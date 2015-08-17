@@ -1,0 +1,17 @@
+document,word,word_count
+nytimes,harry,3
+nytimes,economy,35
+nytimes,jobs,40
+nytimes,magic,1
+nytimes,realestate,15
+nytimes,movies,6
+economist,economy,50
+economist,jobs,35
+economist,realestate,20
+economist,movies,1
+economist,harry,1
+economist,magic,1
+harrypotter,harry,40
+harrypotter,magic,30
+harrypotter,chamber,20
+harrypotter,secrets,30

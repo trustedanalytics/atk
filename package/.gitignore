@@ -1,0 +1,9 @@
+*.LOG
+*.build
+*.changes
+*.dsc
+*.deb
+repack
+*.rpm
+tarballs
+*~

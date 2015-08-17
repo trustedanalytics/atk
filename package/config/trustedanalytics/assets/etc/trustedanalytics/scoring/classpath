@@ -1,0 +1,13 @@
+#START REQUIRED
+#this includes our config in the classpath
+/etc/trustedanalytics/scoring
+#logback jars
+/usr/lib/trustedanalytics/rest-server/lib/logback-*
+#the launcher jar that boots the server
+/usr/lib/trustedanalytics/rest-server/launcher.jar
+#we need this for the models jar
+/tmp
+#END REQUIRED
+
+/etc/hbase/conf
+/etc/hadoop/conf

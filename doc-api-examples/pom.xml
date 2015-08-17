@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>doc-api-examples</artifactId>
+    <packaging>jar</packaging>
+    <name>doc-api-examples (API docs)</name>
+
+    <description>
+        The doc-api-examples module contains the API documentation in RST text resource files.
+
+        All command plugins should also have an API doc string stored in an RST
+        documentation file located in this directory structure, according to the
+        command name.
+
+        Structure layout:
+
+        resources/
+          python/     # documentation for python client
+            entity/
+              function1.rst
+              function2.rst
+
+
+        Example:  "frame/add_columns" plugin should have a file
+
+        doc-api-examples/src/main/resources/python/frame/add_columns.rst
+        
+        test/entity/function.rst is used by unittests, and serves as an example
+    </description>
+    <parent>
+        <groupId>org.trustedanalytics.atk</groupId>
+        <artifactId>TrustedAnalytics</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>master-SNAPSHOT</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+        </dependency>
+    </dependencies>
+</project>

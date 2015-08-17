@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>TrustedAnalytics</artifactId>
+        <groupId>org.trustedanalytics.atk</groupId>
+        <version>master-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>engine-plugins</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        Parent module for plugin modules
+    </description>
+
+    <modules>
+        <module>frame-plugins</module>
+        <module>graph-plugins</module>
+        <module>model-plugins</module>
+        <module>giraph-plugins</module>
+        <module>example-plugins</module>
+    </modules>
+
+    <profiles>
+        <profile>
+            <id>modules-java</id>
+            <!--
+                This profile is here so that we can capture code-coverage for the Java modules only.
+            -->
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <modules>
+                <!--<module>giraph-plugins</module>-->
+            </modules>
+        </profile>
+    </profiles>
+
+</project>

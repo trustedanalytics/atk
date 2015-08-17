@@ -1,0 +1,47 @@
+	Configure git with  your identification and email address
+git config --global user.name "<name>"; <name> is your Intel login identification
+git config --global user.email <email address>; <email address> is your Intel email address
+	Create a working directory
+mkdir work
+cd work
+	Get a copy of the repository (often refered to as the repo)
+git clone <MasterRepositary.git>;
+	There should now be a directory called atk; change to it
+cd atk
+	Check out the current active branch, named after the Agile sprint number
+git checkout <sprint>; <sprint> is the name of the current Agile sprint branch, for example sprint_11
+	Make a new branch of your own named after the JIRA work issue
+git checkout -b <working branch>; <working branch> is the name of the branch being worked for general documentation issues
+	Change to the active working directory
+cd python-client/trustedanalytics
+	This is the base directory of everybody's work. The documentation is in the folder called doc.
+	Make your changes.  Add your changes to the local repository.
+git add <file name>
+git commit -m '<Revision note>'; <Revision note> is a freeform note and the command needs the ' or " marks
+	Merge the sprint branch into your branch, resolving difficulties
+git merge <sprint>; <sprint> is the name of the current Agile sprint branch, for example sprint_11
+	Change to the repo directory
+cd ~/.../atk
+	Push your repository to the server, in other words, push the merged branch with your changes to the server
+git push origin <working branch>; <working branch> is the name of the branch being worked for general documentation issues
+	From the Windows computer, direct the browser to JIRA and select Fisheye + Crucible from the multi-line icon in the upper left corner
+https://jira01.devtools.intel.com; <Username> is your Intel login identification, <Password> is your Intel login password
+	Select the menu option labeled "Create review", then "Browse Changesets"
+	Change Repository to "TRIB-atk" and check the box next to the changes you made and click the button labeled "Edit Details"
+	Select the appropriate reviewers, explain your objectives, then click the button labeled "Start Review"
+
+    Normal work process:
+git fetch origin
+git checkout sprint_15
+git branch doc_15
+git checkout doc_15
+git merge sprint_15
+    Fix any merges, do your changes.
+git add (as necessary)
+git commit -m "" (as necessary)
+git pull origin sprint_15
+git merge sprint_15
+git checkout sprint_15
+git merge doc_15
+git push origin sprint_15
+git checkout doc_15 (before you forget and work in the wrong branch)

@@ -1,0 +1,695 @@
+#!/bin/bash
+
+Python_directory="trustedanalytics"
+JavaCall="java.*launcher/target/launcher.jar.*org.trustedanalytics.atk.component.Boot"
+pid=$(ps aux  | grep -v grep | grep $JavaCall | head -n 1 |  awk '{print $2}')
+
+# The primary purpose of this script file is to allow the Sphinx-Build program
+# to build in python 2.7 on a RedHat distribution of Linux.
+
+# Subroutines:
+
+#############################################################################################################
+function build_docstubs() {
+    # $1 = AskThem
+    # $2 = DisplayStatus
+    # $3 = TempFile
+    # $4 = LogFile
+
+    # debug: Update the additional python documentation files
+    RunCommand="which python2.7"
+    do_this "$RunCommand" $1 "No" $3 $4
+    Return=$?
+    if [ "$Return" != "0" ]; then return $Return; fi
+    if [[ -f build_docs.py ]]; then
+        do_this "python2.7 build_docs.py" $1 $2 $3 $4
+        Return=$?
+    else
+        Err "The python script build_docs.py seems to be missing." $1 $2 $3 $4
+        Return=$?
+    fi
+    return $Return
+}
+
+###########################################################################################################
+function compile_jars() {
+    # $1 = Threads
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: run maven
+    which mvn > /dev/null
+    if [ "$?" == "0" ]; then
+        ps aux|grep zinc|grep -v grep > /dev/null
+        Return=$?
+        if [ "$Return" != "0" ]; then
+            # zinc is not running, so try to start it
+            if [[ -f "bin/zinc.sh" ]]; then
+                bin/zinc.sh start > /dev/null
+            fi
+            ps aux|grep zinc|grep -v grep > /dev/null
+            Return=$?
+        fi
+        if [ "$Return" != "0" ]; then
+            log_step "Compiling without zinc." $3 $5
+        fi
+        RunCommand="mvn clean package -P compile,test,events,modules-all,\!scala-coverage,\!integration-tests -Dcheckstyle.skip=true -DskipTests"
+        if [ "$1" == "True" ]; then
+            RunCommand="$RunCommand -t 8"
+        fi
+        do_this "$RunCommand" $2 $3 $4 $5
+        return $?
+    else
+        Err "Maven does not appear to be installed." $2 $3 $4 $5
+        if [ "$?" == "1" ]; then return 1; fi
+    fi
+    return 0
+}
+
+############################################################################################################
+function delete_previous() {
+    # $1 = Directory
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = Temporary file
+    # $5 = LogFile
+
+    # debug: function delete_previous
+    CommandLine="rm -rf $1"
+    if [ -d $1 ]; then
+        log_step "$CommandLine" $3 $5
+        $CommandLine > $4
+        if [ "$?" == "1" ]; then
+            Err "$CommandLine" $2 $3 $4 $5
+            if [ "$?" == "1" ]; then
+                return 1
+            fi
+        else
+            rm $4
+        fi
+    fi
+    return 0
+}
+
+############################################################################################################
+function do_this() {
+    # $1 = RunCommand
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: function do_this
+    log_step "$1" $3 $5
+    ($1) > $4 2>&1
+    if [ "$?" == "1" ]; then
+        Err "$1" $2 $3 $4 $5
+        return $?
+    else
+        rm $4 > /dev/null
+    fi
+    return 0
+}
+
+############################################################################################################
+function doc_help() {
+    # debug: function doc_help
+    echo
+    echo "$0 $1"
+    echo
+    echo "-h, --help: Print this and return"
+    echo "-e:         Do not erase previous compilation"
+    echo "+e:         Erase doctrees"
+    echo "-p:         Do not rebuild docstub files"
+    echo "-q, -qq:    Quiet mode, use default values for prompts"
+    echo "-s:         Do not compile Scala code"
+    echo "+t:         Use threads during maven compilations"
+    echo "-_:         Do not rename html folders starting with _ to f_"
+    echo
+    echo "dirhtml:    Compile to html segregated with directories"
+    echo "html:       Compile to html"
+    echo "latex:      Compile to LaTeX"
+    echo "pdf:        Compile to pdf"
+    echo "singlehtml: Compile to a monolithic html file"
+    echo "text:       Compile to text"
+    echo "zip:        Do a zip of build directory"
+    echo "doctest:    Test the code examples"
+    echo "packages:   Check for installed packages"
+    echo
+    echo "By default, file builds will erase previous files first. For example,"
+    echo "if html is called for, this will delete the existing html files first."
+    echo "Flags and options listed above have ':' symbol for clarification purposes only,"
+    echo "they are not part of the flag/option and should not be used on the command line."
+    echo
+    return 0
+}
+
+############################################################################################################
+function Err() {
+    # $1 = Failure description, usually the command line
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: function Err
+    if [[ -e "$4" ]]; then
+        cat "$4" >> $5
+        rm "$4"
+    fi
+    if [ "$3" == "Yes" ]; then
+        echo "Failure: $1"
+    fi
+    if [ "$2" == "Yes" ]; then
+        get_response "View .log file?" Y
+        if [ "$?" == "0" ]; then
+            less $LogFile
+        fi
+        get_response "Abort?" Y
+        if [ "$?" == "0" ]; then
+            return 1
+        fi
+    else
+        return 1
+    fi
+    return 0
+}
+
+############################################################################################################
+function get_response() {
+
+    # debug: get_response\($@\)
+    Prioritize=${2:-Y}
+    Prioritize=${Prioritize:0:1}
+    Prioritize=${Prioritize^^}
+    if [ "$Prioritize" == "Y" ]; then
+        Adder="[Y|n]"
+    else
+        Adder="[y|N]"
+    fi
+    UserResponse=$Prioritize
+    Looping=True
+    while [ "$Looping" == "True" ]; do
+        read -p "$1 $Adder " UserResponse
+        UserResponse=${UserResponse:-$Prioritize}
+        UserResponse=${UserResponse:0:1}
+        UserResponse=${UserResponse^^}
+        if [ ! $(echo "YN"|grep -i ${UserResponse:0:1} ) ]; then
+            echo "Please respond with (Y)es or (N)o."
+        else
+            Looping=False
+        fi
+    done
+    if [ "$UserResponse" == "$Prioritize" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+############################################################################################################
+function log_step() {
+    # $1 = step description, usually the full command
+    # $2 = DisplayStatus
+    # $3 = LogFile
+
+    # debug: function log_step
+    if [ "$2" == "Yes" ]; then
+        echo "$1"
+    fi
+    echo >> $3
+    echo >> $3
+    echo "$1" >> $3
+    return 0
+}
+
+############################################################################################################
+function main() {
+    # debug: function main
+    # debug: $1 = Modified Arguments
+
+    echo
+
+    ModifiedArguments=$1
+    ScriptPath=$(dirname "$(readlink -f "$0")")
+    LogFile=$ScriptPath/doc.log; if [ -e $LogFile ]; then rm $LogFile; fi
+    TempFile=$ScriptPath/temp.txt; if [ -e $TempFile ]; then rm $TempFile; fi
+    export PYTHON_DIR=/usr/lib/python2.7/dist-packages
+    export PYTHONPATH=$(pwd)/../python-client:$PYTHONPATH:$PYTHON_DIR
+
+
+    # debug: Start the log file
+    echo "doc run", $(date +%Y%m%d.%H%M), $ModifiedArguments > $LogFile
+
+    # debug: Sometimes numpy chokes on these files.
+    for PYC_file in $(find ../ -name "*.pyc"); do
+        rm $PYC_file
+    done
+
+    # debug: Check on quiet mode
+    echo $ModifiedArguments | grep -i -e "/-q/" -e "/-qq/" > /dev/null
+    if [ $? == 0 ]; then
+        AskThem=No
+    else
+        AskThem=Yes
+    fi
+
+    # debug: Check on super quiet mode
+    echo $ModifiedArguments | grep -i -e "/-qq/" > /dev/null
+    if [ $? == 0 ]; then
+         DisplayStatus=No
+    else
+         DisplayStatus=Yes
+    fi
+
+    # debug: Look for help
+    echo $ModifiedArguments | grep -i -e "/-h/" -e "/--help/" > /dev/null
+    if [ $? == 0 ]; then
+        doc_help $ModifiedArguments
+        return 0
+    fi
+
+    # debug: Look for packages if the individual is a techwriter
+    echo $ModifiedArguments | grep -i "/packages/" > /dev/null
+    if [[ "$?" == "0" && "$USERNAME" != "" ]]; then
+        packages $USERNAME $ScriptPath
+    fi
+
+    # debug: Add latex to the argument list if pdf is called for
+    echo $ModifiedArguments | grep -i -e "/pdf/" > /dev/null
+    if [ "$?" == "0" ]; then
+        echo $ModifiedArguments | grep -i -e "/latex/" > /dev/null
+        if [ "$?" == "1" ]; then
+            ModifiedArguments="$ModifiedArguments+/latex/"
+        fi
+    fi
+
+    # debug: Look for buildable
+    SphinxFormats="latex text html singlehtml dirhtml"
+    BuildableFormat=False
+    for Format in $SphinxFormats; do
+        if [ "$ModifiedArguments" != "${ModifiedArguments/$Format/}" ]; then
+            BuildableFormat=True
+            break
+        fi
+    done
+    if [ "$BuildableFormat" == "True" ]; then
+
+        # debug: Remove previous doctrees
+        echo $ModifiedArguments | grep -i "/+e/" > /dev/null
+        if [ "$?" == "0" ]; then
+            delete_previous "build/doctrees" $AskThem $DisplayStatus $TempFile $LogFile
+            if [ "$?" == "1" ]; then return 1; fi
+        fi
+
+        # debug: Check for rebuilding the scala jar routines
+        echo $ModifiedArguments | grep -i "/-s/" > /dev/null
+        if [ "$?" == "1" ]; then
+            # Update the scala
+            echo $ModifiedArguments | grep -i -e "/+t/" > /dev/null
+            if [ "$?" == "0" ]; then
+                Threads=True
+            else
+                Threads=False
+            fi
+            maven $Threads $AskThem $DisplayStatus $TempFile $LogFile
+            if [ "$?" == "1" ]; then return 1; fi
+        fi
+
+        # debug: Start the server
+        server_start $AskThem $DisplayStatus $TempFile $LogFile
+        Return=$?
+        if [ "$Return" != "0" ]; then return $Return; fi
+
+        # debug: Update the additional python documentation files
+        echo $ModifiedArguments | grep -i "/-p/" > /dev/null
+        if [ "$?" == "1" ]; then
+            pushd ../python-client/$Python_directory/doc > /dev/null
+            build_docstubs $AskThem $DisplayStatus $TempFile $LogFile
+            Return=$?
+            popd > /dev/null
+            if [ "$Return" != "0" ]; then return $Return; fi
+        fi
+
+        RunCommand="which sphinx-build"
+        do_this "$RunCommand" $AskThem "No" $TempFile $LogFile
+        if [ "$?" != "0" ]; then return 1; fi
+
+        # debug: Look for sphinx build types
+        SphinxFlag=OK
+        for Format in $SphinxFormats
+        do
+            echo $ModifiedArguments | grep -i -e "/$Format/" > /dev/null
+            if [ "$?" == "0" ]; then
+                sphinx_build "$Format" $AskThem $DisplayStatus $TempFile $LogFile $ModifiedArguments
+                if [ "$?" == "1" ]; then return 1; fi
+            fi
+            
+            # debug: Rename html files starting with _ to f_
+            echo $ModifiedArguments | grep -i -e "/-_/" > /dev/null
+            if [ "$?" != "0" ]; then
+                echo $Format | grep -i -e "html" > /dev/null
+                if [ "$?" == "0" ]; then
+                    if [[ -d "build/$Format" ]]; then
+                        rename_folders "$Format" $AskThem $DisplayStatus $TempFile $LogFile $ModifiedArguments
+                        if [ "$?" == "1" ]; then return 1; fi
+                    fi
+                fi
+            fi
+        done
+
+        # debug: Look for pdf building
+        echo $ModifiedArguments | grep -i -e "/pdf/" > /dev/null
+        if [ "$?" == "0" ]; then
+            RunCommand="which pdflatex"
+            do_this "$RunCommand" $AskThem "No" $TempFile $LogFile
+            if [ "$?" != "0" ]; then return 1; fi
+            pdf_build latex Package_Documentation $AskThem $DisplayStatus $TempFile $LogFile
+            if [ "$?" != "0" ]; then return 1; fi
+            if [[ -f build/latex/Package_Documentation.pdf && -d build/html/_downloads ]]; then
+                if [ -s build/latex/Package_Documentation.pdf ]; then
+                    RunCommand="cp build/latex/Package_Documentation.pdf build/html/_downloads/"
+                    do_this "$RunCommand" $AskThem $DisplayStatus $TempFile $LogFile
+                    if [ "$?" != "0" ]; then return 1; fi
+                else
+                    Err "PDF too short to copy" $AskThem $DisplayStatus $TempFile $LogFile
+                    if [ "$?" != "0" ]; then
+                        return 1
+                    fi
+                fi
+            fi
+        fi
+    fi
+
+    # debug: Test the examples
+    echo $ModifiedArguments | grep -i -e "/test/" > /dev/null
+    if [ $? == 0 ]; then
+        for File in $(ls -1a source/*.rst)
+        do
+            echo $File
+        done
+    fi
+
+    # debug: Compress the results into a single file
+    echo $ModifiedArguments | grep -i -e "/zip/" > /dev/null
+    if [ $? == 0 ]; then
+        RunCommand="which zip"
+        do_this "$RunCommand" $AskThem "No" $TempFile $LogFile
+        if [ "$?" == "0" ]; then
+            if [[ -e documentation.zip ]]; then
+                rm documentation.zip
+            fi
+            RunCommand="zip -q -9 -r documentation build/html"
+            do_this "$RunCommand" $AskThem $DisplayStatus $TempFile $LogFile
+        fi
+    fi
+    # debug: Delete doc file
+    if [ -e doc.log ]; then
+        rm doc.log
+    fi
+    server_stop $AskThem $DisplayStatus $TempFile $LogFile
+}
+
+############################################################################################################
+function maven() {
+    # $1 = Threads
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = Temporary file
+    # $5 = LogFile
+
+    # debug: Maven
+
+    # debug: Stop the server
+    server_stop $2 $3 $4 $5
+    Return=$?
+    if [ "$Return" != "0" ]; then return $Return; fi
+
+    # debug: Compile jars
+    pushd ../ > /dev/null
+    compile_jars $1 $2 $3 $4 $5
+    Return=$?
+    popd > /dev/null
+
+    return $Return
+
+}
+
+############################################################################################################
+function packages() {
+    # $1 = User id name
+    # $2 = ScriptPath
+
+    # debug: Give the filename of the list of people with ability to
+    # debug: load python packages
+    TECHWRITERS=techwriters
+    # Yes for "packages", check for permissions
+    if [ -f $2/$TECHWRITERS ]; then
+        echo $1 | grep -f $2/$TECHWRITERS > /dev/null
+        if [ $? == 0 ]; then
+            echo Checking the installed packages.
+            # The packages need superuser rights to install properly.
+            sudo -E $2/install_packages.sh
+        fi
+    fi
+    return 0
+}
+
+############################################################################################################
+function parameters() {
+    e=""
+    for p in $1
+    do
+        e=$e"/"$p
+    done
+    if [ "$e" != "" ]; then e=$e"/"; fi
+    echo "$e"
+}
+
+############################################################################################################
+function pdf_build() {
+    # $1 = Source Format
+    # $2 = Source Document(s)
+    # $3 = AskThem
+    # $4 = DisplayStatus
+    # $5 = Temporary file
+    # $6 = LogFile
+
+    # debug: Build a pdf from another source, currently limited to latex
+
+    BuildDirectory="build/$1"
+    Extension="tex"
+
+    log_step "Checking file $BuildDirectory/$2.$Extension" $4 $6
+    if [[ -f "$BuildDirectory/$2.$Extension" ]]; then
+        pushd $BuildDirectory > /dev/null
+        RunCommand="pdflatex -interaction=scrollmode \"$2.$Extension\""
+        $RunCommand > /dev/null # Ignore errors, hope they go away
+        $RunCommand > /dev/null # Ignore errors, hope they go away
+        $RunCommand > /dev/null # Ignore errors, hope they go away
+
+        RunCommand="makeindex -s python.ist $2.idx"
+        do_this "$RunCommand" $3 $4 $5 $6
+        if [ "$?" == "1" ]; then popd > /dev/null; return 1; fi
+
+        RunCommand="pdflatex -interaction=scrollmode \"$2\""
+        $RunCommand > /dev/null # Ignore errors, hope they go away
+        do_this "$RunCommand" $3 $4 $5 $6
+        if [ "$?" == "1" ]; then popd > /dev/null; return 1; fi
+
+        popd > /dev/null
+    else
+        Err "Checking file $BuildDirectory/$2.$Extension" $3 $4 $5 $6
+        return $?
+    fi
+    return 0
+}
+
+############################################################################################################
+function rename_folders() {
+    # $1 = Format
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = Temporary file
+    # $5 = LogFile
+    # $6 = Modified Arguments
+
+    # debug: rename_folders
+
+    BuildDirectory="$ScriptPath/build/$1"
+    Prefix="f"
+    pushd $BuildDirectory > /dev/null
+    LongNames=$(find -name "_*"|sort -r)
+    echo $LongNames=LongNames
+    ShortNames=""
+    for Name in $LongNames; do
+        TestName=$(basename $Name)
+        echo $ShortNames | grep $TestName > /dev/null
+        if [ "$?" != "0" ]; then
+            ShortNames="$ShortNames $TestName"
+        fi
+    done
+    echo $ShortNames=Shortnames
+    WorkingFile=$(date +%Y%m%d%H%M%N.tmp)
+    for Name in $ShortNames; do
+        echo Searching for files which refer to $Name
+        ChangeFiles=$(grep -rl --exclude=*.png --exclude=*.pdf $Name ./)
+        echo $ChangeFiles=ChangeFiles
+        for ChangeFile in $ChangeFiles; do
+            mv $ChangeFile $WorkingFile
+            sed "s/$Name/$Prefix\0/g" < $WorkingFile > $ChangeFile
+        done
+    done
+    for Name in $LongNames; do
+        mv $Name $(echo "$(dirname $Name)/$Prefix$(basename $Name)")
+    done
+    if [[ -e "$WorkingFile" ]]; then
+        rm $WorkingFile
+    fi
+    popd > /dev/null
+    return 0
+}
+
+############################################################################################################
+function server_running() {
+    pid=$(ps aux | grep -v grep | grep $JavaCall)
+    if [ "$?" == "0" ]; then
+        ProcessID=$( echo $pid | head -n 1 | awk '{print $2}')
+    else
+        return 1
+    fi
+    curl -s localhost:9099 > /dev/null
+    if [ "$?" != "0" ]; then
+        return 1
+    fi
+    return 0
+}
+
+############################################################################################################
+function server_start() {
+    # $1 = AskThem
+    # $2 = DisplayStatus
+    # $3 = Temporary file
+    # $4 = LogFile
+
+    ProcessID=0
+    server_running # Sets ProcessID to the server process identification
+    if [ "$?" != "0" ]; then
+
+        # debug: Update the configuration file
+        diff ../conf/examples/application.conf.build ../conf/application.conf > /dev/null
+        if [ "$?" != "0" ]; then
+            # debug: Copy the build configuration to/over the current
+            # debug: application configuration
+            RunCommand="cp ../conf/examples/application.conf.build ../conf/application.conf"
+            do_this "$RunCommand" $AskThem $DisplayStatus $TempFile $LogFile
+            Return=$?
+            if [ "$Return" != "0" ]; then return $Return; fi
+        fi
+
+        # debug: Start the server
+        pushd ../ > /dev/null
+        echo -n "Start server"
+        RunCommand="Start server (nohup bin/rest-server.sh)"
+        log_step "$RunCommand" "No" $4
+        nohup bin/rest-server.sh < /dev/null > $3 2>&1 &
+        Return=$?
+        popd > /dev/null
+        if [ "$Return" != "0" ]; then
+            echo
+            Err "$RunCommand" $1 $2 $3 $4
+            Return=$?
+        else
+            let "Duration = 10"
+            until [[ $Duration -lt 0 ]]; do
+                server_running
+                if [ "$?" != "0" ]; then
+                    sleep 1
+                    echo -n "."
+                    let "Duration -= 1"
+                else
+                    let "Duration = -1"
+                fi
+            done
+            echo
+            server_running
+            if [ "$?" != "0" ]; then
+                Err "$RunCommand" $1 $2 $3 $4
+                Return=$?
+            else
+                Return=0
+            fi
+        fi
+    fi
+    return $Return
+}
+
+############################################################################################################
+function server_stop() {
+    # $1 = AskThem
+    # $2 = DisplayStatus
+    # $3 = Temporary file
+    # $4 = LogFile
+
+    # debug: Stop the server
+    ProcessID=0
+    server_running # Sets ProcessID to the server process identification
+    Looping=$?
+    while [ "$Looping" == "0" ]; do
+        echo -n "Stop server $ProcessID"
+        kill $ProcessID
+        if [ $? != 0 ]; then
+            echo
+            Err "Stop server $ProcessID" $1 $2 $3 $4
+            Return=$?
+            if [[ "$Return" != "0" ]]; then
+                return $Return
+            fi
+        fi
+        let "Duration = 10"
+        until [[ $Duration -le 0 ]]; do
+            ps $ProcessID > /dev/null
+            if [ "$?" == 0 ]; then
+                sleep 1
+                echo -n "."
+                let "Duration -= 1"
+            else
+                let "Duration = -1"
+            fi
+        done
+        echo
+        ProcessID=0
+        server_running # Returns the process identification in the error code
+        Looping=$?
+    done
+    return 0
+}
+
+############################################################################################################
+function sphinx_build() {
+    # $1 = Format
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = Temporary file
+    # $5 = LogFile
+    # $6 = Modified Arguments
+
+    # debug: sphinx_build
+
+    BuildDirectory="build/$1"
+
+    echo "$6" | grep -i "/-e/" > /dev/null
+    if [ "$?" == "1" ]; then
+        delete_previous $BuildDirectory $2 $3 $4 $5
+        if [ "$?" == "1" ]; then return 1; fi
+    fi
+    RunCommand="sphinx-build -b $1 source $BuildDirectory"
+    do_this "$RunCommand" $2 $3 $4 $5
+    return $?
+}
+
+#==========================================================================================================#
+date
+main $(parameters "$*")
+if [ "$?" == "0" ]; then date; fi

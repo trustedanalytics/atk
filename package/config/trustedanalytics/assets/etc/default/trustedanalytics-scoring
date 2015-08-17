@@ -1,0 +1,40 @@
+#trustedanalytics scoring env file
+#Set all your environment variables needed for the rest server here
+
+# depending on the CDH install method used, set the appropriate SPARK_HOME below:
+
+#RPM cloudera installations will place spark in /usr/lib/spark
+#export SPARK_HOME="/usr/lib/spark"
+
+#Parcel cloudera installations will place spark in /opt/cloudera/parcels/CDH/lib/spark
+#/opt/cloudera/parcels/CDH will be a symlink to your current cloudera version
+export SPARK_HOME="/opt/cloudera/parcels/CDH/lib/spark"
+
+export T_JVM_OPT="-XX:MaxPermSize=384m"
+
+#the user that the trusted analytics rest server will run under. If you change the user make sure the new user has
+#access to the fs.root location in /etc/trustedanalytics/scoring/application.conf
+export TUSER="atkuser"
+export HOSTNAME=`hostname`
+
+
+IFS=$'\n\r'
+#get class paths from separate file to make the upstart skip neat and making editing easier
+if [ -f /etc/trustedanalytics/scoring/classpath ]; then
+	for path in `cat /etc/trustedanalytics/scoring/classpath`
+	do
+		#skip empty and lines starting with #
+		if [ "$path" == "" ] || [[ $path == \#* ]]; then
+				continue
+		fi
+		#set the extra conf for the first time
+		if [[ -z "$CLASSPATH" ]]; then
+			CLASSPATH=$path
+		else
+			CLASSPATH="${CLASSPATH}:${path}"
+		fi
+	done
+fi
+
+export CLASSPATH=$CLASSPATH
+export YARN_CONF_DIR="/etc/hadoop/conf"

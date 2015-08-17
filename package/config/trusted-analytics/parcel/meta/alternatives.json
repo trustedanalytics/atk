@@ -1,0 +1,26 @@
+{
+    "trustedanalytics-config": {
+      "destination": "/etc/atk",
+      "source": "etc/trustedanalytics/rest-server",
+      "priority": 10,
+      "isDirectory": true
+    },
+    "trustedanalytics-logrotate.d": {
+      "destination": "/etc/logrotate.d/atk",
+      "source": "etc/logrotate.d/trustedanalytics-rest-server",
+      "priority": 10,
+      "isDirectory": false
+    },
+    "trustedanalytics-logs": {
+      "destination": "/var/log/atk",
+      "source": "log",
+      "priority": 10,
+      "isDirectory": true
+    },
+    "examples": {
+          "destination": "/var/lib/trustedanalytics/examples",
+          "source": "usr/lib/trustedanalytics/rest-server/examples",
+          "priority": 10,
+          "isDirectory": true
+        }
+}

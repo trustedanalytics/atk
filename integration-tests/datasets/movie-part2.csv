@@ -1,0 +1,10 @@
+user,vertex_type,movie,weight,edge_type
+-1218,R,1,3,tr
+1,L,-1232,3,tr
+-1232,R,1,3,tr
+3,L,-1416,2,tr
+-1416,R,1,2,tr
+3,L,-1648,3,tr
+-1648,R,1,3,tr
+3,L,-2347,3,tr
+-2347,R,1,3,tr

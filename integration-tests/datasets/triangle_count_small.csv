@@ -1,0 +1,16 @@
+node03,node04,2,2
+node06,node07,3,3
+node06,node08,3,3
+node07,node08,3,3
+node010,node011,4,4
+node010,node012,4,4
+node010,node013,4,4
+node011,node012,4,4
+node011,node013,4,4
+node012,node013,4,4
+node015,node016,5,5
+node015,node017,5,5
+node015,node018,5,5
+node015,node019,5,5
+node016,node017,5,5
+node016,node018,5,5

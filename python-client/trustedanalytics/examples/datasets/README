@@ -1,0 +1,1 @@
+The datasets need to be copied to HDFS so they are available to the example scripts. The default location is hdfs://user/atkuser/datasets but any path can be specified when executing an examples run method. 

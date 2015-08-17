@@ -1,0 +1,92 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.trustedanalytics.atk</groupId>
+    <artifactId>titan-shaded</artifactId>
+    <version>0.5.4-SNAPSHOT</version>
+
+    <description>
+        Both Titan and Spark depend on Kryo. This causes a ClassLoader conflict when Titan tries
+        to use Kryo after it has already been initialized by Spark.
+
+        This build creates an uber jar containing titan-core and kryo where kryo has been moved
+        to a new package to prevent ClassLoader conflicts with Spark.
+
+        This artifact can be used just like titan-core except that you must include the direct
+        dependencies for titan-core manually.
+    </description>
+
+    <properties>
+        <dep.aurelius.version>0.5.4</dep.aurelius.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.thinkaurelius.titan</groupId>
+            <artifactId>titan-core</artifactId>
+            <version>${dep.aurelius.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <!--
+                                        Keep this list to a minimum, otherwise it is impossible to keep track of
+                                        what is in this project from other projects that depend on this one
+                                     -->
+                                    <include>com.thinkaurelius.titan:*</include>
+                                    <include>com.esotericsoftware.kryo:*</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <!--
+                                            Exclude these so they don't conflict when titan jar is included in gb jar.
+                                          -->
+                                        <exclude>META-INF/maven/com.esotericsoftware.kryo/kryo/pom.properties</exclude>
+                                        <exclude>META-INF/maven/com.esotericsoftware.kryo/kryo/pom.xml</exclude>
+                                        <exclude>META-INF/maven/com.esotericsoftware.reflectasm/reflectasm/pom.xml</exclude>
+                                        <exclude>META-INF/maven/com.esotericsoftware.reflectasm/reflectasm/pom.properties</exclude>
+                                        <exclude>META-INF/maven/com.esotericsoftware.minlog/minlog/pom.xml</exclude>
+                                        <exclude>META-INF/maven/com.esotericsoftware.minlog/minlog/pom.properties</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+
+                            <relocations>
+                                <relocation>
+                                    <!--
+                                        Both Titan and Spark depend on Kryo.  This causes a classloader conflict
+                                         when Titan tries to use Kryo after it has already been initialized by Spark.
+                                      -->
+                                    <!-- original package -->
+                                    <pattern>com.esotericsoftware</pattern>
+                                    <!-- new package -->
+                                    <shadedPattern>com.trustedanalytics.shaded.com.esotericsoftware</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
