@@ -59,30 +59,7 @@ object GiraphConfigurationUtil {
     }
     hConf
   }
-
-  /**
-   * Update the Hadoop configuration object with the Titan configuration
-   *
-   * @param hConf the Hadoop configuration object to update
-   * @param config the Config object from which to copy Titan properties to the Hadoop Configuration
-   * @param graph the graph object containing the Titan graph name
-   */
-  def initializeTitanConfig(hConf: Configuration, config: Config, graph: GraphEntity): Unit = {
-
-    val titanConfig = GraphBuilderConfigFactory.getTitanConfiguration(graph)
-    val storageBackend = titanConfig.getString("storage.backend")
-
-    titanConfig.getKeys.foreach {
-      case (titanKey: String) =>
-        val titanGiraphKey = "giraph.titan.input." + titanKey
-        set(hConf, titanGiraphKey, Option[Any](titanConfig.getProperty(titanKey)))
-    }
-
-    val titanAutoPartitioner = TitanAutoPartitioner(titanConfig)
-    val numGiraphWorkers = Try(config.getInt("giraph.giraph.maxWorkers")).getOrElse(0)
-    titanAutoPartitioner.setGiraphHBaseInputSplits(hConf, numGiraphWorkers)
-  }
-
+  
   /**
    * Flatten a nested Config structure down to a simple dictionary that maps complex keys to
    * a string value, similar to java.util.Properties.
