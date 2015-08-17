@@ -59,7 +59,7 @@ object GiraphConfigurationUtil {
     }
     hConf
   }
-  
+
   /**
    * Flatten a nested Config structure down to a simple dictionary that maps complex keys to
    * a string value, similar to java.util.Properties.
