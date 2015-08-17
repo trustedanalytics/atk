@@ -18,10 +18,10 @@ package org.trustedanalytics.atk.engine.plugin
 
 import org.trustedanalytics.atk.component._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
-import org.trustedanalytics.atk.domain.graph.{GraphEntity, GraphReference}
+import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference }
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
 import org.trustedanalytics.atk.engine.frame.{ FrameImpl, Frame }
-import org.trustedanalytics.atk.engine.graph.{SparkGraphStorage, Graph, GraphImpl}
+import org.trustedanalytics.atk.engine.graph.{ SparkGraphStorage, Graph, GraphImpl }
 import org.trustedanalytics.atk.engine.model.{ ModelImpl, Model }
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import spray.json.{ JsObject, _ }
