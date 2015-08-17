@@ -16,6 +16,12 @@
 
 package org.apache.spark.atk.graph
 
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.domain.schema.{GraphSchema, Schema, VertexSchema}
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
+=======
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, GraphSchema, Schema }
 import org.trustedanalytics.atk.engine.frame.MiscFrameFunctions
@@ -25,6 +31,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.{ SparkContext, sql }
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.{ Row, SQLContext }
+>>>>>>> master
 
 import scala.reflect.ClassTag
 
@@ -54,8 +61,9 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
    * Drop duplicates based on user defined id
    */
   def dropDuplicates(): VertexFrameRdd = {
-    val pairRdd = map(row => MiscFrameFunctions.createKeyValuePairFromRow(row, schema.columnIndices(Seq(schema.idColumnName.getOrElse(throw new RuntimeException("Cannot drop duplicates is id column has not yet been defined")), schema.label))))
-    val duplicatesRemoved: RDD[Row] = MiscFrameFunctions.removeDuplicatesByKey(pairRdd)
+    val idColumnName = schema.idColumnName.getOrElse(throw new RuntimeException("Cannot drop duplicates is id column has not yet been defined"))
+    val columnNames = List(idColumnName, schema.label)
+    val duplicatesRemoved: RDD[Row] = this.dropDuplicatesByColumn(columnNames)
     new VertexFrameRdd(schema, duplicatesRemoved)
   }
 

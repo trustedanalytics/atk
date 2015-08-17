@@ -80,7 +80,7 @@ class DropDuplicateVerticesPlugin extends SparkCommandPlugin[DropDuplicatesArgs,
         // _vid is always unique so don't include it
         schema.columnNames.dropWhile(s => s == GraphSchema.vidProperty)
     }
-    val duplicatesRemoved: RDD[Row] = MiscFrameFunctions.removeDuplicatesByColumnNames(vertexFrame.rdd, schema, columnNames)
+    val duplicatesRemoved: RDD[Row] = vertexFrame.rdd.dropDuplicatesByColumn(columnNames)
 
     val label = schema.asInstanceOf[VertexSchema].label
     FilterVerticesFunctions.removeDanglingEdges(label, engine.frames, seamlessGraph, sc, new FrameRdd(schema, duplicatesRemoved))

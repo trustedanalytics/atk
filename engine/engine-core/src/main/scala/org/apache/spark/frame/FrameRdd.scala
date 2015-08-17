@@ -28,7 +28,7 @@ import org.apache.spark.mllib.linalg.distributed.IndexedRow
 import org.apache.spark.mllib.linalg.{ Vectors, Vector }
 import org.apache.spark.rdd.{ NewHadoopPartition, RDD }
 import org.apache.spark.{ TaskContext, Partition }
-import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+import org.apache.spark.sql.catalyst.expressions.{GenericRow, GenericMutableRow}
 import org.apache.spark.sql.{ types => SparkType }
 import SparkType.{ ArrayType, DateType, DoubleType, FloatType }
 import SparkType.{ IntegerType, LongType, StringType, StructField, StructType, TimestampType, ByteType, BooleanType, ShortType, DecimalType }
@@ -201,6 +201,31 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     convertToNewSchema(frameSchema.dropIgnoreColumns())
   }
 
+  /**
+   * Remove duplicate rows by specifying the unique columns
+   */
+  def dropDuplicatesByColumn(columnNames: List[String]): RDD[Row] = {
+    val numColumns = frameSchema.columns.size
+    val columnIndices = frameSchema.columnIndices(columnNames)
+    val otherColumnNames = frameSchema.columnNamesExcept(columnNames)
+    val otherColumnIndices = frameSchema.columnIndices(otherColumnNames)
+
+    this.mapRows(row => otherColumnNames match {
+      case Nil => (row.values(columnNames), Nil)
+      case _ => (row.values(columnNames), row.values(otherColumnNames))
+    }).reduceByKey((x, y) => x).map{ case(keyRow, valueRow) =>
+      valueRow match {
+        case Nil => new GenericRow(keyRow.toArray)
+        case _=> {
+          //merge and re-order entries to match schema
+          val row =  new GenericMutableRow(numColumns)
+          for (i <- keyRow.indices) row.update(columnIndices(i),keyRow(i))
+          for (i <- valueRow.indices) row.update(otherColumnIndices(i),valueRow(i))
+          row
+        }
+      }
+    }
+  }
   /**
    * Union two Frame's, merging schemas if needed
    */
