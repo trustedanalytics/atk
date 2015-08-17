@@ -1,0 +1,51 @@
+
+:doc:`VertexFrame <index>`  drop_vertices
+*****************************************
+
+------
+
+
+.. function:: drop_vertices(self, predicate)
+
+    Delete rows that qualify.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame
+
+
+    Parameters
+    ----------
+    predicate : |UDF|
+        |UDF| or :term:`lambda` which takes a row argument and evaluates
+        to a boolean value.
+
+    Examples
+    --------
+    Given VertexFrame object *my_vertex_frame* accessing a graph with lots
+    of data for the attributes of ``lions``, ``tigers``, and ``ligers``.
+    Get rid of the ``lions`` and ``tigers``:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_vertex_frame.drop_vertices(lambda row: row.animal_type == "lion" or row.animal_type == "tiger")
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_vertex_frame.drop_vertices(lambda row:
+            ...     row.animal_type == "lion" or
+            ...     row.animal_type == "tiger")
+
+    Now the frame only has information about ``ligers``.
+
+    More information on |UDF| can be found at :doc:`/ds_apir`
+

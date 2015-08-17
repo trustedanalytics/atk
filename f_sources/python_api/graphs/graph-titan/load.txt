@@ -1,0 +1,39 @@
+
+:doc:`TitanGraph <index>`  load
+*******************************
+
+------
+
+
+.. function:: load(self, frame_rules, append=False)
+
+    Loads graph data into a graph in the database.
+
+
+    :Parameters:
+
+        **frame_rules** : list
+
+        ..
+
+
+
+
+
+        **append** : bool (default=False)
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    The source is tabular data interpreted by user-specified rules.

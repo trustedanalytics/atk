@@ -1,0 +1,31 @@
+
+:doc:`TitanGraph <index>`  graph_clustering
+*******************************************
+
+------
+
+
+.. function:: graph_clustering(self, edge_distance)
+
+    Build graph clustering over an initial titan graph.
+
+
+    :Parameters:
+
+        **edge_distance** : unicode
+
+        ..
+
+            Column name for the edge distance.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A set of titan vertices and edges representing the internal clustering of the graph.
+    <TBD>

@@ -1,0 +1,42 @@
+
+:doc:`EdgeFrame <index>`  unflatten_column
+******************************************
+
+------
+
+
+.. function:: unflatten_column(self, composite_key_column_names, delimiter=None)
+
+    Compacts data from multiple rows based on cell data.
+
+
+    :Parameters:
+
+        **composite_key_column_names** : list
+
+        ..
+
+            name of the user column to be used as keys
+            for unflattening.
+
+
+
+        **delimiter** : unicode (default=None)
+
+        ..
+
+            separator for the data in the result columns.
+            Default is comma (,).
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Groups together cells in all columns (less the composite key) using "," as string delimiter.
+    The original rows are deleted. Thr grouping takes place based on a composite key passed as arguments.

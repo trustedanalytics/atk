@@ -1,0 +1,42 @@
+
+:doc:`VertexFrame <index>`  tally
+*********************************
+
+------
+
+
+.. function:: tally(self, sample_col, count_val)
+
+    |BETA|
+    Count number of times a value is seen.
+
+
+    :Parameters:
+
+        **sample_col** : unicode
+
+        ..
+
+            The name of the column from which to compute the cumulative count.
+
+
+
+        **count_val** : unicode
+
+        ..
+
+            The column value to be used for the counts.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    A cumulative count is computed by sequentially stepping through the column
+    values and keeping track of the the number of times the specified
+    *count_value* has been seen up to the current value.

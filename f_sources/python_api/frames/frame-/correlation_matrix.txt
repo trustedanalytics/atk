@@ -1,0 +1,43 @@
+
+:doc:`Frame <index>`  correlation_matrix
+****************************************
+
+------
+
+
+.. function:: correlation_matrix(self, data_column_names, matrix_name=None)
+
+    Calculate correlation matrix for two or more columns.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of the column from
+            which to compute the matrix.
+
+
+
+        **matrix_name** : unicode (default=None)
+
+        ..
+
+            The name for the new
+            matrix.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A matrix with the correlation values for the columns.
+    Notes
+    -----
+    This method applies only to columns containing numerical data.

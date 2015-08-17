@@ -1,0 +1,27 @@
+
+:doc:`TitanGraph <index>`  status
+*********************************
+
+------
+
+
+.. attribute:: status
+
+    Current graph life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the graph
+    One of three statuses: Active, Deleted, Deleted_Final
+       Active:   available for use
+       Deleted:  has been scheduled for deletion
+       Deleted_Final: backend files have been removed from disk.

@@ -1,0 +1,31 @@
+
+:doc:`TitanGraph <index>`  __init__
+***********************************
+
+------
+
+
+.. function:: __init__(self, rules=None, name=None)
+
+    Initialize the graph.
+
+
+    :Parameters:
+
+        **rules** : list of rule (default=None)
+
+        ..
+
+            List of rules which specify how the graph will be created.
+            Default is an empty graph will be created.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            Name for the new graph.
+            Default is None.
+
+

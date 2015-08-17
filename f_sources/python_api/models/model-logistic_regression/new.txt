@@ -1,0 +1,30 @@
+
+:doc:`LogisticRegressionModel <index>`  new
+*******************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of logistic regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

@@ -1,0 +1,23 @@
+
+:doc:`TitanGraph <index>`  fget
+*******************************
+
+------
+
+
+.. attribute:: __private_ml
+
+    Access to object's ml functionality (See :class:`~trustedanalytics.core.docstubs.TitanGraphMl`)
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : TitanGraphMl
+
+        ..
+
+            TitanGraphMl object

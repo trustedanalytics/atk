@@ -1,0 +1,229 @@
+
+
+---------------------------------------------------
+:doc:`Commands <index>` graph:titan/query/recommend
+---------------------------------------------------
+
+Trained model recommendation.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:titan/query/recommend
+
+:arguments:
+
+
+    **graph** : Graph
+
+    ..
+
+        <Missing Description>
+
+
+
+    **vertex_id** : unicode
+
+    ..
+
+        The vertex id to get recommendation for.
+
+
+
+    **vertex_type** : unicode
+
+    ..
+
+        The vertex type to get recommendation for.
+        The valid value is either 'L' or 'R'.
+
+
+
+    **left_vertex_id_property_key** : unicode
+
+    ..
+
+        The property name for left side vertex id.
+
+
+
+    **right_vertex_id_property_key** : unicode
+
+    ..
+
+        The property name for right side vertex id.
+
+
+
+    **output_vertex_property_list** : unicode (default=None)
+
+    ..
+
+        The property name for ALS/CGD results.
+        When bias is enabled, the last property name in the output_vertex_property_list is for bias.
+        The default value is 'als_result'.
+
+
+
+    **vertex_type_property_key** : unicode (default=None)
+
+    ..
+
+        The property name for vertex type.
+        The default value is \"vertex_type\".
+
+
+
+    **edge_type_property_key** : unicode (default=None)
+
+    ..
+
+        The property name for edge type.
+        We need this name to know data is in train, validation or test splits.
+        The default value is \"splits\".
+
+
+
+    **vector_value** : unicode (default=None)
+
+    ..
+
+        Whether ALS/CDG results are saved in a vector for each vertex.
+        The default value is \"true\".
+
+
+
+    **bias_on** : unicode (default=None)
+
+    ..
+
+        Whether bias turned on/off for ALS/CDG calculation.
+        When bias is enabled,
+        The default value is \"false\".
+
+
+
+    **train_str** : unicode (default=None)
+
+    ..
+
+        The label for training data.
+        The default value is \"TR\".
+
+
+
+    **num_output_results** : int32 (default=None)
+
+    ..
+
+        The number of recommendations to output.
+        The default value is 10.
+
+
+
+    **left_vertex_name** : unicode (default=None)
+
+    ..
+
+        The real name for left side vertex.
+
+
+
+    **right_vertex_name** : unicode (default=None)
+
+    ..
+
+        The real name for right side vertex.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Get recommendation to either left-side or right-side vertices.
+The prerequisite is at least one of two algorithms (ALS or CGD) has
+been run before this query.
+
+Notes
+-----
+**Vertex Type **|EM|** "L" Versus "R"**
+
+"L" stands for left-side vertices of a bipartite graph.
+"R" stands for right-side vertices of a bipartite graph.
+For example, if your input data is "user,movie,rating" and you want to get
+recommendations on user, input "L" because user is your left-side vertex.
+Similarly, input "R" if you want to get recommendations for movie.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        List of rank and corresponding recommendation.
+        Recommendations for the input vertex.
+
+

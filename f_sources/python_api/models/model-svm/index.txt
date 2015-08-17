@@ -1,0 +1,63 @@
+
+:doc:`Models<../index>` SvmModel
+********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    test
+    train
+
+.. class:: SvmModel
+
+    <TBD>
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <SvmModel__init__>`\ (self[, name, _info])                                             |ALPHA| <TBD>
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Make new frame with additional column for predicted label.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, intercept, ...])              |ALPHA| Train SVM model based on another frame.
+    ====================================================================================================  ====================================================================================================
+
+.. _SvmModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    <TBD>
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

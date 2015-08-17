@@ -1,0 +1,30 @@
+
+:doc:`Frame <index>`  compute_misplaced_score
+*********************************************
+
+------
+
+
+.. function:: compute_misplaced_score(self, location_frame)
+
+
+
+
+    :Parameters:
+
+        **location_frame** : Frame
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

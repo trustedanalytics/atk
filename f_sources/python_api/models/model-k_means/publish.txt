@@ -1,0 +1,40 @@
+
+:doc:`KMeansModel <index>`  publish
+***********************************
+
+------
+
+
+.. function:: publish(self, service_name, file_path)
+
+    |BETA|
+    <TBD>
+
+
+    :Parameters:
+
+        **service_name** : unicode
+
+        ..
+
+            Name of the service used in the scoring engine rest API
+
+
+
+        **file_path** : unicode
+
+        ..
+
+            Path and filename in HDFS to where this model will be published
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    <TBD>

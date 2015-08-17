@@ -1,0 +1,132 @@
+
+:doc:`Frame <index>`  label_propagation
+***************************************
+
+------
+
+
+.. function:: label_propagation(self, src_col_name, dest_col_name, weight_col_name, src_label_col_name, result_col_name=None, max_iterations=None, convergence_threshold=None, alpha=None)
+
+    Loopy Belief Propagation (LBP) from http://en.wikipedia.org/wiki/Belief_propagation
+
+
+    :Parameters:
+
+        **src_col_name** : unicode
+
+        ..
+
+            <TBD>
+
+
+
+        **dest_col_name** : unicode
+
+        ..
+
+            <TBD>
+
+
+
+        **weight_col_name** : unicode
+
+        ..
+
+            <TBD>
+
+
+
+        **src_label_col_name** : unicode
+
+        ..
+
+            <TBD>
+
+
+
+        **result_col_name** : unicode (default=None)
+
+        ..
+
+            <TBD>
+
+
+
+        **max_iterations** : int32 (default=None)
+
+        ..
+
+            <TBD>
+
+
+
+        **convergence_threshold** : float32 (default=None)
+
+        ..
+
+            <TBD>
+
+
+
+        **alpha** : float32 (default=None)
+
+        ..
+
+            <TBD>
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns
+                          |-------
+                          |a 2-column frame:
+                          |
+                          |vertex: int
+                          |    A vertex id.
+                          |result : Vector (long)
+                          |    label vector for the results (for the node id in column 1)
+    Label Propagation on Gaussian Random Fields.
+                   |
+                   |This algorithm is presented in X. Zhu and Z. Ghahramani.
+                   |Learning from labeled and unlabeled data with label propagation.
+                   |Technical Report CMU-CALD-02-107, CMU, 2002.
+                   |
+                   |
+                   |Parameters
+                   |----------
+                   |src_col_name: str
+                   |    The column name for the source vertex id.
+                   |dest_col_name: str
+                   |    The column name for the destination vertex id.
+                   |weight_col_name: str
+                   |    The column name for the edge weight.
+                   |src_label_col_name: str
+                   |    The column name for the label properties for the source vertex.
+                   |result_col_name : str (optional)
+                   |    column name for the results (holding the post labels for the vertices)
+                   |max_iterations : int (optional)
+                   |    The maximum number of supersteps that the algorithm will execute.
+                   |    The valid value range is all positive int.
+                   |    The default value is 10.
+                   |convergence_threshold : float (optional)
+                   |    The amount of change in cost function that will be tolerated at
+                   |    convergence.
+                   |    If the change is less than this threshold, the algorithm exits earlier
+                   |    before it reaches the maximum number of supersteps.
+                   |    The valid value range is all float and zero.
+                   |    The default value is 0.00000001f.
+                   |alpha : float (optional)
+                   |    The tradeoff parameter that controls how much influence an external
+                   |    classifier's prediction contributes to the final prediction.
+                   |    This is for the case where an external classifier is available that can
+                   |    produce initial probabilistic classification on unlabeled examples, and
+                   |    the option allows incorporating external classifier's prediction into
+                   |    the LP training process.
+                   |    The valid value range is [0.0,1.0].
+                   |    The default value is 0.

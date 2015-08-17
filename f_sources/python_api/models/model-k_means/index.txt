@@ -1,0 +1,62 @@
+
+:doc:`Models<../index>` KMeansModel
+***********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    publish
+    train
+
+.. class:: KMeansModel
+
+    <TBD>
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <KMeansModel__init__>`\ (self[, name, _info])                                          <TBD>
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |BETA| Predict the cluster assignments for the data points.
+    :doc:`publish <publish>`\ (self, service_name, file_path)                                             |BETA| <TBD>
+    :doc:`train <train>`\ (self, frame, observation_columns, column_scalings[, k, max_iterations, ...])   |BETA| Creates KMeans Model from train frame.
+    ====================================================================================================  ====================================================================================================
+
+.. _KMeansModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    <TBD>
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            <TBD>
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

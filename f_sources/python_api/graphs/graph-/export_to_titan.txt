@@ -1,0 +1,34 @@
+
+:doc:`Graph <index>`  export_to_titan
+*************************************
+
+------
+
+
+.. function:: export_to_titan(self, new_graph_name=None)
+
+    Convert current graph to TitanGraph.
+
+
+    :Parameters:
+
+        **new_graph_name** : unicode (default=None)
+
+        ..
+
+            The name of the new graph.
+            Default is None.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A new TitanGraph.
+    Convert this Graph into a TitanGraph object.
+    This will be a new graph backed by Titan with all of the data found in this
+    graph.

@@ -1,0 +1,31 @@
+
+:doc:`LibsvmModel <index>`  new
+*******************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    model:libsvm/new
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

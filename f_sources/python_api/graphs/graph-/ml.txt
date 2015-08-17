@@ -1,0 +1,23 @@
+
+:doc:`Graph <index>`  fget
+**************************
+
+------
+
+
+.. attribute:: __private_ml
+
+    Access to object's ml functionality (See :class:`~trustedanalytics.core.docstubs.GraphMl`)
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : GraphMl
+
+        ..
+
+            GraphMl object

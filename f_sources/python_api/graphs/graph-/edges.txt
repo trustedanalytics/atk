@@ -1,0 +1,22 @@
+
+:doc:`Graph <index>`  edges
+***************************
+
+------
+
+
+.. attribute:: edges
+
+    Edge frame collection
+
+
+    :Parameters:
+
+    Examples
+    --------
+    Inspect edges with the supplied label:
+
+    .. code::
+
+        >>> my_graph.edges['label'].inspect()
+

@@ -1,0 +1,65 @@
+
+:doc:`Models<../index>` LibsvmModel
+***********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    score
+    test
+    train
+
+.. class:: LibsvmModel
+
+    model:libsvm/new
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LibsvmModel__init__>`\ (self[, name, _info])                                          |ALPHA| model:libsvm/new
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| New frame with new predicted label column.
+    :doc:`score <score>`\ (self, vector)                                                                  |ALPHA| Calculate the prediction label for a single observation.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, svm_type, ...])               |ALPHA| Train Lib Svm model based on another frame.
+    ====================================================================================================  ====================================================================================================
+
+.. _LibsvmModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    model:libsvm/new
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

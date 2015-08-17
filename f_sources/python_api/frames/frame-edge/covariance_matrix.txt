@@ -1,0 +1,44 @@
+
+:doc:`EdgeFrame <index>`  covariance_matrix
+*******************************************
+
+------
+
+
+.. function:: covariance_matrix(self, data_column_names, matrix_name=None)
+
+    Calculate covariance matrix for two or more columns.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of the column from which to compute the matrix.
+            Names should refer to a single column of type vector, or two or more
+            columns of numeric scalars.
+
+
+
+        **matrix_name** : unicode (default=None)
+
+        ..
+
+            The name of the new
+            matrix.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A matrix with the covariance values for the columns.
+    Notes
+    -----
+    This function applies only to columns containing numerical data.

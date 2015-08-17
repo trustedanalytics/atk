@@ -1,0 +1,40 @@
+
+:doc:`CollaborativeFilteringModel <index>`  recommend
+*****************************************************
+
+------
+
+
+.. function:: recommend(self, name, top_k)
+
+    |BETA|
+    Collaborative filtering (als/cgd) model
+
+
+    :Parameters:
+
+        **name** : unicode
+
+        ..
+
+            An entity name from the first column of the input frame
+
+
+
+        **top_k** : int32
+
+        ..
+
+            positive integer representing the top recommendations for the name
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            see collaborative filtering train for more information
+    see collaborative filtering train for more information
