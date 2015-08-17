@@ -26,6 +26,7 @@
 package org.trustedanalytics.atk.engine.example.plugins
 
 import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.example.plugins.wc.WordCount
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation, PluginDoc }
 
@@ -80,7 +81,7 @@ class MapreduceWordCountPlugin
 
   override def execute(arguments: MapreduceWordCountInput)(implicit invocation: Invocation): MapreduceWordCountOutput = {
 
-    val hdfsWorkingDir = configuration.getString("fs.root")
+    val hdfsWorkingDir = EngineConfig.fsRoot
 
     println(s"HDFS Working Dir: $hdfsWorkingDir")
 
