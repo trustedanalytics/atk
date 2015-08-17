@@ -21,7 +21,7 @@ import javax.script.Bindings
 import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandInvocation, CommandPlugin, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.graph.{Graph, SparkGraphHBaseBackend, GraphBackendName, GraphBuilderConfigFactory}
+import org.trustedanalytics.atk.engine.graph.{ Graph, SparkGraphHBaseBackend, GraphBackendName, GraphBuilderConfigFactory }
 import com.thinkaurelius.titan.core.TitanGraph
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONMode
 import com.tinkerpop.gremlin.groovy.jsr223.GremlinGroovyScriptEngine
