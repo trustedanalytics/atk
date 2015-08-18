@@ -16,21 +16,14 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import java.util.Date
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.domain.frame.FrameEntity
-import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
-import org.trustedanalytics.atk.component.Boot
-import org.trustedanalytics.atk.domain.command.CommandDoc
 import org.trustedanalytics.atk.domain.graph.GraphReference
-import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
-import org.trustedanalytics.atk.engine.graph.{ SparkGraph, SparkGraphHBaseBackend, GraphBuilderConfigFactory }
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, SparkInvocation }
+import org.trustedanalytics.atk.engine.graph.SparkGraph
+import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
-
-import scala.concurrent._
 
 /**
  * Represents the arguments for KClique Percolation algorithm
