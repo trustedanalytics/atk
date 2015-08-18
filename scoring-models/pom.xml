@@ -167,16 +167,6 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.spark-project.akka</groupId>
-                    <artifactId>akka-slf4j_2.10</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.spark-project.akka</groupId>
-                    <artifactId>akka-remote_2.10</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 
