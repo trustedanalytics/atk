@@ -20,7 +20,8 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs }
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
+import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.hadoop.fs.Path
@@ -76,11 +77,6 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
     val kmeansModel = kmeansData.kMeansModel
     val jsvalue: JsValue = kmeansModel.toJson
 
-    val fileName = "kmeansscoring.tar"
-    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
-    require(!fileStorage.exists(new Path(fileName)), "File or Directory already exists")
-    val filePath = fileStorage.absolutePath(fileName).toString
-    ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", filePath, "org.trustedanalytics.atk.scoring.models.LibKMeansModelReaderPlugin")
-    StringValue(filePath)
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibKMeansModelReaderPlugin"))
   }
 }

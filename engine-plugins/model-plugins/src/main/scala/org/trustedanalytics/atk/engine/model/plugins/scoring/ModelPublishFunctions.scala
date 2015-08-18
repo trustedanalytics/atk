@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.scoring
 
 import java.io._
 import java.net.URI
+import java.util.UUID
 
 import org.trustedanalytics.atk.component.Archive
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveOutputStream }
@@ -25,8 +26,16 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
+
+object ModelPublishJsonProtocol {
+
+  implicit val modelPublishFormat = jsonFormat1(ModelPublishArgs)
+
+}
 
 case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference) {
   require(model != null, "model is required")
@@ -34,7 +43,7 @@ case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference) {
 
 object ModelPublish {
 
-  def createTarForScoringEngine(modelData: String, scoringModelJar: String, tarFileName: String, modelClassName: String): Unit = {
+  def createTarForScoringEngine(modelData: String, scoringModelJar: String, modelClassName: String): String = {
 
     val modelDatafile = new File("/tmp/modelbytes")
     // if file doesnt exists, then create it
@@ -91,10 +100,11 @@ object ModelPublish {
     tarOut.close()
 
     val localPath = new Path(tarTempPath)
+    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+    val tarFileName = fileStorage.absolutePath("models_" + UUID.randomUUID().toString().replaceAll("-", "") + ".tar").toString
     val hdfsPath = new Path(tarFileName)
-
     val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())
     hdfsFileSystem.copyFromLocalFile(false, true, localPath, hdfsPath)
-
+    tarFileName
   }
 }
