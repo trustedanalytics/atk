@@ -34,7 +34,7 @@ def initialize_graph(graph, graph_info):
     """Initializes a graph according to given graph_info"""
     graph._id = graph_info.id_number
     graph._name = graph_info.name
-    graph._ia_uri = graph_info.ia_uri
+    graph._ia_uri = graph_info.atk_uri
     graph._uri= server.create_full_uri("graphs/"+ str(graph._id))
     return graph
 

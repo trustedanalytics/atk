@@ -25,11 +25,11 @@ trait UriReference {
   def id: Long
 
   /** The entity name e.g. "frame", "graph", ... */
-  def name: String
+  def root: String
 
   /** The full URI */
-  def uri: String = {
-    s"ia://$name/$id"
+  final def uri: String = {
+    s"$root/$id"
   }
 
   override def hashCode(): Int = uri.hashCode()
@@ -37,5 +37,22 @@ trait UriReference {
   override def equals(obj: scala.Any): Boolean = obj match {
     case x: UriReference => this.uri == x.uri
     case _ => false
+  }
+}
+
+object UriReference {
+
+  lazy val pattern = """^(.+)/(\d+)$""".r
+
+  def fromString[T <: UriReference](s: String, constructor: (Long => T)): T = {
+    s match {
+      case pattern(root, id) =>
+        val ref = constructor(id.toLong)
+        if (ref.root != root) {
+          throw new RuntimeException(s"Internal Error: Invalid UriReference class applied to uri '$s'.  Expected root '${ref.root}'")
+        }
+        ref
+      case _ => throw new RuntimeException(s"Malformed uri '$s'")
+    }
   }
 }

@@ -36,6 +36,7 @@ object JsonSchema {
     def description = None
     def `type` = None
   }
+
   def verbose_bool(description: Option[String], defaultValue: Option[Any]) = BooleanSchema(id = Some(new URI("ia:bool")),
     description = description,
     defaultValue = defaultValue)
@@ -87,6 +88,8 @@ object JsonSchema {
   val model = StringSchema(format = Some("uri/ia-model"))
 
   def vector(length: Long) = ArraySchema(`type` = Some(s"ia:vector($length)"))
+
+  val unit = UnitSchema()
 }
 
 sealed trait Primitive extends JsonSchema {
@@ -166,3 +169,8 @@ case class BooleanSchema(id: Option[URI] = None,
                          defaultValue: Option[Any] = None,
                          `type`: Option[String] = Some("boolean")) extends Primitive {
 }
+
+case class UnitSchema(id: Option[URI] = None,
+                      title: Option[String] = None,
+                      description: Option[String] = None,
+                      `type`: Option[String] = Some("unit")) extends Primitive {}

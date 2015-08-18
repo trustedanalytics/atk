@@ -120,7 +120,7 @@ class FrameBackendRest(object):
 
 
     def get_ia_uri(self, frame):
-        return self._get_frame_info(frame).ia_uri
+        return self._get_frame_info(frame).atk_uri
 
     def get_repr(self, frame):
         frame_info = self._get_frame_info(frame)
@@ -579,7 +579,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
     def initialize_graph_frame(self, frame, frame_info, graph):
         """Initializes a frame according to given frame_info associated with a graph"""
-        frame._ia_uri = frame_info.ia_uri
+        frame._ia_uri = frame_info.atk_uri
         frame._id = frame_info.id_number
         frame._error_frame_id = frame_info.error_frame_id
         frame._label = frame_info.label
@@ -624,8 +624,8 @@ class FrameInfo(object):
         return self._payload.get('name', None)
     
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def atk_uri(self):
+        return self._payload['atk_uri']
 
     @property
     def schema(self):
@@ -757,7 +757,7 @@ class FrameData:
 
 def initialize_frame(frame, frame_info):
     """Initializes a frame according to given frame_info"""
-    frame._ia_uri = frame_info.ia_uri
+    frame._ia_uri = frame_info.atk_uri
     frame._id = frame_info.id_number
     frame._error_frame_id = frame_info.error_frame_id
 

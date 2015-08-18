@@ -88,6 +88,8 @@ def get_data_type(json_schema):
                 data_type = list
             elif t == 'object':
                 data_type = dict  # use dict for now, TODO - add complex type support
+            elif t == 'unit':
+                data_type = unit
 
         if not data_type:
             #data_type =  dict  # use dict for now, TODO - add complex type support

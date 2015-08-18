@@ -147,7 +147,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   abstract class UriReferenceFormat[T <: UriReference]
       extends JsonFormat[T] {
-    override def write(obj: T): JsValue = JsString(obj.uri)
+    override def write(obj: T): JsValue = JsObject("uri" -> JsString(obj.uri))
 
     override def read(json: JsValue): T = {
       implicit val invocation: Invocation = Call(null, EngineExecutionContext.global)
@@ -155,7 +155,9 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         json match {
           case JsString(uri) => createReference(uri.substring(uri.lastIndexOf('/') + 1).toLong)
           case JsNumber(n) => createReference(n.toLong)
-          case _ => throw new IllegalArgumentException("Json was not a String or Number")
+          case JsObject(o) => o("uri") match {
+            case JsString(uri) => createReference(uri.substring(uri.lastIndexOf('/') + 1).toLong)
+          }
         }
       }
       catch {
@@ -164,10 +166,12 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
 
     def createReference(id: Long): T
+    def createReference(uri: String): T
   }
 
   implicit val frameReferenceFormat = new UriReferenceFormat[FrameReference] {
-    override def createReference(id: Long): FrameReference = new FrameReference(id)
+    override def createReference(id: Long): FrameReference = id
+    override def createReference(uri: String): FrameReference = uri
   }
   implicit def singletonOrListFormat[T: JsonFormat] = new JsonFormat[SingletonOrListValue[T]] {
     def write(list: SingletonOrListValue[T]) = JsArray(list.value.map(_.toJson))
@@ -300,7 +304,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val filterPredicateFormat = jsonFormat2(FilterArgs)
   implicit val removeColumnFormat = jsonFormat2(DropColumnsArgs)
   implicit val addColumnFormat = jsonFormat5(AddColumnsArgs)
-  implicit val renameFrameFormat = jsonFormat2(RenameFrameArgs)
   implicit val renameColumnsFormat = jsonFormat2(RenameColumnsArgs)
   implicit val groupByAggregationsFormat = jsonFormat3(GroupByAggregationArgs)
   implicit val groupByColumnFormat = jsonFormat3(GroupByArgs)
@@ -370,7 +373,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   // model service formats
   implicit val ModelReferenceFormat = new UriReferenceFormat[ModelReference] {
-    override def createReference(id: Long): ModelReference = new ModelReference(id)
+    override def createReference(id: Long): ModelReference = id
+    override def createReference(uri: String): ModelReference = uri
   }
   implicit val modelTemplateFormat = jsonFormat2(ModelTemplate)
   implicit val modelRenameFormat = jsonFormat2(RenameModelArgs)
@@ -386,7 +390,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   // graph service formats
   implicit val graphReferenceFormat = new UriReferenceFormat[GraphReference] {
-    override def createReference(id: Long): GraphReference = new GraphReference(id)
+    override def createReference(id: Long): GraphReference = id
+    override def createReference(uri: String): GraphReference = uri
   }
   implicit val graphTemplateFormat = jsonFormat2(GraphTemplate)
   implicit val graphRenameFormat = jsonFormat2(RenameGraphArgs)
@@ -458,6 +463,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
       case a: ArraySchema => arraySchemaFormat.write(a)
       case n: NumberSchema => numberSchemaFormat.write(n)
       case b: BooleanSchema => booleanSchemaFormat.write(b)
+      case u: UnitSchema => unitSchemaFormat.write(u)
       case JsonSchema.empty => JsObject().toJson
       case x => serializationError(s"Expected a valid json schema object, but received: $x")
     }
@@ -468,6 +474,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   lazy implicit val stringSchemaFormat: RootJsonFormat[StringSchema] = jsonFormat10(StringSchema)
   lazy implicit val objectSchemaFormat: RootJsonFormat[ObjectSchema] = jsonFormat13(ObjectSchema)
   lazy implicit val arraySchemaFormat: RootJsonFormat[ArraySchema] = jsonFormat10(ArraySchema)
+  lazy implicit val unitSchemaFormat: RootJsonFormat[UnitSchema] = jsonFormat4(UnitSchema)
 
   implicit object CommandDocFormat extends JsonFormat[CommandDoc] {
     override def read(value: JsValue): CommandDoc = {
@@ -535,7 +542,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(frame: FrameEntity): JsValue = {
       JsObject(dataFrameFormatOriginal.write(frame).asJsObject.fields +
-        ("ia_uri" -> JsString(frame.uri)) +
+        ("atk_uri" -> JsString(frame.uri)) +
         ("entity_type" -> JsString(frame.entityType)))
     }
   }
@@ -549,7 +556,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(graph: GraphEntity): JsValue = {
       JsObject(graphFormatOriginal.write(graph).asJsObject.fields +
-        ("ia_uri" -> JsString(graph.uri)) +
+        ("atk_uri" -> JsString(graph.uri)) +
         ("entity_type" -> JsString(graph.entityType)))
     }
   }

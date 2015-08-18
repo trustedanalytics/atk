@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.topk
 
-import org.trustedanalytics.atk.domain.frame.{ TopKArgs, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, TopKArgs, FrameEntity }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -41,7 +41,7 @@ All data elements of weight <= 0 are excluded from the calculation, as are
 all data elements whose weight is NaN or infinite.
 If there are no data elements of finite weight > 0, then topK is empty.""",
   returns = "An object with access to the frame of data.")
-class TopKPlugin extends SparkCommandPlugin[TopKArgs, FrameEntity] {
+class TopKPlugin extends SparkCommandPlugin[TopKArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -66,7 +66,7 @@ class TopKPlugin extends SparkCommandPlugin[TopKArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: TopKArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: TopKArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val columnIndex = frame.schema.columnIndex(arguments.columnName)
 

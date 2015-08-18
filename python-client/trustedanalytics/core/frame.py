@@ -1135,9 +1135,8 @@ Default is None.""")
     A frame has been created and Frame *your_frame* is its proxy.
     It has no data yet, but it does have the name *yourframe*.
         """
-        self._error_frame_id = None
         self._id = 0
-        self._ia_uri = None
+        self._atk_uri = None
         with api_context(logger, 3, self.__init__, self, source, name, _info):
             api_status.verify_installed()
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend

@@ -115,8 +115,8 @@ class ModelInfo(object):
         return self._payload.get('name', None)
 
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def atk_uri(self):
+        return self._payload['atk_uri']
 
     @property
     def links(self):

@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.schema.Schema
  */
 
 case class GetDataFrame(id: Long, name: Option[String],
-                        ia_uri: String, schema: Schema,
+                        atk_uri: String, schema: Schema,
                         rowCount: Option[Long],
                         links: List[RelLink],
                         errorFrameId: Option[Long],
@@ -37,7 +37,7 @@ case class GetDataFrame(id: Long, name: Option[String],
                         status: String) {
   require(id > 0, "id must be greater than zero")
   require(name != null, "name must not be null")
-  require(ia_uri != null, "ia_uri must not be null")
+  require(atk_uri != null, "ia_uri must not be null")
   require(schema != null, "schema must not be null")
   require(rowCount.isEmpty || rowCount.get >= 0, "rowCount must not be negative")
   require(links != null, "links must not be null")

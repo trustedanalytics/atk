@@ -26,6 +26,7 @@ import sys
 import inspect
 
 from trustedanalytics.core.api import api_globals, api_status
+from trustedanalytics.core.atktypes import unit
 from trustedanalytics.meta.installpath import InstallPath
 from trustedanalytics.meta.context import get_api_context_decorator
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo
@@ -399,16 +400,31 @@ def validate_arguments(arguments, parameters):
     return validated
 
 
+def _identity(value):
+    return value
+
+def _return_none(value):
+    print "(Returning None!!!!!)"
+    return None
+
+def get_result_processor(command_def):
+    if command_def.return_info.data_type is unit:
+        return _return_none
+    return _identity
+
+
 def create_execute_command_function(command_def, execute_command_function):
     """
     Creates the appropriate execute_command for the command_def by closing
     over the parameter info for validating the arguments during usage
     """
     parameters = command_def.parameters
+    result_processor = get_result_processor(command_def)
 
     def execute_command(_command_name, _selfish, **kwargs):
         arguments = validate_arguments(kwargs, parameters)
-        return execute_command_function(_command_name, _selfish, **arguments)
+        result = execute_command_function(_command_name, _selfish, **arguments)
+        return result_processor(result)
     return execute_command
 
 

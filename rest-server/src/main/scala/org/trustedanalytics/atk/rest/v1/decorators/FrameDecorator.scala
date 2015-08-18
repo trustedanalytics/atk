@@ -50,7 +50,7 @@ object FrameDecorator extends EntityDecorator[FrameEntity, GetDataFrames, GetDat
 
     GetDataFrame(id = entity.id,
       name = entity.name,
-      ia_uri = entity.uri,
+      atk_uri = entity.uri,
       schema = entity.schema,
       rowCount = entity.rowCount,
       links,
