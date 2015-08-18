@@ -9,9 +9,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 ```
 
 #Building
-After clonning the repository CD to CLONED_DIR/misc/titan-shaded and install the module.
+After cloning the repository (to a directory we'll refer to as 'atk'),
+cd to atk/misc/titan-shaded and install the module.
 ```
-cd CLONED_DIR/misc/titan-shaded/
+cd atk/misc/titan-shaded/
+mvn install
+
 ```
 
 go back to the root of the repository
@@ -30,17 +33,18 @@ mvn compile -P events
 ```
 
 
-To build all the jars necessary to run the rest server
+## To build all the jars necessary to run the rest server
+
 ```
 mvn package -P events -DskipTests
 ```
 
-If you want to run all the test run the maven package without without skipTests option
+If you want to run all the test run the maven package without skipTests option
 ```
 mvn package -P events
 ```
 
-You can add -T option to run maven with [parallel execution](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) except when running test
+You can add -T option to run maven with [parallel execution](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) *except when running tests*.
 ```
 #OK
 mvn -T 4 package -P events -DskipTests
@@ -81,7 +85,7 @@ This is an overview. Additional details and instructions are in the user documen
 * [Look at our wiki docs](../../wiki)
 
 # Folders Overview
-* bin/ - script for starting REST server, gremlin shell
+* bin/ - scripts for starting REST server and scoring engine, etc.
 * conf/ - configuration templates for setting up a system, put your application.conf here for running out of source code
 * deploy/ - a module for creating an uber jar needed for deployment on Analytics PaaS.
 * doc/ - end user docs for the system (except doc for specific plugins goes in the plugins themselves)
@@ -102,7 +106,7 @@ This is an overview. Additional details and instructions are in the user documen
 * package/ - packaging for VM's, RPM's
 * python-client/ - python client code (talks with rest-server)
   * examples/ - example code for users of how to use the API
-* rest-server/ - the rest server converts HTTP requests to Akka messages that are sent to the Engine
+* rest-server/ - the rest server converts HTTP requests to messages that are sent to the Engine
 * testutils/ - some test utility code that gets reused between tests in different modules
 
 
