@@ -361,7 +361,7 @@ object MLLibJsonProtocol {
   implicit val pcaTrainFormat = jsonFormat4(PrincipalComponentsTrainArgs)
   implicit val pcaPredictReturnFormat = jsonFormat2(PrincipalComponentsPredictReturn)
   implicit val pcaTrainReturnFormat = jsonFormat4(PrincipalComponentsTrainReturn)
-  implicit val modelPublishFormat = jsonFormat3(ModelPublishArgs)
+  implicit val modelPublishFormat = jsonFormat1(ModelPublishArgs)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

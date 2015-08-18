@@ -81,7 +81,7 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
     source.close()
     val model = modelLoader.load(byteArray)
     val modelName = modelFile.substring(modelFile.lastIndexOf("/") + 1)
-    new ScoringService(model, modelName)
+    new ScoringService(model)
   }
 
   private def modelLoadRead(): Unit = {

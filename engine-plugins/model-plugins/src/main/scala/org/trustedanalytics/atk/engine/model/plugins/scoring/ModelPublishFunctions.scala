@@ -23,25 +23,20 @@ import org.trustedanalytics.atk.component.Archive
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveOutputStream }
 import org.apache.commons.io.IOUtils
 import java.io.File
-import org.apache.commons.io.FileUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference,
-                            @ArgDoc("""Name of the service used in the scoring engine rest API""") serviceName: String,
-                            @ArgDoc("""Path and filename in HDFS to where this model will be published""") filePath: String) {
+case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference) {
   require(model != null, "model is required")
-  require(serviceName != null, "service name is required")
-  require(filePath != null, "file path is required")
 }
 
 object ModelPublish {
 
-  def createTarForScoringEngine(modelData: String, serviceName: String, scoringModelJar: String, tarFileName: String, modelClassName: String): Unit = {
+  def createTarForScoringEngine(modelData: String, scoringModelJar: String, tarFileName: String, modelClassName: String): Unit = {
 
-    val modelDatafile = new File("/tmp/" + serviceName)
+    val modelDatafile = new File("/tmp/modelbytes")
     // if file doesnt exists, then create it
     if (!modelDatafile.exists()) {
       modelDatafile.createNewFile()
@@ -72,19 +67,19 @@ object ModelPublish {
     val bOut = new BufferedOutputStream(tarOut)
     val tOut = new TarArchiveOutputStream(bOut)
 
-    var entryName = modelDatafile.getName()
+    var entryName = modelDatafile.getName
     var tarEntry: TarArchiveEntry = new TarArchiveEntry(modelDatafile, entryName)
     tOut.putArchiveEntry(tarEntry)
     IOUtils.copy(new FileInputStream(modelDatafile), tOut)
     tOut.closeArchiveEntry()
 
-    entryName = modelClassNamefile.getName()
+    entryName = modelClassNamefile.getName
     tarEntry = new TarArchiveEntry(modelClassNamefile, entryName)
     tOut.putArchiveEntry(tarEntry)
     IOUtils.copy(new FileInputStream(modelClassNamefile), tOut)
     tOut.closeArchiveEntry()
 
-    entryName = jarFile.getName()
+    entryName = jarFile.getName
     tarEntry = new TarArchiveEntry(jarFile, entryName)
     tOut.putArchiveEntry(tarEntry)
     IOUtils.copy(new FileInputStream(jarFile), tOut)
