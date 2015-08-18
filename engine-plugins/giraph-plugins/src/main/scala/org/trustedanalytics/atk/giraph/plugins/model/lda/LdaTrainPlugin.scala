@@ -67,7 +67,7 @@ class LdaTrainPlugin
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run
-    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "giraph")
+    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
 
     val giraphConf = new LdaConfiguration(hConf)
 
