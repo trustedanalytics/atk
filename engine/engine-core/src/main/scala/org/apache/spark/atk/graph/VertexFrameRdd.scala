@@ -21,17 +21,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{GraphSchema, Schema, VertexSchema}
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
-=======
-import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
-import org.trustedanalytics.atk.domain.schema.{ VertexSchema, GraphSchema, Schema }
-import org.trustedanalytics.atk.engine.frame.MiscFrameFunctions
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.SparkContext._
-import org.apache.spark.rdd.RDD
-import org.apache.spark.{ SparkContext, sql }
-import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
-import org.apache.spark.sql.{ Row, SQLContext }
->>>>>>> master
 
 import scala.reflect.ClassTag
 
@@ -63,12 +52,22 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
   def dropDuplicates(): VertexFrameRdd = {
     val idColumnName = schema.idColumnName.getOrElse(throw new RuntimeException("Cannot drop duplicates is id column has not yet been defined"))
     val columnNames = List(idColumnName, schema.label)
-    val duplicatesRemoved: RDD[Row] = this.dropDuplicatesByColumn(columnNames)
-    new VertexFrameRdd(schema, duplicatesRemoved)
+    this.dropDuplicatesByColumn(columnNames)
   }
 
   def groupVerticesById() = {
     this.groupBy(data => vertexWrapper(data).idValue)
+  }
+
+  /**
+   * Update rows in vertex frame
+   *
+   * @param newRows New rows
+   * @return New vertex frame with updated rows
+   */
+  override def update(newRows: RDD[Row]): Self = {
+    (new VertexFrameRdd(this.schema, newRows)).asInstanceOf[Self]
+
   }
 
   /**
