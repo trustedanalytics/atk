@@ -1437,7 +1437,97 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>libsvm</artifactId>
                 <version>3.17</version>
             </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-core_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-core_akka-2.2_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.typesafe.akka</groupId>
+                        <artifactId>akka-actor_2.10</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-scala_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-scala_akka-2.2_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-statsd_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-statsd_akka-2.2_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.typesafe.akka</groupId>
+                        <artifactId>akka-actor_2.10</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-spray_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-log-reporter_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-log-reporter_akka-2.2_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.typesafe.akka</groupId>
+                        <artifactId>akka-actor_2.10</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-system-metrics_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.kamon</groupId>
+                <artifactId>kamon-system-metrics_akka-2.2_${scala.short.version}</artifactId>
+                <version>0.4.0</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.typesafe.akka</groupId>
+                        <artifactId>akka-actor_2.10</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+
         </dependencies>
+
+
     </dependencyManagement>
 
 </project>

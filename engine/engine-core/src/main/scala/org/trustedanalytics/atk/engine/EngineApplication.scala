@@ -22,6 +22,7 @@ import com.typesafe.config.Config
 import scala.reflect.ClassTag
 import scala.util.control.NonFatal
 import org.trustedanalytics.atk.event.EventLogging
+import _root_.kamon.Kamon
 
 class EngineApplication(archiveDefinition: ArchiveDefinition, classLoader: ClassLoader, config: Config)
     extends Archive(archiveDefinition, classLoader, config) with EventLogging with ClassLoaderAware {
@@ -45,11 +46,13 @@ class EngineApplication(archiveDefinition: ArchiveDefinition, classLoader: Class
 
   override def stop() = {
     info("Shutting down engine")
+    Kamon.shutdown()
     engine.engine.shutdown()
   }
 
   override def start() = {
     try {
+      Kamon.start()
       engine = new EngineComponent
     }
     catch {
