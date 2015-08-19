@@ -95,7 +95,7 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
         LoadRddFunctions.loadAndParseData(sc, data, parser)
       }
       // parse failures go to their own data frame
-      if (parseResult.errorLines.isEmpty()) {
+      if (!parseResult.errorLines.isEmpty()) {
         val errorFrame = engine.frames.lookupOrCreateErrorFrame(destinationFrame)
         unionAndSave(errorFrame, parseResult.errorLines)
       }
