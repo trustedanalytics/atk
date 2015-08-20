@@ -144,7 +144,7 @@ Example response body for command 17, a 'load' on frame 16 which has completed::
        "materialized_on": "2015-05-15T14:58:32.611-07:00",
        "materialization_complete": "2015-05-15T14:58:35.258-07:00",
        "last_read_date": "2015-05-15T14:58:23.369-07:00",
-       "ia_uri": "ia://frame/16",
+       "ta_uri": "ta://frame/16",
        "entity_type": "frame:"
      },
      "links": [{

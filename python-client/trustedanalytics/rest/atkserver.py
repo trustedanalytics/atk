@@ -45,9 +45,9 @@ def _with_retry_on_token_error(function, *args, **kwargs):
     try:
         return function(*args, **kwargs)
     except InvalidAuthTokenError:
-        ia_server = args[0]
-        if ia_server.retry_on_token_error:
-            ia_server.refresh_oauth_token()
+        ta_server = args[0]
+        if ta_server.retry_on_token_error:
+            ta_server.refresh_oauth_token()
             return function(*args, **kwargs)
         else:
             raise
@@ -82,7 +82,7 @@ class AtkServer(Server):
             uri=uri or self._get_conf('uri'),
             scheme=self._get_conf('scheme'),
             headers=self._get_conf('headers'))
-        # specific to IA Server
+        # specific to TA Server
         self._api_version = self._get_conf('api_version')
         self._user=self._get_conf('user', None)
         self._oauth_uri = self._get_conf('oauth_uri', None)

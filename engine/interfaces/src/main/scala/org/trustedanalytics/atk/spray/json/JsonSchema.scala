@@ -36,13 +36,13 @@ object JsonSchema {
     def description = None
     def `type` = None
   }
-  def verbose_bool(description: Option[String], defaultValue: Option[Any]) = BooleanSchema(id = Some(new URI("ia:bool")),
+  def verbose_bool(description: Option[String], defaultValue: Option[Any]) = BooleanSchema(id = Some(new URI("ta:bool")),
     description = description,
     defaultValue = defaultValue)
 
   val bool = verbose_bool(None, None)
 
-  def verbose_int(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:int")),
+  def verbose_int(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ta:int")),
     description = description,
     defaultValue = defaultValue,
     minimum = Some(Int.MinValue),
@@ -51,7 +51,7 @@ object JsonSchema {
 
   val int = verbose_int(None, None)
 
-  def verbose_long(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:long")),
+  def verbose_long(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ta:long")),
     description = description,
     defaultValue = defaultValue,
     minimum = Some(Long.MinValue),
@@ -60,7 +60,7 @@ object JsonSchema {
 
   val long = verbose_long(None, None)
 
-  def verbose_float(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:float")),
+  def verbose_float(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ta:float")),
     description = description,
     defaultValue = defaultValue,
     minimum = Some(Float.MinValue),
@@ -68,7 +68,7 @@ object JsonSchema {
 
   val float = verbose_float(None, None)
 
-  def verbose_double(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:double")),
+  def verbose_double(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ta:double")),
     description = description,
     defaultValue = defaultValue,
     minimum = Some(Double.MinValue),
@@ -78,15 +78,15 @@ object JsonSchema {
 
   val dateTime = StringSchema(format = Some("date-time"))
 
-  def verbose_frame(description: Option[String], defaultValue: Option[Any]) = StringSchema(format = Some("uri/ia-frame"), description = description, defaultValue = defaultValue)
+  def verbose_frame(description: Option[String], defaultValue: Option[Any]) = StringSchema(format = Some("uri/ta-frame"), description = description, defaultValue = defaultValue)
 
   val frame = verbose_frame(None, None)
 
-  val graph = StringSchema(format = Some("uri/ia-graph"))
+  val graph = StringSchema(format = Some("uri/ta-graph"))
 
-  val model = StringSchema(format = Some("uri/ia-model"))
+  val model = StringSchema(format = Some("uri/ta-model"))
 
-  def vector(length: Long) = ArraySchema(`type` = Some(s"ia:vector($length)"))
+  def vector(length: Long) = ArraySchema(`type` = Some(s"ta:vector($length)"))
 }
 
 sealed trait Primitive extends JsonSchema {

@@ -99,7 +99,7 @@ class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
     val edgeSchemas = edgesWithCorrectedLabels.aggregate(EdgeSchemaAggregator.zeroValue)(EdgeSchemaAggregator.seqOp, EdgeSchemaAggregator.combOp).values
 
     // Create the target Graph
-    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, "ia/frame"))
+    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, "ta/frame"))
 
     // Create the Edge and Vertex frames
     vertexSchemas.foreach(schema => targetGraph.defineVertexType(schema))

@@ -49,7 +49,7 @@ Returns information about the entity
 +-------------------------------+----------------------------------------------+
 | name                          | entity name (user-assigned)                  |
 +-------------------------------+----------------------------------------------+
-| ia_uri                        | Ignorable                                    |
+| ta_uri                        | Ignorable                                    |
 +-------------------------------+----------------------------------------------+
 | links                         | links to the entity                          |
 +-------------------------------+----------------------------------------------+
@@ -79,7 +79,7 @@ Extra fields specific to frames:
    {
     "id": 7,
     "name": "super_frame",
-    "ia_uri": "ia://frame/7",
+    "ta_uri": "ta://frame/7",
     "entity_type": "frame:",
     "status": "Active"
     "links": [{

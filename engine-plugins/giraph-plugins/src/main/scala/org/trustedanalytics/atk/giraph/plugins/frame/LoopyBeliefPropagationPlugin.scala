@@ -245,7 +245,7 @@ class LoopyBeliefPropagationPlugin
     giraphConf.setComputationClass(classOf[LoopyBeliefPropagationComputation])
     giraphConf.setAggregatorWriterClass(classOf[LoopyBeliefPropagationAggregatorWriter])
 
-    val result = GiraphJobManager.run("ia_giraph_lbp",
+    val result = GiraphJobManager.run("ta_giraph_lbp",
       classOf[LoopyBeliefPropagationComputation].getCanonicalName,
       giraphConf,
       invocation,

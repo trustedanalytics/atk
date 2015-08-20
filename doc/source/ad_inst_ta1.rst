@@ -587,7 +587,7 @@ The following lines need to be commented:
 
         metastore.connection-postgresql.host = "invalid-postgresql-host"
         metastore.connection-postgresql.port = 5432
-        metastore.connection-postgresql.database = "ta-metastore"
+        metastore.connection-postgresql.database = "ta_metastore"
         metastore.connection-postgresql.username = "atkuser"
         metastore.connection-postgresql.password = "myPassword"
         metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -599,7 +599,7 @@ The following lines need to be commented:
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "ta_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -613,7 +613,7 @@ The following lines need to be commented:
 
         metastore.connection-postgresql.host = "invalid-postgresql-host"
         metastore.connection-postgresql.port = 5432
-        metastore.connection-postgresql.database = "ta-metastore"
+        metastore.connection-postgresql.database = "ta_metastore"
         metastore.connection-postgresql.username = "atkuser"
         metastore.connection-postgresql.password = "myPassword"
         metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.
@@ -628,7 +628,7 @@ The following lines need to be commented:
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "ta_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.
@@ -717,7 +717,7 @@ Now that the database is created, uncomment all the postgres lines in
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "ta_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -743,7 +743,7 @@ Now that the database is created, uncomment all the postgres lines in
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "ta_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"

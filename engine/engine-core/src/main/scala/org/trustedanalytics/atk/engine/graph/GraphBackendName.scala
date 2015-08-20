@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.domain.graph.GraphEntity
  */
 object GraphBackendName {
 
-  private val iatGraphTablePrefix: String = "iat_graph_"
+  private val iatGraphTablePrefix: String = "ta_graph_"
 
   /**
    * Converts the user's name for a graph into the name used by the underlying graph store.

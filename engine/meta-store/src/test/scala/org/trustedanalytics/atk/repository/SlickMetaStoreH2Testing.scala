@@ -36,7 +36,7 @@ trait SlickMetaStoreH2Testing extends FlatSpec with BeforeAndAfter {
   implicit val rootEc = EventContext.enter("root")
 
   lazy val slickMetaStoreComponent: SlickMetaStoreComponent = new SlickMetaStoreComponent with DbProfileComponent {
-    override lazy val profile = new Profile(H2Driver, connectionString = "jdbc:h2:mem:iatest" + Random.nextInt() + ";DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
+    override lazy val profile = new Profile(H2Driver, connectionString = "jdbc:h2:mem:tatest" + Random.nextInt() + ";DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
   }
 
   before {

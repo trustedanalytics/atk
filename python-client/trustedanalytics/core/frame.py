@@ -1137,7 +1137,7 @@ Default is None.""")
         """
         self._error_frame_id = None
         self._id = 0
-        self._ia_uri = None
+        self._ta_uri = None
         with api_context(logger, 3, self.__init__, self, source, name, _info):
             api_status.verify_installed()
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
@@ -1300,7 +1300,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
             api_status.verify_installed()
             self._error_frame_id = None
             self._id = 0
-            self._ia_uri = None
+            self._ta_uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
@@ -1457,7 +1457,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
             api_status.verify_installed()
             self._error_frame_id = None
             self._id = 0
-            self._ia_uri = None
+            self._ta_uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)

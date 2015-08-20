@@ -23,7 +23,7 @@ class GraphNameTest extends WordSpec with Matchers {
   "ConvertGraphBackendNameToUserName" should {
     "strip expected id from the backend name" in {
       val id: Long = 256
-      val backendName = s"iat_graph_$id"
+      val backendName = s"ta_graph_$id"
       GraphBackendName.getIdFromBackendName(backendName) shouldEqual id
     }
   }
