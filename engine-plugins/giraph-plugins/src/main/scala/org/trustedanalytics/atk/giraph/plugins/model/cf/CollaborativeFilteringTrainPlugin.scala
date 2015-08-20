@@ -20,6 +20,7 @@ import org.apache.spark.sql.parquet.atk.giraph.frame.cf.{ CollaborativeFiltering
 import org.trustedanalytics.atk.domain.{ StringValue, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.FrameName
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 import org.trustedanalytics.atk.giraph.algorithms.als.AlternatingLeastSquaresComputation
 import org.trustedanalytics.atk.giraph.algorithms.als.AlternatingLeastSquaresComputation.{ AlternatingLeastSquaresAggregatorWriter, AlternatingLeastSquaresMasterCompute }
@@ -50,12 +51,11 @@ class CollaborativeFilteringTrainPlugin
   override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit context: Invocation): StringValue = {
 
     val frames = engine.frames
-    val config = configuration
     val frame = frames.expectFrame(arguments.frame)
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run
-    val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(config, "giraph")
+    val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
     val giraphConf = new CollaborativeFilteringConfiguration(hadoopConf)
 
     val userFrameName = FrameName.generate(Some("user_"))
@@ -95,7 +95,6 @@ class CollaborativeFilteringTrainPlugin
 
     val result = GiraphJobManager.run("cf_giraph",
       computation,
-      config,
       giraphConf,
       context,
       CollaborativeFilteringConstants.reportFilename)

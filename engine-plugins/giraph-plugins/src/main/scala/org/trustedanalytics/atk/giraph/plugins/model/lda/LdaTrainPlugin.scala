@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
@@ -57,7 +58,6 @@ class LdaTrainPlugin
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
     val frames = engine.frames
-    val config = configuration
 
     // validate arguments
     val frame = frames.expectFrame(arguments.frame)
@@ -67,7 +67,7 @@ class LdaTrainPlugin
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run
-    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(config, "giraph")
+    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
 
     val giraphConf = new LdaConfiguration(hConf)
 
@@ -92,7 +92,9 @@ class LdaTrainPlugin
 
     val report = GiraphJobManager.run(s"ia_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
       classOf[CVB0LDAComputation].getCanonicalName,
-      config, giraphConf, invocation, "lda-learning-report_0")
+      giraphConf,
+      invocation,
+      "lda-learning-report_0")
 
     val resultsColumn = Column("lda_results", DataTypes.vector(arguments.getNumTopics))
 

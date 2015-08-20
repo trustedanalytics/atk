@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.frame
 
 import org.apache.spark.sql.parquet.atk.giraph.frame.lbp.{ LoopyBeliefPropagationVertexOutputFormat, LoopyBeliefPropagationVertexInputFormat, LoopyBeliefPropagationEdgeInputFormat }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.giraph.algorithms.lbp.LoopyBeliefPropagationComputation
 import org.trustedanalytics.atk.giraph.algorithms.lbp.LoopyBeliefPropagationComputation.{ LoopyBeliefPropagationAggregatorWriter, LoopyBeliefPropagationMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lbp._
@@ -219,14 +220,13 @@ class LoopyBeliefPropagationPlugin
 
   override def execute(arguments: LoopyBeliefPropagationArgs)(implicit invocation: Invocation): LoopyBeliefPropagationResult = {
     val frames = engine.frames
-    val config = configuration
 
     //TODO validate frame args here
     val frame = frames.expectFrame(arguments.frame)
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run
-    val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(config, "giraph")
+    val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
     val giraphConf = new LoopyBeliefPropagationConfiguration(hadoopConf)
 
     val outputFrame = frames.create(CreateEntityArgs(description = Some("Loopy belief propagation results")))
@@ -248,7 +248,6 @@ class LoopyBeliefPropagationPlugin
 
     val result = GiraphJobManager.run("ia_giraph_lbp",
       classOf[LoopyBeliefPropagationComputation].getCanonicalName,
-      config,
       giraphConf,
       invocation,
       "lbp-learning-report")

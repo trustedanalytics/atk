@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.giraph.plugins.util
 import java.io.File
 
 import org.trustedanalytics.atk.component.Boot
-import org.trustedanalytics.atk.engine.{ CommandStorage, ProgressInfo }
+import org.trustedanalytics.atk.engine.{ EngineConfig, CommandStorage, ProgressInfo }
 import org.trustedanalytics.atk.engine.plugin.{ CommandInvocation, Invocation }
 import org.apache.giraph.conf.GiraphConfiguration
 import org.apache.giraph.job.{ DefaultJobObserver, GiraphJob }
@@ -102,14 +102,15 @@ class GiraphJobListener extends DefaultJobObserver {
  */
 object GiraphJobManager {
 
+  private val archiveName = EngineConfig.config.getString("trustedanalytics.atk.engine.giraph.archive.name")
+
   def run(jobName: String,
           computationClassCanonicalName: String,
-          config: Config,
           giraphConf: GiraphConfiguration,
           invocation: Invocation,
           reportName: String): String = {
 
-    val giraphLoader = Boot.getClassLoader(config.getString("giraph.archive.name"))
+    val giraphLoader = Boot.getClassLoader(archiveName)
     Thread.currentThread().setContextClassLoader(giraphLoader)
 
     val commandInvocation = invocation.asInstanceOf[CommandInvocation]
@@ -124,7 +125,7 @@ object GiraphJobManager {
 
     // Clear Giraph Report Directory
     val fs = FileSystem.get(new Configuration())
-    val outputDir = outputDirectory(fs, config, commandInvocation.commandId)
+    val outputDir = outputDirectory(fs, commandInvocation.commandId)
 
     fs.delete(outputDir, true)
 
@@ -143,8 +144,8 @@ object GiraphJobManager {
   /**
    * Get the output directory
    */
-  def outputDirectory(fs: FileSystem, config: Config, commandId: Long): Path = {
-    val path = config.getString("fs.root") +
+  def outputDirectory(fs: FileSystem, commandId: Long): Path = {
+    val path = EngineConfig.fsRoot +
       File.separator +
       "giraph-output-tmp" +
       File.separator + commandId
