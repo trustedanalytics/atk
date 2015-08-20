@@ -1233,7 +1233,7 @@ Inspect the graph:
     >>> my_graph.vertices['Employee'].inspect(20)
     >>> my_graph.edges['worksunder'].inspect(20)
 
-For further information, see the API section on :ref:`seamless_graph`.
+For further information, see the API section on `Graphs <python_api/graphs/index.html>`_.
 
 .. _export_to_titan:
 
@@ -1283,70 +1283,11 @@ arbitrary frame of data consisting of the :download:`following
 | David    | Rob     | VP of Sales       | 7     |
 +----------+---------+-------------------+-------+
 
-Build the Graph
-===============
+Graph Creation
+==============
 
-There are two methods of building a Titan graph, exporting it from a seamless
-graph, or building it directly from a frame.
-Since exporting it from a seamless graph is discussed :ref:`above
-<export_to_titan>`, this section will concentrate on building one directly from
-a frame.
-
-The first step is to define the rules that dictate how the frame data should
-be associated to vertices and edges:
-
-.. only:: html
-
-    .. code::
-
-        >>> employee_vertex = ta.VertexRule(id_key = "employee", id_value = my_frame.employee, properties = {'vertex_type': 'L', title:my_frame.title})
-        >>> manager_vertex = ta.VertexRule(id_key = "managers", id_value = my_frame.manager, properties = {'vertex_type": "R"})
-
-.. only:: latex
-
-    .. code::
-
-        >>> employee_vertex = ta.VertexRule(id_key = "employee",
-        ... id_value = my_frame.employee,
-        ... properties = {'vertex_type': 'L', title:my_frame.title})
-        >>> manager_vertex = ta.VertexRule(id_key = "managers",
-        ... id_value = my_frame.manager,
-        ... properties = {'vertex_type": "R"})
-
-Define the edge rule:
-
-.. only:: html
-
-    .. code::
-
-        >>> worksunder_edge = ta.EdgeRule("worksunder", my_frame.employee, my_frame.manager, properties = {"years":my_frame.years})
-
-.. only:: latex
-
-    .. code::
-
-        >>> worksunder_edge = ta.EdgeRule("worksunder",
-        ... my_frame.employee, my_frame.manager,
-        ... properties = {"years":my_frame.years})
-
-For more information about rules, see the API section on
-:ref:`titan_graph_rules`.
-
-Build the graph:
-
-.. only:: html
-
-    .. code::
-
-        >>> my_graph = ta.TitanGraph(rules=[employee_vertex, manager_vertex, worksunder_edge], name = "personnel")
-
-.. only:: latex
-
-    .. code::
-
-        >>> my_graph = ta.TitanGraph(rules=[employee_vertex, manager_vertex,
-        ... worksunder_edge], name = "personnel")
-
+A Titan graph is created by exporting it from a seamless
+graph.
 For futher information, as well as Titan graph attributes and methods, see the
 API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
 
@@ -1357,6 +1298,8 @@ API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
 ---------------
 Graph Analytics
 ---------------
+
+See these API sections for individual analytic processes:
 
 *   `Clustering Coefficients <python_api/graphs/graph-/clustering_coefficient.html>`_
 *   `Connected Components (CC) <python_api/graphs/graph-titan/connected_components.html>`_
