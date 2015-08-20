@@ -32,6 +32,7 @@ References
 
     glossary
     legal
+    genindex
     appendices
     errata
 
