@@ -96,9 +96,11 @@ object JoinRddFunctions extends Serializable {
       left.innerBroadcastJoin(right, broadcastJoinThreshold)
     }
     else {
-      val joinedFrame = left.frame.join(
-        right.frame,
-        left.frame(left.joinColumn).equalTo(right.frame(right.joinColumn))
+      val leftFrame = left.frame.toDataFrame
+      val rightFrame = right.frame.toDataFrame
+      val joinedFrame = leftFrame.join(
+        rightFrame,
+        leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn))
       )
       //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
       toGenericRowRdd(joinedFrame.rdd)
@@ -117,8 +119,10 @@ object JoinRddFunctions extends Serializable {
    * @return Joined RDD
    */
   def fullOuterJoin(left: RddJoinParam, right: RddJoinParam): RDD[Row] = {
-    val joinedFrame = left.frame.join(right.frame,
-      left.frame(left.joinColumn).equalTo(right.frame(right.joinColumn)),
+    val leftFrame = left.frame.toDataFrame
+    val rightFrame = right.frame.toDataFrame
+    val joinedFrame = leftFrame.join(rightFrame,
+      leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
       joinType = "fullouter"
     )
     //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
@@ -144,12 +148,12 @@ object JoinRddFunctions extends Serializable {
     val leftSizeInBytes = left.estimatedSizeInBytes.getOrElse(Long.MaxValue)
 
     skewedJoinType match {
-      //case Some("skewedbroadcast") => left.leftSkewedBroadcastJoin(right)
-      //case Some("skewedhash") => left.leftSkewedHashJoin(right)
       case x if leftSizeInBytes < broadcastJoinThreshold => left.rightBroadcastJoin(right)
       case _ =>
-        val joinedFrame = left.frame.join(right.frame,
-          left.frame(left.joinColumn).equalTo(right.frame(right.joinColumn)),
+        val leftFrame = left.frame.toDataFrame
+        val rightFrame = right.frame.toDataFrame
+        val joinedFrame = leftFrame.join(rightFrame,
+          leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
           joinType = "right"
         )
         //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
@@ -174,17 +178,16 @@ object JoinRddFunctions extends Serializable {
                     skewedJoinType: Option[String] = None): RDD[Row] = {
     val rightSizeInBytes = right.estimatedSizeInBytes.getOrElse(Long.MaxValue)
     skewedJoinType match {
-      //case Some("skewedbroadcast") => left.leftSkewedBroadcastJoin(right)
-      //case Some("skewedhash") => left.leftSkewedHashJoin(right)
       case x if rightSizeInBytes < broadcastJoinThreshold => left.leftBroadcastJoin(right)
       case _ =>
-        val joinedFrame = left.frame.join(right.frame,
-          left.frame(left.joinColumn).equalTo(right.frame(right.joinColumn)),
+        val leftFrame = left.frame.toDataFrame
+        val rightFrame = right.frame.toDataFrame
+        val joinedFrame = leftFrame.join(rightFrame,
+          leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
           joinType = "left"
         )
         //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
         toGenericRowRdd(joinedFrame.rdd)
     }
-
   }
 }
