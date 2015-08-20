@@ -84,7 +84,7 @@ Extra fields specific to frames:
    {
     "id": 8,
     "name": "weather_frame1",
-    "ia_uri": "ia://frame/8",
+    "ia_uri": "ta://frame/8",
     "schema": {
         "columns": []
     },

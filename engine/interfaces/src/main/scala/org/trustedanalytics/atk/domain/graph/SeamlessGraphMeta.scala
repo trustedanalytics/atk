@@ -31,7 +31,7 @@ import org.trustedanalytics.atk.domain.schema.{ GraphElementSchema, Schema, Vert
 case class SeamlessGraphMeta(graphEntity: GraphEntity, frameEntities: List[FrameEntity]) {
   require(graphEntity != null, "graph is required")
   require(frameEntities != null, "frame is required, it can be empty but not null")
-  require(graphEntity.storageFormat == "ia/frame", "Storage format should be ia/frame")
+  require(graphEntity.storageFormat == "ta/frame", "Storage format should be ta/frame")
   frameEntities.foreach(frame => require(frame.graphId.isDefined, "frame should be owned by the graph, graphId is required"))
   frameEntities.foreach(frame => require(frame.graphId.get == graphEntity.id, "frame should be owned by the graph, graphId did not match"))
 

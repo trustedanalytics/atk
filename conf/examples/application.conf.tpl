@@ -18,7 +18,7 @@ trustedanalytics.atk {
   # The host name for the Postgresql database in which the metadata will be stored
   //metastore.connection-postgresql.host = "invalid-postgresql-host"
   //metastore.connection-postgresql.port = 5432
-  //metastore.connection-postgresql.database = "atk-metastore"
+  //metastore.connection-postgresql.database = "atk_metastore"
   //metastore.connection-postgresql.username = "atkuser"
   //metastore.connection-postgresql.password = "myPassword"
   metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -134,7 +134,7 @@ trustedanalytics.atk {
     //request-timeout = 29s
   }
 
-  #Configuration for the IAT processing engine
+  #Configuration for the TA processing engine
   engine {
     //default-timeout = 30
     //page-size = 1000

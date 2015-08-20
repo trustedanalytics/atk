@@ -34,7 +34,7 @@ class CsvFile(DataFile):
         Relative paths are interpreted as being relative to the path set in
         the application configuration file.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_TA_configure_file_system_root>`.
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
     schema : list of tuples of the form (string, type)
@@ -254,7 +254,7 @@ class LineFile(DataFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_TA_configure_file_system_root>`.
 
 
     Returns
@@ -328,7 +328,7 @@ class JsonFile(MultiLineFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_TA_configure_file_system_root>`.
 
 
     Returns
@@ -466,7 +466,7 @@ class XmlFile(MultiLineFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_TA_configure_file_system_root>`.
     tag_name : str
         Tag name used to determine the split of elements into separate records.
 

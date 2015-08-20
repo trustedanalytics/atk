@@ -114,9 +114,9 @@ args = parser.parse_args()
 ATKUSER = "atkuser"
 SPARK_USER = "spark"
 LIB_PATH = "/usr/lib/trustedanalytics/graphbuilder/lib/ispark-deps.jar"
-IA_LOG_PATH = "/var/log/trustedanalytics/rest-server/output.log"
-IA_START_WAIT_LOOPS = 30
-IA_START_WAIT = 2
+TA_LOG_PATH = "/var/log/trustedanalytics/rest-server/output.log"
+TA_START_WAIT_LOOPS = 30
+TA_START_WAIT = 2
 POSTGRES_WAIT = 3
 GOOD = '\033[92m'
 WARNING = '\033[93m'
@@ -620,7 +620,7 @@ def set_db_user_access(db_username):
 
     pg_hba_text = pg_hba.read()
     pg_hba.seek(0)
-    pg_hba.write("host    all         " + db_username + "      127.0.0.1/32            md5 #IATINSERT\n" + pg_hba_text)
+    pg_hba.write("host    all         " + db_username + "      127.0.0.1/32            md5 #TAINSERT\n" + pg_hba_text)
     pg_hba.close()
 
     restart_db()
@@ -651,7 +651,7 @@ def create_db(db, db_username):
     print system("su -c \"echo \\\"create database " + db + " with owner " + db_username + ";\\\" | psql \"  postgres")
 
 
-def create_IA_meatauser(db):
+def create_TA_meatauser(db):
     """
     Once postgres is configured and the ATK server has been restarted we need to add the test user to so authentication
     will work in ta. Does a psql to set the record
@@ -675,13 +675,13 @@ def restart_db():
     time.sleep(POSTGRES_WAIT)
 
 
-def get_IA_log():
+def get_TA_log():
     """
     Open the output.log and save the contents to memory. Will be used monitor the ATK server restart status.
     :return:
     """
     try:
-        output_log = codecs.open(IA_LOG_PATH, encoding="utf-8", mode="r")
+        output_log = codecs.open(TA_LOG_PATH, encoding="utf-8", mode="r")
         output_log_text = output_log.read()
         output_log.close()
         return output_log_text
@@ -689,7 +689,7 @@ def get_IA_log():
         return ""
 
 
-def restart_IA():
+def restart_TA():
     """
     Send the linux service command to restart trustedanalytics analytics server and read the output.log file to see when the server
     has been restarted.
@@ -697,7 +697,7 @@ def restart_IA():
     """
     #Truncate the ATK log so we can detect a new 'Bound to' message which would let us know the server is up
     try:
-        output_log = codecs.open(IA_LOG_PATH, encoding="utf-8", mode="w+")
+        output_log = codecs.open(TA_LOG_PATH, encoding="utf-8", mode="w+")
         output_log.write("")
         output_log.close()
     except IOError:
@@ -707,18 +707,18 @@ def restart_IA():
     print system("service trustedanalytics restart ")
     print "Waiting for trustedanalytics analytics server to restart"
 
-    output_log_text = get_IA_log()
+    output_log_text = get_TA_log()
     count = 0
     #When we get the Bound to message the server has finished restarting
     while re.search("Bound to.*:.*", output_log_text) is None:
         print " . ",
         sys.stdout.flush()
-        time.sleep(IA_START_WAIT)
+        time.sleep(TA_START_WAIT)
 
-        output_log_text = get_IA_log()
+        output_log_text = get_TA_log()
 
         count += 1
-        if count > IA_START_WAIT_LOOPS:
+        if count > TA_START_WAIT_LOOPS:
             print color_text("Trusted Analytics Rest server didn't restart", ERROR)
             exit(1)
 
@@ -793,9 +793,9 @@ def set_db_details(db, db_username, db_password, reconfig):
 
         restart_db()
 
-        restart_IA()
+        restart_TA()
 
-        create_IA_meatauser(db)
+        create_TA_meatauser(db)
 
         print color_text("postgres is configured", GOOD)
 

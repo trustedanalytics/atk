@@ -79,7 +79,7 @@ Extra fields specific to frames:
    {
     "id": 7,
     "name": "super_frame",
-    "ia_uri": "ia://frame/7",
+    "ia_uri": "ta://frame/7",
     "entity_type": "frame:",
     "status": "Active"
     "links": [{
