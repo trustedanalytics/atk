@@ -293,13 +293,6 @@ class SparkGraphStorage(metaStore: MetaStore,
     new EdgeFrameRdd(frameRdd)
   }
 
-  // TODO: delete me if not needed?
-  //  def loadEdgeFrameRdd(sc: SparkContext, graphId: Long, edgeLabel: String): EdgeFrameRdd = {
-  //    val frame = expectSeamless(graphId).edgeMeta(edgeLabel)
-  //    val frameRdd = frames.loadFrameRdd(sc, frame)
-  //    new EdgeFrameRdd(frameRdd)
-  //  }
-
   def loadGbVertices(sc: SparkContext, graph: GraphEntity)(implicit invocation: Invocation): RDD[GBVertex] = {
     val graphEntity = expectGraph(graph.toReference)
     if (graphEntity.isSeamless) {
@@ -417,16 +410,6 @@ class SparkGraphStorage(metaStore: MetaStore,
     require(frameEntity.isVertexFrame, "frame was not a vertex frame")
     frameStorage.saveFrameData(frameEntity.toReference, vertexFrameRdd)
   }
-
-  //  def saveVertexRdd(graphId: Long, vertexLabel: String, vertexFrameRdd: VertexFrameRdd, rowCount: Option[Long] = None) = {
-  //    val frame = expectSeamless(graphId).vertexMeta(vertexLabel)
-  //    frames.saveFrame(frame, vertexFrameRdd, rowCount)
-  //  }
-
-  //  def saveEdgeRdd(graphId: Long, edgeLabel: String, edgeFrameRdd: EdgeFrameRdd, rowCount: Option[Long] = None) = {
-  //    val frame = expectSeamless(graphId).edgeMeta(edgeLabel)
-  //    frames.saveFrame(frame, edgeFrameRdd, rowCount)
-  //  }
 
   def saveEdgeRdd(frameRef: FrameReference, edgeFrameRdd: EdgeFrameRdd)(implicit invocation: Invocation) = {
     val frameEntity = frameStorage.expectFrame(frameRef)

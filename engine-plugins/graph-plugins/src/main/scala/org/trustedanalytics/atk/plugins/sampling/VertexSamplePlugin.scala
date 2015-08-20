@@ -16,20 +16,14 @@
 
 package org.trustedanalytics.atk.plugins.sampling
 
-import org.trustedanalytics.atk.component.Boot
 import org.trustedanalytics.atk.domain.frame.FrameName
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.graph.{ SparkGraph, GraphBackendName, GraphBuilderConfigFactory }
-import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
-import org.trustedanalytics.atk.engine.plugin.{ SparkInvocation, SparkCommandPlugin }
-import org.trustedanalytics.atk.domain.{ UserPrincipal, StorageFormats, DomainJsonProtocol }
+import org.trustedanalytics.atk.engine.graph.{ SparkGraph, GraphBuilderConfigFactory }
+import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.domain.{ StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphReference }
-import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
 import spray.json._
-import scala.concurrent._
-import java.util.UUID
 import VertexSampleSparkOps._
-import org.trustedanalytics.atk.domain.command.CommandDoc
 
 /**
  * Represents the arguments for vertex sampling
