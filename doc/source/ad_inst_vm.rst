@@ -555,8 +555,6 @@ To show the log as it is generated, run ``tail -f``::
 
     $ sudo tail -f /var/log/trustedanalytics/rest-server/output.log
 
-More details can be found in the :doc:`section on log files </ad_log>`.
-
 --------
 Updating
 --------

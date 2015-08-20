@@ -875,7 +875,6 @@ or:
     $ sudo tail -f /var/log/trustedanalytics/rest-server/application.log
 
 
-More details can be found in the :doc:`section on log files </ad_log>`.
 
 Upgrading
 =========

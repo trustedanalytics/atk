@@ -106,7 +106,7 @@ Help |EM| cluster-generate
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-config
+.. _help_cluster-config:
 
 Help |EM| cluster-config
 ========================
@@ -146,7 +146,7 @@ Help |EM| cluster-config
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-explore
+.. _help_cluster-explore:
 
 Help |EM| cluster-explore
 =========================
