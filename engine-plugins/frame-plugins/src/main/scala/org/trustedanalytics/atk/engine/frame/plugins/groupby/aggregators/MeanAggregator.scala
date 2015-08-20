@@ -57,7 +57,7 @@ case class MeanAggregator() extends GroupByAggregator {
    */
   override def add(mean: AggregateType, mapValue: ValueType): AggregateType = {
     if (mapValue.isNaN) { // omit value from calculation
-      //TODO: Log to IAT EventContext once we figure out how to pass it to Spark workers
+      //TODO: Log to TA EventContext once we figure out how to pass it to Spark workers
       println(s"WARN: Omitting NaNs from mean calculation in group-by")
       mean
     }

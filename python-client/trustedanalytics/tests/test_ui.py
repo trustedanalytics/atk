@@ -15,8 +15,8 @@
 #
 
 
-import iatest
-iatest.init()
+import tatest
+tatest.init()
 
 import unittest
 import trustedanalytics as ta

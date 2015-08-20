@@ -29,7 +29,7 @@ trait UriReference {
 
   /** The full URI */
   def uri: String = {
-    s"ia://$name/$id"
+    s"ta://$name/$id"
   }
 
   override def hashCode(): Int = uri.hashCode()

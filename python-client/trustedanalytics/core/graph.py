@@ -628,7 +628,7 @@ Default is None.""")
         if isinstance(_info, GraphInfo):
             self._id = _info.id_number
         else:
-            self._id = self._backend.create(self, None, name, 'ia/frame', _info)
+            self._id = self._backend.create(self, None, name, 'ta/frame', _info)
 
         self._vertices = GraphFrameCollection(self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self._get_edge_frame, self._get_edge_frames)

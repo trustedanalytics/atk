@@ -29,6 +29,9 @@ import spray.json._
 
 import scala.collection.JavaConversions._
 import scala.util.{ Failure, Success, Try }
+import com.typesafe.config.Config
+import org.trustedanalytics.atk.domain.command.CommandDoc
+import org.trustedanalytics.atk.engine.CommandStorageProgressUpdater
 
 /**
  * Arguments for Gremlin query.
@@ -91,7 +94,7 @@ Examples of valid GraphSON::
     { \"weight\": 1, \"_id\": \"8\", \"_type\": \"edge\", \"_outV\": \"1\", \"_inV\": \"4\", \"_label\": \"knows\" }
 
 See https://github.com/tinkerpop/blueprints/wiki/GraphSON-Reader-and-Writer-Library""")
-class GremlinQueryPlugin extends CommandPlugin[QueryArgs, QueryResult] {
+class GremlinQuery extends CommandPlugin[QueryArgs, QueryResult] {
 
   val gremlinExecutor = new GremlinGroovyScriptEngine()
 
@@ -108,13 +111,14 @@ class GremlinQueryPlugin extends CommandPlugin[QueryArgs, QueryResult] {
    * @return Results of executing Gremlin query
    */
   override def execute(arguments: QueryArgs)(implicit invocation: Invocation): QueryResult = {
+    import scala.concurrent.duration._
 
     invocation.updateProgress(5f)
     val start = System.currentTimeMillis()
     val graphSONMode = GremlinUtils.getGraphSONMode(EngineConfig.config.getString("org.trustedanalytics.atk.plugins.gremlin-query.graphson-mode"))
 
-    // TODO: cast to SparkGraphStorage shouldn't be needed
-    val titanGraph = engine.graphs.asInstanceOf[SparkGraphStorage].titanGraph(arguments.graph)
+    val graph: Graph = arguments.graph
+    val titanGraph = getTitanGraph(graph.storage, config)
 
     val resultIterator = Try({
       val bindings = gremlinExecutor.createBindings()
@@ -165,4 +169,19 @@ class GremlinQueryPlugin extends CommandPlugin[QueryArgs, QueryResult] {
 
     jsResultsIterator
   }
+
+  /**
+   * Connects to Titan graph.
+   *
+   * @param graphName Name of graph
+   * @param config Command configuration
+   * @return Titan graph
+   */
+  private def getTitanGraph(graphName: String, config: Config): TitanGraph = {
+    val titanConfiguration = GraphBuilderConfigFactory.getTitanConfiguration(config, "titan.query", graphName)
+    val titanConnector = new TitanGraphConnector(titanConfiguration)
+    val titanGraph = titanConnector.connect()
+    titanGraph
+  }
+
 }
