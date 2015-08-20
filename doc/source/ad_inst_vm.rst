@@ -378,9 +378,9 @@ To import the |VM| image, do the following steps in Virtual Box.
 
             Boot the VM
 
-------------------------
+----------------------------
 Running |PACKAGE| |VM| Image
-------------------------
+----------------------------
 
 Before starting
 ===============

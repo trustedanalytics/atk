@@ -177,7 +177,7 @@ Help |EM| cluster-explore
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-push
+.. _help_cluster-push:
 
 Help |EM| cluster-push
 ======================

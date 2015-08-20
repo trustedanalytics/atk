@@ -45,9 +45,9 @@ Cloudera cluster 5.3.x with following services:
 
 The |PACKAGE| Python client supports Python 2.7.
 
----------------------------
+-------------------------------
 |PACKAGE| Packages Installation
----------------------------
+-------------------------------
 
 .. index::
     single: repository
@@ -114,7 +114,7 @@ If the "epel" repository is not listed, do this to install it:
     single: repository
 
 |PACKAGE| Dependency Repository
----------------------------
+-------------------------------
 
 Some open source libraries are included to aid with the installation of the
 |PACKAGE|.
@@ -186,7 +186,7 @@ To install the *yum-s3* package, do this:
     single: repository
 
 |PACKAGE| Private Repository
-------------------------
+----------------------------
 
 Create '/etc/yum.repos.d/ta.repo':
 
@@ -277,7 +277,7 @@ Troubleshooting Private Repository
 .. _installing_tA_packages:
 
 Installing |PACKAGE| Packages
-=========================
+=============================
 
 Installing On The Master Node
 -----------------------------
@@ -360,7 +360,7 @@ Manual Configuration
 configuration file are needed.** (:ref:`Skip section <skip_manual_section>`).
 
 /etc/trustedanalytics/rest-server/application.conf
-------------------------------------------------
+--------------------------------------------------
 
 The REST server package provides a configuration template file which must be
 used to create a configuration file.
@@ -844,7 +844,7 @@ sent.
     single: REST server
 
 Starting The |PACKAGE| REST Server
-==============================
+==================================
 
 Starting the REST server is very easy.
 It can be started like any other Linux service.
@@ -857,7 +857,7 @@ After starting the REST server, browse to the host on port 9099
 (<master node ip address>:9099) to see if the server started successfully.
 
 Troubleshooting |PACKAGE| REST Server
-=================================
+=====================================
 
 A log gets written to '/var/log/trustedanalytics/rest-server/output.log or
 '/var/log/trustedanalytics/rest-server/application.log'.
