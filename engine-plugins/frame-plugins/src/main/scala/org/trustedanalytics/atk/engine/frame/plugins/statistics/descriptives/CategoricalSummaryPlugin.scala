@@ -60,7 +60,7 @@ class CategoricalSummaryPlugin extends SparkCommandPlugin[CategoricalSummaryArgs
 
   private val defaultTopK = 10
   private val defaultThreshold = 0.0
-  
+
   /**
    * The name of the command, e.g. frame/categorical_summary
    *

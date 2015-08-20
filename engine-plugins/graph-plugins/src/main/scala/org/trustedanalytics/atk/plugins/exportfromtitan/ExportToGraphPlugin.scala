@@ -201,7 +201,7 @@ object ExportToGraphPlugin {
    * @return vertex properties that had 'unique' indices
    */
   def uniqueVertexPropertyIndices(graphs: SparkGraphStorage, titanGraph: GraphReference)(implicit context: Invocation): List[String] = {
-    val graph = graphs.getTitanGraph(titanGraph)
+    val graph = graphs.titanGraph(titanGraph)
     try {
       val indexes = graph.getManagementSystem.getGraphIndexes(classOf[Vertex])
       val uniqueIndexNames = indexes.iterator().toList.filter(_.isUnique).map(_.getName)

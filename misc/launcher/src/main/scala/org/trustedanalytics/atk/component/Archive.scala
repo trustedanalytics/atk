@@ -51,7 +51,14 @@ abstract class Archive(val definition: ArchiveDefinition, val classLoader: Class
     Archive.logger(s"Loading component $path (set ${SystemConfig.debugConfigKey} to true to enable component config logging")
     val className = configuration.getString(path.replace("/", ".") + ".class")
     val component = load(className).asInstanceOf[Component]
-    val restricted = configuration.getConfig(path + ".config").withFallback(configuration).resolve()
+
+    val restricted = if (configuration.hasPath(path + ".config")) {
+      configuration.getConfig(path + ".config").withFallback(configuration).resolve()
+    }
+    else {
+      ConfigFactory.empty().withFallback(configuration).resolve()
+    }
+
     if (Archive.system.systemConfig.debugConfig) {
       Archive.logger(s"Component config for $path follows:")
       Archive.logger(restricted.root().render())

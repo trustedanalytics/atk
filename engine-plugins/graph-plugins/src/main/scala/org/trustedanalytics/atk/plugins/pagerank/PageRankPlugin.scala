@@ -158,12 +158,8 @@ class PageRankPlugin extends SparkCommandPlugin[PageRankArgs, PageRankResult] {
 
   override def execute(arguments: PageRankArgs)(implicit invocation: Invocation): PageRankResult = {
 
-    // Titan Settings for input
-    val config = configuration
-
     // Get the graph
     val graph: SparkGraph = arguments.graph
-
     val (gbVertices, gbEdges) = graph.gbRdds
 
     val prRunnerArgs = PageRankRunnerArgs(arguments.output_property,

@@ -21,7 +21,7 @@ import MatcherUtils._
 import org.scalatest.{ BeforeAndAfter, FlatSpec, Matchers }
 import spray.json.JsNumber
 
-class GremlinQueryITest extends FlatSpec with Matchers with TestingTitan with BeforeAndAfter {
+class GremlinQueryPluginITest extends FlatSpec with Matchers with TestingTitan with BeforeAndAfter {
   before {
     setupTitan()
 
@@ -49,7 +49,7 @@ class GremlinQueryITest extends FlatSpec with Matchers with TestingTitan with Be
 
     titanGraph.commit()
 
-    val gremlinQuery = new GremlinQuery()
+    val gremlinQuery = new GremlinQueryPlugin()
     val gremlinScript = """g.V("name", "alice").out("knows")"""
 
     val bindings = gremlinQuery.gremlinExecutor.createBindings()
@@ -69,7 +69,7 @@ class GremlinQueryITest extends FlatSpec with Matchers with TestingTitan with Be
   }
   "executeGremlinQuery" should "throw a Runtime exception when executing invalid Gremlin" in {
     intercept[java.lang.RuntimeException] {
-      val gremlinQuery = new GremlinQuery()
+      val gremlinQuery = new GremlinQueryPlugin()
       val gremlinScript = """InvalidGremlin"""
 
       val bindings = gremlinQuery.gremlinExecutor.createBindings()
