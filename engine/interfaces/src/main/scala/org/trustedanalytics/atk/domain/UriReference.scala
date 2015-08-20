@@ -24,12 +24,12 @@ trait UriReference {
   /** The entity id */
   def id: Long
 
-  /** The entity name e.g. "frame", "graph", ... */
-  def root: String
+  /** The entity name e.g. "frames", "graphs", ... */
+  def entityCollectionName: String
 
   /** The full URI */
   final def uri: String = {
-    s"$root/$id"
+    s"$entityCollectionName/$id"
   }
 
   override def hashCode(): Int = uri.hashCode()
@@ -46,10 +46,10 @@ object UriReference {
 
   def fromString[T <: UriReference](s: String, constructor: (Long => T)): T = {
     s match {
-      case pattern(root, id) =>
+      case pattern(entityCollectionName, id) =>
         val ref = constructor(id.toLong)
-        if (ref.root != root) {
-          throw new RuntimeException(s"Internal Error: Invalid UriReference class applied to uri '$s'.  Expected root '${ref.root}'")
+        if (ref.entityCollectionName != entityCollectionName) {
+          throw new RuntimeException(s"Internal Error: Invalid UriReference class applied to uri '$s'.  Expected '${ref.entityCollectionName}', got '$entityCollectionName'")
         }
         ref
       case _ => throw new RuntimeException(s"Malformed uri '$s'")

@@ -49,7 +49,7 @@ class LogisticRegressionSummary(object):
                                                                  index=json_result['wald_statistic'].keys())
                 self.summary_table['p_value'] = pd.Series(data=json_result['p_value'].values(),
                                                           index=json_result['p_value'].keys())
-                self.covariance_matrix = get_frame(json_result['covariance_matrix']['id'])
+                self.covariance_matrix = get_frame(json_result['covariance_matrix']['uri'])
         else:
             self.summary_table = {
                 'coefficients': json_result['coefficients'],
@@ -59,7 +59,7 @@ class LogisticRegressionSummary(object):
                 self.summary_table['standard_errors'] = json_result['standard_errors']
                 self.summary_table['wald_statistic'] = json_result['wald_statistic']
                 self.summary_table['p_value'] = json_result['p_value']
-                self.summary_table['covariance_matrix'] = get_frame(json_result['covariance_matrix']['id'])
+                self.summary_table['covariance_matrix'] = get_frame(json_result['covariance_matrix']['uri'])
 
     def __repr__(self):
         return "num_features: {0}\nnum_classes: {1}\nsummary_table:\n {2}\ncovariance_matrix:\n {3}".format(

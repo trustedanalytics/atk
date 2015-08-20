@@ -31,7 +31,7 @@ json_schema_cum_dist = """
           "status": {
             "minimum": -9.223372036854776e+18,
             "type": "number",
-            "id": "ia:long",
+            "id": "atk:int64",
             "multiple_of": 1.0,
             "maximum": 9.223372036854776e+18
           },
@@ -59,7 +59,7 @@ json_schema_cum_dist = """
       "type": "object",
       "properties": {
         "count_value": {
-          "id": "ia:long",
+          "id": "atk:int64",
           "type": "number",
           "default": 0
         },

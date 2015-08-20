@@ -235,33 +235,33 @@ private[trustedanalytics] object JsonSchemaExtractor {
     val schema = typeSignature match {
       case t if t =:= typeTag[URI].tpe => StringSchema(format = Some("uri"), description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[String].tpe => StringSchema(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Boolean].tpe => JsonSchema.verbose_bool(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Int].tpe => JsonSchema.verbose_int(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Long].tpe => JsonSchema.verbose_long(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Float].tpe => JsonSchema.verbose_float(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Double].tpe => JsonSchema.verbose_double(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Boolean].tpe => JsonSchema.bool(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Int].tpe => JsonSchema.int(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Long].tpe => JsonSchema.long(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Float].tpe => JsonSchema.float(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Double].tpe => JsonSchema.double(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[DateTime].tpe => JsonSchema.dateTime
       case t if t =:= typeTag[UnitReturn].tpe => JsonSchema.unit
       case t if t =:= typeTag[FrameReference].tpe =>
-        val s = JsonSchema.verbose_frame(description, defaultValue)
+        val s = JsonSchema.frame(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
-      case t if t =:= typeTag[FrameEntity].tpe =>
-        val s = JsonSchema.verbose_frame(description, defaultValue)
+      case t if t =:= typeTag[FrameEntity].tpe => // todo: remove FrameEntity, should never be used in the published API meta data
+        val s = JsonSchema.frame(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
       case t if t =:= typeTag[GraphReference].tpe =>
-        val s = JsonSchema.graph
+        val s = JsonSchema.graph(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
       case t if t =:= typeTag[ModelReference].tpe =>
-        val s = JsonSchema.model
+        val s = JsonSchema.model(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }

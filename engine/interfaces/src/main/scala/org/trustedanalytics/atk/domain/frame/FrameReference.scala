@@ -23,7 +23,7 @@ case class FrameReference(frameId: Long) extends UriReference {
   override def id: Long = frameId
 
   /** The entity root path, like "frames" or "graphs" */
-  override def root: String = "frames"
+  override def entityCollectionName: String = "frames"
 }
 
 object FrameReference {

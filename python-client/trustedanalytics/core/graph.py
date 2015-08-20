@@ -626,9 +626,9 @@ Default is None.""")
         if isinstance(_info, dict):
             _info = GraphInfo(_info)
         if isinstance(_info, GraphInfo):
-            self._id = _info.id_number
+            self.uri = _info.uri
         else:
-            self._id = self._backend.create(self, None, name, 'ia/frame', _info)
+            self.uri = self._backend.create(self, None, name, 'atk/frame', _info)
 
         self._vertices = GraphFrameCollection(self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self._get_edge_frame, self._get_edge_frames)
@@ -641,14 +641,14 @@ Default is None.""")
         return a VertexFrame for the associated label
         :param label: the label of the frame to return
         """
-        return self._backend.get_vertex_frame(self._id, label)
+        return self._backend.get_vertex_frame(self.uri, label)
 
     @api
     def ___get_vertex_frames(self):
         """
         return all VertexFrames for this graph
         """
-        return self._backend.get_vertex_frames(self._id)
+        return self._backend.get_vertex_frames(self.uri)
 
     @api
     def ___get_edge_frame(self, label):
@@ -656,14 +656,14 @@ Default is None.""")
         return an EdgeFrame for the associated label
         :param label: the label of the frame to return
         """
-        return self._backend.get_edge_frame(self._id, label)
+        return self._backend.get_edge_frame(self.uri, label)
 
     @api
     def ___get_edge_frames(self):
         """
         return all EdgeFrames for this graph
         """
-        return self._backend.get_edge_frames(self._id)
+        return self._backend.get_edge_frames(self.uri)
 
     @api
     @property
@@ -900,12 +900,11 @@ Default is None.""")
     def __init__(self, rules=None, name=None, _info=None):
         """Initialize the graph."""
         try:
-            self._id = 0
-            self._ia_uri = None
+            self.uri = None
             if not hasattr(self, '_backend'):
                 self._backend = _get_backend()
             _BaseGraph.__init__(self)
-            self._id = self._backend.create(self, rules, name, 'hbase/titan', _info)
+            self.uri = self._backend.create(self, rules, name, 'hbase/titan', _info)
             # logger.info('Created new graph "%s"', new_graph_name)
         except:
             raise IaError(logger)

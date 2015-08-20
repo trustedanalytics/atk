@@ -19,14 +19,18 @@ Named objects - object that have 'names' and are stored server side
 """
 import sys
 import logging
+import re
 
 from trustedanalytics.meta.clientside import get_api_decorator, arg, returns
 from trustedanalytics.meta.names import entity_type_to_collection_name, upper_first
 from trustedanalytics.meta.metaprog import get_entity_class_from_store, set_entity_collection
 
+uri_pattern = re.compile(r"^\w+/\d+$")
+
 
 def name_support(term):
     _term = term
+
     def _add_name_support(cls):
         add_named_object_support(cls, _term)
         return cls
@@ -72,13 +76,12 @@ class _NamedObjectsFunctionFactory(object):
     def class_name_property(self):
         return (self.name_property)
 
-    def get_entity_id_from_name(self, entity_name):
+    def get_entity_uri_from_name(self, entity_name):
         rest_target = '%ss' % self._term
         rest_target_with_name = '%s?name=' % rest_target
-        return self._http.get(rest_target_with_name + entity_name).json()['id']
+        return self._http.get(rest_target_with_name + entity_name).json()['uri']
 
     def create_name_property(self):
-        rest_target = '%ss/' % self._term
         obj_term = self._term
         obj_class = self._class
         http = self._http
@@ -86,7 +89,7 @@ class _NamedObjectsFunctionFactory(object):
         module_logger = self._module_logger
 
         def get_name(self):
-            r = http.get(rest_target + str(self._id))  # TODO: update w/ URI jazz
+            r = http.get(self.uri)
             payload = r.json()
             return payload.get('name', None)
         get_name.__name__ = '__name'
@@ -115,7 +118,7 @@ class _NamedObjectsFunctionFactory(object):
         get_name.__doc__ = doc
 
         def set_name(self, value):
-            arguments = {obj_term: self._id, "new_name": value}
+            arguments = {obj_term: self.uri, "new_name": value}
             execute_command(obj_term + "/rename", self, **arguments)
         set_name.__name__ = '__name'
         from trustedanalytics.meta.context import get_api_context_decorator
@@ -157,9 +160,13 @@ class _NamedObjectsFunctionFactory(object):
         def get_object(identifier):
             module_logger.info("%s(%s)", get_object_name, identifier)
             if isinstance(identifier, basestring):
-                r = http.get(rest_target_with_name + identifier)
+                if uri_pattern.match(identifier):
+                    uri = identifier
+                else:
+                    uri = rest_target_with_name + identifier
             else:
-                r = http.get('%s/%s' % (rest_target, identifier))
+                uri = '%s/%s' % (rest_target, identifier)
+            r = http.get(uri)
             try:
                 entity_type = r.json()['entity_type']
             except KeyError:
@@ -189,7 +196,6 @@ class _NamedObjectsFunctionFactory(object):
     def create_drop_objects(self):
         # create local vars for better closures:
         drop_objects_name = "__drop_%ss" % self._term
-        rest_target = '%ss/' % self._term
         module_logger = self._module_logger
         obj_class = self._class
         obj_term = self._term
@@ -198,17 +204,17 @@ class _NamedObjectsFunctionFactory(object):
         def drop_objects(items):
             if not isinstance(items, list) and not isinstance(items, tuple):
                 items = [items]
-            victim_ids = {}
+            victim_uris = {}
             for item in items:
                 if isinstance(item, basestring):
-                    victim_ids[item] = self.get_entity_id_from_name(item)
+                    victim_uris[item] = self.get_entity_uri_from_name(item)
                 elif isinstance(item, obj_class):
-                    victim_ids[item.name] = item._id
+                    victim_uris[item.name] = item.uri
                 else:
                     raise TypeError("Excepted argument of type {term} or else the {term}'s name".format(term=obj_term))
-            for name, id in victim_ids.items():
+            for name, uri in victim_uris.items():
                 module_logger.info("Drop %s %s", obj_term, name)
-                http.delete(rest_target + str(id))  # TODO: update w/ URI jazz
+                http.delete(uri)
         set_entity_collection(drop_objects, entity_type_to_collection_name(self._term))  # so meta knows where it goes
         drop_objects.__name__ = drop_objects_name
         drop_objects.__doc__ = """Deletes the {obj_term} on the server.""".format(obj_term=obj_term)

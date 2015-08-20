@@ -158,6 +158,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
           case JsObject(o) => o("uri") match {
             case JsString(uri) => createReference(uri.substring(uri.lastIndexOf('/') + 1).toLong)
           }
+          case JsNull => createReference(0) // todo: remove --needed to mark invalid model/new dummy reference, the real problem
         }
       }
       catch {
@@ -542,7 +543,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(frame: FrameEntity): JsValue = {
       JsObject(dataFrameFormatOriginal.write(frame).asJsObject.fields +
-        ("atk_uri" -> JsString(frame.uri)) +
+        ("uri" -> JsString(frame.uri)) +
         ("entity_type" -> JsString(frame.entityType)))
     }
   }
@@ -556,7 +557,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(graph: GraphEntity): JsValue = {
       JsObject(graphFormatOriginal.write(graph).asJsObject.fields +
-        ("atk_uri" -> JsString(graph.uri)) +
+        ("uri" -> JsString(graph.uri)) +
         ("entity_type" -> JsString(graph.entityType)))
     }
   }

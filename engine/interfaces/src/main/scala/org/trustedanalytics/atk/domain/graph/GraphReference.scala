@@ -22,7 +22,7 @@ case class GraphReference(graphId: Long) extends UriReference {
 
   override def id: Long = graphId
 
-  override def root: String = "graphs"
+  override def entityCollectionName: String = "graphs"
 }
 
 object GraphReference {
