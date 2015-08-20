@@ -82,7 +82,7 @@ class AtkServer(Server):
             uri=uri or self._get_conf('uri'),
             scheme=self._get_conf('scheme'),
             headers=self._get_conf('headers'))
-        # specific to IA Server
+        # specific to TA Server
         self._api_version = self._get_conf('api_version')
         self._user=self._get_conf('user', None)
         self._oauth_uri = self._get_conf('oauth_uri', None)

@@ -29,7 +29,7 @@ class LoadLinesTest extends FlatSpec with Matchers {
     val string =
       """
           |{
-          |    "destination": "ia://frame/5",
+          |    "destination": "ta://frame/5",
           |    "source": {
           |      "source_type": "file",
           |      "uri": "m1demo/domains.json",
@@ -62,7 +62,7 @@ class LoadLinesTest extends FlatSpec with Matchers {
     val string =
       """
           |{
-          |    "destination": "ia://frame/5",
+          |    "destination": "ta://frame/5",
           |    "source": {
           |      "source_type": "frame",
           |      "uri": "http://localhost:9099/v1/frames/5"

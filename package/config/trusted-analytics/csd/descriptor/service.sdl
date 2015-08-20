@@ -572,7 +572,7 @@
             },
             "commands" : [
                 {
-                  "name" : "ATK-Start-IA",
+                  "name" : "Start-TA",
                   "label" : "Start",
                   "description" : "Start Trusted Analytics Rest Server",
                   "expectedExitCodes" : [0],

@@ -157,8 +157,8 @@ private class FrequencyStatsAccumulatorParam[T](maxNumberOfModesReturned: Int)
 
   // A canonical ordering so we can sure that the sets of modes returned are reproducible for the same data.
   // TODO the right solution for this is to:
-  //  have rows lug around a container for IAT datatypes, not "Any" and then just have the comparators defined
-  //  for all the subclasses of IAT datatypes.... but that might be a long way off
+  //  have rows lug around a container for TA datatypes, not "Any" and then just have the comparators defined
+  //  for all the subclasses of TA datatypes.... but that might be a long way off
 
   private class canonicalOrdering[T] extends Ordering[T] {
     def compare(a: T, b: T) = {
