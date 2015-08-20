@@ -628,7 +628,7 @@ Default is None.""")
         if isinstance(_info, GraphInfo):
             self._id = _info.id_number
         else:
-            self._id = self._backend.create(self, None, name, 'ia/frame', _info)
+            self._id = self._backend.create(self, None, name, 'ta/frame', _info)
 
         self._vertices = GraphFrameCollection(self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self._get_edge_frame, self._get_edge_frames)
@@ -901,7 +901,7 @@ Default is None.""")
         """Initialize the graph."""
         try:
             self._id = 0
-            self._ia_uri = None
+            self._ta_uri = None
             if not hasattr(self, '_backend'):
                 self._backend = _get_backend()
             _BaseGraph.__init__(self)

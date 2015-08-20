@@ -535,7 +535,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(frame: FrameEntity): JsValue = {
       JsObject(dataFrameFormatOriginal.write(frame).asJsObject.fields +
-        ("ia_uri" -> JsString(frame.uri)) +
+        ("ta_uri" -> JsString(frame.uri)) +
         ("entity_type" -> JsString(frame.entityType)))
     }
   }
@@ -549,7 +549,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
     override def write(graph: GraphEntity): JsValue = {
       JsObject(graphFormatOriginal.write(graph).asJsObject.fields +
-        ("ia_uri" -> JsString(graph.uri)) +
+        ("ta_uri" -> JsString(graph.uri)) +
         ("entity_type" -> JsString(graph.entityType)))
     }
   }

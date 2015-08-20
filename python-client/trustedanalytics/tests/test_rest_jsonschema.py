@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-import iatest
-iatest.init()
+import tatest
+tatest.init()
 
 import unittest
 import trustedanalytics.rest.jsonschema as js
@@ -31,14 +31,14 @@ json_schema_cum_dist = """
           "status": {
             "minimum": -9.223372036854776e+18,
             "type": "number",
-            "id": "ia:long",
+            "id": "ta:long",
             "multiple_of": 1.0,
             "maximum": 9.223372036854776e+18
           },
           "error_frame_id": {
             "minimum": -9.223372036854776e+18,
             "type": "number",
-            "id": "ia:long",
+            "id": "ta:long",
             "multiple_of": 1.0,
             "maximum": 9.223372036854776e+18
           },
@@ -59,7 +59,7 @@ json_schema_cum_dist = """
       "type": "object",
       "properties": {
         "count_value": {
-          "id": "ia:long",
+          "id": "ta:long",
           "type": "number",
           "default": 0
         },
@@ -94,14 +94,14 @@ json_schema_join = """
             "status": {
                 "minimum": -9.223372036854776e+18,
                 "type": "number",
-                "id": "ia:long",
+                "id": "ta:long",
                 "multiple_of": 1.0,
                 "maximum": 9.223372036854776e+18
             },
             "error_frame_id": {
                 "minimum": -9.223372036854776e+18,
                 "type": "number",
-                "id": "ia:long",
+                "id": "ta:long",
                 "multiple_of": 1.0,
                 "maximum": 9.223372036854776e+18
             },

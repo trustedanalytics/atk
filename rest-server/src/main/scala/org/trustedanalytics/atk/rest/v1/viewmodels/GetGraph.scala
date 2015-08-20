@@ -27,7 +27,7 @@ case class GetGraph(id: Long, iaUri: String, name: Option[String], links: List[R
   require(id > 0, "id must be greater than zero")
   require(name != null, "name must not be null")
   require(links != null, "links must not be null")
-  require(iaUri != null, "ia_uri must not be null")
+  require(iaUri != null, "ta_uri must not be null")
   require(entityType != null, "entityType prefix must not be null")
   require(status != null, "status may not be null")
 }

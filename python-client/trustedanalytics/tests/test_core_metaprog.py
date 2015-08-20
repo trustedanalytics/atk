@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-import iatest
-iatest.init()
+import tatest
+tatest.init()
 
 import unittest
 import trustedanalytics.core.atktypes as tatypes

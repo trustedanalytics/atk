@@ -28,13 +28,13 @@ else
     FLAG1=""
 fi
 CONTINUE=True
-START_AT=""
+START_TA=""
 USE_FIND=False
 if [ "$FLAG1" == "-resume" ]
 then
     if [[ -f ~/find_rst_progress.txt ]]
     then
-        START_AT=$(cat ~/find_rst_progress.txt)
+        START_TA=$(cat ~/find_rst_progress.txt)
     else
         read -p "File ~/find_rst_progress.txt not found. Continue from begining? [Y|n]" USER_RESPONSE
         if [ "$USER_RESPONSE" == "" ]
@@ -53,11 +53,11 @@ if [ "$CONTINUE" == "True" ]
 then
     for FILE in $(find /home/work/atk/doc-api-examples/src/main/resources/python -name "*.rst")
     do
-        if [ "$START_AT" == "" -o "$START_AT" == "$FILE" ]
+        if [ "$START_TA" == "" -o "$START_TA" == "$FILE" ]
         then
-            if [ "$START_AT" != "" ]
+            if [ "$START_TA" != "" ]
             then
-                START_AT=""
+                START_TA=""
             fi
             if [ "$CONTINUE" == "True" ]
             then

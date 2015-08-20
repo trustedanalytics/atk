@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.domain.model
 import org.trustedanalytics.atk.domain.UriReference
 
 /**
- * ModelReference is the model's unique identifier. It is used to generate the ia_uri for the model.
+ * ModelReference is the model's unique identifier. It is used to generate the ta_uri for the model.
  */
 case class ModelReference(modelId: Long) extends UriReference {
   /** The entity id */

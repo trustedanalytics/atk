@@ -45,12 +45,12 @@ object FrameDecorator extends EntityDecorator[FrameEntity, GetDataFrames, GetDat
 
     if (entity.errorFrameId.isDefined) {
       val baseUri = StringUtils.substringBeforeLast(uri, "/")
-      links = RelLink("ia-error-frame", baseUri + "/" + entity.errorFrameId.get, "GET") :: links
+      links = RelLink("ta-error-frame", baseUri + "/" + entity.errorFrameId.get, "GET") :: links
     }
 
     GetDataFrame(id = entity.id,
       name = entity.name,
-      ia_uri = entity.uri,
+      ta_uri = entity.uri,
       schema = entity.schema,
       rowCount = entity.rowCount,
       links,

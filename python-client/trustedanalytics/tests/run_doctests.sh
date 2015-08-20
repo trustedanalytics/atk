@@ -17,8 +17,8 @@ source $ACTIVATE_FILE
 
 TESTS_DIR="$( cd "$( dirname "$BASH_SOURCE[0]}" )" && pwd )"
 ATK=`dirname $TESTS_DIR`
-DOC=$IA/doc
-SOURCE_CODE_PYTHON=`dirname $IA`
+DOC=$TA/doc
+SOURCE_CODE_PYTHON=`dirname $TA`
 
 echo SOURCE_CODE_PYTHON=$SOURCE_CODE_PYTHON
 
