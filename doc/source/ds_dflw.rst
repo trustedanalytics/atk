@@ -1286,8 +1286,7 @@ arbitrary frame of data consisting of the :download:`following
 Graph Creation
 ==============
 
-A Titan graph is created by exporting it from a seamless
-graph.
+A Titan graph is created by exporting it from a seamless graph.
 For futher information, as well as Titan graph attributes and methods, see the
 API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
 
@@ -1295,6 +1294,7 @@ API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
 
 .. index::
     pair: analytics; graph
+
 ---------------
 Graph Analytics
 ---------------
