@@ -29,9 +29,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "",
-  extended = "",
-  returns = "")
+@PluginDoc(oneLine = "<TBD>",
+  extended = "<TBD>")
 class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, UnitReturn] {
 
   /**
@@ -75,7 +74,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    ModelPublish.createTarForScoringEngine(jsvalue.toString(), arguments.serviceName, "scoring-models", arguments.filePath, "org.trustedanalytics.atk.scoring.models.RandomForestClassifierReaderPlugin")
+    ModelPublish.createTarForScoringEngine(jsvalue.toString(), arguments.serviceName, "scoring-models", arguments.filePath, "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
 
   }
 }

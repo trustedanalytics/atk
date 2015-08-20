@@ -19,14 +19,14 @@ package org.trustedanalytics.atk.engine.model.plugins.classification
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference, ClassificationMetricValue }
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.regression.LabeledPoint
 import FrameRddImplicits._
 import org.apache.spark.rdd.RDD
@@ -43,16 +43,28 @@ import MLLibJsonProtocol._
  * @param observationColumns Handle to the list of observation columns of the data frame
  * @param labelColumn Handle to the label column of the data frame
  */
-case class RandomForestClassifierTestArgs(model: ModelReference,
-                                          frame: FrameReference,
-                                          labelColumn: String,
-                                          observationColumns: Option[List[String]]) {
+case class RandomForestClassifierTestArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
+                                          @ArgDoc("""The frame whose labels are to be predicted""") frame: FrameReference,
+                                          @ArgDoc("""Column containing the true labels of the observations""") labelColumn: String,
+                                          @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
+By default, we predict the labels over columns the RandomForest was trained on.""") observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
 
 }
 
+@PluginDoc(oneLine = "Predict test frame labels and return metrics.",
+  extended = """Predict the labels for a test frame and run classification metrics on predicted
+and target labels.""",
+  returns = """object
+    An object with classification metrics.
+    The data returned is composed of multiple components:
+  <object>.accuracy : double
+  <object>.confusion_matrix : table
+  <object>.f_measure : double
+  <object>.precision : double
+  <object>.recall : double""")
 class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestClassifierTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.

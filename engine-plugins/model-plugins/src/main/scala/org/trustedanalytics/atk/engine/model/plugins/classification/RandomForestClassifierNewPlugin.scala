@@ -26,7 +26,8 @@ package org.trustedanalytics.atk.engine.model.plugins.classification
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.PluginDocAnnotation
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -34,6 +35,9 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of this model
  */
+@PluginDoc(oneLine = "Create a 'new' instance of random forest classifier model.",
+  extended = "",
+  returns = "")
 class RandomForestClassifierNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
   /**
    * The name of the command.

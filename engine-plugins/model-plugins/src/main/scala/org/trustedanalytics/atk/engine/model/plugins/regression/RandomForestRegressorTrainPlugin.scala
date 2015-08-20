@@ -29,25 +29,27 @@ import org.apache.spark.mllib.tree.RandomForest
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-case class RandomForestRegressorTrainArgs(model: ModelReference,
-                                          frame: FrameReference,
-                                          labelColumn: String,
-                                          observationColumns: List[String],
-                                          categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                          numTrees: Option[Int] = None,
-                                          featureSubsetCategory: Option[String] = None,
-                                          impurity: Option[String] = None,
-                                          maxDepth: Option[Int] = None,
-                                          maxBins: Option[Int] = None,
-                                          seed: Option[Int] = None) {
+case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+                                          @ArgDoc("""A frame to train the model on""") frame: FrameReference,
+                                          @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
+                                          @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
+                                          @ArgDoc("""Arity of categorical features.
+Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
+                                          @ArgDoc("""Number of tress in the random forest""") numTrees: Option[Int] = None,
+                                          @ArgDoc("""Number of features to consider for splits at each node""") featureSubsetCategory: Option[String] = None,
+                                          @ArgDoc("""Criterion used for information gain calculation""") impurity: Option[String] = None,
+                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Option[Int] = None,
+                                          @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Option[Int] = None,
+                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Option[Int] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
@@ -94,6 +96,20 @@ case class RandomForestRegressorTrainArgs(model: ModelReference,
   }
 }
 
+@PluginDoc(oneLine = "Build Random Forests Regressor model.",
+  extended = """Creating a Random Forests Regressor Model using the observation columns and label column.""",
+  returns =
+    """Values of the Random Forest Classifier model object storing:
+      | the list of observation columns on which the model was trained,
+      | the column name containing the labels of the observations,
+      | the number of decison trees in the random forest,
+      | the number of nodes in the random forest,
+      | the map storing arity of categorical features,
+      | the criterion used for information gain calculation,
+      | the maximum depth of the tree,
+      | the maximum number of bins used for splitting features,
+      | the random seed used for bootstrapping and choosing feature subset.
+    """.stripMargin)
 class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRegressorTrainArgs, RandomForestRegressorTrainReturn] {
   /**
    * The name of the command.

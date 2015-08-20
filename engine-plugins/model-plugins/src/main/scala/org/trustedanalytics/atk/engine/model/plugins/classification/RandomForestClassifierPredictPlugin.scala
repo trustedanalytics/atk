@@ -32,7 +32,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-case class RandomForestClassifierPredictArgs(@ArgDoc(""" """) model: ModelReference,
+case class RandomForestClassifierPredictArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
                                              @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
@@ -44,6 +44,10 @@ was trained on. """) observationColumns: Option[List[String]]) {
 
 }
 
+@PluginDoc(oneLine = "Predict the labels for the data points.",
+  extended = "",
+  returns = """Frame
+    A new frame consisting of the existing columns of the frame and a new column with predicted label for each observation.""")
 class RandomForestClassifierPredictPlugin extends SparkCommandPlugin[RandomForestClassifierPredictArgs, FrameEntity] {
   /**
    * The name of the command.

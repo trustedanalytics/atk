@@ -31,6 +31,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
  * Command for loading model data into existing model in the model database.
  * @param randomForestModel Trained MLLib's LinearRegressionModel object
  * @param observationColumns Handle to the observation columns of the data frame
+ * @param numClasses Number of classes of the data
  */
 case class RandomForestClassifierData(randomForestModel: RandomForestModel, observationColumns: List[String], numClasses: Int) {
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumns must not be null nor empty")
