@@ -16,10 +16,12 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
-import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.domain.schema.{FrameSchema, Schema}
+import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
 
 //implicit conversion for PairRDD
 
@@ -46,6 +48,49 @@ object JoinRddFunctions extends Serializable {
   }
 
   /**
+   * Create joined frame
+   *
+   * The duplicate join column in the joined RDD is dropped for inner, left, and right joins.
+   * The frame for full-outer joins contains the join columns from both frames.
+   *
+   * @param joinedRdd Joined RDD
+   * @param left join parameter for first data frame
+   * @param right join parameter for second data frame
+   * @param how join method
+   * @return Joined frame
+   */
+  def createJoinedFrame(joinedRdd: RDD[Row],
+                        left: RddJoinParam,
+                        right: RddJoinParam,
+                        how: String): FrameRdd = {
+
+    val leftSchema = left.frame.frameSchema
+    val rightSchema = right.frame.frameSchema
+    val schema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+
+    how match {
+      case "outer" => {
+       new FrameRdd(schema, joinedRdd)
+      }
+      case "right" => {
+        val dropColumnName = schema.column(leftSchema.columnIndex(left.joinColumn)).name
+        val newLeftSchema = leftSchema.renameColumn(left.joinColumn, dropColumnName)
+        val newSchema = FrameSchema(Schema.join(newLeftSchema.columns, rightSchema.columns))
+
+        new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
+      }
+      case _ => {
+        val dropColumnName = schema.column(rightSchema.columnIndex(right.joinColumn)).name
+        val newRightSchema = rightSchema.renameColumn(right.joinColumn, dropColumnName)
+        val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
+
+        new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
+      }
+    }
+  }
+
+
+  /**
    * Perform join operation
    *
    * Supports left-outer joins, right-outer-joins, outer-joins, and inner joins
@@ -60,9 +105,9 @@ object JoinRddFunctions extends Serializable {
                right: RddJoinParam,
                how: String,
                broadcastJoinThreshold: Long = Long.MaxValue,
-               skewedJoinType: Option[String] = None): RDD[Row] = {
+               skewedJoinType: Option[String] = None): FrameRdd = {
 
-    val result = how match {
+    val joinedRdd = how match {
       case "left" => leftOuterJoin(left, right, broadcastJoinThreshold, skewedJoinType)
       case "right" => rightOuterJoin(left, right, broadcastJoinThreshold, skewedJoinType)
       case "outer" => fullOuterJoin(left, right)
@@ -70,7 +115,7 @@ object JoinRddFunctions extends Serializable {
       case other => throw new IllegalArgumentException(s"Method $other not supported. only support left, right, outer and inner.")
     }
 
-    result
+    createJoinedFrame(joinedRdd, left, right, how)
   }
 
   /**

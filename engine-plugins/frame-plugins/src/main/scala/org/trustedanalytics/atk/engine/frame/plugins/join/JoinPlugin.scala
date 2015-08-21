@@ -76,7 +76,7 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold
 
-    val joinResultRDD = JoinRddFunctions.joinRDDs(
+    val joinedFrame = JoinRddFunctions.joinRDDs(
       createRDDJoinParam(leftFrame, arguments.leftFrame.joinColumn, broadcastJoinThreshold),
       createRDDJoinParam(rightFrame, arguments.rightFrame.joinColumn, broadcastJoinThreshold),
       arguments.how,
@@ -84,12 +84,8 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
       arguments.skewedJoinType
     )
 
-    val allColumns = Schema.join(leftFrame.schema.columns, rightFrame.schema.columns)
-    val newJoinSchema = FrameSchema(allColumns)
-
-    val joinedFrame = new FrameRdd(newJoinSchema, joinResultRDD)
-
-    engine.frames.tryNewFrame(CreateEntityArgs(name = arguments.name, description = Some("created from join operation"))) {
+    engine.frames.tryNewFrame(CreateEntityArgs(name = arguments.name,
+      description = Some("created from join operation"))) {
       newFrame => newFrame.save(joinedFrame)
     }
   }
