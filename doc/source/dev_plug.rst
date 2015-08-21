@@ -1,3 +1,5 @@
+.. _dev_plug.rst:
+
 .. index::
     single: plugin
     single: extend

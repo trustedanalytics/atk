@@ -1,3 +1,5 @@
+.. _legal.rst:
+
 ===============
 Legal Statement
 ===============

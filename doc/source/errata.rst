@@ -1,3 +1,5 @@
+.. _errata.rst:
+
 ======
 Errata
 ======

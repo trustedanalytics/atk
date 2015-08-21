@@ -1,3 +1,5 @@
+.. _ds_ml.rst:
+
 .. index::
     single: machine learning
 

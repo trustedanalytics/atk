@@ -1,3 +1,5 @@
+.. _dev_psql.rst:
+
 .. index::
     single: metadata
     single: H2

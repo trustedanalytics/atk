@@ -1,3 +1,5 @@
+.. _ds_apir.rst:
+
 .. index:: ! UDF
     single: Python
 

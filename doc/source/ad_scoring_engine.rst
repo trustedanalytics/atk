@@ -1,3 +1,5 @@
+.. _ad_scoring_engine.rst:
+
 Scoring Engine
 ==============
 

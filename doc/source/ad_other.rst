@@ -1,3 +1,5 @@
+.. _ad_other.rst:
+
 .. _windows_python_setup:
 
 .. index::

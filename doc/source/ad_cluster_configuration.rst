@@ -1,3 +1,5 @@
+.. _ad_cluster_configuration.rst:
+
 =====================
 Cluster Configuration
 =====================

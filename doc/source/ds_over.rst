@@ -1,3 +1,5 @@
+.. _ds_over.rst:
+
 ===========
 User Manual
 ===========
