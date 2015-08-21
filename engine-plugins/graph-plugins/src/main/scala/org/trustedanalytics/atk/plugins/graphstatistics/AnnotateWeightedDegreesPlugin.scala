@@ -92,7 +92,7 @@ edges leaving the vertex) and an in-degree (the number of edges entering the
 vertex).
 
 The toolkit provides a routine :ref:`annotate_degrees
-<python_api/graphs/graph-/annotate_weighted_degrees.rst>`
+<python_api/graphs/graph-/annotate_weighted_degrees>`
 for calculating the degrees of vertices.
 This calculation could be performed with a Gremlin query on smaller datasets
 because Gremlin queries cannot be executed on a distributed scale.
