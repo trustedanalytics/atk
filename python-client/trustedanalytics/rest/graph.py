@@ -32,10 +32,8 @@ from trustedanalytics.rest.command import executor
 
 def initialize_graph(graph, graph_info):
     """Initializes a graph according to given graph_info"""
-    graph._id = graph_info.id_number
+    graph.uri = graph_info.uri
     graph._name = graph_info.name
-    graph._ia_uri = graph_info.ia_uri
-    graph._uri= server.create_full_uri("graphs/"+ str(graph._id))
     return graph
 
 
@@ -49,7 +47,7 @@ class GraphBackendRest(object):
         if isinstance(_info, dict):
             _info = GraphInfo(_info)
         if isinstance(_info, GraphInfo):
-            return initialize_graph(graph,_info)._id # Early exit here
+            return initialize_graph(graph,_info).uri # Early exit here
         new_graph_id = self._create_new_graph(graph, rules, name, storage_format, True if name else False)
         return new_graph_id
 
@@ -69,7 +67,7 @@ class GraphBackendRest(object):
                     payload_json = json.dumps(frame_rules, indent=2, sort_keys=True)
                     logger.debug("REST Backend: create graph payload: " + payload_json)
                 initialized_graph.load(frame_rules, append=False)
-            return graph_info.id_number
+            return graph_info.uri
     
     def _get_new_graph_name(self,source=None):
         try:
@@ -77,9 +75,6 @@ class GraphBackendRest(object):
         except:
             annotation= ''
         return "graph_" + uuid.uuid4().hex + annotation
-
-    def get_ia_uri(self, graph):
-        return self._get_graph_info(graph).ia_uri
 
     def get_repr(self, graph):
         graph_info = self._get_graph_info(graph)
@@ -94,35 +89,35 @@ class GraphBackendRest(object):
         return GraphInfo(response.json())
 
     def _get_graph_full_uri(self,graph):
-        return self.server.create_full_uri('graphs/%d' % graph._id)
+        return self.server.create_full_uri(graph.uri)
 
     def append(self, graph, rules):
         logger.info("REST Backend: append_frame graph: %s" % graph.name)
         frame_rules = JsonRules(rules)
         graph.load(frame_rules, append=True)
 
-    def get_vertex_frames(self, graphid):
-        r = self.server.get('graphs/%s/vertices' % graphid)
+    def get_vertex_frames(self, graph_uri):
+        r = self.server.get('%s/vertices' % graph_uri)
         return [VertexFrame(_info=x) for x in r.json()]
 
-    def get_vertex_frame(self,graphid, label):
-        r = self.server.get('graphs/%s/vertices?label=%s' % (graphid, label))
+    def get_vertex_frame(self, graph_uri, label):
+        r = self.server.get('%s/vertices?label=%s' % (graph_uri, label))
         return VertexFrame(_info=r.json())
 
-    def get_edge_frames(self, graphid):
-        r = self.server.get('graphs/%s/edges' % graphid)
+    def get_edge_frames(self, graph_uri):
+        r = self.server.get('%s/edges' % graph_uri)
         return [EdgeFrame(_info=x) for x in r.json()]
 
-    def get_edge_frame(self,graphid, label):
-        r = self.server.get('graphs/%s/edges?label=%s' % (graphid, label))
+    def get_edge_frame(self,graph_uri, label):
+        r = self.server.get('%s/edges?label=%s' % (graph_uri, label))
         return EdgeFrame(_info=r.json())
 
     def get_vertex_count(self, graph):
-        arguments = {'graph': self.get_ia_uri(graph)}
+        arguments = {'graph': graph.uri}
         return executor.execute("graph:/vertex_count", graph, arguments)
 
     def get_edge_count(self, graph):
-        arguments = {'graph': self.get_ia_uri(graph)}
+        arguments = {'graph': graph.uri}
         return executor.execute("graph:/edge_count", graph, arguments)
 
 
@@ -194,13 +189,13 @@ class JsonRules(object):
 
     @staticmethod
     def _get_frame(rule, frames_dict):
-        uri = rule.source_frame._id
+        uri = rule.source_frame.uri
         #validate the input frames
         from trustedanalytics.meta.config import get_frame_backend
         frame_backend = get_frame_backend()
 
         try:
-            frame_backend.get_frame_by_id(uri)
+            frame_backend.get_frame_by_uri(uri)
         except:
             raise ValueError("Frame provided to establish VertexRule is no longer available.")
 
@@ -217,17 +212,14 @@ class GraphInfo(object):
     JSON based Server description of a Graph
     """
     def __init__(self, graph_json_payload):
+        print "payload=%s" % json.dumps(graph_json_payload)
         self._payload = graph_json_payload
 
     def __repr__(self):
         return json.dumps(self._payload, indent =2, sort_keys=True)
 
     def __str__(self):
-        return '%s "%s"' % (self.id_number, self.name)
-
-    @property
-    def id_number(self):
-        return self._payload['id']
+        return '%s "%s"' % (self.uri, self.name)
 
     @property
     def name(self):
@@ -238,8 +230,8 @@ class GraphInfo(object):
         return self._payload['entity_type']
 
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def uri(self):
+        return self._payload['uri']
 
     @property
     def links(self):
@@ -250,9 +242,9 @@ class GraphInfo(object):
         return self._payload['status']
 
     def update(self,payload):
-        if self._payload and self.id_number != payload['id']:
-            msg = "Invalid payload, graph ID mismatch %d when expecting %d" \
-                % (payload['id'], self.id_number)
+        if self._payload and self.uri != payload['uri']:
+            msg = "Invalid payload, graph URI mismatch %s when expecting %s" \
+                % (payload['uri'], self.uri)
             logger.error(msg)
             raise RuntimeError(msg)
         self._payload=payload

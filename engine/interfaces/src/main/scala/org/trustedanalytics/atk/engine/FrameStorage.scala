@@ -25,6 +25,9 @@ trait FrameStorage {
 
   type Context
   type Data
+  case class SaveInfo(targetPath: String,
+                      storageFormat: String,
+                      victimPath: Option[String] = None)
 
   def expectFrame(frameRef: FrameReference)(implicit invocation: Invocation): FrameEntity
 
@@ -40,8 +43,8 @@ trait FrameStorage {
   def loadFrameData(context: Context, frame: FrameEntity)(implicit invocation: Invocation): Data
   def saveFrameData(frame: FrameReference, data: Data)(implicit invocation: Invocation): FrameEntity
 
-  def prepareForSave(createEntity: CreateEntityArgs)(implicit invocation: Invocation): FrameEntity
-  def postSave(originalFrameRef: Option[FrameReference], targetFrameRef: FrameReference, schema: Schema)(implicit invocation: Invocation): FrameEntity
+  def prepareForSave(frameEntity: FrameReference, storageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo
+  def postSave(targetFrameRef: FrameReference, saveInfo: SaveInfo, schema: Schema)(implicit invocation: Invocation): FrameEntity
 
   /**
    * Get the error frame of the supplied frame or create one if it doesn't exist

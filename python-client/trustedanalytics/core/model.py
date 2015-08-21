@@ -59,7 +59,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     _entity_type = 'model'
 
     def __init__(self):
-        self._id = 0
+        self.uri = None
         CommandLoadable.__init__(self)
 
     def _get_model_info(self):
@@ -67,7 +67,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
         return ModelInfo(response.json())
 
     def _get_model_full_uri(self):
-        return server.create_full_uri('models/%d' % self._id)
+        return server.create_full_uri(self.uri)
 
     @staticmethod
     def _is_entity_info(obj):
@@ -83,7 +83,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     def __eq__(self, other):
         if not isinstance(other, _BaseModel):
             return False
-        return self._id == other._id
+        return self.uri == other.uri
 
 
 class ModelInfo(object):
@@ -98,25 +98,21 @@ class ModelInfo(object):
         return json.dumps(self._payload, indent =2, sort_keys=True)
 
     def __str__(self):
-        return '%s "%s"' % (self.id_number, self.name)
+        return '%s "%s"' % (self.uri, self.name)
 
     def _validate(self):
         try:
-            assert self.id_number
+            assert self.uri
         except KeyError:
             raise RuntimeError("Invalid response from server. Expected Model info.")
-
-    @property
-    def id_number(self):
-        return self._payload['id']
 
     @property
     def name(self):
         return self._payload.get('name', None)
 
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def uri(self):
+        return self._payload['uri']
 
     @property
     def links(self):
@@ -127,12 +123,12 @@ class ModelInfo(object):
         return self._payload['status']
 
     def initialize_model(self, model):
-        model._id = self.id_number
+        model.uri = self.uri
 
     def update(self,payload):
-        if self._payload and self.id_number != payload['id']:
+        if self._payload and self.uri != payload['uri']:
             msg = "Invalid payload, model ID mismatch %d when expecting %d" \
-                  % (payload['id'], self.id_number)
+                  % (payload['uri'], self.uri)
             logger.error(msg)
             raise RuntimeError(msg)
         self._payload=payload

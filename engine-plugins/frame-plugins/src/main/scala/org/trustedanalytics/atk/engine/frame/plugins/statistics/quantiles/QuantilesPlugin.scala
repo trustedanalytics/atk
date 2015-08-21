@@ -34,7 +34,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "New frame with Quantiles and their values.",
   extended = "Calculate quantiles on the given column.",
   returns = "A new frame with two columns (float64): requested Quantiles and their respective values.")
-class QuantilesPlugin extends SparkCommandPlugin[QuantilesArgs, FrameEntity] {
+class QuantilesPlugin extends SparkCommandPlugin[QuantilesArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -59,7 +59,7 @@ class QuantilesPlugin extends SparkCommandPlugin[QuantilesArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: QuantilesArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: QuantilesArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val frameSchema = frame.schema
     val columnIndex = frameSchema.columnIndex(arguments.columnName)

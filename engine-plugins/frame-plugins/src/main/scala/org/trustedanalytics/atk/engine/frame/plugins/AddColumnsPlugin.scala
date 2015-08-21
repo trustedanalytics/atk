@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
@@ -40,7 +41,7 @@ Notes
         See :doc:`/ds_apir`.
     2)  Unicode in column names is not supported and will likely cause the
         drop_frames() method (and others) to fail!""")
-class AddColumnsPlugin extends SparkCommandPlugin[AddColumnsArgs, FrameEntity] {
+class AddColumnsPlugin extends SparkCommandPlugin[AddColumnsArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -59,7 +60,7 @@ class AddColumnsPlugin extends SparkCommandPlugin[AddColumnsArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: AddColumnsArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: AddColumnsArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val newColumns = arguments.columnNames.zip(arguments.columnTypes.map(x => x: DataType))
     val columnList = newColumns.map { case (name, dataType) => Column(name, dataType) }
