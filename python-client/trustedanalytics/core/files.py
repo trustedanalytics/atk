@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+import json
+
 from trustedanalytics.core.atktypes import valid_data_types
 
 class DataFile(object):
@@ -638,3 +640,45 @@ class HiveQuery(DataFile):
 
     def __repr__(self):
         return repr(self.file_name)
+
+
+
+class HBaseTable(object):
+    """
+    Define the query to retrieve the data from an hBase table.
+
+    Parameters
+    ----------
+    query : str
+        The sql query to retrieve the data
+
+    Returns
+    -------
+    class : HBaseTable object
+        An object which holds hBase query.
+
+    Examples
+    --------
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.connect()
+        >>> h = tp.HBaseTable ("my_table", [("pants", "aisle", unicode), ("pants", "row", int),( "shirts", "aisle", unicode),("shirts", "row", unicode)])
+        >>> f = tp.Frame(h)
+        >>> f.inspect()
+
+    """
+
+    def __init__(self, table_name, schema):
+        self.table_name = table_name
+        self.schema = schema
+
+    def to_json(self):
+        return {"table_name": self.table_name,
+                "schema": [{"column_family" :field[0], "column_name": field[1], "data_type": valid_data_types.to_string(field[2])} for field in self.schema],
+                "start_tag": None,
+                "end_tag": None}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
