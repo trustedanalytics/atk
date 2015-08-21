@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 
 class FrameBinColumnTest(unittest.TestCase):
@@ -41,12 +41,12 @@ class FrameBinColumnTest(unittest.TestCase):
 
     def setUp(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/flattenable.csv", schema= [('number', ta.int32),
+        csv = atk.CsvFile("/datasets/flattenable.csv", schema= [('number', atk.int32),
                                                                ('abc', str),
                                                                ('food', str)], delimiter=',')
 
         print "create frame"
-        self.frame = ta.Frame(csv)
+        self.frame = atk.Frame(csv)
 
     def test_lower_inclusive_strict_binning(self):
         self.frame.bin_column('number', [3, 5, 8], include_lowest=True, strict_binning=True)

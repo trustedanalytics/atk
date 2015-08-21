@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class ModelSmokeTest(unittest.TestCase):
     """
@@ -38,20 +38,20 @@ class ModelSmokeTest(unittest.TestCase):
     """
     def test_model(self):
         print "Initialize KMeansModel object with name"
-        k1 = ta.KMeansModel(name='mykMeansModel1')
+        k1 = atk.KMeansModel(name='mykMeansModel1')
         name = k1.name
 
         print "Initialize KMeansModel object"
-        k2 = ta.KMeansModel()
+        k2 = atk.KMeansModel()
 
         print "Initialize LogisticRegressionModel object with name"
-        l1= ta.LogisticRegressionModel(name='myLogisticRegressionModel1')
+        l1= atk.LogisticRegressionModel(name='myLogisticRegressionModel1')
 
         print "Initialize LogisticRegressionModel object"
-        l2 = ta.LogisticRegressionModel()
+        l2 = atk.LogisticRegressionModel()
 
         print "Initialize NaiveBayesModel object"
-        n = ta.NaiveBayesModel()
+        n = atk.NaiveBayesModel()
 
 if __name__ == "__main__":
     unittest.main()

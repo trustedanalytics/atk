@@ -38,7 +38,7 @@ ATTR_COMMAND_INSTALLATION = "_command_installation"
 ATTR_ENTITY_COLLECTION = "_entity_collection"
 ATTR_INTERMEDIATE_CLASS = "_intermediate_class"
 EXECUTE_COMMAND_FUNCTION_NAME = 'execute_command'
-IA_URI = '_id'
+ATK_URI = '_id'
 
 
 _installable_classes_store = {}  # global store, keyed on full install path, str -> cls   ex.  { 'frame:' : Frame }
@@ -134,7 +134,7 @@ class CommandInstallable(object):
     Inheritors must...
 
     1.  Implement the following:
-        instance attribute '_id' : str or int  (See IA_URI constant)
+        instance attribute '_id' : str or int  (See ATK_URI constant)
             identifies the instance to the server
 
     2.  Call CommandsInstallable.__init__(self) in its own __init__, IMMEDIATELY
@@ -168,9 +168,9 @@ class CommandInstallable(object):
                     logger.debug("Adding intermediate class instance as member %s", private_member_name)
                     setattr(self, private_member_name, private_member_value)
 
-    def _get_entity_ia_uri(self):
+    def _get_entity_atk_uri(self):
         """standard way for generated code to ask for the entity id"""
-        return getattr(self._entity, IA_URI)
+        return getattr(self._entity, ATK_URI)
 
 
 def is_class_command_installable(cls):
@@ -414,7 +414,7 @@ def create_execute_command_function(command_def, execute_command_function):
 
 def get_self_argument_text():
     """Produces the text for argument to use for self in a command call"""
-    return "self._entity.%s" % IA_URI
+    return "self._entity.%s" % ATK_URI
 
 
 def get_function_kwargs(command_def):

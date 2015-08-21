@@ -34,7 +34,7 @@ class CsvFile(DataFile):
         Relative paths are interpreted as being relative to the path set in
         the application configuration file.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_ATK_configure_file_system_root>`.
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
     schema : list of tuples of the form (string, type)
@@ -82,19 +82,19 @@ class CsvFile(DataFile):
 
     .. code::
 
-        >>> import trustedanalytics as ta
+        >>> import trustedanalytics as atk
 
     Define the data:
 
     .. code::
 
-        >>> csv_schema = [("a", ta.int32), ("b", ta.int32), ("c", str)]
+        >>> csv_schema = [("a", atk.int32), ("b", atk.int32), ("c", str)]
 
     Create a CsvFile object with this schema:
 
     .. code::
 
-        >>> csv_define = ta.CsvFile("data/raw_data.csv", csv_schema)
+        >>> csv_define = atk.CsvFile("data/raw_data.csv", csv_schema)
 
     The default delimiter, a comma, was used to separate fields in the file, so
     it was not specified.
@@ -105,14 +105,14 @@ class CsvFile(DataFile):
 
     .. code::
 
-        >>> ta.CsvFile("data/raw_data.csv", csv_schema, delimiter = ':')
+        >>> atk.CsvFile("data/raw_data.csv", csv_schema, delimiter = ':')
 
     If the data had some lines of header at the beginning of the file, the
     lines should be skipped:
 
     .. code::
 
-        >>> csv_data = ta.CsvFile("data/raw_data.csv", csv_schema, skip_header_lines=2)
+        >>> csv_data = atk.CsvFile("data/raw_data.csv", csv_schema, skip_header_lines=2)
 
     For other examples see :ref:`Importing a CSV File <example_files.csvfile>`.
 
@@ -162,15 +162,15 @@ class CsvFile(DataFile):
 
             .. code::
 
-                >>> csv_class = ta.CsvFile("raw_data.csv", schema=[("col1", ta.int32), ("col2", ta.float32)])
+                >>> csv_class = atk.CsvFile("raw_data.csv", schema=[("col1", atk.int32), ("col2", atk.float32)])
                 >>> print(csv_class.field_names())
 
         .. only:: latex
 
             .. code::
 
-                >>> csv_class = ta.CsvFile("raw_data.csv",
-                ... schema=[("col1", ta.int32), ("col2", ta.float32)])
+                >>> csv_class = atk.CsvFile("raw_data.csv",
+                ... schema=[("col1", atk.int32), ("col2", atk.float32)])
                 >>> print(csv_class.field_names())
 
         Results:
@@ -204,22 +204,22 @@ class CsvFile(DataFile):
 
             .. code::
 
-                >>> csv_class = ta.CsvFile("raw_data.csv", schema = [("col1", ta.int32), ("col2", ta.float32)])
+                >>> csv_class = atk.CsvFile("raw_data.csv", schema = [("col1", atk.int32), ("col2", atk.float32)])
                 >>> print(csv_class.field_types())
 
         .. only:: html
 
             .. code::
 
-                >>> csv_class = ta.CsvFile("raw_data.csv",
-                ... schema=[("col1", ta.int32), ("col2", ta.float32)])
+                >>> csv_class = atk.CsvFile("raw_data.csv",
+                ... schema=[("col1", atk.int32), ("col2", atk.float32)])
                 >>> print(csv_class.field_types())
 
         Results:
 
         .. code::
 
-            [ta.int32, ta.float32]
+            [atk.int32, atk.float32]
 
         """
         # TODO - Review docstring
@@ -254,7 +254,7 @@ class LineFile(DataFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_ATK_configure_file_system_root>`.
 
 
     Returns
@@ -273,14 +273,14 @@ class LineFile(DataFile):
 
     .. code::
 
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
+        >>> import trustedanalyticsas atka
+        >>> atk.connect()()
 
     Define the data:
 
     .. code::
 
-        >>> linefile_class = ta.LineFile("data/rawline_data.txt")
+        >>> linefile_class = atk.LineFile("data/rawline_data.txt")
 
     """
 
@@ -328,7 +328,7 @@ class JsonFile(MultiLineFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_ATK_configure_file_system_root>`.
 
 
     Returns
@@ -366,20 +366,20 @@ class JsonFile(MultiLineFile):
 
     .. code::
 
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
+        >>> import trustedanalyticas atkta
+        >>> atk.connect()()
 
     Define the data:
 
     .. code::
 
-        >>> json_file = ta.JsonFile("data/raw_data.json")
+        >>> json_file = atk.JsonFile("data/raw_data.json")
 
     Create a frame using this JsonFile:
 
     .. code::
 
-        >>> my_frame = ta.Frame(json_file)
+        >>> my_frame = atk.Frame(json_file)
 
     The frame looks like:
 
@@ -466,7 +466,7 @@ class XmlFile(MultiLineFile):
         Absolute paths (beginning with ``hdfs://...``, for example) are also
         supported.
         See :ref:`Configure File System Root
-        <ad_inst_IA_configure_file_system_root>`.
+        <ad_inst_ATK_configure_file_system_root>`.
     tag_name : str
         Tag name used to determine the split of elements into separate records.
 
@@ -510,20 +510,20 @@ class XmlFile(MultiLineFile):
 
     .. code::
 
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
+        >>> import trustedanalytias as atk
+        >>> atk.connect()()
 
     Define the data:
 
     .. code::
 
-        >>> xml_file = ta.XmlFile("data/raw_data.xml", "square")
+        >>> xml_file = atk.XmlFile("data/raw_data.xml", "square")
 
     Create a frame using this XmlFile:
 
     .. code::
 
-        >>> my_frame = ta.Frame(xml_file)
+        >>> my_frame = atk.Frame(xml_file)
 
     The frame looks like:
 
@@ -612,20 +612,20 @@ class HiveQuery(DataFile):
     A simple query could be to get the query for the name and age
     .. code::
 
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
+        >>> import trustedanalytas atks ta
+        >>> atk.connect()()
 
     Define the data:
 
     .. code::
 
-        >>> hive_query = ta.HiveQuery("select name, age from person")
+        >>> hive_query = atk.HiveQuery("select name, age from person")
 
     Create a frame using the object:
 
     .. code::
 
-        >>> my_frame = ta.Frame(hive_query)
+        >>> my_frame = atk.Frame(hive_query)
 
     """
 

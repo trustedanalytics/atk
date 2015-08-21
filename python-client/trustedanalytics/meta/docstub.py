@@ -60,7 +60,7 @@ def delete_docstubs():
         raise RuntimeError("Internal error, no docstub module")
 
     def _delete_docstubs(docstubs):
-        import trustedanalytics as ta
+        import trustedanalytics as atk
         items = _get_module_items(docstubs)
         for item in items:
             if inspect.isclass(item):
@@ -293,7 +293,7 @@ def get_doc_stub_modules_text(class_to_member_text_dict, import_return_types):
 def test_import(name):
     """Determines if the name is importable from main module"""
     try:
-        import trustedanalytics as ta
+        import trustedanalytics as atk
         getattr(ia, name)
         return True
     except:

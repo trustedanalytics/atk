@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.domain
 
 /**
- * Things that can be referenced with a simple URI of the form ia://entity/id.
+ * Things that can be referenced with a simple URI of the form atk://entity/id.
  */
 trait UriReference {
 
@@ -29,7 +29,7 @@ trait UriReference {
 
   /** The full URI */
   def uri: String = {
-    s"ia://$name/$id"
+    s"atk://$name/$id"
   }
 
   override def hashCode(): Int = uri.hashCode()

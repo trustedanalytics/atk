@@ -5,7 +5,7 @@ Examples
 
     .. code::
 
-        >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+        >>> my_model = atk.PrincipalComponentsModel(name='principalcomponentsmodel')
         >>> my_model(train_frame,["1","2","3","4","5","6","7","8","9","10","11"],9)
         >>> {u'k': 9,
              u'observation_columns': [u'1',
@@ -37,7 +37,7 @@ Examples
 
     .. code::
 
-        >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+        >>> my_model = atk.PrincipalComponentsModel(name='principalcomponentsmodel')
         >>> my_model(train_frame,["1","2","3","4","5","6","7","8","9","10","11"],9)
         >>> {u'k': 9,
             u'observation_columns': [u'1',

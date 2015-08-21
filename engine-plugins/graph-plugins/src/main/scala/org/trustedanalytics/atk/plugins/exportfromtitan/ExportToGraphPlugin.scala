@@ -53,7 +53,7 @@ import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImp
  */
 case class LabelTriplet(edgeLabel: String, srcLabel: String, destLabel: String)
 
-@PluginDoc(oneLine = "Export from ta.TitanGraph to ta.Graph.",
+@PluginDoc(oneLine = "Export from atk.TitanGraph to atk.Graph.",
   extended = "")
 class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
 
@@ -99,7 +99,7 @@ class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
     val edgeSchemas = edgesWithCorrectedLabels.aggregate(EdgeSchemaAggregator.zeroValue)(EdgeSchemaAggregator.seqOp, EdgeSchemaAggregator.combOp).values
 
     // Create the target Graph
-    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, "ia/frame"))
+    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, "atk/frame"))
 
     // Create the Edge and Vertex frames
     vertexSchemas.foreach(schema => targetGraph.defineVertexType(schema))

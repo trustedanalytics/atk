@@ -40,8 +40,8 @@ edges directly.  export_to_titan is available to obtain a TitanGraph.
 
 Example:
 
->>> import trustedanalytics as ta
->>> g = ta.Graph()
+>>> import trustedanalytics as atk
+>>> g = atk.Graph()
 >>> g.define_vertex_type('users')
 >>> g.define_vertex_type('machines')
 >>> g.vertices['users'].add_vertices(source_frame1, 'user')
@@ -181,16 +181,16 @@ class VertexRule(Rule):
 
         .. code::
 
-            >>> movie_vertex = ta.VertexRule('movie', my_frame['movie'], {'genre': my_frame['genre'], 'vertex_type':'L'})
-            >>> user_vertex = ta.VertexRule('user', my_frame['user'], {'age': my_frame['age_1'], 'vertex_type':'R'})
+            >>> movie_vertex = atk.VertexRule('movie', my_frame['movie'], {'genre': my_frame['genre'], 'vertex_type':'L'})
+            >>> user_vertex = atk.VertexRule('user', my_frame['user'], {'age': my_frame['age_1'], 'vertex_type':'R'})
 
     .. only:: latex
 
         .. code::
 
-            >>> movie_vertex = ta.VertexRule('movie', my_frame['movie'],
+            >>> movie_vertex = atk.VertexRule('movie', my_frame['movie'],
             ... {'genre': my_frame['genre'], 'vertex_type':'L'})
-            >>> user_vertex = ta.VertexRule('user', my_frame['user'],
+            >>> user_vertex = atk.VertexRule('user', my_frame['user'],
             ... {'age': my_frame['age_1'], 'vertex_type':'R'})
 
     """
@@ -224,7 +224,7 @@ class VertexRule(Rule):
 
         .. code::
 
-            >>> my_graph = ta.Graph(my_rule_a, my_rule_b, my_rule_1)
+            >>> my_graph = atk.Graph(my_rule_a, my_rule_b, my_rule_1)
             >>> validation = my_graph.validate()
 
         """
@@ -270,13 +270,13 @@ class EdgeRule(Rule):
 
         .. code::
 
-            >>> rating_edge = ta.EdgeRule('rating', movie_vertex, user_vertex, {'weight': my_frame['score']})
+            >>> rating_edge = atk.EdgeRule('rating', movie_vertex, user_vertex, {'weight': my_frame['score']})
 
     .. only:: latex
 
         .. code::
 
-            >>> rating_edge = ta.EdgeRule('rating', movie_vertex, user_vertex,
+            >>> rating_edge = atk.EdgeRule('rating', movie_vertex, user_vertex,
             ... {'weight': my_frame['score']})
 
     """
@@ -437,24 +437,24 @@ class Graph(_DocStubsGraph, _BaseGraph):
 
         .. code::
 
-            >>> my_schema = [('user_id', ta.int32), ('user_name', str), ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
-            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
-            >>> my_frame = ta.Frame(my_csv)
+            >>> my_schema = [('user_id', atk.int32), ('user_name', str), ('movie_id', atk.int32), ('movie_title', str), ('rating', str)]
+            >>> my_csv = atk.CsvFile("/movie.csv", my_schema)
+            >>> my_frame = atk.Frame(my_csv)
 
     .. only:: latex
 
         .. code::
 
-            >>> my_schema = [('user_id', ta.int32), ('user_name', str),
-            ... ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
-            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
-            >>> my_frame = ta.Frame(my_csv)
+            >>> my_schema = [('user_id', atk.int32), ('user_name', str),
+            ... ('movie_id', atk.int32), ('movie_title', str), ('rating', str)]
+            >>> my_csv = atk.CsvFile("/movie.csv", my_schema)
+            >>> my_frame = atk.Frame(my_csv)
 
     Now, make an empty graph:
 
     .. code::
 
-        >>> my_graph = ta.Graph()
+        >>> my_graph = atk.Graph()
 
     Then, define the types of vertices and edges this graph will be made of:
 
@@ -509,20 +509,20 @@ class Graph(_DocStubsGraph, _BaseGraph):
 
     .. code::
 
-        >>> user_schema = [('user_id', ta.int32), ('user_name', str), ('age', ta.int32)]))
-        >>> user_frame = ta.Frame(ta.CsvFile("/users.csv", userSchema)
+        >>> user_schema = [('user_id', atk.int32), ('user_name', str), ('age', atk.int32)]))
+        >>> user_frame = atk.Frame(atk.CsvFile("/users.csv", userSchema)
 
-        >>> movie_schema = [('movie_id', ta.int32), ('movie_title', str), ('year', str)]))
-        >>> movie_frame = ta.Frame(ta.CsvFile("/movie.csv", movie_schema)
+        >>> movie_schema = [('movie_id', atk.int32), ('movie_title', str), ('year', str)]))
+        >>> movie_frame = atk.Frame(atk.CsvFile("/movie.csv", movie_schema)
 
-        >>> ratings_schema = [('ser_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
-        >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", ratings_schema)
+        >>> ratings_schema = [('ser_id', atk.int32), ('movie_id', atk.int32), ('rating', str)]))
+        >>> ratings_frame = atk.Frame(atk.CsvFile("/ratings.csv", ratings_schema)
 
     Create a graph:
 
     .. code::
 
-        >>> my_graph = ta.Graph()
+        >>> my_graph = atk.Graph()
 
     Define the types of vertices and edges this graph will be made of:
 
@@ -564,22 +564,22 @@ class Graph(_DocStubsGraph, _BaseGraph):
 
         .. code::
 
-            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv", schema = [('Employee', str), ('Manager', str), ('Title', str), ('Years', ta.int64)], skip_header_lines=1), 'employees_frame')
+            >>> employees_frame = atk.Frame(atk.CsvFile("employees.csv", schema = [('Employee', str), ('Manager', str), ('Title', str), ('Years', atk.int64)], skip_header_lines=1), 'employees_frame')
 
     .. only:: latex
 
         .. code::
 
-            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv",
+            >>> employees_frame = atk.Frame(atk.CsvFile("employees.csv",
             ... schema = [('Employee', str), ('Manager', str),
-            ... ('Title', str), ('Years', ta.int64)], skip_header_lines=1),
+            ... ('Title', str), ('Years', atk.int64)], skip_header_lines=1),
             ... 'employees_frame')
 
     Define a graph:
 
     .. code::
 
-        >>> my_graph = ta.Graph()
+        >>> my_graph = atk.Graph()
         >>> my_graph.define_vertex_type('Employee')
         >>> my_graph.define_edge_type('worksunder', 'Employee', 'Employee', directed=True)
 
@@ -628,7 +628,7 @@ Default is None.""")
         if isinstance(_info, GraphInfo):
             self._id = _info.id_number
         else:
-            self._id = self._backend.create(self, None, name, 'ia/frame', _info)
+            self._id = self._backend.create(self, None, name, 'atk/frame', _info)
 
         self._vertices = GraphFrameCollection(self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self._get_edge_frame, self._get_edge_frames)
@@ -812,23 +812,23 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
     .. code::
 
         >>> print my_frame.schema
-        [('user', ta.int32), ('vertex_type', str), ('movie', ta.int32), ('rating', str)]
+        [('user', atk.int32), ('vertex_type', str), ('movie', atk.int32), ('rating', str)]
 
     Define graph parsing rules:
 
     .. code::
 
-        >>> user = ta.VertexRule("user", my_frame.user,
+        >>> user = atk.VertexRule("user", my_frame.user,
         ... {"vertex_type": my_frame.vertex_type})
-        >>> movie = ta.VertexRule("movie", my_frame.movie)
-        >>> rates = ta.EdgeRule("rating", user, movie,
+        >>> movie = atk.VertexRule("movie", my_frame.movie)
+        >>> rates = atk.EdgeRule("rating", user, movie,
         ... {"rating": my_frame.rating}, bidirectional = True)
 
     Create graph:
 
     .. code::
 
-        >>> my_graph = ta.TitanGraph([user, movie, rates])
+        >>> my_graph = atk.TitanGraph([user, movie, rates])
 
     |
 
@@ -841,12 +841,12 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
 
         .. code::
 
-            >>> srcips = ta.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
-            >>> sports = ta.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
-            >>> dstips = ta.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
-            >>> dports = ta.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
-            >>> from_edges = ta.EdgeRule("from_port", srcips, sports, {"fs_srcbyte": my_frame.fs_srcbyte,"tot_srcbyte": my_frame.tot_srcbyte, "fs_srcpkt": my_frame.fs_srcpkt},bidirectional=True)
-            >>> to_edges = ta.EdgeRule("to_port", dstips, dports, {"fs_dstbyte": my_frame.fs_dstbyte,"tot_dstbyte": my_frame.tot_dstbyte, "fs_dstpkt": my_frame.fs_dstpkt},bidirectional=True)
+            >>> srcips = atk.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
+            >>> sports = atk.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
+            >>> dstips = atk.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
+            >>> dports = atk.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
+            >>> from_edges = atk.EdgeRule("from_port", srcips, sports, {"fs_srcbyte": my_frame.fs_srcbyte,"tot_srcbyte": my_frame.tot_srcbyte, "fs_srcpkt": my_frame.fs_srcpkt},bidirectional=True)
+            >>> to_edges = atk.EdgeRule("to_port", dstips, dports, {"fs_dstbyte": my_frame.fs_dstbyte,"tot_dstbyte": my_frame.tot_dstbyte, "fs_dstpkt": my_frame.fs_dstpkt},bidirectional=True)
 
      .. only:: latex
 
@@ -854,15 +854,15 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
 
         .. code::
 
-            >>> srcips = ta.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
-            >>> sports = ta.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
-            >>> dstips = ta.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
-            >>> dports = ta.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
-            >>> from_edges = ta.EdgeRule("from_port", srcips, sports,
+            >>> srcips = atk.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
+            >>> sports = atk.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
+            >>> dstips = atk.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
+            >>> dports = atk.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
+            >>> from_edges = atk.EdgeRule("from_port", srcips, sports,
             ... {"fs_srcbyte": my_frame.fs_srcbyte,
             ... "tot_srcbyte": my_frame.tot_srcbyte,
             ... "fs_srcpkt": my_frame.fs_srcpkt},bidirectional=True)
-            >>> to_edges = ta.EdgeRule("to_port", dstips, dports,
+            >>> to_edges = atk.EdgeRule("to_port", dstips, dports,
             ... {"fs_dstbyte": my_frame.fs_dstbyte,
             ... "tot_dstbyte": my_frame.tot_dstbyte,
             ... "fs_dstpkt": my_frame.fs_dstpkt},bidirectional=True)
@@ -879,13 +879,13 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
 
         .. code::
 
-            >>> my_graph = ta.TitanGraph([srcips, sports, from_edges, dstips, dports, to_edges], gname)
+            >>> my_graph = atk.TitanGraph([srcips, sports, from_edges, dstips, dports, to_edges], gname)
 
     .. only:: latex
 
         .. code::
 
-            >>> my_graph = ta.TitanGraph([srcips, sports, from_edges,
+            >>> my_graph = atk.TitanGraph([srcips, sports, from_edges,
             ... dstips, dports, to_edges], gname)
 
     """
@@ -901,7 +901,7 @@ Default is None.""")
         """Initialize the graph."""
         try:
             self._id = 0
-            self._ia_uri = None
+            self._atk_uri = None
             if not hasattr(self, '_backend'):
                 self._backend = _get_backend()
             _BaseGraph.__init__(self)
@@ -947,16 +947,16 @@ Default is None.""")
 
             .. code::
 
-                >>> my_csv = ta.CsvFile("/movie.csv", schema = [('user', ta.int32), ('vertex_type', str), ('movie', ta.int32), ('rating', str)])
+                >>> my_csv = atk.CsvFile("/movie.csv", schema = [('user', atk.int32), ('vertex_type', str), ('movie', atk.int32), ('rating', str)])
 
         .. only:: latex
 
             .. code::
 
-                >>> my_csv = ta.CsvFile("/movie.csv", schema = [('user', ta.int32),
-                ... ('vertex_type', str), ('movie', ta.int32), ('rating', str)])
+                >>> my_csv = atk.CsvFile("/movie.csv", schema = [('user', atk.int32),
+                ... ('vertex_type', str), ('movie', atk.int32), ('rating', str)])
 
-            >>> my_frame = ta.Frame(csv)
+            >>> my_frame = atk.Frame(csv)
 
         Define graph parsing rules:
 
@@ -964,18 +964,18 @@ Default is None.""")
 
             .. code::
 
-                >>> user = ta.VertexRule("user", my_frame.user, {"vertex_type": my_frame.vertex_type})
-                >>> movie = ta.VertexRule("movie", my_frame.movie)
-                >>> rates = ta.EdgeRule("rating", user, movie, { "rating": my_frame.rating }, bidirectional = True)
+                >>> user = atk.VertexRule("user", my_frame.user, {"vertex_type": my_frame.vertex_type})
+                >>> movie = atk.VertexRule("movie", my_frame.movie)
+                >>> rates = atk.EdgeRule("rating", user, movie, { "rating": my_frame.rating }, bidirectional = True)
 
         .. only:: latex
 
             .. code::
 
-                >>> user = ta.VertexRule("user", my_frame.user,
+                >>> user = atk.VertexRule("user", my_frame.user,
                 ... {"vertex_type": my_frame.vertex_type})
-                >>> movie = ta.VertexRule("movie", my_frame.movie)
-                >>> rates = ta.EdgeRule("rating", user, movie,
+                >>> movie = atk.VertexRule("movie", my_frame.movie)
+                >>> rates = atk.EdgeRule("rating", user, movie,
                 ... { "rating": my_frame.rating }, bidirectional = True)
 
         Append data from the frame to an existing graph:
@@ -995,14 +995,14 @@ Default is None.""")
 
             .. code::
 
-                >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", schema = [('user_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
+                >>> ratings_frame = atk.Frame(atk.CsvFile("/ratings.csv", schema = [('user_id', atk.int32), ('movie_id', atk.int32), ('rating', str)]))
 
         .. only:: latex
 
             .. code::
 
-                >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv",
-                ... schema = [('user_id', ta.int32), ('movie_id', ta.int32),
+                >>> ratings_frame = atk.Frame(atk.CsvFile("/ratings.csv",
+                ... schema = [('user_id', atk.int32), ('movie_id', atk.int32),
                 ... ('rating', str)]))
 
         Define graph parsing rules:
@@ -1011,24 +1011,24 @@ Default is None.""")
 
             .. code::
 
-                >>> user = ta.VertexRule("user", ratings_frame.user_id)
-                >>> movie = ta.VertexRule("movie", ratings_frame.movie_id)
-                >>> rates = ta.EdgeRule("rating", user, movie, { "rating": ratings_frame.rating }, bidirectional = True)
+                >>> user = atk.VertexRule("user", ratings_frame.user_id)
+                >>> movie = atk.VertexRule("movie", ratings_frame.movie_id)
+                >>> rates = atk.EdgeRule("rating", user, movie, { "rating": ratings_frame.rating }, bidirectional = True)
 
         .. only:: latex
 
             .. code::
 
-                >>> user = ta.VertexRule("user", ratings_frame.user_id)
-                >>> movie = ta.VertexRule("movie", ratings_frame.movie_id)
-                >>> rates = ta.EdgeRule("rating", user, movie,
+                >>> user = atk.VertexRule("user", ratings_frame.user_id)
+                >>> movie = atk.VertexRule("movie", ratings_frame.movie_id)
+                >>> rates = atk.EdgeRule("rating", user, movie,
                 ... { "rating": ratings_frame.rating }, bidirectional = True)
 
         Create graph:
 
         .. code::
 
-            >>> my_graph = ta.Graph([user, movie, rates])
+            >>> my_graph = atk.Graph([user, movie, rates])
 
         Load additional properties onto the user vertices:
 
@@ -1036,18 +1036,18 @@ Default is None.""")
 
             .. code::
 
-                >>> users_frame = ta.Frame(ta.CsvFile("/users.csv", schema = [('user_id', ta.int32), ('name', str), ('age', ta.int32)]))
-                >>> user_additional = ta.VertexRule("user", users_frame.user_id, {"user_name": users_frame.name, "age": users_frame.age })
+                >>> users_frame = atk.Frame(atk.CsvFile("/users.csv", schema = [('user_id', atk.int32), ('name', str), ('age', atk.int32)]))
+                >>> user_additional = atk.VertexRule("user", users_frame.user_id, {"user_name": users_frame.name, "age": users_frame.age })
                 >>> my_graph.append([user_additional])
 
         .. only:: latex
 
             .. code::
 
-                >>> users_frame = ta.Frame(ta.CsvFile("/users.csv",
-                ... schema = [('user_id', ta.int32), ('name', str),
-                ... ('age', ta.int32)]))
-                >>> user_additional = ta.VertexRule("user", users_frame.user_id,
+                >>> users_frame = atk.Frame(atk.CsvFile("/users.csv",
+                ... schema = [('user_id', atk.int32), ('name', str),
+                ... ('age', atk.int32)]))
+                >>> user_additional = atk.VertexRule("user", users_frame.user_id,
                 ... {"user_name": users_frame.name, "age": users_frame.age })
                 >>> my_graph.append([user_additional])
 
@@ -1057,18 +1057,18 @@ Default is None.""")
 
             .. code::
 
-                >>> movie_frame = ta.Frame(ta.CsvFile("/movies.csv", schema = [('movie_id', ta.int32), ('title', str), ('year', ta.int32)]))
-                >>> movie_additional = ta.VertexRule("movie", movie_frame.movie_id, {"title": movie_frame.title, "year": movie_frame.year })
+                >>> movie_frame = atk.Frame(atk.CsvFile("/movies.csv", schema = [('movie_id', atk.int32), ('title', str), ('year', atk.int32)]))
+                >>> movie_additional = atk.VertexRule("movie", movie_frame.movie_id, {"title": movie_frame.title, "year": movie_frame.year })
                 >>> my_graph.append([movie_additional])
 
         .. only:: latex
 
             .. code::
 
-                >>> movie_frame = ta.Frame(ta.CsvFile("/movies.csv",
-                ... schema = [('movie_id', ta.int32),
-                ... ('title', str), ('year', ta.int32)]))
-                >>> movie_additional = ta.VertexRule("movie",
+                >>> movie_frame = atk.Frame(atk.CsvFile("/movies.csv",
+                ... schema = [('movie_id', atk.int32),
+                ... ('title', str), ('year', atk.int32)]))
+                >>> movie_additional = atk.VertexRule("movie",
                 ... movie_frame.movie_id,
                 ... {"title": movie_frame.title, "year": movie_frame.year })
                 >>> my_graph.append([movie_additional])

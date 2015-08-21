@@ -45,9 +45,9 @@ def _with_retry_on_token_error(function, *args, **kwargs):
     try:
         return function(*args, **kwargs)
     except InvalidAuthTokenError:
-        ia_server = args[0]
-        if ia_server.retry_on_token_error:
-            ia_server.refresh_oauth_token()
+        atk_server = args[0]
+        if atk_server.retry_on_token_error:
+            atk_server.refresh_oauth_token()
             return function(*args, **kwargs)
         else:
             raise
@@ -68,9 +68,9 @@ class AtkServer(Server):
     Properties can be overridden manually can be overridden manually
 
     Example::
-        ta.server.uri = 'your.hostname.com'
+        atk.server.uri = 'your.hostname.com'
 
-        ta.server.ping()  # test server connection
+        atk.server.ping()  # test server connection
     """
 
     _uri_env = 'ATK_URI'
@@ -82,7 +82,7 @@ class AtkServer(Server):
             uri=uri or self._get_conf('uri'),
             scheme=self._get_conf('scheme'),
             headers=self._get_conf('headers'))
-        # specific to IA Server
+        # specific to ATK Server
         self._api_version = self._get_conf('api_version')
         self._user=self._get_conf('user', None)
         self._oauth_uri = self._get_conf('oauth_uri', None)
@@ -234,8 +234,8 @@ class AtkServer(Server):
                 if '''The resource requires authentication, which was not supplied with the request''' in str(runErr):
                     raise RuntimeError(str(runErr) + ".  Credentials must be supplied through a file specified by env "
                                        "$%s before launching python or by an argument in the call to connect().  You "
-                                       "can create credentials now by running ta.create_credentials_file('<filename>') "
-                                       "and then calling ta.connect('<filename>')" % AtkServer._creds_env)
+                                       "can create credentials now by running atk.create_credentials_file('<filename>') "
+                                       "and then calling atk.connect()('<filename>')" % AtkServer._creds_env)
                 else:
                     raise
             msg = "Connected.  %s" % api_status

@@ -114,13 +114,13 @@ class FrameBackendRest(object):
         # TODO - there's got to be a better way to do this with the RDDs, trick is with Python.
         def icountwhere(predicate, iterable):
            return ("[1]" for item in iterable if predicate(item))
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'udf': get_udf_arg(frame, where, icountwhere)}
         return executor.execute("frame/count_where", self, arguments)
 
 
-    def get_ia_uri(self, frame):
-        return self._get_frame_info(frame).ia_uri
+    def get_atk_uri(self, frame):
+        return self._get_frame_info(frame).atk_uri
 
     def get_repr(self, frame):
         frame_info = self._get_frame_info(frame)
@@ -282,7 +282,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
         add_columns_function = get_add_one_column_function(expression, data_types[0]) if only_one_column \
             else get_add_many_columns_function(expression, data_types)
         from itertools import imap
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'column_names': names,
                      'column_types': [get_rest_str_from_data_type(t) for t in data_types],
                      'udf': get_udf_arg(frame, add_columns_function, imap, optimized_frame_schema),
@@ -334,13 +334,13 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
     def drop(self, frame, predicate):
         from trustedanalytics.rest.spark import ifilterfalse  # use the REST API filter, with a ifilterfalse iterator
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'udf': get_udf_arg(frame, predicate, ifilterfalse)}
         execute_update_frame_command("frame:/filter", arguments, frame)
 
     def filter(self, frame, predicate):
         from trustedanalytics.rest.spark import ifilter
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'udf': get_udf_arg(frame, predicate, ifilter)}
         execute_update_frame_command("frame:/filter", arguments, frame)
 
@@ -349,11 +349,11 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
         from trustedanalytics.rest.spark import ifilterfalse
 
         if keep_matching_vertices:
-            arguments = {'frame': self.get_ia_uri(frame),
+            arguments = {'frame': self.get_atk_uri(frame),
                          'udf': get_udf_arg(frame, predicate, ifilter)
                         }
         else:
-            arguments = {'frame': self.get_ia_uri(frame),
+            arguments = {'frame': self.get_atk_uri(frame),
                          'udf': get_udf_arg(frame, predicate, ifilterfalse)
                         }
         execute_update_frame_command("frame:vertex/filter", arguments, frame)
@@ -418,8 +418,8 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             right_on = left_on
         arguments = {"name": name,
                      "how": how,
-                     "left_frame": {"frame": self.get_ia_uri(left), "join_column": left_on},
-                     "right_frame": {"frame": self.get_ia_uri(right), "join_column": right_on} }
+                     "left_frame": {"frame": self.get_atk_uri(left), "join_column": left_on},
+                     "right_frame": {"frame": self.get_atk_uri(right), "join_column": right_on} }
         return execute_new_frame_command('frame:/join', arguments)
 
     def copy(self, frame, columns=None, where=None, name=None):
@@ -436,7 +436,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             where = get_udf_arg_for_copy_columns(frame, where, column_names)
         else:
             where = None
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'columns': columns,
                      'where': where,
                      'name': name}
@@ -469,7 +469,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             else:
                 raise TypeError("Bad type %s provided in aggregation arguments; expecting an aggregation function or a dictionary of column_name:[func]" % type(arg))
 
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'group_by_columns': group_by_columns,
                      'aggregations': aggregation_list}
 
@@ -488,7 +488,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             else:
                 raise TypeError('Column inputs should be specified as strings or 2-element Tuple consisting of column name as string and dictionary for additional parameters')
 
-        arguments = {'frame': self.get_ia_uri(frame),
+        arguments = {'frame': self.get_atk_uri(frame),
                      'column_input': column_list_input}
         return executor.execute('frame/categorical_summary', self, arguments)
 
@@ -579,7 +579,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
     def initialize_graph_frame(self, frame, frame_info, graph):
         """Initializes a frame according to given frame_info associated with a graph"""
-        frame._ia_uri = frame_info.ia_uri
+        frame._atk_uri = frame_info.atk_uri
         frame._id = frame_info.id_number
         frame._error_frame_id = frame_info.error_frame_id
         frame._label = frame_info.label
@@ -587,7 +587,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
     def copy_graph_frame(self, source, target):
         """Initializes a frame from another frame associated with a graph"""
-        target._ia_uri = source._ia_uri
+        target._atk_uri = source._atk_uri
         target._id = source._id
         target._error_frame_id = source._error_frame_id
         target._label = source._label
@@ -624,8 +624,8 @@ class FrameInfo(object):
         return self._payload.get('name', None)
     
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def atk_uri(self):
+        return self._payload['atk_uri']
 
     @property
     def schema(self):
@@ -757,13 +757,13 @@ class FrameData:
 
 def initialize_frame(frame, frame_info):
     """Initializes a frame according to given frame_info"""
-    frame._ia_uri = frame_info.ia_uri
+    frame._atk_uri = frame_info.atk_uri
     frame._id = frame_info.id_number
     frame._error_frame_id = frame_info.error_frame_id
 
 def become_frame(frame, source_frame):
     """Initializes a frame proxy according to another frame proxy"""
-    frame._ia_uri = source_frame._ia_uri
+    frame._atk_uri = source_frame._atk_uri
     frame._id = source_frame._id
     frame._error_frame_id = source_frame._error_frame_id
 

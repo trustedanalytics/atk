@@ -245,7 +245,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> BF = ta.get_frame('my_data')
+            >>> BF = atk.get_frame('my_data')
             >>> print BF.schema
 
         The result is:
@@ -276,7 +276,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> BF = ta.get_frame('my_data')
+            >>> BF = atk.get_frame('my_data')
             >>> print BF.status
 
         The result is:
@@ -434,7 +434,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> my_frame = ta.Frame(source="my_data.csv")
+            >>> my_frame = atk.Frame(source="my_data.csv")
             >>> my_frame.name("cust")
 
         Given the frame has columns *id*, *name*, *hair*, and *shoe*.
@@ -1120,7 +1120,7 @@ Default is None.""")
 
     .. code::
 
-        >>> my_frame = ta.Frame(my_csv_schema, "myframe")
+        >>> my_frame = atk.Frame(my_csv_schema, "myframe")
 
     A Frame object has been created and *my_frame* is its proxy.
     It brought in the data described by *my_csv_schema*.
@@ -1130,14 +1130,14 @@ Default is None.""")
 
     .. code::
 
-        >>> your_frame = ta.Frame(name='yourframe')
+        >>> your_frame = atk.Frame(name='yourframe')
 
     A frame has been created and Frame *your_frame* is its proxy.
     It has no data yet, but it does have the name *yourframe*.
         """
         self._error_frame_id = None
         self._id = 0
-        self._ia_uri = None
+        self._atk_uri = None
         with api_context(logger, 3, self.__init__, self, source, name, _info):
             api_status.verify_installed()
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
@@ -1254,9 +1254,9 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         .. code::
 
-            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32), ('user_name', str), ('movie_id', int32), ('movie_title', str), ('rating', str)])
-            >>> my_frame = ta.Frame(csv)
-            >>> my_graph = ta.Graph()
+            >>> csv = atk.CsvFile("/movie.csv", schema= [('user_id', int32), ('user_name', str), ('movie_id', int32), ('movie_title', str), ('rating', str)])
+            >>> my_frame = atk.Frame(csv)
+            >>> my_graph = atk.Graph()
             >>> my_graph.define_vertex_type('users')
             >>> my_vertex_frame = my_graph.vertices['users']
             >>> my_vertex_frame.add_vertices(my_frame, 'user_id', ['user_name', 'age'])
@@ -1265,13 +1265,13 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         .. code::
 
-            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32),
+            >>> csv = atk.CsvFile("/movie.csv", schema= [('user_id', int32),
             ...                                     ('user_name', str),
             ...                                     ('movie_id', int32),
             ...                                     ('movie_title', str),
             ...                                     ('rating', str)])
-            >>> my_frame = ta.Frame(csv)
-            >>> my_graph = ta.Graph()
+            >>> my_frame = atk.Frame(csv)
+            >>> my_graph = atk.Graph()
             >>> my_graph.define_vertex_type('users')
             >>> my_vertex_frame = my_graph.vertices['users']
             >>> my_vertex_frame.add_vertices(my_frame, 'user_id',
@@ -1281,7 +1281,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
     .. code::
 
-        >>> my_graph = ta.get_graph("your_graph")
+        >>> my_graph = atk.get_graph("your_graph")
         >>> my_vertex_frame = my_graph.vertices["your_label"]
 
     Calling methods on a VertexFrame:
@@ -1300,7 +1300,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
             api_status.verify_installed()
             self._error_frame_id = None
             self._id = 0
-            self._ia_uri = None
+            self._atk_uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
@@ -1398,14 +1398,14 @@ An EdgeFrame is similar to a Frame but with a few important differences:
 
     .. code::
 
-        >>> my_csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32),
+        >>> my_csv = atk.CsvFile("/movie.csv", schema= [('user_id', int32),
         ...                                     ('user_name', str),
         ...                                     ('movie_id', int32),
         ...                                     ('movie_title', str),
         ...                                     ('rating', str)])
 
-        >>> my_frame = ta.Frame(my_csv)
-        >>> my_graph = ta.Graph()
+        >>> my_frame = atk.Frame(my_csv)
+        >>> my_graph = atk.Graph()
         >>> my_graph.define_vertex_type('users')
         >>> my_graph.define_vertex_type('movies')
         >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
@@ -1438,7 +1438,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
 
     .. code::
 
-        >>> my_old_graph = ta.get_graph("your_graph")
+        >>> my_old_graph = atk.get_graph("your_graph")
         >>> my_new_edge_frame = my_old_graph.edges["your_label"]
 
     Calling methods on an EdgeFrame:
@@ -1457,7 +1457,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
             api_status.verify_installed()
             self._error_frame_id = None
             self._id = 0
-            self._ia_uri = None
+            self._atk_uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)

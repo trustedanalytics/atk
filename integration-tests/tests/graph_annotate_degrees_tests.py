@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class GraphAnnotateDegreesTest(unittest.TestCase):
 
@@ -31,40 +31,40 @@ class GraphAnnotateDegreesTest(unittest.TestCase):
 
         print "define csv file"
         schema_node = [("nodename", str),
-                       ("in", ta.int64),
-                       ("out", ta.int64),
-                       ("undirectedcount", ta.int64),
-                       ("isundirected", ta.int64),
-                       ("outlabel", ta.int64),
-                       ("insum", ta.float64),
-                       ("outsum", ta.float64),
-                       ("undirectedsum", ta.float64),
-                       ("labelsum", ta.float64),
-                       ("nolabelsum", ta.float64),
-                       ("defaultsum", ta.float64),
-                       ("integersum", ta.int64)]
+                       ("in", atk.int64),
+                       ("out", atk.int64),
+                       ("undirectedcount", atk.int64),
+                       ("isundirected", atk.int64),
+                       ("outlabel", atk.int64),
+                       ("insum", atk.float64),
+                       ("outsum", atk.float64),
+                       ("undirectedsum", atk.float64),
+                       ("labelsum", atk.float64),
+                       ("nolabelsum", atk.float64),
+                       ("defaultsum", atk.float64),
+                       ("integersum", atk.int64)]
 
         schema_directed = [("nodefrom", str),
                            ("nodeto", str),
-                           ("value", ta.float64),
+                           ("value", atk.float64),
                            ("badvalue", str),
-                           ("intvalue", ta.int32),
-                           ("int64value", ta.int64)]
+                           ("intvalue", atk.int32),
+                           ("int64value", atk.int64)]
 
         schema_undirected = [("node1", str),
                              ("node2", str),
-                             ("value", ta.float64)]
+                             ("value", atk.float64)]
 
         schema_directed_label = [("nodefrom", str),
                                  ("nodeto", str),
-                                 ("labeltest", ta.float64)]
+                                 ("labeltest", atk.float64)]
 
-        node_frame = ta.Frame(ta.CsvFile("/datasets/annotate_node_list.csv",schema_node))
-        directed_frame = ta.Frame(ta.CsvFile("/datasets/annotate_directed_list.csv",schema_directed))
-        undirected_frame = ta.Frame(ta.CsvFile("/datasets/annotate_undirected_list.csv", schema_undirected))
-        directed_label_frame = ta.Frame(ta.CsvFile("/datasets/annotate_directed_label_list.csv", schema_directed_label))
+        node_frame = atk.Frame(atk.CsvFile("/datasets/annotate_node_list.csv",schema_node))
+        directed_frame = atk.Frame(atk.CsvFile("/datasets/annotate_directed_list.csv",schema_directed))
+        undirected_frame = atk.Frame(atk.CsvFile("/datasets/annotate_undirected_list.csv", schema_undirected))
+        directed_label_frame = atk.Frame(atk.CsvFile("/datasets/annotate_directed_label_list.csv", schema_directed_label))
 
-        graph = ta.Graph()
+        graph = atk.Graph()
         graph.define_vertex_type('primary')
         graph.vertices['primary'].add_vertices(node_frame,"nodename",["out",
                                                                   "undirectedcount",

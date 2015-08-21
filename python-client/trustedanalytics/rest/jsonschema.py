@@ -34,11 +34,11 @@ __all__ = ['get_command_def']
 # And source_code/engine/interfaces/src/main/scala/com/trustedanalytics/trustedanalytics/schema/JsonSchema.scala
 
 json_type_id_to_data_type  = {
-    "ia:int": int32,
-    "ia:long": int64,
-    "ia:float": float32,
-    "ia:double": float64,
-    "ia:bool": bool,
+    "atk:int": int32,
+    "atk:long": int64,
+    "atk:float": float32,
+    "atk:double": float64,
+    "atk:bool": bool,
 }
 
 _unspecified = object()
@@ -46,7 +46,7 @@ _unspecified = object()
 
 def get_data_type_from_json_type_id(json_type_str, default=_unspecified):
     try:
-        if json_type_str.startswith("ia:vector"):
+        if json_type_str.startswith("atk:vector"):
             return vector.get_from_string(json_type_str[3:])
         return json_type_id_to_data_type[json_type_str]
     except:
@@ -56,8 +56,8 @@ def get_data_type_from_json_type_id(json_type_str, default=_unspecified):
 
 
 json_str_formats_to_data_type = {
-    "uri/ia-frame": Frame,
-    "uri/ia-graph": Graph,
+    "uri/atk-frame": Frame,
+    "uri/atk-graph": Graph,
 }
 
 

@@ -54,7 +54,7 @@ Returns a summary of the entity.
 +-------------------------------+----------------------------------------------+
 | name                          | entity name (user-assigned)                  |
 +-------------------------------+----------------------------------------------+
-| ia_uri                        | Ignorable                                    |
+| atk_uri                        | Ignorable                                    |
 +-------------------------------+----------------------------------------------+
 | links                         | links to the entity                          |
 +-------------------------------+----------------------------------------------+
@@ -84,7 +84,7 @@ Extra fields specific to frames:
    {
     "id": 8,
     "name": "weather_frame1",
-    "ia_uri": "ia://frame/8",
+    "atk_uri": "atk://frame/8",
     "schema": {
         "columns": []
     },

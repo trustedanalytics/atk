@@ -127,16 +127,16 @@ To add the dependency repository, do this:
 
     .. code::
 
-        $ wget https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/ta-deps.repo
-        $ sudo cp ta-deps.repo /etc/yum.repos.d/
+        $ wget https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/atk-deps.repo
+        $ sudo cp atk-deps.repo /etc/yum.repos.d/
 
 .. only:: latex
 
     .. code::
 
         $ wget https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/
-            ta-deps.repo
-        $ sudo cp ta-deps.repo /etc/yum.repos.d/
+            atk-deps.repo
+        $ sudo cp atk-deps.repo /etc/yum.repos.d/
 
 Alternatively, do this to build the dependency repository information file
 directly:
@@ -147,11 +147,11 @@ directly:
     > name=trustedanalytics-deps
     > baseurl=https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/yum
     > gpgcheck=0
-    > priority=1 enabled=1"  | sudo tee -a /etc/yum.repos.d/ta-deps.repo
+    > priority=1 enabled=1"  | sudo tee -a /etc/yum.repos.d/atk-deps.repo
 
 .. only:: html
 
-    This code is :download:`downloadable <_downloads/ta-deps.sh>` (open, copy, and paste).
+    This code is :download:`downloadable <_downloads/atk-deps.sh>` (open, copy, and paste).
 
 Test the installation of the dependencies repository:
 
@@ -188,7 +188,7 @@ To install the *yum-s3* package, do this:
 |PACKAGE| Private Repository
 ------------------------
 
-Create '/etc/yum.repos.d/ta.repo':
+Create '/etc/yum.repos.d/atk.repo':
 
 .. only:: html
 
@@ -201,10 +201,10 @@ Create '/etc/yum.repos.d/ta.repo':
         > priority=1
         > s3_enabled=1
         > key_id=ACCESS_TOKEN
-        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/ta.repo
+        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/atk.repo
 
 
-    This code is :download:`downloadable <_downloads/ta-repo.sh>` (open, copy, and paste).
+    This code is :download:`downloadable <_downloads/atk-repo.sh>` (open, copy, and paste).
 
 .. only:: latex
 
@@ -218,7 +218,7 @@ Create '/etc/yum.repos.d/ta.repo':
         > priority=1
         > s3_enabled=1
         > key_id=ACCESS_TOKEN
-        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/ta.repo
+        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/atk.repo
 
     Note: baseurl line above is broken for readability.
     It should be entered as a single line.
@@ -254,7 +254,7 @@ Troubleshooting Private Repository
     *   Incorect secret token/key
     *   The server time is out of sync with the world
 
-*   Double check the access and secret keys in the ta.repo file.
+*   Double check the access and secret keys in the atk.repo file.
 *   AWS S3 will fail with access denied errors if the system time is out of
     sync with the website.
     To keep the system time in sync with the website run:
@@ -587,7 +587,7 @@ The following lines need to be commented:
 
         metastore.connection-postgresql.host = "invalid-postgresql-host"
         metastore.connection-postgresql.port = 5432
-        metastore.connection-postgresql.database = "ta-metastore"
+        metastore.connection-postgresql.database = "atk_metastore"
         metastore.connection-postgresql.username = "atkuser"
         metastore.connection-postgresql.password = "myPassword"
         metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -599,7 +599,7 @@ The following lines need to be commented:
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "atk_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -613,7 +613,7 @@ The following lines need to be commented:
 
         metastore.connection-postgresql.host = "invalid-postgresql-host"
         metastore.connection-postgresql.port = 5432
-        metastore.connection-postgresql.database = "ta-metastore"
+        metastore.connection-postgresql.database = "atk_metastore"
         metastore.connection-postgresql.username = "atkuser"
         metastore.connection-postgresql.password = "myPassword"
         metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.
@@ -628,7 +628,7 @@ The following lines need to be commented:
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "atk_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.
@@ -717,7 +717,7 @@ Now that the database is created, uncomment all the postgres lines in
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "atk_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"${trustedanalytics.atk.metastore.connection-postgresql.host}":"${trustedanalytics.atk.metastore.connection-postgresql.port}"/"${trustedanalytics.atk.metastore.connection-postgresql.database}
@@ -743,7 +743,7 @@ Now that the database is created, uncomment all the postgres lines in
 
         //metastore.connection-postgresql.host = "invalid-postgresql-host"
         //metastore.connection-postgresql.port = 5432
-        //metastore.connection-postgresql.database = "ta-metastore"
+        //metastore.connection-postgresql.database = "atk_metastore"
         //metastore.connection-postgresql.username = "atkuser"
         //metastore.connection-postgresql.password = "myPassword"
         //metastore.connection-postgresql.url = "jdbc:postgresql://"

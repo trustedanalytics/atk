@@ -34,7 +34,7 @@ def initialize_graph(graph, graph_info):
     """Initializes a graph according to given graph_info"""
     graph._id = graph_info.id_number
     graph._name = graph_info.name
-    graph._ia_uri = graph_info.ia_uri
+    graph._atk_uri = graph_info.atk_uri
     graph._uri= server.create_full_uri("graphs/"+ str(graph._id))
     return graph
 
@@ -78,8 +78,8 @@ class GraphBackendRest(object):
             annotation= ''
         return "graph_" + uuid.uuid4().hex + annotation
 
-    def get_ia_uri(self, graph):
-        return self._get_graph_info(graph).ia_uri
+    def get_atk_uri(self, graph):
+        return self._get_graph_info(graph).atk_uri
 
     def get_repr(self, graph):
         graph_info = self._get_graph_info(graph)
@@ -118,11 +118,11 @@ class GraphBackendRest(object):
         return EdgeFrame(_info=r.json())
 
     def get_vertex_count(self, graph):
-        arguments = {'graph': self.get_ia_uri(graph)}
+        arguments = {'graph': self.get_atk_uri(graph)}
         return executor.execute("graph:/vertex_count", graph, arguments)
 
     def get_edge_count(self, graph):
-        arguments = {'graph': self.get_ia_uri(graph)}
+        arguments = {'graph': self.get_atk_uri(graph)}
         return executor.execute("graph:/edge_count", graph, arguments)
 
 
@@ -238,8 +238,8 @@ class GraphInfo(object):
         return self._payload['entity_type']
 
     @property
-    def ia_uri(self):
-        return self._payload['ia_uri']
+    def atk_uri(self):
+        return self._payload['atk_uri']
 
     @property
     def links(self):

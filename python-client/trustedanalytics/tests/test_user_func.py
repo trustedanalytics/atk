@@ -14,10 +14,10 @@
 # limitations under the License.
 #
 
-import iatest
+import atktest
 from trustedanalytics.meta.udf import has_udf_arg
 
-iatest.init()
+atktest.init()
 
 import unittest
 

@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class FrameCopyTest(unittest.TestCase):
     """
@@ -38,7 +38,7 @@ class FrameCopyTest(unittest.TestCase):
 
     def test_copy_001(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/oregon-cities.csv", schema= [('rank', ta.int32),
+        csv = atk.CsvFile("/datasets/oregon-cities.csv", schema= [('rank', atk.int32),
                                             ('city', str),
                                             ('population_2013', str),
                                             ('pop_2010', str),
@@ -46,7 +46,7 @@ class FrameCopyTest(unittest.TestCase):
                                             ('county', str)], delimiter='|')
 
         print "create frame"
-        frame = ta.Frame(csv)
+        frame = atk.Frame(csv)
 
         self.assertEquals(frame.row_count, 20, "frame should have 20 rows")
         self.assertEqual(frame.column_names, ['rank', 'city', 'population_2013', 'pop_2010', 'change', 'county'])
@@ -57,14 +57,14 @@ class FrameCopyTest(unittest.TestCase):
         self.assertNotEquals(frame._id, top10_frame._id, "copy should have a different id from the original")
 
     def test_copy_empty(self):
-        csv = ta.CsvFile("/datasets/empty.csv", schema= [('rank', ta.int32),
+        csv = atk.CsvFile("/datasets/empty.csv", schema= [('rank', atk.int32),
                                                                  ('city', str),
                                                                  ('population_2013', str),
                                                                  ('pop_2010', str),
                                                                  ('change', str),
                                                                  ('county', str)], delimiter='|')
         print "create frame"
-        f1 = ta.Frame(csv)
+        f1 = atk.Frame(csv)
         f1.inspect()
 
         print "copy frame"

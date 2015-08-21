@@ -15,15 +15,15 @@
 #
 #
 # import unittest
-# import trustedanalytics as ta
+# import trustedanalytics as atk
 #
 # # show full stack traces
-# ta.errors.show_details = True
-# ta.loggers.set_api()
+# atk.errors.show_details = True
+# atk.loggers.set_api()
 # # TODO: port setup should move to a super class
-# if ta.server.port != 19099:
-#     ta.server.port = 19099
-# ta.connect()
+# if atk.server.port != 19099:
+#     atk.server.port = 19099
+# atk.connect()()
 #
 # TODO: Commented out because of ClassNotFound error with spark local mode
 # class GraphBeliefPropagationTest(unittest.TestCase):
@@ -31,13 +31,13 @@
 #         lbp_graphlab_input_data ="/datasets/lbp_graphlab_small.csv"
 #         extra_vertex="/datasets/lbp_graphlab_append.csv"
 #
-#         schema = [("id1",ta.int32),("id2",ta.int32),("prior",str)]
-#         schema2 = [("id1",ta.int32),("prior",str)]
+#         schema = [("id1",atk.int32),("id2",atk.int32),("prior",str)]
+#         schema2 = [("id1",atk.int32),("prior",str)]
 #
-#         lbp_frame = ta.Frame(ta.CsvFile(lbp_graphlab_input_data,schema))
-#         extra_vertex_frame = ta.Frame(ta.CsvFile(extra_vertex,schema2))
+#         lbp_frame = atk.Frame(atk.CsvFile(lbp_graphlab_input_data,schema))
+#         extra_vertex_frame = atk.Frame(atk.CsvFile(extra_vertex,schema2))
 #
-#         graph = ta.Graph()
+#         graph = atk.Graph()
 #         graph.define_vertex_type("nodes")
 #         graph.vertices["nodes"].add_vertices(lbp_frame, "id1",["prior"])
 #         graph.vertices["nodes"].add_vertices(extra_vertex_frame, "id1",["prior"])
