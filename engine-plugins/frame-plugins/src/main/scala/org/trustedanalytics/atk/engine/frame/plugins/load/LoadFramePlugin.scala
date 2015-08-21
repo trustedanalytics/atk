@@ -47,7 +47,7 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(load: LoadFrameArgs)(implicit invocation: Invocation) = 8
+  override def numberOfJobs(load: LoadFrameArgs)(implicit invocation: Invocation) = 9
 
   /**
    * Parsing data to load and append to data frames
@@ -95,7 +95,7 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
         LoadRddFunctions.loadAndParseData(sc, data, parser)
       }
       // parse failures go to their own data frame
-      if (parseResult.errorLines.count() > 0) {
+      if (!parseResult.errorLines.isEmpty()) {
         val errorFrame = engine.frames.lookupOrCreateErrorFrame(destinationFrame)
         unionAndSave(errorFrame, parseResult.errorLines)
       }
