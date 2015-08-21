@@ -532,6 +532,14 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       frames.list
     }
 
+    override def scanError()(implicit session: Session): Seq[FrameEntity] = {
+      frames.filter(_.parentId.isNull).filter(_.errorFrameId.isNotNull).list
+    }
+
+    override def scanSuccessful()(implicit session: Session): Seq[FrameEntity] = {
+      frames.filter(_.parentId.isNull).filter(_.errorFrameId.isNull).list
+    }
+
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[FrameEntity] = {
       frames.drop(offset).take(count).list
     }
@@ -724,6 +732,14 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       commandTable.filter(_.id >= offset.toLong)
         .filter(_.id < (offset + count).toLong)
         .sortBy(_.id).list
+    }
+
+    override def scanError()(implicit session: Session): Int = {
+      commandTable.filter(_.error.isNotNull).list.length
+    }
+
+    override def scanSuccessful()(implicit session: Session): Int = {
+      commandTable.filter(_.error.isNull).list.length
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[Command] = {

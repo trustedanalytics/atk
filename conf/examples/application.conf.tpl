@@ -309,3 +309,57 @@ trustedanalytics.atk {
     }
   }
 }
+
+#kamon config
+kamon {
+  internal-config {
+    akka {
+      loglevel = INFO
+    }
+  }
+  metrics {
+    filters = [
+      {
+        # actors we should be monitored
+        actor {
+          includes = [ "**" ] # a list of what should be included
+          excludes = [ ]      # a list of what should be excluded
+        }
+      },
+      # not sure about this yet. Looks important
+      {
+        trace {
+          includes = [ "**" ]
+          excludes = []
+        }
+      }
+    ]
+  }
+
+  statsd {
+    hostname = "127.0.0.1"
+    port = "9000"
+    simple-metric-key-generator{
+      application = "atk"
+    }
+    #flush-interval = 1 second
+    subscriptions {
+      actor           = [ "**" ]
+      dispatcher      = [ "**" ]
+      histogram       = [ "**" ]
+      min-max-counter = [ "**" ]
+      gauge           = [ "**" ]
+      counter         = [ "**" ]
+      trace           = [ "**" ]
+      trace-segment   = [ "**" ]
+      akka-actor      = [ "**" ]
+      akka-dispatcher = [ "**" ]
+      akka-router     = [ "**" ]
+      system-metric   = [ "**" ]
+      http-server     = [ "**" ]
+      spray           = [ "**" ]
+    }
+  }
+}
+
+
