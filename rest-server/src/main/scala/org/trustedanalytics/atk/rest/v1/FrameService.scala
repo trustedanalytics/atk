@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.rest.v1
 
 import org.trustedanalytics.atk.DuplicateNameException
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.catalog.GenericCatalogResponse
 import org.trustedanalytics.atk.domain.frame.{ RowQueryArgs, QueryResult }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
@@ -141,6 +142,16 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                   }
               }
             }
+          }
+        } ~
+        pathPrefix(prefix / "catalog") {
+          onComplete(engine.listCatalog(prefix)) {
+            case Success(catalogs) =>
+              import CatalogServiceImplicits._
+              implicit val catalogResponseFormat = CatalogServiceImplicits.catalogResponseFormat
+              val result = catalogs.map(_.asInstanceOf[GenericCatalogResponse])
+              complete(result.map(elem => CatalogServiceResponse(elem.name, elem.metadata, elem.data)))
+            case Failure(ex) => throw ex
           }
         }
     }

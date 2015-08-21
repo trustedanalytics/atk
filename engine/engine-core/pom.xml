@@ -421,7 +421,15 @@
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-math</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>io.spray</groupId>
+            <artifactId>spray-json_${scala.short.version}</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

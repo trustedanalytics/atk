@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.catalog.CatalogResponse
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate }
@@ -109,5 +110,9 @@ trait Engine {
    * @return optional command instance
    */
   def cancelCommand(id: Identifier)(implicit invocation: Invocation): Future[Unit]
+
+  def listCatalog(catalogType: String)(implicit invocation: Invocation): Future[List[CatalogResponse]]
+
+  //  def peekItemInCatalog(catalogType: String, id: Identifier) = ???
 
 }

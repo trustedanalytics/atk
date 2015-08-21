@@ -14,19 +14,11 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.rest.v1
+package org.trustedanalytics.atk.domain.catalog
 
-import spray.routing._
-
-/**
- * Single entry point for classes that implement the Trusted Analytics V1 REST API
- */
-class ApiV1Service(val dataFrameService: FrameService,
-                   val commandService: CommandService,
-                   val graphService: GraphService,
-                   val modelService: ModelService,
-                   val catalogService: CatalogService) extends Directives {
-  def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes()  ~ catalogService.catalogRoutes() ~ catalogService.dataCatalogRoutes()
-  }
+trait Catalog {
+  def name: String
+  def list: List[CatalogResponse]
+  //  def peek = ???
+  //  def get = ???
 }

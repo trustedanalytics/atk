@@ -38,6 +38,8 @@ export PG_USER=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.use
 export PG_PASS=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.password' | tr -d '"')
 export PG_DB=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.dbname' | tr -d '"')
 export PG_URL=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.uri' | tr -d '"')
+
+export DATA_CATALOG_URI=$(echo $VCAP_SERVICES | $jq '.["user-provided"] | select(.[].name == "datacatalog") | .[0].credentials.host' | tr -d '"')
 env
 
 pushd $ATK_CONF_DIR
