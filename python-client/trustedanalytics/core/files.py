@@ -645,17 +645,18 @@ class HiveQuery(DataFile):
 
 class HBaseTable(object):
     """
-    Define the query to retrieve the data from an hBase table.
+    Define the object to retrieve the data from an hBase table.
 
     Parameters
     ----------
-    query : str
-        The sql query to retrieve the data
+    my_table : str
+        The table name
+    schema : List of (column family, column name, data type for the cell value)
 
     Returns
     -------
     class : HBaseTable object
-        An object which holds hBase query.
+        An object which holds hBase data.
 
     Examples
     --------
@@ -669,16 +670,36 @@ class HBaseTable(object):
 
     """
 
-    def __init__(self, table_name, schema):
+    def __init__(self, table_name, schema, start_row = None, end_row = None):
+        if (not isinstance(table_name, str)):
+            raise ValueError("Incorrect table name")
+        if (not self.__validate(schema)):
+            raise ValueError("Incorrect schema. Please provide a list of tuples with (str, str, type)")
+
         self.table_name = table_name
         self.schema = schema
+        self.start_row = start_row
+        self.end_row = end_row
 
     def to_json(self):
         return {"table_name": self.table_name,
                 "schema": [{"column_family" :field[0], "column_name": field[1], "data_type": valid_data_types.to_string(field[2])} for field in self.schema],
-                "start_tag": None,
-                "end_tag": None}
+                "start_tag": self.start_row,
+                "end_tag": self.end_row}
 
     def __repr__(self):
         return json.dumps(self.to_json(), indent=2)
+
+    def __validate(self, schema):
+        if(not isinstance(schema, list)):
+            return False
+        for elem in schema:
+            if (not isinstance(elem, tuple) or len(elem) != 3):
+                return False
+            if (not isinstance(elem[0], str )or not isinstance(elem[1], str) or elem[2] not in valid_data_types):
+                return False
+        return True
+
+
+
 

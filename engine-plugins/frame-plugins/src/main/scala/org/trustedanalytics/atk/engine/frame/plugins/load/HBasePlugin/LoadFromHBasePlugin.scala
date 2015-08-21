@@ -14,14 +14,14 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load.HBase
+package org.trustedanalytics.atk.engine.frame.plugins.load.HBasePlugin
 
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.load.HBaseArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
-import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
 import spray.json._
@@ -30,9 +30,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>",
-  returns = "<TBD>")
+@PluginDoc(oneLine = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
+  extended = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
+  returns = "the initial FrameRDD with the hbase data appended")
 class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameEntity] {
 
   /**
@@ -62,23 +62,13 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameEntity] {
     val destinationFrame: SparkFrame = arguments.destination
 
     // run the operation
-    val hBaseRdd = HBase.createRdd(sc, arguments.tableName, arguments.schema, arguments.startTag, arguments.endTag)
+    val hBaseRdd = LoadHBaseImpl.createRdd(sc, arguments.tableName, arguments.schema, arguments.startTag, arguments.endTag)
     val hBaseSchema = new FrameSchema(arguments.schema.map {
       case x => Column(x.columnFamily + "_" + x.columnName, x.dataType)
     })
     val additionalData = FrameRdd.toFrameRdd(hBaseSchema, hBaseRdd)
 
-    unionAndSave(destinationFrame, additionalData)
-  }
-
-  /**
-   * Union the additionalData onto the end of the existingFrame
-   * @param existingFrame the target DataFrame that may or may not already have data
-   * @param additionalData the data to add to the existingFrame
-   * @return the frame with updated schema
-   */
-  private def unionAndSave(existingFrame: SparkFrame, additionalData: FrameRdd)(implicit invocation: Invocation): SparkFrame = {
-    existingFrame.save(existingFrame.rdd.union(additionalData))
+    LoadRddFunctions.unionAndSave(destinationFrame, additionalData)
   }
 
 }

@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load.HBase
+package org.trustedanalytics.atk.engine.frame.plugins.load.HBasePlugin
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -28,23 +28,46 @@ import org.trustedanalytics.atk.domain.frame.load.HBaseSchemaArgs
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 
-object HBase extends Serializable {
+/**
+ * Helper class for creating an RDD from hBase
+ */
+object LoadHBaseImpl extends Serializable {
 
+  /**
+   *
+   * @param sc default spark context
+   * @param tableName hBase table to read from
+   * @param schema hBase schema for the table above
+   * @param startTag optional start tag to filter the database rows
+   * @param endTag optional end tag to filter the database rows
+   * @return an RDD of converted hBase values
+   */
   def createRdd(sc: SparkContext, tableName: String, schema: List[HBaseSchemaArgs], startTag: Option[String], endTag: Option[String]): RDD[Array[Any]] = {
-    val hBaseRDD = sc.newAPIHadoopRDD(createConfig(tableName),
+    val hBaseRDD = sc.newAPIHadoopRDD(createConfig(tableName, startTag, endTag),
       classOf[TableInputFormat],
       classOf[ImmutableBytesWritable],
       classOf[Result])
+    hbaseRddToRdd(hBaseRDD, schema)
+  }
 
-    hBaseRDD.map {
+  def hbaseRddToRdd(hbaseRDD: RDD[(ImmutableBytesWritable, Result)], schema: List[HBaseSchemaArgs]) =
+    hbaseRDD.map {
       case (key, row) => {
         val values = for { element <- schema }
           yield getValue(row, element.columnFamily, element.columnName, element.dataType)
+
         values.toArray
       }
     }
-  }
 
+  /**
+   * Get value for cell
+   * @param row hBase data
+   * @param columnFamily hBase column family
+   * @param columnName hBase column name
+   * @param dataType internal data type of the cell
+   * @return the value for the cell as per the specified datatype
+   */
   private def getValue(row: Result, columnFamily: String, columnName: String, dataType: DataType): Any = {
     val value = row.getValue(Bytes.toBytes(columnFamily), Bytes.toBytes(columnName))
     if (value == null)
@@ -53,6 +76,12 @@ object HBase extends Serializable {
       valAsDataType(Bytes.toString(value), dataType)
   }
 
+  /**
+   * Convert value from string representation to datatype
+   * @param value value as string
+   * @param dataType data type to convert to
+   * @return the converted value
+   */
   private def valAsDataType(value: String, dataType: DataType): Any = {
     if (DataTypes.int32.equals(dataType)) {
       DataTypes.toInt(value)
@@ -74,9 +103,21 @@ object HBase extends Serializable {
     }
   }
 
-  private def createConfig(dbName: String): Configuration = {
+  /**
+   * Create initial configuration for bHase reader
+   * @param tableName name of hBase table
+   * @return hBase configuration
+   */
+  private def createConfig(tableName: String, startTag: Option[String], endTag: Option[String]): Configuration = {
     val conf = HBaseConfiguration.create()
-    conf.set(TableInputFormat.INPUT_TABLE, dbName)
+
+    conf.set(TableInputFormat.INPUT_TABLE, tableName)
+    if (startTag.isDefined) {
+      conf.set(TableInputFormat.SCAN_ROW_START, startTag.get)
+    }
+    if (endTag.isDefined) {
+      conf.set(TableInputFormat.SCAN_ROW_STOP, endTag.get)
+    }
 
     conf
   }

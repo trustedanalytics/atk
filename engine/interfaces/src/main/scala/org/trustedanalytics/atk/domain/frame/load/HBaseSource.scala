@@ -32,8 +32,8 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 case class HBaseArgs(
     @ArgDoc("""DataFrame to load data into.
 Should be either a uri or id.""") destination: FrameReference,
-    @ArgDoc("""table name""") tableName: String,
-    @ArgDoc("""hbase schema""") schema: List[HBaseSchemaArgs],
+    @ArgDoc("""hbase table name""") tableName: String,
+    @ArgDoc("""hbase schema as a list of tuples (columnFamily, columnName, dataType for cell value)""") schema: List[HBaseSchemaArgs],
     @ArgDoc("""optional start tag for filtering""") startTag: Option[String] = None,
     @ArgDoc("""optional end tag for filtering""") endTag: Option[String] = None) {
 
