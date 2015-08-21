@@ -1,5 +1,3 @@
-.. _ds_dflw.rst:
-
 .. index::
     single: example
 

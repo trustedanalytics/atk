@@ -1,5 +1,3 @@
-.. _ad_gitune.rst:
-
 .. index::
     single: Giraph
     single: performance

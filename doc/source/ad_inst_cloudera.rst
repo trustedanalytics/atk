@@ -1,5 +1,3 @@
-.. _ad_inst_cloudera.rst:
-
 ===============================
 Cloudera Hadoop 5 Configuration
 ===============================

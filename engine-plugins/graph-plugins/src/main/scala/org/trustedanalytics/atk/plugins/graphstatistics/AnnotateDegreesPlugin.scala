@@ -120,7 +120,7 @@ Analogously, the weighted in-degree of a vertex is the sum of the weights of
 the edges entering it, and the weighted out-degree is the sum
 of the weights of the edges leaving the vertex.
 
-The toolkit provides :ref:`annotate_weighted_degrees <annotate_weighted_degrees.html>`
+The toolkit provides :ref:`annotate_weighted_degrees <python_api/graphs/graph-/annotate_weighted_degrees.rst>`
 for the distributed calculation of weighted vertex degrees.""",
   returns = """Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a column storing the annotated degree for the vertex

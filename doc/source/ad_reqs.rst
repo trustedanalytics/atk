@@ -1,5 +1,3 @@
-.. _ad_reqs.rst:
-
 ===================
 System Requirements
 ===================

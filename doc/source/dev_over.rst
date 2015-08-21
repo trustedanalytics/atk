@@ -1,5 +1,3 @@
-.. _dev_over.rst:
-
 .. index::
     single: extending, development
 

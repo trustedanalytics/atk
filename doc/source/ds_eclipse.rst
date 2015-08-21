@@ -1,5 +1,3 @@
-.. _ds_eclipse.rst:
-
 .. index:: ! Eclipse
     single: IDE
 

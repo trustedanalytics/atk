@@ -1,5 +1,3 @@
-.. _appendices.rst:
-
 ==========
 Appendices
 ==========

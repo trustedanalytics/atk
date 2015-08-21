@@ -1,5 +1,3 @@
-.. _ad_inst_pre_cloudera.rst:
-
 ==============================
 Physical Machine Configuration
 ==============================

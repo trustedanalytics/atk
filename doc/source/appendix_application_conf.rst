@@ -1,5 +1,3 @@
-.. _appendix_application_conf.rst:
-
 =====================================================
 Appendix A |EM| Sample Application Configuration File
 =====================================================

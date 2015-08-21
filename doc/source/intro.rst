@@ -1,5 +1,3 @@
-.. _intro.rst:
-
 =================
 Technical Summary
 =================

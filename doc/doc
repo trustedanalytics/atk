@@ -77,6 +77,9 @@ function main() {
     done
     if [ "$BuildableFormat" == "True" ]; then
 
+        # debug: The download directory must contain a file to simulate the final pdf
+        touch source/_downloads/"$PDFName".pdf
+
         # debug: Remove previous doctrees
         echo $ModifiedArguments | grep -i "/+e/" > /dev/null
         if [ "$?" == "0" ]; then
@@ -220,7 +223,7 @@ function add_reference() {
     fi
     RandomFileName="$(date +%Y%m%d%H%M%N).tmp"
     for File in $RSTFiles; do
-        Line=".. _${File:7}:"
+        Line=".. _${File:7:((${#File} - 11))}:"
         # debug: Check for the reference already existing
         grep "$Line" "$File" > /dev/null
         if [ "$?" != "0" ]; then
@@ -632,7 +635,7 @@ function server_start() {
             # debug: Copy the build configuration to/over the current
             # debug: application configuration
             RunCommand="cp ../conf/examples/application.conf.build ../conf/application.conf"
-            do_this "$RunCommand" $AskThem $DisplayStatus $TempFile $LogFile
+            do_this "$RunCommand" $1 $2 $3 $4
             Return=$?
             if [ "$Return" != "0" ]; then return $Return; fi
         fi
@@ -641,7 +644,7 @@ function server_start() {
         pushd ../ > /dev/null
         echo -n "Start server"
         RunCommand="Start server (nohup bin/rest-server.sh)"
-        log_step "$RunCommand" $1 "No" $3 $4
+        log_step "$RunCommand" "No" $4
         nohup bin/rest-server.sh < /dev/null > $3 2>&1 &
         Return=$?
         popd > /dev/null

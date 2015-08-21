@@ -1,5 +1,3 @@
-.. _ds_strt.rst:
-
 ===============
 Getting Started
 ===============

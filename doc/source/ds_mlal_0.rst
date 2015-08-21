@@ -1,5 +1,3 @@
-.. _ds_mlal_0.rst:
-
 .. index::
     single: machine learning
     single: model

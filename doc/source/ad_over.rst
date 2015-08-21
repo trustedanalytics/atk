@@ -1,5 +1,3 @@
-.. _ad_over.rst:
-
 .. index::
     single: administration
 

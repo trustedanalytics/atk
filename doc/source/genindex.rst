@@ -1,5 +1,3 @@
-.. _genindex.rst:
-
 =====
 Index
 =====

@@ -1,5 +1,3 @@
-.. _ad_inst_ta1.rst:
-
 .. index::
     single: installation
 
