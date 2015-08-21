@@ -99,8 +99,6 @@ case class VertexSchema(columns: List[Column] = List[Column](), label: String, i
     super.dropColumn(columnName)
   }
 
-
-
 }
 
 /**
@@ -540,8 +538,9 @@ trait Schema {
    * @return a new copy of the Schema with the columns removed
    */
   def dropColumnsByIndex(columnIndices: Seq[Int]): Schema = {
-    val remainingColumns = columns.zipWithIndex.filterNot { case (col, index) =>
-      columnIndices.contains(index)
+    val remainingColumns = columns.zipWithIndex.filterNot {
+      case (col, index) =>
+        columnIndices.contains(index)
     }.map { case (col, index) => col }
 
     copy(remainingColumns)
@@ -612,7 +611,7 @@ trait Schema {
    * @return the other column names, if any
    */
   def columnNamesExcept(columnNamesToExclude: List[String]): List[String] = {
-    for {c <- columns if !columnNamesToExclude.contains(c.name)} yield c.name
+    for { c <- columns if !columnNamesToExclude.contains(c.name) } yield c.name
   }
 
   /**

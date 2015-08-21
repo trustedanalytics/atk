@@ -20,7 +20,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.schema.{FrameSchema, Schema}
+import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
 
 //implicit conversion for PairRDD
@@ -70,7 +70,7 @@ object JoinRddFunctions extends Serializable {
 
     how match {
       case "outer" => {
-       new FrameRdd(schema, joinedRdd)
+        new FrameRdd(schema, joinedRdd)
       }
       case "right" => {
         val dropColumnName = schema.column(leftSchema.columnIndex(left.joinColumn)).name
@@ -88,7 +88,6 @@ object JoinRddFunctions extends Serializable {
       }
     }
   }
-
 
   /**
    * Perform join operation

@@ -20,7 +20,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
@@ -230,10 +230,10 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 1),
-      Column("col_1_L", DataTypes.str, 2),
-      Column("col_0_R", DataTypes.int32, 3),
-      Column("col_1_R", DataTypes.str, 4)
+      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_1_L", DataTypes.str, 1),
+      Column("col_0_R", DataTypes.int32, 2),
+      Column("col_1_R", DataTypes.str, 3)
     ))
 
     val expectedResults = List(
@@ -260,10 +260,10 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 1),
-      Column("col_1_L", DataTypes.str, 2),
-      Column("col_0_R", DataTypes.int32, 3),
-      Column("col_1_R", DataTypes.str, 4)
+      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_1_L", DataTypes.str, 1),
+      Column("col_0_R", DataTypes.int32, 2),
+      Column("col_1_R", DataTypes.str, 3)
     ))
 
     val expectedResults = List(
@@ -288,10 +288,10 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 1),
-      Column("col_1_L", DataTypes.str, 2),
-      Column("col_0_R", DataTypes.int32, 3),
-      Column("col_1_R", DataTypes.str, 4)
+      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_1_L", DataTypes.str, 1),
+      Column("col_0_R", DataTypes.int32, 2),
+      Column("col_1_R", DataTypes.str, 3)
     ))
 
     val expectedResults = List(

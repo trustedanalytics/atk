@@ -42,11 +42,11 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
     lazy val leftNullRow: Row = new GenericRow(self.frame.numColumns)
 
     other.frame.flatMapRows(rightRow => {
-        val rightKey = rightRow.value(other.joinColumn)
-        leftBroadcastVariable.get(rightKey) match {
-          case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow.row)
-          case _ => List(Row.merge(leftNullRow.copy(), rightRow.row))
-        }
+      val rightKey = rightRow.value(other.joinColumn)
+      leftBroadcastVariable.get(rightKey) match {
+        case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow.row)
+        case _ => List(Row.merge(leftNullRow.copy(), rightRow.row))
+      }
     })
   }
 
