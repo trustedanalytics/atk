@@ -201,7 +201,7 @@ subset of the data to determine what works best.
 
 .. only:: latex
 
-    See `Figure 1 <ds_mlal_lda_fig_1>`_.
+    See :ref:`Figure 1 <ds_mlal_lda_fig_1>`.
 
 .. _ds_mlal_lda_fig_1:
 
@@ -299,7 +299,9 @@ regarding topic membership, using this information.
 .. [#LDA5] http://www.ics.uci.edu/~newman/pubs/fastlda.pdf
 .. [#LDA6] http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf
 .. [#LDA7] http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf
-""")
+""",
+  returns = """The configuration and learning curve report for Latent Dirichlet
+Allocation.""")
 class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelEntity] {
   /**
    * The name of the command.

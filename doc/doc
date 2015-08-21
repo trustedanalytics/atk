@@ -1,233 +1,15 @@
 #!/bin/bash
 
-Python_directory="trustedanalytics"
-JavaCall="java.*launcher/target/launcher.jar.*org.trustedanalytics.atk.component.Boot"
-pid=$(ps aux  | grep -v grep | grep $JavaCall | head -n 1 |  awk '{print $2}')
-
 # The primary purpose of this script file is to allow the Sphinx-Build program
 # to build in python 2.7 on a RedHat distribution of Linux.
-
-# Subroutines:
-
-#############################################################################################################
-function build_docstubs() {
-    # $1 = AskThem
-    # $2 = DisplayStatus
-    # $3 = TempFile
-    # $4 = LogFile
-
-    # debug: Update the additional python documentation files
-    RunCommand="which python2.7"
-    do_this "$RunCommand" $1 "No" $3 $4
-    Return=$?
-    if [ "$Return" != "0" ]; then return $Return; fi
-    if [[ -f build_docs.py ]]; then
-        do_this "python2.7 build_docs.py" $1 $2 $3 $4
-        Return=$?
-    else
-        Err "The python script build_docs.py seems to be missing." $1 $2 $3 $4
-        Return=$?
-    fi
-    return $Return
-}
-
-###########################################################################################################
-function compile_jars() {
-    # $1 = Threads
-    # $2 = AskThem
-    # $3 = DisplayStatus
-    # $4 = TempFile
-    # $5 = LogFile
-
-    # debug: run maven
-    which mvn > /dev/null
-    if [ "$?" == "0" ]; then
-        ps aux|grep zinc|grep -v grep > /dev/null
-        Return=$?
-        if [ "$Return" != "0" ]; then
-            # zinc is not running, so try to start it
-            if [[ -f "bin/zinc.sh" ]]; then
-                bin/zinc.sh start > /dev/null
-            fi
-            ps aux|grep zinc|grep -v grep > /dev/null
-            Return=$?
-        fi
-        if [ "$Return" != "0" ]; then
-            log_step "Compiling without zinc." $3 $5
-        fi
-        RunCommand="mvn clean package -P compile,test,events,modules-all,\!scala-coverage,\!integration-tests -Dcheckstyle.skip=true -DskipTests"
-        if [ "$1" == "True" ]; then
-            RunCommand="$RunCommand -t 8"
-        fi
-        do_this "$RunCommand" $2 $3 $4 $5
-        return $?
-    else
-        Err "Maven does not appear to be installed." $2 $3 $4 $5
-        if [ "$?" == "1" ]; then return 1; fi
-    fi
-    return 0
-}
-
-############################################################################################################
-function delete_previous() {
-    # $1 = Directory
-    # $2 = AskThem
-    # $3 = DisplayStatus
-    # $4 = Temporary file
-    # $5 = LogFile
-
-    # debug: function delete_previous
-    CommandLine="rm -rf $1"
-    if [ -d $1 ]; then
-        log_step "$CommandLine" $3 $5
-        $CommandLine > $4
-        if [ "$?" == "1" ]; then
-            Err "$CommandLine" $2 $3 $4 $5
-            if [ "$?" == "1" ]; then
-                return 1
-            fi
-        else
-            rm $4
-        fi
-    fi
-    return 0
-}
-
-############################################################################################################
-function do_this() {
-    # $1 = RunCommand
-    # $2 = AskThem
-    # $3 = DisplayStatus
-    # $4 = TempFile
-    # $5 = LogFile
-
-    # debug: function do_this
-    log_step "$1" $3 $5
-    ($1) > $4 2>&1
-    if [ "$?" == "1" ]; then
-        Err "$1" $2 $3 $4 $5
-        return $?
-    else
-        rm $4 > /dev/null
-    fi
-    return 0
-}
-
-############################################################################################################
-function doc_help() {
-    # debug: function doc_help
-    echo
-    echo "$0 $1"
-    echo
-    echo "-h, --help: Print this and return"
-    echo "-e:         Do not erase previous compilation"
-    echo "+e:         Erase doctrees"
-    echo "-p:         Do not rebuild docstub files"
-    echo "-q, -qq:    Quiet mode, use default values for prompts"
-    echo "-s:         Do not compile Scala code"
-    echo "+t:         Use threads during maven compilations"
-    echo "-_:         Do not rename html folders starting with _ to f_"
-    echo
-    echo "dirhtml:    Compile to html segregated with directories"
-    echo "html:       Compile to html"
-    echo "latex:      Compile to LaTeX"
-    echo "pdf:        Compile to pdf"
-    echo "singlehtml: Compile to a monolithic html file"
-    echo "text:       Compile to text"
-    echo "zip:        Do a zip of build directory"
-    echo "doctest:    Test the code examples"
-    echo "packages:   Check for installed packages"
-    echo
-    echo "By default, file builds will erase previous files first. For example,"
-    echo "if html is called for, this will delete the existing html files first."
-    echo "Flags and options listed above have ':' symbol for clarification purposes only,"
-    echo "they are not part of the flag/option and should not be used on the command line."
-    echo
-    return 0
-}
-
-############################################################################################################
-function Err() {
-    # $1 = Failure description, usually the command line
-    # $2 = AskThem
-    # $3 = DisplayStatus
-    # $4 = TempFile
-    # $5 = LogFile
-
-    # debug: function Err
-    if [[ -e "$4" ]]; then
-        cat "$4" >> $5
-        rm "$4"
-    fi
-    if [ "$3" == "Yes" ]; then
-        echo "Failure: $1"
-    fi
-    if [ "$2" == "Yes" ]; then
-        get_response "View .log file?" Y
-        if [ "$?" == "0" ]; then
-            less $LogFile
-        fi
-        get_response "Abort?" Y
-        if [ "$?" == "0" ]; then
-            return 1
-        fi
-    else
-        return 1
-    fi
-    return 0
-}
-
-############################################################################################################
-function get_response() {
-
-    # debug: get_response\($@\)
-    Prioritize=${2:-Y}
-    Prioritize=${Prioritize:0:1}
-    Prioritize=${Prioritize^^}
-    if [ "$Prioritize" == "Y" ]; then
-        Adder="[Y|n]"
-    else
-        Adder="[y|N]"
-    fi
-    UserResponse=$Prioritize
-    Looping=True
-    while [ "$Looping" == "True" ]; do
-        read -p "$1 $Adder " UserResponse
-        UserResponse=${UserResponse:-$Prioritize}
-        UserResponse=${UserResponse:0:1}
-        UserResponse=${UserResponse^^}
-        if [ ! $(echo "YN"|grep -i ${UserResponse:0:1} ) ]; then
-            echo "Please respond with (Y)es or (N)o."
-        else
-            Looping=False
-        fi
-    done
-    if [ "$UserResponse" == "$Prioritize" ]; then
-        return 0
-    else
-        return 1
-    fi
-}
-############################################################################################################
-function log_step() {
-    # $1 = step description, usually the full command
-    # $2 = DisplayStatus
-    # $3 = LogFile
-
-    # debug: function log_step
-    if [ "$2" == "Yes" ]; then
-        echo "$1"
-    fi
-    echo >> $3
-    echo >> $3
-    echo "$1" >> $3
-    return 0
-}
 
 ############################################################################################################
 function main() {
     # debug: function main
     # debug: $1 = Modified Arguments
+
+    Python_directory="trustedanalytics"
+    JavaCall="java.*launcher/target/launcher.jar.*org.trustedanalytics.atk.component.Boot"
 
     echo
 
@@ -332,6 +114,10 @@ function main() {
             if [ "$Return" != "0" ]; then return $Return; fi
         fi
 
+        # debug: Add references at the beginning of all rst files
+        add_reference $AskThem $DisplayStatus $TempFile $LogFile
+        if [ "$?" != "0" ]; then return 1; fi
+
         RunCommand="which sphinx-build"
         do_this "$RunCommand" $AskThem "No" $TempFile $LogFile
         if [ "$?" != "0" ]; then return 1; fi
@@ -409,6 +195,260 @@ function main() {
         rm doc.log
     fi
     server_stop $AskThem $DisplayStatus $TempFile $LogFile
+}
+
+# Subroutines:
+
+#############################################################################################################
+function add_reference() {
+    # $1 = AskThem
+    # $2 = DisplayStatus
+    # $3 = TempFile
+    # $4 = LogFile
+
+    # debug: Add references at the beginning of all rst files
+    log_step "add_reference" $2 $4
+    # debug: Get a list of all rst files in the source folder and sub-folders
+    RSTFiles=$(find source -name "*.rst") > $3 2>&1
+    if [ "$?" != "0" ]; then
+        Err "add_reference" $1 $2 $3 $4
+        return $?
+    else
+        rm $3 > /dev/null
+    fi
+    RandomFileName="$(date +%N).tmp"
+    for File in $RSTFiles; do
+        Line=".. _$File:"
+        # debug: Check for the reference already existing
+        grep "$Line" "$File" > /dev/null
+        if [ "$?" != "0" ]; then
+            # debug: Reference does not exist in the existing file
+            RunCommand="cp $File $RandomFileName"
+            do_this "$RunCommand" $1 $2 $3 $4
+            Return=$?
+            if [ "$Return" != "0" ]; then return $Return; fi
+            log_step "awk 'BEGIN {print '\"$Line\"'} {print $0}' $RandomFileName > $File" $2 $4
+            awk 'BEGIN {print "'"$Line"'"} {print $0}' $RandomFileName > $File
+            return 1
+        fi
+    done
+    return 1
+}
+
+#############################################################################################################
+function build_docstubs() {
+    # $1 = AskThem
+    # $2 = DisplayStatus
+    # $3 = TempFile
+    # $4 = LogFile
+
+    # debug: Update the additional python documentation files
+    RunCommand="which python2.7"
+    do_this "$RunCommand" $1 "No" $3 $4
+    Return=$?
+    if [ "$Return" != "0" ]; then return $Return; fi
+    if [[ -f build_docs.py ]]; then
+        do_this "python2.7 build_docs.py" $1 $2 $3 $4
+        Return=$?
+    else
+        Err "The python script build_docs.py seems to be missing." $1 $2 $3 $4
+        Return=$?
+    fi
+    return $Return
+}
+
+###########################################################################################################
+function compile_jars() {
+    # $1 = Threads
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: run maven
+    which mvn > /dev/null
+    if [ "$?" == "0" ]; then
+        ps aux|grep zinc|grep -v grep > /dev/null
+        Return=$?
+        if [ "$Return" != "0" ]; then
+            # zinc is not running, so try to start it
+            if [[ -f "bin/zinc.sh" ]]; then
+                bin/zinc.sh start > /dev/null
+            fi
+            ps aux|grep zinc|grep -v grep > /dev/null
+            Return=$?
+        fi
+        if [ "$Return" != "0" ]; then
+            log_step "Compiling without zinc." $3 $5
+        fi
+        RunCommand="mvn clean package -P compile,test,events,modules-all,\!scala-coverage,\!integration-tests -Dcheckstyle.skip=true -DskipTests"
+        if [ "$1" == "True" ]; then
+            RunCommand="$RunCommand -t 8"
+        fi
+        do_this "$RunCommand" $2 $3 $4 $5
+        return $?
+    else
+        Err "Maven does not appear to be installed." $2 $3 $4 $5
+        if [ "$?" == "1" ]; then return 1; fi
+    fi
+    return 0
+}
+
+############################################################################################################
+function delete_previous() {
+    # $1 = Directory
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = Temporary file
+    # $5 = LogFile
+
+    # debug: function delete_previous
+    CommandLine="rm -rf $1"
+    if [ -d $1 ]; then
+        log_step "$CommandLine" $3 $5
+        $CommandLine > $4
+        if [ "$?" == "1" ]; then
+            Err "$CommandLine" $2 $3 $4 $5
+            if [ "$?" == "1" ]; then
+                return 1
+            fi
+        else
+            rm $4
+        fi
+    fi
+    return 0
+}
+
+############################################################################################################
+function do_this() {
+    # $1 = RunCommand
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: function do_this
+    log_step "$1" $3 $5
+    ($1) > $4 2>&1
+    if [ "$?" != "0" ]; then
+        Err "$1" $2 $3 $4 $5
+        return $?
+    else
+        rm $4 > /dev/null
+    fi
+    return 0
+}
+
+############################################################################################################
+function doc_help() {
+    # debug: function doc_help
+    echo
+    echo "$0 $1"
+    echo
+    echo "-h, --help: Print this and return"
+    echo "-e:         Do not erase previous compilation"
+    echo "+e:         Erase doctrees"
+    echo "-p:         Do not rebuild docstub files"
+    echo "-q, -qq:    Quiet mode, use default values for prompts"
+    echo "-s:         Do not compile Scala code"
+    echo "+t:         Use threads during maven compilations"
+    echo "-_:         Do not rename html folders starting with _ to f_"
+    echo
+    echo "dirhtml:    Compile to html segregated with directories"
+    echo "html:       Compile to html"
+    echo "latex:      Compile to LaTeX"
+    echo "pdf:        Compile to pdf"
+    echo "singlehtml: Compile to a monolithic html file"
+    echo "text:       Compile to text"
+    echo "zip:        Do a zip of build directory"
+    echo "doctest:    Test the code examples"
+    echo "packages:   Check for installed packages"
+    echo
+    echo "By default, file builds will erase previous files first. For example,"
+    echo "if html is called for, this will delete the existing html files first."
+    echo "Flags and options listed above have ':' symbol for clarification purposes only,"
+    echo "they are not part of the flag/option and should not be used on the command line."
+    echo
+    return 0
+}
+
+############################################################################################################
+function Err() {
+    # $1 = Failure description, usually the command line
+    # $2 = AskThem
+    # $3 = DisplayStatus
+    # $4 = TempFile
+    # $5 = LogFile
+
+    # debug: function Err
+    if [[ -e "$4" ]]; then
+        cat "$4" >> $5
+        rm "$4"
+    fi
+    if [ "$3" == "Yes" ]; then
+        echo "Failure: $1"
+    fi
+    if [ "$2" == "Yes" ]; then
+        get_response "View .log file?" Y
+        if [ "$?" == "0" ]; then
+            less $LogFile
+        fi
+        get_response "Abort?" Y
+        if [ "$?" == "0" ]; then
+            return 1
+        fi
+    else
+        return 1
+    fi
+    return 0
+}
+
+############################################################################################################
+function get_response() {
+
+    date
+    # debug: get_response\($@\)
+    Prioritize=${2:-Y}
+    Prioritize=${Prioritize:0:1}
+    Prioritize=${Prioritize^^}
+    if [ "$Prioritize" == "Y" ]; then
+        Adder="[Y|n]"
+    else
+        Adder="[y|N]"
+    fi
+    UserResponse=$Prioritize
+    Looping=True
+    while [ "$Looping" == "True" ]; do
+        read -p "$1 $Adder " UserResponse
+        UserResponse=${UserResponse:-$Prioritize}
+        UserResponse=${UserResponse:0:1}
+        UserResponse=${UserResponse^^}
+        if [ ! $(echo "YN"|grep -i ${UserResponse:0:1} ) ]; then
+            echo "Please respond with (Y)es or (N)o."
+        else
+            Looping=False
+        fi
+    done
+    if [ "$UserResponse" == "$Prioritize" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+############################################################################################################
+function log_step() {
+    # $1 = step description, usually the full command
+    # $2 = DisplayStatus
+    # $3 = LogFile
+
+    # debug: function log_step
+    if [ "$2" == "Yes" ]; then
+        echo "$1"
+    fi
+    echo >> $3
+    echo >> $3
+    echo "$1" >> $3
+    return 0
 }
 
 ############################################################################################################

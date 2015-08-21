@@ -55,8 +55,9 @@ Glossary
         steps, each involving the application of the :term:`least squares`
         method of parameter estimation.
 
-        See the :ref:`ALS section <ALS>` on machine learning for an
-        in-depth discussion of this method.
+        See the API section on the
+        :ref:`Collaborative Filter Model <python_api/models/model-collaborative_filtering/index.rst>`
+        for an in-depth discussion of this method.
 
     API Maturity Tags
 

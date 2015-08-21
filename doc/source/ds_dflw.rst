@@ -48,7 +48,7 @@ integers, and floats) that can be organized as a collection of rows and
 columns, similar to a table or spreadsheet.
 Each row corresponds to the data associated with one observation, and each
 column corresponds to a variable being observed.
-See the Python API `Data Types <python_api/datatypes/index.html>`_ for
+See the Python API :ref:`Data Types <python_api/datatypes/index.html>` for
 a current list of data types supported.
 
 Connect to the server:
@@ -101,7 +101,7 @@ You should see a list of variable types similar to this:
 Ingesting the Raw Data
 ======================
 
-See the API section `Data Sources <python_api/datasources/index.html>`_
+See the API section :ref:`Data Sources <python_api/datasources/index.html>`
 for the various methods of ingesting data.
 
 
@@ -239,7 +239,7 @@ There are several ways to create frames\:
 #.  by copying (all or a part of) another frame
 #.  as a return value from a Frame-based method; this is part of the ETL data flow.
 
-See the Python API `Frames section <python_api/frames/index.html>`__ for more information.
+See the Python API :ref:`Frames section <python_api/frames/index.html>` for more information.
 
 Examples:
 ---------
@@ -304,7 +304,7 @@ Let's create a Frame and check it out:
 
 Append:
 -------
-The `append <python_api/frames/frame-/append.html>`_ method adds rows and columns of data to a frame.
+The :ref:`append <python_api/frames/frame-/append.html>` method adds rows and columns of data to a frame.
 Columns and rows are added to the database structure, and data is imported
 as appropriate.
 If columns are the same in both name and data type, the appended data will
@@ -312,8 +312,8 @@ go into the existing column.
 
 As an example, let's start with a frame containing two columns *a* and *b*.
 The frame can be accessed by Frame *my_frame1*.
-We can look at the data and structure of the database by using the
-`inspect <python_api/frames/frame-/inspect.html>`_ method:
+We can look at the data and structure of the database by using the :ref:`inspect
+<python_api/frames/frame-/inspect.html>` method:
 
 .. code::
 
@@ -336,7 +336,7 @@ Given another frame, accessed by Frame *my_frame2* with one column *c*:
       dog
       cat
 
-With `append <python_api/frames/frame-/append.html>`_:
+With :ref:`append <python_api/frames/frame-/append.html>`:
 
 .. code::
 
@@ -386,7 +386,7 @@ It would still be accessed by Frame *my_frame1*:
         >>> objects1.append(objects2)
         >>> objects1.inspect()
 
-See also the `join <python_api/frames/frame-/join.html>`_ method in the
+See also the :ref:`join <python_api/frames/frame-/join.html>` method in the
 :doc:`API <python_api/index>` section.
 
 .. _example_frame.inspect:
@@ -394,10 +394,10 @@ See also the `join <python_api/frames/frame-/join.html>`_ method in the
 Inspect The Data
 ================
 |PACKAGE| provides several methods that allow you to inspect your data,
-including `inspect <python_api/frames/frame-/inspect.html>`_ and
-`take <python_api/frames/frame-/take.html>`_.
+including :ref:`inspect <python_api/frames/frame-/inspect.html>` and
+:ref:`take <python_api/frames/frame-/take.html>`.
 The Frame class also contains frame information like
-`row_count <python_api/frames/frame-/row_count.html>`_.
+:ref:`row_count <python_api/frames/frame-/row_count.html>`.
 
 Examples
 --------
@@ -549,7 +549,7 @@ Example of data cleaning:
 Drop Rows:
 ----------
 
-The `drop_rows <python_api/frames/frame-/drop_rows.html>`_
+The :ref:`drop_rows <python_api/frames/frame-/drop_rows.html>`
 method takes a predicate function and removes all rows for
 which the predicate evaluates to ``True``.
 
@@ -583,8 +583,8 @@ To drop any rows where any column is empty:
 Filter Rows:
 ------------
 
-The `filter <python_api/frames/frame-/filter.html>`_ method is like
-`drop_rows <python_api/frames/frame-/drop_rows.html>`_, except it removes all rows
+The :ref:`filter <python_api/frames/frame-/filter.html>` method is like
+:ref:`drop_rows <python_api/frames/frame-/drop_rows.html>`, except it removes all rows
 for which the predicate evaluates to False.
 
 Examples:
@@ -606,7 +606,7 @@ To delete those rows where field *b* is outside the range of 0 to 10:
 Drop Duplicates:
 ----------------
 
-The `drop_duplicates <python_api/frames/frame-/drop_duplicates.html>`_
+The :ref:`drop_duplicates <python_api/frames/frame-/drop_duplicates.html>`
 method performs a row uniqueness comparison across the whole table.
 
 Examples:
@@ -804,8 +804,8 @@ Examining the Data
 ==================
 
 To get standard descriptive statistics information about my_frame, use the
-frame function `column_summary_statistics
-<python_api/frames/frame-/column_summary_statistics.html>`_:
+frame function :ref:`column_summary_statistics
+<python_api/frames/frame-/column_summary_statistics.html>`:
 
 .. code::
 
@@ -938,7 +938,7 @@ Aggregation currently supports using the following functions:
 Join:
 -----
 
-Create a **new** frame from a `join <python_api/frames/frame-/join.html>`_
+Create a **new** frame from a :ref:`join <python_api/frames/frame-/join.html>`
 operation with another frame.
 
 Given two frames *my_frame* (columns *a*, *b*, *c*) and *your_frame* (columns
@@ -1071,7 +1071,7 @@ Result is *right_frame*:
 Flatten Column:
 ---------------
 
-The function `flatten_column <python_api/frames/frame-/flatten_column.html>`_
+The function :ref:`flatten_column <python_api/frames/frame-/flatten_column.html>`
 creates a **new** frame by splitting a
 particular column and returns a Frame object.
 The column is searched for rows where there is more than one value,
@@ -1233,7 +1233,7 @@ Inspect the graph:
     >>> my_graph.vertices['Employee'].inspect(20)
     >>> my_graph.edges['worksunder'].inspect(20)
 
-For further information, see the API section on `Graphs <python_api/graphs/index.html>`_.
+For further information, see the API section on :ref:`Graphs <python_api/graphs/index.html>`.
 
 .. _export_to_titan:
 
@@ -1288,7 +1288,7 @@ Graph Creation
 
 A Titan graph is created by exporting it from a seamless graph.
 For futher information, as well as Titan graph attributes and methods, see the
-API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
+API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index.html>`.
 
 .. _Graph_Analytics:
 
@@ -1301,11 +1301,11 @@ Graph Analytics
 
 See these API sections for individual analytic processes:
 
-*   `Clustering Coefficients <python_api/graphs/graph-/clustering_coefficient.html>`_
-*   `Connected Components (CC) <python_api/graphs/graph-titan/connected_components.html>`_
-*   `Degree Calculation <python_api/graphs/graph-/annotate_degrees.html>`_
-*   `K-Clique Percolation <python_api/graphs/graph-/ml/kclique_percolation.html>`_
-*   `PageRank (PR) <python_api/graphs/graph-titan/page_rank.html>`_
+*   :ref:`Clustering Coefficients <python_api/graphs/graph-/clustering_coefficient.html>`
+*   :ref:`Connected Components (CC) <python_api/graphs/graph-titan/connected_components.html>`
+*   :ref:`Degree Calculation <python_api/graphs/graph-/annotate_degrees.html>`
+*   :ref:`K-Clique Percolation <python_api/graphs/graph-/ml/kclique_percolation.html>`
+*   :ref:`PageRank (PR) <python_api/graphs/graph-titan/page_rank.html>`
 
 
 .. toctree::
