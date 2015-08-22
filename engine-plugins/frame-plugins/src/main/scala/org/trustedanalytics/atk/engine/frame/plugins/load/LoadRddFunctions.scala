@@ -16,18 +16,17 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import org.apache.hadoop.io.{ LongWritable, Text }
+import org.apache.spark.SparkContext
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+import org.apache.spark.sql.types.{ BooleanType, ByteType, DateType, DecimalType, ShortType, StructField, TimestampType }
+import org.apache.spark.sql.{ Row, SchemaRDD, types => SparkType }
 import org.trustedanalytics.atk.domain.frame.load.{ LineParser, LineParserArguments }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame._
-import org.apache.hadoop.io.LongWritable
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.SparkContext
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{ types => SparkType, Row, SchemaRDD }
-import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
-import org.apache.hadoop.io.Text
-import SparkType.{ DateType, StructField, TimestampType, ByteType, BooleanType, ShortType, DecimalType }
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
@@ -47,12 +46,16 @@ object LoadRddFunctions extends Serializable {
    * @param sc SparkContext used for textFile reading
    * @param fileName name of file to parse
    * @param parser the parser
-   * @return  RDD of Row objects
+   * @param minPartitions minimum number of partitions for text file.
+   * @param startTag Start tag for XML or JSON parsers
+   * @param endTag Start tag for XML or JSON parsers
+   * @param isXml True for XML input files
+   * @return RDD of Row objects
    */
   def loadAndParseLines(sc: SparkContext,
                         fileName: String,
                         parser: LineParser,
-                        partitions: Int,
+                        minPartitions: Option[Int] = None,
                         startTag: Option[List[String]] = None,
                         endTag: Option[List[String]] = None,
                         isXml: Boolean = false): ParseResultRddWrapper = {
@@ -61,13 +64,18 @@ object LoadRddFunctions extends Serializable {
       startTag match {
         case Some(s) =>
           val conf = new org.apache.hadoop.conf.Configuration()
-          conf.setStrings(MultiLineTaggedInputFormat.START_TAG_KEY, s: _*) //Treat s as a Varargs parameter
           val e = endTag.get
+          conf.setStrings(MultiLineTaggedInputFormat.START_TAG_KEY, s: _*) //Treat s as a Varargs parameter
           conf.setStrings(MultiLineTaggedInputFormat.END_TAG_KEY, e: _*)
           conf.setBoolean(MultiLineTaggedInputFormat.IS_XML_KEY, isXml)
           sc.newAPIHadoopFile[LongWritable, Text, MultiLineTaggedInputFormat](fileName, classOf[MultiLineTaggedInputFormat], classOf[LongWritable], classOf[Text], conf)
             .map(row => row._2.toString).filter(_.trim() != "")
-        case None => sc.textFile(fileName, partitions).filter(_.trim() != "")
+        case None =>
+          val rdd = minPartitions match {
+            case Some(partitions) => sc.textFile(fileName, partitions)
+            case _ => sc.textFile(fileName)
+          }
+          rdd.filter(_.trim() != "")
       }
 
     if (parser != null) {
@@ -135,8 +143,12 @@ object LoadRddFunctions extends Serializable {
 
     if (failedRatio >= threshold) {
       val errorExampleRecord = preEvaluateResults.errorLines.first().copy()
-      val errorRow = errorExampleRecord { 0 }
-      val errorMessage = errorExampleRecord { 1 }
+      val errorRow = errorExampleRecord {
+        0
+      }
+      val errorMessage = errorExampleRecord {
+        1
+      }
       throw new Exception(s"Parse failed on $failedCount rows out of the first $sampleRowsCount, " +
         s" please ensure your schema is correct.\nExample record that parser failed on : $errorRow    " +
         s" \n$errorMessage")
@@ -224,7 +236,8 @@ object LoadRddFunctions extends Serializable {
           else if (array(i).dataType.getClass == ByteType.getClass) {
             mutableRow(i) = row.getByte(i).toInt
           }
-          else if (array(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
+          else if (array(i).dataType.getClass == classOf[DecimalType]) {
+            // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
             mutableRow(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
           }
           else {
