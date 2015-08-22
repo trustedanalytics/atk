@@ -129,8 +129,6 @@ It has the following steps:
     down to the base graph, providing each vertex with the set of k-clique
     communities to which it belongs.
 
-See :ref:`API <api_kmeans>` for implementation details.
-
 
 .. rubric:: Footnotes
 
