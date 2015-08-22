@@ -1,3 +1,5 @@
+.. _ad_inst_ta1:
+
 .. index::
     single: installation
 

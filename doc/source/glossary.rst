@@ -1,3 +1,5 @@
+.. _glossary:
+
 ========
 Glossary
 ========
@@ -56,7 +58,7 @@ Glossary
         method of parameter estimation.
 
         See the API section on the
-        :ref:`Collaborative Filter Model <python_api/models/model-collaborative_filtering/index.rst>`
+        :ref:`Collaborative Filter Model <python_api/models/model-collaborative_filtering/index>`
         for an in-depth discussion of this method.
 
     API Maturity Tags
@@ -533,7 +535,7 @@ Glossary
 
         A multi-pass process for grouping vertices.
 
-        See :ref:`Label Propagation (LP) <LP>`.
+        See :ref:`Label Propagation (LP) <python_api/frames/frame-/label_propagation>`.
 
         For additional reference:
         `Learning from Labeled and Unlabeled Data with Label Propagation`_.

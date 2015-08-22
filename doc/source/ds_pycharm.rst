@@ -1,3 +1,5 @@
+.. _ds_pycharm:
+
 .. index:: ! PyCharm
     single: IDE
 

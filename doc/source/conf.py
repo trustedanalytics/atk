@@ -38,6 +38,7 @@ rst_epilog = """
 .. |ALPHA|  replace:: :abbr:`[ALPHA] (This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.)`
 .. |API|    replace:: :abbr:`API (Application Programming Interface)`
 .. |BETA|   replace:: :abbr:`[BETA] (This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.)`
+.. |BP|     replace:: :abbr:`BP (Belief Propagation)`
 .. |CDH|    replace:: :abbr:`CDH (Cloudera Hadoop)`
 .. |COPY|   unicode:: U+000A9 .. Copyright symbol
 .. |CSV|    replace:: :abbr:`CSV (Character-Separated Variables)`
@@ -51,7 +52,9 @@ rst_epilog = """
 .. |HDFS|   replace:: :abbr:`HDFS (Hadoop Distributed File System)`
 .. |JSON|   replace:: :abbr:`JSON (JavaScript Object Notation)`
 .. |K-S|    replace:: :abbr:`K-S (Kolmogorov-Smirnov)`
+.. |LBP|    replace:: :abbr:`LBP (Loopy Belief Propagation)`
 .. |LDA|    replace:: :abbr:`LDA (Latent Dirichlet Allocation)`
+.. |LP|     replace:: :abbr:`LP (Label Proopagation)`
 .. |LSI|    replace:: :abbr:`LSI (Latent Semantic Indexing)`
 .. |MDA|    replace:: :abbr:`MDA (Multi-Dimensional Analytical)`
 .. |OLAP|   replace:: :abbr:`OLAP (OnLine Analytical Processing)`

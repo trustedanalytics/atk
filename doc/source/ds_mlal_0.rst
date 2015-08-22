@@ -1,3 +1,5 @@
+.. _ds_mlal_0:
+
 .. index::
     single: machine learning
     single: model

@@ -1,3 +1,5 @@
+.. _ad_inst_vm:
+
 ================
 Virtual Machines
 ================

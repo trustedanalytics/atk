@@ -1,3 +1,5 @@
+.. _ad_hbtune:
+
 .. index::
     single: HBase
     single: performance

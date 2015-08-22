@@ -1,3 +1,5 @@
+.. _ad_inst_cloudera:
+
 ===============================
 Cloudera Hadoop 5 Configuration
 ===============================

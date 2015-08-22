@@ -1,3 +1,5 @@
+.. _ad_over:
+
 .. index::
     single: administration
 

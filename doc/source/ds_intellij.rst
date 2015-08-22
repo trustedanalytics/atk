@@ -1,3 +1,5 @@
+.. _ds_intellij:
+
 .. index:: ! IntelliJ
     single: IDE
 

@@ -1,3 +1,5 @@
+.. _dev_psql:
+
 .. index::
     single: metadata
     single: H2

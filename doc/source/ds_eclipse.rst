@@ -1,3 +1,5 @@
+.. _ds_eclipse:
+
 .. index:: ! Eclipse
     single: IDE
 

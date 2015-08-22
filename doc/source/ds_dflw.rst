@@ -1,3 +1,5 @@
+.. _ds_dflw:
+
 .. index::
     single: example
 

@@ -1,3 +1,5 @@
+.. _appendix_application_conf:
+
 =====================================================
 Appendix A |EM| Sample Application Configuration File
 =====================================================

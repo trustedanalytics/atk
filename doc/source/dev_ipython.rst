@@ -1,3 +1,5 @@
+.. _dev_ipython:
+
 .. index:: ! IPython
 
 ==========================
