@@ -71,7 +71,7 @@ class DropDuplicatesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, UnitRe
       case None => frame.schema.columnNames
     }
     // run operation
-    val duplicatesRemoved: RDD[Row] = MiscFrameFunctions.removeDuplicatesByColumnNames(frame.rdd, frame.schema, columnNames)
-    frame.save(new FrameRdd(frame.schema, duplicatesRemoved))
+    val duplicatesRemovedFrame : FrameRdd = frame.rdd.dropDuplicatesByColumn(columnNames)
+    frame.save(duplicatesRemovedFrame)
   }
 }
