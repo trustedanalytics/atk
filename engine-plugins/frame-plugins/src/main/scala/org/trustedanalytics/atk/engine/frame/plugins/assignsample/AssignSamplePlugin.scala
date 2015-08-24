@@ -45,9 +45,7 @@ The labels are non-negative integers drawn from the range
 Optionally, the user can specify a list of strings to be used as the labels.
 If the number of labels is 3, the labels will default to "TR", "TE" and "VA".
 
-Notes
------
-**Probability Validation**
+**Notes**
 
 The sample percentages provided by the user are preserved to at least eight
 decimal places, but beyond this there may be small changes due to floating
@@ -55,10 +53,10 @@ point imprecision.
 
 In particular:
 
-1)  The engine validates that the sum of probabilities sums to 1.0 within
+#)  The engine validates that the sum of probabilities sums to 1.0 within
     eight decimal places and returns an error if the sum falls outside of this
     range.
-2)  The probability of the final class is clamped so that each row receives a
+#)  The probability of the final class is clamped so that each row receives a
     valid label with probability one.""")
 class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, FrameEntity] {
 
