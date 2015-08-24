@@ -83,7 +83,10 @@ import BeliefPropagationJsonFormat._
   extended = """Belief propagation by the sum-product algorithm.
 This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
 The priors are read from a property in the graph, the posteriors are written to another property in the graph.
-This is the GraphX-based implementation of belief propagation.""",
+This is the GraphX-based implementation of belief propagation.
+
+See :ref:`Loopy Belief Propagation <python_api/frames/frame-/loopy_belief_propagation>`
+for a more in-depth discussion of |BP| and |LBP|.""",
   returns = "Progress report for belief propagation in the format of a multiple-line string.")
 class BeliefPropagationPlugin extends SparkCommandPlugin[BeliefPropagationArgs, BeliefPropagationResult] {
 
