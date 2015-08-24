@@ -57,11 +57,11 @@ to identify grouping.
     If there are multiples of the same value in :math:`C`, then their
     tie-adjusted rank is the average of their ordered rank values.
 
-Notes
------
-1)  Unicode in column names is not supported and will likely cause the
+**Notes**
+
+#)  Unicode in column names is not supported and will likely cause the
     drop_frames() method (and others) to fail!
-2)  The num_bins parameter is considered to be the maximum permissible number
+#)  The num_bins parameter is considered to be the maximum permissible number
     of bins because the data may dictate fewer bins.
     For example, if the column to be binned has a quantity of :math"`X`
     elements with only 2 distinct values and the *num_bins* parameter is
