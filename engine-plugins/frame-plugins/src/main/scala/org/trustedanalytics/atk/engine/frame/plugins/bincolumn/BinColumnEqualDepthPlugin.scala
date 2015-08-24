@@ -43,19 +43,19 @@ import org.apache.spark.SparkContext._
   extended = """Group rows of data based on the value in a single column and add a label
 to identify grouping.
 
-*   Equal depth binning attempts to label rows such that each bin contains the
-    same number of elements.
-    For :math:`n` bins of a column :math:`C` of length :math:`m`, the bin
-    number is determined by:
+Equal depth binning attempts to label rows such that each bin contains the
+same number of elements.
+For :math:`n` bins of a column :math:`C` of length :math:`m`, the bin
+number is determined by:
 
-    .. math::
+.. math::
 
-        \lceil n * \frac { f(C) }{ m } \rceil
+    \lceil n * \frac { f(C) }{ m } \rceil
 
-    where :math:`f` is a tie-adjusted ranking function over values of
-    :math:`C`.
-    If there are multiples of the same value in :math:`C`, then their
-    tie-adjusted rank is the average of their ordered rank values.
+where :math:`f` is a tie-adjusted ranking function over values of
+:math:`C`.
+If there are multiples of the same value in :math:`C`, then their
+tie-adjusted rank is the average of their ordered rank values.
 
 **Notes**
 

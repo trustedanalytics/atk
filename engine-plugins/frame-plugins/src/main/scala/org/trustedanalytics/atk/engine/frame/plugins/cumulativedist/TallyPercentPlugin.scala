@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "Compute a cumulative percent count.",
   extended = """A cumulative percent count is computed by sequentially stepping through
-the column values and keeping track of the current percentage of the
+the rows, observing the column values and keeping track of the percentage of the
 total number of times the specified *count_value* has been seen up to
 the current value.""")
 class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, FrameEntity] {

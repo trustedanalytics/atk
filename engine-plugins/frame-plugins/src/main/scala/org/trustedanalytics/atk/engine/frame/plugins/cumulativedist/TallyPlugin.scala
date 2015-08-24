@@ -32,8 +32,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  *
  */
 @PluginDoc(oneLine = "Count number of times a value is seen.",
-  extended = """A cumulative count is computed by sequentially stepping through the column
-values and keeping track of the the number of times the specified
+  extended = """A cumulative count is computed by sequentially stepping through the rows,
+observing the column values and keeping track of the the number of times the specified
 *count_value* has been seen up to the current value.""")
 class TallyPlugin extends SparkCommandPlugin[TallyArgs, FrameEntity] {
 
