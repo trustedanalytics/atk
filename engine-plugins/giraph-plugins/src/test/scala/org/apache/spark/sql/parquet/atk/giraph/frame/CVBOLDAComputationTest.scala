@@ -85,15 +85,17 @@ class CVBOLDAComputationTest extends WordSpec {
       // validate results that were stored into a global
       val docResults = TestingLdaOutputResults.docResults
       val wordResults = TestingLdaOutputResults.wordResults
-      val topicsGivenWord = TestingLdaOutputResults.topicsGivenWord
+      val topicGivenWord = TestingLdaOutputResults.topicGivenWord
 
       // validate correct number of results
       assert(docResults.size == 3)
       assert(wordResults.size == 8)
+      assert(topicGivenWord.size == 8)
 
       // each result should have a vector with as many elements as the number of topics
       docResults.foreach { case (s, vector) => assert(vector.size() == numTopics, s"result $s should have a vector of results with size of numTopics") }
       wordResults.foreach { case (s, vector) => assert(vector.size() == numTopics, s"result $s should have a vector of results with size of numTopics") }
+      topicGivenWord.foreach { case (s, vector) => assert(vector.size() == numTopics, s"result $s should have a vector of results with size of numTopics") }
 
       // there is a random element in the results so we round to so many decimal places
       assertVectorApproximate(docResults("nytimes"), 0.9791622779172616, 0.020837722082738406)
@@ -106,6 +108,10 @@ class CVBOLDAComputationTest extends WordSpec {
       assertVectorApproximate(wordResults("harry"), 0.012227142764471467, 0.33614890265523867)
       assertVectorApproximate(wordResults("chamber"), 4.8666699891845546E-4, 0.16208167430495116)
       assertVectorApproximate(wordResults("secrets"), 4.866629945216566E-4, 0.242719543561563)
+      assertVectorApproximate(wordResults("magic"), 0.0056778096874241365, 0.2502411087589012)
+      assertVectorApproximate(wordResults("realestate"), 0.17071558553290928, 8.288897492542531E-4)
+
+
     }
   }
 
