@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.plugins.connectedcomponents
 
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.graphbuilder.elements.Property
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -37,7 +37,7 @@ case class ConnectedComponentsArgs(graph: GraphReference,
   require(!outputProperty.isEmpty, "Output property label must be provided")
 }
 
-case class ConnectedComponentsReturn(frameDictionaryOutput: Map[String, FrameEntity])
+case class ConnectedComponentsReturn(frameDictionaryOutput: Map[String, FrameReference])
 
 /** Json conversion for arguments and return value case classes */
 object ConnectedComponentsJsonFormat {
@@ -104,7 +104,7 @@ class ConnectedComponentsPlugin extends SparkCommandPlugin[ConnectedComponentsAr
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new ConnectedComponentsReturn(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

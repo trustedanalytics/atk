@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins
 
-import org.trustedanalytics.atk.domain.model.{ ModelEntity, RenameModelArgs }
+import org.trustedanalytics.atk.domain.model.{ ModelReference, RenameModelArgs }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename a model in the database
  */
-class RenameModelPlugin extends SparkCommandPlugin[RenameModelArgs, ModelEntity] {
+class RenameModelPlugin extends SparkCommandPlugin[RenameModelArgs, ModelReference] {
 
   /**
    * The name of the command, e.g. graph/vertex_sample
@@ -47,7 +47,7 @@ class RenameModelPlugin extends SparkCommandPlugin[RenameModelArgs, ModelEntity]
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: RenameModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: RenameModelArgs)(implicit invocation: Invocation): ModelReference = {
     // dependencies (later to be replaced with dependency injection)
     val models = engine.models
 

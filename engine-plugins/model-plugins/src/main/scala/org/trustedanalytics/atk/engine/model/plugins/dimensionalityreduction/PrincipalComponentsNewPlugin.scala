@@ -17,7 +17,7 @@ package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -26,7 +26,7 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Create a 'new' instance of principal component model.",
   extended = "",
   returns = "")
-class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -35,7 +35,7 @@ class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArg
    */
   override def name: String = "model:principal_components/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:principal_components")))
   }
 }

@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ DropDuplicatesArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.{ DropDuplicatesArgs }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, ArgDoc }
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame, MiscFrameFunctions }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -37,7 +38,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 The entire row can be checked for duplication, or the search for duplicates
 can be limited to one or more columns.
 This modifies the current frame.""")
-class DropDuplicatesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, FrameEntity] {
+class DropDuplicatesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -62,7 +63,7 @@ class DropDuplicatesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, FrameE
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DropDuplicatesArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: DropDuplicatesArgs)(implicit invocation: Invocation): UnitReturn = {
     // validate arguments
     val frame: SparkFrame = arguments.frame
     val columnNames = arguments.unique_columns match {

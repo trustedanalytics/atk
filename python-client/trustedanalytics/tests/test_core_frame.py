@@ -68,8 +68,7 @@ class FrameConstruction(unittest.TestCase):
     def test_create(self, patched_be):
         connect()
         f = Frame()
-        self.assertEqual(0, f._id)
-        self.assertEqual(None, f._error_frame_id)
+        self.assertEqual(None, f.uri)
 
     def test_create_from_csv(self, patched_be):
         connect()
@@ -92,3 +91,7 @@ class FrameConstruction(unittest.TestCase):
         f1 = get_simple_frame_abcde()
         names = [c.name for c in f1]
         self.validate_column_names(f1, names)
+
+
+if __name__ == '__main__':
+    unittest.main()
