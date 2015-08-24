@@ -33,7 +33,7 @@ object TestingLdaOutputResults {
 
   val docResults = mutable.Map[String, Vector]()
   val wordResults = mutable.Map[String, Vector]()
-
+  val topicsGivenWord = mutable.Map[String, Vector]()
 }
 
 /**
@@ -52,6 +52,7 @@ class TestingLdaVertexOutputFormat extends VertexOutputFormat[LdaVertexId, LdaVe
         }
         else {
           TestingLdaOutputResults.wordResults += vertex.getId.getValue -> vertex.getValue.getLdaResult
+          TestingLdaOutputResults.topicsGivenWord += vertex.getId.getValue -> vertex.getValue.getTopicGivenWord
         }
       }
 

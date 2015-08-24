@@ -110,9 +110,10 @@ Default is 10.""") numTopics: Option[Int] = None) {
 
 }
 
-case class LdaTrainResult(docResults: FrameEntity, wordResults: FrameEntity, report: String) {
-  require(docResults != null, "document results are required")
-  require(wordResults != null, "word results are required")
+case class LdaTrainResult(topicGivenDoc: FrameEntity, wordGivenTopic: FrameEntity, topicGivenWord: FrameEntity, report: String) {
+  require(topicGivenDoc != null, "topic given document frame is required")
+  require(wordGivenTopic != null, "word given topic frame is required")
+  require(topicGivenWord != null, "topic given word frame is required")
   require(StringUtils.isNotBlank(report), "report is required")
 }
 
@@ -120,5 +121,5 @@ case class LdaTrainResult(docResults: FrameEntity, wordResults: FrameEntity, rep
 object LdaJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   implicit val ldaFormat = jsonFormat11(LdaTrainArgs)
-  implicit val ldaResultFormat = jsonFormat3(LdaTrainResult)
+  implicit val ldaResultFormat = jsonFormat4(LdaTrainResult)
 }

@@ -48,6 +48,7 @@ import org.trustedanalytics.atk.giraph.io.LdaVertexId;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -58,7 +59,7 @@ import java.util.Random;
  * Inference Algorithm for Latent Dirichlet Allocation, NIPS 19, 2007.
  */
 @Algorithm(
-    name = "CVB0 Latent Dirichlet Allocation"
+        name = "CVB0 Latent Dirichlet Allocation"
 )
 public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexData,
         LdaEdgeData, LdaMessage> {
@@ -67,27 +68,51 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
 
     private LdaConfig config = null;
 
-    /** This value gets changed on convergence */
+    /**
+     * This value gets changed on convergence
+     */
     private static final String CURRENT_MAX_SUPERSTEPS = "lda.maxSupersteps";
 
-    /** Aggregator name for number of document-vertices */
+    /**
+     * Aggregator name for number of document-vertices
+     */
     private static String SUM_DOC_VERTEX_COUNT = "num_doc_vertices";
-    /** Aggregator name for number of word-vertices */
+    /**
+     * Aggregator name for number of word-vertices
+     */
     private static String SUM_WORD_VERTEX_COUNT = "num_word_vertices";
-    /** Aggregator name for number of word occurrences */
+    /**
+     * Aggregator name for number of word occurrences
+     */
     private static String SUM_OCCURRENCE_COUNT = "num_occurrences";
-    /** Aggregator name for sum of word-vertex values, the nk in LDA */
+    /**
+     * Aggregator name for sum of word-vertex values, the nk in LDA
+     */
     private static String SUM_WORD_VERTEX_VALUE = "nk";
-    /** Aggregator name for max of delta at each super step */
+    /**
+     * Aggregator name for max of delta at each super step
+     */
     private static String SUM_COST = "sum_cost";
-    /** Aggregator name for max of delta at each super step */
+    /**
+     * Aggregator name for max of delta at each super step
+     */
     private static String MAX_DELTA = "max_delta";
-    /** Max delta value of previous super step for convergence monitoring */
+    /**
+     * Max delta value of previous super step for convergence monitoring
+     */
     private static String PREV_MAX_DELTA = "prev_max_delta";
+    /**
+     * Map of conditional probability of topics given word
+     */
+    private Map<String, DenseVector> topicWordMap = new HashMap<>();
 
-    /** Number of words in vocabulary */
+    /**
+     * Number of words in vocabulary
+     */
     private long numWords = 0;
-    /** Sum of word-vertex values */
+    /**
+     * Sum of word-vertex values
+     */
     private Vector nk = null;
 
 
@@ -103,7 +128,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
 
     @Override
     public void compute(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex,
-            Iterable<LdaMessage> messages) throws IOException {
+                        Iterable<LdaMessage> messages) throws IOException {
         long step = getSuperstep();
         if (step == 0) {
             initialize(vertex);
@@ -132,6 +157,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         } else {
             // normalize vertex value, i.e., theta and phi in LDA, for final output
             normalizeVertex(vertex);
+
+            // set conditional probability of topic given word
+            setTopicGivenWord(vertex);
         }
 
         vertex.voteToHalt();
@@ -159,7 +187,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             // generate the random seed for this edge
             Random rand2 = new Random(edge.getTargetVertexId().seed());
             long seed2 = rand2.nextInt();
-            long seed =  seed1 + seed2;
+            long seed = seed1 + seed2;
             Random rand = new Random(seed);
             double[] edgeValues = new double[config.numTopics()];
             for (int i = 0; i < config.numTopics(); i++) {
@@ -184,8 +212,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         // collect graph statistics
         if (vertex.getId().isDocument()) {
             aggregate(SUM_DOC_VERTEX_COUNT, new LongWritable(1));
-        }
-        else {
+        } else {
             aggregate(SUM_OCCURRENCE_COUNT, new DoubleWritable(sumWeights));
             aggregate(SUM_WORD_VERTEX_COUNT, new LongWritable(1));
         }
@@ -217,7 +244,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
      * Update edge value according to vertex and messages
      *
      * @param vertex of the graph
-     * @param map of type HashMap
+     * @param map    of type HashMap
      */
     private void updateEdge(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex, HashMap<LdaVertexId, Vector> map) {
         Vector vector = vertex.getValue().getLdaResult();
@@ -232,10 +259,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 if (vertex.getId().isDocument()) {
                     newGamma = vector.minus(gamma).plus(config.alpha()).times(otherVector.minus(gamma).plus(config.beta()))
                             .times(nk.minus(gamma).plus(numWords * config.beta()).assign(Functions.INV));
-                }
-                else {
+                } else {
                     newGamma = vector.minus(gamma).plus(config.beta()).times(otherVector.minus(gamma).plus(config.alpha()))
-                        .times(nk.minus(gamma).plus(numWords * config.beta()).assign(Functions.INV));
+                            .times(nk.minus(gamma).plus(numWords * config.beta()).assign(Functions.INV));
                 }
                 newGamma = newGamma.normalize(1d);
                 double delta = gamma.minus(newGamma).norm(1d) / config.numTopics();
@@ -246,7 +272,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 edge.getValue().setVector(newGamma);
             } else {
                 // this happens when you don't have your Vertex Id's being setup correctly
-                throw new IllegalArgumentException(String.format("Vertex ID %s: A message is mis-matched.",vertex.getId()));
+                throw new IllegalArgumentException(String.format("Vertex ID %s: A message is mis-matched.", vertex.getId()));
             }
         }
         aggregate(MAX_DELTA, new DoubleWritable(maxDelta));
@@ -261,8 +287,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         Vector vector = vertex.getValue().getLdaResult();
         if (vertex.getId().isDocument()) {
             vector = vector.plus(config.alpha()).normalize(1d);
-        }
-        else {
+        } else {
             vector = vector.plus(config.beta()).times(nk.plus(numWords * config.beta()).assign(Functions.INV));
         }
         // update vertex value
@@ -272,12 +297,12 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     /**
      * Evaluate cost according to vertex and messages
      *
-     * @param vertex of the graph
+     * @param vertex   of the graph
      * @param messages of type iterable
-     * @param map of type HashMap
+     * @param map      of type HashMap
      */
     private void evaluateCost(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex,
-        Iterable<LdaMessage> messages, HashMap<LdaVertexId, Vector> map) {
+                              Iterable<LdaMessage> messages, HashMap<LdaVertexId, Vector> map) {
 
         if (vertex.getId().isDocument()) {
             return;
@@ -295,10 +320,38 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 cost -= weight * Math.log(vector.dot(otherVector));
             } else {
                 throw new IllegalArgumentException(String.format("Vertex ID %s: A message is mis-matched",
-                                vertex.getId().getValue()));
+                        vertex.getId().getValue()));
             }
         }
         aggregate(SUM_COST, new DoubleWritable(cost));
+    }
+
+    /**
+     * Compute the conditional probability of topics given word
+     *
+     * Each element of the vector contains the conditional probability of topic k given word
+     * @param vertex of the graph
+     */
+    private void setTopicGivenWord(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex) {
+        if (vertex.getId().isDocument()) {
+            return;
+        }
+
+        double wordCount = 0;
+        Vector topicsGivenWord = new DenseVector(new double[config.numTopics()]);
+
+        for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
+            double weight = edge.getValue().getWordCount();
+            Vector gamma = edge.getValue().getVector();
+            topicsGivenWord = topicsGivenWord.plus(gamma).times(weight);
+            wordCount += weight;
+        }
+
+        if (wordCount > 0) {
+            topicsGivenWord.divide(wordCount);
+        }
+
+        vertex.getValue().setTopicGivenWord(topicsGivenWord);
     }
 
     /**
@@ -352,14 +405,22 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
      * aggregator values to disk, by use of the Writable interface.
      */
     public static class CVB0LDAAggregatorWriter implements AggregatorWriter {
-        /** Name of the file we wrote to */
+        /**
+         * Name of the file we wrote to
+         */
         private static String FILENAME;
-        /** Saved output stream to write to */
+        /**
+         * Saved output stream to write to
+         */
         private FSDataOutputStream output;
-        /** Last superstep number */
+        /**
+         * Last superstep number
+         */
         private long lastStep = -1L;
 
-        /** Configuration */
+        /**
+         * Configuration
+         */
         private ImmutableClassesGiraphConfiguration conf;
 
         @Override
@@ -401,7 +462,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
 
         @Override
         public void writeAggregator(Iterable<Entry<String, Writable>> aggregatorMap, long superstep)
-            throws IOException {
+                throws IOException {
             long realStep = lastStep;
             // collect aggregator data
             HashMap<String, String> map = new HashMap<String, String>();
@@ -417,9 +478,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 long numWordVertices = Long.parseLong(map.get(SUM_WORD_VERTEX_COUNT));
                 output.writeBytes("======Graph Statistics======\n");
                 output.writeBytes(String.format("Number of vertices: %d (doc: %d, word: %d)%n",
-                    numDocVertices + numWordVertices, numDocVertices, numWordVertices));
+                        numDocVertices + numWordVertices, numDocVertices, numWordVertices));
                 output.writeBytes(String.format("Number of edges: %d%n",
-                    GiraphStats.getInstance().getEdges().getValue()));
+                        GiraphStats.getInstance().getEdges().getValue()));
                 output.writeBytes("\n");
                 // output LDA configuration
                 output.writeBytes("======LDA Configuration======\n");

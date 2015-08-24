@@ -70,7 +70,7 @@ class CVBOLDAComputationTest extends WordSpec {
       conf.setVertexOutputFormatClass(classOf[TestingLdaVertexOutputFormat])
 
       val ldaInputConfig = new LdaInputFormatConfig("dummy-input-location", new FrameSchema())
-      val ldaOutputConfig = new LdaOutputFormatConfig("dummy-doc-results", "dummy-word-results")
+      val ldaOutputConfig = new LdaOutputFormatConfig("dummy-doc-results", "dummy-word-results", "dummy-topic-results")
 
       val numTopics = 2
       val ldaArgs = new LdaTrainArgs(new ModelReference(1), new FrameReference(2), "dummy_doc", "dummy_word", "dummy_word_count",
@@ -85,6 +85,7 @@ class CVBOLDAComputationTest extends WordSpec {
       // validate results that were stored into a global
       val docResults = TestingLdaOutputResults.docResults
       val wordResults = TestingLdaOutputResults.wordResults
+      val topicsGivenWord = TestingLdaOutputResults.topicsGivenWord
 
       // validate correct number of results
       assert(docResults.size == 3)

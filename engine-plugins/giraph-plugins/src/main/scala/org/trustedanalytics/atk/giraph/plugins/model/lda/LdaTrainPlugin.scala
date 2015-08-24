@@ -35,10 +35,12 @@ import LdaJsonFormat._
   extended = """See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__""",
   returns = """dict
     The data returned is composed of multiple components:
-doc_results : Frame
-    Frame with LDA results.
-word_results : Frame
-    Frame with LDA results.
+topic_given_doc : Frame
+    Frame with conditional probabilities of topic given document.
+word_given_topic : Frame
+    Frame with conditional probabilities of word given topic.
+topic_given_word : Frame
+    Frame with conditional probabilities of topic given word.
 report : str
    The configuration and learning curve report for Latent Dirichlet
    Allocation as a multiple line str.""")
@@ -73,9 +75,14 @@ class LdaTrainPlugin
 
     val docOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA doc results")))
     val wordOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA word results")))
+    val topicOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA topics given word results")))
 
     val inputFormatConfig = new LdaInputFormatConfig(frame.getStorageLocation, frame.schema)
-    val outputFormatConfig = new LdaOutputFormatConfig(docOut.getStorageLocation, wordOut.getStorageLocation)
+    val outputFormatConfig = new LdaOutputFormatConfig(
+      docOut.getStorageLocation,
+      wordOut.getStorageLocation,
+      topicOut.getStorageLocation
+    )
     val ldaConfig = new LdaConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setLdaConfig(ldaConfig)
@@ -94,13 +101,18 @@ class LdaTrainPlugin
       invocation,
       "lda-learning-report_0")
 
-    val resultsColumn = Column("lda_results", DataTypes.vector(arguments.getNumTopics))
+    val resultsColumn = Column("topic_probabilities", DataTypes.vector(arguments.getNumTopics))
 
     // After saving update timestamps, status, row count, etc.
     frames.postSave(None, docOut.toReference, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
     frames.postSave(None, wordOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    frames.postSave(None, topicOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
-    LdaTrainResult(frames.expectFrame(docOut.toReference), frames.expectFrame(wordOut.toReference), report)
+    LdaTrainResult(
+      frames.expectFrame(docOut.toReference),
+      frames.expectFrame(wordOut.toReference),
+      frames.expectFrame(topicOut.toReference),
+      report)
   }
 
 }

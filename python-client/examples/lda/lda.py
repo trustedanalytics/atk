@@ -36,22 +36,24 @@ results = model.train(frame,
             max_iterations = 3,
             num_topics = 2)
 
-doc_results = results['doc_results']
-word_results = results['word_results']
+doc_results = results['topic_given_doc']
+word_results = results['word_given_topic']
+topic_results = results['topic_given_word']
 report = results['report']
 
 doc_results.inspect()
 word_results.inspect()
+topic_results.inspect()
 print report
 
 print("compute lda score")
-doc_results.rename_columns({'lda_results' : 'lda_results_doc'})
-word_results.rename_columns({'lda_results' : 'lda_results_word'})
+doc_results.rename_columns({'topic_probabilities' : 'lda_topic_given_doc'})
+word_results.rename_columns({'topic_probabilities' : 'lda_word_given_topic'})
 
 frame= frame.join(doc_results, left_on="doc_id", right_on="doc_id", how="left")
 frame= frame.join(word_results, left_on="word_id", right_on="word_id", how="left")
 
-frame.dot_product(['lda_results_doc'], ['lda_results_word'], 'lda_score')
+frame.dot_product(['lda_topic_given_doc'], ['lda_word_given_topic'], 'lda_score')
 frame.inspect()
 
 print("compute histogram of scores")
