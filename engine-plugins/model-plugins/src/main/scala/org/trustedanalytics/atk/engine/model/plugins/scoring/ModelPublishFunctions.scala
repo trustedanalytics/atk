@@ -45,66 +45,79 @@ object ModelPublish {
 
   def createTarForScoringEngine(modelData: String, scoringModelJar: String, modelClassName: String): String = {
 
-    val modelDatafile = new File("/tmp/modelbytes")
-    // if file doesnt exists, then create it
-    if (!modelDatafile.exists()) {
-      modelDatafile.createNewFile()
+    var tarOut: OutputStream = null
+    var bOut: BufferedOutputStream = null
+    var tOut: TarArchiveOutputStream = null
+
+    try {
+      val modelDatafile = new File("/tmp/modelbytes")
+      // if file doesnt exists, then create it
+      if (!modelDatafile.exists()) {
+        modelDatafile.createNewFile()
+      }
+      val writer: PrintWriter = new PrintWriter(modelDatafile)
+      writer.print(modelData)
+      writer.close()
+
+      val modelClassNamefile = new File("/tmp/" + "modelname.txt")
+      // if file doesnt exists, then create it
+      if (!modelClassNamefile.exists()) {
+        modelDatafile.createNewFile()
+      }
+      val classWriter: PrintWriter = new PrintWriter(modelClassNamefile)
+      classWriter.print(modelClassName)
+      classWriter.close()
+
+      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
+
+      val tarTempPath = "/tmp/scoring.tar"
+      val tarTempFile = new File(tarTempPath)
+      if (tarTempFile.exists()) {
+        tarTempFile.delete()
+      }
+      tarTempFile.createNewFile()
+
+      tarOut = new FileOutputStream(tarTempFile)
+      bOut = new BufferedOutputStream(tarOut)
+      tOut = new TarArchiveOutputStream(bOut)
+
+      var entryName = modelDatafile.getName
+      var tarEntry: TarArchiveEntry = new TarArchiveEntry(modelDatafile, entryName)
+      tOut.putArchiveEntry(tarEntry)
+      IOUtils.copy(new FileInputStream(modelDatafile), tOut)
+      tOut.closeArchiveEntry()
+
+      entryName = modelClassNamefile.getName
+      tarEntry = new TarArchiveEntry(modelClassNamefile, entryName)
+      tOut.putArchiveEntry(tarEntry)
+      IOUtils.copy(new FileInputStream(modelClassNamefile), tOut)
+      tOut.closeArchiveEntry()
+
+      entryName = jarFile.getName
+      tarEntry = new TarArchiveEntry(jarFile, entryName)
+      tOut.putArchiveEntry(tarEntry)
+      IOUtils.copy(new FileInputStream(jarFile), tOut)
+      tOut.closeArchiveEntry()
+
+      val localPath = new Path(tarTempPath)
+      val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+      val tarFileName = fileStorage.absolutePath("models_" + UUID.randomUUID().toString.replaceAll("-", "") + ".tar").toString
+      val hdfsPath = new Path(tarFileName)
+      val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())
+      hdfsFileSystem.copyFromLocalFile(false, true, localPath, hdfsPath)
+      tarFileName
     }
-    val writer: PrintWriter = new PrintWriter(modelDatafile)
-    writer.print(modelData)
-    writer.close()
+    finally {
 
-    val modelClassNamefile = new File("/tmp/" + "modelname.txt")
-    // if file doesnt exists, then create it
-    if (!modelClassNamefile.exists()) {
-      modelDatafile.createNewFile()
+      try {
+        tOut.finish()
+        IOUtils.closeQuietly(tOut)
+        IOUtils.closeQuietly(bOut)
+        IOUtils.closeQuietly(tarOut)
+      }
+      catch {
+        case e: Exception => {}
+      }
     }
-    val classWriter: PrintWriter = new PrintWriter(modelClassNamefile)
-    classWriter.print(modelClassName)
-    classWriter.close()
-
-    val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
-
-    val tarTempPath = "/tmp/scoring.tar"
-    val tarTempFile = new File(tarTempPath)
-    if (tarTempFile.exists()) {
-      tarTempFile.delete()
-    }
-    tarTempFile.createNewFile()
-
-    val tarOut: OutputStream = new FileOutputStream(tarTempFile)
-    val bOut = new BufferedOutputStream(tarOut)
-    val tOut = new TarArchiveOutputStream(bOut)
-
-    var entryName = modelDatafile.getName
-    var tarEntry: TarArchiveEntry = new TarArchiveEntry(modelDatafile, entryName)
-    tOut.putArchiveEntry(tarEntry)
-    IOUtils.copy(new FileInputStream(modelDatafile), tOut)
-    tOut.closeArchiveEntry()
-
-    entryName = modelClassNamefile.getName
-    tarEntry = new TarArchiveEntry(modelClassNamefile, entryName)
-    tOut.putArchiveEntry(tarEntry)
-    IOUtils.copy(new FileInputStream(modelClassNamefile), tOut)
-    tOut.closeArchiveEntry()
-
-    entryName = jarFile.getName
-    tarEntry = new TarArchiveEntry(jarFile, entryName)
-    tOut.putArchiveEntry(tarEntry)
-    IOUtils.copy(new FileInputStream(jarFile), tOut)
-    tOut.closeArchiveEntry()
-
-    tOut.finish()
-    tOut.close()
-    bOut.close()
-    tarOut.close()
-
-    val localPath = new Path(tarTempPath)
-    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
-    val tarFileName = fileStorage.absolutePath("models_" + UUID.randomUUID().toString().replaceAll("-", "") + ".tar").toString
-    val hdfsPath = new Path(tarFileName)
-    val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())
-    hdfsFileSystem.copyFromLocalFile(false, true, localPath, hdfsPath)
-    tarFileName
   }
 }
