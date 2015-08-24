@@ -31,8 +31,7 @@ import spray.json._
 /**
  * Variables for executing triangle count.
  */
-case class TriangleCountArgs(@ArgDoc("""Reference to the graph object on which
-to compute triangle count.""") graph: GraphReference,
+case class TriangleCountArgs(graph: GraphReference,
                              @ArgDoc("""The name of output property to be
 added to vertex/edge upon completion.""") output_property: String,
                              @ArgDoc("""The name of edge labels to be considered for triangle count.
@@ -57,12 +56,13 @@ import TriangleCountJsonFormat._
 
 @PluginDoc(oneLine = "Number of triangles among vertices of current graph.",
   extended = """** Experimental Feature **
-Triangle Count.
+
 Counts the number of triangles among vertices in an undirected graph.
 If an edge is marked bidirectional, the implementation opts for canonical
 orientation of edges hence counting it only once (similar to an
 undirected graph).""",
   returns = """dict(label, Frame).
+
 Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a triangle_count column.
 Call dictionary_name['label'] to get the handle to frame whose vertex

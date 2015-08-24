@@ -32,11 +32,12 @@ import spray.json._
 case class BeliefPropagationArgs(graph: GraphReference,
                                  @ArgDoc("""Name of the vertex property which contains the prior belief
 for the vertex.""") priorProperty: String,
-                                 @ArgDoc("""Name of the vertex property which will contain the posterior
- belief for each vertex.""") posteriorProperty: String,
+                                 @ArgDoc("""Name of the vertex property which
+will contain the posterior belief for each
+vertex.""") posteriorProperty: String,
                                  @ArgDoc("""Name of the edge property that contains the edge weight for each edge.""") edgeWeightProperty: Option[String] = None,
-                                 @ArgDoc("""Minimum average change in posterior beliefs between supersteps.
-Belief propagation will terminate when the average change in posterior beliefs between supersteps is
+                                 @ArgDoc("""Belief propagation will terminate
+when the average change in posterior beliefs between supersteps is
 less than or equal to this threshold.""") convergenceThreshold: Option[Double] = None,
                                  @ArgDoc("""The maximum number of supersteps that the algorithm will execute.
 The valid range is all positive int.""") maxIterations: Option[Int] = None)

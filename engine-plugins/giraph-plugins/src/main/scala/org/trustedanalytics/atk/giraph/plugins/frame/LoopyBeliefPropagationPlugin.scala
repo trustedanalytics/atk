@@ -36,22 +36,15 @@ was found that the |BP| algorithm can be used in general graphs.
 The algorithm is then sometimes called "Loopy" Belief Propagation (LBP),
 because graphs typically contain cycles, or loops.
 
-In Giraph, the algorithm runs in iterations until it converges.
-
 **Loopy Belief Propagation (LBP)**
 
 Loopy Belief Propagation (LBP) is a message passing algorithm for inferring
-state probabilities, given a graph and a set of noisy initial estimates of
-state probabilities.
-|PACKAGE| provides two implementations of |LBP|, which differ in their
-assumptions about the joint distribution of the data.
-The standard LBP implementation assumes that the joint distribution of the
-data is given by a Boltzmann distribution, while Gaussian |LBP|
-assumes that the data is continuous and distributed according to a multivariate
-normal distribution.
+state probabilities, given a graph and a set of noisy initial estimates.
+The |LBP| implementation assumes that the joint distribution of the
+data is given by a Boltzmann distribution.
+
 For more information about |LBP|, see: "K. Murphy, Y. Weiss, and M. Jordan,
-Loopy-belief Propagation for Approximate Inference:
-An Empirical Study, UAI 1999."
+Loopy-belief Propagation for Approximate Inference: An Empirical Study, UAI 1999."
 
 |LBP| has a wide range of applications in structured prediction, such as
 low-level vision and influence spread in social networks, where we have prior
