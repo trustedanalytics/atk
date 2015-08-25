@@ -562,6 +562,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val hBaseArgsSchemaFormat: RootJsonFormat[HBaseSchemaArgs] = jsonFormat3(HBaseSchemaArgs)
   implicit val hBaseArgsFormat: RootJsonFormat[HBaseArgs] = jsonFormat5(HBaseArgs)
-  implicit val jdbcArgsFormat: RootJsonFormat[JdbcArgs] = jsonFormat6(JdbcArgs)
+  implicit val jdbcArgsFormat: RootJsonFormat[JdbcArgs] = jsonFormat5(JdbcArgs)
 
 }

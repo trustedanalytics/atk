@@ -22,24 +22,18 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
  * Jdbc argument class
- * @param destination destination frame reference (empty frame supported)
- * @param driverType mysql, sqlserver
- * @param driverName driver name for the associated driver type
- * @param serverNameAndPort server name & (optional) port
- * @param databaseName database name
- * @param initialQuery initial sql query for data filtering
+ * @param destination destination frame
+ * @param tableName a non empty list of csv separated table names
+ * @param url connection url*
+ * @param driverName optional driver name
+ * @param query optional initial query
  */
 case class JdbcArgs(
-    @ArgDoc("""DataFrame to load data into.
-Should be either a uri or id.""") destination: FrameReference,
-    @ArgDoc("""jdbc driver type (mysql, postgresql, sqlserver)""") driverType: String,
-    @ArgDoc("""fully qualified jdbc driver name for the supported type""") driverName: String,
-    @ArgDoc("""jdbc server name and (optional) port""") serverNameAndPort: String,
-    @ArgDoc("""jdbc database name""") databaseName: String,
-    @ArgDoc("""optional query for filtering""") initialQuery: Option[String] = None) {
+    @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
+    @ArgDoc("""table name""") tableName: String,
+    @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
+    @ArgDoc("""(optional) driver name""") driverName: Option[String],
+    @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {
 
-  require(StringUtils.isNotEmpty(driverType), "driver type is required")
-  require(StringUtils.isNotEmpty(driverName), "driver name is required")
-  require(StringUtils.isNotEmpty(serverNameAndPort), "server name is required")
-  require(StringUtils.isNotEmpty(databaseName), "server name is required")
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
 }
