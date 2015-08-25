@@ -28,6 +28,7 @@ import org.apache.spark.sql.{ types => SparkType, Row, SchemaRDD }
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.apache.hadoop.io.Text
 import SparkType.{ DateType, StructField, TimestampType, ByteType, BooleanType, ShortType, DecimalType }
+import org.trustedanalytics.atk.engine.plugin.Invocation
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
@@ -102,6 +103,16 @@ object LoadRddFunctions extends Serializable {
 
     // re-parse the entire file
     parse(dataContentRDD, parser)
+  }
+
+  /**
+   * Union the additionalData onto the end of the existingFrame
+   * @param existingFrame the target DataFrame that may or may not already have data
+   * @param additionalData the data to add to the existingFrame
+   * @return the frame with updated schema
+   */
+  def unionAndSave(existingFrame: SparkFrame, additionalData: FrameRdd)(implicit invocation: Invocation): SparkFrame = {
+    existingFrame.save(existingFrame.rdd.union(additionalData))
   }
 
   /**
