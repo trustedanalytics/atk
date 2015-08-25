@@ -25,24 +25,27 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
                                            @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                            @ArgDoc("""Column name containing the label for each observation.""") labelColumn: String,
                                            @ArgDoc("""Column(s) containing the observations.""") observationColumns: List[String],
-                                           @ArgDoc("""Number of classes for classification""") numClasses: Option[Int] = None,
+                                           @ArgDoc("""Number of classes for classification""") numClasses: Int = 2,
+                                           @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
+                                           @ArgDoc("""Criterion used for information gain calculation. Supported values "gini" or "entropy"""") impurity: String = "gini",
+                                           @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
+                                           @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
+                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
                                            @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                           @ArgDoc("""Number of tress in the random forest""") numTrees: Option[Int] = None,
-                                           @ArgDoc("""Number of features to consider for splits at each node""") featureSubsetCategory: Option[String] = None,
-                                           @ArgDoc("""Criterion used for information gain calculation""") impurity: Option[String] = None,
-                                           @ArgDoc("""Maxium depth of the tree""") maxDepth: Option[Int] = None,
-                                           @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Option[Int] = None,
-                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Option[Int] = None) {
+                                           @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird"""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(numTrees > 0, "numTrees must be greater than 0")
+  require(maxDepth >= 0, "maxDepth must be non negative")
+  require(numClasses >= 2, "numClasses must be at least 2")
 
   def getFeatureSubsetCategory: String = {
     var value = "all"
     value = featureSubsetCategory.getOrElse("all") match {
       case "auto" => {
-        numTrees.getOrElse(1) match {
+        numTrees match {
           case 1 => "all"
           case _ => "sqrt"
         }
@@ -57,31 +60,4 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
     categoricalFeaturesInfo.getOrElse(Map[Int, Int]())
   }
 
-  def getNumTrees: Int = {
-    numTrees.getOrElse(1)
-
-  }
-
-  def getNumClasses: Int = {
-    numClasses.getOrElse(2)
-
-  }
-
-  def getImpurity: String = {
-    impurity.getOrElse("gini")
-
-  }
-
-  def getMaxDepth: Int = {
-    maxDepth.getOrElse(4)
-
-  }
-
-  def getMaxBins: Int = {
-    maxBins.getOrElse(100)
-  }
-
-  def getSeed: Int = {
-    seed.getOrElse(scala.util.Random.nextInt())
-  }
 }

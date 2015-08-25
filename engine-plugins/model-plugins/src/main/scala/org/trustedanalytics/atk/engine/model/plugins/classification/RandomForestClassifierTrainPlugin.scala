@@ -89,13 +89,13 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
 
     //create RDD from the frame
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
-    val randomForestModel = RandomForest.trainClassifier(labeledTrainRdd, arguments.getNumClasses, arguments.getCategoricalFeaturesInfo, arguments.getNumTrees,
-      arguments.getFeatureSubsetCategory, arguments.getImpurity, arguments.getMaxDepth, arguments.getMaxBins, arguments.getSeed)
-    val jsonModel = new RandomForestClassifierData(randomForestModel, arguments.observationColumns, arguments.getNumClasses)
+    val randomForestModel = RandomForest.trainClassifier(labeledTrainRdd, arguments.numClasses, arguments.getCategoricalFeaturesInfo, arguments.numTrees,
+      arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
+    val jsonModel = new RandomForestClassifierData(randomForestModel, arguments.observationColumns, arguments.numClasses)
 
     model.data = jsonModel.toJson.asJsObject
-    new RandomForestClassifierTrainReturn(arguments.observationColumns, arguments.labelColumn, arguments.getNumClasses,
-      randomForestModel.numTrees, randomForestModel.totalNumNodes, arguments.getFeatureSubsetCategory, arguments.getImpurity,
-      arguments.getMaxDepth, arguments.getMaxBins, arguments.getSeed)
+    new RandomForestClassifierTrainReturn(arguments.observationColumns, arguments.labelColumn, arguments.numClasses,
+      randomForestModel.numTrees, randomForestModel.totalNumNodes, arguments.getFeatureSubsetCategory, arguments.impurity,
+      arguments.maxDepth, arguments.maxBins, arguments.seed)
   }
 }

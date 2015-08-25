@@ -42,57 +42,36 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
                                           @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
-                                          @ArgDoc("""Arity of categorical features.
-Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                          @ArgDoc("""Number of tress in the random forest""") numTrees: Option[Int] = None,
-                                          @ArgDoc("""Number of features to consider for splits at each node""") featureSubsetCategory: Option[String] = None,
-                                          @ArgDoc("""Criterion used for information gain calculation""") impurity: Option[String] = None,
-                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Option[Int] = None,
-                                          @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Option[Int] = None,
-                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Option[Int] = None) {
+                                          @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
+                                          @ArgDoc("""Criterion used for information gain calculation. Supported values "variance"""") impurity: String = "variance",
+                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
+                                          @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
+                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
+                                          @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
+                                          @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird"""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(numTrees > 0, "numTrees must be greater than 0")
+  require(maxDepth >= 0, "maxDepth must be non negative")
 
   def getCategoricalFeaturesInfo: Map[Int, Int] = {
     categoricalFeaturesInfo.getOrElse(Map[Int, Int]())
-  }
-
-  //TODO: Verify default value
-  def getNumTrees: Int = {
-    numTrees.getOrElse(1)
   }
 
   def getFeatureSubsetCategory: String = {
     var value = "all"
     value = featureSubsetCategory.getOrElse("all") match {
       case "auto" => {
-        numTrees.getOrElse(1) match {
+        numTrees match {
           case 1 => "all"
           case _ => "onethird"
         }
       }
       case _ => featureSubsetCategory.getOrElse("all")
-
     }
     value
-  }
-
-  def getImpurity: String = {
-    impurity.getOrElse("variance")
-  }
-
-  def getMaxDepth: Int = {
-    maxDepth.getOrElse(4)
-  }
-
-  def getMaxBins: Int = {
-    maxBins.getOrElse(100)
-  }
-
-  def getSeed: Int = {
-    maxBins.getOrElse(scala.util.Random.nextInt())
   }
 }
 
@@ -142,12 +121,12 @@ class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRe
 
     //create RDD from the frame
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
-    val randomForestModel = RandomForest.trainRegressor(labeledTrainRdd, arguments.getCategoricalFeaturesInfo, arguments.getNumTrees,
-      arguments.getFeatureSubsetCategory, arguments.getImpurity, arguments.getMaxDepth, arguments.getMaxBins, arguments.getSeed)
+    val randomForestModel = RandomForest.trainRegressor(labeledTrainRdd, arguments.getCategoricalFeaturesInfo, arguments.numTrees,
+      arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
     val jsonModel = new RandomForestRegressorData(randomForestModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
     new RandomForestRegressorTrainReturn(arguments.observationColumns, arguments.labelColumn, randomForestModel.numTrees, randomForestModel.totalNumNodes,
-      arguments.getFeatureSubsetCategory, arguments.getImpurity, arguments.getMaxDepth, arguments.getMaxBins, arguments.getSeed)
+      arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
   }
 }
