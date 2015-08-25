@@ -116,6 +116,13 @@ trustedanalytics.atk {
       # to increase Spark driver memory, edit java options (IA_JVM_OPT) in /etc/default/trustedanalytics-rest-server
       broadcast-join-threshold = "512MB"
     }
+    #metric collection configuration
+    metric {
+      #how often to run metric collection in seconds
+      //tick = "60s"
+      #auto start metric collection when rest server it started
+      //auto-start = false
+    }
   }
 
   # Configuration for the Trusted Analytics REST server
@@ -309,3 +316,57 @@ trustedanalytics.atk {
     }
   }
 }
+
+#kamon config
+kamon {
+  internal-config {
+    akka {
+      loglevel = INFO
+    }
+  }
+  metrics {
+    filters = [
+      {
+        # actors we should be monitored
+        actor {
+          includes = [ "**" ] # a list of what should be included
+          excludes = [ ]      # a list of what should be excluded
+        }
+      },
+      # not sure about this yet. Looks important
+      {
+        trace {
+          includes = [ "**" ]
+          excludes = []
+        }
+      }
+    ]
+  }
+
+  statsd {
+    hostname = "127.0.0.1"
+    port = "9000"
+    simple-metric-key-generator{
+      application = "atk"
+    }
+    #flush-interval = 1 second
+    subscriptions {
+      actor           = [ "**" ]
+      dispatcher      = [ "**" ]
+      histogram       = [ "**" ]
+      min-max-counter = [ "**" ]
+      gauge           = [ "**" ]
+      counter         = [ "**" ]
+      trace           = [ "**" ]
+      trace-segment   = [ "**" ]
+      akka-actor      = [ "**" ]
+      akka-dispatcher = [ "**" ]
+      akka-router     = [ "**" ]
+      system-metric   = [ "**" ]
+      http-server     = [ "**" ]
+      spray           = [ "**" ]
+    }
+  }
+}
+
+

@@ -10,7 +10,7 @@
 #/opt/cloudera/parcels/CDH will be a symlink to your current cloudera version
 export SPARK_HOME="/opt/cloudera/parcels/CDH/lib/spark"
 
-export T_JVM_OPT="-XX:MaxPermSize=384m"
+export T_JVM_OPT="-XX:MaxPermSize=384m -javaagent:/etc/trustedanalytics/rest-server/aspectjweaver-1.8.6.jar "
 
 #the user that the trusted analytics rest server will run under. If you change the user make sure the new user has
 #access to the fs.root location in /etc/trustedanalytics/rest-server/application.conf

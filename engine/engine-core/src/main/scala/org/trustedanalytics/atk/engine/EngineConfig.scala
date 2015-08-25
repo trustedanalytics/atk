@@ -344,4 +344,6 @@ trait EngineConfig extends EventLogging {
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None
   val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.keytab-file")) else None
 
+  val metricTick = config.getDuration("trustedanalytics.atk.engine.metric.tick", TimeUnit.SECONDS)
+  val metricStart: Boolean = config.getBoolean("trustedanalytics.atk.engine.metric.auto-start")
 }

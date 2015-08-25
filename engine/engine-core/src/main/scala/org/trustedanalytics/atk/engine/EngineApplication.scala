@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.engine
 import org.trustedanalytics.atk.component.{ ArchiveDefinition, ClassLoaderAware, Archive }
 import com.typesafe.config.Config
 
+import kamon.Kamon
 import scala.reflect.ClassTag
 import scala.util.control.NonFatal
 import org.trustedanalytics.atk.event.EventLogging
@@ -45,11 +46,13 @@ class EngineApplication(archiveDefinition: ArchiveDefinition, classLoader: Class
 
   override def stop() = {
     info("Shutting down engine")
+    Kamon.shutdown()
     engine.engine.shutdown()
   }
 
   override def start() = {
     try {
+      Kamon.start()
       engine = new EngineComponent
     }
     catch {

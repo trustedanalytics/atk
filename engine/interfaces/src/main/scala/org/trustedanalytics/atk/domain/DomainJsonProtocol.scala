@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.domain
 import java.net.URI
 import java.util
 
+import org.trustedanalytics.atk.domain.metrics.MetricCollectionArgs
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, CommandDefinition }
 import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf }
@@ -559,6 +560,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val binColumnResultFormat = jsonFormat2(BinColumnResults)
 
   implicit val garbageCollectionArgsFormat = jsonFormat2(GarbageCollectionArgs)
+
+  implicit val metricCollectionArgsFormat = jsonFormat1(MetricCollectionArgs)
 
   implicit val hBaseArgsSchemaFormat: RootJsonFormat[HBaseSchemaArgs] = jsonFormat3(HBaseSchemaArgs)
   implicit val hBaseArgsFormat: RootJsonFormat[HBaseArgs] = jsonFormat5(HBaseArgs)

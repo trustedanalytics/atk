@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.engine.command._
 import org.trustedanalytics.atk.engine.gc.GarbageCollector
+import org.trustedanalytics.atk.engine.metrics.MetricCollection
 import org.trustedanalytics.atk.engine.util.{ EnvironmentLogger, JvmVersionReporter }
 
 /**
@@ -29,4 +30,5 @@ class EngineComponent extends AbstractEngineComponent {
   JvmVersionReporter.check()
   metaStore.initializeSchema()
   GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+  MetricCollection.startup(metaStore)
 }
