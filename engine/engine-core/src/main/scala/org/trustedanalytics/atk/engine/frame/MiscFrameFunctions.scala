@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.catalyst.expressions.{GenericMutableRow, GenericRow}
+import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.apache.spark.sql.Row
 import org.apache.spark.rdd.RDD
