@@ -197,7 +197,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     val frameEntity = expectFrame(frame)
     val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), getNextRevFolderName(frameEntity))
     // delete incomplete data on disk if it exists
-    frameFileStorage.delete(targetPath)
+    frameFileStorage.deletePath(targetPath)
     val storageFormat = forceStorageFormat.getOrElse(frameEntity.storageFormat.getOrElse(defaultStorageFormat))
     info(s"Preparing to save frame ${frame.id} (name: ${frameEntity.name}) to $targetPath as $storageFormat")
     SaveInfo(targetPath = targetPath.toString, victimPath = frameEntity.storageLocation, storageFormat = storageFormat)
@@ -235,7 +235,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
           metaStore.frameRepo.update(withCount)
 
           if (saveInfo.victimPath.isDefined) {
-            frameFileStorage.delete(new Path(saveInfo.victimPath.get))
+            frameFileStorage.deletePath(new Path(saveInfo.victimPath.get))
           }
         }
     }
