@@ -574,7 +574,7 @@ function rename_folders() {
     BuildDirectory="$ScriptPath/build/$1"
     pushd $BuildDirectory > /dev/null
     LongNames=$(find -name "_*"|sort -r)
-    echo $LongNames=LongNames
+
     ShortNames=""
     for Name in $LongNames; do
         TestName=$(basename $Name)
@@ -583,12 +583,12 @@ function rename_folders() {
             ShortNames="$ShortNames $TestName"
         fi
     done
-    echo $ShortNames=Shortnames
+
     WorkingFile=$(date +%Y%m%d%H%M%N.tmp)
     for Name in $ShortNames; do
-        echo Searching for files which refer to $Name
+
         ChangeFiles=$(grep -rl --exclude=*.png --exclude=*.pdf $Name ./)
-        echo $ChangeFiles=ChangeFiles
+
         for ChangeFile in $ChangeFiles; do
             mv $ChangeFile $WorkingFile
             sed "s/$Name/$UnderbarFolderPrefix\0/g" < $WorkingFile > $ChangeFile
@@ -646,7 +646,7 @@ function server_start() {
         echo -n "Start server"
         RunCommand="Start server (nohup bin/rest-server.sh)"
         log_step "$RunCommand" "No" $4
-        nohup bin/rest-server.sh < /dev/null > $3 2>&1 &
+        nohup bin/rest-server.sh < /dev/null > /dev/null 2>&1 &
         Return=$?
         popd > /dev/null
         if [ "$Return" != "0" ]; then
