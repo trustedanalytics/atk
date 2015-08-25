@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Notes
 -----
 This method applies only to columns containing numerical data.""",
-  returns = "CorrelationFunctions of the two columns.")
+  returns = "Pearson correlation coefficient of the two columns.")
 class CorrelationPlugin extends SparkCommandPlugin[CorrelationArgs, DoubleValue] {
 
   /**
