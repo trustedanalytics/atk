@@ -116,7 +116,7 @@ object ModelPublish {
         IOUtils.closeQuietly(tarOut)
       }
       catch {
-        case e: Exception => {}
+        case e: Exception =>
       }
     }
   }
