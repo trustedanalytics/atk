@@ -66,10 +66,10 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
     val schema = dataFrame.dtypes.toList
 
     val jdbcSchema = new FrameSchema(schema.map {
-      case (columnName, columnType) => Column(columnName, LoadJdbcImpl.dbToDataType(columnType))
+      case (columnName, columnType) => Column(columnName, LoadJdbcImpl.sparkDataTypeToSchemaDataType(columnType))
     })
 
-    LoadRddFunctions.unionAndSave(destinationFrame, new FrameRdd(jdbcSchema, dataFrame.map(x => x)))
+    LoadRddFunctions.unionAndSave(destinationFrame, new FrameRdd(jdbcSchema, dataFrame))
   }
 
 }
