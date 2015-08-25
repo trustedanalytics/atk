@@ -16,18 +16,12 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{Invocation, ApiMaturityTag, SparkCommandPlugin}
-import org.apache.spark.SparkContext._
-import scala.collection.immutable.Map
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import spray.json.DefaultJsonProtocol._
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin }
+import org.trustedanalytics.atk.giraph.config.lda.LdaJsonFormat
 import spray.json._
-
-case class LdaModelPredictArgs(model:ModelReference, document: List[String])
+import LdaJsonFormat._
 
 class LdaPredictPlugin extends SparkCommandPlugin[LdaModelPredictArgs, LdaModelPredictReturn] {
   /**

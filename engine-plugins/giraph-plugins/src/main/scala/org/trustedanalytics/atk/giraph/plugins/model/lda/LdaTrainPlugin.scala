@@ -16,15 +16,18 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
 import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, GiraphJobManager }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, ApiMaturityTag, CommandInvocation, CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import LdaJsonFormat._
 
@@ -45,7 +48,7 @@ report : str
    The configuration and learning curve report for Latent Dirichlet
    Allocation as a multiple line str.""")
 class LdaTrainPlugin
-    extends CommandPlugin[LdaTrainArgs, LdaTrainResult] {
+    extends SparkCommandPlugin[LdaTrainArgs, LdaTrainResult] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -108,6 +111,10 @@ class LdaTrainPlugin
     frames.postSave(None, wordOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
     frames.postSave(None, topicOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
+    val model: Model = arguments.model
+    val topicFrame: SparkFrame = topicOut.toReference
+    model.data = createLdaModel(topicFrame.rdd, arguments.wordColumnName, "topic_probabilities").toJson.asJsObject
+
     LdaTrainResult(
       frames.expectFrame(docOut.toReference),
       frames.expectFrame(wordOut.toReference),
@@ -115,4 +122,16 @@ class LdaTrainPlugin
       report)
   }
 
+  /* Create LDA model from frame */
+  private def createLdaModel(frameRdd: FrameRdd,
+                             wordColumnName: String,
+                             probColumnName: String): LdaModel = {
+    val topicWordMap = frameRdd.mapRows(row => {
+      val word = row.value(wordColumnName).toString
+      val prob = row.vectorValue(probColumnName)
+      (word, prob)
+    }).collect().toMap
+
+    new LdaModel(topicWordMap)
+  }
 }

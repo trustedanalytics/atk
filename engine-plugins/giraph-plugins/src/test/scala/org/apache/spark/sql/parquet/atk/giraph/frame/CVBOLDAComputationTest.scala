@@ -111,7 +111,6 @@ class CVBOLDAComputationTest extends WordSpec {
       assertVectorApproximate(wordResults("magic"), 0.0056778096874241365, 0.2502411087589012)
       assertVectorApproximate(wordResults("realestate"), 0.17071558553290928, 8.288897492542531E-4)
 
-
     }
   }
 

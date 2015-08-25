@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 import org.apache.commons.lang3.StringUtils
+import org.trustedanalytics.atk.giraph.plugins.model.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaModel }
 
 /**
  * Arguments to the LDA plugin - see user docs for more on the parameters
@@ -122,4 +123,7 @@ object LdaJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   implicit val ldaFormat = jsonFormat11(LdaTrainArgs)
   implicit val ldaResultFormat = jsonFormat4(LdaTrainResult)
+  implicit val ldaModelFormat = jsonFormat1(LdaModel)
+  implicit val ldaPredictArgsFormat = jsonFormat2(LdaModelPredictArgs)
+  implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
 }
