@@ -39,7 +39,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Notes
 -----
 This method applies only to columns containing numerical data.""",
-  returns = "A matrix with the correlation values for the columns.")
+  returns = "A Frame with the matrix of the correlation values for the columns.")
 class CorrelationMatrixPlugin extends SparkCommandPlugin[CorrelationMatrixArgs, FrameReference] {
 
   /**
