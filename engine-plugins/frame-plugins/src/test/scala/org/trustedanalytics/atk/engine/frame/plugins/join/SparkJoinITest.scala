@@ -230,21 +230,20 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.str, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](5, 50, null, null)),
-      new GenericRow(Array[Any](null, null, 6, "Germany"))
+      new GenericRow(Array[Any](1, 354, "Iceland")),
+      new GenericRow(Array[Any](1, 354, "Ice-land")),
+      new GenericRow(Array[Any](2, 91, "India")),
+      new GenericRow(Array[Any](2, 100, "India")),
+      new GenericRow(Array[Any](3, 47, "Norway")),
+      new GenericRow(Array[Any](4, 968, "Oman")),
+      new GenericRow(Array[Any](5, 50, null)),
+      new GenericRow(Array[Any](6, null, "Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -260,19 +259,18 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.str, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](null, null, 1, "Iceland")),
-      new GenericRow(Array[Any](null, null, 1, "Ice-land")),
-      new GenericRow(Array[Any](null, null, 2, "India")),
-      new GenericRow(Array[Any](null, null, 3, "Norway")),
-      new GenericRow(Array[Any](null, null, 4, "Oman")),
-      new GenericRow(Array[Any](null, null, 6, "Germany"))
+      new GenericRow(Array[Any](1, null, "Iceland")),
+      new GenericRow(Array[Any](1, null, "Ice-land")),
+      new GenericRow(Array[Any](2, null, "India")),
+      new GenericRow(Array[Any](3, null, "Norway")),
+      new GenericRow(Array[Any](4, null, "Oman")),
+      new GenericRow(Array[Any](6, null, "Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -288,19 +286,18 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
+      Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.str, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, null, null)),
-      new GenericRow(Array[Any](2, 91, null, null)),
-      new GenericRow(Array[Any](2, 100, null, null)),
-      new GenericRow(Array[Any](3, 47, null, null)),
-      new GenericRow(Array[Any](4, 968, null, null)),
-      new GenericRow(Array[Any](5, 50, null, null))
+      new GenericRow(Array[Any](1, 354, null)),
+      new GenericRow(Array[Any](2, 91, null)),
+      new GenericRow(Array[Any](2, 100, null)),
+      new GenericRow(Array[Any](3, 47, null)),
+      new GenericRow(Array[Any](4, 968, null)),
+      new GenericRow(Array[Any](5, 50, null))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -325,8 +322,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
       RddJoinParam(rddFiveHundredThousandsToOneFiftyThousands, "col_0"), "outer")
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
-      Column("col_0_R", DataTypes.int32, 1)
+      Column("col_0", DataTypes.int32, 0)
     ))
     resultFrame.count shouldBe 150000
   }

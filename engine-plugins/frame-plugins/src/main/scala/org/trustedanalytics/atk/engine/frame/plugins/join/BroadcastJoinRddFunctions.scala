@@ -21,11 +21,11 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
     val rightBroadcastVariable = JoinBroadcastVariable(other)
     lazy val rightNullRow: Row = new GenericRow(other.frame.numColumns)
 
-    self.frame.flatMapRows(leftRow => {
-      val leftKey = leftRow.value(self.joinColumn)
+    self.frame.flatMapRows(left => {
+      val leftKey = left.value(self.joinColumn)
       rightBroadcastVariable.get(leftKey) match {
-        case Some(rightRowSet) => for (rightRow <- rightRowSet) yield Row.merge(leftRow.row, rightRow)
-        case _ => List(Row.merge(leftRow.row, rightNullRow.copy()))
+        case Some(rightRowSet) => for (rightRow <- rightRowSet) yield Row.merge(left.row, rightRow)
+        case _ => List(Row.merge(left.row, rightNullRow.copy()))
       }
     })
   }
@@ -41,11 +41,11 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
     val leftBroadcastVariable = JoinBroadcastVariable(self)
     lazy val leftNullRow: Row = new GenericRow(self.frame.numColumns)
 
-    other.frame.flatMapRows(rightRow => {
-      val rightKey = rightRow.value(other.joinColumn)
+    other.frame.flatMapRows(right => {
+      val rightKey = right.value(other.joinColumn)
       leftBroadcastVariable.get(rightKey) match {
-        case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow.row)
-        case _ => List(Row.merge(leftNullRow.copy(), rightRow.row))
+        case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, right.row)
+        case _ => List(Row.merge(leftNullRow.copy(), right.row))
       }
     })
   }
@@ -63,11 +63,11 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
 
     val innerJoinedRDD = if (rightSizeInBytes <= broadcastJoinThreshold) {
       val rightBroadcastVariable = JoinBroadcastVariable(other)
-      self.frame.flatMapRows(leftRow => {
-        val leftKey = leftRow.value(self.joinColumn)
+      self.frame.flatMapRows(left => {
+        val leftKey = left.value(self.joinColumn)
         rightBroadcastVariable.get(leftKey) match {
           case Some(rightRowSet) =>
-            for (rightRow <- rightRowSet) yield Row.merge(leftRow.row, rightRow)
+            for (rightRow <- rightRowSet) yield Row.merge(left.row, rightRow)
           case _ => Set.empty[Row]
         }
       })

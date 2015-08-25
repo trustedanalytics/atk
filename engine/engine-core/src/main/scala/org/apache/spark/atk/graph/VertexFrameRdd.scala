@@ -19,7 +19,7 @@ package org.apache.spark.atk.graph
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.domain.schema.{GraphSchema, Schema, VertexSchema}
+import org.trustedanalytics.atk.domain.schema.{ GraphSchema, Schema, VertexSchema }
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 import scala.reflect.ClassTag
