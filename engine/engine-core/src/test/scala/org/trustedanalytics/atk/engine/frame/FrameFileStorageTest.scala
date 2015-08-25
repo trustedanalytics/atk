@@ -27,7 +27,7 @@ class FrameFileStorageTest extends FlatSpec {
   val frameFileStorage = new FrameFileStorage("hdfs://hostname/user/atkuser", null)
 
   "FrameFileStorage" should "determine the correct data frames base directory" in {
-    assert(frameFileStorage.calculateFramePath(FrameEntity(id = 1L, status = 0, name = None, createdOn = null, modifiedOn = null)).toString == "hdfs://hostname/user/atkuser/trustedanalytics/dataframes/1")
+    assert(frameFileStorage.calculateFramePath(FrameEntity(id = 1L, status = 0, name = None, createdOn = null, modifiedOn = null)).toString == "hdfs://hostname/user/atkuser/trustedanalytics/frames/1")
   }
 
 }

@@ -33,7 +33,7 @@ class FrameFileStorage(fsRoot: String,
                        val hdfs: HdfsFileStorage)(implicit startupInvocation: Invocation)
     extends EventLogging with EventLoggingImplicits {
 
-  private val framesBaseDirectory = new Path(fsRoot + "/trustedanalytics/dataframes")
+  private val framesBaseDirectory = new Path(fsRoot + "/trustedanalytics/frames")
 
   withContext("FrameFileStorage") {
     info("fsRoot: " + fsRoot)
