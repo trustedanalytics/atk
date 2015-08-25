@@ -16,24 +16,20 @@
 
 package org.apache.spark.frame
 
-import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
-import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
+import org.apache.spark.atk.graph.{EdgeWrapper, VertexWrapper}
+import org.apache.spark.frame.ordering.MultiColumnOrdering
+import org.apache.spark.mllib.linalg.distributed.IndexedRow
+import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.catalyst.expressions.{GenericMutableRow, GenericRow}
+import org.apache.spark.sql.types.{ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType}
+import org.apache.spark.sql.{DataFrame, Row, SQLContext, types => SparkType}
+import org.apache.spark.{Partition, TaskContext}
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.domain.schema._
-import org.apache.spark.frame.ordering.MultiColumnOrdering
-import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
-import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
-import org.apache.spark.mllib.linalg.distributed.IndexedRow
-import org.apache.spark.mllib.linalg.{ Vectors, Vector }
-import org.apache.spark.rdd.{ NewHadoopPartition, RDD }
-import org.apache.spark.{ TaskContext, Partition }
-import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
-import org.apache.spark.sql.{ types => SparkType }
-import SparkType.{ ArrayType, DateType, DoubleType, FloatType }
-import SparkType.{ IntegerType, LongType, StringType, StructField, StructType, TimestampType, ByteType, BooleanType, ShortType, DecimalType }
-import org.apache.spark.sql.{ SQLContext, DataFrame }
-import parquet.hadoop.ParquetInputSplit
+import org.trustedanalytics.atk.engine.frame.{MiscFrameFunctions, RowWrapper}
+import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{EdgeHolder, EdgeSchemaAggregator, VertexSchemaAggregator}
+import org.trustedanalytics.atk.graphbuilder.elements.{GBEdge, GBVertex}
 
 import scala.reflect.ClassTag
 
@@ -45,7 +41,10 @@ import scala.reflect.ClassTag
  * @param frameSchema  the schema describing the columns of this frame
  */
 class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
-    extends RDD[Row](prev) {
+  extends RDD[Row](prev) {
+
+  // Represents self in FrameRdd and its sub-classes
+  type Self = this.type
 
   /**
    * A Frame RDD is a SchemaRDD with our version of the associated schema
@@ -81,6 +80,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return Dataframe representing the FrameRdd
    */
   def toDataFrame = new SQLContext(this.sparkContext).createDataFrame(this, sparkSchema)
+
   def toDataFrameUsingHiveContext = new org.apache.spark.sql.hive.HiveContext(this.sparkContext).createDataFrame(this, sparkSchema)
 
   override def compute(split: Partition, context: TaskContext): Iterator[Row] =
@@ -119,11 +119,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
   }
 
   def toVectorRDD(featureColumnNames: List[String]) = {
-    this mapRows (row =>
-      {
-        val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-        Vectors.dense(features.toArray)
-      })
+    this mapRows (row => {
+      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
+      Vectors.dense(features.toArray)
+    })
   }
 
   /**
@@ -211,6 +210,44 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    */
   def dropIgnoreColumns(): FrameRdd = {
     convertToNewSchema(frameSchema.dropIgnoreColumns())
+  }
+
+  /**
+   * Remove duplicate rows by specifying the unique columns
+   */
+  def dropDuplicatesByColumn(columnNames: List[String]): Self = {
+    val numColumns = frameSchema.columns.size
+    val columnIndices = frameSchema.columnIndices(columnNames)
+    val otherColumnNames = frameSchema.columnNamesExcept(columnNames)
+    val otherColumnIndices = frameSchema.columnIndices(otherColumnNames)
+
+    val duplicatesRemovedRdd: RDD[Row] = this.mapRows(row => otherColumnNames match {
+      case Nil => (row.values(columnNames), Nil)
+      case _ => (row.values(columnNames), row.values(otherColumnNames))
+    }).reduceByKey((x, y) => x).map { case (keyRow, valueRow) =>
+      valueRow match {
+        case Nil => new GenericRow(keyRow.toArray)
+        case _ => {
+          //merge and re-order entries to match schema
+          val row = new GenericMutableRow(numColumns)
+          for (i <- keyRow.indices) row.update(columnIndices(i), keyRow(i))
+          for (i <- valueRow.indices) row.update(otherColumnIndices(i), valueRow(i))
+          row
+        }
+      }
+    }
+    update(duplicatesRemovedRdd)
+  }
+
+
+  /**
+   * Update rows in the frame
+   *
+   * @param newRows New rows
+   * @return New frame with updated rows
+   */
+  def update(newRows: RDD[Row]): Self = {
+    (new FrameRdd(this.frameSchema, newRows)).asInstanceOf[Self]
   }
 
   /**
