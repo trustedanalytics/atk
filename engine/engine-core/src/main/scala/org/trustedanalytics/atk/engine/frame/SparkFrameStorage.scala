@@ -52,18 +52,6 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
 
   val defaultStorageFormat: String = StorageFormats.FileParquet // todo: add to config
 
-  def exchangeNames(frame1: FrameEntity, frame2: FrameEntity): (FrameEntity, FrameEntity) = {
-    metaStore.withTransaction("SFS.exchangeNames") { implicit txn =>
-      val f1Name = frame1.name
-      val f2Name = frame2.name
-      metaStore.frameRepo.update(frame1.copy(name = None))
-      metaStore.frameRepo.update(frame2.copy(name = None))
-      val newF1 = metaStore.frameRepo.update(frame1.copy(name = f2Name))
-      val newF2 = metaStore.frameRepo.update(frame2.copy(name = f1Name))
-      (newF1.get, newF2.get)
-    }
-  }
-
   /**
    * Copy the frames using spark
    *

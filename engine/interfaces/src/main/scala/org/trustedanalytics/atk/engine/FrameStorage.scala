@@ -25,9 +25,6 @@ trait FrameStorage {
 
   type Context
   type Data
-  case class SaveInfo(targetPath: String,
-                      storageFormat: String,
-                      victimPath: Option[String] = None)
 
   def expectFrame(frameRef: FrameReference)(implicit invocation: Invocation): FrameEntity
 
@@ -63,3 +60,13 @@ trait FrameStorage {
 
   def scheduleDeletion(frame: FrameEntity)(implicit invocation: Invocation): Unit
 }
+
+/**
+ * Stores arguments which describe a saving a frame
+ * @param targetPath HDFS path where the data is going to be saved, revision-specific
+ * @param storageFormat storage format, like parquet
+ * @param victimPath HDFS path which should be deleted after the save, like the previous revision folder
+ */
+case class SaveInfo(targetPath: String,
+                    storageFormat: String,
+                    victimPath: Option[String] = None)
