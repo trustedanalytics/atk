@@ -22,8 +22,7 @@ import org.apache.commons.lang.StringUtils
 /**
  * Command to unflatten a frame and store the result to a new data frame.
  */
-case class UnflattenColumnArgs(@ArgDoc("""FrameReference of the data frame to perform
-column unflattening.""") frame: FrameReference,
+case class UnflattenColumnArgs(frame: FrameReference,
                                @ArgDoc("""name of the user column to be used as keys
 for unflattening.""") compositeKeyColumnNames: List[String],
                                @ArgDoc("""separator for the data in the result columns.

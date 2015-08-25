@@ -28,8 +28,10 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param append true to append to an existing graph, false otherwise.
  */
 case class LoadGraphArgs(graph: GraphReference,
-                         frameRules: List[FrameRule],
-                         append: Boolean = false) {
+                         @ArgDoc(""" List of handles to the dataframe to be used as
+a data source.""") frameRules: List[FrameRule],
+                         @ArgDoc("""True to append to an existing graph,
+False otherwise.""") append: Boolean = false) {
   require(graph != null, "graph must not be null")
   require(frameRules != null, "frame rules must not be null")
 }

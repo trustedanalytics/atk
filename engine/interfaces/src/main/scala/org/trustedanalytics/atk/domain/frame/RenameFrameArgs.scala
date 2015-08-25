@@ -18,9 +18,8 @@ package org.trustedanalytics.atk.domain.frame
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
-case class RenameFrameArgs(
-    @ArgDoc("""<TBD>""") frame: FrameReference,
-    @ArgDoc("""The new name of the frame.""") newName: String) {
+case class RenameFrameArgs(frame: FrameReference,
+                           @ArgDoc("""The new name of the frame.""") newName: String) {
   require(frame != null, "frame is required")
   require(newName != null && newName.nonEmpty, "newName is required")
   FrameName.validate(newName)

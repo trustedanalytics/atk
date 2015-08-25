@@ -24,8 +24,7 @@ import org.apache.commons.lang3.StringUtils
 /**
  * Arguments to the LDA plugin - see user docs for more on the parameters
  */
-case class LdaTrainArgs(@ArgDoc("""Reference to the model for which communities
-are to be determined.""") model: ModelReference,
+case class LdaTrainArgs(model: ModelReference,
                         @ArgDoc("""Input frame data.""") frame: FrameReference,
                         @ArgDoc("""Column Name for documents.
 Column should contain a str value.""") documentColumnName: String,

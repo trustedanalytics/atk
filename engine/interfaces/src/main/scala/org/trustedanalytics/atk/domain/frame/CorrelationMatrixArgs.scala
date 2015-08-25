@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Input arguments class for correlation matrix
  */
-case class CorrelationMatrixArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
+case class CorrelationMatrixArgs(frame: FrameReference,
                                  @ArgDoc("""The names of the column from
 which to compute the matrix.""") dataColumnNames: List[String],
                                  @ArgDoc("""The name for the new

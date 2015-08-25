@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
-case class ClusteringCoefficientArgs(@ArgDoc("<TBD>") graph: GraphReference,
+case class ClusteringCoefficientArgs(graph: GraphReference,
                                      @ArgDoc("""The name of the new property to which each
 vertex's local clustering coefficient will be written.
 If this option is not specified, no output frame will be produced and only

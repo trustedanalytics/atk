@@ -156,5 +156,5 @@ num_topics:
     in more computation but lead to more specific topics.
     The default value is 10, but all positive integers are accepted.
 */
-case class GenericNewModelArgs(@ArgDoc("""Dummy reference.""") dummyModelRef: ModelReference,
+case class GenericNewModelArgs(dummyModelRef: ModelReference,
                                @ArgDoc("""User supplied name.""") name: Option[String] = None)

@@ -44,8 +44,8 @@ equal-length sequences of columns.
 
 Dot product is computed by the following formula:
 
-The dot product of two vectors ``A=[a_1, a_2, ..., a_n]`` and
-``B =[b_1, b_2, ..., b_n]`` is ``a_1*b_1 + a_2*b_2 + ...+ a_n*b_n``.
+The dot product of two vectors :math:`A=[a_1, a_2, ..., a_n]` and
+:math:`B =[b_1, b_2, ..., b_n]` is :math:`a_1*b_1 + a_2*b_2 + ...+ a_n*b_n`.
 The dot product for each row is stored in a new column in the existing frame.
 
 Notes

@@ -29,9 +29,9 @@ import org.apache.spark.frame.FrameRdd
 import spray.json._
 
 case class EcdfArgs(frame: FrameReference,
-                    @ArgDoc("The name of the input column containing sample.") column: String,
-                    @ArgDoc("A name for the resulting frame which is created
-by this operation.") resultFrameName: Option[String] = None) {
+                    @ArgDoc("""The name of the input column containing sample.""") column: String,
+                    @ArgDoc("""A name for the resulting frame which is created
+by this operation.""") resultFrameName: Option[String] = None) {
   require(frame != null, "frame is required")
   require(column != null, "column is required")
 

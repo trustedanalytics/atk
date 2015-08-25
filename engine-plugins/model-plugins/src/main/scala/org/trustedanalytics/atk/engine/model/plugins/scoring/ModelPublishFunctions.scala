@@ -29,7 +29,7 @@ import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference,
+case class ModelPublishArgs(model: ModelReference,
                             @ArgDoc("""Name of the service used in the scoring engine rest API""") serviceName: String,
                             @ArgDoc("""Path and filename in HDFS to where this model will be published""") filePath: String) {
   require(model != null, "model is required")

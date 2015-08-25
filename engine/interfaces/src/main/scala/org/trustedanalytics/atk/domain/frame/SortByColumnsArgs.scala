@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Arguments for SortByColumns - a list of columns to sort on
  */
-case class SortByColumnsArgs(@ArgDoc("""The frame to modify.""") frame: FrameReference,
+case class SortByColumnsArgs(frame: FrameReference,
                              @ArgDoc("""Column names to sort by, true for ascending,
 false for descending.""") columnNamesAndAscending: List[(String, Boolean)]) {
   require(frame != null, "frame is required")
