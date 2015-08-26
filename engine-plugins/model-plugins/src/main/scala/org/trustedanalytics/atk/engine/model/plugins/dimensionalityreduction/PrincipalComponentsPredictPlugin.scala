@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, ApiMaturi
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.distributed.{ IndexedRow, IndexedRowMatrix, RowMatrix }
+import org.apache.spark.mllib.stat.{MultivariateStatisticalSummary, Statistics}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.mllib.linalg.Vector
 
@@ -87,9 +88,27 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val predictColumns = arguments.observationColumns.getOrElse(principalComponentData.observationColumns)
 
     //create RDD from the frame
+//        val x  = arguments.meanCentered match {
+//      case true => frame.rdd.toMeanCenteredVectorDenseRDD(predictColumns)
+//      case false => frame.rdd.toVectorDenseRDD(predictColumns)
+//    }
+//    val i = x.zipWithIndex().map{case(row,index) => (index,row)}
+//
+//    val irm : IndexedRowMatrix = new IndexedRowMatrix()
+
     val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
 
-    val indexedRowMatrix: IndexedRowMatrix = new IndexedRowMatrix(FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns))
+    val indexedRowMatrix : IndexedRowMatrix = new IndexedRowMatrix(
+    arguments.meanCentered match {
+      case true => { val frameToVectorRdd = frame.rdd.toVectorDenseRDD(predictColumns)
+        val meanVector = Statistics.colStats(frameToVectorRdd).mean
+        FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns, meanVector)
+      }
+      case false => FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema,predictColumns)
+    })
+
+
+    //val indexedRowMatrix: IndexedRowMatrix = new IndexedRowMatrix(FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns))
 
     val eigenVectors = principalComponentData.vFactor
     val y = indexedRowMatrix.multiply(eigenVectors)

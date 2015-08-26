@@ -68,15 +68,12 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
 
     validatePrincipalComponentsArgs(frame.schema, arguments)
 
-    // compute covariance
-    val outputColumnDataType = frame.schema.columnDataType(arguments.observationColumns.head)
-    val outputVectorLength: Option[Long] = outputColumnDataType match {
-      case vector(length) => Some(length)
-      case _ => None
-    }
-
     val k = arguments.k.getOrElse(arguments.observationColumns.length)
-    val rowMatrix: RowMatrix = new RowMatrix(frame.rdd.toVectorDenseRDD(arguments.observationColumns))
+
+    val rowMatrix: RowMatrix = new RowMatrix(arguments.meanCentered match {
+      case true => frame.rdd.toMeanCenteredVectorDenseRDD(arguments.observationColumns)
+      case false => frame.rdd.toVectorDenseRDD(arguments.observationColumns)
+    })
 
     val svd = rowMatrix.computeSVD(k, computeU = true)
 
@@ -97,7 +94,7 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
       require(dataColumnNames.size >= 2, "single vector column, or two or more numeric columns required")
       frameSchema.requireColumnsOfNumericPrimitives(dataColumnNames)
     }
-    require(arguments.k.get >= 1, "k should be greater than equal to 1")
+    require(arguments.k.getOrElse(arguments.observationColumns.length) >= 1, "k should be greater than equal to 1")
   }
 
 }

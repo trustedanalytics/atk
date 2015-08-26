@@ -16,6 +16,8 @@
 
 package org.apache.spark.frame
 
+import breeze.linalg.DenseVector
+import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
 import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
@@ -101,6 +103,20 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
       val array = row.valuesAsArray(featureColumnNames, flattenInputs = true)
       val b = array.map(i => DataTypes.toDouble(i))
       Vectors.dense(b)
+    })
+  }
+
+  def toMeanCenteredVectorDenseRDD(featureColumnNames: List[String]): RDD[Vector] = {
+    val vectorRdd =
+      this.mapRows(row => {
+        val array = row.valuesAsArray(featureColumnNames, flattenInputs = true)
+        val b = array.map(i => DataTypes.toDouble(i))
+        Vectors.dense(b)
+      })
+
+    val columnMeans: Vector = Statistics.colStats(vectorRdd).mean
+    vectorRdd.map(i => {
+      Vectors.dense((new DenseVector(i.toArray) - new DenseVector(columnMeans.toArray)).toArray)
     })
   }
 
@@ -396,6 +412,17 @@ object FrameRdd {
         val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
         val b = array.map(i => DataTypes.toDouble(i))
         IndexedRow(index, Vectors.dense(b))
+    }
+  }
+
+  def toMeanCenteredIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String], meanVector: Vector): RDD[IndexedRow] = {
+    val rowWrapper = new RowWrapper(frameSchema)
+    indexedRows.map{
+      case(index, row) =>
+        val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
+        val b = array.map(i => DataTypes.toDouble(i))
+        val meanCenteredVector = Vectors.dense((new DenseVector(b) - new DenseVector(meanVector.toArray)).toArray)
+        IndexedRow(index, meanCenteredVector)
     }
   }
 
