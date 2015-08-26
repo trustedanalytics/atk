@@ -83,18 +83,6 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     expectFrame(child.toReference)
   }
 
-  def exchangeGraphs(frame1: FrameEntity, frame2: FrameEntity): (FrameEntity, FrameEntity) = {
-    metaStore.withTransaction("SFS.exchangeGraphs") { implicit txn =>
-      val f1Graph = frame1.graphId
-      val f2Graph = frame2.graphId
-      metaStore.frameRepo.update(frame1.copy(graphId = None))
-      metaStore.frameRepo.update(frame2.copy(graphId = None))
-      val newF1 = metaStore.frameRepo.update(frame1.copy(graphId = f2Graph))
-      val newF2 = metaStore.frameRepo.update(frame2.copy(graphId = f1Graph))
-      (newF1.get, newF2.get)
-    }
-  }
-
   import org.apache.spark.sql.Row
 
   override def expectFrame(frameRef: FrameReference)(implicit invocation: Invocation): FrameEntity = {
@@ -373,7 +361,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
           val frame = metaStore.frameRepo.insert(frameTemplate).get
 
           //remove any existing artifacts to prevent collisions when a database is reinitialized.
-          frameFileStorage.delete(frame)
+          frameFileStorage.deletePath(frameFileStorage.calculateFramePath(frame))
 
           frame
         }
