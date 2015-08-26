@@ -114,7 +114,7 @@ Plugins Summary
 In addition to the extensive set of capabilities provided, the platform is
 fully extensible using a plugin architecture.
 This allows developers to incorporate graph analytical tools into the existing
-range of machine learning abilities, expanding the capabilities of the |PACKAGE|
+range of machine learning abilities, expanding the capabilities of |PACKAGE|
 for new problem solutions.
 Plugins are developed using a thin Scala wrapper, and the |ATK| framework
 automatically generates a Python presentation for those added functions.

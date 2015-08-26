@@ -412,7 +412,7 @@ Test functionality of |HDFS|.
 Tweaks
 ------
 
-The graph machine learning algorithms in the |PACKAGE| use the Giraph
+The graph machine learning algorithms in |PACKAGE| use the Giraph
 graph-processing framework.
 Giraph is designed to run the whole graph computation in memory, and requires
 large amounts of memory to process big graphs.

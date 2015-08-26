@@ -210,7 +210,7 @@ Glossary
 
     Conjugate Gradient Descent
 
-        The |PACKAGE| implements this algorithm.
+        |PACKAGE| implements this algorithm.
         Specifically, it uses CGD with bias for collaborative filtering.
 
         For more information: `Factorization Meets the Neighborhood (pdf)`_

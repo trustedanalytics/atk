@@ -18,7 +18,7 @@ Plugin Authoring Guide
 Introduction
 ------------
 
-The |PACKAGE| provides an extensibility framework that allows new commands
+|PACKAGE| provides an extensibility framework that allows new commands
 and algorithms to be added to the system at runtime, without requiring |PACKAGE|
 source code, nor recompiling the application.
 
@@ -32,7 +32,7 @@ data to and from JSON.
 Plug-ins should also be isolated from the application as a whole, as well as
 from other plug-ins.
 Each plug-in should be allowed to use whatever libraries it needs, without
-concern for conflicts with the libraries that the |PACKAGE| uses for its own needs.
+concern for conflicts with the libraries that |PACKAGE| uses for its own needs.
 
 ----------------
 Types of Plugins
@@ -91,7 +91,7 @@ Logging and Error Handling
 ==========================
 
 Errors that occur while running a plug-in will be trapped and reported in the
-same way that internal errors within the |PACKAGE| are normally trapped and
+same way that internal errors within |PACKAGE| are normally trapped and
 reported.
 
 Defaulting Arguments

@@ -27,7 +27,7 @@ Requirements
 
 A working |PACKAGE| cluster installation is required.
 It must be configured to run with the Python2.7 executable.
-If the |PACKAGE| is not installed, see :doc:`/ad_inst_ta1` to install it.
+If |PACKAGE| is not installed, see :doc:`/ad_inst_ta1` to install it.
 
 Installing IPython
 ==================

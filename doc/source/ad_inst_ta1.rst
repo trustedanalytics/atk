@@ -15,7 +15,7 @@ Package Installation
 Introduction
 ------------
 
-This guide covers the |PACKAGE| installation and configuration.
+This guide covers |PACKAGE| installation and configuration.
 
 Cloudera installation documentation can be found at:
 http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_cm_cdh.html .
@@ -45,11 +45,11 @@ Cloudera cluster 5.3.x with following services:
 #.  Yarn(MR2)
 #.  Zookeeper
 
-The |PACKAGE| Python client supports Python 2.7.
+|PACKAGE| Python client supports Python 2.7.
 
--------------------------------
-|PACKAGE| Packages Installation
--------------------------------
+----------------------
+|TOOLKIT| Installation
+----------------------
 
 .. index::
     single: repository
@@ -278,13 +278,13 @@ Troubleshooting Private Repository
 
 .. _installing_tA_packages:
 
-Installing |PACKAGE| Packages
-=============================
+Installing |TOOLKIT|
+====================
 
 Installing On The Master Node
 -----------------------------
 
-Install the |PACKAGE| Python REST server and its dependencies.
+Install |PACKAGE| Python REST server and its dependencies.
 Only one instance of the REST server needs to be installed.
 Installation location is flexible, but it is usually installed
 with the HDFS name node.
@@ -331,7 +331,7 @@ create a new 'application.conf' file based on the 'application.conf.tpl' file.
 The script will also fully configure the local PostgreSQL installation to
 work with the |PACKAGE| server.
 
-To configure the |PACKAGE| installation, do this:
+To configure |PACKAGE| installation, do this:
 
 .. code::
 
@@ -777,7 +777,7 @@ Restart the |PACKAGE| service:
 
     $ sudo service trustedanalytics restart
 
-After restarting the service, the |PACKAGE| will create all the database tables.
+After restarting the service, |PACKAGE| will create all the database tables.
 Now insert a meta user to enable Python client requests.
 
 Login to the postgres linux user:

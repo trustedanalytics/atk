@@ -23,7 +23,7 @@ These instructions assume you have already installed:
 -   |PACKAGE| Python REST Client and required dependencies.
 -   `PyCharm <http://www.jetbrains.com/pycharm/>`_.
 
-The |PACKAGE| should work with any version of PyCharm but these instructions were
+|PACKAGE| should work with any version of PyCharm but these instructions were
 tested with PyCharm Community Edition 3.4.1.
 
 -----
