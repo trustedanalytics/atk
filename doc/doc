@@ -213,7 +213,7 @@ function add_reference() {
     # $4 = LogFile
 
     # debug: Add references at the beginning of all rst files
-    log_step "add_reference" $2 $4
+    log_step "add_reference" "No" $4
     # debug: Get a list of all rst files in the source folder and sub-folders
     RSTFiles=$(find source -name "*.rst") > $3 2>&1
     if [ "$?" != "0" ]; then
