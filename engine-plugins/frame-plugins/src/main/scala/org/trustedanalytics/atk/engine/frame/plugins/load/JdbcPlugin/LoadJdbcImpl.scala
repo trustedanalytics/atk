@@ -42,7 +42,7 @@ object LoadJdbcImpl extends Serializable {
     val connectionArgs: Map[String, String] = if (arguments.driverName.isEmpty) {
       Map(
         urlKey -> url,
-        dbTableKey-> arguments.tableName)
+        dbTableKey -> arguments.tableName)
     }
     else {
       Map(
