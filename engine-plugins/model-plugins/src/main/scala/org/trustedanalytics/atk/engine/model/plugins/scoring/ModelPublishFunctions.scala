@@ -45,8 +45,6 @@ object ModelPublish {
 
   def createTarForScoringEngine(modelData: String, scoringModelJar: String, modelClassName: String): String = {
 
-    var tarOut: OutputStream = null
-    var bOut: BufferedOutputStream = null
     var tOut: TarArchiveOutputStream = null
 
     try {
@@ -77,9 +75,7 @@ object ModelPublish {
       }
       tarTempFile.createNewFile()
 
-      tarOut = new FileOutputStream(tarTempFile)
-      bOut = new BufferedOutputStream(tarOut)
-      tOut = new TarArchiveOutputStream(bOut)
+      tOut = new TarArchiveOutputStream(new BufferedOutputStream(new FileOutputStream(tarTempFile)))
 
       var entryName = modelDatafile.getName
       var tarEntry: TarArchiveEntry = new TarArchiveEntry(modelDatafile, entryName)
@@ -98,6 +94,7 @@ object ModelPublish {
       tOut.putArchiveEntry(tarEntry)
       IOUtils.copy(new FileInputStream(jarFile), tOut)
       tOut.closeArchiveEntry()
+      tOut.finish()
 
       val localPath = new Path(tarTempPath)
       val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
@@ -108,16 +105,7 @@ object ModelPublish {
       tarFileName
     }
     finally {
-
-      try {
-        tOut.finish()
-        IOUtils.closeQuietly(tOut)
-        IOUtils.closeQuietly(bOut)
-        IOUtils.closeQuietly(tarOut)
-      }
-      catch {
-        case e: Exception =>
-      }
+      IOUtils.closeQuietly(tOut)
     }
   }
 }

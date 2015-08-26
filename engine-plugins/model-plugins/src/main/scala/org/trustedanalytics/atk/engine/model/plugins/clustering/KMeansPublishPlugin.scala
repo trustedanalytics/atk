@@ -32,8 +32,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
+  extended = "Returns the HDFS path to the tar file")
 class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -77,6 +77,6 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
     val kmeansModel = kmeansData.kMeansModel
     val jsvalue: JsValue = kmeansModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibKMeansModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
   }
 }

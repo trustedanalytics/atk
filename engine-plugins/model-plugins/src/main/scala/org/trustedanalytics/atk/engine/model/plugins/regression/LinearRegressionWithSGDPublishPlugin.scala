@@ -14,26 +14,26 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.model.plugins.libsvm
+package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import ModelPublishJsonProtocol._
-import org.apache.hadoop.fs.Path
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import MLLibJsonProtocol._
+import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
-import LibSvmJsonProtocol._
+import ModelPublishJsonProtocol._
 
 /**
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
   extended = "Returns the HDFS path to the tar file")
-class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -41,7 +41,7 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:libsvm/publish"
+  override def name: String = "model:linear_regression/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
@@ -71,11 +71,11 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    //Extracting the KMeansModel from the stored JsObject
-    val libsvmData = model.data.convertTo[LibSvmData]
-    val libsvmModel = libsvmData.svmModel
-    val jsvalue: JsValue = libsvmModel.toJson
+    val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
+    val linRegData = linRegJsObject.convertTo[LinearRegressionData]
+    val linRegModel: LinearRegressionModel = linRegData.linRegModel
+    val jsvalue: JsValue = linRegModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
   }
 }
