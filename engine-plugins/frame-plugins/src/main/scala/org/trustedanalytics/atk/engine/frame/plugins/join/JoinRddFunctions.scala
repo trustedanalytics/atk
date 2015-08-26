@@ -36,131 +36,6 @@ import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
 object JoinRddFunctions extends Serializable {
 
   /**
-   * Converts RDD of rows of GenericRowWithSchema to GenericRow
-   *
-   * Work-around for kyro serialization bug in GenericRowWithSchema
-   *
-   * @see https://issues.apache.org/jira/browse/SPARK-6465
-   */
-  def toGenericRowRdd(rdd: RDD[Row]): RDD[Row] = {
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
-    rdd.map(row => new GenericRow(row.toSeq.toArray))
-  }
-
-  /**
-   * Create joined frame
-   *
-   * The duplicate join column in the joined RDD is dropped in the joined frame.
-   *
-   * @param joinedRdd Joined RDD
-   * @param left join parameter for first data frame
-   * @param right join parameter for second data frame
-   * @param how join method
-   * @return Joined frame
-   */
-  def createJoinedFrame(joinedRdd: RDD[Row],
-                        left: RddJoinParam,
-                        right: RddJoinParam,
-                        how: String): FrameRdd = {
-    how match {
-      case "outer" => {
-        val mergedRdd = mergeJoinColumns(joinedRdd, left, right)
-        dropRightJoinColumn(mergedRdd, left, right)
-      }
-      case "right" => {
-        dropLeftJoinColumn(joinedRdd, left, right)
-      }
-      case _ => {
-        dropRightJoinColumn(joinedRdd, left, right)
-      }
-    }
-  }
-
-  /**
-   * Merge joined columns for full outer join
-   *
-   * Replaces null values in left join column with value in right join column
-   *
-   * @param joinedRdd Joined RDD
-   * @param left join parameter for first data frame
-   * @param right join parameter for second data frame
-   * @return Merged RDD
-   */
-  def mergeJoinColumns(joinedRdd: RDD[Row],
-                       left: RddJoinParam,
-                       right: RddJoinParam): RDD[Row] = {
-    val leftSchema = left.frame.frameSchema
-    val rightSchema = right.frame.frameSchema
-
-    val leftJoinIndex = leftSchema.columnIndex(left.joinColumn)
-    val rightJoinIndex = rightSchema.columnIndex(right.joinColumn) + rightSchema.columns.size
-
-    joinedRdd.map(row => {
-      val leftKey = row.get(leftJoinIndex)
-      val rightKey = row.get(rightJoinIndex)
-      val newLeftKey = if (leftKey == null) rightKey else leftKey
-
-      val mutableRow = new GenericMutableRow(row.toSeq.toArray)
-      mutableRow.update(leftJoinIndex, newLeftKey)
-      mutableRow
-    })
-  }
-
-  /**
-   * Drop duplicate data in left join column
-   *
-   * Used for right-outer joins
-   *
-   * @param joinedRdd Joined RDD
-   * @param left join parameter for first data frame
-   * @param right join parameter for second data frame
-   * @return Joined frame
-   */
-  def dropLeftJoinColumn(joinedRdd: RDD[Row],
-                         left: RddJoinParam,
-                         right: RddJoinParam): FrameRdd = {
-    val leftSchema = left.frame.frameSchema
-    val rightSchema = right.frame.frameSchema
-
-    // Get unique name for left join column to drop
-    val oldSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
-    val dropColumnName = oldSchema.column(leftSchema.columnIndex(left.joinColumn)).name
-
-    // Create new schema
-    val newLeftSchema = leftSchema.renameColumn(left.joinColumn, dropColumnName)
-    val newSchema = FrameSchema(Schema.join(newLeftSchema.columns, rightSchema.columns))
-
-    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
-  }
-
-  /**
-   * Drop duplicate data in right join column
-   *
-   * Used for inner, left-outer, and full-outer joins
-   *
-   * @param joinedRdd Joined RDD
-   * @param left join parameter for first data frame
-   * @param right join parameter for second data frame
-   * @return Joined frame
-   */
-  def dropRightJoinColumn(joinedRdd: RDD[Row],
-                          left: RddJoinParam,
-                          right: RddJoinParam): FrameRdd = {
-    val leftSchema = left.frame.frameSchema
-    val rightSchema = right.frame.frameSchema
-
-    // Get unique name for right join column to drop
-    val oldSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
-    val dropColumnName = oldSchema.column(rightSchema.columnIndex(right.joinColumn)).name
-
-    // Create new schema
-    val newRightSchema = rightSchema.renameColumn(right.joinColumn, dropColumnName)
-    val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
-
-    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
-  }
-
-  /**
    * Perform join operation
    *
    * Supports left-outer joins, right-outer-joins, outer-joins, and inner joins
@@ -171,11 +46,11 @@ object JoinRddFunctions extends Serializable {
    * @param how join method
    * @return Joined RDD
    */
-  def joinRDDs(left: RddJoinParam,
-               right: RddJoinParam,
-               how: String,
-               broadcastJoinThreshold: Long = Long.MaxValue,
-               skewedJoinType: Option[String] = None): FrameRdd = {
+  def join(left: RddJoinParam,
+           right: RddJoinParam,
+           how: String,
+           broadcastJoinThreshold: Long = Long.MaxValue,
+           skewedJoinType: Option[String] = None): FrameRdd = {
 
     val joinedRdd = how match {
       case "left" => leftOuterJoin(left, right, broadcastJoinThreshold, skewedJoinType)
@@ -304,5 +179,130 @@ object JoinRddFunctions extends Serializable {
         //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
         toGenericRowRdd(joinedFrame.rdd)
     }
+  }
+
+  /**
+   * Converts RDD of rows of GenericRowWithSchema to GenericRow
+   *
+   * Work-around for kyro serialization bug in GenericRowWithSchema
+   *
+   * @see https://issues.apache.org/jira/browse/SPARK-6465
+   */
+  def toGenericRowRdd(rdd: RDD[Row]): RDD[Row] = {
+    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
+    rdd.map(row => new GenericRow(row.toSeq.toArray))
+  }
+
+  /**
+   * Create joined frame
+   *
+   * The duplicate join column in the joined RDD is dropped in the joined frame.
+   *
+   * @param joinedRdd Joined RDD
+   * @param left join parameter for first data frame
+   * @param right join parameter for second data frame
+   * @param how join method
+   * @return Joined frame
+   */
+  def createJoinedFrame(joinedRdd: RDD[Row],
+                        left: RddJoinParam,
+                        right: RddJoinParam,
+                        how: String): FrameRdd = {
+    how match {
+      case "outer" => {
+        val mergedRdd = mergeJoinColumns(joinedRdd, left, right)
+        dropRightJoinColumn(mergedRdd, left, right)
+      }
+      case "right" => {
+        dropLeftJoinColumn(joinedRdd, left, right)
+      }
+      case _ => {
+        dropRightJoinColumn(joinedRdd, left, right)
+      }
+    }
+  }
+
+  /**
+   * Merge joined columns for full outer join
+   *
+   * Replaces null values in left join column with value in right join column
+   *
+   * @param joinedRdd Joined RDD
+   * @param left join parameter for first data frame
+   * @param right join parameter for second data frame
+   * @return Merged RDD
+   */
+  def mergeJoinColumns(joinedRdd: RDD[Row],
+                       left: RddJoinParam,
+                       right: RddJoinParam): RDD[Row] = {
+    val leftSchema = left.frame.frameSchema
+    val rightSchema = right.frame.frameSchema
+
+    val leftJoinIndex = leftSchema.columnIndex(left.joinColumn)
+    val rightJoinIndex = rightSchema.columnIndex(right.joinColumn) + rightSchema.columns.size
+
+    joinedRdd.map(row => {
+      val leftKey = row.get(leftJoinIndex)
+      val rightKey = row.get(rightJoinIndex)
+      val newLeftKey = if (leftKey == null) rightKey else leftKey
+
+      val mutableRow = new GenericMutableRow(row.toSeq.toArray)
+      mutableRow.update(leftJoinIndex, newLeftKey)
+      mutableRow
+    })
+  }
+
+  /**
+   * Drop duplicate data in left join column
+   *
+   * Used for right-outer joins
+   *
+   * @param joinedRdd Joined RDD
+   * @param left join parameter for first data frame
+   * @param right join parameter for second data frame
+   * @return Joined frame
+   */
+  def dropLeftJoinColumn(joinedRdd: RDD[Row],
+                         left: RddJoinParam,
+                         right: RddJoinParam): FrameRdd = {
+    val leftSchema = left.frame.frameSchema
+    val rightSchema = right.frame.frameSchema
+
+    // Get unique name for left join column to drop
+    val oldSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+    val dropColumnName = oldSchema.column(leftSchema.columnIndex(left.joinColumn)).name
+
+    // Create new schema
+    val newLeftSchema = leftSchema.renameColumn(left.joinColumn, dropColumnName)
+    val newSchema = FrameSchema(Schema.join(newLeftSchema.columns, rightSchema.columns))
+
+    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
+  }
+
+  /**
+   * Drop duplicate data in right join column
+   *
+   * Used for inner, left-outer, and full-outer joins
+   *
+   * @param joinedRdd Joined RDD
+   * @param left join parameter for first data frame
+   * @param right join parameter for second data frame
+   * @return Joined frame
+   */
+  def dropRightJoinColumn(joinedRdd: RDD[Row],
+                          left: RddJoinParam,
+                          right: RddJoinParam): FrameRdd = {
+    val leftSchema = left.frame.frameSchema
+    val rightSchema = right.frame.frameSchema
+
+    // Get unique name for right join column to drop
+    val oldSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+    val dropColumnName = oldSchema.column(leftSchema.columns.size + rightSchema.columnIndex(right.joinColumn)).name
+
+    // Create new schema
+    val newRightSchema = rightSchema.renameColumn(right.joinColumn, dropColumnName)
+    val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
+
+    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
   }
 }
