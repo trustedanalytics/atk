@@ -60,10 +60,9 @@ class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, UnitReturn
    */
   override def execute(arguments: TallyPercentArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    val sampleIndex = frame.schema.columnIndex(arguments.sampleCol)
 
     // run the operation
-    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentCount(frame.rdd, sampleIndex, arguments.countVal)
+    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentCount(frame.rdd, arguments.sampleCol, arguments.countVal)
     val updatedSchema = frame.schema.addColumnFixName(Column(arguments.sampleCol + "_tally_percent", DataTypes.float64))
     frame.save(new FrameRdd(updatedSchema, cumulativeDistRdd))
   }

@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.engine
 import org.trustedanalytics.atk.engine.gc.GarbageCollectionPlugin
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.plugin.Call
 import org.trustedanalytics.atk.engine.frame.{ SparkFrameStorage, FrameFileStorage }
 import org.trustedanalytics.atk.engine.graph.{ SparkGraphStorage, HBaseAdminFactory, SparkGraphHBaseBackend }
@@ -44,7 +43,8 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   private val sparkContextFactory = SparkContextFactory
 
-  private val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+  private val fileStorage = new HdfsFileStorage()
+  fileStorage.syncLibs()
 
   private val sparkAutoPartitioner = new SparkAutoPartitioner(fileStorage)
 
