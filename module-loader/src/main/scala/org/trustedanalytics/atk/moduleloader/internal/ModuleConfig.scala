@@ -32,7 +32,7 @@ import scala.collection.JavaConversions._
 private[internal] case class ModuleConfig(moduleLocation: String, config: Config, members: Seq[ModuleConfig] = Nil) {
 
   // validation
-  require(name != null, s"stoString Module name cannot be null")
+  require(name != null, s"$toString Module name cannot be null")
   require(name.nonEmpty, s"$toString Module name cannot be empty")
   require(name.replaceAll(" ", "").nonEmpty, s"$toString Module name cannot be blank spaces")
   require(parentName.isEmpty || memberOf.isEmpty, s"$toString A module cannot define both a member-of and a parent, only one or the other is allowed")
