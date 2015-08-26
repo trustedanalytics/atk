@@ -61,7 +61,7 @@ def return_graph(selfish, json_result):
     from trustedanalytics import get_graph
     return get_graph(json_result['id'])
 
-@postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test')
+@postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test', 'model:random_forest_classifier/test')
 def return_metrics(selfish, json_result):
      from trustedanalytics.core.classifymetrics import ClassificationMetricsResult
      return ClassificationMetricsResult(json_result)
