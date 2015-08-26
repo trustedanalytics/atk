@@ -54,6 +54,9 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    */
   def this(schema: Schema, dataframe: DataFrame) = this(schema, dataframe.rdd)
 
+  /* Number of columns in frame */
+  val numColumns = frameSchema.columns.size
+
   /** This wrapper provides richer API for working with Rows */
   val rowWrapper = new RowWrapper(frameSchema)
 
@@ -127,6 +130,15 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    */
   def mapRows[U: ClassTag](mapFunction: (RowWrapper) => U): RDD[U] = {
     this.map(sqlRow => {
+      mapFunction(rowWrapper(sqlRow))
+    })
+  }
+
+  /**
+   * Spark flatMap with a rowWrapper
+   */
+  def flatMapRows[U: ClassTag](mapFunction: (RowWrapper) => TraversableOnce[U]): RDD[U] = {
+    this.flatMap(sqlRow => {
       mapFunction(rowWrapper(sqlRow))
     })
   }
