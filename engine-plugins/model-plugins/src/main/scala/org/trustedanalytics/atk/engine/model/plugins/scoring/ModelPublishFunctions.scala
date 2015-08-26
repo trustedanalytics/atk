@@ -66,7 +66,7 @@ object ModelPublish {
       classWriter.print(modelClassName)
       classWriter.close()
 
-      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
+      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))//remove the first 5 characeters of the file location
 
       val tarTempPath = "/tmp/scoring.tar"
       val tarTempFile = new File(tarTempPath)
