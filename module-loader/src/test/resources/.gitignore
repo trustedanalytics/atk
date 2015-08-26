@@ -1,0 +1,2 @@
+# this module needs some fake jars for unit testing
+!*.jar
