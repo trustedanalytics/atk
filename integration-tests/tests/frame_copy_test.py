@@ -54,7 +54,7 @@ class FrameCopyTest(unittest.TestCase):
         print "copy()"
         top10_frame = frame.copy()
         self.assertEquals(top10_frame.row_count, 20, "copy should have same number of rows as original")
-        self.assertNotEquals(frame._id, top10_frame._id, "copy should have a different id from the original")
+        self.assertNotEquals(frame.uri, top10_frame.uri, "copy should have a different id from the original")
 
     def test_copy_empty(self):
         csv = ta.CsvFile("/datasets/empty.csv", schema= [('rank', ta.int32),

@@ -30,7 +30,7 @@ was trained on.""") observationColumns: Option[List[String]]) {
 
 @PluginDoc(oneLine = "<TBD>",
   extended = """""")
-class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, FrameEntity] {
+class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -57,7 +57,7 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: NaiveBayesPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: NaiveBayesPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 

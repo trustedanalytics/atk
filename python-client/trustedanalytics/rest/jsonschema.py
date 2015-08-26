@@ -34,32 +34,70 @@ __all__ = ['get_command_def']
 # And source_code/engine/interfaces/src/main/scala/com/trustedanalytics/trustedanalytics/schema/JsonSchema.scala
 
 json_type_id_to_data_type  = {
-    "ia:int": int32,
-    "ia:long": int64,
-    "ia:float": float32,
-    "ia:double": float64,
-    "ia:bool": bool,
+    "atk:int32": int32,
+    "atk:int64": int64,
+    "atk:float32": float32,
+    "atk:float64": float64,
+    "atk:bool": bool,
+    "atk:vector": vector
 }
 
 _unspecified = object()
 
 
-def get_data_type_from_json_type_id(json_type_str, default=_unspecified):
+def get_data_type_from_json_schema_using_id(json_schema, default=_unspecified):
     try:
-        if json_type_str.startswith("ia:vector"):
-            return vector.get_from_string(json_type_str[3:])
-        return json_type_id_to_data_type[json_type_str]
+        if json_schema['id'].startswith("atk:vector"):
+            return vector.get_from_string(json_schema['type'])
+        return json_type_id_to_data_type[json_schema['id']]
     except:
         if default is _unspecified:
-            raise ValueError("Unsupported JSON string for data type: %s" % json_type_str)
+            raise ValueError("Unsupported JSON string for data type: %s" % json_schema['id'])
         return default
 
 
-json_str_formats_to_data_type = {
-    "uri/ia-frame": Frame,
-    "uri/ia-graph": Graph,
-}
 
+# todo - this stuff needs big rework
+# Need 1. the name of the type for documentation  frame-vertex --> VertexFrame, bool --> bool
+#      2. the constructor for the type if it is in return value 'result' JSON
+# atkschema.py - defines types to schema declaration
+# atktypes.py - defines types for ATK API, including entities and result types, list and dictionary conversion (superset of atkschema)
+#
+# Going for stopgap for now, with an AtkEntityType to handle entities specifically...
+
+class AtkEntityType(object):
+    def __init__(self, name, constructor):
+        self.name = name
+        self.constructor = constructor
+
+    def __name__(self):
+        return self.name
+
+
+    def __str__(self):
+        return self.name
+
+    def create(self, raw_value):
+        return self.constructor(raw_value)
+
+def _get_frame(uri_dict):
+    from trustedanalytics import get_frame
+    return get_frame(uri_dict['uri'])
+
+def _get_graph(uri_dict):
+    from trustedanalytics import get_graph
+    return get_graph(uri_dict['uri'])
+
+def _get_model(uri_dict):
+    from trustedanalytics import get_model
+    return get_model(uri_dict['uri'])
+
+entity_schema_id_to_type = {'atk:frame': AtkEntityType("Frame", _get_frame),
+                            'atk:graph': AtkEntityType("Graph", _get_graph),
+                            'atk:model': AtkEntityType("Model", _get_model)}
+
+
+    # Avoid returning actual type, unless we add this to the meta prog
 
 def get_data_type(json_schema):
     """
@@ -67,9 +105,13 @@ def get_data_type(json_schema):
     """
     try:
         data_type = None
-        # first try from id
-        if 'id' in json_schema:
-            data_type = get_data_type_from_json_type_id(json_schema['id'], None)
+        #print "json_schema=%s" % json.dumps(json_schema, indent=2)
+
+        if 'type' in json_schema and json_schema['type'] == 'string' and 'format' in json_schema and json_schema['format'] == 'uri/entity':
+            schema_id = json_schema['id']
+            data_type = entity_schema_id_to_type[json_schema['id']]
+        elif 'id' in json_schema:
+            data_type = get_data_type_from_json_schema_using_id(json_schema, None)
         # next try from type
         if not data_type:
             if 'type' not in json_schema:
@@ -80,14 +122,13 @@ def get_data_type(json_schema):
             if t == 'boolean':
                 return bool
             if t == 'string':
-                if 'format' in json_schema:
-                    data_type = json_str_formats_to_data_type.get(json_schema['format'], unicode)
-                else:
-                    data_type = unicode
+                data_type = unicode
             elif t == 'array':
                 data_type = list
             elif t == 'object':
                 data_type = dict  # use dict for now, TODO - add complex type support
+            elif t == 'unit':
+                data_type = unit
 
         if not data_type:
             #data_type =  dict  # use dict for now, TODO - add complex type support

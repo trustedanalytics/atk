@@ -122,7 +122,7 @@ class SparkGraphStorage(metaStore: MetaStore,
         implicit session =>
           {
             copiedFrames.foreach(frame => metaStore.frameRepo.update(frame.copy(graphId = Some(graphCopy.id), modifiedOn = new DateTime)))
-            metaStore.graphRepo.update(graphCopy.copy(storage = storageName, storageFormat = "ia/frame")).get
+            metaStore.graphRepo.update(graphCopy.copy(storage = storageName, storageFormat = StorageFormats.SeamlessGraph)).get
           }
       }
     }

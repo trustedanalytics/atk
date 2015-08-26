@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
-import org.trustedanalytics.atk.domain.frame.{ TallyPercentArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.TallyPercentArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -36,7 +37,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 the column values and keeping track of the current percentage of the
 total number of times the specified *count_value* has been seen up to
 the current value.""")
-class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, FrameEntity] {
+class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -57,7 +58,7 @@ class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, FrameEntit
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: TallyPercentArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: TallyPercentArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
 
     // run the operation

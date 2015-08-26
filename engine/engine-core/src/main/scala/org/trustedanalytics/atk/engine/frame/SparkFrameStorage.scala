@@ -50,17 +50,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override type Context = SparkContext
   override type Data = FrameRdd
 
-  def exchangeNames(frame1: FrameEntity, frame2: FrameEntity): (FrameEntity, FrameEntity) = {
-    metaStore.withTransaction("SFS.exchangeNames") { implicit txn =>
-      val f1Name = frame1.name
-      val f2Name = frame2.name
-      metaStore.frameRepo.update(frame1.copy(name = None))
-      metaStore.frameRepo.update(frame2.copy(name = None))
-      val newF1 = metaStore.frameRepo.update(frame1.copy(name = f2Name))
-      val newF2 = metaStore.frameRepo.update(frame2.copy(name = f1Name))
-      (newF1.get, newF2.get)
-    }
-  }
+  val defaultStorageFormat: String = StorageFormats.FileParquet // todo: add to config
 
   /**
    * Copy the frames using spark
@@ -91,18 +81,6 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     saveFrameData(child.toReference, frameRdd)
 
     expectFrame(child.toReference)
-  }
-
-  def exchangeGraphs(frame1: FrameEntity, frame2: FrameEntity): (FrameEntity, FrameEntity) = {
-    metaStore.withTransaction("SFS.exchangeGraphs") { implicit txn =>
-      val f1Graph = frame1.graphId
-      val f2Graph = frame2.graphId
-      metaStore.frameRepo.update(frame1.copy(graphId = None))
-      metaStore.frameRepo.update(frame2.copy(graphId = None))
-      val newF1 = metaStore.frameRepo.update(frame1.copy(graphId = f2Graph))
-      val newF2 = metaStore.frameRepo.update(frame2.copy(graphId = f1Graph))
-      (newF1.get, newF2.get)
-    }
   }
 
   import org.apache.spark.sql.Row
@@ -159,83 +137,46 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    */
   override def saveFrameData(frame: FrameReference, frameRdd: FrameRdd)(implicit invocation: Invocation): FrameEntity =
     withContext("SFS.saveFrame") {
-
-      val targetEntity = prepareForSave(frame)
-      info(s"saving frame ${targetEntity.toDebugString}")
-      try {
-        // save the actual data
-        frameRdd.save(targetEntity.getStorageLocation, targetEntity.storageFormat.get)
-
-        postSave(Some(frame), targetEntity.toReference, frameRdd.frameSchema)
-      }
-      catch {
-        case NonFatal(e) =>
-          error("Error occurred, rolling back saving of frame data", exception = e)
-          // TODO: deleting target seems wrong, better will be to use incomplete status
-          drop(targetEntity)
-          //error("Error occurred, rolling back creation of file for frame data, marking frame as Incomplete", exception = e)
-          //updateFrameStatus(targetEntity.toReference, Status.Incomplete)
-          throw e
-      }
+      val saveInfo = prepareForSave(frame)
+      frameRdd.save(saveInfo.targetPath, saveInfo.storageFormat)
+      postSave(frame, saveInfo, frameRdd.frameSchema)
     }
 
+  // The implemented mutable strategy increments a subdirectory for a given
+  // frame path.  The given path is the source and path+1 is the destination.
+  val revPattern = """.*r(\d+)$""".r
+
   /**
-   * Create a new frame reference and prepare it for saving.
+   * Gets the next revision's folder name
+   * @param frame entity to be saved
+   * @return folder name (not absolute)
+   */
+  private def getNextRevFolderName(frame: FrameEntity): String = {
+    val r = frame.storageLocation match {
+      case Some(path) => path match {
+        case revPattern(number) => number.toInt + 1
+      }
+      case None => 0
+    }
+    s"r$r"
+  }
+
+  /**
+   * Prepare save path, return info about the save
    *
    * Exposed here for Giraph (and anything else where the frame will be materialized outside of Spark)
    * - you don't need to call this for Spark plugins.
    *
    * Developer needs to call postSave() once the frame has been materialized.
    */
-  override def prepareForSave(createEntity: CreateEntityArgs)(implicit invocation: Invocation): FrameEntity = {
-    val newFrame = create(createEntity)
-    prepareForSave(newFrame.toReference)
-  }
-
-  /**
-   * Prepare a frame reference for saving, if already materialized then create a new revision.
-   *
-   * Developer needs to call postSave() once the frame has been materialized.
-   */
-  def prepareForSave(frame: FrameReference)(implicit invocation: Invocation): FrameEntity = {
-
+  def prepareForSave(frame: FrameReference, forceStorageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo = {
     val frameEntity = expectFrame(frame)
-
-    // determine if this one has been materialized to disk or not
-    val targetEntity = if (frameEntity.storageLocation.isDefined) {
-      metaStore.withTransaction("sfs.switch-names-and-graphs") { implicit txn =>
-        //We're saving over something that already exists - which we must not do.
-        //So instead we create a new frame.
-        info(s"Path for frame ${frameEntity.id} / ${frameEntity.name} already exists, creating new frame instead")
-        // TODO: initialize command id in frame
-        val child = frameEntity.createChild(Some(invocation.user.user.id), command = None)
-        metaStore.frameRepo.insert(child)
-      }
-    }
-    else {
-      info(s"Path for frame ${frameEntity.id} / ${frameEntity.name} does not exist, will save there")
-      frameEntity
-    }
-
-    metaStore.withSession("frame.prepareForSave") {
-      implicit session =>
-        {
-          val storageFormat = targetEntity.storageFormat.getOrElse(StorageFormats.FileParquet)
-          val path = frameFileStorage.frameBaseDirectory(targetEntity.id).toString
-          metaStore.frameRepo.update(targetEntity.copy(storageFormat = Some(storageFormat),
-            storageLocation = Some(path),
-            // set the timestamp for when we're starting materialization
-            materializedOn = Some(new DateTime),
-            modifiedOn = new DateTime,
-            modifiedBy = Some(invocation.user.user.id)))
-        }
-    }
-
+    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), getNextRevFolderName(frameEntity))
     // delete incomplete data on disk if it exists
-    frameFileStorage.delete(targetEntity)
-
-    // get latest frame from meta store
-    expectFrame(targetEntity.toReference)
+    frameFileStorage.deletePath(targetPath)
+    val storageFormat = forceStorageFormat.getOrElse(frameEntity.storageFormat.getOrElse(defaultStorageFormat))
+    info(s"Preparing to save frame ${frame.id} (name: ${frameEntity.name}) to $targetPath as $storageFormat")
+    SaveInfo(targetPath = targetPath.toString, victimPath = frameEntity.storageLocation, storageFormat = storageFormat)
   }
 
   /**
@@ -243,12 +184,12 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    *
    * Exposed here for Giraph - you don't need to call this for Spark plugins.
    *
-   * @param originalFrameRef the frame that was acted on
    * @param targetFrameRef might be same as originalFrameRef or the next revision
+   * @param saveInfo prepare save info
    * @param schema the new schema
    * @return the latest version of the entity
    */
-  override def postSave(originalFrameRef: Option[FrameReference], targetFrameRef: FrameReference, schema: Schema)(implicit invocation: Invocation): FrameEntity = {
+  override def postSave(targetFrameRef: FrameReference, saveInfo: SaveInfo, schema: Schema)(implicit invocation: Invocation): FrameEntity = {
     // update the metastore
     metaStore.withSession("frame.saveFrame") {
       implicit session =>
@@ -259,6 +200,8 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
 
           val updatedFrame = frameEntity.copy(status = Status.Active,
             schema = schema,
+            storageLocation = Some(saveInfo.targetPath),
+            storageFormat = Some(saveInfo.storageFormat),
             materializationComplete = Some(new DateTime),
             modifiedOn = new DateTime,
             modifiedBy = Some(invocation.user.user.id))
@@ -266,22 +209,12 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
           val withCount = updatedFrame.copy(rowCount = Some(getRowCount(updatedFrame)))
 
           metaStore.frameRepo.update(withCount)
+
+          if (saveInfo.victimPath.isDefined) {
+            frameFileStorage.deletePath(new Path(saveInfo.victimPath.get))
+          }
         }
     }
-
-    // if a child was created, it will need to take the name and graph from the parent
-    if (originalFrameRef.isDefined && originalFrameRef.get.id != targetFrameRef.id) {
-      metaStore.withTransaction("sfs.switch-names-and-graphs") { implicit txn =>
-        {
-          // remove name from existing frame since it is on the child
-          val (f1, f2) = exchangeNames(expectFrame(originalFrameRef.get), expectFrame(targetFrameRef))
-          // TODO: shouldn't exchange graphs, should insert a new revision of a graph but this is complicated because there might be multiple frame modifications in one step for graphs
-          exchangeGraphs(f1, f2)
-        }
-      }
-    }
-
-    // look up the latest version from the DB
     expectFrame(targetFrameRef)
   }
 
@@ -428,7 +361,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
           val frame = metaStore.frameRepo.insert(frameTemplate).get
 
           //remove any existing artifacts to prevent collisions when a database is reinitialized.
-          frameFileStorage.delete(frame)
+          frameFileStorage.deletePath(frameFileStorage.calculateFramePath(frame))
 
           frame
         }
@@ -469,7 +402,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    */
   override def lookupErrorFrame(frame: FrameEntity)(implicit invocation: Invocation): Option[FrameEntity] = {
     if (frame.errorFrameId.isDefined) {
-      Some(expectFrame(frame.toReference))
+      Some(expectFrame(FrameReference(frame.errorFrameId.get)))
     }
     else {
       None

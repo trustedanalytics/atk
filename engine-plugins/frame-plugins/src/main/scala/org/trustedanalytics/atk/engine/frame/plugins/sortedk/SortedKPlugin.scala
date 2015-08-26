@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.sortedk
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -58,7 +58,7 @@ In particular:
 3) Use Frame.sort() instead if the number of sorted rows (k) is
   very large (i.e., cannot fit in Spark driver memory).""",
   returns = "A new frame with the first k sorted rows from the original frame.")
-class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameEntity] {
+class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -85,7 +85,7 @@ class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return New frame with top-K sorted rows.
    */
-  override def execute(arguments: SortedKArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: SortedKArgs)(implicit invocation: Invocation): UnitReturn = {
     // load frame
     val frame: SparkFrame = arguments.frame
 
