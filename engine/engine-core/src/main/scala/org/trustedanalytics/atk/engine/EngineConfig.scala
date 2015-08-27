@@ -84,7 +84,21 @@ trait EngineConfig extends EventLogging {
 
   val defaultTimeout: FiniteDuration = config.getInt("trustedanalytics.atk.engine.default-timeout").seconds
 
+  /**
+   * The hdfs URL where the 'trustedanalytics' folder will be created and which will be used as the starting
+   * point for any relative URLs e.g. "hdfs://hostname/user/atkuser"
+   */
   val fsRoot: String = config.getString("trustedanalytics.atk.engine.fs.root")
+
+  /**
+   * Absolute local paths where jars are copied from
+   */
+  val localLibs: List[String] = config.getStringList("trustedanalytics.atk.engine.local-libs").asScala.toList
+
+  /**
+   * Path relative to fs.root where jars are copied to
+   */
+  val hdfsLib: String = config.getString("trustedanalytics.atk.engine.hdfs-lib")
 
   val pageSize: Int = config.getInt("trustedanalytics.atk.engine.page-size")
 

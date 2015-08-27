@@ -14,14 +14,14 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.domain.frame
+package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
-
-case class RenameFrameArgs(
-    @ArgDoc("""<TBD>""") frame: FrameReference,
-    @ArgDoc("""The new name of the frame.""") newName: String) {
-  require(frame != null, "frame is required")
-  require(newName != null && newName.nonEmpty, "newName is required")
-  FrameName.validate(newName)
-}
+case class RandomForestRegressorTrainReturn(observationColumns: List[String],
+                                            labelColumn: String,
+                                            numTrees: Int,
+                                            numNodes: Int,
+                                            featureSubsetCategory: String,
+                                            impurity: String,
+                                            maxDepth: Int,
+                                            maxBins: Int,
+                                            seed: Int)

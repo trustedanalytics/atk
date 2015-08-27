@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 
 import spray.json._
@@ -300,7 +300,7 @@ regarding topic membership, using this information.
 .. [#LDA6] http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf
 .. [#LDA7] http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf
 """)
-class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelEntity] {
+class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -309,7 +309,7 @@ class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelEntity] {
    */
   override def name: String = "model:lda/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     val models = engine.models
     models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:lda")))
   }

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.load.HBasePlugin
 
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.load.HBaseArgs
-import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
+import org.trustedanalytics.atk.domain.frame.{ FrameReference }
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
   extended = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
   returns = "the initial FrameRDD with the hbase data appended")
-class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameEntity] {
+class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graph/ml/loopy_belief_propagation
@@ -58,7 +58,7 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameEntity] {
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: HBaseArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: HBaseArgs)(implicit invocation: Invocation): FrameReference = {
     val destinationFrame: SparkFrame = arguments.destination
 
     // run the operation

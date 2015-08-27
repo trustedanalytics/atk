@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.pagerank
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -61,7 +61,7 @@ object PageRankDefaults {
   val convergenceToleranceDefault = 0.001d
 }
 
-case class PageRankResult(vertexDictionaryOutput: Map[String, FrameEntity], edgeDictionaryOutput: Map[String, FrameEntity])
+case class PageRankResult(vertexDictionaryOutput: Map[String, FrameReference], edgeDictionaryOutput: Map[String, FrameReference])
 
 /** Json conversion for arguments and return value case classes */
 object PageRankJsonFormat {
@@ -174,7 +174,7 @@ class PageRankPlugin extends SparkCommandPlugin[PageRankArgs, PageRankResult] {
     val edgeFrameRddMap = FrameRdd.toFrameRddMap(outEdges, outVertices)
 
     val edgeMap = edgeFrameRddMap.keys.map(edgeLabel => {
-      val edgeFrame = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
+      val edgeFrame: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = edgeFrameRddMap(edgeLabel)
         newOutputFrame.save(frameRdd)
       }
@@ -184,7 +184,7 @@ class PageRankPlugin extends SparkCommandPlugin[PageRankArgs, PageRankResult] {
     val vertexFrameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     val vertexMap = vertexFrameRddMap.keys.map(vertexLabel => {
-      val vertexFrame = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
+      val vertexFrame: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = vertexFrameRddMap(vertexLabel)
         newOutputFrame.save(frameRdd)
       }

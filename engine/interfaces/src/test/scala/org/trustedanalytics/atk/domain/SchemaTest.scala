@@ -461,17 +461,32 @@ class SchemaTest extends WordSpec with Matchers {
       assert(renamed.isInstanceOf[VertexSchema])
     }
 
-    // TODO: fix this in Schema
-    "be able to rename movie_id column" ignore {
+    "be able to rename movie_id column" in {
       val renamed = vertexSchema.renameColumn("movie_id", "m_id")
       renamed.hasColumn("movie_id") shouldBe false
       renamed.hasColumn("m_id") shouldBe true
       renamed.asInstanceOf[VertexSchema].idColumnName.get shouldBe "m_id"
     }
 
+    "be able to rename a subset of columns" in {
+      val renamed = vertexSchema.renameColumns(Map("movie_id" -> "m_id", "name" -> "title"))
+      renamed.hasColumn("movie_id") shouldBe false
+      renamed.hasColumn("m_id") shouldBe true
+      renamed.hasColumn("name") shouldBe false
+      renamed.hasColumn("title") shouldBe true
+      renamed.columnNames shouldBe List(GraphSchema.vidProperty, GraphSchema.labelProperty, "m_id", "title")
+      renamed.asInstanceOf[VertexSchema].idColumnName.get shouldBe "m_id"
+    }
+
     "not be able to rename _vid column" in {
       intercept[IllegalArgumentException] {
         vertexSchema.renameColumn(GraphSchema.vidProperty, "other")
+      }
+    }
+
+    "not be able to rename non-existent columns" in {
+      intercept[IllegalArgumentException] {
+        vertexSchema.renameColumn("invalid_col", "other")
       }
     }
 

@@ -18,8 +18,8 @@ package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
-import org.scalatest.{FlatSpec, Matchers}
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class DropDuplicatesByColumnITest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
@@ -52,7 +52,7 @@ class DropDuplicatesByColumnITest extends FlatSpec with Matchers with TestingSpa
       Row("Peter", 3, "Star War")
     )
 
-    duplicatesRemoved should contain theSameElementsAs(expectedResults)
+    duplicatesRemoved should contain theSameElementsAs (expectedResults)
   }
 
   "dropDuplicatesByColumn" should "keep only unique rows" in {
@@ -88,27 +88,27 @@ class DropDuplicatesByColumnITest extends FlatSpec with Matchers with TestingSpa
       Row("Peter", 3, "Star War")
     )
 
-    duplicatesRemoved should contain theSameElementsAs(expectedResults)
+    duplicatesRemoved should contain theSameElementsAs (expectedResults)
   }
 
   "dropDuplicatesByColumn" should "throw an IllegalArgumentException for invalid column names" in {
-     intercept[IllegalArgumentException]{
-       //setup test data
-       val favoriteMovies = List(
-         Row("John", 1, "Titanic"),
-         Row("Kathy", 2, "Jurassic Park"),
-         Row("John", 1, "The kite runner"),
-         Row("Kathy", 2, "Toy Story 3"),
-         Row("Peter", 3, "Star War"))
+    intercept[IllegalArgumentException] {
+      //setup test data
+      val favoriteMovies = List(
+        Row("John", 1, "Titanic"),
+        Row("Kathy", 2, "Jurassic Park"),
+        Row("John", 1, "The kite runner"),
+        Row("Kathy", 2, "Toy Story 3"),
+        Row("Peter", 3, "Star War"))
 
-       val schema = FrameSchema(List(
-         Column("name", DataTypes.string),
-         Column("id", DataTypes.int32),
-         Column("movie", DataTypes.string)))
+      val schema = FrameSchema(List(
+        Column("name", DataTypes.string),
+        Column("id", DataTypes.int32),
+        Column("movie", DataTypes.string)))
 
-       val rdd = sparkContext.parallelize(favoriteMovies)
-       val frameRdd = new FrameRdd(schema, rdd)
-       frameRdd.dropDuplicatesByColumn(List("name", "invalidCol1", "invalidCol2")).collect()
-     }
+      val rdd = sparkContext.parallelize(favoriteMovies)
+      val frameRdd = new FrameRdd(schema, rdd)
+      frameRdd.dropDuplicatesByColumn(List("name", "invalidCol1", "invalidCol2")).collect()
+    }
   }
 }

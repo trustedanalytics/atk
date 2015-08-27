@@ -1335,6 +1335,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <version>8.4-702.jdbc4</version>
             </dependency>
             <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>5.1.6</version>
+            </dependency>
+            <dependency>
                 <groupId>com.github.tototoshi</groupId>
                 <artifactId>slick-joda-mapper_2.10</artifactId>
                 <version>1.1.0</version>
