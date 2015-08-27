@@ -29,11 +29,7 @@ mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
 cp -Rv ../python-client/examples/end-user/* ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
 
-if [ -d /home/agent/datasets ]; then
-    #copy datasets from agent home if it exists into the rpm tar.gz source
-    cp -Rv /home/agent/datasets ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples
-fi
-
+cp -v ../lib/* ${BUILD_DIR}/etc/trustedanalytics/rest-server/
 
 cp -v ../conf/examples/application.conf.tpl ${BUILD_DIR}/etc/trustedanalytics/rest-server
 cp -v ../conf/examples/parcel.conf.tpl      ${BUILD_DIR}/etc/trustedanalytics/rest-server

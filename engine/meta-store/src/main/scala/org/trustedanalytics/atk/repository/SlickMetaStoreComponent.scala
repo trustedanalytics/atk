@@ -532,16 +532,16 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       frames.list
     }
 
-    override def scanTotal()(implicit session: Session): Seq[FrameEntity] = {
-      frames.filter(_.statusId === Status.Active).list
+    override def totalCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).list.length
     }
 
-    override def scanError()(implicit session: Session): Seq[FrameEntity] = {
-      frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNotNull).list
+    override def errorCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNotNull).list.length
     }
 
-    override def scanSuccessful()(implicit session: Session): Seq[FrameEntity] = {
-      frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNull).list
+    override def successfulCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNull).list.length
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[FrameEntity] = {
@@ -738,16 +738,16 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
         .sortBy(_.id).list
     }
 
-    override def scanTotal()(implicit session: Session): Seq[Command] = {
-      commandTable.list
+    override def totalCount()(implicit session: Session): Int = {
+      commandTable.list.length
     }
 
-    override def scanError()(implicit session: Session): Seq[Command] = {
-      commandTable.filter(_.error.isNotNull).list
+    override def errorCount()(implicit session: Session): Int = {
+      commandTable.filter(_.error.isNotNull).list.length
     }
 
-    override def scanSuccessful()(implicit session: Session): Seq[Command] = {
-      commandTable.filter(_.error.isNull).list
+    override def successfulCount()(implicit session: Session): Int = {
+      commandTable.filter(_.error.isNull).filter(_.complete === true).list.length
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[Command] = {
@@ -884,8 +884,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       graphs.list
     }
 
-    override def scanTotal()(implicit session: Session): Seq[GraphEntity] = {
-      graphs.filter(_.statusId == Status.Active).list
+    override def totalCount()(implicit session: Session): Int = {
+      graphs.filter(_.statusId == Status.Active).list.length
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[GraphEntity] = {

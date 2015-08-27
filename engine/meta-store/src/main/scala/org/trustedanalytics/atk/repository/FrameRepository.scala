@@ -42,11 +42,11 @@ trait FrameRepository[Session] extends Repository[Session, DataFrameTemplate, Fr
    */
   def scanAll()(implicit session: Session): Seq[FrameEntity]
 
-  def scanTotal()(implicit session: Session): Seq[FrameEntity]
+  def totalCount()(implicit session: Session): Int
 
-  def scanSuccessful()(implicit session: Session): Seq[FrameEntity]
+  def successfulCount()(implicit session: Session): Int
 
-  def scanError()(implicit session: Session): Seq[FrameEntity]
+  def errorCount()(implicit session: Session): Int
 
   def lookupByGraphId(graphId: Long)(implicit session: Session): Seq[FrameEntity]
 

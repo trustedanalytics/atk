@@ -54,6 +54,7 @@ echo "$NAME Api Server logging going to $LOG"
 
 echo "starting"
 java $@ -XX:MaxPermSize=256m -Xss10m -cp "$CONF:$LAUNCHER" \
+    -javaagent:$DIR/../lib/aspectjweaver-1.8.6.jar \
     -Dconfig.resource=integration-test.conf \
     -Dtrustedanalytics.atk.engine.fs.root=file:$FS_ROOT \
     -Dtrustedanalytics.atk.engine.spark.conf.properties.spark.sql.parquet.useDataSourceApi=false \
