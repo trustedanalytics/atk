@@ -14,26 +14,26 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import MLLibJsonProtocol._
-import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
+import ModelPublishJsonProtocol._
+import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 // Implicits needed for JSON conversion
-import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import ModelPublishJsonProtocol._
+import spray.json._
+import LibSvmJsonProtocol._
 
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
-class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
+  extended = "Returns the HDFS path to the tar file")
+class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -41,7 +41,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:random_forest_classifier/publish"
+  override def name: String = "model:libsvm/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
@@ -71,11 +71,11 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
 
     val model: Model = arguments.model
 
-    //Extracting the RandomForestModel from the stored JsObject
-    val randomForestData = model.data.convertTo[RandomForestClassifierData]
-    val randomForestModel = randomForestData.randomForestModel
-    val jsvalue: JsValue = randomForestModel.toJson
+    //Extracting the KMeansModel from the stored JsObject
+    val libsvmData = model.data.convertTo[LibSvmData]
+    val libsvmModel = libsvmData.svmModel
+    val jsvalue: JsValue = libsvmModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
   }
 }

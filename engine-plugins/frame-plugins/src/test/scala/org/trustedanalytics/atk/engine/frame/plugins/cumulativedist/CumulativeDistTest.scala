@@ -20,7 +20,7 @@ import org.apache.spark.SparkException
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.domain.schema.{DataTypes, Column, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
