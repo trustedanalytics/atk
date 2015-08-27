@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ RenameColumnsArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.RenameColumnsArgs
 import org.trustedanalytics.atk.engine.frame.Frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation, PluginDoc }
 
@@ -29,7 +30,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "<TBD>",
   extended = "<TBD>")
-class RenameColumnsPlugin extends CommandPlugin[RenameColumnsArgs, FrameEntity] {
+class RenameColumnsPlugin extends CommandPlugin[RenameColumnsArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -48,7 +49,7 @@ class RenameColumnsPlugin extends CommandPlugin[RenameColumnsArgs, FrameEntity] 
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: RenameColumnsArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: RenameColumnsArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: Frame = arguments.frame
     frame.renameColumns(arguments.names.toSeq)
     frame

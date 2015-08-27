@@ -138,13 +138,13 @@ Example response body for command 17, a 'load' on frame 16 which has completed::
        "created_on": "2015-05-15T14:58:23.369-07:00",
        "modified_on": "2015-05-15T14:58:35.272-07:00",
        "storage_format": "file/parquet",
-       "storage_location": "hdfs://paulsimon.hf.trustedanalytics.com/user/atkuser/trustedanalytics/dataframes/16",
+       "storage_location": "hdfs://paulsimon.hf.trustedanalytics.com/user/atkuser/trustedanalytics/frames/16",
        "row_count": 3,
        "modified_by": 1,
        "materialized_on": "2015-05-15T14:58:32.611-07:00",
        "materialization_complete": "2015-05-15T14:58:35.258-07:00",
        "last_read_date": "2015-05-15T14:58:23.369-07:00",
-       "ia_uri": "ia://frame/16",
+       "uri": "frames/16",
        "entity_type": "frame:"
      },
      "links": [{

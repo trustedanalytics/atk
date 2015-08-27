@@ -14,11 +14,11 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load.HBasePlugin
+package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 
 import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.domain.frame.load.HBaseArgs
-import org.trustedanalytics.atk.domain.frame.{ FrameReference }
+import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
+import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
@@ -30,10 +30,10 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
-  extended = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
-  returns = "the initial FrameRDD with the hbase data appended")
-class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] {
+@PluginDoc(oneLine = "Append data from a Jdbc table into an existing (possibly empty) frame",
+  extended = "Append data from a Jdbc table into an existing (possibly empty) frame",
+  returns = "the initial frame with the Jdbc data appended")
+class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
 
   /**
    * The name of the command, e.g. graph/ml/loopy_belief_propagation
@@ -41,13 +41,13 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] 
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/loadhbase"
+  override def name: String = "frame/loadjdbc"
 
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(load: HBaseArgs)(implicit invocation: Invocation) = 8
+  override def numberOfJobs(load: JdbcArgs)(implicit invocation: Invocation) = 8
 
   /**
    * Parsing data to load and append to data frames
@@ -58,17 +58,18 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] 
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: HBaseArgs)(implicit invocation: Invocation): FrameReference = {
+  override def execute(arguments: JdbcArgs)(implicit invocation: Invocation): FrameEntity = {
     val destinationFrame: SparkFrame = arguments.destination
 
     // run the operation
-    val hBaseRdd = LoadHBaseImpl.createRdd(sc, arguments.tableName, arguments.schema, arguments.startTag, arguments.endTag)
-    val hBaseSchema = new FrameSchema(arguments.schema.map {
-      case x => Column(x.columnFamily + "_" + x.columnName, x.dataType)
-    })
-    val additionalData = FrameRdd.toFrameRdd(hBaseSchema, hBaseRdd)
+    val dataFrame = LoadJdbcImpl.createDataFrame(sc, arguments)
+    val schema = dataFrame.dtypes.toList
 
-    LoadRddFunctions.unionAndSave(destinationFrame, additionalData)
+    val jdbcSchema = new FrameSchema(schema.map {
+      case (columnName, columnType) => Column(columnName, LoadJdbcImpl.sparkDataTypeToSchemaDataType(columnType))
+    })
+
+    LoadRddFunctions.unionAndSave(destinationFrame, new FrameRdd(jdbcSchema, dataFrame))
   }
 
 }

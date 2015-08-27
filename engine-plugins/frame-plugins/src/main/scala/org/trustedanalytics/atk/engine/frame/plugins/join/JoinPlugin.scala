@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -42,7 +42,7 @@ import JoinJsonFormat._
  */
 @PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).",
   extended = "<TBD>")
-class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
+class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -65,7 +65,7 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
    * @param arguments parameter contains information for the join operation (user supplied arguments to running this plugin)
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: JoinArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: JoinArgs)(implicit invocation: Invocation): FrameReference = {
     val leftFrame: SparkFrame = arguments.leftFrame.frame
     val rightFrame: SparkFrame = arguments.rightFrame.frame
 
@@ -76,7 +76,7 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold
 
-    val joinResultRDD = JoinRddFunctions.joinRDDs(
+    val joinedFrame = JoinRddFunctions.join(
       createRDDJoinParam(leftFrame, arguments.leftFrame.joinColumn, broadcastJoinThreshold),
       createRDDJoinParam(rightFrame, arguments.rightFrame.joinColumn, broadcastJoinThreshold),
       arguments.how,
@@ -84,12 +84,8 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
       arguments.skewedJoinType
     )
 
-    val allColumns = Schema.join(leftFrame.schema.columns, rightFrame.schema.columns)
-    val newJoinSchema = FrameSchema(allColumns)
-
-    val joinedFrame = new FrameRdd(newJoinSchema, joinResultRDD)
-
-    engine.frames.tryNewFrame(CreateEntityArgs(name = arguments.name, description = Some("created from join operation"))) {
+    engine.frames.tryNewFrame(CreateEntityArgs(name = arguments.name,
+      description = Some("created from join operation"))) {
       newFrame => newFrame.save(joinedFrame)
     }
   }
@@ -103,11 +99,7 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameEntity] {
     val genericRowFrame = new FrameRdd(frame.rdd.frameSchema, JoinRddFunctions.toGenericRowRdd(frame.rdd))
 
     val frameSize = if (broadcastJoinThreshold > 0) frame.sizeInBytes else None
-    RddJoinParam(genericRowFrame.toDataFrame,
-      joinColumn,
-      frame.schema.columnIndex(joinColumn),
-      frame.schema.columns.length,
-      frameSize)
+    RddJoinParam(genericRowFrame, joinColumn, frameSize)
   }
 
 }

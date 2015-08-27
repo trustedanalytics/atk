@@ -701,5 +701,58 @@ class HBaseTable(object):
         return True
 
 
+class JdbcTable(object):
+    """
+    Define the object to retrieve the data from an jdbc table.
+
+    Parameters
+    ----------
+    table_name : str
+        the table name
+    url : str
+        Jdbc connection string (as url)
+    driver_name : str
+        An optional driver name
+    query : initial query (for data filtering / processing)
+
+    Returns
+    -------
+    class : JdbcTable object
+        An object which holds jdbc data.
+
+    Examples
+    --------
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.connect()
+        >>> jdbcTable = tp.JdbcTable ("test",
+                                      "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
+                                      "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                                      "select * FROM SomeTable")
+        >>> frame = tp.Frame(jdbcTable)
+        >>> frame.inspect()
+
+    """
+
+    def __init__(self, table_name, url = None, driver_name = None, query = None):
+        if (not isinstance(table_name, str)):
+            raise ValueError("Incorrect table name")
+
+        self.table_name = table_name
+        self.url = url
+        self.driver_name = driver_name
+        self.query = query
+
+    def to_json(self):
+        return {"url": self.url,
+                "table_name": self.table_name,
+                "driver_name": self.driver_name,
+                "query": self.query}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
+
 
 

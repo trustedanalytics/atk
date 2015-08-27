@@ -30,7 +30,7 @@ class Column(object):
     def _as_json_obj(self):
         return { "name": self.name,
                  "data_type": valid_data_types.to_string(self.data_type),
-                 "frame": None if not self.frame else self.frame._id}
+                 "frame": None if not self.frame else self.frame.uri}
 
     @property
     def frame(self):

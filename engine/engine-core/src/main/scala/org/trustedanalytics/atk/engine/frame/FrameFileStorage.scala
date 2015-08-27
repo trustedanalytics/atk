@@ -33,38 +33,38 @@ class FrameFileStorage(fsRoot: String,
                        val hdfs: HdfsFileStorage)(implicit startupInvocation: Invocation)
     extends EventLogging with EventLoggingImplicits {
 
-  private val framesBaseDirectory = new Path(fsRoot + "/trustedanalytics/dataframes")
+  private val framesBaseDirectory = new Path(fsRoot + "/trustedanalytics/frames")
 
   withContext("FrameFileStorage") {
     info("fsRoot: " + fsRoot)
     info("data frames base directory: " + framesBaseDirectory)
   }
 
-  def frameBaseDirectoryExists(dataFrame: FrameEntity) = {
-    val path = frameBaseDirectory(dataFrame.id)
-    hdfs.exists(path)
-  }
-
-  def createFrame(dataFrame: FrameEntity): Path = withContext("createFrame") {
-
-    if (frameBaseDirectoryExists(dataFrame)) {
-      throw new IllegalArgumentException(s"Frame already exists at ${frameBaseDirectory(dataFrame.id)}")
-    }
-    //TODO: actually create the file?
-    frameBaseDirectory(dataFrame.id)
+  /**
+   * Determines what the storage path should be based on information in the Entity and current configuration
+   * @param frame the data frame to act on
+   * @return
+   */
+  def calculateFramePath(frame: FrameEntity): Path = {
+    new Path(framesBaseDirectory, frame.id.toString)
   }
 
   /**
-   * Remove the directory and underlying data for a particular revision of a data frame
-   * @param dataFrame the data frame to act on
+   * Remove the directory and underlying data for a particular frame
+   * @param frame the data frame to act on
    */
-  def delete(dataFrame: FrameEntity): Unit = {
-    hdfs.delete(frameBaseDirectory(dataFrame.id), recursive = true)
+  def delete(frame: FrameEntity): Unit = {
+    if (frame.storageLocation.isDefined) {
+      deletePath(getStoredRevisionPath(frame).getParent)
+    }
   }
 
-  /** Base dir for a frame */
-  private[frame] def frameBaseDirectory(frameId: Long): Path = {
-    new Path(framesBaseDirectory + "/" + frameId)
+  /**
+   * Remove the directory and underlying data for a particular frame
+   * @param path the path of the dir to remove
+   */
+  def deletePath(path: Path): Unit = {
+    hdfs.delete(path, recursive = true)
   }
 
   /**
@@ -73,8 +73,19 @@ class FrameFileStorage(fsRoot: String,
    * @return true if the data frame is saved in the parquet format
    */
   private[frame] def isParquet(dataFrame: FrameEntity): Boolean = {
-    val path = frameBaseDirectory(dataFrame.id)
+    val path = getStoredRevisionPath(dataFrame)
     hdfs.globList(path, "*.parquet").nonEmpty
   }
 
+  /**
+   * Helper method to get the storage path that is stored in the Entity
+   * @param frame the frame to interrogate
+   * @return
+   */
+  private[frame] def getStoredRevisionPath(frame: FrameEntity): Path = {
+    frame.storageLocation match {
+      case Some(path) => new Path(path)
+      case None => throw new RuntimeException(s"Frame ${frame.id} does not have a storage location set")
+    }
+  }
 }

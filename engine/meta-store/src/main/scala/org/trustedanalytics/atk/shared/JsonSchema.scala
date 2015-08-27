@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.shared
 
 import java.net.URI
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.graph.GraphReference
@@ -55,8 +56,20 @@ private[trustedanalytics] object JsonSchemaExtractor {
     getProductSchema(tag, includeDefaultValues = true)
   }
 
-  def getReturnSchema[T](tag: ClassTag[T]): ObjectSchema = {
-    getProductSchema(tag, includeDefaultValues = false)
+  def getReturnSchema[T](tag: ClassTag[T], description: Option[String]): JsonSchema = {
+    val manifest: ClassManifest[T] = tag
+    val fieldHelper = new ProductFormatsAccessor()
+    fieldHelper.extractFieldNames(manifest)
+
+    val mirror = ru.runtimeMirror(tag.runtimeClass.getClassLoader)
+    val typ: ru.Type = mirror.classSymbol(tag.runtimeClass).toType
+    val schema = getSchemaForType(typ, description = description)._1
+    if (schema == JsonSchema.empty) {
+      getProductSchema(tag, includeDefaultValues = false).copy(description = description)
+    }
+    else {
+      schema
+    }
   }
 
   /**
@@ -110,7 +123,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
             case y => Some(y)
           }
         }
-        val (name, (schema, isTypeOption)) = JsonPropertyNameConverter.camelCaseToUnderscores(sym.name.decoded) -> func(sym, i, description, defaultValue)
+        val (name, (schema, isTypeOption)) = JsonPropertyNameConverter.camelCaseToUnderscores(sym.name.decoded) -> func(sym, Some(i), description, defaultValue)
         // todo: turn this check on to print out offenders, and fix them
         //if (isTypeOption && !optional) {
         //  println(s"WARNING - Argument ${sym.name} in $typ is type Option with no default value")
@@ -199,12 +212,12 @@ private[trustedanalytics] object JsonSchemaExtractor {
    *
    * @param clazz the parent class
    * @param symbol the field
-   * @param order the numeric (0 based) order of this field in the class
+   * @param fieldPosition the numeric (0 based) order of this field in the class
    * @return a pair containing the schema, plus a flag indicating if the field is optional or not
    */
-  private def getFieldSchema(clazz: ru.Type)(symbol: ru.Symbol, order: Int, description: Option[String] = None, defaultValue: Option[Any] = None): (JsonSchema, Boolean) = { //JsonSchema = { //}, Boolean) = {
+  private def getFieldSchema(clazz: ru.Type)(symbol: ru.Symbol, fieldPosition: Option[Int] = None, description: Option[String] = None, defaultValue: Option[Any] = None): (JsonSchema, Boolean) = { //JsonSchema = { //}, Boolean) = {
     val typeSignature: ru.Type = symbol.typeSignatureIn(clazz)
-    val schema = getSchemaForType(typeSignature, order, description, defaultValue)
+    val schema = getSchemaForType(typeSignature, fieldPosition, description, defaultValue)
     schema
   }
 
@@ -215,45 +228,46 @@ private[trustedanalytics] object JsonSchemaExtractor {
    * as "self" arguments.
    *
    * @param typeSignature the type
-   * @param order the numeric order of the field within its containing class
+   * @param fieldPosition the numeric order of the field within its containing class
    * @return
    */
-  def getSchemaForType(typeSignature: ru.Type, order: Int, description: Option[String] = None, defaultValue: Option[Any]): (JsonSchema, Boolean) = { // JsonSchema = { //}, Boolean) = {
+  def getSchemaForType(typeSignature: ru.Type, fieldPosition: Option[Int] = None, description: Option[String] = None, defaultValue: Option[Any] = None): (JsonSchema, Boolean) = { // JsonSchema = { //}, Boolean) = {
     val schema = typeSignature match {
       case t if t =:= typeTag[URI].tpe => StringSchema(format = Some("uri"), description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[String].tpe => StringSchema(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Boolean].tpe => JsonSchema.verbose_bool(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Int].tpe => JsonSchema.verbose_int(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Long].tpe => JsonSchema.verbose_long(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Float].tpe => JsonSchema.verbose_float(description = description, defaultValue = defaultValue)
-      case t if t =:= typeTag[Double].tpe => JsonSchema.verbose_double(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Boolean].tpe => JsonSchema.bool(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Int].tpe => JsonSchema.int(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Long].tpe => JsonSchema.long(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Float].tpe => JsonSchema.float(description = description, defaultValue = defaultValue)
+      case t if t =:= typeTag[Double].tpe => JsonSchema.double(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[DateTime].tpe => JsonSchema.dateTime
+      case t if t =:= typeTag[UnitReturn].tpe => JsonSchema.unit
       case t if t =:= typeTag[FrameReference].tpe =>
-        val s = JsonSchema.verbose_frame(description, defaultValue)
-        if (order == 0) {
+        val s = JsonSchema.frame(description, defaultValue)
+        if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
-      case t if t =:= typeTag[FrameEntity].tpe =>
-        val s = JsonSchema.verbose_frame(description, defaultValue)
-        if (order == 0) {
+      case t if t =:= typeTag[FrameEntity].tpe => // todo: remove FrameEntity, should never be used in the published API meta data
+        val s = JsonSchema.frame(description, defaultValue)
+        if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
       case t if t =:= typeTag[GraphReference].tpe =>
-        val s = JsonSchema.graph
-        if (order == 0) {
+        val s = JsonSchema.graph(description, defaultValue)
+        if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
       case t if t =:= typeTag[ModelReference].tpe =>
-        val s = JsonSchema.model
-        if (order == 0) {
+        val s = JsonSchema.model(description, defaultValue)
+        if (fieldPosition.getOrElse(-1) == 0) {
           s.copy(self = Some(true))
         }
         else s
       case t if t.erasure =:= typeTag[Option[Any]].tpe =>
-        val (subSchema, _) = getSchemaForType(t.asInstanceOf[TypeRefApi].args.head, order, description, defaultValue)
+        val (subSchema, _) = getSchemaForType(t.asInstanceOf[TypeRefApi].args.head, fieldPosition, description, defaultValue)
         subSchema
       //parameterized types need special handling
       case t if t.erasure =:= typeTag[Map[Any, Any]].tpe => ObjectSchema()

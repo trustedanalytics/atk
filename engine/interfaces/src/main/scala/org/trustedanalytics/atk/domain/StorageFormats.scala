@@ -23,7 +23,7 @@ object StorageFormats {
 
   val CassandraTitan = "cassandra/titan"
   val HBaseTitan = "hbase/titan"
-  val SeamlessGraph = "ia/frame"
+  val SeamlessGraph = "atk/frame"
   val FileParquet = "file/parquet"
   val FileSequence = "file/sequence"
 

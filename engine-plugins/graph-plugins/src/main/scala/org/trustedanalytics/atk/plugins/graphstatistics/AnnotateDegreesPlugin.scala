@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
 import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilderConfig, GraphBuilder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate, GraphReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -76,7 +76,7 @@ in the degree calculation, regardless of label.""") inputEdgeLabels: Option[List
   def useOutDegree() = "out".startsWith(degreeMethod)
 }
 
-case class AnnotateDegreesReturn(frameDictionaryOutput: Map[String, FrameEntity])
+case class AnnotateDegreesReturn(frameDictionaryOutput: Map[String, FrameReference])
 
 import DomainJsonProtocol._
 import spray.json._
@@ -162,7 +162,7 @@ class AnnotateDegreesPlugin extends SparkCommandPlugin[AnnotateDegreesArgs, Anno
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new AnnotateDegreesReturn(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotated degrees operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotated degrees operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }
