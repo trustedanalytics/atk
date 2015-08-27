@@ -508,6 +508,26 @@ object FrameRdd {
   }
 
   /**
+   * Converts a spark dataType (as string)to our schema Datatype
+   * @param sparkDataType spark data type
+   * @return a DataType
+   */
+  def sparkDataTypeToSchemaDataType(sparkDataType: String): DataType = {
+    if ("intType".equalsIgnoreCase(sparkDataType)) { int32 }
+    else if ("longType".equalsIgnoreCase(sparkDataType)) { int64 }
+    else if ("floatType".equalsIgnoreCase(sparkDataType)) { float32 }
+    else if ("doubleType".equalsIgnoreCase(sparkDataType)) { float64 }
+    else if ("decimalType".equalsIgnoreCase(sparkDataType)) { float64 }
+    else if ("shortType".equalsIgnoreCase(sparkDataType)) { int32 }
+    else if ("stringType".equalsIgnoreCase(sparkDataType)) { DataTypes.string }
+    else if ("dateType".equalsIgnoreCase(sparkDataType)) { DataTypes.string }
+    else if ("byteType".equalsIgnoreCase(sparkDataType)) { int32 }
+    else if ("booleanType".equalsIgnoreCase(sparkDataType)) { int32 }
+    else if ("timeStampType".equalsIgnoreCase(sparkDataType)) { DataTypes.string }
+    else throw new IllegalArgumentException(s"unsupported type $sparkDataType")
+  }
+
+  /**
    * Converts the schema object to a StructType for use in creating a SchemaRDD
    * @return StructType with StructFields corresponding to the columns of the schema object
    */

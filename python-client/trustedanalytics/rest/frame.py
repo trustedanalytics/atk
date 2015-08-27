@@ -28,7 +28,7 @@ import trustedanalytics.rest.config as config
 from trustedanalytics.core.frame import Frame
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.core.column import Column
-from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable
+from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
 
@@ -307,6 +307,13 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
              arguments = data.to_json()
              arguments['destination'] = frame._id
              result = execute_update_frame_command("frame/loadhbase", arguments, frame)
+             self._handle_error(result)
+             return
+
+        if isinstance(data, JdbcTable):
+             arguments = data.to_json()
+             arguments['destination'] = frame._id
+             result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
              self._handle_error(result)
              return
 
