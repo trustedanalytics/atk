@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.groupby
 
-import org.trustedanalytics.atk.domain.frame.{ GroupByArgs, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.{ GroupByArgs, FrameReference }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -32,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Summarized Frame with Aggregations.",
   extended = "Create a Summarized Frame with Aggregations (Avg, Count, Max, Min, Mean, Sum, Stdev, ...).",
   returns = "Summarized Frame.")
-class GroupByPlugin extends SparkCommandPlugin[GroupByArgs, FrameEntity] {
+class GroupByPlugin extends SparkCommandPlugin[GroupByArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -53,7 +53,7 @@ class GroupByPlugin extends SparkCommandPlugin[GroupByArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: GroupByArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: GroupByArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val groupByColumns = frame.schema.columns(arguments.groupByColumns)
 

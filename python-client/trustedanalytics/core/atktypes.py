@@ -20,7 +20,7 @@ trusted_analytics definitions for Data Types
 
 # TODO - consider server providing types, similar to commands
 
-__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector']
+__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit']
 
 import numpy as np
 import json
@@ -81,6 +81,12 @@ class _Vector(object):
 
 
 vector = _Vector
+
+class _Unit(object):
+    """Ignore type used for schemas during file import"""
+    pass
+
+unit = _Unit
 
 
 class _Ignore(object):

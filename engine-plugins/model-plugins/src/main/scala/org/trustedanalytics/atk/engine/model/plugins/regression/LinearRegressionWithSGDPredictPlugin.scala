@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
@@ -32,7 +32,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted label's column.""",
   returns = "Frame containing the original frame's columns and a column with the predicted label.")
-class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameEntity] {
+class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -59,7 +59,7 @@ class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[Classifica
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 

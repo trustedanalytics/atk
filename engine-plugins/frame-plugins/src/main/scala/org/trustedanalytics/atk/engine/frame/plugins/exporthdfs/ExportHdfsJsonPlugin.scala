@@ -16,18 +16,13 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
-import java.nio.file.FileSystem
-
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.command.CommandDoc
 import org.trustedanalytics.atk.domain.frame.ExportHdfsJsonArgs
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.HdfsFileStorage
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.hadoop.fs.Path
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -60,7 +55,7 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
    * @return value of type declared as the Return type
    */
   override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): UnitReturn = {
-    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+    val fileStorage = new HdfsFileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     FrameExportHdfs.exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)

@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.graph.plugins
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.plugins.RenameColumnsPlugin
@@ -38,7 +39,7 @@ class RenameVertexColumnsPlugin extends RenameColumnsPlugin {
 
   val systemFields = Set(GraphSchema.vidProperty, GraphSchema.labelProperty)
 
-  override def execute(arguments: RenameColumnsArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: RenameColumnsArgs)(implicit invocation: Invocation): UnitReturn = {
     rejectInvalidColumns(arguments.names.keys, systemFields)
     super.execute(arguments)
   }

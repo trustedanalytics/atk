@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.exportfromtitan
 
+import org.trustedanalytics.atk.domain.StorageFormats
 import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
 import org.trustedanalytics.atk.domain.graph._
@@ -99,7 +100,7 @@ class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
     val edgeSchemas = edgesWithCorrectedLabels.aggregate(EdgeSchemaAggregator.zeroValue)(EdgeSchemaAggregator.seqOp, EdgeSchemaAggregator.combOp).values
 
     // Create the target Graph
-    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, "ia/frame"))
+    val targetGraph: SparkGraph = engine.graphs.createGraph(GraphTemplate(None, StorageFormats.SeamlessGraph))
 
     // Create the Edge and Vertex frames
     vertexSchemas.foreach(schema => targetGraph.defineVertexType(schema))

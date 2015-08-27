@@ -16,11 +16,11 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matchers {
@@ -39,9 +39,9 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
   ))
 
   "JoinBroadcastVariable" should "create a single broadcast variable when RDD size is less than 2GB" in {
-    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames)).toDataFrame
+    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", 0, 2, Some(150))
+    val joinParam = RddJoinParam(countryNames, "col_0", Some(150))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
@@ -56,9 +56,9 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
   }
   "JoinBroadcastVariable" should "create a two broadcast variables when RDD size is equals 3GB" in {
-    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames)).toDataFrame
+    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", 0, 2, Some(3L * 1024 * 1024 * 1024))
+    val joinParam = RddJoinParam(countryNames, "col_0", Some(3L * 1024 * 1024 * 1024))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
@@ -72,9 +72,9 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
     broadcastVariable.get(8).isDefined should equal(false)
   }
   "JoinBroadcastVariable" should "create an empty broadcast variable" in {
-    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(List.empty[Row])).toDataFrame
+    val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(List.empty[Row]))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", 0, 2, Some(3L * 1024 * 1024 * 1024))
+    val joinParam = RddJoinParam(countryNames, "col_0", Some(3L * 1024 * 1024 * 1024))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
@@ -88,8 +88,8 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
   }
   "JoinBroadcastVariable" should "throw an Exception if column does not exist in frame" in {
     intercept[Exception] {
-      val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames)).toDataFrame
-      val joinParam = RddJoinParam(countryNames, "col_bad", 34, 2, Some(3L * 1024 * 1024 * 1024))
+      val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
+      val joinParam = RddJoinParam(countryNames, "col_bad", Some(3L * 1024 * 1024 * 1024))
       JoinBroadcastVariable(joinParam)
     }
   }
