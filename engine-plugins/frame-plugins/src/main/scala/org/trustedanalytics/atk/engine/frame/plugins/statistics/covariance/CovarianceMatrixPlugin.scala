@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, SparkInvocat
 import org.trustedanalytics.atk.domain.schema.FrameSchema
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.CovarianceMatrixArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.schema.Column
 import org.trustedanalytics.atk.domain.schema.DataTypes.vector
 
@@ -41,7 +41,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 -----
 This function applies only to columns containing numerical data.""",
   returns = "A matrix with the covariance values for the columns.")
-class CovarianceMatrixPlugin extends SparkCommandPlugin[CovarianceMatrixArgs, FrameEntity] {
+class CovarianceMatrixPlugin extends SparkCommandPlugin[CovarianceMatrixArgs, FrameReference] {
 
   /**
    * The name of the command
@@ -62,7 +62,7 @@ class CovarianceMatrixPlugin extends SparkCommandPlugin[CovarianceMatrixArgs, Fr
    * @param arguments input specification for covariance matrix
    * @return value of type declared as the Return type
    */
-  override def execute(arguments: CovarianceMatrixArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CovarianceMatrixArgs)(implicit invocation: Invocation): FrameReference = {
 
     val frame: SparkFrame = arguments.frame
     frame.schema.requireColumnsAreVectorizable(arguments.dataColumnNames)

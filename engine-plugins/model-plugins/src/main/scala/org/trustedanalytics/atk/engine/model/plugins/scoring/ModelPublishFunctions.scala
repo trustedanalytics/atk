@@ -66,7 +66,7 @@ object ModelPublish {
       classWriter.print(modelClassName)
       classWriter.close()
 
-      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))//remove the first 5 characeters of the file location
+      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5)) //remove the first 5 characeters of the file location
 
       val tarTempPath = "/tmp/scoring.tar"
       val tarTempFile = new File(tarTempPath)
@@ -97,7 +97,7 @@ object ModelPublish {
       tOut.finish()
 
       val localPath = new Path(tarTempPath)
-      val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+      val fileStorage = new HdfsFileStorage
       val tarFileName = fileStorage.absolutePath("models_" + UUID.randomUUID().toString.replaceAll("-", "") + ".tar").toString
       val hdfsPath = new Path(tarFileName)
       val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())

@@ -16,6 +16,11 @@
 
 package org.apache.spark.mllib.atk.plugins
 
+import org.apache.spark.mllib.tree.configuration.Algo
+import org.apache.spark.mllib.tree.configuration.Algo.Algo
+import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
+import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
+import org.apache.spark.mllib.tree.model._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.LogisticRegressionData
 import org.trustedanalytics.atk.engine.model.plugins.classification.SVMData
 import org.trustedanalytics.atk.engine.model.plugins.clustering.KMeansData
@@ -224,6 +229,246 @@ class MLLibJsonProtocolTest extends WordSpec {
       assert(p.observationColumns.length == 2)
       assert(p.singularValues.size == 2)
       assert(p.vFactor.numRows == 2)
+    }
+  }
+
+  "FeatureTypeModelFormat" should {
+
+    "be able to serialize" in {
+      val featureString = "Categorical"
+      val featureType = FeatureType.withName(featureString)
+      assert(featureType.toJson.compactPrint == "{\"featuretype\":\"Categorical\"}")
+    }
+
+    "parse json" in {
+      val string = "{\"featuretype\":\"Categorical\"}"
+      val json = JsonParser(string).asJsObject
+      val f = json.convertTo[FeatureType]
+
+      assert(f.toString == "Categorical")
+      assert(f.id == 1)
+    }
+  }
+
+  "AlgoModelFormat" should {
+
+    "be able to seralize" in {
+      val algoString = "Classification"
+      val algo = Algo.withName(algoString)
+      assert(algo.toJson.compactPrint == "{\"algo\":\"Classification\"}")
+    }
+
+    "parse json" in {
+      val string = "{\"algo\":\"Classification\"}"
+      val json = JsonParser(string).asJsObject
+      val a = json.convertTo[Algo]
+
+      assert(a.toString == "Classification")
+      assert(a.id == 0)
+    }
+  }
+
+  "SplitFormat" should {
+
+    "be able to serialize" in {
+      val feature = 2
+      val threshold = 0.5
+      val featureType = FeatureType.withName("Categorical")
+      val categories = List(1.1, 2.2)
+      val split = new Split(feature, threshold, featureType, categories)
+
+      assert(split.toJson.compactPrint == "{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}")
+    }
+
+    "parse json" in {
+      val string = "{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}"
+      val json = JsonParser(string).asJsObject
+      val split = json.convertTo[Split]
+
+      assert(split.feature == 2)
+      assert(split.threshold == 0.5)
+      assert(split.featureType.toString == "Categorical")
+      assert(split.categories.length == 2)
+    }
+  }
+
+  "PredictFormat" should {
+
+    "be able to serialize" in {
+      val predict = 0.1
+      val prob = 0.5
+      val predictObject = new Predict(predict, prob)
+
+      assert(predictObject.toJson.compactPrint == "{\"predict\":0.1,\"prob\":0.5}")
+    }
+
+    "parse json" in {
+      val string = "{\"predict\":0.1,\"prob\":0.5}"
+      val json = JsonParser(string).asJsObject
+      val predictObject = json.convertTo[Predict]
+
+      assert(predictObject.predict == 0.1)
+      assert(predictObject.prob == 0.5)
+    }
+  }
+
+  "InformationGainStatsFormat" should {
+
+    "be able to serialize" in {
+      val gain = 0.2
+      val impurity = 0.3
+      val leftImpurity = 0.4
+      val rightImpurity = 0.5
+      val leftPredict = new Predict(0.6, 0.7)
+      val rightPredict = new Predict(0.8, 0.9)
+      val i = new InformationGainStats(gain, impurity, leftImpurity, rightImpurity, leftPredict, rightPredict)
+
+      assert(i.toJson.compactPrint == "{\"gain\":0.2,\"impurity\":0.3,\"leftimpurity\":0.4,\"rightimpurity\":0.5," +
+        "\"leftpredict\":{\"predict\":0.6,\"prob\":0.7},\"rightpredict\":{\"predict\":0.8,\"prob\":0.9}}")
+    }
+
+    "parse json" in {
+      val string =
+        """
+          |{
+          |"gain":0.2,
+          |"impurity":0.3,
+          |"leftimpurity":0.4,
+          |"rightimpurity":0.5,
+          |"leftpredict":{"predict":0.6,"prob":0.7},
+          |"rightpredict":{"predict":0.8,"prob":0.9}
+          |}
+        """.stripMargin
+      val json = JsonParser(string).asJsObject
+      val i = json.convertTo[InformationGainStats]
+
+      assert(i.gain == 0.2)
+      assert(i.leftPredict.predict == 0.6)
+    }
+  }
+
+  "NodeFormat" should {
+
+    "be able to serialize" in {
+      val id = 1
+      val predict = new Predict(0.1, 0.2)
+      val impurity = 0.2
+      val isLeaf = false
+      val split = new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))
+      val leftNode = new Node(2, new Predict(0.3, 0.4), 0.5, true, Some(new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))), None, None, None)
+      val node = new Node(id, predict, impurity, isLeaf, Some(split), Some(leftNode), None, None)
+
+      assert(node.toJson.compactPrint == "{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"" +
+        "isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5," +
+        "\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null}")
+    }
+
+    "parse json" in {
+
+      val string =
+        """
+          |{
+          |"id":1,
+          |"predict":{"predict":0.1,"prob":0.2},
+          |"impurity":0.2,
+          |"isLeaf":false,
+          |"split":{"feature":2,"threshold":0.5,"featuretype":{"featuretype":"Categorical"},"categories":[1.1,2.2]},
+          |"leftNode":null,
+          |"rightNode":null,
+          |"stats":null
+          |}
+      """.stripMargin
+      val json = JsonParser(string).asJsObject
+      val n = json.convertTo[Node]
+
+      assert(n.id == 1)
+    }
+  }
+
+  "DecisionTreeFormat" should {
+
+    "be able to serialize" in {
+      val split = new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))
+      val leftNode = new Node(2, new Predict(0.3, 0.4), 0.5, true, Some(new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))), None, None, None)
+      val topNode = new Node(1, new Predict(0.1, 0.2), 0.2, false, Some(split), Some(leftNode), None, None)
+      val algoString = "Classification"
+      val algo = Algo.withName(algoString)
+      val decisionTree = new DecisionTreeModel(topNode, algo)
+
+      assert(decisionTree.toJson.compactPrint == "{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
+        "\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}")
+    }
+
+    "parse json" in {
+      val string = "{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
+        "\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}"
+
+      val json = JsonParser(string).asJsObject
+      val decisionTree = json.convertTo[DecisionTreeModel]
+
+      assert(decisionTree.algo.toString == "Classification")
+      assert(decisionTree.topNode.id == 1)
+    }
+  }
+
+  "RandomForestModel" should {
+
+    "be able to serialize" in {
+      val split1 = new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))
+      val leftNode1 = new Node(2, new Predict(0.3, 0.4), 0.5, true, Some(new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))), None, None, None)
+      val topNode1 = new Node(1, new Predict(0.1, 0.2), 0.2, false, Some(split1), Some(leftNode1), None, None)
+      val algoString1 = "Classification"
+      val algo1 = Algo.withName(algoString1)
+      val decisionTree1 = new DecisionTreeModel(topNode1, algo1)
+
+      val split2 = new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))
+      val leftNode2 = new Node(2, new Predict(0.3, 0.4), 0.5, true, Some(new Split(2, 0.5, FeatureType.withName("Categorical"), List(1.1, 2.2))), None, None, None)
+      val topNode2 = new Node(2, new Predict(0.1, 0.2), 0.2, false, Some(split2), Some(leftNode2), None, None)
+      val algoString2 = "Classification"
+      val algo2 = Algo.withName(algoString2)
+      val decisionTree2 = new DecisionTreeModel(topNode2, algo2)
+
+      val trees = Array(decisionTree1, decisionTree2)
+      val randomForest = new RandomForestModel(algo1, trees)
+
+      assert(randomForest.toJson.compactPrint == "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"topnode\":{\"id\":1," +
+        "\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3," +
+        "\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null}," +
+        "\"algo\":{\"algo\":\"Classification\"}},{\"topnode\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"isLeaf\":false," +
+        "\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2," +
+        "\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null}," +
+        "\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}")
+
+    }
+
+    "parse json" in {
+      val string = "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2," +
+        "\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}," +
+        "\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null}," +
+        "\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}},{\"topnode\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true," +
+        "\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null," +
+        "\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}"
+
+      val json = JsonParser(string).asJsObject
+      val randomForest = json.convertTo[RandomForestModel]
+
+      assert(randomForest.algo.toString == "Classification")
+      assert(randomForest.trees(1).topNode.id == 2)
+
     }
   }
 

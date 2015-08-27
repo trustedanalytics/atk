@@ -16,12 +16,13 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column }
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
-class EcdfArgsTest extends TestingSparkContextFlatSpec with Matchers {
+class EcdfTest extends TestingSparkContextFlatSpec with Matchers {
 
   // Input data
   val sampleOneList = List(
@@ -58,15 +59,17 @@ class EcdfArgsTest extends TestingSparkContextFlatSpec with Matchers {
     val sampleOneRdd = sparkContext.parallelize(sampleOneList, 2)
     val sampleTwoRdd = sparkContext.parallelize(sampleTwoList, 2)
     val sampleThreeRdd = sparkContext.parallelize(sampleThreeList, 2)
+    val colA = Column("a", DataTypes.int32, 0)
+    val schema = FrameSchema(List(colA))
 
     // Get binned results
-    val sampleOneECDF = CumulativeDistFunctions.ecdf(sampleOneRdd, Column("a", DataTypes.int32, 0))
+    val sampleOneECDF = CumulativeDistFunctions.ecdf(new FrameRdd(schema, sampleOneRdd), colA)
     val resultOne = sampleOneECDF.take(10)
 
-    val sampleTwoECDF = CumulativeDistFunctions.ecdf(sampleTwoRdd, Column("a", DataTypes.int32, 0))
+    val sampleTwoECDF = CumulativeDistFunctions.ecdf(new FrameRdd(schema, sampleTwoRdd), colA)
     val resultTwo = sampleTwoECDF.take(5)
 
-    val sampleThreeECDF = CumulativeDistFunctions.ecdf(sampleThreeRdd, Column("a", DataTypes.int32, 0))
+    val sampleThreeECDF = CumulativeDistFunctions.ecdf(new FrameRdd(schema, sampleThreeRdd), colA)
     val resultThree = sampleThreeECDF.take(5)
 
     // Validate

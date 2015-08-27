@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.giraph.algorithms.lp.LabelPropagationComputation
 import org.trustedanalytics.atk.giraph.algorithms.lp.LabelPropagationComputation.{ LabelPropagationAggregatorWriter, LabelPropagationMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lp._
 import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, GiraphJobManager }
-import org.trustedanalytics.atk.domain.CreateEntityArgs
+import org.trustedanalytics.atk.domain.{ StorageFormats, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 import LabelPropagationJsonFormat._
@@ -98,9 +98,10 @@ class LabelPropagationPlugin
     val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
     val giraphConf = new LabelPropagationConfiguration(hadoopConf)
 
-    val outputFrame = frames.prepareForSave(CreateEntityArgs(description = Some("Label propagation results")))
+    val resultsFrameRef = frames.create(CreateEntityArgs(description = Some("Label propagation results"))).toReference
+    val resultsSaveInfo = frames.prepareForSave(resultsFrameRef, storageFormat = Some(StorageFormats.FileParquet))
     val inputFormatConfig = new LabelPropagationInputFormatConfig(frame.getStorageLocation, frame.schema)
-    val outputFormatConfig = new LabelPropagationOutputFormatConfig(outputFrame.getStorageLocation)
+    val outputFormatConfig = new LabelPropagationOutputFormatConfig(resultsSaveInfo.targetPath)
     val labelPropagationConfig = new LabelPropagationConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setConfig(labelPropagationConfig)
@@ -121,9 +122,9 @@ class LabelPropagationPlugin
       "lp-learning-report_0")
 
     val resultsColumn = Column(arguments.srcLabelColName, frame.schema.columnDataType(arguments.srcLabelColName))
-    frames.postSave(None, outputFrame.toReference, new FrameSchema(List(frame.schema.column(arguments.srcColName), resultsColumn)))
+    frames.postSave(resultsFrameRef, resultsSaveInfo, new FrameSchema(List(frame.schema.column(arguments.srcColName), resultsColumn)))
 
-    LabelPropagationResult(frames.expectFrame(outputFrame.toReference), result)
+    LabelPropagationResult(frames.expectFrame(resultsFrameRef), result)
 
   }
 

@@ -38,7 +38,7 @@ class ModelSmokeTest(unittest.TestCase):
     """
     def test_model(self):
         print "Initialize KMeansModel object with name"
-        k1 = ta.KMeansModel(name='mykMeansModel1')
+        k1 = ta.KMeansModel(name='smoke_kmeans_model')
         name = k1.name
 
         print "Initialize KMeansModel object"

@@ -55,6 +55,30 @@ case class VertexSchema(columns: List[Column] = List[Column](), label: String, i
     idColumnName.getOrElse(nameIfNotAlreadyDefined)
   }
 
+  /**
+   * Rename a column
+   * @param existingName the old name
+   * @param newName the new name
+   * @return the updated schema
+   */
+  override def renameColumn(existingName: String, newName: String): Schema = {
+    renameColumns(Map(existingName -> newName))
+  }
+
+  /**
+   * Renames several columns
+   * @param names oldName -> newName
+   * @return new renamed schema
+   */
+  override def renameColumns(names: Map[String, String]): Schema = {
+    val newSchema = super.renameColumns(names)
+    val newIdColumn = idColumnName match {
+      case Some(id) => Some(names.getOrElse(id, id))
+      case _ => idColumnName
+    }
+    new VertexSchema(newSchema.columns, label, newIdColumn)
+  }
+
   override def copy(columns: List[Column]): VertexSchema = {
     new VertexSchema(columns, label, idColumnName)
   }
@@ -338,7 +362,9 @@ trait Schema {
   def union(schema: Schema): Schema = {
     // check for conflicts
     val newColumns: List[Column] = schema.columns.filterNot(c => {
-      hasColumn(c.name) && { require(hasColumnWithType(c.name, c.dataType), s"columns with same name ${c.name} didn't have matching types"); true }
+      hasColumn(c.name) && {
+        require(hasColumnWithType(c.name, c.dataType), s"columns with same name ${c.name} didn't have matching types"); true
+      }
     })
     val combinedColumns = this.columns ++ newColumns
     copy(combinedColumns)
@@ -512,15 +538,12 @@ trait Schema {
    * @return a new copy of the Schema with the columns removed
    */
   def dropColumnsByIndex(columnIndices: Seq[Int]): Schema = {
-    val remainingColumns = {
-      columnIndices match {
-        case singleColumn if singleColumn.length == 1 =>
-          columnTuples.take(singleColumn.head) ++ columnTuples.drop(singleColumn.head + 1)
-        case _ =>
-          columnTuples.zipWithIndex.filter(elem => !columnIndices.contains(elem._2)).map(_._1)
-      }
-    }
-    legacyCopy(remainingColumns)
+    val remainingColumns = columns.zipWithIndex.filterNot {
+      case (col, index) =>
+        columnIndices.contains(index)
+    }.map { case (col, index) => col }
+
+    copy(remainingColumns)
   }
 
   /**
@@ -542,7 +565,7 @@ trait Schema {
    * @return the updated schema
    */
   def renameColumn(existingName: String, newName: String): Schema = {
-    copy(columns = columns.updated(columnIndex(existingName), column(existingName).copy(name = newName)))
+    renameColumns(Map(existingName -> newName))
   }
 
   /**

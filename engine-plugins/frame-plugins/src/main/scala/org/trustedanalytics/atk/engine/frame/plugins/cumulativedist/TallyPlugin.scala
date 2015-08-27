@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
-import org.trustedanalytics.atk.domain.frame.{ TallyArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.TallyArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, Schema, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -35,7 +36,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """A cumulative count is computed by sequentially stepping through the column
 values and keeping track of the the number of times the specified
 *count_value* has been seen up to the current value.""")
-class TallyPlugin extends SparkCommandPlugin[TallyArgs, FrameEntity] {
+class TallyPlugin extends SparkCommandPlugin[TallyArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -56,12 +57,11 @@ class TallyPlugin extends SparkCommandPlugin[TallyArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: TallyArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: TallyArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    val sampleIndex = frame.schema.columnIndex(arguments.sampleCol)
 
     // run the operation
-    val cumulativeDistRdd = CumulativeDistFunctions.cumulativeCount(frame.rdd, sampleIndex, arguments.countVal)
+    val cumulativeDistRdd = CumulativeDistFunctions.cumulativeCount(frame.rdd, arguments.sampleCol, arguments.countVal)
     val updatedSchema = frame.schema.addColumnFixName(Column(arguments.sampleCol + "_tally", DataTypes.float64))
     frame.save(new FrameRdd(updatedSchema, cumulativeDistRdd))
   }

@@ -19,13 +19,17 @@ package org.trustedanalytics.atk.domain.graph
 import org.trustedanalytics.atk.domain.UriReference
 
 case class GraphReference(graphId: Long) extends UriReference {
-  /** The entity id */
+
   override def id: Long = graphId
 
-  /** The entity name e.g. "frame", "graph", ... */
-  override def name: String = "graph"
+  override def entityCollectionName: String = "graphs"
 }
 
 object GraphReference {
+
   implicit def graphEntityToGraphReference(graphEntity: GraphEntity): GraphReference = graphEntity.toReference
+
+  implicit def uriToGraphReference(uri: String): GraphReference = UriReference.fromString[GraphReference](uri, new GraphReference(_))
+
+  implicit def idToGraphReference(id: Long): GraphReference = GraphReference(id)
 }
