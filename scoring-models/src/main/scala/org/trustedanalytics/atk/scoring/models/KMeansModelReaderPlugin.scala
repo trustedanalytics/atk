@@ -22,7 +22,6 @@ class KMeansModelReaderPlugin() extends ModelLoader {
       myKMeansModel.asInstanceOf[Model]
     }
     catch {
-      //TODO: log the error
       case e: IOException => throw e
     }
   }
