@@ -82,7 +82,7 @@ class HdfsFileStorage extends EventLogging {
       new Path(path)
     }
     else {
-      new Path(EngineConfig.fsRoot, path)
+      new Path(concatPaths(EngineConfig.fsRoot, path))
     }
   }
 
@@ -217,6 +217,18 @@ class HdfsFileStorage extends EventLogging {
           fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
         }
       }
+    }
+  }
+
+  /**
+   * Concat two paths
+   */
+  private def concatPaths(first: String, second: String): String = {
+    if (first.endsWith("/") || second.startsWith("/")) {
+      first + second
+    }
+    else {
+      first + "/" + second
     }
   }
 
