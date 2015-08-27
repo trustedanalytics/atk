@@ -80,47 +80,53 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
     val byteArray = source.map(_.toByte).toArray
     source.close()
     val model = modelLoader.load(byteArray)
-    val modelName = modelFile.substring(modelFile.lastIndexOf("/") + 1)
-    new ScoringService(model, modelName)
+    new ScoringService(model)
   }
 
   private def modelLoadRead(): Unit = {
 
-    val pt = new Path(config.getString("trustedanalytics.scoring-engine.archive-tar"))
-    val uri = new URI(config.getString("trustedanalytics.scoring-engine.archive-tar"))
-    val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(uri, new Configuration())
+    var outputFile: FileOutputStream = null
+    var myTarFile: TarArchiveInputStream = null
+    try {
+      val pt = new Path(config.getString("trustedanalytics.scoring-engine.archive-tar"))
+      val uri = new URI(config.getString("trustedanalytics.scoring-engine.archive-tar"))
+      val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(uri, new Configuration())
 
-    val tempFilePath = "/tmp/models.tar"
-    val local = new Path(tempFilePath)
+      val tempFilePath = "/tmp/models.tar"
+      val local = new Path(tempFilePath)
 
-    hdfsFileSystem.copyToLocalFile(false, pt, local)
-    val tmpPath = "/tmp/"
-    val myTarFile: TarArchiveInputStream = new TarArchiveInputStream(new FileInputStream(new File(tempFilePath)))
-    var entry: TarArchiveEntry = null
-    entry = myTarFile.getNextTarEntry
-    while (entry != null) {
-      // Get the name of the file
-      val individualFile: String = entry.getName
-      // Get Size of the file and create a byte array for the size
-      val content: Array[Byte] = new Array[Byte](entry.getSize.toInt)
-      myTarFile.read(content, 0, content.length)
-      val outputFile = new FileOutputStream(new File(tmpPath + individualFile))
-      IOUtils.write(content, outputFile)
-      outputFile.close()
-      if (individualFile.contains(".jar")) {
-        archiveName = individualFile.substring(0, individualFile.indexOf(".jar"))
-      }
-      else if (individualFile.contains("modelname")) {
-        val s = new String(content)
-        modelName = s.replaceAll("\n", "")
-        info("model name is " + modelName)
-      }
-      else {
-        ModelBytesFileName = tmpPath + individualFile
-      }
+      hdfsFileSystem.copyToLocalFile(false, pt, local)
+      val tmpPath = "/tmp/"
+      myTarFile = new TarArchiveInputStream(new FileInputStream(new File(tempFilePath)))
+      var entry: TarArchiveEntry = null
       entry = myTarFile.getNextTarEntry
+      while (entry != null) {
+        // Get the name of the file
+        val individualFile: String = entry.getName
+        // Get Size of the file and create a byte array for the size
+        val content: Array[Byte] = new Array[Byte](entry.getSize.toInt)
+        myTarFile.read(content, 0, content.length)
+        outputFile = new FileOutputStream(new File(tmpPath + individualFile))
+        IOUtils.write(content, outputFile)
+        outputFile.close()
+        if (individualFile.contains(".jar")) {
+          archiveName = individualFile.substring(0, individualFile.indexOf(".jar"))
+        }
+        else if (individualFile.contains("modelname")) {
+          val s = new String(content)
+          modelName = s.replaceAll("\n", "")
+          info("model name is " + modelName)
+        }
+        else {
+          ModelBytesFileName = tmpPath + individualFile
+        }
+        entry = myTarFile.getNextTarEntry
+      }
     }
-    myTarFile.close()
+    finally {
+      IOUtils.closeQuietly(outputFile)
+      IOUtils.closeQuietly(myTarFile)
+    }
   }
 
   /**

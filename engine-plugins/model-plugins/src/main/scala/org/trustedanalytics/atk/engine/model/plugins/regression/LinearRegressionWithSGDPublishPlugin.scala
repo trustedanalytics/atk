@@ -14,26 +14,26 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
-import org.trustedanalytics.atk.UnitReturn
+import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 // Implicits needed for JSON conversion
-import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import spray.json._
 import ModelPublishJsonProtocol._
 
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
-class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
+  extended = "Returns the HDFS path to the tar file")
+class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -41,7 +41,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:random_forest_classifier/publish"
+  override def name: String = "model:linear_regression/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
@@ -71,11 +71,11 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
 
     val model: Model = arguments.model
 
-    //Extracting the RandomForestModel from the stored JsObject
-    val randomForestData = model.data.convertTo[RandomForestClassifierData]
-    val randomForestModel = randomForestData.randomForestModel
-    val jsvalue: JsValue = randomForestModel.toJson
+    val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
+    val linRegData = linRegJsObject.convertTo[LinearRegressionData]
+    val linRegModel: LinearRegressionModel = linRegData.linRegModel
+    val jsvalue: JsValue = linRegModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
   }
 }
