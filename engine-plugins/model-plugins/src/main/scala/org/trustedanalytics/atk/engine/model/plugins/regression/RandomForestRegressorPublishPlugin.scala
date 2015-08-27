@@ -19,19 +19,21 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs }
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import ModelPublishJsonProtocol._
 
 /**
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "<TBD>",
   extended = "<TBD>")
-class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, UnitReturn] {
+class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -65,7 +67,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
 
     val model: Model = arguments.model
 
@@ -74,7 +76,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    ModelPublish.createTarForScoringEngine(jsvalue.toString(), arguments.serviceName, "scoring-models", arguments.filePath, "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
 
   }
 }

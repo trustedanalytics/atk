@@ -39,7 +39,6 @@ import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ Logist
 import org.trustedanalytics.atk.engine.model.plugins.clustering.{ KMeansData, KMeansPredictArgs, KMeansTrainArgs, KMeansTrainReturn }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionData
-import org.trustedanalytics.atk.engine.model.plugins.scoring.ModelPublishArgs
 import spray.json._
 
 /**
@@ -503,12 +502,12 @@ object MLLibJsonProtocol {
   implicit val naiveBayesTrainFormat = jsonFormat5(NaiveBayesTrainArgs)
   implicit val naiveBayesPredictFormat = jsonFormat3(NaiveBayesPredictArgs)
   implicit val logRegTrainFormat = jsonFormat18(LogisticRegressionTrainArgs)
+
   implicit val logRegTrainResultsFormat = jsonFormat8(LogisticRegressionSummaryTable)
   implicit val pcaPredictFormat = jsonFormat6(PrincipalComponentsPredictArgs)
   implicit val pcaTrainFormat = jsonFormat4(PrincipalComponentsTrainArgs)
   implicit val pcaPredictReturnFormat = jsonFormat2(PrincipalComponentsPredictReturn)
   implicit val pcaTrainReturnFormat = jsonFormat4(PrincipalComponentsTrainReturn)
-  implicit val modelPublishFormat = jsonFormat3(ModelPublishArgs)
   implicit val randomForestClassifierDataFormat = jsonFormat3(RandomForestClassifierData)
   implicit val randomForestClassifierTrainFormat = jsonFormat12(RandomForestClassifierTrainArgs)
   implicit val randomForestClassifierTrainReturn = jsonFormat10(RandomForestClassifierTrainReturn)
@@ -518,7 +517,6 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainFormat = jsonFormat11(RandomForestRegressorTrainArgs)
   implicit val randomForestRegressorPredictFormat = jsonFormat3(RandomForestRegressorPredictArgs)
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
-
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

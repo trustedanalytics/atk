@@ -21,7 +21,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.frame.{FrameReference, FrameEntity}
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.SparkContextFactory

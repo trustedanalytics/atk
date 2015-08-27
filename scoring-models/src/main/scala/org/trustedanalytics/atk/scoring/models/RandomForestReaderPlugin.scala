@@ -171,7 +171,6 @@ object RandomForestJsonReadersWriters {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 }
-class InvalidJsonException(message: String) extends RuntimeException(message)
 
 class RandomForestReaderPlugin() extends ModelLoader {
 
