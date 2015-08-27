@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ SortByColumnsArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.SortByColumnsArgs
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -30,7 +31,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "Sort by one or more columns.",
   extended = "<TBD>")
-class SortByColumnsPlugin extends SparkCommandPlugin[SortByColumnsArgs, FrameEntity] {
+class SortByColumnsPlugin extends SparkCommandPlugin[SortByColumnsArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -57,7 +58,7 @@ class SortByColumnsPlugin extends SparkCommandPlugin[SortByColumnsArgs, FrameEnt
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: SortByColumnsArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: SortByColumnsArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     frame.save(frame.rdd.sortByColumns(arguments.columnNamesAndAscending))
   }

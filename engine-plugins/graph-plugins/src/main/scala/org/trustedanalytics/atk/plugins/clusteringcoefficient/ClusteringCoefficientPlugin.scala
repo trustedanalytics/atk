@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.clusteringcoefficient
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }
 import org.trustedanalytics.atk.engine.graph.SparkGraph
@@ -56,7 +56,7 @@ analysis be undirected.""") inputEdgeLabels: Option[List[String]] = None) {
  * @param frame If local clustering coefficients are requested, a reference to the frame with local clustering
  *              coefficients stored at properties at each vertex.
  */
-case class ClusteringCoefficientResult(globalClusteringCoefficient: Double, frame: Option[FrameEntity] = None)
+case class ClusteringCoefficientResult(globalClusteringCoefficient: Double, frame: Option[FrameReference] = None)
 
 /** Json conversion for arguments and return value case classes */
 object ClusteringCoefficientJsonFormat {

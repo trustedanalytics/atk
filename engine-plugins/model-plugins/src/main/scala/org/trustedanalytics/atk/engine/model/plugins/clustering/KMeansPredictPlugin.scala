@@ -45,7 +45,7 @@ import scala.collection.mutable.ListBuffer
     Containing squared distance of each point to every cluster center.
 predicted_cluster : int
     Integer containing the cluster assignment.""")
-class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameEntity] {
+class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameReference] {
 
   /**
    * The name of the command.
@@ -79,7 +79,7 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameEnt
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: KMeansPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: KMeansPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 

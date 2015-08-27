@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.SparkContext._
@@ -28,7 +28,7 @@ import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "<TBD>",
   extended = "")
-class SVMWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+class SVMWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -39,7 +39,7 @@ class SVMWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelE
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:svm")))
   }
 }

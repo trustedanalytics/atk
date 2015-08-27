@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.dotproduct
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema.{ Schema, DataTypes }
@@ -52,7 +53,7 @@ Notes
 -----
 If default_left_values or default_right_values are not specified, any null
 values will be replaced by zeros.""")
-class DotProductPlugin extends SparkCommandPlugin[DotProductArgs, FrameEntity] {
+class DotProductPlugin extends SparkCommandPlugin[DotProductArgs, UnitReturn] {
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
    *
@@ -78,7 +79,7 @@ class DotProductPlugin extends SparkCommandPlugin[DotProductArgs, FrameEntity] {
    * @param arguments user supplied arguments to running dot-product plugin
    * @return Updated frame with dot product stored in new column
    */
-  override def execute(arguments: DotProductArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: DotProductArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
 
     // run the operation
@@ -88,6 +89,7 @@ class DotProductPlugin extends SparkCommandPlugin[DotProductArgs, FrameEntity] {
     // save results
     val updatedSchema = frame.schema.addColumn(arguments.dotProductColumnName, DataTypes.float64)
     frame.save(new FrameRdd(updatedSchema, dotProductRdd))
+    UnitReturn()
   }
 
 }

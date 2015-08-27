@@ -26,7 +26,7 @@ import org.joda.time.DateTime
  * @param description description of the graph (a good default might say what frames it came from)
  * @param storage name used in physical data store, the HBase table name
  * @param statusId lifecycle status. For example, INIT (building), ACTIVE, DELETED (un-delete possible), DELETE_FINAL (no un-delete), INCOMPLETE (failed construction)
- * @param storageFormat e.g. "ia/frame", "cassandra/titan", "hbase/titan"
+ * @param storageFormat e.g. "atk/frame", "cassandra/titan", "hbase/titan"
  * @param createdOn date/time this record was created
  * @param modifiedOn date/time this record was last modified
  * @param createdByUserId user who created this row

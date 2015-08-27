@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.assignsample
 
-import org.trustedanalytics.atk.domain.frame.{ AssignSampleArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.AssignSampleArgs
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.plugins.{ LabeledLine, MLDataSplitter }
 import org.apache.spark.sql.Row
@@ -58,7 +59,7 @@ In particular:
     range.
 #)  The probability of the final class is clamped so that each row receives a
     valid label with probability one.""")
-class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, FrameEntity] {
+class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -76,7 +77,7 @@ class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, FrameEntit
    *                   can be used during this invocation.
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: AssignSampleArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: AssignSampleArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val samplePercentages = arguments.samplePercentages.toArray
 

@@ -16,25 +16,20 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.frame.FrameRdd
 
 /**
  * Join parameters for RDD
  *
- * @param frame RDD of (key, value) pairs used for join
+ * @param frame Frame used for join
  * @param joinColumn Join column name
- * @param joinColumnIndex Join column index
- * @param columnCount Number of columns in value array
  * @param estimatedSizeInBytes Optional estimated size of RDD in bytes used to determine whether to use a broadcast join
  */
-case class RddJoinParam(frame: DataFrame,
+case class RddJoinParam(frame: FrameRdd,
                         joinColumn: String,
-                        joinColumnIndex: Int, //TODO: Delete in Spark 1.4+ since row.getAs(columnName) supported
-                        columnCount: Int,
                         estimatedSizeInBytes: Option[Long] = None) {
   require(frame != null, "join frame is required")
   require(joinColumn != null, "join column is required")
-  require(columnCount > 0, "column count should be greater than zero")
   require(estimatedSizeInBytes.isEmpty || estimatedSizeInBytes.get > 0,
     "Estimated rdd size in bytes should be empty or greater than zero")
 }
