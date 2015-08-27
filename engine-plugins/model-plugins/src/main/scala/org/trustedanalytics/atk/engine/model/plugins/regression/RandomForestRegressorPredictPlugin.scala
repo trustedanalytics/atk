@@ -48,7 +48,7 @@ was trained on. """) observationColumns: Option[List[String]]) {
   extended = "",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.""")
-class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForestRegressorPredictArgs, FrameEntity] {
+class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForestRegressorPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -75,7 +75,7 @@ class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForest
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: RandomForestRegressorPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: RandomForestRegressorPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
