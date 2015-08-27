@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.domain.frame
 
-import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
@@ -55,6 +54,16 @@ Default is zero (0).""") offset: Option[Int] = None) {
  */
 case class ExportHdfsHiveArgs(@ArgDoc("Frame being exported to Hive") frame: FrameReference,
                               @ArgDoc("The name of the Hive table that will contain the exported frame") tableName: String) {
+  require(frame != null, "frame is required")
+  require(tableName != null, "table name is required")
+}
+
+/**
+ * Input arguments class for export to HBase
+ */
+case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: FrameReference,
+                               @ArgDoc("The name of the HBase table that will contain the exported frame") tableName: String,
+                               @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: Option[String]) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
 }

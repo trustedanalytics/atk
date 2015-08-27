@@ -16,18 +16,16 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
-import java.nio.file.FileSystem
-
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.command.CommandDoc
 import org.trustedanalytics.atk.domain.frame.ExportHdfsJsonArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
-import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.hadoop.fs.Path
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
+
+import scala.collection.mutable.ArrayBuffer
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -63,7 +61,40 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
     val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
-    FrameExportHdfs.exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
+    exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
+  }
+
+  /**
+   * Export to a file in JSON format
+   *
+   * @param frameRdd input rdd containing all columns
+   * @param filename file path where to store the file
+   */
+  private def exportToHdfsJson(
+    frameRdd: FrameRdd,
+    filename: String,
+    count: Option[Int],
+    offset: Option[Int]) {
+
+    val recCount = count.getOrElse(-1)
+    val recOffset = offset.getOrElse(0)
+
+    val filterRdd = if (recCount > 0) MiscFrameFunctions.getPagedRdd(frameRdd, recOffset, recCount, -1) else frameRdd
+    val headers = frameRdd.frameSchema.columnNames
+    val jsonRDD = filterRdd.map {
+      row =>
+        {
+          val value = row.toSeq.zip(headers).map {
+            case (k, v) => new String("\"" + v.toString + "\":" + (if (k == null) "null"
+            else if (k.isInstanceOf[String]) { "\"" + k.toString + "\"" }
+            else if (k.isInstanceOf[ArrayBuffer[_]]) { k.asInstanceOf[ArrayBuffer[Double]].mkString("[", ",", "]") }
+            else k.toString)
+            )
+          }
+          value.mkString("{", ",", "}")
+        }
+    }
+    jsonRDD.saveAsTextFile(filename)
   }
 
 }
