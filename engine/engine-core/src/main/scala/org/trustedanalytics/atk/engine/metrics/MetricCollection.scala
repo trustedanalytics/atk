@@ -27,7 +27,7 @@ class MetricCollection(val metaStore: MetaStore) extends Runnable with EventLogg
         implicit session =>
           {
             info("metric collect")
-            framesTotal.record(metaStore.frameRepo.scanAll().length)
+            framesTotal.record(metaStore.frameRepo.scanTotal().length)
             framesSuccessful.record(metaStore.frameRepo.scanSuccessful().length)
             framesError.record(metaStore.frameRepo.scanError().length)
 
