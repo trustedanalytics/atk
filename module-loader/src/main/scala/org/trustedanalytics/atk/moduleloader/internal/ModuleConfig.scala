@@ -94,7 +94,7 @@ private[internal] case class ModuleConfig(moduleLocation: String, config: Config
    */
   def addMember(moduleConfig: ModuleConfig): ModuleConfig = {
     require(moduleConfig.memberOf.isDefined, "trying to add a module that doesn't have a member-of defined")
-    require(moduleConfig.memberOf.get == name, s"trying to add a module who has a different member-of defined $name != ${moduleConfig.memberOf.get}")
+    require(moduleConfig.memberOf.get == name, s"trying to add a module that has a different member-of defined $name != ${moduleConfig.memberOf.get}")
     copy(members = members :+ moduleConfig)
   }
 
