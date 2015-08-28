@@ -75,15 +75,19 @@ class LdaTrainPlugin
 
     val giraphConf = new LdaConfiguration(hConf)
 
-    val docOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA doc results")))
-    val wordOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA word results")))
-    val topicOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA topics given word results")))
+    val docOut = frames.create(CreateEntityArgs(description = Some("LDA doc results")))
+    val wordOut = frames.create(CreateEntityArgs(description = Some("LDA word results")))
+    val topicOut = frames.create(CreateEntityArgs(description = Some("LDA topics given word results")))
 
+    val docOutSaveInfo = frames.prepareForSave(docOut)
+    val wordOutSaveInfo = frames.prepareForSave(wordOut)
+    val topicOutSaveInfo = frames.prepareForSave(topicOut)
+    
     val inputFormatConfig = new LdaInputFormatConfig(frame.getStorageLocation, frame.schema)
     val outputFormatConfig = new LdaOutputFormatConfig(
-      docOut.getStorageLocation,
-      wordOut.getStorageLocation,
-      topicOut.getStorageLocation
+      docOutSaveInfo.targetPath, 
+      wordOutSaveInfo.targetPath,
+      topicOutSaveInfo.targetPath
     )
     val ldaConfig = new LdaConfig(inputFormatConfig, outputFormatConfig, arguments)
 
@@ -107,9 +111,9 @@ class LdaTrainPlugin
     val resultsColumn = Column(resultsColumnName, DataTypes.vector(arguments.getNumTopics))
 
     // After saving update timestamps, status, row count, etc.
-    frames.postSave(None, docOut.toReference, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
-    frames.postSave(None, wordOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
-    frames.postSave(None, topicOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    frames.postSave(docOut, docOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
+    frames.postSave(wordOut, wordOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    frames.postSave(topicOut, topicOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
     val model: Model = arguments.model
     val topicFrame: SparkFrame = topicOut.toReference

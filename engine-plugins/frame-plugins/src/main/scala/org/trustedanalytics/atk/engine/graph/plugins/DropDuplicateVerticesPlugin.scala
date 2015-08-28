@@ -16,10 +16,11 @@
 
 package org.trustedanalytics.atk.engine.graph.plugins
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.engine.graph.{ SparkVertexFrame, VertexFrame }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.trustedanalytics.atk.domain.frame.{ DropDuplicatesArgs, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.DropDuplicatesArgs
 import org.apache.spark.atk.graph.VertexFrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.engine.frame.{ SparkFrameStorage, MiscFrameFunctions }
@@ -37,7 +38,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Remove duplicate vertex rows, keeping only one vertex row per uniqueness
 criteria match.
 Edges that were connected to removed vertices are also automatically dropped.""")
-class DropDuplicateVerticesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, FrameEntity] {
+class DropDuplicateVerticesPlugin extends SparkCommandPlugin[DropDuplicatesArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -70,7 +71,7 @@ class DropDuplicateVerticesPlugin extends SparkCommandPlugin[DropDuplicatesArgs,
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DropDuplicatesArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: DropDuplicatesArgs)(implicit invocation: Invocation): UnitReturn = {
     val vertexFrame: SparkVertexFrame = arguments.frame
     val seamlessGraph = vertexFrame.graphMeta
     val schema = vertexFrame.schema

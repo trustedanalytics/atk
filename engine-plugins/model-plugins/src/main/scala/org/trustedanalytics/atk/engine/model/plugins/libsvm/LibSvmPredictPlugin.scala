@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
@@ -34,7 +34,7 @@ import LibSvmJsonProtocol._
 existing columns and a new predicted label's column.""",
   returns = """A new frame containing the original frame's columns and a column
 *predicted_label* containing the score calculated for each observation.""")
-class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameEntity] {
+class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -61,7 +61,7 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameEnt
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: LibSvmPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: LibSvmPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 

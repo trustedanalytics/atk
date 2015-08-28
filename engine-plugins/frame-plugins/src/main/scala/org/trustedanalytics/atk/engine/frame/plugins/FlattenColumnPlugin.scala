@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FlattenColumnArgs }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.FlattenColumnArgs
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -38,7 +39,7 @@ delimiter.
 New rows are a full copy of the original row, but the specified column only
 contains one value.
 The original row is deleted.""")
-class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, FrameEntity] {
+class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -59,7 +60,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, FrameEnt
    * @param arguments input specification for column flattening
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: FlattenColumnArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: FlattenColumnArgs)(implicit invocation: Invocation): UnitReturn = {
     // validate arguments
     val frame: SparkFrame = arguments.frame
     var schema = frame.schema

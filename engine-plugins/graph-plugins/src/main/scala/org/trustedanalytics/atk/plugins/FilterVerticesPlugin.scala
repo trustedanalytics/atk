@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.FilterVerticesArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.{ PythonRddStorage, SparkFrameStorage, _ }
@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 @PluginDoc(oneLine = "",
   extended = "")
-class FilterVerticesPlugin extends SparkCommandPlugin[FilterVerticesArgs, FrameEntity] {
+class FilterVerticesPlugin extends SparkCommandPlugin[FilterVerticesArgs, UnitReturn] {
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
    *
@@ -53,7 +53,7 @@ class FilterVerticesPlugin extends SparkCommandPlugin[FilterVerticesArgs, FrameE
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: FilterVerticesArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: FilterVerticesArgs)(implicit invocation: Invocation): UnitReturn = {
 
     val frames = engine.frames.asInstanceOf[SparkFrameStorage]
     val graphStorage = engine.graphs

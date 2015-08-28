@@ -17,13 +17,13 @@
 package org.trustedanalytics.atk.domain.command
 
 import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag.ApiMaturityTag
-import org.trustedanalytics.atk.spray.json.ObjectSchema
+import org.trustedanalytics.atk.spray.json.{ JsonSchema, ObjectSchema }
 
 /**
  * A description of a command in the system, including sample arguments and results
  */
 case class CommandDefinition(name: String,
                              argument_schema: ObjectSchema,
-                             return_schema: ObjectSchema,
+                             return_schema: JsonSchema,
                              doc: Option[CommandDoc] = None,
                              maturity: Option[ApiMaturityTag] = None)

@@ -28,7 +28,7 @@ class Numbers(CommandInstallable):
     _entity_type = 'numbers'
 
     def __init__(self, name):
-        self._id = name
+        self.uri = name
         CommandInstallable.__init__(self)
 
 

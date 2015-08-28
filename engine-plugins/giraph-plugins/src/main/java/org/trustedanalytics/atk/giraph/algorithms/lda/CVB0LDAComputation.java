@@ -235,6 +235,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             vector = vector.plus(gamma.times(weight));
         }
         vertex.getValue().setLdaResult(vector);
+
         if (vertex.getId().isWord()) {
             aggregate(SUM_WORD_VERTEX_VALUE, new VectorWritable(vector));
         }
