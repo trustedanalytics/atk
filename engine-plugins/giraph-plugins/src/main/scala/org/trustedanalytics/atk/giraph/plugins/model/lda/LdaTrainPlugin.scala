@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -32,17 +31,17 @@ import spray.json._
 import LdaJsonFormat._
 
 /**
- * Latent Dirichlet allocation
+ * Train plugin for Latent Dirichlet Allocation
  */
 @PluginDoc(oneLine = "Creates Latent Dirichlet Allocation model",
   extended = """See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__""",
   returns = """dict
     The data returned is composed of multiple components:
-topic_given_doc : Frame
+topics_given_doc : Frame
     Frame with conditional probabilities of topic given document.
-word_given_topic : Frame
+word_given_topics : Frame
     Frame with conditional probabilities of word given topic.
-topic_given_word : Frame
+topics_given_word : Frame
     Frame with conditional probabilities of topic given word.
 report : str
    The configuration and learning curve report for Latent Dirichlet
@@ -104,7 +103,8 @@ class LdaTrainPlugin
       invocation,
       "lda-learning-report_0")
 
-    val resultsColumn = Column("topic_probabilities", DataTypes.vector(arguments.getNumTopics))
+    val resultsColumnName = "topic_probabilities"
+    val resultsColumn = Column(resultsColumnName, DataTypes.vector(arguments.getNumTopics))
 
     // After saving update timestamps, status, row count, etc.
     frames.postSave(None, docOut.toReference, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
@@ -113,7 +113,12 @@ class LdaTrainPlugin
 
     val model: Model = arguments.model
     val topicFrame: SparkFrame = topicOut.toReference
-    model.data = createLdaModel(topicFrame.rdd, arguments.wordColumnName, "topic_probabilities").toJson.asJsObject
+
+    model.data = LdaModel.createLdaModel(topicFrame.rdd,
+      arguments.wordColumnName,
+      resultsColumnName,
+      arguments.getNumTopics
+    ).toJson.asJsObject
 
     LdaTrainResult(
       frames.expectFrame(docOut.toReference),
@@ -122,16 +127,4 @@ class LdaTrainPlugin
       report)
   }
 
-  /* Create LDA model from frame */
-  private def createLdaModel(frameRdd: FrameRdd,
-                             wordColumnName: String,
-                             probColumnName: String): LdaModel = {
-    val topicWordMap = frameRdd.mapRows(row => {
-      val word = row.value(wordColumnName).toString
-      val prob = row.vectorValue(probColumnName)
-      (word, prob)
-    }).collect().toMap
-
-    new LdaModel(topicWordMap)
-  }
 }

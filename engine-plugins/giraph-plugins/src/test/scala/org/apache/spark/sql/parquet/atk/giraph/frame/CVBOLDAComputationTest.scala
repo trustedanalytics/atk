@@ -111,6 +111,10 @@ class CVBOLDAComputationTest extends WordSpec {
       assertVectorApproximate(wordResults("magic"), 0.0056778096874241365, 0.2502411087589012)
       assertVectorApproximate(wordResults("realestate"), 0.17071558553290928, 8.288897492542531E-4)
 
+      topicGivenWord.foreach {
+        case (s, vector) =>
+          assert(round(vector.zSum()) == 1, s"sum of conditional probabilities for topic given $s should equal 1")
+      }
     }
   }
 

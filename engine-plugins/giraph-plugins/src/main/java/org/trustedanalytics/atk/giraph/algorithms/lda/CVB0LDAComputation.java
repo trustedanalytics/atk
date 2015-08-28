@@ -155,11 +155,11 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                     vertex.getValue().getLdaResult());
             sendMessageToAllEdges(vertex, newMessage);
         } else {
-            // normalize vertex value, i.e., theta and phi in LDA, for final output
-            normalizeVertex(vertex);
-
             // set conditional probability of topic given word
             setTopicGivenWord(vertex);
+
+            // normalize vertex value, i.e., theta and phi in LDA, for final output
+            normalizeVertex(vertex);
         }
 
         vertex.voteToHalt();
@@ -337,21 +337,20 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             return;
         }
 
-        double wordCount = 0;
-        Vector topicsGivenWord = new DenseVector(new double[config.numTopics()]);
-
+        double wordCount = 0d;
+        Vector vector = vertex.getValue().getLdaResult().clone();
         for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
-            double weight = edge.getValue().getWordCount();
-            Vector gamma = edge.getValue().getVector();
-            topicsGivenWord = topicsGivenWord.plus(gamma).times(weight);
-            wordCount += weight;
+            wordCount += edge.getValue().getWordCount();
         }
 
-        if (wordCount > 0) {
-            topicsGivenWord.divide(wordCount);
+        if (wordCount > 0d) {
+            vector = vector.divide(wordCount);
+        }
+        else {
+            vector = vector.assign(0d);
         }
 
-        vertex.getValue().setTopicGivenWord(topicsGivenWord);
+        vertex.getValue().setTopicGivenWord(vector);
     }
 
     /**

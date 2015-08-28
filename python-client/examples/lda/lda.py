@@ -36,9 +36,9 @@ results = model.train(frame,
             max_iterations = 3,
             num_topics = 2)
 
-doc_results = results['topic_given_doc']
-word_results = results['word_given_topic']
-topic_results = results['topic_given_word']
+doc_results = results['topics_given_doc']
+word_results = results['word_given_topics']
+topic_results = results['topics_given_word']
 report = results['report']
 
 doc_results.inspect()
@@ -59,5 +59,5 @@ frame.inspect()
 print("compute histogram of scores")
 word_hist = frame.histogram('word_count')
 lda_hist = frame.histogram('lda_score')
-group_frame = frame.group_by('word_id_L', {'word_count': ta.agg.histogram(word_hist.cutoffs), 'lda_score':  ta.agg.histogram(lda_hist.cutoffs)})
+group_frame = frame.group_by('word_id', {'word_count': ta.agg.histogram(word_hist.cutoffs), 'lda_score':  ta.agg.histogram(lda_hist.cutoffs)})
 group_frame.inspect()

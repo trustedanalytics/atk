@@ -16,13 +16,28 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin }
-import org.trustedanalytics.atk.giraph.config.lda.LdaJsonFormat
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, ApiMaturityTag, SparkCommandPlugin }
+import org.trustedanalytics.atk.giraph.config.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaJsonFormat }
 import spray.json._
 import LdaJsonFormat._
 
+/**
+ * Predict plugin for Latent Dirichlet Allocation
+ */
+@PluginDoc(oneLine = "Predict conditional probabilities of topics given document.",
+  extended =
+    """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
+The input document is represented as a list of strings""",
+  returns = """dict
+    Dictionary containing predicted topics.
+    The data returned is composed of multiple components:
+topics_given_doc : list of doubles
+    List of conditional probabilities of topics given document.
+new_words_count : int
+    Count of new words in test document not present in training set.
+new_words_percentage: double
+    Percentage of new words in test document.""")
 class LdaPredictPlugin extends SparkCommandPlugin[LdaModelPredictArgs, LdaModelPredictReturn] {
   /**
    * The name of the command.
@@ -35,16 +50,9 @@ class LdaPredictPlugin extends SparkCommandPlugin[LdaModelPredictArgs, LdaModelP
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-
   override def numberOfJobs(arguments: LdaModelPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
@@ -62,7 +70,6 @@ class LdaPredictPlugin extends SparkCommandPlugin[LdaModelPredictArgs, LdaModelP
 
     val ldaModel = model.data.convertTo[LdaModel]
     ldaModel.predict(document)
-
   }
 
 }

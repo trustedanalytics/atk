@@ -16,46 +16,87 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import scala.collection.immutable.Map
 import scala.collection.mutable.ListBuffer
-class LdaModel(val topicWordMap: Map[String, Vector[Double]]) {
 
+//TODO: This code duplicates LdaModel in model plugin. Need to be refactored.
+
+/**
+ * Model for Latent Dirichlet Allocation
+ *
+ * @param numTopics Number of topics in trained model
+ * @param topicWordMap Map of conditional probabilities of topics given word
+ */
+case class LdaModel(numTopics: Int,
+                    topicWordMap: Map[String, Vector[Double]]) {
+
+  /**
+   * Predict conditional probabilities of topics given document
+   *
+   * @param document Test document represented as a list of words
+   * @return Topic predictions for document
+   */
   def predict(document: List[String]): LdaModelPredictReturn = {
-    val numberOfWords = document.length
-    val numberOfTopics = topicWordMap.values.head.size
-    val wordOccurrences: Map[String, Int] = computeWordOccurences(document)
+    require(document != null && !document.isEmpty, "Document must not be empty")
+    val numWords = document.length
+    val wordOccurrences: Map[String, Int] = computeWordOccurrences(document)
     var topicsGivenDocumentBuffer = new ListBuffer[Double]()
-    for (x <- 1 to numberOfTopics) {
-      var topicGivenDocument: Double = 0.0
+
+    for (x <- 0 until numTopics) {
+      var topicGivenDocument: Double = 0d
       for (word <- document) {
-        val wGivenD = wordProbabilityGivenDocument(word, wordOccurrences, numberOfWords)
-        val topicsProbablitiesForWord = topicWordMap(word)
+        val wordGivenDoc = wordProbabilityGivenDocument(word, wordOccurrences, numWords)
         val topicProbabilityForWord = topicWordMap(word)(x)
-        topicGivenDocument += topicProbabilityForWord * wGivenD
+        topicGivenDocument += topicProbabilityForWord * wordGivenDoc
       }
       topicsGivenDocumentBuffer += topicGivenDocument
     }
     val newWords: Int = computeNewWords(topicWordMap, document)
-    val percentOfNewWords: Double = newWords * 100 / numberOfWords
+    val percentOfNewWords: Double = newWords * 100 / numWords
     new LdaModelPredictReturn(topicsGivenDocumentBuffer.toVector, newWords, percentOfNewWords)
   }
 
-  def computeWordOccurences(document: List[String]): Map[String, Int] = {
-    var wordOccurences: Map[String, Int] = Map[String, Int]()
+  /**
+   * Compute counts for each word
+   *
+   * @param document Test document represented as a list of words
+   * @return Map with counts for each word
+   */
+  def computeWordOccurrences(document: List[String]): Map[String, Int] = {
+    var wordOccurrences: Map[String, Int] = Map[String, Int]()
     for (word <- document) {
-      if (wordOccurences.contains(word)) {
-        val count = wordOccurences(word) + 1
-        wordOccurences += (word -> count)
+      if (wordOccurrences.contains(word)) {
+        val count = wordOccurrences(word) + 1
+        wordOccurrences += (word -> count)
       }
-      else { wordOccurences += (word -> 1) }
+      else {
+        wordOccurrences += (word -> 1)
+      }
     }
-    wordOccurences
+    wordOccurrences
   }
 
-  def wordProbabilityGivenDocument(word: String, wordOccurences: Map[String, Int], numberOfWords: Int): Double = {
-    val wordCount = wordOccurences(word)
+  /**
+   * Compute conditional probability of word given document
+   *
+   * @param word Input word
+   * @param wordOccurrences Number of occurrences of word in document
+   * @param numberOfWords Total number of words in document
+   * @return Conditional probability of word given document
+   */
+  def wordProbabilityGivenDocument(word: String, wordOccurrences: Map[String, Int], numberOfWords: Int): Double = {
+    require(numberOfWords > 0, "Number of words in document must be greater than zero")
+    val wordCount = wordOccurrences.getOrElse(word, 0)
     wordCount / numberOfWords
   }
 
+  /**
+   * Compute count of new words in document not present in trained model
+   *
+   * @param topicWordMap Map of conditional probabilities of topics given word
+   * @param document Test document
+   * @return Count of new words in document
+   */
   def computeNewWords(topicWordMap: Map[String, Vector[Double]], document: List[String]): Int = {
     var count = 0
     for (word <- document) {
@@ -66,4 +107,13 @@ class LdaModel(val topicWordMap: Map[String, Vector[Double]]) {
   }
 }
 
-case class LdaModelPredictReturn(topicsGivenDocumentVector: Vector[Double], newWordsCount: Int, percentageOfNewWords: Double)
+/**
+ * Return arguments to the LDA predict plugin
+ *
+ * @param topicsGivenDoc Vector of conditional probabilities of topics given document
+ * @param newWordsCount Count of new words in test document not present in training set
+ * @param newWordsPercentage Percentage of new word in test document
+ */
+case class LdaModelPredictReturn(topicsGivenDoc: Vector[Double],
+                                 newWordsCount: Int,
+                                 newWordsPercentage: Double)

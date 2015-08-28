@@ -15,15 +15,14 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import java.util.StringTokenizer
-
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.apache.spark.mllib.clustering.KMeansModel
-import org.apache.spark.mllib.linalg.{ Vectors, DenseVector }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.topicWordMap) with Model {
+/**
+ * Scoring model for Latent Dirichlet Allocation
+ */
+class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
   override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
     var score = Seq[Any]()
@@ -34,11 +33,11 @@ class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.topicWordMap
         row.zipWithIndex.foreach {
           case (value: Any, index: Int) => document(index) = value
         }
+
         val predictReturn = predict(document.toList)
         score = score :+ predictReturn.toString
       }
     }
     score
   }
-
 }

@@ -94,10 +94,10 @@ def return_bin_result(selfish, json_result):
 @postprocessor('model:lda/train')
 def return_lda_train(selfish, json_result):
     from trustedanalytics import get_frame
-    doc_frame = get_frame(json_result['topic_given_doc']['id'])
-    word_frame= get_frame(json_result['word_given_topic']['id'])
-    topic_frame= get_frame(json_result['topic_given_word']['id'])
-    return { 'topic_given_doc': doc_frame, 'word_given_topic': word_frame, 'topic_given_word': word_frame, 'report': json_result['report'] }
+    doc_frame = get_frame(json_result['topics_given_doc']['id'])
+    word_frame= get_frame(json_result['word_given_topics']['id'])
+    topic_frame= get_frame(json_result['topics_given_word']['id'])
+    return { 'topics_given_doc': doc_frame, 'word_given_topics': word_frame, 'topics_given_word': topic_frame, 'report': json_result['report'] }
 
 @postprocessor('model:logistic_regression/train')
 def return_logistic_regression_train(selfish, json_result):
