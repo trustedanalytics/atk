@@ -25,7 +25,7 @@ import scala.concurrent._
 import ExecutionContext.Implicits.global
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import scala.util.{ Failure, Success }
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import org.trustedanalytics.atk.scoring.interfaces.Model
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -53,7 +53,7 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
 /**
  * Defines our service behavior independently from the service actor
  */
-class ScoringService(model: Model, modelName: String) extends Directives {
+class ScoringService(model: Model) extends Directives {
 
   def homepage = {
     respondWithMediaType(`text/html`) {
@@ -80,13 +80,13 @@ class ScoringService(model: Model, modelName: String) extends Directives {
    * Main Route entry point to the Scoring Server
    */
   val serviceRoute: Route = logRequest("scoring service", Logging.InfoLevel) {
-    val prefix = "models"
+    val prefix = "score"
     path("") {
       get {
         homepage
       }
     } ~
-      path("v1" / prefix / modelName) {
+      path("v1" / prefix) {
         requestUri { uri =>
           post {
             parameterSeq { (params) =>

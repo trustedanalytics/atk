@@ -46,12 +46,11 @@ private object CumulativeDistFunctions extends Serializable {
     val sortedRdd = frameRdd.mapRows(row => {
       val sample = row.doubleValue(sampleColumn.name)
       (sample, 1)
-    }).reduceByKey(_+_).sortByKey().cache()
-
+    }).reduceByKey(_ + _).sortByKey().cache()
 
     // compute the partition sums
     val partSums: Array[Double] = 0.0 +: sortedRdd.mapPartitionsWithIndex {
-      case (index, partition) => Iterator(partition.map{case (sample, count) => count}.sum.toDouble)
+      case (index, partition) => Iterator(partition.map { case (sample, count) => count }.sum.toDouble)
     }.collect()
 
     // get sample size
