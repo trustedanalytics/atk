@@ -532,14 +532,29 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       frames.list
     }
 
+    /**
+     * return count of all the active frames
+     * @param session db connection
+     * @return count of all the active frames
+     */
     override def totalCount()(implicit session: Session): Int = {
       frames.filter(_.statusId === Status.Active).list.length
     }
 
+    /**
+     * return count of all the active errored frames
+     * @param session db connection
+     * @return int count of all the active errored frames
+     */
     override def errorCount()(implicit session: Session): Int = {
       frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNotNull).list.length
     }
 
+    /**
+     * return count of all the active non errored frames
+     * @param session db
+     * @return int count of all the active non errored frames
+     */
     override def successfulCount()(implicit session: Session): Int = {
       frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNull).list.length
     }
@@ -738,14 +753,29 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
         .sortBy(_.id).list
     }
 
+    /**
+     * return count of all the commands
+     * @param session db connection
+     * @return int count of all the commands
+     */
     override def totalCount()(implicit session: Session): Int = {
       commandTable.list.length
     }
 
+    /**
+     * return count of all the errored commands
+     * @param session db connection
+     * @return int count of all the errored commands
+     */
     override def errorCount()(implicit session: Session): Int = {
       commandTable.filter(_.error.isNotNull).list.length
     }
 
+    /**
+     * return count of all the successfully completed commands
+     * @param session db connection
+     * @return int count of all the successfully completed commands
+     */
     override def successfulCount()(implicit session: Session): Int = {
       commandTable.filter(_.error.isNull).filter(_.complete === true).list.length
     }
@@ -884,6 +914,11 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       graphs.list
     }
 
+    /**
+     * Return a count of all active graphs for metric collection.
+     * @param session db session
+     * @return count of active graphs
+     */
     override def totalCount()(implicit session: Session): Int = {
       graphs.filter(_.statusId == Status.Active).list.length
     }

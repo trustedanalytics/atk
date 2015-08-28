@@ -358,6 +358,13 @@ trait EngineConfig extends EventLogging {
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None
   val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.keytab-file")) else None
 
+  /**
+   * The metric update interval in seconds. Default values is 60 seconds
+   */
   val metricTick = config.getDuration("trustedanalytics.atk.engine.metric.tick", TimeUnit.SECONDS)
+  /**
+   * The metric start status. the default will be set to false since metric collection is outside the scope of atk and
+   * requires quite a large amount of setup
+   */
   val metricStart: Boolean = config.getBoolean("trustedanalytics.atk.engine.metric.auto-start")
 }

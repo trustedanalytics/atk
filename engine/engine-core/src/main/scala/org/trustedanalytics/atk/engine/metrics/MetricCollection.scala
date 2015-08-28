@@ -8,7 +8,7 @@ import kamon.Kamon
 import org.trustedanalytics.atk.repository.MetaStore
 
 /**
- * Runnable Thread that executes slick queries that are reportd outside the rest-server through kamon api.
+ * Runnable Thread that executes slick queries that are reported outside the rest-server through kamon api.
  * Currently reports only to statsd. Although all kamon reporting api's are usable only statsd is packaged with engine-core.
  * Kamon statsd documentation can be found at http://kamon.io/backends/statsd/
  * @param metaStore database store
@@ -16,15 +16,17 @@ import org.trustedanalytics.atk.repository.MetaStore
 class MetricCollection(val metaStore: MetaStore) extends Runnable with EventLogging {
 
   /*
-  Define metrics that will be reported
+  Define metrics that will be reported out
    */
   val framesTotal = Kamon.metrics.histogram("frames-total")
   val framesSuccessful = Kamon.metrics.histogram("frames-successful")
   val framesError = Kamon.metrics.histogram("frames-error")
-  val graphHistogram = Kamon.metrics.histogram("graphs")
+
   val commandsTotal = Kamon.metrics.histogram("commands-total")
   val commandsSuccessful = Kamon.metrics.histogram("commands-successful")
   val commandsError = Kamon.metrics.histogram("commands-error")
+
+  val graphHistogram = Kamon.metrics.histogram("graphs")
 
   override def run(): Unit = {
     collect()
