@@ -23,12 +23,12 @@
                 <artifactId>scala-maven-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.scalariform</groupId>
-                <artifactId>scalariform-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.scalatest</groupId>
                 <artifactId>scalatest-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>maven-scoverage-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
