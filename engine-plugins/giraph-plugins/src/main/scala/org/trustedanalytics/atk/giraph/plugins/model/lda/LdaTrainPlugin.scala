@@ -82,10 +82,10 @@ class LdaTrainPlugin
     val docOutSaveInfo = frames.prepareForSave(docOut)
     val wordOutSaveInfo = frames.prepareForSave(wordOut)
     val topicOutSaveInfo = frames.prepareForSave(topicOut)
-    
+
     val inputFormatConfig = new LdaInputFormatConfig(frame.getStorageLocation, frame.schema)
     val outputFormatConfig = new LdaOutputFormatConfig(
-      docOutSaveInfo.targetPath, 
+      docOutSaveInfo.targetPath,
       wordOutSaveInfo.targetPath,
       topicOutSaveInfo.targetPath
     )

@@ -20,7 +20,6 @@ import scala.collection.immutable.Map
 import scala.collection.mutable.ListBuffer
 
 //TODO: This code duplicates LdaModel in model plugin. Need to be refactored.
-
 /**
  * Model for Latent Dirichlet Allocation
  *
@@ -29,7 +28,6 @@ import scala.collection.mutable.ListBuffer
  */
 case class LdaModel(numTopics: Int,
                     topicWordMap: Map[String, Vector[Double]]) {
-
   /**
    * Predict conditional probabilities of topics given document
    *
@@ -42,11 +40,11 @@ case class LdaModel(numTopics: Int,
     val wordOccurrences: Map[String, Int] = computeWordOccurrences(document)
     var topicsGivenDocumentBuffer = new ListBuffer[Double]()
 
-    for (x <- 0 until numTopics) {
+    for (i <- 0 until numTopics) {
       var topicGivenDocument: Double = 0d
       for (word <- document) {
         val wordGivenDoc = wordProbabilityGivenDocument(word, wordOccurrences, numWords)
-        val topicProbabilityForWord = topicWordMap(word)(x)
+        val topicProbabilityForWord = topicProbabilityGivenWord(word, i)
         topicGivenDocument += topicProbabilityForWord * wordGivenDoc
       }
       topicsGivenDocumentBuffer += topicGivenDocument
@@ -87,7 +85,17 @@ case class LdaModel(numTopics: Int,
   def wordProbabilityGivenDocument(word: String, wordOccurrences: Map[String, Int], numberOfWords: Int): Double = {
     require(numberOfWords > 0, "Number of words in document must be greater than zero")
     val wordCount = wordOccurrences.getOrElse(word, 0)
-    wordCount / numberOfWords
+    wordCount.toDouble / numberOfWords
+  }
+
+  /**
+   * Compute conditional probability of topic given word
+   */
+  def topicProbabilityGivenWord(word: String, topicIndex: Int): Double = {
+    if (topicWordMap.contains(word)) {
+      topicWordMap(word)(topicIndex)
+    }
+    else 0d
   }
 
   /**

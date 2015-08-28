@@ -86,7 +86,7 @@ case class LdaModel(numTopics: Int,
   def wordProbabilityGivenDocument(word: String, wordOccurrences: Map[String, Int], numberOfWords: Int): Double = {
     require(numberOfWords > 0, "Number of words in document must be greater than zero")
     val wordCount = wordOccurrences.getOrElse(word, 0)
-    wordCount / numberOfWords
+    wordCount.toDouble / numberOfWords
   }
 
   /**
