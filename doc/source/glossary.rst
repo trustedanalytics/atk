@@ -259,8 +259,12 @@ Glossary
 
     Edge
 
-        A connection — either directed or not — between two vertices in a
+        A connection |EM| either directed or not |EM| between two vertices in a
         graph.
+
+    Enumerate
+
+        Verb |EM| To specify each member of a sequence individually in incrementing order.
 
     Equal Width Binning
 
@@ -519,7 +523,7 @@ Glossary
 
     |K-S| Test
 
-        From `Wikipedia\: Kolmogorov–Smirnov Test`_:
+        From `Wikipedia\: Kolmogorov|EM|Smirnov Test`_:
 
             In statistics, the |K-S| test is a nonparametric test of the
             equality of continuous, one-dimensional probability distributions
@@ -1044,7 +1048,7 @@ Glossary
     http://en.wikipedia.org/wiki/Statistical_classification
 .. _Wikipedia\: Recommender System:
     http://en.wikipedia.org/wiki/Recommendation_system
-.. _How Computers Know What We Want — Before We Do:
+.. _How Computers Know What We Want |EM| Before We Do:
     http://content.time.com/time/magazine/article/0,9171,1992403,00.html
 .. _Wikipedia\: Topic Modeling: http://en.wikipedia.org/wiki/Topic_modeling
 .. _Wikipedia\: Community Structure:
@@ -1055,7 +1059,7 @@ Glossary
 .. _Wikipedia\: Collaborative Filtering:
     http://en.wikipedia.org/wiki/Collaborative_filtering
 .. _Wikipedia\: Confusion Matrix: http://en.wikipedia.org/wiki/Confusion_matrix
-.. _Wikipedia\: Kolmogorov–Smirnov Test: http://en.wikipedia.org/wiki/K-S_Test
+.. _Wikipedia\: Kolmogorov|EM|Smirnov Test: http://en.wikipedia.org/wiki/K-S_Test
 .. _Wikipedia\: Precision and Recall:
     http://en.wikipedia.org/wiki/Precision_and_recall
 .. _Wikipedia\: F1 score: http://en.wikipedia.org/wiki/F-measure
@@ -1084,7 +1088,7 @@ Glossary
 .. [#f3] Francesco Ricci and Lior Rokach and Bracha Shapira (2011).
     Recommender Systems Handbook, pp. 1-35. Springer.
 .. [#f4] Lev Grossman (2010).
-    `How Computers Know What We Want — Before We Do`_. Time.
+    `How Computers Know What We Want |EM| Before We Do`_. Time.
 .. [#f5] Terveen, Loren; Hill, Will (2001).
     Beyond Recommender Systems: Helping People Help Each Other pp. 6.
     Addison-Wesley.
@@ -1098,7 +1102,7 @@ Glossary
     Oxford University Press.
 .. [#f11] Weiss, Yair; Freeman, William T. (October 2001). "Correctness of
     Belief Propagation in Gaussian Graphical Models of Arbitrary Topology".
-    Neural Computation 13 (10): 2173–2200. doi:10.1162/089976601750541769.
+    Neural Computation 13 (10): 2173|EM|2200. doi:10.1162/089976601750541769.
     PMID 11570995.
 
 
