@@ -19,8 +19,13 @@ class MetricCollection(val metaStore: MetaStore) extends Runnable with EventLogg
   Define metrics that will be reported out
    */
   val framesTotal = Kamon.metrics.histogram("frames-total")
+  val framesNamedTotal = Kamon.metrics.histogram("frames-name-total")
+
   val framesSuccessful = Kamon.metrics.histogram("frames-successful")
+  val framesNamedSuccessful = Kamon.metrics.histogram("frames-named-successful")
+
   val framesError = Kamon.metrics.histogram("frames-error")
+  val framesNamedError = Kamon.metrics.histogram("frames-named-error")
 
   val commandsTotal = Kamon.metrics.histogram("commands-total")
   val commandsSuccessful = Kamon.metrics.histogram("commands-successful")
@@ -43,8 +48,13 @@ class MetricCollection(val metaStore: MetaStore) extends Runnable with EventLogg
 
             info("metric collection")
             framesTotal.record(metaStore.frameRepo.totalCount())
+            framesNamedTotal.record(metaStore.frameRepo.totalNamedCount())
+
             framesSuccessful.record(metaStore.frameRepo.successfulCount())
+            framesNamedError.record(metaStore.frameRepo.successfulNamedCount())
+
             framesError.record(metaStore.frameRepo.errorCount())
+            framesNamedError.record(metaStore.frameRepo.errorNamedCount())
 
             commandsTotal.record(metaStore.commandRepo.totalCount())
             commandsSuccessful.record(metaStore.commandRepo.successfulCount())

@@ -542,21 +542,50 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     /**
-     * return count of all the active errored frames
+     * return count of all the active named frames
      * @param session db connection
-     * @return int count of all the active errored frames
+     * @return count of all the active named frames
+     */
+    override def totalNamedCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).filter(_.name.isNotNull).filter(_.parentId.isNull).list.length
+    }
+
+    /**
+     * return count of all the active named frames with errors
+     * @param session db connection
+     * @return count of all the active named frames
+     */
+    override def errorNamedCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).filter(_.name.isNotNull).filter(_.parentId.isNull)
+        .filter(_.errorFrameId.isNotNull).list.length
+    }
+
+    /**
+     * return count of all the active frames with errors
+     * @param session db connection
+     * @return int count of all the active error frames
      */
     override def errorCount()(implicit session: Session): Int = {
       frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNotNull).list.length
     }
 
     /**
-     * return count of all the active non errored frames
+     * return count of all the active successful frames
      * @param session db
-     * @return int count of all the active non errored frames
+     * @return int count of all the active non error frames
      */
     override def successfulCount()(implicit session: Session): Int = {
       frames.filter(_.statusId === Status.Active).filter(_.parentId.isNull).filter(_.errorFrameId.isNull).list.length
+    }
+
+    /**
+     * return count of all the active successful named frames
+     * @param session db
+     * @return int count of all the active non error frames
+     */
+    override def successfulNamedCount()(implicit session: Session): Int = {
+      frames.filter(_.statusId === Status.Active).filter(_.name.isNotNull).filter(_.parentId.isNull)
+        .filter(_.errorFrameId.isNull).list.length
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[FrameEntity] = {
