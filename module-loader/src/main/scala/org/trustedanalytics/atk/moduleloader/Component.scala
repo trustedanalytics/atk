@@ -14,20 +14,23 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine
-
-import org.trustedanalytics.atk.engine.command._
-import org.trustedanalytics.atk.engine.gc.GarbageCollector
-import org.trustedanalytics.atk.engine.util.{ EnvironmentLogger, JvmVersionReporter }
+package org.trustedanalytics.atk.moduleloader
 
 /**
- * Main class for initializing the Spark Engine
+ * Interface that can be implemented in modules.
+ *
+ * Implementation can be an entry point for applications started by the ModuleLoader
  */
-class EngineComponent extends AbstractEngineComponent {
-  EnvironmentLogger.log()
-  EngineConfig.logSettings()
-  JvmVersionReporter.check()
-  metaStore.initializeSchema()
-  fileStorage.syncLibs()
-  GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+trait Component {
+
+  /**
+   * Start this component
+   */
+  def start(): Unit
+
+  /**
+   * Stop this component
+   */
+  def stop(): Unit
+
 }

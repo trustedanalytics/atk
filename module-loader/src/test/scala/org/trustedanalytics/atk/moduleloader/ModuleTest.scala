@@ -14,20 +14,24 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine
+package org.trustedanalytics.atk.moduleloader
 
-import org.trustedanalytics.atk.engine.command._
-import org.trustedanalytics.atk.engine.gc.GarbageCollector
-import org.trustedanalytics.atk.engine.util.{ EnvironmentLogger, JvmVersionReporter }
+import org.scalatest.WordSpec
+import org.mockito.Mockito._
+import org.scalatest.mock.MockitoSugar
 
-/**
- * Main class for initializing the Spark Engine
- */
-class EngineComponent extends AbstractEngineComponent {
-  EnvironmentLogger.log()
-  EngineConfig.logSettings()
-  JvmVersionReporter.check()
-  metaStore.initializeSchema()
-  fileStorage.syncLibs()
-  GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+class ModuleTest extends WordSpec with MockitoSugar {
+
+  "Module" should {
+    "use its classloader" in {
+      val className = "MyClass"
+      val classLoader = mock[ClassLoader]
+      when(classLoader.loadClass(className)).thenReturn(null)
+      val module = new Module("myname", parentName = None, jarNames = Nil, commandPlugins = Nil, classLoader)
+      val result = module.loadClass(className)
+      assert(result == null)
+      verify(classLoader, times(1)).loadClass(className)
+    }
+  }
+
 }

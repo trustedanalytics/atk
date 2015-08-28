@@ -43,8 +43,7 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   private val sparkContextFactory = SparkContextFactory
 
-  private val fileStorage = new HdfsFileStorage()
-  fileStorage.syncLibs()
+  val fileStorage = new HdfsFileStorage()
 
   private val sparkAutoPartitioner = new SparkAutoPartitioner(fileStorage)
 
