@@ -209,7 +209,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         }
         vertex.getValue().setLdaResult(vector);
 
-        if (vertex.getId().isWord() && vector.size() > 0) { //size check prevents cardinality exceptions
+        if (vertex.getId().isWord()) {
             aggregate(SUM_WORD_VERTEX_VALUE, new VectorWritable(vector));
         }
     }
