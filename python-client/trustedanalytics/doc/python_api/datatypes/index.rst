@@ -46,4 +46,17 @@ automatically converted to None.
 Any further usage of those data points should treat the values as None.
 
 
+.. only:: latex
 
+    API Maturity Tags
+
+        Functions in the API may be at different levels of software maturity.
+        Where a function is not mature, the documentation will note it with one
+        of the following tags.  The absence of a tag means the function is
+        standardized and fully tested.
+
+        |ALPHA|
+
+        |BETA|
+
+        |DEPRECATED|
