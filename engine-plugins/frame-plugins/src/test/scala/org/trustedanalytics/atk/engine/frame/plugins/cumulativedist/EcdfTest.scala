@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class EcdfTest extends TestingSparkContextFlatSpec with Matchers {
