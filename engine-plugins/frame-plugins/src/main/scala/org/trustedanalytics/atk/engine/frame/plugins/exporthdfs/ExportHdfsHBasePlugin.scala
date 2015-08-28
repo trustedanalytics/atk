@@ -104,7 +104,9 @@ object ExportHBaseImpl extends Serializable {
                        familyColumnName: String,
                        keyColumnName: String)(implicit invocation: Invocation) = {
 
-    rdd.mapRows(row => buildRow(row, rdd.frameSchema, familyColumnName, keyColumnName))
+    rdd.mapRows(_.valuesAsArray()).zipWithUniqueId().map {
+      case (row, index) => buildRow((row, index), rdd.frameSchema, familyColumnName, keyColumnName)
+    }
   }
 
   /**
@@ -115,17 +117,17 @@ object ExportHBaseImpl extends Serializable {
    * @param keyColumnName key column name for hbase
    * @return hbase row
    */
-  private def buildRow(row: RowWrapper, schema: Schema, familyColumnName: String, keyColumnName: String) = {
+  private def buildRow(row: (Array[Any], Long), schema: Schema, familyColumnName: String, keyColumnName: String) = {
     val columnTypes = schema.columns.map(_.dataType)
     val columnNames = schema.columns.map(_.name)
     val familyColumnAsByteArray = Bytes.toBytes(familyColumnName)
 
-    val valuesAsDataTypes = DataTypes.parseMany(columnTypes.toArray)(row.values().toArray)
+    val valuesAsDataTypes = DataTypes.parseMany(columnTypes.toArray)(row._1)
     val valuesAsByteArray = valuesAsDataTypes.map(value => {
       if (null == value) null else Bytes.toBytes(value.toString)
     })
 
-    val keyColumnValue = Bytes.toBytes(keyColumnName + Math.random())
+    val keyColumnValue = Bytes.toBytes(keyColumnName + row._2)
     val put = new Put(keyColumnValue)
     for (index <- 0 to valuesAsByteArray.length - 1) {
       if (valuesAsByteArray(index) != null) {
