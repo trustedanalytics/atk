@@ -2,7 +2,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.hbase.HBaseConfiguration
+import org.apache.hadoop.hbase.{ HColumnDescriptor, HTableDescriptor, HBaseConfiguration }
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.mapreduce.TableOutputFormat
 import org.apache.hadoop.hbase.util.Bytes
@@ -13,7 +13,7 @@ import org.trustedanalytics.atk.domain.frame.{ ExportHdfsHBaseArgs }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.{ RowWrapper, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
-import org.apache.hadoop.hbase.client.Put
+import org.apache.hadoop.hbase.client.{ HBaseAdmin, Put }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.apache.commons.lang.StringUtils
 
@@ -52,10 +52,19 @@ class ExportHdfsHBasePlugin extends SparkCommandPlugin[ExportHdfsHBaseArgs, Unit
 
     val frame: SparkFrame = arguments.frame
     val conf = createConfig(arguments.tableName)
+    val familyName = arguments.familyName.getOrElse("familyColumn")
 
     val pairRdd = ExportHBaseImpl.convertToPairRDD(frame.rdd,
-      arguments.familyName.getOrElse("familyColumn"),
+      familyName,
       arguments.keyColumnName.getOrElse(StringUtils.EMPTY))
+
+    val hBaseAdmin = new HBaseAdmin(HBaseConfiguration.create())
+    if (!hBaseAdmin.tableExists(arguments.tableName)) {
+      val desc = new HTableDescriptor(arguments.tableName)
+      desc.addFamily(new HColumnDescriptor(familyName))
+
+      hBaseAdmin.createTable(desc)
+    }
 
     pairRdd.saveAsNewAPIHadoopDataset(conf)
 
