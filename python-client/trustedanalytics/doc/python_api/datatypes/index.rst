@@ -16,7 +16,6 @@ the supported Python data types.
     float32, float64, ignore, int32, int64, unicode, vector(n)
     (and aliases: float->float64, int->int32, list->vector, long->int64, str->unicode)
 
-|
 
 ==============  =========================================================================================
 **float32**     32-bit floating point number; equivalent to numpy.float32
@@ -35,9 +34,6 @@ the supported Python data types.
 **vector(n)**   |ALPHA|  Ordered list of n float64 numbers (array of fixed-length n); uses numpy.ndarray
 ==============  =========================================================================================
 
-|
-|
-|
 
 **Note:**  Numpy values of positive infinity (np.inf), negative infinity
 (-np.inf) or nan (np.nan) are treated as Python's None when sent to the server.
