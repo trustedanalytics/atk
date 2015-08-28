@@ -29,6 +29,7 @@ class EngineComponent extends AbstractEngineComponent {
   EngineConfig.logSettings()
   JvmVersionReporter.check()
   metaStore.initializeSchema()
+  fileStorage.syncLibs()
   GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
   MetricCollection.startup(metaStore)
 }
