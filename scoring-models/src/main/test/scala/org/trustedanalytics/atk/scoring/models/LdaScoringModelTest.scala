@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.scoring.models
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.testutils.MatcherUtils._
+import spray.json._
+import ScoringJsonReaderWriters._
 
 class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
   val epsilon = 1e-6
@@ -49,17 +51,17 @@ class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
 
     scores.size should equal(3)
 
-    val score0 = scores(0).asInstanceOf[LdaModelPredictReturn]
+    val score0 = JsonParser(scores(0).toString).asJsObject.convertTo[LdaModelPredictReturn]
     score0.topicsGivenDoc.toArray should equalWithTolerance(Array(0.5, 0.333333))
     score0.newWordsCount should equal(1)
     score0.newWordsPercentage should equal(100 / 6d +- epsilon)
 
-    val score1 = scores(1).asInstanceOf[LdaModelPredictReturn]
+    val score1 = JsonParser(scores(1).toString).asJsObject.convertTo[LdaModelPredictReturn]
     score1.topicsGivenDoc.toArray should equalWithTolerance(Array(0.4375, 0.5625))
     score1.newWordsCount should equal(0)
     score1.newWordsPercentage should equal(0d +- epsilon)
 
-    val score2 = scores(2).asInstanceOf[LdaModelPredictReturn]
+    val score2 = JsonParser(scores(2).toString).asJsObject.convertTo[LdaModelPredictReturn]
     score2.topicsGivenDoc.toArray should equalWithTolerance(Array(0d, 0d))
     score2.newWordsCount should equal(0)
     score2.newWordsPercentage should equal(0d +- epsilon)

@@ -90,13 +90,6 @@ class LdaModelTest extends FlatSpec with Matchers {
     ldaModel.wordProbabilityGivenDocument("new_word", wordOccurrences, 15) should equal(0)
   }
 
-  "wordProbabilityGivenDocument" should "throw an IllegalArgumentException if number of words is zero" in {
-    intercept[IllegalArgumentException] {
-      val ldaModel = LdaModel(numTopics, topicWordMap)
-      ldaModel.wordProbabilityGivenDocument("jobs", wordOccurrences, 0) should equal(0)
-    }
-  }
-
   "computeNewWordCount" should "count words not present in trained model" in {
     val ldaModel = LdaModel(numTopics, topicWordMap)
 
