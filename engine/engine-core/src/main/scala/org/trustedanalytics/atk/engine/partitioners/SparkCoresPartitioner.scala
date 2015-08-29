@@ -56,7 +56,8 @@ object SparkCoresPartitioner extends Serializable {
     val coresPerExecutor = Try({
       EngineConfig.sparkConfProperties("spark.executor.cores").toInt
     }).getOrElse(1)
-    EngineConfig.sparkOnYarnNumExecutors * coresPerExecutor * EngineConfig.maxTasksPerCore
+    // EngineConfig.sparkOnYarnNumExecutors *
+    coresPerExecutor * EngineConfig.maxTasksPerCore
   }
 
   // Get the maximum number of executors for Spark stand-alone
