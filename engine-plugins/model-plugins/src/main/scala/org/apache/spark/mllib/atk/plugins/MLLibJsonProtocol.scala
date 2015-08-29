@@ -316,9 +316,12 @@ object MLLibJsonProtocol {
 
     override def write(obj: PrincipalComponentsData): JsValue = {
       val singularValues = VectorFormat.write(obj.singularValues)
+      val meanVector = VectorFormat.write(obj.meanVector)
       JsObject(
         "k" -> obj.k.toJson,
         "observationColumns" -> obj.observationColumns.toJson,
+        "meanCentered" -> obj.meanCentered.toJson,
+        "meanVector" -> meanVector,
         "singularValues" -> singularValues,
         "vFactor" -> obj.vFactor.toJson
       )
@@ -329,11 +332,15 @@ object MLLibJsonProtocol {
       val k = getOrInvalid(fields, "k").convertTo[Int]
       val observationColumns = getOrInvalid(fields, "observationColumns").convertTo[List[String]]
 
+      val meanCentered = getOrInvalid(fields, "meanCentered").convertTo[Boolean]
+
+      val meanVector = VectorFormat.read(getOrInvalid(fields, "meanVector"))
+
       val singularValues = VectorFormat.read(getOrInvalid(fields, "singularValues"))
 
       val vFactor = MatrixFormat.read(getOrInvalid(fields, "vFactor"))
 
-      new PrincipalComponentsData(k, observationColumns, singularValues, vFactor)
+      new PrincipalComponentsData(k, observationColumns, meanCentered, meanVector, singularValues, vFactor)
     }
   }
 
@@ -359,8 +366,7 @@ object MLLibJsonProtocol {
   implicit val logRegTrainResultsFormat = jsonFormat8(LogisticRegressionSummaryTable)
   implicit val pcaPredictFormat = jsonFormat7(PrincipalComponentsPredictArgs)
   implicit val pcaTrainFormat = jsonFormat5(PrincipalComponentsTrainArgs)
-  implicit val pcaPredictReturnFormat = jsonFormat2(PrincipalComponentsPredictReturn)
-  implicit val pcaTrainReturnFormat = jsonFormat4(PrincipalComponentsTrainReturn)
+  implicit val pcaTrainReturnFormat = jsonFormat6(PrincipalComponentsTrainReturn)
   implicit val modelPublishFormat = jsonFormat3(ModelPublishArgs)
 }
 

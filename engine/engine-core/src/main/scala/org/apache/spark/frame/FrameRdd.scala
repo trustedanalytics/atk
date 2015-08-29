@@ -106,15 +106,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     })
   }
 
-  def toMeanCenteredVectorDenseRDD(featureColumnNames: List[String]): RDD[Vector] = {
-    val vectorRdd =
-      this.mapRows(row => {
-        val array = row.valuesAsArray(featureColumnNames, flattenInputs = true)
-        val b = array.map(i => DataTypes.toDouble(i))
-        Vectors.dense(b)
-      })
-
-    val columnMeans: Vector = Statistics.colStats(vectorRdd).mean
+  def toMeanCenteredVectorDenseRDD(vectorRdd: RDD[Vector], columnMeans: Vector): RDD[Vector] = {
     vectorRdd.map(i => {
       Vectors.dense((new DenseVector(i.toArray) - new DenseVector(columnMeans.toArray)).toArray)
     })
@@ -417,8 +409,8 @@ object FrameRdd {
 
   def toMeanCenteredIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String], meanVector: Vector): RDD[IndexedRow] = {
     val rowWrapper = new RowWrapper(frameSchema)
-    indexedRows.map{
-      case(index, row) =>
+    indexedRows.map {
+      case (index, row) =>
         val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
         val b = array.map(i => DataTypes.toDouble(i))
         val meanCenteredVector = Vectors.dense((new DenseVector(b) - new DenseVector(meanVector.toArray)).toArray)

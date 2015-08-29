@@ -200,11 +200,12 @@ class MLLibJsonProtocolTest extends WordSpec {
 
     "be able to serialize" in {
       val singularValuesVector = new DenseVector(Array(1.1, 2.2))
+      val meanVector = new DenseVector(Array(0.5, 0.5))
       val vFactorMatrix = new DenseMatrix(2, 2, Array(1.0, 2.0, 3.0, 4.0), false)
-      val p = new PrincipalComponentsData(2, List("column1", "column2"), singularValuesVector, vFactorMatrix)
-      assert(p.toJson.compactPrint == "{\"k\":2,\"observationColumns\":[\"column1\",\"column2\"]," +
-        "\"singularValues\":{\"values\":[1.1,2.2]}," +
-        "\"vFactor\":{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0],\"isTransposed\":false}}")
+      val p = new PrincipalComponentsData(2, List("column1", "column2"), true, meanVector, singularValuesVector, vFactorMatrix)
+      assert(p.toJson.compactPrint == "{\"k\":2,\"observationColumns\":[\"column1\",\"column2\"],\"meanCentered\":true," +
+        "\"meanVector\":{\"values\":[0.5,0.5]},\"singularValues\":{\"values\":[1.1,2.2]},\"vFactor\":{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0]," +
+        "\"isTransposed\":false}}")
     }
 
     "parse json" in {
@@ -213,6 +214,8 @@ class MLLibJsonProtocolTest extends WordSpec {
           |{
           |"k":2,
           |"observationColumns": ["column1", "column2"],
+          |"meanCentered":true,
+          |"meanVector": {"values": [0.5,0.5]},
           |"singularValues": {"values": [1.1,2.2]},
           |"vFactor": {"numRows":2, "numCols": 2, "values": [1.0,2.0,3.0,4.0], "isTransposed": false}
           |}
@@ -224,6 +227,9 @@ class MLLibJsonProtocolTest extends WordSpec {
       assert(p.observationColumns.length == 2)
       assert(p.singularValues.size == 2)
       assert(p.vFactor.numRows == 2)
+      assert(p.meanCentered == true)
+      assert(p.meanVector(1) == 0.5)
+
     }
   }
 

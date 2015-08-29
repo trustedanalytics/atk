@@ -144,10 +144,10 @@ def return_belief_propagation(selfish, json_result):
     vertex_dictionary = dict([(k,get_frame(v["id"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
-@postprocessor('model:principal_components/predict')
-def return_principal_components_predict(selfish, json_result):
-    from trustedanalytics import get_frame
-    train_output = {'output_frame': get_frame(json_result['output_frame']['id']) }
-    if json_result.get('t_squared_index', None) is not None:
-        train_output['t_squared_index'] = json_result['t_squared_index']
-    return train_output
+#@postprocessor('model:principal_components/predict')
+#def return_principal_components_predict(selfish, json_result):
+#    from trustedanalytics import get_frame
+#    train_output = {'output_frame': get_frame(json_result['output_frame']['id']) }
+#    if json_result.get('t_squared_index', None) is not None:
+#        train_output['t_squared_index'] = json_result['t_squared_index']
+#    return train_output

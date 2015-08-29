@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import breeze.numerics._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import org.apache.spark.mllib.stat.Statistics
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -25,7 +26,7 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, SparkInvocation }
 import org.trustedanalytics.atk.domain.schema.DataTypes.vector
-import org.apache.spark.mllib.linalg.Matrix
+import org.apache.spark.mllib.linalg.{ Vector, Matrix }
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
 
 // Implicits needed for JSON conversion
@@ -70,17 +71,20 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
 
     val k = arguments.k.getOrElse(arguments.observationColumns.length)
 
+    val vectorRdd = frame.rdd.toVectorDenseRDD(arguments.observationColumns)
+    val columnMeans: Vector = Statistics.colStats(vectorRdd).mean
+
     val rowMatrix: RowMatrix = new RowMatrix(arguments.meanCentered match {
-      case true => frame.rdd.toMeanCenteredVectorDenseRDD(arguments.observationColumns)
-      case false => frame.rdd.toVectorDenseRDD(arguments.observationColumns)
+      case true => frame.rdd.toMeanCenteredVectorDenseRDD(vectorRdd, columnMeans)
+      case false => vectorRdd
     })
 
     val svd = rowMatrix.computeSVD(k, computeU = true)
 
-    val jsonModel = new PrincipalComponentsData(k, arguments.observationColumns, svd.s, svd.V)
-    model.data = jsonModel.toJson.asJsObject
+    val principalComponentsObject = new PrincipalComponentsData(k, arguments.observationColumns, arguments.meanCentered, columnMeans, svd.s, svd.V)
+    model.data = principalComponentsObject.toJson.asJsObject
 
-    new PrincipalComponentsTrainReturn(jsonModel)
+    new PrincipalComponentsTrainReturn(principalComponentsObject)
   }
 
   // TODO: this kind of standardized validation belongs in the Schema class
