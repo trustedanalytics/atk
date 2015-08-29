@@ -46,6 +46,13 @@ word_results.inspect()
 topic_results.inspect()
 print report
 
+print("compute topic probabilities for document")
+prediction = model.predict(['harry', 'economy', 'magic', 'harry' 'test'])
+print(prediction)
+
+
+
+
 print("compute lda score")
 doc_results.rename_columns({'topic_probabilities' : 'lda_topic_given_doc'})
 word_results.rename_columns({'topic_probabilities' : 'lda_word_given_topic'})

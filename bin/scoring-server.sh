@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 
 if [[ -f $DIR/../misc/launcher/target/launcher.jar ]]; then
-	LAUNCHER=$DIR/../misc/launcher/target/launcher.jar:.
+	LAUNCHER=.:$DIR/../misc/launcher/target/launcher.jar:.
 fi
 
 pushd $DIR/..

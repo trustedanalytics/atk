@@ -168,6 +168,10 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>model-plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>testutils</artifactId>
             <scope>test</scope>
         </dependency>

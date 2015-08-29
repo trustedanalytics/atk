@@ -23,6 +23,8 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
+import scala.collection.immutable.Map
+
 /**
  * Implicit conversions for Logistic Regression objects to/from JSON
  */
@@ -242,6 +244,32 @@ object ScoringJsonReaderWriters {
 
   }
 
+  implicit object LdaModelFormat extends JsonFormat[LdaModel] {
+    /**
+     * The write methods converts from LdaModel to JsValue
+     * @param obj LdaModel. Where LdaModel's format is
+     *            LdaModel(val numTopics: Int,val topicWordMap: Map[String, scala.Vector])
+     * @return JsValue
+     */
+    override def write(obj: LdaModel): JsValue = {
+      JsObject(
+        "num_topics" -> JsNumber(obj.numTopics),
+        "topic_word_map" -> obj.topicWordMap.toJson
+      )
+    }
+
+    /**
+     * The read methods converts from LdaModel to JsValue
+     * @param json JsValue
+     * @return LdaModel with format LdaModel(val numTopics: Int,val topicWordMap: Map[String, scala.Vector])
+     */
+    override def read(json: JsValue): LdaModel = {
+      val fields = json.asJsObject.fields
+      val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
+      val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
+      LdaModel(numTopics, topicWordMap)
+    }
+  }
   //  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
   //
   //    override def write(obj: NaiveBayesModel): JsValue = {
@@ -267,7 +295,6 @@ object ScoringJsonReaderWriters {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
-  implicit val ldaModelFormat = jsonFormat2(LdaModel.apply)
   implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
 }
 
