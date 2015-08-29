@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 
 class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
@@ -65,6 +65,5 @@ class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
     score2.newWordsCount should equal(0)
     score2.newWordsPercentage should equal(0d +- epsilon)
   }
-
 
 }

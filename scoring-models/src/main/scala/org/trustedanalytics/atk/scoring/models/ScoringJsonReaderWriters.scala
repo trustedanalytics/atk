@@ -267,6 +267,8 @@ object ScoringJsonReaderWriters {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
+  implicit val ldaModelFormat = jsonFormat2(LdaModel.apply)
+  implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
