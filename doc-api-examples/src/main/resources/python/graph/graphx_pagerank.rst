@@ -4,22 +4,22 @@ Examples
 
     .. code::
 
-        >>> a = ta.VertexRule("node",frame.followed,{"_label":"a"})
-        >>> b = ta.VertexRule("node",frame.follows,{"_label":"b"})
-        >>> e1 = ta.EdgeRule("e1",b,a,bidirectional=False)
-        >>> e2 = ta.EdgeRule("e2",a,b,bidirectional=False)
-        >>> graph = ta.TitanGraph([b,a,e1,a,b,e2],"GraphName")
+        >>> a = atk.VertexRule("node",frame.followed,{"_label":"a"})
+        >>> b = atk.VertexRule("node",frame.follows,{"_label":"b"})
+        >>> e1 = atk.EdgeRule("e1",b,a,bidirectional=False)
+        >>> e2 = atk.EdgeRule("e2",a,b,bidirectional=False)
+        >>> graph = atk.TitanGraph([b,a,e1,a,b,e2],"GraphName")
         >>> output = graph.graphx_pagerank(output_property="PR", max_iterations = 1, convergence_tolerance = 0.001)
 
 .. only:: latex
 
     .. code::
 
-        >>> a = ta.VertexRule("node",frame.followed,{"_label":"a"})
-        >>> b = ta.VertexRule("node",frame.follows,{"_label":"b"})
-        >>> e1 = ta.EdgeRule("e1",b,a,bidirectional=False)
-        >>> e2 = ta.EdgeRule("e2",a,b,bidirectional=False)
-        >>> graph = ta.TitanGraph([b,a,e1,a,b,e2],"GraphName")
+        >>> a = atk.VertexRule("node",frame.followed,{"_label":"a"})
+        >>> b = atk.VertexRule("node",frame.follows,{"_label":"b"})
+        >>> e1 = atk.EdgeRule("e1",b,a,bidirectional=False)
+        >>> e2 = atk.EdgeRule("e2",a,b,bidirectional=False)
+        >>> graph = atk.TitanGraph([b,a,e1,a,b,e2],"GraphName")
         >>> output = graph.graphx_pagerank(output_property="PR",
         ... max_iterations = 1, convergence_tolerance = 0.001)
 
@@ -61,11 +61,11 @@ To query:
 
     .. code::
 
-        >>> a = ta.VertexRule("node",frame.followed,{"_label":"a"})
-        >>> b = ta.VertexRule("node",frame.follows,{"_label":"b"})
-        >>> e1 = ta.EdgeRule("e1",b,a,bidirectional=False)
-        >>> e2 = ta.EdgeRule("e2",a,b,bidirectional=False)
-        >>> graph = ta.TitanGraph([b,a,e1,a,b,e2],"GraphName")
+        >>> a = atk.VertexRule("node",frame.followed,{"_label":"a"})
+        >>> b = atk.VertexRule("node",frame.follows,{"_label":"b"})
+        >>> e1 = atk.EdgeRule("e1",b,a,bidirectional=False)
+        >>> e2 = atk.EdgeRule("e2",a,b,bidirectional=False)
+        >>> graph = atk.TitanGraph([b,a,e1,a,b,e2],"GraphName")
         >>> output = graph.graphx_pagerank(output_property="PR", max_iterations = 1, convergence_tolerance = 0.001)
 
         {'vertex_dictionary': {u'a': Frame "None"
@@ -100,11 +100,11 @@ To query:
 
     .. code::
 
-        >>> a = ta.VertexRule("node",frame.followed,{"_label":"a"})
-        >>> b = ta.VertexRule("node",frame.follows,{"_label":"b"})
-        >>> e1 = ta.EdgeRule("e1",b,a,bidirectional=False)
-        >>> e2 = ta.EdgeRule("e2",a,b,bidirectional=False)
-        >>> graph = ta.TitanGraph([b,a,e1,a,b,e2],"GraphName")
+        >>> a = atk.VertexRule("node",frame.followed,{"_label":"a"})
+        >>> b = atk.VertexRule("node",frame.follows,{"_label":"b"})
+        >>> e1 = atk.EdgeRule("e1",b,a,bidirectional=False)
+        >>> e2 = atk.EdgeRule("e2",a,b,bidirectional=False)
+        >>> graph = atk.TitanGraph([b,a,e1,a,b,e2],"GraphName")
         >>> output = graph.graphx_pagerank(output_property="PR",
         ... max_iterations = 1, convergence_tolerance = 0.001)
 

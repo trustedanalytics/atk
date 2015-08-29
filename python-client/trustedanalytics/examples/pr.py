@@ -29,21 +29,21 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
         ta = examples.connect()
 
     #csv schema definition
-    schema = [("user_id", ta.int32),
-              ("movie_id", ta.int32),
-              ("rating", ta.int32),
+    schema = [("user_id", atk.int32),
+              ("movie_id", atk.int32),
+              ("rating", atk.int32),
               ("splits", str)]
 
-    csv = ta.CsvFile(path, schema, skip_header_lines=1)
+    csv = atk.CsvFile(path, schema, skip_header_lines=1)
 
-    frames = ta.get_frame_names()
+    frames = atk.get_frame_names()
     if NAME in frames:
         print "Deleting old '{0}' frame.".format(NAME)
-        ta.drop_frames(NAME)
+        atk.drop_frames(NAME)
         
     print "Building frame '{0}'.".format(NAME)
 
-    frame = ta.Frame(csv, NAME)
+    frame = atk.Frame(csv, NAME)
 
     print "Inspecting frame '{0}'.".format(NAME)
 
@@ -52,13 +52,13 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
     print "Creating graph '{0}'".format(NAME)
 
     # Create a graph
-    graphs = ta.get_graph_names()
+    graphs = atk.get_graph_names()
     if NAME in graphs:
         print "Deleting old '{0}' graph".format(NAME)
-        ta.drop_graphs(NAME)
+        atk.drop_graphs(NAME)
 
     # Create some rules
-    graph = ta.Graph()
+    graph = atk.Graph()
     graph.name = NAME
     graph.define_vertex_type("user_id")
     graph.define_vertex_type("movie_id")

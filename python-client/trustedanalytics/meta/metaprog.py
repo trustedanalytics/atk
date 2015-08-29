@@ -169,6 +169,7 @@ class CommandInstallable(object):
                     setattr(self, private_member_name, private_member_value)
 
 
+
 def is_class_command_installable(cls):
     return CommandInstallable in inspect.getmro(cls)
 

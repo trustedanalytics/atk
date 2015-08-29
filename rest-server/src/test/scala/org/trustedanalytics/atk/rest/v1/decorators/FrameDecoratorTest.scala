@@ -49,7 +49,7 @@ class FrameDecoratorTest extends FlatSpec with Matchers {
     decoratedFrame.links.size should be(2)
 
     // error frame link
-    decoratedFrame.links.head.rel should be("ia-error-frame")
+    decoratedFrame.links.head.rel should be("atk-error-frame")
     decoratedFrame.links.head.uri should be("http://www.example.com/frames/5")
 
     // self link

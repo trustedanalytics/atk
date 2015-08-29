@@ -15,27 +15,27 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class ModelKMeansTest(unittest.TestCase):
     def testKMeans(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/KMeansTestFile.csv", schema= [('data', ta.float64),
+        csv = atk.CsvFile("/datasets/KMeansTestFile.csv", schema= [('data', atk.float64),
                                                              ('name', str)], skip_header_lines=1)
 
         print "create frame"
-        frame = ta.Frame(csv)
+        frame = atk.Frame(csv)
 
         print "Initializing a KMeansModel object"
-        k = ta.KMeansModel(name='myKMeansModel')
+        k = atk.KMeansModel(name='myKMeansModel')
 
         print "Training the model on the Frame"
         k.train(frame,['data'],[2.0])

@@ -54,7 +54,7 @@ import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImp
  */
 case class LabelTriplet(edgeLabel: String, srcLabel: String, destLabel: String)
 
-@PluginDoc(oneLine = "Export from ta.TitanGraph to ta.Graph.",
+@PluginDoc(oneLine = "Export from atk.TitanGraph to atk.Graph.",
   extended = "")
 class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
 

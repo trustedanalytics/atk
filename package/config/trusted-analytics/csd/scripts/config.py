@@ -223,7 +223,7 @@ def create_updated_class_path(current_class_path, spark_env):
         spark_class_path = "SPARK_CLASSPATH=\"" + current_class_path + ":" + args.classpath_lib + "\""
         return re.sub('.*SPARK_CLASSPATH=(\".*\"|[^\r\n]*).*', spark_class_path, spark_env)
 
-def find_ia_class_path(class_path):
+def find_atk_class_path(class_path):
     """
     find any current ia class path
     :param class_path: the full class path value from Cloudera manager
@@ -264,8 +264,8 @@ def update_spark_env(group, spark_config_env_sh):
         print "Found existing SPARK_CLASSPATH: " + found_class_path_value
 
         #see if we our LIB_PATH is set in the classpath
-        found_ia_class_path = find_ia_class_path(found_class_path_value)
-        if found_ia_class_path is None:
+        found_atk_class_path = find_atk_class_path(found_class_path_value)
+        if found_atk_class_path is None:
             #no existing ia classpath
             print "No existing Trusted Analytics class path found."
             updated_class_path = create_updated_class_path(found_class_path_value, spark_config_env_sh)

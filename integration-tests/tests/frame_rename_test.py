@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class FrameRenameTest(unittest.TestCase):
     """
@@ -38,19 +38,19 @@ class FrameRenameTest(unittest.TestCase):
 
     def test_frame_rename(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
-                                                                          ('b', ta.int32),
-                                                                          ('labels', ta.int32),
-                                                                          ('predictions', ta.int32)], delimiter=',', skip_header_lines=1)
+        csv = atk.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
+                                                                          ('b', atk.int32),
+                                                                          ('labels', atk.int32),
+                                                                          ('predictions', atk.int32)], delimiter=',', skip_header_lines=1)
 
         print "create frame"
-        frame = ta.Frame(csv, name="test_frame_rename")
+        frame = atk.Frame(csv, name="test_frame_rename")
 
         new_name = "test_frame_new_name"
-        self.assertFalse(new_name in ta.get_frame_names(), "test_frame_new_name should not exist in list of frames")
+        self.assertFalse(new_name in atk.get_frame_names(), "test_frame_new_name should not exist in list of frames")
         print "renaming frame"
         frame.name = new_name
-        self.assertTrue(new_name in ta.get_frame_names(), "test_frame_new_name should exist in list of frames")
+        self.assertTrue(new_name in atk.get_frame_names(), "test_frame_new_name should exist in list of frames")
 
 
 if __name__ == "__main__":

@@ -22,16 +22,16 @@ To use the default settings provided by the environment and/or configuration:
 
 .. code::
 
-    >>> import trustedanalytics as ta
-    >>> ta.connect()
+    >>> import trustedanalytics as atk
+    >>> atk.connect()()
 
 To connect to a specific server:
 
 .. code::
 
-    >>> import trustedanalytics as ta
-    >>> ta.server.uri = 'myhost-name:port'
-    >>> ta.connect()
+    >>> import trustedanalyticsas as atk
+    >>> atk.server.uri = 'myhost-name:port'
+    >>> atk.connect()()
 
 Connections requiring OAuth
 ---------------------------
@@ -53,8 +53,8 @@ The user can create a credentials file using |PACKAGE| client running in an inte
 
     $ python2.7
 
-    >>> import trustedanalytics as ta
-    >>> ta.create_connect_file('~/.ta/demo.creds')
+    >>> import trustedanalytics as atk
+    >>> atk.create_connect_file('~/.ta/demo.creds')
     OAuth server URI: uaa.my-dp2-domain.com
     user name: dscientist9
     Password: **********
@@ -67,16 +67,16 @@ The credentials file can be specified when calling ``connect`` or set as an envi
 
     .. code::
 
-        >>> ta.connect('~/.ta/demo.creds')
-        Connected.  This client instance connected to server http://my-ta-instance.my-dp2-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.
+        >>> atk.connect()('~/.ta/demo.creds')
+        Connected.  This client instance connected to server http://my-atk-instance.my-dp2-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.
 
 .. only:: latex
 
     .. code::
 
-        >>> ta.connect('~/.ta/demo.creds')
+        >>> atk.connect()('~/.ta/demo.creds')
         Connected.  This client instance connected to
-        server http://my-ta-instance.my-dp2-apps-domain.com/v1
+        server http://my-atk-instance.my-dp2-apps-domain.com/v1
         as user dscientist9 at 2015-06-19 10:27:21.583704.
 
 The credentials file path must be relative to how python was launched.
@@ -93,7 +93,7 @@ It may still be overridden as shown above in the session or script.
 
 .. code::
 
-    $ export TA_URI=ta-server.demo-gotapaas.com
+    $ export TA_URI=atk-server.demo-gotapaas.com
 
 The credentials file can be specified by $TA_CREDS.
 
@@ -105,8 +105,8 @@ With these two variables set, the simple connect sequence works.
 
 .. code::
 
-    >>> import trustedanalytics as ta
-    >>> ta.connect()
+    >>> import trustedanalytics as atk
+    >>> atk.connect()()
 
 Troubleshooting
 ---------------
@@ -114,13 +114,13 @@ Troubleshooting
 Client's Server Settings
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-To see the client's configuration to find the server, look at ``ta.server``:
+To see the client's configuration to find the server, look at ``atk.server``:
 
 .. only:: html
 
     .. code::
 
-        >>> ta.server
+        >>> atk.server
         {
             "headers": {
                 "Accept": "application/json,text/plain", 
@@ -136,7 +136,7 @@ To see the client's configuration to find the server, look at ``ta.server``:
 
     .. code::
 
-        >>> ta.server
+        >>> atk.server
         {
             "headers": {
                 "Accept": "application/json,text/plain", 
@@ -160,5 +160,5 @@ To see the client's configuration to find the server, look at ``ta.server``:
             "user": "dscientist9"
         }
 
-The settings may be individually modified with the ``ta.server`` object, before calling connect.
+The settings may be individually modified with the ``atk.server`` object, before calling connect.
 

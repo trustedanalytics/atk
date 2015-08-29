@@ -8,15 +8,15 @@ columns *column_a*, *column_b*, *column_c* and *column_d*.
     .. code::
 
         >>> print my_frame.schema
-        [("column_a", str), ("column_b", ta.int32), ("column_c", str), ("column_d", ta.int32)]
+        [("column_a", str), ("column_b", atk.int32), ("column_c", str), ("column_d", atk.int32)]
 
 .. only:: latex
 
     .. code::
 
         >>> print my_frame.schema
-        [("column_a", str), ("column_b", ta.int32), ("column_c", str),
-        ("column_d", ta.int32)]
+        [("column_a", str), ("column_b", atk.int32), ("column_c", str),
+        ("column_d", atk.int32)]
 
 Eliminate columns *column_b* and *column_d*:
 

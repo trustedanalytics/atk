@@ -20,27 +20,27 @@ Ping the server:
 
 .. code::
 
-    >>> import trustedanalytics as ta
-    >>> ta.server.ping()
+    >>> import trustedanalytics as atk
+    >>> atk.server.ping()
     Successful ping to Trusted Analytics ATK at http://localhost:9099/info
-    >>> ta.connect()
+    >>> atk.connect()()
 
 View and edit the server connection:
 
 .. code::
 
-    >>> print ta.server
+    >>> print atk.server
     host:    localhost
     port:    9099
     scheme:  http
     version: v1
 
-    >>> ta.server.host
+    >>> atk.server.host
     'localhost'
 
-    >>> ta.server.host = '10.54.99.99'
-    >>> ta.server.port = None
-    >>> print ta.server
+    >>> atk.server.host = '10.54.99.99'
+    >>> atk.server.port = None
+    >>> print atk.server
     host:    10.54.99.99
     port:    None
     scheme:  http
@@ -50,8 +50,8 @@ Reset configuration back to defaults:
 
 .. code::
 
-    >>> ta.server.reset()
-    >>> print ta.server
+    >>> atk.server.reset()
+    >>> print atk.server
     host:    localhost
     port:    9099
     scheme:  http
@@ -66,19 +66,19 @@ To see the full Python stack trace of the last (i.e. most recent) exception:
 
 .. code::
 
-    >>> ta.errors.last
+    >>> atk.errors.last
 
 To enable always printing the full Python stack trace, set the *show_details*
 property:
 
 .. code::
 
-    >>> import trustedanalytics as ta
+    >>> import trustedanalytics as atk
 
     # show full stack traces
-    >>> ta.errors.show_details = True
+    >>> atk.errors.show_details = True
 
-    >>> ta.connect()
+    >>> atk.connect()()
 
     # … the rest of your script …
 

@@ -16,27 +16,27 @@
 
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class ModelPrincipalComponentsTest(unittest.TestCase):
     def test_principal_components(self):
         print "define csv file"
-        schema= [("1", ta.float64),("2", ta.float64),("3", ta.float64),("4", ta.float64),("5", ta.float64),("6", ta.float64),
-                 ("7", ta.float64),("8", ta.float64),("9", ta.float64),("10", ta.float64),("11", ta.float64)]
-        train_file = ta.CsvFile("/datasets/pca_10rows.csv", schema= schema)
+        schema= [("1", atk.float64),("2", atk.float64),("3", atk.float64),("4", atk.float64),("5", atk.float64),("6", atk.float64),
+                 ("7", atk.float64),("8", atk.float64),("9", atk.float64),("10", atk.float64),("11", atk.float64)]
+        train_file = atk.CsvFile("/datasets/pca_10rows.csv", schema= schema)
         print "creating the frame"
-        train_frame = ta.Frame(train_file)
+        train_frame = atk.Frame(train_file)
 
         print "initializing the naivebayes model"
-        p = ta.PrincipalComponentsModel()
+        p = atk.PrincipalComponentsModel()
 
         print "training the model on the frame"
         p.train(train_frame,["1","2","3","4","5","6","7","8","9","10","11"],9)

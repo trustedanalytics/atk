@@ -4,7 +4,7 @@ Examples
 
     .. code::
 
-        >>> graph = ta.Graph()
+        >>> graph = atk.Graph()
         >>> graph.define_vertex_type('users')
         >>> graph.vertices['users'].add_vertices(frame, 'user_id', ['user_name', 'age'])
 
@@ -12,7 +12,7 @@ Examples
 
     .. code::
 
-        >>> graph = ta.Graph()
+        >>> graph = atk.Graph()
         >>> graph.define_vertex_type('users')
         >>> graph.vertices['users'].add_vertices(frame, 'user_id',
         ... ['user_name', 'age'])

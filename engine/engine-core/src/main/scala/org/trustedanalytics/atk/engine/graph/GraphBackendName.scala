@@ -26,15 +26,15 @@ import org.trustedanalytics.atk.domain.graph.GraphEntity
  */
 object GraphBackendName {
 
-  private val iatGraphTablePrefix: String = "iat_graph_"
+  private val atkGraphTablePrefix: String = "atk_graph_"
 
   /**
    * Converts the user's name for a graph into the name used by the underlying graph store.
    */
   def getGraphBackendName(graph: GraphEntity): String = {
-    iatGraphTablePrefix + graph.id
+    atkGraphTablePrefix + graph.id
   }
 
-  def getIdFromBackendName(graphName: String): Long = graphName.stripPrefix(iatGraphTablePrefix).toLong
+  def getIdFromBackendName(graphName: String): Long = graphName.stripPrefix(atkGraphTablePrefix).toLong
 
 }

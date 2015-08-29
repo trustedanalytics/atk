@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-import trustedanalytics as ta
-ta.server.port = 19099
-ta.connect()
+import trustedanalytics as atk
+atk.server.port = 19099
+atk.connect()()
 
 
 import doctest
@@ -106,9 +106,9 @@ run_tests()
 
 # option 2
 #connection_header = """
-#>>> import trustedanalytics as ta
-#>>> ta.server.port = 19099
-#>>> ta.connect()
+#>>> import trustedanalyticsas atka
+#>>> atk.server.port = 19099
+#>atk.connect()ect()
 #-etc-
 #"""
 #content = "\n".join([connection_header, content])

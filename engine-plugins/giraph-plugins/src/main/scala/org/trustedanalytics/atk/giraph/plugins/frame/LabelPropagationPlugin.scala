@@ -115,7 +115,7 @@ class LabelPropagationPlugin
     giraphConf.setComputationClass(classOf[LabelPropagationComputation])
     giraphConf.setAggregatorWriterClass(classOf[LabelPropagationAggregatorWriter])
 
-    val result = GiraphJobManager.run("ia_giraph_lp",
+    val result = GiraphJobManager.run("atk_giraph_lp",
       classOf[LabelPropagationComputation].getCanonicalName,
       giraphConf,
       context,
