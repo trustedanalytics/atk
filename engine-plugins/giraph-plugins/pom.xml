@@ -166,7 +166,11 @@
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>engine-core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
         <!--END dependencies to our modules-->
 
         <dependency>

@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import breeze.linalg.{ DenseVector, axpy }
 import scala.collection.immutable.Map
-import scala.collection.mutable.ListBuffer
 
 //TODO: This code duplicates LdaModel in model plugin. Need to be refactored.
 /**
@@ -28,6 +28,8 @@ import scala.collection.mutable.ListBuffer
  */
 case class LdaModel(numTopics: Int,
                     topicWordMap: Map[String, Vector[Double]]) {
+  require(numTopics > 0, "number of topics must be greater than zero")
+
   /**
    * Predict conditional probabilities of topics given document
    *
@@ -35,23 +37,25 @@ case class LdaModel(numTopics: Int,
    * @return Topic predictions for document
    */
   def predict(document: List[String]): LdaModelPredictReturn = {
-    require(document != null && !document.isEmpty, "Document must not be empty")
-    val numWords = document.length
-    val wordOccurrences: Map[String, Int] = computeWordOccurrences(document)
-    var topicsGivenDocumentBuffer = new ListBuffer[Double]()
+    require(document != null, "document must not be null")
 
-    for (i <- 0 until numTopics) {
-      var topicGivenDocument: Double = 0d
-      for (word <- document) {
-        val wordGivenDoc = wordProbabilityGivenDocument(word, wordOccurrences, numWords)
-        val topicProbabilityForWord = topicProbabilityGivenWord(word, i)
-        topicGivenDocument += topicProbabilityForWord * wordGivenDoc
+    val docLength = document.length
+    val wordOccurrences: Map[String, Int] = computeWordOccurrences(document)
+    val topicGivenDoc = new Array[Double](numTopics)
+
+    for (word <- wordOccurrences.keys) {
+      val wordGivenDoc = wordProbabilityGivenDocument(word, wordOccurrences, docLength)
+      if (topicWordMap.contains(word)) {
+        val topicGivenWord = topicWordMap(word)
+        for (i <- topicGivenDoc.indices) {
+          topicGivenDoc(i) += topicGivenWord(i) * wordGivenDoc
+        }
       }
-      topicsGivenDocumentBuffer += topicGivenDocument
     }
-    val newWords: Int = computeNewWords(topicWordMap, document)
-    val percentOfNewWords: Double = newWords * 100 / numWords
-    new LdaModelPredictReturn(topicsGivenDocumentBuffer.toVector, newWords, percentOfNewWords)
+
+    val newWordCount = computeNewWordCount(document)
+    val percentOfNewWords = computeNewWordPercentage(newWordCount, docLength)
+    new LdaModelPredictReturn(topicGivenDoc.toVector, newWordCount, percentOfNewWords)
   }
 
   /**
@@ -61,15 +65,11 @@ case class LdaModel(numTopics: Int,
    * @return Map with counts for each word
    */
   def computeWordOccurrences(document: List[String]): Map[String, Int] = {
+    require(document != null, "document must not be null")
     var wordOccurrences: Map[String, Int] = Map[String, Int]()
     for (word <- document) {
-      if (wordOccurrences.contains(word)) {
-        val count = wordOccurrences(word) + 1
-        wordOccurrences += (word -> count)
-      }
-      else {
-        wordOccurrences += (word -> 1)
-      }
+      val count = wordOccurrences.getOrElse(word, 0) + 1
+      wordOccurrences += (word -> count)
     }
     wordOccurrences
   }
@@ -79,13 +79,15 @@ case class LdaModel(numTopics: Int,
    *
    * @param word Input word
    * @param wordOccurrences Number of occurrences of word in document
-   * @param numberOfWords Total number of words in document
+   * @param docLength Total number of words in document
    * @return Conditional probability of word given document
    */
-  def wordProbabilityGivenDocument(word: String, wordOccurrences: Map[String, Int], numberOfWords: Int): Double = {
-    require(numberOfWords > 0, "Number of words in document must be greater than zero")
+  def wordProbabilityGivenDocument(word: String,
+                                   wordOccurrences: Map[String, Int],
+                                   docLength: Int): Double = {
+    require(docLength >= 0, "number of words in document must be greater than or equal to zero")
     val wordCount = wordOccurrences.getOrElse(word, 0)
-    wordCount.toDouble / numberOfWords
+    if (docLength > 0) wordCount.toDouble / docLength else 0d
   }
 
   /**
@@ -101,17 +103,29 @@ case class LdaModel(numTopics: Int,
   /**
    * Compute count of new words in document not present in trained model
    *
-   * @param topicWordMap Map of conditional probabilities of topics given word
    * @param document Test document
    * @return Count of new words in document
    */
-  def computeNewWords(topicWordMap: Map[String, Vector[Double]], document: List[String]): Int = {
+  def computeNewWordCount(document: List[String]): Int = {
+    require(document != null, "document must not be null")
     var count = 0
     for (word <- document) {
       if (!topicWordMap.contains(word))
         count += 1
     }
     count
+  }
+
+  /**
+   * Compute percentage of new words in document not present in trained model
+   *
+   * @param newWordCount Count of new words in document
+   * @param docLength Total number of words in document
+   * @return  Count of new words in document
+   */
+  def computeNewWordPercentage(newWordCount: Int, docLength: Int): Double = {
+    require(docLength >= 0, "number of words in document must be greater than or equal to zero")
+    if (docLength > 0) newWordCount * 100 / docLength.toDouble else 0d
   }
 }
 

@@ -35,7 +35,7 @@ class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, l
         }
 
         val predictReturn = predict(document.toList)
-        score = score :+ predictReturn.toString
+        score = score :+ predictReturn
       }
     }
     score
