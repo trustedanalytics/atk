@@ -4,5 +4,5 @@ Consider Frame *my_frame*:
 
 .. code::
 
-    >>> my_frame.export_to_hbase('covarianceresults')
+    >>> my_frame.export_to_jdbc('covarianceresults')
 
