@@ -36,57 +36,64 @@ object JsonSchema {
     def description = None
     def `type` = None
   }
-  def verbose_bool(description: Option[String], defaultValue: Option[Any]) = BooleanSchema(id = Some(new URI("ia:bool")),
-    description = description,
-    defaultValue = defaultValue)
 
-  val bool = verbose_bool(None, None)
+  val unit = UnitSchema()
 
-  def verbose_int(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:int")),
-    description = description,
-    defaultValue = defaultValue,
-    minimum = Some(Int.MinValue),
-    maximum = Some(Int.MaxValue),
-    multipleOf = Some(1.0))
+  def bool(description: Option[String] = None, defaultValue: Option[Any] = None) =
+    BooleanSchema(id = Some(new URI("atk:bool")),
+      description = description,
+      defaultValue = defaultValue)
 
-  val int = verbose_int(None, None)
+  def int(description: Option[String] = None, defaultValue: Option[Any] = None) =
+    NumberSchema(id = Some(new URI("atk:int32")),
+      description = description,
+      defaultValue = defaultValue,
+      minimum = Some(Int.MinValue),
+      maximum = Some(Int.MaxValue),
+      multipleOf = Some(1.0))
 
-  def verbose_long(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:long")),
-    description = description,
-    defaultValue = defaultValue,
-    minimum = Some(Long.MinValue),
-    maximum = Some(Long.MaxValue),
-    multipleOf = Some(1.0))
+  def long(description: Option[String] = None, defaultValue: Option[Any] = None) =
+    NumberSchema(id = Some(new URI("atk:int64")),
+      description = description,
+      defaultValue = defaultValue,
+      minimum = Some(Long.MinValue),
+      maximum = Some(Long.MaxValue),
+      multipleOf = Some(1.0))
 
-  val long = verbose_long(None, None)
+  def float(description: Option[String] = None, defaultValue: Option[Any] = None) =
+    NumberSchema(id = Some(new URI("atk:float32")),
+      description = description,
+      defaultValue = defaultValue,
+      minimum = Some(Float.MinValue),
+      maximum = Some(Float.MaxValue))
 
-  def verbose_float(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:float")),
-    description = description,
-    defaultValue = defaultValue,
-    minimum = Some(Float.MinValue),
-    maximum = Some(Float.MaxValue))
-
-  val float = verbose_float(None, None)
-
-  def verbose_double(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:double")),
-    description = description,
-    defaultValue = defaultValue,
-    minimum = Some(Double.MinValue),
-    maximum = Some(Double.MaxValue))
-
-  val double = verbose_double(None, None)
+  def double(description: Option[String] = None, defaultValue: Option[Any] = None) =
+    NumberSchema(id = Some(new URI("atk:float64")),
+      description = description,
+      defaultValue = defaultValue,
+      minimum = Some(Double.MinValue),
+      maximum = Some(Double.MaxValue))
 
   val dateTime = StringSchema(format = Some("date-time"))
 
-  def verbose_frame(description: Option[String], defaultValue: Option[Any]) = StringSchema(format = Some("uri/ia-frame"), description = description, defaultValue = defaultValue)
+  def entityReference(idUri: String, description: Option[String], defaultValue: Option[Any]) =
+    StringSchema(id = Some(new URI(idUri)),
+      description = description,
+      defaultValue = defaultValue,
+      format = Some("uri/entity"))
 
-  val frame = verbose_frame(None, None)
+  def frame(description: Option[String] = None, defaultValue: Option[Any] = None) = entityReference("atk:frame", description, defaultValue)
 
-  val graph = StringSchema(format = Some("uri/ia-graph"))
+  def graph(description: Option[String] = None, defaultValue: Option[Any] = None) = entityReference("atk:graph", description, defaultValue)
 
-  val model = StringSchema(format = Some("uri/ia-model"))
+  def model(description: Option[String] = None, defaultValue: Option[Any] = None) = entityReference("atk:model", description, defaultValue)
 
-  def vector(length: Long) = ArraySchema(`type` = Some(s"ia:vector($length)"))
+  def vector(length: Long, description: Option[String] = None, defaultValue: Option[Any] = None) =
+    ArraySchema(id = Some(new URI("atk:vector")),
+      description = description,
+      defaultValue = defaultValue,
+      `type` = Some(s"vector($length)"))
+
 }
 
 sealed trait Primitive extends JsonSchema {
@@ -166,3 +173,9 @@ case class BooleanSchema(id: Option[URI] = None,
                          defaultValue: Option[Any] = None,
                          `type`: Option[String] = Some("boolean")) extends Primitive {
 }
+
+case class UnitSchema(id: Option[URI] = None,
+                      title: Option[String] = None,
+                      description: Option[String] = None,
+                      `type`: Option[String] = Some("unit")) extends Primitive {}
+

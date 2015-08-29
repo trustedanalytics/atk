@@ -37,33 +37,10 @@ def execute_command(command_name, selfish, **arguments):
     """Executes command and returns the output."""
     command_request = CommandRequest(command_name, arguments)
     command_info = executor.issue(command_request)
-
-    # post-process the results
-    from trustedanalytics.meta.results import get_postprocessor
-    is_frame = command_info.result.has_key('schema')
-    parent = None
-    if is_frame:
-        parent = command_info.result.get('parent')
-        if parent and parent == getattr(selfish, '_id'):
-            #print "Changing ID for existing proxy"
-            selfish._id = command_info.result['id']
-    postprocessor = get_postprocessor(command_name)
-    if postprocessor:
-        result = postprocessor(selfish, command_info.result)
-    elif command_info.result.has_key('value') and len(command_info.result) == 1:
+    result = command_info.result
+    if result.has_key('value') and len(result) == 1:
         result = command_info.result.get('value')
-    elif is_frame:
-        # TODO: remove this hack for plugins that return data frame
-        from trustedanalytics import get_frame
-        if parent:
-            result = selfish
-        else:
-            #print "Returning new proxy"
-            result = get_frame(command_info.result['id'])
-    else:
-        result = command_info.result
     return result
-
 
 
 class CommandRequest(object):

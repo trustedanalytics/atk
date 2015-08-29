@@ -62,7 +62,7 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, UnitRetu
    */
   override def execute(arguments: ExportHdfsCsvArgs)(implicit invocation: Invocation): UnitReturn = {
 
-    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+    val fileStorage = new HdfsFileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD

@@ -63,6 +63,7 @@ case class ExportHdfsHiveArgs(@ArgDoc("Frame being exported to Hive") frame: Fra
  */
 case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: FrameReference,
                                @ArgDoc("The name of the HBase table that will contain the exported frame") tableName: String,
+                               @ArgDoc("The name of the column to be used as row key in hbase table") keyColumnName: Option[String],
                                @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: Option[String]) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")

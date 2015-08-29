@@ -30,9 +30,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "Append data from a Jdbc table into an existing (possibly empty) FrameRDD",
-  extended = "Append data from a Jdbc table into an existing (possibly empty) FrameRDD",
-  returns = "the initial FrameRDD with the Jdbc data appended")
+@PluginDoc(oneLine = "Append data from a Jdbc table into an existing (possibly empty) frame",
+  extended = "Append data from a Jdbc table into an existing (possibly empty) frame",
+  returns = "the initial frame with the Jdbc data appended")
 class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
 
   /**
@@ -66,10 +66,10 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
     val schema = dataFrame.dtypes.toList
 
     val jdbcSchema = new FrameSchema(schema.map {
-      case (columnName, columnType) => Column(columnName, LoadJdbcImpl.dbToDataType(columnType))
+      case (columnName, columnType) => Column(columnName, LoadJdbcImpl.sparkDataTypeToSchemaDataType(columnType))
     })
 
-    LoadRddFunctions.unionAndSave(destinationFrame, new FrameRdd(jdbcSchema, dataFrame.map(x => x)))
+    LoadRddFunctions.unionAndSave(destinationFrame, new FrameRdd(jdbcSchema, dataFrame))
   }
 
 }

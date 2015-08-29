@@ -60,10 +60,12 @@ class CollaborativeFilteringTrainPlugin
 
     val userFrameName = FrameName.generate(Some("user_"))
     val itemFrameName = FrameName.generate(Some("item_"))
-    val userFrame = frames.prepareForSave(CreateEntityArgs(name = Some(userFrameName), description = Some("Collaborative filtering user frame results")))
-    val itemFrame = frames.prepareForSave(CreateEntityArgs(name = Some(itemFrameName), description = Some("Collaborative filtering item frame results")))
+    val userFrame = frames.create(CreateEntityArgs(name = Some(userFrameName), description = Some("Collaborative filtering user frame results")))
+    val itemFrame = frames.create(CreateEntityArgs(name = Some(itemFrameName), description = Some("Collaborative filtering item frame results")))
+    val userFrameSaveInfo = frames.prepareForSave(userFrame)
+    val itemFrameSaveInfo = frames.prepareForSave(itemFrame)
     val inputFormatConfig = new CollaborativeFilteringInputFormatConfig(frame.storageLocation.get, frame.schema)
-    val outputFormatConfig = new CollaborativeFilteringOutputFormatConfig(userFrame.storageLocation.get, itemFrame.storageLocation.get)
+    val outputFormatConfig = new CollaborativeFilteringOutputFormatConfig(userFrameSaveInfo.targetPath, itemFrameSaveInfo.targetPath)
     val collaborativeFilteringConfig = new CollaborativeFilteringConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setConfig(collaborativeFilteringConfig)
@@ -99,8 +101,8 @@ class CollaborativeFilteringTrainPlugin
 
     val factorsColumnName = "cf_factors"
     val resultsColumn = Column(factorsColumnName, DataTypes.vector(arguments.getNumFactors))
-    frames.postSave(None, userFrame.toReference, new FrameSchema(List(frame.schema.column(arguments.userColName), resultsColumn)))
-    frames.postSave(None, itemFrame.toReference, new FrameSchema(List(frame.schema.column(arguments.itemColName), resultsColumn)))
+    frames.postSave(userFrame.toReference, userFrameSaveInfo, new FrameSchema(List(frame.schema.column(arguments.userColName), resultsColumn)))
+    frames.postSave(itemFrame.toReference, itemFrameSaveInfo, new FrameSchema(List(frame.schema.column(arguments.itemColName), resultsColumn)))
 
     //Writing the model as JSON
     val jsonModel = new CollaborativeFilteringData(userFrameReference = userFrame.toReference,

@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ DropColumnsArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.DropColumnsArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -33,7 +34,7 @@ Notes
 It is not possible to delete all columns from a frame.
 At least one column needs to remain.
 If it is necessary to delete all columns, then delete the frame.""")
-class DropColumnsPlugin extends SparkCommandPlugin[DropColumnsArgs, FrameEntity] {
+class DropColumnsPlugin extends SparkCommandPlugin[DropColumnsArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -52,7 +53,7 @@ class DropColumnsPlugin extends SparkCommandPlugin[DropColumnsArgs, FrameEntity]
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DropColumnsArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: DropColumnsArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val schema = frame.schema
     schema.validateColumnsExist(arguments.columns)

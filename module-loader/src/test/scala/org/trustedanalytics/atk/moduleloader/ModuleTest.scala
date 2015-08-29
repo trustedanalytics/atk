@@ -14,21 +14,24 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.domain.frame
+package org.trustedanalytics.atk.moduleloader
 
 import org.scalatest.WordSpec
+import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 
-class RenameFrameArgsTest extends WordSpec with MockitoSugar {
+class ModuleTest extends WordSpec with MockitoSugar {
 
-  "RenameFrame" should {
-
-    "require a frame" in {
-      intercept[IllegalArgumentException] { RenameFrameArgs(null, "newName") }
-    }
-
-    "require a name" in {
-      intercept[IllegalArgumentException] { RenameFrameArgs(mock[FrameReference], null) }
+  "Module" should {
+    "use its classloader" in {
+      val className = "MyClass"
+      val classLoader = mock[ClassLoader]
+      when(classLoader.loadClass(className)).thenReturn(null)
+      val module = new Module("myname", parentName = None, jarNames = Nil, commandPlugins = Nil, classLoader)
+      val result = module.loadClass(className)
+      assert(result == null)
+      verify(classLoader, times(1)).loadClass(className)
     }
   }
+
 }

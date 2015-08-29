@@ -103,10 +103,15 @@ This is an overview. Additional details and instructions are in the user documen
 * integration-tests/ - developer written, build time integration tests in python, these run against a minimal version of our product
 * misc/ - miscellaneous items that aren't really part of our product
   * launcher/ - starts up our application, launches parts of our app
+* module-loader/ - future replacement for launcher, starts application and sets up ClassLoaders appropriately.
 * package/ - packaging for VM's, RPM's
 * python-client/ - python client code (talks with rest-server)
   * examples/ - example code for users of how to use the API
 * rest-server/ - the rest server converts HTTP requests to messages that are sent to the Engine
+* scoring-engine/ - a small lightweight REST server that can score against trained models
+* scoring-interfaces/ - interfaces the scoring-engine depends on.  Other model implementations could be plugged in as 
+  long as they implement these interfaces.
+* scoring-models/ - implementations of models the scoring-engine uses.
 * testutils/ - some test utility code that gets reused between tests in different modules
 
 

@@ -58,7 +58,7 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
    * @return value of type declared as the Return type
    */
   override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): UnitReturn = {
-    val fileStorage = new HdfsFileStorage(EngineConfig.fsRoot)
+    val fileStorage = new HdfsFileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)

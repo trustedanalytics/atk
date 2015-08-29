@@ -17,19 +17,16 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 
 import org.apache.spark._
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.{ DataFrame, SQLContext }
 import org.apache.spark.rdd.{ RDD }
 import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
-import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
+import org.trustedanalytics.atk.domain.schema.DataTypes._
 
 /**
- * Helper class for creating an RDD from hBase
+ * Helper class for creating an RDD from jdbc
  */
 object LoadJdbcImpl extends Serializable {
-
-  private val user = "root"
-  private val password = "root"
 
   /**
    * Create a data frame from an jdbc compatible database
@@ -37,34 +34,40 @@ object LoadJdbcImpl extends Serializable {
    * @param arguments arguments for jdbc connection (including the initial data filtering)
    */
   def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
-    val sqlContext = new SQLContext(sc)
-    val options: Map[String, String] = Map(
-      "driver" -> arguments.driverName,
-      "url" -> JdbcConnectionFactory.connectionUrl(arguments),
-      "dbtable" -> arguments.initialQuery.getOrElse("select * from " + arguments.databaseName)
-    )
+    val urlKey = "url"
+    val dbTableKey = "dbtable"
 
-    sqlContext.load("jdbc", options)
+    val sqlContext = new SQLContext(sc)
+    val url = arguments.url.getOrElse(buildUrl())
+    val connectionArgs: Map[String, String] = if (arguments.driverName.isEmpty) {
+      Map(
+        urlKey -> url,
+        dbTableKey -> arguments.tableName)
+    }
+    else {
+      Map(
+        urlKey -> url,
+        dbTableKey -> arguments.tableName,
+        "driver" -> arguments.driverName.get)
+    }
+
+    sqlContext.load("jdbc", connectionArgs)
   }
 
   /**
    * Converts a jdbc data type to DataType
-   * @param dbType jdbc type
+   * @param sparkDataType jdbc type
    * @return a DataType
    */
-  def dbToDataType(dbType: String): DataType = {
-    if ("int".equalsIgnoreCase(dbType)) {
-      DataTypes.int32
-    }
-    else if ("long".equalsIgnoreCase(dbType)) {
-      DataTypes.int32
-    }
-    else if ("double".equalsIgnoreCase(dbType)) {
-      DataTypes.float64
-    }
-    else if ("string".equalsIgnoreCase(dbType)) {
-      DataTypes.string
-    }
-    else throw new IllegalArgumentException(s"unsupported export type $dbType")
+  def sparkDataTypeToSchemaDataType(sparkDataType: String): DataType = {
+    FrameRdd.sparkDataTypeToSchemaDataType(sparkDataType)
+  }
+
+  /**
+   * Builds connection url for cluster/cloud deployment. Not supported yet.
+   * @return a connection url
+   */
+  def buildUrl(): String = {
+    throw new IllegalArgumentException("Connection url is required")
   }
 }
