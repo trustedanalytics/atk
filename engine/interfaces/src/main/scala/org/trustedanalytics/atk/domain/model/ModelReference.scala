@@ -25,8 +25,8 @@ case class ModelReference(modelId: Long) extends UriReference {
   /** The entity id */
   override def id: Long = modelId
 
-  /** The entity name e.g. "frames", "graphs", ... */
-  override def entityCollectionName: String = "models"
+  /** The entity name e.g. "frame", "graph", ... */
+  override def name: String = "model"
 }
 
 object ModelReference {

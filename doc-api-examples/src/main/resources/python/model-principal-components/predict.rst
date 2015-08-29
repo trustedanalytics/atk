@@ -5,7 +5,7 @@ Examples
 
     .. code::
 
-        >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+        >>> my_model = atk.PrincipalComponentsModel(name='principalcomponentsmodel')
         >>> my_model(train_frame,["1","2","3","4","5"],4)
         >>> output = my_model.predict(train_frame,c=4,t_square_index=True,name='predictedFrame')
         >>> output
@@ -28,7 +28,7 @@ Examples
 
     .. code::
 
-        >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+        >>> my_model = atk.PrincipalComponentsModel(name='principalcomponentsmodel')
         >>> my_model(train_frame,["1","2","3","4","5"],4)
         >>> output = my_model.predict(train_frame,c=4,t_square_index=True,name='predictedFrame')
         >>> output

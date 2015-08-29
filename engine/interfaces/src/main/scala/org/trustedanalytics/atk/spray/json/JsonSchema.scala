@@ -74,6 +74,16 @@ object JsonSchema {
       minimum = Some(Double.MinValue),
       maximum = Some(Double.MaxValue))
 
+  val float = verbose_float(None, None)
+
+  def verbose_double(description: Option[String], defaultValue: Option[Any]) = NumberSchema(id = Some(new URI("ia:double")),
+    description = description,
+    defaultValue = defaultValue,
+    minimum = Some(Double.MinValue),
+    maximum = Some(Double.MaxValue))
+
+  val double = verbose_double(None, None)
+
   val dateTime = StringSchema(format = Some("date-time"))
 
   def entityReference(idUri: String, description: Option[String], defaultValue: Option[Any]) =

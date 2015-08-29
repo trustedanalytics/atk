@@ -2,14 +2,14 @@ Examples
 --------
 .. code::
 
-    >>> import trustedanalytics as ta
-    >>> ta.connect()
+    >>> import trustedanalytics as atk
+    >>> atk.connect()()
     >>> dataset = r"datasets/kclique_edges.csv"
     >>> schema = [("source", int64), ("target", int64)]
-    >>> csvfile = ta.CsvFile(dataset, schema)
-    >>> my_frame = ta.Frame(csvfile)
+    >>> csvfile = atk.CsvFile(dataset, schema)
+    >>> my_frame = atk.Frame(csvfile)
 
-    >>> my_graph = ta.Graph())
+    >>> my_graph = atk.Graph())
     >>> my_graph.name = "mygraph"
     >>> source_vertex_type = my_graph.define_vertex_type("source")
     >>> target_vertex_type = my_graph.define_vertex_type("target")

@@ -90,7 +90,7 @@ class LdaTrainPlugin
     giraphConf.setComputationClass(classOf[CVB0LDAComputation])
     giraphConf.setAggregatorWriterClass(classOf[CVB0LDAAggregatorWriter])
 
-    val report = GiraphJobManager.run(s"ia_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
+    val report = GiraphJobManager.run(s"atk_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
       classOf[CVB0LDAComputation].getCanonicalName,
       giraphConf,
       invocation,

@@ -36,7 +36,7 @@ object SparkCoresPartitioner extends Serializable {
     val maxPartitions = getMaxSparkTasks(rdd)
     val numPartitions = Math.min(rdd.partitions.length, maxPartitions)
 
-    //TODO: Replace print statement with IAT event context when event contexts are supported at workers
+    //TODO: Replace print statement with ATK event context when event contexts are supported at workers
     println(s"Number of partitions computed by SparkCoresPartitioner: $numPartitions")
     numPartitions
   }

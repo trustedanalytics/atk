@@ -48,7 +48,7 @@ class SparkGraphHBaseBackendTest extends WordSpec with Matchers with MockitoSuga
   //  "Quietly deleting a table that does exist" should {
   //    "cause table to be disabled and deleted" in {
   //      val userTableName = "mytable"
-  //      val internalTableName = "iat_graph_mytable"
+  //      val internalTableName = "atk_graph_mytable"
   //      val mockHBaseAdmin = mock[HBaseAdmin]
   //      when(mockHBaseAdmin.tableExists(internalTableName)).thenReturn(true)
   //      when(mockHBaseAdmin.isTableEnabled(internalTableName)).thenReturn(true)

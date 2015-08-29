@@ -12,11 +12,11 @@ Examples
 
     script
 
-    ta.connect()
-    s = [("a", ta.int32), ("b", ta.int32), ("c", ta.float32), ("d", ta.vector(2))]
+    atk.connect()()
+    s = [("a", atk.int32), ("b", atk.int32), ("c", atk.float32), ("d", atk.vector(2))]
     d = "lbp.csv"
-    c = ta.CsvFile(d,s)
-    f = ta.Frame(c)
+    c = atk.CsvFile(d,s)
+    f = atk.Frame(c)
     r = f.loopy_belief_propagation("a", "b", "c", "d", "results")
     r['frame'].inspect()
     r['report']

@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class FrameCategorySummaryTest(unittest.TestCase):
     """
@@ -39,11 +39,11 @@ class FrameCategorySummaryTest(unittest.TestCase):
     def setUp(self):
         print "define csv file"
         schema = [("source",str),("target",str)]
-        self.csv = ta.CsvFile("/datasets/noun_graph_small.csv", schema)
+        self.csv = atk.CsvFile("/datasets/noun_graph_small.csv", schema)
 
     def test_category_summary_topk(self):
         print "create frame"
-        frame = ta.Frame(self.csv)
+        frame = atk.Frame(self.csv)
 
         print "compute category summary"
         cm = frame.categorical_summary(('source', {'top_k' : 2}))
@@ -58,7 +58,7 @@ class FrameCategorySummaryTest(unittest.TestCase):
 
     def test_category_summary_threshold(self):
         print "create frame"
-        frame = ta.Frame(self.csv)
+        frame = atk.Frame(self.csv)
 
         print "compute category summary"
         cm = frame.categorical_summary(('source', {'threshold' : 0.5}))
@@ -71,7 +71,7 @@ class FrameCategorySummaryTest(unittest.TestCase):
 
     def test_category_summary_both(self):
         print "create frame"
-        frame = ta.Frame(self.csv)
+        frame = atk.Frame(self.csv)
 
         print "compute category summary"
         cm = frame.categorical_summary(('source', {'top_k' : 2}), ('target', {'threshold' : 0.5}))
@@ -94,7 +94,7 @@ class FrameCategorySummaryTest(unittest.TestCase):
 
     def test_category_summary_none(self):
         print "create frame"
-        frame = ta.Frame(self.csv)
+        frame = atk.Frame(self.csv)
 
         print "compute category summary"
         cm = frame.categorical_summary('source','target')

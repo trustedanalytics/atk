@@ -31,7 +31,7 @@ class RelLinkTest extends FlatSpec with Matchers {
   }
 
   it should "not allow invalid methods" in {
-    intercept[IllegalArgumentException] { RelLink("ia-foo", "uri", "WHACK") }
+    intercept[IllegalArgumentException] { RelLink("atk-foo", "uri", "WHACK") }
   }
 
   it should "not allow null" in {

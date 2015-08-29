@@ -15,11 +15,11 @@
 #
 
 
-import iatest
-iatest.init()
+import atktest
+atktest.init()
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 import trustedanalytics.core.ui as ui
 
 
@@ -29,8 +29,8 @@ abc_schema = [('a', int), ('b', unicode), ('c', unicode)]
 two_abc_rows = [[1, "sixteen_16_abced", "long"],
                 [2, "tiny", "really really really really long"]]
 
-schema1 = [('i32', ta.int32),
-            ('floaties', ta.float64),
+schema1 = [('i32', atk.int32),
+            ('floaties', atk.float64),
             ('long_column_name_ugh_and_ugh', str),
             ('long_value', str),
             ('s', str)]
@@ -68,10 +68,10 @@ After the day was done--
 class TestUi(unittest.TestCase):
 
     def test_round(self):
-        self.assertEqual("3.14", ui.round_float(3.1415, ta.float32, 2))
-        self.assertEqual("6.28", ui.round_float(6.2830, ta.float64, 2))
-        self.assertEqual("867.5309000000", ui.round_float(867.5309, ta.float64, 10))
-        self.assertEqual("867.5310000000", ui.round_float(867.5309, ta.float32, 10))  # notice quirk with float32
+        self.assertEqual("3.14", ui.round_float(3.1415, atk.float32, 2))
+        self.assertEqual("6.28", ui.round_float(6.2830, atk.float64, 2))
+        self.assertEqual("867.5309000000", ui.round_float(867.5309, atk.float64, 10))
+        self.assertEqual("867.5310000000", ui.round_float(867.5309, atk.float32, 10))  # notice quirk with float32
         self.assertEqual("[1.23, 5.68]", ui.round_vector([1.234, 5.6789], 2))
         self.assertEqual("[1.0, 2.0, 3.0]", ui.round_vector([1.234, 2.36789, 3], 0))
         self.assertEqual("[1.2, 2.4, 3.0]", ui.round_vector([1.234, 2.36789, 3], 1))
