@@ -59,16 +59,7 @@ class ComputeMisplacedScorePlugin extends SparkCommandPlugin[ComputeMisplacedSco
     val frame: SparkFrame = arguments.frame
     val rdd = frame.rdd
 
-    val locationFrame: SparkFrame = arguments.locationFrame
-    val locations = for {
-      iter <- locationFrame.rdd.mapRows(row => row.valuesAsArray()).collect()
-      location = iter(0).asInstanceOf[String]
-      x = iter(1).asInstanceOf[Double]
-      y = iter(2).asInstanceOf[Double]
-    } yield (location, (x, y))
-    val bv = sc.broadcast(locations.toMap)
-
-    val newFrameRdd = ComputeMisplacedScoreImpl.computeMisplacedScoreUsingBroadcastJoin(rdd, bv)
+    val newFrameRdd = ComputeMisplacedScoreImpl.computeMisplacedScoreUsingBroadcastJoin(rdd, arguments.gravity)
     engine.frames.tryNewFrame(CreateEntityArgs(name = Some("misplaced_score_frame"), description = Some("MS"))) {
       newFrame => newFrame.save(newFrameRdd)
     }
