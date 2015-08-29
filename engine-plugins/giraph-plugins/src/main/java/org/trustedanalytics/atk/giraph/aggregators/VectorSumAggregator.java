@@ -30,7 +30,7 @@ public class VectorSumAggregator extends BasicAggregator<VectorWritable> {
         Vector currentValue = getAggregatedValue().get();
         if (currentValue.size() == 0) {
             getAggregatedValue().set(value.get());
-        } else {
+        } else if (value.get().size() > 0) {
             getAggregatedValue().set(currentValue.plus(value.get()));
         }
     }

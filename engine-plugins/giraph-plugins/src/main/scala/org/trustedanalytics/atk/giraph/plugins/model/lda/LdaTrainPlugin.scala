@@ -71,11 +71,13 @@ class LdaTrainPlugin
 
     val giraphConf = new LdaConfiguration(hConf)
 
-    val docOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA doc results")))
-    val wordOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA word results")))
+    val docOut = frames.create(CreateEntityArgs(description = Some("LDA doc results")))
+    val wordOut = frames.create(CreateEntityArgs(description = Some("LDA word results")))
+    val docOutSaveInfo = frames.prepareForSave(docOut)
+    val wordOutSaveInfo = frames.prepareForSave(wordOut)
 
     val inputFormatConfig = new LdaInputFormatConfig(frame.getStorageLocation, frame.schema)
-    val outputFormatConfig = new LdaOutputFormatConfig(docOut.getStorageLocation, wordOut.getStorageLocation)
+    val outputFormatConfig = new LdaOutputFormatConfig(docOutSaveInfo.targetPath, wordOutSaveInfo.targetPath)
     val ldaConfig = new LdaConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setLdaConfig(ldaConfig)
@@ -97,8 +99,8 @@ class LdaTrainPlugin
     val resultsColumn = Column("lda_results", DataTypes.vector(arguments.getNumTopics))
 
     // After saving update timestamps, status, row count, etc.
-    frames.postSave(None, docOut.toReference, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
-    frames.postSave(None, wordOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    frames.postSave(docOut, docOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
+    frames.postSave(wordOut, wordOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
     LdaTrainResult(frames.expectFrame(docOut.toReference), frames.expectFrame(wordOut.toReference), report)
   }

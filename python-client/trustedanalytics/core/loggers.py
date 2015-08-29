@@ -276,7 +276,7 @@ class ApiLogFormat(object):
 
     @staticmethod
     def format_value(v):
-        if hasattr(v, "_id"):  # the tell of an entity
+        if hasattr(v, "uri"):  # the tell of an entity
             return ApiLogFormat._format_entity(v)
         return repr(v)
 

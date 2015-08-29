@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.partitioning
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.command.CommandDoc
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.frame.partitioning.CoalesceArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -34,7 +34,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Calls underlying Spark RDD method.",
   extended = "",
   returns = "")
-class CoalescePlugin extends SparkCommandPlugin[CoalesceArgs, FrameEntity] {
+class CoalescePlugin extends SparkCommandPlugin[CoalesceArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -53,7 +53,7 @@ class CoalescePlugin extends SparkCommandPlugin[CoalesceArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: CoalesceArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CoalesceArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val coalescedRdd = frame.rdd.coalesce(arguments.numberPartitions, arguments.shuffle.get)
     frame.save(new FrameRdd(frame.schema, coalescedRdd))

@@ -229,9 +229,10 @@ class LoopyBeliefPropagationPlugin
     val hadoopConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
     val giraphConf = new LoopyBeliefPropagationConfiguration(hadoopConf)
 
-    val outputFrame = frames.prepareForSave(CreateEntityArgs(description = Some("Loopy belief propagation results")))
+    val outputFrame = frames.create(CreateEntityArgs(description = Some("Loopy belief propagation results")))
+    val outputFrameSaveInfo = frames.prepareForSave(outputFrame)
     val inputFormatConfig = new LoopyBeliefPropagationInputFormatConfig(frame.getStorageLocation, frame.schema)
-    val outputFormatConfig = new LoopyBeliefPropagationOutputFormatConfig(outputFrame.getStorageLocation)
+    val outputFormatConfig = new LoopyBeliefPropagationOutputFormatConfig(outputFrameSaveInfo.targetPath)
     val loopyBeliefPropagationConfig = new LoopyBeliefPropagationConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setConfig(loopyBeliefPropagationConfig)
@@ -252,7 +253,7 @@ class LoopyBeliefPropagationPlugin
       "lbp-learning-report")
 
     val resultsColumn = Column(arguments.srcLabelColName, frame.schema.columnDataType(arguments.srcLabelColName))
-    frames.postSave(None, outputFrame.toReference, new FrameSchema(List(frame.schema.column(arguments.srcColName), resultsColumn)))
+    frames.postSave(outputFrame.toReference, outputFrameSaveInfo, new FrameSchema(List(frame.schema.column(arguments.srcColName), resultsColumn)))
 
     LoopyBeliefPropagationResult(frames.expectFrame(outputFrame.toReference), result)
   }

@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.trianglecount
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.graph.SparkGraph
@@ -44,7 +44,7 @@ Default is all edges are considered.""") input_edge_labels: Option[List[String]]
  * The result object
  * @param frameDictionaryOutput Name of the output graph
  */
-case class TriangleCountResult(frameDictionaryOutput: Map[String, FrameEntity])
+case class TriangleCountResult(frameDictionaryOutput: Map[String, FrameReference])
 
 /** Json conversion for arguments and return value case classes */
 object TriangleCountJsonFormat {
@@ -89,7 +89,7 @@ class TriangleCountPlugin extends SparkCommandPlugin[TriangleCountArgs, Triangle
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new TriangleCountResult(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

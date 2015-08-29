@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.plugins.graphstatistics
 
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -64,7 +64,7 @@ case class AnnotateWeightedDegreesArgs(graph: GraphReference,
   }
 }
 
-case class AnnotateWeightedDegreesReturn(frameDictionaryOutput: Map[String, FrameEntity])
+case class AnnotateWeightedDegreesReturn(frameDictionaryOutput: Map[String, FrameReference])
 
 import DomainJsonProtocol._
 import spray.json._
@@ -142,7 +142,7 @@ class AnnotateWeightedDegreesPlugin extends SparkCommandPlugin[AnnotateWeightedD
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new AnnotateWeightedDegreesReturn(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotate weighted degrees operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotate weighted degrees operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

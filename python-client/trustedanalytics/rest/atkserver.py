@@ -286,7 +286,7 @@ def create_credentials_file(filename):
         pass
 
     cache = _CreateCredentialsCache  # alias the cache singleton for convenience
-    cache.uri = default_input("URI of ATK or OAuth server", cache.uri)
+    cache.uri = default_input("URI of the ATK server", cache.uri)
     if not cache.uri:
         print "Empty URI, aborting."
         return

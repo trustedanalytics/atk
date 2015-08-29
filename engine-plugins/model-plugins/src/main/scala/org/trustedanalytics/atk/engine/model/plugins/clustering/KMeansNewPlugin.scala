@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ KMeansNewArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ KMeansNewArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
@@ -27,11 +27,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 @PluginDoc(oneLine = "<TBD>",
   extended = "")
-class KMeansNewPlugin extends SparkCommandPlugin[KMeansNewArgs, ModelEntity] {
+class KMeansNewPlugin extends SparkCommandPlugin[KMeansNewArgs, ModelReference] {
 
   override def name: String = "model:k_means/new"
 
-  override def execute(arguments: KMeansNewArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: KMeansNewArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:k_means")))
   }
 }

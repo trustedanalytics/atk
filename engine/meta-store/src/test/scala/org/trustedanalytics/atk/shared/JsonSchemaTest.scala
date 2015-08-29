@@ -25,11 +25,11 @@ case class SchemaSample(other_frame: FrameReference, int: Int, long: Long,
 
 class JsonSchemaTest extends FlatSpec with Matchers {
   val schema = JsonSchemaExtractor.getProductSchema(manifest[SchemaSample])
-  val reference = ObjectSchema(properties = Some(Map("int" -> JsonSchema.int.asInstanceOf[JsonSchema],
-    "long" -> JsonSchema.long,
+  val reference = ObjectSchema(properties = Some(Map("int" -> JsonSchema.int(None, None).asInstanceOf[JsonSchema],
+    "long" -> JsonSchema.long(None, None),
     "string" -> new StringSchema(),
     "array" -> ArraySchema(),
-    "option" -> JsonSchema.int,
+    "option" -> JsonSchema.int(None, None),
     "frame" -> StringSchema(format = Some("atk/frame"), self = Some(true)),
     "other_frame" -> StringSchema(format = Some("atk/graph"))
   )),
