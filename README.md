@@ -76,8 +76,8 @@ This is an overview. Additional details and instructions are in the user documen
 * Open ipython or python shell
   * Verify you are runing a python 2.7
   * Run these commands first
-    * import trustedanalytics as ta
-    * ta.connect()
+    * import trustedanalytics as atk
+    * atk.connect()
 
 # Getting Help
 * Gitter chat

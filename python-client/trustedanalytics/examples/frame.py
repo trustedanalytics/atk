@@ -15,7 +15,7 @@
 #
 from trustedanalytics import examples
 
-def run(path=r"datasets/cities.csv", ta=None):
+def run(path=r"datasets/cities.csv", atk=None):
     """
     The default home directory is hdfs://user/atkuser all the sample data sets are saved to
     hdfs://user/atkuser/datasets when installing through the rpm
@@ -24,27 +24,27 @@ def run(path=r"datasets/cities.csv", ta=None):
     """
     NAME = "TEST"
 
-    if ta is None:
-        ta = examples.connect()
+    if atk is None:
+        atk = examples.connect()
 
     #csv schema definition
-    schema = [('rank', ta.int32),
+    schema = [('rank', atk.int32),
               ('city', str),
-              ('population_2013', ta.int32),
-              ('population_2010', ta.int32),
+              ('population_2013', atk.int32),
+              ('population_2010', atk.int32),
               ('change', str),
               ('county', str)]
 
-    csv = ta.CsvFile(path, schema, skip_header_lines=1, delimiter='|')
+    csv = atk.CsvFile(path, schema, skip_header_lines=1, delimiter='|')
 
-    frames = ta.get_frame_names()
+    frames = atk.get_frame_names()
     if NAME in frames:
         print "Deleting old '{0}' frame.".format(NAME)
-        ta.drop_frames(NAME)
+        atk.drop_frames(NAME)
 
     print "Building frame '{0}'.".format(NAME)
 
-    frame = ta.Frame(csv, NAME)
+    frame = atk.Frame(csv, NAME)
 
     print "Inspecting frame '{0}'.".format(NAME)
 
@@ -58,7 +58,7 @@ def run(path=r"datasets/cities.csv", ta=None):
 
     print "Add Change column."
     frame.add_columns(lambda row: ((row.population_2013 - row.population_2010)/float(row.population_2010)) * 100,
-                      ("change", ta.float32))
+                      ("change", atk.float32))
 
     print frame.inspect()
 
@@ -70,7 +70,7 @@ def run(path=r"datasets/cities.csv", ta=None):
 
     print "Add Change columns."
 
-    frame.add_columns(lambda row: [row.population_2013 - row.population_2010, ((row.population_2013 - row.population_2010)/float(row.population_2010)) * 100 ], [("difference", ta.int32 ), ("change", ta.float32 )])
+    frame.add_columns(lambda row: [row.population_2013 - row.population_2010, ((row.population_2013 - row.population_2010)/float(row.population_2010)) * 100 ], [("difference", atk.int32 ), ("change", atk.float32 )])
 
     print "Format inspection."
     print frame.inspect(10, wrap=10, columns=["city", "population_2013", "population_2010", "change", "difference"], round=2)

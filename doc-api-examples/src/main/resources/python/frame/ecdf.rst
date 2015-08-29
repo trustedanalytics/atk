@@ -4,9 +4,9 @@ Consider the following sample data set in *frame* with actual data labels
 specified in the *labels* column and the predicted labels in the
 *predictions* column:
 
->>> import trustedanalytics as ta
+>>> import trustedanalytics as atk
 >>> import pandas as p
->>> f = ta.Frame(ta.Pandas(p.DataFrame([1, 3, 1, 0]), [('numbers', ta.int32)]))
+>>> f = atk.Frame(atk.Pandas(p.DataFrame([1, 3, 1, 0]), [('numbers', atk.int32)]))
   [==Job Progress...]
 
 >>> f.take(5)

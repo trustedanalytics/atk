@@ -15,27 +15,27 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 
 
 class UserExamples(unittest.TestCase):
     def test_frame(self):
         import trustedanalytics.examples.frame as frame_test
-        frame_test.run("/datasets/cities.csv", ta)
+        frame_test.run("/datasets/cities.csv", atk)
         assert True
 
     def test_movie_graph_small(self):
         import trustedanalytics.examples.movie_graph_small as mgs
-        vars = mgs.run("/datasets/movie_data_random.csv", ta)
+        vars = mgs.run("/datasets/movie_data_random.csv", atk)
 
         assert vars["frame"].row_count == 2
         assert vars["frame"].name == "MGS" and vars["graph"].name == "MGS"
@@ -45,7 +45,7 @@ class UserExamples(unittest.TestCase):
 
     def test_pr(self):
         import trustedanalytics.examples.pr as pr
-        vars = pr.run("/datasets/movie_data_random.csv", ta)
+        vars = pr.run("/datasets/movie_data_random.csv", atk)
 
         assert vars["frame"].row_count == 20
         assert vars["frame"].name == "PR" and vars["graph"].name == "PR"

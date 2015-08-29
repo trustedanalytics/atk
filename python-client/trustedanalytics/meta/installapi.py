@@ -39,9 +39,9 @@ def handle_client_server_version_mismatch(client_version, server_version):
     To turn this client/server version check OFF, change the value of 'version' to
     be None before connecting:
 
-    import trustedanalytics as ta
-    ta.version = None
-    ta.connect()
+    import trustedanalytics as atk
+    atk.version = None
+    atk.connect()
     """
     msg = """
 ------------------------------------------------------------------------------

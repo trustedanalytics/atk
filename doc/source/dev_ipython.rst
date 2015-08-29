@@ -91,12 +91,12 @@ inside of a notebook or IPython shell and ping the REST server.
     help      -> Python's own help system.
     object?   -> Details about 'object', use 'object??' for extra details.
 
-    In [1]: import trustedanalytics as ta
+    In [1]: import trustedanalytics as atk
 
-    In [2]: ta.server.ping()
+    In [2]: atk.server.ping()
     Successful ping to Trusted Analytics ATK at http://localhost:9099/info
 
-    In [3]: ta.connect()
+    In [3]: atk.connect()
 
 IPython Notebook
 ================

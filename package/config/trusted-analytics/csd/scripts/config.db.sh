@@ -11,7 +11,7 @@ echo "==$timestamp: $1=="
 #    if it doesn't exist
 #    start service posgres service with "service postgresql initdb"
 
-#   then insert "host    all         " + db_username + "      127.0.0.1/32            md5 #IATINSERT\n" + pg_hba_text"
+#   then insert "host    all         " + db_username + "      127.0.0.1/32            md5 #ATKINSERT\n" + pg_hba_text"
 
 #   create db user
 

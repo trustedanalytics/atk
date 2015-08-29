@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-import iatest
-iatest.init()
+import atktest
+atktest.init()
 
 import unittest
 
@@ -25,8 +25,8 @@ from trustedanalytics.rest.frame import FrameSchema, FrameData
 class TestConnect(unittest.TestCase):
 
     def test_meta(self):
-        import trustedanalytics as ta
-        ta.connect()
+        import trustedanalytics as atk
+        atk.connect()
 
 class TestInspectionTable(unittest.TestCase):
 

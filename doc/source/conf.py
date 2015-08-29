@@ -66,9 +66,9 @@ rst_epilog = """
 .. |ATK|    replace:: ATK
 .. |PACKAGE_1LC|    replace:: trustedanalytics
 .. |PACKAGE_DLC|    replace:: trusted-analytics
-.. |PACKAGE_SLC|    replace:: ta
+.. |PACKAGE_SLC|    replace:: atk
 .. |PACKAGE_SUC|    replace:: TA
-.. |PACKAGE_USER|   replace:: ta
+.. |PACKAGE_USER|   replace:: atk
 .. |TOOLKIT|    replace:: |PACKAGE| Package
 """
 

@@ -95,10 +95,10 @@ Setup
     #)  Close the *Help keeping PyDev alive* dialog, if it appears.
     #)  Type the following code into test.py::
 
-            import trustedanalytics as ta
-            ta.server.host = "correct host name or IP address"
-            ta.connect()
-            ta.server.ping()
+            import trustedanalytics as atk
+            atk.server.host = "correct host name or IP address"
+            atk.connect()
+            atk.server.ping()
 
 #)  Choose :menuselection:`Run --> Run`.
 
