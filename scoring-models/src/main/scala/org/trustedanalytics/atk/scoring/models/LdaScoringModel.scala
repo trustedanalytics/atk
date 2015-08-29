@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.scoring.models
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import spray.json._
+import ScoringJsonReaderWriters._
 
 /**
  * Scoring model for Latent Dirichlet Allocation
@@ -35,7 +37,7 @@ class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, l
         }
 
         val predictReturn = predict(document.toList)
-        score = score :+ predictReturn
+        score = score :+ predictReturn.toJson
       }
     }
     score

@@ -270,6 +270,37 @@ object ScoringJsonReaderWriters {
       LdaModel(numTopics, topicWordMap)
     }
   }
+
+  implicit object LdaModelPredictReturnFormat extends JsonFormat[LdaModelPredictReturn] {
+    /**
+     * The write methods converts from LdaModelPredictReturn to JsValue
+     * @param obj LdaModelPredictReturn. Where LdaModelPredictReturn's format is
+     *            LdaModelPredictReturn(val topicsGivenDoc: scala.Vector,val newWordsCount: Int, val newWordsPercentage: Double)
+     * @return JsValue
+     */
+    override def write(obj: LdaModelPredictReturn): JsValue = {
+      JsObject(
+        "topics_given_docs" -> obj.topicsGivenDoc.toJson,
+        "new_words_count" -> JsNumber(obj.newWordsCount),
+        "new_words_percentage" -> JsNumber(obj.newWordsPercentage)
+      )
+    }
+
+    /**
+     * The read methods converts from LdaModelPredictReturn to JsValue
+     * @param json JsValue
+     * @return LdaModelPredictReturn with format
+     *         LdaModelPredictReturn(val topicsGivenDoc: scala.Vector,val newWordsCount: Int, val newWordsPercentage: Double)
+     */
+    override def read(json: JsValue): LdaModelPredictReturn = {
+      val fields = json.asJsObject.fields
+      val topicsGivenDoc = getOrInvalid(fields, "topics_given_docs").convertTo[scala.Vector[Double]]
+      val newWordsCount = getOrInvalid(fields, "new_words_count").convertTo[Int]
+      val newWordsPercentage = getOrInvalid(fields, "new_words_percentage").convertTo[Double]
+
+      LdaModelPredictReturn(topicsGivenDoc, newWordsCount, newWordsPercentage)
+    }
+  }
   //  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
   //
   //    override def write(obj: NaiveBayesModel): JsValue = {
@@ -295,7 +326,6 @@ object ScoringJsonReaderWriters {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
-  implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
