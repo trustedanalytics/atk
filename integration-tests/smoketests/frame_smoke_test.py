@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class FrameSmokeTest(unittest.TestCase):
     """
@@ -40,7 +40,7 @@ class FrameSmokeTest(unittest.TestCase):
 
     def test_frame(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/oregon-cities.csv", schema= [('rank', ta.int32),
+        csv = atk.CsvFile("/datasets/oregon-cities.csv", schema= [('rank', atk.int32),
                                             ('city', str),
                                             ('population_2013', str),
                                             ('pop_2010', str),
@@ -48,7 +48,7 @@ class FrameSmokeTest(unittest.TestCase):
                                             ('county', str)], delimiter='|')
 
         print "create frame"
-        frame = ta.Frame(csv)
+        frame = atk.Frame(csv)
 
         # TODO: add asserts verifying inspect is working
         print

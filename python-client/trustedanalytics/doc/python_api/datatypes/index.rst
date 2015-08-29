@@ -11,7 +11,7 @@ the supported Python data types.
 
 .. code::
 
-    >>> ta.valid_data_types
+    >>> atk.valid_data_types
 
     float32, float64, ignore, int32, int64, unicode, vector(n)
     (and aliases: float->float64, int->int32, list->vector, long->int64, str->unicode)

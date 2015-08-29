@@ -7,7 +7,7 @@
 --
 
 --
--- update storage to iat_graph_<id> for all hbase/titan backed graphs
+-- update storage to atk_graph_<id> for all hbase/titan backed graphs
 --
 
-UPDATE graph SET storage = 'iat_graph_' || graph.name WHERE graph.storage_format = 'hbase/titan'
+UPDATE graph SET storage = 'atk_graph_' || graph.name WHERE graph.storage_format = 'hbase/titan'

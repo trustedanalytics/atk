@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class FrameClassificationTest(unittest.TestCase):
     """
@@ -38,13 +38,13 @@ class FrameClassificationTest(unittest.TestCase):
 
     def test_classification_metrics_001(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
-                                            ('b', ta.int32),
-                                            ('labels', ta.int32),
-                                            ('predictions', ta.int32)], delimiter=',', skip_header_lines=1)
+        csv = atk.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
+                                            ('b', atk.int32),
+                                            ('labels', atk.int32),
+                                            ('predictions', atk.int32)], delimiter=',', skip_header_lines=1)
 
         print "create frame"
-        frame = ta.Frame(csv)
+        frame = atk.Frame(csv)
 
         self.assertEquals(frame.row_count, 4, "frame should have 4 rows")
         self.assertEqual(frame.column_names, ['a', 'b', 'labels', 'predictions'])

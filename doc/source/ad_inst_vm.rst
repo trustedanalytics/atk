@@ -561,7 +561,7 @@ More details can be found in the :doc:`section on log files </ad_log>`.
 Updating
 --------
 
-Upon receipt of access and secret tokens, edit '/etc/yum.repos.d/ta.repo' and
+Upon receipt of access and secret tokens, edit '/etc/yum.repos.d/atk.repo' and
 replace *myKey* and *mySecret*.
 Afterwards, it is recommended to run ``yum`` commands to check for and perform
 updates.
@@ -570,7 +570,7 @@ updates.
 
     ::
 
-        $ sudo [vi|vim] /etc/yum.repos.d/ta.repo
+        $ sudo [vi|vim] /etc/yum.repos.d/atk.repo
 
         [Trusted Analytics repo]
         name=Trusted Analytics yum repo
@@ -586,7 +586,7 @@ updates.
 
     ::
 
-        $ sudo [vi/vim] /etc/yum.repos.d/ta.repo
+        $ sudo [vi/vim] /etc/yum.repos.d/atk.repo
 
         [Trusted Analytics repo]
         name=Trusted Analytics yum repo

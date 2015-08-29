@@ -50,20 +50,20 @@ class Pandas(object):
 
     First bring in the stuff::
 
-        import trustedanalytics as ta
+        import trustedanalytics as atk
         import pandas
 
     At this point create a schema that defines the data::
 
-        schema = [("a", ta.int32),
-                      ("b", ta.int32),
+        schema = [("a", atk.int32),
+                      ("b", atk.int32),
                       ("c", str)]
 
     your_pandas = pandas.read_csv("pandas_df.csv")
 
     Now build a PandasFrame object with this schema::
 
-        my_pandas = ta.PandasFrame(your_pandas, schema, False)
+        my_pandas = atk.PandasFrame(your_pandas, schema, False)
 
     """
 
@@ -105,7 +105,7 @@ class Pandas(object):
         For this example, we are going to use a pandas dataframe object *your_pandas* .
         It will have two columns *col1* and *col2* with types of *int32* and *float32* respectively::
 
-            my_pandas = ta.PandasFrame(your_pandas, schema=[("col1", ta.int32), ("col2", ta.float32)])
+            my_pandas = atk.PandasFrame(your_pandas, schema=[("col1", atk.int32), ("col2", atk.float32)])
             print(my_pandas.field_names())
 
         The output would be::
@@ -133,7 +133,7 @@ class Pandas(object):
         For this example, we are going to use a pandas dataframe object *your_pandas* .
         It will have two columns *col1* and *col2* with types of *int32* and *float32* respectively::
 
-            my_pandas = ta.PandasFrame(your_pandas, schema=[("col1", ta.int32), ("col2", ta.float32)])
+            my_pandas = atk.PandasFrame(your_pandas, schema=[("col1", atk.int32), ("col2", atk.float32)])
             print(my_csv.field_types())
 
         The output would be::

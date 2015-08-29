@@ -15,29 +15,29 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()()
 
 class ModelLinearRegressionTest(unittest.TestCase):
     def testLinearRegression(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/linear_regression_8_columns.csv", schema = [("y", ta.float64),("1",ta.float64),("2",ta.float64),
-                                                              ("3",ta.float64),("4",ta.float64),("5",ta.float64),
-                                                              ("6",ta.float64),("7",ta.float64),("8",ta.float64),
-                                                              ("9",ta.float64),("10",ta.float64)])
+        csv = atk.CsvFile("/datasets/linear_regression_8_columns.csv", schema = [("y", atk.float64),("1",atk.float64),("2",atk.float64),
+                                                              ("3",atk.float64),("4",atk.float64),("5",atk.float64),
+                                                              ("6",atk.float64),("7",atk.float64),("8",atk.float64),
+                                                              ("9",atk.float64),("10",atk.float64)])
 
         print "create frame"
-        frame = ta.Frame(csv,'LinearRegressionSampleFrame')
+        frame = atk.Frame(csv,'LinearRegressionSampleFrame')
 
         print "Initializing a LinearRegressionModel object"
-        model = ta.LinearRegressionModel(name='myLinearRegressionModel')
+        model = atk.LinearRegressionModel(name='myLinearRegressionModel')
 
         print "Training the model on the Frame"
         model.train(frame,'y', ['1','2','3','4','5','6','7','8','9','10'])

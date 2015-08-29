@@ -14,11 +14,11 @@
 # limitations under the License.
 #
 
-import iatest
-iatest.init()
+import atktest
+atktest.init()
 
 import unittest
-import trustedanalytics.core.atktypes as tatypes
+import trustedanalytics.core.atktypes as atktypes
 from trustedanalytics.meta.metaprog import CommandInstallable, CommandInstallation, ATTR_COMMAND_INSTALLATION
 from trustedanalytics.meta.names import entity_type_to_class_name
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo
@@ -59,8 +59,8 @@ def make_command_def(full_name):
     return CommandDefinition({},
                              full_name,
                              [Parameter('self', object, True, False, None, None),
-                              Parameter('a', tatypes.int32, False, False, None, None),
-                              Parameter('b', tatypes.int32, False, False, None, None)],
+                              Parameter('a', atktypes.int32, False, False, None, None),
+                              Parameter('b', atktypes.int32, False, False, None, None)],
                               ReturnInfo(list, False, None))
 
 cmd_defs = [make_command_def(name) for name in numbers_by_lang.keys()]

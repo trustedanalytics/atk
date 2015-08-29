@@ -4,7 +4,7 @@ Get the first two outgoing edges of the vertex whose source equals 5767244:
 
 .. code::
 
-    >>> mygraph = ta.TitanGraph(...)
+    >>> mygraph = atk.TitanGraph(...)
     >>> results = mygraph.query.gremlin("g.V('source', 5767244).outE[0..1]")
     >>> print results["results"]
 
