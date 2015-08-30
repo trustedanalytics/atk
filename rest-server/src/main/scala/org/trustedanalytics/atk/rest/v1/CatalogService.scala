@@ -1,22 +1,11 @@
 package org.trustedanalytics.atk.rest.v1
 
-import org.apache.commons.lang.StringUtils
 import org.trustedanalytics.atk.domain.catalog.GenericCatalogResponse
-import org.trustedanalytics.atk.engine.Engine
-import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.rest.CommonDirectives
 
 import org.apache.commons.lang.StringUtils
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
 import org.trustedanalytics.atk.engine.Engine
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
-import org.trustedanalytics.atk.rest.v1.CatalogServiceImplicits._
-import org.trustedanalytics.atk.rest.v1.viewmodels.RelLink
-import org.trustedanalytics.atk.rest.v1.viewmodels.ViewModelJsonImplicits
-import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
-import scala.concurrent._
 import scala.util._
 import org.trustedanalytics.atk.rest.v1.viewmodels.{ RelLink, ViewModelJsonImplicits }
 import org.trustedanalytics.atk.rest.CommonDirectives

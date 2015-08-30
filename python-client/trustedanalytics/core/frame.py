@@ -170,10 +170,10 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     def __eq__(self, other):
             if not isinstance(other, Frame):
                 return False
-            return self._id == other._id
+            return self.uri == other.uri
 
     def __hash__(self):
-        return hash(self._id)
+        return hash(self.uri)
 
     @api
     @property
@@ -608,7 +608,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             A new object accessing a frame that contains the parse errors of
             the currently active Frame or None if no error frame exists.
         """
-        return self._backend.get_frame_by_id(self._error_frame_id)
+        return self._backend.get_error_frame(self)
 
     @api
     @beta
@@ -1135,9 +1135,7 @@ Default is None.""")
     A frame has been created and Frame *your_frame* is its proxy.
     It has no data yet, but it does have the name *yourframe*.
         """
-        self._error_frame_id = None
-        self._id = 0
-        self._ia_uri = None
+        self.uri = None
         with api_context(logger, 3, self.__init__, self, source, name, _info):
             api_status.verify_installed()
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
@@ -1298,9 +1296,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
         """
         try:
             api_status.verify_installed()
-            self._error_frame_id = None
-            self._id = 0
-            self._ia_uri = None
+            self.uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
@@ -1455,9 +1451,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
         """
         try:
             api_status.verify_installed()
-            self._error_frame_id = None
-            self._id = 0
-            self._ia_uri = None
+            self.uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)

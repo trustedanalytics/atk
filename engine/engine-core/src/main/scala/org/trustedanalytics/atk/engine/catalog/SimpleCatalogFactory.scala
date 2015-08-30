@@ -2,8 +2,8 @@ package org.trustedanalytics.atk.engine.catalog
 
 import org.trustedanalytics.atk.domain.catalog.Catalog
 import org.trustedanalytics.atk.engine.Engine
-import org.trustedanalytics.atk.engine.catalog.data._
-import org.trustedanalytics.atk.engine.catalog.frame.FrameCatalog
+import org.trustedanalytics.atk.engine.catalog.datacatalog._
+import org.trustedanalytics.atk.engine.catalog.framecatalog.FrameCatalog
 import org.trustedanalytics.atk.engine.plugin.Invocation
 
 object SimpleCatalogFactory {

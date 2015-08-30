@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
@@ -29,7 +29,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 @PluginDoc(oneLine = "",
   extended = "",
   returns = "")
-class LinearRegressionWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+class LinearRegressionWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -38,7 +38,7 @@ class LinearRegressionWithSGDNewPlugin extends SparkCommandPlugin[GenericNewMode
    */
   override def name: String = "model:linear_regression/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:linear_regression")))
   }
 }

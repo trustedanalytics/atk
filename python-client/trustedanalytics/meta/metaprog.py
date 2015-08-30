@@ -26,6 +26,7 @@ import sys
 import inspect
 
 from trustedanalytics.core.api import api_globals, api_status
+from trustedanalytics.core.atktypes import unit
 from trustedanalytics.meta.installpath import InstallPath
 from trustedanalytics.meta.context import get_api_context_decorator
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo
@@ -38,7 +39,6 @@ ATTR_COMMAND_INSTALLATION = "_command_installation"
 ATTR_ENTITY_COLLECTION = "_entity_collection"
 ATTR_INTERMEDIATE_CLASS = "_intermediate_class"
 EXECUTE_COMMAND_FUNCTION_NAME = 'execute_command'
-IA_URI = '_id'
 
 
 _installable_classes_store = {}  # global store, keyed on full install path, str -> cls   ex.  { 'frame:' : Frame }
@@ -134,7 +134,7 @@ class CommandInstallable(object):
     Inheritors must...
 
     1.  Implement the following:
-        instance attribute '_id' : str or int  (See IA_URI constant)
+        instance attribute 'uri' : str
             identifies the instance to the server
 
     2.  Call CommandsInstallable.__init__(self) in its own __init__, IMMEDIATELY
@@ -167,10 +167,6 @@ class CommandInstallable(object):
                     private_member_value = cls(self._entity)  # instantiate
                     logger.debug("Adding intermediate class instance as member %s", private_member_name)
                     setattr(self, private_member_name, private_member_value)
-
-    def _get_entity_ia_uri(self):
-        """standard way for generated code to ask for the entity id"""
-        return getattr(self._entity, IA_URI)
 
 
 def is_class_command_installable(cls):
@@ -390,13 +386,35 @@ def validate_arguments(arguments, parameters):
             parameter = [p for p in parameters if p.name == k][0]
         except IndexError:
             raise ValueError("No parameter named '%s'" % k)
-        if hasattr(v, "_id"):
-            v = v._id
+        if hasattr(v, "uri"):
+            v = v.uri
         validated[k] = v
         if parameter.data_type is list:
             if v is not None and (isinstance(v, basestring) or not hasattr(v, '__iter__')):
                 validated[k] = [v]
     return validated
+
+
+def _identity(value):
+    return value
+
+
+def _return_none(value):
+    return None
+
+
+def get_result_processor(command_def):
+    from trustedanalytics.meta.results import get_postprocessor
+    postprocessor = get_postprocessor(command_def.full_name)
+    if postprocessor:
+        return postprocessor
+    if command_def.is_constructor:  # constructors always return raw JSON
+        return _identity
+    if command_def.return_info.data_type is unit:
+        return _return_none
+    if hasattr(command_def.return_info.data_type, "create"):   # this should grab the entities
+        return command_def.return_info.data_type.create
+    return _identity
 
 
 def create_execute_command_function(command_def, execute_command_function):
@@ -405,16 +423,18 @@ def create_execute_command_function(command_def, execute_command_function):
     over the parameter info for validating the arguments during usage
     """
     parameters = command_def.parameters
+    result_processor = get_result_processor(command_def)
 
     def execute_command(_command_name, _selfish, **kwargs):
         arguments = validate_arguments(kwargs, parameters)
-        return execute_command_function(_command_name, _selfish, **arguments)
+        result = execute_command_function(_command_name, _selfish, **arguments)
+        return result_processor(result)
     return execute_command
 
 
 def get_self_argument_text():
     """Produces the text for argument to use for self in a command call"""
-    return "self._entity.%s" % IA_URI
+    return "self._entity.uri"
 
 
 def get_function_kwargs(command_def):
@@ -467,13 +487,13 @@ def default_repr(self, collection_name):
     entity = type(self).__name__
     try:
         from trustedanalytics.rest.atkserver import server
-        uri = server.create_full_uri(collection_name + "/" + str(self._id))
+        uri = server.create_full_uri(self.uri)
         response = server.get(uri).json()
         name = response.get('name', None)
         if name:
             details = ' "%s"' % response['name']
         else:
-            details = ' <unnamed@%s>' % response['id']
+            details = ' <unnamed@%s>' % response['uri']
     except:
         raise
         #details = " (Unable to collect details from server)"
@@ -483,16 +503,13 @@ def default_repr(self, collection_name):
 def _get_init_body_text(command_def):
     """Gets text for the body of an init function for a constructor command_def"""
     return '''
-    self._id = 0
+    self.uri = None
     base_class.__init__(self)
     if {info} is None:
         {info} = {call_execute_create}
-    # initialize from _info
-    self._id = _info['id']
-    self._name = _info.get('name', None)  # todo: remove, move to initialize_from_info
+    self.uri = {info}['uri']
     # initialize_from_info(self, {info})  todo: implement
-    '''.format(info='_info',
-               call_execute_create=get_call_execute_command_text(command_def))
+    '''.format(info='_info', call_execute_create=get_call_execute_command_text(command_def))
 
 
 def _compile_function(func_name, func_text, dependencies):

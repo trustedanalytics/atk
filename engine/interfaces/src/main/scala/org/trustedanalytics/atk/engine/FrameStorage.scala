@@ -40,8 +40,8 @@ trait FrameStorage {
   def loadFrameData(context: Context, frame: FrameEntity)(implicit invocation: Invocation): Data
   def saveFrameData(frame: FrameReference, data: Data)(implicit invocation: Invocation): FrameEntity
 
-  def prepareForSave(createEntity: CreateEntityArgs)(implicit invocation: Invocation): FrameEntity
-  def postSave(originalFrameRef: Option[FrameReference], targetFrameRef: FrameReference, schema: Schema)(implicit invocation: Invocation): FrameEntity
+  def prepareForSave(frameEntity: FrameReference, storageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo
+  def postSave(targetFrameRef: FrameReference, saveInfo: SaveInfo, schema: Schema)(implicit invocation: Invocation): FrameEntity
 
   /**
    * Get the error frame of the supplied frame or create one if it doesn't exist
@@ -60,3 +60,13 @@ trait FrameStorage {
 
   def scheduleDeletion(frame: FrameEntity)(implicit invocation: Invocation): Unit
 }
+
+/**
+ * Stores arguments which describe a saving a frame
+ * @param targetPath HDFS path where the data is going to be saved, revision-specific
+ * @param storageFormat storage format, like parquet
+ * @param victimPath HDFS path which should be deleted after the save, like the previous revision folder
+ */
+case class SaveInfo(targetPath: String,
+                    storageFormat: String,
+                    victimPath: Option[String] = None)

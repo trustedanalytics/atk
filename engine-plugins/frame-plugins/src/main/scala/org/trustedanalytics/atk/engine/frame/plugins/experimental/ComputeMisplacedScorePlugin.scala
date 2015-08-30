@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.experimental
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
@@ -36,7 +36,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "",
   extended = "",
   returns = "")
-class ComputeMisplacedScorePlugin extends SparkCommandPlugin[ComputeMisplacedScoreArgs, FrameEntity] {
+class ComputeMisplacedScorePlugin extends SparkCommandPlugin[ComputeMisplacedScoreArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -55,20 +55,11 @@ class ComputeMisplacedScorePlugin extends SparkCommandPlugin[ComputeMisplacedSco
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ComputeMisplacedScoreArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: ComputeMisplacedScoreArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val rdd = frame.rdd
 
-    val locationFrame: SparkFrame = arguments.locationFrame
-    val locations = for {
-      iter <- locationFrame.rdd.mapRows(row => row.valuesAsArray()).collect()
-      location = iter(0).asInstanceOf[String]
-      x = iter(1).asInstanceOf[Double]
-      y = iter(2).asInstanceOf[Double]
-    } yield (location, (x, y))
-    val bv = sc.broadcast(locations.toMap)
-
-    val newFrameRdd = ComputeMisplacedScoreImpl.computeMisplacedScoreUsingBroadcastJoin(rdd, bv)
+    val newFrameRdd = ComputeMisplacedScoreImpl.computeMisplacedScoreUsingBroadcastJoin(rdd, arguments.gravity)
     engine.frames.tryNewFrame(CreateEntityArgs(name = Some("misplaced_score_frame"), description = Some("MS"))) {
       newFrame => newFrame.save(newFrameRdd)
     }

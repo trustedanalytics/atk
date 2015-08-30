@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+import json
+
 from trustedanalytics.core.atktypes import valid_data_types
 
 class DataFile(object):
@@ -638,3 +640,119 @@ class HiveQuery(DataFile):
 
     def __repr__(self):
         return repr(self.file_name)
+
+
+
+class HBaseTable(object):
+    """
+    Define the object to retrieve the data from an hBase table.
+
+    Parameters
+    ----------
+    my_table : str
+        The table name
+    schema : List of (column family, column name, data type for the cell value)
+
+    Returns
+    -------
+    class : HBaseTable object
+        An object which holds hBase data.
+
+    Examples
+    --------
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.connect()
+        >>> h = tp.HBaseTable ("my_table", [("pants", "aisle", unicode), ("pants", "row", int),( "shirts", "aisle", unicode),("shirts", "row", unicode)])
+        >>> f = tp.Frame(h)
+        >>> f.inspect()
+
+    """
+
+    def __init__(self, table_name, schema, start_row = None, end_row = None):
+        if (not isinstance(table_name, str)):
+            raise ValueError("Incorrect table name")
+        if (not self.__validate(schema)):
+            raise ValueError("Incorrect schema. Please provide a list of tuples with (str, str, type)")
+
+        self.table_name = table_name
+        self.schema = schema
+        self.start_row = start_row
+        self.end_row = end_row
+
+    def to_json(self):
+        return {"table_name": self.table_name,
+                "schema": [{"column_family" :field[0], "column_name": field[1], "data_type": valid_data_types.to_string(field[2])} for field in self.schema],
+                "start_tag": self.start_row,
+                "end_tag": self.end_row}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
+    def __validate(self, schema):
+        if(not isinstance(schema, list)):
+            return False
+        for elem in schema:
+            if (not isinstance(elem, tuple) or len(elem) != 3):
+                return False
+            if (not isinstance(elem[0], str )or not isinstance(elem[1], str) or elem[2] not in valid_data_types):
+                return False
+        return True
+
+
+class JdbcTable(object):
+    """
+    Define the object to retrieve the data from an jdbc table.
+
+    Parameters
+    ----------
+    table_name : str
+        the table name
+    url : str
+        Jdbc connection string (as url)
+    driver_name : str
+        An optional driver name
+    query : initial query (for data filtering / processing)
+
+    Returns
+    -------
+    class : JdbcTable object
+        An object which holds jdbc data.
+
+    Examples
+    --------
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.connect()
+        >>> jdbcTable = tp.JdbcTable ("test",
+                                      "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
+                                      "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                                      "select * FROM SomeTable")
+        >>> frame = tp.Frame(jdbcTable)
+        >>> frame.inspect()
+
+    """
+
+    def __init__(self, table_name, url = None, driver_name = None, query = None):
+        if (not isinstance(table_name, str)):
+            raise ValueError("Incorrect table name")
+
+        self.table_name = table_name
+        self.url = url
+        self.driver_name = driver_name
+        self.query = query
+
+    def to_json(self):
+        return {"url": self.url,
+                "table_name": self.table_name,
+                "driver_name": self.driver_name,
+                "query": self.query}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
+
+
+

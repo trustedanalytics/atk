@@ -21,7 +21,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.SparkContextFactory
@@ -59,7 +59,7 @@ import VertexOutDegreeFormat._
         Frame with vertex out-degree
     """)
 class VertexOutDegreePlugin
-    extends SparkCommandPlugin[VertexOutDegreeInput, FrameEntity] {
+    extends SparkCommandPlugin[VertexOutDegreeInput, FrameReference] {
 
   /**
    * The name of the command, e.g. graph/vertex_outdegree
@@ -83,7 +83,7 @@ class VertexOutDegreePlugin
    */
   override def name: String = "graph/vertex_outdegree"
 
-  override def execute(arguments: VertexOutDegreeInput)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: VertexOutDegreeInput)(implicit invocation: Invocation): FrameReference = {
 
     /* Load the Frame from the frame id */
     val graph: SparkGraph = arguments.graph
