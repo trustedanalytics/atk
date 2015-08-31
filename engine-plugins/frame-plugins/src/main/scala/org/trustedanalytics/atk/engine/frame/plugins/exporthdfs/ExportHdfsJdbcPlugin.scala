@@ -16,7 +16,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Export a frame to Jdbc table
  */
 @PluginDoc(oneLine = "Write current frame to Jdbc table.",
-  extended = """Table must exist in Jdbc.
+  extended = """Table will be created or appended to.
 Export of Vectors is not currently supported.""")
 class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitReturn] {
 
