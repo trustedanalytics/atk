@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.apache.spark.sql.Row
 import org.apache.spark.rdd.RDD
@@ -108,34 +110,10 @@ object MiscFrameFunctions extends Serializable {
   }
 
   /**
-   * generate 2 tuple instance in order to invoke pairRDD functions
-   * @param data row data
-   * @param keyIndex index of the key column
-   */
-  def createKeyValuePairFromRow(data: Row, keyIndex: Seq[Int]): (Seq[Any], Row) = {
-    var key: Seq[Any] = Seq()
-    for (i <- keyIndex)
-      key = key :+ data(i)
-
-    (key, data)
-  }
-
-  /**
-   * Remove duplicate rows by specifiying the unique columns
-   */
-  def removeDuplicatesByColumnNames(rdd: RDD[Row], schema: Schema, columnNames: List[String]): RDD[Row] = {
-    val columnIndices = schema.columnIndices(columnNames)
-    val pairRdd = rdd.map(row =>
-      MiscFrameFunctions.createKeyValuePairFromRow(row, columnIndices)
-    )
-    MiscFrameFunctions.removeDuplicatesByKey(pairRdd)
-  }
-
-  /**
    * Remove duplicate rows identified by the key
    * @param pairRdd rdd which has (key, value) structure in each row
    */
-  def removeDuplicatesByKey(pairRdd: RDD[(Seq[Any], Row)]): RDD[Row] = {
+  def removeDuplicatesByKey(pairRdd: RDD[(List[Any], Row)]): RDD[Row] = {
     pairRdd.reduceByKey((x, y) => x).map(x => x._2)
   }
 

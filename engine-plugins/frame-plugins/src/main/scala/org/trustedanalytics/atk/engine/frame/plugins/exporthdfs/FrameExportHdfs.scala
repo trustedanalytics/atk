@@ -119,7 +119,7 @@ object FrameExportHdfs extends Serializable {
     df.registerTempTable("mytable")
 
     val beginstring = "{\"name\": \"" + tablename + "\",\"type\": \"record\",\"fields\": "
-    val array = FrameRdd.schemaToHiveType(frameRdd.frameSchema).map(column => "{\"name\":\"" + column._1 + "\", \"type\":\"" + column._2 + "\"}")
+    val array = FrameRdd.schemaToHiveType(frameRdd.frameSchema).map(column => "{\"name\":\"" + column._1 + "\", \"type\":[\"null\",\"" + column._2 + "\"]}")
     val colSchema = array.mkString("[", ",", "]")
     val endstring = "}"
     val schema = beginstring + colSchema + endstring

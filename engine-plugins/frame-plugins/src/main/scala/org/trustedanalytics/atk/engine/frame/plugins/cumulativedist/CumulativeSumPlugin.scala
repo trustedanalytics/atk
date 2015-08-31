@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
-import org.trustedanalytics.atk.domain.frame.{ CumulativeSumArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.CumulativeSumArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -38,7 +39,7 @@ values and keeping track of the current cumulative sum for each value.
 Notes
 -----
 This method applies only to columns containing numerical data.""")
-class CumulativeSumPlugin extends SparkCommandPlugin[CumulativeSumArgs, FrameEntity] {
+class CumulativeSumPlugin extends SparkCommandPlugin[CumulativeSumArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -59,12 +60,11 @@ class CumulativeSumPlugin extends SparkCommandPlugin[CumulativeSumArgs, FrameEnt
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: CumulativeSumArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CumulativeSumArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    val sampleIndex = frame.schema.columnIndex(arguments.sampleCol)
 
     // run the operation
-    val cumulativeDistRdd = CumulativeDistFunctions.cumulativeSum(frame.rdd, sampleIndex)
+    val cumulativeDistRdd = CumulativeDistFunctions.cumulativeSum(frame.rdd, arguments.sampleCol)
     val updatedSchema = frame.schema.addColumnFixName(Column(arguments.sampleCol + "_cumulative_sum", DataTypes.float64))
 
     // save results

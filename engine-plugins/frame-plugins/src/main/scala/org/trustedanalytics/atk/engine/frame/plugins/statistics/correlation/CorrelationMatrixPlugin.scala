@@ -39,8 +39,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Notes
 -----
 This method applies only to columns containing numerical data.""",
-  returns = "A matrix with the correlation values for the columns.")
-class CorrelationMatrixPlugin extends SparkCommandPlugin[CorrelationMatrixArgs, FrameEntity] {
+  returns = "A Frame with the matrix of the correlation values for the columns.")
+class CorrelationMatrixPlugin extends SparkCommandPlugin[CorrelationMatrixArgs, FrameReference] {
 
   /**
    * The name of the command
@@ -61,7 +61,7 @@ class CorrelationMatrixPlugin extends SparkCommandPlugin[CorrelationMatrixArgs, 
    * @param arguments input specification for correlation matrix
    * @return value of type declared as the Return type
    */
-  override def execute(arguments: CorrelationMatrixArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CorrelationMatrixArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     frame.schema.validateColumnsExist(arguments.dataColumnNames)
 

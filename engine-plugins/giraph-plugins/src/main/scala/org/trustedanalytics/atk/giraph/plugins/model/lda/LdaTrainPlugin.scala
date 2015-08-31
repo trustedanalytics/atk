@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
@@ -57,7 +58,6 @@ class LdaTrainPlugin
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
     val frames = engine.frames
-    val config = configuration
 
     // validate arguments
     val frame = frames.expectFrame(arguments.frame)
@@ -67,15 +67,17 @@ class LdaTrainPlugin
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run
-    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(config, "giraph")
+    val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
 
     val giraphConf = new LdaConfiguration(hConf)
 
-    val docOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA doc results")))
-    val wordOut = frames.prepareForSave(CreateEntityArgs(description = Some("LDA word results")))
+    val docOut = frames.create(CreateEntityArgs(description = Some("LDA doc results")))
+    val wordOut = frames.create(CreateEntityArgs(description = Some("LDA word results")))
+    val docOutSaveInfo = frames.prepareForSave(docOut)
+    val wordOutSaveInfo = frames.prepareForSave(wordOut)
 
     val inputFormatConfig = new LdaInputFormatConfig(frame.getStorageLocation, frame.schema)
-    val outputFormatConfig = new LdaOutputFormatConfig(docOut.getStorageLocation, wordOut.getStorageLocation)
+    val outputFormatConfig = new LdaOutputFormatConfig(docOutSaveInfo.targetPath, wordOutSaveInfo.targetPath)
     val ldaConfig = new LdaConfig(inputFormatConfig, outputFormatConfig, arguments)
 
     giraphConf.setLdaConfig(ldaConfig)
@@ -90,13 +92,15 @@ class LdaTrainPlugin
 
     val report = GiraphJobManager.run(s"ia_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
       classOf[CVB0LDAComputation].getCanonicalName,
-      config, giraphConf, invocation, "lda-learning-report_0")
+      giraphConf,
+      invocation,
+      "lda-learning-report_0")
 
     val resultsColumn = Column("lda_results", DataTypes.vector(arguments.getNumTopics))
 
     // After saving update timestamps, status, row count, etc.
-    frames.postSave(None, docOut.toReference, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
-    frames.postSave(None, wordOut.toReference, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    frames.postSave(docOut, docOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
+    frames.postSave(wordOut, wordOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
     LdaTrainResult(frames.expectFrame(docOut.toReference), frames.expectFrame(wordOut.toReference), report)
   }

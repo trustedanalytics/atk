@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Copies specified columns into a new Frame object, optionally
 renaming them and/or filtering them.""",
   returns = "New Frame object.")
-class CopyFramePlugin extends SparkCommandPlugin[CopyFrameArgs, FrameEntity] {
+class CopyFramePlugin extends SparkCommandPlugin[CopyFrameArgs, FrameReference] {
 
   override def name: String = "frame/copy"
 
@@ -53,7 +53,7 @@ class CopyFramePlugin extends SparkCommandPlugin[CopyFrameArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: CopyFrameArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CopyFrameArgs)(implicit invocation: Invocation): FrameReference = {
 
     val frame: SparkFrame = arguments.frame
 

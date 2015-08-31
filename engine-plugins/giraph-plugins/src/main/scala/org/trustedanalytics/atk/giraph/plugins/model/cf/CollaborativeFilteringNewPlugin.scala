@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.model.cf
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 
 import spray.json._
@@ -248,7 +248,7 @@ specified edge property values, and then writes each user-factors vector to its
 user vertex in a specified vertex property name and each item-factors vector to
 its item vertex in the specified vertex property name.
 """)
-class CollaborativeFilteringNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelEntity] {
+class CollaborativeFilteringNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -257,7 +257,7 @@ class CollaborativeFilteringNewPlugin extends CommandPlugin[GenericNewModelArgs,
    */
   override def name: String = "model:collaborative_filtering/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     val models = engine.models
     models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:collaborativefiltering_new")))
   }

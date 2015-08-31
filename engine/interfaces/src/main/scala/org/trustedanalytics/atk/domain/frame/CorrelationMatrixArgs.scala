@@ -22,10 +22,10 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Input arguments class for correlation matrix
  */
 case class CorrelationMatrixArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
-                                 @ArgDoc("""The names of the column from
+                                 @ArgDoc("""The names of the columns from
 which to compute the matrix.""") dataColumnNames: List[String],
-                                 @ArgDoc("""The name for the new
-matrix.""") matrixName: Option[String] = None) {
+                                 @ArgDoc("""The name for the returned
+matrix Frame.""") matrixName: Option[String] = None) {
   require(frame != null, "frame is required")
   require(dataColumnNames.size >= 2, "two or more data columns are required")
   require(!dataColumnNames.contains(null), "data columns names cannot be null")
