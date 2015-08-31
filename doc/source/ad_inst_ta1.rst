@@ -188,7 +188,7 @@ To install the *yum-s3* package, do this:
 |PACKAGE| Private Repository
 ------------------------
 
-Create '/etc/yum.repos.d/ta.repo':
+Create '/etc/yum.repos.d/atk.repo':
 
 .. only:: html
 
@@ -201,7 +201,7 @@ Create '/etc/yum.repos.d/ta.repo':
         > priority=1
         > s3_enabled=1
         > key_id=ACCESS_TOKEN
-        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/ta.repo
+        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/atk.repo
 
 
     This code is :download:`downloadable <_downloads/ta-repo.sh>` (open, copy, and paste).
@@ -218,7 +218,7 @@ Create '/etc/yum.repos.d/ta.repo':
         > priority=1
         > s3_enabled=1
         > key_id=ACCESS_TOKEN
-        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/ta.repo
+        > secret_key=SECRET_TOKEN" | sudo tee -a /etc/yum.repos.d/atk.repo
 
     Note: baseurl line above is broken for readability.
     It should be entered as a single line.
@@ -254,7 +254,7 @@ Troubleshooting Private Repository
     *   Incorect secret token/key
     *   The server time is out of sync with the world
 
-*   Double check the access and secret keys in the ta.repo file.
+*   Double check the access and secret keys in the atk.repo file.
 *   AWS S3 will fail with access denied errors if the system time is out of
     sync with the website.
     To keep the system time in sync with the website run:

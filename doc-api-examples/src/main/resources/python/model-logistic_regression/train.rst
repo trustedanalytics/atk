@@ -10,7 +10,7 @@ statistics about the quality of the trained model.
 
     .. code::
 
-        >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+        >>> my_model = atk.LogisticRegressionModel(name='LogReg')
         >>> metrics = my_model.train(train_frame, 'name_of_label_column', ['obs1', 'obs2'], 'frequency_column', num_classes=2, optimizer='LBFGS', compute_covariance=True)
 
         >>> metrics.num_features
@@ -38,7 +38,7 @@ statistics about the quality of the trained model.
 
     .. code::
 
-        >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+        >>> my_model = atk.LogisticRegressionModel(name='LogReg')
         >>> my_model.train(train_frame,'name_of_label_column', ['obs1', 'obs2'], 'frequency_column',
         ... num_classes=2, optimizer='LBFGS', compute_covariance=True)
 

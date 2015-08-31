@@ -15,17 +15,17 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 import math
 from trustedanalytics.rest.command import CommandServerError
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 _multiprocess_can_split_ = True
 
@@ -43,15 +43,15 @@ class FrameAssignSampleTests(unittest.TestCase):
     def setUp(self):
         # there's already a "splits" column in this data set, but for testing purposes, it doesn't affect anything
         print "define csv file"
-        self.schema = [('user', ta.int32),
+        self.schema = [('user', atk.int32),
                          ('vertex_type', str),
-                         ('movie', ta.int32),
-                         ('rating', ta.int32),
+                         ('movie', atk.int32),
+                         ('rating', atk.int32),
                          ('splits', str)]
-        self.csv = ta.CsvFile("/datasets/movie.csv", self.schema)
+        self.csv = atk.CsvFile("/datasets/movie.csv", self.schema)
 
         print "creating frame"
-        self.frame = ta.Frame(self.csv)
+        self.frame = atk.Frame(self.csv)
 
     def test_assign_sample_low_probabilities(self):
         try:

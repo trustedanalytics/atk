@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class FrameLoadMultipleFilesTest(unittest.TestCase):
     """
@@ -37,13 +37,13 @@ class FrameLoadMultipleFilesTest(unittest.TestCase):
     _multiprocess_can_split_ = True
 
     def test_frame_loading_multiple_files_with_wildcard(self):
-        csv = ta.CsvFile("/datasets/movie-part*.csv", schema= [('user', ta.int32),
+        csv = atk.CsvFile("/datasets/movie-part*.csv", schema= [('user', atk.int32),
                                                                ('vertex_type', str),
-                                                               ('movie', ta.int32),
-                                                               ('rating', ta.int32),
+                                                               ('movie', atk.int32),
+                                                               ('rating', atk.int32),
                                                                ('splits', str)])
 
-        frame = ta.Frame(csv)
+        frame = atk.Frame(csv)
         self.assertEquals(frame.row_count, 20, "frame should have 20 rows")
         self.assertEquals(len(frame.column_names), 5, "frame should have 5 columns")
         self.assertGreaterEqual(frame._size_on_disk, 0, "frame size on disk should be non-negative")

@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-import trustedanalytics as ta
-ta.server.port = 19099
-ta.connect()
+import trustedanalytics as atk
+atk.server.port = 19099
+atk.connect()
 
 
 import doctest
@@ -93,7 +93,7 @@ run_tests()
 #
 #     print "Running examples in %s" % relative_path
 #     return doctest.run_docstring_examples(content,
-#                                           {"ta": ta},
+#                                           {"atk": atk},
 #                                           verbose=True,
 #                                           optionflags=doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
 #
@@ -106,9 +106,9 @@ run_tests()
 
 # option 2
 #connection_header = """
-#>>> import trustedanalytics as ta
-#>>> ta.server.port = 19099
-#>>> ta.connect()
+#>>> import trustedanalytics as atk
+#>>> atk.server.port = 19099
+#>>> atk.connect()
 #-etc-
 #"""
 #content = "\n".join([connection_header, content])

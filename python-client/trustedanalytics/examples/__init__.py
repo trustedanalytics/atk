@@ -15,8 +15,8 @@
 #
 
 def connect():
-    import trustedanalytics as ta
+    import trustedanalytics as atk
 
-    ta.connect()
+    atk.connect()
 
-    return ta
+    return atk

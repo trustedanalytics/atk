@@ -63,9 +63,9 @@ def delete_existing_docstubs():
 delete_existing_docstubs()
 
 # Connect to running server
-import trustedanalytics as ta
-print "Using package: %s" % ta.__file__
-ta.connect()
+import trustedanalytics as atk
+print "Using package: %s" % atk.__file__
+atk.connect()
 
 
 from trustedanalytics.meta.metaprog import get_installation, has_entity_collection, get_entity_collection, get_function_text
@@ -322,7 +322,7 @@ delete_folder(dst_python_api_dir)
 copy_template(python_api)
 path = dst_python_api_dir
 print "Creating rst files for Python API docs, using root_path %s" % path
-ta._walk_api(get_obj_py_rst(path), get_attr_py_rst(path), include_init=True)
+atk._walk_api(get_obj_py_rst(path), get_attr_py_rst(path), include_init=True)
 walk_py_rst_collection_folders(path)  # this patches things up, writes some index.rst files
 
 # rest
@@ -330,14 +330,14 @@ delete_folder(dst_rest_api_dir)
 copy_template(rest_api)
 path = dst_rest_api_commands_dir  # the autogen stuff is just for commands/
 print "Creating rst files for REST API docs, using root_path %s" % path
-server_version, server_commands = download_server_details(ta.server)  # rather than walk api, use all the defs from the server
+server_version, server_commands = download_server_details(atk.server)  # rather than walk api, use all the defs from the server
 for c in server_commands:
     write_command_def_rest_rst_file(path, c)
 write_commands_index_rest_rst_file(path, server_commands)
 
 # spa
 print "Creating spa modules..."
-ta._walk_api(obj_spa, attr_spa, include_init=True)
+atk._walk_api(obj_spa, attr_spa, include_init=True)
 text_1, text_2 = get_doc_stub_modules_text(doc_stub_class_to_members_text_dict, doc_stub_import_return_types)
 write_text_to_file(spa_module1_file_name, text_1)
 write_text_to_file(spa_module2_file_name, text_2)

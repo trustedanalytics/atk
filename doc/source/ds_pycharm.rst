@@ -58,10 +58,10 @@ Setup
 
     a)  Name the file "test" and type in the following code::
 
-            import trustedanalytics as ta
-            ta.server.host = "correct host name or IP address"
-            ta.connect()
-            ta.server.ping()
+            import trustedanalytics as atk
+            atk.server.host = "correct host name or IP address"
+            atk.connect()
+            atk.server.ping()
 
     #)  If you see a yellow bar across the top of the file warning about
         "Package requirements" not being satisfied then your system is not

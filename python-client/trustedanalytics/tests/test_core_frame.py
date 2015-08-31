@@ -14,8 +14,8 @@
 # limitations under the License.
 #
 
-import iatest
-iatest.init()
+import atktest
+atktest.init()
 
 import unittest
 from mock import patch

@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class ApiExistsSmokeTest(unittest.TestCase):
     """
@@ -46,7 +46,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
     def test_expected_methods_exist_on_csvfile(self):
         self.assert_methods_defined(['annotation',
                                     'field_names',
-                                    'field_types'], ta.CsvFile)
+                                    'field_types'], atk.CsvFile)
 
     def test_expected_methods_exist_on_frame(self):
         self.assert_methods_defined(['add_columns',
@@ -97,7 +97,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.Frame)
+                                      'unflatten_column'], atk.Frame)
 
     def test_expected_methods_exist_on_vertexframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -147,7 +147,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.VertexFrame)
+                                      'unflatten_column'], atk.VertexFrame)
 
     def test_expected_methods_exist_on_edgeframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -196,7 +196,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.EdgeFrame)
+                                      'unflatten_column'], atk.EdgeFrame)
 
     def test_expected_methods_exist_on_graph(self):
         self.assert_methods_defined(['annotate_degrees',
@@ -215,7 +215,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'name',
                                      'status',
                                      'vertex_count',
-                                     'vertices'], ta.Graph)
+                                     'vertices'], atk.Graph)
 
     def test_expected_methods_exist_on_titangraph(self):
         self.assert_methods_defined(['annotate_degrees',
@@ -233,46 +233,46 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'name',
                                      'query',
                                      'status',
-                                     'vertex_sample'], ta.TitanGraph)
+                                     'vertex_sample'], atk.TitanGraph)
 
     def test_expected_methods_exist_on_titangraphml(self):
-        self.assert_methods_defined(['belief_propagation'], ta.core.api.TitanGraphMl)
+        self.assert_methods_defined(['belief_propagation'], atk.core.api.TitanGraphMl)
 
     def test_expected_methods_exist_on_kmeans_model(self):
         self.assert_methods_defined(["name",
                                      "predict",
-                                     "train"], ta.KMeansModel)
+                                     "train"], atk.KMeansModel)
     def test_expected_methods_exist_on_lda_model(self):
         self.assert_methods_defined(["name",
-                                    "train"], ta.LdaModel)
+                                    "train"], atk.LdaModel)
     def test_expected_methods_exist_on_collaborative_filtering_model(self):
         self.assert_methods_defined(["name",
                                     "train",
-                                    "recommend"], ta.CollaborativeFilteringModel)
+                                    "recommend"], atk.CollaborativeFilteringModel)
 
     def test_expected_methods_exist_on_libsvm_model(self):
         self.assert_methods_defined(["name",
                                      "predict",
                                      "score",
                                      "test",
-                                     "train"], ta.LibsvmModel)
+                                     "train"], atk.LibsvmModel)
 
     def test_expected_methods_exist_on_linear_regression_model(self):
         self.assert_methods_defined(["name",
                                      "predict",
-                                     "train"], ta.LinearRegressionModel)
+                                     "train"], atk.LinearRegressionModel)
 
     def test_expected_methods_exist_on_logistic_regression_model(self):
         self.assert_methods_defined(["name",
                                      "predict",
                                      "test",
-                                     "train"], ta.LogisticRegressionModel)
+                                     "train"], atk.LogisticRegressionModel)
 
     def test_expected_methods_exist_on_svm_model(self):
         self.assert_methods_defined(["name",
                                      "predict",
                                      "test",
-                                     "train"], ta.SvmModel)
+                                     "train"], atk.SvmModel)
 
     def test_expected_global_methods_exist(self):
         self.assert_methods_defined(['drop_frames',
@@ -283,7 +283,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'get_graph',
                                      'get_graph_names',
                                      'get_model',
-                                     'get_model_names'], ta)
+                                     'get_model_names'], atk)
 
     def assert_methods_defined(self, methods, clazz):
         for method in methods:

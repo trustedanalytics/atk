@@ -6,7 +6,7 @@ Given *my_graph* is a Graph object accessing a graph with data:
 
     .. code::
 
-        >>> my_graph = ta.get_graph('my_graph')
+        >>> my_graph = atk.get_graph('my_graph')
         >>> my_graph.query.gremlin("g.V [0..2]")
         {u'results': [{u'_vid': 4, u'source': 3, u'_type': u'vertex', u'_id': 30208, u'_label': u'vertex'}, {u'_vid': 3, u'source': 2, u'_type': u'vertex', u'_id': 19992, u'_label': u'vertex'}, {u'_vid': 1, u'source': 1, u'_type': u'vertex', u'_id': 23384, u'_label': u'vertex'}], u'run_time_seconds': 2.165}
 
@@ -14,7 +14,7 @@ Given *my_graph* is a Graph object accessing a graph with data:
 
     .. code::
 
-        >>> my_graph = ta.get_graph('my_graph')
+        >>> my_graph = atk.get_graph('my_graph')
         >>> my_graph.query.gremlin("g.V [0..2]")
         {u'results':
           [{u'_vid': 4,

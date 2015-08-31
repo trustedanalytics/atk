@@ -31,21 +31,21 @@
 #       execfile('/path/to/numbers.py')
 #
 
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
+atk.errors.show_details = True
 
-ta.connect()
+atk.connect()
 
-#ta.loggers.set_http()
+#atk.loggers.set_http()
 
 print("define csv file")
 schema =  [("number", str), ("factor", str), ("binary", str), ("isPrime", str), ("reverse", str), ("isPalindrome", str)]
-csv = ta.CsvFile("/numbers.csv", schema, delimiter=":", skip_header_lines=1)
+csv = atk.CsvFile("/numbers.csv", schema, delimiter=":", skip_header_lines=1)
 
 print("create frame")
-frame = ta.Frame(csv)
+frame = atk.Frame(csv)
 
 print("inspect frame")
 print frame.inspect(10)
@@ -57,14 +57,14 @@ print frame.inspect(10)
 print("frame row count " + str(frame.row_count))
 
 print("define graph parsing rules")
-number = ta.VertexRule("number", frame["number"],{ "isPrime": frame["isPrime"], "isPalindrome": frame["isPalindrome"]})
-factor = ta.VertexRule("number", frame["factor"])
-binary = ta.VertexRule("number", frame["binary"])
-reverse = ta.VertexRule("number", frame["reverse"])
+number = atk.VertexRule("number", frame["number"],{ "isPrime": frame["isPrime"], "isPalindrome": frame["isPalindrome"]})
+factor = atk.VertexRule("number", frame["factor"])
+binary = atk.VertexRule("number", frame["binary"])
+reverse = atk.VertexRule("number", frame["reverse"])
 
-hasFactor = ta.EdgeRule("hasFactor", number, factor, bidirectional=False)
-hasBinary = ta.EdgeRule("hasBinary", number, binary, bidirectional=False)
-hasReverse = ta.EdgeRule("hasReverse", number, reverse, bidirectional=True)
+hasFactor = atk.EdgeRule("hasFactor", number, factor, bidirectional=False)
+hasBinary = atk.EdgeRule("hasBinary", number, binary, bidirectional=False)
+hasReverse = atk.EdgeRule("hasReverse", number, reverse, bidirectional=True)
 
 print("create graph")
-graph = ta.TitanGraph([number, factor, binary, reverse, hasFactor, hasBinary, hasReverse])
+graph = atk.TitanGraph([number, factor, binary, reverse, hasFactor, hasBinary, hasReverse])

@@ -12,15 +12,15 @@ The commands to bring the data into a frame, where it can be worked on:
 
     .. code::
 
-        >>> my_csv = ta.CsvFile("original_data.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32]))
-        >>> my_frame = ta.Frame(source=my_csv)
+        >>> my_csv = atk.CsvFile("original_data.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32]))
+        >>> my_frame = atk.Frame(source=my_csv)
 
 .. only:: latex
 
     .. code::
 
-        >>> my_csv = ta.CsvFile("unflatten_column.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32)])
-        >>> my_frame = ta.Frame(source=my_csv)
+        >>> my_csv = atk.CsvFile("unflatten_column.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32)])
+        >>> my_frame = atk.Frame(source=my_csv)
 
 Looking at it:
 

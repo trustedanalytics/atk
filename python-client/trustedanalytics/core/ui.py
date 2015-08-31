@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 spaces_between_cols = 2  # consts
 ellipses = '...'
@@ -148,7 +148,7 @@ class RowsInspection(object):
 
     def get_rounder(self, float_type):
         num_digits = self.round
-        if isinstance(float_type, ta.vector):
+        if isinstance(float_type, atk.vector):
             def vector_rounder(value):
                 return round_vector(value, num_digits)
             return vector_rounder
@@ -159,12 +159,12 @@ class RowsInspection(object):
 
 
 def is_type_float(t):
-    tpe = ta.valid_data_types.get_from_type(t)
-    return tpe is ta.float32 or tpe is ta.float64 or isinstance(t, ta.vector)
+    tpe = atk.valid_data_types.get_from_type(t)
+    return tpe is atk.float32 or tpe is atk.float64 or isinstance(t, atk.vector)
 
 
 def is_type_unicode(t):
-    return ta.valid_data_types.get_from_type(t) is unicode
+    return atk.valid_data_types.get_from_type(t) is unicode
 
 
 def get_validated_positive_int(arg_name, arg_value):
@@ -207,7 +207,7 @@ def round_float(f, float_type, num_digits):
 
 def round_vector(v, num_digits):
     """provides a rounded, formatted string to represent the vector"""
-    return "[%s]" % ", ".join([round_float(f, ta.float64, num_digits) for f in v])
+    return "[%s]" % ", ".join([round_float(f, atk.float64, num_digits) for f in v])
 
 
 def identity(value):

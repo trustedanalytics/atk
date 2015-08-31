@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 
 class FrameDropDuplicatesTest(unittest.TestCase):
@@ -39,7 +39,7 @@ class FrameDropDuplicatesTest(unittest.TestCase):
 
     def setUp(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/duplicates.csv", schema= [('rank', ta.int32),
+        csv = atk.CsvFile("/datasets/duplicates.csv", schema= [('rank', atk.int32),
                                                                  ('city', str),
                                                                  ('population_2013', str),
                                                                  ('pop_2010', str),
@@ -47,7 +47,7 @@ class FrameDropDuplicatesTest(unittest.TestCase):
                                                                  ('county', str)], delimiter='|')
 
         print "create frame"
-        self.frame = ta.Frame(csv)
+        self.frame = atk.Frame(csv)
 
     def test_drop_duplicates(self):
         self.assertEqual(self.frame.column_names, ['rank', 'city', 'population_2013', 'pop_2010', 'change', 'county'])

@@ -15,28 +15,28 @@
 #
 
 import unittest
-import trustedanalytics as ia
+import trustedanalytics as atk
 
 # show full stack traces
-ia.errors.show_details = True
-ia.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ia.server.port != 19099:
-    ia.server.port = 19099
-ia.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class ModelRandomForestTest(unittest.TestCase):
     def testSvm(self):
         print "define csv file"
-        csv = ia.CsvFile("/datasets/RandomForest.csv", schema= [('Class', int),
-                                                               ('Dim_1', ia.float64),
-                                                               ('Dim_2',ia.float64)])
+        csv = atk.CsvFile("/datasets/RandomForest.csv", schema= [('Class', int),
+                                                               ('Dim_1', atk.float64),
+                                                               ('Dim_2',atk.float64)])
 
         print "create frame"
-        frame = ia.Frame(csv)
+        frame = atk.Frame(csv)
 
         print "Initializing the classifier model object"
-        classifier = ia.RandomForestClassifierModel()
+        classifier = atk.RandomForestClassifierModel()
 
         print "Training the model on the Frame"
         classifier.train(frame,'Class', ['Dim_1','Dim_2'],num_classes=2)
@@ -47,7 +47,7 @@ class ModelRandomForestTest(unittest.TestCase):
         self.assertEqual(output.column_names, ['Class', 'Dim_1','Dim_2', 'predicted_class'])
 
         print "Initializing the classifier model object"
-        regressor = ia.RandomForestRegressorModel()
+        regressor = atk.RandomForestRegressorModel()
 
         print "Training the model on the Frame"
         regressor.train(frame,'Class', ['Dim_1','Dim_2'])

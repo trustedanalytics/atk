@@ -15,23 +15,23 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class KcliqueTest(unittest.TestCase):
     def test_kclique(self):
         print "define csv file"
         noun_graph_data ="datasets/noun_graph_small.csv"
         schema = [("source",str),("target",str)]
-        noun_words_frame = ta.Frame(ta.CsvFile(noun_graph_data,schema))
-        graph = ta.Graph()
+        noun_words_frame = atk.Frame(atk.CsvFile(noun_graph_data,schema))
+        graph = atk.Graph()
 
         graph.define_vertex_type("source")
         graph.vertices["source"].add_vertices(noun_words_frame,"source")

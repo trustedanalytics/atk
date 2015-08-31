@@ -15,15 +15,15 @@
 #
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class FrameDropTest(unittest.TestCase):
     """
@@ -38,23 +38,23 @@ class FrameDropTest(unittest.TestCase):
 
     def test_frame_drop(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
-                                                                          ('b', ta.int32),
-                                                                          ('labels', ta.int32),
-                                                                          ('predictions', ta.int32)], delimiter=',', skip_header_lines=1)
+        csv = atk.CsvFile("/datasets/classification-compute.csv", schema= [('a', str),
+                                                                          ('b', atk.int32),
+                                                                          ('labels', atk.int32),
+                                                                          ('predictions', atk.int32)], delimiter=',', skip_header_lines=1)
 
         print "create frame"
-        frame = ta.Frame(csv, name="test_frame_drop")
+        frame = atk.Frame(csv, name="test_frame_drop")
 
         print "dropping frame by entity"
-        ta.drop_frames(frame)
-        frames = ta.get_frame_names()
+        atk.drop_frames(frame)
+        frames = atk.get_frame_names()
         self.assertFalse("test_frame_drop" in frames, "test_frame_drop should not exist in list of frames")
 
-        frame = ta.Frame(csv, name="test_frame_drop")
+        frame = atk.Frame(csv, name="test_frame_drop")
 
         print "dropping frame by name"
-        ta.drop_frames("test_frame_drop")
+        atk.drop_frames("test_frame_drop")
         self.assertFalse("test_frame_drop" in frames, "test_frame_drop should not exist in list of frames")
 
 

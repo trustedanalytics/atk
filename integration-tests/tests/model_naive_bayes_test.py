@@ -16,26 +16,26 @@
 
 
 import unittest
-import trustedanalytics as ta
+import trustedanalytics as atk
 
 # show full stack traces
-ta.errors.show_details = True
-ta.loggers.set_api()
+atk.errors.show_details = True
+atk.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
-ta.connect()
+if atk.server.port != 19099:
+    atk.server.port = 19099
+atk.connect()
 
 class ModelNaiveBayesTest(unittest.TestCase):
     def test_naive_bayes(self):
         print "define csv file"
-        schema = [("Class", ta.int32),("Dim_1", ta.int32),("Dim_2", ta.int32),("Dim_3",ta.int32)]
-        train_file = ta.CsvFile("/datasets/naivebayes_spark_data.csv", schema= schema)
+        schema = [("Class", atk.int32),("Dim_1", atk.int32),("Dim_2", atk.int32),("Dim_3",atk.int32)]
+        train_file = atk.CsvFile("/datasets/naivebayes_spark_data.csv", schema= schema)
         print "creating the frame"
-        train_frame = ta.Frame(train_file)
+        train_frame = atk.Frame(train_file)
 
         print "initializing the naivebayes model"
-        n = ta.NaiveBayesModel()
+        n = atk.NaiveBayesModel()
 
         print "training the model on the frame"
         n.train(train_frame, 'Class', ['Dim_1', 'Dim_2', 'Dim_3'])

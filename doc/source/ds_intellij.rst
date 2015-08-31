@@ -68,10 +68,10 @@ Setup
 #)  Choose :menuselection:`File --> New --> Python File`.
 #)  Name the file 'test' and type in the following code::
 
-        import trustedanalytics as ta
-        ta.server.host = "correct host name or IP address"
-        ta.connect()
-        ta.server.ping()
+        import trustedanalytics as atk
+        atk.server.host = "correct host name or IP address"
+        atk.connect()
+        atk.server.ping()
 
 #)  Choose :menuselection:`Run --> Run`, you should see the output::
 
