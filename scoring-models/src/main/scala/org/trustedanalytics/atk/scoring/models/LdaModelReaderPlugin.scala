@@ -15,8 +15,6 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import java.io._
-
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import spray.json._
@@ -26,17 +24,10 @@ class LdaModelReaderPlugin() extends ModelLoader {
   private var scoringModel: LdaScoringModel = _
 
   override def load(bytes: Array[Byte]): Model = {
-    try {
-      val str = new String(bytes)
-      println(str)
-      val json: JsValue = str.parseJson
-      val ldaModel = json.convertTo[LdaModel]
-      scoringModel = new LdaScoringModel(ldaModel)
-      scoringModel
-    }
-    catch {
-      //TODO: log the error
-      case e: IOException => throw e
-    }
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val ldaModel = json.convertTo[LdaModel]
+    scoringModel = new LdaScoringModel(ldaModel)
+    scoringModel
   }
 }

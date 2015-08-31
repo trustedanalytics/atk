@@ -94,13 +94,13 @@ class LdaParquetFrameVertexWriter(conf: LdaConfiguration,
     //context.getConfiguration.setBoolean(ParquetOutputFormat.ENABLE_JOB_SUMMARY, true)
     val fileName = s"/part-${context.getTaskAttemptID.getTaskID.getId}.parquet"
     context.getConfiguration.set(RowWriteSupport.SPARK_ROW_SCHEMA, LdaOutputFormat.LdaOutputRowSchema)
-    documentResultsWriter = docResultsOutputFormat.getRecordWriter(context, new Path(outputFormatConfig.documentResultsFileLocation + fileName))
 
-    context.getConfiguration.set(RowWriteSupport.SPARK_ROW_SCHEMA, LdaOutputFormat.LdaOutputRowSchema)
-    wordResultsWriter = wordResultsOutputFormat.getRecordWriter(context, new Path(outputFormatConfig.wordResultsFileLocation + fileName))
-
-    context.getConfiguration.set(RowWriteSupport.SPARK_ROW_SCHEMA, LdaOutputFormat.LdaOutputRowSchema)
-    topicResultsWriter = topicResultsOutputFormat.getRecordWriter(context, new Path(outputFormatConfig.topicResultsFileLocation + fileName))
+    documentResultsWriter = docResultsOutputFormat.getRecordWriter(context,
+      new Path(outputFormatConfig.documentResultsFileLocation + fileName))
+    wordResultsWriter = wordResultsOutputFormat.getRecordWriter(context,
+      new Path(outputFormatConfig.wordResultsFileLocation + fileName))
+    topicResultsWriter = topicResultsOutputFormat.getRecordWriter(context,
+      new Path(outputFormatConfig.topicResultsFileLocation + fileName))
   }
 
   override def close(context: TaskAttemptContext): Unit = {

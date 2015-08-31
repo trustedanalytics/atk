@@ -320,19 +320,19 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         }
 
         double wordCount = 0d;
-        Vector vector = vertex.getValue().getLdaResult().clone();
+
+        // LDA result before normalization contains word_count * probability of topic given word and document
+        Vector weightedGamma = vertex.getValue().getLdaResult();
+
         for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
             wordCount += edge.getValue().getWordCount();
         }
 
+        Vector topicsGivenWord = new DenseVector(new double[config.numTopics()]);
         if (wordCount > 0d) {
-            vector = vector.divide(wordCount);
+            topicsGivenWord = weightedGamma.divide(wordCount);
         }
-        else {
-            vector = vector.assign(0d);
-        }
-
-        vertex.getValue().setTopicGivenWord(vector);
+        vertex.getValue().setTopicGivenWord(topicsGivenWord);
     }
 
     /**

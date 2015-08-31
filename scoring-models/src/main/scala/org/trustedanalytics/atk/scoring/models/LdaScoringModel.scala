@@ -28,14 +28,8 @@ class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, l
 
   override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
     var score = Seq[Any]()
-    data.foreach { row =>
+    data.foreach { document =>
       {
-        val document: Array[String] = row
-
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => document(index) = value
-        }
-
         val predictReturn = predict(document.toList)
         score = score :+ predictReturn.toJson
       }
