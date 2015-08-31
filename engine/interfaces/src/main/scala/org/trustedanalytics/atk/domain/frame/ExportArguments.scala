@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.domain.frame
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
@@ -67,4 +68,16 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
                                @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: Option[String]) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
+}
+
+/**
+ * Input arguments class for export to Jdbc
+ */
+case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to jdbc""") frame: FrameReference,
+                              @ArgDoc("""jdbc table name""") tableName: String,
+                              @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
+                              @ArgDoc("""(optional) driver name""") driverName: Option[String],
+                              @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {
+  require(frame != null, "frame is required")
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
 }
