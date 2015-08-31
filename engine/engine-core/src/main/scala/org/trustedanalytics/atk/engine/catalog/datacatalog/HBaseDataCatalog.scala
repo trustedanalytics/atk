@@ -3,10 +3,12 @@ import org.apache.hadoop.hbase.client.ConnectionFactory
 import org.apache.hadoop.hbase.HBaseConfiguration
 
 import org.trustedanalytics.atk.domain.catalog.{ CatalogResponse, GenericCatalogResponse, DataCatalog }
+import org.trustedanalytics.atk.engine.Engine
+import org.trustedanalytics.atk.engine.plugin.Invocation
 
-class HBaseDataCatalog() extends DataCatalog {
+object HBaseDataCatalog extends DataCatalog {
   override val name: String = "HBase"
-  override def list: List[CatalogResponse] = {
+  override def list(engine: Engine)(implicit invocation: Invocation): List[CatalogResponse] = {
 
     val config = HBaseConfiguration.create()
     val hbadmin = ConnectionFactory.createConnection(config).getAdmin

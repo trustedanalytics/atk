@@ -333,7 +333,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
   override def listCatalog(catalogType: String)(implicit invocation: Invocation): Future[List[CatalogResponse]] = {
     future {
       withMyClassLoader {
-        SimpleCatalogFactory.getCatalogInstance(catalogType, this).list
+        SimpleCatalogFactory.getCatalogInstance(catalogType).list(this)
       }
     }
   }

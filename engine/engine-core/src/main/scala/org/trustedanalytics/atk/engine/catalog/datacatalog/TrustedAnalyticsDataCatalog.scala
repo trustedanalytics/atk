@@ -6,7 +6,7 @@ import org.apache.http.client.config.RequestConfig
 import org.apache.http.client.methods.{ CloseableHttpResponse, HttpGet }
 import org.apache.http.impl.client.HttpClients
 import org.trustedanalytics.atk.domain.catalog.{ DataCatalog, GenericCatalogResponse, CatalogResponse }
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.{ Engine, EngineConfig }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 
 import spray.json.JsValue
@@ -41,7 +41,7 @@ object DataCatalogResponseJsonProtocol extends DefaultJsonProtocol {
   implicit val datacatalogResponseFormat = jsonFormat4(DataCatalogResponse)
 }
 
-class TrustedAnalyticsDataCatalog()(implicit invocation: Invocation) extends DataCatalog {
+object TrustedAnalyticsDataCatalog extends DataCatalog {
 
   override val name: String = "TrustedAnalytics"
 
@@ -49,7 +49,7 @@ class TrustedAnalyticsDataCatalog()(implicit invocation: Invocation) extends Dat
     case m: MethodSymbol if m.isCaseAccessor => m
   }.toList.map(_.name.toString)
 
-  override def list: List[CatalogResponse] = {
+  override def list(engine: Engine)(implicit invocation: Invocation): List[CatalogResponse] = {
     val metadata = getCaseClassParameters[IndexedMetadataEntryWithID]
 
     val oauthTokenReceived = invocation.user.user.apiKey.getOrElse("Invalid OAuth token for TrustedAnalytics User")

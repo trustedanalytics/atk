@@ -358,12 +358,5 @@ trait EngineConfig extends EventLogging {
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None
   val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.keytab-file")) else None
 
-  val dataCatalogUri: String = config.getString("trustedanalytics.atk.engine.catalog.data-catalog-uri")
-  val catalogList: List[String] = {
-    import scala.collection.JavaConversions._
-    val catalogNames = for {
-      catalog <- config.getList("trustedanalytics.atk.engine.catalog.available").unwrapped()
-    } yield catalog.asInstanceOf[String]
-    catalogNames.toList
-  }
+  val dataCatalogUri = config.getString("trustedanalytics.atk.engine.catalog.data-catalog-uri")
 }

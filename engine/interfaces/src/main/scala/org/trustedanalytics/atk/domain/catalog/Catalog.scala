@@ -16,9 +16,12 @@
 
 package org.trustedanalytics.atk.domain.catalog
 
+import org.trustedanalytics.atk.engine.Engine
+import org.trustedanalytics.atk.engine.plugin.Invocation
+
 trait Catalog {
   def name: String
-  def list: List[CatalogResponse]
+  def list(engine: Engine)(implicit invocation: Invocation): List[CatalogResponse]
   //  def peek = ???
   //  def get = ???
 }

@@ -4,9 +4,9 @@ import org.trustedanalytics.atk.domain.catalog.{ DataCatalog, GenericCatalogResp
 import org.trustedanalytics.atk.engine.Engine
 import org.trustedanalytics.atk.engine.plugin.Invocation
 
-class FrameCatalog(engine: Engine)(implicit invocation: Invocation) extends DataCatalog {
+object FrameCatalog extends DataCatalog {
   override val name: String = "Frames"
-  def list: List[CatalogResponse] = {
+  def list(engine: Engine)(implicit invocation: Invocation): List[CatalogResponse] = {
     val frames = engine.frames.getFrames()
     val metadata = List("name", "description", "schema", "createdOn", "modifiedOn", "storageLocation", "rowCount", "lastReadDate")
     val data = for (f <- frames)
