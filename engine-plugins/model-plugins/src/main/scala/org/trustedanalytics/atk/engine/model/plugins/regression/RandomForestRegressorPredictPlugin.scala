@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
-import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }

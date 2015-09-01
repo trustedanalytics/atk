@@ -93,9 +93,10 @@ def return_bin_result(json_result):
 @postprocessor('model:lda/train')
 def return_lda_train(json_result):
     from trustedanalytics import get_frame
-    doc_frame = get_frame(json_result['doc_results']['uri'])
-    word_frame= get_frame(json_result['word_results']['uri'])
-    return { 'doc_results': doc_frame, 'word_results': word_frame, 'report': json_result['report'] }
+    doc_frame = get_frame(json_result['topics_given_doc']['uri'])
+    word_frame= get_frame(json_result['word_given_topics']['uri'])
+    topic_frame= get_frame(json_result['topics_given_word']['uri'])
+    return { 'topics_given_doc': doc_frame, 'word_given_topics': word_frame, 'topics_given_word': topic_frame, 'report': json_result['report'] }
 
 @postprocessor('model:logistic_regression/train')
 def return_logistic_regression_train(json_result):

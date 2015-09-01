@@ -15,14 +15,12 @@
 */
 
 package org.trustedanalytics.atk.giraph.config.lda
-
-import org.trustedanalytics.atk.domain.schema.Schema
 import org.apache.commons.lang3.StringUtils
 import org.apache.giraph.conf.GiraphConfiguration
 import org.apache.hadoop.conf.Configuration
-import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import LdaJsonFormat._
+import org.trustedanalytics.atk.domain.schema.Schema
+import spray.json._
 
 /**
  * Config for LDA Input
@@ -38,10 +36,14 @@ case class LdaInputFormatConfig(parquetFileLocation: String,
  * Configuration for LDA Output
  * @param documentResultsFileLocation parquet output frame file location in HDFS
  * @param wordResultsFileLocation parquet output frame file location in HDFS
+ * @param topicResultsFileLocation parquet output frame file location in HDFS
  */
-case class LdaOutputFormatConfig(documentResultsFileLocation: String, wordResultsFileLocation: String) {
+case class LdaOutputFormatConfig(documentResultsFileLocation: String,
+                                 wordResultsFileLocation: String,
+                                 topicResultsFileLocation: String) {
   require(StringUtils.isNotBlank(documentResultsFileLocation), "document lda results file location is required")
   require(StringUtils.isNotBlank(wordResultsFileLocation), "word lda results file location is required")
+  require(StringUtils.isNotBlank(topicResultsFileLocation), "topics given word results file location is required")
 }
 
 /**
@@ -83,6 +85,7 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
       args.getEvaluateCost,
       args.getNumTopics)
   }
+
   require(inputFormatConfig != null, "input format is required")
   require(outputFormatConfig != null, "output format is required")
   require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
@@ -99,11 +102,11 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
  */
 object LdaConfigJSONFormat {
   implicit val ldaInputFormatConfigFormat = jsonFormat2(LdaInputFormatConfig)
-  implicit val ldaOutputFormatConfigFormat = jsonFormat2(LdaOutputFormatConfig)
+  implicit val ldaOutputFormatConfigFormat = jsonFormat3(LdaOutputFormatConfig)
   implicit val ldaConfigFormat = jsonFormat11(LdaConfig)
 }
 
-import LdaConfigJSONFormat._
+import org.trustedanalytics.atk.giraph.config.lda.LdaConfigJSONFormat._
 
 /**
  * Wrapper so that we can use simpler API for getting configuration settings.
