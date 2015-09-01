@@ -242,6 +242,34 @@ object ScoringJsonReaderWriters {
 
   }
 
+  implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
+
+    override def write(obj: PrincipalComponentsData): JsValue = {
+      val singularValues = VectorFormat.write(obj.singularValues)
+      val meanVector = VectorFormat.write(obj.meanVector)
+      JsObject(
+        "k" -> obj.k.toJson,
+        "observationColumns" -> obj.observationColumns.toJson,
+        "meanCentered" -> obj.meanCentered.toJson,
+        "meanVector" -> meanVector,
+        "singularValues" -> singularValues,
+        "vFactor" -> obj.vFactor.toJson
+      )
+    }
+
+    override def read(json: JsValue): PrincipalComponentsData = {
+      val fields = json.asJsObject.fields
+      val k = getOrInvalid(fields, "k").convertTo[Int]
+      val observationColumns = getOrInvalid(fields, "observationColumns").convertTo[List[String]]
+      val meanCentered = getOrInvalid(fields, "meanCentered").convertTo[Boolean]
+      val meanVector = VectorFormat.read(getOrInvalid(fields, "meanVector"))
+      val singularValues = VectorFormat.read(getOrInvalid(fields, "singularValues"))
+      val vFactor = MatrixFormat.read(getOrInvalid(fields, "vFactor"))
+
+      new PrincipalComponentsData(k, observationColumns, meanCentered, meanVector, singularValues, vFactor)
+    }
+  }
+
   //  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
   //
   //    override def write(obj: NaiveBayesModel): JsValue = {

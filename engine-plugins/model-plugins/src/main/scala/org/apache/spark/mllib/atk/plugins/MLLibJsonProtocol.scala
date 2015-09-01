@@ -343,15 +343,10 @@ object MLLibJsonProtocol {
       val fields = json.asJsObject.fields
       val k = getOrInvalid(fields, "k").convertTo[Int]
       val observationColumns = getOrInvalid(fields, "observationColumns").convertTo[List[String]]
-
       val meanCentered = getOrInvalid(fields, "meanCentered").convertTo[Boolean]
-
       val meanVector = VectorFormat.read(getOrInvalid(fields, "meanVector"))
-
       val singularValues = VectorFormat.read(getOrInvalid(fields, "singularValues"))
-
       val vFactor = MatrixFormat.read(getOrInvalid(fields, "vFactor"))
-
       new PrincipalComponentsData(k, observationColumns, meanCentered, meanVector, singularValues, vFactor)
     }
   }
