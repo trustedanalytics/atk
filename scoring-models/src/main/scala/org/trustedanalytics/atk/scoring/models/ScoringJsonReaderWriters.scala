@@ -23,6 +23,8 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
+import scala.collection.immutable.Map
+
 /**
  * Implicit conversions for Logistic Regression objects to/from JSON
  */
@@ -243,7 +245,14 @@ object ScoringJsonReaderWriters {
   }
 
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
-
+    /**
+     * The write methods converts from PrincipalComponentsData to JsValue
+     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     * @return JsValue
+     */
     override def write(obj: PrincipalComponentsData): JsValue = {
       val singularValues = VectorFormat.write(obj.singularValues)
       val meanVector = VectorFormat.write(obj.meanVector)
@@ -257,6 +266,13 @@ object ScoringJsonReaderWriters {
       )
     }
 
+    /**
+     * The read methods converts from PrincipalComponentsData to JsValue
+     * @param json JsValue
+     * @return PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector: org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     */
     override def read(json: JsValue): PrincipalComponentsData = {
       val fields = json.asJsObject.fields
       val k = getOrInvalid(fields, "k").convertTo[Int]
@@ -270,6 +286,63 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object LdaModelFormat extends JsonFormat[LdaModel] {
+    /**
+     * The write methods converts from LdaModel to JsValue
+     * @param obj LdaModel. Where LdaModel's format is
+     *            LdaModel(val numTopics: Int,val topicWordMap: Map[String, scala.Vector])
+     * @return JsValue
+     */
+    override def write(obj: LdaModel): JsValue = {
+      JsObject(
+        "num_topics" -> JsNumber(obj.numTopics),
+        "topic_word_map" -> obj.topicWordMap.toJson
+      )
+    }
+
+    /**
+     * The read methods converts from LdaModel to JsValue
+     * @param json JsValue
+     * @return LdaModel with format LdaModel(val numTopics: Int,val topicWordMap: Map[String, scala.Vector])
+     */
+    override def read(json: JsValue): LdaModel = {
+      val fields = json.asJsObject.fields
+      val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
+      val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
+      LdaModel(numTopics, topicWordMap)
+    }
+  }
+
+  implicit object LdaModelPredictReturnFormat extends JsonFormat[LdaModelPredictReturn] {
+    /**
+     * The write methods converts from LdaModelPredictReturn to JsValue
+     * @param obj LdaModelPredictReturn. Where LdaModelPredictReturn's format is
+     *            LdaModelPredictReturn(val topicsGivenDoc: scala.Vector,val newWordsCount: Int, val newWordsPercentage: Double)
+     * @return JsValue
+     */
+    override def write(obj: LdaModelPredictReturn): JsValue = {
+      JsObject(
+        "topics_given_docs" -> obj.topicsGivenDoc.toJson,
+        "new_words_count" -> JsNumber(obj.newWordsCount),
+        "new_words_percentage" -> JsNumber(obj.newWordsPercentage)
+      )
+    }
+
+    /**
+     * The read methods converts from LdaModelPredictReturn to JsValue
+     * @param json JsValue
+     * @return LdaModelPredictReturn with format
+     *         LdaModelPredictReturn(val topicsGivenDoc: scala.Vector,val newWordsCount: Int, val newWordsPercentage: Double)
+     */
+    override def read(json: JsValue): LdaModelPredictReturn = {
+      val fields = json.asJsObject.fields
+      val topicsGivenDoc = getOrInvalid(fields, "topics_given_docs").convertTo[scala.Vector[Double]]
+      val newWordsCount = getOrInvalid(fields, "new_words_count").convertTo[Int]
+      val newWordsPercentage = getOrInvalid(fields, "new_words_percentage").convertTo[Double]
+
+      LdaModelPredictReturn(topicsGivenDoc, newWordsCount, newWordsPercentage)
+    }
+  }
   //  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
   //
   //    override def write(obj: NaiveBayesModel): JsValue = {

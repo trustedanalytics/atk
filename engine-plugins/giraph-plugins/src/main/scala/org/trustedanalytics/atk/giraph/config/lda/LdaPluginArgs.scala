@@ -18,13 +18,14 @@ package org.trustedanalytics.atk.giraph.config.lda
 
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import org.apache.commons.lang3.StringUtils
+import org.trustedanalytics.atk.giraph.plugins.model.lda.LdaModel
 
 /**
- * Arguments to the LDA plugin - see user docs for more on the parameters
+ * Arguments to the LDA train plugin - see user docs for more on the parameters
  */
-case class LdaTrainArgs(@ArgDoc("""Reference to the model for which communities
+case class LdaTrainArgs(@ArgDoc("""Reference to the model for which topics
 are to be determined.""") model: ModelReference,
                         @ArgDoc("""Input frame data.""") frame: FrameReference,
                         @ArgDoc("""Column Name for documents.
@@ -110,15 +111,45 @@ Default is 10.""") numTopics: Option[Int] = None) {
 
 }
 
-case class LdaTrainResult(docResults: FrameEntity, wordResults: FrameEntity, report: String) {
-  require(docResults != null, "document results are required")
-  require(wordResults != null, "word results are required")
+/**
+ * Return arguments to the LDA train plugin
+ *
+ * @param topicsGivenDoc Frame with conditional probabilities of topic given document
+ * @param wordGivenTopics Frame with conditional probabilities of word given topic
+ * @param topicsGivenWord Frame with conditional probabilities of topic given word
+ * @param report Configuration and learning curve report for LDA as a multiple line string
+ */
+case class LdaTrainResult(topicsGivenDoc: FrameEntity, wordGivenTopics: FrameEntity, topicsGivenWord: FrameEntity, report: String) {
+  require(topicsGivenDoc != null, "topic given document frame is required")
+  require(wordGivenTopics != null, "word given topic frame is required")
+  require(topicsGivenWord != null, "topic given word frame is required")
   require(StringUtils.isNotBlank(report), "report is required")
 }
+
+/**
+ * Arguments to the LDA predict plugin - see user docs for more on the parameters
+ */
+case class LdaModelPredictArgs(@ArgDoc("""Reference to the model for which topics are to be determined.""") model: ModelReference,
+                               @ArgDoc("""Document whose topics are to be predicted. """) document: List[String])
+
+/**
+ * Return arguments to the LDA predict plugin
+ *
+ * @param topicsGivenDoc Vector of conditional probabilities of topics given document
+ * @param newWordsCount Count of new words in test document not present in training set
+ * @param newWordsPercentage Percentage of new word in test document
+ */
+case class LdaModelPredictReturn(topicsGivenDoc: Vector[Double],
+                                 newWordsCount: Int,
+                                 newWordsPercentage: Double)
 
 /** Json conversion for arguments and return value case classes */
 object LdaJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   implicit val ldaFormat = jsonFormat11(LdaTrainArgs)
-  implicit val ldaResultFormat = jsonFormat3(LdaTrainResult)
+  implicit val ldaResultFormat = jsonFormat4(LdaTrainResult)
+  implicit val ldaModelFormat = jsonFormat2(LdaModel.apply)
+  implicit val ldaPredictArgsFormat = jsonFormat2(LdaModelPredictArgs)
+  implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
 }
+

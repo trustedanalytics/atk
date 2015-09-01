@@ -34,6 +34,9 @@ public class LdaVertexData implements Writable {
     /** The vector value at this vertex */
     private final VectorWritable ldaResult = new VectorWritable(new DenseVector());
 
+    /** The conditional probability of topic given word */
+    private final VectorWritable topicGivenWord = new VectorWritable(new DenseVector());
+
     public LdaVertexData() {
     }
 
@@ -45,17 +48,32 @@ public class LdaVertexData implements Writable {
         return ldaResult.get();
     }
 
+
+    public void setTopicGivenWord(Vector vector) {
+        topicGivenWord.set(vector);
+    }
+
+    public Vector getTopicGivenWord() {
+        return topicGivenWord.get();
+    }
+
     public double[] getLdaResultAsDoubleArray() {
         return VectorUtils.toDoubleArray(getLdaResult());
+    }
+
+    public double[] getTopicGivenWordAsDoubleArray() {
+        return VectorUtils.toDoubleArray(getTopicGivenWord());
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
         ldaResult.readFields(in);
+        topicGivenWord.readFields(in);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         ldaResult.write(out);
+        topicGivenWord.write(out);
     }
 }

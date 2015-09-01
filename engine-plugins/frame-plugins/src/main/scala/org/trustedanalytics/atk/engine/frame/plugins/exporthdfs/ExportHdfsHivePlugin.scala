@@ -16,22 +16,13 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
-import java.nio.file.FileSystem
-
+import org.apache.spark.SparkContext
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.DomainJsonProtocol
-import org.trustedanalytics.atk.domain.command.CommandDoc
 import org.trustedanalytics.atk.domain.frame.ExportHdfsHiveArgs
-import org.trustedanalytics.atk.engine.PluginDocAnnotation
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.HdfsFileStorage
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.frame.plugins.cumulativedist.EcdfJsonFormat
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.hadoop.fs.Path
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -66,6 +57,30 @@ class ExportHdfsHivePlugin extends SparkCommandPlugin[ExportHdfsHiveArgs, UnitRe
    */
   override def execute(arguments: ExportHdfsHiveArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    FrameExportHdfs.exportToHdfsHive(sc, frame.rdd, arguments.tableName)
+    exportToHdfsHive(sc, frame.rdd, arguments.tableName)
+  }
+
+  /**
+   * Export to a file in Hive format
+   *
+   * @param frameRdd input rdd containing all columns
+   * @param tablename table where to store the RDD
+   */
+  private def exportToHdfsHive(
+    sc: SparkContext,
+    frameRdd: FrameRdd,
+    tablename: String) {
+
+    val df = frameRdd.toDataFrameUsingHiveContext
+    df.registerTempTable("mytable")
+
+    val beginstring = "{\"name\": \"" + tablename + "\",\"type\": \"record\",\"fields\": "
+    val array = FrameRdd.schemaToHiveType(frameRdd.frameSchema).map(column => "{\"name\":\"" + column._1 + "\", \"type\":[\"null\",\"" + column._2 + "\"]}")
+    val colSchema = array.mkString("[", ",", "]")
+    val endstring = "}"
+    val schema = beginstring + colSchema + endstring
+
+    df.sqlContext.asInstanceOf[org.apache.spark.sql.hive.HiveContext].sql(s"CREATE TABLE " + tablename +
+      s" ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS AVRO TBLPROPERTIES ('avro.schema.literal'= '${schema}' ) AS SELECT * FROM mytable")
   }
 }

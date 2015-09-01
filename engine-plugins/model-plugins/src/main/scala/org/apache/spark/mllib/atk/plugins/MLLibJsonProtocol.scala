@@ -325,7 +325,14 @@ object MLLibJsonProtocol {
   }
 
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
-
+    /**
+     * The write methods converts from PrincipalComponentsData to JsValue
+     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     * @return JsValue
+     */
     override def write(obj: PrincipalComponentsData): JsValue = {
       val singularValues = VectorFormat.write(obj.singularValues)
       val meanVector = VectorFormat.write(obj.meanVector)
@@ -339,6 +346,14 @@ object MLLibJsonProtocol {
       )
     }
 
+
+    /**
+     * The read methods converts from PrincipalComponentsData to JsValue
+     * @param json JsValue
+     * @return PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector: org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     */
     override def read(json: JsValue): PrincipalComponentsData = {
       val fields = json.asJsObject.fields
       val k = getOrInvalid(fields, "k").convertTo[Int]

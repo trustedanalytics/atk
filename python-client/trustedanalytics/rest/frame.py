@@ -305,14 +305,14 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
         if isinstance(data, HBaseTable):
              arguments = data.to_json()
-             arguments['destination'] = frame._id
+             arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(data, JdbcTable):
              arguments = data.to_json()
-             arguments['destination'] = frame._id
+             arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
              self._handle_error(result)
              return
