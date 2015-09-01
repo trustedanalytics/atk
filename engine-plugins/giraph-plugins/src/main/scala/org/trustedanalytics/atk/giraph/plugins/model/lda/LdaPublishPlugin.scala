@@ -14,27 +14,26 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.model.plugins.clustering
+package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import MLLibJsonProtocol._
-import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
-import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 import org.trustedanalytics.atk.domain.StringValue
-import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, CommandPlugin, ApiMaturityTag, Invocation }
 // Implicits needed for JSON conversion
-import spray.json._
-import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import ModelPublishJsonProtocol._
+import spray.json._
 
 /**
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
-class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+  extended = """Creates a tar file with the trained Latent Dirichlet Allocation model.
+The tar file is used as input to the scoring engine to predict the conditional topic
+probabilities for a document.""",
+  returns = """Returns the HDFS path to the tar file""")
+class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -42,15 +41,9 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:k_means/publish"
+  override def name: String = "model:lda/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
 
   /**
    * Number of Spark jobs that get created by running this command
@@ -60,7 +53,7 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
   override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
 
   /**
-   * Get the predictions for observations in a test frame
+   * Publish trained Latent Dirichlet Allocation model
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -72,11 +65,8 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    //Extracting the KMeansModel from the stored JsObject
-    val kmeansData = model.data.convertTo[KMeansData]
-    val kmeansModel = kmeansData.kMeansModel
-    val jsvalue: JsValue = kmeansModel.toJson
-
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(),
+      "scoring-models",
+      "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin"))
   }
 }

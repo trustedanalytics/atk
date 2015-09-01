@@ -16,34 +16,24 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.apache.spark.mllib.clustering.KMeansModel
-import org.apache.spark.mllib.linalg.Vectors
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
+import spray.json._
+import ScoringJsonReaderWriters._
 
-class KMeansScoreModel(libKMeansModel: KMeansModel) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
+/**
+ * Scoring model for Latent Dirichlet Allocation
+ */
+class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
   override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
     var score = Seq[Any]()
-    var value: Int = 2
-    data.foreach { row =>
+    data.foreach { document =>
       {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = atof(value)
-        }
-        score = score :+ (predict(Vectors.dense(x)) + 1)
+        val predictReturn = predict(document.toList)
+        score = score :+ predictReturn.toJson
       }
     }
     score
   }
-
-  def atof(s: String): Double = {
-    s.toDouble
-  }
-
-  def atoi(s: String): Int = {
-    Integer.parseInt(s)
-  }
-
 }

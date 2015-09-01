@@ -25,7 +25,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -34,7 +34,7 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of this model
  */
-class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -43,7 +43,7 @@ class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelA
    */
   override def name: String = "model:random_forest_regressor/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:random_forest_regressor")))
   }
 }

@@ -137,6 +137,20 @@
 
     </build>
     <dependencies>
+
+        <!--START dependencies to our modules-->
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>scoring-interfaces</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--END dependencies to our modules-->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -144,11 +158,6 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-reflect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>scoring-interfaces</artifactId>
-            <version>master-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>

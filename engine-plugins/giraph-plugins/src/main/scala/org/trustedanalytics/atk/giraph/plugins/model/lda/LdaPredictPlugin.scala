@@ -14,50 +14,46 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.model.plugins.clustering
+package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import MLLibJsonProtocol._
-import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
-import org.trustedanalytics.atk.domain.StringValue
-import org.apache.hadoop.fs.Path
-// Implicits needed for JSON conversion
+import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.giraph.config.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaJsonFormat }
 import spray.json._
-import ModelPublishJsonProtocol._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import LdaJsonFormat._
 
 /**
- * Rename columns of a frame
+ * Predict plugin for Latent Dirichlet Allocation
  */
-@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
-class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
-
+@PluginDoc(oneLine = "Predict conditional probabilities of topics given document.",
+  extended =
+    """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
+The input document is represented as a list of strings""",
+  returns = """dict
+    Dictionary containing predicted topics.
+    The data returned is composed of multiple components:
+topics_given_doc : list of doubles
+    List of conditional probabilities of topics given document.
+new_words_count : int
+    Count of new words in test document not present in training set.
+new_words_percentage: double
+    Percentage of new words in test document.""")
+class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredictReturn] {
   /**
    * The name of the command.
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:k_means/publish"
+  override def name: String = "model:lda/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
 
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-
-  override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
+  override def numberOfJobs(arguments: LdaModelPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -68,15 +64,13 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
-
+  override def execute(arguments: LdaModelPredictArgs)(implicit invocation: Invocation): LdaModelPredictReturn = {
     val model: Model = arguments.model
+    val document: List[String] = arguments.document
 
-    //Extracting the KMeansModel from the stored JsObject
-    val kmeansData = model.data.convertTo[KMeansData]
-    val kmeansModel = kmeansData.kMeansModel
-    val jsvalue: JsValue = kmeansModel.toJson
-
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
+    val ldaModel = model.data.convertTo[LdaModel]
+    ldaModel.predict(document)
   }
+
 }
+

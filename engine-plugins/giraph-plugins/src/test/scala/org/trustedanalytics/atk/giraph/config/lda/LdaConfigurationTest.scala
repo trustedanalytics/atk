@@ -36,7 +36,7 @@ class LdaConfigurationTest extends WordSpec {
     "support ldaConfig json serialization/deserialization" in {
       val config = new LdaConfiguration(new Configuration())
       val ldaInputConfig = new LdaInputFormatConfig("input-location", new FrameSchema())
-      val ldaOutputConfig = new LdaOutputFormatConfig("doc-results", "word-results")
+      val ldaOutputConfig = new LdaOutputFormatConfig("doc-results", "word-results", "topic-results")
       val ldaArgs = new LdaTrainArgs(new ModelReference(1), new FrameReference(2), "doc", "word", "word_count")
       val ldaConfig = new LdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs)
       config.setLdaConfig(ldaConfig)

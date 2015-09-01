@@ -15,28 +15,19 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import java.io._
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters.KmeansModelFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.apache.spark.mllib.clustering.KMeansModel
-import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, Vector }
+import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import spray.json._
 
-class KMeansModelReaderPlugin() extends ModelLoader {
+class LdaModelReaderPlugin() extends ModelLoader {
 
-  private var myKMeansModel: KMeansScoreModel = _
+  private var scoringModel: LdaScoringModel = _
 
   override def load(bytes: Array[Byte]): Model = {
-    try {
-      val str = new String(bytes)
-      val json: JsValue = str.parseJson
-      val libKMeansModel = json.convertTo[KMeansModel]
-      myKMeansModel = new KMeansScoreModel(libKMeansModel)
-      myKMeansModel.asInstanceOf[Model]
-    }
-    catch {
-      //TODO: log the error
-      case e: IOException => throw e
-    }
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val ldaModel = json.convertTo[LdaModel]
+    scoringModel = new LdaScoringModel(ldaModel)
+    scoringModel
   }
 }
