@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
 import org.trustedanalytics.atk.engine.EngineConfig
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
@@ -47,7 +46,7 @@ report : str
    The configuration and learning curve report for Latent Dirichlet
    Allocation as a multiple line str.""")
 class LdaTrainPlugin
-    extends SparkCommandPlugin[LdaTrainArgs, LdaTrainResult] {
+    extends CommandPlugin[LdaTrainArgs, LdaTrainResult] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -113,12 +112,12 @@ class LdaTrainPlugin
     // After saving update timestamps, status, row count, etc.
     frames.postSave(docOut, docOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.documentColumnName), resultsColumn)))
     frames.postSave(wordOut, wordOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
-    frames.postSave(topicOut, topicOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
+    val topicFrame = frames.postSave(topicOut, topicOutSaveInfo, new FrameSchema(List(frame.schema.column(arguments.wordColumnName), resultsColumn)))
 
     val model: Model = arguments.model
-    val topicFrame: SparkFrame = topicOut.toReference
 
-    model.data = LdaModel.createLdaModel(topicFrame.rdd,
+    model.data = LdaModel.createLdaModel(frames.getAllRows(topicFrame),
+      topicFrame.schema,
       arguments.wordColumnName,
       resultsColumnName,
       arguments.getNumTopics

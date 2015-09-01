@@ -15,7 +15,9 @@
 */
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.apache.spark.frame.FrameRdd
+import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.domain.schema.Schema
+import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lda.LdaModelPredictReturn
 
 import scala.collection.immutable.Map
@@ -134,21 +136,26 @@ object LdaModel {
   /**
    * Create LDA model from frame
    *
-   * @param topicsGivenWord Frame with conditional probabilities of topics given word
+   * @param topicsGivenWord Iterable of rows from frame
+   *                        Each row contains word and conditional probabilities of topics given word
+   * @param frameSchema Frame schema
    * @param wordColumnName Name of column with words
    * @param topicProbColumnName Name of column with topic probabilities
    * @param numTopics Number of topics in trained model
    * @return LDA model
    */
-  def createLdaModel(topicsGivenWord: FrameRdd,
+  def createLdaModel(topicsGivenWord: Iterable[Array[Any]],
+                     frameSchema: Schema,
                      wordColumnName: String,
                      topicProbColumnName: String,
                      numTopics: Int): LdaModel = {
-    val topicWordMap = topicsGivenWord.mapRows(row => {
-      val word = row.value(wordColumnName).toString
-      val prob = row.vectorValue(topicProbColumnName)
+    val rowWrapper = new RowWrapper(frameSchema)
+    val topicWordMap = topicsGivenWord.map(row => {
+      val sqlRowWrapper = rowWrapper(new GenericRow(row))
+      val word = sqlRowWrapper.value(wordColumnName).toString
+      val prob = sqlRowWrapper.vectorValue(topicProbColumnName)
       (word, prob)
-    }).collect().toMap
+    }).toMap
 
     new LdaModel(numTopics, topicWordMap)
   }
