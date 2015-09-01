@@ -16,13 +16,19 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
+import java.nio.file.FileSystem
+
+import org.apache.commons.csv.{ CSVPrinter, CSVFormat }
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.ExportHdfsCsvArgs
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.HdfsFileStorage
-import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.hadoop.fs.Path
+
+import scala.collection.mutable.ArrayBuffer
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -60,6 +66,45 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, UnitRetu
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD
-    FrameExportHdfs.exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
+    exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
+  }
+
+  /**
+   * Export to a file in CSV format
+   *
+   * @param frameRdd input rdd containing all columns
+   * @param filename file path where to store the file
+   */
+  private def exportToHdfsCsv(
+    frameRdd: FrameRdd,
+    filename: String,
+    separator: Char,
+    count: Option[Int] = None,
+    offset: Option[Int] = None) {
+
+    val recCount = count.getOrElse(-1)
+    val recOffset = offset.getOrElse(0)
+
+    val filterRdd = if (recCount > 0) MiscFrameFunctions.getPagedRdd(frameRdd, recOffset, recCount, -1) else frameRdd
+    val headers = frameRdd.frameSchema.columnNames.mkString(separator.toString)
+    val csvFormat = CSVFormat.RFC4180.withDelimiter(separator)
+
+    val csvRdd = filterRdd.map(row => {
+      val stringBuilder = new java.lang.StringBuilder
+      val printer = new CSVPrinter(stringBuilder, csvFormat)
+      val array = row.toSeq.map(col => if (col == null) "" else {
+        if (col.isInstanceOf[ArrayBuffer[_]]) {
+          col.asInstanceOf[ArrayBuffer[Double]].mkString(",")
+        }
+        else {
+          col.toString
+        }
+      })
+      for (i <- array) printer.print(i)
+      stringBuilder.toString
+    })
+
+    val addHeaders = frameRdd.sparkContext.parallelize(List(headers)) ++ csvRdd
+    addHeaders.saveAsTextFile(filename)
   }
 }
