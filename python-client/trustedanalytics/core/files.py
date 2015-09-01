@@ -753,49 +753,5 @@ class JdbcTable(object):
     def __repr__(self):
         return json.dumps(self.to_json(), indent=2)
 
-class HiveQuery(object):
-    """
-    Define the object to retrieve the data from a hive table.
-
-    Parameters
-    ----------
-    uri : str
-        Hive connection string (as url)
-    driver_name : str
-        An optional driver name
-    query : initial query (for data filtering / processing)
-
-    Returns
-    -------
-    class : HiveTable object
-        An object which holds hive data.
-
-    Examples
-    --------
-    .. code::
-
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
-        >>> jdbcTable = tp.JdbcTable ("test",
-                                      "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
-                                      "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-                                      "select * FROM SomeTable")
-        >>> frame = tp.Frame(jdbcTable)
-        >>> frame.inspect()
-
-    """
-
-    def __init__(self, url):
-        if (not isinstance(url, str)):
-            raise ValueError("Incorrect url for hive connection string")
-
-        self.url = url
-
-    def to_json(self):
-        return {"url": self.url}
-
-    def __repr__(self):
-        return json.dumps(self.to_json(), indent=2)
-
 
 
