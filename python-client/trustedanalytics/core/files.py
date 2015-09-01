@@ -633,13 +633,16 @@ class HiveQuery(DataFile):
 
     annotation = "hive_settings"
 
-    def __init__(self, sql_query):
-        if not sql_query or not isinstance(sql_query, basestring):
+    def __init__(self, query):
+        if not query or not isinstance(query, basestring):
             raise ValueError("The query must be a non-empty string")
-        self.file_name = sql_query
+        self.query = query
+
+    def to_json(self):
+        return {"query": self.query}
 
     def __repr__(self):
-        return repr(self.file_name)
+        return json.dumps(self.to_json(), indent=2)
 
 
 
