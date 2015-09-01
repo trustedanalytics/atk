@@ -340,11 +340,8 @@ object MLLibJsonProtocol {
       val fields = json.asJsObject.fields
       val k = getOrInvalid(fields, "k").convertTo[Int]
       val observationColumns = getOrInvalid(fields, "observationColumns").convertTo[List[String]]
-
       val singularValues = VectorFormat.read(getOrInvalid(fields, "singularValues"))
-
       val vFactor = MatrixFormat.read(getOrInvalid(fields, "vFactor"))
-
       new PrincipalComponentsData(k, observationColumns, singularValues, vFactor)
     }
   }
@@ -362,11 +359,11 @@ object MLLibJsonProtocol {
 
   implicit object FeatureTypeFormat extends JsonFormat[FeatureType] {
     override def write(obj: FeatureType): JsValue = {
-      JsObject("featuretype" -> obj.toString.toJson)
+      JsObject("featureType" -> obj.toString.toJson)
     }
     override def read(json: JsValue): FeatureType = {
       val fields = json.asJsObject.fields
-      val f = getOrInvalid(fields, "featuretype").convertTo[String]
+      val f = getOrInvalid(fields, "featureType").convertTo[String]
       FeatureType.withName(f)
     }
   }
@@ -375,7 +372,7 @@ object MLLibJsonProtocol {
     override def write(obj: Split): JsValue = {
       JsObject("feature" -> obj.feature.toJson,
         "threshold" -> obj.threshold.toJson,
-        "featuretype" -> FeatureTypeFormat.write(obj.featureType),
+        "featureType" -> FeatureTypeFormat.write(obj.featureType),
         "categories" -> obj.categories.toJson)
     }
 
