@@ -16,6 +16,20 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
+/**
+ * Results for Random Forest Classifier Train plugin
+ *
+ * @param observationColumns List of column name(s) on which the model was trained
+ * @param labelColumn Column name containing the true label for each observation
+ * @param numClasses Number of classes the model is trained classify
+ * @param numTrees Number of trees in the trained random forest model
+ * @param numNodes Number of nodes in the trained random forest model
+ * @param featureSubsetCategory Number of features to consider for splits at each node
+ * @param impurity Criterion used for information gain calculation
+ * @param maxDepth Maximum depth of the tree
+ * @param maxBins Maximum number of bins used for splitting features
+ * @param seed Random seed for bootstrapping and choosing feature subsets
+ */
 case class RandomForestClassifierTrainReturn(observationColumns: List[String],
                                              labelColumn: String,
                                              numClasses: Int,
