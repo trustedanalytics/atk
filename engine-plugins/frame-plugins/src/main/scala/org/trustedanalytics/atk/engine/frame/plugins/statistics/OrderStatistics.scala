@@ -27,7 +27,7 @@ import scala.reflect.ClassTag
  * @param ordering Ordering on the data items.
  * @tparam T The type of the data objects. It must have an ordering function in scope.
  */
-class OrderStatistics[T: ClassTag](dataWeightPairs: RDD[(T, Double)])(implicit ordering: Ordering[T])
+class OrderStatistics[T: ClassTag](dataWeightPairs: RDD[(T, Double)], isInputSorted: Boolean = false)(implicit ordering: Ordering[T])
     extends Serializable {
 
   /**
@@ -47,29 +47,38 @@ class OrderStatistics[T: ClassTag](dataWeightPairs: RDD[(T, Double)])(implicit o
    */
   private def computeMedian: Option[T] = {
 
-    val sortedDataWeightPairs: RDD[(T, BigDecimal)] =
+    val filteredWeightPairs: RDD[(T, BigDecimal)] =
       dataWeightPairs.filter({ case (data, weight) => NumericValidationUtils.isFinitePositive(weight) }).
-        map({ case (data, weight) => (data, BigDecimal(weight)) }).sortByKey(ascending = true)
+        map({ case (data, weight) => (data, BigDecimal(weight)) })
 
-    val weightsOfPartitions: Array[BigDecimal] = sortedDataWeightPairs.mapPartitions(sumWeightsInPartition).collect()
+    val sortedDataWeightPairs = if (isInputSorted) filteredWeightPairs else filteredWeightPairs.sortByKey(ascending = true)
+    sortedDataWeightPairs.cache()
+
+    val weightsOfPartitions: Array[BigDecimal] =
+      sortedDataWeightPairs.mapPartitions(sumWeightsInPartition, preservesPartitioning = true).collect()
 
     val totalWeight: BigDecimal = weightsOfPartitions.sum
 
-    if (totalWeight <= 0) {
-      None
+    try {
+      if (totalWeight <= 0) {
+        None
+      }
+      else {
+
+        // the "median partition" is the partition the contains the median
+        val (indexOfMedianPartition, weightInPrecedingPartitions) = findMedianPartition(weightsOfPartitions, totalWeight)
+
+        val median: T = sortedDataWeightPairs.mapPartitionsWithIndex({
+          case (partitionIndex, iterator) =>
+            if (partitionIndex != indexOfMedianPartition) Iterator.empty
+            else medianInSingletonIterator[T](iterator, totalWeight, weightInPrecedingPartitions)
+        }).collect().head
+
+        Some(median)
+      }
     }
-    else {
-
-      // the "median partition" is the partition the contains the median
-      val (indexOfMedianPartition, weightInPrecedingPartitions) = findMedianPartition(weightsOfPartitions, totalWeight)
-
-      val median: T = sortedDataWeightPairs.mapPartitionsWithIndex({
-        case (partitionIndex, iterator) =>
-          if (partitionIndex != indexOfMedianPartition) Iterator.empty
-          else medianInSingletonIterator[T](iterator, totalWeight, weightInPrecedingPartitions)
-      }).collect().head
-
-      Some(median)
+    finally {
+      sortedDataWeightPairs.unpersist(blocking = false)
     }
   }
 

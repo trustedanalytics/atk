@@ -82,7 +82,7 @@ object LoadRddFunctions extends Serializable {
     else {
       val listColumn = List(Column("data_lines", DataTypes.str))
       val rows = fileContentRdd.map(s => Row(s))
-      ParseResultRddWrapper(new FrameRdd(new FrameSchema(listColumn), rows), null)
+      ParseResultRddWrapper(new FrameRdd(new FrameSchema(listColumn), rows), null, fileContentRdd)
     }
 
   }
@@ -183,10 +183,7 @@ object LoadRddFunctions extends Serializable {
         .map(rowParseResult => rowParseResult.row)
 
       val schema = parser.arguments.schema
-      new ParseResultRddWrapper(FrameRdd.toFrameRdd(schema.schema, successesRdd), FrameRdd.toFrameRdd(ErrorFrameSchema, failuresRdd))
-    }
-    finally {
-      parseResultRdd.unpersist(blocking = false)
+      new ParseResultRddWrapper(FrameRdd.toFrameRdd(schema.schema, successesRdd), FrameRdd.toFrameRdd(ErrorFrameSchema, failuresRdd), parseResultRdd)
     }
   }
 

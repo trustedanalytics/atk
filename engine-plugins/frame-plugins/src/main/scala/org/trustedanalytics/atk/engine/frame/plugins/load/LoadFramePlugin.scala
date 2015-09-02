@@ -98,7 +98,9 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
       }
 
       // successfully parsed lines get added to the destination frame
-      LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines.dropIgnoreColumns())
+      val resultFrame = LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines.dropIgnoreColumns())
+      parseResult.unpersistOriginalRdd
+      resultFrame
     }
 
     else {
