@@ -88,7 +88,11 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
   }
 
   // TODO: this kind of standardized validation belongs in the Schema class
-  // Validate input arguments
+  /**
+   * Validate the input arguments
+   * @param frameSchema Schema of the input frame
+   * @param arguments Arguments to the principal components train plugin
+   */
   private def validatePrincipalComponentsArgs(frameSchema: Schema, arguments: PrincipalComponentsTrainArgs): Unit = {
     val dataColumnNames = arguments.observationColumns
     if (dataColumnNames.size == 1) {

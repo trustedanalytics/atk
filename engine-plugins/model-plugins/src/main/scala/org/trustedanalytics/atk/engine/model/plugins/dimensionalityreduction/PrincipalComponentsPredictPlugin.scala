@@ -135,6 +135,13 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
 
   }
 
+  /**
+   * Compute the t-squared index for an IndexedRowMatrix created from the input frame
+   * @param y IndexedRowMatrix storing the projection into k dimensional space
+   * @param E Singular Values
+   * @param k Number of dimensions
+   * @return IndexedRowMatrix with existing elements in the RDD and computed t-squared index
+   */
   def tSquaredIndex(y: IndexedRowMatrix, E: Vector, k: Int): IndexedRowMatrix = {
     val matrix = y.rows.map(row => {
       val rowVectorToArray = row.vector.toArray

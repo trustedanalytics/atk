@@ -28,7 +28,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 import spray.json._
 /**
- * Rename columns of a frame
+ * Publish a Principal Components Model for scoring
  */
 @PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
   extended = """Creates a tar file with the trained Principal Components Model.
