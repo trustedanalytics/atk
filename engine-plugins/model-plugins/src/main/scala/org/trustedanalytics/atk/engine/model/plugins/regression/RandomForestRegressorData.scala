@@ -28,7 +28,7 @@ import org.apache.spark.mllib.tree.model.RandomForestModel
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param randomForestModel Trained MLLib's LinearRegressionModel object
+ * @param randomForestModel Trained MLLib's RandomForestModel object
  * @param observationColumns Handle to the observation columns of the data frame
  */
 case class RandomForestRegressorData(randomForestModel: RandomForestModel, observationColumns: List[String]) {

@@ -608,7 +608,7 @@ class HiveQuery(DataFile):
 
     annotation = "hive_settings"
 
-    def __init__(self, sql_query):
+    def __init__(self, query):
         """
         Define the sql query to retrieve the data from a Hive table.
 
@@ -674,12 +674,15 @@ class HiveQuery(DataFile):
             >>> my_frame = ta.Frame(hive_query)
 
         """
-        if not sql_query or not isinstance(sql_query, basestring):
+        if not query or not isinstance(query, basestring):
             raise ValueError("The query must be a non-empty string")
-        self.file_name = sql_query
+        self.query = query
+
+    def to_json(self):
+        return {"query": self.query}
 
     def __repr__(self):
-        return repr(self.file_name)
+        return json.dumps(self.to_json(), indent=2)
 
 
 
@@ -799,7 +802,6 @@ class JdbcTable(object):
 
     def __repr__(self):
         return json.dumps(self.to_json(), indent=2)
-
 
 
 
