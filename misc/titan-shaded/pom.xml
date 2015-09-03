@@ -5,7 +5,7 @@
 
     <groupId>org.trustedanalytics.atk</groupId>
     <artifactId>titan-shaded</artifactId>
-    <version>0.5.4-SNAPSHOT</version>
+    <version>0.5.4b-SNAPSHOT</version>
 
     <description>
         This is a repacking of Titan for ATK with conflicts shaded.
@@ -288,8 +288,8 @@
                         </goals>
                         <configuration>
                             <shadeTestJar>true</shadeTestJar>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <shadedClassifierName>${project.artifactId}</shadedClassifierName>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>modified-titan</shadedClassifierName>
                             <artifactSet>
                                 <includes>
                                     <!--
@@ -299,9 +299,9 @@
                                     <include>com.thinkaurelius.titan:*</include>
                                     <include>com.esotericsoftware.kryo:*</include>
                                     <!-- Titan uses a different version of guava than the rest of ATK -->
-                                    <include>com.google.common:*</include>
-                                    <include>com.google.guava:*</include>
-                                    <include>com.google.protobuf:*</include>
+                                    <!--<include>com.google.common:*</include>-->
+                                    <!--<include>com.google.guava:*</include>-->
+                                    <!--<include>com.google.protobuf:*</include>-->
                                 </includes>
                             </artifactSet>
                             <filters>
@@ -335,18 +335,18 @@
                                     <!-- new package -->
                                     <shadedPattern>org.trustedanalytics.atk.shaded.com.esotericsoftware</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>com.google.guava</pattern>
-                                    <shadedPattern>org.trustedanalytics.atk.shaded.com.google.guava</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google.common</pattern>
-                                    <shadedPattern>org.trustedanalytics.atk.shaded.com.google.common</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.google.protobuf</pattern>
-                                    <shadedPattern>org.trustedanalytics.atk.shaded.com.google.protobuf</shadedPattern>
-                                </relocation>
+                                <!--<relocation>-->
+                                    <!--<pattern>com.google.guava</pattern>-->
+                                    <!--<shadedPattern>org.trustedanalytics.atk.shaded.com.google.guava</shadedPattern>-->
+                                <!--</relocation>-->
+                                <!--<relocation>-->
+                                    <!--<pattern>com.google.common</pattern>-->
+                                    <!--<shadedPattern>org.trustedanalytics.atk.shaded.com.google.common</shadedPattern>-->
+                                <!--</relocation>-->
+                                <!--<relocation>-->
+                                    <!--<pattern>com.google.protobuf</pattern>-->
+                                    <!--<shadedPattern>org.trustedanalytics.atk.shaded.com.google.protobuf</shadedPattern>-->
+                                <!--</relocation>-->
                             </relocations>
                         </configuration>
                     </execution>

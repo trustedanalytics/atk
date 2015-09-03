@@ -85,7 +85,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- START TITAN -->
-        <dep.titan-shaded.version>0.5.4-SNAPSHOT</dep.titan-shaded.version>
+        <dep.titan-shaded.version>0.5.4b-SNAPSHOT</dep.titan-shaded.version>
         <dep.aurelius.version>0.5.4</dep.aurelius.version>
         <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
         <dep.reflections>0.9.9-RC1</dep.reflections>
@@ -699,6 +699,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>com.google.guava</groupId>
                         <artifactId>guava</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>com.esotericsoftware.kryo</groupId>
+                        <artifactId>kryo</artifactId>
+                    </exclusion>
                     <!-- also, exclude deps we don't want in our project -->
                     <exclusion>
                         <groupId>org.apache.hbase</groupId>
@@ -747,6 +751,22 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <artifactId>asm</artifactId>
                         <groupId>org.ow2.asm</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>titan-shaded</artifactId>
+                <version>${dep.titan-shaded.version}</version>
+                <classifier>modified-titan</classifier>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.netty</groupId>
+                        <artifactId>netty</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.esotericsoftware.kryo</groupId>
+                        <artifactId>kryo</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
