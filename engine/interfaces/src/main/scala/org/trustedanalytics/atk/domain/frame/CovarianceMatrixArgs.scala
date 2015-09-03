@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Input arguments class for covariance matrix
  */
-case class CovarianceMatrixArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
+case class CovarianceMatrixArgs(frame: FrameReference,
                                 @ArgDoc("""The names of the column from which to compute the matrix.
 Names should refer to a single column of type vector, or two or more
 columns of numeric scalars.""") dataColumnNames: List[String],

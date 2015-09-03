@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param frame Handle to the data frame
  * @param observationColumns Handle to the observation column/s of the data frame
  */
-case class LibSvmTestArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class LibSvmTestArgs(model: ModelReference,
                           @ArgDoc("""A frame whose labels are to be predicted.""") frame: FrameReference,
                           @ArgDoc("""Column containing the actual label for each
 observation.""") labelColumn: String,

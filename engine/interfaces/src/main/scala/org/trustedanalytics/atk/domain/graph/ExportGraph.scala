@@ -21,6 +21,6 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Data needed to export a graph.
  */
-case class ExportGraph(@ArgDoc("""Reference of the source graph.""") graph: GraphReference,
+case class ExportGraph(graph: GraphReference,
                        @ArgDoc("""The name of the new graph.
 Default is None.""") newGraphName: Option[String] = None)

@@ -1,3 +1,5 @@
+.. _ad_gitune:
+
 .. index::
     single: Giraph
     single: performance

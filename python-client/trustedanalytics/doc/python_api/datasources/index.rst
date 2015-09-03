@@ -34,3 +34,10 @@ Pandas
 .. autoclass:: trustedanalytics.Pandas
     :members:
     :inherited-members:
+
+XmlFile
+-------
+.. autoclass:: trustedanalytics.XmlFile
+    :members:
+    :inherited-members:
+

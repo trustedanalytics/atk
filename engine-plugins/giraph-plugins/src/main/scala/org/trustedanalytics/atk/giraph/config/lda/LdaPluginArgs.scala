@@ -25,8 +25,7 @@ import org.trustedanalytics.atk.giraph.plugins.model.lda.LdaModel
 /**
  * Arguments to the LDA train plugin - see user docs for more on the parameters
  */
-case class LdaTrainArgs(@ArgDoc("""Reference to the model for which topics
-are to be determined.""") model: ModelReference,
+case class LdaTrainArgs(model: ModelReference,
                         @ArgDoc("""Input frame data.""") frame: FrameReference,
                         @ArgDoc("""Column Name for documents.
 Column should contain a str value.""") documentColumnName: String,

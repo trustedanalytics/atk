@@ -21,6 +21,5 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /** Arguments to RepartitionPlugin (see Spark API) */
-case class RepartitionArgs(
-  @ArgDoc("""<TBD>""") frame: FrameReference,
-  @ArgDoc("""<TBD>""") numberPartitions: Int)
+case class RepartitionArgs(frame: FrameReference,
+                           @ArgDoc("""<TBD>""") numberPartitions: Int)

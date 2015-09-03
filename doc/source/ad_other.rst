@@ -1,3 +1,5 @@
+.. _ad_other:
+
 .. _windows_python_setup:
 
 .. index::

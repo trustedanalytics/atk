@@ -29,13 +29,11 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * @param startTag optional start tag for filtering
  * @param endTag optional end tag for filtering
  */
-case class HBaseArgs(
-    @ArgDoc("""DataFrame to load data into.
-Should be either a uri or id.""") destination: FrameReference,
-    @ArgDoc("""hbase table name""") tableName: String,
-    @ArgDoc("""hbase schema as a list of tuples (columnFamily, columnName, dataType for cell value)""") schema: List[HBaseSchemaArgs],
-    @ArgDoc("""optional start tag for filtering""") startTag: Option[String] = None,
-    @ArgDoc("""optional end tag for filtering""") endTag: Option[String] = None) {
+case class HBaseArgs(destination: FrameReference,
+                     @ArgDoc("""hbase table name""") tableName: String,
+                     @ArgDoc("""hbase schema as a list of tuples (columnFamily, columnName, dataType for cell value)""") schema: List[HBaseSchemaArgs],
+                     @ArgDoc("""optional start tag for filtering""") startTag: Option[String] = None,
+                     @ArgDoc("""optional end tag for filtering""") endTag: Option[String] = None) {
 
   require(StringUtils.isNotEmpty(tableName), "database name cannot be null")
   require(schema != null, "table schema cannot be null")

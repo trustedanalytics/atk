@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.domain.graph
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
-case class DefineVertexArgs(@ArgDoc("""<TBD>""") graphRef: GraphReference,
+case class DefineVertexArgs(graphRef: GraphReference,
                             @ArgDoc("""Label of the vertex type.""") label: String) {
   require(graphRef != null, "graph is required")
   require(label != null, "label is required")
