@@ -144,4 +144,29 @@ class DataTypesTest extends FlatSpec with Matchers {
     }
   }
 
+  "isCompatibleDataType"  should "check if two data types are compatible" in {
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.str) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int32) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float32, DataTypes.float32) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float32, DataTypes.float64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.vector(2), DataTypes.vector(2)) shouldBe true
+
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.int32) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.int64) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.float32) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.float64) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.str, DataTypes.vector(2)) shouldBe false
+
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.float32) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.float64) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.vector(2)) shouldBe false
+
+    DataTypes.isCompatibleDataType(DataTypes.int64, DataTypes.float32) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int64, DataTypes.float64) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int64, DataTypes.vector(2)) shouldBe false
+
+    DataTypes.isCompatibleDataType(DataTypes.vector(2), DataTypes.vector(3)) shouldBe false
+
+  }
 }
