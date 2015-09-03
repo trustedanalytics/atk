@@ -48,11 +48,11 @@ Equal width binning places column values into groups such that the values
 in each group fall within the same interval and the interval width for each
 group is equal.
 
-Notes
------
-1)  Unicode in column names is not supported and will likely cause the
+**Notes**
+
+#)  Unicode in column names is not supported and will likely cause the
     drop_frames() method (and others) to fail!
-2)  The num_bins parameter is considered to be the maximum permissible number
+#)  The num_bins parameter is considered to be the maximum permissible number
     of bins because the data may dictate fewer bins.
     For example, if the column to be binned has 10
     elements with only 2 distinct values and the *num_bins* parameter is

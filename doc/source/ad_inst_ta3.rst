@@ -1,3 +1,5 @@
+.. _ad_inst_ta3:
+
 Configuration Script
 --------------------
 .. only:: html

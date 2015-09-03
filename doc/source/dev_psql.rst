@@ -1,3 +1,5 @@
+.. _dev_psql:
+
 .. index::
     single: metadata
     single: H2
@@ -11,15 +13,15 @@ Tracking Metadata
     :local:
     :backlinks: none
 
-By default, the |PACKAGE| uses H2, an in-memory database that is lost on
+By default, |PACKAGE| uses H2, an in-memory database that is lost on
 application restart.
 This is convenient for testing.
 H2 setup is completely automatic.
 No steps below are needed for H2.
 
 The configuration script, used during normal installation (see
-:ref:`REST Server Configuration <rest_server_configuration>`), changes this
-behavior to use PostgreSQL.
+:ref:`REST Server Configuration <rest_server_configuration>`),
+changes this behavior to use PostgreSQL.
 
 ----------------
 Using PostgreSQL

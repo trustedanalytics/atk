@@ -23,6 +23,6 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for dropping duplicates rows per uniqueness criteria match
  */
-case class DropDuplicatesArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
+case class DropDuplicatesArgs(frame: FrameReference,
                               @ArgDoc("""Column name(s) to identify duplicates.
 Default is the entire row is compared.""") unique_columns: Option[SingletonOrListValue[String]] = None)

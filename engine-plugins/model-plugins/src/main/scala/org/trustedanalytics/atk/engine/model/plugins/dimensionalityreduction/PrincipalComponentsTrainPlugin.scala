@@ -38,7 +38,7 @@ import MLLibJsonProtocol._
   returns =
     """Values of the  principal components model object storing:
     | principal components count used to train the model,
-    |  the list of observation columns on which the model was trained,
+    | the list of observation columns on which the model was trained,
     | the singular values vector and the vFactor matrix stored as an array of double values.
   """.stripMargin)
 class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {

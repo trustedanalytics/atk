@@ -58,67 +58,62 @@ import KCliquePercolationJsonFormat._
  */
 
 @PluginDoc(oneLine = "Find groups of vertices with similar attributes.",
-  extended = """Notes
------
-Spawns a number of Spark jobs that cannot be calculated before execution
-(it is bounded by the diameter of the clique graph derived from the input graph).
-For this reason, the initial loading, clique enumeration and clique-graph
-construction steps are tracked with a single progress bar (this is most of
-the time), and then successive iterations of analysis of the clique graph
-are tracked with many short-lived progress bars, and then finally the
-result is written out.
-
-|
-**Community Detection Using the K-Clique Percolation Algorithm**
+  extended = """**Community Detection Using the K-Clique Percolation Algorithm**
 
 **Overview**
 
-Modeling data as a graph captures relations |EM| friendship ties between social
-network users or chemical interactions between proteins.
-Analyzing the community structure of the graph reveals collections of entities
-that are more likely to interact amongst each
-other |EM| for example, a community of friends in a social network or the
-"community" of highly interacting proteins of a cellular process.
+Modeling data as a graph captures relations, for example, friendship ties
+between social network users or chemical interactions between proteins.
+Analyzing the structure of the graph reveals collections (often termed
+'communities') of vertices that are more likely to interact amongst each
+other.
+Examples could include a community of friends in a social network or a
+collection of highly interacting proteins in a cellular process.
 
-The |PACKAGE| version |version| provides community detection using the k-Clique
+|PACKAGE| provides community detection using the k-Clique
 percolation method first proposed by Palla et. al. [1]_ that has been widely
 used in many contexts.
-Other community detection algorithms may be offered in future releases of the
-|PACKAGE|.
 
 **K-Clique Percolation**
 
-K-clique percolation is one of many different methods for detecting community
-structure in graphs.
+K-clique percolation is a method for detecting community structure in graphs.
 Here we provide mathematical background on how communities are defined in the
 context of the k-clique percolation algorithm.
 
-A k-clique is with :math:`k` vertices in which all
-:math:`\left( \frac {k}{2} \right)` possible edges are present.
-A k-clique is certainly a community in the sense that its nodes are all
+A clique is a group of vertices in which every vertex is connected (via
+undirected edge) with every other vertex in the clique.
+This graphically looks like a triangle or a structure composed of triangles:
+
+.. image:: /k-clique_201508281155.*
+
+A clique is certainly a community in the sense that its vertices are all
 connected, but, it is too restrictive for most purposes,
-since it is natural that a few members of the community may not interact.
+since it is natural some members of a community may not interact.
+
+Mathematically, a k-clique has :math:`k` vertices, each with :math:`k - 1`
+common edges, each of which connects to another vertex in the k-clique.
 The k-clique percolation method forms communities by taking unions of k-cliques
-that overlap in :math:`k - 1` vertices.
+that have :math:`k - 1` vertices in common.
 
 **K-Clique Example**
 
-In the graph below, the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7,
-8}. Note that the nodes 9, 10, 11, 12 belong to no community at all, whereas 4
-belongs to two distinct (but overlapping) communities.
+In the graph below, the cliques are the sections defined by their triangular
+appearance and the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7, 8}.
+The vertices 9, 10, 11, 12 are not in 3-cliques, therefore they do not belong
+to any community.
+Vertex 4 belongs to two distinct (but overlapping) communities.
 
 .. image:: /ds_mlal_a1.png
 
-|
 **Distributed Implementation of K-Clique Community Detection**
 
 The implementation of k-clique community detection in |PACKAGE| is a fully
-distributed Apache Spark based implementation that follows the map-reduce
+distributed implementation that follows the map-reduce
 algorithm proposed in Varamesh et. al. [2]_ .
 
 It has the following steps:
 
-1.  A k-clique enumeration method is used to enumerate all k-cliques.
+#.  All k-cliques are :term:`enumerated <enumerate>`.
 #.  k-cliques are used to build a "clique graph" by declaring each k-clique to
     be a vertex in a new graph and placing edges between k-cliques that share
     k-1 vertices in the base graph.
@@ -129,7 +124,15 @@ It has the following steps:
     down to the base graph, providing each vertex with the set of k-clique
     communities to which it belongs.
 
-See :ref:`API <api_kmeans>` for implementation details.
+Notes
+-----
+Spawns a number of Spark jobs that cannot be calculated before execution
+(it is bounded by the diameter of the clique graph derived from the input graph).
+For this reason, the initial loading, clique enumeration and clique-graph
+construction steps are tracked with a single progress bar (this is most of
+the time), and then successive iterations of analysis of the clique graph
+are tracked with many short-lived progress bars, and then finally the
+result is written out.
 
 
 .. rubric:: Footnotes
