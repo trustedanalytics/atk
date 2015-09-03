@@ -107,7 +107,7 @@ class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRe
   override def numberOfJobs(arguments: RandomForestRegressorTrainArgs)(implicit invocation: Invocation) = 109
 
   /**
-   * Run MLLib's NaiveBayes() on the training frame and create a Model for it.
+   * Run MLLib's RandomForest trainRegressor on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that

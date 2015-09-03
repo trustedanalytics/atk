@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * Input arguments for principal components predict plugin
  */
 
-case class PrincipalComponentsPredictArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class PrincipalComponentsPredictArgs(model: ModelReference,
                                           @ArgDoc("""Frame whose principal components are to be computed.""") frame: FrameReference,
                                           @ArgDoc("""Option to mean center the columns. Default is true""") meanCentered: Boolean = true,
                                           @ArgDoc("""Indicator for whether the t-square index is to be computed.Default is false.""") tSquaredIndex: Boolean = false,

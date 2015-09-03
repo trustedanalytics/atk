@@ -34,7 +34,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "Compacts data from multiple rows based on cell data.",
   extended = """Groups together cells in all columns (less the composite key) using "," as string delimiter.
-The original rows are deleted. Thr grouping takes place based on a composite key passed as arguments.""")
+The original rows are deleted.
+The grouping takes place based on a composite key passed as arguments.""")
 class UnflattenColumnPlugin extends SparkCommandPlugin[UnflattenColumnArgs, UnitReturn] {
 
   private val defaultDelimiter = ","

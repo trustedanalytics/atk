@@ -367,9 +367,20 @@ object MLLibJsonProtocol {
   }
 
   implicit object AlgoFormat extends JsonFormat[Algo] {
+    /**
+     * The write method converts from MLLib's Algo to JsValue
+     * @param obj Algo
+     * @return JsValue
+     */
     override def write(obj: Algo): JsValue = {
       JsObject("algo" -> obj.toString.toJson)
     }
+
+    /**
+     * The read method converts from JsValue to MLLib's Algo
+     * @param json JsValue
+     * @return Algo
+     */
     override def read(json: JsValue): Algo = {
       val fields = json.asJsObject.fields
       val a = getOrInvalid(fields, "algo").convertTo[String]
@@ -378,40 +389,71 @@ object MLLibJsonProtocol {
   }
 
   implicit object FeatureTypeFormat extends JsonFormat[FeatureType] {
+    /**
+     * The write method converts from MLLib's FeatureType to JsValue
+     * @param obj FeatureType
+     * @return JsValue
+     */
     override def write(obj: FeatureType): JsValue = {
-      JsObject("featuretype" -> obj.toString.toJson)
+      JsObject("feature_type" -> obj.toString.toJson)
     }
+
+    /**
+     * The read method coneverts from JsValue to MLLib's FeatureType
+     * @param json JsValue
+     * @return FeatureType
+     */
     override def read(json: JsValue): FeatureType = {
       val fields = json.asJsObject.fields
-      val f = getOrInvalid(fields, "featuretype").convertTo[String]
+      val f = getOrInvalid(fields, "feature_type").convertTo[String]
       FeatureType.withName(f)
     }
   }
 
   implicit object SplitFormat extends JsonFormat[Split] {
+    /**
+     * The write method converts from MLLib's Split to JsValue
+     * @param obj Split(val feature:Int, val threshold: Double, val featureType: FeatureType, categories: List[Double])
+     * @return JsValue
+     */
     override def write(obj: Split): JsValue = {
       JsObject("feature" -> obj.feature.toJson,
         "threshold" -> obj.threshold.toJson,
-        "featuretype" -> FeatureTypeFormat.write(obj.featureType),
+        "feature_type" -> FeatureTypeFormat.write(obj.featureType),
         "categories" -> obj.categories.toJson)
     }
 
+    /**
+     * The read method converts from JsValue to MLLib's Split
+     * @param json JsValue
+     * @return Split(val feature:Int, val threshold: Double, val featureType: FeatureType, categories: List[Double])
+     */
     override def read(json: JsValue): Split = {
       val fields = json.asJsObject.fields
       val feature = getOrInvalid(fields, "feature").convertTo[Int]
       val threshold = getOrInvalid(fields, "threshold").convertTo[Double]
-      val featureType = FeatureTypeFormat.read(getOrInvalid(fields, "featuretype"))
+      val featureType = FeatureTypeFormat.read(getOrInvalid(fields, "feature_type"))
       val categories = getOrInvalid(fields, "categories").convertTo[List[Double]]
       new Split(feature, threshold, featureType, categories)
     }
   }
 
   implicit object PredictFormat extends JsonFormat[Predict] {
+    /**
+     * The write method converts from MLLib's Predict to JsValue
+     * @param obj Predict(val predict: Double, val prob: Double)
+     * @return JsValue
+     */
     override def write(obj: Predict): JsValue = {
       JsObject("predict" -> obj.predict.toJson,
         "prob" -> obj.prob.toJson)
     }
 
+    /**
+     * The read method converts from JsValue to MLLib's Predict
+     * @param json JsValue
+     * @return Predict(val predict: Double, val prob: Double)
+     */
     override def read(json: JsValue): Predict = {
       val fields = json.asJsObject.fields
       val predict = getOrInvalid(fields, "predict").convertTo[Double]
@@ -421,50 +463,74 @@ object MLLibJsonProtocol {
   }
 
   implicit object InformationGainStatsFormat extends JsonFormat[InformationGainStats] {
+    /**
+     * The write method converts from MLLib's InformationGainStats to JsValue
+     * @param obj InformationGainStats(val gain: Double, val impurity: Double, val leftImpurity: Double,
+     *            val rightImpurity: Double, val leftPredict: Predict, val rightPredict: Predict)
+     * @return JsValue
+     */
     override def write(obj: InformationGainStats): JsValue = {
       JsObject("gain" -> obj.gain.toJson,
         "impurity" -> obj.impurity.toJson,
-        "leftimpurity" -> obj.leftImpurity.toJson,
-        "rightimpurity" -> obj.rightImpurity.toJson,
-        "leftpredict" -> PredictFormat.write(obj.leftPredict),
-        "rightpredict" -> PredictFormat.write(obj.rightPredict)
+        "left_impurity" -> obj.leftImpurity.toJson,
+        "right_impurity" -> obj.rightImpurity.toJson,
+        "left_predict" -> PredictFormat.write(obj.leftPredict),
+        "right_predict" -> PredictFormat.write(obj.rightPredict)
       )
     }
-
+    /**
+     * The read method converts from JsValue to MLLib's InformationGainStats
+     * @param json JsValue
+     * @return InformationGainStats(val gain: Double, val impurity: Double, val leftImpurity: Double,
+     *            val rightImpurity: Double, val leftPredict: Predict, val rightPredict: Predict)
+     */
     override def read(json: JsValue): InformationGainStats = {
       val fields = json.asJsObject.fields
       val gain = getOrInvalid(fields, "gain").convertTo[Double]
       val impurity = getOrInvalid(fields, "impurity").convertTo[Double]
-      val leftImpurity = getOrInvalid(fields, "leftimpurity").convertTo[Double]
-      val rightImpurity = getOrInvalid(fields, "rightimpurity").convertTo[Double]
-      val leftPredict = PredictFormat.read(getOrInvalid(fields, "leftpredict"))
-      val rightPredict = PredictFormat.read(getOrInvalid(fields, "rightpredict"))
+      val leftImpurity = getOrInvalid(fields, "left_impurity").convertTo[Double]
+      val rightImpurity = getOrInvalid(fields, "right_impurity").convertTo[Double]
+      val leftPredict = PredictFormat.read(getOrInvalid(fields, "left_predict"))
+      val rightPredict = PredictFormat.read(getOrInvalid(fields, "right_predict"))
       new InformationGainStats(gain, impurity, leftImpurity, rightImpurity, leftPredict, rightPredict)
     }
   }
 
   implicit object NodeFormat extends JsonFormat[Node] {
+    /**
+     * The write method converts from MLLib's Node to JsValue
+     * @param obj Node(val id: Int, val predict: Predict, val impurity: Double, val isLeaf: Boolean,
+     *            val split: Option[Split], val leftNode: Option[Node], val rightNode: Option[Node],
+     *            val stats: Option[InformationGainStats])
+     * @return JsValue
+     */
     override def write(obj: Node): JsValue = {
 
       JsObject("id" -> obj.id.toJson,
         "predict" -> obj.predict.toJson,
         "impurity" -> obj.impurity.toJson,
-        "isLeaf" -> obj.isLeaf.toJson,
+        "is_leaf" -> obj.isLeaf.toJson,
         "split" -> obj.split.toJson,
-        "leftNode" -> obj.leftNode.toJson,
-        "rightNode" -> obj.rightNode.toJson,
+        "left_node" -> obj.leftNode.toJson,
+        "right_node" -> obj.rightNode.toJson,
         "stats" -> obj.stats.toJson)
     }
-
+    /**
+     * The read method converts from JsValue to MLLib's Node
+     * @param json JsValue
+     * @return Node(val id: Int, val predict: Predict, val impurity: Double, val isLeaf: Boolean,
+     *            val split: Option[Split], val leftNode: Option[Node], val rightNode: Option[Node],
+     *            val stats: Option[InformationGainStats])
+     */
     override def read(json: JsValue): Node = {
       val fields = json.asJsObject.fields
       val id = getOrInvalid(fields, "id").convertTo[Int]
       val predict = getOrInvalid(fields, "predict").convertTo[Predict]
       val impurity = getOrInvalid(fields, "impurity").convertTo[Double]
-      val isLeaf = getOrInvalid(fields, "isLeaf").convertTo[Boolean]
+      val isLeaf = getOrInvalid(fields, "is_leaf").convertTo[Boolean]
       val split = getOrInvalid(fields, "split").convertTo[Option[Split]]
-      val leftNode = getOrInvalid(fields, "leftNode").convertTo[Option[Node]]
-      val rightNode = getOrInvalid(fields, "rightNode").convertTo[Option[Node]]
+      val leftNode = getOrInvalid(fields, "left_node").convertTo[Option[Node]]
+      val rightNode = getOrInvalid(fields, "right_node").convertTo[Option[Node]]
       val stats = getOrInvalid(fields, "stats").convertTo[Option[InformationGainStats]]
 
       new Node(id, predict, impurity, isLeaf, split, leftNode, rightNode, stats)
@@ -472,14 +538,19 @@ object MLLibJsonProtocol {
   }
 
   implicit object DecisionTreeModelFormat extends JsonFormat[DecisionTreeModel] {
+    /**
+     * The write method converts from MLLib's DecisionTreeModel to JsValue
+     * @param obj DecisionTreeModel(val topNode: Node, val algo: Algo)
+     * @return JsValue
+     */
     override def write(obj: DecisionTreeModel): JsValue = {
-      JsObject("topnode" -> NodeFormat.write(obj.topNode),
+      JsObject("top_node" -> NodeFormat.write(obj.topNode),
         "algo" -> AlgoFormat.write(obj.algo))
     }
 
     override def read(json: JsValue): DecisionTreeModel = {
       val fields = json.asJsObject.fields
-      val topNode = NodeFormat.read(getOrInvalid(fields, "topnode"))
+      val topNode = NodeFormat.read(getOrInvalid(fields, "top_node"))
       val algo = AlgoFormat.read(getOrInvalid(fields, "algo"))
       new DecisionTreeModel(topNode, algo)
     }

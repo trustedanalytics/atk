@@ -201,7 +201,7 @@ subset of the data to determine what works best.
 
 .. only:: latex
 
-    See `Figure 1 <ds_mlal_lda_fig_1>`_.
+    See :ref:`Figure 1 <ds_mlal_lda_fig_1>`.
 
 .. _ds_mlal_lda_fig_1:
 

@@ -53,7 +53,7 @@ Default is zero (0).""") offset: Option[Int] = None) {
 /**
  * Input arguments class for export to Hive
  */
-case class ExportHdfsHiveArgs(@ArgDoc("Frame being exported to Hive") frame: FrameReference,
+case class ExportHdfsHiveArgs(frame: FrameReference,
                               @ArgDoc("The name of the Hive table that will contain the exported frame") tableName: String) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")

@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Data needed to export a graph.
  */
-case class CopyGraphArgs(@ArgDoc("""Reference of the source graph.""") graph: GraphReference,
+case class CopyGraphArgs(graph: GraphReference,
                          @ArgDoc("""The name for the copy of the graph.
 Default is None.""") name: Option[String] = None) {
   require(graph != null, "graph is required")

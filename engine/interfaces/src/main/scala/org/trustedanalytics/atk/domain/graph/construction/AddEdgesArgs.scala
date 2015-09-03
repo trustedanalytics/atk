@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Arguments for adding Edges to a Edge Frame
  */
-case class AddEdgesArgs(@ArgDoc("""The frame being operated on.""") edgeFrame: FrameReference,
+case class AddEdgesArgs(edgeFrame: FrameReference,
                         @ArgDoc("""Frame that will be the source of
 the edge data.""") sourceFrame: FrameReference,
                         @ArgDoc("""column name for a unique id for

@@ -75,7 +75,7 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
   override def numberOfJobs(arguments: RandomForestClassifierTrainArgs)(implicit invocation: Invocation) = 109
 
   /**
-   * Run MLLib's NaiveBayes() on the training frame and create a Model for it.
+   * Run MLLib's RandomForest classifier on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
