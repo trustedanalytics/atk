@@ -32,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Append data from a csv/xml into an existing (possibly empty) frame",
   extended = "Append data from a csv/xml into an existing (possibly empty) frame",
   returns = "The initial frame with the csv/xml data appended")
-class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
+class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graph/ml/loopy_belief_propagation

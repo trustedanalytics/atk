@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.SchemaRDD
+import org.apache.spark.sql.{ DataFrame }
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
 
 /**
@@ -30,8 +30,8 @@ object LoadHiveImpl extends Serializable {
    * @param rdd spark rdd
    * @return frame rdd
    */
-  def hiveFrameToFrameRdd(rdd: SchemaRDD): FrameRdd = {
-    LoadRddFunctions.dataFrameToFrameRdd(rdd)
+  def hiveFrameToFrameRdd(rdd: DataFrame): FrameRdd = {
+    FrameRdd.toFrameRdd(rdd)
   }
 
 }

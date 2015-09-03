@@ -19,9 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
-import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin.LoadHiveImpl
 import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
@@ -64,7 +62,7 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
 
     // run the operation
     val dataFrame = LoadJdbcImpl.createDataFrame(sc, arguments)
-    LoadRddFunctions.unionAndSave(destinationFrame, LoadRddFunctions.dataFrameToFrameRdd(dataFrame))
+    LoadRddFunctions.unionAndSave(destinationFrame, FrameRdd.toFrameRdd(dataFrame))
   }
 
 }

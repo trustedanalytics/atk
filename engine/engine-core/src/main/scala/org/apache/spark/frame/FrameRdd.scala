@@ -31,6 +31,7 @@ import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
 import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ EdgeHolder, EdgeSchemaAggregator, VertexSchemaAggregator }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 
+import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 
 /**
@@ -362,6 +363,51 @@ object FrameRdd {
 
   def toFrameRdd(schema: Schema, rowRDD: RDD[Array[Any]]) = {
     new FrameRdd(schema, FrameRdd.toRowRDD(schema, rowRDD))
+  }
+
+  /**
+   * converts a data frame to frame rdd
+   * @param rdd a data frame
+   * @return a frame rdd
+   */
+  def toFrameRdd(rdd: DataFrame): FrameRdd = {
+    val array: Seq[StructField] = rdd.schema.fields
+    val list = new ListBuffer[Column]
+    for (field <- array) {
+      list += new Column(field.name, sparkDataTypeToSchemaDataType(field.dataType))
+    }
+    val schema = new FrameSchema(list.toList)
+    val convertedRdd: RDD[org.apache.spark.sql.Row] = rdd.map(row => {
+      val mutableRow = new GenericMutableRow(row.length)
+      row.toSeq.zipWithIndex.foreach {
+        case (o, i) =>
+          if (o == null) {
+            mutableRow(i) = null
+          }
+          else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
+            mutableRow(i) = o.toString
+          }
+          else if (array(i).dataType.getClass == ShortType.getClass) {
+            mutableRow(i) = row.getShort(i).toInt
+          }
+          else if (array(i).dataType.getClass == BooleanType.getClass) {
+            mutableRow(i) = row.getBoolean(i).compareTo(false)
+          }
+          else if (array(i).dataType.getClass == ByteType.getClass) {
+            mutableRow(i) = row.getByte(i).toInt
+          }
+          else if (array(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
+            mutableRow(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
+          }
+          else {
+            val colType = schema.columns(i).dataType
+            mutableRow(i) = o.asInstanceOf[colType.ScalaType]
+          }
+      }
+      mutableRow
+    }
+    )
+    new FrameRdd(schema, convertedRdd)
   }
 
   /**
