@@ -17,8 +17,10 @@
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
 import org.apache.spark.SparkException
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
@@ -31,10 +33,17 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
     Row(4, 1, "b", 0),
     Row(5, 2, "c", 0))
 
+  val inputSchema = FrameSchema(List(
+    Column("col_0", DataTypes.int32),
+    Column("col_1", DataTypes.int32),
+    Column("col_2", DataTypes.string),
+    Column("col_3", DataTypes.int32)
+  ))
+
   "cumulative sum" should "compute correct distribution" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeSum(rdd, 1)
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeSum(frame, "col_1")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -50,8 +59,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
       i <- 1 to 10
     } {
       val rdd = sparkContext.parallelize(inputList).sortBy(row => row.getInt(0), ascending = true, numPartitions = i)
-
-      val resultRdd = CumulativeDistFunctions.cumulativeSum(rdd, 1)
+      val frame = new FrameRdd(inputSchema, rdd)
+      val resultRdd = CumulativeDistFunctions.cumulativeSum(frame, "col_1")
       val result = resultRdd.take(6)
 
       result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -65,8 +74,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative sum" should "compute correct distribution with over partitioning" in {
     val rdd = sparkContext.parallelize(inputList).sortBy(row => row.getInt(0), ascending = true, numPartitions = 1000)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeSum(rdd, 1)
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeSum(frame, "col_1")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -79,14 +88,14 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative sum" should "throw error for non-numeric columns" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    a[SparkException] shouldBe thrownBy(CumulativeDistFunctions.cumulativeSum(rdd, 2))
+    val frame = new FrameRdd(inputSchema, rdd)
+    a[SparkException] shouldBe thrownBy(CumulativeDistFunctions.cumulativeSum(frame, "col_2"))
   }
 
   "cumulative sum" should "compute correct distribution for column of all zero" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeSum(rdd, 3)
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeSum(frame, "col_3")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -99,8 +108,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative count" should "compute correct distribution" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeCount(rdd, 1, "1")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeCount(frame, "col_1", "1")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -113,8 +122,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative count" should "compute correct distribution for column of all zero" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeCount(rdd, 3, "0")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeCount(frame, "col_3", "0")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 1)
@@ -127,8 +136,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative count" should "compute correct distribution for column of strings" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativeCount(rdd, 2, "b")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativeCount(frame, "col_2", "b")
     val result = resultRdd.take(6)
 
     result(0) shouldBe Row(0, 0, "a", 0, 0)
@@ -141,8 +150,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative percent sum" should "compute correct distribution" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativePercentSum(rdd, 1)
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativePercentSum(frame, "col_1")
     val result = resultRdd.take(6)
 
     java.lang.Double.parseDouble(result(0)(4).toString) shouldEqual 0
@@ -157,14 +166,14 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative percent sum" should "throw error for non-numeric columns" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    a[SparkException] shouldBe thrownBy(CumulativeDistFunctions.cumulativePercentSum(rdd, 2))
+    val frame = new FrameRdd(inputSchema, rdd)
+    a[SparkException] shouldBe thrownBy(CumulativeDistFunctions.cumulativePercentSum(frame, "col_2"))
   }
 
   "cumulative percent sum" should "compute correct distribution for column of all zero" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativePercentSum(rdd, 3)
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativePercentSum(frame, "col_3")
     val result = resultRdd.take(6)
 
     java.lang.Double.parseDouble(result(0)(4).toString) shouldEqual 1
@@ -177,8 +186,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative percent count" should "compute correct distribution" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(rdd, 1, "1")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(frame, "col_1", "1")
     val result = resultRdd.take(6)
 
     java.lang.Double.parseDouble(result(0)(4).toString) shouldEqual 0
@@ -191,8 +200,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative percent count" should "compute correct distribution for column of all zero" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(rdd, 3, "0")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(frame, "col_3", "0")
     val result = resultRdd.take(6)
 
     var diff = (java.lang.Double.parseDouble(result(0)(4).toString) - 0.16666666).abs
@@ -209,8 +218,8 @@ class CumulativeDistTest extends TestingSparkContextFlatSpec with Matchers {
 
   "cumulative percent count" should "compute correct distribution for column of strings" in {
     val rdd = sparkContext.parallelize(inputList)
-
-    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(rdd, 2, "b")
+    val frame = new FrameRdd(inputSchema, rdd)
+    val resultRdd = CumulativeDistFunctions.cumulativePercentCount(frame, "col_2", "b")
     val result = resultRdd.take(6)
 
     java.lang.Double.parseDouble(result(0)(4).toString) shouldEqual 0

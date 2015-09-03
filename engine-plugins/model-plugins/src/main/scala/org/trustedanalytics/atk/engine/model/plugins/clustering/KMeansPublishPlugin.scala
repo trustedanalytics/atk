@@ -18,21 +18,23 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs }
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.domain.StringValue
+import org.apache.hadoop.fs.Path
 // Implicits needed for JSON conversion
 import spray.json._
+import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
-class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, UnitReturn] {
+@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
+  extended = "Returns the HDFS path to the tar file")
+class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -66,7 +68,7 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, UnitReturn] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
 
     val model: Model = arguments.model
 
@@ -75,7 +77,6 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, UnitReturn] {
     val kmeansModel = kmeansData.kMeansModel
     val jsvalue: JsValue = kmeansModel.toJson
 
-    ModelPublish.createTarForScoringEngine(jsvalue.toString(), arguments.serviceName, "scoring-models", arguments.filePath, "org.trustedanalytics.atk.scoring.models.LibKMeansModelReaderPlugin")
-
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
   }
 }

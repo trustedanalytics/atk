@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
-import org.trustedanalytics.atk.domain.frame.{ CumulativePercentArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.CumulativePercentArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -43,7 +44,7 @@ This method applies only to columns containing numerical data.
 Although this method will execute for columns containing negative
 values, the interpretation of the result will change (for example,
 negative percentages).""")
-class CumulativePercentPlugin extends SparkCommandPlugin[CumulativePercentArgs, FrameEntity] {
+class CumulativePercentPlugin extends SparkCommandPlugin[CumulativePercentArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -64,12 +65,11 @@ class CumulativePercentPlugin extends SparkCommandPlugin[CumulativePercentArgs, 
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: CumulativePercentArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: CumulativePercentArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    val sampleIndex = frame.schema.columnIndex(arguments.sampleCol)
 
     // run the operation
-    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentSum(frame.rdd, sampleIndex)
+    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentSum(frame.rdd, arguments.sampleCol)
     val updatedSchema = frame.schema.addColumnFixName(Column(arguments.sampleCol + "_cumulative_percent", DataTypes.float64))
 
     // save results

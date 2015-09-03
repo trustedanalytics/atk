@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.classification.glm
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -27,7 +27,7 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Create a 'new' instance of logistic regression model.",
   extended = "",
   returns = "")
-class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -36,7 +36,7 @@ class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs
    */
   override def name: String = "model:logistic_regression/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:logistic_regression")))
   }
 }

@@ -48,6 +48,7 @@ import org.trustedanalytics.atk.giraph.io.LdaVertexId;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -84,6 +85,8 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     private static String MAX_DELTA = "max_delta";
     /** Max delta value of previous super step for convergence monitoring */
     private static String PREV_MAX_DELTA = "prev_max_delta";
+    /** Map of conditional probability of topics given word */
+    private Map<String, DenseVector> topicWordMap = new HashMap<>();
 
     /** Number of words in vocabulary */
     private long numWords = 0;
@@ -130,6 +133,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                     vertex.getValue().getLdaResult());
             sendMessageToAllEdges(vertex, newMessage);
         } else {
+            // set conditional probability of topic given word
+            setTopicGivenWord(vertex);
+
             // normalize vertex value, i.e., theta and phi in LDA, for final output
             normalizeVertex(vertex);
         }
@@ -208,6 +214,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             vector = vector.plus(gamma.times(weight));
         }
         vertex.getValue().setLdaResult(vector);
+
         if (vertex.getId().isWord()) {
             aggregate(SUM_WORD_VERTEX_VALUE, new VectorWritable(vector));
         }
@@ -217,7 +224,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
      * Update edge value according to vertex and messages
      *
      * @param vertex of the graph
-     * @param map of type HashMap
+     * @param map    Map of vertices
      */
     private void updateEdge(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex, HashMap<LdaVertexId, Vector> map) {
         Vector vector = vertex.getValue().getLdaResult();
@@ -299,6 +306,33 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             }
         }
         aggregate(SUM_COST, new DoubleWritable(cost));
+    }
+
+    /**
+     * Compute the conditional probability of topics given word
+     *
+     * Each element of the vector contains the conditional probability of topic k given word
+     * @param vertex of the graph
+     */
+    private void setTopicGivenWord(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex) {
+        if (vertex.getId().isDocument()) {
+            return;
+        }
+
+        double wordCount = 0d;
+
+        // LDA result before normalization contains word_count * probability of topic given word and document
+        Vector weightedGamma = vertex.getValue().getLdaResult();
+
+        for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
+            wordCount += edge.getValue().getWordCount();
+        }
+
+        Vector topicsGivenWord = new DenseVector(new double[config.numTopics()]);
+        if (wordCount > 0d) {
+            topicsGivenWord = weightedGamma.divide(wordCount);
+        }
+        vertex.getValue().setTopicGivenWord(topicsGivenWord);
     }
 
     /**

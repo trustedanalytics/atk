@@ -16,8 +16,9 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.UserPrincipal
-import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.load.LoadFrameArgs
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
@@ -30,10 +31,10 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>",
-  returns = "<TBD>")
-class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
+@PluginDoc(oneLine = "Append data from a csv/xml into an existing (possibly empty) frame",
+  extended = "Append data from a csv/xml into an existing (possibly empty) frame",
+  returns = "The initial frame with the csv/xml data appended")
+class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graph/ml/loopy_belief_propagation
@@ -58,7 +59,7 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
    * @param arguments the arguments supplied by the caller
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: LoadFrameArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: LoadFrameArgs)(implicit invocation: Invocation): UnitReturn = {
     val sparkAutoPartitioner = engine.sparkAutoPartitioner
     def getAbsolutePath(s: String): String = engine.frames.frameFileStorage.hdfs.absolutePath(s).toString
 
@@ -67,21 +68,17 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, FrameEntity] {
     // run the operation
     if (arguments.source.isFrame) {
       // load data from an existing frame and add its data onto the target frame
-      val additionalData = (FrameReference(arguments.source.uri.toInt): SparkFrame).rdd
+      val frame: FrameReference = arguments.source.uri
+      val additionalData = (frame: SparkFrame).rdd
       LoadRddFunctions.unionAndSave(destinationFrame, additionalData)
     }
-    else if (arguments.source.isFile || arguments.source.isMultilineFile) {
+    else if (arguments.source.isSinglelineFile || arguments.source.isMultilineFile) {
       val filePath = getAbsolutePath(arguments.source.uri)
       val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
       val parseResult = LoadRddFunctions.loadAndParseLines(sc, filePath,
         null, partitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
       LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines)
 
-    }
-    else if (arguments.source.isHiveDb) {
-      val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
-      val rdd = sqlContext.sql(arguments.source.uri) //use URI
-      LoadRddFunctions.unionAndSave(destinationFrame, LoadRddFunctions.convertHiveRddToFrameRdd(rdd))
     }
     else if (arguments.source.isFieldDelimited || arguments.source.isClientData) {
       val parser = arguments.source.parser.get

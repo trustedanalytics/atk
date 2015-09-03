@@ -22,10 +22,15 @@ case class FrameReference(frameId: Long) extends UriReference {
   /** The entity id */
   override def id: Long = frameId
 
-  /** The entity name e.g. "frame", "graph", ... */
-  override def name: String = "frame"
+  /** The entity root path, like "frames" or "graphs" */
+  override def entityCollectionName: String = "frames"
 }
 
 object FrameReference {
+
   implicit def frameEntityToFrameReference(frameEntity: FrameEntity): FrameReference = frameEntity.toReference
+
+  implicit def uriToFrameReference(uri: String): FrameReference = UriReference.fromString[FrameReference](uri, new FrameReference(_))
+
+  implicit def idToFrameReference(id: Long): FrameReference = FrameReference(id)
 }
