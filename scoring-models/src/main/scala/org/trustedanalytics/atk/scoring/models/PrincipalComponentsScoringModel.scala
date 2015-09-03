@@ -23,6 +23,7 @@ import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.collection.mutable.Map
 import scala.concurrent._
 
 class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends PrincipalComponentsData(pcaModel.k, pcaModel.observationColumns,
@@ -37,9 +38,11 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
           case (value: Any, index: Int) => x(index) = value.toDouble
         }
         val y: DenseMatrix = computePrincipalComponents(x)
-        score = score :+ y
+        val pcaScoreOutput: Map[String, Any] = Map[String, Any]()
+        pcaScoreOutput.put("principal_components", y)
         val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
-        score = score :+ t_squared_index
+        pcaScoreOutput.put("t_squared_index", t_squared_index)
+        score = score :+ pcaScoreOutput
       }
     }
     score
