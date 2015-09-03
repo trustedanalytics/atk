@@ -298,8 +298,6 @@ trait EngineConfig extends EventLogging {
    */
   val sparkDriverMaxPermSize = config.getString("trustedanalytics.atk.engine.spark.conf.properties.spark.driver.maxPermSize")
 
-  //val sparkOnYarnNumExecutors = config.getInt("trustedanalytics.atk.engine.spark.conf.properties.spark.yarn.numExecutors")
-
   /**
    * Determines whether SparkContex.addJars() paths get "local:" prefix or not.
    *
