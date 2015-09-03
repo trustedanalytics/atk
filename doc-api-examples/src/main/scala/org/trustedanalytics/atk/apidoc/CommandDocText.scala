@@ -30,7 +30,9 @@ object CommandDocText {
     val path = "/" + client + "/" + commandName + ".rst"
     getClass.getResource(path) match {
       case null => None
-      case r => Some(Source.fromURL(r).mkString)
+      case r =>
+        try { Some(Source.fromURL(r).mkString) }
+        catch { case ex: Exception => throw new RuntimeException(s"CommandDocText problem at $path\n" + ex.toString) }
     }
   }
 }
