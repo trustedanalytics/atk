@@ -18,8 +18,9 @@ package org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql._
+import org.apache.spark.sql.SchemaRDD
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+import org.apache.spark.sql.types.StructField
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column }
 
@@ -51,6 +52,8 @@ object LoadHiveImpl extends Serializable {
           }
           else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
             mutableRow(i) = o.toString
+            // todo - add conversion to our joda time
+            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
           else if (array(i).dataType.getClass == ShortType.getClass) {
             mutableRow(i) = row.getShort(i).toInt

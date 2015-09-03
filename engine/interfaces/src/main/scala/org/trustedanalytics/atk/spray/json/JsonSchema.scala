@@ -74,7 +74,11 @@ object JsonSchema {
       minimum = Some(Double.MinValue),
       maximum = Some(Double.MaxValue))
 
-  val dateTime = StringSchema(format = Some("date-time"))
+  def dateTime(description: Option[String], defaultValue: Option[Any]) =
+    StringSchema(id = Some(new URI("atk:datetime")),
+      description = description,
+      defaultValue = defaultValue,
+      format = Some("iso8601"))
 
   def entityReference(idUri: String, description: Option[String], defaultValue: Option[Any]) =
     StringSchema(id = Some(new URI(idUri)),
