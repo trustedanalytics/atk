@@ -1,3 +1,5 @@
+.. _ad_inst_ta1:
+
 .. index::
     single: installation
 
@@ -13,7 +15,7 @@ Package Installation
 Introduction
 ------------
 
-This guide covers the |PACKAGE| installation and configuration.
+This guide covers |PACKAGE| installation and configuration.
 
 Cloudera installation documentation can be found at:
 http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_cm_cdh.html .
@@ -43,11 +45,11 @@ Cloudera cluster 5.3.x with following services:
 #.  Yarn(MR2)
 #.  Zookeeper
 
-The |PACKAGE| Python client supports Python 2.7.
+|PACKAGE| Python client supports Python 2.7.
 
----------------------------
-|PACKAGE| Packages Installation
----------------------------
+----------------------
+|TOOLKIT| Installation
+----------------------
 
 .. index::
     single: repository
@@ -114,7 +116,7 @@ If the "epel" repository is not listed, do this to install it:
     single: repository
 
 |PACKAGE| Dependency Repository
----------------------------
+-------------------------------
 
 Some open source libraries are included to aid with the installation of the
 |PACKAGE|.
@@ -186,7 +188,7 @@ To install the *yum-s3* package, do this:
     single: repository
 
 |PACKAGE| Private Repository
-------------------------
+----------------------------
 
 Create '/etc/yum.repos.d/ta.repo':
 
@@ -276,13 +278,13 @@ Troubleshooting Private Repository
 
 .. _installing_tA_packages:
 
-Installing |PACKAGE| Packages
-=========================
+Installing |TOOLKIT|
+====================
 
 Installing On The Master Node
 -----------------------------
 
-Install the |PACKAGE| Python REST server and its dependencies.
+Install |PACKAGE| Python REST server and its dependencies.
 Only one instance of the REST server needs to be installed.
 Installation location is flexible, but it is usually installed
 with the HDFS name node.
@@ -329,7 +331,7 @@ create a new 'application.conf' file based on the 'application.conf.tpl' file.
 The script will also fully configure the local PostgreSQL installation to
 work with the |PACKAGE| server.
 
-To configure the |PACKAGE| installation, do this:
+To configure |PACKAGE| installation, do this:
 
 .. code::
 
@@ -360,7 +362,7 @@ Manual Configuration
 configuration file are needed.** (:ref:`Skip section <skip_manual_section>`).
 
 /etc/trustedanalytics/rest-server/application.conf
-------------------------------------------------
+--------------------------------------------------
 
 The REST server package provides a configuration template file which must be
 used to create a configuration file.
@@ -775,7 +777,7 @@ Restart the |PACKAGE| service:
 
     $ sudo service trustedanalytics restart
 
-After restarting the service, the |PACKAGE| will create all the database tables.
+After restarting the service, |PACKAGE| will create all the database tables.
 Now insert a meta user to enable Python client requests.
 
 Login to the postgres linux user:
@@ -844,7 +846,7 @@ sent.
     single: REST server
 
 Starting The |PACKAGE| REST Server
-==============================
+==================================
 
 Starting the REST server is very easy.
 It can be started like any other Linux service.
@@ -857,7 +859,7 @@ After starting the REST server, browse to the host on port 9099
 (<master node ip address>:9099) to see if the server started successfully.
 
 Troubleshooting |PACKAGE| REST Server
-=================================
+=====================================
 
 A log gets written to '/var/log/trustedanalytics/rest-server/output.log or
 '/var/log/trustedanalytics/rest-server/application.log'.
@@ -875,7 +877,6 @@ or:
     $ sudo tail -f /var/log/trustedanalytics/rest-server/application.log
 
 
-More details can be found in the :doc:`section on log files </ad_log>`.
 
 Upgrading
 =========

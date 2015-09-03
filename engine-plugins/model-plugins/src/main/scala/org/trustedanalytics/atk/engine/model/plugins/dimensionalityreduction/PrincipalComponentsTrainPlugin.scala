@@ -38,7 +38,7 @@ import MLLibJsonProtocol._
   returns =
     """Values of the  principal components model object storing:
     | principal components count used to train the model,
-    |  the list of observation columns on which the model was trained,
+    | the list of observation columns on which the model was trained,
     | the singular values vector and the vFactor matrix stored as an array of double values.
   """.stripMargin)
 class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
@@ -68,13 +68,6 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
 
     validatePrincipalComponentsArgs(frame.schema, arguments)
 
-    // compute covariance
-    val outputColumnDataType = frame.schema.columnDataType(arguments.observationColumns.head)
-    val outputVectorLength: Option[Long] = outputColumnDataType match {
-      case vector(length) => Some(length)
-      case _ => None
-    }
-
     val k = arguments.k.getOrElse(arguments.observationColumns.length)
     val rowMatrix: RowMatrix = new RowMatrix(frame.rdd.toVectorDenseRDD(arguments.observationColumns))
 
@@ -97,7 +90,7 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
       require(dataColumnNames.size >= 2, "single vector column, or two or more numeric columns required")
       frameSchema.requireColumnsOfNumericPrimitives(dataColumnNames)
     }
-    require(arguments.k.get >= 1, "k should be greater than equal to 1")
+    require(arguments.k.getOrElse(arguments.observationColumns.length) >= 1, "k should be greater than equal to 1")
   }
 
 }

@@ -206,12 +206,6 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                     },
                     }
 
-        if isinstance( source, HiveQuery):
-            return {'destination': frame.uri,
-                    'source': {"source_type": "hivedb",
-                               "uri": source.file_name
-                               },
-                    }
 
         if isinstance( source, MultiLineFile):
             return {'destination': frame.uri,
@@ -305,15 +299,22 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
 
         if isinstance(data, HBaseTable):
              arguments = data.to_json()
-             arguments['destination'] = frame._id
+             arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(data, JdbcTable):
              arguments = data.to_json()
-             arguments['destination'] = frame._id
+             arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
+             self._handle_error(result)
+             return
+
+        if isinstance(data, HiveQuery):
+             arguments = data.to_json()
+             arguments['destination'] = frame.uri
+             result = execute_update_frame_command("frame/loadhive", arguments, frame)
              self._handle_error(result)
              return
 

@@ -180,7 +180,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @returns(list, "list of names of all the frame's columns")
     def __column_names(self):
         """
-        Column identifications in the current Frame.
+        Column identifications in the current frame.
 
         Examples
         --------

@@ -21,6 +21,6 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for calculating percentiles values
  */
-case class QuantilesArgs(@ArgDoc("""ID of the data frame.""") frame: FrameReference,
+case class QuantilesArgs(frame: FrameReference,
                          @ArgDoc("""The column to calculate quantiles.""") columnName: String,
                          @ArgDoc("""What is being requested.""") quantiles: List[Double])

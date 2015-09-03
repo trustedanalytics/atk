@@ -1,3 +1,5 @@
+.. _index:
+
 =========
 |Toolkit|
 =========
@@ -24,7 +26,7 @@ References
 * :doc:`Index <genindex>`
 * :doc:`appendices`
 * :doc:`errata`
-* :download:`PDF <_downloads/Package_Documentation.pdf>`
+* :download:`PDF <_downloads/Documentation.pdf>`
 
 .. toctree::
     :hidden:
@@ -32,6 +34,7 @@ References
 
     glossary
     legal
+    genindex
     appendices
     errata
 

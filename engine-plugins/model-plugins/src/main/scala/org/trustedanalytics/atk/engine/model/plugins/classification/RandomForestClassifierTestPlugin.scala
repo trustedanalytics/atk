@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference, ClassificationMetricValue }
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, ClassificationMetricValue }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics

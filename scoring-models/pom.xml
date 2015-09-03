@@ -66,10 +66,6 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.0</version>
                 <configuration>
@@ -141,6 +137,20 @@
 
     </build>
     <dependencies>
+
+        <!--START dependencies to our modules-->
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>scoring-interfaces</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--END dependencies to our modules-->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -148,11 +158,6 @@
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-reflect</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>scoring-interfaces</artifactId>
-            <version>master-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>

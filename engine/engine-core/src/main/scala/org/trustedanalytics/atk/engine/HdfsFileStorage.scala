@@ -172,16 +172,16 @@ class HdfsFileStorage extends EventLogging {
   def syncLibs(): Unit = withContext("synclibs") {
     val destDir = absolutePath(EngineConfig.hdfsLib)
     val srcDirs = EngineConfig.localLibs.map(path => new Path(path))
-    srcDirs.foreach(srcDir => info(s"local-lib: $srcDir"))
     info(s"hdfs-lib: $destDir")
     if (!fs.exists(destDir)) {
       info(s"Creating $destDir")
       fs.mkdirs(destDir)
     }
     require(fs.isDirectory(destDir), s"Not a directory $destDir, please configure hdfs-lib")
-    for (srcDir <- srcDirs) {
+    srcDirs.foreach(srcDir => {
+      info(s"local-lib: $srcDir")
       syncDir(srcDir, destDir)
-    }
+    })
   }
 
   /**
@@ -220,6 +220,9 @@ class HdfsFileStorage extends EventLogging {
     }
   }
 
+  /**
+   * Concat two paths
+   */
   private def concatPaths(first: String, second: String): String = {
     if (first.endsWith("/") || second.startsWith("/")) {
       first + second

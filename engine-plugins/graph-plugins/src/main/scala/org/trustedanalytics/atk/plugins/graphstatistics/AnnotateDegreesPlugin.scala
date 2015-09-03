@@ -98,8 +98,7 @@ and then writes the output graph to the underlying store.
 
 @PluginDoc(oneLine = "Make new graph with degrees.",
   extended = """Creates a new graph which is the same as the input graph, with the addition
-that every vertex of the graph has its :term:`degree` stored in a
-user-specified property.
+that every vertex of the graph has its :term:`degree` stored in a user-specified property.
 
 **Degree Calculation**
 
@@ -121,7 +120,7 @@ Analogously, the weighted in-degree of a vertex is the sum of the weights of
 the edges entering it, and the weighted out-degree is the sum
 of the weights of the edges leaving the vertex.
 
-The toolkit provides `annotate_weighted_degrees <annotate_weighted_degrees.html>`_
+The toolkit provides :ref:`annotate_weighted_degrees <python_api/graphs/graph-/annotate_weighted_degrees>`
 for the distributed calculation of weighted vertex degrees.""",
   returns = """Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a column storing the annotated degree for the vertex

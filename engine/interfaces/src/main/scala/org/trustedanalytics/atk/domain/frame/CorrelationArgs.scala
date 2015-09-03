@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Input arguments class for correlation
  */
 
-case class CorrelationArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
+case class CorrelationArgs(frame: FrameReference,
                            @ArgDoc("""The names of 2 columns from which
 to compute the correlation.""") dataColumnNames: List[String]) {
   require(frame != null, "frame is required")

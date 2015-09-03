@@ -24,7 +24,7 @@ class LdaOutputFormatTest extends WordSpec {
 
   "LdaOutputFormat" should {
     "have a parse-able row schema" in {
-      ParquetTypesConverter.convertFromString(LdaOutputFormat.OutputRowSchema)
+      ParquetTypesConverter.convertFromString(LdaOutputFormat.LdaOutputRowSchema)
     }
   }
 

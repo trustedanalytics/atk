@@ -29,10 +29,12 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 
 /**
- * Rename columns of a frame
+ * Publish a Random Forest Classifier Model for scoring
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended = """Creates a tar file with the trained Random Forest Classifier Model
+The tar file is used as input to the scoring engine to predict the class of an observation.""",
+  returns = """Returns the HDFS path to the tar file""")
 class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -71,11 +73,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
 
     val model: Model = arguments.model
 
-    //Extracting the RandomForestModel from the stored JsObject
-    val randomForestData = model.data.convertTo[RandomForestClassifierData]
-    val randomForestModel = randomForestData.randomForestModel
-    val jsvalue: JsValue = randomForestModel.toJson
-
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(), "scoring-models",
+      "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }

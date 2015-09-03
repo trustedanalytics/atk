@@ -1,3 +1,5 @@
+.. _ds_apir:
+
 .. index:: ! UDF
     single: Python
 
