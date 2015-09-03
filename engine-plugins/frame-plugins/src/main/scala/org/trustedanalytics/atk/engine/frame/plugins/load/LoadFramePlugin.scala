@@ -31,9 +31,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>",
-  returns = "<TBD>")
+@PluginDoc(oneLine = "Append data from a csv/xml into an existing (possibly empty) frame",
+  extended = "Append data from a csv/xml into an existing (possibly empty) frame",
+  returns = "The initial frame with the csv/xml data appended")
 class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
 
   /**
@@ -72,18 +72,13 @@ class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
       val additionalData = (frame: SparkFrame).rdd
       LoadRddFunctions.unionAndSave(destinationFrame, additionalData)
     }
-    else if (arguments.source.isFile || arguments.source.isMultilineFile) {
+    else if (arguments.source.isSinglelineFile || arguments.source.isMultilineFile) {
       val filePath = getAbsolutePath(arguments.source.uri)
       val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
       val parseResult = LoadRddFunctions.loadAndParseLines(sc, filePath,
         null, partitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
       LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines)
 
-    }
-    else if (arguments.source.isHiveDb) {
-      val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
-      val rdd = sqlContext.sql(arguments.source.uri) //use URI
-      LoadRddFunctions.unionAndSave(destinationFrame, LoadRddFunctions.convertHiveRddToFrameRdd(rdd))
     }
     else if (arguments.source.isFieldDelimited || arguments.source.isClientData) {
       val parser = arguments.source.parser.get
