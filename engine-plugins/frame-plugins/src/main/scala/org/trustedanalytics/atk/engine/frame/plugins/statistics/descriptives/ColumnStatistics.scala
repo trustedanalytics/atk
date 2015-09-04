@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.descriptives
 
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.{ ColumnFullStatisticsReturn, ColumnMedianReturn, ColumnModeReturn, ColumnSummaryStatisticsReturn }
 import org.trustedanalytics.atk.domain.schema.Column
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
@@ -81,31 +82,33 @@ object ColumnStatistics extends Serializable {
    * Values with non-positive weights(including NaNs and infinite values) are thrown out before the calculation is
    * performed. The option None is returned when the total weight is 0.
    *
-   * @param dataColumnIndex Index of the data column.
-   * @param dataType The type of the data column.
-   * @param weightsColumnIndexOption  Option for index of column providing  weights. Must be numerical data.
-   * @param weightsTypeOption Option for the datatype of the weights.
-   * @param rowRDD RDD of input rows.
+   * //   * @param dataColumnIndex Index of the data column.
+   * //   * @param dataType The type of the data column.
+   * //   * @param weightsColumnIndexOption  Option for index of column providing  weights. Must be numerical data.
+   * //   * @param weightsTypeOption Option for the datatype of the weights.
+   * //   * @param rowRDD RDD of input rows.
    * @return The  median of the column.
    */
-  def columnMedian(dataColumnIndex: Int,
-                   dataType: DataType,
-                   weightsColumnIndexOption: Option[Int],
-                   weightsTypeOption: Option[DataType],
-                   rowRDD: RDD[Row]): ColumnMedianReturn = {
+  def columnMedian(rdd: FrameRdd, dataColumn: Column, weightColumn: Option[Column] = None): ColumnMedianReturn = {
 
-    val dataWeightPairs: RDD[(Any, Double)] =
-      getDataWeightPairs(dataColumnIndex, weightsColumnIndexOption, weightsTypeOption, rowRDD)
+    val sortedFrame = rdd.toDataFrame.sort(dataColumn.name).map(row =>
+      if (weightColumn.isDefined) {
+        (row.get(0), weightColumn.get.dataType.asDouble(row.get(1)))
+      }
+      else {
+        (row.get(0), 1.toDouble)
+      }
+    )
 
-    implicit val ordering: Ordering[Any] = new NumericalOrdering(dataType)
+    implicit val ordering: Ordering[Any] = new NumericalOrdering(dataColumn.dataType)
 
-    val orderStatistics = new OrderStatistics[Any](dataWeightPairs)
+    val orderStatistics = new OrderStatistics[Any](sortedFrame, true)
 
     val medianReturn: JsValue = if (orderStatistics.medianOption.isEmpty) {
       JsNull
     }
     else {
-      dataType.typedJson(orderStatistics.medianOption.get)
+      dataColumn.dataType.typedJson(orderStatistics.medianOption.get)
     }
     ColumnMedianReturn(medianReturn)
   }

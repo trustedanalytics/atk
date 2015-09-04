@@ -24,6 +24,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.apache.spark.sql.types.{ ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType }
 import org.apache.spark.sql.{ DataFrame, Row, SQLContext, types => SparkType }
+import org.apache.spark.storage.StorageLevel
 import org.apache.spark.{ Partition, TaskContext }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.domain.schema._
@@ -352,6 +353,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
       case format => throw new IllegalArgumentException(s"Unrecognized storage format: $format")
     }
   }
+
+  def isCached = this.getStorageLevel != StorageLevel.NONE
 
 }
 

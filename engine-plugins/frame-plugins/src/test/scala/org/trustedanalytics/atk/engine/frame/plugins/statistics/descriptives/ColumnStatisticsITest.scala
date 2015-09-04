@@ -16,8 +16,9 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.descriptives
 
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.frame.{ ColumnFullStatisticsReturn, ColumnMedianReturn, ColumnSummaryStatisticsReturn }
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
@@ -43,6 +44,16 @@ class ColumnStatisticsITest extends TestingSparkContextFlatSpec with Matchers {
     val row4 = Row("E", 1, 2.0f, 7, 1, 2.0f, 0, 0)
 
     val rowRDD: RDD[Row] = sparkContext.parallelize(List(row0, row1, row2, row3, row4))
+    val columns = List(Column("col1", DataTypes.string),
+      Column("col2", DataTypes.int32),
+      Column("col3", DataTypes.float32),
+      Column("col4", DataTypes.int32),
+      Column("col5", DataTypes.int32),
+      Column("col6", DataTypes.float32),
+      Column("col7", DataTypes.int32),
+      Column("col8", DataTypes.int32)
+    )
+    val frameRDD = new FrameRdd(FrameSchema(columns), rowRDD)
   }
 
   "mode with no net weight" should "return none as json" in new ColumnStatisticsTest() {
@@ -80,7 +91,7 @@ class ColumnStatisticsITest extends TestingSparkContextFlatSpec with Matchers {
 
   "unweighted median" should "work" in new ColumnStatisticsTest() {
 
-    val median: ColumnMedianReturn = ColumnStatistics.columnMedian(2, DataTypes.float32, None, None, rowRDD)
+    val median: ColumnMedianReturn = ColumnStatistics.columnMedian(frameRDD.selectColumn("col3"), frameRDD.frameSchema.column("col3"))
 
     median.value shouldBe 2.0f.toJson
   }
@@ -88,13 +99,13 @@ class ColumnStatisticsITest extends TestingSparkContextFlatSpec with Matchers {
   "weighted median" should "work" in new ColumnStatisticsTest() {
 
     val median: ColumnMedianReturn =
-      ColumnStatistics.columnMedian(5, DataTypes.float32, Some(6), Some(DataTypes.int32), rowRDD)
+      ColumnStatistics.columnMedian(frameRDD.selectColumns(List("col6", "col7")), frameRDD.frameSchema.column("col6"), frameRDD.frameSchema.column(Some("col7")))
 
     median.value shouldBe 0.0f.toJson
   }
 
   "median with no net weights" should "return none as json" in new ColumnStatisticsTest() {
-    val median = ColumnStatistics.columnMedian(0, DataTypes.string, Some(7), Some(DataTypes.int32), rowRDD)
+    val median = ColumnStatistics.columnMedian(frameRDD.selectColumns(List("col1", "col8")), frameRDD.frameSchema.column("col1"), frameRDD.frameSchema.column(Some("col8")))
 
     median.value shouldBe None.asInstanceOf[Option[Double]].toJson
   }

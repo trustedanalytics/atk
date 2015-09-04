@@ -66,18 +66,20 @@ class ColumnMedianPlugin extends SparkCommandPlugin[ColumnMedianArgs, ColumnMedi
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: ColumnMedianArgs)(implicit invocation: Invocation): ColumnMedianReturn = {
-    val frame: SparkFrame = arguments.frame
-    val columnIndex = frame.schema.columnIndex(arguments.dataColumn)
-    val valueDataType = frame.schema.columnDataType(arguments.dataColumn)
 
-    // run the operation and return results
-    val (weightsColumnIndexOption, weightsDataTypeOption) = if (arguments.weightsColumn.isEmpty) {
-      (None, None)
+    val frame: SparkFrame = arguments.frame
+    val frameRdd = frame.rdd
+    val frameSchema = frameRdd.frameSchema
+
+    val selectedFrame = if (arguments.weightsColumn.isDefined) {
+      frameRdd.selectColumns(List(arguments.dataColumn, arguments.weightsColumn.get))
     }
     else {
-      val weightsColumnIndex = frame.schema.columnIndex(arguments.weightsColumn.get)
-      (Some(weightsColumnIndex), Some(frame.schema.columnTuples(weightsColumnIndex)._2))
+      frameRdd.selectColumns(List(arguments.dataColumn))
     }
-    ColumnStatistics.columnMedian(columnIndex, valueDataType, weightsColumnIndexOption, weightsDataTypeOption, frame.rdd)
+
+    ColumnStatistics.columnMedian(selectedFrame,
+      frameSchema.column(arguments.dataColumn),
+      frameSchema.column(arguments.weightsColumn))
   }
 }
