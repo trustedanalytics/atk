@@ -29,8 +29,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Object used for parsing and then executing the frame.append command
  *
  */
-case class LoadFrameArgs(@ArgDoc("""DataFrame to load data into.
-Should be either a uri or id.""") destination: FrameReference,
+case class LoadFrameArgs(destination: FrameReference,
                          @ArgDoc("""Object describing the data to load into the destination.
 Includes the Where and How of loading.""") source: LoadSource)
 

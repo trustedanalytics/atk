@@ -1,3 +1,5 @@
+.. _ad_inst_vm:
+
 ================
 Virtual Machines
 ================
@@ -13,9 +15,9 @@ Virtual Machines
 Introduction
 ------------
 
-This guide goes through the download and import of the |PACKAGE| beta on a virtual
+This guide goes through the download and import of |PACKAGE| beta on a virtual
 machine (VM).
-Currently the |PACKAGE| |VM| only supports
+Currently |PACKAGE| |VM| only supports
 `Virtual Box <https://www.virtualbox.org/>`_.
 These instructions do not cover the installation of Virtual Box.
 Virtual Box supports many platforms and can be `downloaded for free
@@ -378,9 +380,9 @@ To import the |VM| image, do the following steps in Virtual Box.
 
             Boot the VM
 
-------------------------
+----------------------------
 Running |PACKAGE| |VM| Image
-------------------------
+----------------------------
 
 Before starting
 ===============
@@ -401,9 +403,9 @@ This message can be safely ignored.
 Sample Scripts
 ==============
 
-The |VM| is pre-configured and installed with the |PACKAGE|.
+The |VM| is pre-configured and installed with |PACKAGE|.
 Several examples and datasets are included to get people
-familiar with the coding and behavior of the |PACKAGE|.
+familiar with the coding and behavior of |PACKAGE|.
 
 The examples are located in '/home/cloudera/examples'.
 ::
@@ -554,8 +556,6 @@ file is '/var/log/trustedanalytics/rest-server/output.log'.
 To show the log as it is generated, run ``tail -f``::
 
     $ sudo tail -f /var/log/trustedanalytics/rest-server/output.log
-
-More details can be found in the :doc:`section on log files </ad_log>`.
 
 --------
 Updating

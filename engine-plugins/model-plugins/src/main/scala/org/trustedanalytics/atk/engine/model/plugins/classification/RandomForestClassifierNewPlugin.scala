@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Create a 'new' instance of this model
+ * Create a 'new' instance of Random Forest Classifier model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of random forest classifier model.",
   extended = "",

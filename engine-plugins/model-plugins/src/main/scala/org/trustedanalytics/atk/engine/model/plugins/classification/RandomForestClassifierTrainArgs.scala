@@ -28,7 +28,7 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
                                            @ArgDoc("""Number of classes for classification""") numClasses: Int = 2,
                                            @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
                                            @ArgDoc("""Criterion used for information gain calculation. Supported values "gini" or "entropy"""") impurity: String = "gini",
-                                           @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
+                                           @ArgDoc("""Maximum depth of the tree""") maxDepth: Int = 4,
                                            @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
                                            @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
                                            @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
@@ -50,7 +50,7 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
           case _ => "sqrt"
         }
       }
-      case _ => featureSubsetCategory.getOrElse("all")
+      case x => x
 
     }
     value

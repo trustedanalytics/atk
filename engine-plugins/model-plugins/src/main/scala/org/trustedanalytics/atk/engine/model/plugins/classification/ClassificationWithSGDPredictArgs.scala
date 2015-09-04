@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param frame Handle to the data frame
  * @param observationColumns Handle to the observation column of the data frame
  */
-case class ClassificationWithSGDPredictArgs(@ArgDoc("""<TBD>""") model: ModelReference,
+case class ClassificationWithSGDPredictArgs(model: ModelReference,
                                             @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,

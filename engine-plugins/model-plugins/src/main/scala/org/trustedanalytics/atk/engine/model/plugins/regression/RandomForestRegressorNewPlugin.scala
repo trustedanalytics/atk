@@ -32,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Create a 'new' instance of this model
+ * Create a 'new' instance of Random Forest Regressor model
  */
 class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**

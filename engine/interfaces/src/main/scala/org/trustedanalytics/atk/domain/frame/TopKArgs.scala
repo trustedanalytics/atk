@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Command for retrieving the top (or bottom) K distinct values by count for a specified column.
  *
  */
-case class TopKArgs(@ArgDoc("""Reference to the input data frame.""") frame: FrameReference,
+case class TopKArgs(frame: FrameReference,
                     @ArgDoc("""The column whose top (or bottom) K distinct values are
 to be calculated.""") columnName: String,
                     @ArgDoc("""Number of entries to return (If k is negative, return bottom k).""") k: Int,
