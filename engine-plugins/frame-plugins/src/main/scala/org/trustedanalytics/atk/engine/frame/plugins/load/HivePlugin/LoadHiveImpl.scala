@@ -17,8 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load.HivePlugin
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.{ DataFrame }
-import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
+import org.apache.spark.sql.DataFrame
 
 /**
  * Helper class for creating an RDD from hive

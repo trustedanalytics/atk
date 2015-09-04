@@ -14,7 +14,14 @@
 # limitations under the License.
 #
 
-from trustedanalytics.core.atktypes import valid_data_types
+from trustedanalytics.core.atktypes import valid_data_types, datetime
+
+
+def atk_dtype_to_pandas_str(dtype):
+    """maps ATK schema types to types understood by pandas, returns string"""
+    if dtype is not datetime and valid_data_types.is_primitive_type(dtype):
+        valid_data_types.to_string(dtype)
+    return "object"
 
 
 class Pandas(object):
