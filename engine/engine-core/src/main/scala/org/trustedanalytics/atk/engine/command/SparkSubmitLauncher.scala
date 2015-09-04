@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.event.EventLogging
+import org.apache.commons.lang.StringUtils
 
 /**
  * Our wrapper for calling SparkSubmit to run a plugin.
@@ -76,20 +77,26 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
 
           val executorClassPathString = "spark.executor.extraClassPath"
+          val dbLib: String = s"${EngineConfig.hiveLib}:${EngineConfig.jdbcLib}:"
+          val dbConf: String = s"${EngineConfig.hiveConf}:"
+          val executorSparkConf: String = s"${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, StringUtils.EMPTY)}"
+
           val executorClassPathTuple = EngineConfig.sparkAppJarsLocal match {
             case true => (executorClassPathString,
               s".:${SparkContextFactory.jarPath("interfaces")}:${SparkContextFactory.jarPath("launcher")}:" +
-              s"${EngineConfig.hiveLib}:${getPluginJarPath(pluginJarsList, ":")}" +
-              s"${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
+              dbLib + s"${getPluginJarPath(pluginJarsList, ":")}" +
+              executorSparkConf)
             case false => (executorClassPathString,
-              s"${EngineConfig.hiveLib}:${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
+              dbLib + executorSparkConf)
           }
 
           val driverClassPathString = "spark.driver.extraClassPath"
           val driverClassPathTuple = (driverClassPathString,
             s".:interfaces.jar:launcher.jar:engine-core.jar:frame-plugins.jar:graph-plugins.jar:model-plugins.jar:application.conf:" +
-            s"${pluginExtraClasspath.mkString(":")}:${EngineConfig.hiveLib}:${EngineConfig.hiveConf}:" +
-            s"${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, "")}")
+            s"${pluginExtraClasspath.mkString(":")}:" +
+            dbLib +
+            dbConf +
+            s"${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, StringUtils.EMPTY)}")
 
           val executionConfigs = {
             for {
