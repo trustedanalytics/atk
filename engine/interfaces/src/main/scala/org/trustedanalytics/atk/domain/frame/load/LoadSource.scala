@@ -101,6 +101,13 @@ case class LoadSource(
   def isMultilineFile: Boolean = {
     sourceType == "multilinefile" || sourceType == "xmlfile"
   }
+
+  /**
+   * True if source is a multi line file
+   */
+  def hasXml: Boolean = {
+    sourceType == "multilinefile" || sourceType == "xmlfile"
+  }
 }
 
 /**
