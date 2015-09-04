@@ -135,7 +135,7 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.javaTypeToDataType(new java.lang.Double(3).getClass) shouldBe float64
   }
 
-  "datetime.asDouble" should "give time as milliseconds" in {
+  "datetime.asDouble" should "throw exception" in {
     val dt = DateTime.parse("2010-05-08T23:41:54.000Z")
     intercept[IllegalArgumentException] {
       DataTypes.datetime.asDouble(dt)
@@ -164,8 +164,6 @@ class DataTypesTest extends FlatSpec with Matchers {
 
   "toDateTime" should "produce datetime objects" in {
     DataTypes.toDateTime(null) shouldBe null
-    DataTypes.toDateTime(25) shouldBe new DateTime(25)
-    DataTypes.toDateTime(123456789L) shouldBe new DateTime(123456789L)
     DataTypes.toDateTime("2010-05-08T23:41:54.000Z") shouldBe DateTime.parse("2010-05-08T23:41:54.000Z")
   }
 

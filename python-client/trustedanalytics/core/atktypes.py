@@ -25,7 +25,6 @@ __all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32
 import numpy as np
 import json
 import re
-import dateutil.parser as datetime_parser
 
 # alias numpy types
 float32 = np.float32
@@ -34,8 +33,13 @@ int32 = np.int32
 int64 = np.int64
 
 from datetime import datetime
+import dateutil.parser as datetime_parser
 import pytz
 utc = pytz.UTC
+# Chose python's datetime over numpy.datetime64 based on its support for ISO 8601 and time zone consciousness.
+# UDFs can create numpy objects from x using: numpy.datatime64(x.isoformat())
+# The decision can be revisited.
+
 
 class _Vector(object):
 

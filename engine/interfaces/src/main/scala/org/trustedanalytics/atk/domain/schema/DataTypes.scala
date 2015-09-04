@@ -540,6 +540,7 @@ object DataTypes extends EventLogging {
     }
   }
 
+  @deprecated // Added deprecation to note this function is flawed; need a more sophisticated type sniffer (if even possible), especially as more types are added, like datetime, vector, lists, etc. which may have the same underlying raw values --blbarker 9/4/15
   def dataTypeOfValue(value: Any): DataType = {
     val matchesPrimitives = supportedPrimitiveTypes.filter { case (name: String, dataType: DataType) => dataType.isType(value) }.toList
     if (matchesPrimitives.nonEmpty) {
@@ -588,7 +589,6 @@ object DataTypes extends EventLogging {
       case bd: BigDecimal => bd.toDouble
       case s: String => s.trim().toDouble
       case v: vector.ScalaType => vector.asDouble(v)
-      case dt: DateTime => dt.getMillis.toDouble
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
   }
@@ -603,7 +603,6 @@ object DataTypes extends EventLogging {
       case bd: BigDecimal => bd
       case s: String => BigDecimal(s)
       case v: vector.ScalaType => BigDecimal(vector.asDouble(v))
-      case dt: DateTime => BigDecimal(dt.getMillis())
       case _ => throw new IllegalArgumentException(s"The following value is not of numeric data type: $value")
     }
   }
@@ -618,7 +617,6 @@ object DataTypes extends EventLogging {
       case bd: BigDecimal => bd.toLong
       case s: String => s.trim().toLong
       case v: vector.ScalaType => vector.asDouble(v).toLong
-      case dt: DateTime => dt.getMillis()
       case _ => throw new RuntimeException(s"${value.getClass.getName} toLong is not implemented")
     }
   }
@@ -695,8 +693,6 @@ object DataTypes extends EventLogging {
   def toDateTime(value: Any): DateTime = {
     value match {
       case null => null
-      case i: Int => new DateTime(i) // milliseconds
-      case l: Long => new DateTime(l) // milliseconds
       case s: String => DateTime.parse(s) // ISO 8601
       case dt: DateTime => dt
       case _ => throw new RuntimeException(s"${value.getClass.getName} toDateTime is not implemented")
