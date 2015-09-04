@@ -386,6 +386,8 @@ object FrameRdd {
           }
           else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
             mutableRow(i) = o.toString
+            // todo - add conversion to datetime object
+            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
           else if (array(i).dataType.getClass == ShortType.getClass) {
             mutableRow(i) = row.getShort(i).toInt
