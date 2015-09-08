@@ -14,16 +14,14 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load
+package org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin
 
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.UserPrincipal
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.load.LoadFrameArgs
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.engine.frame.plugins.load.LoadRddFunctions
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -34,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Append data from a csv/xml into an existing (possibly empty) frame",
   extended = "Append data from a csv/xml into an existing (possibly empty) frame",
   returns = "The initial frame with the csv/xml data appended")
-class LoadFramePlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
+class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graph/ml/loopy_belief_propagation

@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param model Handle to the model to be written to.
  * @param frame Handle to the data frame whose cluster assignments are to be predicted
  */
-case class KMeansPredictArgs(@ArgDoc("""""") model: ModelReference,
+case class KMeansPredictArgs(model: ModelReference,
                              @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,

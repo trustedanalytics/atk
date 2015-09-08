@@ -1,3 +1,5 @@
+.. _ds_eclipse:
+
 .. index:: ! Eclipse
     single: IDE
 
@@ -20,7 +22,7 @@ These instructions assume you have already installed:
     dependencies.
 -   Eclipse Standard.
 
-The |PACKAGE| should work with any version of Eclipse, but these instructions were
+|PACKAGE| should work with any version of Eclipse, but these instructions were
 tested with Eclipse Standard Version 4.4 Luna.
 
 If you are on a corporate network, you may need to configure proxy settings in

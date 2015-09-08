@@ -1,3 +1,6 @@
 package org.trustedanalytics.atk.domain.frame
 
-case class ComputeMisplacedScoreArgs(frame: FrameReference, gravity: Double)
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+
+case class ComputeMisplacedScoreArgs(frame: FrameReference,
+                                     @ArgDoc("""<TBD>""") gravity: Double)

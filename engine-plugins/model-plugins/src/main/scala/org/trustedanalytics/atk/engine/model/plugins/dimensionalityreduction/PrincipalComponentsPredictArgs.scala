@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * Input arguments for principal components predict plugin
  */
 
-case class PrincipalComponentsPredictArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class PrincipalComponentsPredictArgs(model: ModelReference,
                                           @ArgDoc("""Frame whose principal components are to be computed.""") frame: FrameReference,
                                           @ArgDoc("""List of observation column name(s) to be used for prediction.Default is the list of column name(s) used to train the model.""") observationColumns: Option[List[String]] = None,
                                           @ArgDoc("""The number of principal components to be predicted.Default is the count used to train the model.""") c: Option[Int] = None,

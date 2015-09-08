@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Arguments for SortedK plugin
  */
-case class SortedKArgs(@ArgDoc("""Frame to sort.""") frame: FrameReference,
+case class SortedKArgs(frame: FrameReference,
                        @ArgDoc("""Number of sorted records to return.""") k: Int,
                        @ArgDoc("""Column names to sort by, and true to sort column by ascending order,
 or false for descending order.""") columnNamesAndAscending: List[(String, Boolean)],

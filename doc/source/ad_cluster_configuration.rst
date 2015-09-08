@@ -1,3 +1,5 @@
+.. _ad_cluster_configuration:
+
 =====================
 Cluster Configuration
 =====================
@@ -46,7 +48,7 @@ Help
 ----
 
 After installing, you will have three executable scripts on your path:
-cluster-generate_, cluster-config_, and cluster-explore_.
+:ref:`cluster_generate`  cluster-config_, and cluster-explore_.
 
 .. _common_options:
 
@@ -106,7 +108,7 @@ Help |EM| cluster-generate
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-config
+.. _help_cluster-config:
 
 Help |EM| cluster-config
 ========================
@@ -146,7 +148,7 @@ Help |EM| cluster-config
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-explore
+.. _help_cluster-explore:
 
 Help |EM| cluster-explore
 =========================
@@ -177,7 +179,7 @@ Help |EM| cluster-explore
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _help_cluster-push
+.. _help_cluster-push:
 
 Help |EM| cluster-push
 ======================
@@ -227,7 +229,7 @@ Combines cluster-generate and cluster-config
       --log {INFO,DEBUG,WARNING,FATAL,ERROR}
                             Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
-.. _cluster-generate:
+.. _cluster_generate:
 
 -------------------------------
 Generating |CDH| Configurations
@@ -575,8 +577,9 @@ Example
     Deploying configuration for all YARN roles
     .
 
-After connecting to Cloudera Manager, *cdh.json* (generated in the `previous
-step <cluster-generate>`_ and *user-cdh.json* (if available) are read.
+After connecting to Cloudera Manager, *cdh.json* (generated in the
+:ref:`previous step <cluster_generate>`
+and *user-cdh.json* (if available) are read.
 
 The file *user-cdh.json* has any user overrides and/or any additional |CDH|
 configurations needing to be set.
@@ -669,7 +672,7 @@ your json text.
 Create cdh.json
 ---------------
 
-Once you've saved *user-cdh.json*, run cluster-generate_ to create a
+Once you've saved *user-cdh.json*, run :ref:`cluster_generate` to create a
 *cdh.json* file, or verify you have *_cdh.json_* file in the same working
 directory where you saved *_user-cdh.json_* file.
 

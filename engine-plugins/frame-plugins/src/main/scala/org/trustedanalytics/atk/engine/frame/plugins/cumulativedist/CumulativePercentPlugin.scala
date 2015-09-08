@@ -34,7 +34,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "Add column to frame with cumulative percent sum.",
   extended = """A cumulative percent sum is computed by sequentially stepping through the
-column values and keeping track of the current percentage of the total sum
+rows, observing the column values and keeping track of the current percentage of the total sum
 accounted for at the current value.
 
 

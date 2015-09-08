@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for predicting labels on the given dataset using a libsvm model
  */
-case class LibSvmPredictArgs(@ArgDoc("""Handle to the model to be written to.""") model: ModelReference,
+case class LibSvmPredictArgs(model: ModelReference,
                              @ArgDoc("""A frame whose labels are to be predicted.""") frame: FrameReference,
                              @ArgDoc("""Column(s) containing the observations whose labels are to be
 predicted.

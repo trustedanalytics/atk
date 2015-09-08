@@ -22,7 +22,7 @@ import spray.json.JsValue
 /**
  * Command for calculating the mode of a (possibly weighted) column.
  */
-case class ColumnModeArgs(@ArgDoc("""Identifier for the input dataframe.""") frame: FrameReference,
+case class ColumnModeArgs(frame: FrameReference,
                           @ArgDoc("""Name of the column supplying the data.""") dataColumn: String,
                           @ArgDoc("""Name of the column supplying the weights.
 Default is all items have weight of 1.""") weightsColumn: Option[String],
