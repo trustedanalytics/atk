@@ -14,18 +14,13 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load
+package org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin
+
+import org.apache.spark.frame.FrameRdd
 
 /**
- * Parsing results into two types of rows: successes and failures.
- *
- * Successes go into one data frame and errors go into another.
- *
- * @param parseSuccess true if this row was a success, false otherwise
- * @param row either the successfully parsed row OR a row of two columns (original line and error message)
+ * RDD results of loading a dataframe including both successfully parsed lines and errors
+ * @param parsedLines lines that were successfully parsed
+ * @param errorLines lines that were NOT successfully parsed including error messages
  */
-case class RowParseResult(parseSuccess: Boolean, row: Array[Any]) {
-  if (!parseSuccess) {
-    require(row.length == 2, "error rows have two columns: the original un-parsed line and the error message")
-  }
-}
+case class ParseResultRddWrapper(parsedLines: FrameRdd, errorLines: FrameRdd)
