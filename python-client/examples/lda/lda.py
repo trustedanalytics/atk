@@ -36,14 +36,14 @@ results = model.train(frame,
             max_iterations = 3,
             num_topics = 2)
 
-doc_results = results['topics_given_doc']
-word_results = results['word_given_topics']
-topic_results = results['topics_given_word']
+topics_given_doc = results['topics_given_doc']
+word_given_topics = results['word_given_topics']
+topics_given_word = results['topics_given_word']
 report = results['report']
 
-doc_results.inspect()
-word_results.inspect()
-topic_results.inspect()
+topics_given_doc.inspect()
+word_given_topics.inspect()
+topics_given_word.inspect()
 print report
 
 print("compute topic probabilities for document")
@@ -51,11 +51,11 @@ prediction = model.predict(['harry', 'economy', 'magic', 'harry' 'test'])
 print(prediction)
 
 print("compute lda score")
-doc_results.rename_columns({'topic_probabilities' : 'lda_topic_given_doc'})
-word_results.rename_columns({'topic_probabilities' : 'lda_word_given_topic'})
+topics_given_doc.rename_columns({'topic_probabilities' : 'lda_topic_given_doc'})
+word_given_topics.rename_columns({'topic_probabilities' : 'lda_word_given_topic'})
 
-frame= frame.join(doc_results, left_on="doc_id", right_on="doc_id", how="left")
-frame= frame.join(word_results, left_on="word_id", right_on="word_id", how="left")
+frame= frame.join(topics_given_doc, left_on="doc_id", right_on="doc_id", how="left")
+frame= frame.join(word_given_topics, left_on="word_id", right_on="word_id", how="left")
 
 frame.dot_product(['lda_topic_given_doc'], ['lda_word_given_topic'], 'lda_score')
 frame.inspect()

@@ -16,7 +16,12 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import org.apache.spark.sql.{ Row, DataFrame }
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.domain.frame.load.{ LineParser, LineParserArguments }
+import org.trustedanalytics.atk.domain.schema.Column
+import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame._
@@ -24,10 +29,8 @@ import org.apache.hadoop.io.LongWritable
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{ types => SparkType, Row, SchemaRDD }
-import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.apache.hadoop.io.Text
-import SparkType.{ DateType, StructField, TimestampType, ByteType, BooleanType, ShortType, DecimalType }
+import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin._
 import org.trustedanalytics.atk.engine.plugin.Invocation
 
 import scala.collection.mutable.ListBuffer

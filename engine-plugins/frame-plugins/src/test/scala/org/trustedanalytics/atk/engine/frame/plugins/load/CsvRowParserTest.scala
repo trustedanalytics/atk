@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.load
 
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.scalatest.{ Matchers, WordSpec }
+import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin.CsvRowParser
 
 class CsvRowParserTest extends WordSpec with Matchers {
 
