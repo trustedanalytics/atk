@@ -144,4 +144,13 @@ class DataTypesTest extends FlatSpec with Matchers {
     }
   }
 
+  "isIntegerType" should "determine which types are integer" in {
+    DataTypes.isIntegerDataType(DataTypes.int32) shouldBe true
+    DataTypes.isIntegerDataType(DataTypes.int64) shouldBe true
+    DataTypes.isIntegerDataType(DataTypes.float32) shouldBe false
+    DataTypes.isIntegerDataType(DataTypes.float64) shouldBe false
+    DataTypes.isIntegerDataType(DataTypes.string) shouldBe false
+    DataTypes.isIntegerDataType(DataTypes.vector(1)) shouldBe false
+  }
+
 }
