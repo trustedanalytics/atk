@@ -19,7 +19,7 @@ iatest.init()
 
 import unittest
 from trustedanalytics.core.atktypes import *
-from trustedanalytics.core.atktypes import utc
+from pytz import utc
 
 
 class ValidDataTypes(unittest.TestCase):
@@ -77,6 +77,7 @@ class ValidDataTypes(unittest.TestCase):
         self.assertEqual('jim', valid_data_types.cast('jim', str))
         self.assertTrue(valid_data_types.cast(None, unicode) is None)
         self.assertEqual(datetime(2010, 5, 8, 23, 41, 54, tzinfo=utc), valid_data_types.cast("2010-05-08T23:41:54.000Z", datetime))
+        self.assertEqual(valid_data_types.datetime_from_iso("2015-09-08T15:51:22"), valid_data_types.cast("2015-09-08T15:51:22", datetime))
         try:
             valid_data_types.cast(3, set)
         except ValueError:
@@ -99,6 +100,12 @@ class ValidDataTypes(unittest.TestCase):
         self.assertTrue(len(v) == 3)
         self.assertEqual(3.14, v[0])
         self.assertEqual(9.42, v[2])
+
+    def test_datetime(self):
+        from dateutil.tz import tzoffset
+        self.assertEqual(datetime(2015, 9, 8).isoformat(), "2015-09-08T00:00:00")
+        self.assertEqual(datetime(2015, 9, 8, tzinfo=tzoffset(None, 6*60*60)).isoformat(), "2015-09-08T00:00:00+06:00")
+        self.assertEqual(datetime(2015, 9, 8, tzinfo=tzoffset(None, -7*60*60-30*60)).isoformat(), "2015-09-08T00:00:00-07:30")
 
     def test_nan(self):
         import numpy as np

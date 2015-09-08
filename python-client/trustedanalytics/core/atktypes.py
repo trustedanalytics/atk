@@ -34,11 +34,10 @@ int64 = np.int64
 
 from datetime import datetime
 import dateutil.parser as datetime_parser
-import pytz
-utc = pytz.UTC
-# Chose python's datetime over numpy.datetime64 based on its support for ISO 8601 and time zone consciousness.
-# UDFs can create numpy objects from x using: numpy.datatime64(x.isoformat())
-# The decision can be revisited.
+# Chose python's datetime over numpy.datetime64 because of time zone support and string serialization
+# Here's a long thread discussing numpy's datetime64 timezone problem:
+#   http://mail.scipy.org/pipermail/numpy-discussion/2013-April/066038.html
+# If need be, UDFs can create numpy objects from x using: numpy.datatime64(x.isoformat())
 
 
 class _Vector(object):
@@ -87,8 +86,8 @@ class _Vector(object):
     def __repr__(self):
         return "vector(%d)" % self.length
 
-
 vector = _Vector
+
 
 class _Unit(object):
     """Ignore type used for schemas during file import"""
@@ -155,10 +154,7 @@ def get_float_constructor(float_type):
 def datetime_constructor(value):
     """Creates special constructor for datetime parsing"""
     if valid_data_types.value_is_string(value):
-        dt = datetime_parser.parse(value)
-        if not dt.tzinfo:
-            utc.localize(dt)
-        return dt
+        return datetime_parser.parse(value)
     else:
         try:
             return datetime(*value)
@@ -356,6 +352,11 @@ class _DataTypes(object):
             return None if _DataTypes.value_is_missing_value(result) else result
         except Exception as e:
             raise ValueError(("Unable to cast to type %s\n" % to_type) + str(e))
+
+    @staticmethod
+    def datetime_from_iso(iso_string):
+        """create datetime object from ISO 8601 string"""
+        return datetime_parser.parse(iso_string)
 
 
 valid_data_types = _DataTypes()
