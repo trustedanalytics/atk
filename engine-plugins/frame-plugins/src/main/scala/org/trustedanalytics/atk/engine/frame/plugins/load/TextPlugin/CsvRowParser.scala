@@ -14,11 +14,11 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.frame.plugins.load
+package org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin
 
+import org.apache.commons.csv.{ CSVFormat, CSVParser }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
-import org.apache.commons.csv.{ CSVFormat, CSVParser }
 
 import scala.collection.JavaConversions.asScalaIterator
 

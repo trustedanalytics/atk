@@ -59,7 +59,7 @@ class LoadFromHivePlugin extends SparkCommandPlugin[HiveArgs, FrameEntity] {
     val destinationFrame: SparkFrame = arguments.destination
     val sqlContext = new org.apache.spark.sql.hive.HiveContext(sc)
     val rdd = sqlContext.sql(arguments.query)
-    val additionalData = LoadHiveImpl.convertHiveRddToFrameRdd(rdd)
+    val additionalData = LoadHiveImpl.hiveFrameToFrameRdd(rdd)
 
     LoadRddFunctions.unionAndSave(destinationFrame, additionalData)
   }
