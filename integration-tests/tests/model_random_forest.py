@@ -53,11 +53,9 @@ class ModelRandomForestTest(unittest.TestCase):
         regressor.train(frame,'Class', ['Dim_1','Dim_2'])
 
         print "Predicting on the Frame"
-        output = regressor.predict(frame)
+        regressor_output = regressor.predict(frame)
 
-        self.assertEqual(output.column_names, ['Class', 'Dim_1','Dim_2', 'predicted_class'])
-
-
+        self.assertEqual(regressor_output.column_names, ['Class', 'Dim_1','Dim_2', 'predicted_value'])
 
 if __name__ == "__main__":
     unittest.main()
