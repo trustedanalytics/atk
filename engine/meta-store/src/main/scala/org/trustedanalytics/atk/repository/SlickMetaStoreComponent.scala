@@ -588,6 +588,22 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       list.filter(f => !inLiveGraph(f))
     }
 
+    def getStaleEntities(age: Long)(implicit session: Session): Seq[FrameEntity] = {
+      val oldestDate = DateTime.now.minus(age)
+      //val entities = (for (f <- frames) yield f).list  // anyone know a better way to get a list of type FrameEntity from Slick?
+      frames.list.filter(f => isStale(f, oldestDate))
+    }
+
+    def isTiedUpWithOtherEntities(frame: FrameEntity)(implicit session: Session): Boolean = {
+      frame.graphId match {
+        case None => false
+        case Some(g) => {
+          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
+          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
+        }
+      }
+    }
+
     /**
      * Return true if the supplied frame is part of a live graph
      * @param frame frame in question
@@ -603,8 +619,27 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       }
     }
 
+    def isStale(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
+      frame.status == Status.Active && frame.name.isEmpty && wasLastReadBefore(frame, date) && !belongsToAnotherEntity(frame)
+    }
+
+    def wasLastReadBefore(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
+      frame.lastReadDate.isBefore(date)
+    }
+
+    def belongsToAnotherEntity(frame: FrameEntity)(implicit session: Session): Boolean = {
+       frame.graphId match {
+        case None => false
+        case Some(g) => {
+          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
+          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
+        }
+      }
+    }
+
+
     /**
-     * determines if a frame is live from its metadat
+     * determines if a frame is live from its metadata
      * @param frame frame in question
      */
     override def isLive(frame: FrameEntity): Boolean = {

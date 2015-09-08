@@ -69,6 +69,7 @@ class GarbageCollector(val metaStore: MetaStore, val frameStorage: FrameFileStor
       metaStore.withSession("gc.garbagecollector") {
         implicit session =>
           try {
+            // seems like we need a transaction or lock here?
             if (gcRepo.getCurrentExecutions().isEmpty) {
               info("Execute Garbage Collector")
               val gc: GarbageCollection = gcRepo.insert(new GarbageCollectionTemplate(hostname, processId, new DateTime)).get
@@ -110,7 +111,7 @@ class GarbageCollector(val metaStore: MetaStore, val frameStorage: FrameFileStor
    * @param gc garbage collection database entry
    * @param frame frame to be deleted
    */
-  def deleteFrameData(gc: GarbageCollection, frame: FrameEntity)(implicit sesion: metaStore.Session): Unit = {
+  def deleteFrameData(gc: GarbageCollection, frame: FrameEntity)(implicit session: metaStore.Session): Unit = {
     val description = s"Deleting Data for DataFrame ID: ${frame.id} Name: ${frame.name}"
     try {
       val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
@@ -126,8 +127,7 @@ class GarbageCollector(val metaStore: MetaStore, val frameStorage: FrameFileStor
   }
 
   /**
-   * garbage collect graphs delete underlying frame rdds for a seamless graph and mark as deleted if not referenced
-   * in over a year
+   * garbage collect graphs delete underlying frame rdds for a seamless graph and mark as deleted
    * @param gc garbage collection database entry
    * @param session db session for backend process
    */
