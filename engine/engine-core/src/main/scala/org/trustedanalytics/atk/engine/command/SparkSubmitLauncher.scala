@@ -73,7 +73,6 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
           val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile",
             "--conf", s"config.resource=application.conf")
           val executionParams = Array(
-            "--num-executors", s"${EngineConfig.sparkOnYarnNumExecutors}",
             "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
 
           val executorClassPathString = "spark.executor.extraClassPath"
