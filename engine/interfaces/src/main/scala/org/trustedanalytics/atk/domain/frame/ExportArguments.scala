@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.domain.frame
 
-import org.apache.commons.lang3.StringUtils
+import org.apache.commons.lang.StringUtils
+import org.trustedanalytics.atk.domain.frame.load.JdbcArgs
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
@@ -75,6 +76,7 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
  */
 case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to jdbc""") frame: FrameReference,
                               @ArgDoc("""jdbc table name""") tableName: String,
+                              @ArgDoc("""(optional) jdbc connector type""") connectorType: Option[String],
                               @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
                               @ArgDoc("""(optional) driver name""") driverName: Option[String],
                               @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {
