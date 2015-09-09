@@ -19,9 +19,9 @@ package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 case class AddColumnsArgs(
-    @ArgDoc("<TBD>") frame: FrameReference,
-    @ArgDoc("<TBD>") columnNames: List[String],
-    @ArgDoc("<TBD>") columnTypes: List[String],
+    @ArgDoc("Frame to which new columns need to be added") frame: FrameReference,
+    @ArgDoc("List of names for the new columns") columnNames: List[String],
+    @ArgDoc("List of data types for the new columns") columnTypes: List[String],
     @ArgDoc("""User-Defined Function (|UDF|) which takes the values in the row
 and produces a value, or collection of values, for the
 new cell(s).""") udf: Udf,
