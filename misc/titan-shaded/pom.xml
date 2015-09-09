@@ -27,6 +27,12 @@
             <groupId>com.thinkaurelius.titan</groupId>
             <artifactId>titan-core</artifactId>
             <version>${dep.aurelius.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

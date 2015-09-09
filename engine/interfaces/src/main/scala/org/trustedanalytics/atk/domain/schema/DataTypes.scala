@@ -394,6 +394,12 @@ object DataTypes extends EventLogging {
   def isVectorDataType: DataType => Boolean = vector.isVectorDataType
 
   /**
+   * function to check if data type is of type integer
+   * @return true if isInteger otherwise false
+   */
+  def isIntegerDataType: DataType => Boolean = _.isInteger
+
+  /**
    * This is a special type for values that should be ignored while importing from CSV file.
    *
    * Any column with this type should be dropped.
