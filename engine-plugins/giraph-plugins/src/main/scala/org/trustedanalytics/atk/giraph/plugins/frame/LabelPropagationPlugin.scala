@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 import LabelPropagationJsonFormat._
 
-@PluginDoc(oneLine = "<TBD>",
+@PluginDoc(oneLine = "Label Propagation on Gaussian Random Fields.",
   extended = """Label Propagation on Gaussian Random Fields.
 
 This algorithm is presented in `X. Zhu and Z. Ghahramani.
