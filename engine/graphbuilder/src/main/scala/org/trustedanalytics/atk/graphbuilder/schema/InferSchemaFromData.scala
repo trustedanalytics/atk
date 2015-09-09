@@ -79,7 +79,7 @@ class InferSchemaFromData extends Serializable {
    * @param isGbId true if this property is a Vertex gbId
    */
   private def addProperty(propertyType: PropertyType.Value, property: Property, isGbId: Boolean): Unit = {
-    if (propertyDefsMap.get(property.key).isEmpty) {
+    if (propertyDefsMap.get(property.key).isEmpty && property.value != null) {
       propertyDefsMap += (property.key -> new PropertyDef(propertyType, property.key, property.value.getClass, isGbId, isGbId))
     }
   }
