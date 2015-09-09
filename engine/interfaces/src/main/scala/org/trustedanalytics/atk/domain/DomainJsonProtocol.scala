@@ -262,6 +262,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case n: Double => new JsNumber(n)
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
+        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
         case unk => serializationError("Cannot serialize " + unk.getClass.getName)

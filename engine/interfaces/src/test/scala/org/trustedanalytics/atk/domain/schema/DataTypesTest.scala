@@ -16,8 +16,10 @@
 
 package org.trustedanalytics.atk.domain.schema
 
+import org.joda.time.DateTime
 import org.trustedanalytics.atk.domain.schema.DataTypes.{ float64, float32, int64, int32 }
 import org.scalatest.{ FlatSpec, Matchers }
+import spray.json.JsString
 import scala.collection.mutable.ArrayBuffer
 
 class DataTypesTest extends FlatSpec with Matchers {
@@ -83,8 +85,8 @@ class DataTypesTest extends FlatSpec with Matchers {
     val v = Vector[Double](2.5, 3.6, 4.7)
     DataTypes.vector.typedJson(v).toString shouldBe "[2.5,3.6,4.7]"
   }
-  "vector" should "be a supported primative type" in {
-    DataTypes.supportedPrimativeTypes.contains("vector") shouldBe false
+  "vector" should "not be a supported primitive type" in {
+    DataTypes.supportedPrimitiveTypes.contains("vector") shouldBe false
   }
 
   "vector" should "compare with other vectors appropriately" in {
@@ -133,6 +135,42 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.javaTypeToDataType(new java.lang.Double(3).getClass) shouldBe float64
   }
 
+  "datetime.asDouble" should "throw exception" in {
+    val dt = DateTime.parse("2010-05-08T23:41:54.000Z")
+    intercept[IllegalArgumentException] {
+      DataTypes.datetime.asDouble(dt)
+    }
+  }
+
+  "datetime.typeJson" should "produce good Json" in {
+    val dt = DateTime.parse("2010-05-08T23:41:54.000Z")
+    val json = DataTypes.datetime.typedJson(dt)
+    json shouldBe JsString("2010-05-08T23:41:54.000Z")
+    json.toString shouldBe "\"2010-05-08T23:41:54.000Z\""
+  }
+
+  "datetime" should "compare with other datetime values appropriately" in {
+    val dt = DateTime.parse("2015-08-01")
+    val dtGood = DateTime.parse("2015-08-01")
+    val dtEarlier = DateTime.parse("2015-07-31")
+    val dtAfter = DateTime.parse("2015-08-02")
+    DataTypes.compare(dt, dtGood) shouldBe 0
+    DataTypes.compare(dt, dtEarlier) shouldBe 1
+    DataTypes.compare(dt, dtAfter) shouldBe -1
+    DataTypes.compare(dt, null) shouldBe 1
+    DataTypes.compare(null, dt) shouldBe -1
+    DataTypes.compare(null, null) shouldBe 0
+  }
+
+  "toDateTime" should "produce datetime objects" in {
+    DataTypes.toDateTime(null) shouldBe null
+    DataTypes.toDateTime("2010-05-08T23:41:54.000Z") shouldBe DateTime.parse("2010-05-08T23:41:54.000Z")
+  }
+
+  "asString" should "handle DateTime" in {
+    DataTypes.datetime.asString(DateTime.parse("2010-05-08T23:41:54.000Z")) shouldBe "2010-05-08T23:41:54.000Z"
+  }
+
   "string toDouble" should "fail with nice error message when given bad string" in {
     try {
       DataTypes.toDouble("badString")
@@ -143,7 +181,6 @@ class DataTypesTest extends FlatSpec with Matchers {
         e.getMessage shouldBe "For input string: \"badString\""
     }
   }
-
   "isIntegerType" should "determine which types are integer" in {
     DataTypes.isIntegerDataType(DataTypes.int32) shouldBe true
     DataTypes.isIntegerDataType(DataTypes.int64) shouldBe true
