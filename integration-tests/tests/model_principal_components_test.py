@@ -35,7 +35,7 @@ class ModelPrincipalComponentsTest(unittest.TestCase):
         print "creating the frame"
         train_frame = ta.Frame(train_file)
 
-        print "initializing the naivebayes model"
+        print "initializing the principalcomponents model"
         p = ta.PrincipalComponentsModel()
 
         print "training the model on the frame"
