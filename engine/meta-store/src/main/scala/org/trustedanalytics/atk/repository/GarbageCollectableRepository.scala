@@ -28,7 +28,8 @@ trait GarbageCollectableRepository[Session, Entity <: HasId] extends ReadReposit
    * @param age the length of time in milliseconds for the newest possible record to be deleted
    * @param session current session
    */
-  def listReadyForDeletion(age: Long)(implicit session: Session): Seq[Entity]
+  //def listReadyForDeletion(age: Long)(implicit session: Session): Seq[Entity]
+  def getStaleEntities(age: Long)(implicit session: Session): Seq[Entity]
 
   /**
    * update and mark an entity as having it's data deleted

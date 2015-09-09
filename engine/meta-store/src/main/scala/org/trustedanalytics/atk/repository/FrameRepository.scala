@@ -44,5 +44,5 @@ trait FrameRepository[Session] extends Repository[Session, DataFrameTemplate, Fr
 
   def lookupByGraphId(graphId: Long)(implicit session: Session): Seq[FrameEntity]
 
-  def isLive(frame: FrameEntity): Boolean
+  def isStale(frame: FrameEntity): Boolean
 }

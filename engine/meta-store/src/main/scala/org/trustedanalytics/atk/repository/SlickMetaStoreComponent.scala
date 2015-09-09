@@ -578,93 +578,65 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
      * @param age the length of time in milliseconds for the newest possible record to be deleted
      * @param session current session
      */
-    override def listReadyForDeletion(age: Long)(implicit session: Session): Seq[FrameEntity] = {
+    override def getStaleEntities(age: Long)(implicit session: Session): Seq[FrameEntity] = {
       val oldestDate = DateTime.now.minus(age)
-      val list = (for (
-        f <- frames; if (f.name.isNull &&
-          f.statusId =!= Status.Deleted_Final &&
-          f.lastReadDate < oldestDate) || f.statusId === Status.Deleted
-      ) yield f).list
-      list.filter(f => !inLiveGraph(f))
-    }
-
-    def getStaleEntities(age: Long)(implicit session: Session): Seq[FrameEntity] = {
-      val oldestDate = DateTime.now.minus(age)
-      //val entities = (for (f <- frames) yield f).list  // anyone know a better way to get a list of type FrameEntity from Slick?
       frames.list.filter(f => isStale(f, oldestDate))
     }
 
-    def isTiedUpWithOtherEntities(frame: FrameEntity)(implicit session: Session): Boolean = {
-      frame.graphId match {
-        case None => false
-        case Some(g) => {
-          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
-          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
-        }
-      }
+    override def isStale(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
+      frame.status == Status.Active && frame.name.isEmpty && wasLastReadBefore(frame, date) && !isOwned(frame)
     }
 
-    /**
-     * Return true if the supplied frame is part of a live graph
-     * @param frame frame in question
-     * @param session the user session
-     */
-    def inLiveGraph(frame: FrameEntity)(implicit session: Session): Boolean = {
-      frame.graphId match {
-        case None => false
-        case Some(g) => {
-          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
-          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
-        }
-      }
-    }
-
-    def isStale(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
-      frame.status == Status.Active && frame.name.isEmpty && wasLastReadBefore(frame, date) && !belongsToAnotherEntity(frame)
+    def isOwned(frame: FrameEntity)(implicit session: Session): Boolean = {
+      frame.graphId.isDefined
     }
 
     def wasLastReadBefore(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
       frame.lastReadDate.isBefore(date)
     }
 
-    def belongsToAnotherEntity(frame: FrameEntity)(implicit session: Session): Boolean = {
-       frame.graphId match {
-        case None => false
-        case Some(g) => {
-          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
-          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
-        }
-      }
-    }
+//    /**
+//     * Return true if the supplied frame is part of a live graph
+//     * @param frame frame in question
+//     * @param session the user session
+//     */
+//    def inLiveGraph(frame: FrameEntity)(implicit session: Session): Boolean = {
+//      frame.graphId match {
+//        case None => false
+//        case Some(g) => {
+//          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
+//          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
+//        }
+//      }
+//    }
+//
+//    /**
+//     * determines if a frame is live from its metadata
+//     * @param frame frame in question
+//     */
+//    override def isLive(frame: FrameEntity): Boolean = {
+//      frame.name.isDefined && frame.status == Status.Active
+//    }
 
+//    /**
+//     * return true if the id supplied belongs to an entity that has live children
+//     * @param id
+//     * @param session
+//     */
+//    def hasLiveChildren(id: Long)(implicit session: Session): Boolean = {
+//      val list = frames.where(f => f.parentId === id &&
+//        f.statusId =!= Status.Deleted_Final).list
+//      list.count(f => !hasLiveChildren(f.id)) > 0
+//    }
 
-    /**
-     * determines if a frame is live from its metadata
-     * @param frame frame in question
-     */
-    override def isLive(frame: FrameEntity): Boolean = {
-      frame.name.isDefined && frame.status == Status.Active
-    }
-
-    /**
-     * return true if the id supplied belongs to an entity that has live children
-     * @param id
-     * @param session
-     */
-    def hasLiveChildren(id: Long)(implicit session: Session): Boolean = {
-      val list = frames.where(f => f.parentId === id &&
-        f.statusId =!= Status.Deleted_Final).list
-      list.count(f => !hasLiveChildren(f.id)) > 0
-    }
-
-    /**
-     * return true if the id supplied belongs to an entity that has children
-     * @param id
-     * @param session
-     */
-    def hasChildren(id: Long)(implicit session: Session): Boolean = {
-      frames.where(_.parentId === id).list.length > 0
-    }
+//    /**
+//     * return true if the id supplied belongs to an entity that has children
+//     * @param id
+//     * @param session
+//     */
+//    def hasChildren(id: Long)(implicit session: Session): Boolean = {
+//      frames.where(_.parentId === id).list.length > 0
+//    }
 
     /**
      * update the last read data of an entity if it has been marked as deleted change it's status
