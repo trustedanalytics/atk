@@ -16,13 +16,12 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 
 /**
@@ -157,6 +156,8 @@ class KCliquePercolationPlugin extends SparkCommandPlugin[KCliqueArgs, KCliqueRe
    * The name of the command, e.g. graphs/ml/kclique_percolation
    */
   override def name: String = "graph:/ml/kclique_percolation"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * The number of jobs varies with the number of supersteps required to find the connected components
