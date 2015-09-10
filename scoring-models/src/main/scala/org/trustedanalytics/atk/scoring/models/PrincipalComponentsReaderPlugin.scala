@@ -22,17 +22,14 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import spray.json._
 
+/* Reader plugin for Principal Components */
 class PrincipalComponentsReaderPlugin() extends ModelLoader {
-
-  private var scoringModel: PrincipalComponentsScoringModel = _
 
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
     println(str)
     val json: JsValue = str.parseJson
     val pcaModel = json.convertTo[PrincipalComponentsData]
-    scoringModel = new PrincipalComponentsScoringModel(pcaModel)
-    scoringModel.asInstanceOf[Model]
-
+    new PrincipalComponentsScoringModel(pcaModel).asInstanceOf[Model]
   }
 }

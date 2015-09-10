@@ -26,6 +26,9 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.collection.mutable.Map
 import scala.concurrent._
 
+/**
+ * Scoring model for Principal Components
+ */
 class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends PrincipalComponentsData(pcaModel.k, pcaModel.observationColumns,
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
@@ -48,6 +51,11 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
     score
   }
 
+  /**
+   * Compute the principal components for the observation
+   * @param x Each observation stored as an Array[Double]
+   * @return (org.apache.spark.mllib)DenseMatrix
+   */
   def computePrincipalComponents(x: Array[Double]): DenseMatrix = {
     var inputVector = new org.apache.spark.mllib.linalg.DenseVector(x)
     if (pcaModel.meanCentered) {
@@ -57,6 +65,13 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
     new DenseMatrix(1, inputVector.size, inputVector.toArray).multiply(pcaModel.vFactor.asInstanceOf[DenseMatrix])
   }
 
+  /**
+   * Compute the t-squared index for the observation
+   * @param y Projection of singular vectors on the input
+   * @param E Right singular values of the input
+   * @param k Number of principal components
+   * @return t-squared index for the observation
+   */
   def computeTSquaredIndex(y: Array[Double], E: Vector, k: Int): Double = {
     val yArray: Array[Double] = y
     var t: Double = 0.0
@@ -66,4 +81,3 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
     t
   }
 }
-

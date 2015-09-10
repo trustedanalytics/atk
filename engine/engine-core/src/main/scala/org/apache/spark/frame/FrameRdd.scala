@@ -104,8 +104,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd into RDD[Vector] format required by MLLib
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @return RDD of (org.apache.spark.mllib)Vector
    */
-  def toVectorDenseRDD(featureColumnNames: List[String]): RDD[Vector] = {
+  def toDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
     this.mapRows(row => {
       val array = row.valuesAsArray(featureColumnNames, flattenInputs = true)
       val b = array.map(i => DataTypes.toDouble(i))
@@ -113,12 +115,35 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     })
   }
 
-  def toMeanCenteredVectorDenseRDD(vectorRdd: RDD[Vector], columnMeans: Vector): RDD[Vector] = {
+  /**
+   * Compute MLLib's MultivariateStatisticalSummary from FrameRdd
+   * @param columnNames Names of the frame's column(s) whose column statistics are to be computed
+   * @return MLLib's MultivariateStatisticalSummary
+   */
+  def columnStatistics(columnNames: List[String]): MultivariateStatisticalSummary = {
+    val vectorRdd = toDenseVectorRDD(columnNames)
+    Statistics.colStats(vectorRdd)
+  }
+
+  /**
+   * Convert FrameRdd to RDD[Vector] by mean centering the specified columns
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @return RDD of (org.apache.spark.mllib)Vector
+   */
+  def toMeanCenteredDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
+    val vectorRdd = toDenseVectorRDD(featureColumnNames)
+    val columnMeans: Vector = columnStatistics(featureColumnNames).mean
     vectorRdd.map(i => {
       Vectors.dense((new DenseVector(i.toArray) - new DenseVector(columnMeans.toArray)).toArray)
     })
   }
 
+  /**
+   * Convert FrameRdd to RDD[Vector]
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @param columnWeights The weights of the columns
+   * @return RDD of (org.apache.spark.mllib)Vector
+   */
   def toDenseVectorRDDWithWeights(featureColumnNames: List[String], columnWeights: List[Double]): RDD[Vector] = {
     require(columnWeights.length == featureColumnNames.length, "Length of columnWeights and featureColumnNames needs to be the same")
     this.mapRows(row => {
@@ -495,6 +520,13 @@ object FrameRdd {
     rowRDD
   }
 
+  /**
+   * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
+   * @param indexedRows Rows of the frame as RDD[Row]
+   * @param frameSchema Schema of the frame
+   * @param featureColumnNames List of the frame's column(s) to be used
+   * @return RDD[IndexedRow]
+   */
   def toIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String]): RDD[IndexedRow] = {
     val rowWrapper = new RowWrapper(frameSchema)
     indexedRows.map {
@@ -505,6 +537,14 @@ object FrameRdd {
     }
   }
 
+  /**
+   * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
+   * @param indexedRows Rows of the frame as RDD[Row]
+   * @param frameSchema Schema of the frame
+   * @param featureColumnNames List of the frame's column(s) to be used
+   * @param meanVector Vector storing the means of the columns
+   * @return RDD[IndexedRow]
+   */
   def toMeanCenteredIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String], meanVector: Vector): RDD[IndexedRow] = {
     val rowWrapper = new RowWrapper(frameSchema)
     indexedRows.map {

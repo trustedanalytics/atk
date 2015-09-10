@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.engine.model.plugins.MatrixImplicits
 import MatrixImplicits._
 
 /**
- *
+ * Object returned on training a principal components model
  * @param k Handle to the model to be used
  * @param observationColumns List of observation column name(s) used to train the model
  * @param meanCentered Indicator whether the columns were mean centered for training

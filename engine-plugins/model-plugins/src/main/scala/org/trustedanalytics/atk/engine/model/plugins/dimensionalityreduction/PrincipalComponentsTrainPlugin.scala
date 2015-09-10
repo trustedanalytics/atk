@@ -71,17 +71,15 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
 
     val k = arguments.k.getOrElse(arguments.observationColumns.length)
 
-    val vectorRdd = frame.rdd.toVectorDenseRDD(arguments.observationColumns)
-    val columnMeans: Vector = Statistics.colStats(vectorRdd).mean
-
     val rowMatrix: RowMatrix = new RowMatrix(arguments.meanCentered match {
-      case true => frame.rdd.toMeanCenteredVectorDenseRDD(vectorRdd, columnMeans)
-      case false => vectorRdd
+      case true => frame.rdd.toMeanCenteredDenseVectorRDD(arguments.observationColumns)
+      case false => frame.rdd.toDenseVectorRDD(arguments.observationColumns)
     })
 
     val svd = rowMatrix.computeSVD(k, computeU = true)
 
-    val principalComponentsObject = new PrincipalComponentsData(k, arguments.observationColumns, arguments.meanCentered, columnMeans, svd.s, svd.V)
+    val columnStatistics = frame.rdd.columnStatistics(arguments.observationColumns)
+    val principalComponentsObject = new PrincipalComponentsData(k, arguments.observationColumns, arguments.meanCentered, columnStatistics.mean, svd.s, svd.V)
     model.data = principalComponentsObject.toJson.asJsObject
 
     new PrincipalComponentsTrainReturn(principalComponentsObject)

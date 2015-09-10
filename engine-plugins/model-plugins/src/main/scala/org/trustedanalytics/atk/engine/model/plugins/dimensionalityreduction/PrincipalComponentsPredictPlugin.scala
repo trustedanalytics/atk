@@ -36,6 +36,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 import org.apache.spark.sql.Row
 
+import scala.RuntimeException
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict using principal components model.",
@@ -77,17 +78,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val principalComponentJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val principalComponentData = principalComponentJsObject.convertTo[PrincipalComponentsData]
 
-    if (arguments.meanCentered == true) {
-      require(principalComponentData.meanCentered == arguments.meanCentered, "Cannot mean center the predict frame if the train frame was not mean centered.")
-    }
-
-    if (arguments.observationColumns.isDefined) {
-      require(principalComponentData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
-    }
-
-    if (arguments.c.isDefined) {
-      require(principalComponentData.k >= arguments.c.get, "Number of components must be at most the number of components trained on")
-    }
+    validateInputArguments(arguments, principalComponentData)
 
     val c = arguments.c.getOrElse(principalComponentData.k)
     val predictColumns = arguments.observationColumns.getOrElse(principalComponentData.observationColumns)
@@ -95,30 +86,18 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     //create RDD from the frame
     val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
 
-    val indexedRowMatrix: IndexedRowMatrix = new IndexedRowMatrix(
-      arguments.meanCentered match {
-        case true => FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns, principalComponentData.meanVector)
-        case false => FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns)
-      })
+    val indexedRowMatrix: IndexedRowMatrix = toIndexedRowMatrix(arguments.meanCentered, frame, principalComponentData, predictColumns, indexedFrameRdd)
 
     val eigenVectors = principalComponentData.vFactor
     val y = indexedRowMatrix.multiply(eigenVectors)
     var columnNames = new ListBuffer[String]()
-    var columnTypes = new ListBuffer[DataTypes.DataType]()
+    var columnTypes = new ListBuffer[DataType]()
     for (i <- 1 to c) {
       val colName = "p_" + i.toString
       columnNames += colName
       columnTypes += DataTypes.float64
     }
-    val yNew = arguments.tSquaredIndex match {
-      case true => {
-        val t = tSquaredIndex(y, principalComponentData.singularValues, principalComponentData.k)
-        columnNames += "t_squared_index"
-        columnTypes += DataTypes.float64
-        t
-      }
-      case _ => y
-    }
+    val yNew = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, y, columnNames, columnTypes)
 
     val resultFrameRdd = yNew.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
       .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
@@ -136,17 +115,76 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
   }
 
   /**
+   * Validate the arguments to the plugin
+   * @param arguments Arguments passed to the predict plugin
+   * @param principalComponentData Trained PrincipalComponents model data
+   */
+  def validateInputArguments(arguments: PrincipalComponentsPredictArgs, principalComponentData: PrincipalComponentsData): Unit = {
+    if (arguments.meanCentered == true) {
+      require(principalComponentData.meanCentered == arguments.meanCentered, "Cannot mean center the predict frame if the train frame was not mean centered.")
+    }
+
+    if (arguments.observationColumns.isDefined) {
+      require(principalComponentData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
+    }
+
+    if (arguments.c.isDefined) {
+      require(principalComponentData.k >= arguments.c.get, "Number of components must be at most the number of components trained on")
+    }
+  }
+
+  /**
+   * Compute an IndexedRowMatrix with/without t-squared index depending on the argument
+   * @param tSquaredIndex Flag indicating whether we need to compute the t-squared index
+   * @param principalComponentData Trained PrincipalComponents model data
+   * @param y IndexedRowMatrix storing the projection into k dimensional space
+   * @param columnNames ListBuffer storing the column name(s) of the output frame
+   * @param columnTypes ListBuffer storing the column type(s) of the output frame
+   * @return IndexedRowMatrix
+   */
+  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData,
+                            y: IndexedRowMatrix, columnNames: ListBuffer[String], columnTypes: ListBuffer[DataType]): IndexedRowMatrix = {
+    tSquaredIndex match {
+      case true => {
+        val t = computeTSquaredIndex(y, principalComponentData.singularValues, principalComponentData.k)
+        columnNames += "t_squared_index"
+        columnTypes += DataTypes.float64
+        t
+      }
+      case _ => y
+    }
+  }
+
+  /**
+   * Check flag and mean center the input RDD
+   * @param meanCentered Flag indicating whether the frame is to be mean centered
+   * @param frame
+   * @param principalComponentData Trained PrincipalComponents model data
+   * @param predictColumns Frame's column(s) to be used for principal components computation
+   * @param indexedFrameRdd
+   * @return
+   */
+  def toIndexedRowMatrix(meanCentered: Boolean, frame: SparkFrame, principalComponentData: PrincipalComponentsData,
+                         predictColumns: List[String], indexedFrameRdd: RDD[(Long, Row)]): IndexedRowMatrix = {
+    new IndexedRowMatrix(
+      meanCentered match {
+        case true => FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns, principalComponentData.meanVector)
+        case false => FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns)
+      })
+  }
+
+  /**
    * Compute the t-squared index for an IndexedRowMatrix created from the input frame
    * @param y IndexedRowMatrix storing the projection into k dimensional space
    * @param E Singular Values
    * @param k Number of dimensions
    * @return IndexedRowMatrix with existing elements in the RDD and computed t-squared index
    */
-  def tSquaredIndex(y: IndexedRowMatrix, E: Vector, k: Int): IndexedRowMatrix = {
+  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, k: Int): IndexedRowMatrix = {
     val matrix = y.rows.map(row => {
       val rowVectorToArray = row.vector.toArray
       var t = 0.0
-      for (i <- 0 to k - 1) {
+      for (i <- 0 until k) {
         if (E(i) > 0)
           t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
       }
