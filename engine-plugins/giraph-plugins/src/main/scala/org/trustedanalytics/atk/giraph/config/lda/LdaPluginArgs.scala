@@ -32,7 +32,7 @@ Column should contain a str value.""") documentColumnName: String,
                         @ArgDoc("""Column name for words.
 Column should contain a str value.""") wordColumnName: String,
                         @ArgDoc("""Column name for word count.
-Column should contain an int64 value.""") wordCountColumnName: String,
+Column should contain an int32 or int64 value.""") wordCountColumnName: String,
                         @ArgDoc("""The maximum number of iterations that the algorithm will execute.
 The valid value range is all positive int.
 Default is 20.""") maxIterations: Option[Int] = None,

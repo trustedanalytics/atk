@@ -422,6 +422,8 @@ object FrameRdd {
           }
           else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
             mutableRow(i) = o.toString
+            // todo - add conversion to datetime object
+            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
           else if (array(i).dataType.getClass == ShortType.getClass) {
             mutableRow(i) = row.getShort(i).toInt
@@ -574,6 +576,7 @@ object FrameRdd {
           case x if x.equals(DataTypes.float32) => FloatType
           case x if x.equals(DataTypes.float64) => DoubleType
           case x if x.equals(DataTypes.string) => StringType
+          case x if x.equals(DataTypes.datetime) => StringType
           case x if x.isVector => VectorType
           case x if x.equals(DataTypes.ignore) => StringType
         }, nullable = true)
@@ -639,7 +642,7 @@ object FrameRdd {
    * Converts the schema object to a StructType for use in creating a SchemaRDD
    * @return StructType with StructFields corresponding to the columns of the schema object
    */
-  def schemaToHiveType(schema: Schema): List[(String, String)] = {
+  def schemaToAvroType(schema: Schema): List[(String, String)] = {
     val fields = schema.columns.map {
       column =>
         (column.name.replaceAll("\\s", ""), column.dataType match {
@@ -648,6 +651,7 @@ object FrameRdd {
           case x if x.equals(DataTypes.float32) => "double"
           case x if x.equals(DataTypes.float64) => "double"
           case x if x.equals(DataTypes.string) => "string"
+          case x if x.equals(DataTypes.datetime) => "string"
           case x => throw new IllegalArgumentException(s"unsupported export type ${x.toString}")
         })
     }

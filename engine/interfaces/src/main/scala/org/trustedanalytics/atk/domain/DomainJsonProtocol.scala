@@ -262,6 +262,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case n: Double => new JsNumber(n)
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
+        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
         case unk => serializationError("Cannot serialize " + unk.getClass.getName)
@@ -362,7 +363,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val exportHdfsJsonPlugin = jsonFormat4(ExportHdfsJsonArgs)
   implicit val exportHdfsHivePlugin = jsonFormat2(ExportHdfsHiveArgs)
   implicit val exportHdfsHBasePlugin = jsonFormat4(ExportHdfsHBaseArgs)
-  implicit val exportHdfsJdbcPlugin = jsonFormat5(ExportHdfsJdbcArgs)
+  implicit val exportHdfsJdbcPlugin = jsonFormat6(ExportHdfsJdbcArgs)
 
   //histogram formats
   implicit val histogramArgsFormat = jsonFormat5(HistogramArgs)
@@ -574,7 +575,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val hBaseArgsFormat = jsonFormat5(HBaseArgs)
 
-  implicit val jdbcArgsFormat = jsonFormat5(JdbcArgs)
+  implicit val jdbcArgsFormat = jsonFormat6(JdbcArgs)
 
   implicit val hiveArgsFormat = jsonFormat2(HiveArgs)
 

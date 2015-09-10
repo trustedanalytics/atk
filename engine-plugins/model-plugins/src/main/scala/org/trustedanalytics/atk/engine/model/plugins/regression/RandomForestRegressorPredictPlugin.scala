@@ -96,7 +96,7 @@ class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForest
       row.addValue(prediction)
     })
 
-    val updatedSchema = frame.schema.addColumn("predicted_class", DataTypes.float64)
+    val updatedSchema = frame.schema.addColumn("predicted_value", DataTypes.float64)
     val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by RandomForests as a regressor predict operation"))) {

@@ -24,8 +24,6 @@ import json
 
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo, Doc, ApiVersion
 from trustedanalytics.core.atktypes import *
-from trustedanalytics.core.frame import Frame
-from trustedanalytics.core.graph import Graph
 
 __all__ = ['get_command_def']
 
@@ -39,7 +37,8 @@ json_type_id_to_data_type  = {
     "atk:float32": float32,
     "atk:float64": float64,
     "atk:bool": bool,
-    "atk:vector": vector
+    "atk:vector": vector,
+    "atk:datetime": datetime
 }
 
 _unspecified = object()

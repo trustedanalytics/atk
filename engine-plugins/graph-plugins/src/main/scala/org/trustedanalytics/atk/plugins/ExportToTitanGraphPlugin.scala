@@ -78,6 +78,9 @@ class ExportToTitanGraphPlugin extends SparkCommandPlugin[ExportGraph, GraphEnti
     validateLabelNames(seamlessGraph.edgeFrames, seamlessGraph.edgeLabels)
     val titanGraph: GraphEntity = engine.graphs.createGraph(
       new GraphTemplate(arguments.newGraphName, StorageFormats.HBaseTitan))
+
+    // TODO: this is inferring the schema from the data but it would be better to just get it from the source frames
+
     val graph = graphs.expectGraph(seamlessGraph.toReference)
     loadTitanGraph(createGraphBuilderConfig(titanGraph.storage),
       graphs.loadGbVertices(sc, graph),
