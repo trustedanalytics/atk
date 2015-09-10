@@ -1376,15 +1376,14 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('source','?',"""<TBD>""")
-    @arg('graph','?',"""<TBD>""")
-    @arg('label','?',"""<TBD>""")
-    @arg('src_vertex_label','?',"""<TBD>""")
-    @arg('dest_vertex_label','?',"""<TBD>""")
-    @arg('directed','?',"""<TBD>""")
-    @arg('_info','?',"""<TBD>""")
+    @arg('graph','?',"""graph these edges belong to""")
+    @arg('label','?',"""edge label""")
+    @arg('src_vertex_label','?',"""label of the source vertex type""")
+    @arg('dest_vertex_label','?',"""label of the destination vertex type""")
+    @arg('directed','?',"""directed or undirected""")
+    @arg('_info','?',"""""")
     @returns('VertexFrame object',"""An object with access to the frame.""")
-    def __init__(self, source=None, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
+    def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 
     Examples
@@ -1456,7 +1455,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
-            new_frame_name = self._backend.create_edge_frame(self, source, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
+            new_frame_name = self._backend.create_edge_frame(self, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
             logger.info('Created new edge frame "%s"', new_frame_name)
         except:
             error = IaError(logger)

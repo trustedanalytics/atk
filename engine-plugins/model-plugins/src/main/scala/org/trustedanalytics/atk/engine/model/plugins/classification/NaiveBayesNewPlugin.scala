@@ -34,8 +34,7 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of this model
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "")
+@PluginDoc(oneLine = "create a new model")
 class NaiveBayesNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

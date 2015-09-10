@@ -578,7 +578,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
         self.copy_graph_frame(source_frame, frame)
         return source_frame.name
 
-    def create_edge_frame(self, frame, source, label, graph, src_vertex_label, dest_vertex_label, directed, _info=None):
+    def create_edge_frame(self, frame, label, graph, src_vertex_label, dest_vertex_label, directed, _info=None):
         logger.info("REST Backend: create vertex_frame with label %s" % label)
         if _info is not None and isinstance(_info, dict):
             _info = FrameInfo(_info)
