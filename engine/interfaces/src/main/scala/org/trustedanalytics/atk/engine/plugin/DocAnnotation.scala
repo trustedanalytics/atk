@@ -42,7 +42,7 @@ case class ArgDocAnnotation(description: String = "") extends scala.annotation.S
  * @param returns optional description for the return object.  Uses empty string for null value, instead of null
  *                for the sake of serialization, and instead of Option for the sake of reflection
  */
-case class PluginDocAnnotation(oneLine: String, extended: String, returns: String = "") extends scala.annotation.StaticAnnotation {
+case class PluginDocAnnotation(oneLine: String, extended: String = "", returns: String = "") extends scala.annotation.StaticAnnotation {
 
   /**
    * Get description text of returns as Option, accounting for its empty semantics
