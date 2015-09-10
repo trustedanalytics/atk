@@ -7,5 +7,5 @@ induced subgraph:
 
 .. code::
 
-    >>> my_graph = ta.TitanGraph([user_vertex_rule, product_vertex_rule, edge_rule])
+    >>> my_graph = ta.get_graph("mytitangraph")
     >>> my_subgraph = my_graph.sampling.vertex_sample(1000, 'uniform')
