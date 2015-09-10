@@ -17,125 +17,9 @@
 package org.trustedanalytics.atk.engine.graph
 
 import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderConfig
-import org.trustedanalytics.atk.graphbuilder.parser.rule.{ ConstantValue, ParsedValue, EdgeRule => GBEdgeRule, PropertyRule => GBPropertyRule, Value => GBValue, VertexRule => GBVertexRule }
-import org.trustedanalytics.atk.graphbuilder.parser.{ ColumnDef, InputSchema }
-import org.trustedanalytics.atk.domain.frame.FrameName
-import org.trustedanalytics.atk.domain.graph.construction.{ EdgeRule, PropertyRule, ValueRule, VertexRule, _ }
-import org.trustedanalytics.atk.domain.graph.{ GraphName, GraphEntity, LoadGraphArgs }
-import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
-import org.trustedanalytics.atk.domain.schema.Schema
+import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.engine.EngineConfig
 import com.typesafe.config.Config
-
-/**
- * Converter that produces the graphbuilder3 consumable
- * org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderConfig object from a GraphLoad command,
- * the schema of the source dataframe, and the metadata of the graph being written to.
- *
- * @param schema Schema of the source dataframe.
- * @param graphLoad The graph loading command.
- * @param graph Metadata for the graph being written to.
- */
-class GraphBuilderConfigFactory(val schema: Schema, val graphLoad: LoadGraphArgs, graph: GraphEntity) {
-
-  // TODO graphbuilder does not yet support taking multiple frames as input
-  require(graphLoad.frameRules.size == 1, "only one frame rule per call is supported in this version")
-
-  val theOnlyFrameRule = graphLoad.frameRules.head
-
-  val graphConfig: GraphBuilderConfig = {
-    new GraphBuilderConfig(getInputSchema(schema),
-      getGBVertexRules(theOnlyFrameRule.vertexRules),
-      getGBEdgeRules(theOnlyFrameRule.edgeRules),
-      GraphBuilderConfigFactory.getTitanConfiguration(graph.storage),
-      append = graphLoad.append,
-      // The retainDanglingEdges option doesn't make sense for Python Layer because of how the rules get defined
-      retainDanglingEdges = false,
-      inferSchema = true,
-      broadcastVertexIds = false)
-  }
-
-  /**
-   * Converts org.trustedanalytics.atk.domain.schema.Schema into org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-   * @param schema The dataframe schema to be converted.
-   * @return Dataframe schema as a org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-   */
-  private def getInputSchema(schema: Schema): InputSchema = {
-
-    val columns: List[ColumnDef] = schema.columnTuples map { case (name: String, dataType: DataType) => new ColumnDef(name, dataType.scalaType) }
-
-    new InputSchema(columns)
-  }
-
-  /**
-   * Converts org.trustedanalytics.atk.domain.graphconstruction.Value into the GraphBuilder3 consumable
-   * org.trustedanalytics.atk.graphbuilder.parser.rule.Value
-   *
-   * @param value A value from a graph load's parsing rules.
-   * @return A org.trustedanalytics.atk.graphbuilder.parser.rule.Value
-   */
-  private def getGBValue(value: ValueRule): GBValue = {
-    if (value.source == GBValueSourcing.CONSTANT) {
-      new ConstantValue(value.value)
-    }
-    else {
-      new ParsedValue(value.value)
-    }
-  }
-
-  /**
-   * Converts {org.trustedanalytics.atk.domain.graphconstruction.Property} into the GraphBuilder3 consumable
-   * org.trustedanalytics.atk.graphbuilder.parser.rule.PropertyRule
-   * @param property A property rule from a graph load's parsing rules.
-   * @return A org.trustedanalytics.atk.graphbuilder.parser.rule.PropertyRule
-   */
-  private def getGBPropertyRule(property: PropertyRule): GBPropertyRule = {
-    new GBPropertyRule(getGBValue(property.key), getGBValue(property.value))
-  }
-
-  /**
-   * Converts org.trustedanalytics.atk.domain.graphconstruction.VertexRule to GraphBuilder3 consumable
-   * org.trustedanalytics.atk.graphbuilder.parser.rule.VertexRule
-   * @param vertexRule A vertex rule from a graph load's parsing rules.
-   * @return A org.trustedanalytics.atk.domain.graphconstruction.VertexRule
-   */
-  private def getGBVertexRule(vertexRule: VertexRule): GBVertexRule = {
-    new GBVertexRule(getGBPropertyRule(vertexRule.id), vertexRule.properties.map(getGBPropertyRule))
-  }
-
-  /**
-   * Converts a list of org.trustedanalytics.atk.domain.graphconstruction.VertexRule's into a list of
-   * GraphBuilder3 consumable org.trustedanalytics.atk.graphbuilder.parser.rule.VertexRule's
-   * @param vertexRules A list of vertex rules from a graph load's parsing rules.
-   * @return A list of org.trustedanalytics.atk.domain.graphconstruction.VertexRule
-   */
-  private def getGBVertexRules(vertexRules: List[VertexRule]): List[GBVertexRule] = {
-    vertexRules map getGBVertexRule
-  }
-
-  /**
-   * Converts org.trustedanalytics.atk.domain.graphconstruction.EdgeRule to GraphBuilder3 consumable
-   * org.trustedanalytics.atk.graphbuilder.parser.rule.EdgeRule
-   * @param edgeRule An edge rule from a graph load's parsing rules.
-   * @return A org.trustedanalytics.atk.domain.graphconstruction.EdgeRule
-   */
-  private def getGBEdgeRule(edgeRule: EdgeRule): GBEdgeRule = {
-    new GBEdgeRule(getGBPropertyRule(edgeRule.tail), getGBPropertyRule(edgeRule.head),
-      getGBValue(edgeRule.label), edgeRule.properties.map(getGBPropertyRule), biDirectional = edgeRule.bidirectional)
-  }
-
-  /**
-   * Converts a list of org.trustedanalytics.atk.domain.graphconstruction.EdgeRule's into a list of
-   * GraphBuilder3 consumable org.trustedanalytics.atk.graphbuilder.parser.rule.EdgeRule's
-   * @param edgeRules A list of edge rules from a graph load's parsing rules.
-   * @return A list of org.trustedanalytics.atk.domain.graphconstruction.EdgeRule
-   */
-  private def getGBEdgeRules(edgeRules: List[EdgeRule]): List[GBEdgeRule] = {
-    edgeRules map getGBEdgeRule
-  }
-
-}
 
 object GraphBuilderConfigFactory {
   /**
@@ -143,7 +27,7 @@ object GraphBuilderConfigFactory {
    * a graph name and a org.trustedanalytics.atk.domain.graphconstruction.outputConfiguration
    * @param backendStorageName Name of the graph to be written to.
    *
-   * @return GraphBuilder3 consumable org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
+   * @return GraphBuilder3 consumable org.truststedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
    */
   def getTitanConfiguration(backendStorageName: String): SerializableBaseConfiguration = {
 
