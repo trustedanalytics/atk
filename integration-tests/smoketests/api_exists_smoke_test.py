@@ -220,7 +220,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
     def test_expected_methods_exist_on_titangraph(self):
         self.assert_methods_defined(['annotate_degrees',
                                      'annotate_weighted_degrees',
-                                     'append',
                                      'clustering_coefficient',
                                      'copy',
                                      'export_to_graph',
