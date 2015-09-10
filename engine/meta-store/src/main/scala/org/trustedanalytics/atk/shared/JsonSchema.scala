@@ -161,7 +161,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
         }
         val extended: String = argValues(1) match {
           case Constant(s: String) => s
-          case _ => throw new RuntimeException(s"Internal Error - bad extended description in annotation for $tag (expected String)")
+          case _ => ""
         }
         val returns: String = argValues(2) match {
           case Constant(s: String) => s

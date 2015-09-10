@@ -28,8 +28,7 @@ was trained on.""") observationColumns: Option[List[String]]) {
 
 }
 
-@PluginDoc(oneLine = "<TBD>",
-  extended = """""")
+@PluginDoc(oneLine = "Predict")
 class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, FrameReference] {
   /**
    * The name of the command.

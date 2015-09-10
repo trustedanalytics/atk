@@ -29,8 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Sort by one or more columns
  */
-@PluginDoc(oneLine = "Sort by one or more columns.",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Sort by one or more columns.")
 class SortByColumnsPlugin extends SparkCommandPlugin[SortByColumnsArgs, UnitReturn] {
 
   /**
