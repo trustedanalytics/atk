@@ -227,7 +227,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
                                      'graph_clustering',
-                                     'load',
                                      'ml',
                                      'name',
                                      'query',
