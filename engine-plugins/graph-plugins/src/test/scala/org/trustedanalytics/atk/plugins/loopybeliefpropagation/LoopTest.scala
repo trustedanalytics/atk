@@ -14,19 +14,18 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
+import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
 import org.scalatest.{ Matchers, FlatSpec }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.SparkException
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
- * Tests that check that bad inputs and arguments will raise the appropriate exceptions.
+ * These test cases validate that belief propagation works correctly on (very simple) graphs that contain loops.
  */
-
-class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
+class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
   trait BPTest {
 
@@ -39,7 +38,7 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -48,16 +47,17 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
       posteriorProperty = propertyForLBPOutput)
 
   }
+  "BP Runner" should "work with a triangle with uniform probabilities" in new BPTest {
 
-  "BP Runner" should "throw an illegal argument exception when vertices have different prior state space sizes " in new BPTest {
+    val vertexSet: Set[Long] = Set(1, 2, 3)
 
-    val vertexSet: Set[Long] = Set(1, 2)
-
-    val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d), 2.toLong -> Vector(0.5d, 0.5d))
+    val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
+      2.toLong -> Vector(0.5d, 0.5d), 3.toLong -> Vector(0.5d, 0.5d))
 
     //  directed edge list is made bidirectional with a flatmap
 
-    val edgeSet: Set[(Long, Long)] = Set()
+    val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong), (1.toLong, 3.toLong), (2.toLong, 3.toLong))
+      .flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
     val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, pdfValues.get(x).get))))
 
@@ -77,26 +77,34 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
-    val exception = intercept[SparkException] {
-      val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
-    }
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
-    exception.asInstanceOf[SparkException].getMessage should include("IllegalArgumentException")
-    exception.asInstanceOf[SparkException].getMessage should include("Length of prior does not match state space size")
+    val testVertices = verticesOut.collect().toSet
+    val testEdges = edgesOut.collect().toSet
+
+    val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
+      expectedVerticesOut,
+      List(propertyForLBPOutput),
+      floatingPointEqualityThreshold)
+
+    test shouldBe true
+    testEdges shouldBe expectedEdgesOut
+
   }
 
-  "BP Runner" should "throw a NotFoundException when the vertex does provide the request property" in new BPTest {
+  "BP Runner" should "work with a four-cycle with uniform probabilities" in new BPTest {
 
-    val vertexSet: Set[Long] = Set(1)
+    val vertexSet: Set[Long] = Set(1, 2, 3, 4)
 
-    val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d))
+    val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
+      2.toLong -> Vector(0.5d, 0.5d), 3.toLong -> Vector(0.5d, 0.5d), 4.toLong -> Vector(0.5d, 0.5d))
 
     //  directed edge list is made bidirectional with a flatmap
 
-    val edgeSet: Set[(Long, Long)] = Set()
+    val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong), (2.toLong, 3.toLong),
+      (3.toLong, 4.toLong), (4.toLong, 1.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property("hahawrongname", pdfValues.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, pdfValues.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
@@ -114,12 +122,19 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
-    val exception = intercept[Exception] {
-      BeliefPropagationRunner.run(verticesIn, edgesIn, args)
-    }
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
-    exception.asInstanceOf[Exception].getMessage should include("not be found")
-    exception.asInstanceOf[Exception].getMessage should include(inputPropertyName)
+    val testVertices = verticesOut.collect().toSet
+    val testEdges = edgesOut.collect().toSet
+
+    val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
+      expectedVerticesOut,
+      List(propertyForLBPOutput),
+      floatingPointEqualityThreshold)
+
+    test shouldBe true
+    testEdges shouldBe expectedEdgesOut
+
   }
+
 }

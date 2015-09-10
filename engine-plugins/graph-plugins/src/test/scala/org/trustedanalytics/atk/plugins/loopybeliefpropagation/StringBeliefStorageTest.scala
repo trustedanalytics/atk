@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
 import org.scalatest.{ Matchers, FlatSpec }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
@@ -39,7 +39,7 @@ class StringBeliefStorageTest extends FlatSpec with Matchers with TestingSparkCo
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -75,7 +75,7 @@ class StringBeliefStorageTest extends FlatSpec with Matchers with TestingSparkCo
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet

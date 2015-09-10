@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
 import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.scalatest.{ Matchers, FlatSpec }
@@ -69,7 +69,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   "BP Runner" should "run for one iteration when convergence threshold is 1.0" in new CTTest {
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -77,14 +77,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = Some(1d),
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
     log should include("Total number of iterations: 1")
   }
 
   "BP Runner" should "run for two iterations when convergence threshold is 0.2" in new CTTest {
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -92,14 +92,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = Some(0.2d),
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
     log should include("Total number of iterations: 2")
   }
 
   "BP Runner" should "run for two iterations when  convergence threshold is 0" in new CTTest {
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -107,7 +107,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = Some(0d),
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
     log should include("Total number of iterations: 2")
   }
@@ -116,7 +116,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   "BP Runner" should "run for two iterations when no convergence threshold given" in new CTTest {
 
-    val args = BeliefPropagationRunnerArgs(
+    val args = LoopyBeliefPropagationRunnerArgs(
       priorProperty = inputPropertyName,
       edgeWeightProperty = None,
       maxIterations = Some(10),
@@ -124,7 +124,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = None,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = BeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
 
     log should include("Total number of iterations: 2")
   }

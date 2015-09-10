@@ -14,12 +14,11 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.atkpregel.{ AverageDeltaSuperStepStatusGenerator, BasicCountsInitialReport, AtkPregel, DeltaProvider }
+import org.trustedanalytics.atk.pregel.{ AverageDeltaSuperStepStatusGenerator, BasicCountsInitialReport, Pregel, DeltaProvider }
 import org.apache.spark.graphx._
-import org.trustedanalytics.atk.atkpregel._
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
@@ -59,13 +58,11 @@ class PregelBeliefPropagation(val maxIterations: Int,
   def run(graph: Graph[VertexState, Double]): (Graph[VertexState, Double], String) = {
 
     // choose loggers
-
     val initialReporter = new BasicCountsInitialReport[VertexState, Double]
     val superStepReporter = new AverageDeltaSuperStepStatusGenerator[VertexState](convergenceThreshold)
 
     // call  Pregel
-
-    AtkPregel(graph,
+    org.trustedanalytics.atk.pregel.Pregel(graph,
       Map().asInstanceOf[Map[Long, Vector[Double]]],
       initialReporter,
       superStepReporter,

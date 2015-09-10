@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
 import org.trustedanalytics.atk.plugins.VectorMath
 import org.apache.spark.rdd.RDD
@@ -32,17 +32,17 @@ import org.trustedanalytics.atk._
  *                             supersteps is less than or equal to this threshold. Defaults to 0.
  * @param edgeWeightProperty Optional. Property containing edge weights.
  */
-case class BeliefPropagationRunnerArgs(posteriorProperty: String,
-                                       priorProperty: String,
-                                       maxIterations: Option[Int],
-                                       stringOutput: Option[Boolean],
-                                       convergenceThreshold: Option[Double],
-                                       edgeWeightProperty: Option[String])
+case class LoopyBeliefPropagationRunnerArgs(posteriorProperty: String,
+                                            priorProperty: String,
+                                            maxIterations: Option[Int],
+                                            stringOutput: Option[Boolean],
+                                            convergenceThreshold: Option[Double],
+                                            edgeWeightProperty: Option[String])
 /**
  * Provides a method for running belief propagation on a graph. The result is a new graph with the belief-propagation
  * posterior beliefs placed in a new vertex property on each vertex.
  */
-object BeliefPropagationRunner extends Serializable {
+object LoopyBeliefPropagationRunner extends Serializable {
 
   val separators: Array[Char] = Array(' ', ',', '\t')
 
@@ -54,14 +54,13 @@ object BeliefPropagationRunner extends Serializable {
    * @return Vertex and edge list for the output graph and a logging string reporting on the execution of the belief
    *         propagation run.
    */
-
-  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: BeliefPropagationRunnerArgs): (RDD[GBVertex], RDD[GBEdge], String) = {
+  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: LoopyBeliefPropagationRunnerArgs): (RDD[GBVertex], RDD[GBEdge], String) = {
 
     val outputPropertyLabel = args.posteriorProperty
     val inputPropertyName: String = args.priorProperty
-    val maxIterations: Int = args.maxIterations.getOrElse(BeliefPropagationDefaults.maxIterationsDefault)
-    val beliefsAsStrings = args.stringOutput.getOrElse(BeliefPropagationDefaults.stringOutputDefault)
-    val convergenceThreshold = args.convergenceThreshold.getOrElse(BeliefPropagationDefaults.convergenceThreshold)
+    val maxIterations: Int = args.maxIterations.getOrElse(LoopyBeliefPropagationDefaults.maxIterationsDefault)
+    val beliefsAsStrings = args.stringOutput.getOrElse(LoopyBeliefPropagationDefaults.stringOutputDefault)
+    val convergenceThreshold = args.convergenceThreshold.getOrElse(LoopyBeliefPropagationDefaults.convergenceThreshold)
 
     val firstVertexOption: Option[GBVertex] = try {
       Some(inVertices.first())
@@ -79,8 +78,7 @@ object BeliefPropagationRunner extends Serializable {
       val firstPropertyOption = firstVertexOption.get.getProperty(inputPropertyName)
 
       if (firstPropertyOption.isEmpty) {
-        throw new NotFoundException("Vertex Property", inputPropertyName,
-          "Vertex ID ==" + firstVertex.gbId.value.toString + "    Physical ID == " + firstVertex.physicalId)
+        throw new NotFoundException("Vertex Property", inputPropertyName, vertexErrorInfo(firstVertex))
       }
       else {
         val firstPrior = firstPropertyOption.get.value
@@ -90,13 +88,11 @@ object BeliefPropagationRunner extends Serializable {
           case s: String => s.split(separators).filter(_.nonEmpty).map(_.toDouble).toVector.length
         }
 
-        val defaultEdgeWeight = BeliefPropagationDefaults.edgeWeightDefault
-
-        val power = BeliefPropagationDefaults.powerDefault
-        val smoothing = BeliefPropagationDefaults.smoothingDefault
+        val defaultEdgeWeight = LoopyBeliefPropagationDefaults.edgeWeightDefault
+        val power = LoopyBeliefPropagationDefaults.powerDefault
+        val smoothing = LoopyBeliefPropagationDefaults.smoothingDefault
 
         // convert to graphX vertices
-
         val graphXVertices: RDD[(Long, VertexState)] =
           inVertices.map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], bpVertexStateFromVertex(gbVertex, inputPropertyName, stateSpaceSize)))
 
@@ -118,7 +114,9 @@ object BeliefPropagationRunner extends Serializable {
     }
   }
 
-  // converts incoming edge to the form consumed by the belief propagation computation
+  /**
+   * converts incoming edge to the form consumed by the belief propagation computation
+   */
   private def bpEdgeStateFromEdge(gbEdge: GBEdge, edgeWeightPropertyNameOption: Option[String], defaultEdgeWeight: Double) = {
 
     val weight: Double = if (edgeWeightPropertyNameOption.nonEmpty) {
@@ -128,9 +126,7 @@ object BeliefPropagationRunner extends Serializable {
       val property = gbEdge.getProperty(edgeWeightPropertyName)
 
       if (property.isEmpty) {
-        throw new NotFoundException("Edge Property", edgeWeightPropertyName, "Edge ID == " + gbEdge.id + "\n"
-          + "Source Vertex == " + gbEdge.tailVertexGbId.value + "\n"
-          + "Destination Vertex == " + gbEdge.headVertexGbId.value)
+        throw new NotFoundException("Edge Property", edgeWeightPropertyName, edgeErrorInfo(gbEdge))
       }
       else {
         gbEdge.getProperty(edgeWeightPropertyNameOption.get).get.asInstanceOf[Double]
@@ -140,21 +136,21 @@ object BeliefPropagationRunner extends Serializable {
       defaultEdgeWeight
     }
     val srcId = gbEdge.tailPhysicalId.asInstanceOf[Long]
-
     val destId = gbEdge.headPhysicalId.asInstanceOf[Long]
 
     new Edge[Double](srcId, destId, weight)
   }
 
-  // converts incoming vertex to the form consumed by the belief propagation computation
+  /**
+   * Converts incoming vertex to the form consumed by the belief propagation computation
+   */
   private def bpVertexStateFromVertex(gbVertex: GBVertex,
                                       inputPropertyName: String, stateSpaceSize: Int): VertexState = {
 
     val property = gbVertex.getProperty(inputPropertyName)
 
     val prior: Vector[Double] = if (property.isEmpty) {
-      throw new NotFoundException("Vertex Property", inputPropertyName,
-        "Vertex ID ==" + gbVertex.gbId.value.toString + "    Physical ID == " + gbVertex.physicalId)
+      throw new NotFoundException("Vertex Property", inputPropertyName, vertexErrorInfo(gbVertex))
     }
     else {
       property.get.value match {
@@ -165,7 +161,7 @@ object BeliefPropagationRunner extends Serializable {
 
     if (prior.length != stateSpaceSize) {
       throw new IllegalArgumentException("Length of prior does not match state space size\n" +
-        "Vertex ID ==" + gbVertex.gbId.value.toString + "    Physical ID == " + gbVertex.physicalId + "\n" +
+        vertexErrorInfo(gbVertex) + "\n" +
         "Property name == " + inputPropertyName + "    Expected state space size " + stateSpaceSize)
     }
     val posterior = VectorMath.l1Normalize(prior)
@@ -174,7 +170,9 @@ object BeliefPropagationRunner extends Serializable {
 
   }
 
-  // converts vertex in belief propagation output into the common graph representation for output
+  /**
+   * converts vertex in belief propagation output into the common graph representation for output
+   */
   private def vertexFromBPVertexState(vertexState: VertexState, outputPropertyLabel: String, beliefsAsStrings: Boolean) = {
     val oldGBVertex = vertexState.gbVertex
 
@@ -188,5 +186,26 @@ object BeliefPropagationRunner extends Serializable {
     val properties = oldGBVertex.properties + posteriorProperty
 
     GBVertex(oldGBVertex.physicalId, oldGBVertex.gbId, properties)
+  }
+
+  /**
+   * Creates error string for input vertex
+   * @param gbVertex a gb vertex
+   * @return a formatted string
+   */
+  private def vertexErrorInfo(gbVertex: GBVertex): String = {
+    "Vertex ID ==" + gbVertex.gbId.value.toString +
+      "    Physical ID == " + gbVertex.physicalId
+  }
+
+  /**
+   * Creates error string for input edge
+   * @param gbEdge a gb edge
+   * @return a formatted string
+   */
+  private def edgeErrorInfo(gbEdge: GBEdge): String = {
+    "Edge ID == " + gbEdge.id + "\n" +
+      "Source Vertex == " + gbEdge.tailVertexGbId.value + "\n" +
+      "Destination Vertex == " + gbEdge.headVertexGbId.value
   }
 }
