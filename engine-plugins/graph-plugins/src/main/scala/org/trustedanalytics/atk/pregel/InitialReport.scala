@@ -14,18 +14,16 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.atkpregel
+package org.trustedanalytics.atk.pregel
 
 import org.apache.spark.rdd.RDD
 
-case class SuperStepStatus(log: String, earlyTermination: Boolean)
-
 /**
- * Implementations of this trait provide a method for generating a summary of superstep activity after the completion
- * of a Pregel superstep.
- * @tparam V Class of the vertex data.
+ * Implementations of this trait provide a method for creating an initial status report for a Pregel-run using the
+ * incoming edge and vertex RDDs.
+ * @tparam V Class of the vertex data in the graph.
+ * @tparam E Class of the edge data in the graph.
  */
-
-trait SuperStepStatusGenerator[V] extends Serializable {
-  def generateSuperStepStatus(iteration: Int, totalVertices: Long, activeVertices: RDD[V]): SuperStepStatus
+trait InitialReport[V, E] {
+  def generateInitialReport(vertices: RDD[V], edges: RDD[E]): String
 }

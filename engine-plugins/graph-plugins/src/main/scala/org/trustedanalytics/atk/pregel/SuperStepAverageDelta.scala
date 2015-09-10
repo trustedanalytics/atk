@@ -14,10 +14,9 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.atkpregel
+package org.trustedanalytics.atk.pregel
 
 import org.apache.spark.rdd.RDD
-import akka.dispatch.sysmsg.Failed
 
 /**
  * Provides a method for creating an initial report that summarizes vertex and edge counts.
@@ -26,9 +25,6 @@ import akka.dispatch.sysmsg.Failed
  * @tparam E Class of the edge data in the graph.
  */
 class BasicCountsInitialReport[V, E] extends InitialReport[V, E] with Serializable {
-
-  private def vertexToCount(v: V): Long = 1
-  private def edgeToCount(e: E): Long = 1
 
   /**
    * @param vertices RDD of the per-vertex data.
@@ -42,7 +38,7 @@ class BasicCountsInitialReport[V, E] extends InitialReport[V, E] with Serializab
 }
 
 /**
- * Aggregater for per-superstep status reports.
+ * Aggregator for per-superstep status reports.
  * @param activeCount Number fo active vertices
  * @param sumOfDeltas Net change.
  */
@@ -73,9 +69,7 @@ class AverageDeltaSuperStepStatusGenerator[V <: DeltaProvider](val convergenceTh
   def generateSuperStepStatus(iteration: Int, totalVertexCount: Long, activeVertices: RDD[V]) = {
 
     val emptyStatus = SuperStepNetDelta(0, 0)
-
     val status = activeVertices.map(v => convertVertexDataToStatus(v)).fold(emptyStatus)(accumulateSuperStepStatus)
-
     val earlyTermination = (status.sumOfDeltas / totalVertexCount) <= convergenceThreshold
 
     val log =

@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.atkpregel
+package org.trustedanalytics.atk.pregel
 
 /**
  * Implementations of this trait can provide a publicly visible Double value called "delta". It is intended to be

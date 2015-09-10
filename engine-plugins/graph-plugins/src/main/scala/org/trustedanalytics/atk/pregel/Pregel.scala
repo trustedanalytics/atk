@@ -14,14 +14,14 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.atkpregel
+package org.trustedanalytics.atk.pregel
 
 import scala.reflect.ClassTag
 
 import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
 
-object AtkPregel {
+object Pregel {
 
   /**
    * Implements Pregel-like BSP message passing. It is the GraphX implementation of Pregel extended with richer logging.
@@ -106,17 +106,18 @@ object AtkPregel {
         g.cache()
 
         val oldMessages = messages
+
         // Send new messages. Vertices that didn't get any messages don't appear in newVerts, so don't
         // get to send messages. We must cache messages so it can be materialized on the next line,
         // allowing us to uncache the previous iteration.
         messages = g.mapReduceTriplets(sendMsg, mergeMsg, Some((newVerts, activeDirection))).cache()
+
         // The call to count() materializes `messages`, `newVerts`, and the vertices of `g`. This
         // hides oldMessages (depended on by newVerts), newVerts (depended on by messages), and the
         // vertices of prevG (depended on by newVerts, oldMessages, and the vertices of g).
         activeMessages = messages.count()
 
         // update the status -- we use the new verts to avoid contributions from vertices that did not change
-
         val status = superStepStatusGenerator.generateSuperStepStatus(i, numberOfVertices, newVerts.map({ case (vid, vdata) => vdata }))
 
         // count the iteration and update the log

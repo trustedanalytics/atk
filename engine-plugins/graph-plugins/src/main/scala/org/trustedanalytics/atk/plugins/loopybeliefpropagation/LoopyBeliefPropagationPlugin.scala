@@ -14,7 +14,7 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins.beliefpropagation
+package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.graph.GraphReference
@@ -29,23 +29,23 @@ import spray.json._
 /**
  * Variables for executing belief propagation.
  */
-case class BeliefPropagationArgs(graph: GraphReference,
-                                 @ArgDoc("""Name of the vertex property which contains the prior belief
+case class LoopyBeliefPropagationArgs(graph: GraphReference,
+                                      @ArgDoc("""Name of the vertex property which contains the prior belief
 for the vertex.""") priorProperty: String,
-                                 @ArgDoc("""Name of the vertex property which
+                                      @ArgDoc("""Name of the vertex property which
 will contain the posterior belief for each
 vertex.""") posteriorProperty: String,
-                                 @ArgDoc("""Name of the edge property that contains the edge weight for each edge.""") edgeWeightProperty: Option[String] = None,
-                                 @ArgDoc("""Belief propagation will terminate
+                                      @ArgDoc("""Name of the edge property that contains the edge weight for each edge.""") edgeWeightProperty: Option[String] = None,
+                                      @ArgDoc("""Belief propagation will terminate
 when the average change in posterior beliefs between supersteps is
 less than or equal to this threshold.""") convergenceThreshold: Option[Double] = None,
-                                 @ArgDoc("""The maximum number of supersteps that the algorithm will execute.
+                                      @ArgDoc("""The maximum number of supersteps that the algorithm will execute.
 The valid range is all positive int.""") maxIterations: Option[Int] = None)
 
 /**
  * Companion object holds the default values.
  */
-object BeliefPropagationDefaults {
+object LoopyBeliefPropagationDefaults {
   val stringOutputDefault = false
   val maxIterationsDefault = 20
   val edgeWeightDefault = 1.0d
@@ -60,16 +60,16 @@ object BeliefPropagationDefaults {
  * @param frameDictionaryOutput dictionary with vertex label type as key and vertex's frame as the value
  * @param time execution time
  */
-case class BeliefPropagationResult(frameDictionaryOutput: Map[String, FrameEntity], time: Double)
+case class LoopyBeliefPropagationResult(frameDictionaryOutput: Map[String, FrameEntity], time: Double)
 
 /** Json conversion for arguments and return value case classes */
-object BeliefPropagationJsonFormat {
+object LoopyBeliefPropagationJsonFormat {
   import DomainJsonProtocol._
-  implicit val BPFormat = jsonFormat6(BeliefPropagationArgs)
-  implicit val BPResultFormat = jsonFormat2(BeliefPropagationResult)
+  implicit val BPFormat = jsonFormat6(LoopyBeliefPropagationArgs)
+  implicit val BPResultFormat = jsonFormat2(LoopyBeliefPropagationResult)
 }
 
-import BeliefPropagationJsonFormat._
+import LoopyBeliefPropagationJsonFormat._
 
 /**
  * Launches "loopy" belief propagation.
@@ -89,14 +89,14 @@ This is the GraphX-based implementation of belief propagation.
 See :ref:`Loopy Belief Propagation <python_api/frames/frame-/loopy_belief_propagation>`
 for a more in-depth discussion of |BP| and |LBP|.""",
   returns = "Progress report for belief propagation in the format of a multiple-line string.")
-class BeliefPropagationPlugin extends SparkCommandPlugin[BeliefPropagationArgs, BeliefPropagationResult] {
+class LoopyBeliefPropagationPlugin extends SparkCommandPlugin[LoopyBeliefPropagationArgs, LoopyBeliefPropagationResult] {
 
   override def name: String = "graph/ml/belief_propagation"
 
   //TODO remove when we move to the next version of spark
   override def kryoRegistrator: Option[String] = None
 
-  override def numberOfJobs(arguments: BeliefPropagationArgs)(implicit invocation: Invocation): Int = {
+  override def numberOfJobs(arguments: LoopyBeliefPropagationArgs)(implicit invocation: Invocation): Int = {
     // TODO: not sure this is right but it seemed to work with testing
     //    when max iterations was 1, number of jobs was 11
     //    when max iterations was 2, number of jobs was 13
@@ -107,7 +107,7 @@ class BeliefPropagationPlugin extends SparkCommandPlugin[BeliefPropagationArgs, 
     9 + (arguments.maxIterations.getOrElse(0) * 2)
   }
 
-  override def execute(arguments: BeliefPropagationArgs)(implicit invocation: Invocation): BeliefPropagationResult = {
+  override def execute(arguments: LoopyBeliefPropagationArgs)(implicit invocation: Invocation): LoopyBeliefPropagationResult = {
 
     val start = System.currentTimeMillis()
 
@@ -115,14 +115,14 @@ class BeliefPropagationPlugin extends SparkCommandPlugin[BeliefPropagationArgs, 
     val graph: SparkGraph = arguments.graph
     val (gbVertices, gbEdges) = graph.gbRdds
 
-    val bpRunnerArgs = BeliefPropagationRunnerArgs(arguments.posteriorProperty,
+    val bpRunnerArgs = LoopyBeliefPropagationRunnerArgs(arguments.posteriorProperty,
       arguments.priorProperty,
       arguments.maxIterations,
       stringOutput = Some(true), // string output is default until the ATK supports Vectors as a datatype in tables
       arguments.convergenceThreshold,
       arguments.edgeWeightProperty)
 
-    val (outVertices, outEdges, log) = BeliefPropagationRunner.run(gbVertices, gbEdges, bpRunnerArgs)
+    val (outVertices, outEdges, log) = LoopyBeliefPropagationRunner.run(gbVertices, gbEdges, bpRunnerArgs)
 
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
     val frameMap = frameRddMap.keys.map(label => {
@@ -134,7 +134,7 @@ class BeliefPropagationPlugin extends SparkCommandPlugin[BeliefPropagationArgs, 
     }).toMap
     val time = (System.currentTimeMillis() - start).toDouble / 1000.0
 
-    BeliefPropagationResult(frameMap, time)
+    LoopyBeliefPropagationResult(frameMap, time)
 
   }
 }
