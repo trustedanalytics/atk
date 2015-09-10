@@ -30,7 +30,6 @@ from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFi
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.rest.udfdepends import udf
 from trustedanalytics.core.frame import Frame, VertexFrame
-from trustedanalytics.core.graph import Graph, TitanGraph, VertexRule, EdgeRule
 from trustedanalytics.core.model import _BaseModel
 
 from trustedanalytics.rest.atkserver import server
