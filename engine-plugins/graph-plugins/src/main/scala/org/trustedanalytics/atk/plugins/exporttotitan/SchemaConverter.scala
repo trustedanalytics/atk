@@ -25,6 +25,9 @@ import org.trustedanalytics.atk.graphbuilder.util.PrimitiveConverter
  */
 object SchemaConverter {
 
+  /**
+   * Convert schema of a seamless Graph to a Titan Schema
+   */
   def convert(frameSchemas: List[GraphElementSchema]): GraphSchema = {
 
     val vertexPropDefs = frameSchemas.filter(_.isInstanceOf[VertexSchema]).flatMap(schema => {
