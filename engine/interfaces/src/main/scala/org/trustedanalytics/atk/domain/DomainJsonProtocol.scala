@@ -402,8 +402,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val graphNoArgsFormat = jsonFormat1(GraphNoArgs)
 
-  implicit val schemaListFormat = jsonFormat1(SchemaList)
-
   // graph loading formats for specifying graphbuilder and graphload rules
 
   implicit val quantileFormat = jsonFormat2(Quantile)
