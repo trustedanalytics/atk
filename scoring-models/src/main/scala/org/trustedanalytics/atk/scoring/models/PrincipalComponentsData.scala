@@ -13,10 +13,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
-package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
+package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.mllib.linalg.Matrix
+
+//TODO: This code duplicates PrincipalComponentsData in model plugin. Need to be refactored.
+
 /**
  * Command for loading model data into existing model in the model database.
  * @param k Principal component count
