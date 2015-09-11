@@ -22,6 +22,7 @@ import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.graph.{ GraphBuilderConfigFactory, TestingTitanWithSparkWordSpec, SparkGraphStorage }
+import org.trustedanalytics.atk.graphbuilder.schema.GraphSchema
 import org.trustedanalytics.atk.plugins.exporttotitan.ExportToTitanGraphPlugin
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import com.tinkerpop.blueprints.Direction
@@ -83,7 +84,7 @@ class ExportToTitanGraphPluginTest extends TestingTitanWithSparkWordSpec with Ma
         List(),
         List(),
         this.titanConfig)
-      plugin.loadTitanGraph(config, vertexFrame, edgeFrame)
+      plugin.loadTitanGraph(config, new GraphSchema(Nil, Nil), vertexFrame, edgeFrame)
 
       // Need to explicitly specify type when getting vertices to resolve the error
       // "Helper method to resolve ambiguous reference error in TitanGraph.getVertices() in Titan 0.5.1+"
