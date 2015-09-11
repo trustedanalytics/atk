@@ -67,6 +67,7 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             case false => Array("--jars",
               s"${SparkContextFactory.jarPath("interfaces")}," +
                 s"${SparkContextFactory.jarPath("launcher")}," +
+                s"${EngineConfig.extraJarsForSparkSubmit}," +
                 s"${getPluginJarPath(pluginJarsList)}")
           }
 
