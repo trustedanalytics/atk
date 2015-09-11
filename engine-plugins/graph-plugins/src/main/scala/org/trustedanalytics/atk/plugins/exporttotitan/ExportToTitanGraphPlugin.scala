@@ -114,6 +114,9 @@ class ExportToTitanGraphPlugin extends SparkCommandPlugin[ExportGraph, GraphEnti
       inferSchema = false)
   }
 
+  /**
+   * Validate label names: Titan does not allow labels to be the same as property names.
+   */
   def validateLabelNames(edgeFrames: List[FrameEntity], edgeLabels: List[String]) = {
     val invalidColumnNames = edgeFrames.flatMap(frame => frame.schema.columnNames.map(columnName => {
       if (edgeLabels.contains(columnName))
