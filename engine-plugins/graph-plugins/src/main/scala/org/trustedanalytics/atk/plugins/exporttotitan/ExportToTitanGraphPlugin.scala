@@ -14,8 +14,9 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.plugins
+package org.trustedanalytics.atk.plugins.exporttotitan
 
+import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.StorageFormats
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.graph._
@@ -25,7 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkComm
 import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilder, GraphBuilderConfig }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.schema.GraphSchema
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -79,12 +80,11 @@ class ExportToTitanGraphPlugin extends SparkCommandPlugin[ExportGraph, GraphEnti
     val titanGraph: GraphEntity = engine.graphs.createGraph(
       new GraphTemplate(arguments.newGraphName, StorageFormats.HBaseTitan))
 
-    // TODO: this is inferring the schema from the data but it would be better to just get it from the source frames
+    val graphSchema = SchemaConverter.convert(seamlessGraph.frameSchemas)
 
-    val graph = graphs.expectGraph(seamlessGraph.toReference)
-    loadTitanGraph(createGraphBuilderConfig(titanGraph.storage),
-      graphs.loadGbVertices(sc, graph),
-      graphs.loadGbEdges(sc, graph))
+    loadTitanGraph(createGraphBuilderConfig(titanGraph.storage), graphSchema,
+      graphs.loadGbVertices(sc, seamlessGraph.graphEntity),
+      graphs.loadGbEdges(sc, seamlessGraph.graphEntity))
 
     graphs.expectGraph(titanGraph.toReference)
   }
@@ -95,8 +95,9 @@ class ExportToTitanGraphPlugin extends SparkCommandPlugin[ExportGraph, GraphEnti
    * @param vertexRDD RDD of GBVertex objects found in seamless graph
    * @param edgeRDD  RDD of GBVertex objects found in a seamless graph
    */
-  def loadTitanGraph(gbConfig: GraphBuilderConfig, vertexRDD: RDD[GBVertex], edgeRDD: RDD[GBEdge]) {
+  def loadTitanGraph(gbConfig: GraphBuilderConfig, graphSchema: GraphSchema, vertexRDD: RDD[GBVertex], edgeRDD: RDD[GBEdge]) {
     val graphBuilder = new GraphBuilder(gbConfig)
+    graphBuilder.titanSchemaManager.writeSchema(graphSchema)
     graphBuilder.buildGraphWithSpark(vertexRDD, edgeRDD)
   }
 
@@ -109,7 +110,8 @@ class ExportToTitanGraphPlugin extends SparkCommandPlugin[ExportGraph, GraphEnti
     new GraphBuilderConfig(new InputSchema(List()),
       List(),
       List(),
-      GraphBuilderConfigFactory.getTitanConfiguration(backendStorageName))
+      GraphBuilderConfigFactory.getTitanConfiguration(backendStorageName),
+      inferSchema = false)
   }
 
   def validateLabelNames(edgeFrames: List[FrameEntity], edgeLabels: List[String]) = {

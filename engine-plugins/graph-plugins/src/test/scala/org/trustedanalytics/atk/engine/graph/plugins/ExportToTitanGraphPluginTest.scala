@@ -17,13 +17,12 @@
 package org.trustedanalytics.atk.engine.graph.plugins
 
 import java.util
-
-import org.trustedanalytics.atk.plugins.ExportToTitanGraphPlugin
 import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderConfig
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.graph.{ GraphBuilderConfigFactory, TestingTitanWithSparkWordSpec, SparkGraphStorage }
+import org.trustedanalytics.atk.plugins.exporttotitan.ExportToTitanGraphPlugin
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import com.tinkerpop.blueprints.Direction
 import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
