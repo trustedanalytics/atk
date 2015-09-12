@@ -41,7 +41,7 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
    */
   override def execute(arguments: ExportHdfsJdbcArgs)(implicit invocation: Invocation): UnitReturn = {
 
-    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.url, arguments.driverName)
+    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.url, arguments.driverName)
     exportToHdfsJdbc(arguments, connectionArgs)
 
   }

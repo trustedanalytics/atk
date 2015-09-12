@@ -16,6 +16,11 @@
 
 package org.apache.spark.frame
 
+import breeze.linalg.DenseVector
+import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
+import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
+import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
 import org.apache.spark.frame.ordering.MultiColumnOrdering
 import org.apache.spark.mllib.linalg.distributed.IndexedRow
@@ -99,8 +104,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd into RDD[Vector] format required by MLLib
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @return RDD of (org.apache.spark.mllib)Vector
    */
-  def toVectorDenseRDD(featureColumnNames: List[String]): RDD[Vector] = {
+  def toDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
     this.mapRows(row => {
       val array = row.valuesAsArray(featureColumnNames, flattenInputs = true)
       val b = array.map(i => DataTypes.toDouble(i))
@@ -108,6 +115,35 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     })
   }
 
+  /**
+   * Compute MLLib's MultivariateStatisticalSummary from FrameRdd
+   * @param columnNames Names of the frame's column(s) whose column statistics are to be computed
+   * @return MLLib's MultivariateStatisticalSummary
+   */
+  def columnStatistics(columnNames: List[String]): MultivariateStatisticalSummary = {
+    val vectorRdd = toDenseVectorRDD(columnNames)
+    Statistics.colStats(vectorRdd)
+  }
+
+  /**
+   * Convert FrameRdd to RDD[Vector] by mean centering the specified columns
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @return RDD of (org.apache.spark.mllib)Vector
+   */
+  def toMeanCenteredDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
+    val vectorRdd = toDenseVectorRDD(featureColumnNames)
+    val columnMeans: Vector = columnStatistics(featureColumnNames).mean
+    vectorRdd.map(i => {
+      Vectors.dense((new DenseVector(i.toArray) - new DenseVector(columnMeans.toArray)).toArray)
+    })
+  }
+
+  /**
+   * Convert FrameRdd to RDD[Vector]
+   * @param featureColumnNames Names of the frame's column(s) to be used
+   * @param columnWeights The weights of the columns
+   * @return RDD of (org.apache.spark.mllib)Vector
+   */
   def toDenseVectorRDDWithWeights(featureColumnNames: List[String], columnWeights: List[Double]): RDD[Vector] = {
     require(columnWeights.length == featureColumnNames.length, "Length of columnWeights and featureColumnNames needs to be the same")
     this.mapRows(row => {
@@ -386,6 +422,8 @@ object FrameRdd {
           }
           else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
             mutableRow(i) = o.toString
+            // todo - add conversion to datetime object
+            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
           else if (array(i).dataType.getClass == ShortType.getClass) {
             mutableRow(i) = row.getShort(i).toInt
@@ -484,6 +522,13 @@ object FrameRdd {
     rowRDD
   }
 
+  /**
+   * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
+   * @param indexedRows Rows of the frame as RDD[Row]
+   * @param frameSchema Schema of the frame
+   * @param featureColumnNames List of the frame's column(s) to be used
+   * @return RDD[IndexedRow]
+   */
   def toIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String]): RDD[IndexedRow] = {
     val rowWrapper = new RowWrapper(frameSchema)
     indexedRows.map {
@@ -491,6 +536,25 @@ object FrameRdd {
         val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
         val b = array.map(i => DataTypes.toDouble(i))
         IndexedRow(index, Vectors.dense(b))
+    }
+  }
+
+  /**
+   * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
+   * @param indexedRows Rows of the frame as RDD[Row]
+   * @param frameSchema Schema of the frame
+   * @param featureColumnNames List of the frame's column(s) to be used
+   * @param meanVector Vector storing the means of the columns
+   * @return RDD[IndexedRow]
+   */
+  def toMeanCenteredIndexedRowRdd(indexedRows: RDD[(Long, org.apache.spark.sql.Row)], frameSchema: Schema, featureColumnNames: List[String], meanVector: Vector): RDD[IndexedRow] = {
+    val rowWrapper = new RowWrapper(frameSchema)
+    indexedRows.map {
+      case (index, row) =>
+        val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
+        val b = array.map(i => DataTypes.toDouble(i))
+        val meanCenteredVector = Vectors.dense((new DenseVector(b) - new DenseVector(meanVector.toArray)).toArray)
+        IndexedRow(index, meanCenteredVector)
     }
   }
 
@@ -512,6 +576,7 @@ object FrameRdd {
           case x if x.equals(DataTypes.float32) => FloatType
           case x if x.equals(DataTypes.float64) => DoubleType
           case x if x.equals(DataTypes.string) => StringType
+          case x if x.equals(DataTypes.datetime) => StringType
           case x if x.isVector => VectorType
           case x if x.equals(DataTypes.ignore) => StringType
         }, nullable = true)
@@ -577,7 +642,7 @@ object FrameRdd {
    * Converts the schema object to a StructType for use in creating a SchemaRDD
    * @return StructType with StructFields corresponding to the columns of the schema object
    */
-  def schemaToHiveType(schema: Schema): List[(String, String)] = {
+  def schemaToAvroType(schema: Schema): List[(String, String)] = {
     val fields = schema.columns.map {
       column =>
         (column.name.replaceAll("\\s", ""), column.dataType match {
@@ -586,6 +651,7 @@ object FrameRdd {
           case x if x.equals(DataTypes.float32) => "double"
           case x if x.equals(DataTypes.float64) => "double"
           case x if x.equals(DataTypes.string) => "string"
+          case x if x.equals(DataTypes.datetime) => "string"
           case x => throw new IllegalArgumentException(s"unsupported export type ${x.toString}")
         })
     }

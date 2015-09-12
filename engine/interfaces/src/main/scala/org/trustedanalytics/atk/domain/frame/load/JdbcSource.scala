@@ -31,6 +31,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 case class JdbcArgs(
     @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
     @ArgDoc("""table name""") tableName: String,
+    @ArgDoc("""(optional) connector type""") connectorType: Option[String],
     @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
     @ArgDoc("""(optional) driver name""") driverName: Option[String],
     @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {

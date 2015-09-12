@@ -753,7 +753,7 @@ class JdbcTable(object):
     Define the object to retrieve the data from an jdbc table.
     """
 
-    def __init__(self, table_name, url = None, driver_name = None, query = None):
+    def __init__(self, table_name, connector_type = None, url = None, driver_name = None, query = None):
         """
         Define the object to retrieve the data from an jdbc table.
 
@@ -761,6 +761,8 @@ class JdbcTable(object):
         ----------
         table_name : str
             the table name
+        connector_type : str
+            the connector type
         url : str
             Jdbc connection string (as url)
         driver_name : str
@@ -790,6 +792,7 @@ class JdbcTable(object):
             raise ValueError("Incorrect table name")
 
         self.table_name = table_name
+        self.connector_type = connector_type
         self.url = url
         self.driver_name = driver_name
         self.query = query
@@ -797,6 +800,7 @@ class JdbcTable(object):
     def to_json(self):
         return {"url": self.url,
                 "table_name": self.table_name,
+                "connector_type":self.connector_type,
                 "driver_name": self.driver_name,
                 "query": self.query}
 
