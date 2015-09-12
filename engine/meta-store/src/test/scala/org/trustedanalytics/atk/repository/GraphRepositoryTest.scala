@@ -54,39 +54,41 @@ class GraphRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
 
         // create graphs
 
-        //should be in list old and unnamed
+        //should be in the stale list because it is old and unnamed
         val graph1 = graphRepo.insert(new GraphTemplate(None)).get
         graphRepo.update(graph1.copy(lastReadDate = new DateTime().minus(age * 2)))
 
-        //should not be in list. it is named
+        //should not be in stale list because though old it is named
         val graph2 = graphRepo.insert(new GraphTemplate(name)).get
         graphRepo.update(graph2.copy(lastReadDate = new DateTime().minus(age * 2)))
 
-        //should not be in list. it is too new
+        //should not be in stale list because it is too new
         val graph3 = graphRepo.insert(new GraphTemplate(None)).get
         graphRepo.update(graph3.copy(lastReadDate = new DateTime()))
 
-        //should not be in list has a named frame as part of it.
+        //should be in stale list, though it owns a named frame --this is convoluted construction.
         val graph4 = graphRepo.insert(new GraphTemplate(None)).get
         graphRepo.update(graph4.copy(lastReadDate = new DateTime().minus(age * 2)))
 
         val frame = frameRepo.insert(new DataFrameTemplate(Some("namedFrame"), None)).get
         frameRepo.update(frame.copy(lastReadDate = new DateTime().minus(age * 2), graphId = Some(graph4.id)))
 
-        //should be in list. user has marked as ready to delete
+        //should not be in stale list because it has been dropped
         val graph5 = graphRepo.insert(new GraphTemplate(name)).get
-        graphRepo.update(graph5.copy(statusId = DeletedStatus))
+        graphRepo.update(graph5.copy(statusId = DroppedStatus))
 
-        //should not be in list. Has already been deleted
+        //should not be in stale list because it has been finalized
         val graph6 = graphRepo.insert(new GraphTemplate(name)).get
-        graphRepo.update(graph6.copy(statusId = DeletedFinalStatus))
+        graphRepo.update(graph6.copy(statusId = FinalizedStatus))
 
-        val stateEntities = graphRepo.getStaleEntities(age)
-        val idList = stateEntities.map(g => g.id).toList
-        idList should contain(graph1.id)
-        idList should contain(graph5.id)
-        stateEntities.length should be(2)
+        val stale = graphRepo.getStaleEntities(age).map(g => g.id).toList
+        stale should contain(graph1.id)
+        stale should contain(graph4.id)
+        stale.length should be(2)
+
+        val dropped = graphRepo.droppedGraphs.map(g => g.id).toList
+        dropped should contain(graph5.id)
+        dropped.length should be(1)
     }
   }
-
 }

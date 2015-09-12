@@ -573,8 +573,12 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     def isOwned(frame: FrameEntity)(implicit session: Session): Boolean = {
-      frame.graphId.isDefined
-      // (we don't have a link to the owner of an error frame)
+      frame.graphId.isDefined || isErrorFrame(frame)
+    }
+
+    def isErrorFrame(frame: FrameEntity)(implicit session: Session): Boolean = {
+      for (f <- frames if (f.errorFrameId === frame.id && frame.isStatus(Status.Active))) return true
+      false
     }
 
     def wasLastReadBefore(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
@@ -587,6 +591,15 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     def dropFrame(frame: FrameEntity)(implicit session: SlickMetaStoreComponent.this.type#Session): Try[FrameEntity] = Try {
+      if (frame.errorFrameId.isDefined) {
+        val errorFrameId = frame.errorFrameId.get
+        if (errorFrameId != frame.id) {
+          val errorFrame: FrameEntity = frames.filter(_.id === errorFrameId).firstOption.get
+          if (errorFrame.isStatus(Status.Active)) {
+            dropFrame(errorFrame)
+          }
+        }
+      }
       frames.filter(_.id === frame.id).map(f => (f.name, f.statusId, f.modifiedOn)).update((None, Status.Dropped, new DateTime))
       frames.where(_.id === frame.id).firstOption.get
     }

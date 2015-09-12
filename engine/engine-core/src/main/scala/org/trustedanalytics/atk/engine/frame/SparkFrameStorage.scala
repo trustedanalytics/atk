@@ -407,7 +407,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override def lookupOrCreateErrorFrame(frame: FrameEntity)(implicit invocation: Invocation): FrameEntity = {
     val errorFrame = lookupErrorFrame(frame)
     if (errorFrame.isEmpty) {
-      val newlyCreatedErrorFrame = create(CreateEntityArgs(description =Some(s"Error frame for frame.id=${frame.id}")))
+      val newlyCreatedErrorFrame = create(CreateEntityArgs(description = Some(s"Error frame for frame.id=${frame.id}")))
       metaStore.withSession("frame.updateErrorFrameId") {
         implicit session =>
           metaStore.frameRepo.updateErrorFrameId(frame, Some(newlyCreatedErrorFrame.id))

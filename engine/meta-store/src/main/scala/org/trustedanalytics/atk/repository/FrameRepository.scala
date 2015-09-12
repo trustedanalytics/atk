@@ -49,4 +49,7 @@ trait FrameRepository[Session] extends Repository[Session, DataFrameTemplate, Fr
 
   /** gets sequence of all frames with status Dropped */
   def droppedFrames(implicit session: Session): Seq[FrameEntity]
+
+  /** determines if a frame is listed as an error frame of any other active frame */
+  def isErrorFrame(frame: FrameEntity)(implicit session: Session): Boolean
 }
