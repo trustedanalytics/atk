@@ -21,6 +21,8 @@ This file zips and converts necessary modules to evaluate a lambda expression by
 import zipfile
 import os
 import os.path
+from types import ModuleType
+
 
 class UdfZip(object):
 
@@ -69,3 +71,35 @@ class UdfZip(object):
         # zips a path to /tmp/iapydependencies.zip. Please note that this zip file will be truncated every time
         # this call is made. So to preserver the contents, read the file immediately or copy. Not thread-safe.
         UdfZip._makeArchive(UdfZip._dirEntries(path, True), '/tmp/iapydependencies.zip', path[0:path.rfind('/')])
+
+
+UdfDependencies = []
+
+
+def get_file_content_as_str(filename):
+
+    if isinstance(filename, ModuleType) and hasattr(filename, '__path__'): # Serialize modules
+        UdfZip.zipdir(filename.__path__)
+        name, fileToSerialize = ('%s.zip' % os.path.basename(filename), '/tmp/iapydependencies.zip')
+    elif isinstance(filename, ModuleType) and hasattr(filename, '__file__'): # Serialize single file based modules
+        name, fileToSerialize = (filename.__file__, filename.__file__)
+    elif os.path.isdir(filename): # Serialize local directories
+        UdfZip.zipdir(filename)
+        name, fileToSerialize = ('%s.zip' % os.path.basename(filename), '/tmp/iapydependencies.zip')
+    elif os.path.isfile(filename) and filename.endswith('.py'): # Serialize local files
+        name, fileToSerialize = (filename, filename)
+    else:
+        raise Exception('%s should be either local python script without any packaging structure \
+        or the absolute path to a valid python package/module which includes the intended python file to be included and all \
+                        its dependencies.' % filename)
+    # Serialize the file contents and send back along with the new serialized file names
+    with open(fileToSerialize, 'rb') as f:
+        return (name, base64.urlsafe_b64encode(f.read()))
+
+
+def get_dependencies(filenames):
+    dependencies = []
+    for filename in filenames:
+        name, content = get_file_content_as_str(filename)
+        dependencies.append({'file_name': name, 'file_content': content})
+    return dependencies

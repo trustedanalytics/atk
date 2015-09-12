@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.rest
 
 import akka.actor.Actor
+import org.trustedanalytics.atk.rest.factory.ActorSystemImplicits
 import spray.routing._
 import spray.http._
 import MediaTypes._
@@ -51,7 +52,7 @@ class ApiServiceActor(val apiService: ApiService) extends Actor with HttpService
 /**
  * Defines our service behavior independently from the service actor
  */
-class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1Service) extends Directives {
+class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1Service) extends Directives with ActorSystemImplicits {
 
   def homepage = {
     respondWithMediaType(`text/html`) {
@@ -102,6 +103,18 @@ class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1
         respondWithMediaType(`application/json`) {
           commonDirectives.respondWithVersion {
             complete(oauthServer)
+          }
+        }
+      } ~
+      path("client") {
+        import scala.reflect.io.Directory
+        val files = Directory("client").deepFiles.toList.map(_.toString)
+        files.headOption.isDefined match {
+          case false => reject
+          case true => respondWithMediaType(`application/x-gzip`) {
+            commonDirectives.respondWithVersion {
+              getFromDirectory(files.headOption.get)
+            }
           }
         }
       }
