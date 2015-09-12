@@ -101,10 +101,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
           case Some(argValues) =>
             argValues(0) match {
               case Constant(s: String) => Some(s)
-              case _ => throw new RuntimeException("Internal Error - bad @ArgDoc annotation description argument type for $tag (expected String)")
-              /*
- *            case _ => throw new RuntimeException("Internal Error - bad Argument description annotation type (expected String)")
- */
+              case _ => throw new RuntimeException(s"Internal Error - bad @ArgDoc annotation description argument type for $tag (expected String)")
             }
           case _ => None
         }

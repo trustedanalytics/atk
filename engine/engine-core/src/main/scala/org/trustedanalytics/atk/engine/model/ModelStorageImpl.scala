@@ -51,20 +51,6 @@ class ModelStorageImpl(metaStore: MetaStore)
   }
 
   /**
-   * Deletes a model from the metastore.
-   * @param modelRef Model metadata object.
-   */
-  override def drop(modelRef: ModelReference): Unit = {
-    metaStore.withSession("spark.modelstorage.drop") {
-      implicit session =>
-        {
-          metaStore.modelRepo.delete(modelRef.id)
-          Unit
-        }
-    }
-  }
-
-  /**
    * Registers a new model.
    * @param createArgs arguments to create the model entity
    * @return Model metadata.
@@ -101,8 +87,7 @@ class ModelStorageImpl(metaStore: MetaStore)
           }
 
           val newModel = expectModel(modelRef).copy(name = Some(newName))
-          val renamed = metaStore.modelRepo.update(newModel).get
-          metaStore.modelRepo.updateLastReadDate(renamed).get
+          metaStore.modelRepo.update(newModel).get
         }
     }
   }
@@ -124,7 +109,7 @@ class ModelStorageImpl(metaStore: MetaStore)
     metaStore.withSession("spark.modelstorage.getModels") {
       implicit session =>
         {
-          metaStore.modelRepo.scanAll().filter(m => m.statusId != Status.Deleted && m.statusId != Status.Deleted_Final && m.name.isDefined)
+          metaStore.modelRepo.scanAll().filter(m => m.isStatus(Status.Active) && m.name.isDefined)
         }
     }
   }
@@ -148,16 +133,16 @@ class ModelStorageImpl(metaStore: MetaStore)
   }
 
   /**
-   * Set a model to be deleted on the next execution of garbage collection
-   * @param model model to delete
+   * Mark model as Dropped
+   * @param model model to drop
    * @param invocation current invocation
    */
-  override def scheduleDeletion(model: ModelEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.modelstorage.scheduleDeletion") {
+  def dropModel(model: ModelEntity)(implicit invocation: Invocation): Unit = {
+    metaStore.withSession("spark.modelstorage.dropModel") {
       implicit session =>
         {
-          info(s"marking as ready to delete: model id:${model.id}, name:${model.name}")
-          metaStore.modelRepo.updateReadyToDelete(model)
+          info(s"marking model entity (id=${model.id}, name=${model.name}) as dropped")
+          metaStore.modelRepo.dropModel(model)
         }
     }
   }

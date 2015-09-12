@@ -19,14 +19,27 @@ package org.trustedanalytics.atk.engine.gc
 import java.util.concurrent.TimeUnit
 
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.gc.GarbageCollectionArgs
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.domain.DomainJsonProtocol
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, EngineConfig }
 import com.typesafe.config.ConfigFactory
 
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+/**
+ * Arguments used for a single execution of garbage collection
+ */
+case class GarbageCollectionArgs(@ArgDoc("""Minimum age of entity staleness.  Defaults to server config.  As a string it supports units according to https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format""") staleAge: Option[String] = None)
+
+/** Json conversion for arguments and return value case classes */
+object GcJsonFormat {
+  import DomainJsonProtocol._
+  implicit val GarbageCollectionArgsFormat = jsonFormat1(GarbageCollectionArgs)
+}
+
+import GcJsonFormat._
+import DomainJsonProtocol._
 
 /**
  * Plugin that executes a single instance of garbage collection with user timespans specified at runtime
@@ -45,11 +58,11 @@ class GarbageCollectionPlugin extends CommandPlugin[GarbageCollectionArgs, UnitR
    * Execute a single instance of garbage collection
    */
   override def execute(arguments: GarbageCollectionArgs)(implicit context: Invocation): UnitReturn = {
-    val dataDeleteAge = arguments.ageToDeleteData match {
-      case Some(age) => stringToMilliseconds(age)
-      case None => EngineConfig.gcAgeToDeleteData
+    val staleAge = arguments.staleAge match {
+      case Some(age) => Some(stringToMilliseconds(age))
+      case None => None
     }
-    GarbageCollector.singleTimeExecution(dataDeleteAge)
+    GarbageCollector.singleTimeExecution(staleAge)
   }
 
   /**

@@ -74,9 +74,9 @@ class ModelEntityRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         val model6 = modelRepo.insert(new ModelTemplate(name, modelType)).get
         modelRepo.update(model6.copy(statusId = DeletedFinalStatus))
 
-        val readyForDeletion = modelRepo.listReadyForDeletion(age)
-        readyForDeletion.length should be(2)
-        val idList = readyForDeletion.map(m => m.id).toList
+        val stateEntities = modelRepo.getStaleEntities(age)
+        stateEntities.length should be(2)
+        val idList = stateEntities.map(m => m.id).toList
         idList should contain(model1.id)
     }
   }

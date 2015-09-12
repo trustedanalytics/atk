@@ -29,14 +29,11 @@ trait ModelStorage {
 
   def renameModel(modelRef: ModelReference, newName: String): ModelEntity
 
-  def drop(modelRef: ModelReference)
-
   def getModels()(implicit invocation: Invocation): Seq[ModelEntity]
 
   def getModelByName(name: Option[String]): Option[ModelEntity]
 
   def updateModel(modelReference: ModelReference, newData: JsObject)(implicit invocation: Invocation): ModelEntity
 
-  def scheduleDeletion(model: ModelEntity)(implicit invocation: Invocation): Unit
-
+  def dropModel(model: ModelEntity)(implicit invocation: Invocation): Unit
 }

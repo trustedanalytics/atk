@@ -352,7 +352,7 @@ trait EngineConfig extends EventLogging {
 
   //gc variables
   val gcInterval = config.getDuration("trustedanalytics.atk.engine.gc.interval", TimeUnit.MILLISECONDS)
-  val gcAgeToDeleteData = config.getDuration("trustedanalytics.atk.engine.gc.data-lifespan", TimeUnit.MILLISECONDS)
+  val gcStaleAge = config.getDuration("trustedanalytics.atk.engine.gc.data-lifespan", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean("trustedanalytics.atk.engine.hadoop.kerberos.enabled")
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None

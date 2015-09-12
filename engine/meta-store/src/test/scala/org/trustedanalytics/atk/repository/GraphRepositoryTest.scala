@@ -81,11 +81,11 @@ class GraphRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         val graph6 = graphRepo.insert(new GraphTemplate(name)).get
         graphRepo.update(graph6.copy(statusId = DeletedFinalStatus))
 
-        val readyForDeletion = graphRepo.listReadyForDeletion(age)
-        val idList = readyForDeletion.map(g => g.id).toList
+        val stateEntities = graphRepo.getStaleEntities(age)
+        val idList = stateEntities.map(g => g.id).toList
         idList should contain(graph1.id)
         idList should contain(graph5.id)
-        readyForDeletion.length should be(2)
+        stateEntities.length should be(2)
     }
   }
 

@@ -117,13 +117,13 @@ class FrameRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         val frame9 = frameRepo.insert(new DataFrameTemplate(None, None)).get
         frameRepo.update(frame9.copy(status = DeletedFinalStatus))
 
-        val readyForDeletion = frameRepo.listReadyForDeletion(age)
-        val idList = readyForDeletion.map(f => f.id).toList
+        val staleEntities = frameRepo.getStaleEntities(age)
+        val idList = staleEntities.map(f => f.id).toList
         idList should contain(frame2.id)
         idList should contain(frame3.id)
         idList should contain(frame6.id)
         idList should contain(frame8.id)
-        readyForDeletion.length should be(4)
+        staleEntities.length should be(4)
     }
   }
 }

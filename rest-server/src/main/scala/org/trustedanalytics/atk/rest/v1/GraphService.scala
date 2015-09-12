@@ -141,7 +141,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                         }
                       } ~
                         delete {
-                          onComplete(engine.deleteGraph(id)) {
+                          onComplete(engine.dropGraph(id)) {
                             case Success(ok) => complete("OK")
                             case Failure(ex) => throw ex
                           }

@@ -20,6 +20,8 @@ import java.lang.management.ManagementFactory
 import java.net.InetAddress
 import java.util.concurrent.{ Executors, TimeUnit, ScheduledFuture }
 
+import org.trustedanalytics.atk.domain.graph.GraphEntity
+import org.trustedanalytics.atk.domain.model.ModelEntity
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntryTemplate, GarbageCollectionEntry, GarbageCollectionTemplate, GarbageCollection }
@@ -32,21 +34,17 @@ import org.joda.time.DateTime
 /**
  * Runnable Thread that executes garbage collection of unused entities.
  * @param metaStore database store
- * @param frameStorage storage class for accessing frame storage
+ * @param frameFileStorage storage class for accessing frame file storage
  * @param graphBackendStorage storage class for accessing graph backend storage
  */
-class GarbageCollector(val metaStore: MetaStore, val frameStorage: FrameFileStorage, graphBackendStorage: GraphBackendStorage) extends Runnable with EventLogging {
+class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFileStorage, val graphBackendStorage: GraphBackendStorage) extends Runnable with EventLogging {
 
   val start = new DateTime()
   val gcRepo = metaStore.gcRepo
   val gcEntryRepo = metaStore.gcEntryRepo
-
-  /**
-   * Execute Garbage Collection as a Runnable
-   */
-  override def run(): Unit = {
-    garbageCollectEntities()
-  }
+  val frames = metaStore.frameRepo
+  val graphs = metaStore.graphRepo
+  val models = metaStore.modelRepo
 
   /**
    * @return get host name of computer executing this process
@@ -61,115 +59,154 @@ class GarbageCollector(val metaStore: MetaStore, val frameStorage: FrameFileStor
     ManagementFactory.getRuntimeMXBean.getName.split("@")(0).toLong
 
   /**
-   * garbage collect all entities
-   * @param gcAgeToDeleteData in milliseconds
+   * Execute Garbage Collection as a Runnable
    */
-  def garbageCollectEntities(gcAgeToDeleteData: Long = EngineConfig.gcAgeToDeleteData): Unit = {
+  override def run(): Unit = {
+    runAllPhases()
+  }
+
+  /**
+   * Identify and drop all stale entities
+   * @param gcStaleAge - age at which an entity become stale, from last access (in ms)
+   */
+  def dropStale(gcStaleAge: Long = EngineConfig.gcStaleAge): Unit = {
+    metaStore.withSession("gc.garbagecollector.dropStale") {
+      implicit session =>
+        try {
+          info("Execute Garbage Collector Finalize")
+          frames.getStaleEntities(gcStaleAge).foreach(frame => frames.dropFrame(frame))
+          graphs.getStaleEntities(gcStaleAge).foreach(graph => graphs.dropGraph(graph))
+          models.getStaleEntities(gcStaleAge).foreach(model => models.dropModel(model))
+        }
+        catch {
+          case e: Exception => error("Exception Thrown during Garbage Collector DropStale", exception = e)
+        }
+    }
+  }
+
+  /**
+   * Finalize all dropped Entities
+   */
+  def finalizeEntities(gc: GarbageCollection): Unit = {
+    metaStore.withSession("gc.garbagecollector.finalizeEntities") {
+      implicit session =>
+        try {
+          info("Execute Garbage Collector Finalize")
+          finalizeFrames(gc)
+          finalizeGraphs(gc)
+          finalizeModels(gc)
+        }
+        catch {
+          case e: Exception => error("Exception Thrown during Garbage Collector Finalize", exception = e)
+        }
+    }
+  }
+
+  def runAllPhases(gcStaleAge: Long = EngineConfig.gcStaleAge): Unit = {
     this.synchronized {
       metaStore.withSession("gc.garbagecollector") {
         implicit session =>
           try {
-            // seems like we need a transaction or lock here?
-            if (gcRepo.getCurrentExecutions().isEmpty) {
-              info("Execute Garbage Collector")
-              val gc: GarbageCollection = gcRepo.insert(new GarbageCollectionTemplate(hostname, processId, new DateTime)).get
-              garbageCollectFrames(gc, gcAgeToDeleteData)
-              garbageCollectGraphs(gc, gcAgeToDeleteData)
-              garbageCollectModels(gc, gcAgeToDeleteData)
-              gcRepo.updateEndTime(gc)
-            }
-            else {
-              info("Garbage Collector currently executing in another process.")
-            }
+            val gc: GarbageCollection = gcRepo.insert(new GarbageCollectionTemplate(hostname, processId, new DateTime)).get
+            dropStale(gcStaleAge)
+            finalizeEntities(gc)
+            gcRepo.updateEndTime(gc)
           }
           catch {
             case e: Exception => error("Exception Thrown during Garbage Collection", exception = e)
           }
-          finally {
-
-          }
       }
     }
-
   }
 
   /**
-   * garbage collect frames delete saved files if the frame is too old and mark object as deleted if it has not been
-   * called in over a year
+   * finalize all frames that have been dropped
    * @param gc garbage collection database entry
    * @param session db session for backend process
    */
-  def garbageCollectFrames(gc: GarbageCollection, gcAgeToDeleteData: Long)(implicit session: metaStore.Session): Unit = {
-    //get weakly live records that are old
-    metaStore.frameRepo.listReadyForDeletion(gcAgeToDeleteData).foreach(frame => {
-      deleteFrameData(gc, frame)
-    })
+  def finalizeFrames(gc: GarbageCollection)(implicit session: metaStore.Session): Unit = {
+    metaStore.frameRepo.droppedFrames.foreach(frame => { finalizeFrame(gc, frame) })
   }
 
   /**
-   * Method deletes data associated with a frame and places an entry into the GarbageCollectionEntry table
+   * Deletes data associated with a frame and places an entry into the GarbageCollectionEntry table
    * @param gc garbage collection database entry
    * @param frame frame to be deleted
    */
-  def deleteFrameData(gc: GarbageCollection, frame: FrameEntity)(implicit session: metaStore.Session): Unit = {
-    val description = s"Deleting Data for DataFrame ID: ${frame.id} Name: ${frame.name}"
+  def finalizeFrame(gc: GarbageCollection, frame: FrameEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"finalize frame id=${frame.id} name=${frame.name}"
     try {
       val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
         new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
       info(description)
-      frameStorage.delete(frame)
-      metaStore.frameRepo.updateDataDeleted(frame)
+      frameFileStorage.deleteFrameData(frame)
+      metaStore.frameRepo.finalizeEntity(frame)
       gcEntryRepo.updateEndTime(gcEntry)
     }
     catch {
-      case e: Exception => error(s"Exception when: $description", exception = e)
+      case e: Exception => error(s"Exception trying to $description", exception = e)
     }
   }
 
   /**
+   * Finalize all graphs that have been dropped.
    * garbage collect graphs delete underlying frame rdds for a seamless graph and mark as deleted
    * @param gc garbage collection database entry
    * @param session db session for backend process
    */
-  def garbageCollectGraphs(gc: GarbageCollection, gcAgeToDeleteData: Long)(implicit session: metaStore.Session): Unit = {
-    metaStore.graphRepo.listReadyForDeletion(EngineConfig.gcAgeToDeleteData).foreach(graph => {
-      val description = s"Deleting Data for Graph ID: ${graph.id} Name: ${graph.name}"
-      try {
-        val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
-          new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
-        info(description)
-        metaStore.frameRepo.lookupByGraphId(graph.id).foreach(frame => deleteFrameData(gc, frame))
-        metaStore.graphRepo.updateDataDeleted(graph)
-        if (graph.isTitan) {
-          graphBackendStorage.deleteUnderlyingTable(graph.storage, quiet = true)(invocation = new BackendInvocation(EngineExecutionContext.global))
-        }
-        gcEntryRepo.updateEndTime(gcEntry)
-      }
-      catch {
-        case e: Exception => error(s"Exception when: $description", exception = e)
-      }
-    })
+  def finalizeGraphs(gc: GarbageCollection)(implicit session: metaStore.Session): Unit = {
+    metaStore.graphRepo.droppedGraphs.foreach(graph => { finalizeGraph(gc, graph) })
   }
 
   /**
-   * garbage collect models and mark as deleted if not referenced in over a year
+   * Deletes data associated with a graph and places an entry into the GarbageCollectionEntry table
+   * @param gc garbage collection database entry
+   * @param graph graph to be deleted
+   */
+  def finalizeGraph(gc: GarbageCollection, graph: GraphEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"finalize graph id=${graph.id} name=${graph.name}"
+    try {
+      val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
+        new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
+      info(description)
+      metaStore.frameRepo.lookupByGraphId(graph.id).foreach(frame => finalizeFrame(gc, frame))
+      metaStore.graphRepo.finalizeEntity(graph)
+      if (graph.isTitan) {
+        graphBackendStorage.deleteUnderlyingTable(graph.storage, quiet = true)(invocation = new BackendInvocation(EngineExecutionContext.global))
+      }
+      gcEntryRepo.updateEndTime(gcEntry)
+    }
+    catch {
+      case e: Exception => error(s"Exception trying to $description", exception = e)
+    }
+  }
+
+  /**
+   * finalize all models that have been dropped
    * @param gc garbage collection database entry
    * @param session db session for backend process
    */
-  def garbageCollectModels(gc: GarbageCollection, gcAgeToDeleteData: Long)(implicit session: metaStore.Session): Unit = {
-    metaStore.modelRepo.listReadyForDeletion(EngineConfig.gcAgeToDeleteData).foreach(model => {
-      val description = s"Deleting Data for Model ID: ${model.id} Name: ${model.name}"
-      try {
-        val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
-          new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
-        info(description)
-        metaStore.modelRepo.updateDataDeleted(model)
-        gcEntryRepo.updateEndTime(gcEntry)
-      }
-      catch {
-        case e: Exception => error(s"Exception when: $description", exception = e)
-      }
-    })
+  def finalizeModels(gc: GarbageCollection)(implicit session: metaStore.Session): Unit = {
+    metaStore.modelRepo.droppedModels.foreach(model => { finalizeModel(gc, model) })
+  }
+
+  /**
+   * Deletes data associated with a model and places an entry into the GarbageCollectionEntry table
+   * @param gc garbage collection database entry
+   * @param model model to be deleted
+   */
+  def finalizeModel(gc: GarbageCollection, model: ModelEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"finalize model id=${model.id} name=${model.name}"
+    try {
+      val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
+        new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
+      info(description)
+      metaStore.modelRepo.finalizeEntity(model)
+      gcEntryRepo.updateEndTime(gcEntry)
+    }
+    catch {
+      case e: Exception => error(s"Exception trying to $description", exception = e)
+    }
   }
 }
 
@@ -195,11 +232,14 @@ object GarbageCollector {
 
   /**
    * Execute a garbage collection outside of the regularly scheduled intervals
-   * @param gcAgeToDeleteData in milliseconds
+   * @param gcStaleAge in milliseconds
    */
-  def singleTimeExecution(gcAgeToDeleteData: Long): Unit = {
+  def singleTimeExecution(gcStaleAge: Option[Long] = None): Unit = {
     require(garbageCollector != null, "GarbageCollector has not been initialized. Problem during RestServer initialization")
-    garbageCollector.garbageCollectEntities(gcAgeToDeleteData)
+    gcStaleAge match {
+      case Some(age) => garbageCollector.runAllPhases(age)
+      case None => garbageCollector.runAllPhases()
+    }
   }
 
   /**

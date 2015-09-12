@@ -513,13 +513,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       frames.where(_.id === frame.id).firstOption.get
     }
 
-    //    override def updateRevision(frame: DataFrame, revision: Int)(implicit session: Session): DataFrame = {
-    //      // this looks crazy but it is how you update only one column
-    //      val column = for (f <- frames if f.id === frame.id) yield f.revision
-    //      column.update(revision)
-    //      frames.where(_.id === frame.id).firstOption.get
-    //    }
-
     override def insert(frame: DataFrameTemplate)(implicit session: Session): Try[FrameEntity] = Try {
       _insertFrame(frame)(session)
     }
@@ -561,103 +554,41 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       frames.ddl.drop
     }
 
-    /**
-     * update and mark an entity as having it's data deleted
-     * @param frame entity to be deleted
-     * @param session the user session
-     * @return the entity
-     */
-    override def updateDataDeleted(frame: FrameEntity)(implicit session: Session): Try[FrameEntity] = Try {
-      val cols = frames.filter(_.id === frame.id).map(f => (f.name, f.statusId, f.materializedOn, f.materializationComplete, f.modifiedOn))
-      cols.update((None, Status.Deleted_Final, None, None, new DateTime))
+    def droppedFrames(implicit session: Session) = {
+      frames.where(_.statusId === (Status.Dropped: Long)).list
+    }
+
+    def finalizeEntity(frame: FrameEntity)(implicit session: Session): Try[FrameEntity] = Try {
+      frames.filter(_.id === frame.id).map(f => (f.statusId, f.modifiedOn)).update((Status.Finalized, new DateTime))
       frames.where(_.id === frame.id).firstOption.get
     }
 
-    /**
-     * Return a list of entities ready to delete
-     * @param age the length of time in milliseconds for the newest possible record to be deleted
-     * @param session current session
-     */
-    override def getStaleEntities(age: Long)(implicit session: Session): Seq[FrameEntity] = {
+    def getStaleEntities(age: Long)(implicit session: Session): Seq[FrameEntity] = {
       val oldestDate = DateTime.now.minus(age)
       frames.list.filter(f => isStale(f, oldestDate))
     }
 
-    override def isStale(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
-      frame.status == Status.Active && frame.name.isEmpty && wasLastReadBefore(frame, date) && !isOwned(frame)
+    def isStale(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
+      frame.isStatus(Status.Active) && frame.name.isEmpty && wasLastReadBefore(frame, date) && !isOwned(frame)
     }
 
     def isOwned(frame: FrameEntity)(implicit session: Session): Boolean = {
       frame.graphId.isDefined
+      // (we don't have a link to the owner of an error frame)
     }
 
     def wasLastReadBefore(frame: FrameEntity, date: DateTime)(implicit session: Session): Boolean = {
       frame.lastReadDate.isBefore(date)
     }
 
-//    /**
-//     * Return true if the supplied frame is part of a live graph
-//     * @param frame frame in question
-//     * @param session the user session
-//     */
-//    def inLiveGraph(frame: FrameEntity)(implicit session: Session): Boolean = {
-//      frame.graphId match {
-//        case None => false
-//        case Some(g) => {
-//          val graph = metaStore.graphRepo.lookup(g)(session.asInstanceOf[metaStore.Session])
-//          metaStore.graphRepo.isLive(graph.get)(session.asInstanceOf[metaStore.Session])
-//        }
-//      }
-//    }
-//
-//    /**
-//     * determines if a frame is live from its metadata
-//     * @param frame frame in question
-//     */
-//    override def isLive(frame: FrameEntity): Boolean = {
-//      frame.name.isDefined && frame.status == Status.Active
-//    }
-
-//    /**
-//     * return true if the id supplied belongs to an entity that has live children
-//     * @param id
-//     * @param session
-//     */
-//    def hasLiveChildren(id: Long)(implicit session: Session): Boolean = {
-//      val list = frames.where(f => f.parentId === id &&
-//        f.statusId =!= Status.Deleted_Final).list
-//      list.count(f => !hasLiveChildren(f.id)) > 0
-//    }
-
-//    /**
-//     * return true if the id supplied belongs to an entity that has children
-//     * @param id
-//     * @param session
-//     */
-//    def hasChildren(id: Long)(implicit session: Session): Boolean = {
-//      frames.where(_.parentId === id).list.length > 0
-//    }
-
-    /**
-     * update the last read data of an entity if it has been marked as deleted change it's status
-     * @param entity entity to be updated
-     * @param session the user session
-     */
-    def updateLastReadDate(entity: FrameEntity)(implicit session: Session): Try[FrameEntity] = Try {
-      val columns = frames.filter(_.id === entity.id).map(f => (f.lastReadDate, f.statusId, f.modifiedOn))
-      columns.update((new DateTime, Status.getNewStatusForRead(entity.status), new DateTime))
-      frames.where(_.id === entity.id).firstOption.get
+    def updateLastReadDate(frame: FrameEntity)(implicit session: Session): Try[FrameEntity] = Try {
+      frames.filter(_.id === frame.id).map(f => (f.lastReadDate, f.modifiedOn)).update((new DateTime, new DateTime))
+      frames.where(_.id === frame.id).firstOption.get
     }
 
-    /**
-     * update and mark an entity as being ready to delete in the next garbage collection execution
-     * @param entity enity that will be marked as deleted
-     * @param session user session
-     */
-    override def updateReadyToDelete(entity: FrameEntity)(implicit session: SlickMetaStoreComponent.this.type#Session): Try[FrameEntity] = Try {
-      val cols = frames.filter(_.id === entity.id).map(f => (f.name, f.statusId, f.modifiedOn))
-      cols.update((None, Status.Deleted, new DateTime))
-      frames.where(_.id === entity.id).firstOption.get
+    def dropFrame(frame: FrameEntity)(implicit session: SlickMetaStoreComponent.this.type#Session): Try[FrameEntity] = Try {
+      frames.filter(_.id === frame.id).map(f => (f.name, f.statusId, f.modifiedOn)).update((None, Status.Dropped, new DateTime))
+      frames.where(_.id === frame.id).firstOption.get
     }
   }
 
@@ -852,13 +783,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       updatedGraph
     }
 
-    override def incrementIdCounter(id: Long, increment: Long)(implicit session: Session): Unit = {
-      val graph = graphs.where(_.id === id).firstOption.getOrElse(throw new RuntimeException(s"Graph with id $id not found"))
-      val newValue = graph.idCounter.getOrElse(0L) + increment
-      val idCounterCol = for (g <- graphs if g.id === id) yield g.idCounter
-      idCounterCol.update(Some(newValue))
-    }
-
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[GraphEntity] = {
       graphs.drop(offset).take(count).list
     }
@@ -888,71 +812,36 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       graphs.ddl.drop
     }
 
-    /**
-     * return true if the supplied graph is live.
-     * @param g the graph in question
-     */
-    override def isLive(g: GraphEntity)(implicit session: Session): Boolean = {
-      val live = g.name.isDefined && g.statusId == Status.Active
-      if (live) {
-        true
-      }
-      else {
-        val frames = metaStore.frameRepo.lookupByGraphId(g.id)(session.asInstanceOf[metaStore.Session])
-        frames.count(f => metaStore.frameRepo.isLive(f)) > 0
-      }
-    }
-
-    /**
-     * Return a list of entities ready to delete
-     * @param age the length of time in milliseconds for the newest possible record to be deleted
-     * @param session current session
-     */
-    override def listReadyForDeletion(age: Long)(implicit session: Session): Seq[GraphEntity] = {
+    def getStaleEntities(age: Long)(implicit session: Session): Seq[GraphEntity] = {
       val oldestDate = DateTime.now.minus(age)
-      val list = (for (
-        g <- graphs; if (g.name.isNull &&
-          g.statusId =!= Status.Deleted_Final &&
-          g.lastReadDate < oldestDate) || g.statusId === Status.Deleted
-      ) yield g).list
-      list.filter(g => !isLive(g))
+      graphs.list.filter(g => isStale(g, oldestDate))
     }
 
-    /**
-     * update and mark an entity as having it's data deleted
-     * @param entity entity to be deleted
-     * @param session the user session
-     * @return the entity
-     */
-    override def updateDataDeleted(entity: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
-      graphs.filter(_.id === entity.id)
-        .map(g => (g.name, g.statusId, g.modifiedOn))
-        .update((None, Status.Deleted_Final, new DateTime))
-      graphs.where(_.id === entity.id).firstOption.get
+    def isStale(graph: GraphEntity, date: DateTime)(implicit session: Session): Boolean = {
+      graph.isStatus(Status.Active) && graph.name.isEmpty && wasLastReadBefore(graph, date)
     }
 
-    /**
-     * update the last read data of an entity if it has been marked as deleted change it's status
-     * @param entity entity to be updated
-     * @param session the user session
-     */
-    def updateLastReadDate(entity: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
-      graphs.filter(_.id === entity.id)
-        .map(g => (g.lastReadDate, g.statusId, g.modifiedOn))
-        .update((new DateTime, Status.getNewStatusForRead(entity.statusId), new DateTime))
-      graphs.where(_.id === entity.id).firstOption.get
+    def wasLastReadBefore(graph: GraphEntity, date: DateTime)(implicit session: Session): Boolean = {
+      graph.lastReadDate.isBefore(date)
     }
 
-    /**
-     * update and mark an entity as being ready to delete in the next garbage collection execution
-     * @param entity entity that will be marked as deleted
-     * @param session user session
-     */
-    override def updateReadyToDelete(entity: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
-      graphs.filter(_.id === entity.id)
-        .map(g => (g.name, g.statusId, g.modifiedOn))
-        .update((None, Status.Deleted, new DateTime))
-      graphs.where(_.id === entity.id).firstOption.get
+    def finalizeEntity(graph: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
+      graphs.filter(_.id === graph.id).map(g => (g.statusId, g.modifiedOn)).update((Status.Finalized, new DateTime))
+      graphs.where(_.id === graph.id).firstOption.get
+    }
+
+    def droppedGraphs(implicit session: Session) = {
+      graphs.where(_.statusId === (Status.Dropped: Long)).list // need explicit : Long for foreign key lookup
+    }
+
+    def updateLastReadDate(graph: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
+      graphs.filter(_.id === graph.id).map(g => (g.lastReadDate, g.modifiedOn)).update((new DateTime, new DateTime))
+      graphs.where(_.id === graph.id).firstOption.get
+    }
+
+    def dropGraph(graph: GraphEntity)(implicit session: Session): Try[GraphEntity] = Try {
+      graphs.filter(_.id === graph.id).map(g => (g.name, g.statusId, g.modifiedOn)).update((None, Status.Dropped, new DateTime))
+      graphs.where(_.id === graph.id).firstOption.get
     }
   }
 
@@ -1040,55 +929,36 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       models.ddl.drop
     }
 
-    /**
-     * Return a list of entities ready to delete
-     * @param age the length of time in milliseconds for the newest possible record to be deleted
-     * @param session current session
-     */
-    override def listReadyForDeletion(age: Long)(implicit session: Session): Seq[ModelEntity] = {
+    def getStaleEntities(age: Long)(implicit session: Session): Seq[ModelEntity] = {
       val oldestDate = DateTime.now.minus(age)
-      (for (
-        m <- models; if (m.name.isNull &&
-          m.statusId =!= Status.Deleted_Final &&
-          m.lastReadDate < oldestDate) || m.statusId === Status.Deleted
-      ) yield m).list
+      models.list.filter(m => isStale(m, oldestDate))
     }
 
-    /**
-     * update and mark an entity as having it's data deleted
-     * @param entity entity to be deleted
-     * @param session the user session
-     * @return the entity
-     */
-    override def updateDataDeleted(entity: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
-      models.filter(_.id === entity.id)
-        .map(m => (m.name, m.statusId, m.modifiedOn))
-        .update((None, Status.Deleted_Final, new DateTime))
-      models.where(_.id === entity.id).firstOption.get
+    def isStale(model: ModelEntity, date: DateTime)(implicit session: Session): Boolean = {
+      model.isStatus(Status.Active) && model.name.isEmpty && wasLastReadBefore(model, date)
     }
 
-    /**
-     * update the last read data of an entity if it has been marked as deleted change it's status
-     * @param entity entity to be updated
-     * @param session the user session
-     */
-    def updateLastReadDate(entity: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
-      models.filter(_.id === entity.id)
-        .map(m => (m.lastReadDate, m.statusId, m.modifiedOn))
-        .update((new DateTime, Status.getNewStatusForRead(entity.statusId), new DateTime))
-      models.where(_.id === entity.id).firstOption.get
+    def wasLastReadBefore(model: ModelEntity, date: DateTime)(implicit session: Session): Boolean = {
+      model.lastReadDate.isBefore(date)
     }
 
-    /**
-     * update and mark an entity as being ready to delete in the next garbage collection execution
-     * @param entity entity that will be marked as deleted
-     * @param session user session
-     */
-    override def updateReadyToDelete(entity: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
-      models.filter(_.id === entity.id)
-        .map(m => (m.name, m.statusId, m.modifiedOn))
-        .update((None, Status.Deleted, new DateTime))
-      models.where(_.id === entity.id).firstOption.get
+    def finalizeEntity(model: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
+      models.filter(_.id === model.id).map(m => (m.statusId, m.modifiedOn)).update((Status.Finalized, new DateTime))
+      models.where(_.id === model.id).firstOption.get
+    }
+
+    def droppedModels(implicit session: Session) = {
+      models.where(_.statusId === (Status.Dropped: Long)).list
+    }
+
+    def updateLastReadDate(model: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
+      models.filter(_.id === model.id).map(m => (m.lastReadDate, m.modifiedOn)).update((new DateTime, new DateTime))
+      models.where(_.id === model.id).firstOption.get
+    }
+
+    def dropModel(model: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {
+      models.filter(_.id === model.id).map(m => (m.name, m.statusId, m.modifiedOn)).update((None, Status.Dropped, new DateTime))
+      models.where(_.id === model.id).firstOption.get
     }
   }
 

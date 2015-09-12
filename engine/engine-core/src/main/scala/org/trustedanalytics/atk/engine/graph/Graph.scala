@@ -39,8 +39,6 @@ trait Graph {
 
   def nextId: Long
 
-  def incrementIdCounter(value: Long): Unit
-
   // TODO: not sure to leave these here or move to a SeamlessGraph interface
 
   def defineVertexType(vertexSchema: VertexSchema): Unit
@@ -98,8 +96,6 @@ class GraphImpl(graph: GraphReference, sparkGraphStorage: SparkGraphStorage)(imp
   override def isTitan: Boolean = entity.isTitan
 
   override def nextId: Long = entity.nextId()
-
-  override def incrementIdCounter(value: Long): Unit = sparkGraphStorage.incrementIdCounter(graph, value)
 
   override def defineVertexType(vertexSchema: VertexSchema): Unit = {
     sparkGraphStorage.defineVertexType(graph, vertexSchema)
