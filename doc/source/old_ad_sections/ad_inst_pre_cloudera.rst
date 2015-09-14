@@ -1,3 +1,5 @@
+.. _old_ad_sections/ad_inst_pre_cloudera:
+
 .. _ad_inst_pre_cloudera:
 
 ==============================

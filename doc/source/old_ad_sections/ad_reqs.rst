@@ -1,3 +1,5 @@
+.. _old_ad_sections/ad_reqs:
+
 .. _ad_reqs:
 
 ===================

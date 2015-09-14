@@ -1,3 +1,5 @@
+.. _old_ad_sections/ad_scoring_engine:
+
 .. _ad_scoring_engine:
 
 Scoring Engine

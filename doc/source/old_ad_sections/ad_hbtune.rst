@@ -1,3 +1,5 @@
+.. _old_ad_sections/ad_hbtune:
+
 .. _ad_hbtune:
 
 .. index::

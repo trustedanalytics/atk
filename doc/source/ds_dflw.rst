@@ -231,7 +231,7 @@ columns.
 |PACKAGE| can handle frames with large volumes of data, because it is
 designed to work with data spread over multiple machines.
 
-Create A Frame
+Create a Frame
 ==============
 
 There are several ways to create frames\:
@@ -393,7 +393,7 @@ See also the :ref:`join <python_api/frames/frame-/join>` method in the
 
 .. _example_frame.inspect:
 
-Inspect The Data
+Inspect the Data
 ================
 |PACKAGE| provides several methods that allow you to inspect your data,
 including :ref:`inspect <python_api/frames/frame-/inspect>` and
@@ -498,7 +498,7 @@ Gives you something like this:
         ...     pprint(summary[col])
 
 
-Clean The Data
+Clean the Data
 ==============
 
 The process of "data cleaning" encompasses the identification and removal or
@@ -516,7 +516,7 @@ not provide the same level of efficiency.
     rather than return a new frame with the changed data.
     It is recommended that you copy the data to a new frame on a regular
     basis and work on the new frame.
-    This way, you have a fall-back if something does not work as expected:
+    This way, you have a fallback if something does not work as expected:
 
     .. code::
 
@@ -671,7 +671,7 @@ Rename column *b* to "author" and *c* to "publisher":
 
     >>> my_frame.rename_columns({'b': 'author', 'c': 'publisher'})
 
-Transform The Data
+Transform the Data
 ==================
 
 Often, you will need to create new data based upon the existing data.
@@ -1211,7 +1211,7 @@ Add the data:
 
 .. warning::
 
-    Improperly built graphs can give inconsistant results.
+    Improperly built graphs can give inconsistent results.
     For example, given EdgeFrames with this data::
 
         Movieid, movieTitle, Rating, userId
@@ -1289,7 +1289,7 @@ Graph Creation
 ==============
 
 A Titan graph is created by exporting it from a seamless graph.
-For futher information, as well as Titan graph attributes and methods, see the
+For further information, as well as Titan graph attributes and methods, see the
 API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
 
 .. _Graph_Analytics:

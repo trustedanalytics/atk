@@ -1,3 +1,5 @@
+.. _old_ad_sections/ad_cluster_configuration:
+
 .. _ad_cluster_configuration:
 
 =====================
