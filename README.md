@@ -80,7 +80,7 @@ This is an overview. Additional details and instructions are in the user documen
     * ta.connect()
 
 # Getting Help
-* Gitter chat
+* [Bug Tracking](https://trustedanalytics.atlassian.net)
 * [Look at our end user docs](http://trustedanalytics.github.io/atk/)
 * [Look at our wiki docs](../../wiki)
 
