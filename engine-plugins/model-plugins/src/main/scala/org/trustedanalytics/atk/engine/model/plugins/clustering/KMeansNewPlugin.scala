@@ -25,8 +25,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-@PluginDoc(oneLine = "<TBD>",
-  extended = "")
+@PluginDoc(oneLine = "create a new model")
 class KMeansNewPlugin extends SparkCommandPlugin[KMeansNewArgs, ModelReference] {
 
   override def name: String = "model:k_means/new"

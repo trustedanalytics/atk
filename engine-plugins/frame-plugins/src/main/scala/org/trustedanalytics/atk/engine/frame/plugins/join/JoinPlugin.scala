@@ -40,8 +40,7 @@ import JoinJsonFormat._
 /**
  * Join two data frames (similar to SQL JOIN)
  */
-@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).")
 class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
 
   /**
