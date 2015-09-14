@@ -31,46 +31,46 @@ class MultiClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
     ScoreAndLabel(0, 0),
     ScoreAndLabel(1, 1),
     ScoreAndLabel(0, 0),
-    ScoreAndLabel(1, 0))
+    ScoreAndLabel(0, 1))
 
   val inputListBinaryChar = List(
     ScoreAndLabel("no", "no"),
     ScoreAndLabel("yes", "yes"),
     ScoreAndLabel("no", "no"),
-    ScoreAndLabel("yes", "no"))
+    ScoreAndLabel("no", "yes"))
 
   val inputListBinary2 = List(
     ScoreAndLabel(0, 0),
     ScoreAndLabel(1, 1),
-    ScoreAndLabel(0, 1),
-    ScoreAndLabel(1, 1),
-    ScoreAndLabel(0, 0),
-    ScoreAndLabel(0, 1),
-    ScoreAndLabel(0, 0),
-    ScoreAndLabel(1, 1),
+    ScoreAndLabel(1, 0),
     ScoreAndLabel(1, 1),
     ScoreAndLabel(0, 0),
     ScoreAndLabel(1, 0),
-    ScoreAndLabel(0, 1),
+    ScoreAndLabel(0, 0),
     ScoreAndLabel(1, 1),
-    ScoreAndLabel(0, 1))
+    ScoreAndLabel(1, 1),
+    ScoreAndLabel(0, 0),
+    ScoreAndLabel(0, 1),
+    ScoreAndLabel(1, 0),
+    ScoreAndLabel(1, 1),
+    ScoreAndLabel(1, 0))
 
   // tp + tn = 2
   val inputListMulti = List(
     ScoreAndLabel(0, 0),
-    ScoreAndLabel(1, 2),
     ScoreAndLabel(2, 1),
+    ScoreAndLabel(1, 2),
     ScoreAndLabel(0, 0),
-    ScoreAndLabel(1, 0),
-    ScoreAndLabel(2, 1))
+    ScoreAndLabel(0, 1),
+    ScoreAndLabel(1, 2))
 
   val inputListMultiChar = List(
     ScoreAndLabel("red", "red"),
-    ScoreAndLabel("green", "blue"),
     ScoreAndLabel("blue", "green"),
+    ScoreAndLabel("green", "blue"),
     ScoreAndLabel("red", "red"),
-    ScoreAndLabel("green", "red"),
-    ScoreAndLabel("blue", "green"))
+    ScoreAndLabel("red", "green"),
+    ScoreAndLabel("green", "blue"))
 
 
   "accuracy measure" should "compute correct value for multi-class classifier" in {

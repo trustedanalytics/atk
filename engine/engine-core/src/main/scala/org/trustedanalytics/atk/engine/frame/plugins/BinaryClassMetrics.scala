@@ -69,10 +69,10 @@ case class BinaryClassMetrics[T, S : SerializableType](labelPredictRdd: RDD[Scor
     else if (!label.equals(positiveLabel) && !score.equals(positiveLabel)) {
       counter.trueNegatives += frequency
     }
-    else if (label.equals(positiveLabel) && !score.equals(positiveLabel)) {
+    else if (!label.equals(positiveLabel) && score.equals(positiveLabel)) {
       counter.falsePositives += frequency
     }
-    else if (!label.equals(positiveLabel) && score.equals(positiveLabel)) {
+    else if (label.equals(positiveLabel) && !score.equals(positiveLabel)) {
       counter.falseNegatives += frequency
     }
     counter

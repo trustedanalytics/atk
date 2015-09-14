@@ -55,10 +55,15 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
     (scoreAndLabel.label, truePositives)
   }).reduceByKey(_ + _).collectAsMap()
 
-
-  lazy val positivesByScore = labelPredictRdd.map (scoreAndLabel => {
-    (scoreAndLabel.score, scoreAndLabel.frequency)
+  lazy val falsePositivesByScore = labelPredictRdd.map (scoreAndLabel => {
+    val falsePositives = if (!scoreAndLabel.label.equals(scoreAndLabel.score)) {
+      scoreAndLabel.frequency
+    } else {
+      0L
+    }
+    (scoreAndLabel.score, falsePositives)
   }).reduceByKey(_ + _).collectAsMap()
+
 
   lazy val totalCount = countsByLabel.map { case (label, count) => count }.sum
 
@@ -74,11 +79,11 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
    */
   def precision(label: T): Double = {
     val truePos = truePositivesByLabel.getOrElse(label, 0L)
-    val totalPos = positivesByScore.getOrElse(label, 0L)
+    val falsePos = falsePositivesByScore.getOrElse(label, 0L)
 
-    totalPos match {
+    (truePos + falsePos) match {
       case 0 => 0d
-      case _ => truePos / totalPos.toDouble
+      case totalPos => truePos / totalPos.toDouble
     }
   }
 
