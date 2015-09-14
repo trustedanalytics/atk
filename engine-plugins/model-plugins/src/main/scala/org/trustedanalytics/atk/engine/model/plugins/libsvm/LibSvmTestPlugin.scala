@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
 import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
+import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -88,27 +88,17 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
     }
 
     //predicting a label for the observation column/s
-    val predictionsRdd: RDD[Row] = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(arguments.observationColumns.getOrElse(libsvmData.observationColumns))
-      val label = row.value(arguments.labelColumn) match {
-        case x: Int => x.toInt
-        case y: Double => y.toDouble
-        case _ => throw new RuntimeException(s"Only Int and Double are supported as label columns")
-      }
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      var vector = Vector.empty[Double]
-      var i: Int = 0
-      while (i < doubles.length) {
-        vector = vector :+ doubles(i)
-        i += 1
-      }
-      val predictionLabel = LibSvmPluginFunctions.score(libsvmModel, vector)
-      Row(label, predictionLabel.value)
+    val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val vector = row.valuesAsDoubleArray(observationColumns).toVector
+      val label = row.doubleValue(arguments.labelColumn)
+      val score = LibSvmPluginFunctions.score(libsvmModel, vector)
+      ScoreAndLabel(score, label)
     })
 
     //Run Binary classification metrics
-    val posLabel: String = "1.0"
-    ClassificationMetrics.binaryClassificationMetrics(predictionsRdd, 0, 1, posLabel, 1)
+    val posLabel: Double = 1d
+    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
   }
 
 }

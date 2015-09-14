@@ -18,17 +18,12 @@ package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
-import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -86,17 +81,16 @@ class SVMWithSGDTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
     }
     val svmColumns = arguments.observationColumns.getOrElse(svmData.observationColumns)
 
-    val labeledTestRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, svmColumns)
-
     //predicting and testing
-    val scoreAndLabelRDD: RDD[Row] = labeledTestRDD.map { point =>
-      val prediction = svmModel.predict(point.features)
-      Row(point.label, prediction)
-    }
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val labeledPoint = row.valuesAsLabeledPoint(svmColumns, arguments.labelColumn)
+      val score = svmModel.predict(labeledPoint.features)
+      ScoreAndLabel(score, labeledPoint.label)
+    })
 
     //Run Binary classification metrics
-    val posLabel: String = "1.0"
-    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRDD, 0, 1, posLabel, 1)
+    val posLabel: Double = 1d
+    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
 
   }
 }

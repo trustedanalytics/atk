@@ -18,16 +18,14 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{Column, DataTypes}
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.SparkContext._
-import org.apache.spark.mllib.linalg.Vectors
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -88,20 +86,15 @@ class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForest
     val rfColumns = arguments.observationColumns.getOrElse(rfData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(rfColumns)
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      val point = Vectors.dense(doubles)
-      val prediction = rfModel.predict(point)
-      row.addValue(prediction)
+    val predictColumn = Column("predicted_class", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val point = row.valuesAsDenseVector(rfColumns)
+      rfModel.predict(point)
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_class", DataTypes.float64)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by RandomForests as a regressor predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 

@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 import org.trustedanalytics.atk.domain.frame.{ ClassificationMetricArgs, ClassificationMetricValue }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 // Implicits needed for JSON conversion
@@ -130,13 +130,10 @@ class ClassificationMetricsPlugin extends SparkCommandPlugin[ClassificationMetri
    */
   override def execute(arguments: ClassificationMetricArgs)(implicit invocation: Invocation): ClassificationMetricValue = {
     val frame: SparkFrame = arguments.frame
-    val schema = frame.schema
-    val betaValue = arguments.beta.getOrElse(1.0)
-    val labelColumnIndex = schema.columnIndex(arguments.labelColumn)
-    val predColumnIndex = schema.columnIndex(arguments.predColumn)
 
     // check if poslabel is an Int, string or None
-    val metricsPoslabel: String = arguments.posLabel.isDefined match {
+    val betaValue = arguments.beta.getOrElse(1.0)
+    val positiveLabel: String = arguments.posLabel.isDefined match {
       case false => null
       case true => arguments.posLabel.get match {
         case Left(x) => x
@@ -144,12 +141,24 @@ class ClassificationMetricsPlugin extends SparkCommandPlugin[ClassificationMetri
       }
     }
     // run the operation and return the results
-    if (metricsPoslabel == null) {
-      ClassificationMetrics.multiclassClassificationMetrics(frame.rdd, labelColumnIndex, predColumnIndex, betaValue)
-    }
-    else {
-      ClassificationMetrics.binaryClassificationMetrics(frame.rdd, labelColumnIndex, predColumnIndex, metricsPoslabel, betaValue)
-    }
-
+    //if (positiveLabel == null) {
+      ClassificationMetrics.multiclassClassificationMetrics(
+        frame.rdd,
+        arguments.labelColumn,
+        arguments.predColumn,
+        betaValue,
+        arguments.frequencyColumn
+      )
+   // }
+    /*else {
+      ClassificationMetrics.binaryClassificationMetrics(
+        frame.rdd,
+        arguments.labelColumn,
+        arguments.predColumn,
+        positiveLabel,
+        betaValue,
+        arguments.frequencyColumn
+      )
+    } */
   }
 }

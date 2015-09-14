@@ -23,6 +23,8 @@ case class ClassificationMetricArgs(frame: FrameReference,
 correct label for each instance.""") labelColumn: String,
                                     @ArgDoc("""The name of the column containing the
 predicted label for each instance.""") predColumn: String,
+                                    @ArgDoc("""The name of an optional column containing the
+frequency of observations.""") frequencyColumn: Option[String] = None,
                                     @ArgDoc("""This is a str or int for binary classifiers,
 and Null for multi-class classifiers.
 The value to be interpreted as a positive instance.""") posLabel: Option[Either[String, Int]],
@@ -38,4 +40,27 @@ Defaults is 1.""") beta: Option[Double] = None) {
   }
 }
 
-case class ClassificationMetricValue(fMeasure: Double, accuracy: Double, recall: Double, precision: Double, confusionMatrix: Map[String, Long])
+
+/**
+ * Entry in confusion matrix
+ * 
+ * @param actualClass Actual class label
+ * @param predictedClass Predicted class label
+ * @param count Count of instances matching actual class and predicted class
+ */
+case class ConfusionMatrixEntry(actualClass: String, predictedClass: String, count: Long)
+
+/**
+ * Classification metrics
+ *
+ * @param fMeasure Weighted average of precision and recall
+ * @param accuracy Fraction of correct predictions
+ * @param recall Fraction of positives correctly predicted
+ * @param precision Fraction of correct predictions among positive predictions
+ * @param confusionMatrix Matrix of actual vs. predicted classes
+ */
+case class ClassificationMetricValue(fMeasure: Double,
+                                     accuracy: Double,
+                                     recall: Double,
+                                     precision: Double,
+                                     confusionMatrix: List[ConfusionMatrixEntry])

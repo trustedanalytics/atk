@@ -16,12 +16,11 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
-import org.trustedanalytics.atk.engine.frame.plugins.{BinaryClassMetrics, ScoreAndLabel, MultiClassMetrics, ClassificationMetrics}
 import org.scalatest.Matchers
+import org.trustedanalytics.atk.engine.frame.plugins.{MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel}
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
-class ClassificationMetricTest extends TestingSparkContextFlatSpec with Matchers {
-
+class BinaryClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
   // posLabel = 1
   // tp = 1
   // tn = 2
@@ -97,24 +96,6 @@ class ClassificationMetricTest extends TestingSparkContextFlatSpec with Matchers
     diff should be <= 0.0000001
   }
 
-  "accuracy measure" should "compute correct value for multi-class classifier" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val accuracy = multiClassMetrics.accuracy()
-    val diff = (accuracy - 0.3333333).abs
-    diff should be <= 0.0000001
-  }
-
- /* "accuracy measure" should "compute correct value for multi-class classifier with string labels" in {
-    val rdd = sparkContext.parallelize(inputListMultiChar)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val accuracy = multiClassMetrics.accuracy()
-    val diff = (accuracy - 0.3333333).abs
-    diff should be <= 0.0000001
-  }  */
-
   "precision measure" should "compute correct value for binary classifier" in {
     val rdd = sparkContext.parallelize(inputListBinary)
 
@@ -143,28 +124,10 @@ class ClassificationMetricTest extends TestingSparkContextFlatSpec with Matchers
   "precision measure" should "return 0 for binary classifier if posLabel does not exist in label column" in {
     val rdd = sparkContext.parallelize(inputListBinary)
 
-    //val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
-    //val precision = binaryClassMetrics.precision()
-    //precision shouldEqual 0.0
+    val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
+    val precision = binaryClassMetrics.precision()
+    precision shouldEqual 0.0
   }
-       /*
-  "precision measure" should "compute correct value for multi-class classifier" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val precision = multiClassMetrics.weightedPrecision()
-    val diff = (precision - 0.2222222).abs
-    diff should be <= 0.0000001
-  }
-
-  "precision measure" should "compute correct value for multi-class classifier with string labels" in {
-    val rdd = sparkContext.parallelize(inputListMultiChar)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val precision = multiClassMetrics.weightedPrecision()
-    val diff = (precision - 0.2222222).abs
-    diff should be <= 0.0000001
-  } */
 
   "recall measure" should "compute correct value for binary classifier" in {
     val rdd = sparkContext.parallelize(inputListBinary)
@@ -191,31 +154,13 @@ class ClassificationMetricTest extends TestingSparkContextFlatSpec with Matchers
     diff should be <= 0.0000001
   }
 
- /* "recall measure" should "return 0 for binary classifier if posLabel does not exist in label column" in {
-    val rdd = sparkContext.parallelize(inputListBinary)
+   "recall measure" should "return 0 for binary classifier if posLabel does not exist in label column" in {
+     val rdd = sparkContext.parallelize(inputListBinary)
 
-    val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
-    val recall = binaryClassMetrics.recall()
-    recall shouldEqual 0.0
-  }
-
-  "recall measure" should "compute correct value for multi-class classifier" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val recall = multiClassMetrics.weightedRecall()
-    val diff = (recall - 0.3333333).abs
-    diff should be <= 0.0000001
-  }
-
-  "recall measure" should "compute correct value for multi-class classifier with string labels" in {
-    val rdd = sparkContext.parallelize(inputListMultiChar)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd)
-    val recall = multiClassMetrics.weightedRecall()
-    val diff = (recall - 0.3333333).abs
-    diff should be <= 0.0000001
-  }  */
+     val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
+     val recall = binaryClassMetrics.recall()
+     recall shouldEqual 0.0
+   }
 
   "f measure" should "compute correct value for binary classifier for beta = 0.5" in {
     val rdd = sparkContext.parallelize(inputListBinary)
@@ -287,41 +232,5 @@ class ClassificationMetricTest extends TestingSparkContextFlatSpec with Matchers
     val fmeasure = binaryClassMetrics.fmeasure()
     fmeasure shouldEqual 0.0
   }
-       /*
-  "f measure" should "compute correct value for multi-class classifier for beta = 0.5" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd, 0.5)
-    val fmeasure = multiClassMetrics.weightedFmeasure()
-    val diff = (fmeasure - 0.2380952).abs
-    diff should be <= 0.0000001
-  }
-
-  "f measure" should "compute correct value for multi-class classifier for beta = 1" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd, 1)
-    val fmeasure = multiClassMetrics.weightedFmeasure()
-    val diff = (fmeasure - 0.2666666).abs
-    diff should be <= 0.0000001
-  }
-
-  "f measure" should "compute correct value for multi-class classifier for beta = 1 with string labels" in {
-    val rdd = sparkContext.parallelize(inputListMultiChar)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd, 1)
-    val fmeasure = multiClassMetrics.weightedFmeasure()
-    val diff = (fmeasure - 0.2666666).abs
-    diff should be <= 0.0000001
-  }
-
-  "f measure" should "compute correct value for multi-class classifier for beta = 2" in {
-    val rdd = sparkContext.parallelize(inputListMulti)
-
-    val multiClassMetrics = new MultiClassMetrics(rdd, 2)
-    val fmeasure = multiClassMetrics.weightedFmeasure()
-    val diff = (fmeasure - 0.3030303).abs
-    diff should be <= 0.0000001
-  }    */
 
 }

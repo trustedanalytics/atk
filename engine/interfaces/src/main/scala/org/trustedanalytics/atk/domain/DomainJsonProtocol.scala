@@ -370,7 +370,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   // model performance formats
 
-  implicit val classificationMetricLongFormat = jsonFormat5(ClassificationMetricArgs)
+  implicit val classificationMetricLongFormat = jsonFormat6(ClassificationMetricArgs)
+  implicit val confusionMatrixEntryFormat = jsonFormat3(ConfusionMatrixEntry)
   implicit val classificationMetricValueLongFormat = jsonFormat5(ClassificationMetricValue)
   implicit val commandActionFormat = jsonFormat1(CommandPost)
 

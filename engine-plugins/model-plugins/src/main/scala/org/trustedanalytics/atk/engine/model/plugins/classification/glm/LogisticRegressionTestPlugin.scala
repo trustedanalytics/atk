@@ -18,17 +18,13 @@ package org.trustedanalytics.atk.engine.model.plugins.classification.glm
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
-import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTestArgs
-import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
-import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -36,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /* Run the LogisticRegressionWithSGD model on the test frame*/
-@PluginDoc(oneLine = "Predict test frame labels and show metrics.",
+@PluginDoc(oneLine = "Predict test frame labels using trained logistic regression model, and show metrics.",
   extended = "Predict the labels for a test frame and run classification metrics on predicted and target labels.",
   returns = """object
     An object with binary classification metrics.
@@ -82,16 +78,15 @@ class LogisticRegressionTestPlugin extends SparkCommandPlugin[ClassificationWith
     }
     val logRegColumns = arguments.observationColumns.getOrElse(logRegData.observationColumns)
 
-    val labeledTestRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, logRegColumns)
-
     //predicting and testing
-    val scoreAndLabelRdd: RDD[Row] = labeledTestRdd.map { point =>
-      val prediction = logRegModel.predict(point.features)
-      Row(point.label, prediction)
-    }
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val labeledPoint = row.valuesAsLabeledPoint(logRegColumns, arguments.labelColumn)
+      val score = logRegModel.predict(labeledPoint.features)
+      ScoreAndLabel(score, labeledPoint.label)
+    })
 
     //Run Binary classification metrics
-    val posLabel: String = "1.0"
-    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, 0, 1, posLabel, 1)
+    val posLabel: Double = 1.0d
+    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
   }
 }

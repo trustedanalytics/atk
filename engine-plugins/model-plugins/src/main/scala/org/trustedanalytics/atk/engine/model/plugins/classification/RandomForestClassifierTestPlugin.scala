@@ -20,15 +20,15 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, ClassificationMetricValue }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
+import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
+import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
@@ -103,20 +103,19 @@ class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestCl
     }
     val rfColumns = arguments.observationColumns.getOrElse(rfData.observationColumns)
 
-    val labeledTestRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, rfColumns)
-
     //predicting and testing
-    val scoreAndLabelRDD: RDD[Row] = labeledTestRDD.map { point =>
-      val prediction = rfModel.predict(point.features)
-      Row(point.label, prediction)
-    }
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val labeledPoint = row.valuesAsLabeledPoint(rfColumns, arguments.labelColumn)
+      val score = rfModel.predict(labeledPoint.features)
+      ScoreAndLabel(score, labeledPoint.label)
+    })
 
     val output = rfData.numClasses match {
       case 2 => {
-        val posLabel: String = "1.0"
-        ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRDD, 0, 1, posLabel, 1)
+        val posLabel = 1d
+        ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
       }
-      case _ => ClassificationMetrics.multiclassClassificationMetrics(scoreAndLabelRDD, 0, 1, 1)
+      case _ => ClassificationMetrics.multiclassClassificationMetrics(scoreAndLabelRdd)
     }
     output
   }
