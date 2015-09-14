@@ -29,11 +29,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
 case class AnnotateWeightedDegreesArgs(graph: GraphReference,
-                                       @ArgDoc("<TBD>") outputPropertyName: String,
-                                       @ArgDoc("<TBD>") degreeOption: Option[String] = None,
-                                       @ArgDoc("<TBD>") inputEdgeLabels: Option[List[String]] = None,
-                                       @ArgDoc("<TBD>") edgeWeightProperty: Option[String] = None,
-                                       @ArgDoc("<TBD>") edgeWeightDefault: Option[Double] = None) {
+                                       @ArgDoc("property name of where to store output") outputPropertyName: String,
+                                       @ArgDoc("choose from 'out', 'in', 'undirected'") degreeOption: Option[String] = None,
+                                       @ArgDoc("labels of edge types that should be included") inputEdgeLabels: Option[List[String]] = None,
+                                       @ArgDoc("property name of edge weight, if not provided all edges are weighted equally") edgeWeightProperty: Option[String] = None,
+                                       @ArgDoc("default edge weight") edgeWeightDefault: Option[Double] = None) {
 
   // validate arguments
 

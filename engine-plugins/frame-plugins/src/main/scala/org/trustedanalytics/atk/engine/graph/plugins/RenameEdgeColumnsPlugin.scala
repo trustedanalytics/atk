@@ -22,8 +22,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc }
 /**
  * Rename columns for edge frame.
  */
-@PluginDoc(oneLine = "Rename columns for edge frame.",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Rename columns for edge frame.")
 class RenameEdgeColumnsPlugin extends RenameVertexColumnsPlugin {
   override def name: String = "frame:edge/rename_columns"
   override val systemFields = Set(GraphSchema.edgeProperty, GraphSchema.srcVidProperty, GraphSchema.destVidProperty, GraphSchema.labelProperty)

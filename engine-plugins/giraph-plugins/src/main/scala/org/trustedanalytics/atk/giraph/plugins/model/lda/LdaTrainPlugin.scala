@@ -66,7 +66,7 @@ class LdaTrainPlugin
     val frame = frames.expectFrame(arguments.frame)
     frame.schema.requireColumnIsType(arguments.documentColumnName, DataTypes.string)
     frame.schema.requireColumnIsType(arguments.wordColumnName, DataTypes.string)
-    frame.schema.requireColumnIsType(arguments.wordCountColumnName, DataTypes.int64)
+    frame.schema.requireColumnIsType(arguments.wordCountColumnName, DataTypes.isIntegerDataType)
     require(frame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     // setup and run

@@ -26,8 +26,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "<TBD>",
-  extended = "")
+@PluginDoc(oneLine = "create a new model")
 class SVMWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
