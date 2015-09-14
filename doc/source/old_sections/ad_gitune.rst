@@ -1,3 +1,5 @@
+.. _old_sections/ad_gitune:
+
 .. _old_ad_sections/ad_gitune:
 
 .. _ad_gitune:

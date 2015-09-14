@@ -1,3 +1,5 @@
+.. _old_sections/ad_over:
+
 .. _old_ad_sections/ad_over:
 
 .. _ad_over:

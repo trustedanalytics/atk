@@ -1,3 +1,5 @@
+.. _old_sections/dev_psql:
+
 .. _dev_psql:
 
 .. index::

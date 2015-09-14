@@ -1,3 +1,5 @@
+.. _old_sections/dev_plug:
+
 .. _dev_plug:
 
 .. index::

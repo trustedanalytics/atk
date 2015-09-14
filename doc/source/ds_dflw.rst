@@ -1297,19 +1297,6 @@ API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
 .. index::
     pair: analytics; graph
 
----------------
-Graph Analytics
----------------
-
-See these API sections for individual analytic processes:
-
-*   :ref:`Clustering Coefficients <python_api/graphs/graph-/clustering_coefficient>`
-*   :ref:`Connected Components (CC) <python_api/graphs/graph-/graphx_connected_components>`
-*   :ref:`Degree Calculation <python_api/graphs/graph-/annotate_degrees>`
-*   :ref:`K-Clique Percolation <python_api/graphs/graph-/ml/kclique_percolation>`
-*   :ref:`PageRank (PR) <python_api/graphs/graph-/graphx_pagerank>`
-
-
 .. toctree::
     :hidden:
 
