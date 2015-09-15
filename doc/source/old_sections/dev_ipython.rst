@@ -1,3 +1,5 @@
+.. _old_sections/dev_ipython:
+
 .. _dev_ipython:
 
 .. index:: ! IPython
