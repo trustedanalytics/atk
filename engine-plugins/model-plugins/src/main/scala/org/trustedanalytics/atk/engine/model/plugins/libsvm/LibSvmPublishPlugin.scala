@@ -25,9 +25,8 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import spray.json._
 import LibSvmJsonProtocol._
-
+import libsvm.svm
 /**
  * Rename columns of a frame
  */
@@ -71,11 +70,16 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    //Extracting the KMeansModel from the stored JsObject
+    //Extracting the LibSvmModel from the stored JsObject
     val libsvmData = model.data.convertTo[LibSvmData]
     val libsvmModel = libsvmData.svmModel
-    val jsvalue: JsValue = libsvmModel.toJson
+    svm.svm_save_model("/tmp/LibSvmModel", libsvmModel)
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    val source = scala.io.Source.fromFile("/tmp/LibSvmModel")
+    val modelValues = try source.mkString
+    finally
+      source.close()
+    StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
   }
+
 }
