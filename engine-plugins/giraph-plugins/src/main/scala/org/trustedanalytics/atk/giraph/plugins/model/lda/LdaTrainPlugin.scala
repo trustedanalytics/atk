@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, GiraphJobManager }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 import spray.json._
 import LdaJsonFormat._
 

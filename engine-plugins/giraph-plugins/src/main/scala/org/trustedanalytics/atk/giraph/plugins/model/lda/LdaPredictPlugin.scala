@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
 import org.trustedanalytics.atk.giraph.config.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaJsonFormat }
 import spray.json._
 import LdaJsonFormat._

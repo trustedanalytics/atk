@@ -476,6 +476,24 @@ Glossary
         Apache HBase is the Hadoop database, a distributed, scalable, big data
         store.
 
+    hyperparameter
+
+        Parameter that describe the prior distribution (the assumption about
+        the data before observing it) as opposed to the parameters that govern
+        the underlying system.
+
+        In particular, for Latent Dirichlet Allocation:
+
+        Alpha is the parameter of the Dirichlet "prior" on the per-document
+        distribution of words.
+        In other words, how the distribution of words per
+        document is modeled before seeing any data. 
+
+        Beta is the parameter of the Dirichlet "prior" on the per-topic word
+        distribution.
+        In other words, how the distribution of words per
+        topic is modeled before seeing any data.
+
     int32
 
         An integer is a member of the set of positive whole numbers {1, 2,
