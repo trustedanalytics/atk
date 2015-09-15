@@ -40,12 +40,12 @@ export PG_PASS=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.pas
 export PG_DB=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.dbname' | tr -d '"')
 export PG_URL=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.uri' | tr -d '"')
 
-export MSQ_HOST=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.hostname' | tr -d '"')
-export MSQ_PORT=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.port' | tr -d '"')
-export MSQ_USER=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.username' | tr -d '"')
-export MSQ_PASS=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.password' | tr -d '"')
-export MSQ_DB=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.dbname' | tr -d '"')
-export MSQ_URL=$(echo $VCAP_SERVICES | $jq '.MSQNodeHere | .[0].credentials.uri' | tr -d '"')
+export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.hostname' | tr -d '"')
+export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.port' | tr -d '"')
+export MYSQL_USER=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.username' | tr -d '"')
+export MYSQL_PASS=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.password' | tr -d '"')
+export MYSQL_DB=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.dbname' | tr -d '"')
+export MYSQL_URL=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.uri' | tr -d '"')
 env
 
 pushd $ATK_CONF_DIR
