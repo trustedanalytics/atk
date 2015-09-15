@@ -111,7 +111,16 @@ class EdgeDAO(graph: Graph, vertexDAO: VertexDAO) extends Serializable {
    * @return the blueprints.Edge
    */
   def update(edge: GBEdge, blueprintsEdge: blueprints.Edge): blueprints.Edge = {
-    edge.properties.foreach(property => blueprintsEdge.setProperty(property.key, property.value))
+    edge.properties.foreach(property => {
+      if (property.value != null) {
+        blueprintsEdge.setProperty(property.key, property.value)
+      }
+      else {
+        // null values aren't supprted by bluesprints, so you remove the property
+        blueprintsEdge.removeProperty(property.key)
+      }
+
+    })
     blueprintsEdge
   }
 

@@ -26,7 +26,6 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-
 @PluginDoc(oneLine = "Create a 'new' instance of support vector machine model.",
   extended = """
 *Classification using Support Vector Machine.*

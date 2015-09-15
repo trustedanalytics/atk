@@ -35,7 +35,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.graph.construction._
-import org.trustedanalytics.atk.domain.graph.{ GraphEntity, LoadGraphArgs, GraphReference, GraphTemplate }
+import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference, GraphTemplate }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.joda.time.{ Duration, DateTime }
@@ -402,16 +402,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val graphNoArgsFormat = jsonFormat1(GraphNoArgs)
 
-  implicit val schemaListFormat = jsonFormat1(SchemaList)
-
   // graph loading formats for specifying graphbuilder and graphload rules
 
-  implicit val valueFormat = jsonFormat2(ValueRule)
-  implicit val propertyFormat = jsonFormat2(PropertyRule)
-  implicit val edgeRuleFormat = jsonFormat5(EdgeRule)
-  implicit val vertexRuleFormat = jsonFormat2(VertexRule)
-  implicit val frameRuleFormat = jsonFormat3(FrameRule)
-  implicit val graphLoadFormat = jsonFormat3(LoadGraphArgs)
   implicit val quantileFormat = jsonFormat2(Quantile)
   implicit val QuantileCalculationResultFormat = jsonFormat1(QuantileValues)
   implicit val defineVertexFormat = jsonFormat2(DefineVertexArgs)

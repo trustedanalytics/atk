@@ -34,6 +34,7 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of NaiveBayes model
  */
+
 @PluginDoc(oneLine = "Create a 'new' instance of Naive Bayes model",
   extended = """
 *Classification using Naive Bayes*

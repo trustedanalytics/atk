@@ -21,11 +21,15 @@ import org.apache.spark.mllib.linalg.Matrix
  * Command for loading model data into existing model in the model database.
  * @param k Principal component count
  * @param observationColumns Handle to the observation columns of the data frame
- * @param singularValues Singular values of the data frame
- * @param vFactor Right singular vectors of the data frame
+ * @param meanCentered Indicator whether the columns were mean centered for training
+ * @param meanVector Means of the columns
+ * @param singularValues Singular values of the specified columns in the input frame
+ * @param vFactor Right singular vectors of the specified columns in the input frame
  */
 case class PrincipalComponentsData(k: Int,
                                    observationColumns: List[String],
+                                   meanCentered: Boolean,
+                                   meanVector: Vector,
                                    singularValues: Vector,
                                    vFactor: Matrix) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")

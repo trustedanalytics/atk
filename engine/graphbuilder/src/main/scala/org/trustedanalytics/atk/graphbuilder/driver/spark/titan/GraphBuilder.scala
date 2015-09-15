@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.graphbuilder.parser.rule._
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
+import org.trustedanalytics.atk.graphbuilder.schema.GraphSchema
 
 /**
  * This is a GraphBuilder that runs on Spark, uses a RuleParser and creates Graphs in Titan.

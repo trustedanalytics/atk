@@ -84,7 +84,16 @@ class VertexDAO(graph: Graph) extends Serializable {
    * @return the blueprints.Vertex
    */
   def update(vertex: GBVertex, blueprintsVertex: blueprints.Vertex): blueprints.Vertex = {
-    vertex.fullProperties.foreach(property => blueprintsVertex.setProperty(property.key, property.value))
+    vertex.fullProperties.foreach(property => {
+      if (property.value != null) {
+        blueprintsVertex.setProperty(property.key, property.value)
+      }
+      else {
+        // null values aren't supprted by bluesprints, so you remove the property
+        blueprintsVertex.removeProperty(property.key)
+      }
+
+    })
     blueprintsVertex
   }
 

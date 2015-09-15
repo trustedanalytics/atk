@@ -22,4 +22,4 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /** Arguments to RepartitionPlugin (see Spark API) */
 case class RepartitionArgs(frame: FrameReference,
-                           @ArgDoc("""<TBD>""") numberPartitions: Int)
+                           @ArgDoc("""number of RDD partitions""") numberPartitions: Int)
