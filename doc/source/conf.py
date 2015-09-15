@@ -66,8 +66,8 @@ rst_epilog = """
 .. |VM|     replace:: :abbr:`VM (Virtual Machine)`
 .. |XML|    replace:: :abbr:`XML (Extensible Markup Language)`
 .. |YCSB|   replace:: :abbr:`YCSB (Yahoo! Cloud Serving Benchmarking)`
-.. |PACKAGE|    replace:: Trusted Analytics
-.. |ATK|    replace:: ATK
+.. |PACKAGE|    replace:: Trusted Analytics Platform
+.. |ATK|    replace:: :abbr:`ATK (Trusted Analytics Platform Toolkit)`
 .. |PACKAGE_1LC|    replace:: trustedanalytics
 .. |PACKAGE_DLC|    replace:: trusted-analytics
 .. |PACKAGE_SLC|    replace:: ta
@@ -133,7 +133,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Trusted Analytics Package'
+project = u'Trusted Analytics Platform'
 copyright = u'2015, Intel'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -306,7 +306,8 @@ latex_elements = {
 
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Documentation', 'Author: Intel', 'manual')]
+#latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Documentation', 'Author: Intel', 'manual')]
+latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Platform Documentation', '', 'manual')]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
