@@ -18,6 +18,9 @@ package org.trustedanalytics.atk.domain
 
 trait SerializableType[T]
 
+/**
+ * Serializable type for representing Scala and Java serializable types
+ */
 object SerializableType {
 
   implicit def AnyValToSerializableType[T <: AnyVal]: SerializableType[T] = new SerializableType[T] {}
