@@ -129,8 +129,8 @@ case class BinaryClassMetrics[T, S : SerializableType](labelPredictRdd: RDD[Scor
    */
   def confusionMatrix(): List[ConfusionMatrixEntry] = {
     List(ConfusionMatrixEntry("positive", "positive", truePositives),
-      ConfusionMatrixEntry("positive", "negative", falseNegatives),
-      ConfusionMatrixEntry("negative", "positive", falsePositives),
+      ConfusionMatrixEntry("positive", "negative", falsePositives),
+      ConfusionMatrixEntry("negative", "positive", falseNegatives),
       ConfusionMatrixEntry("negative", "negative", trueNegatives)
     )
   }

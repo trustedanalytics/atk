@@ -173,8 +173,8 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
     labelPredictRdd.map(scoreAndLabel => {
       ((scoreAndLabel.score, scoreAndLabel.label), scoreAndLabel.frequency)
     }).reduceByKey(_ + _)
-      .map { case ((label, prediction), frequency) =>
-      ConfusionMatrixEntry(label.toString, prediction.toString, frequency)
+      .map { case ((prediction, label), frequency) =>
+      ConfusionMatrixEntry(prediction.toString, label.toString, frequency)
     }.collect.toList
   }
 }

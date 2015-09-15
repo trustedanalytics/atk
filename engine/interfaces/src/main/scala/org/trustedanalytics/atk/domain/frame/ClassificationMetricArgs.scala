@@ -43,12 +43,12 @@ Defaults is 1.""") beta: Option[Double] = None) {
 
 /**
  * Entry in confusion matrix
- * 
- * @param actualClass Actual class label
+ *
  * @param predictedClass Predicted class label
+ * @param actualClass Actual class label
  * @param count Count of instances matching actual class and predicted class
  */
-case class ConfusionMatrixEntry(actualClass: String, predictedClass: String, count: Long)
+case class ConfusionMatrixEntry(predictedClass: String, actualClass: String, count: Long)
 
 /**
  * Classification metrics
