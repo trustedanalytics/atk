@@ -64,11 +64,18 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
 
           val pluginDependencyJars = EngineConfig.sparkAppJarsLocal match {
             case true => Array[String]() /* Expect jars to installed locally and available */
-            case false => Array("--jars",
-              s"${SparkContextFactory.jarPath("interfaces")}," +
-                s"${SparkContextFactory.jarPath("launcher")}," +
-                s"${EngineConfig.extraJarsForSparkSubmit}," +
-                s"${getPluginJarPath(pluginJarsList)}")
+            case false => {
+              val extraJarsForSparkSubmitValue = s"${EngineConfig.extraJarsForSparkSubmit}"
+              val extraJarsForSparkSubmit = if (StringUtils.isEmpty(extraJarsForSparkSubmitValue))
+                StringUtils.EMPTY
+              else (extraJarsForSparkSubmitValue + ",")
+
+              Array("--jars",
+                s"${SparkContextFactory.jarPath("interfaces")}," +
+                  s"${SparkContextFactory.jarPath("launcher")}," +
+                  extraJarsForSparkSubmit +
+                  s"${getPluginJarPath(pluginJarsList)}")
+            }
           }
 
           val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile",
