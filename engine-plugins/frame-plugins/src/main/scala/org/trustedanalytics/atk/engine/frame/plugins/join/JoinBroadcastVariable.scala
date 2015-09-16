@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql._
-import org.trustedanalytics.atk.engine.EngineConfig
 
 import scala.collection.mutable.{ HashMap, MultiMap, Set }
 import scala.util.{ Try, Random }
@@ -71,7 +70,7 @@ case class JoinBroadcastVariable(joinParam: RddJoinParam) {
     //Grouping by key to ensure that duplicate keys are not split across different broadcast variables
     val broadcastList = joinParam.frame.groupByRows(row => row.value(joinParam.joinColumn)).collect().toList
 
-    val rddSizeInBytes = joinParam.estimatedSizeInBytes.getOrElse(Long.MaxValue) * EngineConfig.frameCompressionRatio
+    val rddSizeInBytes = joinParam.estimatedSizeInBytes.getOrElse(Long.MaxValue)
     val numBroadcastVars = if (broadcastList.nonEmpty && rddSizeInBytes < Long.MaxValue && rddSizeInBytes > 0) {
       Math.ceil(rddSizeInBytes.toDouble / Int.MaxValue).toInt // Limit size of each broadcast var to 2G (MaxInt)
     }
