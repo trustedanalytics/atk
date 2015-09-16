@@ -59,24 +59,57 @@ class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFile
     ManagementFactory.getRuntimeMXBean.getName.split("@")(0).toLong
 
   /**
-   * Execute Garbage Collection as a Runnable
+   * Execute Garbage Collection as a Runnable (entry point)
    */
   override def run(): Unit = {
-    runAllPhases()
+    runPhases()
+  }
+
+  /**
+   * Runs phases in a garbage collection instance
+   * @param phases function which runs desired phases given a gc instance (by default, all phases run)
+   */
+  def runPhases(phases: GarbageCollection => Unit = allPhases): Unit = {
+    this.synchronized {
+      metaStore.withSession("gc.garbagecollector") {
+        implicit session =>
+          try {
+            val gc: GarbageCollection = gcRepo.insert(new GarbageCollectionTemplate(hostname, processId, new DateTime)).get
+            phases(gc)
+            gcRepo.updateEndTime(gc)
+          }
+          catch {
+            case e: Exception => error("Exception Thrown during Garbage Collection", exception = e)
+          }
+      }
+    }
+  }
+
+  /**
+   * Method to run all phases for default GarbageCollection
+   * @param gc garbage collection instance
+   */
+  def allPhases(gc: GarbageCollection): Unit = {
+    dropStale(gc)
+    finalizeDropped(gc)
   }
 
   /**
    * Identify and drop all stale entities
    * @param gcStaleAge - age at which an entity become stale, from last access (in ms)
    */
-  def dropStale(gcStaleAge: Long = EngineConfig.gcStaleAge): Unit = {
+  def dropStale(gc: GarbageCollection, gcStaleAge: Option[Long] = None): Unit = {
+    val age = gcStaleAge match {
+      case Some(a) => a
+      case None => EngineConfig.gcStaleAge
+    }
     metaStore.withSession("gc.garbagecollector.dropStale") {
       implicit session =>
         try {
-          info("Execute Garbage Collector Finalize")
-          frames.getStaleEntities(gcStaleAge).foreach(frame => frames.dropFrame(frame))
-          graphs.getStaleEntities(gcStaleAge).foreach(graph => graphs.dropGraph(graph))
-          models.getStaleEntities(gcStaleAge).foreach(model => models.dropModel(model))
+          info("Execute Garbage Collector Drop Stale")
+          dropStaleFrames(gc, age)
+          dropStaleGraphs(gc, age)
+          dropStaleModels(gc, age)
         }
         catch {
           case e: Exception => error("Exception Thrown during Garbage Collector DropStale", exception = e)
@@ -85,10 +118,94 @@ class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFile
   }
 
   /**
+   * Drops all stale frame entities
+   * @param gc garbage collection instanace
+   * @param gcStaleAge minimum age to be considered stale
+   */
+  def dropStaleFrames(gc: GarbageCollection, gcStaleAge: Long)(implicit session: metaStore.Session): Unit = {
+    frames.getStaleEntities(gcStaleAge).foreach(frame => dropFrame(gc, frame))
+  }
+
+  /**
+   * "drop frame" initiated through garbage collection
+   * @param gc garbage collection instanace
+   * @param frame frame to be dropped
+   */
+  def dropFrame(gc: GarbageCollection, frame: FrameEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"drop frame id=${frame.id}"
+    try {
+      val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
+        new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
+      info(description)
+      frames.dropFrame(frame)
+      gcEntryRepo.updateEndTime(gcEntry)
+    }
+    catch {
+      case e: Exception => error(s"Exception trying to $description", exception = e)
+    }
+  }
+
+  /**
+   * Drops all stale graph entities
+   * @param gc garbage collection instance
+   * @param gcStaleAge minimum age to be considered stale
+   */
+  def dropStaleGraphs(gc: GarbageCollection, gcStaleAge: Long)(implicit session: metaStore.Session): Unit = {
+    graphs.getStaleEntities(gcStaleAge).foreach(graph => dropGraph(gc, graph))
+  }
+
+  /**
+   * "drop graph" initiated through garbage collection
+   * @param gc garbage collection instance
+   * @param graph graph to be dropped
+   */
+  def dropGraph(gc: GarbageCollection, graph: GraphEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"drop graph id=${graph.id}"
+    try {
+      val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
+        new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
+      info(description)
+      graphs.dropGraph(graph)
+      gcEntryRepo.updateEndTime(gcEntry)
+    }
+    catch {
+      case e: Exception => error(s"Exception trying to $description", exception = e)
+    }
+  }
+
+  /**
+   * Drops all stale model entities
+   * @param gc garbage collection instanace
+   * @param gcStaleAge minimum age to be considered stale
+   */
+  def dropStaleModels(gc: GarbageCollection, gcStaleAge: Long)(implicit session: metaStore.Session): Unit = {
+    models.getStaleEntities(gcStaleAge).foreach(model => dropModel(gc, model))
+  }
+
+  /**
+   * "drop model" initiated through garbage collection
+   * @param gc garbage collection instance
+   * @param model model to be dropped
+   */
+  def dropModel(gc: GarbageCollection, model: ModelEntity)(implicit session: metaStore.Session): Unit = {
+    val description = s"drop model id=${model.id}"
+    try {
+      val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
+        new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
+      info(description)
+      models.dropModel(model)
+      gcEntryRepo.updateEndTime(gcEntry)
+    }
+    catch {
+      case e: Exception => error(s"Exception trying to $description", exception = e)
+    }
+  }
+
+  /**
    * Finalize all dropped Entities
    */
-  def finalizeEntities(gc: GarbageCollection): Unit = {
-    metaStore.withSession("gc.garbagecollector.finalizeEntities") {
+  def finalizeDropped(gc: GarbageCollection): Unit = {
+    metaStore.withSession("gc.garbagecollector.finalizeDropped") {
       implicit session =>
         try {
           info("Execute Garbage Collector Finalize")
@@ -99,23 +216,6 @@ class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFile
         catch {
           case e: Exception => error("Exception Thrown during Garbage Collector Finalize", exception = e)
         }
-    }
-  }
-
-  def runAllPhases(gcStaleAge: Long = EngineConfig.gcStaleAge): Unit = {
-    this.synchronized {
-      metaStore.withSession("gc.garbagecollector") {
-        implicit session =>
-          try {
-            val gc: GarbageCollection = gcRepo.insert(new GarbageCollectionTemplate(hostname, processId, new DateTime)).get
-            dropStale(gcStaleAge)
-            finalizeEntities(gc)
-            gcRepo.updateEndTime(gc)
-          }
-          catch {
-            case e: Exception => error("Exception Thrown during Garbage Collection", exception = e)
-          }
-      }
     }
   }
 
@@ -235,11 +335,42 @@ object GarbageCollector {
    * @param gcStaleAge in milliseconds
    */
   def singleTimeExecution(gcStaleAge: Option[Long] = None): Unit = {
+    singleTimeExecutionDropStale(gcStaleAge)
+    singleTimeExecutionFinalizeDropped()
+  }
+
+  /**
+   * Execute the "drop all stale entities" phase of garbage collection immediately, outside the regular scheduling
+   * @param gcStaleAge in milliseconds
+   */
+  def singleTimeExecutionDropStale(gcStaleAge: Option[Long] = None): Unit = {
     require(garbageCollector != null, "GarbageCollector has not been initialized. Problem during RestServer initialization")
-    gcStaleAge match {
-      case Some(age) => garbageCollector.runAllPhases(age)
-      case None => garbageCollector.runAllPhases()
-    }
+    garbageCollector.runPhases(runDropStale(gcStaleAge))
+  }
+
+  /**
+   * Execute the "finalize all dropped entities" phase of garbage collection immediately, outside the regular scheduling
+   */
+  def singleTimeExecutionFinalizeDropped(): Unit = {
+    require(garbageCollector != null, "GarbageCollector has not been initialized. Problem during RestServer initialization")
+    garbageCollector.runPhases(runFinalize)
+  }
+
+  /**
+   * Function argument to the garbage collector's runPhases, GarbageCollection => Unit, for just drop stale phase
+   * @param age minimum age to be considered stale
+   * @param gc garbage collection instance
+   */
+  def runDropStale(age: Option[Long])(gc: GarbageCollection): Unit = {
+    garbageCollector.dropStale(gc, age)
+  }
+
+  /**
+   * Function argument to the garbage collector's runPhases, GarbageCollection => Unit, for just finalize phase
+   * @param gc garbage collection instance
+   */
+  def runFinalize(gc: GarbageCollection): Unit = {
+    garbageCollector.finalizeDropped(gc)
   }
 
   /**

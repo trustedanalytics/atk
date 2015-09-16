@@ -35,5 +35,7 @@ trait ModelStorage {
 
   def updateModel(modelReference: ModelReference, newData: JsObject)(implicit invocation: Invocation): ModelEntity
 
+  def updateLastReadDate(model: ModelEntity)(implicit invocation: Invocation): ModelEntity
+
   def dropModel(model: ModelEntity)(implicit invocation: Invocation): Unit
 }

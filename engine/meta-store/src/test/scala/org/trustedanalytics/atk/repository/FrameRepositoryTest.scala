@@ -132,22 +132,4 @@ class FrameRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         dropped.length should be(1)
     }
   }
-
-//  it should "drop a frame's error frame" in {
-//    val frameRepo = slickMetaStoreComponent.metaStore.frameRepo
-//    val graphRepo = slickMetaStoreComponent.metaStore.graphRepo
-//    slickMetaStoreComponent.metaStore.withSession("frame-test") {
-//      implicit session =>
-//
-//        val frame1 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-//        frameRepo.update(frame1.copy(lastReadDate = new DateTime))
-//
-//        //should not be in list. it is named
-//        val frame2 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-//        frameRepo.update(frame2.copy(lastReadDate = new DateTime(), errorFrameId = Some(frame1.id)))
-//
-//        finsih writing this... i plus something funky about the tests holding entity vals, do they refresh?
-//    }
-//  }
-
 }

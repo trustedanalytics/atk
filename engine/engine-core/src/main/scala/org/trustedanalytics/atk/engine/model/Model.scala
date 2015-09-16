@@ -82,10 +82,13 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
   /**
    * Expects model has been trained and data exists, throws appropriate exception otherwise
    */
-  override def data: JsObject = entity.data.getOrElse(throw new RuntimeException("Model has not yet been trained"))
+  override def data: JsObject = dataOption.getOrElse(throw new RuntimeException("Model has not yet been trained"))
 
   override def data_=(updatedData: JsObject): Unit = modelStorage.updateModel(modelRef, updatedData)
 
-  override def dataOption: Option[JsObject] = entity.data
+  override def dataOption: Option[JsObject] = {
+    modelStorage.updateLastReadDate(entity)
+    entity.data
+  }
 
 }

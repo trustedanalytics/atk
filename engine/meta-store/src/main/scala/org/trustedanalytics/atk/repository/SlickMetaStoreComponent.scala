@@ -1073,7 +1073,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     this: Repository[Session, GarbageCollectionEntryTemplate, GarbageCollectionEntry] =>
 
     class GarbageCollectionEntryTable(tag: Tag) extends Table[GarbageCollectionEntry](tag, "garbage_collection_entry") {
-      def id = column[Long]("garbage_collection_id", O.PrimaryKey, O.AutoInc)
+      def id = column[Long]("garbage_collection_entry_id", O.PrimaryKey, O.AutoInc)
 
       def garbageCollectionId = column[Long]("garbage_collection_id")
 

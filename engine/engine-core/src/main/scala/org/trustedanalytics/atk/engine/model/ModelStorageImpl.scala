@@ -119,7 +119,6 @@ class ModelStorageImpl(metaStore: MetaStore)
    * @param modelRef The model to update
    * @param newData JsObject storing the result of training.
    */
-
   override def updateModel(modelRef: ModelReference, newData: JsObject)(implicit invocation: Invocation): ModelEntity = {
     metaStore.withSession("spark.modelstorage.updateModel") {
       implicit session =>
@@ -127,7 +126,21 @@ class ModelStorageImpl(metaStore: MetaStore)
           val currentModel = expectModel(modelRef)
           val newModel = currentModel.copy(data = Option(newData))
 
-          metaStore.modelRepo.update(newModel).get
+          val updatedModel = metaStore.modelRepo.update(newModel).get
+          updateLastReadDate(updatedModel)
+        }
+    }
+  }
+
+  /**
+   * Update last read date of the model
+   * @param model The model to update
+   */
+  override def updateLastReadDate(model: ModelEntity)(implicit invocation: Invocation): ModelEntity = {
+    metaStore.withSession("spark.modelstorage.updateLastReadDate") {
+      implicit session =>
+        {
+          metaStore.modelRepo.updateLastReadDate(model).get
         }
     }
   }

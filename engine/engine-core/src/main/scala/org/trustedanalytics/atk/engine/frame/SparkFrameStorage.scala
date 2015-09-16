@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.component.ClassLoaderAware
@@ -114,12 +115,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
         sparkAutoPartitioner.repartitionFromFileSize(absPath.toString, frameRdd)
       case (Some(s), _) => illegalArg(s"Cannot load frame with storage '$s'")
     }
-    metaStore.withSession("frame.loadFrameData") {
-      implicit session =>
-        {
-          metaStore.frameRepo.update(frame.copy(lastReadDate = new DateTime))
-        }
-    }
+    updateLastReadDate(frame)
     rdd
   }
 
@@ -218,6 +214,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
           val withCount = updatedFrame.copy(rowCount = Some(getRowCount(updatedFrame)))
 
           metaStore.frameRepo.update(withCount)
+          updateLastReadDate(withCount)
 
           if (saveInfo.victimPath.isDefined) {
             frameFileStorage.deletePath(new Path(saveInfo.victimPath.get))
@@ -242,12 +239,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       withMyClassLoader {
         val reader = getReader(frame)
         val rows = reader.take(count, offset, Some(maxRows))
-        metaStore.withSession("frame.updateFrameStatus") {
-          implicit session =>
-            {
-              metaStore.frameRepo.updateLastReadDate(frame)
-            }
-        }
+        updateLastReadDate(frame)
         rows
       }
     }
@@ -264,12 +256,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
         val reader = getReader(frame)
         val numRows = getRowCount(frame)
         val rows = reader.take(numRows, 0, None)
-        metaStore.withSession("frame.updateFrameStatus") {
-          implicit session =>
-            {
-              metaStore.frameRepo.updateLastReadDate(frame)
-            }
-        }
+        updateLastReadDate(frame)
         rows
       }
     }
