@@ -33,6 +33,7 @@ from trustedanalytics.meta.udf import has_udf_arg
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
+from trustedanalytics.core.ui import InspectSettings
 
 
 def _get_backend():
@@ -847,9 +848,21 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @arg('width', int, 'If set to integer N, the print out will try to honor a max line width of N')
     @arg('margin', int, "('stripes' mode only) If set to integer N, the margin for printing names in a "
                         "stripe will be limited to N characters")
-    def __inspect(self, n=10, offset=0, columns=None, wrap=None, truncate=None, round=None, width=80, margin=None):
+    def __inspect(self,
+                  n=10,
+                  offset=0,
+                  columns=None,
+                  wrap=None,
+                  truncate=None,
+                  round=None,
+                  width=None,
+                  margin=None):
+
         """
         Prints the frame data in readable format.
+
+        If not specified, the arguments that control formatting receive default values from
+        'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
 
         Examples
         --------
@@ -859,19 +872,34 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         .. code::
 
             >>> print my_frame.inspect(4)
-
-            column defs ->  animal:str  name:str    age:int     weight:float
-                          /--------------------------------------------------/
-            frame data ->   human       George        8            542.5
-                            human       Ursula        6            495.0
-                            ape         Ape          41            400.0
-                            elephant    Shep          5           8630.0
-
-
+           [#]    animal      name    age     weight
+           =========================================
+           [0]  human       George      8      542.5
+           [1]  human       Ursula      6      495.0
+           [2]  ape         Ape        41      400.0
+           [3]  elephant    Shep        5     8630.0
 
         # For other examples, see :ref:`example_frame.inspect`.
         """
-        return self._backend.inspect(self, n, offset, columns, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
+        if wrap is None:
+            wrap = InspectSettings.wrap
+        if truncate is None:
+            truncate = InspectSettings.truncate
+        if round is None:
+            round = InspectSettings.round
+        if width is None:
+            width = InspectSettings.width
+        if margin is None:
+            margin = InspectSettings.margin
+        return self._backend.inspect(self,
+                                     n,
+                                     offset,
+                                     columns,
+                                     wrap=wrap,
+                                     truncate=truncate,
+                                     round=round,
+                                     width=width,
+                                     margin=margin)
 
     @api
     @beta

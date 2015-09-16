@@ -20,12 +20,56 @@ spaces_between_cols = 2  # consts
 ellipses = '...'
 
 
+class InspectSettings(object):
+    """Global settings for the 'inspect' method
+
+    wrap: int or 'stripes'
+      If set to 'stripes' then inspect prints rows in stripes; if set to an integer N,
+      rows will be printed in clumps of N columns, where the columns are wrapped")
+
+    truncate: int
+      If set to integer N, all strings will be truncated to length N, including a tagged ellipses
+
+    round: int
+      If set to integer N, all floating point numbers will be rounded and truncated to N digits
+
+    width: int
+      If set to integer N, the print out will try to honor a max line width of N
+
+    margin: int (only has meaning in 'stripes' mode)
+      If set to integer N, the margin for printing names in a stripe will be limited to N characters
+    """
+    wrap = 20
+    truncate = None
+    round = None
+    width = 80
+    margin = None
+
+    @staticmethod
+    def show():
+        """displays current settings"""
+        s = InspectSettings
+        print """wrap     %8s
+truncate %8s
+round    %8s
+width    %8s
+margin   %8s""" % (s.wrap, s.truncate, s.round, s.width, s.margin)
+
+
 class RowsInspection(object):
     """
     class used specifically for inspect, where the __repr__ is the main use case
     """
 
-    def __init__(self, rows, schema, offset, wrap=None, truncate=None, round=None, width=80, margin=None):
+    def __init__(self,
+                 rows,
+                 schema,
+                 offset,
+                 wrap=InspectSettings.wrap,
+                 truncate=InspectSettings.truncate,
+                 round=InspectSettings.round,
+                 width=InspectSettings.width,
+                 margin=InspectSettings.margin):
         if isinstance(wrap, basestring):
             if wrap == 'stripes':
                 self._repr = self._stripes
