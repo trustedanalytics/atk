@@ -107,6 +107,9 @@ class FrameBackendRest(object):
     def get_status(self, frame):
         return self._get_frame_info(frame).status
 
+    def get_last_read_date(self, frame):
+        return self._get_frame_info(frame).last_read_date
+
     def get_row_count(self, frame, where):
         if not where:
             return self._get_frame_info(frame).row_count
@@ -141,6 +144,11 @@ class FrameBackendRest(object):
         except Exception as e:
             status = "Unable to determine status (%s)" % e
 
+        try:
+            last_read_date = frame_info.last_read_date.isoformat()
+        except Exception as e:
+            last_read_date = "Unable to determine last_read_date (%s)" % e
+
         if frame_info._has_vertex_schema():
             frame_type = "VertexFrame"
             graph_data = "\nLabel = %s" % frame_info.label
@@ -154,7 +162,13 @@ class FrameBackendRest(object):
         return """{type} {name}{graph_data}
 row_count = {row_count}
 schema = [{schema}]
-status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_data, row_count=row_count, schema=schema, status=status)
+status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type,
+                                                                 name=frame_name,
+                                                                 graph_data=graph_data,
+                                                                 row_count=row_count,
+                                                                 schema=schema,
+                                                                 status=status,
+                                                                 last_read_date=last_read_date)
 
     def _get_frame_info(self, frame):
         response = self.server.get(self._get_frame_full_uri(frame))
@@ -691,12 +705,15 @@ class FrameInfo(object):
     def status(self):
         return self._payload['status']
 
+    @property
+    def last_read_date(self):
+        return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
+
     def _has_edge_schema(self):
         return "edge_schema" in self._payload['schema']
 
     def _has_vertex_schema(self):
         return "vertex_schema" in self._payload['schema']
-
 
     def update(self, payload):
         if self._payload and self.uri != payload['uri']:
@@ -705,8 +722,6 @@ class FrameInfo(object):
             logger.error(msg)
             raise RuntimeError(msg)
         self._payload = payload
-
-
 
 
 class FrameSchema:

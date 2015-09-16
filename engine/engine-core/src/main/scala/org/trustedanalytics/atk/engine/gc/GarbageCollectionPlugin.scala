@@ -16,44 +16,32 @@
 
 package org.trustedanalytics.atk.engine.gc
 
+// "admin" plugins to manually run garbage collection
+
 import java.util.concurrent.TimeUnit
 
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.gc.GarbageCollectionArgs
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.domain.DomainJsonProtocol
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation }
 import com.typesafe.config.ConfigFactory
 
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-
 /**
- * Plugin that executes a single instance of garbage collection with user timespans specified at runtime
+ * Arguments used for a single execution of garbage collection
  */
-class GarbageCollectionPlugin extends CommandPlugin[GarbageCollectionArgs, UnitReturn] {
-  /**
-   * The name of the command, e.g. graphs/ml/loopy_belief_propagation
-   *
-   *  This method does not execute against a specific object but is instead a static method
-   *  Will be called against an explicitly written method
-   *
-   */
-  override def name: String = "_admin:/_explicit_garbage_collection"
+case class GarbageCollectionDropStaleArgs(@ArgDoc("""Minimum age of entity staleness.  Defaults to server config.  As a string it supports units according to https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format""") staleAge: Option[String] = None)
+case class GarbageCollectionFinalizeDroppedArgs(@ArgDoc("""Ignore this argument""") bogus: Long = 0) // todo: this is a bogus reference for now to fit current plugin framework and JSON support
+
+/** Json conversion for arguments and return value case classes */
+object GcJsonFormat {
+  import DomainJsonProtocol._
+  implicit val GarbageCollectionDropStaleArgsFormat = jsonFormat1(GarbageCollectionDropStaleArgs)
+  implicit val GarbageCollectionFinalizeArgsFormat = jsonFormat1(GarbageCollectionFinalizeDroppedArgs)
 
   /**
-   * Execute a single instance of garbage collection
-   */
-  override def execute(arguments: GarbageCollectionArgs)(implicit context: Invocation): UnitReturn = {
-    val dataDeleteAge = arguments.ageToDeleteData match {
-      case Some(age) => stringToMilliseconds(age)
-      case None => EngineConfig.gcAgeToDeleteData
-    }
-    GarbageCollector.singleTimeExecution(dataDeleteAge)
-  }
-
-  /**
-   * Utilize the typesafe SimpleConfig.parseDuration method to allow this plugin to use the typesafe duration format
+   * Converts unit of duration using typesafe's SimpleConfig.parseDuration into milliseconds
    * just like the config
    * @param str string value to convert into milliseconds
    * @return milliseconds age range from the string object
@@ -61,5 +49,36 @@ class GarbageCollectionPlugin extends CommandPlugin[GarbageCollectionArgs, UnitR
   def stringToMilliseconds(str: String): Long = {
     val config = ConfigFactory.parseString(s"""string_value = "$str" """)
     config.getDuration("string_value", TimeUnit.MILLISECONDS)
+  }
+}
+
+import GcJsonFormat._
+import DomainJsonProtocol._
+
+/**
+ * Plugin that executes a single instance of garbage collection to drop all stale entities with user-specified age
+ */
+class GarbageCollectionDropStalePlugin extends CommandPlugin[GarbageCollectionDropStaleArgs, UnitReturn] {
+
+  override def name: String = "_admin:/_drop_stale"
+
+  override def execute(arguments: GarbageCollectionDropStaleArgs)(implicit context: Invocation): UnitReturn = {
+    val staleAge = arguments.staleAge match {
+      case Some(age) => Some(stringToMilliseconds(age))
+      case None => None
+    }
+    GarbageCollector.singleTimeExecutionDropStale(staleAge)
+  }
+}
+
+/**
+ * Plugin that executes a single instance of garbage collection to finalize all dropped entities
+ */
+class GarbageCollectionFinalizeDroppedPlugin extends CommandPlugin[GarbageCollectionFinalizeDroppedArgs, UnitReturn] {
+
+  override def name: String = "_admin:/_finalize_dropped"
+
+  override def execute(arguments: GarbageCollectionFinalizeDroppedArgs)(implicit context: Invocation): UnitReturn = {
+    GarbageCollector.singleTimeExecutionFinalizeDropped()
   }
 }

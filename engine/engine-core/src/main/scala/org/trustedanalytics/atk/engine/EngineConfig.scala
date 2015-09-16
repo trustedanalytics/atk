@@ -356,7 +356,7 @@ trait EngineConfig extends EventLogging {
 
   //gc variables
   val gcInterval = config.getDuration(engineConfigKey + ".gc.interval", TimeUnit.MILLISECONDS)
-  val gcAgeToDeleteData = config.getDuration(engineConfigKey + ".gc.data-lifespan", TimeUnit.MILLISECONDS)
+  val gcStaleAge = config.getDuration(engineConfigKey + ".gc.stale-age", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean(engineConfigKey + ".hadoop.kerberos.enabled")
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.principal-name")) else None

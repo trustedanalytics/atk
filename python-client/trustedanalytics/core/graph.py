@@ -89,16 +89,27 @@ class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
         """
         Current graph life cycle status.
 
-        One of three statuses: Active, Deleted, Deleted_Final
-           Active:   available for use
-           Deleted:  has been scheduled for deletion
-           Deleted_Final: backend files have been removed from disk.
+        One of three statuses: Active, Dropped, Finalized
+           Active:    Entity is available for use
+           Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+           Finalized: Entity's data has been deleted
         """
         try:
             return self._backend.get_status(self)
         except:
             return super(_BaseGraph, self).__repr__() + " (Unable to collect metadata from server)"
 
+    @api
+    @property
+    @returns(data_type=str, description="Date string of the last time this frame's data was accessed")
+    def __last_read_date(self):
+        """
+        Last time this frame's data was accessed.
+        """
+        try:
+            return self._backend.get_last_read_date(self)
+        except:
+            return "(Unable to collect metadata from server)"
 
 
 @api

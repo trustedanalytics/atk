@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.repository
 
 import org.trustedanalytics.atk.domain.model.{ ModelTemplate, ModelEntity }
 
+import scala.util.Try
+
 /**
  * Repository for models
  */
@@ -30,4 +32,9 @@ trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelE
    */
   def scanAll()(implicit session: Session): Seq[ModelEntity]
 
+  /** update a model entity as Dropped */
+  def dropModel(graph: ModelEntity)(implicit session: Session): Try[ModelEntity]
+
+  /** gets sequence of all models with status Dropped */
+  def droppedModels(implicit session: Session): Seq[ModelEntity]
 }

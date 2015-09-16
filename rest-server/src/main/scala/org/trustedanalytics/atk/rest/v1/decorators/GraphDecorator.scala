@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.rest.v1.decorators
 
 import org.trustedanalytics.atk.domain.Status
 import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.rest.v1.viewmodels.{ GetDataFrame, RelLink, GetGraph, GetGraphs }
+import org.trustedanalytics.atk.rest.v1.viewmodels.{ RelLink, GetGraph, GetGraphs }
 
 /**
  * A decorator that takes an entity from the database and converts it to a View/Model
@@ -36,8 +36,12 @@ object GraphDecorator extends EntityDecorator[GraphEntity, GetGraphs, GetGraph] 
    */
   override def decorateEntity(uri: String, links: Iterable[RelLink], entity: GraphEntity): GetGraph = {
 
-    GetGraph(uri = entity.uri, name = entity.name, links = links.toList, entity.entityType,
-      Status.getName(entity.statusId))
+    GetGraph(uri = entity.uri,
+      name = entity.name,
+      links = links.toList,
+      entity.entityType,
+      (entity.statusId: Status).name,
+      entity.lastReadDate.toString)
   }
 
   /**

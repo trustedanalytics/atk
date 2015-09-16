@@ -129,7 +129,7 @@ class ModelService(commonDirectives: CommonDirectives, engine: Engine) extends D
                       }
                     } ~
                       delete {
-                        onComplete(engine.deleteModel(id)) {
+                        onComplete(engine.dropModel(id)) {
                           case Success(ok) => complete("OK")
                           case Failure(ex) => throw ex
                         }
