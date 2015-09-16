@@ -32,7 +32,7 @@ import MLLibJsonProtocol._
 
 Support Vector Machine[1]_ is a supervised algorithm used to perform binary classification. A support vector machine
 constructs a high dimensional hyperplane which is said to achieve a good separation when a hyperplane has the largest distance to
-the nearest training-data point of any class. This model runs MLLib's implementation of SVM[2]_ with SGD[3]_ optimizer.
+the nearest training-data point of any class. This model runs the MLLib implementation of SVM[2]_ with SGD[3]_ optimizer.
 The user may initialize a SVMWithSGDModel, train the model on columns of a frame, use the model to predict the labels of observations in a frame and
 test the predicted labels against the true labels. During testing, labels of the observations are predicted and tested against the true labels using
 in-built binary ClassificationMetrics.

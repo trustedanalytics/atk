@@ -31,7 +31,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 
 Linear Regression[1]_ is used to model the relationship between a scalar dependent variable and one or more independent variables. The user may initialize a LinearRegressionModel,
 train the model on columns of a frame and use the trained model to predict the value of the dependent variable given the independent observations of a frame. This model
-runs MLLib's implementation of LinearRegression[2]_ with the SGD[3]_ optimizer.
+runs the MLLib implementation of LinearRegression[2]_ with the SGD[3]_ optimizer.
                 
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression

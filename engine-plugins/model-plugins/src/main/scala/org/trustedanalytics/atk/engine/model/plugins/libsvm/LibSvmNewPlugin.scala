@@ -28,7 +28,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 Support Vector Machine[1]_ is a supervised algorithm used to perform binary classification. A support vector machine
 constructs a high dimensional hyperplane which is said to achieve a good separation when a hyperplane has the largest distance to
-the nearest training-data point of any class. This model runs LIBSVM's[2]_[3]_ implementation of SVM.
+the nearest training-data point of any class. This model runs the LIBSVM[2]_[3]_ implementation of SVM.
 The user may initialize a LibsvmModel, train the model on columns of a frame, use the model to predict the labels of observations in a frame and
 test the predicted labels against the true labels. During testing, labels of the observations are predicted and tested against the true labels using
 in-built binary ClassificationMetrics.

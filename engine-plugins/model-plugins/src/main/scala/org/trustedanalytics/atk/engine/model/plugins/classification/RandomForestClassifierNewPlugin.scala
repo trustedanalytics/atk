@@ -42,7 +42,7 @@ import MLLibJsonProtocol._
 Random Forest[1]_ is a supervised ensemble learning algorithm which can be used to perform binary and multi-class classification.
 The user may initialize a RandomForestClassifierModel, train the model on columns of a frame,
 use the model to predict the labels of observations in a frame and test the predicted labels against the true labels.
-This model runs MLLib's implementation of Random Forest[2]_. During training, the decision trees are trained in parallel with some
+This model runs the MLLib implementation of Random Forest[2]_. During training, the decision trees are trained in parallel with some
 injected randomness so that the trees differ from each other. During prediction, each tree's prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes. During testing, labels of the observations are predicted
 and tested against the true labels using in-built binary and multiclass ClassificationMetrics.

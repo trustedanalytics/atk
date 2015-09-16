@@ -32,7 +32,7 @@ variables called principal components. The number of principal components is les
 variables. This implementation of computing Principal Components is done by Singular Value Decomposition[2]_ of the data,
 providing the user with an option to mean center the data. The user may initialize a PrincipalComponentsModel, train the model
 specifying the observation columns of the frame, the number of components, and predict principal components using the trained model.
-MLLib's Singular Value Decomposition[3]_ has been used for this, with additional features to mean center the data during train and
+The MLLib Singular Value Decomposition[3]_ implementation has been used for this, with additional features to mean center the data during train and
 predict and compute the t-squared index during prediction.
 
 .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis

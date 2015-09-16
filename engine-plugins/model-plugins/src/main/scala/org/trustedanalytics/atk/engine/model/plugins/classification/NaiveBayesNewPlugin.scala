@@ -43,7 +43,7 @@ Naive Bayes[1]_ is a probabilistic classifier with strong independence assumptio
 probability distribution of each feature given label, and then applies Bayes' theorem to compute the conditional probability distribution
 of label given an observation and use it for prediction. The user may initialize a NaiveBayesModel, train the model on columns of a frame
 and use the trained model to predict the value of the dependent variable given the independent observations of a frame. This model
-runs MLLib's implementation of Naive Bayes[2]_.
+runs the MLLib implementation of Naive Bayes[2]_.
 
 .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
