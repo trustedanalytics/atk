@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
+import org.joda.time.DateTime
+
 /**
  * The REST service response for single graph in "GET ../graphs/id"
  *
@@ -31,7 +33,7 @@ case class GetGraph(uri: String,
                     links: List[RelLink],
                     entityType: String,
                     status: String,
-                    lastReadDate: String) {
+                    lastReadDate: DateTime) {
   require(uri != null, "uri must not be null")
   require(name != null, "name must not be null")
   require(links != null, "links must not be null")

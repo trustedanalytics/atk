@@ -41,7 +41,7 @@ object GraphDecorator extends EntityDecorator[GraphEntity, GetGraphs, GetGraph] 
       links = links.toList,
       entity.entityType,
       (entity.statusId: Status).name,
-      entity.lastReadDate.toString)
+      entity.lastReadDate)
   }
 
   /**

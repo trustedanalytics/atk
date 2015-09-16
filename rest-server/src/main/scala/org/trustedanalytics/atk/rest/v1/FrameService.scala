@@ -54,7 +54,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
           get {
             parameters('name.?) {
               import spray.httpx.SprayJsonSupport._
-              implicit val indexFormat = ViewModelJsonImplicits.getDataFrameFormat
+              implicit val indexFormat = ViewModelJsonImplicits.getFrameFormat
               (name) => name match {
                 case Some(name) => {
                   onComplete(engine.getFrameByName(name)) {
@@ -71,7 +71,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                   onComplete(engine.getFrames()) {
                     case Success(frames) =>
                       import AtkDefaultJsonProtocol._
-                      implicit val indexFormat = ViewModelJsonImplicits.getDataFramesFormat
+                      implicit val indexFormat = ViewModelJsonImplicits.getFramesFormat
                       complete(FrameDecorator.decorateForIndex(uri.toString(), frames))
                     case Failure(ex) => throw ex
                   }
@@ -81,7 +81,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
             post {
               import spray.httpx.SprayJsonSupport._
               implicit val format = DomainJsonProtocol.createEntityArgsFormat
-              implicit val indexFormat = ViewModelJsonImplicits.getDataFrameFormat
+              implicit val indexFormat = ViewModelJsonImplicits.getFrameFormat
               entity(as[CreateEntityArgs]) {
                 createEntityArgs =>
                   onComplete(engine.createFrame(createEntityArgs)) {
@@ -108,7 +108,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                     complete {
                       import spray.httpx.SprayJsonSupport._
                       implicit val format = DomainJsonProtocol.dataFrameTemplateFormat
-                      implicit val indexFormat = ViewModelJsonImplicits.getDataFrameFormat
+                      implicit val indexFormat = ViewModelJsonImplicits.getFrameFormat
                       decorated
                     }
                   }

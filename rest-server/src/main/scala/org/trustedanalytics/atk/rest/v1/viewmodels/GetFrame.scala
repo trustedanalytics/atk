@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
+import org.joda.time.DateTime
 import org.trustedanalytics.atk.domain.schema.Schema
 
 /**
@@ -32,15 +33,15 @@ import org.trustedanalytics.atk.domain.schema.Schema
  * @param lastReadDate the last time data from this frame was accessed
  */
 
-case class GetDataFrame(uri: String,
-                        name: Option[String],
-                        schema: Schema,
-                        rowCount: Option[Long],
-                        links: List[RelLink],
-                        errorFrameUri: Option[String],
-                        entityType: String,
-                        status: String,
-                        lastReadDate: String) {
+case class GetFrame(uri: String,
+                    name: Option[String],
+                    schema: Schema,
+                    rowCount: Option[Long],
+                    links: List[RelLink],
+                    errorFrameUri: Option[String],
+                    entityType: String,
+                    status: String,
+                    lastReadDate: DateTime) {
   require(uri != null, "uri must not be null")
   require(name != null, "name must not be null")
   require(schema != null, "schema must not be null")

@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
+import org.joda.time.DateTime
+
 /**
  * The REST service response for single command in "GET ../models/id"
  *
@@ -32,7 +34,7 @@ case class GetModel(uri: String,
                     links: List[RelLink],
                     entityType: String,
                     status: String,
-                    lastReadDate: String) {
+                    lastReadDate: DateTime) {
   require(uri != null, "uri must not be null")
   require(name != null, "name must not be null")
   require(links != null, "links must not be null")

@@ -81,24 +81,6 @@ class SparkGraphStorage(metaStore: MetaStore,
   def expectSeamless(graphRef: GraphReference): SeamlessGraphMeta = expectSeamless(graphRef.id)
 
   /**
-   * Deletes a graph by synchronously deleting its information from the meta-store and asynchronously
-   * deleting it from the backend storage.
-   * @param graph Graph metadata object.
-   */
-  def erase(graph: GraphEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.graphstorage.erase") {
-      implicit session =>
-        {
-          info(s"dropping graph id:${graph.id}, name:${graph.name}, entityType:${graph.entityType}")
-          if (graph.isTitan) {
-            backendStorage.deleteUnderlyingTable(graph.storage, quiet = true, inBackground = true)
-          }
-          metaStore.graphRepo.delete(graph.id).get
-        }
-    }
-  }
-
-  /**
    * @param graph the graph to be copied
    * @param name name to be given to the copied graph
    * @return

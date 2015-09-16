@@ -39,7 +39,7 @@ object ModelDecorator extends EntityDecorator[ModelEntity, GetModels, GetModel] 
       name = entity.name,
       links.toList, entity.entityType,
       (entity.statusId: Status).name,
-      entity.lastReadDate.toString)
+      entity.lastReadDate)
   }
 
   /**

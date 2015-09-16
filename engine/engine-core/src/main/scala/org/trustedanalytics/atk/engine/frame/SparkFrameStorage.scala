@@ -305,7 +305,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   }
 
   /** Immediately deletes frame file storage and the record in the metastore */
-  private def erase(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
+  private def deleteFrameDateAndMetaDataCompletely(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
     frameFileStorage.deleteFrameData(frame)
     metaStore.withSession("frame.erase") {
       implicit session =>
@@ -439,7 +439,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     } match {
       case Success(f) => f
       case Failure(e) =>
-        erase(frame)
+        deleteFrameDateAndMetaDataCompletely(frame)
         throw e
     }
   }

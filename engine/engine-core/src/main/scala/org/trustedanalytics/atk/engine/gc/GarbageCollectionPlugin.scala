@@ -32,13 +32,13 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Arguments used for a single execution of garbage collection
  */
 case class GarbageCollectionDropStaleArgs(@ArgDoc("""Minimum age of entity staleness.  Defaults to server config.  As a string it supports units according to https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format""") staleAge: Option[String] = None)
-case class GarbageCollectionFinalizeDroppedArgs(@ArgDoc("""Ignore this argument""") bogus: Long = 0) // todo: this is a bogus reference for now to fit current plugin framework and JSON support
+case class NoArgs(@ArgDoc("""Ignore this argument""") bogus: Long = 0) // todo: this is a bogus reference for now to fit current plugin framework and JSON support
 
 /** Json conversion for arguments and return value case classes */
 object GcJsonFormat {
   import DomainJsonProtocol._
   implicit val GarbageCollectionDropStaleArgsFormat = jsonFormat1(GarbageCollectionDropStaleArgs)
-  implicit val GarbageCollectionFinalizeArgsFormat = jsonFormat1(GarbageCollectionFinalizeDroppedArgs)
+  implicit val NoArgsFormat = jsonFormat1(NoArgs)
 
   /**
    * Converts unit of duration using typesafe's SimpleConfig.parseDuration into milliseconds
@@ -74,11 +74,11 @@ class GarbageCollectionDropStalePlugin extends CommandPlugin[GarbageCollectionDr
 /**
  * Plugin that executes a single instance of garbage collection to finalize all dropped entities
  */
-class GarbageCollectionFinalizeDroppedPlugin extends CommandPlugin[GarbageCollectionFinalizeDroppedArgs, UnitReturn] {
+class GarbageCollectionFinalizeDroppedPlugin extends CommandPlugin[NoArgs, UnitReturn] {
 
   override def name: String = "_admin:/_finalize_dropped"
 
-  override def execute(arguments: GarbageCollectionFinalizeDroppedArgs)(implicit context: Invocation): UnitReturn = {
+  override def execute(arguments: NoArgs)(implicit context: Invocation): UnitReturn = {
     GarbageCollector.singleTimeExecutionFinalizeDropped()
   }
 }
