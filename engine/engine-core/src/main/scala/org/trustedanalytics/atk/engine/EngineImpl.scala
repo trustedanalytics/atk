@@ -36,6 +36,7 @@ import org.trustedanalytics.atk.event.EventLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.engine.SparkProgressListener
 import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.engine.metrics.MetricCollection
 
 import scala.concurrent._
 import scala.util.{ Failure, Success, Try }
@@ -298,6 +299,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
 
   override def shutdown(): Unit = {
     GarbageCollector.shutdown()
+    MetricCollection.shutdown()
   }
 
   override def getVertex(graphId: Identifier, label: String)(implicit invocation: Invocation): Future[FrameEntity] = {

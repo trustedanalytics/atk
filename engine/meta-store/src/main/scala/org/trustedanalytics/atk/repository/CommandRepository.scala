@@ -25,4 +25,7 @@ import org.trustedanalytics.atk.engine.ProgressInfo
 trait CommandRepository[Session] extends Repository[Session, CommandTemplate, Command] {
   def updateComplete(id: Long, complete: Boolean)(implicit session: Session): Try[Unit]
   def updateProgress(id: Long, progressInfo: List[ProgressInfo])(implicit session: Session): Try[Unit]
+  def totalCount()(implicit session: Session): Int
+  def successfulCount()(implicit session: Session): Int
+  def errorCount()(implicit session: Session): Int
 }

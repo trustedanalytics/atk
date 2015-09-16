@@ -30,6 +30,8 @@ trait GraphRepository[Session] extends Repository[Session, GraphTemplate, GraphE
    */
   def scanAll()(implicit session: Session): Seq[GraphEntity]
 
+  def totalCount()(implicit session: Session): Int
+
   def incrementIdCounter(id: Long, idCounter: Long)(implicit session: Session): Unit
 
   /**
