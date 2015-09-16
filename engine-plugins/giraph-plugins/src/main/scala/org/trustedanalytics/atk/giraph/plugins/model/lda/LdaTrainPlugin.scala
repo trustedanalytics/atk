@@ -22,6 +22,7 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
+import org.trustedanalytics.atk.giraph.io.{ LdaVertexId, LdaEdgeData, BigDataEdges }
 import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, GiraphJobManager }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
@@ -61,6 +62,7 @@ class LdaTrainPlugin
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
     val frames = engine.frames
+    val config = configuration
 
     // validate arguments
     val frame = frames.expectFrame(arguments.frame)
@@ -99,6 +101,11 @@ class LdaTrainPlugin
     giraphConf.setMasterComputeClass(classOf[CVB0LDAMasterCompute])
     giraphConf.setComputationClass(classOf[CVB0LDAComputation])
     giraphConf.setAggregatorWriterClass(classOf[CVB0LDAAggregatorWriter])
+
+    //Enable only if serialized edges for single vertex exceed 1GB
+    if (config.getBoolean("useBigDataEdges")) {
+      giraphConf.setOutEdgesClass(classOf[BigDataEdges[LdaVertexId, LdaEdgeData]])
+    }
 
     val report = GiraphJobManager.run(s"ia_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
       classOf[CVB0LDAComputation].getCanonicalName,
