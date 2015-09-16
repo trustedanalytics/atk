@@ -38,7 +38,6 @@ import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema.EdgeSchema
 import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.domain.graph.SchemaList
 import org.trustedanalytics.atk.domain.model.ModelTemplate
 import org.trustedanalytics.atk.domain.command.CommandTemplate
 import org.trustedanalytics.atk.domain.Error
@@ -77,11 +76,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
   implicit val commandProgressType = MappedColumnType.base[List[ProgressInfo], String](
     { progress => progress.toJson.prettyPrint },
     { string => JsonParser(string).convertTo[List[ProgressInfo]] }
-  )
-
-  implicit val elementIDNamesColumnType = MappedColumnType.base[SchemaList, String](
-    { elementIDNames => elementIDNames.toJson.prettyPrint }, // Schema to String
-    { string => JsonParser(string).convertTo[SchemaList] } // String to Schema
   )
 
   private[repository] val database = withContext("Connecting to database") {
