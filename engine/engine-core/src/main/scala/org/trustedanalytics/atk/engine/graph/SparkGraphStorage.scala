@@ -418,10 +418,10 @@ class SparkGraphStorage(metaStore: MetaStore,
         {
           info(s"marking graph entity (id=${graph.id}, name=${graph.name}) as dropped")
           metaStore.graphRepo.dropGraph(graph)
-          // we delete the data for Titan graphs immediately
-          if (graph.isTitan) {
-            backendStorage.deleteUnderlyingTable(graph.storage, quiet = true, inBackground = true)
-          }
+//          // we delete the data for Titan graphs immediately
+//          if (graph.isTitan) {
+//            backendStorage.deleteUnderlyingTable(graph.storage, quiet = true, inBackground = true)
+//          }
         }
     }
   }
