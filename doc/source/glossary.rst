@@ -107,7 +107,7 @@ Glossary
 
         See :term:`API Maturity Tags`.
 
-    Bias-variance tradeoff
+    Bias-variance trade-off
 
         In supervised classifier training, the problem of minimizing two
         sources of prediction error: erroneous assumptions in the learning
@@ -153,7 +153,7 @@ Glossary
         A file containing tabular data (numbers and text) in plain-text form.
         The file can consist of any number of records, separated by a unique
         character.
-        New line characters are ususally used for this purpose.
+        New line characters are usually used for this purpose.
         Each record consists of one or more fields, separated by some unique
         character.
         Commas are usually used for this purpose.
@@ -421,7 +421,7 @@ Glossary
         structural properties of a graph, including:
 
         #.  Traversals --
-            Algorithmic walk throughs of the graph to determine optimal
+            Algorithmic walk-through of the graph to determine optimal
             paths and relationship between vertices.
 
         #.  Statistics --
@@ -476,7 +476,7 @@ Glossary
         Apache HBase is the Hadoop database, a distributed, scalable, big data
         store.
 
-    hyperparameter
+    Hyperparameter
 
         Parameter that describe the prior distribution (the assumption about
         the data before observing it) as opposed to the parameters that govern
@@ -522,7 +522,7 @@ Glossary
 
         Data in the JavaScript Object Notation format. An open standard format
         that uses human-readable text to transmit data objects consisting of
-        attributevalue pairs. For more information see `http:/json.org`__.
+        attribute/value pairs. For more information see `http:/json.org`__.
 
     Katz Centrality
 
@@ -582,10 +582,10 @@ Glossary
 
         Adapted from: `Stanford\: Machine Learning`_:
 
-            This is the tradeoff parameter, used in :term:`Label Propagation`
+            This is the trade-off parameter, used in :term:`Label Propagation`
             on :term:`Gaussian Random Fields`.
             The regularization parameter is a control on fitting parameters.
-            It is used in machine learning algorithms to prevent overfitting.
+            It is used in machine learning algorithms to prevent over-fitting.
             As the magnitude of the fitting parameter increases, there will be
             an increasing penalty on the cost function.
             This penalty is dependent on the squares of the parameters as well

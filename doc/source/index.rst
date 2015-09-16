@@ -37,5 +37,3 @@ References
     appendices
     errata
 
-.. TODOLIST::
-

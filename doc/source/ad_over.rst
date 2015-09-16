@@ -34,7 +34,7 @@ Install the CloudFoundry |CLI| package:
    
     $ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
 
-This downloads the pre-packaged RPM to your local machine.
+This downloads the prepackaged RPM to your local machine.
 Install this package:
 
 .. code::
@@ -61,7 +61,7 @@ OK
 
 API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
 Not logged in. Use 'cf login' to log in.
-now try login by running the command "cf login -u admin -p c1oudc0w -o seedorg -s seedspace":
+Now try login by running the command "cf login -u admin -p c1oudc0w -o seedorg -s seedspace":
 Your output should look something like this:
 
 .. code::
@@ -100,7 +100,7 @@ In order to download the file, simply run the command:
 
     wget https://s3.amazonaws.com/gao-internal-archive/<Your_Branch_Name>/trustedanalytics.tar.gz
 
-for example if you are on "master" branch you run:
+For example, if you are on "master" branch you run:
 
 .. code::
 
@@ -138,7 +138,7 @@ In order to do so, do the following:
         - <YOUR_POSTGRESQL_SERVICE_NAME_HERE> for example "pg-atk-ebi"
         - bryn-zk
 
-#)  Create an instance of postgresql by running the command: 
+#)  Create an instance of PostgreSQL by running the command: 
 
     .. code::
 

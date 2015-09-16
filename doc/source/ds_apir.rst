@@ -38,7 +38,7 @@ only rows with scores greater than zero:
 
 .. code::
 
-    >>> my_csv = CsvFile(“tresults.txt”, [(‘test’, str), (‘score’, int32)])
+    >>> my_csv = CsvFile(“results.txt”, [(‘test’, str), (‘score’, int32)])
     >>> my_frame = Frame(my_csv)
     >>> my_frame.filter(my_custom_row_func)
 
@@ -107,8 +107,7 @@ For example::
 .. note::
 
     This example is for illustration only.
-    There are other, perhaps more Pythonic, ways of doing this, like using a
-    list comprehension.
+    There are other ways of doing this, like using a list comprehension.
 
 ----------------
 |UDF| Guidelines

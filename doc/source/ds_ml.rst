@@ -28,8 +28,8 @@ be done automatically, without directly involving analysts.
 There are many other problems that are amenable to :term:`machine learning`
 solutions.
 Translation of text for example is a difficult issue.
-A corpus of pre-translated text can be used to teach an algorithm a mapping
-from one language to another.
+A corpus of previously translated text can be used to teach an algorithm a
+mapping from one language to another.
 
 ----------
 Algorithms

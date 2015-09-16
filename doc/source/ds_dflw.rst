@@ -107,7 +107,7 @@ See the API section :ref:`Data Sources <python_api/datasources/index>`
 for the various methods of ingesting data.
 
 
-.. _example_files.csvfile:
+.. _example_files.CsvFile:
 
 Importing a |CSV| file.
 -----------------------
@@ -210,8 +210,6 @@ the data layouts:
         ... schema=column_schema_list, delimiter='|', skip_header_lines=2)
 
 
-.. TODO:: Add example for JsonFile.
-
 .. index::
     single: frame (lower case f)
     single: Frame (capital F)
@@ -236,10 +234,10 @@ Create a Frame
 
 There are several ways to create frames\:
 
-#.  as "empty", with no schema or data
-#.  with a schema and data
-#.  by copying (all or a part of) another frame
-#.  as a return value from a Frame-based method; this is part of the ETL data flow.
+#.  As "empty", with no schema or data
+#.  With a schema and data
+#.  By copying (all or a part of) another frame
+#.  As a return value from a Frame-based method; this is part of the ETL data flow.
 
 See the Python API :ref:`Frames section <python_api/frames/index>` for more information.
 
@@ -255,7 +253,7 @@ The Frame *my_frame* is now a Python object which references an empty frame
 that has been created on the server.
 
 For an example, to create a frame defined by the schema *my_csv* (see
-:ref:`example_files.csvfile`), import the data, give the frame the name
+:ref:`example_files.CsvFile`), import the data, give the frame the name
 *myframe*, and create a Frame object, *my_frame*, to access it:
 
 .. code::
