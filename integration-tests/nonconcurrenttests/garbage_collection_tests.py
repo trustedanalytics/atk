@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-import sys
-sys.path.insert(0, "/home/blbarker/dev/atk/python-client")
-
 import time
 import unittest
 import trustedanalytics as ta
@@ -34,7 +31,7 @@ ta.connect()
 class GarbageCollectionTests(unittest.TestCase):
     _multiprocess_can_split_ = False  # should NOT run concurrently with other tests, as it runs GC with small stale age
 
-    def _test_gc_drop_stale_and_finalize(self):
+    def test_gc_drop_stale_and_finalize(self):
         csv = ta.CsvFile("/datasets/dates.csv", schema= [('start', ta.datetime),
                                                          ('id', int),
                                                          ('stop', ta.datetime),
