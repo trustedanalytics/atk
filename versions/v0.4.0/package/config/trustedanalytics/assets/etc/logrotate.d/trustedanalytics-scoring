@@ -1,0 +1,8 @@
+/var/log/trustedanalytics/scoring/*.log {
+    daily
+    rotate 2
+    size=20M
+    copytruncate
+    notifempty
+    missingok
+}

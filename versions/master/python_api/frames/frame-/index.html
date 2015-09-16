@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Frames Frame &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames" href="../index.html" >
+    <link rel="next" title="Frame __init__" href="f__init__.html" >
+    <link rel="prev" title="VertexFrame unflatten_column" href="../frame-vertex/unflatten_column.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" accesskey="U">Frames</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../frame-vertex/unflatten_column.html" title="VertexFrame unflatten_column"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="f__init__.html" title="Frame __init__"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../models/index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="frames-frame">
+<span id="python-api-frames-frame-index"></span><h1><a class="reference internal" href="../index.html"><em>Frames</em></a> Frame<a class="headerlink" href="#frames-frame" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="Frame">
+<em class="property">class </em><code class="descname">Frame</code><a class="headerlink" href="#Frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Large table of data.</p>
+<p>Class with information about a large row and columnar data store in a frame,
+Has information needed to modify data and table structure.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="column_names.html"><em>column_names</em></a></td>
+<td>Column identifications in the current frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<td>Set or get the name of the frame object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="row_count.html"><em>row_count</em></a></td>
+<td>Number of rows in the current frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="schema.html"><em>schema</em></a></td>
+<td>Current frame column names and types.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<td>Current frame life cycle status.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#frame-init"><span>__init__</span></a>(self[, source, name, _info])</td>
+<td>Create a Frame/frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="add_columns.html"><em>add_columns</em></a>(self, func, schema[, columns_accessed])</td>
+<td>Add columns to current frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="append.html"><em>append</em></a>(self, data)</td>
+<td>Adds more data to the current frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="assign_sample.html"><em>assign_sample</em></a>(self, sample_percentages[, sample_labels, ...])</td>
+<td>Randomly group rows into user-defined classes.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bin_column.html"><em>bin_column</em></a>(self, column_name, cutoffs[, include_lowest, strict_binning, ...])</td>
+<td>Classify data into user-defined groups.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="bin_column_equal_depth.html"><em>bin_column_equal_depth</em></a>(self, column_name[, num_bins, ...])</td>
+<td>Classify column into groups with the same frequency.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="bin_column_equal_width.html"><em>bin_column_equal_width</em></a>(self, column_name[, num_bins, ...])</td>
+<td>Classify column into same-width groups.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="categorical_summary.html"><em>categorical_summary</em></a>(self, *column_inputs)</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Compute a summary of the data in a column(s) for categorical or numerical data types.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="classification_metrics.html"><em>classification_metrics</em></a>(self, label_column, pred_column[, ...])</td>
+<td>Model statistics of accuracy, precision, and others.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="column_median.html"><em>column_median</em></a>(self, data_column[, weights_column])</td>
+<td>Calculate the (weighted) median of a column.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="column_mode.html"><em>column_mode</em></a>(self, data_column[, weights_column, max_modes_returned])</td>
+<td>Evaluate the weights assigned to rows.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="column_summary_statistics.html"><em>column_summary_statistics</em></a>(self, data_column[, ...])</td>
+<td>Calculate multiple statistics for a column.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="compute_misplaced_score.html"><em>compute_misplaced_score</em></a>(self, gravity)</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="copy.html"><em>copy</em></a>(self[, columns, where, name])</td>
+<td>Create new frame from current frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="correlation.html"><em>correlation</em></a>(self, data_column_names)</td>
+<td>Calculate correlation for two columns of current frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="correlation_matrix.html"><em>correlation_matrix</em></a>(self, data_column_names[, matrix_name])</td>
+<td>Calculate correlation matrix for two or more columns.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="count.html"><em>count</em></a>(self, where)</td>
+<td>Counts the number of rows which meet given criteria.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="covariance.html"><em>covariance</em></a>(self, data_column_names)</td>
+<td>Calculate covariance for exactly two columns.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="covariance_matrix.html"><em>covariance_matrix</em></a>(self, data_column_names[, matrix_name])</td>
+<td>Calculate covariance matrix for two or more columns.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="cumulative_percent.html"><em>cumulative_percent</em></a>(self, sample_col)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Add column to frame with cumulative percent sum.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="cumulative_sum.html"><em>cumulative_sum</em></a>(self, sample_col)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Add column to frame with cumulative percent sum.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dot_product.html"><em>dot_product</em></a>(self, left_column_names, right_column_names, ...[, ...])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate dot product for each row in current frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="download.html"><em>download</em></a>(self[, n, offset, columns])</td>
+<td>Download a frame from the server into client workspace.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="drop_columns.html"><em>drop_columns</em></a>(self, columns)</td>
+<td>Remove columns from the frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="drop_duplicates.html"><em>drop_duplicates</em></a>(self[, unique_columns])</td>
+<td>Modify the current frame, removing duplicate rows.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="drop_rows.html"><em>drop_rows</em></a>(self, predicate)</td>
+<td>Erase any row in the current frame which qualifies.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="ecdf.html"><em>ecdf</em></a>(self, column[, result_frame_name])</td>
+<td>Builds new frame with columns for data and distribution.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="entropy.html"><em>entropy</em></a>(self, data_column[, weights_column])</td>
+<td>Calculate the Shannon entropy of a column.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_csv.html"><em>export_to_csv</em></a>(self, folder_name[, separator, count, offset])</td>
+<td>Write current frame to HDFS in csv format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="export_to_hbase.html"><em>export_to_hbase</em></a>(self, table_name[, key_column_name, family_name])</td>
+<td>Write current frame to HBase table.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_hive.html"><em>export_to_hive</em></a>(self, table_name)</td>
+<td>Write current frame to Hive table.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="export_to_jdbc.html"><em>export_to_jdbc</em></a>(self, table_name[, connector_type, url, driver_name, ...])</td>
+<td>Write current frame to Jdbc table.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_json.html"><em>export_to_json</em></a>(self, folder_name[, count, offset])</td>
+<td>Write current frame to HDFS in JSON format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="filter.html"><em>filter</em></a>(self, predicate)</td>
+<td>Select all rows which satisfy a predicate.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="flatten_column.html"><em>flatten_column</em></a>(self, column[, delimiter])</td>
+<td>Spread data to multiple rows based on cell data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="get_error_frame.html"><em>get_error_frame</em></a>(self)</td>
+<td>Get a frame with error recordings.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="group_by.html"><em>group_by</em></a>(self, group_by_columns, *aggregation_arguments)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Create summarized frame.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="histogram.html"><em>histogram</em></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute the histogram for a column in a frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin])</td>
+<td>Prints the frame data in readable format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="join.html"><em>join</em></a>(self, right, left_on[, right_on, how, name])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Join operation on one or two frames, creating a new frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="label_propagation.html"><em>label_propagation</em></a>(self, src_col_name, dest_col_name, ...[, ...])</td>
+<td>Label Propagation on Gaussian Random Fields.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="loadhbase.html"><em>loadhbase</em></a>(self, table_name, schema[, start_tag, end_tag])</td>
+<td>Append data from an hBase table into an existing (possibly empty) FrameRDD</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="loadhive.html"><em>loadhive</em></a>(self, query)</td>
+<td>Append data from a hive table into an existing (possibly empty) frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="loadjdbc.html"><em>loadjdbc</em></a>(self, table_name[, connector_type, url, driver_name, query])</td>
+<td>Append data from a Jdbc table into an existing (possibly empty) frame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="loopy_belief_propagation.html"><em>loopy_belief_propagation</em></a>(self, src_col_name, ...[, ...])</td>
+<td>Message passing to infer state probabilities.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="quantiles.html"><em>quantiles</em></a>(self, column_name, quantiles)</td>
+<td>New frame with Quantiles and their values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="rename_columns.html"><em>rename_columns</em></a>(self, names)</td>
+<td>Rename columns</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="sort.html"><em>sort</em></a>(self, columns[, ascending])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Sort the data in a frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="sorted_k.html"><em>sorted_k</em></a>(self, k, column_names_and_ascending[, reduce_tree_depth])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Get a sorted subset of the data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="take.html"><em>take</em></a>(self, n[, offset, columns])</td>
+<td>Get data subset.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="tally.html"><em>tally</em></a>(self, sample_col, count_val)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Count number of times a value is seen.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="tally_percent.html"><em>tally_percent</em></a>(self, sample_col, count_val)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute a cumulative percent count.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="top_k.html"><em>top_k</em></a>(self, column_name, k[, weights_column])</td>
+<td>Most or least frequent column values.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="unflatten_column.html"><em>unflatten_column</em></a>(self, composite_key_column_names[, delimiter])</td>
+<td>Compacts data from multiple rows based on cell data.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="frame-init"></span><dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>source=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Frame/frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source</strong> : CsvFile | Frame (default=None)</p>
+<blockquote>
+<div><p>A source of initial data.</p>
+</div></blockquote>
+<p><strong>name</strong> : str (default=None)</p>
+<blockquote class="last">
+<div><p>The name of the newly created frame.
+Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A frame with no name is subject to garbage collection.</p>
+<p>If a string in the CSV file starts and ends with a double-quote (&#8221;)
+character, the character is stripped off of the data before it is put into
+the field.
+Anything, including delimiters, between the double-quote characters is
+considered part of the str.
+If the first character after the delimiter is anything other than a
+double-quote character, the string will be composed of all the characters
+between the delimiters, including double-quotes.
+If the first field type is str, leading spaces on each row are
+considered part of the str.
+If the last field type is str, trailing spaces on each row are
+considered part of the str.</p>
+<p class="rubric">Examples</p>
+<p>Create a new frame based upon the data described in the CsvFile object
+<em>my_csv_schema</em>.
+Name the frame &#8220;myframe&#8221;.
+Create a Frame <em>my_frame</em> to access the data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv_schema</span><span class="p">,</span> <span class="s">&quot;myframe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A Frame object has been created and <em>my_frame</em> is its proxy.
+It brought in the data described by <em>my_csv_schema</em>.
+It is named <em>myframe</em>.</p>
+<p>Create an empty frame; name it &#8220;yourframe&#8221;:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;yourframe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A frame has been created and Frame <em>your_frame</em> is its proxy.
+It has no data yet, but it does have the name <em>yourframe</em>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

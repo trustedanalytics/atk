@@ -1,0 +1,36 @@
+.. _python_api/frames/frame-vertex/correlation:
+
+
+:doc:`VertexFrame <index>`  correlation
+***************************************
+
+------
+
+
+.. function:: correlation(self, data_column_names)
+
+    Calculate correlation for two columns of current frame.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of 2 columns from which
+            to compute the correlation.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Pearson correlation coefficient of the two columns.
+    Notes
+    -----
+    This method applies only to columns containing numerical data.

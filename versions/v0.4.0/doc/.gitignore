@@ -1,0 +1,9 @@
+# A list of files for git to ignore
+# ---------------------------------
+# vim backup files
+*~
+.sc2*
+# Log files
+*.log
+*.Log
+*.LOG

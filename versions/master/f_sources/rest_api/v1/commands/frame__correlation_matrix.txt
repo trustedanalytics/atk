@@ -1,0 +1,123 @@
+.. _rest_api/v1/commands/frame__correlation_matrix:
+
+
+
+------------------------------------------------
+:doc:`Commands <index>` frame/correlation_matrix
+------------------------------------------------
+
+Calculate correlation matrix for two or more columns.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/correlation_matrix
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **data_column_names** : list
+
+    ..
+
+        The names of the columns from
+        which to compute the matrix.
+
+
+
+    **matrix_name** : unicode (default=None)
+
+    ..
+
+        The name for the returned
+        matrix Frame.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Notes
+-----
+This method applies only to columns containing numerical data.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>``
+
+        A Frame with the matrix of the correlation values for the columns.
+
+

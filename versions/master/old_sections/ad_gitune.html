@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Giraph Performance Tuning and Benchmarking &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ad-gitune"><span id="old-ad-sections-ad-gitune"></span><span id="old-sections-ad-gitune"></span></span><div class="section" id="giraph-performance-tuning-and-benchmarking">
+<span id="index-0"></span><h1>Giraph Performance Tuning and Benchmarking<a class="headerlink" href="#giraph-performance-tuning-and-benchmarking" title="Permalink to this headline">¶</a></h1>
+<p>Apache Giraph is a  Hadoop-based graph-processing framework that is modeled
+after Google&#8217;s Pregel.
+Giraph jobs are memory-hungry applications because it attempts to load the
+entire graph in-memory.
+Giraph jobs have no reducers.
+To improve memory-related issues:</p>
+<ul class="simple">
+<li>Allocate all available memory to the job, in other words, set the total JVM
+heap size available to mappers in $HADOOP_HOME/conf/mapred-site
+(mapreduce.tasktracker.map.tasks.maximum.* maximum heap size in
+mapred.map.child.java.opts) so it does not exceed available memory for the
+node, and leaves room for other daemons running on the nodes, for example,
+datanode, regionserver, and tasktracker.</li>
+<li>Allocate at least 4GB to each map tasks, but this value depends
+heavily on the size of the graph.</li>
+<li>The maximum number of workers available is the number of map slots
+available in the cluster - 1 (in other words, the number of nodes times
+the mapreduce.tasktracker.map.tasks.maximum - 1).
+One master and the rest are slaves.</li>
+<li>When writing Giraph jobs, keep the compute function small and minimize
+vertex memory footprint.
+There is a patch for spilling data to disk but it does not appear to be
+working very well at the moment.</li>
+</ul>
+<p>To solve performance problems, try upgrading to the latest version of
+Giraph, which might include patches that address performance concerns.
+For example, Facebook submitted a large number of patches that allow Giraph to
+run at scale
+<a class="reference external" href="http://www.facebook.com/notes/facebook-engineering/scaling-apache-giraph-to-a-trillion-edges/10151617006153920">http link</a> .
+Some memory optimizations to try are:</p>
+<ul class="simple">
+<li>Enable ByteArrayPartition store that Facebook implemented to optimize
+memory usage in Giraph using the option
+<strong>-Dgiraph.partitionClass=org.apache.giraph.partition.ByteArrayPartition</strong>.
+This option significantly decreases the amount of memory needed to run
+Giraph jobs.
+Giraph&#8217;s default partition store is the SimplePartitionStore (which stores
+the graph as Java objects).
+The ByteArrayPartition store keeps only a representative vertex that
+serializes/deserializes on the fly thereby saving memory.
+Be careful to use this option, because some algorithms may fail with this
+option on.</li>
+<li>If messages are stored as complex objects, try enabling the option
+<strong>-Dgiraph.useMessageSizeEncoding=true</strong>.
+<em>Note: This option will cause jobs to crash if the messages are simple
+objects.</em></li>
+</ul>
+<p>Other Giraph options are available at <a class="reference external" href="http://giraph.apache.org/options.html">http://giraph.apache.org/options.html</a>.
+These options can be set using -D&lt;option=value&gt; in the command for running the
+Hadoop job.
+For large clusters, &#8220;The Hadoop Real World Solutions Cookbook, Owens et al.
+2013&#8221; recommends controlling the number of messaging threads used by each
+worker to communicate with other workers, and increasing the maximum number of
+messages flushed in bulk.</p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

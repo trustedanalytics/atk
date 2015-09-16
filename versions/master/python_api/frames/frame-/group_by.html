@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Frame group_by &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames Frame" href="index.html" >
+    <link rel="next" title="Frame histogram" href="histogram.html" >
+    <link rel="prev" title="Frame get_error_frame" href="get_error_frame.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> Frame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="get_error_frame.html" title="Frame get_error_frame"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="histogram.html" title="Frame histogram"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="frame-group-by">
+<span id="python-api-frames-frame-group-by"></span><h1><a class="reference internal" href="index.html"><em>Frame</em></a>  group_by<a class="headerlink" href="#frame-group-by" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="group_by">
+<code class="descname">group_by</code><span class="sig-paren">(</span><em>self</em>, <em>group_by_columns</em>, <em>aggregation_arguments=None</em><span class="sig-paren">)</span><a class="headerlink" href="#group_by" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+Create summarized frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>group_by_columns</strong> : list</p>
+<blockquote>
+<div><p>Column name or list of column names</p>
+</div></blockquote>
+<p><strong>aggregation_arguments</strong> : dict (default=None)</p>
+<blockquote>
+<div><p>Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>A new frame with the results of the group_by</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Creates a new frame and returns a Frame object to access it.
+Takes a column or group of columns, finds the unique combination of
+values, and creates unique rows with these column values.
+The other columns are combined according to the aggregation
+argument(s).</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Column order is not guaranteed when columns are added</li>
+<li>The column names created by aggregation functions in the new frame
+are the original column name appended with the &#8216;_&#8217; character and
+the aggregation function.
+For example, if the original field is <em>a</em> and the function is
+<em>avg</em>, the resultant column is named <em>a_avg</em>.</li>
+<li>An aggregation argument of <em>count</em> results in a column named
+<em>count</em>.</li>
+<li>The aggregation function <em>agg.count</em> is the only full row
+aggregation function supported at this time.</li>
+<li>Aggregation currently supports using the following functions:<ul>
+<li>avg</li>
+<li>count</li>
+<li>count_distinct</li>
+<li>max</li>
+<li>min</li>
+<li>stdev</li>
+<li>sum</li>
+<li>var (see glossary <a class="reference internal" href="../../../glossary.html#term-bias-vs-variance"><span class="xref std std-term">Bias vs Variance</span></a>)</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Examples</p>
+<p>For setup, we will use a Frame <em>my_frame</em> accessing a frame with a
+column <em>a</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str</span>
+<span class="go">/-------/</span>
+<span class="go">  cat</span>
+<span class="go">  apple</span>
+<span class="go">  bat</span>
+<span class="go">  cat</span>
+<span class="go">  bat</span>
+<span class="go">  cat</span>
+</pre></div>
+</div>
+<p>Create a new frame, combining similar values of column <em>a</em>,
+and count how many of each value is in the original frame:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str       count:int</span>
+<span class="go">/-----------------------/</span>
+<span class="go">  cat             3</span>
+<span class="go">  apple           1</span>
+<span class="go">  bat             2</span>
+</pre></div>
+</div>
+<p>In this example, &#8216;my_frame&#8217; is accessing a frame with three columns,
+<em>a</em>, <em>b</em>, and <em>c</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:int   b:str   c:float</span>
+<span class="go">/-------------------------/</span>
+<span class="go">  1       alpha     3.0</span>
+<span class="go">  1       bravo     5.0</span>
+<span class="go">  1       alpha     5.0</span>
+<span class="go">  2       bravo     8.0</span>
+<span class="go">  2       bravo    12.0</span>
+</pre></div>
+</div>
+<p>Create a new frame from this data, grouping the rows by unique
+combinations of column <em>a</em> and <em>b</em>.
+Average the value in <em>c</em> for each group:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;c&#39;</span> <span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:int   b:str   c_avg:float</span>
+<span class="go">/-----------------------------/</span>
+<span class="go">  1       alpha     4.0</span>
+<span class="go">  1       bravo     5.0</span>
+<span class="go">  2       bravo    10.0</span>
+</pre></div>
+</div>
+<p>For this example, we use <em>my_frame</em> with columns <em>a</em>, <em>c</em>, <em>d</em>,
+and <em>e</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str   c:int   d:float e:int</span>
+<span class="go">/-------------------------------/</span>
+<span class="go">  ape     1       4.0     9</span>
+<span class="go">  ape     1       8.0     8</span>
+<span class="go">  big     1       5.0     7</span>
+<span class="go">  big     1       6.0     6</span>
+<span class="go">  big     1       8.0     5</span>
+</pre></div>
+</div>
+<p>Create a new frame from this data, grouping the rows by unique
+combinations of column <em>a</em> and <em>c</em>.
+Count each group; for column <em>d</em> calculate the average, sum and minimum
+value.
+For column <em>e</em>, save the maximum value:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">],</span> <span class="s">&#39;e&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">})</span>
+
+<span class="go">  a:str   c:int   count:int  d_avg:float  d_sum:float   d_min:float   e_max:int</span>
+<span class="go">/-------------------------------------------------------------------------------/</span>
+<span class="go">  ape     1       2          6.0          12.0          4.0           9</span>
+<span class="go">  big     1       3          6.333333     19.0          5.0           7</span>
+</pre></div>
+</div>
+<p>For further examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-group-by"><span>Group by (and aggregate):</span></a>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

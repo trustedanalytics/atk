@@ -1,0 +1,5 @@
+# good for testing classification metrics
+red, 1, 0, 0
+blue, 3, 1, 0
+green, 1, 0, 0
+green, 0, 1, 1

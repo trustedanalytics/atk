@@ -1,0 +1,121 @@
+.. _rest_api/v1/commands/model-lda__predict:
+
+
+
+-----------------------------------------
+:doc:`Commands <index>` model:lda/predict
+-----------------------------------------
+
+|BETA|
+Predict conditional probabilities of topics given document.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:lda/predict
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6675773110>>
+
+    ..
+
+        Reference to the model for which topics are to be determined.
+
+
+
+    **document** : list
+
+    ..
+
+        Document whose topics are to be predicted. 
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
+The input document is represented as a list of strings
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dict
+            Dictionary containing predicted topics.
+            The data returned is composed of multiple components:
+        topics_given_doc : list of doubles
+            List of conditional probabilities of topics given document.
+        new_words_count : int
+            Count of new words in test document not present in training set.
+        new_words_percentage: double
+            Percentage of new words in test document.
+
+

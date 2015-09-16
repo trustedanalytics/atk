@@ -1,0 +1,60 @@
+.. _python_api/frames/frame-/export_to_csv:
+
+
+:doc:`Frame <index>`  export_to_csv
+***********************************
+
+------
+
+
+.. function:: export_to_csv(self, folder_name, separator=None, count=None, offset=None)
+
+    Write current frame to HDFS in csv format.
+
+
+    :Parameters:
+
+        **folder_name** : unicode
+
+        ..
+
+            The HDFS folder path where the files
+            will be created.
+
+
+
+        **separator** : None (default=None)
+
+        ..
+
+
+
+
+
+        **count** : int32 (default=None)
+
+        ..
+
+            The number of records you want.
+            Default, or a non-positive value, is the whole frame.
+
+
+
+        **offset** : int32 (default=None)
+
+        ..
+
+            The number of rows to skip before exporting to the file.
+            Default is zero (0).
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Export the frame to a file in csv format as a Hadoop file.

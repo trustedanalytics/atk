@@ -1,0 +1,24 @@
+.. _python_api/frames/frame-vertex/get_error_frame:
+
+
+:doc:`VertexFrame <index>`  get_error_frame
+*******************************************
+
+------
+
+
+.. function:: get_error_frame(self)
+
+    Get a frame with error recordings.
+
+
+    :Parameters:
+
+    When a frame is created, another frame is transparently
+    created to capture parse errors.
+
+    Returns
+    -------
+    Frame : error frame object
+        A new object accessing a frame that contains the parse errors of
+        the currently active Frame or None if no error frame exists.

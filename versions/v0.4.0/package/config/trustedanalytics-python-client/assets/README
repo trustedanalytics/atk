@@ -1,0 +1,12 @@
+trusted analytics
+
+trusted analytics is a platform that simplifies applying graph analytics and machine learning to big data for superior knowledge
+discovery and predictive modeling across a wide variety of use cases and solutions. ATK provides an analytics pipeline
+spanning feature engineering, graph construction, graph analytics, and machine learning using an extensible,
+modular framework. By unifying graph and entity-based machine learning, machine learning developers can incorporate an
+entity's nearby relationships to yield superior predictive models that better represent the contextual information in
+the data. All functionality operates at full scale, yet are accessed using a higher level Python data science
+programming abstraction to significantly ease the complexity of cluster computing and parallel processing.
+The platform is fully extensible through a plugin architecture that allows incorporating the full range of analytics
+and machine learning for any solution need in a unified workflow that frees the researchers from the overhead of
+understanding, integrating, and inefficiently iterating across a diversity of formats and interfaces.

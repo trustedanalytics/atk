@@ -1,0 +1,61 @@
+.. _python_api/models/model-naive_bayes/train:
+
+
+:doc:`NaiveBayesModel <index>`  train
+*************************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, lambda_parameter=None)
+
+    |ALPHA|
+    Build a naive bayes model.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6675773090>>
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the label for each
+            observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Column(s) containing the
+            observations.
+
+
+
+        **lambda_parameter** : float64 (default=None)
+
+        ..
+
+            Additive smoothing parameter
+            Default is 1.0.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.

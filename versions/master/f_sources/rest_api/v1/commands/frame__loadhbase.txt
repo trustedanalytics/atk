@@ -1,0 +1,135 @@
+.. _rest_api/v1/commands/frame__loadhbase:
+
+
+
+---------------------------------------
+:doc:`Commands <index>` frame/loadhbase
+---------------------------------------
+
+Append data from an hBase table into an existing (possibly empty) FrameRDD
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/loadhbase
+
+:arguments:
+
+
+    **destination** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **table_name** : unicode
+
+    ..
+
+        hbase table name
+
+
+
+    **schema** : list
+
+    ..
+
+        hbase schema as a list of tuples (columnFamily, columnName, dataType for cell value)
+
+
+
+    **start_tag** : unicode (default=None)
+
+    ..
+
+        optional start tag for filtering
+
+
+
+    **end_tag** : unicode (default=None)
+
+    ..
+
+        optional end tag for filtering
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Append data from an hBase table into an existing (possibly empty) FrameRDD
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>``
+
+        the initial FrameRDD with the hbase data appended
+
+

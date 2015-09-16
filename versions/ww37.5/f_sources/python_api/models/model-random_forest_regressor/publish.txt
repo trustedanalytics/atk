@@ -1,0 +1,28 @@
+.. _python_api/models/model-random_forest_regressor/publish:
+
+
+:doc:`RandomForestRegressorModel <index>`  publish
+**************************************************
+
+------
+
+
+.. function:: publish(self)
+
+    |BETA|
+    Creates a tar file that will be used as input to the scoring engine
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns the HDFS path to the tar file
+    Creates a tar file with the trained Random Forest Regressor Model
+    The tar file is used as input to the scoring engine to predict the value of an observation.

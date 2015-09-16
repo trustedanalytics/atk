@@ -1,0 +1,5 @@
+This file shold be here until more content files are added, otherwise Maven build fails with:
+
+skip non existing resourceDirectory /home/ashahbax/QA/atk/testutils/src/test/resources
+
+that causes "DirNotFoundException" during the build.

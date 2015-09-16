@@ -1,0 +1,32 @@
+.. _python_api/models/model-linear_regression/new:
+
+
+:doc:`LinearRegressionModel <index>`  new
+*****************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3110>>
+
+        ..
+
+

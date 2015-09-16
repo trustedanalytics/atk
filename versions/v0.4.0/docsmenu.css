@@ -1,0 +1,98 @@
+
+/**********************************************/
+/* Dropdown menu for version number selection */
+/**********************************************/
+
+#header-container {
+  height: 34px;
+  background-color: #0088cc;
+}
+.versionmenu-container {
+    float:right;
+    margin-right: 17px;
+    margin-top:-22px;
+}
+
+div.versionmenu-container ul ul{
+    display:none;
+}
+
+div.versionmenu-container {
+position: relative;
+	margin: 0;
+	padding: 0;
+	/* menu header width and height */
+	height: 30px;
+	width: 90%;
+  float: left;
+}
+
+div.versionmenu-container ul{
+  margin: 0;
+	padding: 0;
+	position: absolute;
+	height: 100%;
+	/*width: 100%;*/
+	list-style-type: none;
+	background-color: #fffabf;
+	overflow: visible;
+}
+
+div.versionmenu-container ul li{
+display: block;
+	float: left;
+	height: auto;
+	/* menu header's items width */
+	width: 120px;
+}
+
+div.versionmenu-container li:hover > ul {
+  display: block;
+}
+
+/*
+ul.major-menu {
+    margin:0;
+    padding:3;
+    font-weight: bold;
+    display:inline-block;
+    list-style-type:none;
+    font:14px Helvetica, Calibri, Arial, sans-serif;
+}
+
+ul.major-menu > li {
+    position:relative;
+    list-style-type:none;
+    float:left;
+}
+
+
+ul.major-menu > li:hover > ul {
+    background-color:#0CF;	
+    display: block;
+}
+
+ul.specific-version {
+    position:absolute;
+    visibility:hidden;
+    border-top:1px solid #fff;
+    top:100%;
+    margin:0;
+    padding:0;
+    white-space: nowrap;
+}
+
+.specific-version > li {
+    display:inline;
+    float:none;
+    list-style:none;
+    font:12px Arial, Helvetica, sans-serif #111;
+    position:absolute;
+
+}
+
+.specific-version > li:hover {
+    background-color:#0CF;	
+    display: block;
+}
+*/

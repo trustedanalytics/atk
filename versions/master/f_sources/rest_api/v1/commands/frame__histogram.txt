@@ -1,0 +1,161 @@
+.. _rest_api/v1/commands/frame__histogram:
+
+
+
+---------------------------------------
+:doc:`Commands <index>` frame/histogram
+---------------------------------------
+
+|BETA|
+Compute the histogram for a column in a frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/histogram
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **column_name** : unicode
+
+    ..
+
+        Name of column to be evaluated.
+
+
+
+    **num_bins** : int32 (default=None)
+
+    ..
+
+        Number of bins in histogram.
+        Default is Square-root choice will be used
+        (in other words math.floor(math.sqrt(frame.row_count)).
+
+
+
+    **weight_column_name** : unicode (default=None)
+
+    ..
+
+        Name of column containing weights.
+        Default is all observations are weighted equally.
+
+
+
+    **bin_type** : unicode (default=equalwidth)
+
+    ..
+
+        The type of binning algorithm to use: ["equalwidth"|"equaldepth"]
+        Defaults is "equalwidth".
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Compute the histogram of the data in a column.
+The returned value is a Histogram object containing 3 lists one each for:
+the cutoff points of the bins, size of each bin, and density of each bin.
+
+**Notes**
+
+The num_bins parameter is considered to be the maximum permissible number
+of bins because the data may dictate fewer bins.
+With equal depth binning, for example, if the column to be binned has 10
+elements with only 2 distinct values and the *num_bins* parameter is
+greater than 2, then the number of actual number of bins will only be 2.
+This is due to a restriction that elements with an identical value must
+belong to the same bin.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        histogram
+            A Histogram object containing the result set.
+            The data returned is composed of multiple components:
+        cutoffs : array of float
+            A list containing the edges of each bin.
+        hist : array of float
+            A list containing count of the weighted observations found in each bin.
+        density : array of float
+            A list containing a decimal containing the percentage of
+            observations found in the total set per bin.
+
+
