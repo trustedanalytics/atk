@@ -85,8 +85,6 @@ class AddVerticesPlugin extends SparkCommandPlugin[AddVerticesArgs, UnitReturn] 
 
     verticesToAdd.persist(StorageLevel.MEMORY_AND_DISK)
 
-    vertexFrame.graph.incrementIdCounter(verticesToAdd.count())
-
     // load existing data, if any, and append the new data
     val existingVertexData = vertexFrame.rdd
     val combinedRdd = existingVertexData.setIdColumnName(idColumnName).append(verticesToAdd, preferNewVertexData)

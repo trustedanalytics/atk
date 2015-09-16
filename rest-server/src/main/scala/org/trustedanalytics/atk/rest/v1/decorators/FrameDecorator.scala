@@ -55,7 +55,8 @@ object FrameDecorator extends EntityDecorator[FrameEntity, GetDataFrames, GetDat
       links,
       getFrameUri(entity.errorFrameId),
       entity.entityType,
-      Status.getName(entity.status))
+      (entity.status: Status).name,
+      entity.lastReadDate.toString)
   }
 
   def getFrameUri(id: Option[Long]): Option[String] = {

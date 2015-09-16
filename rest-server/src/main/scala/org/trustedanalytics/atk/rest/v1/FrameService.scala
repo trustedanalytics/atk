@@ -117,7 +117,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                 }
               } ~
                 delete {
-                  onComplete(engine.deleteFrame(id)) {
+                  onComplete(engine.dropFrame(id)) {
                     case Success(_) => complete("OK")
                     case Failure(ex) => throw ex
                   }

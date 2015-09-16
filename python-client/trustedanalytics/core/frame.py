@@ -264,10 +264,10 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
         Current frame life cycle status.
 
-        One of three statuses: Active, Deleted, Deleted_Final
-           Active:   Frame is available for use
-           Deleted:  Frame has been scheduled for deletion can be unscheduled by modifying
-           Deleted_Final: Frame's backend files have been removed from disk.
+        One of three statuses: Active, Dropped, Finalized
+           Active:    Entity is available for use
+           Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+           Finalized: Entity's data has been deleted
 
         Examples
         --------
@@ -286,6 +286,15 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             u'Active'
         """
         return self._backend.get_status(self)
+
+    @api
+    @property
+    @returns(data_type=str, description="Date string of the last time this frame's data was accessed")
+    def __last_read_date(self):
+        """
+        Last time this frame's data was accessed.
+        """
+        return self._backend.get_last_read_date(self)
 
     @api
     @has_udf_arg

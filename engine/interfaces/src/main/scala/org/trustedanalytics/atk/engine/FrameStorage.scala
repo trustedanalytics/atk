@@ -37,7 +37,6 @@ trait FrameStorage {
   def renameColumns(frame: FrameEntity, namePairs: Seq[(String, String)])(implicit invocation: Invocation): FrameEntity
   def getRows(frame: FrameEntity, offset: Long, count: Long)(implicit invocation: Invocation): Iterable[Array[Any]]
   def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]]
-  def drop(frame: FrameEntity)(implicit invocation: Invocation)
   def loadFrameData(context: Context, frame: FrameEntity)(implicit invocation: Invocation): Data
   def saveFrameData(frame: FrameReference, data: Data)(implicit invocation: Invocation): FrameEntity
 
@@ -59,7 +58,7 @@ trait FrameStorage {
   def lookupErrorFrame(frame: FrameEntity)(implicit invocation: Invocation): Option[FrameEntity]
   def sizeInBytes(frameEntity: FrameEntity)(implicit invocation: Invocation): Option[Long]
 
-  def scheduleDeletion(frame: FrameEntity)(implicit invocation: Invocation): Unit
+  def dropFrame(frame: FrameEntity)(implicit invocation: Invocation): Unit
 }
 
 /**

@@ -112,7 +112,6 @@ class ExportToGraphPlugin extends SparkCommandPlugin[GraphNoArgs, GraphEntity] {
     vertices.unpersist()
     edges.unpersist()
 
-    targetGraph.incrementIdCounter(Math.max(maxVertexId, maxEdgeId) + 1)
     targetGraph
   }
 

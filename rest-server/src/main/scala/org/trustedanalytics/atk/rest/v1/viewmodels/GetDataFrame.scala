@@ -25,7 +25,11 @@ import org.trustedanalytics.atk.domain.schema.Schema
  * @param name name assigned by user
  * @param schema the schema of the frame (defines columns, etc)
  * @param rowCount the number of rows in the frames
- * @param links
+ * @param links sundry links for the frame
+ * @param errorFrameUri uri of the error frame, if it exists
+ * @param entityType type of entity, in this case probably "frame"
+ * @param status status of the entity, like Active or Dropped...
+ * @param lastReadDate the last time data from this frame was accessed
  */
 
 case class GetDataFrame(uri: String,
@@ -35,7 +39,8 @@ case class GetDataFrame(uri: String,
                         links: List[RelLink],
                         errorFrameUri: Option[String],
                         entityType: String,
-                        status: String) {
+                        status: String,
+                        lastReadDate: String) {
   require(uri != null, "uri must not be null")
   require(name != null, "name must not be null")
   require(schema != null, "schema must not be null")
