@@ -1,0 +1,91 @@
+.. _python_api/graphs/graph-titan/annotate_weighted_degrees:
+
+
+:doc:`TitanGraph <index>`  annotate_weighted_degrees
+****************************************************
+
+------
+
+
+.. function:: annotate_weighted_degrees(self, output_property_name, degree_option=None, input_edge_labels=None, edge_weight_property=None, edge_weight_default=None)
+
+    Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+
+
+    :Parameters:
+
+        **output_property_name** : unicode
+
+        ..
+
+            property name of where to store output
+
+
+
+        **degree_option** : unicode (default=None)
+
+        ..
+
+            choose from 'out', 'in', 'undirected'
+
+
+
+        **input_edge_labels** : list (default=None)
+
+        ..
+
+            labels of edge types that should be included
+
+
+
+        **edge_weight_property** : unicode (default=None)
+
+        ..
+
+            property name of edge weight, if not provided all edges are weighted equally
+
+
+
+        **edge_weight_default** : float64 (default=None)
+
+        ..
+
+            default edge weight
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Pulls graph from underlying store, calculates weighted degrees and writes them into the property
+    specified, and then writes the output graph to the underlying store.
+
+    **Degree Calculation**
+
+    A fundamental quantity in graph analyses is the degree of a vertex:
+    The degree of a vertex is the number of edges adjacent to it.
+
+    For a directed edge relation, a vertex has both an out-degree (the number of
+    edges leaving the vertex) and an in-degree (the number of edges entering the
+    vertex).
+
+    The toolkit provides a routine :ref:`annotate_degrees
+    <python_api/graphs/graph-/annotate_weighted_degrees>`
+    for calculating the degrees of vertices.
+    This calculation could be performed with a Gremlin query on smaller datasets
+    because Gremlin queries cannot be executed on a distributed scale.
+    The |PACKAGE| routine ``annotate_degrees`` can be executed at distributed scale.
+
+    In the presence of edge weights, vertices can have weighted degrees: The
+    weighted degree of a vertex is the sum of weights of edges adjacent to it.
+    Analogously, the weighted in-degree of a vertex is the sum of the weights of
+    the edges entering it, and the weighted out-degree is the sum
+    of the weights of the edges leaving the vertex.
+
+    The toolkit provides this routine for the distributed calculation of weighted
+    vertex degrees.

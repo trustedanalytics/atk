@@ -1,0 +1,40 @@
+/***************************/
+/*         Header          */
+/***************************/
+
+body {
+    margin:0px;
+    background:#F5F5F5;
+}
+
+#header-container {
+    width:100%;
+    position:fixed;
+    top:0px;
+    height:80px;
+}
+
+#header {
+    height:65px;
+    background:#0071C5;  /* Intel Blue is decimal R:0 G:113 B:197 */
+    border:2px solid #CCC;
+    width:100%;
+    margin:3px auto;
+    font:42px Palatino, Cambria, Times, serif;
+}
+
+
+/***********/
+/* Content */
+/***********/
+
+#content {
+    width:960px;
+    background: #F5F5F5;
+    border: 1px solid #CCC;
+    height: 20000px;
+    margin: 70px auto;
+    font:10px Helvetica, Calibri, Arial, sans-serif;
+
+}
+

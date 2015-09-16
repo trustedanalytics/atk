@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame bin_column &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame bin_column_equal_depth" href="bin_column_equal_depth.html" >
+    <link rel="prev" title="VertexFrame assign_sample" href="assign_sample.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="assign_sample.html" title="VertexFrame assign_sample"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="bin_column_equal_depth.html" title="VertexFrame bin_column_equal_depth"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-bin-column">
+<span id="python-api-frames-frame-vertex-bin-column"></span><h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  bin_column<a class="headerlink" href="#vertexframe-bin-column" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="bin_column">
+<code class="descname">bin_column</code><span class="sig-paren">(</span><em>self</em>, <em>column_name</em>, <em>cutoffs</em>, <em>include_lowest=None</em>, <em>strict_binning=None</em>, <em>bin_column_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#bin_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classify data into user-defined groups.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_name</strong> : unicode</p>
+<blockquote>
+<div><p>Name of the column to bin.</p>
+</div></blockquote>
+<p><strong>cutoffs</strong> : list</p>
+<blockquote>
+<div><p>Array of values containing bin cutoff points.
+Array can be list or tuple.
+Array values must be progressively increasing.
+All bin boundaries must be included, so, with N bins, you need N+1 values.</p>
+</div></blockquote>
+<p><strong>include_lowest</strong> : bool (default=None)</p>
+<blockquote>
+<div><p>Specify how the boundary conditions are handled.
+True indicates that the lower bound of the bin is inclusive.
+False indicates that the upper bound is inclusive.
+Default is True.</p>
+</div></blockquote>
+<p><strong>strict_binning</strong> : bool (default=None)</p>
+<blockquote>
+<div><p>Specify how values outside of the cutoffs array should be binned.
+If set to True, each value less than cutoffs[0] or greater than
+cutoffs[-1] will be assigned a bin value of -1.
+If set to False, values less than cutoffs[0] will be included in the first
+bin while values greater than cutoffs[-1] will be included in the final
+bin.</p>
+</div></blockquote>
+<p><strong>bin_column_name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>The name for the new binned column.
+Default is <code class="docutils literal"><span class="pre">&lt;column_name&gt;_binned</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: _Unit</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Summarize rows of data based on the value in a single column by sorting them
+into bins, or groups, based on a list of bin cutoff points.</p>
+<p><strong>Notes</strong></p>
+<ol class="arabic simple">
+<li>Unicode in column names is not supported and will likely cause the
+drop_frames() method (and others) to fail!</li>
+<li>Bins IDs are 0-index: the lowest bin number is 0.</li>
+<li>The first and last cutoffs are always included in the bins.
+When include_lowest is <code class="docutils literal"><span class="pre">True</span></code>, the last bin includes both cutoffs.
+When include_lowest is <code class="docutils literal"><span class="pre">False</span></code>, the first bin (bin 0) includes both
+cutoffs.</li>
+</ol>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

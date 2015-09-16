@@ -1,0 +1,169 @@
+.. _rest_api/v1/commands/graph__annotate_weighted_degrees:
+
+
+
+-------------------------------------------------------
+:doc:`Commands <index>` graph/annotate_weighted_degrees
+-------------------------------------------------------
+
+Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/annotate_weighted_degrees
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f66757730d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **output_property_name** : unicode
+
+    ..
+
+        property name of where to store output
+
+
+
+    **degree_option** : unicode (default=None)
+
+    ..
+
+        choose from 'out', 'in', 'undirected'
+
+
+
+    **input_edge_labels** : list (default=None)
+
+    ..
+
+        labels of edge types that should be included
+
+
+
+    **edge_weight_property** : unicode (default=None)
+
+    ..
+
+        property name of edge weight, if not provided all edges are weighted equally
+
+
+
+    **edge_weight_default** : float64 (default=None)
+
+    ..
+
+        default edge weight
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Pulls graph from underlying store, calculates weighted degrees and writes them into the property
+specified, and then writes the output graph to the underlying store.
+
+**Degree Calculation**
+
+A fundamental quantity in graph analyses is the degree of a vertex:
+The degree of a vertex is the number of edges adjacent to it.
+
+For a directed edge relation, a vertex has both an out-degree (the number of
+edges leaving the vertex) and an in-degree (the number of edges entering the
+vertex).
+
+The toolkit provides a routine :ref:`annotate_degrees
+<python_api/graphs/graph-/annotate_weighted_degrees>`
+for calculating the degrees of vertices.
+This calculation could be performed with a Gremlin query on smaller datasets
+because Gremlin queries cannot be executed on a distributed scale.
+The |PACKAGE| routine ``annotate_degrees`` can be executed at distributed scale.
+
+In the presence of edge weights, vertices can have weighted degrees: The
+weighted degree of a vertex is the sum of weights of edges adjacent to it.
+Analogously, the weighted in-degree of a vertex is the sum of the weights of
+the edges entering it, and the weighted out-degree is the sum
+of the weights of the edges leaving the vertex.
+
+The toolkit provides this routine for the distributed calculation of weighted
+vertex degrees.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Virtual Machines &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Administration" href="ad_over.html" >
+    <link rel="next" title="Best Known Methods (Admin)" href="ad_bkm.html" >
+    <link rel="prev" title="Scoring Engine" href="ad_scoring_engine.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" accesskey="U">Administration</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_scoring_engine.html" title="Scoring Engine"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_bkm.html" title="Best Known Methods (Admin)"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="virtual-machines">
+<span id="ad-inst-vm"></span><h1>Virtual Machines<a class="headerlink" href="#virtual-machines" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<span id="index-0"></span><p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id33">Introduction</a></li>
+<li><a class="reference internal" href="#requirements" id="id34">Requirements</a></li>
+<li><a class="reference internal" href="#download-vm-image" id="id35">Download <abbr title="Virtual Machine">VM</abbr> Image</a></li>
+<li><a class="reference internal" href="#windows-gui-client" id="id36">Windows GUI Client</a></li>
+<li><a class="reference internal" href="#extract-archive" id="id37">Extract Archive</a><ul>
+<li><a class="reference internal" href="#extracting-on-windows" id="id38">Extracting On Windows</a></li>
+<li><a class="reference internal" href="#extracting-on-linux" id="id39">Extracting On Linux</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#import-image" id="id40">Import Image</a></li>
+<li><a class="reference internal" href="#running-package-vm-image" id="id41">Running Trusted Analytics <abbr title="Virtual Machine">VM</abbr> Image</a><ul>
+<li><a class="reference internal" href="#before-starting" id="id42">Before starting</a></li>
+<li><a class="reference internal" href="#sample-scripts" id="id43">Sample Scripts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#eclipse-pydev" id="id44">Eclipse/PyDev</a></li>
+<li><a class="reference internal" href="#logs" id="id45">Logs</a></li>
+<li><a class="reference internal" href="#updating" id="id46">Updating</a></li>
+<li><a class="reference internal" href="#common-vm-problems" id="id47">Common VM problems</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This guide goes through the download and import of Trusted Analytics beta on a virtual
+machine (VM).
+Currently Trusted Analytics <abbr title="Virtual Machine">VM</abbr> only supports
+<a class="reference external" href="https://www.virtualbox.org/">Virtual Box</a>.
+These instructions do not cover the installation of Virtual Box.
+Virtual Box supports many platforms and can be <a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">downloaded for free</a>.
+The installation documentation is also
+<a class="reference external" href="https://www.virtualbox.org/manual/UserManual.html">available online</a>.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>12GB of memory needs to be allocated to the <abbr title="Virtual Machine">VM</abbr></li>
+<li>45GB of free hard drive space</li>
+<li>Working Virtual Box 4.3 installation</li>
+</ul>
+</div>
+<div class="section" id="download-vm-image">
+<h2>Download <abbr title="Virtual Machine">VM</abbr> Image<a class="headerlink" href="#download-vm-image" title="Permalink to this headline">¶</a></h2>
+<p>Open a Linux shell (or for Windows user a command prompt) to run the
+various commands.</p>
+<p>The <abbr title="Virtual Machine">VM</abbr> image is downloaded from AWS.
+The download requires the AWS Command Line Interface (CLI) client.
+Instructions for downloading and installing CLI can be found at
+<a class="reference external" href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html">Amazon cli documentation</a>.</p>
+<p>After installing the interface, verify the installation by running:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ aws --version
+</pre></div>
+</div>
+<p>The result should be similar to this:</p>
+<div class="highlight-python"><div class="highlight"><pre>aws-cli/1.2.9 Python/2.7.6 Linux/3.8.0-35-generic
+</pre></div>
+</div>
+<p>Take note of the aws-cli version, as it must be greater or equal to 1.2.9.
+Older versions of the aws-cli client does not work with the restricted
+permissions.</p>
+<p>The aws-cli client can be updated with pip or
+download the new Windows MSI (reference <a class="reference internal" href="#windows-gui-client"><span>Windows GUI Client</span></a>).</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo pip install -U awscli
+</pre></div>
+</div>
+<p>After aws installation, run:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ aws configure
+</pre></div>
+</div>
+<p>The program prompts for the access and secret tokens given at registration.
+When prompted for the &#8220;Default region name&#8221;, use &#8220;us-west-2&#8221;.
+When prompted for the &#8220;Default output format&#8221;, use &#8220;json&#8221;.</p>
+<div class="highlight-python"><div class="highlight"><pre>AWS Access Key ID [None]: &lt;my access key&gt;
+AWS Secret Access Key [None]: &lt;my secret key&gt;
+Default region name [None]: &lt;us-west-2&gt;
+Default output format [None]: &lt;json&gt;
+</pre></div>
+</div>
+<p>List the files in the directory:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ aws s3 ls s3://trustedanalytics-repo/release/latest/vm/
+2014-08-19 12:57:03           0
+2014-11-25 16:22:57          70 TrustedAnalytics-VM.md5
+2014-11-25 16:22:57 14656025025 TrustedAnalytics-VM.tar.gz
+</pre></div>
+</div>
+<p>Download the tar.gz file.
+In this case, it&#8217;s &#8216;TrustedAnalytics-VM.tar.gz&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ aws s3 cp s3://trustedanalytics-repo/release/latest/vm/TrustedAnalytics-VM.tar.gz ./
+</pre></div>
+</div>
+<p>[<a class="reference internal" href="#extract-archive"><span>Skip section about Windows GUI Client</span></a>].</p>
+</div>
+<div class="section" id="windows-gui-client">
+<span id="id1"></span><h2>Windows GUI Client<a class="headerlink" href="#windows-gui-client" title="Permalink to this headline">¶</a></h2>
+<p>If you are on a Windows machine, and you prefer a GUI client, use the
+<a class="reference external" href="http://s3browser.com/">S3Browser</a> to download the <abbr title="Virtual Machine">VM</abbr>.</p>
+<ol class="arabic">
+<li><p class="first">Download the Windows MSI <a class="reference external" href="http://s3browser.com/download.php">http://s3browser.com/download.php</a>.</p>
+</li>
+<li><p class="first">Install and open the S3Browser application.</p>
+</li>
+<li><p class="first">Add the keys provided.</p>
+<ol class="upperalpha">
+<li><p class="first">Navigate to:</p>
+<ol class="arabic simple">
+<li><strong>Accounts</strong></li>
+<li><strong>Add new account</strong></li>
+</ol>
+<p>or press <strong>Ctrl</strong> + <strong>Shift</strong> + <strong>A</strong>.</p>
+<p>See <a class="reference internal" href="#fig-15-01"><span>Fig. 15.1</span></a>.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-15-01"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_add_new_acct.png"><img alt="f_images/ad_inst_vm_add_new_acct.png" src="f_images/ad_inst_vm_add_new_acct.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.1
+Add New Account</span></p>
+</div>
+</li>
+<li><p class="first">In the account creation window:</p>
+<ol class="arabic simple">
+<li>Add your access and secret keys</li>
+<li>Give the account a name</li>
+</ol>
+<p>See <a class="reference internal" href="#fig-15-02"><span>Fig. 15.2</span></a>.</p>
+<div class="figure align-center" id="id5">
+<span id="fig-15-02"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_new_acct_info.png"><img alt="f_images/ad_inst_vm_new_acct_info.png" src="f_images/ad_inst_vm_new_acct_info.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.2
+New Account Information</span></p>
+</div>
+</li>
+</ol>
+</li>
+<li><p class="first">Navigate to:</p>
+<ol class="upperalpha simple">
+<li><strong>Buckets</strong></li>
+<li><strong>Add External Bucket</strong></li>
+</ol>
+<p>or press <strong>Ctrl</strong> + <strong>E</strong>.</p>
+<p>See <a class="reference internal" href="#fig-15-03"><span>Fig. 15.3</span></a>.</p>
+<div class="figure align-center" id="id7">
+<span id="fig-15-03"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_add_bucket.png"><img alt="f_images/ad_inst_vm_add_bucket.png" src="f_images/ad_inst_vm_add_bucket.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.3
+Add External Bucket</span></p>
+</div>
+</li>
+<li><p class="first">Add the bucket url &#8220;trustedanalytics-repo/release&#8221;,
+then click <strong>Add External bucket</strong>.
+See <a class="reference internal" href="#fig-15-04"><span>Fig. 15.4</span></a>.</p>
+<div class="figure align-center" id="id9">
+<span id="fig-15-04"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_bucket_name.png"><img alt="f_images/ad_inst_vm_bucket_name.png" src="f_images/ad_inst_vm_bucket_name.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.4
+Give Bucket Name</span></p>
+</div>
+</li>
+<li><p class="first">After adding the bucket, a list of folders shows up on the right.
+See <a class="reference internal" href="#fig-15-05"><span>Fig. 15.5</span></a>.</p>
+<div class="figure align-center" id="id11">
+<span id="fig-15-05"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_check_folder_list.png"><img alt="f_images/ad_inst_vm_check_folder_list.png" src="f_images/ad_inst_vm_check_folder_list.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.5
+Check Folder List</span></p>
+</div>
+</li>
+<li><p class="first">Select the appropriate version, and navigate to the <abbr title="Virtual Machine">VM</abbr> folder,
+then right click and download the &#8220;tar.gz&#8221; file.
+See <a class="reference internal" href="#fig-15-06"><span>Fig. 15.6</span></a>.</p>
+<div class="figure align-center" id="id13">
+<span id="fig-15-06"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_download_file.png"><img alt="f_images/ad_inst_vm_download_file.png" src="f_images/ad_inst_vm_download_file.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.6
+Download File</span></p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="extract-archive">
+<span id="id2"></span><h2>Extract Archive<a class="headerlink" href="#extract-archive" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="extracting-on-windows">
+<h3>Extracting On Windows<a class="headerlink" href="#extracting-on-windows" title="Permalink to this headline">¶</a></h3>
+<p>Extracting on Windows is relatively easy.
+Use <a class="reference external" href="http://7-zip.org/">7zip</a> (or equivalent tool) to extract the archive.</p>
+</div>
+<div class="section" id="extracting-on-linux">
+<h3>Extracting On Linux<a class="headerlink" href="#extracting-on-linux" title="Permalink to this headline">¶</a></h3>
+<p>After acquiring the <abbr title="Virtual Machine">VM</abbr>, extract the archive:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ tar -xvf TrustedAnalytics-VM.tar.gz
+</pre></div>
+</div>
+<p>After extraction, there should be two (2) files,
+one with the extension &#8216;vmdk&#8217;, and another with the extension &#8216;ovf&#8217;.</p>
+</div>
+</div>
+<div class="section" id="import-image">
+<h2>Import Image<a class="headerlink" href="#import-image" title="Permalink to this headline">¶</a></h2>
+<p>To import the <abbr title="Virtual Machine">VM</abbr> image, do the following steps in Virtual Box.</p>
+<ol class="arabic">
+<li><p class="first">Go to the <strong>File</strong> menu, then <strong>Import Appliance</strong>.
+See <a class="reference internal" href="#fig-15-07"><span>Fig. 15.7</span></a>.</p>
+<div class="figure align-center" id="id15">
+<span id="fig-15-07"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_file_import_app.png"><img alt="f_images/ad_inst_vm_file_import_app.png" src="f_images/ad_inst_vm_file_import_app.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.7
+File -&gt; Import Appliance</span></p>
+</div>
+</li>
+<li><p class="first">Select the file with the extension &#8216;ovf&#8217;, which was extracted earlier from
+the <abbr title="Virtual Machine">VM</abbr> image.
+See <a class="reference internal" href="#fig-15-08"><span>Fig. 15.8</span></a>.</p>
+<div class="figure align-center" id="id17">
+<span id="fig-15-08"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_app_to_import.png"><img alt="f_images/ad_inst_vm_app_to_import.png" src="f_images/ad_inst_vm_app_to_import.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.8
+Appliance to Import</span></p>
+</div>
+</li>
+<li><p class="first">Import the Trusted Analytics <abbr title="Virtual Machine">VM</abbr>.
+See <a class="reference internal" href="#fig-15-09"><span>Fig. 15.9</span></a>.</p>
+<div class="figure align-center" id="id19">
+<span id="fig-15-09"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_app_settings.png"><img alt="f_images/ad_inst_vm_app_settings.png" src="f_images/ad_inst_vm_app_settings.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.9
+Appliance Settings</span></p>
+</div>
+</li>
+<li><p class="first">After clicking <strong>Import</strong>, wait for the <abbr title="Virtual Machine">VM</abbr> to be imported.
+See <a class="reference internal" href="#fig-15-10"><span>Fig. 15.10</span></a>.</p>
+<div class="figure align-center" id="id21">
+<span id="fig-15-10"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_watch_import.png"><img alt="f_images/ad_inst_vm_watch_import.png" src="f_images/ad_inst_vm_watch_import.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.10
+Watching Appliance Import</span></p>
+</div>
+</li>
+<li><p class="first">Once the <abbr title="Virtual Machine">VM</abbr> is imported, boot the <abbr title="Virtual Machine">VM</abbr> by selecting the <abbr title="Virtual Machine">VM</abbr> and
+clicking <strong>Start</strong>.
+See <a class="reference internal" href="#fig-15-11"><span>Fig. 15.11</span></a>.</p>
+<div class="figure align-center" id="id23">
+<span id="fig-15-11"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_boot_vm.png"><img alt="f_images/ad_inst_vm_boot_vm.png" src="f_images/ad_inst_vm_boot_vm.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.11
+Boot the VM</span></p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="running-package-vm-image">
+<h2>Running Trusted Analytics <abbr title="Virtual Machine">VM</abbr> Image<a class="headerlink" href="#running-package-vm-image" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="before-starting">
+<h3>Before starting<a class="headerlink" href="#before-starting" title="Permalink to this headline">¶</a></h3>
+<p>After every reboot of the <abbr title="Virtual Machine">VM</abbr>, the Trusted Analytics server must also be restarted.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo service trustedanalytics restart
+</pre></div>
+</div>
+<p>Upon restart, if the service wasn&#8217;t running before it was told to stop,
+the system reports:</p>
+<div class="highlight-python"><div class="highlight"><pre>initctl: Unknown instance:
+</pre></div>
+</div>
+<p>This message can be safely ignored.</p>
+</div>
+<div class="section" id="sample-scripts">
+<h3>Sample Scripts<a class="headerlink" href="#sample-scripts" title="Permalink to this headline">¶</a></h3>
+<p>The <abbr title="Virtual Machine">VM</abbr> is pre-configured and installed with Trusted Analytics.
+Several examples and datasets are included to get people
+familiar with the coding and behavior of Trusted Analytics.</p>
+<p>The examples are located in &#8216;/home/cloudera/examples&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre>drwxr-xr-x 2 cloudera cloudera 4096 Aug  1 00:53 datasets
+-rw-r--r-- 1 cloudera cloudera 1100 Aug  1 10:15 lbp.py
+-rw-r--r-- 1 cloudera cloudera  707 Aug  1 00:53 lda.py
+-rw-r--r-- 1 cloudera cloudera  930 Aug  1 00:53 lp.py
+</pre></div>
+</div>
+<p>The datasets are located in &#8216;/home/cloudera/examples/datasets&#8217; and
+&#8216;hdfs://user/trustedanalytics/datasets/&#8217;.</p>
+<div class="highlight-python"><div class="highlight"><pre>-rw-r--r--   1 atkuser atkuser        122 2014-08-01 /user/trustedanalytics/datasets/README
+-rw-r--r--   1 atkuser atkuser     617816 2014-08-01 /user/trustedanalytics/datasets/apl.csv
+-rw-r--r--   1 atkuser atkuser    8162836 2014-08-01 /user/trustedanalytics/datasets/lbp_edge.csv
+-rw-r--r--   1 atkuser atkuser     188470 2014-08-01 /user/trustedanalytics/datasets/lp_edge.csv
+-rw-r--r--   1 atkuser atkuser  311641390 2014-08-01 /user/trustedanalytics/datasets/test_lda.csv
+</pre></div>
+</div>
+<p>The datasets in &#8216;/home/cloudera/examples/datasets&#8217; are for reference.
+The actual data that is being used by the Python examples and the Trusted Analytics server
+is in &#8216;hdfs://user/trustedanalytics/datasets&#8217;.</p>
+<p>To run any of the Python example scripts, start in the examples directory and
+start Python with the script name:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python &lt;SCRIPT_NAME&gt;.py
+</pre></div>
+</div>
+<p>where <code class="docutils literal"><span class="pre">&lt;SCRIPT_NAME&gt;</span></code> is any of the scripts in &#8216;/home/cloudera/example&#8217;.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd /home/cloudera/examples
+$ python pr.py
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="eclipse-pydev">
+<span id="index-1"></span><h2>Eclipse/PyDev<a class="headerlink" href="#eclipse-pydev" title="Permalink to this headline">¶</a></h2>
+<p>The <abbr title="Virtual Machine">VM</abbr> comes with Eclipse and PyDev installed and ready for use.
+Importing the example scripts is easy.</p>
+<ol class="arabic">
+<li><p class="first">Go to the desktop, and double-click on the Eclipse icon.</p>
+</li>
+<li><p class="first">Go to <strong>File</strong> menu, and select <strong>New</strong> and then <strong>Other</strong>.</p>
+<p>See <a class="reference internal" href="#fig-15-12"><span>Fig. 15.12</span></a>.</p>
+<div class="figure align-center" id="id25">
+<span id="fig-15-12"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_start_eclipse.png"><img alt="f_images/ad_inst_vm_start_eclipse.png" src="f_images/ad_inst_vm_start_eclipse.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.12
+Starting Eclipse</span></p>
+</div>
+</li>
+<li><p class="first">After selecting <strong>File</strong>-&gt;**New**-&gt;**Other**, look for the PyDev folder
+and expand the list, then select <strong>PyDev Project</strong> then click <strong>Next</strong>.
+See <a class="reference internal" href="#fig-15-13"><span>Fig. 15.13</span></a>.</p>
+<div class="figure align-center" id="id27">
+<span id="fig-15-13"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_new_pydev.png"><img alt="f_images/ad_inst_vm_new_pydev.png" src="f_images/ad_inst_vm_new_pydev.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.13
+New PyDev Project</span></p>
+</div>
+</li>
+<li><p class="first">The only field you have to change is the &#8216;Project Contents&#8217; default
+directory.
+Uncheck &#8216;Use default&#8217; and enter the directory you want to use
+&#8216;/home/cloudera/examples&#8217;.
+Everything else can be left with the default values.
+Click <strong>Next</strong> when you are done.
+See <a class="reference internal" href="#fig-15-14"><span>Fig. 15.14</span></a>.</p>
+<div class="figure align-center" id="id29">
+<span id="fig-15-14"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_working_path.png"><img alt="f_images/ad_inst_vm_working_path.png" src="f_images/ad_inst_vm_working_path.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.14
+Enter Working Path</span></p>
+</div>
+</li>
+<li><p class="first">You should now be able to see all the example scripts on the left hand
+pane.
+See <a class="reference internal" href="#fig-15-15"><span>Fig. 15.15</span></a>.</p>
+<div class="figure align-center" id="id31">
+<span id="fig-15-15"></span><a class="reference internal image-reference" href="f_images/ad_inst_vm_example_scripts.png"><img alt="f_images/ad_inst_vm_example_scripts.png" src="f_images/ad_inst_vm_example_scripts.png" style="width: 60%;" /></a>
+<p class="caption"><span class="caption-text">Fig. 15.15
+Examining Example Scripts</span></p>
+</div>
+</li>
+</ol>
+</div>
+<div class="section" id="logs">
+<span id="index-2"></span><h2>Logs<a class="headerlink" href="#logs" title="Permalink to this headline">¶</a></h2>
+<p>To debug changes to the scripts (or to peek behind the curtain), the log
+file is &#8216;/var/log/trustedanalytics/rest-server/output.log&#8217;.
+To show the log as it is generated, run <code class="docutils literal"><span class="pre">tail</span> <span class="pre">-f</span></code>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo tail -f /var/log/trustedanalytics/rest-server/output.log
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating">
+<h2>Updating<a class="headerlink" href="#updating" title="Permalink to this headline">¶</a></h2>
+<p>Upon receipt of access and secret tokens, edit &#8216;/etc/yum.repos.d/ta.repo&#8217; and
+replace <em>myKey</em> and <em>mySecret</em>.
+Afterwards, it is recommended to run <code class="docutils literal"><span class="pre">yum</span></code> commands to check for and perform
+updates.</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo [vi|vim] /etc/yum.repos.d/ta.repo
+
+[Trusted Analytics repo]
+name=Trusted Analytics yum repo
+baseurl=https://s3-us-west-2.amazonaws.com/trustedanalytics-repo/release/latest/yum/dists/rhel/6
+gpgcheck=0
+priority=1
+#enabled=0
+s3_enabled=0
+key_id=myKey
+secret_key=mySecret
+</pre></div>
+</div>
+<p>To check for new updates and see the difference between the new and installed
+version:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo yum info trustedanalytics-rest-server
+</pre></div>
+</div>
+<p>To update:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo yum update trustedanalytics-rest-server
+</pre></div>
+</div>
+</div>
+<div class="section" id="common-vm-problems">
+<h2>Common VM problems<a class="headerlink" href="#common-vm-problems" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>The VM doesn&#8217;t have enough memory allocated.</li>
+<li>The TA REST server wasn&#8217;t restarted after restart or boot.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

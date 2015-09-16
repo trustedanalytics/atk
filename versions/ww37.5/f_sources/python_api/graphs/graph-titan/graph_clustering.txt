@@ -1,0 +1,33 @@
+.. _python_api/graphs/graph-titan/graph_clustering:
+
+
+:doc:`TitanGraph <index>`  graph_clustering
+*******************************************
+
+------
+
+
+.. function:: graph_clustering(self, edge_distance)
+
+    Performs graph clustering over an initial titan graph.
+
+
+    :Parameters:
+
+        **edge_distance** : unicode
+
+        ..
+
+            Column name for the edge distance.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Performs graph clustering over an initial titan graph using a distributed edge collapse algorithm.

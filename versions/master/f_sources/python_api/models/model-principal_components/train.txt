@@ -1,0 +1,57 @@
+.. _python_api/models/model-principal_components/train:
+
+
+:doc:`PrincipalComponentsModel <index>`  train
+**********************************************
+
+------
+
+
+.. function:: train(self, frame, observation_columns, mean_centered=True, k=None)
+
+    Build principal components model.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing the observations.
+
+
+
+        **mean_centered** : bool (default=True)
+
+        ..
+
+            Option to mean center the columns
+
+
+
+        **k** : int32 (default=None)
+
+        ..
+
+            Principal component count. Default is the number of observation columns
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Creating a PrincipalComponents Model using the observation columns.

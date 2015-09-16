@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>event-api</artifactId>
+    <version>master-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+    <name>event-api (logging)</name>
+
+    <parent>
+        <groupId>org.trustedanalytics.atk</groupId>
+        <artifactId>TrustedAnalytics</artifactId>
+        <relativePath>../../pom.xml</relativePath>
+        <version>master-SNAPSHOT</version>
+    </parent>
+
+    <description>
+        event-api provides the interfaces and event provides the implementation.
+
+        Unlike other logging frameworks it supports rich event data including nested execution contexts, and delayed
+        translation support.
+    </description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.scalatest</groupId>
+                <artifactId>scalatest-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.scoverage</groupId>
+                <artifactId>maven-scoverage-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+    </dependencies>
+</project>

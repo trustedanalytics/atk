@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-/status:
+
+
+:doc:`Frame <index>`  status
+****************************
+
+------
+
+
+.. attribute:: status
+
+    Current frame life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the frame
+    One of three statuses: Active, Deleted, Deleted_Final
+       Active:   Frame is available for use
+       Deleted:  Frame has been scheduled for deletion can be unscheduled by modifying
+       Deleted_Final: Frame's backend files have been removed from disk.
+
+    Examples
+    --------
+    Given that we have an existing data frame *my_data*, create a Frame,
+    then show the frame schema:
+
+    .. code::
+
+        >>> BF = ta.get_frame('my_data')
+        >>> print BF.status
+
+    The result is:
+
+    .. code::
+
+        u'Active'

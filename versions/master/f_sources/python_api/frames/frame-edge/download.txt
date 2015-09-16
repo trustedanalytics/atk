@@ -1,0 +1,73 @@
+.. _python_api/frames/frame-edge/download:
+
+
+:doc:`EdgeFrame <index>`  download
+**********************************
+
+------
+
+
+.. function:: download(self, n=100, offset=0, columns=None)
+
+    Download a frame from the server into client workspace.
+
+
+    :Parameters:
+
+        **n** : int (default=100)
+
+        ..
+
+            The number of rows to download to the client
+
+
+
+        **offset** : int (default=0)
+
+        ..
+
+            The number of rows to skip before copying
+
+
+
+        **columns** : list (default=None)
+
+        ..
+
+            Column filter, the names of columns to be included (default is all columns)
+
+
+
+
+    :Returns:
+
+        : pandas.DataFrame
+
+        ..
+
+            A new pandas dataframe object containing the downloaded frame data
+    Copies an trustedanalytics Frame into a Pandas DataFrame.
+
+
+    Examples
+    --------
+    Frame *my_frame* accesses a frame with millions of rows of data.
+    Get a sample of 500 rows:
+
+    .. code::
+
+        >>> pandas_frame = my_frame.download( 500 )
+
+    We now have a new frame accessed by a pandas DataFrame *pandas_frame*
+    with a copy of the first 500 rows of the original frame.
+
+    If we use the method with an offset like:
+
+    .. code::
+
+        >>> pandas_frame = my_frame.take( 500, 100 )
+
+    We end up with a new frame accessed by the pandas DataFrame
+    *pandas_frame* again, but this time it has a copy of rows 101 to 600 of
+    the original frame.
+

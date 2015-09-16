@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>com.trustedanalytics.bda</groupId>
+  <artifactId>ititan-core</artifactId>
+  <version>0.4.2-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20140418.151000</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20140418151000</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>0.4.2-20140418.151000-1</value>
+        <updated>20140418151000</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>0.4.2-20140418.151000-1</value>
+        <updated>20140418151000</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

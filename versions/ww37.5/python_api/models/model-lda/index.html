@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Models LdaModel &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models" href="../index.html" >
+    <link rel="next" title="LdaModel new" href="new.html" >
+    <link rel="prev" title="SvmModel train" href="../model-svm/train.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" accesskey="U">Models</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../model-svm/train.html" title="SvmModel train"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="new.html" title="LdaModel new"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="models-ldamodel">
+<span id="python-api-models-model-lda-index"></span><h1><a class="reference internal" href="../index.html"><em>Models</em></a> LdaModel<a class="headerlink" href="#models-ldamodel" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="LdaModel">
+<em class="property">class </em><code class="descname">LdaModel</code><a class="headerlink" href="#LdaModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Latent Dirichlet Allocation model</p>
+<p><strong>Topic Modeling with Latent Dirichlet Allocation</strong></p>
+<p><a class="reference internal" href="../../../glossary.html#term-topic-modeling"><span class="xref std std-term">Topic modeling</span></a> algorithms are a class of statistical approaches to
+partitioning items in a data set into subgroups.
+As the name implies, these algorithms are often used on corpora of textual
+data, where they are used to group documents in the collection into
+semantically-meaningful groupings.
+For an overall introduction to topic modeling, the reader might refer to the
+work of David Blei and Michael Jordan, who are credited with creating and
+popularizing topic modeling in the machine learning community.
+In particular, Blei&#8217;s 2011 paper provides a nice introduction,
+and is freely-available online <a href="#id26"><span class="problematic" id="id27"><span id="id1"></span>[#LDA1]_</span></a> .</p>
+<p><abbr title="Latent Dirichlet Allocation">LDA</abbr> is a commonly-used algorithm for topic modeling, but, more broadly,
+is considered a dimensionality reduction technique.
+It contrasts with other approaches (for example, latent semantic indexing), in
+that it creates what&#8217;s referred to as a generative probabilistic model — a
+statistical model that allows the algorithm to generalize its approach to topic
+assignment to other, never-before-seen data points.
+For the purposes of exposition, we&#8217;ll limit the scope of our discussion of
+<abbr title="Latent Dirichlet Allocation">LDA</abbr> to the world of natural language processing, as it has an intuitive use
+there (though <abbr title="Latent Dirichlet Allocation">LDA</abbr> can be used on other types of data).
+In general, <abbr title="Latent Dirichlet Allocation">LDA</abbr> represents documents as random mixtures over topics in the
+corpus.
+This makes sense because any work of writing is rarely about a single subject.
+Take the case of a news article on the President of the United States of
+America&#8217;s approach to healthcare as an example.
+It would be reasonable to assign topics like President, USA, health insurance,
+politics, or healthcare to such a work, though it is likely to primarily
+discuss the President and healthcare.</p>
+<p><abbr title="Latent Dirichlet Allocation">LDA</abbr> assumes that input corpora contain documents pertaining to a given number
+of topics, each of which are associated with a variety of words, and that each
+document is the result of a mixture of probabilistic samplings: first over the
+distribution of possible topics for the corpora, and second over the list of
+possible words in the selected topic.
+This generative assumption confers one of the main advantages <abbr title="Latent Dirichlet Allocation">LDA</abbr> holds over
+other topic modeling approaches, such as probabilistic and regular <abbr title="Latent Semantic Indexing">LSI</abbr>.
+As a generative model, <abbr title="Latent Dirichlet Allocation">LDA</abbr> is able to generalize the model it uses to
+separate documents into topics to documents outside the corpora.
+For example, this means that using <abbr title="Latent Dirichlet Allocation">LDA</abbr> to group online news articles into
+categories like Sports, Entertainment, and Politics, it would be possible to
+use the fitted model to help categorize newly-published news stories.
+Such an application is beyond the scope of approaches like <abbr title="Latent Semantic Indexing">LSI</abbr>.
+What&#8217;s more, when fitting an <abbr title="Latent Semantic Indexing">LSI</abbr> model, the number of parameters that have
+to be estimated scale linearly with the number of documents in the corpus,
+whereas the number of parameters to estimate for an <abbr title="Latent Dirichlet Allocation">LDA</abbr> model scales with the
+number of topics — a much lower number, making it much better-suited to working
+with large data sets.</p>
+<p><strong>The Typical Latent Dirichlet Allocation Workflow</strong></p>
+<p>Although every user is likely to have his or her own habits and preferred
+approach to topic modeling a document corpus, there is a general workflow that
+is a good starting point when working with new data.
+The general steps to the topic modeling with <abbr title="Latent Dirichlet Allocation">LDA</abbr> include:</p>
+<ol class="arabic simple">
+<li>Data preparation and ingest</li>
+<li>Assignment to training or testing partition</li>
+<li>Graph construction</li>
+<li>Training <abbr title="Latent Dirichlet Allocation">LDA</abbr></li>
+<li>Evaluation</li>
+<li>Interpretation of results</li>
+</ol>
+<p><strong>Data preparation and ingest</strong></p>
+<p>Most topic modeling workflows involve several data pre-processing and cleaning
+steps.
+Depending on the characteristics of the data being analyzed, there are
+different best-practices to use here, so it&#8217;s important to be familiar with
+the standard procedures for analytics in the domain from which the text
+originated.
+For example, in the biomedical text analytics community, it is common practice
+for text analytics workflows to involve pre-processing for identifying negation
+statements (Chapman et al., 2001 <a href="#id28"><span class="problematic" id="id29"><span id="id2"></span>[#LDA2]_</span></a> ).
+The reason for this is many analysts in that domain are examining text for
+diagnostic statements — thus, failing to identify a negated statement in which
+a disease is mentioned could lead to undesirable false-positives, but this
+phenomenon may not arise in every domain.
+In general, both stemming and stop word filtering are recommended steps for
+topic modeling pre-processing.
+Stemming refers to a set of methods used to normalize different tenses and
+variations of the same word (for example, stemmer, stemming, stemmed, and
+stem).
+Stemming algorithms will normalize all variations of a word to one common form
+(for example, stem).
+There are many approaches to stemming, but the Porter Stemming (Porter, 2006
+<a href="#id30"><span class="problematic" id="id31"><span id="id3"></span>[#LDA3]_</span></a> ) is one of the most commonly-used.</p>
+<p>Removing common, uninformative words, or stop word filtering, is another
+commonly-used step in data pre-processing for topic modeling.
+Stop words include words like <em>the</em>, <em>and</em>, or <em>a</em>, but the full list of
+uninformative words can be quite long and depend on the domain producing the
+text in question.
+Example stop word lists online <a href="#id32"><span class="problematic" id="id33"><span id="id4"></span>[#LDA4]_</span></a> can be a great place to start, but
+being aware of the best-practices in the applicalbe field is necessary to
+expand upon these.</p>
+<p>There may be other pre-processing steps needed, depending on the type of text
+being worked with.
+Punctuation removal is frequently recommended, for example.
+To determine what&#8217;s best for the text being analyzed, it helps to understand a
+bit about what how <abbr title="Latent Dirichlet Allocation">LDA</abbr> analyzes the input text.
+To learn the topic model, <abbr title="Latent Dirichlet Allocation">LDA</abbr> will typically look at the frequency of
+individual words across documents, which are determined based on
+space-separation.
+Thus, each word will be interpreted independent of where it occurs in a
+document, and without regard for the words that were written around it.
+In the text analytics field, this is often referred to as a <em>bag of words</em>
+approach to tokenization, the process of separating input text into
+composite features to be analyzed by some algorithm.
+When choosing pre-processing steps, it helps to keep this in mind.
+Don&#8217;t worry too much about removing words or modifying their format — you&#8217;re
+not manipulating your data!
+These steps simply make it easier for the topic modeling algorithm to find the
+latent topics that comprise your corpus.</p>
+<p><strong>Assignment to training or testing partition</strong></p>
+<p>The random assignment to training and testing partitions is an important step
+in most every machine learning workflow.
+It is common practice to withhold a random selection of one&#8217;s data set for the
+purpose of evaluating the accuracy of the model that was learned from the
+training data.
+The results of this evaluation allow the user to confidently speak about the
+generalizability of the trained model.
+When speaking in these terms, be cautious that you only discuss
+generalizability to the broader population from which your data was originally
+obtained.
+If a topic model is trained on neuroscience-related publications,
+for example, evaluating the model on other neuroscience-related publications
+is valid.
+It would not be valid to discuss the model&#8217;s ability to work on documents from
+other domains.</p>
+<p>There are various schools of thought for how to assign a data set to training
+and testing collections, but all agree that the process should be random.
+Where analysts disagree is in the ratio of data to be assigned to each.
+In most situations, the bulk of data will be assigned to the training
+collection, because the more data that can be used to train the algorithm,
+the better the resultant model will typically be.
+It&#8217;s also important that the testing collection have sufficient data to
+be able to reflect the characteristics of the larger
+population from which it was drawn (this becomes an important issue when
+working with data sets with rare topics, for example).
+As a starting point, many people will use a 90%/10% training/test collection
+split, and modify this ratio based on the characteristics of the documents
+being analyzed.</p>
+<p><strong>Graph construction</strong></p>
+<p>Trusted Analytics uses a bipartite graph, to learn an <abbr title="Latent Dirichlet Allocation">LDA</abbr> topic model.
+This graph contains vertices in two columns.
+The left-hand column contains unique ids, each corresponding to a document in
+the training collection, while the right-hand column contains unique ids
+corresponding to each word in the entire training set, following any
+pre-processing steps that were used.
+Connections between these columns, or edges, denote the number of times a
+particular word appears in a document, with the weight on the edge in question
+denoting the number of times the word was found there.
+After graph construction, many analysts choose to normalize the weights using
+one of a variety of normalization schemes.
+One approach is to normalize the weights to sum to 1, while another is to use
+an approach called term frequency-inverse document frequency (tfidf), where the
+resultant weights are meant to reflect how important a word is to a document in
+the corpus.
+Whether to use normalization — or what technique to use — is an open question,
+and will likely depend on the characteristics of the text being analyzed.
+Typical text analytics experiments will try a variety of approaches on a small
+subset of the data to determine what works best.</p>
+<div class="figure align-center" id="id23">
+<span id="ds-mlal-lda-fig-1"></span><img alt="../../../f_images/ds_mlal_lda_1.png" src="../../../f_images/ds_mlal_lda_1.png" />
+<p class="caption"><span class="caption-text">Figure 1 - Example layout of a bipartite graph for LDA.</span></p>
+<div class="legend">
+The left-hand column contains one vertex for each document in the input
+corpus, while the right-hand column contains vertices for each unique word
+found in them.
+Edges connecting left- and right-hand columns denote the number of times
+the word was found in the document the edge connects.
+The weights of the edges used in this example were not normalized.</div>
+</div>
+<p><strong>Training the Model</strong></p>
+<p>In using <abbr title="Latent Dirichlet Allocation">LDA</abbr>, we are trying to model a document collection in terms of topics
+<img class="math" src="../../../f_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, where each <img class="math" src="../../../f_images/math/69b7d1c2cbc4553d99a5e37f8078d1422285d9f9.png" alt="\beta_{K}"/> describes a distribution
+over the set of words in the training corpus.
+Every document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>, then, is a vector of proportions <img class="math" src="../../../f_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+where <img class="math" src="../../../f_images/math/0b423201cc87446c0fcc3fadcb387e3972c88d0e.png" alt="\theta_{d,k}"/> is the proportion of the <img class="math" src="../../../f_images/math/85f8727408c03c41f79e3de553aeda83fce59d4c.png" alt="d^{th}"/> document for
+topic <img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
+The topic assignment for document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is <img class="math" src="../../../f_images/math/578bdc7cd948ad59d5e331724419de33d1bd554f.png" alt="z_{d}"/>, and
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> is the topic assignment for the <img class="math" src="../../../f_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word
+in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+The words observed in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> are :math&#8221;<cite>w_{d}</cite>, and
+<img class="math" src="../../../f_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> is the <img class="math" src="../../../f_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+The generative process for <abbr title="Latent Dirichlet Allocation">LDA</abbr>, then, is the joint distribution of hidden and
+observed values</p>
+<div class="math">
+<p><img src="../../../f_images/math/bb0d00578db59cde3d28908f6372678c9eb103d8.png" alt="p(\beta_{1:K},\theta_{1:D},z_{1:D},w_{1:D} )=\prod_{i=1}^{K} p(\beta_i) \
+\prod_{i=1}^{D} p(\theta_d) \left(\sideset{_{}^{}}{_{n=1}^N}\prod_{}^{} \
+p\left(z_{d,n} | \theta_{d} \right)p\left(w_{d,n} | \beta_{1:K},z_{d,n} \
+\right) \right)"/></p>
+</div><p>This distribution depicts several dependencies: topic assignment
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> depends on the topic proportions <img class="math" src="../../../f_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+and the observed word <img class="math" src="../../../f_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> depends on topic assignment
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> and all the topics <img class="math" src="../../../f_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, for example.
+Although there are no analytical solutions to learning the <abbr title="Latent Dirichlet Allocation">LDA</abbr> model, there
+are a variety of approximate solutions that are used, most of which are based
+on Gibbs Sampling (for example, Porteous et al., 2008 <a href="#id34"><span class="problematic" id="id35"><span id="id5"></span>[#LDA5]_</span></a> ).
+The Trusted Analytics uses an implementation related to this.
+We refer the interested reader to the primary source on this approach to learn
+more (Teh et al., 2006 <a href="#id36"><span class="problematic" id="id37"><span id="id6"></span>[#LDA6]_</span></a> ).</p>
+<p><strong>Evaluation</strong></p>
+<p>As with every machine learning algorithm, evaluating the accuracy of the model
+that has been obtained is an important step before interpreting the results.
+With many types of algorithms, the best practices in this step are
+straightforward — in supervised classification, for example, we know the true
+labels of the data being classified, so evaluating performance can be as simple
+as computing the number of errors, calculating receiver operating
+characteristic, or F1 measure.
+With topic modeling, the situation is not so straightforward.
+This makes sense, if we consider with <abbr title="Latent Dirichlet Allocation">LDA</abbr> we&#8217;re using an algorithm to blindly
+identify logical subgroupings in our data, and we don&#8217;t <em>a priori</em> know the
+best grouping that can be found.
+Evaluation, then, should proceed with this in mind, and an examination of
+homogeneity of the words comprising the documents in each grouping is often
+done.
+This issue is discussed further in Blei&#8217;s 2011 introduction to topic modeling
+<a href="#id38"><span class="problematic" id="id39"><span id="id7"></span>[#LDA7]_</span></a> .
+It is of course possible to evaluate a topic model from a statistical
+perspective using our hold-out testing document collection — and this is a
+recommended best practice — however, such an evaluation does not assess the
+topic model in terms of how they are typically used.</p>
+<p><strong>Interpretation of results</strong></p>
+<p>After running <abbr title="Latent Dirichlet Allocation">LDA</abbr> on a document corpus, users will typically examine the top
+<img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> most frequent words that can be found in each grouping.
+With this information, one is often able to use their own domain expertise to
+think of logical names for each topic (this situation is analogous to the step
+in principal components analysis, wherein statisticians will think of logical
+names for each principal component based on the mixture of dimensions each
+spans).
+Each document, then, can be assigned to a topic, based on the mixture of topics
+it has been assigned.
+Recall that <abbr title="Latent Dirichlet Allocation">LDA</abbr> will assign each document a set of probabilities
+corresponding to each possible topic.
+Researchers will often set some threshold value to make a categorical judgment
+regarding topic membership, using this information.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils footnote" frame="void" id="lda1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><a class="reference external" href="http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf">http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[2]</td><td><a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S1532046401910299">http://www.sciencedirect.com/science/article/pii/S1532046401910299</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[3]</td><td><a class="reference external" href="http://tartarus.org/~martin/PorterStemmer/index.html">http://tartarus.org/~martin/PorterStemmer/index.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[4]</td><td><a class="reference external" href="http://www.textfixer.com/resources/common-english-words.txt">http://www.textfixer.com/resources/common-english-words.txt</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[5]</td><td><a class="reference external" href="http://www.ics.uci.edu/~newman/pubs/fastlda.pdf">http://www.ics.uci.edu/~newman/pubs/fastlda.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[6]</td><td><a class="reference external" href="http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf">http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="lda7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[7]</td><td><a class="reference external" href="http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf">http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<td>Set or get the name of the model object.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#ldamodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<td>Creates Latent Dirichlet Allocation model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, document)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Predict conditional probabilities of topics given document.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, document_column_name, word_column_name, word_count_column_name)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates Latent Dirichlet Allocation model</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="ldamodel-init"></span><dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Latent Dirichlet Allocation model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6675773110&gt;&gt;</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Topic Modeling with Latent Dirichlet Allocation</strong></p>
+<p><a class="reference internal" href="../../../glossary.html#term-topic-modeling"><span class="xref std std-term">Topic modeling</span></a> algorithms are a class of statistical approaches to
+partitioning items in a data set into subgroups.
+As the name implies, these algorithms are often used on corpora of textual
+data, where they are used to group documents in the collection into
+semantically-meaningful groupings.
+For an overall introduction to topic modeling, the reader might refer to the
+work of David Blei and Michael Jordan, who are credited with creating and
+popularizing topic modeling in the machine learning community.
+In particular, Blei&#8217;s 2011 paper provides a nice introduction,
+and is freely-available online <a href="#id40"><span class="problematic" id="id41"><span id="id8"></span>[#LDA1]_</span></a> .</p>
+<p><abbr title="Latent Dirichlet Allocation">LDA</abbr> is a commonly-used algorithm for topic modeling, but, more broadly,
+is considered a dimensionality reduction technique.
+It contrasts with other approaches (for example, latent semantic indexing), in
+that it creates what&#8217;s referred to as a generative probabilistic model — a
+statistical model that allows the algorithm to generalize its approach to topic
+assignment to other, never-before-seen data points.
+For the purposes of exposition, we&#8217;ll limit the scope of our discussion of
+<abbr title="Latent Dirichlet Allocation">LDA</abbr> to the world of natural language processing, as it has an intuitive use
+there (though <abbr title="Latent Dirichlet Allocation">LDA</abbr> can be used on other types of data).
+In general, <abbr title="Latent Dirichlet Allocation">LDA</abbr> represents documents as random mixtures over topics in the
+corpus.
+This makes sense because any work of writing is rarely about a single subject.
+Take the case of a news article on the President of the United States of
+America&#8217;s approach to healthcare as an example.
+It would be reasonable to assign topics like President, USA, health insurance,
+politics, or healthcare to such a work, though it is likely to primarily
+discuss the President and healthcare.</p>
+<p><abbr title="Latent Dirichlet Allocation">LDA</abbr> assumes that input corpora contain documents pertaining to a given number
+of topics, each of which are associated with a variety of words, and that each
+document is the result of a mixture of probabilistic samplings: first over the
+distribution of possible topics for the corpora, and second over the list of
+possible words in the selected topic.
+This generative assumption confers one of the main advantages <abbr title="Latent Dirichlet Allocation">LDA</abbr> holds over
+other topic modeling approaches, such as probabilistic and regular <abbr title="Latent Semantic Indexing">LSI</abbr>.
+As a generative model, <abbr title="Latent Dirichlet Allocation">LDA</abbr> is able to generalize the model it uses to
+separate documents into topics to documents outside the corpora.
+For example, this means that using <abbr title="Latent Dirichlet Allocation">LDA</abbr> to group online news articles into
+categories like Sports, Entertainment, and Politics, it would be possible to
+use the fitted model to help categorize newly-published news stories.
+Such an application is beyond the scope of approaches like <abbr title="Latent Semantic Indexing">LSI</abbr>.
+What&#8217;s more, when fitting an <abbr title="Latent Semantic Indexing">LSI</abbr> model, the number of parameters that have
+to be estimated scale linearly with the number of documents in the corpus,
+whereas the number of parameters to estimate for an <abbr title="Latent Dirichlet Allocation">LDA</abbr> model scales with the
+number of topics — a much lower number, making it much better-suited to working
+with large data sets.</p>
+<p><strong>The Typical Latent Dirichlet Allocation Workflow</strong></p>
+<p>Although every user is likely to have his or her own habits and preferred
+approach to topic modeling a document corpus, there is a general workflow that
+is a good starting point when working with new data.
+The general steps to the topic modeling with <abbr title="Latent Dirichlet Allocation">LDA</abbr> include:</p>
+<ol class="arabic simple">
+<li>Data preparation and ingest</li>
+<li>Assignment to training or testing partition</li>
+<li>Graph construction</li>
+<li>Training <abbr title="Latent Dirichlet Allocation">LDA</abbr></li>
+<li>Evaluation</li>
+<li>Interpretation of results</li>
+</ol>
+<p><strong>Data preparation and ingest</strong></p>
+<p>Most topic modeling workflows involve several data pre-processing and cleaning
+steps.
+Depending on the characteristics of the data being analyzed, there are
+different best-practices to use here, so it&#8217;s important to be familiar with
+the standard procedures for analytics in the domain from which the text
+originated.
+For example, in the biomedical text analytics community, it is common practice
+for text analytics workflows to involve pre-processing for identifying negation
+statements (Chapman et al., 2001 <a href="#id42"><span class="problematic" id="id43"><span id="id9"></span>[#LDA2]_</span></a> ).
+The reason for this is many analysts in that domain are examining text for
+diagnostic statements — thus, failing to identify a negated statement in which
+a disease is mentioned could lead to undesirable false-positives, but this
+phenomenon may not arise in every domain.
+In general, both stemming and stop word filtering are recommended steps for
+topic modeling pre-processing.
+Stemming refers to a set of methods used to normalize different tenses and
+variations of the same word (for example, stemmer, stemming, stemmed, and
+stem).
+Stemming algorithms will normalize all variations of a word to one common form
+(for example, stem).
+There are many approaches to stemming, but the Porter Stemming (Porter, 2006
+<a href="#id44"><span class="problematic" id="id45"><span id="id10"></span>[#LDA3]_</span></a> ) is one of the most commonly-used.</p>
+<p>Removing common, uninformative words, or stop word filtering, is another
+commonly-used step in data pre-processing for topic modeling.
+Stop words include words like <em>the</em>, <em>and</em>, or <em>a</em>, but the full list of
+uninformative words can be quite long and depend on the domain producing the
+text in question.
+Example stop word lists online <a href="#id46"><span class="problematic" id="id47"><span id="id11"></span>[#LDA4]_</span></a> can be a great place to start, but
+being aware of the best-practices in the applicalbe field is necessary to
+expand upon these.</p>
+<p>There may be other pre-processing steps needed, depending on the type of text
+being worked with.
+Punctuation removal is frequently recommended, for example.
+To determine what&#8217;s best for the text being analyzed, it helps to understand a
+bit about what how <abbr title="Latent Dirichlet Allocation">LDA</abbr> analyzes the input text.
+To learn the topic model, <abbr title="Latent Dirichlet Allocation">LDA</abbr> will typically look at the frequency of
+individual words across documents, which are determined based on
+space-separation.
+Thus, each word will be interpreted independent of where it occurs in a
+document, and without regard for the words that were written around it.
+In the text analytics field, this is often referred to as a <em>bag of words</em>
+approach to tokenization, the process of separating input text into
+composite features to be analyzed by some algorithm.
+When choosing pre-processing steps, it helps to keep this in mind.
+Don&#8217;t worry too much about removing words or modifying their format — you&#8217;re
+not manipulating your data!
+These steps simply make it easier for the topic modeling algorithm to find the
+latent topics that comprise your corpus.</p>
+<p><strong>Assignment to training or testing partition</strong></p>
+<p>The random assignment to training and testing partitions is an important step
+in most every machine learning workflow.
+It is common practice to withhold a random selection of one&#8217;s data set for the
+purpose of evaluating the accuracy of the model that was learned from the
+training data.
+The results of this evaluation allow the user to confidently speak about the
+generalizability of the trained model.
+When speaking in these terms, be cautious that you only discuss
+generalizability to the broader population from which your data was originally
+obtained.
+If a topic model is trained on neuroscience-related publications,
+for example, evaluating the model on other neuroscience-related publications
+is valid.
+It would not be valid to discuss the model&#8217;s ability to work on documents from
+other domains.</p>
+<p>There are various schools of thought for how to assign a data set to training
+and testing collections, but all agree that the process should be random.
+Where analysts disagree is in the ratio of data to be assigned to each.
+In most situations, the bulk of data will be assigned to the training
+collection, because the more data that can be used to train the algorithm,
+the better the resultant model will typically be.
+It&#8217;s also important that the testing collection have sufficient data to
+be able to reflect the characteristics of the larger
+population from which it was drawn (this becomes an important issue when
+working with data sets with rare topics, for example).
+As a starting point, many people will use a 90%/10% training/test collection
+split, and modify this ratio based on the characteristics of the documents
+being analyzed.</p>
+<p><strong>Graph construction</strong></p>
+<p>Trusted Analytics uses a bipartite graph, to learn an <abbr title="Latent Dirichlet Allocation">LDA</abbr> topic model.
+This graph contains vertices in two columns.
+The left-hand column contains unique ids, each corresponding to a document in
+the training collection, while the right-hand column contains unique ids
+corresponding to each word in the entire training set, following any
+pre-processing steps that were used.
+Connections between these columns, or edges, denote the number of times a
+particular word appears in a document, with the weight on the edge in question
+denoting the number of times the word was found there.
+After graph construction, many analysts choose to normalize the weights using
+one of a variety of normalization schemes.
+One approach is to normalize the weights to sum to 1, while another is to use
+an approach called term frequency-inverse document frequency (tfidf), where the
+resultant weights are meant to reflect how important a word is to a document in
+the corpus.
+Whether to use normalization — or what technique to use — is an open question,
+and will likely depend on the characteristics of the text being analyzed.
+Typical text analytics experiments will try a variety of approaches on a small
+subset of the data to determine what works best.</p>
+<div class="figure align-center" id="id24">
+<span id="id12"></span><img alt="../../../f_images/ds_mlal_lda_1.png" src="../../../f_images/ds_mlal_lda_1.png" />
+<p class="caption"><span class="caption-text">Figure 1 - Example layout of a bipartite graph for LDA.</span></p>
+<div class="legend">
+The left-hand column contains one vertex for each document in the input
+corpus, while the right-hand column contains vertices for each unique word
+found in them.
+Edges connecting left- and right-hand columns denote the number of times
+the word was found in the document the edge connects.
+The weights of the edges used in this example were not normalized.</div>
+</div>
+<p><strong>Training the Model</strong></p>
+<p>In using <abbr title="Latent Dirichlet Allocation">LDA</abbr>, we are trying to model a document collection in terms of topics
+<img class="math" src="../../../f_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, where each <img class="math" src="../../../f_images/math/69b7d1c2cbc4553d99a5e37f8078d1422285d9f9.png" alt="\beta_{K}"/> describes a distribution
+over the set of words in the training corpus.
+Every document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>, then, is a vector of proportions <img class="math" src="../../../f_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+where <img class="math" src="../../../f_images/math/0b423201cc87446c0fcc3fadcb387e3972c88d0e.png" alt="\theta_{d,k}"/> is the proportion of the <img class="math" src="../../../f_images/math/85f8727408c03c41f79e3de553aeda83fce59d4c.png" alt="d^{th}"/> document for
+topic <img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
+The topic assignment for document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is <img class="math" src="../../../f_images/math/578bdc7cd948ad59d5e331724419de33d1bd554f.png" alt="z_{d}"/>, and
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> is the topic assignment for the <img class="math" src="../../../f_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word
+in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+The words observed in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> are :math&#8221;<cite>w_{d}</cite>, and
+<img class="math" src="../../../f_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> is the <img class="math" src="../../../f_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word in document <img class="math" src="../../../f_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+The generative process for <abbr title="Latent Dirichlet Allocation">LDA</abbr>, then, is the joint distribution of hidden and
+observed values</p>
+<div class="math">
+<p><img src="../../../f_images/math/bb0d00578db59cde3d28908f6372678c9eb103d8.png" alt="p(\beta_{1:K},\theta_{1:D},z_{1:D},w_{1:D} )=\prod_{i=1}^{K} p(\beta_i) \
+\prod_{i=1}^{D} p(\theta_d) \left(\sideset{_{}^{}}{_{n=1}^N}\prod_{}^{} \
+p\left(z_{d,n} | \theta_{d} \right)p\left(w_{d,n} | \beta_{1:K},z_{d,n} \
+\right) \right)"/></p>
+</div><p>This distribution depicts several dependencies: topic assignment
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> depends on the topic proportions <img class="math" src="../../../f_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+and the observed word <img class="math" src="../../../f_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> depends on topic assignment
+<img class="math" src="../../../f_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> and all the topics <img class="math" src="../../../f_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, for example.
+Although there are no analytical solutions to learning the <abbr title="Latent Dirichlet Allocation">LDA</abbr> model, there
+are a variety of approximate solutions that are used, most of which are based
+on Gibbs Sampling (for example, Porteous et al., 2008 <a href="#id48"><span class="problematic" id="id49"><span id="id13"></span>[#LDA5]_</span></a> ).
+The Trusted Analytics uses an implementation related to this.
+We refer the interested reader to the primary source on this approach to learn
+more (Teh et al., 2006 <a href="#id50"><span class="problematic" id="id51"><span id="id14"></span>[#LDA6]_</span></a> ).</p>
+<p><strong>Evaluation</strong></p>
+<p>As with every machine learning algorithm, evaluating the accuracy of the model
+that has been obtained is an important step before interpreting the results.
+With many types of algorithms, the best practices in this step are
+straightforward — in supervised classification, for example, we know the true
+labels of the data being classified, so evaluating performance can be as simple
+as computing the number of errors, calculating receiver operating
+characteristic, or F1 measure.
+With topic modeling, the situation is not so straightforward.
+This makes sense, if we consider with <abbr title="Latent Dirichlet Allocation">LDA</abbr> we&#8217;re using an algorithm to blindly
+identify logical subgroupings in our data, and we don&#8217;t <em>a priori</em> know the
+best grouping that can be found.
+Evaluation, then, should proceed with this in mind, and an examination of
+homogeneity of the words comprising the documents in each grouping is often
+done.
+This issue is discussed further in Blei&#8217;s 2011 introduction to topic modeling
+<a href="#id52"><span class="problematic" id="id53"><span id="id15"></span>[#LDA7]_</span></a> .
+It is of course possible to evaluate a topic model from a statistical
+perspective using our hold-out testing document collection — and this is a
+recommended best practice — however, such an evaluation does not assess the
+topic model in terms of how they are typically used.</p>
+<p><strong>Interpretation of results</strong></p>
+<p>After running <abbr title="Latent Dirichlet Allocation">LDA</abbr> on a document corpus, users will typically examine the top
+<img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> most frequent words that can be found in each grouping.
+With this information, one is often able to use their own domain expertise to
+think of logical names for each topic (this situation is analogous to the step
+in principal components analysis, wherein statisticians will think of logical
+names for each principal component based on the mixture of dimensions each
+spans).
+Each document, then, can be assigned to a topic, based on the mixture of topics
+it has been assigned.
+Recall that <abbr title="Latent Dirichlet Allocation">LDA</abbr> will assign each document a set of probabilities
+corresponding to each possible topic.
+Researchers will often set some threshold value to make a categorical judgment
+regarding topic membership, using this information.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils footnote" frame="void" id="id16" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[8]</td><td><a class="reference external" href="http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf">http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id17" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[9]</td><td><a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S1532046401910299">http://www.sciencedirect.com/science/article/pii/S1532046401910299</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id18" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[10]</td><td><a class="reference external" href="http://tartarus.org/~martin/PorterStemmer/index.html">http://tartarus.org/~martin/PorterStemmer/index.html</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[11]</td><td><a class="reference external" href="http://www.textfixer.com/resources/common-english-words.txt">http://www.textfixer.com/resources/common-english-words.txt</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[12]</td><td><a class="reference external" href="http://www.ics.uci.edu/~newman/pubs/fastlda.pdf">http://www.ics.uci.edu/~newman/pubs/fastlda.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id21" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[13]</td><td><a class="reference external" href="http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf">http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id22" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[14]</td><td><a class="reference external" href="http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf">http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

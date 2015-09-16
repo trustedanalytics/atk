@@ -1,0 +1,39 @@
+{
+  "schema_version":     1,
+  "name":               "TRUSTEDANALYTICS",
+  "version":            "VERSION-BUILD.cdh5.3.0",
+  "extraVersionInfo": {
+    "fullVersion":      "VERSION-BUILD.cdh5.3.0",
+    "baseVersion":      "VERSION",
+    "patchCount":       "BUILD"
+  },
+  "depends": "CDH (>= 5.3), CDH (<< 6.0)",
+  "setActiveSymlink":   true,
+
+  "provides": [
+      "ATK"
+  ],
+
+  "scripts": {
+    "defines": "ATK_ENV.sh"
+  },
+  "packages": [],
+  "components": [
+    { "name":     "trustedanalytics-rest-server",
+      "version":  "VERSION"
+    }
+    ,{ "name":     "trustedanalytics-python-rest-client",
+      "version":  "VERSION"
+    }
+  ],
+  "users": {
+     "atkuser": {
+       "longname"    : "atkuser",
+       "home"        : "/var/lib/trustedanalytics",
+       "shell"       : "/bin/bash",
+       "extra_groups": ["hadoop"]
+     }
+  },
+
+  "groups": []
+}

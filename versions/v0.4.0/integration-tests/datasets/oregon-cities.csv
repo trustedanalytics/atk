@@ -1,0 +1,23 @@
+rank|city|population_2013|population_2010|change|county
+1|Portland|609,456|583,776|4.40%|Multnomah
+2|Salem|160,614|154,637|3.87%|Marion
+3|Eugene|159,190|156,185|1.92%|Lane
+4|Gresham|109,397|105,594|3.60%|Multnomah
+5|Hillsboro|97,368|91,611|6.28%|Washington
+6|Beaverton|93,542|89,803|4.16%|Washington
+15|Grants Pass|35,076|34,533|1.57%|Josephine
+16|Oregon City|34,622|31,859|8.67%|Clackamas
+17|McMinnville|33,131|32,187|2.93%|Yamhill
+18|Redmond|27,427|26,215|4.62%|Deschutes
+19|Tualatin|26,879|26,054|4.17%|Washington
+20|West Linn|25,992|25,109|3.52%|Clackamas
+7|Bend|81,236|76,639|6.00%|Deschutes
+this row has a bad value!
+
+8|Medford|77,677|74,907|3.70%|Jackson
+9|Springfield|60,177|59,403|1.30%|Lane
+10|Corvallis|55,298|54,462|1.54%|Benton
+11|Albany|51,583|50,158|2.84%|Linn
+12|Tigard|50,444|48,035|5.02%|Washington
+13|Lake Oswego|37,610|36,619|2.71%|Clackamas
+14|Keizer|37,064|36,478|1.61%|Marion

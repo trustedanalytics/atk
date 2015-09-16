@@ -1,0 +1,40 @@
+.. _python_api/frames/frame-vertex/cumulative_sum:
+
+
+:doc:`VertexFrame <index>`  cumulative_sum
+******************************************
+
+------
+
+
+.. function:: cumulative_sum(self, sample_col)
+
+    |BETA|
+    Add column to frame with cumulative percent sum.
+
+
+    :Parameters:
+
+        **sample_col** : unicode
+
+        ..
+
+            The name of the column from which to compute
+            the cumulative sum.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    A cumulative sum is computed by sequentially stepping through the rows,
+    observing the column values and keeping track of the cumulative sum for each value.
+
+    Notes
+    -----
+    This method applies only to columns containing numerical data.

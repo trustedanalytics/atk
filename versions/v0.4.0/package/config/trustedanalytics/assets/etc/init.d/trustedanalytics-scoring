@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#
+#trustedanalytics-scoring init script
+#
+#chkconfig: 345 99 25
+#description: trustedanalytics scoring server for big data analytics
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+
+prog=trustedanalytics-scoring
+
+green='\e[1;32m'#$(tput setaf 2)
+red='\e[1;31m'#$(tput setaf 1)
+yellow='\e[1;33m'#$(tput setaf 3)
+normal='\e[0m'#$(tput sgr0)
+
+verifySparkHome(){
+	[ -f /etc/default/${prog} ] && . /etc/default/${prog}
+	if [ -z "$SPARK_HOME" ]; then
+			echo "${yellow}SPARK_HOME is not set, please set it in /etc/default/${prog}${normal}"
+	fi
+	if [ ! -d $SPARK_HOME ]; then
+			echo "${red}SPARK_HOME directory doesn't exist, please correct the issue in /etc/default/${prog}${normal}"
+			exit 1
+	fi
+}
+
+initctlFunc() {
+	local event=$1
+	initctl $event $prog
+	RETVAL=$?
+	return $RETVAL
+}
+
+verifySparkHome
+
+mkdir -p /var/log/trustedanalytics/scoring
+#change ownership log directory so logback has permissions to create application log
+chown $TUSER:$TUSER /var/log/trustedanalytics/scoring
+
+# See how we were called.
+case "$1" in
+  start)
+	initctlFunc start
+	;;
+  stop)
+	initctlFunc stop
+	;;
+  status)
+	initctlFunc status
+	;;
+  restart|force-reload)
+	initctlFunc stop
+	initctlFunc start
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|force-reload}"
+	exit 2
+esac

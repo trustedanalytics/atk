@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>conf</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.trustedanalytics.atk</groupId>
+        <artifactId>TrustedAnalytics</artifactId>
+        <relativePath>../pom.xml</relativePath>
+        <version>master-SNAPSHOT</version>
+    </parent>
+    <build>
+        
+        <plugins>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!--START dependencies to our modules-->
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>engine-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>rest-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>giraph-plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>frame-plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>graph-plugins</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>model-plugins</artifactId>
+        </dependency>
+        <!--END dependencies to our modules-->
+    </dependencies>
+</project>

@@ -1,0 +1,14 @@
+user,vertex_type,movie,weight,edge_type
+1,L,-131,0,tr
+-131,R,1,0,tr
+1,L,-300,2,tr
+-300,R,1,2,tr
+1,L,-570,4,tr
+-570,R,1,4,tr
+this row has a bad value!
+2,L,-778,1,tr
+-778,R,1,1,tr
+
+1,L,-1209,2,va
+-1209,R,1,2,va
+2,L,-1218,3,tr

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+
+<FindBugsFilter>
+  <Match>
+    <Class name="org.apache.giraph.hive.column.HiveColumnWriter"/>
+    <Bug pattern="BC_UNCONFIRMED_CAST"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.hive.record.HiveRecordWriter"/>
+    <Bug pattern="BC_UNCONFIRMED_CAST"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.conf.AllOptions"/>
+    <Bug pattern="DM_DEFAULT_ENCODING"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.zk.ZooKeeperManager"/>
+    <Bug pattern="DM_DEFAULT_ENCODING"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.examples.SimpleFailComputation"/>
+    <Bug pattern="DM_EXIT"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.graph.GraphMapper$OverrideExceptionHandler"/>
+    <Bug pattern="DM_EXIT"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.worker.BspServiceWorker"/>
+    <Bug pattern="DM_EXIT"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.examples.SimpleCheckpoint$SimpleCheckpointComputation"/>
+    <Bug pattern="DM_EXIT"/>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Bug pattern="EQ_OVERRIDING_EQUALS_NOT_SYMMETRIC"/>
+    <Class name="org.apache.giraph.jython.wrappers.JythonWrapperBase"/>
+  </Match>
+  <Match>
+    <Bug pattern="EQ_OVERRIDING_EQUALS_NOT_SYMMETRIC"/>
+    <Class name="org.apache.giraph.jython.wrappers.JythonWritableWrapper"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.comm.netty.NettyClient"/>
+    <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.comm.netty.handler.RequestServerHandler"/>
+    <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.comm.netty.handler.ResponseClientHandler"/>
+    <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.io.formats.PseudoRandomLocalEdgesHelper"/>
+    <Bug pattern="RV_ABSOLUTE_VALUE_OF_RANDOM_INT"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.master.BspServiceMaster"/>
+    <Bug pattern="RV_RETURN_VALUE_IGNORED_BAD_PRACTICE"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.partition.PartitionBalancer$PartitionOwnerComparator"/>
+    <Bug pattern="SE_COMPARATOR_SHOULD_BE_SERIALIZABLE"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.partition.DiskBackedPartitionStore$AddPartition"/>
+    <Bug pattern="UL_UNRELEASED_LOCK"/>
+  </Match>
+  <Match>
+    <Class name="org.apache.giraph.partition.DiskBackedPartitionStore$GetPartition"/>
+    <Bug pattern="UL_UNRELEASED_LOCK"/>
+  </Match>
+</FindBugsFilter>

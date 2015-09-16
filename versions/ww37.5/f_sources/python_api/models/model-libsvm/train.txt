@@ -1,0 +1,189 @@
+.. _python_api/models/model-libsvm/train:
+
+
+:doc:`LibsvmModel <index>`  train
+*********************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, svm_type=2, kernel_type=2, weight_label=None, weight=None, epsilon=0.001, degree=3, gamma=None, coef=0.0, nu=0.5, cache_size=100.0, shrinking=1, probability=0, nr_weight=1, c=1.0, p=0.1)
+
+    |ALPHA|
+    Train Lib Svm model based on another frame.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6675773090>>
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column name containing the label for each observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Column(s) containing the observations.
+
+
+
+        **svm_type** : int32 (default=2)
+
+        ..
+
+            Set type of SVM.
+            Default is one-class SVM.
+
+                0 -- C-SVC
+                1 -- nu-SVC
+                2 -- one-class SVM
+                3 -- epsilon-SVR
+                4 -- nu-SVR
+
+
+
+        **kernel_type** : int32 (default=2)
+
+        ..
+
+            Specifies the kernel type to be used in the algorithm.
+            Default is RBF.
+
+                0 -- linear: u\'\*v
+                1 -- polynomial: (gamma*u\'\*v + coef0)^degree
+                2 -- radial basis function: exp(-gamma*|u-v|^2)
+                3 -- sigmoid: tanh(gamma*u\'\*v + coef0)
+
+
+
+        **weight_label** : list (default=None)
+
+        ..
+
+            Default is (Array[Int](0))
+
+
+
+        **weight** : list (default=None)
+
+        ..
+
+            Default is (Array[Double](0.0))
+
+
+
+        **epsilon** : float64 (default=0.001)
+
+        ..
+
+            Set tolerance of termination criterion
+
+
+
+        **degree** : int32 (default=3)
+
+        ..
+
+            Degree of the polynomial kernel function ('poly').
+            Ignored by all other kernels.
+
+
+
+        **gamma** : float64 (default=None)
+
+        ..
+
+            Kernel coefficient for 'rbf', 'poly' and 'sigmoid'.
+            Default is 1/n_features.
+
+
+
+        **coef** : float64 (default=0.0)
+
+        ..
+
+            Independent term in kernel function.
+            It is only significant in 'poly' and 'sigmoid'.
+
+
+
+        **nu** : float64 (default=0.5)
+
+        ..
+
+            Set the parameter nu of nu-SVC, one-class SVM, and nu-SVR.
+
+
+
+        **cache_size** : float64 (default=100.0)
+
+        ..
+
+            Specify the size of the kernel cache (in MB).
+
+
+
+        **shrinking** : int32 (default=1)
+
+        ..
+
+            Whether to use the shrinking heuristic.
+            Default is 1 (true).
+
+
+
+        **probability** : int32 (default=0)
+
+        ..
+
+            Whether to enable probability estimates.
+            Default is 0 (false).
+
+
+
+        **nr_weight** : int32 (default=1)
+
+        ..
+
+            NR Weight
+
+
+
+        **c** : float64 (default=1.0)
+
+        ..
+
+            Penalty parameter c of the error term.
+
+
+
+        **p** : float64 (default=0.1)
+
+        ..
+
+            Set the epsilon in loss function of epsilon-SVR.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Creating a lib Svm Model using the observation column and label column of the
+    train frame.

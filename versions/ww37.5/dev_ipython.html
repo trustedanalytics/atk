@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>IPython Setup Instructions &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Extending Trusted Analytics" href="dev_over.html" >
+    <link rel="next" title="Plugin Authoring Guide" href="dev_plug.html" >
+    <link rel="prev" title="Tracking Metadata" href="dev_psql.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="dev_over.html" accesskey="U">Extending Trusted Analytics</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="dev_psql.html" title="Tracking Metadata"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="dev_plug.html" title="Plugin Authoring Guide"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dev_psql.html">Tracking Metadata</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">IPython Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_plug.html">Plugin Authoring Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev_bkm.html">Best Known Methods (Development)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="dev-ipython"></span><div class="section" id="ipython-setup-instructions">
+<span id="index-0"></span><h1>IPython Setup Instructions<a class="headerlink" href="#ipython-setup-instructions" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table Of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a><ul>
+<li><a class="reference internal" href="#installing-ipython" id="id3">Installing IPython</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#configure-package-python-rest-client" id="id4">Configure Trusted Analytics Python REST Client</a></li>
+<li><a class="reference internal" href="#running-ipython" id="id5">Running IPython</a><ul>
+<li><a class="reference internal" href="#ipython-notebook" id="id6">IPython Notebook</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>These instructions show how to use the Trusted Analytics server through
+<a class="reference external" href="http://ipython.org/">IPython</a>.
+This is a guide through the IPython setup needed to communicate with an Trusted Analytics
+service on a remote cluster.
+With an understanding of this information, the Python REST client can be
+accessed from a remote host through an IPyhon shell or notebook server.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>A working Trusted Analytics cluster installation is required.
+It must be configured to run with the Python2.7 executable.
+If Trusted Analytics is not installed, see <a class="reference internal" href="ad_inst_ta1.html"><em>Package Installation</em></a> to install it.</p>
+<div class="section" id="installing-ipython">
+<h3>Installing IPython<a class="headerlink" href="#installing-ipython" title="Permalink to this headline">¶</a></h3>
+<p>To install IPython run:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo yum install python27-ipython
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="configure-package-python-rest-client">
+<h2>Configure Trusted Analytics Python REST Client<a class="headerlink" href="#configure-package-python-rest-client" title="Permalink to this headline">¶</a></h2>
+<p>Before IPython can operate properly, it is necessary to configure the Trusted Analytics
+REST client.
+The REST client needs to know where to find the Trusted Analytics REST server.
+This is done by updating the host address in
+&#8216;/usr/lib/trustedanalytics/rest-client/python/rest/config.py&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo vim /usr/lib/trustedanalytics/rest-client/python/rest/config.py
+</pre></div>
+</div>
+<p>The &#8216;config.py&#8217; file will look similar to this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">config file for REST client</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c"># default connection config</span>
+<span class="k">class</span> <span class="nc">server</span><span class="p">:</span>
+    <span class="n">host</span> <span class="o">=</span> <span class="s">&quot;localhost&quot;</span>
+    <span class="n">port</span> <span class="o">=</span> <span class="mi">9099</span>
+    <span class="n">scheme</span> <span class="o">=</span> <span class="s">&quot;http&quot;</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="s">&quot;v1&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json,text/plain&#39;</span><span class="p">,</span>
+            <span class="s">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s">&quot;test_api_key_1&quot;</span><span class="p">}</span>
+
+<span class="k">class</span> <span class="nc">polling</span><span class="p">:</span>
+    <span class="n">start_interval_secs</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">max_interval_secs</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">backoff_factor</span> <span class="o">=</span> <span class="mf">1.02</span>
+
+<span class="n">build_id</span> <span class="o">=</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>Update the address for host to the <a class="reference external" href="http://en.wikipedia.org/wiki/Fully_qualified_domain_name">Fully Qualified Domain Name</a> or
+the IP address of the node hosting the Trusted Analytics REST server.</p>
+</div>
+<div class="section" id="running-ipython">
+<h2>Running IPython<a class="headerlink" href="#running-ipython" title="Permalink to this headline">¶</a></h2>
+<p>Test the Trusted Analytics IPython installation by importing the REST client libraries
+inside of a notebook or IPython shell and ping the REST server.</p>
+<div class="highlight-python"><div class="highlight"><pre># testing IPython/Trusted Analytics ATK
+
+$ ipython
+Python 2.7.5 (default, Sep  4 2014, 17:06:50)
+Type &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+IPython 2.2.0 -- An enhanced Interactive Python.
+?         -&gt; Introduction and overview of IPython&#39;s features.
+%quickref -&gt; Quick reference.
+help      -&gt; Python&#39;s own help system.
+object?   -&gt; Details about &#39;object&#39;, use &#39;object??&#39; for extra details.
+
+In [1]: import trustedanalytics as ta
+
+In [2]: ta.server.ping()
+Successful ping to Trusted Analytics ATK at http://localhost:9099/info
+
+In [3]: ta.connect()
+</pre></div>
+</div>
+<div class="section" id="ipython-notebook">
+<h3>IPython Notebook<a class="headerlink" href="#ipython-notebook" title="Permalink to this headline">¶</a></h3>
+<p>All the dependencies to run the IPython notebook server are also installed
+which lets the IPython shell be run from a web browser.
+The notebook server is accessed by:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ ipython notebook
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 16, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

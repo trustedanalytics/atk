@@ -1,0 +1,72 @@
+{
+    "tmp": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0700"
+    },
+    "log": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0755"
+    },
+    "etc/trustedanalytics/rest-server": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0755"
+    },
+    "etc/logrotate.d": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0744"
+    },
+    "usr/lib/trustedanalytics/graphbuilder/lib": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/lib/python2.7": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/lib/python2.7/site-packages": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/cmps": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/python2.7": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/pip2.7": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/f2py2.7": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/python2.7-config": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    },
+    "usr/bin/python27pydoc": {
+        "user": "atkuser",
+        "group": "atkuser",
+        "permissions": "0775"
+    }
+}

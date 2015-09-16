@@ -1,0 +1,268 @@
+Parameters
+----------
+Parameters are shown as:
+
+Parameters
+----------
+A : B
+    Description of parameter.
+    Default is X.
+A : B
+    Description of parameter.
+    Default is X.
+
+A is the name of the parameter.
+B is the variable type.
+Description can be multiple lines.
+Last line in description states the default value of optional parameters.
+
+Returns
+-------
+This section is included only if the function returns a value.
+The first line of this section is the type of variable being returned.
+The second line is a description of the value being returned.
+The the data type being returned has multiple sections with different parts,
+the last line of the description will be:
+"The data returned is composed of multiple components:"
+and will be followed by a section of different components
+laid out similar to the parameters section.
+For example:
+
+Returns
+-------
+dict
+    A dictionary of data.
+    The data returned is composed of multiple components:
+A : B
+    Description of parameter.
+A : B
+    Description of parameter.
+
+
+Lines
+-----
+Lines are broken at spaces so they could be read on a 80 column screen.
+123456789-123456789-123456789-123456789-123456789-123456789-123456789-123456789.
+The last character visible on the line should be blank space.
+Do not end a line with a space character.
+Use four spaces instead of a tab character.
+When there are multiple lines in a paragraph, each line starts on it's own line.
+Use **bold** when words or a line needs to be particularly noted.
+Use ".. note::" when a paragraph needs to be particularly noted.
+
+Quotes
+------
+When an exact file is called, it is surrounded by 'single quotes'.
+When exact strings are to be entered into the command line, they are surrounded
+by a gray box with no border using ``double back-quotes``.
+When a value is expected to be entered by user, a short description is used
+inside the <> characters such as <this>.
+When emphasizing word strings, which are not file names, they are surrounded by
+"double quotes".
+When refering to something by name such as a column name or frame name, use
+*italics*.
+Strings used as examples are surrounded with double back quotes like ``this``.
+
+Code
+====
+Use ".. code::" to highlight sections with code.
+Lines entered at the command prompt should be prefixed with the appropriate
+prompt symbol $, >, or #.
+Each Python function is entered beginning with >>>.
+If Python functions extend more than one line, following lines begin with ...
+Comments between code blocks are separated from the code blocks they apply to
+so they appear outside the code shading.
+
+Menus
+=====
+For single selections italicize the word.
+For example, "Click on the *OK* button. Select *Open*.
+For multiple selections with no interruptions, use :menuselect:`xxx --> xxx`.
+For example, "Select :menuselect:`File --> New --> Text Document`
+
+Tables
+======
+Tables with exact strings to be entered into the command line can be entered as:
++--------------------------------------+---------------------------------------+
+| RedHat/CentOS                        | Ubuntu                                |
++======================================+=======================================+
+| ::                                   | ::                                    |
+|                                      |                                       |
+|     yum info postgresql              |     TBD                               |
++--------------------------------------+---------------------------------------+
+
+Headings
+========
+
+    =====
+1.  Words
+    =====
+
+    -----
+2.  Words
+    -----
+
+3.  Words
+    =====
+
+4.  Words
+    -----
+
+5.  Words
+    ~~~~~
+
+6.  Words
+    #####
+
+conf.py
+=======
+Abbreviations are substituted from the conf.py file.
+They are not used until they are spelled out, at least once, in the major
+document division (Technical Summary, Administration, User Manual, or Python
+API) in which they are used.
+
+Substitutions are organized in the conf.py file.
+
+Examples
+========
+
+     my_frame.inspect()
+
+       col_0:int32  col_1:float64  col_2:int32  col3:int32
+     /-----------------------------------------------------/
+       1            0.2            -2           5
+       2            0.4            -1           6
+       3            0.6             0           7
+       4            0.8             1           8
+       5            null            2           null
+
+.. only:: html
+
+    To query::
+
+        tc_graph = get_graph('tc_graph')
+        tc_graph.query.gremlin("g.V [0..4]")
+
+        {u'results':[{u'_id':4,u'_type':u'vertex',u'b':3603376,u'pr':0.967054,u'titanPhysicalId':363016,u'triangle_count':1},{u'_id':8,u'_type':u'vertex',u'a':3118124,u'pr':0.967054,u'titanPhysicalId':343201000,u'triangle_count':1},{u'_id':12,u'_type':u'vertex',u'a':3063711,u'pr':0.967054,u'titanPhysicalId':43068,u'triangle_count':1},{u'_id':16,u'_type':u'vertex',u'c':899225,u'pr':0.967054,u'titanPhysicalId':202800088,u'triangle_count':1},{u'_id':20,u'_type':u'vertex',u'c':1493990,u'pr':0.967054,u'titanPhysicalId':268188,u'triangle_count':1}],u'run_time_seconds':0.271}
+
+        g.ml.conjugate_gradient_descent(edge_value_property_list = "rating", vertex_type_property_key = "vertex_type", input_edge_label_list = "edge", output_vertex_property_list = "cgd_result", edge_type_property_key = "splits", vector_value = "true", cgd_lambda = 0.065, num_iters = 3)
+
+    The expected output is like this::
+
+        {u'value': u'======Graph Statistics======\\nNumber of vertices: 20140 (left: 10070, right: 10070)\\nNumber of edges: 604016 (train: 554592, validate: 49416, test: 8)\\n\\n======CGD Configuration======\\nmaxSupersteps: 20\\nfeatureDimension: 3\\nlambda: 0.065000\\nbiasOn: false\\nconvergenceThreshold: 0.000000\\nbidirectionalCheck: false\\nnumCGDIters: 3\\nmaxVal: Infinity\\nminVal: -Infinity\\nlearningCurveOutputInterval: 1\\n\\n======Learning Progress======\\nsuperstep = 2\\tcost(train) = 21828.395401\\trmse(validate) = 1.317799\\trmse(test) = 3.663107\\nsuperstep = 4\\tcost(train) = 18126.623261\\trmse(validate) = 1.247019\\trmse(test) = 3.565567\\nsuperstep = 6\\tcost(train) = 15902.042769\\trmse(validate) = 1.209014\\trmse(test) = 3.677774\\nsuperstep = 8\\tcost(train) = 14274.718100\\trmse(validate) = 1.196888\\trmse(test) = 3.656467\\nsuperstep = 10\\tcost(train) = 13226.419606\\trmse(validate) = 1.189605\\trmse(test) = 3.699198\\nsuperstep = 12\\tcost(train) = 12438.789925\\trmse(validate) = 1.187416\\trmse(test) = 3.653920\\nsuperstep = 14\\tcost(train) = 11791.454643\\trmse(validate) = 1.188480\\trmse(test) = 3.670579\\nsuperstep = 16\\tcost(train) = 11256.035422\\trmse(validate) = 1.187924\\trmse(test) = 3.742146\\nsuperstep = 18\\tcost(train) = 10758.691712\\trmse(validate) = 1.189491\\trmse(test) = 3.658956\\nsuperstep = 20\\tcost(train) = 10331.742207\\trmse(validate) = 1.191606\\trmse(test) = 3.757683'}
+
+.. only:: latex
+
+    To query::
+
+        tc_graph = get_graph('tc_graph')
+        tc_graph.query.gremlin("g.V [0..4]")
+
+        {u'results':
+            [{u'_id':4,
+              u'_type':u'vertex',
+              u'b':3603376,
+              u'pr':0.967054,
+              u'titanPhysicalId':363016,
+              u'triangle_count':1},
+             {u'_id':8,
+              u'_type':u'vertex',
+              u'a':3118124,
+              u'pr':0.967054,
+              u'titanPhysicalId':343201000,
+              u'triangle_count':1},
+             {u'_id':12,
+              u'_type':u'vertex',
+              u'a':3063711,
+              u'pr':0.967054,
+              u'titanPhysicalId':43068,
+              u'triangle_count':1},
+             {u'_id':16,
+              u'_type':u'vertex',
+              u'c':899225,
+              u'pr':0.967054,
+              u'titanPhysicalId':202800088,
+              u'triangle_count':1},
+             {u'_id':20,
+              u'_type':u'vertex',
+              u'c':1493990,
+              u'pr':0.967054,
+              u'titanPhysicalId':268188,
+              u'triangle_count':1}],
+              u'run_time_seconds':0.271}
+
+        g.ml.conjugate_gradient_descent(                \\
+            edge_value_property_list = "rating",        \\
+            vertex_type_property_key = "vertex_type",   \\
+            input_edge_label_list = "edge",             \\
+            output_vertex_property_list = "cgd_result", \\
+            edge_type_property_key = "splits",          \\
+            vector_value = "true",                      \\
+            cgd_lambda = 0.065,                         \\
+            num_iters = 3)
+
+    The expected output is like this::
+
+        {u'value': u'======Graph Statistics======\\n
+        Number of vertices: 20140 (left: 10070, right: 10070)\\n
+        Number of edges: 604016 (train: 554592, validate: 49416, test: 8)\\n
+        \\n
+        ======CGD Configuration======\\n
+        maxSupersteps: 20\\n
+        featureDimension: 3\\n
+        lambda: 0.065000\\n
+        biasOn: false\\n
+        convergenceThreshold: 0.000000\\n
+        bidirectionalCheck: false\\n
+        numCGDIters: 3\\n
+        maxVal: Infinity\\n
+        minVal: -Infinity\\n
+        learningCurveOutputInterval: 1\\n
+        \\n
+        ======Learning Progress======\\n
+        superstep = 2\\tcost(train) = 21828.395401\\t
+            rmse(validate) = 1.317799\\trmse(test) = 3.663107\\n
+        superstep = 4\\tcost(train) = 18126.623261\\t
+            mse(validate) = 1.247019\\trmse(test) = 3.565567\\n
+        superstep = 6\\tcost(train) = 15902.042769\\t
+            mse(validate) = 1.209014\\trmse(test) = 3.677774\\n
+        superstep = 8\\tcost(train) = 14274.718100\\t
+            mse(validate) = 1.196888\\trmse(test) = 3.656467\\n
+        superstep = 10\\tcost(train) = 13226.419606\\t
+            mse(validate) = 1.189605\\trmse(test) = 3.699198\\n
+        superstep = 12\\tcost(train) = 12438.789925\\t
+            mse(validate) = 1.187416\\trmse(test) = 3.653920\\n
+        superstep = 14\\tcost(train) = 11791.454643\\t
+            mse(validate) = 1.188480\\trmse(test) = 3.670579\\n
+        superstep = 16\\tcost(train) = 11256.035422\\t
+            mse(validate) = 1.187924\\trmse(test) = 3.742146\\n
+        superstep = 18\\tcost(train) = 10758.691712\\t
+            mse(validate) = 1.189491\\trmse(test) = 3.658956\\n
+        superstep = 20\\tcost(train) = 10331.742207\\t
+            mse(validate) = 1.191606\\trmse(test) = 3.757683'}
+
+    Report may show zero edges and/or vertices if parameters were supplied
+    wrong, or if the graph was not the expected input::
+
+        ======Graph Statistics======
+        Number of vertices: 12673 (left: 12673, right: 0)
+        Number of edges: 0 (train: 0, validate: 0, test: 0)
+
+Default is 0.
+Default is Infinity.
+
+vector_value : str (optional)
+    "True" means a vector as vertex value is supported and
+    "False" means a vector as vertex value is not supported.
+    Default is "False".
+
+bias_on : bool (optional)
+    True means turn on the update for bias term and
+    False means turn off the update for bias term.
+    Default is False.
+
+Use bool, str and int as opposed to boolean, string and integer.
+Use sentence case for variable types. Example:
+    Float is ok in a sentence, but float is required in declarations.
+Values are capitalized, such as None, Infinity, True, Zero, but numerals are
+preferred over spelling out numbers.

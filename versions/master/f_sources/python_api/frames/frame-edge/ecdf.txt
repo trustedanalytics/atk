@@ -1,0 +1,42 @@
+.. _python_api/frames/frame-edge/ecdf:
+
+
+:doc:`EdgeFrame <index>`  ecdf
+******************************
+
+------
+
+
+.. function:: ecdf(self, column, result_frame_name=None)
+
+    Builds new frame with columns for data and distribution.
+
+
+    :Parameters:
+
+        **column** : unicode
+
+        ..
+
+            The name of the input column containing sample.
+
+
+
+        **result_frame_name** : unicode (default=None)
+
+        ..
+
+            A name for the resulting frame which is created
+            by this operation.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f3d406b3090>>
+
+        ..
+
+            A new Frame containing each distinct value in the sample and its corresponding ECDF value.
+    Generates the :term:`empirical cumulative distribution` for the input column.

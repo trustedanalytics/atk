@@ -1,0 +1,11 @@
+# good for testing flatten_column()
+1,a,biscuits+gravy
+2,a,ham+cheese
+3,a,grilled+tuna
+4,a|b|c,mac+cheese
+5,a|e,salad
+6,d,coke
+7,a|b|d,spinach+artichoke+dip
+8,,big+mac
+9,c|d,fries
+10,e,

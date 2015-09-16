@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-/correlation_matrix:
+
+
+:doc:`Frame <index>`  correlation_matrix
+****************************************
+
+------
+
+
+.. function:: correlation_matrix(self, data_column_names, matrix_name=None)
+
+    Calculate correlation matrix for two or more columns.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of the columns from
+            which to compute the matrix.
+
+
+
+        **matrix_name** : unicode (default=None)
+
+        ..
+
+            The name for the returned
+            matrix Frame.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6675773090>>
+
+        ..
+
+            A Frame with the matrix of the correlation values for the columns.
+    Notes
+    -----
+    This method applies only to columns containing numerical data.

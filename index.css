@@ -1,0 +1,93 @@
+/***************************/
+/*         Header          */
+/***************************/
+
+body {
+    margin:0px;
+    background:#F5F5F5;
+}
+
+#header-container {
+    width:100%;
+    position:fixed;
+    top:0px;
+    height:80px;
+}
+
+#header {
+    height:65px;
+    background:#0071C5;  /* Intel Blue is decimal R:0 G:113 B:197 */
+    border:2px solid #CCC;
+    width:100%;
+    margin:3px auto;
+    font:42px Palatino, Cambria, Times, serif;
+}
+
+iframe {
+  width:100%;
+  height:100%;
+}
+
+#header-container {
+  height: 34px;
+  background-color: #0088cc;
+}
+
+/*menu css*/
+
+div.versionmenu-container ul ul{
+  display:none; 
+}
+
+div.versionmenu-container {
+position: relative;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 90%;
+  float: left;
+  margin-left:50px;
+}
+
+div.versionmenu-container ul{
+  margin: 0;
+	padding: 0;
+	position: absolute;
+	height: auto;
+	/*width: 100%;*/
+	list-style-type: none;
+	background-color: #0088cc;
+	overflow: visible;
+  cursor:pointer;
+}
+
+div.versionmenu-container ul li{
+display: block;
+	float: left;
+	height: 100%;
+	width: 200px;
+}
+
+div.versionmenu-container li:hover > ul {
+  display: block;
+}
+
+div.versionmenu-container a{
+  height: 100%;
+    line-height: 34px;
+    align-self: center;
+    vertical-align: middle;
+    margin: auto;
+    width: 60%;
+    padding: 20px;
+}
+
+.top{
+  border-left:1px solid black;
+  border-right:1px solid black;
+}
+.bottom{
+  border-top: 1px solid white;
+  
+  
+}

@@ -1,0 +1,285 @@
+.. _python_api/graphs/graph-/index:
+
+
+:doc:`Graphs<../index>` Graph
+*****************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+
+    ml
+    annotate_degrees
+    annotate_weighted_degrees
+    clustering_coefficient
+    copy
+    define_edge_type
+    define_vertex_type
+    edge_count
+    edges
+    export_to_titan
+    graphx_connected_components
+    graphx_pagerank
+    graphx_triangle_count
+    ml/belief_propagation
+    ml/kclique_percolation
+    name
+    status
+    vertex_count
+    vertices
+
+.. class:: Graph
+
+
+        Creates a seamless property graph.
+
+        A seamless graph is a collection of vertex and edge lists stored as frames.
+        This allows frame-like operations against graph data.
+        Many frame methods are available to work with vertices and edges.
+        Vertex and edge properties are stored as columns.
+
+        A seamless graph is better suited for bulk :term:`OLAP`-type operations
+        whereas a Titan graph is better suited to :term:`OLTP`.
+
+
+        Examples
+        --------
+        This example uses a single source data frame and creates a graph of 'user'
+        and 'movie' vertices connected by 'rating' edges.
+
+        The first step is to bring in some data to create a frame as the source
+        for a graph:
+
+        .. only:: html
+
+            .. code::
+
+                >>> my_schema = [('user_id', ta.int32), ('user_name', str), ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
+                >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
+                >>> my_frame = ta.Frame(my_csv)
+
+        .. only:: latex
+
+            .. code::
+
+                >>> my_schema = [('user_id', ta.int32), ('user_name', str),
+                ... ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
+                >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
+                >>> my_frame = ta.Frame(my_csv)
+
+        Now, make an empty graph:
+
+        .. code::
+
+            >>> my_graph = ta.Graph()
+
+        Then, define the types of vertices and edges this graph will be made of:
+
+        .. code::
+
+            >>> my_graph.define_vertex_type('users')
+            >>> my_graph.define_vertex_type('movies')
+            >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+
+        And finally, add the data to the graph:
+
+        .. only:: latex
+
+            .. code::
+
+                >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
+                >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
+                >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id', 'movie_id', ['rating']
+
+        .. only:: html
+
+            .. code::
+
+                >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
+                >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
+                >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id',
+                ... 'movie_id', ['rating'])
+
+        |
+        
+        Adding additional data to the graph from another frame (my_frame2),
+        is simply adding vertices (and edges) in row formation.
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(my_frame2, 'user_id', ['user_name'])
+
+        Getting basic information about the graph:
+
+        .. code::
+
+            >>> my_graph.vertex_count
+            >>> my_graph.edge_count
+            >>> my_graph.vertices['users'].inspect(20)
+
+        |
+
+        This example uses multiple source data frames and creates a graph of
+        'user' and 'movie' vertices connected by 'rating' edges.
+
+        Create a frame as the source for a graph:
+
+        .. code::
+
+            >>> user_schema = [('user_id', ta.int32), ('user_name', str), ('age', ta.int32)]))
+            >>> user_frame = ta.Frame(ta.CsvFile("/users.csv", userSchema)
+
+            >>> movie_schema = [('movie_id', ta.int32), ('movie_title', str), ('year', str)]))
+            >>> movie_frame = ta.Frame(ta.CsvFile("/movie.csv", movie_schema)
+
+            >>> ratings_schema = [('ser_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
+            >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", ratings_schema)
+
+        Create a graph:
+
+        .. code::
+
+            >>> my_graph = ta.Graph()
+
+        Define the types of vertices and edges this graph will be made of:
+
+        .. code::
+
+            >>> my_graph.define_vertex_type('users')
+            >>> my_graph.define_vertex_type('movies')
+            >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+
+        Add data to the graph:
+
+        .. only:: html
+
+            .. code::
+
+                >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id', ['user_name', 'age'])
+                >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id') # all columns automatically added as properties
+                >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id', 'movie_id', ['rating'])
+
+        .. only:: latex
+
+            .. code::
+
+                >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id',
+                ... ['user_name', 'age'])
+                >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id')
+                ... # all columns automatically added as properties
+                >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id',
+                ... 'movie_id', ['rating'])
+
+        |
+
+        This example shows edges between vertices of the same type.
+        Specifically, "employees work under other employees".
+
+        Create a frame to use as the source for the graph data:
+
+        .. only:: html
+
+            .. code::
+
+                >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv", schema = [('Employee', str), ('Manager', str), ('Title', str), ('Years', ta.int64)], skip_header_lines=1), 'employees_frame')
+
+        .. only:: latex
+
+            .. code::
+
+                >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv",
+                ... schema = [('Employee', str), ('Manager', str),
+                ... ('Title', str), ('Years', ta.int64)], skip_header_lines=1),
+                ... 'employees_frame')
+
+        Define a graph:
+
+        .. code::
+
+            >>> my_graph = ta.Graph()
+            >>> my_graph.define_vertex_type('Employee')
+            >>> my_graph.define_edge_type('worksunder', 'Employee', 'Employee', directed=True)
+
+        Add data:
+
+        .. only:: html
+
+            .. code::
+
+                >>> my_graph.vertices['Employee'].add_vertices(employees_frame, 'Employee', ['Title'])
+                >>> my_graph.edges['worksunder'].add_edges(employees_frame, 'Employee', 'Manager', ['Years'], create_missing_vertices = True)
+
+        .. only:: latex
+
+            .. code::
+
+                >>> my_graph.vertices['Employee'].add_vertices(employees_frame,
+                ... 'Employee', ['Title'])
+                >>> my_graph.edges['worksunder'].add_edges(employees_frame,
+                ... 'Employee', 'Manager', ['Years'],
+                ... create_missing_vertices = True)
+
+        Inspect the graph:
+
+        .. code::
+
+            >>> my_graph.vertex_count
+            >>> my_graph.edge_count
+            >>> my_graph.vertices['Employee'].inspect(20)
+            >>> my_graph.edges['worksunder'].inspect(20)
+
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`edge_count <edge_count>`\                                                                       Get the total number of edges in the graph.
+    :doc:`edges <edges>`\                                                                                 Edge frame collection
+    :doc:`name <name>`\                                                                                   Set or get the name of the graph object.
+    :doc:`status <status>`\                                                                               Current graph life cycle status.
+    :doc:`vertex_count <vertex_count>`\                                                                   Get the total number of vertices in the graph.
+    :doc:`vertices <vertices>`\                                                                           Vertex frame collection
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <Graph__init__>`\ (self[, name, _info])                                                <Missing Doc>
+    :ref:`__init__ <GraphMl__init__>`\ (self, entity)                                                     <Missing Doc>
+    :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
+    :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+    :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
+    :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
+    :doc:`define_edge_type <define_edge_type>`\ (self, label, src_vertex_label, dest_vertex_label)        Define an edge type.
+    :doc:`define_vertex_type <define_vertex_type>`\ (self, label)                                         Define a vertex type by label.
+    :doc:`export_to_titan <export_to_titan>`\ (self[, new_graph_name])                                    Convert current graph to TitanGraph.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
+    :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
+    :doc:`ml.belief_propagation <ml/belief_propagation>`\ (self, prior_property, posterior_property)      Classification on sparse data using Belief Propagation.
+    :doc:`ml.kclique_percolation <ml/kclique_percolation>`\ (self, clique_size, ...)                      |ALPHA| Find groups of vertices with similar attributes.
+    ====================================================================================================  ====================================================================================================
+
+.. _Graph__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **name** : str (default=None)
+
+        ..
+
+            Name for the new graph.
+            Default is None.
+
+
