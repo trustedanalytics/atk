@@ -27,6 +27,9 @@ import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
 import libsvm.svm
+import java.io.File
+import org.apache.commons.io.FileUtils
+
 /**
  * Rename columns of a frame
  */
@@ -73,13 +76,19 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
     //Extracting the LibSvmModel from the stored JsObject
     val libsvmData = model.data.convertTo[LibSvmData]
     val libsvmModel = libsvmData.svmModel
-    svm.svm_save_model("/tmp/LibSvmModel", libsvmModel)
+    var file: File = null
 
-    val source = scala.io.Source.fromFile("/tmp/LibSvmModel")
-    val modelValues = try source.mkString
-    finally
-      source.close()
-    StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    try {
+      file = File.createTempFile("tmp", ".txt")
+      svm.svm_save_model(file.getAbsolutePath(), libsvmModel)
+      val modelValues = FileUtils.readFileToString(file)
+
+      StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    }
+    catch { case ex: Exception => throw new RuntimeException(s"Unable to Publish the LibSvm Model\n" + ex.toString) }
+    finally {
+      FileUtils.deleteQuietly(file)
+    }
   }
 
 }
