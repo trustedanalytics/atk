@@ -1,3 +1,7 @@
+.. _old_sections/ad_inst_vm:
+
+.. _old_ad_sections/ad_inst_vm:
+
 .. _ad_inst_vm:
 
 ================
