@@ -35,15 +35,15 @@ object Status {
   /**
    * Available to user
    */
-  final val Active = Status(1, "Active", "Available to user", new DateTime, null)
+  final val Active = Status(1, "ACTIVE", "Available to user", new DateTime, null)
   /**
    * No longer available to user
    */
-  final val Dropped = Status(2, "Dropped", "No longer available to user", new DateTime, null)
+  final val Dropped = Status(2, "DROPPED", "No longer available to user", new DateTime, null)
   /**
    * Not available and data has been deleted
    */
-  final val Finalized = Status(3, "Finalized", "Not available and data has been deleted", new DateTime, null)
+  final val Finalized = Status(3, "FINALIZED", "Not available and data has been deleted", new DateTime, null)
 
   implicit def toString(v: Status): String = v.name
   implicit def toLong(v: Status): Long = v.id

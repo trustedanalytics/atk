@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-import time
 import unittest
 import trustedanalytics as ta
 import trustedanalytics.core.admin as admin
@@ -50,30 +49,30 @@ class GarbageCollectionTests(unittest.TestCase):
         self.assertIsNone(f2e.name)
 
         admin.drop_stale()  # first, normal drop_stale, nothing should change because these frames aren't old enough
-        self.assertEqual("Active", f1.status)
-        self.assertEqual("Active", f1e.status)
-        self.assertEqual("Active", f2.status)
-        self.assertEqual("Active", f2e.status)
+        self.assertEqual("ACTIVE", f1.status)
+        self.assertEqual("ACTIVE", f1e.status)
+        self.assertEqual("ACTIVE", f2.status)
+        self.assertEqual("ACTIVE", f2e.status)
         # print "f1.status=%s, f2.status=%s" % (f1.status, f2.status)
 
         admin.finalize_dropped()  # nothing is dropped, so nothing so be finalized
-        self.assertEqual("Active", f1.status)
-        self.assertEqual("Active", f1e.status)
-        self.assertEqual("Active", f2.status)
-        self.assertEqual("Active", f2e.status)
+        self.assertEqual("ACTIVE", f1.status)
+        self.assertEqual("ACTIVE", f1e.status)
+        self.assertEqual("ACTIVE", f2.status)
+        self.assertEqual("ACTIVE", f2e.status)
 
         admin.drop_stale("1ms")  # now drop with very tiny age, so non-name f1 should get dropped
-        self.assertEqual("Dropped", f1.status)
-        self.assertEqual("Dropped", f1e.status)
-        self.assertEqual("Active", f2.status)
-        self.assertEqual("Active", f2e.status)
+        self.assertEqual("DROPPED", f1.status)
+        self.assertEqual("DROPPED", f1e.status)
+        self.assertEqual("ACTIVE", f2.status)
+        self.assertEqual("ACTIVE", f2e.status)
         # print "f1.status=%s, f2.status=%s" % (f1.status, f2.status)
 
         admin.finalize_dropped()  # on f1 and f1e are dropped, so only they should be finalized
-        self.assertEqual("Finalized", f1.status)
-        self.assertEqual("Finalized", f1e.status)
-        self.assertEqual("Active", f2.status)
-        self.assertEqual("Active", f2e.status)
+        self.assertEqual("FINALIZED", f1.status)
+        self.assertEqual("FINALIZED", f1e.status)
+        self.assertEqual("ACTIVE", f2.status)
+        self.assertEqual("ACTIVE", f2e.status)
         # print "f1.status=%s, f2.status=%s" % (f1.status, f2.status)
 
 
