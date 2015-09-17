@@ -23,9 +23,7 @@ chmod +x $jq
 echo "Setting environment variables"
 export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
 export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
-export CC_URI=$(echo $VCAP_APPLICATION | $jq  '.application_uris[0]' | sed -e "s/$APP_NAME\.apps/api.run/g" | tr -d '"')
-export UAA_URI=$(echo $VCAP_APPLICATION | $jq  '.application_uris[0]' | sed -e "s/$APP_NAME\.apps/uaa.run/g" | tr -d '"')
-export USE_HTTP=false
+export USE_HTTP=true
 
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq '.cdh | .[0].credentials.hdfs_root' | tr -d '"')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
