@@ -1,0 +1,30 @@
+
+:doc:`LinearRegressionModel <index>`  new
+*****************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

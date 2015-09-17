@@ -1,0 +1,71 @@
+
+:doc:`Frame <index>`  __init__
+******************************
+
+------
+
+
+.. function:: __init__(self, source=None, name=None)
+
+    Create a Frame/frame.
+
+
+    :Parameters:
+
+        **source** : CsvFile | Frame (default=None)
+
+        ..
+
+            A source of initial data.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            The name of the newly created frame.
+            Default is None.
+
+
+    Notes
+    -----
+    A frame with no name is subject to garbage collection.
+
+    If a string in the CSV file starts and ends with a double-quote (")
+    character, the character is stripped off of the data before it is put into
+    the field.
+    Anything, including delimiters, between the double-quote characters is
+    considered part of the str.
+    If the first character after the delimiter is anything other than a
+    double-quote character, the string will be composed of all the characters
+    between the delimiters, including double-quotes.
+    If the first field type is str, leading spaces on each row are
+    considered part of the str.
+    If the last field type is str, trailing spaces on each row are
+    considered part of the str.
+
+    Examples
+    --------
+    Create a new frame based upon the data described in the CsvFile object
+    *my_csv_schema*.
+    Name the frame "myframe".
+    Create a Frame *my_frame* to access the data:
+
+    .. code::
+
+        >>> my_frame = ta.Frame(my_csv_schema, "myframe")
+
+    A Frame object has been created and *my_frame* is its proxy.
+    It brought in the data described by *my_csv_schema*.
+    It is named *myframe*.
+
+    Create an empty frame; name it "yourframe":
+
+    .. code::
+
+        >>> your_frame = ta.Frame(name='yourframe')
+
+    A frame has been created and Frame *your_frame* is its proxy.
+    It has no data yet, but it does have the name *yourframe*.
+        

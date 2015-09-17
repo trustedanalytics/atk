@@ -1,0 +1,32 @@
+
+:doc:`VertexFrame <index>`  name
+********************************
+
+------
+
+
+.. attribute:: name
+
+    Set or get the name of the frame object.
+
+
+    :Parameters:
+
+    Change or retrieve frame object identification.
+    Identification names must start with a letter and are limited to
+    alphanumeric characters and the ``_`` character.
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> my_frame.name
+
+        "csv_data"
+
+        >>> my_frame.name = "cleaned_data"
+        >>> my_frame.name
+
+        "cleaned_data"

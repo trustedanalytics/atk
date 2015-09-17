@@ -1,0 +1,173 @@
+
+:doc:`TitanGraph <index>`  append
+*********************************
+
+------
+
+
+.. function:: append(self, rules=None)
+
+    Append frame data to the current graph.
+
+
+    :Parameters:
+
+        **rules** :  (default=None)
+
+        ..
+
+
+
+
+    Append updates existing edges and vertices or creates new ones if they
+    do not exist.
+    Vertices are considered the same if their id_key's and id_value's
+    match.
+    Edges are considered the same if they have the same source vertex,
+    destination vertex, and label.
+
+
+    Parameters
+    ----------
+    rules : list of rule
+        List of rules which specify how the graph will be added to.
+        Default is no data will be added.
+
+
+    Examples
+    --------
+    This example shows appending new user and movie data to an existing
+    graph.
+
+    Create a frame as the source for additional data:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_csv = ta.CsvFile("/movie.csv", schema = [('user', ta.int32), ('vertex_type', str), ('movie', ta.int32), ('rating', str)])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_csv = ta.CsvFile("/movie.csv", schema = [('user', ta.int32),
+            ... ('vertex_type', str), ('movie', ta.int32), ('rating', str)])
+
+        >>> my_frame = ta.Frame(csv)
+
+    Define graph parsing rules:
+
+    .. only:: html
+
+        .. code::
+
+            >>> user = ta.VertexRule("user", my_frame.user, {"vertex_type": my_frame.vertex_type})
+            >>> movie = ta.VertexRule("movie", my_frame.movie)
+            >>> rates = ta.EdgeRule("rating", user, movie, { "rating": my_frame.rating }, bidirectional = True)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> user = ta.VertexRule("user", my_frame.user,
+            ... {"vertex_type": my_frame.vertex_type})
+            >>> movie = ta.VertexRule("movie", my_frame.movie)
+            >>> rates = ta.EdgeRule("rating", user, movie,
+            ... { "rating": my_frame.rating }, bidirectional = True)
+
+    Append data from the frame to an existing graph:
+
+    .. code::
+
+        >>> my_graph.append([user, movie, rates])
+
+    |
+
+    This example shows creating a graph from one frame and appending data
+    to it from other frames.
+
+    Create a frame as the source for a graph:
+
+    .. only:: html
+
+        .. code::
+
+            >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", schema = [('user_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
+
+    .. only:: latex
+
+        .. code::
+
+            >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv",
+            ... schema = [('user_id', ta.int32), ('movie_id', ta.int32),
+            ... ('rating', str)]))
+
+    Define graph parsing rules:
+
+    .. only:: html
+
+        .. code::
+
+            >>> user = ta.VertexRule("user", ratings_frame.user_id)
+            >>> movie = ta.VertexRule("movie", ratings_frame.movie_id)
+            >>> rates = ta.EdgeRule("rating", user, movie, { "rating": ratings_frame.rating }, bidirectional = True)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> user = ta.VertexRule("user", ratings_frame.user_id)
+            >>> movie = ta.VertexRule("movie", ratings_frame.movie_id)
+            >>> rates = ta.EdgeRule("rating", user, movie,
+            ... { "rating": ratings_frame.rating }, bidirectional = True)
+
+    Create graph:
+
+    .. code::
+
+        >>> my_graph = ta.Graph([user, movie, rates])
+
+    Load additional properties onto the user vertices:
+
+    .. only:: html
+
+        .. code::
+
+            >>> users_frame = ta.Frame(ta.CsvFile("/users.csv", schema = [('user_id', ta.int32), ('name', str), ('age', ta.int32)]))
+            >>> user_additional = ta.VertexRule("user", users_frame.user_id, {"user_name": users_frame.name, "age": users_frame.age })
+            >>> my_graph.append([user_additional])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> users_frame = ta.Frame(ta.CsvFile("/users.csv",
+            ... schema = [('user_id', ta.int32), ('name', str),
+            ... ('age', ta.int32)]))
+            >>> user_additional = ta.VertexRule("user", users_frame.user_id,
+            ... {"user_name": users_frame.name, "age": users_frame.age })
+            >>> my_graph.append([user_additional])
+
+    Load additional properties onto the movie vertices:
+
+    .. only:: html
+
+        .. code::
+
+            >>> movie_frame = ta.Frame(ta.CsvFile("/movies.csv", schema = [('movie_id', ta.int32), ('title', str), ('year', ta.int32)]))
+            >>> movie_additional = ta.VertexRule("movie", movie_frame.movie_id, {"title": movie_frame.title, "year": movie_frame.year })
+            >>> my_graph.append([movie_additional])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> movie_frame = ta.Frame(ta.CsvFile("/movies.csv",
+            ... schema = [('movie_id', ta.int32),
+            ... ('title', str), ('year', ta.int32)]))
+            >>> movie_additional = ta.VertexRule("movie",
+            ... movie_frame.movie_id,
+            ... {"title": movie_frame.title, "year": movie_frame.year })
+            >>> my_graph.append([movie_additional])
+

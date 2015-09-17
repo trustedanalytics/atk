@@ -1,0 +1,49 @@
+
+:doc:`VertexFrame <index>`  add_vertices
+****************************************
+
+------
+
+
+.. function:: add_vertices(self, source_frame, id_column_name, column_names=None)
+
+    Add vertices to a graph.
+
+
+    :Parameters:
+
+        **source_frame** : Frame
+
+        ..
+
+            Frame that will be the source of
+            the vertex data.
+
+
+
+        **id_column_name** : unicode
+
+        ..
+
+            Column name for a unique id for each vertex.
+
+
+
+        **column_names** : list (default=None)
+
+        ..
+
+            Column names that will be turned
+            into properties for each vertex.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Includes appending to a list of existing vertices.

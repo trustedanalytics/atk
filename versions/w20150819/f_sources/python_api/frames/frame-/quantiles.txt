@@ -1,0 +1,39 @@
+
+:doc:`Frame <index>`  quantiles
+*******************************
+
+------
+
+
+.. function:: quantiles(self, column_name, quantiles)
+
+    New frame with Quantiles and their values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column to calculate quantiles.
+
+
+
+        **quantiles** : list
+
+        ..
+
+            What is being requested.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A new frame with two columns (float64): requested Quantiles and their respective values.
+    Calculate quantiles on the given column.

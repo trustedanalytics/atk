@@ -1,0 +1,83 @@
+
+:doc:`EdgeFrame <index>`  take
+******************************
+
+------
+
+
+.. function:: take(self, n, offset=0, columns=None)
+
+    Get data subset.
+
+
+    :Parameters:
+
+        **n** : int
+
+        ..
+
+            The number of rows to copy to the client from the frame.
+
+
+
+        **offset** : int (default=0)
+
+        ..
+
+            The number of rows to skip before starting to copy
+
+
+
+        **columns** : str | iterable of str (default=None)
+
+        ..
+
+            If not None, only the given columns' data will be provided.  By default, all columns are included
+
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            A list of lists, where each contained list is the data for one row.
+    Take a subset of the currently active Frame.
+
+    Notes
+    -----
+    The data is considered 'unstructured', therefore taking a certain
+    number of rows, the rows obtained may be different every time the
+    command is executed, even if the parameters do not change.
+
+    Examples
+    --------
+    Frame *my_frame* accesses a frame with millions of rows of data.
+    Get a sample of 5000 rows:
+
+    .. code::
+
+        >>> my_data_list = my_frame.take( 5000 )
+
+    We now have a list of data from the original frame.
+
+    .. code::
+
+        >>> print my_data_list
+
+        [[ 1, "text", 3.1415962 ]
+         [ 2, "bob", 25.0 ]
+         [ 3, "weave", .001 ]
+         ...]
+
+    If we use the method with an offset like:
+
+    .. code::
+
+        >>> my_data_list = my_frame.take( 5000, 1000 )
+
+    We end up with a new list, but this time it has a copy of the data from
+    rows 1001 to 5000 of the original frame.
+

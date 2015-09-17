@@ -1,0 +1,112 @@
+
+
+---------------------------------------------
+:doc:`Commands <index>` frame/drop_duplicates
+---------------------------------------------
+
+Modify the current frame, removing duplicate rows.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/drop_duplicates
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <TBD>
+
+
+
+    **unique_columns** : None (default=None)
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Remove data rows which are the same as other rows.
+The entire row can be checked for duplication, or the search for duplicates
+can be limited to one or more columns.
+This modifies the current frame.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

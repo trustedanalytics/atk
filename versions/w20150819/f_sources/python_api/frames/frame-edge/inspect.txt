@@ -1,0 +1,96 @@
+
+:doc:`EdgeFrame <index>`  inspect
+*********************************
+
+------
+
+
+.. function:: inspect(self, n=10, offset=0, columns=None, wrap=None, truncate=None, round=None, width=80, margin=None)
+
+    Prints the frame data in readable format.
+
+
+    :Parameters:
+
+        **n** : int (default=10)
+
+        ..
+
+            The number of rows to print.
+
+
+
+        **offset** : int (default=0)
+
+        ..
+
+            The number of rows to skip before printing.
+
+
+
+        **columns** : int (default=None)
+
+        ..
+
+            Filter columns to be included.  By default, all columns are included
+
+
+
+        **wrap** : int or 'stripes' (default=None)
+
+        ..
+
+            If set to 'stripes' then inspect prints rows in stripes; if set to an integer N, rows will be printed in clumps of N columns, where the columns are wrapped
+
+
+
+        **truncate** : int (default=None)
+
+        ..
+
+            If set to integer N, all strings will be truncated to length N, including a tagged ellipses
+
+
+
+        **round** : int (default=None)
+
+        ..
+
+            If set to integer N, all floating point numbers will be rounded and truncated to N digits
+
+
+
+        **width** : int (default=80)
+
+        ..
+
+            If set to integer N, the print out will try to honor a max line width of N
+
+
+
+        **margin** : int (default=None)
+
+        ..
+
+            ('stripes' mode only) If set to integer N, the margin for printing names in a stripe will be limited to N characters
+
+
+    Examples
+    --------
+    Given a frame of data and a Frame to access it.
+    To look at the first 4 rows of data:
+
+    .. code::
+
+        >>> print my_frame.inspect(4)
+
+        column defs ->  animal:str  name:str    age:int     weight:float
+                      /--------------------------------------------------/
+        frame data ->   human       George        8            542.5
+                        human       Ursula        6            495.0
+                        ape         Ape          41            400.0
+                        elephant    Shep          5           8630.0
+
+
+
+    # For other examples, see :ref:`example_frame.inspect`.

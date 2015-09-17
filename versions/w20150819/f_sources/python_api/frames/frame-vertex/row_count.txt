@@ -1,0 +1,37 @@
+
+:doc:`VertexFrame <index>`  row_count
+*************************************
+
+------
+
+
+.. attribute:: row_count
+
+    Number of rows in the current frame.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : int
+
+        ..
+
+            The number of rows in the frame
+    Examples
+    --------
+    Get the number of rows:
+
+    .. code::
+
+        >>> my_frame.row_count
+
+    The result given is:
+
+    .. code::
+
+        81734
+

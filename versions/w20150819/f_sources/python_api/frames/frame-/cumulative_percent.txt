@@ -1,0 +1,43 @@
+
+:doc:`Frame <index>`  cumulative_percent
+****************************************
+
+------
+
+
+.. function:: cumulative_percent(self, sample_col)
+
+    |BETA|
+    Add column to frame with cumulative percent sum.
+
+
+    :Parameters:
+
+        **sample_col** : unicode
+
+        ..
+
+            The name of the column from which to compute
+            the cumulative percent sum.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    A cumulative percent sum is computed by sequentially stepping through the
+    column values and keeping track of the current percentage of the total sum
+    accounted for at the current value.
+
+
+    Notes
+    -----
+    This method applies only to columns containing numerical data.
+    Although this method will execute for columns containing negative
+    values, the interpretation of the result will change (for example,
+    negative percentages).

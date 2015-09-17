@@ -1,0 +1,44 @@
+
+:doc:`Frame <index>`  flatten_column
+************************************
+
+------
+
+
+.. function:: flatten_column(self, column, delimiter=None)
+
+    Spread data to multiple rows based on cell data.
+
+
+    :Parameters:
+
+        **column** : unicode
+
+        ..
+
+            The column to be flattened.
+
+
+
+        **delimiter** : unicode (default=None)
+
+        ..
+
+            The delimiter string.
+            Default is comma (,).
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Splits cells in the specified column into multiple rows according to a string
+    delimiter.
+    New rows are a full copy of the original row, but the specified column only
+    contains one value.
+    The original row is deleted.

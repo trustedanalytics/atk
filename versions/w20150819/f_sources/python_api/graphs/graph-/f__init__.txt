@@ -1,0 +1,22 @@
+
+:doc:`Graph <index>`  __init__
+******************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **name** : str (default=None)
+
+        ..
+
+            Name for the new graph.
+            Default is None.
+
+

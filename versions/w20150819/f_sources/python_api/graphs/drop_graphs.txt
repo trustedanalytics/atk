@@ -1,0 +1,21 @@
+
+:doc:`trustedanalytics <index>`  drop_graphs
+********************************************
+
+------
+
+
+.. function:: drop_graphs(items)
+
+    Deletes the graph on the server.
+
+
+    :Parameters:
+
+        **items** : [ str | graph object | list [ str | graph objects ]]
+
+        ..
+
+            Either the name of the graph object to delete or the graph object itself
+
+

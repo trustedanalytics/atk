@@ -1,0 +1,30 @@
+
+:doc:`PrincipalComponentsModel <index>`  new
+********************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of principal component model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

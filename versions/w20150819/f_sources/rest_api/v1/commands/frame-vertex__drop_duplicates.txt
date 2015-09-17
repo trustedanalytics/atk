@@ -1,0 +1,111 @@
+
+
+----------------------------------------------------
+:doc:`Commands <index>` frame:vertex/drop_duplicates
+----------------------------------------------------
+
+Remove duplicate vertex rows.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame:vertex/drop_duplicates
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <TBD>
+
+
+
+    **unique_columns** : None (default=None)
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Remove duplicate vertex rows, keeping only one vertex row per uniqueness
+criteria match.
+Edges that were connected to removed vertices are also automatically dropped.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

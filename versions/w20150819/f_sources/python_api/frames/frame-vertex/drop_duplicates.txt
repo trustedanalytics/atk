@@ -1,0 +1,33 @@
+
+:doc:`VertexFrame <index>`  drop_duplicates
+*******************************************
+
+------
+
+
+.. function:: drop_duplicates(self, unique_columns=None)
+
+    Remove duplicate vertex rows.
+
+
+    :Parameters:
+
+        **unique_columns** : None (default=None)
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Remove duplicate vertex rows, keeping only one vertex row per uniqueness
+    criteria match.
+    Edges that were connected to removed vertices are also automatically dropped.

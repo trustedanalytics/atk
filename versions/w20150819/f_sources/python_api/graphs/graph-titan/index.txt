@@ -1,0 +1,182 @@
+
+:doc:`Graphs<../index>` TitanGraph
+**********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+
+
+    ml
+    query
+    annotate_degrees
+    annotate_weighted_degrees
+    append
+    clustering_coefficient
+    copy
+    export_to_graph
+    graph_clustering
+    graphx_connected_components
+    graphx_pagerank
+    graphx_triangle_count
+    load
+    ml/belief_propagation
+    name
+    query/gremlin
+    status
+    vertex_sample
+
+.. class:: TitanGraph
+
+
+        Proxy to a graph in Titan, supports Gremlin query
+
+        Examples
+        --------
+        Starting with a single source data frame, create a graph of 'user'
+        and 'movie' vertices connected by 'rating' edges.
+
+        Create a frame as the source for a graph:
+
+        .. code::
+
+            >>> print my_frame.schema
+            [('user', ta.int32), ('vertex_type', str), ('movie', ta.int32), ('rating', str)]
+
+        Define graph parsing rules:
+
+        .. code::
+
+            >>> user = ta.VertexRule("user", my_frame.user,
+            ... {"vertex_type": my_frame.vertex_type})
+            >>> movie = ta.VertexRule("movie", my_frame.movie)
+            >>> rates = ta.EdgeRule("rating", user, movie,
+            ... {"rating": my_frame.rating}, bidirectional = True)
+
+        Create graph:
+
+        .. code::
+
+            >>> my_graph = ta.TitanGraph([user, movie, rates])
+
+        |
+
+        In another example, the vertex and edge rules can be sent to the method
+        simultaneously.
+
+        .. only:: html
+
+            Define the rules:
+
+            .. code::
+
+                >>> srcips = ta.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
+                >>> sports = ta.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
+                >>> dstips = ta.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
+                >>> dports = ta.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
+                >>> from_edges = ta.EdgeRule("from_port", srcips, sports, {"fs_srcbyte": my_frame.fs_srcbyte,"tot_srcbyte": my_frame.tot_srcbyte, "fs_srcpkt": my_frame.fs_srcpkt},bidirectional=True)
+                >>> to_edges = ta.EdgeRule("to_port", dstips, dports, {"fs_dstbyte": my_frame.fs_dstbyte,"tot_dstbyte": my_frame.tot_dstbyte, "fs_dstpkt": my_frame.fs_dstpkt},bidirectional=True)
+
+         .. only:: latex
+
+            Define the rules:
+
+            .. code::
+
+                >>> srcips = ta.VertexRule("srcip", my_frame.srcip,{"vertex_type": "L"})
+                >>> sports = ta.VertexRule("sport", my_frame.sport,{"vertex_type": "R"})
+                >>> dstips = ta.VertexRule("dstip", my_frame.dstip,{"vertex_type": "R"})
+                >>> dports = ta.VertexRule("dport", my_frame.dport,{"vertex_type": "L"})
+                >>> from_edges = ta.EdgeRule("from_port", srcips, sports,
+                ... {"fs_srcbyte": my_frame.fs_srcbyte,
+                ... "tot_srcbyte": my_frame.tot_srcbyte,
+                ... "fs_srcpkt": my_frame.fs_srcpkt},bidirectional=True)
+                >>> to_edges = ta.EdgeRule("to_port", dstips, dports,
+                ... {"fs_dstbyte": my_frame.fs_dstbyte,
+                ... "tot_dstbyte": my_frame.tot_dstbyte,
+                ... "fs_dstpkt": my_frame.fs_dstpkt},bidirectional=True)
+
+        Define the graph name:
+
+        .. code::
+
+            >>> gname = 'vast_netflow_topic_9'
+
+        Create the graph:
+
+        .. only:: html
+
+            .. code::
+
+                >>> my_graph = ta.TitanGraph([srcips, sports, from_edges, dstips, dports, to_edges], gname)
+
+        .. only:: latex
+
+            .. code::
+
+                >>> my_graph = ta.TitanGraph([srcips, sports, from_edges,
+                ... dstips, dports, to_edges], gname)
+
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the graph object.
+    :doc:`status <status>`\                                                                               Current graph life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <TitanGraph__init__>`\ (self[, rules, name, _info])                                    Initialize the graph.
+    :ref:`__init__ <TitanGraphMl__init__>`\ (self, entity)                                                <Missing Doc>
+    :ref:`__init__ <TitanGraphQuery__init__>`\ (self, entity)                                             <Missing Doc>
+    :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
+    :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+    :doc:`append <append>`\ (self[, rules])                                                               Append frame data to the current graph.
+    :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
+    :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
+    :doc:`export_to_graph <export_to_graph>`\ (self)                                                      Export from ta.TitanGraph to ta.Graph.
+    :doc:`graph_clustering <graph_clustering>`\ (self, edge_distance)                                     Build graph clustering over an initial titan graph.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determining which vertices are the most important.
+    :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
+    :doc:`load <load>`\ (self, frame_rules[, append])                                                     Loads graph data into a graph in the database.
+    :doc:`ml.belief_propagation <ml/belief_propagation>`\ (self, prior_property, posterior_property)      Classification on sparse data using belief propagation.
+    :doc:`query.gremlin <query/gremlin>`\ (self, gremlin)                                                 Executes a Gremlin query.
+    :doc:`vertex_sample <vertex_sample>`\ (self, size, sample_type[, seed])                               Make subgraph from vertex sampling.
+    ====================================================================================================  ====================================================================================================
+
+.. _TitanGraph__init__:
+
+
+.. function:: __init__(self, rules=None, name=None)
+
+    Initialize the graph.
+
+
+    :Parameters:
+
+        **rules** : list of rule (default=None)
+
+        ..
+
+            List of rules which specify how the graph will be created.
+            Default is an empty graph will be created.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            Name for the new graph.
+            Default is None.
+
+

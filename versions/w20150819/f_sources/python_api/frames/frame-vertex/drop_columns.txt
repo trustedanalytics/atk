@@ -1,0 +1,37 @@
+
+:doc:`VertexFrame <index>`  drop_columns
+****************************************
+
+------
+
+
+.. function:: drop_columns(self, columns)
+
+    Remove columns from the frame.
+
+
+    :Parameters:
+
+        **columns** : list
+
+        ..
+
+            Column name OR list of column names to be removed from the frame.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    The data from the columns is lost.
+
+    Notes
+    -----
+    It is not possible to delete all columns from a frame.
+    At least one column needs to remain.
+    If it is necessary to delete all columns, then delete the frame.

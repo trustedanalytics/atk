@@ -1,0 +1,34 @@
+
+:doc:`Frame <index>`  drop_duplicates
+*************************************
+
+------
+
+
+.. function:: drop_duplicates(self, unique_columns=None)
+
+    Modify the current frame, removing duplicate rows.
+
+
+    :Parameters:
+
+        **unique_columns** : None (default=None)
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Remove data rows which are the same as other rows.
+    The entire row can be checked for duplication, or the search for duplicates
+    can be limited to one or more columns.
+    This modifies the current frame.

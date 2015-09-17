@@ -1,0 +1,204 @@
+
+:doc:`Frames<../index>` Frame
+*****************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+    add_columns
+    append
+    assign_sample
+    bin_column
+    bin_column_equal_depth
+    bin_column_equal_width
+    categorical_summary
+    classification_metrics
+    column_median
+    column_mode
+    column_names
+    column_summary_statistics
+    compute_misplaced_score
+    copy
+    correlation
+    correlation_matrix
+    count
+    covariance
+    covariance_matrix
+    cumulative_percent
+    cumulative_sum
+    dot_product
+    download
+    drop_columns
+    drop_duplicates
+    drop_rows
+    ecdf
+    entropy
+    export_to_csv
+    export_to_hive
+    export_to_json
+    filter
+    flatten_column
+    get_error_frame
+    group_by
+    histogram
+    inspect
+    join
+    label_propagation
+    loopy_belief_propagation
+    name
+    quantiles
+    rename_columns
+    row_count
+    schema
+    sort
+    sorted_k
+    status
+    take
+    tally
+    tally_percent
+    top_k
+    unflatten_column
+
+.. class:: Frame
+
+    Large table of data.
+
+    Class with information about a large row and columnar data store in a frame,
+    Has information needed to modify data and table structure.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`column_names <column_names>`\                                                                   Column identifications in the current Frame.
+    :doc:`name <name>`\                                                                                   Set or get the name of the frame object.
+    :doc:`row_count <row_count>`\                                                                         Number of rows in the current frame.
+    :doc:`schema <schema>`\                                                                               Current frame column names and types.
+    :doc:`status <status>`\                                                                               Current frame life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <Frame__init__>`\ (self[, source, name, _info])                                        Create a Frame/frame.
+    :doc:`add_columns <add_columns>`\ (self, func, schema[, columns_accessed])                            Add columns to current frame.
+    :doc:`append <append>`\ (self, data)                                                                  Adds more data to the current frame.
+    :doc:`assign_sample <assign_sample>`\ (self, sample_percentages[, sample_labels, ...])                Randomly group rows into user-defined classes.
+    :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
+    :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.
+    :doc:`bin_column_equal_width <bin_column_equal_width>`\ (self, column_name[, num_bins, ...])          Classify column into same-width groups.
+    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             |ALPHA| Compute a summary of the data in a column(s) for categorical or numerical data types.
+    :doc:`classification_metrics <classification_metrics>`\ (self, label_column, pred_column[, ...])      Model statistics of accuracy, precision, and others.
+    :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
+    :doc:`column_mode <column_mode>`\ (self, data_column[, weights_column, max_modes_returned])           Evaluate the weights assigned to rows.
+    :doc:`column_summary_statistics <column_summary_statistics>`\ (self, data_column[, ...])              Calculate multiple statistics for a column.
+    :doc:`compute_misplaced_score <compute_misplaced_score>`\ (self, location_frame)                      
+    :doc:`copy <copy>`\ (self[, columns, where, name])                                                    Create new frame from current frame.
+    :doc:`correlation <correlation>`\ (self, data_column_names)                                           Calculate correlation for two columns of current frame.
+    :doc:`correlation_matrix <correlation_matrix>`\ (self, data_column_names[, matrix_name])              Calculate correlation matrix for two or more columns.
+    :doc:`count <count>`\ (self, where)                                                                   Counts the number of rows which meet given criteria.
+    :doc:`covariance <covariance>`\ (self, data_column_names)                                             Calculate covariance for exactly two columns.
+    :doc:`covariance_matrix <covariance_matrix>`\ (self, data_column_names[, matrix_name])                Calculate covariance matrix for two or more columns.
+    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    |BETA| Add column to frame with cumulative percent sum.
+    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            |BETA| Add column to frame with cumulative percent sum.
+    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           |ALPHA| Calculate dot product for each row in current frame.
+    :doc:`download <download>`\ (self[, count, offset, columns])                                          Download a frame from the server into client workspace.
+    :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
+    :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Modify the current frame, removing duplicate rows.
+    :doc:`drop_rows <drop_rows>`\ (self, predicate)                                                       Erase any row in the current frame which qualifies.
+    :doc:`ecdf <ecdf>`\ (self, column[, result_frame_name])                                               Builds new frame with columns for data and distribution.
+    :doc:`entropy <entropy>`\ (self, data_column[, weights_column])                                       Calculate the Shannon entropy of a column.
+    :doc:`export_to_csv <export_to_csv>`\ (self, folder_name[, separator, count, offset])                 Write current frame to HDFS in csv format.
+    :doc:`export_to_hive <export_to_hive>`\ (self, table_name)                                            Write current frame to Hive table.
+    :doc:`export_to_json <export_to_json>`\ (self, folder_name[, count, offset])                          Write current frame to HDFS in JSON format.
+    :doc:`filter <filter>`\ (self, predicate)                                                             Select all rows which satisfy a predicate.
+    :doc:`flatten_column <flatten_column>`\ (self, column[, delimiter])                                   Spread data to multiple rows based on cell data.
+    :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
+    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
+    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
+    :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin])          Prints the frame data in readable format.
+    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
+    :doc:`label_propagation <label_propagation>`\ (self, src_col_name, dest_col_name, ...[, ...])         Loopy Belief Propagation (LBP) from http://en.wikipedia.org/wiki/Belief_propagation
+    :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, src_col_name, ...[, ...])          Loopy Belief Propagation (LBP) from http://en.wikipedia.org/wiki/Belief_propagation
+    :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
+    :doc:`rename_columns <rename_columns>`\ (self, names)                                                 <TBD>
+    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      |BETA| Sort the data in a frame.
+    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                |ALPHA| Get a sorted subset of the data.
+    :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
+    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   |BETA| Count number of times a value is seen.
+    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   |BETA| Compute a cumulative percent count.
+    :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
+    :doc:`unflatten_column <unflatten_column>`\ (self, composite_key_column_names[, delimiter])           Compacts data from multiple rows based on cell data.
+    ====================================================================================================  ====================================================================================================
+
+.. _Frame__init__:
+
+
+.. function:: __init__(self, source=None, name=None)
+
+    Create a Frame/frame.
+
+
+    :Parameters:
+
+        **source** : CsvFile | Frame (default=None)
+
+        ..
+
+            A source of initial data.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            The name of the newly created frame.
+            Default is None.
+
+
+    Notes
+    -----
+    A frame with no name is subject to garbage collection.
+
+    If a string in the CSV file starts and ends with a double-quote (")
+    character, the character is stripped off of the data before it is put into
+    the field.
+    Anything, including delimiters, between the double-quote characters is
+    considered part of the str.
+    If the first character after the delimiter is anything other than a
+    double-quote character, the string will be composed of all the characters
+    between the delimiters, including double-quotes.
+    If the first field type is str, leading spaces on each row are
+    considered part of the str.
+    If the last field type is str, trailing spaces on each row are
+    considered part of the str.
+
+    Examples
+    --------
+    Create a new frame based upon the data described in the CsvFile object
+    *my_csv_schema*.
+    Name the frame "myframe".
+    Create a Frame *my_frame* to access the data:
+
+    .. code::
+
+        >>> my_frame = ta.Frame(my_csv_schema, "myframe")
+
+    A Frame object has been created and *my_frame* is its proxy.
+    It brought in the data described by *my_csv_schema*.
+    It is named *myframe*.
+
+    Create an empty frame; name it "yourframe":
+
+    .. code::
+
+        >>> your_frame = ta.Frame(name='yourframe')
+
+    A frame has been created and Frame *your_frame* is its proxy.
+    It has no data yet, but it does have the name *yourframe*.
+        

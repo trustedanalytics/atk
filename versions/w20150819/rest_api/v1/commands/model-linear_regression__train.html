@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Commands model:linear_regression/train &mdash; Trusted Analytics Package 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 1.1.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API Commands" href="index.html" >
+    <link rel="next" title="Commands model:logistic_regression/new" href="model-logistic_regression__new.html" >
+    <link rel="prev" title="Commands model:linear_regression/predict" href="model-linear_regression__predict.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Commands</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="model-linear_regression__predict.html" title="Commands model:linear_regression/predict"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="model-logistic_regression__new.html" title="Commands model:logistic_regression/new"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="commands-model-linear-regression-train">
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:linear_regression/train<a class="headerlink" href="#commands-model-linear-regression-train" title="Permalink to this headline">¶</a></h1>
+<p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+Build linear regression model.</p>
+<div class="section" id="post-v1-commands">
+<h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="get-v1-commands-id">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>POST /v1/commands/
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:linear_regression/train</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : unicode</p>
+<blockquote>
+<div><p>&lt;Missing Description&gt;</p>
+</div></blockquote>
+<p><strong>frame</strong> : Frame</p>
+<blockquote>
+<div><p>A frame to train the model on.</p>
+</div></blockquote>
+<p><strong>label_column</strong> : unicode</p>
+<blockquote>
+<div><p>Column name containing the label
+for each observation.</p>
+</div></blockquote>
+<p><strong>observation_columns</strong> : list</p>
+<blockquote>
+<div><p>Column(s) containing the
+observations.</p>
+</div></blockquote>
+<p><strong>intercept</strong> : bool (default=None)</p>
+<blockquote>
+<div><p>The algorithm adds an intercept.
+Default is true.</p>
+</div></blockquote>
+<p><strong>num_iterations</strong> : int32 (default=None)</p>
+<blockquote>
+<div><p>Number of iterations.
+Default is 100.</p>
+</div></blockquote>
+<p><strong>step_size</strong> : int32 (default=None)</p>
+<blockquote>
+<div><p>Step size for optimizer.
+Default is 1.0.</p>
+</div></blockquote>
+<p><strong>reg_type</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>Regularization L1 or L2.
+Default is L2.</p>
+</div></blockquote>
+<p><strong>reg_param</strong> : float64 (default=None)</p>
+<blockquote>
+<div><p>Regularization parameter.
+Default is 0.01.</p>
+</div></blockquote>
+<p><strong>mini_batch_fraction</strong> : float64 (default=None)</p>
+<blockquote class="last">
+<div><p>Mini batch fraction parameter.
+Default is 1.0.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Description</strong></p>
+<p>Creating a LinearRegression Model using the observation column and label column of the train frame.</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code></p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 17, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

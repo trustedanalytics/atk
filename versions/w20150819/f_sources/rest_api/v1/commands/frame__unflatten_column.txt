@@ -1,0 +1,121 @@
+
+
+----------------------------------------------
+:doc:`Commands <index>` frame/unflatten_column
+----------------------------------------------
+
+Compacts data from multiple rows based on cell data.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/unflatten_column
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        FrameReference of the data frame to perform
+        column unflattening.
+
+
+
+    **composite_key_column_names** : list
+
+    ..
+
+        name of the user column to be used as keys
+        for unflattening.
+
+
+
+    **delimiter** : unicode (default=None)
+
+    ..
+
+        separator for the data in the result columns.
+        Default is comma (,).
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Groups together cells in all columns (less the composite key) using "," as string delimiter.
+The original rows are deleted. Thr grouping takes place based on a composite key passed as arguments.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

@@ -1,0 +1,76 @@
+
+:doc:`EdgeFrame <index>`  sort
+******************************
+
+------
+
+
+.. function:: sort(self, columns, ascending=True)
+
+    |BETA|
+    Sort the data in a frame.
+
+
+    :Parameters:
+
+        **columns** : str | list of str | list of tuples
+
+        ..
+
+            Either a column name, a list of column names, or a list of tuples where each tuple is a name and an ascending bool value.
+
+
+
+        **ascending** : bool (default=True)
+
+        ..
+
+            True for ascending, False for descending.
+
+
+    Sort a frame by column values either ascending or descending.
+
+    Examples
+    --------
+    Sort a single column:
+
+    .. code::
+
+        >>> frame.sort('column_name')
+
+    Sort a single column ascending:
+
+    .. code::
+
+        >>> frame.sort('column_name', True)
+
+    Sort a single column descending:
+
+    .. code::
+
+        >>> frame.sort('column_name', False)
+
+    Sort multiple columns:
+
+    .. code::
+
+        >>> frame.sort(['col1', 'col2'])
+
+    Sort multiple columns ascending:
+
+    .. code::
+
+        >>> frame.sort(['col1', 'col2'], True)
+
+    Sort multiple columns descending:
+
+    .. code::
+
+        >>> frame.sort(['col1', 'col2'], False)
+
+    Sort multiple columns: 'col1' ascending and 'col2' descending:
+
+    .. code::
+
+        >>> frame.sort([ ('col1', True), ('col2', False) ])
+

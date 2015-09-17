@@ -1,0 +1,143 @@
+
+:doc:`Frame <index>`  join
+**************************
+
+------
+
+
+.. function:: join(self, right, left_on, right_on=None, how='inner', name=None)
+
+    |BETA|
+    Join operation on one or two frames, creating a new frame.
+
+
+    :Parameters:
+
+        **right** : Frame
+
+        ..
+
+            Another frame to join with
+
+
+
+        **left_on** : str
+
+        ..
+
+            Name of the column in the left frame used to match up the two frames.
+
+
+
+        **right_on** : str (default=None)
+
+        ..
+
+            Name of the column in the right frame used to match up the two frames. Default is the same as the left frame.
+
+
+
+        **how** : str (default=inner)
+
+        ..
+
+            How to qualify the data to be joined together.  Must be one of the following:  'left', 'right', 'inner', 'outer'.  Default is 'inner'
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            Name of the result grouped frame
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new frame with the results of the join
+    Create a new frame from a SQL JOIN operation with another frame.
+    The frame on the 'left' is the currently active frame.
+    The frame on the 'right' is another frame.
+    This method takes a column in the left frame and matches its values
+    with a column in the right frame.
+    Using the default 'how' option ['inner'] will only allow data in the
+    resultant frame if both the left and right frames have the same value
+    in the matching column.
+    Using the 'left' 'how' option will allow any data in the resultant
+    frame if it exists in the left frame, but will allow any data from the
+    right frame if it has a value in its column which matches the value in
+    the left frame column.
+    Using the 'right' option works similarly, except it keeps all the data
+    from the right frame and only the data from the left frame when it
+    matches.
+    The 'outer' option provides a frame with data from both frames where
+    the left and right frames did not have the same value in the matching
+    column.
+
+    Notes
+    -----
+    When a column is named the same in both frames, it will result in two
+    columns in the new frame.
+    The column from the *left* frame (originally the current frame) will be
+    copied and the column name will have the string "_L" added to it.
+    The same thing will happen with the column from the *right* frame,
+    except its name has the string "_R" appended. The order of columns
+    after this method is called is not guaranteed.
+
+    It is recommended that you rename the columns to meaningful terms prior
+    to using the ``join`` method.
+    Keep in mind that unicode in column names will likely cause the
+    drop_frames() method (and others) to fail!
+
+    Examples
+    --------
+    For this example, we will use a Frame *my_frame* accessing a frame with
+    columns *a*, *b*, *c*, and a Frame *your_frame* accessing a frame with
+    columns *a*, *d*, *e*.
+    Join the two frames keeping only those rows having the same value in
+    column *a*:
+
+    .. code::
+
+        >>> print my_frame.inspect()
+
+          a:unicode   b:unicode   c:unicode
+        /--------------------------------------/
+          alligator   bear        cat
+          apple       berry       cantaloupe
+          auto        bus         car
+          mirror      frog        ball
+
+        >>> print your_frame.inspect()
+
+          b:unicode   c:int   d:unicode
+        /-------------------------------------/
+          berry        5218   frog
+          blue            0   log
+          bus           871   dog
+
+        >>> joined_frame = my_frame.join(your_frame, 'b', how='inner')
+
+    Now, joined_frame is a Frame accessing a frame with the columns *a*,
+    *b*, *c_L*, *ci_R*, and *d*.
+    The data in the new frame will be from the rows where column 'a' was
+    the same in both frames.
+
+    .. code::
+
+        >>> print joined_frame.inspect()
+
+          a:unicode   b:unicode     c_L:unicode   c_R:int64   d:unicode
+        /-------------------------------------------------------------------/
+          apple       berry         cantaloupe         5218   frog
+          auto        bus           car                 871   dog
+
+    More examples can be found in the :ref:`user manual
+    <example_frame.join>`.
+

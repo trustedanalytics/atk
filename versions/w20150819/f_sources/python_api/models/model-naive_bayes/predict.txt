@@ -1,0 +1,44 @@
+
+:doc:`NaiveBayesModel <index>`  predict
+***************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    <TBD>
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the
+            observations whose labels are to be predicted.
+            By default, we predict the labels over columns the NaiveBayesModel
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

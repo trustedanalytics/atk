@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Frame __init__ &mdash; Trusted Analytics Package 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 1.1.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames Frame" href="index.html" >
+    <link rel="next" title="Frame add_columns" href="add_columns.html" >
+    <link rel="prev" title="Frames Frame" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> Frame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Frames Frame"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="add_columns.html" title="Frame add_columns"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="frame-init">
+<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  __init__<a class="headerlink" href="#frame-init" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>source=None</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a Frame/frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>source</strong> : CsvFile | Frame (default=None)</p>
+<blockquote>
+<div><p>A source of initial data.</p>
+</div></blockquote>
+<p><strong>name</strong> : str (default=None)</p>
+<blockquote class="last">
+<div><p>The name of the newly created frame.
+Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>A frame with no name is subject to garbage collection.</p>
+<p>If a string in the CSV file starts and ends with a double-quote (&#8221;)
+character, the character is stripped off of the data before it is put into
+the field.
+Anything, including delimiters, between the double-quote characters is
+considered part of the str.
+If the first character after the delimiter is anything other than a
+double-quote character, the string will be composed of all the characters
+between the delimiters, including double-quotes.
+If the first field type is str, leading spaces on each row are
+considered part of the str.
+If the last field type is str, trailing spaces on each row are
+considered part of the str.</p>
+<p class="rubric">Examples</p>
+<p>Create a new frame based upon the data described in the CsvFile object
+<em>my_csv_schema</em>.
+Name the frame &#8220;myframe&#8221;.
+Create a Frame <em>my_frame</em> to access the data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv_schema</span><span class="p">,</span> <span class="s">&quot;myframe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A Frame object has been created and <em>my_frame</em> is its proxy.
+It brought in the data described by <em>my_csv_schema</em>.
+It is named <em>myframe</em>.</p>
+<p>Create an empty frame; name it &#8220;yourframe&#8221;:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;yourframe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A frame has been created and Frame <em>your_frame</em> is its proxy.
+It has no data yet, but it does have the name <em>yourframe</em>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 17, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

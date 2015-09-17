@@ -1,0 +1,210 @@
+
+
+------------------------------------------------
+:doc:`Commands <index>` frame:/label_propagation
+------------------------------------------------
+
+Loopy Belief Propagation (LBP) from http://en.wikipedia.org/wiki/Belief_propagation
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame:/label_propagation
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <TBD>
+
+
+
+    **src_col_name** : unicode
+
+    ..
+
+        <TBD>
+
+
+
+    **dest_col_name** : unicode
+
+    ..
+
+        <TBD>
+
+
+
+    **weight_col_name** : unicode
+
+    ..
+
+        <TBD>
+
+
+
+    **src_label_col_name** : unicode
+
+    ..
+
+        <TBD>
+
+
+
+    **result_col_name** : unicode (default=None)
+
+    ..
+
+        <TBD>
+
+
+
+    **max_iterations** : int32 (default=None)
+
+    ..
+
+        <TBD>
+
+
+
+    **convergence_threshold** : float32 (default=None)
+
+    ..
+
+        <TBD>
+
+
+
+    **alpha** : float32 (default=None)
+
+    ..
+
+        <TBD>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Label Propagation on Gaussian Random Fields.
+               |
+               |This algorithm is presented in X. Zhu and Z. Ghahramani.
+               |Learning from labeled and unlabeled data with label propagation.
+               |Technical Report CMU-CALD-02-107, CMU, 2002.
+               |
+               |
+               |Parameters
+               |----------
+               |src_col_name: str
+               |    The column name for the source vertex id.
+               |dest_col_name: str
+               |    The column name for the destination vertex id.
+               |weight_col_name: str
+               |    The column name for the edge weight.
+               |src_label_col_name: str
+               |    The column name for the label properties for the source vertex.
+               |result_col_name : str (optional)
+               |    column name for the results (holding the post labels for the vertices)
+               |max_iterations : int (optional)
+               |    The maximum number of supersteps that the algorithm will execute.
+               |    The valid value range is all positive int.
+               |    The default value is 10.
+               |convergence_threshold : float (optional)
+               |    The amount of change in cost function that will be tolerated at
+               |    convergence.
+               |    If the change is less than this threshold, the algorithm exits earlier
+               |    before it reaches the maximum number of supersteps.
+               |    The valid value range is all float and zero.
+               |    The default value is 0.00000001f.
+               |alpha : float (optional)
+               |    The tradeoff parameter that controls how much influence an external
+               |    classifier's prediction contributes to the final prediction.
+               |    This is for the case where an external classifier is available that can
+               |    produce initial probabilistic classification on unlabeled examples, and
+               |    the option allows incorporating external classifier's prediction into
+               |    the LP training process.
+               |    The valid value range is [0.0,1.0].
+               |    The default value is 0.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Returns
+                      |-------
+                      |a 2-column frame:
+                      |
+                      |vertex: int
+                      |    A vertex id.
+                      |result : Vector (long)
+                      |    label vector for the results (for the node id in column 1)
+
+

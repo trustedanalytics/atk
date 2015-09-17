@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>TitanGraph append &mdash; Trusted Analytics Package 1.1.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 1.1.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Graphs TitanGraph" href="index.html" >
+    <link rel="next" title="TitanGraph clustering_coefficient" href="clustering_coefficient.html" >
+    <link rel="prev" title="TitanGraph annotate_weighted_degrees" href="annotate_weighted_degrees.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Graphs</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Graphs</span></code> TitanGraph</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="annotate_weighted_degrees.html" title="TitanGraph annotate_weighted_degrees"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="clustering_coefficient.html" title="TitanGraph clustering_coefficient"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="titangraph-append">
+<h1><a class="reference internal" href="index.html"><em>TitanGraph</em></a>  append<a class="headerlink" href="#titangraph-append" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>self</em>, <em>rules=None</em><span class="sig-paren">)</span><a class="headerlink" href="#append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append frame data to the current graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>rules</strong> :  (default=None)</td>
+</tr>
+</tbody>
+</table>
+<p>Append updates existing edges and vertices or creates new ones if they
+do not exist.
+Vertices are considered the same if their id_key&#8217;s and id_value&#8217;s
+match.
+Edges are considered the same if they have the same source vertex,
+destination vertex, and label.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>rules</strong> : list of rule</p>
+<blockquote class="last">
+<div><p>List of rules which specify how the graph will be added to.
+Default is no data will be added.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>This example shows appending new user and movie data to an existing
+graph.</p>
+<p>Create a frame as the source for additional data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/movie.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;vertex_type&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p>Define graph parsing rules:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;user&quot;</span><span class="p">,</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;vertex_type&quot;</span><span class="p">:</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">vertex_type</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">movie</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;movie&quot;</span><span class="p">,</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">movie</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rates</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">EdgeRule</span><span class="p">(</span><span class="s">&quot;rating&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">movie</span><span class="p">,</span> <span class="p">{</span> <span class="s">&quot;rating&quot;</span><span class="p">:</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">rating</span> <span class="p">},</span> <span class="n">bidirectional</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Append data from the frame to an existing graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">user</span><span class="p">,</span> <span class="n">movie</span><span class="p">,</span> <span class="n">rates</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>This example shows creating a graph from one frame and appending data
+to it from other frames.</p>
+<p>Create a frame as the source for a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ratings_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/ratings.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+</pre></div>
+</div>
+<p>Define graph parsing rules:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;user&quot;</span><span class="p">,</span> <span class="n">ratings_frame</span><span class="o">.</span><span class="n">user_id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">movie</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;movie&quot;</span><span class="p">,</span> <span class="n">ratings_frame</span><span class="o">.</span><span class="n">movie_id</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rates</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">EdgeRule</span><span class="p">(</span><span class="s">&quot;rating&quot;</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">movie</span><span class="p">,</span> <span class="p">{</span> <span class="s">&quot;rating&quot;</span><span class="p">:</span> <span class="n">ratings_frame</span><span class="o">.</span><span class="n">rating</span> <span class="p">},</span> <span class="n">bidirectional</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">([</span><span class="n">user</span><span class="p">,</span> <span class="n">movie</span><span class="p">,</span> <span class="n">rates</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Load additional properties onto the user vertices:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">users_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/users.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_additional</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;user&quot;</span><span class="p">,</span> <span class="n">users_frame</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;user_name&quot;</span><span class="p">:</span> <span class="n">users_frame</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s">&quot;age&quot;</span><span class="p">:</span> <span class="n">users_frame</span><span class="o">.</span><span class="n">age</span> <span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">user_additional</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Load additional properties onto the movie vertices:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">movie_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/movies.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">movie_additional</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">VertexRule</span><span class="p">(</span><span class="s">&quot;movie&quot;</span><span class="p">,</span> <span class="n">movie_frame</span><span class="o">.</span><span class="n">movie_id</span><span class="p">,</span> <span class="p">{</span><span class="s">&quot;title&quot;</span><span class="p">:</span> <span class="n">movie_frame</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="s">&quot;year&quot;</span><span class="p">:</span> <span class="n">movie_frame</span><span class="o">.</span><span class="n">year</span> <span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">movie_additional</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 17, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+
+:doc:`Models<../index>` PrincipalComponentsModel
+************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    train
+
+.. class:: PrincipalComponentsModel
+
+    Create a 'new' instance of principal component model.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <PrincipalComponentsModel__init__>`\ (self[, name, _info])                             Create a 'new' instance of principal component model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns, c, t_square_index, name])               |ALPHA| Predict using principal components model.
+    :doc:`train <train>`\ (self, frame, observation_columns[, k])                                         Build principal components model.
+    ====================================================================================================  ====================================================================================================
+
+.. _PrincipalComponentsModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of principal component model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

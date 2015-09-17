@@ -1,0 +1,118 @@
+
+
+---------------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/recommend
+---------------------------------------------------------------
+
+|BETA|
+Collaborative filtering (als/cgd) model
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:collaborative_filtering/recommend
+
+:arguments:
+
+
+    **model** : unicode
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode
+
+    ..
+
+        An entity name from the first column of the input frame
+
+
+
+    **top_k** : int32
+
+    ..
+
+        positive integer representing the top recommendations for the name
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+see collaborative filtering train for more information
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        see collaborative filtering train for more information
+
+
