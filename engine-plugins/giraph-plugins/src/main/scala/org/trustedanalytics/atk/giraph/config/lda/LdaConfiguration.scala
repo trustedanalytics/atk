@@ -50,8 +50,8 @@ case class LdaOutputFormatConfig(documentResultsFileLocation: String,
  * Configuration settings for Lda
  * @param inputFormatConfig where to read input from
  * @param outputFormatConfig where to write output to
- * @param documentColumnName column name that contains the "documents"
- * @param wordColumnName column name that contains the "words"
+ * @param documentIdColumnName column name that contains the "documents"
+ * @param wordIdColumnName column name that contains the "words"
  * @param wordCountColumnName column name that contains "word count"
  * @param maxIterations see LdaTrainArgs for doc
  * @param alpha see LdaTrainArgs for doc
@@ -62,8 +62,8 @@ case class LdaOutputFormatConfig(documentResultsFileLocation: String,
  */
 case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
                      outputFormatConfig: LdaOutputFormatConfig,
-                     documentColumnName: String,
-                     wordColumnName: String,
+                     documentIdColumnName: String,
+                     wordIdColumnName: String,
                      wordCountColumnName: String,
                      maxIterations: Long,
                      alpha: Float,
@@ -71,6 +71,10 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
                      convergenceThreshold: Float,
                      evaluationCost: Boolean,
                      numTopics: Int) {
+
+  val isDocumentColumnName : String = ???
+  val vertexIdColumnName : String = ???
+  val vertexDescriptionColumnName : String = ???
 
   def this(inputFormatConfig: LdaInputFormatConfig, outputFormatConfig: LdaOutputFormatConfig, args: LdaTrainArgs) = {
     this(inputFormatConfig,
@@ -88,8 +92,8 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
 
   require(inputFormatConfig != null, "input format is required")
   require(outputFormatConfig != null, "output format is required")
-  require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
-  require(StringUtils.isNotBlank(wordColumnName), "word column name is required")
+  require(StringUtils.isNotBlank(documentIdColumnName), "document column name is required")
+  require(StringUtils.isNotBlank(wordIdColumnName), "word column name is required")
   require(StringUtils.isNotBlank(wordCountColumnName), "word count column name is required")
   require(maxIterations > 0, "Max iterations should be greater than 0")
   require(alpha > 0, "Alpha should be greater than 0")
@@ -116,6 +120,7 @@ import org.trustedanalytics.atk.giraph.config.lda.LdaConfigJSONFormat._
  */
 class LdaConfiguration(other: Configuration) extends GiraphConfiguration(other) {
 
+  val LdaIdPrefix = "_lda_id_"
   private val LdaConfigPropertyName = "lda.config"
 
   def this() = {
