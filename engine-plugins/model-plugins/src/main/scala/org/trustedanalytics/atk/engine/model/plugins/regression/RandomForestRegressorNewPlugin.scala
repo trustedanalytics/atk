@@ -42,9 +42,8 @@ import MLLibJsonProtocol._
 Random Forest[1]_ is a supervised ensemble learning algorithm which can be used to perform regression.
 The user may initialize a RandomForestRegressorModel, train the model on columns of a frame, and
 use the model to predict the value of each observation in a frame.
-This model runs the MLLib implementation of Random Forest[2]_. During training, the decision trees are trained in parallel with some
-injected randomness so that the trees differ from each other. During prediction, the average over all tree's predicted value is the
-predicted value of the random forest.
+This model runs the MLLib implementation of Random Forest[2]_. During training, the decision trees are trained in parallel.
+During prediction, the average over all tree's predicted value is the predicted value of the random forest.
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
