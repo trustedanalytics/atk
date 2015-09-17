@@ -17,9 +17,7 @@
 package org.trustedanalytics.atk.giraph.io;
 
 import org.apache.hadoop.io.Writable;
-import org.apache.mahout.math.DenseVector;
 import org.apache.mahout.math.Vector;
-import org.apache.mahout.math.VectorWritable;
 import org.apache.spark.mllib.atk.plugins.VectorUtils;
 
 import java.io.DataInput;
@@ -37,10 +35,10 @@ public class LdaVertexData implements Writable {
     private String description;
 
     /** The vector value at this vertex */
-    private final VectorWritable ldaResult = new VectorWritable(new DenseVector());
+    private final DoubleArrayWritable ldaResult = new DoubleArrayWritable();
 
     /** The conditional probability of topic given word */
-    private final VectorWritable topicGivenWord = new VectorWritable(new DenseVector());
+    private final DoubleArrayWritable topicGivenWord = new DoubleArrayWritable();
 
     public LdaVertexData() {
     }
@@ -63,7 +61,7 @@ public class LdaVertexData implements Writable {
     }
 
     public Vector getLdaResult() {
-        return ldaResult.get();
+        return ldaResult.getVector();
     }
 
     public void setTopicGivenWord(Vector vector) {
@@ -71,7 +69,7 @@ public class LdaVertexData implements Writable {
     }
 
     public Vector getTopicGivenWord() {
-        return topicGivenWord.get();
+        return topicGivenWord.getVector();
     }
 
     public double[] getLdaResultAsDoubleArray() {

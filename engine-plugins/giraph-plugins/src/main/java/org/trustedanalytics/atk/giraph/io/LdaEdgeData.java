@@ -31,7 +31,7 @@ import java.io.IOException;
 public final class LdaEdgeData implements Writable {
 
     private Double wordCount = null;
-    private final VectorWritable vectorWritable = new VectorWritable(new DenseVector());
+    private final DoubleArrayWritable vectorWritable = new DoubleArrayWritable();
 
     public LdaEdgeData() {
     }
@@ -62,7 +62,7 @@ public final class LdaEdgeData implements Writable {
     }
 
     public Vector getVector() {
-        return vectorWritable.get();
+        return vectorWritable.getVector();
     }
 
     public void setVector(Vector vector) {
