@@ -32,10 +32,12 @@ View and edit the server connection:
 .. code::
 
     >>> print ta.server
-    host:    localhost
-    port:    9099
-    scheme:  http
-    version: v1
+    ------------------------------------------------------------------------------
+    headers        : {u'Content-type': u'application/json', u'Authorization': u...
+    scheme         : http
+    uri            : 10.54.8.187:9099
+    user           : test_api_key_1
+    ------------------------------------------------------------------------------
 
     >>> ta.server.host
     'localhost'
@@ -93,9 +95,9 @@ issues, etc.
 Tab Completion
 ==============
 
-Allows you to use the tab key to complete your typing for you.
+Enabling tab completion allows you to use the tab key to complete your typing for you.
 
-If you are running with a standard Python REPL (not IPython, bPython, or the
+If you are running with a standard Python `REPL`_ (not IPython, bPython, or the
 like) you will have to set up the tab completion manually:
 
 Create a .pythonrc file in your home directory with the following contents:
@@ -106,7 +108,7 @@ Create a .pythonrc file in your home directory with the following contents:
     >>> readline.parse_and_bind('tab:complete')
 
 
-Or you can just run the two lines in your REPL session.
+Or you can just run the two lines in your `REPL`_ session.
 
 This will let you do the tab completion, but will also remember your history
 over multiple sessions:
@@ -147,3 +149,4 @@ Note:
 
         export PYTHONSTARTUP=~/.pythonrc
 
+.. _REPL: https://pypi.python.org/pypi/repl/1.0

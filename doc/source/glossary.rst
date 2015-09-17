@@ -1029,7 +1029,7 @@ Glossary
     http://en.wikipedia.org/wiki/Convergence_(mathematics)
 .. _Wikipedia\: Directed Acyclic Graph:
     https://en.wikipedia.org/wiki/Directed_acyclic_graph
-.. _Tinkerpop\: Property Graph Model:
+.. _TinkerPop\: Property Graph Model:
     https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model
 .. _Wikipedia\: Extract, Transform, and Load:
     http://en.wikipedia.org/wiki/Extract,_transform,_load

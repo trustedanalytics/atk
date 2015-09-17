@@ -62,7 +62,7 @@ collection of days) to a known binary label (e.g., whether or not someone
 went for a trail run on that day).
 Once the relationship between temperature and running activity is learned,
 then the model can be used to make predictions about new running activity,
-given the days temperatures.
+given the daily temperatures.
 Unsupervised machine learning algorithms are used to find patterns or
 groupings in data for which class labels are unknown.
 For example, given a data set of observations about flowers (e.g., petal
