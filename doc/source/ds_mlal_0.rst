@@ -12,26 +12,28 @@ Machine Learning Algorithms
     :local:
     :backlinks: none
 
------------------------
-Collaborative Filtering
------------------------
-See the :ref:`models section of the API
-<python_api/models/model-collaborative_filtering/index.rst>` for details.
+-------------------------
+Classification Algorithms
+-------------------------
+-   :ref:`Logistic Regression <python_api/models/model-logistic_regression/index>`
+-   :ref:`Naive Bayes <python_api/models/model-naive_bayes/index>`
+-   :ref:`Random Forest <python_api/models/model-random_forest_classifier/index>`
+-   :ref:`SVM with SGD <python_api/models/model-svm/index>`
+-   :ref:`Lib SVM <python_api/models/model-libsvm/index>`
 
+---------------------
+Regression Algorithms
+---------------------
+-   :ref:`Linear Regression <python_api/models/model-linear_regression/index>`
+-   :ref:`Random Forest <python_api/models/model-random_forest_regressor/index>`
 
-----------------
-Graphical Models
-----------------
-Graphical models find more insights from structured noisy data.
-See :ref:`graph API <python_api/graphs/index.rst>` for details of the
-:term:`Label Propagation` (LP) and :term:`Loopy Belief Propagation` (LBP).
+---------------------
+Clustering Algorithms
+---------------------
+-   :ref:`K means <python_api/models/model-k_means/index>`
 
+-----------------------------------
+Dimensionality Reduction Algorithms
+-----------------------------------
+-   :ref:`Principal Component Analysis <python_api/models/model-principal_components/index>`
 
-.. _Topic_Modeling:
-
---------------
-Topic Modeling
---------------
-For Topic Modeling, see the :ref:`LDA Model section of the API
-<python_api/models/model-lda/index.rst>` and
-http://en.wikipedia.org/wiki/Topic_model
