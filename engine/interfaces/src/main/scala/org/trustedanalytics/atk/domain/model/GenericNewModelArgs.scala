@@ -143,7 +143,7 @@ bidirectional_check:
     Boolean (optional)
 
     Turns bidirectional check on and off.
-    |LDA| expects a bi-partite input graph, so each edge should be
+    |LDA| expects a bipartite input graph, so each edge should be
     bi-directional.
     This option is mainly for graph integrity check.
 

@@ -8,13 +8,6 @@ Glossary
 ..  glossary::
     :sorted:
 
-    ASCII
-
-        Abbreviated from American Standard Code for Information Interchange,
-        ASCII is a character-encoding scheme.
-        Originally based on the English alphabet, it encodes 128 specified
-        characters into 7-bit binary integers.
-
     Adjacency List
 
         A representation of a graph as a list.
@@ -82,6 +75,19 @@ Glossary
         supported.
         It is recommended that an alternate solution be found.
         This function may be removed in future releases.
+
+    Arity
+
+        In logic, mathematics, and computer science, the arity of a function
+        or operation is the number of arguments or operands the function or
+        operation accepts.
+
+    ASCII
+
+        Abbreviated from American Standard Code for Information Interchange,
+        ASCII is a character-encoding scheme.
+        Originally based on the English alphabet, it encodes 128 specified
+        characters into 7-bit binary integers.
 
     Average Path Length
 

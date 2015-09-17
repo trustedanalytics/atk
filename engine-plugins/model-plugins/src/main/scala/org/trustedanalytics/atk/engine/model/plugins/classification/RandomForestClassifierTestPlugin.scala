@@ -25,7 +25,7 @@ import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, _ }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.apache.spark.mllib.regression.LabeledPoint
 import FrameRddImplicits._

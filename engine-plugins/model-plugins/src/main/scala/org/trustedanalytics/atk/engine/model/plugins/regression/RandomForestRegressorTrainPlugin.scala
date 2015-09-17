@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
-import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, _ }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -44,7 +44,7 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
                                           @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
                                           @ArgDoc("""Criterion used for information gain calculation. Supported values "variance"""") impurity: String = "variance",
-                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
+                                          @ArgDoc("""Maximum depth of the tree""") maxDepth: Int = 4,
                                           @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
                                           @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
@@ -81,7 +81,7 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
     """Values of the Random Forest Classifier model object storing:
       | the list of observation columns on which the model was trained,
       | the column name containing the labels of the observations,
-      | the number of decison trees in the random forest,
+      | the number of decision trees in the random forest,
       | the number of nodes in the random forest,
       | the map storing arity of categorical features,
       | the criterion used for information gain calculation,

@@ -33,7 +33,7 @@ import CollaborativeFilteringJsonFormat._
 /**
  * Collaborative filtering recommend model
  */
-@PluginDoc(oneLine = "Collaborative filtering (als/cgd) model",
+@PluginDoc(oneLine = "Collaborative filtering (ALS/CGD) model",
   extended = "see collaborative filtering train for more information",
   returns = "see collaborative filtering train for more information")
 class CollaborativeFilteringRecommendPlugin

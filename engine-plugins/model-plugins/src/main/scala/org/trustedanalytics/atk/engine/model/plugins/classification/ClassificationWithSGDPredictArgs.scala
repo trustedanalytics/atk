@@ -32,7 +32,7 @@ case class ClassificationWithSGDPredictArgs(model: ModelReference,
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
                                             @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
-By default, we predict the labels over columns the LogisticRegressionModel
+Default is the labels the model
 was trained on. """) observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")

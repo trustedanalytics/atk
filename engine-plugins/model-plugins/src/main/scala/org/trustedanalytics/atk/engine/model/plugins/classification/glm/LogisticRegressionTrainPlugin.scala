@@ -32,7 +32,7 @@ import MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build logistic regression model.",
-  extended = "Creating a LogisticRegression Model using the observation column and label column of the train frame.",
+  extended = "Creating a Logistic Regression Model using the observation column and label column of the train frame.",
   returns = """object
     An object with a summary of the trained model.
     The data returned is composed of multiple components:

@@ -56,7 +56,7 @@ Default is 1.0.""") lambdaParameter: Option[Double] = None) {
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
 }
 
-@PluginDoc(oneLine = "Build a naive bayes model.",
+@PluginDoc(oneLine = "Train a Naive Bayes model.",
   extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""")
 class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, UnitReturn] {
   /**

@@ -36,7 +36,7 @@ import SortedKJsonFormat._
 
 @PluginDoc(oneLine = "Get a sorted subset of the data.",
   extended = """Take a number of rows and return them
-sorted by in either ascending or descending order.
+sorted in either ascending or descending order.
 
 Sorting a subset of rows is more efficient than sorting the entire frame when
 the number of sorted rows is much less than the total number of rows in the frame.

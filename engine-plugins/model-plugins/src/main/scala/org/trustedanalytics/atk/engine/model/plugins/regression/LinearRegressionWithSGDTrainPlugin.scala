@@ -31,7 +31,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build linear regression model.",
-  extended = "Creating a LinearRegression Model using the observation column and label column of the train frame.")
+  extended = "Creating a Linear Regression Model using the observation column and label column of the train frame.")
 class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.

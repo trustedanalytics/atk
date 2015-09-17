@@ -94,21 +94,21 @@ The general steps to the topic modeling with |LDA| include:
 
 **Data preparation and ingest**
 
-Most topic modeling workflows involve several data pre-processing and cleaning
+Most topic modeling workflows involve several data preprocessing and cleaning
 steps.
 Depending on the characteristics of the data being analyzed, there are
 different best-practices to use here, so it's important to be familiar with
 the standard procedures for analytics in the domain from which the text
 originated.
 For example, in the biomedical text analytics community, it is common practice
-for text analytics workflows to involve pre-processing for identifying negation
+for text analytics workflows to involve preprocessing for identifying negation
 statements (Chapman et al., 2001 [#LDA2]_ ).
 The reason for this is many analysts in that domain are examining text for
 diagnostic statements |EM| thus, failing to identify a negated statement in which
 a disease is mentioned could lead to undesirable false-positives, but this
 phenomenon may not arise in every domain.
 In general, both stemming and stop word filtering are recommended steps for
-topic modeling pre-processing.
+topic modeling preprocessing.
 Stemming refers to a set of methods used to normalize different tenses and
 variations of the same word (for example, stemmer, stemming, stemmed, and
 stem).
@@ -118,15 +118,15 @@ There are many approaches to stemming, but the Porter Stemming (Porter, 2006
 [#LDA3]_ ) is one of the most commonly-used.
 
 Removing common, uninformative words, or stop word filtering, is another
-commonly-used step in data pre-processing for topic modeling.
+commonly-used step in data preprocessing for topic modeling.
 Stop words include words like *the*, *and*, or *a*, but the full list of
 uninformative words can be quite long and depend on the domain producing the
 text in question.
 Example stop word lists online [#LDA4]_ can be a great place to start, but
-being aware of the best-practices in the applicalbe field is necessary to
+being aware of the best-practices in the applicable field is necessary to
 expand upon these.
 
-There may be other pre-processing steps needed, depending on the type of text
+There may be other preprocessing steps needed, depending on the type of text
 being worked with.
 Punctuation removal is frequently recommended, for example.
 To determine what's best for the text being analyzed, it helps to understand a
@@ -139,7 +139,7 @@ document, and without regard for the words that were written around it.
 In the text analytics field, this is often referred to as a *bag of words*
 approach to tokenization, the process of separating input text into
 composite features to be analyzed by some algorithm.
-When choosing pre-processing steps, it helps to keep this in mind.
+When choosing preprocessing steps, it helps to keep this in mind.
 Don't worry too much about removing words or modifying their format |EM| you're
 not manipulating your data!
 These steps simply make it easier for the topic modeling algorithm to find the
@@ -153,9 +153,9 @@ It is common practice to withhold a random selection of one's data set for the
 purpose of evaluating the accuracy of the model that was learned from the
 training data.
 The results of this evaluation allow the user to confidently speak about the
-generalizability of the trained model.
+ability to generalize the trained model.
 When speaking in these terms, be cautious that you only discuss
-generalizability to the broader population from which your data was originally
+ability to generalize the broader population from which your data was originally
 obtained.
 If a topic model is trained on neuroscience-related publications,
 for example, evaluating the model on other neuroscience-related publications
@@ -184,7 +184,7 @@ This graph contains vertices in two columns.
 The left-hand column contains unique ids, each corresponding to a document in
 the training collection, while the right-hand column contains unique ids
 corresponding to each word in the entire training set, following any
-pre-processing steps that were used.
+preprocessing steps that were used.
 Connections between these columns, or edges, denote the number of times a
 particular word appears in a document, with the weight on the edge in question
 denoting the number of times the word was found there.

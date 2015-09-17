@@ -45,8 +45,7 @@ topics_given_word : Frame
 report : str
    The configuration and learning curve report for Latent Dirichlet
    Allocation as a multiple line str.""")
-class LdaTrainPlugin
-    extends CommandPlugin[LdaTrainArgs, LdaTrainResult] {
+class LdaTrainPlugin extends CommandPlugin[LdaTrainArgs, LdaTrainResult] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation

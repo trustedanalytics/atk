@@ -57,8 +57,8 @@ The valid value range is in [0, 1].
 Default is 1.0.""") anchorThreshold: Option[Double] = None,
                                       @ArgDoc("""The Ising smoothing parameter.
 This parameter adjusts the relative strength of closeness encoded edge
-weights, similar to the width of Gussian distribution.
-Larger value implies smoother decay and the edge weight beomes less important.
+weights, similar to the width of Gaussian distribution.
+Larger value implies smoother decay and the edge weight becomes less important.
 Default is 2.0.""") smoothing: Option[Float] = None,
                                       @ArgDoc("""Should |LBP| use max_product or not.
 Default is False.""") maxProduct: Option[Boolean] = None,

@@ -48,7 +48,7 @@ D. Wilkinson, R. Schreiber and R. Pan,
 CGD provides a faster, more approximate optimization of the cost function and
 should be used when memory is a constraint.
 
-A typical representation of the preference matrix P in Giraph is a bi-partite
+A typical representation of the preference matrix P in Giraph is a bipartite
 graph, where nodes at the left side represent a list of users and nodes at the
 right side represent a set of items (for example, movies), and edges encode
 the rating a user provided to an item.
@@ -126,8 +126,8 @@ maximum number of :term:`supersteps`.
     \right)
 
 Note that the equations above omit user and item subscripts for generality.
-The :math:`l_{2}` regularization term, lambda, tries to avoid overfitting by
-penalizing the magnitudes of the parameters, and :math:`\lambda` is a tradeoff
+The :math:`l_{2}` regularization term, lambda, tries to avoid over-fitting by
+penalizing the magnitudes of the parameters, and :math:`\lambda` is a trade-off
 parameter that balances the two terms and is usually determined by cross
 validation (CV).
 
@@ -233,7 +233,7 @@ Therefore, it requires more memory and computational effort.
 But ALS, a 2nd-order optimization method, enjoys higher convergence rate and is
 potentially more accurate in parameter estimation.
 
-On the otherhand, CGD is a 1.5th-order optimization method that approximates
+On the other hand, CGD is a 1.5th-order optimization method that approximates
 the Hessian of the cost function from the previous gradient information
 through N consecutive CGD updates.
 This is very important in cases where the solution has thousands or even
@@ -242,7 +242,7 @@ millions of components.
 **Usage**
 
 The matrix factorization by CGD procedure takes a property graph, encoding a
-biparite user-item ranking network, selects a subset of the edges to be
+bipartite user-item ranking network, selects a subset of the edges to be
 considered (via a selection of edge labels), takes initial ratings from
 specified edge property values, and then writes each user-factors vector to its
 user vertex in a specified vertex property name and each item-factors vector to

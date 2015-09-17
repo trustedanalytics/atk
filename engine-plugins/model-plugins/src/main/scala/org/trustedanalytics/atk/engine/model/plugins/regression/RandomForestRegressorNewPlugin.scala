@@ -26,7 +26,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -34,6 +34,9 @@ import MLLibJsonProtocol._
 /**
  * Create a 'new' instance of Random Forest Regressor model
  */
+@PluginDoc(oneLine = "<TBD>",
+  extended = """<TBD>""",
+  returns = """<TBD>""")
 class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
