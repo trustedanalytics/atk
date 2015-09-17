@@ -23,9 +23,10 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 /**
  * Input arguments for principal components train plugin
  */
-case class PrincipalComponentsTrainArgs(model: ModelReference,
+case class PrincipalComponentsTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                         @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                         @ArgDoc("""List of column(s) containing the observations.""") observationColumns: List[String],
+                                        @ArgDoc("""Option to mean center the columns""") meanCentered: Boolean = true,
                                         @ArgDoc("""Principal component count. Default is the number of observation columns""") k: Option[Int] = None) {
   require(frame != null, "frame is required")
   require(!observationColumns.contains(null), "data columns names cannot be null")

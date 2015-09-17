@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.plugins.graphclustering
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.trustedanalytics.atk.engine.graph.{ SparkGraph, GraphBuilderConfigFactory }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
@@ -42,8 +41,8 @@ import GraphClusteringFormat._
 /**
  * GraphClusteringPlugin implements the graph clustering algorithm on a graph.
  */
-@PluginDoc(oneLine = "Build graph clustering over an initial titan graph.",
-  extended = "<TBD>",
+@PluginDoc(oneLine = "Performs graph clustering over an initial titan graph.",
+  extended = "Performs graph clustering over an initial titan graph using a distributed edge collapse algorithm.",
   returns = "A set of titan vertices and edges representing the internal clustering of the graph.")
 class GraphClusteringPlugin extends SparkCommandPlugin[GraphClusteringArgs, UnitReturn] {
 

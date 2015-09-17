@@ -13,11 +13,17 @@ the supported Python data types.
 
     >>> ta.valid_data_types
 
-    float32, float64, ignore, int32, int64, unicode, vector(n)
+    float32, float64, ignore, int32, int64, unicode, vector(n), datetime
     (and aliases: float->float64, int->int32, list->vector, long->int64, str->unicode)
 
 
 ==============  =========================================================================================
+**datetime**    |ALPHA| object for date and time; equivalent to python's datetime.datetime class.
+                Converts to and from strings using the ISO 8601 format.  Inside the server, the object
+                is represented by the nscala/joda DateTime object.  When interfacing with various data
+                sources and sinks that use different data types for datetime, the datetime value will
+                be converted to a string by default.
+
 **float32**     32-bit floating point number; equivalent to numpy.float32
 
 **float64**     64-bit floating point number; equivalent to numpy.float64

@@ -160,12 +160,9 @@ case class SeamlessGraphMeta(graphEntity: GraphEntity, frameEntities: List[Frame
     } yield left + right
   }
 
-  /**
-   * Create a list of ElementIDName objects corresponding to the IDColumn of all Vertices in this graph.
-   */
-  def getFrameSchemaList: List[Schema] = {
+  def frameSchemas: List[GraphElementSchema] = {
     this.frameEntities.map {
-      frame => frame.schema
+      frame => frame.schema.asInstanceOf[GraphElementSchema]
     }
   }
 

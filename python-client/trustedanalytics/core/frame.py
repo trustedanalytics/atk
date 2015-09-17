@@ -485,11 +485,11 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         return self._backend.get_row_count(self, where)
 
     @api
-    @arg('count', int, 'The number of rows to download to the client')
+    @arg('n', int, 'The number of rows to download to the client')
     @arg('offset', int, 'The number of rows to skip before copying')
     @arg('columns', list, 'Column filter, the names of columns to be included (default is all columns)')
     @returns('pandas.DataFrame', 'A new pandas dataframe object containing the downloaded frame data' )
-    def __download(self, count=100, offset=0, columns=None):
+    def __download(self, n=100, offset=0, columns=None):
         """
         Download a frame from the server into client workspace.
 
@@ -523,13 +523,14 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             import pandas
         except:
             raise RuntimeError("pandas module not found, unable to download.  Install pandas or try the take command.")
-        result = self._backend.take(self, count, offset, columns)
+        from trustedanalytics.core.atkpandas import atk_dtype_to_pandas_str
+        result = self._backend.take(self, n, offset, columns)
         headers, data_types = zip(*result.schema)
 
         pandas_df = pandas.DataFrame(result.data, columns=headers)
 
         for i, dtype in enumerate(data_types):
-            dtype_str = valid_data_types.to_string(dtype) if valid_data_types.is_primitive_type(dtype) else "object"
+            dtype_str = atk_dtype_to_pandas_str(dtype)
             pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
         return pandas_df
 
@@ -1375,15 +1376,14 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('source','?',"""<TBD>""")
-    @arg('graph','?',"""<TBD>""")
-    @arg('label','?',"""<TBD>""")
-    @arg('src_vertex_label','?',"""<TBD>""")
-    @arg('dest_vertex_label','?',"""<TBD>""")
-    @arg('directed','?',"""<TBD>""")
-    @arg('_info','?',"""<TBD>""")
+    @arg('graph','?',"""graph these edges belong to""")
+    @arg('label','?',"""edge label""")
+    @arg('src_vertex_label','?',"""label of the source vertex type""")
+    @arg('dest_vertex_label','?',"""label of the destination vertex type""")
+    @arg('directed','?',"""directed or undirected""")
+    @arg('_info','?',"""""")
     @returns('VertexFrame object',"""An object with access to the frame.""")
-    def __init__(self, source=None, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
+    def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 
     Examples
@@ -1455,7 +1455,7 @@ An EdgeFrame is similar to a Frame but with a few important differences:
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
-            new_frame_name = self._backend.create_edge_frame(self, source, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
+            new_frame_name = self._backend.create_edge_frame(self, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
             logger.info('Created new edge frame "%s"', new_frame_name)
         except:
             error = IaError(logger)

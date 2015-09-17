@@ -42,7 +42,7 @@ object CorrelationFunctions extends Serializable {
                   dataColumnNames: List[String]): DoubleValue = {
     // compute correlation
 
-    val correlation: Matrix = Statistics.corr(frameRdd.toVectorDenseRDD(dataColumnNames))
+    val correlation: Matrix = Statistics.corr(frameRdd.toDenseVectorRDD(dataColumnNames))
 
     val dblVal: Double = correlation.toArray(1)
 
@@ -59,7 +59,7 @@ object CorrelationFunctions extends Serializable {
   def correlationMatrix(frameRdd: FrameRdd,
                         dataColumnNames: List[String]): RDD[Row] = {
 
-    val correlation: Matrix = Statistics.corr(frameRdd.toVectorDenseRDD(dataColumnNames))
+    val correlation: Matrix = Statistics.corr(frameRdd.toDenseVectorRDD(dataColumnNames))
     val vecArray = correlation.toArray.grouped(correlation.numCols).toArray
     val arrGenericRow = vecArray.map(row => {
       val temp: Array[Any] = row.map(x => if (x.isNaN || abs(x) < .000001) 0 else x)

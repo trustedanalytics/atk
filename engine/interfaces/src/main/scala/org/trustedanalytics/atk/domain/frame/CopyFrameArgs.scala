@@ -19,9 +19,9 @@ package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 case class CopyFrameArgs(frame: FrameReference,
-                         @ArgDoc("""<TBD>""") columns: Option[Map[String, String]] = None,
-                         @ArgDoc("""<TBD>""") where: Option[Udf] = None,
-                         @ArgDoc("""<TBD>""") name: Option[String] = None) {
+                         @ArgDoc("""dictionary of column names to include in the copy and target names""") columns: Option[Map[String, String]] = None,
+                         @ArgDoc("""UDF for selecting what rows to copy""") where: Option[Udf] = None,
+                         @ArgDoc("""name of the frame copy""") name: Option[String] = None) {
   require(frame != null, "frame is required")
   require(name != null, "name cannot be null")
   if (name.isDefined) FrameName.validate(name.get)

@@ -76,6 +76,19 @@ class VertexDAOTest extends WordSpec with Matchers with TestingTitan with Before
       bpVertexUpdated.getProperty("name").asInstanceOf[String] shouldBe "Updated Name"
     }
 
+    "update properties on vertices when new value is null" in {
+      // setup data
+      val gbVertexOriginal = new GBVertex(new Property("gbId", 10003), Set(new Property("name", "Original Name")))
+      val gbVertexUpdated = new GBVertex(new Property("gbId", 10003), Set(new Property("name", null)))
+      val bpVertexOriginal = vertexDAO.create(gbVertexOriginal)
+
+      // invoke method under test
+      val bpVertexUpdated = vertexDAO.update(gbVertexUpdated, bpVertexOriginal)
+
+      // validate
+      bpVertexUpdated.getPropertyKeys.size() shouldBe 1
+    }
+
     "update properties on vertices when no create is needed" in {
       // setup data
       val gbVertexOriginal = new GBVertex(new Property("gbId", 10004), Set(new Property("name", "Original Name")))

@@ -182,17 +182,17 @@ class MLLibJsonProtocolTest extends WordSpec {
 
     "be able to serialize" in {
       val dm = new DenseMatrix(2, 2, Array(1.0, 2.0, 3.0, 4.0), false)
-      assert(dm.toJson.compactPrint == "{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0],\"isTransposed\":false}")
+      assert(dm.toJson.compactPrint == "{\"num_rows\":2,\"num_cols\":2,\"values\":[1.0,2.0,3.0,4.0],\"is_transposed\":false}")
     }
 
     "parse json" in {
       val string =
         """
         |{
-        | "numRows": 2,
-        | "numCols": 2,
+        | "num_rows": 2,
+        | "num_cols": 2,
         | "values": [1.0,2.0,3.0,4.0],
-        | "isTransposed": false
+        | "is_transposed": false
         |}
       """.stripMargin
       val json = JsonParser(string).asJsObject
@@ -205,11 +205,12 @@ class MLLibJsonProtocolTest extends WordSpec {
 
     "be able to serialize" in {
       val singularValuesVector = new DenseVector(Array(1.1, 2.2))
+      val meanVector = new DenseVector(Array(0.5, 0.5))
       val vFactorMatrix = new DenseMatrix(2, 2, Array(1.0, 2.0, 3.0, 4.0), false)
-      val p = new PrincipalComponentsData(2, List("column1", "column2"), singularValuesVector, vFactorMatrix)
-      assert(p.toJson.compactPrint == "{\"k\":2,\"observationColumns\":[\"column1\",\"column2\"]," +
-        "\"singularValues\":{\"values\":[1.1,2.2]}," +
-        "\"vFactor\":{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0],\"isTransposed\":false}}")
+      val p = new PrincipalComponentsData(2, List("column1", "column2"), true, meanVector, singularValuesVector, vFactorMatrix)
+      assert(p.toJson.compactPrint == "{\"k\":2,\"observation_columns\":[\"column1\",\"column2\"],\"mean_centered\":true," +
+        "\"mean_vector\":{\"values\":[0.5,0.5]},\"singular_values\":{\"values\":[1.1,2.2]},\"v_factor\":{\"num_rows\":2,\"num_cols\":2,\"values\":[1.0,2.0,3.0,4.0]," +
+        "\"is_transposed\":false}}")
     }
 
     "parse json" in {
@@ -217,9 +218,11 @@ class MLLibJsonProtocolTest extends WordSpec {
         """
           |{
           |"k":2,
-          |"observationColumns": ["column1", "column2"],
-          |"singularValues": {"values": [1.1,2.2]},
-          |"vFactor": {"numRows":2, "numCols": 2, "values": [1.0,2.0,3.0,4.0], "isTransposed": false}
+          |"observation_columns": ["column1", "column2"],
+          |"mean_centered":true,
+          |"mean_vector": {"values": [0.5,0.5]},
+          |"singular_values": {"values": [1.1,2.2]},
+          |"v_factor": {"num_rows":2, "num_cols": 2, "values": [1.0,2.0,3.0,4.0], "is_transposed": false}
           |}
         """.stripMargin
       val json = JsonParser(string).asJsObject
@@ -229,6 +232,9 @@ class MLLibJsonProtocolTest extends WordSpec {
       assert(p.observationColumns.length == 2)
       assert(p.singularValues.size == 2)
       assert(p.vFactor.numRows == 2)
+      assert(p.meanCentered == true)
+      assert(p.meanVector(1) == 0.5)
+
     }
   }
 
