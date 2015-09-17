@@ -48,11 +48,11 @@ class TestingLdaVertexOutputFormat extends VertexOutputFormat[LdaVertexId, LdaVe
 
       override def writeVertex(vertex: Vertex[LdaVertexId, LdaVertexData, LdaEdgeData]): Unit = {
         if (vertex.getId.isDocument) {
-          TestingLdaOutputResults.docResults += vertex.getId.getValue -> vertex.getValue.getLdaResult
+          TestingLdaOutputResults.docResults += vertex.getValue.getDescription -> vertex.getValue.getLdaResult
         }
         else {
-          TestingLdaOutputResults.wordResults += vertex.getId.getValue -> vertex.getValue.getLdaResult
-          TestingLdaOutputResults.topicGivenWord += vertex.getId.getValue -> vertex.getValue.getTopicGivenWord
+          TestingLdaOutputResults.wordResults += vertex.getValue.getDescription -> vertex.getValue.getLdaResult
+          TestingLdaOutputResults.topicGivenWord += vertex.getValue.getDescription -> vertex.getValue.getTopicGivenWord
         }
       }
 

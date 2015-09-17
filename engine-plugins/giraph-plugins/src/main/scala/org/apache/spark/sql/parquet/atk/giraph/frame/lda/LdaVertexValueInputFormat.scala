@@ -17,32 +17,45 @@ package org.apache.spark.sql.parquet.atk.giraph.frame.lda
 
 import java.util
 
-import org.apache.giraph.io.{VertexValueReader, VertexValueInputFormat}
+import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
+import org.apache.giraph.io.{ VertexValueInputFormat, VertexValueReader }
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.mapreduce.{TaskAttemptContext, InputSplit, JobContext}
+import org.apache.hadoop.io.Writable
+import org.apache.hadoop.mapreduce.{ InputSplit, JobContext, TaskAttemptContext }
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.parquet.RowReadSupport
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lda.LdaConfiguration
-import org.trustedanalytics.atk.giraph.io.{LdaVertexData, LdaVertexId}
-import parquet.hadoop.{ParquetRecordReader, ParquetInputFormat}
+import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
+import org.trustedanalytics.atk.giraph.plugins.util.GiraphConfigurationUtil
+import parquet.hadoop.{ ParquetInputFormat, ParquetRecordReader }
 
 /**
  * Input format for LDA vertex data reads from Parquet Frame
  */
-class LdaVertexValueInputFormat extends VertexValueInputFormat[LdaVertexId, LdaVertexData ]{
+class LdaVertexValueInputFormat extends VertexValueInputFormat[LdaVertexId, LdaVertexData] {
   private val parquetInputFormat = new ParquetInputFormat[Row](classOf[RowReadSupport])
-
 
   override def checkInputSpecs(conf: Configuration): Unit = {
     new LdaConfiguration(conf).validate()
   }
 
   override def getSplits(context: JobContext, minSplits: Int): util.List[InputSplit] = {
-    parquetInputFormat.getSplits(context)
+    val ldaConfiguration = new LdaConfiguration(context.getConfiguration)
+    GiraphConfigurationUtil.set(context.getConfiguration, "mapreduce.input.fileinputformat.inputdir",
+      Some(ldaConfiguration.ldaConfig.inputFormatConfig.parquetVertexFrameLocation))
+    println("reading from file:" + context.getConfiguration.get("mapreduce.input.fileinputformat.inputdir"))
+    val splits = parquetInputFormat.getSplits(context)
+    println("input splits :")
+    for (i <- 0 until splits.size()) println(splits.get(i).getLocations)
+    splits
   }
 
   override def createVertexValueReader(split: InputSplit, context: TaskAttemptContext): VertexValueReader[LdaVertexId, LdaVertexData] = {
+    val ldaConfiguration = new LdaConfiguration(context.getConfiguration)
+    GiraphConfigurationUtil.set(context.getConfiguration, "mapreduce.input.fileinputformat.inputdir",
+      Some(ldaConfiguration.ldaConfig.inputFormatConfig.parquetVertexFrameLocation))
+    println("reading from file1:" + context.getConfiguration.get("mapreduce.input.fileinputformat.inputdir"))
     new LdaVertexValueReader(new LdaConfiguration(context.getConfiguration))
   }
 }
@@ -50,12 +63,16 @@ class LdaVertexValueInputFormat extends VertexValueInputFormat[LdaVertexId, LdaV
 class LdaVertexValueReader(config: LdaConfiguration) extends VertexValueReader[LdaVertexId, LdaVertexData] {
   private val ldaConfig = config.ldaConfig
   private val reader = new ParquetRecordReader[Row](new RowReadSupport)
-  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.frameSchema)
+  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.vertexFrameSchema)
 
   private var vertexId: LdaVertexId = null
-  private var vertexData : LdaVertexData = null
+  private var vertexData: LdaVertexData = null
 
   override def initialize(inputSplit: InputSplit, context: TaskAttemptContext): Unit = {
+    val ldaConfiguration = new LdaConfiguration(context.getConfiguration)
+    GiraphConfigurationUtil.set(context.getConfiguration, "mapreduce.input.fileinputformat.inputdir",
+      Some(ldaConfiguration.ldaConfig.inputFormatConfig.parquetVertexFrameLocation))
+    println("reading from split" + context.getConfiguration.get("mapreduce.input.fileinputformat.inputdir") + " " + inputSplit.getLocations)
     reader.initialize(inputSplit, context)
   }
 
@@ -75,14 +92,15 @@ class LdaVertexValueReader(config: LdaConfiguration) extends VertexValueReader[L
     val hasNext: Boolean = reader.nextKeyValue
     if (hasNext) {
       row.apply(reader.getCurrentValue)
-      val isDocument = row.booleanValue(ldaConfig.isDocumentColumnName)
+      println("reading vertex: " + row.row.toSeq)
+      val isDocument = row.intValue(ldaConfig.isDocumentColumnName)
 
       vertexId = isDocument match {
-        case true => new LdaVertexId(row.longValue(ldaConfig.vertexIdColumnName), true)
-        case _ =>new LdaVertexId(row.longValue(ldaConfig.vertexIdColumnName), false)
+        case 1 => new LdaVertexId(row.longValue(ldaConfig.vertexIdColumnName), true)
+        case _ => new LdaVertexId(row.longValue(ldaConfig.vertexIdColumnName), false)
       }
 
-      val description = row.stringValue(ldaConfig.vertexDescriptionColumnName)
+      val description = row.stringValue(ldaConfig.vertexDescColumnName)
       vertexData = new LdaVertexData(description)
     }
     hasNext

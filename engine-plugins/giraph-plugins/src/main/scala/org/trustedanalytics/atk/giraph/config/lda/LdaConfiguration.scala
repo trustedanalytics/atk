@@ -15,6 +15,7 @@
 */
 
 package org.trustedanalytics.atk.giraph.config.lda
+
 import org.apache.commons.lang3.StringUtils
 import org.apache.giraph.conf.GiraphConfiguration
 import org.apache.hadoop.conf.Configuration
@@ -24,12 +25,16 @@ import spray.json._
 
 /**
  * Config for LDA Input
- * @param parquetFileLocation parquet input frame
+ * @param parquetEdgeFrameLocation parquet input frame
  */
-case class LdaInputFormatConfig(parquetFileLocation: String,
-                                frameSchema: Schema) {
-  require(StringUtils.isNotBlank(parquetFileLocation), "input file location is required")
-  require(frameSchema != null, "input frame schema is required")
+case class LdaInputFormatConfig(parquetEdgeFrameLocation: String,
+                                edgeFrameSchema: Schema,
+                                parquetVertexFrameLocation: String,
+                                vertexFrameSchema: Schema) {
+  require(StringUtils.isNotBlank(parquetEdgeFrameLocation), "input edge file location is required")
+  require(edgeFrameSchema != null, "input edge frame schema is required")
+  require(StringUtils.isNotBlank(parquetVertexFrameLocation), "input vertex file location is required")
+  require(vertexFrameSchema != null, "input vertex frame schema is required")
 }
 
 /**
@@ -46,12 +51,34 @@ case class LdaOutputFormatConfig(documentResultsFileLocation: String,
   require(StringUtils.isNotBlank(topicResultsFileLocation), "topics given word results file location is required")
 }
 
+import LdaVertexInputFormatConfig._
+case class LdaVertexInputFormatConfig(documentIdColumnName: String,
+                                      wordIdColumnName: String,
+                                      isDocumentColumnName: String,
+                                      vertexIdColumnName: String,
+                                      vertexDescColumnName: String) {
+
+  def this(args: LdaTrainArgs) = {
+    this(
+      LdaAutoGenPrefix + args.documentColumnName,
+      LdaAutoGenPrefix + args.wordColumnName,
+      LdaAutoGenPrefix + "is_document",
+      LdaAutoGenPrefix + "vertex_id",
+      LdaAutoGenPrefix + "vertex_description"
+    )
+  }
+
+}
+
+object LdaVertexInputFormatConfig {
+  val LdaAutoGenPrefix = "_lda_autogen_"
+}
 /**
  * Configuration settings for Lda
  * @param inputFormatConfig where to read input from
  * @param outputFormatConfig where to write output to
- * @param documentIdColumnName column name that contains the "documents"
- * @param wordIdColumnName column name that contains the "words"
+ * @param documentColumnName column name that contains the "documents"
+ * @param wordColumnName column name that contains the "words"
  * @param wordCountColumnName column name that contains "word count"
  * @param maxIterations see LdaTrainArgs for doc
  * @param alpha see LdaTrainArgs for doc
@@ -62,21 +89,22 @@ case class LdaOutputFormatConfig(documentResultsFileLocation: String,
  */
 case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
                      outputFormatConfig: LdaOutputFormatConfig,
-                     documentIdColumnName: String,
-                     wordIdColumnName: String,
+                     documentColumnName: String,
+                     wordColumnName: String,
                      wordCountColumnName: String,
                      maxIterations: Long,
                      alpha: Float,
                      beta: Float,
                      convergenceThreshold: Float,
                      evaluationCost: Boolean,
-                     numTopics: Int) {
+                     numTopics: Int,
+                     documentIdColumnName: String,
+                     wordIdColumnName: String,
+                     isDocumentColumnName: String,
+                     vertexIdColumnName: String,
+                     vertexDescColumnName: String) {
 
-  val isDocumentColumnName : String = ???
-  val vertexIdColumnName : String = ???
-  val vertexDescriptionColumnName : String = ???
-
-  def this(inputFormatConfig: LdaInputFormatConfig, outputFormatConfig: LdaOutputFormatConfig, args: LdaTrainArgs) = {
+  def this(inputFormatConfig: LdaInputFormatConfig, outputFormatConfig: LdaOutputFormatConfig, args: LdaTrainArgs, vertexInputFormatConfig: LdaVertexInputFormatConfig) = {
     this(inputFormatConfig,
       outputFormatConfig,
       args.documentColumnName,
@@ -87,13 +115,19 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
       args.getBeta,
       args.getConvergenceThreshold,
       args.getEvaluateCost,
-      args.getNumTopics)
+      args.getNumTopics,
+      vertexInputFormatConfig.documentIdColumnName,
+      vertexInputFormatConfig.wordIdColumnName,
+      vertexInputFormatConfig.isDocumentColumnName,
+      vertexInputFormatConfig.vertexIdColumnName,
+      vertexInputFormatConfig.vertexDescColumnName
+    )
   }
 
   require(inputFormatConfig != null, "input format is required")
   require(outputFormatConfig != null, "output format is required")
-  require(StringUtils.isNotBlank(documentIdColumnName), "document column name is required")
-  require(StringUtils.isNotBlank(wordIdColumnName), "word column name is required")
+  require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
+  require(StringUtils.isNotBlank(wordColumnName), "word column name is required")
   require(StringUtils.isNotBlank(wordCountColumnName), "word count column name is required")
   require(maxIterations > 0, "Max iterations should be greater than 0")
   require(alpha > 0, "Alpha should be greater than 0")
@@ -105,12 +139,11 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
  * JSON formats needed by Lda.
  */
 object LdaConfigJSONFormat {
-  implicit val ldaInputFormatConfigFormat = jsonFormat2(LdaInputFormatConfig)
+  implicit val ldaInputFormatConfigFormat = jsonFormat4(LdaInputFormatConfig)
   implicit val ldaOutputFormatConfigFormat = jsonFormat3(LdaOutputFormatConfig)
-  implicit val ldaConfigFormat = jsonFormat11(LdaConfig)
+  implicit val ldaConfigFormat = jsonFormat16(LdaConfig)
+  implicit val vertexInputConfigFormat = jsonFormat5(LdaVertexInputFormatConfig.apply)
 }
-
-import org.trustedanalytics.atk.giraph.config.lda.LdaConfigJSONFormat._
 
 /**
  * Wrapper so that we can use simpler API for getting configuration settings.
@@ -119,8 +152,7 @@ import org.trustedanalytics.atk.giraph.config.lda.LdaConfigJSONFormat._
  * constants passed around.
  */
 class LdaConfiguration(other: Configuration) extends GiraphConfiguration(other) {
-
-  val LdaIdPrefix = "_lda_id_"
+  import LdaConfigJSONFormat._
   private val LdaConfigPropertyName = "lda.config"
 
   def this() = {

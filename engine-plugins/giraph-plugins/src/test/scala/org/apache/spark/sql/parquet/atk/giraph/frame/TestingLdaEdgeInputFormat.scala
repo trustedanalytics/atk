@@ -43,11 +43,11 @@ class TestingLdaEdgeInputFormat extends TextEdgeInputFormat[LdaVertexId, LdaEdge
         new LdaEdgeData(parseLine(line)._3)
       }
 
-      private def parseLine(line: Text): (String, String, Long) = {
-        require(StringUtils.isNotBlank(line.toString), "input cannot be blank, please use 'doc,word,word_count'")
+      private def parseLine(line: Text): (Long, Long, Long) = {
+        require(StringUtils.isNotBlank(line.toString), "input cannot be blank, please use 'doc,word,word_count,doc_id,word_id")
         val parts = line.toString.split(',')
-        require(parts.length == 3, "please use 'doc,word,word_count' e.g. 'nytimes,crossword,1'")
-        (parts(0), parts(1), parts(2).toLong)
+        require(parts.length == 5, "please use 'doc,word,word_count,doc_id,word_id' e.g. 'nytimes,jobs,23,1,4'")
+        (parts(3).toLong, parts(4).toLong, parts(2).toLong)
       }
     }
     new ReverseEdgeDuplicator(reader)

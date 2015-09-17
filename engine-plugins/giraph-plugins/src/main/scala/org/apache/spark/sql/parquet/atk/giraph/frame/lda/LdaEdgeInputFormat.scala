@@ -55,7 +55,7 @@ class LdaParquetFrameEdgeReader(config: LdaConfiguration) extends EdgeReader[Lda
 
   private val ldaConfig = config.ldaConfig
   private val reader = new ParquetRecordReader[Row](new RowReadSupport)
-  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.frameSchema)
+  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.edgeFrameSchema)
 
   private var currentSourceId: LdaVertexId = null
   private var currentEdge: DefaultEdge[LdaVertexId, LdaEdgeData] = null
