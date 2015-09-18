@@ -1,0 +1,114 @@
+.. _rest_api/v1/commands/graph-__export_to_titan:
+
+
+
+----------------------------------------------
+:doc:`Commands <index>` graph:/export_to_titan
+----------------------------------------------
+
+Convert current graph to TitanGraph.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:/export_to_titan
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f2699b23110>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **new_graph_name** : unicode (default=None)
+
+    ..
+
+        The name of the new graph.
+        Default is None.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Convert this Graph into a TitanGraph object.
+This will be a new graph backed by Titan with all of the data found in this
+graph.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        A new TitanGraph.
+
+

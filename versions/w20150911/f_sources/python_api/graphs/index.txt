@@ -1,0 +1,28 @@
+.. _python_api/graphs/index:
+
+
+Graphs
+======
+
+**Classes**
+
+.. toctree::
+    Graph <graph-/index.rst>
+    TitanGraph <graph-titan/index.rst>
+
+.. toctree::
+    :hidden:
+
+    get_graph
+    drop_graphs
+    get_graph_names
+
+-------
+
+**Global Methods**
+
+:doc:`get_graph<get_graph>`
+
+:doc:`drop_graphs<drop_graphs>`
+
+:doc:`get_graph_names<get_graph_names>`

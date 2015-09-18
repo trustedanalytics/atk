@@ -1,0 +1,23 @@
+.. _python_api/graphs/graph-titan/__init__:
+
+
+:doc:`TitanGraph <index>`  __init__
+***********************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Initialize the graph.
+
+
+    :Parameters:
+
+        **name** :  (default=None)
+
+        ..
+
+
+
+

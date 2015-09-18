@@ -1,0 +1,56 @@
+.. _python_api/frames/frame-edge/top_k:
+
+
+:doc:`EdgeFrame <index>`  top_k
+*******************************
+
+------
+
+
+.. function:: top_k(self, column_name, k, weights_column=None)
+
+    Most or least frequent column values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column whose top (or bottom) K distinct values are
+            to be calculated.
+
+
+
+        **k** : int32
+
+        ..
+
+            Number of entries to return (If k is negative, return bottom k).
+
+
+
+        **weights_column** : unicode (default=None)
+
+        ..
+
+            The column that provides weights (frequencies) for the topK calculation.
+            Must contain numerical data.
+            Default is 1 for all items.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f2699b230d0>>
+
+        ..
+
+            An object with access to the frame of data.
+    Calculate the top (or bottom) K distinct values by count of a column.
+    The column can be weighted.
+    All data elements of weight <= 0 are excluded from the calculation, as are
+    all data elements whose weight is NaN or infinite.
+    If there are no data elements of finite weight > 0, then topK is empty.

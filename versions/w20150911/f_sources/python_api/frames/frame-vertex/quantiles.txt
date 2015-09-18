@@ -1,0 +1,41 @@
+.. _python_api/frames/frame-vertex/quantiles:
+
+
+:doc:`VertexFrame <index>`  quantiles
+*************************************
+
+------
+
+
+.. function:: quantiles(self, column_name, quantiles)
+
+    New frame with Quantiles and their values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column to calculate quantiles.
+
+
+
+        **quantiles** : list
+
+        ..
+
+            What is being requested.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f2699b230d0>>
+
+        ..
+
+            A new frame with two columns (float64): requested Quantiles and their respective values.
+    Calculate quantiles on the given column.

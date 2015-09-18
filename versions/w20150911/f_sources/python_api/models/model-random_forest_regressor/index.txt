@@ -1,0 +1,64 @@
+.. _python_api/models/model-random_forest_regressor/index:
+
+
+:doc:`Models<../index>` RandomForestRegressorModel
+**************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    publish
+    train
+
+.. class:: RandomForestRegressorModel
+
+    <Missing Doc>
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <RandomForestRegressorModel__init__>`\ (self[, name, _info])                           <Missing Doc>
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict the values for the data points.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, num_trees, impurity, ...])    |ALPHA| Build Random Forests Regressor model.
+    ====================================================================================================  ====================================================================================================
+
+.. _RandomForestRegressorModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f2699b23150>>
+
+        ..
+
+

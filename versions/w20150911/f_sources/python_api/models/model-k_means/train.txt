@@ -1,0 +1,98 @@
+.. _python_api/models/model-k_means/train:
+
+
+:doc:`KMeansModel <index>`  train
+*********************************
+
+------
+
+
+.. function:: train(self, frame, observation_columns, column_scalings, k=None, max_iterations=None, epsilon=None, initialization_mode=None)
+
+    |BETA|
+    Creates KMeans Model from train frame.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f2699b230d0>>
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Columns containing the
+            observations.
+
+
+
+        **column_scalings** : list
+
+        ..
+
+            Column scalings for each of the observation columns.
+            The scaling value is multiplied by the corresponding value in the
+            observation column.
+
+
+
+        **k** : int32 (default=None)
+
+        ..
+
+            Desired number of clusters.
+            Default is 2.
+
+
+
+        **max_iterations** : int32 (default=None)
+
+        ..
+
+            Number of iterations for which the algorithm should run.
+            Default is 20.
+
+
+
+        **epsilon** : float64 (default=None)
+
+        ..
+
+            Distance threshold within which we consider k-means to have converged.
+            Default is 1e-4.
+
+
+
+        **initialization_mode** : unicode (default=None)
+
+        ..
+
+            The initialization technique for the algorithm.
+            It could be either "random" or "k-means||".
+            Default is "k-means||".
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dict
+                Results.
+                The data returned is composed of multiple components:
+            cluster_size : dict
+                Cluster size
+            ClusterId : int
+                Number of elements in the cluster 'ClusterId'.
+            within_set_sum_of_squared_error : double
+                The set of sum of squared error for the model.
+    Upon training the 'k' cluster centers are computed.

@@ -1,0 +1,47 @@
+.. _python_api/frames/frame-/entropy:
+
+
+:doc:`Frame <index>`  entropy
+*****************************
+
+------
+
+
+.. function:: entropy(self, data_column, weights_column=None)
+
+    Calculate the Shannon entropy of a column.
+
+
+    :Parameters:
+
+        **data_column** : unicode
+
+        ..
+
+            The column whose entropy is to be calculated.
+
+
+
+        **weights_column** : unicode (default=None)
+
+        ..
+
+            The column that provides weights (frequencies) for the entropy calculation.
+            Must contain numerical data.
+            Default is using uniform weights of 1 for all items.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Entropy.
+    The data column is weighted via the weights column.
+    All data elements of weight <= 0 are excluded from the calculation, as are
+    all data elements whose weight is NaN or infinite.
+    If there are no data elements with a finite weight greater than 0,
+    the entropy is zero.

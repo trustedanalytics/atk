@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Appendix A — Sample Application Configuration File &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Appendices" href="appendices.html" >
+    <link rel="next" title="Errata" href="errata.html" >
+    <link rel="prev" title="Appendices" href="appendices.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="appendices.html" accesskey="U">Appendices</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="appendices.html" title="Appendices"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="errata.html" title="Errata"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="appendix-a-em-sample-application-configuration-file">
+<span id="appendix-application-conf"></span><h1>Appendix A — Sample Application Configuration File<a class="headerlink" href="#appendix-a-em-sample-application-configuration-file" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-python"><div class="highlight"><pre># BEGIN REQUIRED SETTINGS
+
+trustedanalytics.atk {
+#bind address - change to 0.0.0.0 to listen on all interfaces
+//api.host = &quot;127.0.0.1&quot;
+
+#bind port
+//api.port = 9099
+
+# The host name for the Postgresql database in which the metadata will be stored
+metastore.connection-postgresql.host = &quot;localhost&quot;
+metastore.connection-postgresql.port = &quot;5432&quot;
+metastore.connection-postgresql.database = &quot;ta_metastore&quot;
+metastore.connection-postgresql.username = &quot;atkuser&quot;
+metastore.connection-postgresql.password = &quot;MyPassword&quot;
+metastore.connection-postgresql.url =
+    &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:
+    &quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/
+    &quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+
+# This allows for the use of postgres for a metastore.
+# Service restarts will not affect the data stored in postgres.
+metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+
+# This allows the use of an in memory data store.
+# Restarting the REST server will create a fresh database and any
+# data in the h2 DB will be lost
+//metastore.connection = ${trustedanalytics.atk.metastore.connection-h2}
+
+engine {
+
+    # The hdfs URL where the trustedanalytics folder will be created
+    # and which will be used as the starting point for any relative URLs
+    fs.root = &quot;hdfs://master.silvern.gao.cluster:8020/user/atkuser&quot;
+
+    # The (comma separated, no spaces) Zookeeper hosts that
+    # Comma separated list of host names with zookeeper role assigned
+    titan.load.storage.hostname = &quot;node01, node02, node01&quot;
+
+    # Titan storage backend.
+    # Available options are hbase and cassandra.
+    # The default is hbase.
+    //titan.load.storage.backend = &quot;hbase&quot;
+
+    # Titan storage port, defaults to 2181 for HBase ZooKeeper.
+    # Use 9160 for Cassandra.
+    titan.load.storage.port = &quot;2181&quot;
+
+    # The URL for connecting to the Spark master server
+    #spark.master = &quot;spark://master.silvern.gao.cluster:7077&quot;
+    yarn-client = &quot;spark://master.silvern.gao.cluster:7077&quot;
+
+
+    spark.conf.properties {
+        # Memory should be same or lower than what is listed as available
+        # in Cloudera Manager.
+        # Values should generally be in gigabytes, e.g. &quot;64g&quot;.
+        spark.executor.memory = &quot;103079215104&quot;
+    }
+}
+
+}
+# END REQUIRED SETTINGS
+
+# The settings below are all optional.
+# Some may need to be configured depending on the
+# specifics of your cluster and workload.
+
+trustedanalytics.atk {
+  engine {
+    auto-partitioner {
+      # auto-partitioning spark based on the file size
+      file-size-to-partition-size = [{ upper-bound=&quot;1MB&quot;, partitions = 15 },
+                                       { upper-bound=&quot;1GB&quot;, partitions = 45 },
+                                       { upper-bound=&quot;5GB&quot;, partitions = 100 },
+                                       { upper-bound=&quot;10GB&quot;, partitions = 200 },
+                                       { upper-bound=&quot;15GB&quot;, partitions = 375 },
+                                       { upper-bound=&quot;25GB&quot;, partitions = 500 },
+                                       { upper-bound=&quot;50GB&quot;, partitions = 750 },
+                                       { upper-bound=&quot;100GB&quot;, partitions = 1000 },
+                                       { upper-bound=&quot;200GB&quot;, partitions = 1500 },
+                                       { upper-bound=&quot;300GB&quot;, partitions = 2000 },
+                                       { upper-bound=&quot;400GB&quot;, partitions = 2500 },
+                                       { upper-bound=&quot;600GB&quot;, partitions = 3750 }]
+  # max-partitions is used if value is above the max upper-bound
+          max-partitions = 10000
+      }
+    }
+
+    # Configuration for the Trusted Analytics ATK REST API server
+    api {
+      # this is reported by the API server in the /info results -
+      # it can be used to identify a particular server or cluster.
+      //identifier = &quot;ta&quot;
+
+      #The default page size for result pagination
+      //default-count = 20
+
+      #Timeout for waiting for results from the engine
+      //default-timeout = 30s
+
+      #HTTP request timeout for the REST server
+      //request-timeout = 29s
+    }
+
+      #Configuration for the processing engine
+      engine {
+          //default-timeout = 30s
+         //page-size = 1000
+
+    spark {
+
+      # When master is empty the system defaults to spark://`hostname`:7070
+      # where hostname is calculated from the current system.
+      # For local mode (useful only for development testing) set master = &quot;local[4]&quot;
+      # in cluster mode, set master and home like the example
+      # master = &quot;spark://MASTER_HOSTNAME:7077&quot;
+      # home = &quot;/opt/cloudera/parcels/CDH/lib/spark&quot;
+
+      # When home is empty the system will check expected locations on the
+      # local system and use the first one it finds.
+      # If spark is running in yarn-cluster mode (spark.master = &quot;yarn-cluster&quot;),
+      # spark.home needs to be set to the spark directory on CDH cluster
+      # (&quot;/usr/lib/spark&quot;,&quot;/opt/cloudera/parcels/CDH/lib/spark/&quot;, etc)
+      //home = &quot;&quot;
+
+      conf {
+        properties {
+          # These key/value pairs will be parsed dynamically and provided
+          # to SparkConf().
+          # See Spark docs for possible values
+          # http://spark.apache.org/docs/0.9.0/configuration.html.
+          # All values should be convertible to Strings.
+
+          #Examples of other useful properties to edit for performance tuning:
+
+          # Increased Akka frame size from default of 10MB to 100MB to
+          # allow tasks to send large results to Spark driver
+          # (e.g., using collect() on large datasets).
+          //spark.akka.frameSize=100
+
+          #spark.akka.retry.wait=30000
+          #spark.akka.timeout=200
+          #spark.akka.timeout=30000
+
+          //spark.shuffle.consolidateFiles=true
+
+          # Enabling RDD compression to save space (might increase CPU cycles)
+          # Snappy compression is more efficient
+          //spark.rdd.compress=true
+          //spark.io.compression.codec=org.apache.spark.io.SnappyCompressionCodec
+
+          #spark.storage.blockManagerHeartBeatMs=300000
+          #spark.storage.blockManagerSlaveTimeoutMs=300000
+
+          #spark.worker.timeout=600
+          #spark.worker.timeout=30000
+          spark.eventLog.enabled=true
+          spark.eventLog.dir=
+          &quot;hdfs://master.silvern.gao.cluster:8020/user/spark/applicationHistory&quot;
+        }
+
+      }
+    }
+
+    giraph {
+      #Overrides of normal Hadoop settings that are used when running Giraph jobs
+      giraph.maxWorkers = 30
+      //giraph.minWorkers = 1
+      //giraph.SplitMasterWorker = true
+      mapreduce.map.memory.mb = 4096
+      mapreduce.map.java.opts = &quot;-Xmx3072m&quot;
+      //giraph.zkIsExternal = false
+    }
+
+
+    titan {
+      load {
+        # documentation for these settings is available on Titan website
+        # http://s3.thinkaurelius.com/docs/titan/current/titan-config-ref.html
+        storage {
+
+          # Whether to enable batch loading into the storage backend.
+          # Set to true for bulk loads.
+          //batch-loading = true
+
+          # Size of the batch in which mutations are persisted.
+          //buffer-size = 2048
+
+          lock {
+            # Number of milliseconds the system waits for a lock application
+            # to be acknowledged by the storage backend.
+            //wait-time = 400
+
+            # Number of times the system attempts to acquire a lock before
+            # giving up and throwing an exception.
+            //retries = 15
+          }
+
+          hbase {
+            # Pre-split settngs for large datasets
+            //region-count = 12
+            //compression-algorithm = &quot;SNAPPY&quot;
+          }
+
+          cassandra {
+            # Cassandra configuration options
+          }
+        }
+
+        ids {
+          # Globally reserve graph element IDs in chunks of this size.
+          # Setting this too low will make commits
+          # frequently block on slow reservation requests.
+          # Setting it too high will result in IDs wasted when a graph
+          # instance shuts down with reserved but mostly-unused blocks.
+          //block-size = 300000
+
+          # Number of partition block to allocate for placement of vertices.
+          //num-partitions = 10
+
+          # The number of milliseconds that the Titan id pool manager will
+          # wait before giving up on allocating a new block of ids.
+          //renew-timeout = 150000
+
+          # When true, vertices and edges are assigned IDs immediately upon
+          # creation.
+          # When false, IDs are assigned only when the transaction commits.
+          # Must be disabled for graph partitioning to work.
+          //flush = true
+
+          authority {
+            # This setting helps separate Titan instances sharing a single
+            # graph storage backend avoid contention when reserving ID
+            # blocks, increasing overall throughput.
+            # The options available are:
+            # NONE = Default in Titan
+            # LOCAL_MANUAL = Expert feature: user manually assigns each
+            # Titan instance a unique conflict avoidance tag in its local
+            # graph configuration.
+            # GLOBAL_MANUAL = User assigns a tag to each Titan instance.
+            # The tags should be globally unique for optimal performance,
+            # but duplicates will not compromise correctness
+            # GLOBAL_AUTO = Titan randomly selects a tag from the space of
+            # all possible tags when performing allocations.
+            //conflict-avoidance-mode = &quot;GLOBAL_AUTO&quot;
+
+            # The number of milliseconds the system waits for an ID block
+            # reservation to be acknowledged by the storage backend.
+            //wait-time = 300
+
+            # Number of times the system attempts ID block reservations
+            # with random conflict avoidance tags
+            # before giving up and throwing an exception
+            //randomized-conflict-avoidance-retries = 10
+          }
+        }
+
+        auto-partitioner {
+          hbase {
+            # Number of regions per regionserver to set when creating
+            # Titan/HBase table.
+            regions-per-server = 2
+
+            # Number of input splits for Titan reader is based on number of
+            # available cores and minimum split size as follows: Number of
+            # splits = Minimum(input-splits-per-spark-core * spark-cores,
+            # graph size in HBase/minimum-input-splits-size-mb).
+            input-splits-per-spark-core = 20
+          }
+
+          enable = true
+        }
+      }
+
+      query {
+        storage {
+          # query does use the batch load settings in titan.load
+          backend = ${trustedanalytics.atk.engine.titan.load.storage.backend}
+          hostname =  ${trustedanalytics.atk.engine.titan.load.storage.hostname}
+          port =  ${trustedanalytics.atk.engine.titan.load.storage.port}
+        }
+        cache {
+          # Adjust cache size parameters if you experience OutOfMemory
+          # errors during Titan queries.
+          # Either increase heap allocation for TrustedAnalytics Engine, or
+          # reduce db-cache-size.
+          # Reducing db-cache will result in cache misses and increased
+          # reads from disk.
+          //db-cache = true
+          //db-cache-clean-wait = 20
+          //db-cache-time = 180000
+          #Allocates 30% of available heap to Titan (default is 50%)
+          //db-cache-size = 0.3
+        }
+      }
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 18, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
