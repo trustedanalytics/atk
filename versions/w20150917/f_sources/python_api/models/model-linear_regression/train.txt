@@ -1,0 +1,106 @@
+.. _python_api/models/model-linear_regression/train:
+
+
+:doc:`LinearRegressionModel <index>`  train
+*******************************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, intercept=None, num_iterations=None, step_size=None, reg_type=None, reg_param=None, mini_batch_fraction=None)
+
+    |ALPHA|
+    Build linear regression model.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf0d0>>
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column name containing the label
+            for each observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            Column(s) containing the
+            observations.
+
+
+
+        **intercept** : bool (default=None)
+
+        ..
+
+            The algorithm adds an intercept.
+            Default is true.
+
+
+
+        **num_iterations** : int32 (default=None)
+
+        ..
+
+            Number of iterations.
+            Default is 100.
+
+
+
+        **step_size** : int32 (default=None)
+
+        ..
+
+            Step size for optimizer.
+            Default is 1.0.
+
+
+
+        **reg_type** : unicode (default=None)
+
+        ..
+
+            Regularization L1 or L2.
+            Default is L2.
+
+
+
+        **reg_param** : float64 (default=None)
+
+        ..
+
+            Regularization parameter.
+            Default is 0.01.
+
+
+
+        **mini_batch_fraction** : float64 (default=None)
+
+        ..
+
+            Mini batch fraction parameter.
+            Default is 1.0.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Creating a LinearRegression Model using the observation column and label column of the train frame.

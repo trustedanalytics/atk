@@ -1,0 +1,64 @@
+.. _python_api/models/model-logistic_regression/index:
+
+
+:doc:`Models<../index>` LogisticRegressionModel
+***********************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    test
+    train
+
+.. class:: LogisticRegressionModel
+
+    Create a 'new' instance of logistic regression model.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LogisticRegressionModel__init__>`\ (self[, name, _info])                              Create a 'new' instance of logistic regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Make a new frame with a column for label prediction.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and show metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, frequency_column, ...])       |ALPHA| Build logistic regression model.
+    ====================================================================================================  ====================================================================================================
+
+.. _LogisticRegressionModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of logistic regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf150>>
+
+        ..
+
+

@@ -1,0 +1,139 @@
+.. _rest_api/v1/commands/graph__graphx_connected_components:
+
+
+
+---------------------------------------------------------
+:doc:`Commands <index>` graph/graphx_connected_components
+---------------------------------------------------------
+
+Implements the connected components computation on a graph by invoking graphx api.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/graphx_connected_components
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf110>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **output_property** : unicode
+
+    ..
+
+        The name of the column containing the connected component value.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Pulls graph from underlying store, sends it off to the ConnectedComponentGraphXDefault,
+and then writes the output graph back to the underlying store.
+
+|
+**Connected Components (CC)**
+
+Connected components are disjoint subgraphs in which all vertices are
+connected to all other vertices in the same component via paths, but not
+connected via paths to vertices in any other component.
+The connected components algorithm uses message passing along a specified edge
+type to find all of the connected components of a graph and label each edge
+with the identity of the component to which it belongs.
+The algorithm is specific to an edge type, hence in graphs with several
+different types of edges, there may be multiple, overlapping sets of connected
+components.
+
+The algorithm works by assigning each vertex a unique numerical index and
+passing messages between neighbors.
+Vertices pass their indices back and forth with their neighbors and update
+their own index as the minimum of their current index and all other indices
+received.
+This algorithm continues until there is no change in any of the vertex
+indices.
+At the end of the alorithm, the unique levels of the indices denote the
+distinct connected components.
+The complexity of the algorithm is proportional to the diameter of the graph.
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Dictionary containing the vertex type as the key and the corresponding
+          vertex's frame with a connected component column.
+          Call dictionary_name['label'] to get the handle to frame whose vertex type is label.
+
+

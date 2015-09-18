@@ -1,0 +1,178 @@
+.. _rest_api/v1/commands/graph__clustering_coefficient:
+
+
+
+----------------------------------------------------
+:doc:`Commands <index>` graph/clustering_coefficient
+----------------------------------------------------
+
+Coefficient of graph with respect to labels.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/clustering_coefficient
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf110>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **output_property_name** : unicode (default=None)
+
+    ..
+
+        The name of the new property to which each
+        vertex's local clustering coefficient will be written.
+        If this option is not specified, no output frame will be produced and only
+        the global clustering coefficient will be returned.
+
+
+
+    **input_edge_labels** : list (default=None)
+
+    ..
+
+        If this list is provided,
+        only edges whose labels are included in the given
+        set will be considered in the clustering coefficient calculation.
+        In the default situation (when no list is provided), all edges will be used
+        in the calculation, regardless of label.
+        It is required that all edges that enter into the clustering coefficient
+        analysis be undirected.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.
+
+Pulls graph from underlying store, calculates degrees and writes them into the property specified,
+and then writes the output graph to the underlying store.
+
+.. warning::
+
+    THIS FUNCTION IS FOR UNDIRECTED GRAPHS.
+    If it is called on a directed graph, its output is NOT guaranteed to calculate
+    the local directed clustering coefficients.
+
+|
+**Clustering Coefficients**
+
+The clustering coefficient of a graph provides a measure of how tightly
+clustered an undirected graph is.
+Informally, if the edge relation denotes "friendship", the clustering
+coefficient of the graph is the probability that two people are friends given
+that they share a common friend.
+
+More formally:
+
+.. math::
+
+    cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+    E \} \| }{\| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\} \in E \} \|}
+
+
+Analogously, the clustering coefficient of a vertex provides a measure of how
+tightly clustered that vertex's neighborhood is.
+Informally, if the edge relation denotes "friendship", the clustering
+coefficient at a vertex :math:`v` is the probability that two acquaintances of
+:math:`v` are themselves friends.
+
+More formally:
+
+.. math::
+
+    cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+    E \} \| }{\| \{ (u,v,w) \in V^3: \ \{v, u \}, \{v, w\} \in E \} \|}
+
+
+The toolkit provides the function clustering_coefficient which computes both
+local and global clustering coefficients for a given undirected graph.
+
+For more details on the mathematics and applications of clustering
+coefficients, see http://en.wikipedia.org/wiki/Clustering_coefficient.
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Dictionary of the global clustering coefficient of the graph or,
+        if local clustering coefficients are requested, a reference to the frame with local
+        clustering coefficients stored at properties at each vertex.
+
+

@@ -1,0 +1,34 @@
+.. _python_api/frames/frame-edge/export_to_hive:
+
+
+:doc:`EdgeFrame <index>`  export_to_hive
+****************************************
+
+------
+
+
+.. function:: export_to_hive(self, table_name)
+
+    Write current frame to Hive table.
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            The name of the Hive table that will contain the exported frame
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Table must not exist in Hive.
+    Export of Vectors is not currently supported.

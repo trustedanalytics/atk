@@ -1,0 +1,111 @@
+.. _rest_api/v1/commands/frame__loadhive:
+
+
+
+--------------------------------------
+:doc:`Commands <index>` frame/loadhive
+--------------------------------------
+
+Append data from a hive table into an existing (possibly empty) frame
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/loadhive
+
+:arguments:
+
+
+    **destination** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf0d0>>
+
+    ..
+
+        DataFrame to load data into.Should be either a uri or id.
+
+
+
+    **query** : unicode
+
+    ..
+
+        Initial query to run at load time
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Append data from a hive table into an existing (possibly empty) frame
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf0d0>>``
+
+        the initial frame with the hive data appended
+
+

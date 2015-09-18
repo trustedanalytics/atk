@@ -1,0 +1,62 @@
+.. _python_api/models/model-logistic_regression/test:
+
+
+:doc:`LogisticRegressionModel <index>`  test
+********************************************
+
+------
+
+
+.. function:: test(self, frame, label_column, observation_columns=None)
+
+    |ALPHA|
+    Predict test frame labels and show metrics.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf0d0>>
+
+        ..
+
+            frame whose labels are to be
+            predicted.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the actual
+            label for each observation.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose labels are to be predicted and tested.
+            Default is to test over the columns the SvmModel
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            object
+                An object with binary classification metrics.
+                The data returned is composed of multiple components:
+            <object>.accuracy : double
+            <object>.confusion_matrix : table
+            <object>.f_measure : double
+            <object>.precision : double
+            <object>.recall : double
+    Predict the labels for a test frame and run classification metrics on predicted and target labels.

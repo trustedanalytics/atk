@@ -1,0 +1,32 @@
+.. _python_api/frames/frame-edge/compute_misplaced_score:
+
+
+:doc:`EdgeFrame <index>`  compute_misplaced_score
+*************************************************
+
+------
+
+
+.. function:: compute_misplaced_score(self, gravity)
+
+
+
+
+    :Parameters:
+
+        **gravity** : float64
+
+        ..
+
+            Similarity measure for computing tension between 2 connected items
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf0d0>>
+
+        ..
+
+

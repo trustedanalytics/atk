@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Plugin Authoring Guide &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="dev-plug"><span id="old-sections-dev-plug"></span></span><div class="section" id="plugin-authoring-guide">
+<span id="index-0"></span><h1>Plugin Authoring Guide<a class="headerlink" href="#plugin-authoring-guide" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#types-of-plugins" id="id2">Types of Plugins</a><ul>
+<li><a class="reference internal" href="#commands-and-queries" id="id3">Commands and Queries</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#when-to-write-a-plugin" id="id4">When to Write a Plugin</a></li>
+<li><a class="reference internal" href="#plugin-support-services" id="id5">Plugin Support Services</a><ul>
+<li><a class="reference internal" href="#plugin-life-cycle" id="id6">Plugin Life Cycle</a></li>
+<li><a class="reference internal" href="#logging-and-error-handling" id="id7">Logging and Error Handling</a></li>
+<li><a class="reference internal" href="#defaulting-arguments" id="id8">Defaulting Arguments</a></li>
+<li><a class="reference internal" href="#execution-flow" id="id9">Execution Flow</a></li>
+<li><a class="reference internal" href="#accessing-spark-or-other-components" id="id10">Accessing Spark or Other Components</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-a-commandplugin" id="id11">Creating a CommandPlugin</a><ul>
+<li><a class="reference internal" href="#naming" id="id12">Naming</a></li>
+<li><a class="reference internal" href="#rest-input-and-output" id="id13">REST Input and Output</a></li>
+<li><a class="reference internal" href="#frame-and-graph-references" id="id14">Frame and Graph References</a></li>
+<li><a class="reference internal" href="#self-arguments" id="id15">Self Arguments</a></li>
+<li><a class="reference internal" href="#single-value-results" id="id16">Single Value Results</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#creating-an-archive" id="id17">Creating an Archive</a></li>
+<li><a class="reference internal" href="#deployment" id="id18">Deployment</a></li>
+<li><a class="reference internal" href="#configuration" id="id19">Configuration</a></li>
+<li><a class="reference internal" href="#archive-declaration" id="id20">Archive Declaration</a></li>
+<li><a class="reference internal" href="#enabling-the-archive" id="id21">Enabling the Archive</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Trusted Analytics provides an extensibility framework that allows new commands
+and algorithms to be added to the system at runtime, without requiring Trusted Analytics
+source code, nor recompiling the application.</p>
+<p>Plug-ins should be easy to write, and should not require the author to have a
+deep understanding of the REST server, the execution engine, or any of its
+supporting libraries.
+In particular, plug-in authors should not have to understand issues like how to
+manage multiple threads of execution, user authentication, or marshaling of
+data to and from JSON.</p>
+<p>Plug-ins should also be isolated from the application as a whole, as well as
+from other plug-ins.
+Each plug-in should be allowed to use whatever libraries it needs, without
+concern for conflicts with the libraries that Trusted Analytics uses for its own needs.</p>
+</div>
+<div class="section" id="types-of-plugins">
+<h2>Types of Plugins<a class="headerlink" href="#types-of-plugins" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="commands-and-queries">
+<h3>Commands and Queries<a class="headerlink" href="#commands-and-queries" title="Permalink to this headline">¶</a></h3>
+<p>The most common kinds of plugins are primarily divided into two categories,
+commands and queries.
+Commands are actions that are typically initiated by user, that have some
+impact on the system, such as loading a data frame, or removing columns from
+one.</p>
+<p>Queries are also initiated by users, but their purpose is to return data to a
+client, with no side effects.</p>
+<p>The interfaces that command and query plug-ins implement are very similar, but
+it is important to use the correct interface so the system can preserve the
+expected performance and semantics.</p>
+<p>The outputs of commands and queries, and the processing of them, are monitored
+by the Trusted Analytics processing engine.</p>
+</div>
+</div>
+<div class="section" id="when-to-write-a-plugin">
+<h2>When to Write a Plugin<a class="headerlink" href="#when-to-write-a-plugin" title="Permalink to this headline">¶</a></h2>
+<p>Many of the operations and algorithms that are desirable to express can be
+written in Python using the Python client.
+However, some kinds of operations are inconvenient to express in that format,
+or require better performance than Python can provide.</p>
+<p>Anytime there is a new function such as an analytical or
+<a class="reference internal" href="../glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a> algorithm that would be desirable to publish for use
+via the Python client or REST server, it is worth considering writing a
+CommandPlugin.</p>
+</div>
+<div class="section" id="plugin-support-services">
+<h2>Plugin Support Services<a class="headerlink" href="#plugin-support-services" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="plugin-life-cycle">
+<h3>Plugin Life Cycle<a class="headerlink" href="#plugin-life-cycle" title="Permalink to this headline">¶</a></h3>
+<p>Plugins are loaded at application start up, and a start() method is called to
+perform any necessary one-time setup operations.
+When the application ends, a stop() method is called to do clean up operations.
+Calling stop(), or allowing stop() to complete, is not guaranteed, depending on
+how the server is terminated.</p>
+<p>Each invocation resulting from a user action or other source will provide an
+execution context object that encapsulates the arguments
+passed by the user as well as other relevant metadata.</p>
+</div>
+<div class="section" id="logging-and-error-handling">
+<h3>Logging and Error Handling<a class="headerlink" href="#logging-and-error-handling" title="Permalink to this headline">¶</a></h3>
+<p>Errors that occur while running a plug-in will be trapped and reported in the
+same way that internal errors within Trusted Analytics are normally trapped and
+reported.</p>
+</div>
+<div class="section" id="defaulting-arguments">
+<h3>Defaulting Arguments<a class="headerlink" href="#defaulting-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Authors should represent arguments that are not required using Option values.
+The system will supply default values for these optional values from the
+configuration system when the user&#8217;s invocation does not provide them.</p>
+<p>Configuration for commands and queries should be included in the Typesafe
+Config configuration file associated with the application (defaults can be
+provided by a reference.conf in the plugin&#8217;s deployment jar).
+Configuration details are discussed in the &#8220;Configuration&#8221; section below.
+Plugins have access to the configuration, but only the section of it that
+contains settings that are relevant.
+For example, the Loopy Belief Propagation plugin gets its configuration from
+&#8216;trustedanalytics.atk.giraph-plugins.command.graph.ml.loopy_belief_propagation.config&#8217;.
+Values that appear in this section are available to the plugin, and are passed
+to it during execution.
+The plugin does not have convenient access to other configuration parameters of
+the system, and plugin authors are strongly urged to take all configuration
+information from the Config instance they are passed rather than inspecting
+environment variables and so on.</p>
+</div>
+<div class="section" id="execution-flow">
+<h3>Execution Flow<a class="headerlink" href="#execution-flow" title="Permalink to this headline">¶</a></h3>
+<a class="reference internal image-reference" href="../f_images/dev_plug_11.png"><img alt="../f_images/dev_plug_11.png" class="align-center" src="../f_images/dev_plug_11.png" style="width: 80%;" /></a>
+</div>
+<div class="section" id="accessing-spark-or-other-components">
+<h3>Accessing Spark or Other Components<a class="headerlink" href="#accessing-spark-or-other-components" title="Permalink to this headline">¶</a></h3>
+<p>For the time being, plugin authors may implement specific interfaces that
+declare their need for a particular service, for example,
+SparkSupport for direct access to a SparkContext.</p>
+<p>See also <code class="xref doc docutils literal"><span class="pre">/dev_bkm</span></code>.</p>
+</div>
+</div>
+<div class="section" id="creating-a-commandplugin">
+<h2>Creating a CommandPlugin<a class="headerlink" href="#creating-a-commandplugin" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="naming">
+<h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
+<p>Naming the command correctly is crucial for the usability of the system.
+The Python client creates Python functions to match the commands in the engine,
+and it places them and names them in accordance with the name specified for the
+plugin.</p>
+<p>Name components are separated by slashes.
+For instance, the command that drops columns from a dataframe is called
+dataframe/drop_column.
+The Python client sees that name, knows that dataframe commands are associated
+with the <a class="reference internal" href="../glossary.html#term-frame-capital-f"><span class="xref std std-term">Frame (capital F)</span></a> class, and therefore generates a function
+named drop_column on the Frame.
+When the user calls that function, its arguments will be converted to JSON,
+sent to the REST server, and then on to the engine for processing.
+The results from the engine flow back through the REST server, and are
+converted back to Python objects.</p>
+<p>If the name of the command contains more than one slash, the Python client will
+create intermediate objects that allow functions to be grouped logically
+together.
+For example, if the command is named dataframe/ml/my_new_algorithm (of course,
+real algorithms will have better names!), then the method created in the Python
+client could be accessed on a frame <em>f</em> using <code class="docutils literal"><span class="pre">f.ml.my_new_algorithm()</span></code>.
+Commands can be nested as deeply as needed, any number of intermediary objects
+will be created automatically so the object model of the frame or graph matches
+the command tree structure defined by the command names in the system.</p>
+</div>
+<div class="section" id="rest-input-and-output">
+<h3>REST Input and Output<a class="headerlink" href="#rest-input-and-output" title="Permalink to this headline">¶</a></h3>
+<p>Each command or query plug-in should define two case classes: one for
+arguments, and one for return value.
+The plug-in framework will ensure that the user&#8217;s Python (or JSON) commands are
+converted into an instance of the argument class, and the output from the
+plug-in will also be converted back to Python (or JSON) for storage in the
+command execution record for later return to the client.</p>
+</div>
+<div class="section" id="frame-and-graph-references">
+<h3>Frame and Graph References<a class="headerlink" href="#frame-and-graph-references" title="Permalink to this headline">¶</a></h3>
+<p>Usually, the commands associated with a frame or graph need to accept the frame
+or graph on which they should operate as a parameter.
+Use the class org.trustedanalytics.atk.domain.frame.FrameReference to represent
+frames, and org.trustedanalytics.atk.domain.graph.GraphReference to represent
+graphs.</p>
+</div>
+<div class="section" id="self-arguments">
+<h3>Self Arguments<a class="headerlink" href="#self-arguments" title="Permalink to this headline">¶</a></h3>
+<p>Use a FrameReference as the type, and place this parameter first in the case
+class definition if it is desired that this parameter is filled by the Frame
+instance whose method is being invoked by the user.
+Similarly, if the method is on a graph, using  a GraphReference in the first
+position will do the trick for <a class="reference internal" href="../glossary.html#term-titangraph"><span class="xref std std-term">TitanGraph</span></a> instances.</p>
+</div>
+<div class="section" id="single-value-results">
+<h3>Single Value Results<a class="headerlink" href="#single-value-results" title="Permalink to this headline">¶</a></h3>
+<p>The result returned by command plugins can be as complex as needed.
+It can also be very simple — for example, a single floating point value.
+Since the result type of the plugin must be a case class, the convention is to
+return a case class with one field, which must be named &#8220;value&#8221;.
+When the client receives such a result, it should extract and return the single
+value.</p>
+</div>
+</div>
+<div class="section" id="creating-an-archive">
+<h2>Creating an Archive<a class="headerlink" href="#creating-an-archive" title="Permalink to this headline">¶</a></h2>
+<p>Plugins are deployed in Archives – jar files that contain the plugin class,
+its argument and result classes, and any supporting classes it needs, along
+with a class that implements the Archive trait.
+The Archive trait provides the system with a directory of available services
+that the archive provides.
+On application start up, the application will query all the jar files it knows
+about (see below) to see what plugins they provide.</p>
+</div>
+<div class="section" id="deployment">
+<h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
+<p>Plug-Ins should be installed in the system using jar files.
+Jars that are found in the server&#8217;s lib directory will be available to be
+loaded based on configuration.
+The plug-ins that will be installed must be listed in the application.conf
+file.
+Each command or query advertises the location at which it would prefer to be
+installed in the URL structure, and if no further directives
+appear in configuration, they will be installed according to their request.
+However, using the configuration file, it is also possible to remap a plug-in
+to a different location or an additional location in the URL structure.</p>
+<p>In the future, plugin discovery may be further automated, and it may also be
+possible to add a plugin without restarting the server.</p>
+</div>
+<div class="section" id="configuration">
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<p>Server-side configuration should be stored in the reference.conf file for the
+plugin archive.
+This is a Typesafe Config file (see <a class="reference external" href="https://github.com/typesafehub/config">https://github.com/typesafehub/config</a>).</p>
+</div>
+<div class="section" id="archive-declaration">
+<h2>Archive Declaration<a class="headerlink" href="#archive-declaration" title="Permalink to this headline">¶</a></h2>
+<p>Each archive should have a reference.conf file stored as a resource in its jar
+file.
+For example, in a typical Maven-based project, this file might reside in the
+src/main/resources folder.
+The Typesafe Config library automatically finds resources named
+&#8220;reference.conf&#8221;, so this is how the configuration file will be discovered.</p>
+<p>The first section of the reference.conf should be the declaration of how the
+archive should be activated.
+This configuration should look like the following:</p>
+<div class="highlight-python"><div class="highlight"><pre>trustedanalytics.atk.component.archives {
+    &lt;archive-name&gt; {
+        class = &quot;&lt;archive-class&gt;&quot;
+        parent = &quot;&lt;parent-archive&gt;&quot;
+        config-path = &quot;&lt;path&gt;&quot;
+    }
+}
+</pre></div>
+</div>
+<p>The &lt;archive-name&gt; is required.
+It should be replaced with the actual name of the archive (without the .jar
+suffix).
+For example, for graphon.jar, just use the word graphon by itself.</p>
+<p><code class="docutils literal"><span class="pre">&lt;archive-class&gt;</span></code> is optional.
+If provided, it must be the name of a class that can be found in the jar file
+or in its parent classloader.
+This class must implement the Archive trait, which makes it the archive
+manager.
+The archive manager is the service that the system uses to discover plugins in
+the archive.
+If omitted, this defaults to DefaultArchive, which uses the Config system for
+plugin registration and publishing.</p>
+<p><code class="docutils literal"><span class="pre">&lt;parent&gt;</span></code> is also optional.
+If provided, this archive is treated as dependent on whatever archive is
+specified here.
+For example, SparkCommand plugins should use &#8220;engine&#8221; for this entry, so
+that they have access to the same version of Spark the engine is using, as well
+as the SparkInvocation class.</p>
+<p><code class="docutils literal"><span class="pre">&lt;config-path&gt;</span></code> is also optional.
+It specifies the config path where the configuration for plugins for this
+archive can be found.
+If omitted, configuration is assumed to be included in the archive declaration
+block.
+It can be convenient to provide a vale for the config path because it leads to
+less nested config files.</p>
+<p>Here is a sample config file for an archive that provides a single plugin.
+Note that it relies on the engine archive, and re-maps its configuration
+to &#8220;trustedanalytics.graphon&#8221; rather than including the configuration in the
+trustedanalytics.atk.component.archives.graphon section.</p>
+<p>Also note the $-substitutions that allow configuration options from other
+sections to be pulled in so they&#8217;re available to the plugin.</p>
+<div class="highlight-python"><div class="highlight"><pre>trustedanalytics.atk.component.archives {
+    graphon {
+        parent = &quot;engine-core&quot;
+        config-path = &quot;trustedanalytics.graphon&quot;
+    }
+}
+
+trustedanalytics.graphon {
+    command {
+        available = [&quot;graphs.sampling.vertex_sample&quot;]
+        graphs {
+            sampling {
+                vertex_sample {
+                    class = &quot;com.trustedanalytics.spark.graphon.sampling.VertexSample&quot;
+                    config {
+                        default-timeout = ${trustedanalytics.atk.engine.default-timeout}
+                        titan = ${trustedanalytics.atk.engine.titan}
+                    }
+                }
+            }
+        }
+    }
+}
+
+#included so that conf file can be read during unit tests,
+#these will not be used when the application is actually running
+trustedanalytics.atk.engine {
+    default-timeout = 30s
+    titan {}
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="enabling-the-archive">
+<h2>Enabling the Archive<a class="headerlink" href="#enabling-the-archive" title="Permalink to this headline">¶</a></h2>
+<p>The command executor uses the config key
+&#8220;trustedanalytics.atk.engine.plugin.command.archives&#8221; to determine which archives it
+should check for command plugins.
+This setting is built into the reference.conf that is embedded in the engine
+archive (at the time of writing).
+For your installation, you can control this list using the application.conf
+file.</p>
+<p>Once this setting has been updated, restart the server to activate the changes.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 18, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

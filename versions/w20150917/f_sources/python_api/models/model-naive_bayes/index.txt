@@ -1,0 +1,62 @@
+.. _python_api/models/model-naive_bayes/index:
+
+
+:doc:`Models<../index>` NaiveBayesModel
+***************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    train
+
+.. class:: NaiveBayesModel
+
+    create a new model
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <NaiveBayesModel__init__>`\ (self[, name, _info])                                      create a new model
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, lambda_parameter])            |ALPHA| Build a naive bayes model.
+    ====================================================================================================  ====================================================================================================
+
+.. _NaiveBayesModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    create a new model
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf150>>
+
+        ..
+
+

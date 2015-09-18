@@ -1,0 +1,33 @@
+.. _python_api/models/model-svm/new:
+
+
+:doc:`SvmModel <index>`  new
+****************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    create a new model
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9fe99bf150>>
+
+        ..
+
+
