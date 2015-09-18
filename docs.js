@@ -2,7 +2,7 @@ var VERSIONS = {};
 $(document).ready(function(){
 try{
   $.ajax({
-  url: "https://raw.githubusercontent.com/trustedanalytics/atk/master/doc/versions.json",
+  url: "https://raw.githubusercontent.com/trustedanalytics/atk/gh-pages/versions.json",
   dataType:"json"
   })
   .success(function(data, jqXHR){
@@ -21,7 +21,7 @@ function updateIframeSrc(selected){
 
 function bindClick(){
   $(".doc").unbind("click");
-  $(".doc").click(function() {    
+  $(".doc").click(function() {
     updateIframeSrc(this.id);
     appendMenu(makeMenu(this.id));
   });
@@ -34,7 +34,7 @@ function makeMenu(selected){
     if(selected != index){
       list += '<li id="'+index+'" class="bottom"><a class="doc" id="'+index+'" >'+ VERSIONS[index]["type"]+': '+index+'</a></li>';
     }
-  }); 
+  });
   list += '</ul></li>';
   return list;
 }
