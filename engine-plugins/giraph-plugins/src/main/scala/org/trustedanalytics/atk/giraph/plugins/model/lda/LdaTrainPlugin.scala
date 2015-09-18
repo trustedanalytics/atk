@@ -184,8 +184,8 @@ class LdaTrainPlugin
       Column(config.isDocumentColumnName, DataTypes.int32)))
 
     val rowRdd: RDD[Row] = frameRdd.mapRows(row => {
-      row.stringValue(columnName)
-    }).distinct.zipWithUniqueId().map {
+      (row.stringValue(columnName), 1)
+    }).reduceByKey((x,y) => x).map{case (id, x) => id}.zipWithUniqueId().map {
       case (description, id) =>
         new GenericRow(Array[Any](id, description, isDocument))
     }
