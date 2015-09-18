@@ -1,0 +1,106 @@
+.. _rest_api/v1/commands/model-principal_components__publish:
+
+
+
+----------------------------------------------------------
+:doc:`Commands <index>` model:principal_components/publish
+----------------------------------------------------------
+
+|BETA|
+Creates a tar file that will be used as input to the scoring engine
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:principal_components/publish
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed2150>>
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creates a tar file with the trained Principal Components Model.
+       The tar file is used as input to the scoring engine to compute the principal components and t-squared index
+       of the observation.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Returns the HDFS path to the tar file
+
+

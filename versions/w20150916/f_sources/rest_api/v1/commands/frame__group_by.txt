@@ -1,0 +1,120 @@
+.. _rest_api/v1/commands/frame__group_by:
+
+
+
+--------------------------------------
+:doc:`Commands <index>` frame/group_by
+--------------------------------------
+
+|BETA|
+Summarized Frame with Aggregations.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/group_by
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **group_by_columns** : list
+
+    ..
+
+        list of columns to group on
+
+
+
+    **aggregations** : list
+
+    ..
+
+        the aggregations to perform
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Create a Summarized Frame with Aggregations (Avg, Count, Max, Min, Mean, Sum, Stdev, ...).
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>``
+
+        Summarized Frame.
+
+

@@ -1,0 +1,210 @@
+.. _rest_api/v1/commands/frame__classification_metrics:
+
+
+
+----------------------------------------------------
+:doc:`Commands <index>` frame/classification_metrics
+----------------------------------------------------
+
+Model statistics of accuracy, precision, and others.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/classification_metrics
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        The name of the column containing the
+        correct label for each instance.
+
+
+
+    **pred_column** : unicode
+
+    ..
+
+        The name of the column containing the
+        predicted label for each instance.
+
+
+
+    **pos_label** : None (default=None)
+
+    ..
+
+        <Missing Description>
+
+
+
+    **beta** : float64 (default=None)
+
+    ..
+
+        This is the beta value to use for
+        :math:`F_{ \beta}` measure (default F1 measure is computed); must be greater than zero.
+        Defaults is 1.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Calculate the accuracy, precision, confusion_matrix, recall and
+:math:`F_{ \beta}` measure for a classification model.
+
+*   The **f_measure** result is the :math:`F_{ \beta}` measure for a
+    classification model.
+    The :math:`F_{ \beta}` measure of a binary classification model is the
+    harmonic mean of precision and recall.
+    If we let:
+
+    * beta :math:`\equiv \beta`,
+    * :math:`T_{P}` denotes the number of true positives,
+    * :math:`F_{P}` denotes the number of false positives, and
+    * :math:`F_{N}` denotes the number of false negatives
+
+    then:
+
+    .. math::
+
+        F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
+        \frac{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
+        F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}
+
+    The :math:`F_{ \beta}` measure for a multi-class classification model is
+    computed as the weighted average of the :math:`F_{ \beta}` measure for
+    each label, where the weight is the number of instances of each label.
+    The determination of binary vs. multi-class is automatically inferred
+    from the data.
+
+*   The **recall** result of a binary classification model is the proportion
+    of positive instances that are correctly identified.
+    If we let :math:`T_{P}` denote the number of true positives and
+    :math:`F_{N}` denote the number of false negatives, then the model
+    recall is given by :math:`\frac {T_{P}} {T_{P} + F_{N}}`.
+
+    For multi-class classification models, the recall measure is computed as
+    the weighted average of the recall for each label, where the weight is
+    the number of instances of each label.
+    The determination of binary vs. multi-class is automatically inferred
+    from the data.
+
+*   The **precision** of a binary classification model is the proportion of
+    predicted positive instances that are correctly identified.
+    If we let :math:`T_{P}` denote the number of true positives and
+    :math:`F_{P}` denote the number of false positives, then the model
+    precision is given by: :math:`\frac {T_{P}} {T_{P} + F_{P}}`.
+
+    For multi-class classification models, the precision measure is computed
+    as the weighted average of the precision for each label, where the
+    weight is the number of instances of each label.
+    The determination of binary vs. multi-class is automatically inferred
+    from the data.
+
+*   The **accuracy** of a classification model is the proportion of
+    predictions that are correctly identified.
+    If we let :math:`T_{P}` denote the number of true positives,
+    :math:`T_{N}` denote the number of true negatives, and :math:`K` denote
+    the total number of classified instances, then the model accuracy is
+    given by: :math:`\frac{T_{P} + T_{N}}{K}`.
+
+    This measure applies to binary and multi-class classifiers.
+
+*   The **confusion_matrix** result is a confusion matrix for a
+    binary classifier model, formatted for human readability.
+
+Notes
+-----
+The **confusion_matrix** is not yet implemented for multi-class classifiers.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        object
+        <object>.accuracy : double
+        <object>.confusion_matrix : table
+        <object>.f_measure : double
+        <object>.precision : double
+        <object>.recall : double
+
+

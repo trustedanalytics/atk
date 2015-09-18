@@ -1,0 +1,265 @@
+.. _rest_api/v1/commands/model-logistic_regression__train:
+
+
+
+-------------------------------------------------------
+:doc:`Commands <index>` model:logistic_regression/train
+-------------------------------------------------------
+
+|ALPHA|
+Build logistic regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:logistic_regression/train
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed2150>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column name containing the label for each observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Column(s) containing the observations.
+
+
+
+    **frequency_column** : unicode (default=None)
+
+    ..
+
+        Optional column containing the frequency of observations.
+
+
+
+    **num_classes** : int32 (default=2)
+
+    ..
+
+        Number of classes
+
+
+
+    **optimizer** : unicode (default=LBFGS)
+
+    ..
+
+        Set type of optimizer.
+                                                   LBFGS - Limited-memory BFGS. LBFGS supports multinomial logistic regression.
+                                                   SGD - Stochastic Gradient Descent. SGD only supports binary logistic regression.
+                                                 
+
+
+
+    **compute_covariance** : bool (default=True)
+
+    ..
+
+        If true, compute covariance matrix for the model.
+
+
+
+    **intercept** : bool (default=True)
+
+    ..
+
+        If true, add intercept column to training data.
+
+
+
+    **feature_scaling** : bool (default=False)
+
+    ..
+
+        If true, perform feature scaling before training model.
+
+
+
+    **threshold** : float64 (default=0.5)
+
+    ..
+
+        Threshold for separating positive predictions from negative predictions.
+
+
+
+    **reg_type** : unicode (default=L2)
+
+    ..
+
+        Set type of regularization
+                                                   L1 - L1 regularization with sum of absolute values of coefficients
+                                                   L2 - L2 regularization with sum of squares of coefficients
+                                                 
+
+
+
+    **reg_param** : float64 (default=0.0)
+
+    ..
+
+        Regularization parameter
+
+
+
+    **num_iterations** : int32 (default=100)
+
+    ..
+
+        Maximum number of iterations
+
+
+
+    **convergence_tolerance** : float64 (default=0.0001)
+
+    ..
+
+        Convergence tolerance of iterations for L-BFGS.
+                                                    Smaller value will lead to higher accuracy with the cost of more iterations.
+                                                 
+
+
+
+    **num_corrections** : int32 (default=10)
+
+    ..
+
+        Number of corrections used in LBFGS update. Default 10.
+                                                   Values of numCorrections less than 3 are not recommended; large values
+                                                   of numCorrections will result in excessive computing time.
+                                                 
+
+
+
+    **mini_batch_fraction** : float64 (default=1.0)
+
+    ..
+
+        Fraction of data to be used for each SGD iteration
+
+
+
+    **step_size** : int32 (default=1)
+
+    ..
+
+        Initial step size for SGD. In subsequent steps,
+                                                          the step size decreases by stepSize/sqrt(t)
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a LogisticRegression Model using the observation column and label column of the train frame.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        object
+            An object with a summary of the trained model.
+            The data returned is composed of multiple components:
+        numFeatures : Int
+            Number of features in the training data
+        numClasses : Int
+            Number of classes in the training data
+        summaryTable: table
+            A summary table composed of:
+        covarianceMatrix: Frame (optional)
+            Covariance matrix of the trained model.
+            The covariance matrix is the inverse of the Hessian matrix for the trained model.
+            The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function
+        ""
+
+

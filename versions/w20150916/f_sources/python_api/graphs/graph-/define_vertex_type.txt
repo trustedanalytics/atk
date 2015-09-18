@@ -1,0 +1,32 @@
+.. _python_api/graphs/graph-/define_vertex_type:
+
+
+:doc:`Graph <index>`  define_vertex_type
+****************************************
+
+------
+
+
+.. function:: define_vertex_type(self, label)
+
+    Define a vertex type by label.
+
+
+    :Parameters:
+
+        **label** : unicode
+
+        ..
+
+            Label of the vertex type.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+

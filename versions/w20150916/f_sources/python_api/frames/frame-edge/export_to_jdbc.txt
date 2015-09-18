@@ -1,0 +1,66 @@
+.. _python_api/frames/frame-edge/export_to_jdbc:
+
+
+:doc:`EdgeFrame <index>`  export_to_jdbc
+****************************************
+
+------
+
+
+.. function:: export_to_jdbc(self, table_name, connector_type=None, url=None, driver_name=None, query=None)
+
+    Write current frame to Jdbc table.
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            jdbc table name
+
+
+
+        **connector_type** : unicode (default=None)
+
+        ..
+
+            (optional) jdbc connector type
+
+
+
+        **url** : unicode (default=None)
+
+        ..
+
+            (optional) connection url (includes server name, database name, user acct and password
+
+
+
+        **driver_name** : unicode (default=None)
+
+        ..
+
+            (optional) driver name
+
+
+
+        **query** : unicode (default=None)
+
+        ..
+
+            (optional) query for filtering. Not supported yet.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Table will be created or appended to.
+    Export of Vectors is not currently supported.

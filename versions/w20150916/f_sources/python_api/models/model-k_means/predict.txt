@@ -1,0 +1,51 @@
+.. _python_api/models/model-k_means/predict:
+
+
+:doc:`KMeansModel <index>`  predict
+***********************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |BETA|
+    Predict the cluster assignments for the data points.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose clusters are to be predicted.
+            By default, we predict the clusters over columns the KMeansModel was trained on.
+            The columns are scaled using the same values used when training the model.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+        ..
+
+            Frame
+                A new frame consisting of the existing columns of the frame and new columns.
+                The data returned is composed of multiple components:
+            'k' columns : double
+                Containing squared distance of each point to every cluster center.
+            predicted_cluster : int
+                Integer containing the cluster assignment.

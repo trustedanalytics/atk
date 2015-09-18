@@ -1,0 +1,42 @@
+.. _python_api/models/model-collaborative_filtering/recommend:
+
+
+:doc:`CollaborativeFilteringModel <index>`  recommend
+*****************************************************
+
+------
+
+
+.. function:: recommend(self, name, top_k)
+
+    |BETA|
+    Collaborative filtering (als/cgd) model
+
+
+    :Parameters:
+
+        **name** : unicode
+
+        ..
+
+            An entity name from the first column of the input frame
+
+
+
+        **top_k** : int32
+
+        ..
+
+            positive integer representing the top recommendations for the name
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+        ..
+
+            see collaborative filtering train for more information
+    see collaborative filtering train for more information

@@ -1,0 +1,64 @@
+.. _python_api/models/model-principal_components/index:
+
+
+:doc:`Models<../index>` PrincipalComponentsModel
+************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    publish
+    train
+
+.. class:: PrincipalComponentsModel
+
+    Create a 'new' instance of principal component model.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <PrincipalComponentsModel__init__>`\ (self[, name, _info])                             Create a 'new' instance of principal component model.
+    :doc:`predict <predict>`\ (self, frame[, mean_centered, t_squared_index, observation_columns, ...])   |ALPHA| Predict using principal components model.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, observation_columns[, mean_centered, k])                          Build principal components model.
+    ====================================================================================================  ====================================================================================================
+
+.. _PrincipalComponentsModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of principal component model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed2150>>
+
+        ..
+
+

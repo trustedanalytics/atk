@@ -1,0 +1,153 @@
+.. _rest_api/v1/commands/frame__add_columns:
+
+
+
+-----------------------------------------
+:doc:`Commands <index>` frame/add_columns
+-----------------------------------------
+
+Add columns to current frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+    **Note** - An argument for this command requires a Python User-Defined Function (UDF).
+    This function must be especially prepared (wrapped/serialized) in order for it to run
+    in the engine.  **If this argument is needed for your call (i.e. it may be optional),
+    then this particular command usage is NOT practically available as a REST API.**
+    Today, the trustedanalytics Python client does the special function preparation and calls this API.
+
+
+:name:
+
+    frame/add_columns
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+    ..
+
+        Frame to which new columns need to be added
+
+
+
+    **column_names** : list
+
+    ..
+
+        List of names for the new columns
+
+
+
+    **column_types** : list
+
+    ..
+
+        List of data types for the new columns
+
+
+
+    **udf** : None
+
+    ..
+
+        <Missing Description>
+
+
+
+    **columns_accessed** : list
+
+    ..
+
+        List of columns which the |UDF| will access.
+        This adds significant performance benefit if we know which column(s) will be
+        needed to execute the |UDF|, especially when the frame has significantly more
+        columns than those being used to evaluate
+        the |UDF|.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Assigns data to column based on evaluating a function for each row.
+
+Notes
+-----
+    1)  The row |UDF| ('func') must return a value in the same format as
+        specified by the schema.
+        See :doc:`/ds_apir`.
+    2)  Unicode in column names is not supported and will likely cause the
+        drop_frames() method (and others) to fail!
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

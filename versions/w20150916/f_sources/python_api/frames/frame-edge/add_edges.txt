@@ -1,0 +1,72 @@
+.. _python_api/frames/frame-edge/add_edges:
+
+
+:doc:`EdgeFrame <index>`  add_edges
+***********************************
+
+------
+
+
+.. function:: add_edges(self, source_frame, column_name_for_source_vertex_id, column_name_for_dest_vertex_id, column_names=None, create_missing_vertices=False)
+
+    Add edges to a graph.
+
+
+    :Parameters:
+
+        **source_frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7ff799ed20d0>>
+
+        ..
+
+            Frame that will be the source of
+            the edge data.
+
+
+
+        **column_name_for_source_vertex_id** : unicode
+
+        ..
+
+            column name for a unique id for
+            each source vertex (this is not the system defined _vid).
+
+
+
+        **column_name_for_dest_vertex_id** : unicode
+
+        ..
+
+            column name for a unique id for
+            each destination vertex (this is not the system defined _vid).
+
+
+
+        **column_names** : list (default=None)
+
+        ..
+
+            Column names to be used as properties for each vertex,
+            None means use all columns,
+            empty list means use none.
+
+
+
+        **create_missing_vertices** : bool (default=False)
+
+        ..
+
+            True to create missing vertices for edge (slightly slower),
+            False to drop edges pointing to missing vertices.
+            Defaults to False.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Includes appending to a list of existing edges.

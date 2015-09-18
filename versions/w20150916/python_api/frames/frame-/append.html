@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Frame append &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames Frame" href="index.html" >
+    <link rel="next" title="Frame assign_sample" href="assign_sample.html" >
+    <link rel="prev" title="Frame add_columns" href="add_columns.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> Frame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="add_columns.html" title="Frame add_columns"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="assign_sample.html" title="Frame assign_sample"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="frame-append">
+<span id="python-api-frames-frame-append"></span><h1><a class="reference internal" href="index.html"><em>Frame</em></a>  append<a class="headerlink" href="#frame-append" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>self</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds more data to the current frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : Data source</p>
+<blockquote class="last">
+<div><p>Data source, see <a class="reference internal" href="../../datasources/index.html"><em>Data Sources</em></a></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Given a frame with a single column, <em>col_1</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre>      &gt;&gt;&gt; my_frame.inspect(4)
+        col_1:str
+      /-----------/
+        dog
+        cat
+        bear
+        donkey
+
+and a frame with two columns, *col_1* and *col_2*:
+
+..code::
+
+      &gt;&gt;&gt; your_frame.inspect(4)
+        col_1:str  col_qty:int32
+      /--------------------------/
+        bear          15
+        cat            2
+        snake          8
+        horse          5
+</pre></div>
+</div>
+<p>Column <em>col_1</em> means the same thing in both frames.
+The Frame <em>my_frame</em> points to the first frame and <em>your_frame</em> points
+to the second.
+To add the contents of <em>your_frame</em> to <em>my_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">your_frame</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="go">  col_1:str  col_2:int32</span>
+<span class="go">/------------------------/</span>
+<span class="go">  dog           None</span>
+<span class="go">  bear            15</span>
+<span class="go">  bear          None</span>
+<span class="go">  horse            5</span>
+<span class="go">  cat           None</span>
+<span class="go">  cat              2</span>
+<span class="go">  donkey        None</span>
+<span class="go">  snake            5</span>
+</pre></div>
+</div>
+<p>Now the first frame has two columns, <em>col_1</em> and <em>col_2</em>.
+Column <em>col_1</em> has the data from <em>col_1</em> in both original frames.
+Column <em>col_2</em> has None (undefined) in all of the rows in the original
+first frame, and has the value of the second frame column, <em>col_2</em>, in
+the rows matching the new data in <em>col_1</em>.</p>
+<p>Breaking it down differently, the original rows referred to by
+<em>my_frame</em> have a new column, <em>col_2</em>, and this new column is filled
+with non-defined data.
+The frame referred to by <em>your_frame</em>, is then added to the bottom.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 18, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
