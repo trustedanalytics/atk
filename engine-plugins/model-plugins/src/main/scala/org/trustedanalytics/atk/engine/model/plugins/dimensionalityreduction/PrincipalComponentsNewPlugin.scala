@@ -23,9 +23,12 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Create a 'new' instance of principal components model.",
+/**
+ * Create a 'new' instance of a Principal Components model
+ */
+@PluginDoc(oneLine = "Create a 'new' instance of a Principal Components model.",
   extended = """
-*Dimensionality Reduction using Principal Component Analysis.*
+**Dimensionality Reduction using Principal Component Analysis**
 
 Principal component analysis[1]_ is a statistical algorithm that converts possibly correlated features to linearly uncorrelated
 variables called principal components. The number of principal components is less than or equal to the number of original

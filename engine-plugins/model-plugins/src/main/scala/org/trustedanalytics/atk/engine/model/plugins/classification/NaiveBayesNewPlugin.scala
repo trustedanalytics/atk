@@ -32,12 +32,12 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 /**
- * Create a 'new' instance of NaiveBayes model
+ * Create a 'new' instance of a NaiveBayes model
  */
 
-@PluginDoc(oneLine = "Create a 'new' instance of Naive Bayes model",
+@PluginDoc(oneLine = "Create a 'new' instance of a Naive Bayes model",
   extended = """
-*Classification using Naive Bayes*
+**Classification using Naive Bayes**
 
 Naive Bayes[1]_ is a probabilistic classifier with strong independence assumptions between features. It computes the conditional
 probability distribution of each feature given label, and then applies Bayes' theorem to compute the conditional probability distribution

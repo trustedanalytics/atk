@@ -33,11 +33,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Create a 'new' instance of Random Forest Classifier model
+ * Create a 'new' instance of a Random Forest Classifier model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of random forest classifier model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a Random Forest Classifier model.",
   extended = """
-*Classification using Random Forest*
+**Classification using Random Forest**
 
 Random Forest[1]_ is a supervised ensemble learning algorithm which can be used to perform binary and multi-class classification.
 The user may initialize a RandomForestClassifierModel, train the model on columns of a frame,

@@ -27,12 +27,12 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Create a 'new' instance of logistic regression model.",
   extended =
     """
-*Classification using Logistic Regression*
+**Classification using Logistic Regression**
 
 Logistic Regression[1]_ is a widely used supervised binary and multi-class classification algorithm. The user may initialize a LogisticRegressionModel,
 train the model on columns of a frame, use the model to predict the labels of observations in a frame and test the predicted labels against the true labels. This model
 runs the MLLib implementation of LogisticRegression[2]_ with enhanced features - trained model Summary Statistics, Covariance and Hessian Matrices, and
-ability to specify the frequency of the train and test observations. The user can view the performance of testing via in-built binary and multiclass Classification Metrics. It also allows
+ability to specify the frequency of the train and test observations. Testing performance can be viewed via in-built binary and multiclass Classification Metrics. It also allows
 the user to select the optimizer to be used - L-BFGS[3]_ or SGD[4]_.
 
 .. [1] https://en.wikipedia.org/wiki/Logistic_regression

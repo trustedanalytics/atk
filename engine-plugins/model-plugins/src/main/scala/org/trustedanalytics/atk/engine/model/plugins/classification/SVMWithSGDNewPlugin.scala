@@ -26,9 +26,12 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Create a 'new' instance of support vector machine model.",
+/**
+ * Create a 'new' instance of a Support Vector Machine model
+ */
+@PluginDoc(oneLine = "Create a 'new' instance of a Support Vector Machine model.",
   extended = """
-*Classification using Support Vector Machine.*
+**Classification using Support Vector Machine**
 
 Support Vector Machine[1]_ is a supervised algorithm used to perform binary classification. A support vector machine
 constructs a high dimensional hyperplane which is said to achieve a good separation when a hyperplane has the largest distance to

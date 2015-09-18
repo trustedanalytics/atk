@@ -33,11 +33,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Create a 'new' instance of Random Forest Regressor model
+ * Create a 'new' instance of a Random Forest Regressor model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of random forest regressor model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a Random Forest Regressor model.",
   extended = """
-*Regression using Random Forest*
+**Regression using Random Forest**
 
 Random Forest[1]_ is a supervised ensemble learning algorithm which can be used to perform regression.
 The user may initialize a RandomForestRegressorModel, train the model on columns of a frame, and
