@@ -1,0 +1,32 @@
+.. _python_api/frames/frame-edge/rename_columns:
+
+
+:doc:`EdgeFrame <index>`  rename_columns
+****************************************
+
+------
+
+
+.. function:: rename_columns(self, names)
+
+    Rename columns for edge frame.
+
+
+    :Parameters:
+
+        **names** : None
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+

@@ -1,0 +1,179 @@
+.. _python_api/frames/frame-edge/group_by:
+
+
+:doc:`EdgeFrame <index>`  group_by
+**********************************
+
+------
+
+
+.. function:: group_by(self, group_by_columns, aggregation_arguments=None)
+
+    |BETA|
+    Create summarized frame.
+
+
+    :Parameters:
+
+        **group_by_columns** : list
+
+        ..
+
+            Column name or list of column names
+
+
+
+        **aggregation_arguments** : dict (default=None)
+
+        ..
+
+            Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new frame with the results of the group_by
+    Creates a new frame and returns a Frame object to access it.
+    Takes a column or group of columns, finds the unique combination of
+    values, and creates unique rows with these column values.
+    The other columns are combined according to the aggregation
+    argument(s).
+
+    Notes
+    -----
+    *   Column order is not guaranteed when columns are added
+    *   The column names created by aggregation functions in the new frame
+        are the original column name appended with the '_' character and
+        the aggregation function.
+        For example, if the original field is *a* and the function is
+        *avg*, the resultant column is named *a_avg*.
+    *   An aggregation argument of *count* results in a column named
+        *count*.
+    *   The aggregation function *agg.count* is the only full row
+        aggregation function supported at this time.
+    *   Aggregation currently supports using the following functions:
+
+        *   avg
+        *   count
+        *   count_distinct
+        *   max
+        *   min
+        *   stdev
+        *   sum
+        *   var (see glossary :term:`Bias vs Variance`)
+
+    Examples
+    --------
+    For setup, we will use a Frame *my_frame* accessing a frame with a
+    column *a*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+
+          a:str
+        /-------/
+          cat
+          apple
+          bat
+          cat
+          bat
+          cat
+
+    Create a new frame, combining similar values of column *a*,
+    and count how many of each value is in the original frame:
+
+    .. code::
+
+        >>> new_frame = my_frame.group_by('a', agg.count)
+        >>> new_frame.inspect()
+
+          a:str       count:int
+        /-----------------------/
+          cat             3
+          apple           1
+          bat             2
+
+    In this example, 'my_frame' is accessing a frame with three columns,
+    *a*, *b*, and *c*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+
+          a:int   b:str   c:float
+        /-------------------------/
+          1       alpha     3.0
+          1       bravo     5.0
+          1       alpha     5.0
+          2       bravo     8.0
+          2       bravo    12.0
+
+    Create a new frame from this data, grouping the rows by unique
+    combinations of column *a* and *b*.
+    Average the value in *c* for each group:
+
+    .. code::
+
+        >>> new_frame = my_frame.group_by(['a', 'b'], {'c' : agg.avg})
+        >>> new_frame.inspect()
+
+          a:int   b:str   c_avg:float
+        /-----------------------------/
+          1       alpha     4.0
+          1       bravo     5.0
+          2       bravo    10.0
+
+    For this example, we use *my_frame* with columns *a*, *c*, *d*,
+    and *e*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+
+          a:str   c:int   d:float e:int
+        /-------------------------------/
+          ape     1       4.0     9
+          ape     1       8.0     8
+          big     1       5.0     7
+          big     1       6.0     6
+          big     1       8.0     5
+
+    Create a new frame from this data, grouping the rows by unique
+    combinations of column *a* and *c*.
+    Count each group; for column *d* calculate the average, sum and minimum
+    value.
+    For column *e*, save the maximum value:
+
+    .. only:: html
+
+        .. code::
+
+            >>> new_frame = my_frame.group_by(['a', 'c'], agg.count, {'d': [agg.avg, agg.sum, agg.min], 'e': agg.max})
+
+              a:str   c:int   count:int  d_avg:float  d_sum:float   d_min:float   e_max:int
+            /-------------------------------------------------------------------------------/
+              ape     1       2          6.0          12.0          4.0           9
+              big     1       3          6.333333     19.0          5.0           7
+
+    .. only:: latex
+
+        .. code::
+
+            >>> new_frame = my_frame.group_by(['a', 'c'], agg.count,
+            ... {'d': [agg.avg, agg.sum, agg.min], 'e': agg.max})
+
+              a    c    count  d_avg  d_sum  d_min  e_max
+              str  int  int    float  float  float  int
+            /---------------------------------------------/
+              ape  1    2      6.0    12.0   4.0    9
+              big  1    3      6.333  19.0   5.0    7
+
+
+    For further examples, see :ref:`example_frame.group_by`.

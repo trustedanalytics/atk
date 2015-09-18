@@ -1,0 +1,46 @@
+.. _python_api/frames/frame-edge/schema:
+
+
+:doc:`EdgeFrame <index>`  schema
+********************************
+
+------
+
+
+.. attribute:: schema
+
+    Current frame column names and types.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            list of tuples of the form (<column name>, <data type>)
+    The schema of the current frame is a list of column names and
+    associated data types.
+    It is retrieved as a list of tuples.
+    Each tuple has the name and data type of one of the frame's columns.
+
+    Examples
+    --------
+    Given that we have an existing data frame *my_data*, create a Frame,
+    then show the frame schema:
+
+    .. code::
+
+        >>> BF = ta.get_frame('my_data')
+        >>> print BF.schema
+
+    The result is:
+
+    .. code::
+
+        [("col1", str), ("col2", numpy.int32)]
+

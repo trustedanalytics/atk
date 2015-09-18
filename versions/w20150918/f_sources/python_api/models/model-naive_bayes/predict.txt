@@ -1,0 +1,46 @@
+.. _python_api/models/model-naive_bayes/predict:
+
+
+:doc:`NaiveBayesModel <index>`  predict
+***************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    Predict
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fea263dd0d0>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the
+            observations whose labels are to be predicted.
+            By default, we predict the labels over columns the NaiveBayesModel
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fea263dd0d0>>
+
+        ..
+
+

@@ -1,0 +1,75 @@
+.. _python_api/frames/frame-/sorted_k:
+
+
+:doc:`Frame <index>`  sorted_k
+******************************
+
+------
+
+
+.. function:: sorted_k(self, k, column_names_and_ascending, reduce_tree_depth=None)
+
+    |ALPHA|
+    Get a sorted subset of the data.
+
+
+    :Parameters:
+
+        **k** : int32
+
+        ..
+
+            Number of sorted records to return.
+
+
+
+        **column_names_and_ascending** : list
+
+        ..
+
+            Column names to sort by, and true to sort column by ascending order,
+            or false for descending order.
+
+
+
+        **reduce_tree_depth** : int32 (default=None)
+
+        ..
+
+            Advanced tuning parameter which determines the depth of the
+            reduce-tree for the sorted_k plugin.
+            This plugin uses Spark's treeReduce() for scalability.
+            The default depth is 2.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fea263dd0d0>>
+
+        ..
+
+            A new frame with the first k sorted rows from the original frame.
+    Take the first k (sorted) rows for the currently active Frame.
+    Rows are sorted by column values in either ascending or descending order.
+
+    Returning the first k (sorted) rows is more efficient than sorting the
+    entire frame when k is much smaller than the number of rows in the frame.
+
+    Notes
+    -----
+    The number of sorted rows (k) should be much smaller than the number of rows
+    in the original frame.
+
+    In particular:
+
+    1) The number of sorted rows (k) returned should fit in Spark driver memory.
+      The maximum size of serialized results that can fit in the Spark driver is
+      set by the Spark configuration parameter *spark.driver.maxResultSize*.
+
+    2) If you encounter a Kryo buffer overflow exception, increase the Spark
+      configuration parameter *spark.kryoserializer.buffer.max.mb*.
+
+    3) Use Frame.sort() instead if the number of sorted rows (k) is
+      very large (i.e., cannot fit in Spark driver memory).

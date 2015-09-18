@@ -1,0 +1,128 @@
+.. _rest_api/v1/commands/frame__export_to_hbase:
+
+
+
+---------------------------------------------
+:doc:`Commands <index>` frame/export_to_hbase
+---------------------------------------------
+
+Write current frame to HBase table.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/export_to_hbase
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fea263dd0d0>>
+
+    ..
+
+        Frame being exported to HBase
+
+
+
+    **table_name** : unicode
+
+    ..
+
+        The name of the HBase table that will contain the exported frame
+
+
+
+    **key_column_name** : unicode (default=None)
+
+    ..
+
+        The name of the column to be used as row key in hbase table
+
+
+
+    **family_name** : unicode (default=None)
+
+    ..
+
+        The family name of the HBase table that will contain the exported frame
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Table must exist in HBase.
+Export of Vectors is not currently supported.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

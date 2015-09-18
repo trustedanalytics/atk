@@ -1,0 +1,33 @@
+.. _python_api/models/model-libsvm/score:
+
+
+:doc:`LibsvmModel <index>`  score
+*********************************
+
+------
+
+
+.. function:: score(self, vector)
+
+    |ALPHA|
+    Calculate the prediction label for a single observation.
+
+
+    :Parameters:
+
+        **vector** : None
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Predicted label.

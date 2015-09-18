@@ -1,0 +1,85 @@
+.. _python_api/models/model-k_means/index:
+
+
+:doc:`Models<../index>` KMeansModel
+***********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    publish
+    train
+
+.. class:: KMeansModel
+
+    Create a 'new' instance of a k-means model.
+
+    **Clustering using k-means**
+
+    k-means[1]_ is an unsupervised algorithm used to partition the data into 'k' clusters. Each observation can belong to only one cluster, the cluster with the nearest mean.
+    The user may initialize a k-means model, train the model on columns of a frame and predict cluster assignments for a frame using a trained model.
+    This model runs the MLLib implementation of k-means[2]_ with enhanced features, computing the number of elements in each cluster during training and during predict
+    computing the distance of each observation from its cluster center and also from every other cluster center.
+
+    .. [1] https://en.wikipedia.org/wiki/K-means_clustering
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <KMeansModel__init__>`\ (self[, name, _info])                                          Create a 'new' instance of a k-means model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |BETA| Predict the cluster assignments for the data points.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, observation_columns, column_scalings[, k, max_iterations, ...])   |BETA| Creates KMeans Model from train frame.
+    ====================================================================================================  ====================================================================================================
+
+.. _KMeansModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of a k-means model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            name for the model
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fea263dd150>>
+
+        ..
+
+
+    **Clustering using k-means**
+
+    k-means[1]_ is an unsupervised algorithm used to partition the data into 'k' clusters. Each observation can belong to only one cluster, the cluster with the nearest mean.
+    The user may initialize a k-means model, train the model on columns of a frame and predict cluster assignments for a frame using a trained model.
+    This model runs the MLLib implementation of k-means[2]_ with enhanced features, computing the number of elements in each cluster during training and during predict
+    computing the distance of each observation from its cluster center and also from every other cluster center.
+
+    .. [1] https://en.wikipedia.org/wiki/K-means_clustering
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means
+        
