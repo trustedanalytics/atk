@@ -30,8 +30,8 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Make new frame with column for label prediction.",
   extended = """Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted label's column.""",
-  returns = "Frame containing the original frame's columns and a column with the predicted label.")
+existing columns and a new predicted value column.""",
+  returns = "Frame containing the original frame's columns and a column with the predicted value.")
 class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameReference] {
   /**
    * The name of the command.
