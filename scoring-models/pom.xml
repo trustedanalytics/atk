@@ -164,6 +164,15 @@
             <artifactId>spark-mllib_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>testutils</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
