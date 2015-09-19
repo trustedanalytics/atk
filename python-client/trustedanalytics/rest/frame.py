@@ -341,8 +341,19 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             if len(pan.columns) != len(source.field_names):
                 raise ValueError("Number of columns in Pandasframe {0} does not match the number of columns in the "
                                  " schema provided {1}.".format(len(pan.columns), len(source.field_names)))
-
-            self._upload_raw_data_in_chunks(frame, source, pan)
+            begin_index = 0
+            iteration = 1
+            end_index = config.upload_defaults.rows
+            while True:
+                pandas_rows = pan[begin_index:end_index].values.tolist()
+                arguments = self._get_load_arguments(frame, source, pandas_rows)
+                result = execute_update_frame_command("frame:/load", arguments, frame)
+                self._handle_error(result)
+                if end_index > len(pan.index):
+                    break
+                iteration += 1
+                begin_index = end_index
+                end_index = config.upload_defaults.rows * iteration
         elif isinstance(source, UploadRows):
             self._upload_raw_data_in_chunks(frame, source, source.data)
         else:

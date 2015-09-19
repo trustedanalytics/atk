@@ -33,10 +33,10 @@ class FrameUploadTests(unittest.TestCase):
     _multiprocess_can_split_ = True
 
     def test_frame_upload_raw_list_data(self):
+        """does round trip with list data --> upload to frame --> 'take' back to list and compare"""
         data = [[1, 'one', [1.0, 1.1]], [2, 'two', [2.0, 2.2]], [3, 'three', [3.0, 3.3]]]
         schema = [('n', int), ('s', str), ('v', ta.vector(2))]
         frame = ta.Frame(ta.UploadRows(data, schema))
-        # print frame.inspect(wrap=10)
         taken = frame.take(5)
         self.assertEqual(len(data),len(taken))
         for r, row in enumerate(taken):
@@ -44,6 +44,24 @@ class FrameUploadTests(unittest.TestCase):
             for c, column in enumerate(row):
                 self.assertEqual(data[r][c], column)
 
+    def test_frame_upload_pandas(self):
+        """does round trip pandas DF --> upload to frame --> download back to pandas and compare"""
+        import pandas as pd
+        from pandas.util.testing import assert_frame_equal
+        import numpy as np
+        data = [[1, 'one', [1.0, 1.1]], [2, 'two', [2.0, 2.2]], [3, 'three', [3.0, 3.3]]]
+        schema = [('n', ta.int64), ('s', str), ('v', ta.vector(2))]  # 'n' is int64, pandas default
+        source = dict(zip(zip(*schema)[0], zip(*data)))
+        df0 = pd.DataFrame(source)
+        self.assertEqual(np.int64, df0['n'].dtype)
+        self.assertEqual(np.object, df0['s'].dtype)
+        self.assertEqual(np.object, df0['v'].dtype)
+        p = ta.Pandas(df0, schema)
+        frame = ta.Frame(p)
+        df1 = frame.download()
+        # print repr(df0)
+        # print repr(df1)
+        assert_frame_equal(df0, df1)
 
 if __name__ == "__main__":
     unittest.main()
