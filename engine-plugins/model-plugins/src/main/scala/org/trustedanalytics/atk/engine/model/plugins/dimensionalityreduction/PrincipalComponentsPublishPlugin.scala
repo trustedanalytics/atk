@@ -30,7 +30,7 @@ import spray.json._
 /**
  * Publish a Principal Components Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+@PluginDoc(oneLine = "Creates a scoring engine tar file.",
   extended = """Creates a tar file with the trained Principal Components Model.
 The tar file is used as input to the scoring engine to compute the principal components and
 t-squared index of the observation.""",

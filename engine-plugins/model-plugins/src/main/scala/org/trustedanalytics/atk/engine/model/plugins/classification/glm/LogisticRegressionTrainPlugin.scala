@@ -32,21 +32,21 @@ import MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build logistic regression model.",
-  extended = "Creating a Logistic Regression Model using the observation column and label column of the train frame.",
-  returns = """object
-    An object with a summary of the trained model.
-    The data returned is composed of multiple components:
-numFeatures : Int
-    Number of features in the training data
-numClasses : Int
-    Number of classes in the training data
-summaryTable: table
-    A summary table composed of:
-covarianceMatrix: Frame (optional)
-    Covariance matrix of the trained model.
+  extended = """Creating a Logistic Regression Model using the observation column and
+label column of the train frame.""",
+  returns = """An object with a summary of the trained model.
+The data returned is composed of multiple components\:
+
+| **int** : *numFeatures*
+|   Number of features in the training data
+| **int** : *numClasses*
+|   Number of classes in the training data
+| **table** : *summaryTable*
+|   A summary table composed of:
+| **Frame** : *CovarianceMatrix (optional)*
+|   Covariance matrix of the trained model.
     The covariance matrix is the inverse of the Hessian matrix for the trained model.
-    The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function
-""""")
+    The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function.""")
 class LogisticRegressionTrainPlugin extends SparkCommandPlugin[LogisticRegressionTrainArgs, LogisticRegressionSummaryTable] {
   /**
    * The name of the command.

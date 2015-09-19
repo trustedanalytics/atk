@@ -31,10 +31,10 @@ import ModelPublishJsonProtocol._
 /**
  * Publish a Random Forest Regressor Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+@PluginDoc(oneLine = "Creates a scoring engine tar file.",
   extended = """Creates a tar file with the trained Random Forest Regressor Model
 The tar file is used as input to the scoring engine to predict the value of an observation.""",
-  returns = """Returns the HDFS path to the tar file""")
+  returns = """Returns the HDFS path to the tar file.""")
 class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

@@ -37,11 +37,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param model Handle to the model to be written to.
- * @param frame Handle to the data frame
- * @param observationColumns Handle to the list of observation columns of the data frame
- * @param labelColumn Handle to the label column of the data frame
+ * Command for testing model data in the model.
  */
 case class RandomForestClassifierTestArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
                                           @ArgDoc("""The frame whose labels are to be predicted""") frame: FrameReference,
@@ -57,14 +53,14 @@ By default, we predict the labels over columns the RandomForest was trained on."
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
 and target labels.""",
-  returns = """object
-    An object with classification metrics.
-    The data returned is composed of multiple components:
-  <object>.accuracy : double
-  <object>.confusion_matrix : table
-  <object>.f_measure : double
-  <object>.precision : double
-  <object>.recall : double""")
+  returns = """An object with classification metrics.
+The data returned is composed of multiple components\:
+
+|  **double** : *accuracy*
+|  **table** : *confusion_matrix*
+|  **double** : *f_measure*
+|  **double** : *precision*
+|  **double** : *recall*""")
 class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestClassifierTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.

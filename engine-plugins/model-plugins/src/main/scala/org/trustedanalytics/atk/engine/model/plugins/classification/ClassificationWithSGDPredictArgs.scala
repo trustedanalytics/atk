@@ -22,18 +22,15 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param model Handle to the model to be written to.
- * @param frame Handle to the data frame
- * @param observationColumns Handle to the observation column of the data frame
+ * Command for predicting model data.
  */
 case class ClassificationWithSGDPredictArgs(model: ModelReference,
                                             @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
-                                            @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
-Default is the labels the model
-was trained on. """) observationColumns: Option[List[String]]) {
+                                            @ArgDoc("""Column(s) containing the observations
+whose labels are to be predicted.
+Default is the labels the model was trained on.""") observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
 

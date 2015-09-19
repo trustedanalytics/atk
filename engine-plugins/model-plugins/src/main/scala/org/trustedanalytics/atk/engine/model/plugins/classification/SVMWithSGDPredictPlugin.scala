@@ -35,7 +35,7 @@ import MLLibJsonProtocol._
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted label's column.""",
   returns = """A frame containing the original frame's columns and a column with the
-predicted label""")
+predicted label.""")
 class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameReference] {
   /**
    * The name of the command.

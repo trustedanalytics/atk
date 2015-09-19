@@ -184,7 +184,7 @@ pygments_style = 'bw'
 html_use_modindex = True
 
 # Remove the space immediately before the footnote, which is required to recognize it as such.
-trim_footnote_reference_space = True
+trim_footnote_reference_space = 1
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
