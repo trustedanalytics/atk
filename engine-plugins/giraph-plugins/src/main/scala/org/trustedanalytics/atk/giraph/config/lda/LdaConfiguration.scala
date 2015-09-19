@@ -21,6 +21,7 @@ import org.apache.giraph.conf.GiraphConfiguration
 import org.apache.hadoop.conf.Configuration
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.schema.Schema
+import org.trustedanalytics.atk.giraph.plugins.util.GiraphConfigurationUtil
 import spray.json._
 
 /**
@@ -56,7 +57,7 @@ case class LdaVertexInputFormatConfig(documentIdColumnName: String,
                                       wordIdColumnName: String,
                                       isDocumentColumnName: String,
                                       vertexIdColumnName: String,
-                                      vertexDescColumnName: String) {
+                                      vertexOriginalIdColumnName: String) {
 
   def this(args: LdaTrainArgs) = {
     this(
@@ -102,7 +103,7 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
                      wordIdColumnName: String,
                      isDocumentColumnName: String,
                      vertexIdColumnName: String,
-                     vertexDescColumnName: String) {
+                     vertexOriginalIdColumnName: String) {
 
   def this(inputFormatConfig: LdaInputFormatConfig, outputFormatConfig: LdaOutputFormatConfig, args: LdaTrainArgs, vertexInputFormatConfig: LdaVertexInputFormatConfig) = {
     this(inputFormatConfig,
@@ -120,7 +121,7 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
       vertexInputFormatConfig.wordIdColumnName,
       vertexInputFormatConfig.isDocumentColumnName,
       vertexInputFormatConfig.vertexIdColumnName,
-      vertexInputFormatConfig.vertexDescColumnName
+      vertexInputFormatConfig.vertexOriginalIdColumnName
     )
   }
 

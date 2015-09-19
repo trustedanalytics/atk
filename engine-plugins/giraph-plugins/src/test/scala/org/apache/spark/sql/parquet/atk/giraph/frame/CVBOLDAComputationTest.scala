@@ -16,14 +16,14 @@
 
 package org.apache.spark.sql.parquet.atk.giraph.frame
 
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
-import org.trustedanalytics.atk.giraph.config.lda._
+import org.apache.mahout.math.Vector
+import org.scalatest.WordSpec
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.schema.FrameSchema
-import org.apache.mahout.math.Vector
-import org.scalatest.WordSpec
+import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
+import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{CVB0LDAAggregatorWriter, CVB0LDAMasterCompute}
+import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.testutils.SynchronizedInternalVertexRunner
 
 import scala.collection.JavaConversions._
@@ -39,6 +39,33 @@ class CVBOLDAComputationTest extends WordSpec {
   def assertVectorApproximate(v: Vector, expectedDouble1: Double, expectedDouble2: Double): Unit = {
     assert(round(v.get(0)) == round(expectedDouble1))
     assert(round(v.get(1)) == round(expectedDouble2))
+  }
+
+  /** assertion that most likely topic is given by index */
+  def assertLikelyTopic(v: Vector, topicIndex: Int) : Unit = {
+     assert(v.maxValueIndex() == topicIndex, s"topic should equal ${topicIndex}")
+  }
+
+  /* assert each element in vector is between 0 and 1 */
+  def assertHasValidProbabilities(map: Map[String, Vector]): Unit = {
+    map.foreach {
+      case (s, vector) => {
+        for (x <- vector.all()) {
+          assert(x.get() >= 0 && x.get() <= 1, s"topic probabilities for ${s} should lie between 0 and 1")
+        }
+      }
+    }
+  }
+
+  /* assert sum of probabilities in vectors is one */
+  def assertProbabilitySumIsOne(map: Map[String, Vector]): Unit = {
+    map.foreach {
+      case (s, vector) => {
+        for (x <- vector.all()) {
+          assert(round(vector.zSum()) == 1, s"sum of topic probabilities for ${s} should equal 1")
+        }
+      }
+    }
   }
 
   val vertexData = List(
@@ -113,23 +140,27 @@ class CVBOLDAComputationTest extends WordSpec {
       topicGivenWord.foreach { case (s, vector) => assert(vector.size() == numTopics, s"result $s should have a vector of results with size of numTopics") }
 
       // there is a random element in the results so we round to so many decimal places
-      /* assertVectorApproximate(docResults("nytimes"), 0.9791622779172616, 0.020837722082738406)
-      assertVectorApproximate(docResults("economist"), 0.9940318217299755, 0.005968178270024487)
-      assertVectorApproximate(docResults("harrypotter"), 8.452603312170585E-4, 0.999154739668783)
+      val harryPotterTopic = docResults("harrypotter").maxValueIndex()
+      val newsTopic = 1 - harryPotterTopic
 
-      assertVectorApproximate(wordResults("economy"), 0.4139199864115501, 8.281218109226838E-4)
-      assertVectorApproximate(wordResults("movies"), 0.03451218015974311, 8.441422016054433E-4)
-      assertVectorApproximate(wordResults("jobs"), 0.36527729311947715, 8.312812262932968E-4)
-      assertVectorApproximate(wordResults("harry"), 0.012227142764471467, 0.33614890265523867)
-      assertVectorApproximate(wordResults("chamber"), 4.8666699891845546E-4, 0.16208167430495116)
-      assertVectorApproximate(wordResults("secrets"), 4.866629945216566E-4, 0.242719543561563)
-      assertVectorApproximate(wordResults("magic"), 0.0056778096874241365, 0.2502411087589012)
-      assertVectorApproximate(wordResults("realestate"), 0.17071558553290928, 8.288897492542531E-4)
-       */
-      topicGivenWord.foreach {
-        case (s, vector) =>
-          assert(round(vector.zSum()) == 1, s"sum of conditional probabilities for topic given $s should equal 1")
-      }
+      assertLikelyTopic(docResults("nytimes"), newsTopic)
+      assertLikelyTopic(docResults("economist"), newsTopic)
+      assertLikelyTopic(docResults("harrypotter"), harryPotterTopic)
+
+      assertLikelyTopic(wordResults("economy"), newsTopic)
+      assertLikelyTopic(wordResults("movies"), newsTopic)
+      assertLikelyTopic(wordResults("jobs"), newsTopic)
+      assertLikelyTopic(wordResults("harry"), harryPotterTopic)
+      assertLikelyTopic(wordResults("chamber"), harryPotterTopic)
+      assertLikelyTopic(wordResults("secrets"), harryPotterTopic)
+      assertLikelyTopic(wordResults("magic"), harryPotterTopic)
+      assertLikelyTopic(wordResults("realestate"), newsTopic)
+
+      assertHasValidProbabilities(docResults.toMap)
+      assertHasValidProbabilities(topicGivenWord.toMap)
+      assertProbabilitySumIsOne(docResults.toMap)
+      assertProbabilitySumIsOne(topicGivenWord.toMap)
+
     }
   }
 

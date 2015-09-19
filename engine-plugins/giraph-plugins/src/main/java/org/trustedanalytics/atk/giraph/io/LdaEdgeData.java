@@ -17,9 +17,7 @@
 package org.trustedanalytics.atk.giraph.io;
 
 import org.apache.hadoop.io.Writable;
-import org.apache.mahout.math.DenseVector;
 import org.apache.mahout.math.Vector;
-import org.apache.mahout.math.VectorWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -31,7 +29,7 @@ import java.io.IOException;
 public final class LdaEdgeData implements Writable {
 
     private Double wordCount = null;
-    private final DoubleArrayWritable vectorWritable = new DoubleArrayWritable();
+    private final DoubleArrayWritable arrayWritable = new DoubleArrayWritable();
 
     public LdaEdgeData() {
     }
@@ -62,23 +60,23 @@ public final class LdaEdgeData implements Writable {
     }
 
     public Vector getVector() {
-        return vectorWritable.getVector();
+        return arrayWritable.getVector();
     }
 
     public void setVector(Vector vector) {
-        vectorWritable.set(vector);
+        arrayWritable.set(vector);
     }
 
     @Override
     public void readFields(DataInput in) throws IOException {
         wordCount = in.readDouble();
-        vectorWritable.readFields(in);
+        arrayWritable.readFields(in);
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         out.writeDouble(wordCount);
-        vectorWritable.write(out);
+        arrayWritable.write(out);
     }
 
 }

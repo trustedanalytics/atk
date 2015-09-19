@@ -93,11 +93,12 @@ class LdaTrainPlugin
 
     // assign unique long vertex Ids to vertices
     val vertexInputConfig = new LdaVertexInputFormatConfig(arguments)
+    edgeFrame.rdd.cache()
     val docVertexFrame = createVertexFrame(edgeFrame.rdd, arguments.documentColumnName, 1, vertexInputConfig)
     val wordVertexFrame = createVertexFrame(edgeFrame.rdd, arguments.wordColumnName, 0, vertexInputConfig)
     //TODO : Remove forward refs
-    var edgeFrameWithIds = joinFramesById(edgeFrame.rdd, docVertexFrame, arguments.documentColumnName, vertexInputConfig.vertexDescColumnName, vertexInputConfig.documentIdColumnName)
-    edgeFrameWithIds = joinFramesById(edgeFrameWithIds, wordVertexFrame, arguments.wordColumnName, vertexInputConfig.vertexDescColumnName, vertexInputConfig.wordIdColumnName)
+    var edgeFrameWithIds = joinFramesById(edgeFrame.rdd, docVertexFrame, arguments.documentColumnName, vertexInputConfig.vertexOriginalIdColumnName, vertexInputConfig.documentIdColumnName)
+    edgeFrameWithIds = joinFramesById(edgeFrameWithIds, wordVertexFrame, arguments.wordColumnName, vertexInputConfig.vertexOriginalIdColumnName, vertexInputConfig.wordIdColumnName)
     val vertexValueFrame = createVertexValueFrame(docVertexFrame, wordVertexFrame, vertexInputConfig)
 
     val newEdgeFrame = engine.frames.tryNewFrame(CreateEntityArgs(
@@ -180,17 +181,20 @@ class LdaTrainPlugin
     val longIdColumnName = if (isDocument == 1) config.documentIdColumnName else config.wordIdColumnName
     val vertexFrameSchema = FrameSchema(List(
       Column(longIdColumnName, DataTypes.int64),
-      Column(config.vertexDescColumnName, DataTypes.string),
+      Column(config.vertexOriginalIdColumnName, DataTypes.string),
       Column(config.isDocumentColumnName, DataTypes.int32)))
 
-    val rowRdd: RDD[Row] = frameRdd.mapRows(row => {
-      (row.stringValue(columnName), 1)
-    }).reduceByKey((x,y) => x).map{case (id, x) => id}.zipWithUniqueId().map {
-      case (description, id) =>
-        new GenericRow(Array[Any](id, description, isDocument))
-    }
+    val idAssigner = new LdaGraphIDAssigner()
 
-    new FrameRdd(vertexFrameSchema, rowRdd)
+    val uniqueVertices = frameRdd.mapRows(row => {
+      row.stringValue(columnName)
+    }).distinct()
+
+    val vertexRdd: RDD[Row] = idAssigner.assignVertexId(uniqueVertices).map {
+      case (longId, stringId) =>
+        new GenericRow(Array[Any](longId, stringId, isDocument))
+    }
+    new FrameRdd(vertexFrameSchema, vertexRdd)
   }
 
   def joinFramesById(edgeFrame: FrameRdd,
@@ -211,7 +215,7 @@ class LdaTrainPlugin
   def createVertexValueFrame(docVertexFrame: RDD[Row], wordVertexFrame: RDD[Row], config: LdaVertexInputFormatConfig): FrameRdd = {
     val vertexFrameSchema = FrameSchema(List(
       Column(config.vertexIdColumnName, DataTypes.int64),
-      Column(config.vertexDescColumnName, DataTypes.string),
+      Column(config.vertexOriginalIdColumnName, DataTypes.string),
       Column(config.isDocumentColumnName, DataTypes.int32)))
 
     new FrameRdd(vertexFrameSchema, docVertexFrame.union(wordVertexFrame))
