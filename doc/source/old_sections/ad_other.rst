@@ -1,3 +1,7 @@
+.. _old_sections/ad_other:
+
+.. _old_ad_sections/ad_other:
+
 .. _ad_other:
 
 .. _windows_python_setup:
