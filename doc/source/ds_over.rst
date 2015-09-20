@@ -10,4 +10,5 @@ User Manual
     ds_strt
     ds_dflw
     ds_ml
+    scoring_engine
     ds_bkm
