@@ -27,7 +27,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
-import org.trustedanalytics.atk.engine.plugin.{PluginDoc, Invocation, SparkCommandPlugin}
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
