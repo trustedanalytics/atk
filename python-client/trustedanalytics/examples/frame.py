@@ -66,7 +66,7 @@ def run(path=r"datasets/cities.csv", ta=None):
 
         .. code::
 
-          >>>import taprootanalytics.examples.frame as frame
+          >>>import trustedanalytics.examples.frame as frame
 
         After importing you can execute run method with the path to the dataset
 

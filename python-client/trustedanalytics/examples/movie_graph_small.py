@@ -66,7 +66,7 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
 
         .. code::
 
-          >>>import taprootanalytics.examples.movie_graph_small as movie
+          >>>import trustedanalytics.examples.movie_graph_small as movie
 
         After importing you can execute run method with the path to the dataset
 

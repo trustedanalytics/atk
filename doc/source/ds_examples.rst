@@ -60,7 +60,7 @@ To access any of the examples import them like you would any other python module
 
 
     $ python[2.7]
-    >>> import taprootanalytics.examples.frame as frame
+    >>> import trustedanalytics.examples.frame as frame
 
 ----------------
 Running Examples
@@ -77,7 +77,7 @@ Frame
 frame example::
 
     $ python[2.7]
-    >>> import taprootanalytics.examples.frame as frame
+    >>> import trustedanalytics.examples.frame as frame
     #after importing the example execute it's run method with the HDFS path from the data catalog
     >>> frame.run("hdfs://FULL_HDFS_PATH")
 
@@ -91,7 +91,7 @@ Movie Graph Small
 movie graph example::
 
     $ python[2.7]
-    >>> import taprootanalytics.examples.movie_data_small as movie
+    >>> import trustedanalytics.examples.movie_data_small as movie
     #after importing the example execute it's run method with the HDFS path from the data catalog
     >>> movie.run("hdfs://FULL_HDFS_PATH")
 
@@ -105,7 +105,7 @@ Page Rank
 page rank example::
 
     $ python[2.7]
-    >>> import taprootanalytics.examples.pr as pr
+    >>> import trustedanalytics.examples.pr as pr
     #after importing the example execute it's run method with the HDFS path from the data catalog
     >>> pr.run("hdfs://FULL_HDFS_PATH")
 

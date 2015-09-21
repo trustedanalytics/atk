@@ -17,7 +17,7 @@ from trustedanalytics import examples
 
 
 def run(path=r"datasets/movie_data_random.csv", ta=None):
-   """
+    """
     Loads movie_data_random.csv into a frame, creates a graph and runs the page rank algorithm.
     We are not required to use movie_data_random.csv but rather it's schema. Any other csv file with the correct schema and delimeter will work.
 
@@ -67,7 +67,7 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
 
         .. code::
 
-          >>>import taprootanalytics.examples.movie_graph_small as movie
+          >>>import trustedanalytics.examples.movie_graph_small as movie
 
         After importing you can execute run method with the path to the dataset
 
