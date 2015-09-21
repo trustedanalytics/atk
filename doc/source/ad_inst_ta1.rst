@@ -327,8 +327,13 @@ Configuration Script
 ====================
 
 The server configuration is semi-automated via the use of a Python script
-'/etc/trustedanalytics/rest-server/config.py'.
-It will query Cloudera Manager for the necessary configuration values and
+'/etc/trustedanalytics/rest-server/config'.
+It will query Cloudera Manager and
+write out two files: 'atk.conf' containing general |PACKAGE| and Cloudera
+configuration parameters and 'db.conf' containing parameters related to the
+PostgreSQL installation.
+
+
 create a new 'application.conf' file based on the 'application.conf.tpl' file.
 The script will also fully configure the local PostgreSQL installation to
 work with the |PACKAGE| server.
