@@ -83,7 +83,6 @@ from cluster_config.cdh.cluster import Cluster, save_config
 import cluster_config.cdh as cdh
 import time, datetime
 from pprint import pprint
-from os import system
 import hashlib, re, time, argparse, os, time, sys, getpass
 import codecs
 import subprocess
@@ -182,7 +181,7 @@ def set_db_user_access(db_username):
     :param db_username: the database username
     """
     #update pg_hba conf file with user entry will only ever be for local host
-    print "Configuring postgres access for  '" + db_username + "'"
+    print('Configuring postgres access for user:' + db_username)
     try:
         pg_hba = codecs.open(r"/var/lib/pgsql/data/pg_hba.conf", encoding="utf-8", mode="r+")
     except IOError:
@@ -205,8 +204,8 @@ def create_db_user(db_username, db_password):
     :param db_username: the  user name that will eventually own the database
     :param db_password: the password for the user
     """
-    print system("su -c \"echo \\\"create user " + db_username +
-                 " with createdb encrypted password '" + db_password + "';\\\" | psql \"  postgres")
+    print(os.system("su -c \"echo \\\"create user " + db_username +
+                 " with createdb encrypted password '" + db_password + "';\\\" | psql \"  postgres"))
 
 
 def create_db(db, db_username):
@@ -218,7 +217,7 @@ def create_db(db, db_username):
     :param db_username: the postgres user that will own the database
 
     """
-    print system("su -c \"echo \\\"create database " + db + " with owner " + db_username + ";\\\" | psql \"  postgres")
+    print(system("su -c \"echo \\\"create database " + db + " with owner " + db_username + ";\\\" | psql \"  postgres"))
 
 
 def create_IA_metauser(db):
@@ -229,9 +228,9 @@ def create_IA_metauser(db):
     :param db: the database we will be inserting the record into
 
     """
-    print system("su -c \" echo \\\" \c " + db +
+    print(system("su -c \" echo \\\" \c " + db +
                  "; \\\\\\\\\  insert into users (username, api_key, created_on, modified_on) "
-                 "values( 'metastore', 'test_api_key_1', now(), now() );\\\" | psql \" postgres ")
+                 "values( 'metastore', 'test_api_key_1', now(), now() );\\\" | psql \" postgres "))
 
 
 def restart_db():
@@ -241,7 +240,7 @@ def restart_db():
 
     :return:
     """
-    print system("service postgresql  restart ")
+    print(system("service postgresql  restart "))
     time.sleep(POSTGRES_WAIT)
 
 
@@ -272,18 +271,18 @@ def restart_IA():
         output_log.close()
     except IOError:
         cc.log.info("Starting ATK...")
-        print color_text("Starting ATK...", GOOD)
+        print(color_text("Starting ATK...", GOOD))
 
     #restart IA
-    print system("service trustedanalytics restart ")
+    print(system("service trustedanalytics restart "))
     cc.log.info("Waiting for server to restart")
-    print color_text("Waiting for server to restart", GOOD)
+    print(color_text("Waiting for server to restart", GOOD))
 
     output_log_text = get_IA_log()
     count = 0
     #When we get the Bound to message the server has finished restarting
     while re.search("Bound to.*:.*", output_log_text) is None:
-        print " . ",
+        print(" . ",)
         sys.stdout.flush()
         time.sleep(IA_START_WAIT)
 
@@ -291,11 +290,11 @@ def restart_IA():
 
         count += 1
         if count > IA_START_WAIT_LOOPS:
-            print color_text("Intel Analytics Rest server didn't restart!", ERROR)
+            print(color_text("Intel Analytics Rest server didn't restart!", ERROR))
             cc.log.fatal("Intel Analytics Rest server didn't restart!")
             exit(1)
 
-    print "\n"
+    print("\n")
 
 
 def set_db_details(db, db_username, db_password):
@@ -312,7 +311,7 @@ def set_db_details(db, db_username, db_password):
     restart_db()
     restart_IA()
     create_IA_metauser(db)
-    print color_text("Postgres is configured.", GOOD)
+    print(color_text("Postgres is configured.", GOOD))
 
 
 def run_command(command):
@@ -334,7 +333,7 @@ def run_command(command):
 
 def setup_yarn_cluster_mode(cluster):
     cc.log.info("Configuring ATK for Spark on YARN-cluster mode...")
-    print color_text("Configuring for Spark on YARN-cluster mode...", GOOD)
+    print(color_text("Configuring for Spark on YARN-cluster mode...", GOOD))
 
     # Sanity check that the database is running.
     command = "service postgresql status"
@@ -351,7 +350,7 @@ def setup_yarn_cluster_mode(cluster):
         pg_hba_conf = codecs.open("/var/lib/pgsql/data/pg_hba.conf", encoding="utf-8", mode="a")
         for ip in yarn_internal_IPs:
             pg_hba_conf.write("host    all    all    " + ip + "/32    trust")
-        print color_text("YARN cluster is configured.", GOOD)
+        print(color_text("YARN cluster is configured.", GOOD))
     except:
         raise ConfigurationException("Could not open '/var/lib/pgsql/data/pg_hba.conf' and write YARN server information")
     finally:
@@ -374,7 +373,7 @@ def cli(parser=None):
         parser.add_argument("--db_only", type=str, help="configure only the database yes/no", required=True)
         parser.add_argument("--db_host", type=str, help="Database host name")
         parser.add_argument("--db_port", type=str, help="Database port number")
-        parser.add_argument("--db", type=str, help="Database name")
+        parser.add_argument("--db_database", type=str, help="Database name")
         parser.add_argument("--db_username", type=str, help="Database username")
         parser.add_argument("--db_password", type=str, help="Database password")
         parser.add_argument("--path", type=str,
@@ -383,6 +382,7 @@ def cli(parser=None):
                             "Defaults to working directory {0}".format(os.getcwd()))
         parser.add_argument("--log", type=str, help="Log level [INFO|DEBUG|WARNING|FATAL|ERROR]", default="INFO",
                             choices=["INFO", "DEBUG", "WARNING", "FATAL", "ERROR"])
+        parser.add_argument("--yarn_cluster", type=str, help="configure for Spark / Yarn-cluster mode, (yes/no)")
     return parser
 
 
@@ -393,10 +393,15 @@ def create_config(identifier, prefix, confs, filename):
         print("{0}.{1}={2}".format(prefix, key, confs[key]), file=f)
     f.close()
     cc.log.info("Wrote generated {0} configuration file to: {1}".format(identifier, path))
-    print color_text("Configuration created for Intel Analytics: {0}".format(identifier), GOOD)
+    print(color_text("Configuration created for Intel Analytics: {0}".format(identifier), GOOD))
 
 
 def run(args, cluster=None):
+
+    from ptpdb import set_trace
+    set_trace()
+
+    
     # Take what is on the commandline for CDH initial parameters, if anything.
     cdh_conf_from_commandline = {
         'username': args.username if args.username else None,
@@ -452,11 +457,11 @@ def run(args, cluster=None):
             test_old_cdh_conf()
         except Exception as e:
             cc.log.warning(e)
-            print color_text(e + "\nDid you mean to create a new one?", WARNING)
+            print (color_text(e + "\nDid you mean to create a new one?", WARNING))
         else:
             cc.log.warning("Existing cdh.conf file being used.")
-            print color_text("Existing cdh.conf file being used.  " +
-                             "Did you mean to create a new one?", WARNING)
+            print (color_text("Existing cdh.conf file being used.  " +
+                             "Did you mean to create a new one?", WARNING))
     else:   # db_only == 'no'
         cc.log.warning("New cdh.conf file will be written.")
         for key in cdh_conf:
@@ -482,7 +487,7 @@ def run(args, cluster=None):
     if args.yarn_cluster.lower().strip() != 'no':
         setup_yarn_cluster_mode(cluster)
 
-    print color_text("Intel Analytics is ready for use.", GOOD)
+    print (color_text("Intel Analytics is ready for use.", GOOD))
 
 
 if __name__ == '__main__':
