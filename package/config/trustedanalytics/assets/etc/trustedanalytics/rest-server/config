@@ -26,14 +26,13 @@ This script queries Cloudera manager to get the host names of the machines runni
  -ZOOKEEPER server(the zookeeper role is actually called 'server')
  -HDFS name node
 
-#FIXME
 It also updates the spark-env.sh config in Cloudera manager with a necessary export of SPARK_CLASSPATH
 needed for graph processing. The spark service config is re-deployed and the service is restarted.
 If the Intel Analytics class path is already present no updates are done,
 the config is not deployed and the spark service is not restarted.
 
 CAUTION:
-    You can run this script many times to pull the latest configuration details from Cloudera manager but care should 
+    You can run this script many times to pull the latest configuration details from Cloudera Manager but care should 
     be taken when configuring the database. If any existing database configurations exist
     it will be overwritten without warning. If you do change database configurations the REST server will loose
     all knowledge of any frames, graphs and other processed data that might have been created.
@@ -41,44 +40,35 @@ CAUTION:
 Command Line Arguments
     Every command line argument is required.
 
-#FIXME
---host the cloudera manager host address. If this script is run on host managed by Cloudera manager we will try to get
-    the host name from /etc/cloudera-scm-agent/config.ini
+--host the cloudera Manager host address. If this script is run on host managed by Cloudera Manager we will try to get
+    the host name from the Cloudera Manager API
 
---port the Cloudera manager port. The port used to access the Cloudera manager ui. (normally 7180 but no default is provided)
+--port the Cloudera Manager port. The port used to access the Cloudera Manager UI. (normally 7180 but no default is provided)
 
---username The Cloudera manager user name. The user name for logging into Cloudera manager
+--username The Cloudera Manager user name. The user name for logging into Cloudera Manager
 
---password The Cloudera manager password.  The user name for logging into Cloudera manager
+--password The Cloudera Manager password.  The user name for logging into Cloudera Manager
 
---cluster The Cloudera cluster we will create the config for. If Cloudera manager manages more than one cluster
+--cluster The Cloudera cluster we will create the config for. If Cloudera Manager manages more than one cluster
     we need to know what cluster we will be updating and pulling our config for. Can give the display name of the
     cluster
-
-#FIXME is this still needed?
---restart Weather or not we will restart the spark service after setting the spark classpath. After the SPARK_CLASSPATH
-    gets updated we deploy the new config but we also need to restart the spark service for the changes to take effect
-    on all the master and worker nodes. This is left to the user to decide in case spark is currently busy running some
-    jobs
 
 --db_only Configure only the database (yes/no).  If there is no existing cdh.conf file and db_only=yes, no cdh.conf file will be created.
     If there is an existing cdh.conf file and db_only=yes, the command-line parameters for connecting to Cloudera Manager will be used
     in preference to the contents of cdh.conf.  If the parameters given disagree with the contents of cdh.conf, the cdh.conf file will
-    NOT be updated.
+    NOT be updated.  Any parameter for this option other than "yes" (case-insensitive) is treated as "no".
 
-#FIXME still providing any defaults?
---db_host the hostname of your postgres database. will default to localhost
+--db_host the hostname of your postgres database.
 
---db_port the port number for your postgres installation. will default to 5432
+--db_port the port number for your postgres installation.
 
---db the postgres database name. will default to ia_metastore
+--db the postgres database name.
 
---db_username the database user name. will default to iauser
+--db_username the database user name.
 
---db_password the database password. will default to random hash. Don't use '$' sign in the password the intel analytics
-    server can't read them correctly from the configuration file. While doing the configuration for the password
-    you will only see asterisk for the display. If you need the password for future reference you can open the
-    application.conf file and look for metastore.connection-postgresql.username.
+--db_password the database password.
+
+--yarn_cluster Setup Spark to use yarn-cluster mode (yes/no).  Any parameter for this option other than "no" (case-insensitive) is treated as "yes".
 
 """
 
@@ -96,6 +86,7 @@ from pprint import pprint
 from os import system
 import hashlib, re, time, argparse, os, time, sys, getpass
 import codecs
+import subprocess
 
 IAUSER = "atkuser"
 SPARK_USER = "spark"
@@ -113,162 +104,6 @@ RESET = '\033[0m'
 
 def color_text(text, color):
     return text
-
-
-# def restart_service(service):  DELETEME?
-#     """
-#     restart the service
-#     :param service: service we are going to restart
-
-#     """
-#     print "\nYou need to restart " + service.name + " service for the config changes to take affect."
-#     service_restart = get_arg("Would you like to restart spark now? Enter \"" + color_text("yes", GOOD) +
-#                               "\" to restart.", "no", args.restart)
-#     if service_restart is not None and service_restart.strip().lower() == "yes":
-#         print "Restarting " + service.name,
-#         service.restart()
-#         poll_commands(service, "Restart")
-#         print color_text("Restarted " + service.name, GOOD)
-
-
-# def update_spark_env(group, spark_config_env_sh):# DELETEME?
-
-#     """
-#     update the park env configuration in Cloudera manager
-
-#     :param group: the group that spark_env.sh belongs too
-#     :param spark_config_env_sh: the current spark_env.sh value
-#     :return:
-#     """
-
-#     if spark_config_env_sh is None:
-#         spark_config_env_sh = ""
-
-#     #look for any current SPARK_CLASSPATH
-#     found_class_path = find_exported_class_path(spark_config_env_sh)
-
-#     if found_class_path is None:
-#         #no existing class path found
-#         print "No current SPARK_CLASSPATH set."
-
-#         updated_class_path = create_updated_class_path(found_class_path, spark_config_env_sh)
-
-#         print "Setting to: " + updated_class_path
-
-#         #update the spark-env.sh with our exported class path appended to whatever whas already present in spark-env.sh
-#         group.update_config({"SPARK_WORKER_role_env_safety_valve": updated_class_path})
-#         return True
-#     else:
-#         #found existing classpath
-#         found_class_path_value = find_class_path_value(spark_config_env_sh)
-#         print "Found existing SPARK_CLASSPATH: " + found_class_path_value
-
-#         #see if we our LIB_PATH is set in the classpath
-#         found_ia_class_path = find_ia_class_path(found_class_path_value)
-#         if found_ia_class_path is None:
-#             #no existing ia classpath
-#             print "No existing Intel Analytics class path found."
-#             updated_class_path = create_updated_class_path(found_class_path_value, spark_config_env_sh)
-#             print "Updating to: " + updated_class_path
-#             group.update_config({"SPARK_WORKER_role_env_safety_valve" : updated_class_path})
-#             return True
-#         else:
-#             #existing ia classpath
-#             print "Found existing Intel Analytics class path no update needed."
-#             return False
-#     return False
-
-
-# def get_hdfs_details(services):  # DELETEME?
-
-#     """
-#     We need various hdfs details to eventually get to the name node host name
-
-#     :param services: all the cluster services
-#     :return: name node host name
-#     """
-#     #get hdfs service details
-#     hdfs_service = find_service(services, "HDFS")
-#     if hdfs_service is None:
-#         print color_text("no hdfs service found", ERROR)
-#         exit(1)
-
-#     hdfs_roles = hdfs_service.get_all_roles()
-
-#     hdfs_namenode_roles = find_service_roles(hdfs_roles, "NAMENODE")
-
-#     hdfs_namenode_role_hostnames = get_role_host_names(api, hdfs_namenode_roles)
-
-#     hdfs_config_groups = role_config_groups.get_all_role_config_groups(api, hdfs_service.name, cluster.name)
-
-#     hdfs_namenode_port, _ = find_config(hdfs_config_groups, "hdfs-NAMENODE-BASE", "namenode_port")
-
-#     return hdfs_namenode_role_hostnames, hdfs_namenode_port
-
-
-# def get_zookeeper_details(services):# DELETEME  ??
-#     #  Assigned during CDH deploy and available via query through the Cluster object.
-#     """
-#     get the various zookeeper service details and eventually return the zookeeper host names
-
-#     :param services: all the cluster services
-#     :return: list of zookeeper host names
-#     """
-#     zookeeper_service = find_service(services, "ZOOKEEPER")
-#     if zookeeper_service is None:
-#         print color_text("no zookeeper service found", ERROR)
-#         exit(1)
-
-#     zookeeper_roles = zookeeper_service.get_all_roles()
-
-#     zookeeper_server_roles = find_service_roles(zookeeper_roles, "SERVER")
-
-#     zookeeper_server_role_hostnames = get_role_host_names(api, zookeeper_server_roles)
-
-#     zookeeper_config_groups = role_config_groups.get_all_role_config_groups(api, zookeeper_service.name, cluster.name)
-
-#     zookeeper_client_port, _ = find_config(zookeeper_config_groups, "zookeeper-SERVER-BASE", "clientPort")
-
-#     return zookeeper_server_role_hostnames, zookeeper_client_port
-
-
-# def get_spark_details(services):
-#     """
-#     Look for the spark master host name, spark master port, executor memory and update the spark_env.sh with the
-#     necessary class path to build graphs
-#     :param services: all the cluster services
-#     :return: spark master host name, port and executor max memory
-#     """
-#     spark_service = find_service(services, "SPARK")
-#     if spark_service is None:
-#        print color_text("no spark service found", ERROR)
-#        exit(1)
-
-#     spark_roles = spark_service.get_all_roles()
-
-#     spark_master_roles = find_service_roles(spark_roles, "SPARK_MASTER")
-
-#     spark_master_role_hostnames = get_role_host_names(api, spark_master_roles)
-
-#     spark_config_groups = role_config_groups.get_all_role_config_groups(api, spark_service.name, cluster.name)
-
-#     spark_config_executor_total_max_heapsize, _ = find_config(spark_config_groups, "spark-SPARK_WORKER-BASE",
-#                                                            "executor_total_max_heapsize")
-
-#     spark_config_master_port, _ = find_config(spark_config_groups, "spark-SPARK_MASTER-BASE", "master_port")
-
-#     #spark_config_env_sh, group = find_config(spark_config_groups, "spark-GATEWAY-BASE",
-#     #                               "spark-conf/spark-env.sh_client_config_safety_valve")
-#     #spark_config_env_sh, group = find_config(spark_config_groups, "spark-SPARK_WORKER-BASE",
-#                                              #"SPARK_WORKER_role_env_safety_valve")
-
-#     #updated = update_spark_env(group, spark_config_env_sh)
-
-#     #if updated and True:
-#     #    deploy_config(spark_service, spark_roles)
-#     #    restart_service(spark_service)
-
-#     return spark_master_role_hostnames, spark_config_executor_total_max_heapsize, spark_config_master_port
 
 
 def search_config(config_key, group_name, search_text):
@@ -480,6 +315,52 @@ def set_db_details(db, db_username, db_password):
     print color_text("Postgres is configured.", GOOD)
 
 
+def run_command(command):
+    """
+    Run an external command that may produce multiple lines of output and
+    return the lines as an iterator so that the caller can choose whether to
+    wait for the output or allow the subprocess to execute concurrently and
+    check the lines intermittently.
+    :param command: Commandline to be run.  Array or string.  If a string, automatically split into an array on space.
+    :return: An iterator which contains the standard output of the command
+    """
+    if isinstance(command, str):
+        command = command.split()
+    p = subprocess.Popen(command,
+                         stdout=subprocess.PIPE,
+                         stderr=subprocess.STDOUT)
+    return iter(p.stdout.readline, b'')
+
+
+def setup_yarn_cluster_mode(cluster):
+    cc.log.info("Configuring ATK for Spark on YARN-cluster mode...")
+    print color_text("Configuring for Spark on YARN-cluster mode...", GOOD)
+
+    # Sanity check that the database is running.
+    command = "service postgresql status"
+    for line in run_command(command):
+        if not (line.find("postmaster") >= 0 and line.find("is running") >= 10):
+            raise ConfigurationException("Database not running, cannot setup YARN cluster!")
+
+    # Update pg_hba.conf for all the nodes in the cluster.
+    yarn_internal_IPs = []
+    for host in cluster.yarn.nodemanager.hosts.hosts:
+        yarn_internal_IPs.append(cluster.yarn.nodemanager.hosts[host].ipAddress)
+
+    try:
+        pg_hba_conf = codecs.open("/var/lib/pgsql/data/pg_hba.conf", encoding="utf-8", mode="a")
+        for ip in yarn_internal_IPs:
+            pg_hba_conf.write("host    all    all    " + ip + "/32    trust")
+        print color_text("YARN cluster is configured.", GOOD)
+    except:
+        raise ConfigurationException("Could not open '/var/lib/pgsql/data/pg_hba.conf' and write YARN server information")
+    finally:
+        pg_hba_conf.close()
+
+    restart_db()
+    restart_IA()
+
+
 def cli(parser=None):
     if parser is None:
         parser = argparse.ArgumentParser(description="Configure a new ATK install")
@@ -524,8 +405,6 @@ def run(args, cluster=None):
     # Query Cloudera for the parameters we can get from it using the
     # config_cluster API.  Login and password must be provided on the
     # commandline.
-    # FIXME - Do we need error checking of username and password here,
-    # or is that done in the Cluster constructor?
     if cluster is None:
         cluster = Cluster(args.host, args.port, args.username, args.password, args.cluster)
 
@@ -600,13 +479,11 @@ def run(args, cluster=None):
 
     set_db_details(db_conf.database, db_conf.username, db_conf.password)
 
-    #TODO: Make sure we are setting up everything for yarn-cluster
-    # mode correctly per the document on the Wiki
-    # "ATK with Spark on yarn-cluster mode (Serial and Parallel execution"
+    if args.yarn_cluster.lower().strip() != 'no':
+        setup_yarn_cluster_mode(cluster)
 
     print color_text("Intel Analytics is ready for use.", GOOD)
 
 
 if __name__ == '__main__':
     run(cc.cli.parse(cli()))
- 
