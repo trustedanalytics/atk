@@ -291,8 +291,8 @@ trait AbstractRow {
    * @param flattenInputs If true, flatten vector data types
    * @return array of doubles with values for the supplied properties
    */
-  def valuesAsDoubleArray(names: Seq[String] = schema.columnNames, flattenInputs: Boolean = false) : Array[Double] = {
-     valuesAsArray(names, flattenInputs).map(value => DataTypes.toDouble(value))
+  def valuesAsDoubleArray(names: Seq[String] = schema.columnNames, flattenInputs: Boolean = false): Array[Double] = {
+    valuesAsArray(names, flattenInputs).map(value => DataTypes.toDouble(value))
   }
 
   /**

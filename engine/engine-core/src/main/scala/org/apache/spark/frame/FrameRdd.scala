@@ -392,7 +392,6 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     }
   }
 
-
   /**
    * Convert FrameRdd into RDD of scores, labels, and associated frequency
    *
@@ -435,13 +434,13 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return Frame with added column
    */
   def addColumn[P](column: Column, addColumnFunc: (RowWrapper) => P): FrameRdd = {
-    val rows = this.mapRows( row => {
+    val rows = this.mapRows(row => {
       val columnValue = addColumnFunc(row)
       row.addValue(columnValue)
     })
     new FrameRdd(frameSchema.addColumn(column), rows)
   }
-  
+
 }
 
 /**

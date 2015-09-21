@@ -132,6 +132,31 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
   }
 
+  implicit object ConfusionMatrixFormat extends JsonFormat[ConfusionMatrix] {
+    override def read(json: JsValue): ConfusionMatrix = json match {
+      case obj: JsObject => {
+        val fields = json.asJsObject.fields
+
+        val rowLabels = getOrInvalid(fields, "row_labels").convertTo[List[String]]
+        val columnLabels = getOrInvalid(fields, "column_labels").convertTo[List[String]]
+        val matrix = getOrInvalid(fields, "matrix").convertTo[Array[Array[Long]]]
+
+        val confusionMatrix = ConfusionMatrix(rowLabels, columnLabels)
+        confusionMatrix.setMatrix(matrix)
+        confusionMatrix
+      }
+      case x => deserializationError("Expected confusion matrix, but got " + x)
+    }
+
+    override def write(obj: ConfusionMatrix): JsValue = {
+      JsObject(
+        "row_labels" -> obj.rowLabels.toJson,
+        "column_labels" -> obj.columnLabels.toJson,
+        "matrix" -> obj.getMatrix.toJson
+      )
+    }
+  }
+
   /**
    * Holds a regular expression, plus the group number we care about in case
    * the pattern is a match
@@ -282,6 +307,12 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
 
   }
+
+  def getOrInvalid[T](map: Map[String, T], key: String): T = {
+    // throw exception if a programmer made a mistake
+    map.getOrElse(key, deserializationError(s"expected key $key was not found in JSON $map"))
+  }
+
   implicit val longValueFormat = jsonFormat1(LongValue)
   implicit val intValueFormat = jsonFormat1(IntValue)
   implicit val stringValueFormat = jsonFormat1(StringValue)
@@ -372,7 +403,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   // model performance formats
 
   implicit val classificationMetricLongFormat = jsonFormat6(ClassificationMetricArgs)
-  implicit val confusionMatrixEntryFormat = jsonFormat3(ConfusionMatrixEntry)
   implicit val classificationMetricValueLongFormat = jsonFormat5(ClassificationMetricValue)
   implicit val commandActionFormat = jsonFormat1(CommandPost)
 

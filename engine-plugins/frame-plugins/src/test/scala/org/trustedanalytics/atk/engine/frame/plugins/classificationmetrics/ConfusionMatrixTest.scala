@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
 import org.trustedanalytics.atk.domain.frame.ConfusionMatrixEntry
-import org.trustedanalytics.atk.engine.frame.plugins.{MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel, ClassificationMetrics}
+import org.trustedanalytics.atk.engine.frame.plugins.{ MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel, ClassificationMetrics }
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -61,13 +61,12 @@ class ConfusionMatrixTest extends TestingSparkContextFlatSpec with Matchers {
     val binaryClassMetrics = new BinaryClassMetrics(rdd, 1)
     val confusionMatrix = binaryClassMetrics.confusionMatrix()
 
-    val expectedConfusionMatrix = List(
-      ConfusionMatrixEntry("positive", "positive", 1),
-      ConfusionMatrixEntry("positive", "negative", 0),
-      ConfusionMatrixEntry("negative", "positive", 1),
-      ConfusionMatrixEntry("negative", "negative", 2))
-
-    confusionMatrix should contain theSameElementsAs(expectedConfusionMatrix)
+    confusionMatrix.numRows should equal(2)
+    confusionMatrix.numColumns should equal(2)
+    confusionMatrix.get("pos", "pos") should equal(1)
+    confusionMatrix.get("pos", "neg") should equal(0)
+    confusionMatrix.get("neg", "pos") should equal(1)
+    confusionMatrix.get("neg", "neg") should equal(2)
   }
 
   "confusion matrix" should "compute predicted vs. actual class for binary classifier with string labels" in {
@@ -76,13 +75,12 @@ class ConfusionMatrixTest extends TestingSparkContextFlatSpec with Matchers {
     val binaryClassMetrics = new BinaryClassMetrics(rdd, "yes")
     val confusionMatrix = binaryClassMetrics.confusionMatrix()
 
-    val expectedConfusionMatrix = List(
-      ConfusionMatrixEntry("positive", "positive", 1),
-      ConfusionMatrixEntry("positive", "negative", 0),
-      ConfusionMatrixEntry("negative", "positive", 1),
-      ConfusionMatrixEntry("negative", "negative", 2))
-
-    confusionMatrix should contain theSameElementsAs(expectedConfusionMatrix)
+    confusionMatrix.numRows should equal(2)
+    confusionMatrix.numColumns should equal(2)
+    confusionMatrix.get("pos", "pos") should equal(1)
+    confusionMatrix.get("pos", "neg") should equal(0)
+    confusionMatrix.get("neg", "pos") should equal(1)
+    confusionMatrix.get("neg", "neg") should equal(2)
   }
 
   "confusion matrix" should "compute predicted vs. actual class for multi-class classifier" in {
@@ -91,13 +89,12 @@ class ConfusionMatrixTest extends TestingSparkContextFlatSpec with Matchers {
     val multiClassMetrics = new MultiClassMetrics(rdd)
     val confusionMatrix = multiClassMetrics.confusionMatrix()
 
-    val expectedConfusionMatrix = List(
-      ConfusionMatrixEntry("0", "0", 2),
-      ConfusionMatrixEntry("0", "1", 1),
-      ConfusionMatrixEntry("1", "2", 2),
-      ConfusionMatrixEntry("2", "1", 1))
-
-    confusionMatrix should contain theSameElementsAs(expectedConfusionMatrix)
+    confusionMatrix.numRows should equal(3)
+    confusionMatrix.numColumns should equal(3)
+    confusionMatrix.get("0", "0") should equal(2)
+    confusionMatrix.get("0", "1") should equal(1)
+    confusionMatrix.get("1", "2") should equal(2)
+    confusionMatrix.get("2", "1") should equal(1)
   }
 
   "confusion matrix" should "compute predicted vs. actual class for multi-class classifier with string labels" in {
@@ -106,13 +103,13 @@ class ConfusionMatrixTest extends TestingSparkContextFlatSpec with Matchers {
     val multiClassMetrics = new MultiClassMetrics(rdd)
     val confusionMatrix = multiClassMetrics.confusionMatrix()
 
-    val expectedConfusionMatrix = List(
-      ConfusionMatrixEntry("red", "red", 2),
-      ConfusionMatrixEntry("red", "green", 1),
-      ConfusionMatrixEntry("green", "blue", 2),
-      ConfusionMatrixEntry("blue", "green", 1))
+    confusionMatrix.numRows should equal(3)
+    confusionMatrix.numColumns should equal(3)
+    confusionMatrix.get("red", "red") should equal(2)
+    confusionMatrix.get("red", "green") should equal(1)
+    confusionMatrix.get("green", "blue") should equal(2)
+    confusionMatrix.get("blue", "green") should equal(1)
 
-    confusionMatrix should contain theSameElementsAs(expectedConfusionMatrix)
   }
 
 }

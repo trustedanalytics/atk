@@ -20,7 +20,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, ClassificationMetricValue }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
-import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
+import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.model.Model

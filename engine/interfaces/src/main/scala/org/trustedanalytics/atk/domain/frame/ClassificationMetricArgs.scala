@@ -16,21 +16,21 @@
 
 package org.trustedanalytics.atk.domain.frame
 
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class ClassificationMetricArgs(frame: FrameReference,
                                     @ArgDoc("""The name of the column containing the
 correct label for each instance.""") labelColumn: String,
                                     @ArgDoc("""The name of the column containing the
 predicted label for each instance.""") predColumn: String,
-                                    @ArgDoc("""The name of an optional column containing the
-frequency of observations.""") frequencyColumn: Option[String] = None,
                                     @ArgDoc("""This is a str or int for binary classifiers,
 and Null for multi-class classifiers.
 The value to be interpreted as a positive instance.""") posLabel: Option[Either[String, Int]],
                                     @ArgDoc("""This is the beta value to use for
 :math:`F_{ \beta}` measure (default F1 measure is computed); must be greater than zero.
-Defaults is 1.""") beta: Option[Double] = None) {
+Defaults is 1.""") beta: Option[Double] = None,
+                                    @ArgDoc("""The name of an optional column containing the
+frequency of observations.""") frequencyColumn: Option[String] = None) {
   require(frame != null, "ClassificationMetric requires a non-null dataframe.")
   require(labelColumn != null && !labelColumn.equals(""), "label column is required")
   require(predColumn != null && !predColumn.equals(""), "predict column is required")
@@ -40,7 +40,6 @@ Defaults is 1.""") beta: Option[Double] = None) {
   }
 }
 
-
 /**
  * Entry in confusion matrix
  *
@@ -49,6 +48,56 @@ Defaults is 1.""") beta: Option[Double] = None) {
  * @param count Count of instances matching actual class and predicted class
  */
 case class ConfusionMatrixEntry(predictedClass: String, actualClass: String, count: Long)
+
+case class ConfusionMatrix(rowLabels: List[String], columnLabels: List[String]) {
+  val numRows = rowLabels.size
+  val numColumns = columnLabels.size
+  private var matrix: Array[Array[Long]] = Array.fill(numRows) { Array.fill(numColumns) { 0L } }
+
+  def set(predictedClass: String, actualClass: String, count: Long): Unit = {
+    matrix(rowIndex(actualClass))(columnIndex(predictedClass)) = count
+  }
+
+  def get(predictedClass: String, actualClass: String): Long = {
+    matrix(rowIndex(actualClass))(columnIndex(predictedClass))
+  }
+
+  def getMatrix: Array[Array[Long]] = matrix
+
+  def setMatrix(matrix: Array[Array[Long]]): Unit = {
+    this.matrix = matrix
+  }
+
+  /**
+   * get row index by row name
+   *
+   * Throws exception if not found, check first with hasColumn()
+   *
+   * @param rowName name of the column to find index
+   */
+  def rowIndex(rowName: String): Int = {
+    val index = rowLabels.indexWhere(row => row == rowName, 0)
+    if (index == -1)
+      throw new IllegalArgumentException(s"Invalid row name $rowName provided, please choose from: " + rowLabels)
+    else
+      index
+  }
+
+  /**
+   * get column index by column name
+   *
+   * Throws exception if not found, check first with hasColumn()
+   *
+   * @param columnName name of the column to find index
+   */
+  def columnIndex(columnName: String): Int = {
+    val index = columnLabels.indexWhere(column => column == columnName, 0)
+    if (index == -1)
+      throw new IllegalArgumentException(s"Invalid column name $columnName provided, please choose from: " + columnLabels)
+    else
+      index
+  }
+}
 
 /**
  * Classification metrics
@@ -63,4 +112,4 @@ case class ClassificationMetricValue(fMeasure: Double,
                                      accuracy: Double,
                                      recall: Double,
                                      precision: Double,
-                                     confusionMatrix: List[ConfusionMatrixEntry])
+                                     confusionMatrix: ConfusionMatrix)

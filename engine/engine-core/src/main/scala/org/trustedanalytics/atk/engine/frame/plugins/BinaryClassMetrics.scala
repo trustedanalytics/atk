@@ -18,20 +18,18 @@ package org.trustedanalytics.atk.engine.frame.plugins
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.SerializableType
-import org.trustedanalytics.atk.domain.frame.ConfusionMatrixEntry
-
-
+import org.trustedanalytics.atk.domain.frame.ConfusionMatrix
 
 /**
  * Model Accuracy, Precision, Recall, FMeasure, Confusion matrix for binary-class
  *
  * TODO: this class doesn't really belong in the Engine but it is shared code that both frame-plugins and model-plugins need access to
  */
-case class BinaryClassCounter(var truePositives: Long = 0, 
-                               var falsePositives: Long = 0, 
-                               var trueNegatives: Long = 0, 
-                               var falseNegatives: Long = 0, 
-                               var count: Long = 0) {
+case class BinaryClassCounter(var truePositives: Long = 0,
+                              var falsePositives: Long = 0,
+                              var trueNegatives: Long = 0,
+                              var falseNegatives: Long = 0,
+                              var count: Long = 0) {
   def +(that: BinaryClassCounter): BinaryClassCounter = {
     this.truePositives += that.truePositives
     this.falsePositives += that.falsePositives
@@ -42,9 +40,9 @@ case class BinaryClassCounter(var truePositives: Long = 0,
   }
 }
 
-case class BinaryClassMetrics[T, S : SerializableType](labelPredictRdd: RDD[ScoreAndLabel[T]],
-                                         positiveLabel: S,
-                                         beta: Double = 1) extends Serializable {
+case class BinaryClassMetrics[T, S: SerializableType](labelPredictRdd: RDD[ScoreAndLabel[T]],
+                                                      positiveLabel: S,
+                                                      beta: Double = 1) extends Serializable {
 
   def this(frameRdd: FrameRdd,
            labelColumn: String,
@@ -127,12 +125,16 @@ case class BinaryClassMetrics[T, S : SerializableType](labelPredictRdd: RDD[Scor
   /**
    * Compute confusion matrix
    */
-  def confusionMatrix(): List[ConfusionMatrixEntry] = {
-    List(ConfusionMatrixEntry("positive", "positive", truePositives),
-      ConfusionMatrixEntry("positive", "negative", falsePositives),
-      ConfusionMatrixEntry("negative", "positive", falseNegatives),
-      ConfusionMatrixEntry("negative", "negative", trueNegatives)
-    )
+  def confusionMatrix(): ConfusionMatrix = {
+    val rowLabels = List("pos", "neg")
+    val colLabels = List("pos", "neg")
+
+    val matrix = ConfusionMatrix(rowLabels, colLabels)
+    matrix.set("pos", "pos", truePositives)
+    matrix.set("pos", "neg", falsePositives)
+    matrix.set("neg", "pos", falseNegatives)
+    matrix.set("neg", "neg", trueNegatives)
+    matrix
   }
 
 }

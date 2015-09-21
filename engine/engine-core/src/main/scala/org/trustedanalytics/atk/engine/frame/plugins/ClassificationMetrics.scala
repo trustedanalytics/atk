@@ -63,8 +63,8 @@ object ClassificationMetrics extends Serializable {
     )
   }
 
-  def multiclassClassificationMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
-                                      beta: Double = 1): ClassificationMetricValue = {
+  def multiclassClassificationMetrics[T: ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
+                                                   beta: Double = 1): ClassificationMetricValue = {
 
     val multiClassMetrics = new MultiClassMetrics(labelPredictRdd, beta)
 
@@ -116,9 +116,9 @@ object ClassificationMetrics extends Serializable {
    * @return a Double of the model f measure, a Double of the model accuracy, a Double of the model recall,
    *         a Double of the model precision, a map of confusion matrix values
    */
-  def binaryClassificationMetrics[T, S : SerializableType](labelPredictRdd: RDD[ScoreAndLabel[T]],
-                                  positiveLabel: S,
-                                  beta: Double = 1): ClassificationMetricValue = {
+  def binaryClassificationMetrics[T, S: SerializableType](labelPredictRdd: RDD[ScoreAndLabel[T]],
+                                                          positiveLabel: S,
+                                                          beta: Double = 1): ClassificationMetricValue = {
 
     val binaryClassMetrics = new BinaryClassMetrics(labelPredictRdd, positiveLabel, beta)
 

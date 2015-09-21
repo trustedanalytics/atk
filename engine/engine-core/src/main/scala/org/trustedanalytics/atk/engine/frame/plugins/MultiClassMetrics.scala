@@ -17,7 +17,7 @@ package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.frame.ConfusionMatrixEntry
+import org.trustedanalytics.atk.domain.frame.{ ConfusionMatrix, ConfusionMatrixEntry }
 
 import scala.reflect.ClassTag
 
@@ -26,8 +26,8 @@ import scala.reflect.ClassTag
  *
  * TODO: this class doesn't really belong in the Engine but it is shared code that both frame-plugins and model-plugins need access to
  */
-class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
-                        beta: Double = 1) extends Serializable {
+class MultiClassMetrics[T: ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
+                                     beta: Double = 1) extends Serializable {
 
   def this(frameRdd: FrameRdd,
            labelColumn: String,
@@ -45,25 +45,25 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
     (scoreAndLabel.score, scoreAndLabel.frequency)
   }).reduceByKey(_ + _).collectAsMap()
 
-
   lazy val truePositivesByLabel = labelPredictRdd.map(scoreAndLabel => {
     val truePositives = if (scoreAndLabel.label.equals(scoreAndLabel.score)) {
       scoreAndLabel.frequency
-    } else {
+    }
+    else {
       0L
     }
     (scoreAndLabel.label, truePositives)
   }).reduceByKey(_ + _).collectAsMap()
 
-  lazy val falsePositivesByScore = labelPredictRdd.map (scoreAndLabel => {
+  lazy val falsePositivesByScore = labelPredictRdd.map(scoreAndLabel => {
     val falsePositives = if (!scoreAndLabel.label.equals(scoreAndLabel.score)) {
       scoreAndLabel.frequency
-    } else {
+    }
+    else {
       0L
     }
     (scoreAndLabel.score, falsePositives)
   }).reduceByKey(_ + _).collectAsMap()
-
 
   lazy val totalCount = countsByLabel.map { case (label, count) => count }.sum
 
@@ -126,8 +126,9 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
    */
   def weightedPrecision(): Double = {
     if (totalCount > 0) {
-      countsByLabel.map { case (label, labelCount) =>
-        labelCount * precision(label)
+      countsByLabel.map {
+        case (label, labelCount) =>
+          labelCount * precision(label)
       }.sum / totalCount.toDouble
     }
     else 0d
@@ -138,8 +139,9 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
    */
   def weightedRecall(): Double = {
     if (totalCount > 0) {
-      countsByLabel.map { case (label, labelCount) =>
-        labelCount * recall(label)
+      countsByLabel.map {
+        case (label, labelCount) =>
+          labelCount * recall(label)
       }.sum / totalCount.toDouble
     }
     else 0d
@@ -150,8 +152,9 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
    */
   def weightedFmeasure(): Double = {
     if (totalCount > 0) {
-      countsByLabel.map { case (label, labelCount) =>
-        labelCount * fmeasure(label)
+      countsByLabel.map {
+        case (label, labelCount) =>
+          labelCount * fmeasure(label)
       }.sum / totalCount.toDouble
     }
     else 0d
@@ -163,18 +166,25 @@ class MultiClassMetrics[T : ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
   def accuracy(): Double = {
     if (totalCount > 0) {
       totalTruePositives / totalCount.toDouble
-    } else 0d
+    }
+    else 0d
   }
 
   /**
    * Compute confusion matrix for labels
    */
-  def confusionMatrix(): List[ConfusionMatrixEntry] = {
-    labelPredictRdd.map(scoreAndLabel => {
+  def confusionMatrix(): ConfusionMatrix = {
+    val predictionSummary = labelPredictRdd.map(scoreAndLabel => {
       ((scoreAndLabel.score, scoreAndLabel.label), scoreAndLabel.frequency)
-    }).reduceByKey(_ + _)
-      .map { case ((prediction, label), frequency) =>
-      ConfusionMatrixEntry(prediction.toString, label.toString, frequency)
-    }.collect.toList
+    }).reduceByKey(_ + _).collectAsMap()
+
+    val rowLabels = predictionSummary.map { case ((score, label), frequency) => label.toString }.toSet.toList.sorted
+    val colLabels = predictionSummary.map { case ((score, label), frequency) => score.toString }.toSet.toList.sorted
+    val matrix = ConfusionMatrix(rowLabels, colLabels)
+    predictionSummary.foreach {
+      case ((score, label), frequency) =>
+        matrix.set(score.toString, label.toString, frequency)
+    }
+    matrix
   }
 }

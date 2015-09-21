@@ -142,14 +142,14 @@ class ClassificationMetricsPlugin extends SparkCommandPlugin[ClassificationMetri
     }
     // run the operation and return the results
     //if (positiveLabel == null) {
-      ClassificationMetrics.multiclassClassificationMetrics(
-        frame.rdd,
-        arguments.labelColumn,
-        arguments.predColumn,
-        betaValue,
-        arguments.frequencyColumn
-      )
-   // }
+    ClassificationMetrics.multiclassClassificationMetrics(
+      frame.rdd,
+      arguments.labelColumn,
+      arguments.predColumn,
+      betaValue,
+      arguments.frequencyColumn
+    )
+    // }
     /*else {
       ClassificationMetrics.binaryClassificationMetrics(
         frame.rdd,

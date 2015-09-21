@@ -16,5 +16,4 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-
-case class ScoreAndLabel[T](score: T, label : T, frequency : Long = 1)
+case class ScoreAndLabel[T](score: T, label: T, frequency: Long = 1)

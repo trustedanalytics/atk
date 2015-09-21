@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.engine.frame.plugins.{MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel}
+import org.trustedanalytics.atk.engine.frame.plugins.{ MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class BinaryClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
@@ -154,13 +154,13 @@ class BinaryClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
     diff should be <= 0.0000001
   }
 
-   "recall measure" should "return 0 for binary classifier if posLabel does not exist in label column" in {
-     val rdd = sparkContext.parallelize(inputListBinary)
+  "recall measure" should "return 0 for binary classifier if posLabel does not exist in label column" in {
+    val rdd = sparkContext.parallelize(inputListBinary)
 
-     val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
-     val recall = binaryClassMetrics.recall()
-     recall shouldEqual 0.0
-   }
+    val binaryClassMetrics = new BinaryClassMetrics(rdd, "yoyoyo")
+    val recall = binaryClassMetrics.recall()
+    recall shouldEqual 0.0
+  }
 
   "f measure" should "compute correct value for binary classifier for beta = 0.5" in {
     val rdd = sparkContext.parallelize(inputListBinary)

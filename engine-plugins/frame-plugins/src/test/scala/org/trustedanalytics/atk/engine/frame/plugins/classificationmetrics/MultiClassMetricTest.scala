@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.engine.frame.plugins.{MultiClassMetrics, ScoreAndLabel}
+import org.trustedanalytics.atk.engine.frame.plugins.{ MultiClassMetrics, ScoreAndLabel }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class MultiClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
@@ -72,7 +72,6 @@ class MultiClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
     ScoreAndLabel("red", "green"),
     ScoreAndLabel("green", "blue"))
 
-
   "accuracy measure" should "compute correct value for multi-class classifier" in {
     val rdd = sparkContext.parallelize(inputListMulti)
 
@@ -90,7 +89,6 @@ class MultiClassMetricTest extends TestingSparkContextFlatSpec with Matchers {
     val diff = (accuracy - 0.3333333).abs
     diff should be <= 0.0000001
   }
-
 
   "precision measure" should "compute correct value for multi-class classifier" in {
     val rdd = sparkContext.parallelize(inputListMulti)

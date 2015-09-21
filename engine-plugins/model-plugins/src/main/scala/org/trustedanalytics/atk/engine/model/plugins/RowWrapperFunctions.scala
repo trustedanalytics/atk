@@ -19,8 +19,8 @@ package org.trustedanalytics.atk.engine.model.plugins
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.apache.spark.mllib.linalg.DenseVector
-import org.apache.spark.mllib.regression.{LabeledPoint, LabeledPointWithFrequency}
-import breeze.linalg.{DenseVector => BDV}
+import org.apache.spark.mllib.regression.{ LabeledPoint, LabeledPointWithFrequency }
+import breeze.linalg.{ DenseVector => BDV }
 
 class RowWrapperFunctions(self: RowWrapper) {
 
@@ -53,8 +53,8 @@ class RowWrapperFunctions(self: RowWrapper) {
    * Convert Row into LabeledPointWithFrequency format required for updates in MLLib code
    */
   def valuesAsLabeledPointWithFrequency(labelColumnName: String,
-                                  featureColumnNames: List[String],
-                                  frequencyColumnName: Option[String]): LabeledPointWithFrequency = {
+                                        featureColumnNames: List[String],
+                                        frequencyColumnName: Option[String]): LabeledPointWithFrequency = {
     val label = DataTypes.toDouble(self.value(labelColumnName))
     val vector = valuesAsDenseVector(featureColumnNames)
 

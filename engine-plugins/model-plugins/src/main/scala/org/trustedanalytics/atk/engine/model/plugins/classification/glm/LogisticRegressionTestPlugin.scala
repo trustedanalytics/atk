@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.classification.glm
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
-import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
+import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
 import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.engine.frame.plugins.{ScoreAndLabel, ClassificationMetrics}
+import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
