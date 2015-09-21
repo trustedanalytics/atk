@@ -28,7 +28,7 @@ import trustedanalytics.rest.config as config
 from trustedanalytics.core.frame import Frame
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.core.column import Column
-from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable
+from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
 
@@ -231,6 +231,20 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                         },
                     }
 
+        if isinstance(source, UploadRows):
+            return{'destination': frame.uri,
+                   'source': {"source_type": "strings",
+                              "uri": "raw_list",
+                              "parser": {"name": "builtin/upload",
+                                         "arguments": { "separator": ',',
+                                                       "skip_rows": 0,
+                                                       "schema":{ "columns": source._schema_to_json()
+                                    }
+                                }
+                              },
+                              "data": data
+                   }
+            }
         if isinstance(source, Pandas):
             return{'destination': frame.uri,
                    'source': {"source_type": "strings",
@@ -303,51 +317,50 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
             sys.stderr.write("There were parse errors during load, please see frame.get_error_frame()\n")
             logger.warn("There were parse errors during load, please see frame.get_error_frame()")
 
-    def append(self, frame, data):
-        logger.info("REST Backend: append data to frame {0}: {1}".format(frame.uri, repr(data)))
+    def append(self, frame, source):
+        logger.info("REST Backend: append data to frame {0}: {1}".format(frame.uri, repr(source)))
         # for now, many data sources requires many calls to append
-        if isinstance(data, list) or isinstance(data, tuple):
-            for d in data:
+        if isinstance(source, list) or isinstance(source, tuple):
+            for d in source:
                 self.append(frame, d)
             return
 
-        if isinstance(data, HBaseTable):
-             arguments = data.to_json()
+        if isinstance(source, HBaseTable):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, JdbcTable):
-             arguments = data.to_json()
+        if isinstance(source, JdbcTable):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, HiveQuery):
-             arguments = data.to_json()
+        if isinstance(source, HiveQuery):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhive", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, Pandas):
-            pan = data.pandas_frame
-            if not data.row_index:
+        if isinstance(source, Pandas):
+            pan = source.pandas_frame
+            if not source.row_index:
                 pan = pan.reset_index()
             pan = pan.dropna(thresh=len(pan.columns))
             #number of columns should match the number of columns in the schema, else throw an error
-            if len(pan.columns) != len(data.field_names):
+            if len(pan.columns) != len(source.field_names):
                 raise ValueError("Number of columns in Pandasframe {0} does not match the number of columns in the "
-                                 " schema provided {1}.".format(len(pan.columns), len(data.field_names)))
-
+                                 " schema provided {1}.".format(len(pan.columns), len(source.field_names)))
             begin_index = 0
             iteration = 1
             end_index = config.upload_defaults.rows
             while True:
                 pandas_rows = pan[begin_index:end_index].values.tolist()
-                arguments = self._get_load_arguments(frame, data, pandas_rows)
+                arguments = self._get_load_arguments(frame, source, pandas_rows)
                 result = execute_update_frame_command("frame:/load", arguments, frame)
                 self._handle_error(result)
                 if end_index > len(pan.index):
@@ -355,10 +368,34 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 iteration += 1
                 begin_index = end_index
                 end_index = config.upload_defaults.rows * iteration
+        elif isinstance(source, UploadRows):
+            self._upload_raw_data_in_chunks(frame, source, source.data)
         else:
-            arguments = self._get_load_arguments(frame, data)
+            arguments = self._get_load_arguments(frame, source)
             result = execute_update_frame_command("frame:/load", arguments, frame)
             self._handle_error(result)
+
+    def _upload_raw_data_in_chunks(self, frame, source, data):
+        """
+        uploads data in chunks
+        :param frame: frame proxy
+        :param source: data source, like Pandas or RawListData
+        :param data: list of data
+        """
+        # convoluted, but follows existing pattern
+        begin_index = 0
+        iteration = 1
+        end_index = config.upload_defaults.rows
+        while True:
+            rows = data[begin_index:end_index]
+            arguments = self._get_load_arguments(frame, source, rows)
+            result = execute_update_frame_command("frame:/load", arguments, frame)
+            self._handle_error(result)
+            if end_index > len(data):
+                break
+            iteration += 1
+            begin_index = end_index
+            end_index = config.upload_defaults.rows * iteration
 
     def drop(self, frame, predicate):
         from trustedanalytics.rest.spark import ifilterfalse  # use the REST API filter, with a ifilterfalse iterator
