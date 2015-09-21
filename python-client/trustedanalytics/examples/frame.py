@@ -24,7 +24,7 @@ def run(path=r"datasets/cities.csv", ta=None):
     ----------
     path : str
         The HDFS path to the cities.csv dataset. If a path is not given the default is datasets/cities.csv. The dataset is
-        available in the examples/datasets directory and in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+        available in the examples/datasets directory and in `github<https://github.com/trustedanalytics/atk/tree/master/python-client/trustedanalytics/examples/datasets>`__.
         Must be a valid HDFS path either fully qualified hdfs://some/path or relative the ATK rest servers HDFS home directory.
 
     ta : trusted analytics python import
@@ -39,7 +39,7 @@ def run(path=r"datasets/cities.csv", ta=None):
 
     Datasets
     --------
-      All the datasets can be found in the examples/datasets directory of the python client or in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+      All the datasets can be found in the examples/datasets directory of the python client or in `github<https://github.com/trustedanalytics/atk/tree/master/python-client/trustedanalytics/examples/datasets>`__.
 
 
     Dataset
