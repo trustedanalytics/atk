@@ -1,0 +1,267 @@
+.. _rest_api/v1/commands/model-libsvm__train:
+
+
+
+------------------------------------------
+:doc:`Commands <index>` model:libsvm/train
+------------------------------------------
+
+|ALPHA|
+Train Lib Svm model based on another frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:libsvm/train
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6210>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column name containing the label for each observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Column(s) containing the observations.
+
+
+
+    **svm_type** : int32 (default=2)
+
+    ..
+
+        Set type of SVM.
+        Default is one-class SVM.
+
+            0 -- C-SVC
+            1 -- nu-SVC
+            2 -- one-class SVM
+            3 -- epsilon-SVR
+            4 -- nu-SVR
+
+
+
+    **kernel_type** : int32 (default=2)
+
+    ..
+
+        Specifies the kernel type to be used in the algorithm.
+        Default is RBF.
+
+            0 -- linear: u\'\*v
+            1 -- polynomial: (gamma*u\'\*v + coef0)^degree
+            2 -- radial basis function: exp(-gamma*|u-v|^2)
+            3 -- sigmoid: tanh(gamma*u\'\*v + coef0)
+
+
+
+    **weight_label** : list (default=None)
+
+    ..
+
+        Default is (Array[Int](0))
+
+
+
+    **weight** : list (default=None)
+
+    ..
+
+        Default is (Array[Double](0.0))
+
+
+
+    **epsilon** : float64 (default=0.001)
+
+    ..
+
+        Set tolerance of termination criterion
+
+
+
+    **degree** : int32 (default=3)
+
+    ..
+
+        Degree of the polynomial kernel function ('poly').
+        Ignored by all other kernels.
+
+
+
+    **gamma** : float64 (default=None)
+
+    ..
+
+        Kernel coefficient for 'rbf', 'poly' and 'sigmoid'.
+        Default is 1/n_features.
+
+
+
+    **coef** : float64 (default=0.0)
+
+    ..
+
+        Independent term in kernel function.
+        It is only significant in 'poly' and 'sigmoid'.
+
+
+
+    **nu** : float64 (default=0.5)
+
+    ..
+
+        Set the parameter nu of nu-SVC, one-class SVM, and nu-SVR.
+
+
+
+    **cache_size** : float64 (default=100.0)
+
+    ..
+
+        Specify the size of the kernel cache (in MB).
+
+
+
+    **shrinking** : int32 (default=1)
+
+    ..
+
+        Whether to use the shrinking heuristic.
+        Default is 1 (true).
+
+
+
+    **probability** : int32 (default=0)
+
+    ..
+
+        Whether to enable probability estimates.
+        Default is 0 (false).
+
+
+
+    **nr_weight** : int32 (default=1)
+
+    ..
+
+        NR Weight
+
+
+
+    **c** : float64 (default=1.0)
+
+    ..
+
+        Penalty parameter c of the error term.
+
+
+
+    **p** : float64 (default=0.1)
+
+    ..
+
+        Set the epsilon in loss function of epsilon-SVR.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a lib Svm Model using the observation column and label column of the
+train frame.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

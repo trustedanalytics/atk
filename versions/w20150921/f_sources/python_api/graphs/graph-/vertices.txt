@@ -1,0 +1,24 @@
+.. _python_api/graphs/graph-/vertices:
+
+
+:doc:`Graph <index>`  vertices
+******************************
+
+------
+
+
+.. attribute:: vertices
+
+    Vertex frame collection
+
+
+    :Parameters:
+
+    Examples
+    --------
+    Inspect vertices with the supplied label:
+
+    .. code::
+
+        >>> my_graph.vertices['label'].inspect()
+

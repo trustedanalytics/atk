@@ -1,0 +1,32 @@
+.. _python_api/frames/frame-vertex/compute_misplaced_score:
+
+
+:doc:`VertexFrame <index>`  compute_misplaced_score
+***************************************************
+
+------
+
+
+.. function:: compute_misplaced_score(self, gravity)
+
+
+
+
+    :Parameters:
+
+        **gravity** : float64
+
+        ..
+
+            Similarity measure for computing tension between 2 connected items
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+

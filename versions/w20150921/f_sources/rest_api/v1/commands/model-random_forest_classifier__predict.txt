@@ -1,0 +1,125 @@
+.. _rest_api/v1/commands/model-random_forest_classifier__predict:
+
+
+
+--------------------------------------------------------------
+:doc:`Commands <index>` model:random_forest_classifier/predict
+--------------------------------------------------------------
+
+|ALPHA|
+Predict the labels for the data points.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:random_forest_classifier/predict
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6210>>
+
+    ..
+
+        Handle of the model to be used
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+    ..
+
+        A frame whose labels are to be predicted.
+        By default, predict is run on the same columns over which the model is
+        trained.
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        Column(s) containing the observations whose labels are to be predicted.
+        By default, we predict the labels over columns the RandomForestModel
+        was trained on. 
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>``
+
+        Frame
+            A new frame consisting of the existing columns of the frame and a new column with predicted label for each observation.
+
+

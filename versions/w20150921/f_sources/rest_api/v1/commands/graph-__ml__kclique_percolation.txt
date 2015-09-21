@@ -1,0 +1,214 @@
+.. _rest_api/v1/commands/graph-__ml__kclique_percolation:
+
+
+
+-----------------------------------------------------
+:doc:`Commands <index>` graph:/ml/kclique_percolation
+-----------------------------------------------------
+
+|ALPHA|
+Find groups of vertices with similar attributes.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:/ml/kclique_percolation
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b61d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **clique_size** : int32
+
+    ..
+
+        The sizes of the cliques used to form communities.
+        Larger values of clique size result in fewer, smaller communities that are more connected.
+        Must be at least 2.
+
+
+
+    **community_property_label** : unicode
+
+    ..
+
+        Name of the community property of vertex that will be updated/created in the graph.
+        This property will contain for each vertex the set of communities that contain that
+        vertex.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+**Community Detection Using the K-Clique Percolation Algorithm**
+
+**Overview**
+
+Modeling data as a graph captures relations, for example, friendship ties
+between social network users or chemical interactions between proteins.
+Analyzing the structure of the graph reveals collections (often termed
+'communities') of vertices that are more likely to interact amongst each
+other.
+Examples could include a community of friends in a social network or a
+collection of highly interacting proteins in a cellular process.
+
+|PACKAGE| provides community detection using the k-Clique
+percolation method first proposed by Palla et. al. [1]_ that has been widely
+used in many contexts.
+
+**K-Clique Percolation**
+
+K-clique percolation is a method for detecting community structure in graphs.
+Here we provide mathematical background on how communities are defined in the
+context of the k-clique percolation algorithm.
+
+A clique is a group of vertices in which every vertex is connected (via
+undirected edge) with every other vertex in the clique.
+This graphically looks like a triangle or a structure composed of triangles:
+
+.. image:: /k-clique_201508281155.*
+
+A clique is certainly a community in the sense that its vertices are all
+connected, but, it is too restrictive for most purposes,
+since it is natural some members of a community may not interact.
+
+Mathematically, a k-clique has :math:`k` vertices, each with :math:`k - 1`
+common edges, each of which connects to another vertex in the k-clique.
+The k-clique percolation method forms communities by taking unions of k-cliques
+that have :math:`k - 1` vertices in common.
+
+**K-Clique Example**
+
+In the graph below, the cliques are the sections defined by their triangular
+appearance and the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7, 8}.
+The vertices 9, 10, 11, 12 are not in 3-cliques, therefore they do not belong
+to any community.
+Vertex 4 belongs to two distinct (but overlapping) communities.
+
+.. image:: /ds_mlal_a1.png
+
+**Distributed Implementation of K-Clique Community Detection**
+
+The implementation of k-clique community detection in |PACKAGE| is a fully
+distributed implementation that follows the map-reduce
+algorithm proposed in Varamesh et. al. [2]_ .
+
+It has the following steps:
+
+#.  All k-cliques are :term:`enumerated <enumerate>`.
+#.  k-cliques are used to build a "clique graph" by declaring each k-clique to
+    be a vertex in a new graph and placing edges between k-cliques that share
+    k-1 vertices in the base graph.
+#.  A :term:`connected component` analysis is performed on the clique graph.
+    Connected components of the clique graph correspond to k-clique communities
+    in the base graph.
+#.  The connected components information for the clique graph is projected back
+    down to the base graph, providing each vertex with the set of k-clique
+    communities to which it belongs.
+
+Notes
+-----
+Spawns a number of Spark jobs that cannot be calculated before execution
+(it is bounded by the diameter of the clique graph derived from the input graph).
+For this reason, the initial loading, clique enumeration and clique-graph
+construction steps are tracked with a single progress bar (this is most of
+the time), and then successive iterations of analysis of the clique graph
+are tracked with many short-lived progress bars, and then finally the
+result is written out.
+
+
+.. rubric:: Footnotes
+
+.. [1]
+    G. Palla, I. Derenyi, I. Farkas, and T. Vicsek. Uncovering the overlapping
+    community structure of complex networks in nature and society.
+    Nature, 435:814, 2005 ( See http://hal.elte.hu/cfinder/wiki/papers/communitylettm.pdf )
+
+.. [2]
+    Varamesh, A.; Akbari, M.K.; Fereiduni, M.; Sharifian, S.; Bagheri, A.,
+    "Distributed Clique Percolation based community detection on social
+    networks using MapReduce,"
+    Information and Knowledge Technology (IKT), 2013 5th Conference on, vol.,
+    no., pp.478,483, 28-30 May 2013
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Dictionary of vertex label and frame, Execution time.
+
+

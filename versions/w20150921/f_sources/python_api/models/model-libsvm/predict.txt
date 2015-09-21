@@ -1,0 +1,46 @@
+.. _python_api/models/model-libsvm/predict:
+
+
+:doc:`LibsvmModel <index>`  predict
+***********************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    New frame with new predicted label column.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose labels are to be
+            predicted.
+            Default is the columns the LibsvmModel was trained on.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+            A new frame containing the original frame's columns and a column
+            *predicted_label* containing the score calculated for each observation.
+    Predict the labels for a test frame and create a new frame revision with
+    existing columns and a new predicted label's column.

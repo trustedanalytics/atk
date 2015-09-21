@@ -1,0 +1,46 @@
+.. _python_api/models/model-random_forest_regressor/predict:
+
+
+:doc:`RandomForestRegressorModel <index>`  predict
+**************************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    Predict the values for the data points.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose labels are to be predicted.
+            By default, we predict the labels over columns the RandomForestModel
+            was trained on. 
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+            Frame
+                A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.

@@ -1,0 +1,148 @@
+.. _python_api/models/model-lda/train:
+
+
+:doc:`LdaModel <index>`  train
+******************************
+
+------
+
+
+.. function:: train(self, frame, document_column_name, word_column_name, word_count_column_name, max_iterations=None, alpha=None, beta=None, convergence_threshold=None, evaluate_cost=None, num_topics=None)
+
+    |BETA|
+    Creates Latent Dirichlet Allocation model
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+
+        ..
+
+            Input frame data.
+
+
+
+        **document_column_name** : unicode
+
+        ..
+
+            Column Name for documents.
+            Column should contain a str value.
+
+
+
+        **word_column_name** : unicode
+
+        ..
+
+            Column name for words.
+            Column should contain a str value.
+
+
+
+        **word_count_column_name** : unicode
+
+        ..
+
+            Column name for word count.
+            Column should contain an int32 or int64 value.
+
+
+
+        **max_iterations** : int32 (default=None)
+
+        ..
+
+            The maximum number of iterations that the algorithm will execute.
+            The valid value range is all positive int.
+            Default is 20.
+
+
+
+        **alpha** : float32 (default=None)
+
+        ..
+
+            The hyper-parameter for document-specific distribution over topics.
+            Mainly used as a smoothing parameter in :term:`Bayesian inference`.
+            Larger value implies that documents are assumed to cover all topics
+            more uniformly; smaller value implies that documents are more
+            concentrated on a small subset of topics.
+            Valid value range is all positive float.
+             Default is 0.1.
+
+
+
+        **beta** : float32 (default=None)
+
+        ..
+
+            The hyper-parameter for word-specific distribution over topics.
+            Mainly used as a smoothing parameter in :term:`Bayesian inference`.
+            Larger value implies that topics contain all words more uniformly and
+            smaller value implies that topics are more concentrated on a small
+            subset of words.
+            Valid value range is all positive float.
+            Default is 0.1.
+
+
+
+        **convergence_threshold** : float32 (default=None)
+
+        ..
+
+            The amount of change in LDA model parameters that will be tolerated
+            at convergence.
+            If the change is less than this threshold, the algorithm exits
+            before it reaches the maximum number of supersteps.
+            Valid value range is all positive float and 0.0.
+            Default is 0.001.
+
+
+
+        **evaluate_cost** : bool (default=None)
+
+        ..
+
+            "True" means turn on cost evaluation and "False" means turn off
+            cost evaluation.
+            It's relatively expensive for LDA to evaluate cost function.
+            For time-critical applications, this option allows user to turn off cost
+            function evaluation.
+            Default is "False".
+
+
+
+        **num_topics** : int32 (default=None)
+
+        ..
+
+            The number of topics to identify in the LDA model.
+            Using fewer topics will speed up the computation, but the extracted topics
+            might be more abstract or less specific; using more topics will
+            result in more computation but lead to more specific topics.
+            Valid value range is all positive int.
+            Default is 10.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dict
+                The data returned is composed of multiple components:
+            topics_given_doc : Frame
+                Frame with conditional probabilities of topic given document.
+            word_given_topics : Frame
+                Frame with conditional probabilities of word given topic.
+            topics_given_word : Frame
+                Frame with conditional probabilities of topic given word.
+            report : str
+               The configuration and learning curve report for Latent Dirichlet
+               Allocation as a multiple line str.
+    See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__
