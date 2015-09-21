@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Intel Corporation 
+# Copyright (c) 2015 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,65 @@ from trustedanalytics import examples
 
 def run(path=r"datasets/movie_data_random.csv", ta=None):
     """
-    The default home directory is hdfs://user/atkuser all the sample data sets are saved to
-    hdfs://user/atkuser/datasets when installing through the rpm
-    you will need to copy the data sets to hdfs manually otherwise and adjust the data set location path accordingly
-    :param path: data set hdfs path can be full and relative path
+    Loads movie_data_random.csv into a frame, filters it by movie rating and creates a graph.
+    We are not required to use movie_data_random.csv but rather it's schema. Any other csv file with the correct schema and delimeter will work.
+
+    Parameters
+    ----------
+    path : str
+        The HDFS path to the movie_data_random.csv dataset. If a path is not given the default is datasets/movie_data_random.csv. The dataset is
+        available in the examples/datasets directory and in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+        Must be a valid HDFS path either fully qualified hdfs://some/path or relative the ATK rest servers HDFS home directory.
+
+    ta : trusted analytics python import
+        Can be safely ignored when running examples. It is only used during integration testing to pass pre-configured
+        python client reference.
+
+
+    Returns
+    -------
+        A dictionary with the frame and graph
+
+
+    Datasets
+    --------
+      All the datasets can be found in the examples/datasets directory of the python client or in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+
+
+    Dataset
+    -------
+      Name : movie_data_random.csv
+
+      schema:
+
+        user_id(int32) , movie_id(int32) , rating(int32) , splits(str)
+
+        sample
+
+        .. code::
+          1,-1,4,tr
+          2,-1,1,tr
+          3,-1,2,tr
+
+      delimeter: ,
+
+
+    Example
+    -------
+        To run the movie example first import the example.
+
+        .. code::
+
+          >>>import taprootanalytics.examples.movie_graph_small as movie
+
+        After importing you can execute run method with the path to the dataset
+
+        .. code::
+
+          >>>movie.run("hdfs://FULL_HDFS_PATH")
+
+
+
     """
     NAME = "MGS"
 
@@ -42,7 +97,7 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
     if NAME in frames:
         print "Deleting old '{0}' frame.".format(NAME)
         ta.drop_frames(NAME)
-        
+
     print "Building frame '{0}'.".format(NAME)
 
     frame = ta.Frame(csv, NAME)

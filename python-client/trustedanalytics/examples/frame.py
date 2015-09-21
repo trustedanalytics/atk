@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2015 Intel Corporation 
+# Copyright (c) 2015 Intel Corporation
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,10 +17,65 @@ from trustedanalytics import examples
 
 def run(path=r"datasets/cities.csv", ta=None):
     """
-    The default home directory is hdfs://user/atkuser all the sample data sets are saved to
-    hdfs://user/atkuser/datasets when installing through the rpm
-    you will need to copy the data sets to hdfs manually otherwise and adjust the data set location path accordingly
-    :param path: data set hdfs path can be full and relative path
+    Loads cities.csv into a frame and runs some simple frame operations. We will be dropping columns and adding new ones with python lambdas.
+    We are not required to use cities.csv but rather it's schema. Any other csv file with the correct schema and delimeter will work.
+
+    Parameters
+    ----------
+    path : str
+        The HDFS path to the cities.csv dataset. If a path is not given the default is datasets/cities.csv. The dataset is
+        available in the examples/datasets directory and in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+        Must be a valid HDFS path either fully qualified hdfs://some/path or relative the ATK rest servers HDFS home directory.
+
+    ta : trusted analytics python import
+        Can be safely ignored when running examples. It is only used during integration testing to pass pre-configured
+        python client reference.
+
+
+    Returns
+    -------
+        A dictionary with the final built frame
+
+
+    Datasets
+    --------
+      All the datasets can be found in the examples/datasets directory of the python client or in `github<https://github.com/rodorad/atk/tree/example-doc/python-client/trustedanalytics/examples/datasets>`__.
+
+
+    Dataset
+    -------
+      Name : cities.csv
+
+      schema:
+        rank(int32) | city(str) | population_2013(int32) | population_2010(int32) | change(str) | county(str)
+
+        sample
+
+        .. code::
+
+          1|Portland|609456|583776|4.40%|Multnomah
+          2|Salem|160614|154637|3.87%|Marion
+          3|Eugene|159190|156185|1.92%|Lane
+
+      delimeter: |
+
+
+    Example
+    -------
+        To run the frame example first import the example.
+
+        .. code::
+
+          >>>import taprootanalytics.examples.frame as frame
+
+        After importing you can execute run method with the path to the dataset
+
+        .. code::
+
+          >>>frame.run("hdfs://FULL_HDFS_PATH")
+
+
+
     """
     NAME = "TEST"
 
@@ -35,6 +90,7 @@ def run(path=r"datasets/cities.csv", ta=None):
               ('change', str),
               ('county', str)]
 
+    #import csv file
     csv = ta.CsvFile(path, schema, skip_header_lines=1, delimiter='|')
 
     frames = ta.get_frame_names()
