@@ -27,49 +27,49 @@ class LinearRegressionModelTest extends ScoringModelTest {
   var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel)
   val numRows = 5    // number of rows of data to test with
 
-  "LinearRegressionModel" should "throw an exception when attempting to score null data" in {
-    nullDataTest(linearRegressionScoreModel)
-  }
-
-  it should "throw an exception when scoring data with too few columns" in {
-    tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
-  }
-
-  it should "throw an exception when scoring data with too many columns" in {
-    tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
-  }
-
-  it should "throw an exception when scoring data with non-numerical records" in {
-    invalidDataTest(linearRegressionScoreModel, weights.size)
-  }
-
-  it should "successfully score a model when float data is provided" in {
-    successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
-  }
-
-  it should "successfully score a model when integer data is provided" in {
-    successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
-  }
-
-  it should "return results that match the expected results based on the specified weights and intercept" in {
-    val data = Seq(Array("1","1.7"), Array("2", "3"), Array("5.32", "0"))
-    val testWeights = new DenseVector(Array(2,3))
-    val testIntercept = 4
-    val testModel = new LinearRegressionModel(testWeights, testIntercept)
-    val score = linearRegressionScoreModel.score(data)
-
-    whenReady(score, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { result =>
-      assert(score.isCompleted)
-      assert(data.size == result.length)
-
-      for (i <- data.indices)
-      {
-        val x1 = data(i)(0).toDouble
-        val x2 = data(i)(1).toDouble
-        val y = (x1*testWeights.apply(0)) + (x2*testWeights.apply(1)) + testIntercept + 1
-        assert(result(i).equals(y))
-      }
+  "LinearRegressionModel" should {
+    "throw an exception when attempting to score null data" in {
+      nullDataTest(linearRegressionScoreModel)
     }
 
+    "throw an exception when scoring data with too few columns" in {
+      tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+    }
+
+    "throw an exception when scoring data with too many columns" in {
+      tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+    }
+
+    "throw an exception when scoring data with non-numerical records" in {
+      invalidDataTest(linearRegressionScoreModel, weights.size)
+    }
+
+    "successfully score a model when float data is provided" in {
+      successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+    }
+
+    "successfully score a model when integer data is provided" in {
+      successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+    }
+
+    "return results that match the expected results based on the specified weights and intercept" in {
+      val data = Seq(Array("1", "1.7"), Array("2", "3"), Array("5.32", "0"))
+      val testWeights = new DenseVector(Array(2, 3))
+      val testIntercept = 4
+      val testModel = new LinearRegressionModel(testWeights, testIntercept)
+      val score = linearRegressionScoreModel.score(data)
+
+      whenReady(score, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { result =>
+        assert(score.isCompleted)
+        assert(data.size == result.length)
+
+        for (i <- data.indices) {
+          val x1 = data(i)(0).toDouble
+          val x2 = data(i)(1).toDouble
+          val y = (x1 * testWeights.apply(0)) + (x2 * testWeights.apply(1)) + testIntercept + 1
+          assert(result(i).equals(y))
+        }
+      }
+    }
   }
 }

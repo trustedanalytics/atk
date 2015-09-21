@@ -20,10 +20,10 @@ import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.{Millis, Seconds, Span}
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
+import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import scala.util.Random
 
-class ScoringModelTest extends TestingSparkContextFlatSpec with ScalaFutures with Matchers  {
+class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures with Matchers  {
   val scoreTimeoutSeconds = 10   // timeout length for calling model score()
   val scoreIntervalMillis = 100  // interval to sleep between queries to check if scoring has completed
 

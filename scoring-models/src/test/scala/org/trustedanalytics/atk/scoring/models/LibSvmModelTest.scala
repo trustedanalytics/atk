@@ -27,24 +27,26 @@ class LibSvmModelTest extends ScoringModelTest {
   var libSvmModel = new LibSvmModel(svm.svm_load_model(reader))
   val numRows = 5
 
-  "LibSvmModel" should "throw an exception when attempting to score null data" in {
-    nullDataTest(libSvmModel)
-  }
+  "LibSvmModel" should {
+    "throw an exception when attempting to score null data" in {
+      nullDataTest(libSvmModel)
+    }
 
-  it should "throw an exception when scoring data with non-numerical records" in {
-    invalidDataTest(libSvmModel, 3)
-  }
+    "throw an exception when scoring data with non-numerical records" in {
+      invalidDataTest(libSvmModel, 3)
+    }
 
-  it should "successfully score a model when float data is provided" in {
-    successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-    successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-    successfulModelScoringFloatTest(libSvmModel, 20, numRows)
-  }
+    "successfully score a model when float data is provided" in {
+      successfulModelScoringFloatTest(libSvmModel, 3, numRows)
+      successfulModelScoringFloatTest(libSvmModel, 1, numRows)
+      successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+    }
 
-  it should "successfully score a model when integer data is provided" in {
-    successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-    successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-    successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+    "successfully score a model when integer data is provided" in {
+      successfulModelScoringFloatTest(libSvmModel, 3, numRows)
+      successfulModelScoringFloatTest(libSvmModel, 1, numRows)
+      successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+    }
   }
 }
 
