@@ -19,14 +19,13 @@ package org.trustedanalytics.atk.scoring.models
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.scalatest.WordSpec
-import org.scalatest.time.{Millis, Seconds, Span}
 
 class LinearRegressionModelTest extends WordSpec {
-  val weights = new DenseVector(Array(2,3))
+  val weights = new DenseVector(Array(2, 3))
   val intercept = 4
   val linearRegressionModel = new LinearRegressionModel(weights, intercept)
   var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel)
-  val numRows = 5    // number of rows of data to test with
+  val numRows = 5 // number of rows of data to test with
 
   "LinearRegressionModel" should {
     "throw an exception when attempting to score null data" in {
