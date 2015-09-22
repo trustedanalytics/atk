@@ -24,19 +24,19 @@ import org.trustedanalytics.atk.moduleloader.Module
 
 import scala.collection.JavaConversions._
 
-import com.typesafe.config.Config
+import com.typesafe.config.{ ConfigFactory, Config }
 
 /**
  * The SearchPath is used to find Modules and Jars
  *
  * Modules are expected to either be in a directory or in a jar.
  *
- * @param config the config used to initialize the SearchPath
+ * @param path list of jars and directories delimited by colons
  */
-private[moduleloader] class SearchPath(config: Config) {
+private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPath) {
 
-  // list of jars and directories
-  private lazy val searchPath = config.getStringList("atk.module-loader.search-path").toList.map(path => new File(path))
+  private lazy val searchPath: List[File] = path.split(":").toList.map(file => new File(file))
+
   println("searchPath: " + searchPath.mkString(":"))
 
   /**
@@ -150,3 +150,11 @@ private[moduleloader] class SearchPath(config: Config) {
   }
 }
 
+object SearchPath {
+
+  val defaultSearchPath: String = {
+    val config = ConfigFactory.load(this.getClass.getClassLoader)
+    config.getString("atk.module-loader.search-path")
+  }
+
+}

@@ -5,7 +5,7 @@
 
     <groupId>org.trustedanalytics.atk</groupId>
     <artifactId>titan-shaded</artifactId>
-    <version>0.5.4-SNAPSHOT</version>
+    <version>0.5.4c-SNAPSHOT</version>
 
     <description>
         Both Titan and Spark depend on Kryo. This causes a ClassLoader conflict when Titan tries

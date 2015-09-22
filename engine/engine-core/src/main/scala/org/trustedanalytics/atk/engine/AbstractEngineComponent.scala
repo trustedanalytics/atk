@@ -26,6 +26,7 @@ import org.trustedanalytics.atk.engine.model.ModelStorageImpl
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitioner
 import org.trustedanalytics.atk.engine.user.UserStorage
 import org.trustedanalytics.atk.engine.command._
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.atk.repository.{ Profile, SlickMetaStoreComponent, DbProfileComponent }
 
 /**
@@ -34,16 +35,20 @@ import org.trustedanalytics.atk.repository.{ Profile, SlickMetaStoreComponent, D
 abstract class AbstractEngineComponent extends DbProfileComponent
     with SlickMetaStoreComponent
     with EventLogging
-    with EventLoggingImplicits {
+    with EventLoggingImplicits
+    with ClassLoaderAware {
 
   implicit lazy val startupCall = Call(null, EngineExecutionContext.global)
 
-  private val commandLoader = new CommandLoader
+  val commandLoader: CommandLoader
+
   private lazy val commandPluginRegistry: CommandPluginRegistry = new CommandPluginRegistry(commandLoader)
 
   private val sparkContextFactory = SparkContextFactory
 
-  val fileStorage = new HdfsFileStorage()
+  val fileStorage = withMyClassLoader {
+    new HdfsFileStorage()
+  }
 
   private val sparkAutoPartitioner = new SparkAutoPartitioner(fileStorage)
 
@@ -73,9 +78,6 @@ abstract class AbstractEngineComponent extends DbProfileComponent
       password = EngineConfig.metaStoreConnectionPassword,
       poolMaxActive = EngineConfig.metaStorePoolMaxActive)
   }(startupCall.eventContext)
-
-  // Administrative plugins
-  commandPluginRegistry.registerCommand(new GarbageCollectionPlugin)
 
   val engine = new EngineImpl(sparkContextFactory,
     commandExecutor, commands, frameStorage, graphStorage, modelStorage, userStorage,

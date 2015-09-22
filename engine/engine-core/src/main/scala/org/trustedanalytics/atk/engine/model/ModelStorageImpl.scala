@@ -23,12 +23,7 @@ import org.trustedanalytics.atk.domain.{ Status, CreateEntityArgs }
 import org.trustedanalytics.atk.engine.ModelStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.repository.MetaStore
-import spray.json.{ JsValue, JsObject }
-import org.trustedanalytics.atk.component.ClassLoaderAware
-import scala.slick.model
-
-import scala.util.Try
-
+import spray.json.JsObject
 /**
  * Front end for Spark to create and manage models.
  * @param metaStore Repository for model meta data.
@@ -37,8 +32,7 @@ import scala.util.Try
 class ModelStorageImpl(metaStore: MetaStore)
     extends ModelStorage
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   /** Lookup a Model, Throw an Exception if not found */
   override def expectModel(modelRef: ModelReference): ModelEntity = {

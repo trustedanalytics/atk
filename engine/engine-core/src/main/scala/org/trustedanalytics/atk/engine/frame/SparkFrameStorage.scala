@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.engine.frame
 
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.domain._
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, DataFrameTemplate, FrameEntity }
 import org.trustedanalytics.atk.engine.FrameStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -44,8 +43,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
                         sparkAutoPartitioner: SparkAutoPartitioner)
     extends FrameStorage
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   override type Context = SparkContext
   override type Data = FrameRdd
@@ -230,17 +228,15 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       require(frame != null, "frame is required")
       require(offset >= 0, "offset must be zero or greater")
       require(count > 0, "count must be zero or greater")
-      withMyClassLoader {
-        val reader = getReader(frame)
-        val rows = reader.take(count, offset, Some(maxRows))
-        metaStore.withSession("frame.updateFrameStatus") {
-          implicit session =>
-            {
-              metaStore.frameRepo.updateLastReadDate(frame)
-            }
-        }
-        rows
+      val reader = getReader(frame)
+      val rows = reader.take(count, offset, Some(maxRows))
+      metaStore.withSession("frame.updateFrameStatus") {
+        implicit session =>
+          {
+            metaStore.frameRepo.updateLastReadDate(frame)
+          }
       }
+      rows
     }
 
   /**
@@ -301,10 +297,8 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   def getReader(frame: FrameEntity)(implicit invocation: Invocation): ParquetReader = {
     withContext("frame.getReader") {
       require(frame != null, "frame is required")
-      withMyClassLoader {
-        val absPath: Path = new Path(frame.getStorageLocation)
-        new ParquetReader(absPath, frameFileStorage.hdfs)
-      }
+      val absPath: Path = new Path(frame.getStorageLocation)
+      new ParquetReader(absPath, frameFileStorage.hdfs)
     }
   }
 
