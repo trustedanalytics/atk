@@ -40,11 +40,8 @@ import MLLibJsonProtocol._
  * Create a 'new' instance of a Random Forest Regressor model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a Random Forest Regressor model.",
-  extended = """
-**Regression using Random Forest**
-
-Random Forest [1]_ is a supervised ensemble learning algorithm used to perform
-regression.
+  extended = """Random Forest [1]_ is a supervised ensemble learning algorithm
+used to perform regression.
 A Random Forest Regressor model is initialized, trained on columns of a frame,
 and used to predict the value of each observation in the frame.
 This model runs the MLLib implementation of Random Forest [2]_.
@@ -55,8 +52,7 @@ value of the random forest.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
-             """)
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html""")
 class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
