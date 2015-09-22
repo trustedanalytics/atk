@@ -879,8 +879,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         # For other examples, see :ref:`example_frame.inspect`.
 
-        Global Settings
-        ---------------
+        **Global Settings**
+
         If not specified, the arguments that control formatting receive default values from
         'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
 
@@ -919,6 +919,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             width            80
             margin         None
             with_types    False
+
+        ..
         """
         format_settings = inspect_settings.copy(wrap, truncate, round, width, margin, with_types)
         return self._backend.inspect(self, n, offset, columns, format_settings=format_settings)

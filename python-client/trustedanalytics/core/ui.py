@@ -43,7 +43,7 @@ class InspectSettings(object):
       If set to True, header will include the data_type of each column
     """
 
-    _unspecified = object()  # sentinel
+    _unspecified = 'inspect_settings'  # sentinel
 
     _default_wrap = 20
     _default_truncate = None
