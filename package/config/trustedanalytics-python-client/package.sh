@@ -22,6 +22,8 @@ echo "$SCRIPTPATH"
 
 pwd
 
+mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/python-client
+
 pushd $SCRIPTPATH
     cp -v requirements-linux.txt ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/
 popd
