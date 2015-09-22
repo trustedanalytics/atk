@@ -21,8 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for calculating summary statistics for a dataframe column.
  */
-case class ColumnSummaryStatisticsArgs(@ArgDoc("""Identifier for the input
-dataframe.""") frame: FrameReference,
+case class ColumnSummaryStatisticsArgs(frame: FrameReference,
                                        @ArgDoc("""The column to be statistically summarized.
 Must contain numerical data; all NaNs and infinite values are excluded
 from the calculation.""") dataColumn: String,

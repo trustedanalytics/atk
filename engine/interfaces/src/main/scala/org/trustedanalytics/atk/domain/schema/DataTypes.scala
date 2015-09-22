@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.domain.schema
 
+import org.joda.time.DateTime
 import org.trustedanalytics.atk.event.EventLogging
 import org.apache.commons.lang3.StringUtils
 import spray.json.DefaultJsonProtocol._
@@ -26,6 +27,8 @@ import scala.collection.mutable
 import scala.util.Try
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
+
+import org.trustedanalytics.atk.domain.DomainJsonProtocol.dateTimeFormat
 
 /**
  * Datatypes supported for frames, graphs, etc.
@@ -226,19 +229,60 @@ object DataTypes extends EventLogging {
   }
 
   /**
-   * Vectors
+   * DateTime
    */
-  type VectorScalaTypeAlias = Vector[Double]
+  case object datetime extends DataType {
+
+    override type ScalaType = String
+
+    override def scalaType = classOf[ScalaType]
+
+    implicit def stringToDateTime(s: ScalaType): DateTime = toDateTime(s)
+
+    override def parse(raw: Any) = Try {
+      toDateTime(raw).toString
+    }
+
+    override def asString(raw: Any): String = {
+      parse(raw).get.asInstanceOf[String]
+    }
+
+    def compare(valueA: DateTime, valueB: DateTime): Int = {
+      valueA.compareTo(valueB)
+    }
+
+    def compare(valueA: String, valueB: String): Int = {
+      toDateTime(valueA).compareTo(toDateTime(valueB))
+    }
+
+    override def isType(raw: Any): Boolean = {
+      // where null is allowed we accept null as this type
+      raw == null || raw.isInstanceOf[DateTime] || Try { toDateTime(raw) }.isSuccess
+    }
+
+    override def typedJson(raw: Any): JsValue = {
+      asString(raw).toJson
+    }
+
+    override def asDouble(raw: Any): Double =
+      throw new IllegalArgumentException("Could not parse datetime object " + raw + " as a Double.")
+
+    override def isNumerical = false
+
+    override def isInteger = false
+  }
 
   /**
+   * Vectors
+   *
    * vector case class which represents a type with a specific length
    * @param length number of doubles in the vector
    */
   case class vector(length: Long) extends DataType {
 
-    override type ScalaType = VectorScalaTypeAlias
+    override type ScalaType = vector.ScalaType
 
-    override def scalaType = classOf[VectorScalaTypeAlias]
+    override def scalaType = classOf[vector.ScalaType]
 
     override def isNumerical = false
 
@@ -259,7 +303,7 @@ object DataTypes extends EventLogging {
 
     override def isType(raw: Any): Boolean = {
       // where null is allowed we accept null as this type
-      raw == null || (raw.isInstanceOf[VectorScalaTypeAlias] && raw.asInstanceOf[VectorScalaTypeAlias].length == length)
+      raw == null || (raw.isInstanceOf[vector.ScalaType] && raw.asInstanceOf[vector.ScalaType].length == length)
     }
 
     override def typedJson(raw: Any): JsValue = {
@@ -279,6 +323,8 @@ object DataTypes extends EventLogging {
    * vector object for general vector type work, but not considered a DataType
    */
   case object vector {
+
+    type ScalaType = Vector[Double]
 
     def parse(raw: Any) = Try {
       toVector()(raw)
@@ -309,7 +355,7 @@ object DataTypes extends EventLogging {
 
     def asDouble(raw: Any): Double = {
       try {
-        val vec = raw.asInstanceOf[VectorScalaTypeAlias] // we'll try to convert a Vector if it only has one item in
+        val vec = raw.asInstanceOf[vector.ScalaType] // we'll try to convert a Vector if it only has one item in
         require(vec.size == 1, "Vector must be of size 1.")
         vec.head
       }
@@ -318,7 +364,7 @@ object DataTypes extends EventLogging {
       }
     }
 
-    def compare(valueA: VectorScalaTypeAlias, valueB: VectorScalaTypeAlias): Int = {
+    def compare(valueA: vector.ScalaType, valueB: vector.ScalaType): Int = {
       if (valueB == null) {
         if (valueA == null) {
           0
@@ -346,6 +392,12 @@ object DataTypes extends EventLogging {
    * @return
    */
   def isVectorDataType: DataType => Boolean = vector.isVectorDataType
+
+  /**
+   * function to check if data type is of type integer
+   * @return true if isInteger otherwise false
+   */
+  def isIntegerDataType: DataType => Boolean = _.isInteger
 
   /**
    * This is a special type for values that should be ignored while importing from CSV file.
@@ -398,9 +450,9 @@ object DataTypes extends EventLogging {
   /**
    * All the supported datatypes
    */
-  val supportedPrimativeTypes: Map[String, DataType] =
+  val supportedPrimitiveTypes: Map[String, DataType] =
     Seq(int32, int64, float32,
-      float64, string, ignore)
+      float64, string, ignore, datetime)
       .map(t => t.toString -> t)
       .toMap ++
       Map("str" -> string,
@@ -430,7 +482,7 @@ object DataTypes extends EventLogging {
    * @return the data type object corresponding to the name
    */
   implicit def toDataType(s: String): DataType = {
-    supportedPrimativeTypes.getOrElse(s, null) match {
+    supportedPrimitiveTypes.getOrElse(s, null) match {
       case null => toComplexDataType(s)
       case x => x
     }
@@ -494,8 +546,9 @@ object DataTypes extends EventLogging {
     }
   }
 
+  @deprecated // Added deprecation to note this function is flawed; need a more sophisticated type sniffer (if even possible), especially as more types are added, like datetime, vector, lists, etc. which may have the same underlying raw values --blbarker 9/4/15
   def dataTypeOfValue(value: Any): DataType = {
-    val matchesPrimitives = supportedPrimativeTypes.filter { case (name: String, dataType: DataType) => dataType.isType(value) }.toList
+    val matchesPrimitives = supportedPrimitiveTypes.filter { case (name: String, dataType: DataType) => dataType.isType(value) }.toList
     if (matchesPrimitives.nonEmpty) {
       if (matchesPrimitives.length > 1) {
         // this would happen with null
@@ -541,7 +594,7 @@ object DataTypes extends EventLogging {
       case d: Double => d
       case bd: BigDecimal => bd.toDouble
       case s: String => s.trim().toDouble
-      case v: VectorScalaTypeAlias => vector.asDouble(v)
+      case v: vector.ScalaType => vector.asDouble(v)
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
   }
@@ -555,7 +608,7 @@ object DataTypes extends EventLogging {
       case d: Double => BigDecimal(d)
       case bd: BigDecimal => bd
       case s: String => BigDecimal(s)
-      case v: VectorScalaTypeAlias => BigDecimal(vector.asDouble(v))
+      case v: vector.ScalaType => BigDecimal(vector.asDouble(v))
       case _ => throw new IllegalArgumentException(s"The following value is not of numeric data type: $value")
     }
   }
@@ -569,7 +622,7 @@ object DataTypes extends EventLogging {
       case d: Double => d.toLong
       case bd: BigDecimal => bd.toLong
       case s: String => s.trim().toLong
-      case v: VectorScalaTypeAlias => vector.asDouble(v).toLong
+      case v: vector.ScalaType => vector.asDouble(v).toLong
       case _ => throw new RuntimeException(s"${value.getClass.getName} toLong is not implemented")
     }
   }
@@ -583,7 +636,7 @@ object DataTypes extends EventLogging {
       case d: Double => d.toInt
       case bd: BigDecimal => bd.toInt
       case s: String => s.trim().toInt
-      case v: VectorScalaTypeAlias => vector.asDouble(v).toInt
+      case v: vector.ScalaType => vector.asDouble(v).toInt
       case _ => throw new RuntimeException(s"${value.getClass.getName} toInt is not implemented")
     }
   }
@@ -597,7 +650,7 @@ object DataTypes extends EventLogging {
       case d: Double => d.toFloat
       case bd: BigDecimal => bd.toFloat
       case s: String => s.trim().toFloat
-      case v: VectorScalaTypeAlias => vector.asDouble(v).toFloat
+      case v: vector.ScalaType => vector.asDouble(v).toFloat
       case _ => throw new RuntimeException(s"${value.getClass.getName} toFloat is not implemented")
     }
   }
@@ -611,12 +664,13 @@ object DataTypes extends EventLogging {
       case d: Double => d.toString
       case bd: BigDecimal => bd.toString()
       case s: String => s
-      case v: VectorScalaTypeAlias => vector.asString(v)
+      case v: vector.ScalaType => vector.asString(v)
+      case dt: DateTime => dt.toString
       case _ => throw new RuntimeException(s"${value.getClass.getName} toStr is not implemented")
     }
   }
 
-  def toVector(length: Long = -1)(value: Any): VectorScalaTypeAlias = {
+  def toVector(length: Long = -1)(value: Any): vector.ScalaType = {
     val vec = value match {
       case null => null
       case i: Int => toVector(length)(i.toDouble)
@@ -627,7 +681,7 @@ object DataTypes extends EventLogging {
       case s: String =>
         val jsonStr = if (s.trim.startsWith("[")) s else "[" + s + "]"
         JsonParser(jsonStr).convertTo[List[Double]].toVector
-      case v: VectorScalaTypeAlias => v
+      case v: vector.ScalaType => v
       case ab: ArrayBuffer[_] => ab.map(value => toDouble(value)).toVector
       case a: Array[_] => a.map(value => toDouble(value)).toVector
       case l: List[_] => l.map(value => toDouble(value)).toVector
@@ -640,6 +694,15 @@ object DataTypes extends EventLogging {
       require(vec.length == length, s"Expected vector of length $length, but received one of length ${vec.length}")
     }
     vec
+  }
+
+  def toDateTime(value: Any): DateTime = {
+    value match {
+      case null => null
+      case s: String => DateTime.parse(s) // ISO 8601
+      case dt: DateTime => dt
+      case _ => throw new RuntimeException(s"${value.getClass.getName} toDateTime is not implemented")
+    }
   }
 
   /**
@@ -679,7 +742,8 @@ object DataTypes extends EventLogging {
         case f: Float => f.compare(DataTypes.toFloat(valueB))
         case d: Double => d.compare(DataTypes.toDouble(valueB))
         case s: String => s.compareTo(valueB.toString)
-        case v: VectorScalaTypeAlias => vector.compare(v, DataTypes.toVector()(valueB))
+        case v: vector.ScalaType => vector.compare(v, DataTypes.toVector()(valueB))
+        case dt: DateTime => dt.compareTo(DataTypes.toDateTime(valueB))
         case _ => throw new RuntimeException(s"${valueA.getClass.getName} comparison is not implemented")
       }
     }

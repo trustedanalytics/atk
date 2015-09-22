@@ -29,11 +29,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
 case class AnnotateWeightedDegreesArgs(graph: GraphReference,
-                                       @ArgDoc("<TBD>") outputPropertyName: String,
-                                       @ArgDoc("<TBD>") degreeOption: Option[String] = None,
-                                       @ArgDoc("<TBD>") inputEdgeLabels: Option[List[String]] = None,
-                                       @ArgDoc("<TBD>") edgeWeightProperty: Option[String] = None,
-                                       @ArgDoc("<TBD>") edgeWeightDefault: Option[Double] = None) {
+                                       @ArgDoc("property name of where to store output") outputPropertyName: String,
+                                       @ArgDoc("choose from 'out', 'in', 'undirected'") degreeOption: Option[String] = None,
+                                       @ArgDoc("labels of edge types that should be included") inputEdgeLabels: Option[List[String]] = None,
+                                       @ArgDoc("property name of edge weight, if not provided all edges are weighted equally") edgeWeightProperty: Option[String] = None,
+                                       @ArgDoc("default edge weight") edgeWeightDefault: Option[Double] = None) {
 
   // validate arguments
 
@@ -91,7 +91,8 @@ For a directed edge relation, a vertex has both an out-degree (the number of
 edges leaving the vertex) and an in-degree (the number of edges entering the
 vertex).
 
-The toolkit provides a routine `annotate_degrees <annotate_degrees.html>`_
+The toolkit provides a routine :ref:`annotate_degrees
+<python_api/graphs/graph-/annotate_weighted_degrees>`
 for calculating the degrees of vertices.
 This calculation could be performed with a Gremlin query on smaller datasets
 because Gremlin queries cannot be executed on a distributed scale.

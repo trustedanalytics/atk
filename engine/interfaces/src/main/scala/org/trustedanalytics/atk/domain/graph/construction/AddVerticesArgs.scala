@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Arguments for adding Vertices to a Vertex Frame
  */
-case class AddVerticesArgs(@ArgDoc("""The frame being operated on.""") vertexFrame: FrameReference,
+case class AddVerticesArgs(vertexFrame: FrameReference,
                            @ArgDoc("""Frame that will be the source of
 the vertex data.""") sourceFrame: FrameReference,
                            @ArgDoc("""Column name for a unique id for each vertex.""") idColumnName: String,

@@ -1,3 +1,5 @@
+.. _ds_dflw:
+
 .. index::
     single: example
 
@@ -48,7 +50,7 @@ integers, and floats) that can be organized as a collection of rows and
 columns, similar to a table or spreadsheet.
 Each row corresponds to the data associated with one observation, and each
 column corresponds to a variable being observed.
-See the Python API `Data Types <python_api/datatypes/index.html>`_ for
+See the Python API :ref:`Data Types <python_api/datatypes/index>` for
 a current list of data types supported.
 
 Connect to the server:
@@ -84,7 +86,7 @@ You should see a list of variable types similar to this:
 
 .. note::
 
-    Although the |PACKAGE| utilizes the NumPy package, NumPy values of positive
+    Although |PACKAGE| utilizes the NumPy package, NumPy values of positive
     infinity (np.inf), negative infinity (-np.inf) or nan (np.nan) are treated
     as None.
     Results of any user-defined functions which deal with such values are
@@ -101,7 +103,7 @@ You should see a list of variable types similar to this:
 Ingesting the Raw Data
 ======================
 
-See the API section `Data Sources <python_api/datasources/index.html>`_
+See the API section :ref:`Data Sources <python_api/datasources/index>`
 for the various methods of ingesting data.
 
 
@@ -226,10 +228,10 @@ A :term:`Frame (capital F)` is a class of objects capable of accessing and
 controlling a :term:`frame (lower case f)` containing "big data".
 The frame is visualized as a two-dimensional table structure of rows and
 columns.
-The |PACKAGE| can handle frames with large volumes of data, because it is
+|PACKAGE| can handle frames with large volumes of data, because it is
 designed to work with data spread over multiple machines.
 
-Create A Frame
+Create a Frame
 ==============
 
 There are several ways to create frames\:
@@ -239,7 +241,7 @@ There are several ways to create frames\:
 #.  by copying (all or a part of) another frame
 #.  as a return value from a Frame-based method; this is part of the ETL data flow.
 
-See the Python API `Frames section <python_api/frames/index.html>`__ for more information.
+See the Python API :ref:`Frames section <python_api/frames/index>` for more information.
 
 Examples:
 ---------
@@ -304,7 +306,7 @@ Let's create a Frame and check it out:
 
 Append:
 -------
-The `append <python_api/frames/frame-/append.html>`_ method adds rows and columns of data to a frame.
+The :ref:`append <python_api/frames/frame-/append>` method adds rows and columns of data to a frame.
 Columns and rows are added to the database structure, and data is imported
 as appropriate.
 If columns are the same in both name and data type, the appended data will
@@ -312,8 +314,8 @@ go into the existing column.
 
 As an example, let's start with a frame containing two columns *a* and *b*.
 The frame can be accessed by Frame *my_frame1*.
-We can look at the data and structure of the database by using the
-`inspect <python_api/frames/frame-/inspect.html>`_ method:
+We can look at the data and structure of the database by using the :ref:`inspect
+<python_api/frames/frame-/inspect>` method:
 
 .. code::
 
@@ -336,7 +338,7 @@ Given another frame, accessed by Frame *my_frame2* with one column *c*:
       dog
       cat
 
-With `append <python_api/frames/frame-/append.html>`_:
+With :ref:`append <python_api/frames/frame-/append>`:
 
 .. code::
 
@@ -386,18 +388,18 @@ It would still be accessed by Frame *my_frame1*:
         >>> objects1.append(objects2)
         >>> objects1.inspect()
 
-See also the `join <python_api/frames/frame-/join.html>`_ method in the
+See also the :ref:`join <python_api/frames/frame-/join>` method in the
 :doc:`API <python_api/index>` section.
 
 .. _example_frame.inspect:
 
-Inspect The Data
+Inspect the Data
 ================
 |PACKAGE| provides several methods that allow you to inspect your data,
-including `inspect <python_api/frames/frame-/inspect.html>`_ and
-`take <python_api/frames/frame-/take.html>`_.
+including :ref:`inspect <python_api/frames/frame-/inspect>` and
+:ref:`take <python_api/frames/frame-/take>`.
 The Frame class also contains frame information like
-`row_count <python_api/frames/frame-/row_count.html>`_.
+:ref:`row_count <python_api/frames/frame-/row_count>`.
 
 Examples
 --------
@@ -496,12 +498,12 @@ Gives you something like this:
         ...     pprint(summary[col])
 
 
-Clean The Data
+Clean the Data
 ==============
 
 The process of "data cleaning" encompasses the identification and removal or
 repair of incomplete, incorrect, or malformed information in a data set.
-The |PACKAGE|'s Python API provides much of the functionality necessary for these
+The |PACKAGE| Python API provides much of the functionality necessary for these
 tasks.
 It is important to keep in mind that it was designed for data scalability.
 Thus, using external Python packages for these tasks, while possible, may
@@ -514,7 +516,7 @@ not provide the same level of efficiency.
     rather than return a new frame with the changed data.
     It is recommended that you copy the data to a new frame on a regular
     basis and work on the new frame.
-    This way, you have a fall-back if something does not work as expected:
+    This way, you have a fallback if something does not work as expected:
 
     .. code::
 
@@ -549,7 +551,7 @@ Example of data cleaning:
 Drop Rows:
 ----------
 
-The `drop_rows <python_api/frames/frame-/drop_rows.html>`_
+The :ref:`drop_rows <python_api/frames/frame-/drop_rows>`
 method takes a predicate function and removes all rows for
 which the predicate evaluates to ``True``.
 
@@ -583,8 +585,8 @@ To drop any rows where any column is empty:
 Filter Rows:
 ------------
 
-The `filter <python_api/frames/frame-/filter.html>`_ method is like
-`drop_rows <python_api/frames/frame-/drop_rows.html>`_, except it removes all rows
+The :ref:`filter <python_api/frames/frame-/filter>` method is like
+:ref:`drop_rows <python_api/frames/frame-/drop_rows>`, except it removes all rows
 for which the predicate evaluates to False.
 
 Examples:
@@ -606,7 +608,7 @@ To delete those rows where field *b* is outside the range of 0 to 10:
 Drop Duplicates:
 ----------------
 
-The `drop_duplicates <python_api/frames/frame-/drop_duplicates.html>`_
+The :ref:`drop_duplicates <python_api/frames/frame-/drop_duplicates>`
 method performs a row uniqueness comparison across the whole table.
 
 Examples:
@@ -669,7 +671,7 @@ Rename column *b* to "author" and *c* to "publisher":
 
     >>> my_frame.rename_columns({'b': 'author', 'c': 'publisher'})
 
-Transform The Data
+Transform the Data
 ==================
 
 Often, you will need to create new data based upon the existing data.
@@ -804,8 +806,8 @@ Examining the Data
 ==================
 
 To get standard descriptive statistics information about my_frame, use the
-frame function `column_summary_statistics
-<python_api/frames/frame-/column_summary_statistics.html>`_:
+frame function :ref:`column_summary_statistics
+<python_api/frames/frame-/column_summary_statistics>`:
 
 .. code::
 
@@ -938,7 +940,7 @@ Aggregation currently supports using the following functions:
 Join:
 -----
 
-Create a **new** frame from a `join <python_api/frames/frame-/join.html>`_
+Create a **new** frame from a :ref:`join <python_api/frames/frame-/join>`
 operation with another frame.
 
 Given two frames *my_frame* (columns *a*, *b*, *c*) and *your_frame* (columns
@@ -1071,7 +1073,7 @@ Result is *right_frame*:
 Flatten Column:
 ---------------
 
-The function `flatten_column <python_api/frames/frame-/flatten_column.html>`_
+The function :ref:`flatten_column <python_api/frames/frame-/flatten_column>`
 creates a **new** frame by splitting a
 particular column and returns a Frame object.
 The column is searched for rows where there is more than one value,
@@ -1209,7 +1211,7 @@ Add the data:
 
 .. warning::
 
-    Improperly built graphs can give inconsistant results.
+    Improperly built graphs can give inconsistent results.
     For example, given EdgeFrames with this data::
 
         Movieid, movieTitle, Rating, userId
@@ -1233,7 +1235,7 @@ Inspect the graph:
     >>> my_graph.vertices['Employee'].inspect(20)
     >>> my_graph.edges['worksunder'].inspect(20)
 
-For further information, see the API section on :ref:`seamless_graph`.
+For further information, see the API section on :ref:`Graphs <python_api/graphs/index>`.
 
 .. _export_to_titan:
 
@@ -1283,87 +1285,17 @@ arbitrary frame of data consisting of the :download:`following
 | David    | Rob     | VP of Sales       | 7     |
 +----------+---------+-------------------+-------+
 
-Build the Graph
-===============
+Graph Creation
+==============
 
-There are two methods of building a Titan graph, exporting it from a seamless
-graph, or building it directly from a frame.
-Since exporting it from a seamless graph is discussed :ref:`above
-<export_to_titan>`, this section will concentrate on building one directly from
-a frame.
-
-The first step is to define the rules that dictate how the frame data should
-be associated to vertices and edges:
-
-.. only:: html
-
-    .. code::
-
-        >>> employee_vertex = ta.VertexRule(id_key = "employee", id_value = my_frame.employee, properties = {'vertex_type': 'L', title:my_frame.title})
-        >>> manager_vertex = ta.VertexRule(id_key = "managers", id_value = my_frame.manager, properties = {'vertex_type": "R"})
-
-.. only:: latex
-
-    .. code::
-
-        >>> employee_vertex = ta.VertexRule(id_key = "employee",
-        ... id_value = my_frame.employee,
-        ... properties = {'vertex_type': 'L', title:my_frame.title})
-        >>> manager_vertex = ta.VertexRule(id_key = "managers",
-        ... id_value = my_frame.manager,
-        ... properties = {'vertex_type": "R"})
-
-Define the edge rule:
-
-.. only:: html
-
-    .. code::
-
-        >>> worksunder_edge = ta.EdgeRule("worksunder", my_frame.employee, my_frame.manager, properties = {"years":my_frame.years})
-
-.. only:: latex
-
-    .. code::
-
-        >>> worksunder_edge = ta.EdgeRule("worksunder",
-        ... my_frame.employee, my_frame.manager,
-        ... properties = {"years":my_frame.years})
-
-For more information about rules, see the API section on
-:ref:`titan_graph_rules`.
-
-Build the graph:
-
-.. only:: html
-
-    .. code::
-
-        >>> my_graph = ta.TitanGraph(rules=[employee_vertex, manager_vertex, worksunder_edge], name = "personnel")
-
-.. only:: latex
-
-    .. code::
-
-        >>> my_graph = ta.TitanGraph(rules=[employee_vertex, manager_vertex,
-        ... worksunder_edge], name = "personnel")
-
-For futher information, as well as Titan graph attributes and methods, see the
-API section on `Titan Graph <python_api/graphs/graph-titan/index.html>`_.
+A Titan graph is created by exporting it from a seamless graph.
+For further information, as well as Titan graph attributes and methods, see the
+API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
 
 .. _Graph_Analytics:
 
 .. index::
     pair: analytics; graph
----------------
-Graph Analytics
----------------
-
-*   `Clustering Coefficients <python_api/graphs/graph-/clustering_coefficient.html>`_
-*   `Connected Components (CC) <python_api/graphs/graph-titan/connected_components.html>`_
-*   `Degree Calculation <python_api/graphs/graph-/annotate_degrees.html>`_
-*   `K-Clique Percolation <python_api/graphs/graph-/ml/kclique_percolation.html>`_
-*   `PageRank (PR) <python_api/graphs/graph-titan/page_rank.html>`_
-
 
 .. toctree::
     :hidden:

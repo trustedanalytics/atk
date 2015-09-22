@@ -15,7 +15,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-case class NaiveBayesPredictArgs(@ArgDoc("""<TBD>""") model: ModelReference,
+case class NaiveBayesPredictArgs(model: ModelReference,
                                  @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
@@ -28,8 +28,7 @@ was trained on.""") observationColumns: Option[List[String]]) {
 
 }
 
-@PluginDoc(oneLine = "<TBD>",
-  extended = """""")
+@PluginDoc(oneLine = "Predict")
 class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, FrameReference] {
   /**
    * The name of the command.

@@ -244,6 +244,28 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     }
 
   /**
+   * Retrieve all records from the given dataframe
+   * @param frame Frame to retrieve records from
+   * @return records in the dataframe
+   */
+  override def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]] =
+    withContext("frame.getAllRows") {
+      require(frame != null, "frame is required")
+      withMyClassLoader {
+        val reader = getReader(frame)
+        val numRows = getRowCount(frame)
+        val rows = reader.take(numRows, 0, None)
+        metaStore.withSession("frame.updateFrameStatus") {
+          implicit session =>
+            {
+              metaStore.frameRepo.updateLastReadDate(frame)
+            }
+        }
+        rows
+      }
+    }
+
+  /**
    * Row count for the supplied frame (assumes Parquet storage)
    * @return row count
    */

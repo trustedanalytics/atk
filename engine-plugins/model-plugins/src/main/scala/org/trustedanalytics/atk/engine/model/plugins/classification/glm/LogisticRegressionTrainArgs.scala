@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 /**
  * Input arguments for logistic regression train plugin
  */
-case class LogisticRegressionTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class LogisticRegressionTrainArgs(model: ModelReference,
 
                                        @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
 

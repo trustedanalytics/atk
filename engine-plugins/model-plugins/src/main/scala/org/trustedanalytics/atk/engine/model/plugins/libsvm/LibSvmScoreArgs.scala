@@ -23,9 +23,8 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for loading model data into existing model in the model database.
  */
-case class LibSvmScoreArgs(
-    @ArgDoc("""Handle to the model to be written to.""") model: ModelReference,
-    @ArgDoc("""A single observation of features.""") vector: Vector[Double]) {
+case class LibSvmScoreArgs(model: ModelReference,
+                           @ArgDoc("""A single observation of features.""") vector: Vector[Double]) {
   require(model != null, "model is required")
 }
 

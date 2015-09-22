@@ -26,11 +26,11 @@ from trustedanalytics.core.loggers import loggers
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
 from trustedanalytics.core.errorhandle import errors
-from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable
+from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.rest.udfdepends import udf
 from trustedanalytics.core.frame import Frame, VertexFrame
-from trustedanalytics.core.graph import Graph, TitanGraph, VertexRule, EdgeRule
+from trustedanalytics.core.graph import Graph, TitanGraph
 from trustedanalytics.core.model import _BaseModel
 
 from trustedanalytics.rest.atkserver import server

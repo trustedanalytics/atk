@@ -40,8 +40,7 @@ import JoinJsonFormat._
 /**
  * Join two data frames (similar to SQL JOIN)
  */
-@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).")
 class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
 
   /**
@@ -72,6 +71,9 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
     //first validate join columns are valid
     leftFrame.schema.validateColumnsExist(List(arguments.leftFrame.joinColumn))
     rightFrame.schema.validateColumnsExist(List(arguments.rightFrame.joinColumn))
+    require(leftFrame.schema.columnDataType(arguments.leftFrame.joinColumn)
+      .equalsDataType(rightFrame.schema.columnDataType(arguments.rightFrame.joinColumn)),
+      "Join columns must have the same data type")
 
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold

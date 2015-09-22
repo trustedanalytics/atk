@@ -1,3 +1,5 @@
+.. _ds_intellij:
+
 .. index:: ! IntelliJ
     single: IDE
 
@@ -23,7 +25,7 @@ Verify the Python plugin is enabled in IntelliJ by choosing
 :menuselection:`File --> Settings`, searching for *Python*, and choosing
 *Plugins* from the pane on the left-hand side.
 
-The |PACKAGE| should work with any version of IntelliJ IDEA but these instructions
+|PACKAGE| should work with any version of IntelliJ IDEA but these instructions
 were tested with IntelliJ IDEA 13.1.3 Ultimate.
 
 -----

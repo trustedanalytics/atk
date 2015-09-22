@@ -17,9 +17,9 @@
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.engine.EngineKryoRegistrator
-import org.trustedanalytics.atk.atkpregel.{ BasicCountsInitialReport, SuperStepNetDelta }
-import org.trustedanalytics.atk.plugins.beliefpropagation.VertexState
-import org.trustedanalytics.atk.atkpregel._
+import org.trustedanalytics.atk.pregel.{ BasicCountsInitialReport, SuperStepNetDelta }
+import org.trustedanalytics.atk.plugins.loopybeliefpropagation.VertexState
+import org.trustedanalytics.atk.pregel._
 import com.esotericsoftware.kryo.Kryo
 import org.apache.spark.graphx.GraphKryoRegistrator
 

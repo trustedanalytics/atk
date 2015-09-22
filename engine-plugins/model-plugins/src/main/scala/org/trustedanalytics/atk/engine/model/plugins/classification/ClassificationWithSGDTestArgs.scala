@@ -28,8 +28,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param observationColumns Handle to the list of observation columns of the data frame
  * @param labelColumn Handle to the label column of the data frame
  */
-case class ClassificationWithSGDTestArgs(@ArgDoc("""Handle to the model to be
-written to.""") model: ModelReference,
+case class ClassificationWithSGDTestArgs(model: ModelReference,
                                          @ArgDoc("""frame whose labels are to be
 predicted.""") frame: FrameReference,
                                          @ArgDoc("""Column containing the actual

@@ -29,8 +29,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Object used for parsing and then executing the frame.append command
  *
  */
-case class LoadFrameArgs(@ArgDoc("""DataFrame to load data into.
-Should be either a uri or id.""") destination: FrameReference,
+case class LoadFrameArgs(destination: FrameReference,
                          @ArgDoc("""Object describing the data to load into the destination.
 Includes the Where and How of loading.""") source: LoadSource)
 
@@ -42,23 +41,23 @@ case class LoadSource(
     @ArgDoc("""Source object that can be parsed into an RDD. Such as "file" or "frame".""") sourceType: String,
     @ArgDoc("""Location of data to load. Should be appropriate for the source_type.""") uri: String,
     @ArgDoc("""Object describing how to parse the resource. If data already an RDD can be set to None.""") parser: Option[LineParser] = None,
-    @ArgDoc("""<TBD>""") data: Option[List[List[Any]]] = None,
-    @ArgDoc("""<TBD>""") startTag: Option[List[String]] = None,
-    @ArgDoc("""<TBD>""") endTag: Option[List[String]] = None) {
+    @ArgDoc("""(optional) list of strings as input data""") data: Option[List[List[Any]]] = None,
+    @ArgDoc("""start reading line (for filtering)""") startTag: Option[List[String]] = None,
+    @ArgDoc("""end reading line (for filtering)""") endTag: Option[List[String]] = None) {
 
   require(sourceType != null, "sourceType cannot be null")
-  require(sourceType == "frame" || sourceType == "file" || sourceType == "hivedb" || sourceType == "strings" || sourceType == "linefile" || sourceType == "multilinefile" || sourceType == "xmlfile",
+  require(isFrame || isFile || isClientData || isSinglelineFile || isMultilineFile,
     "sourceType must be a valid type")
   require(uri != null, "uri cannot be null")
   require(parser != null, "parser cannot be null")
-  if (sourceType == "frame" || sourceType == "file" || sourceType == "linefile" || sourceType == "multilinefile") {
+  if (isFrame || isFile || isSinglelineFile || sourceType == "multilinefile") {
     require(data.isEmpty, "if this is not a strings file the data must be None")
   }
-  if (sourceType == "strings") {
+  if (isClientData) {
     require(data.isDefined, "if the sourceType is strings data must not be None")
   }
-  if (sourceType == "multilinefile" || sourceType == "xmlfile") {
-    require(startTag.isDefined && endTag.isDefined, "if this is a multiline file the start and end tags must be set")
+  if (isMultilineFile) {
+    require(startTag.isDefined && endTag.isDefined, "if this is a multi-line file the start and end tags must be set")
   }
 
   /**
@@ -66,6 +65,13 @@ case class LoadSource(
    */
   def isFrame: Boolean = {
     sourceType == "frame"
+  }
+
+  /**
+   * True if source is a file
+   */
+  def isFile: Boolean = {
+    sourceType == "file"
   }
 
   /**
@@ -79,22 +85,28 @@ case class LoadSource(
    * True if source is a file
    */
   def isFieldDelimited: Boolean = {
-    sourceType == "file"
+    isFile
   }
 
   /**
-   * True if source is a Line File
+   * True if source is a line file
    */
-  def isFile: Boolean = {
+  def isSinglelineFile: Boolean = {
     sourceType == "linefile"
   }
 
+  /**
+   * True if source is a multi line file
+   */
   def isMultilineFile: Boolean = {
     sourceType == "multilinefile" || sourceType == "xmlfile"
   }
 
-  def isHiveDb: Boolean = {
-    sourceType == "hivedb"
+  /**
+   * True if source is a multi line file
+   */
+  def hasXml: Boolean = {
+    sourceType == "multilinefile" || sourceType == "xmlfile"
   }
 }
 

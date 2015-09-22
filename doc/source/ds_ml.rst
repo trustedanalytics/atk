@@ -1,3 +1,5 @@
+.. _ds_ml:
+
 .. index::
     single: machine learning
 
@@ -50,7 +52,7 @@ Algorithms
 Supervision
 -----------
 
-The |PACKAGE| incorporates supervised, unsupervised, and
+|PACKAGE| incorporates supervised, unsupervised, and
 semi-supervised machine learning algorithms.
 Supervised algorithms are used to learn the relationship between features in
 a dataset and some labeling schema, such as is in classification.
@@ -72,7 +74,7 @@ as "similar species appear to cluster together."
 Semi-supervised learning is the natural combination of these two classes of
 algorithms, in which unlabeled data are supplemented with smaller amounts of
 labeled data, with the goal of increasing the accuracy of learning.
-For more information on these approaches, the respective wikipedia entries
+For more information on these approaches, the respective Wikipedia entries
 to these approaches provide an easy-to-read overview of their strengths and
 limitations.
 

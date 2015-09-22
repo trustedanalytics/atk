@@ -1,3 +1,5 @@
+.. _ds_strt:
+
 ===============
 Getting Started
 ===============
@@ -10,7 +12,7 @@ Getting Started
 Open-Source
 -----------
 
-The |PACKAGE| uses standards and open-source routines from
+|PACKAGE| uses standards and open-source routines from
 `Apache Hadoop <http://hadoop.apache.org/>`__ such as |HDFS|,
 :term:`MapReduce`, YARN, as well as
 `Apache Giraph <http://giraph.apache.org/>`__ for graph-based machine learning
@@ -33,7 +35,7 @@ Features
 Script Examples
 ---------------
 
-The |PACKAGE| ships with example Python scripts and data sets that exercise the
+|PACKAGE| ships with example Python scripts and data sets that exercise the
 various features of the platform.
 The default location for the example scripts is |PACKAGE_USER|'s home directory
 '/home/|PACKAGE_USER|'.

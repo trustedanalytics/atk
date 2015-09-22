@@ -17,6 +17,18 @@ HiveQuery
     :members:
     :inherited-members:
 
+HBase
+--------
+.. autoclass:: trustedanalytics.HBaseTable
+    :members:
+    :inherited-members:
+
+Jdbc
+--------
+.. autoclass:: trustedanalytics.JdbcTable
+    :members:
+    :inherited-members:
+
 JsonFile
 --------
 .. autoclass:: trustedanalytics.JsonFile
@@ -34,3 +46,10 @@ Pandas
 .. autoclass:: trustedanalytics.Pandas
     :members:
     :inherited-members:
+
+XmlFile
+-------
+.. autoclass:: trustedanalytics.XmlFile
+    :members:
+    :inherited-members:
+

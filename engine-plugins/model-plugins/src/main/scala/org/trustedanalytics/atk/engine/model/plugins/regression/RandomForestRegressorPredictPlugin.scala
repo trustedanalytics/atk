@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
-import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
@@ -96,7 +96,7 @@ class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForest
       row.addValue(prediction)
     })
 
-    val updatedSchema = frame.schema.addColumn("predicted_class", DataTypes.float64)
+    val updatedSchema = frame.schema.addColumn("predicted_value", DataTypes.float64)
     val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by RandomForests as a regressor predict operation"))) {

@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for training a lib svm model with the provided dataset and params.
  */
-case class LibSvmTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class LibSvmTrainArgs(model: ModelReference,
                            @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                            @ArgDoc("""Column name containing the label for each observation.""") labelColumn: String,
                            @ArgDoc("""Column(s) containing the observations.""") observationColumns: List[String],
