@@ -19,8 +19,9 @@ package org.trustedanalytics.atk.scoring.models
 import java.io.{InputStreamReader, BufferedReader, ByteArrayInputStream}
 
 import libsvm.svm
+import org.scalatest.WordSpec
 
-class LibSvmModelTest extends ScoringModelTest {
+class LibSvmModelTest extends WordSpec {
   val data = new String("nr_class 2\ntotal_sv 2\nrho 0.5\nlabel 1 -1\nnr_sv 1 1\nSV\n1 1:0 2:1 3:1\n-1 4:2 1:0 2:2")
   val inputStream = new ByteArrayInputStream(data.getBytes())
   var reader = new BufferedReader(new InputStreamReader(inputStream))
@@ -29,23 +30,23 @@ class LibSvmModelTest extends ScoringModelTest {
 
   "LibSvmModel" should {
     "throw an exception when attempting to score null data" in {
-      nullDataTest(libSvmModel)
+      ScoringModelTestUtils.nullDataTest(libSvmModel)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
-      invalidDataTest(libSvmModel, 3)
+      ScoringModelTestUtils.invalidDataTest(libSvmModel, 3)
     }
 
     "successfully score a model when float data is provided" in {
-      successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-      successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-      successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20, numRows)
     }
 
     "successfully score a model when integer data is provided" in {
-      successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-      successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-      successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20, numRows)
     }
   }
 }

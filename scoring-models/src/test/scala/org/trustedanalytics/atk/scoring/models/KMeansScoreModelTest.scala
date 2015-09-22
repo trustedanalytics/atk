@@ -18,8 +18,9 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.DenseVector
+import org.scalatest.WordSpec
 
-class KMeansScoreModelTest extends ScoringModelTest {
+class KMeansScoreModelTest extends WordSpec {
 
   "KMeansScoreModel" should {
     val kmeansModel = new KMeansModel(Array(new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
@@ -27,27 +28,27 @@ class KMeansScoreModelTest extends ScoringModelTest {
     val numRows = 5    // number of rows of data to test with
 
     "throw an exception when attempting to score null data" in {
-      nullDataTest(kmeansScoreModel)
+      ScoringModelTestUtils.nullDataTest(kmeansScoreModel)
     }
 
     "throw an exception when scoring data with too few columns" in {
-      tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
-      invalidDataTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
+      ScoringModelTestUtils.invalidDataTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
     }
 
     "successfully score a model when float data is provided" in {
-      successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
     }
 
     "successfully score a model when integer data is provided" in {
-      successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
     }
   }
 }

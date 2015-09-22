@@ -18,9 +18,10 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.scalatest.WordSpec
 import org.scalatest.time.{Millis, Seconds, Span}
 
-class LinearRegressionModelTest extends ScoringModelTest {
+class LinearRegressionModelTest extends WordSpec {
   val weights = new DenseVector(Array(2,3))
   val intercept = 4
   val linearRegressionModel = new LinearRegressionModel(weights, intercept)
@@ -29,27 +30,27 @@ class LinearRegressionModelTest extends ScoringModelTest {
 
   "LinearRegressionModel" should {
     "throw an exception when attempting to score null data" in {
-      nullDataTest(linearRegressionScoreModel)
+      ScoringModelTestUtils.nullDataTest(linearRegressionScoreModel)
     }
 
     "throw an exception when scoring data with too few columns" in {
-      tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
-      invalidDataTest(linearRegressionScoreModel, weights.size)
+      ScoringModelTestUtils.invalidDataTest(linearRegressionScoreModel, weights.size)
     }
 
     "successfully score a model when float data is provided" in {
-      successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
     }
 
     "successfully score a model when integer data is provided" in {
-      successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
     }
 
     "return results that match the expected results based on the specified weights and intercept" in {
@@ -57,18 +58,16 @@ class LinearRegressionModelTest extends ScoringModelTest {
       val testWeights = new DenseVector(Array(2, 3))
       val testIntercept = 4
       val testModel = new LinearRegressionModel(testWeights, testIntercept)
+
+      // score data, and then check the results.
       val score = linearRegressionScoreModel.score(data)
+      assert(data.size == score.length)
 
-      whenReady(score, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { result =>
-        assert(score.isCompleted)
-        assert(data.size == result.length)
-
-        for (i <- data.indices) {
-          val x1 = data(i)(0).toDouble
-          val x2 = data(i)(1).toDouble
-          val y = (x1 * testWeights.apply(0)) + (x2 * testWeights.apply(1)) + testIntercept + 1
-          assert(result(i).equals(y))
-        }
+      for (i <- data.indices) {
+        val x1 = data(i)(0).toDouble
+        val x2 = data(i)(1).toDouble
+        val y = (x1 * testWeights.apply(0)) + (x2 * testWeights.apply(1)) + testIntercept + 1
+        assert(score(i).equals(y))
       }
     }
   }

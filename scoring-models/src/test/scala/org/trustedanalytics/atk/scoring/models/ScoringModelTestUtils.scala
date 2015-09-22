@@ -16,25 +16,20 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.time.{Millis, Seconds, Span}
-import org.scalatest.Matchers
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import scala.util.Random
 
-class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures with Matchers  {
-  val scoreTimeoutSeconds = 10   // timeout length for calling model score()
-  val scoreIntervalMillis = 100  // interval to sleep between queries to check if scoring has completed
-
+object ScoringModelTestUtils {
   // Calls model.score() with null data and verifies that we get a NullPointerException
   def nullDataTest (model: Model) = {
-    // score with null data
-    val score = model.score(null)
 
-    // wait for scoring to complete, and we expect a NullPointerException
-    whenReady(score.failed, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { e =>
-      e shouldBe a [NullPointerException]
+    // score with null data and expect a NullPointerEXception
+    try {
+      model.score(null)
+      assert(false, "Expected NullPointerException after scoring model with null data.")
+    }
+    catch {
+      case _: NullPointerException => // expected exception
     }
   }
 
@@ -49,13 +44,15 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
       data = data :+ getRandomIntegerArray(numColumns-1)
     }
 
-    // score model
-    val score = model.score(data)
-
-    // wait for scoring to complete, and we expect an IllegalArgumentException
-    whenReady(score.failed, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { e =>
-      e shouldBe a [IllegalArgumentException]
+    // score model and expect an IllegalArgumentException
+    try {
+      model.score(data)
+      assert(false, "Expected IllegalArgumentException after scoring model with too few data columns.")
     }
+    catch {
+      case _: IllegalArgumentException => // expected exception
+    }
+
   }
 
   // Generates data with one more than the number of columns specified, then scores the model,
@@ -69,11 +66,13 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
       data = data :+ getRandomIntegerArray(numColumns+1)
     }
 
-    val score = model.score(data)
-
-    // wait for scoring to complete, and we expect an IllegalArgumentException
-    whenReady(score.failed, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { e =>
-      e shouldBe a [IllegalArgumentException]
+    // score model and expect an IllegalArgumentException
+    try {
+      model.score(data)
+      assert(false, "Expected IllegalArgumentException after scoring model with too many data columns.")
+    }
+    catch {
+      case _: IllegalArgumentException => // expected exception
     }
   }
 
@@ -82,17 +81,23 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
   def invalidDataTest (model: Model, numColumns: Int) = {
     assert(numColumns > 0)
 
+    var data = Seq[Array[String]]()
+
     // generate data by getting integers and then adding on an "a"
-    var row = getRandomIntegerArray(numColumns)
-    for (i <- row.indices) {
-      row(i) += "a"
+    var row1 = getRandomIntegerArray(numColumns)
+    for (i <- row1.indices) {
+      row1(i) += "a"
     }
 
-    val score = model.score(Seq(row))
+    // score model
+    data = data :+ row1
 
-    // wait for scoring to complete, and we expect an NumberFormatException
-    whenReady(score.failed, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { e =>
-      e shouldBe a [NumberFormatException]
+    try {
+      model.score(data)
+      assert(false, "Expected a NumberFormatException after scoring non-numerical data.")
+    }
+    catch {
+      case _: NumberFormatException => // expected exception
     }
   }
 
@@ -101,17 +106,13 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
   def successfulModelScoringFloatTest (model: Model, numColumns: Int, numRows: Int) = {
     var data = Seq[Array[String]]()
 
-    // generate data with float values
     for (i <- 1 to numRows) {
       data = data :+ getRandomFloatArray(numColumns)
     }
 
+    // score model
     val score = model.score(data)
-
-    // wait for scoring to complete and check the result
-    whenReady(score, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { result =>
-      assert(result.length == numRows)
-    }
+    assert (score.length == numRows)
   }
 
   // Generates data with integer data for the specified number of column/rows and then
@@ -119,17 +120,16 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
   def successfulModelScoringIntegerTest (model: Model, numColumns: Int, numRows: Int) = {
     var data = Seq[Array[String]]()
 
-    // generate data with integer values
     for (i <- 1 to numRows) {
       data = data :+ getRandomIntegerArray(numColumns)
     }
 
-    val score = model.score(data)
-
-    // wait for scoring to complete and check the result
-    whenReady(score, timeout(Span(scoreTimeoutSeconds, Seconds)), interval(Span(scoreIntervalMillis, Millis))) { result =>
-      assert(result.length == numRows)
+    // score model
+    try {
+      model.score(data)
     }
+    val score = model.score(data)
+    assert(score.length == numRows)
   }
 
   // Helper function to return an array filled with random string floats
@@ -151,5 +151,6 @@ class ScoringModelTest extends TestingSparkContextWordSpec with ScalaFutures wit
     }
     row
   }
+
 
 }

@@ -25,6 +25,6 @@ trait Model {
   /**
    * Called for scoring
    */
-  def score(data: Seq[Array[String]]): Future[Seq[Any]]
+  def score(data: Seq[Array[String]]): Seq[Any]
 
 }
