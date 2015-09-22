@@ -22,8 +22,6 @@ echo "$SCRIPTPATH"
 
 pwd
 
-mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/doc
-
 pushd $SCRIPTPATH
     cp -v requirements-linux.txt ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/
 popd
@@ -41,6 +39,5 @@ cp -Rv ../python-client/examples/end-user/* ${BUILD_DIR}/usr/lib/trustedanalytic
 
 cp -Rv  ../python-client/cmdgen.py ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/
 
-cp -Rv ../doc/build/html ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/doc/html/
 
 createArchive $packageName
