@@ -11,18 +11,18 @@ Package Installation
     :local:
     :backlinks: none
 
-------------
+
 Introduction
-------------
+
 
 This guide covers |PACKAGE| installation and configuration.
 
 Cloudera installation documentation can be found at:
 http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_cm_cdh.html .
 
-------------
+
 Requirements
-------------
+
 
 Operating System Requirements
 =============================
@@ -47,9 +47,9 @@ Cloudera cluster 5.3.x with following services:
 
 |PACKAGE| Python client supports Python 2.7.
 
-----------------------
+
 |TOOLKIT| Installation
-----------------------
+
 
 .. index::
     single: repository
@@ -65,7 +65,7 @@ the |PACKAGE| private repository.
 .. _epel repository:
 
 EPEL Repository
----------------
+-
 
 Verify the installation of the "epel" repository:
 
@@ -118,7 +118,7 @@ If the "epel" repository is not listed, do this to install it:
     single: repository
 
 |PACKAGE| Dependency Repository
--------------------------------
+-
 
 Some open source libraries are included to aid with the installation of the
 |PACKAGE|.
@@ -190,7 +190,7 @@ To install the *yum-s3* package, do this:
     single: repository
 
 |PACKAGE| Private Repository
-----------------------------
+
 
 Create '/etc/yum.repos.d/ta.repo':
 
@@ -284,7 +284,7 @@ Installing |TOOLKIT|
 ====================
 
 Installing On The Master Node
------------------------------
+-
 
 Install |PACKAGE| Python REST server and its dependencies.
 Only one instance of the REST server needs to be installed.
@@ -296,7 +296,7 @@ with the HDFS name node.
     $ sudo yum -y install trustedanalytics-rest-server
 
 Installing On A Worker Node
----------------------------
+-
 
 The |PACKAGE| spark dependencies package needs to be installed on every node
 running the spark worker role.
@@ -316,9 +316,9 @@ running the spark worker role.
 
 .. _rest_server_configuration:
 
--------------------------
+-
 REST Server Configuration
--------------------------
+-
 
 From the postgresql client, create a new database and user in postgresql.
 See the section on :ref:`postgresql <ad_inst_ta1_postgresql>`.
@@ -329,39 +329,117 @@ Configuration Script
 The server configuration is semi-automated via the use of a Python script
 '/etc/trustedanalytics/rest-server/config'.
 It will query Cloudera Manager and
-write out two files: 'atk.conf' containing general |PACKAGE| and Cloudera
+write out two files: 'cdh.conf' containing general |PACKAGE| and Cloudera
 configuration parameters and 'db.conf' containing parameters related to the
-PostgreSQL installation.
+PostgreSQL installation for |PACKAGE|.
 
+There is a single "master" configuration file called 'atk.conf'.  You can open
+'atk.conf' in any text editor to see that it is simply a list of
+"include"si.e., 'atk.conf' tells |PACKAGE| to read, upon initialization, in
+order, the following files:
 
-create a new 'application.conf' file based on the 'application.conf.tpl' file.
-The script will also fully configure the local PostgreSQL installation to
-work with the |PACKAGE| server.
+gen.conf
+    Parameters set by the scripts installed with the 'cluster_config' package.
 
-To configure |PACKAGE| installation, do this:
+db.conf
+    Configuration parameters for the underlying database used by Cloudera.
+
+cdh.conf
+    General CDH parameters such as the administrator username and password.
+
+user.conf
+    Any parameters in the above three files may be overwritten deliberately in
+    this file.
+
+The files are read in the order of inclusion, with settings in the later files
+that have the same name as those in the earlier files overwriting them.  It is
+important to note that this mechanism is designed for the user to exploit it
+by placing any "custom" settings in 'user.conf'.  You should not have to
+change anything directly in the 'gen.conf', 'db.conf', or 'cdh.conf' files;
+they are designed to be machine-readable and machine-writable only.
+
+To configure |PACKAGE| installation, you must set all the parameters for the
+'db.conf' file and several of the parameterers for the 'cdh.conf' file on the
+command line, unless you are configuring the database only (see the
+appropriate section below).
 
 .. code::
 
     $ cd /etc/trustedanalytics/rest-server/
-    $ sudo ./config
+    $ sudo ./config <ARGUMENTS>
 
-Answer the prompts to configure the cluster.
-To see an example of the prompts see :doc:`/ad_inst_ta3`.
-
-The script goes through all the necessary configurations to get the |PACKAGE|
-service running.
-The script can be run multiple times but there is a danger that configuring the
-database multiple times can wipe out a users data frames and graphs.
-
-Command line arguments can also be supplied for every prompt.
-If a command line argument is given, no prompt will be presented.
 To get a list of all the command line arguments for the configuration script,
-run the same command with --help:
+run the command with ``--help``:
 
 .. code::
 
-    $ sudo ./config --help
+    $ sudo ./config help
 
+Descriptions of each of the arguments follow.
+
+``--host``
+    the cloudera Manager host address. If this script is run on host managed by Cloudera Manager we will try to get
+    the host name from the Cloudera Manager API.
+
+``--port``
+    the Cloudera Manager port. The port used to access the Cloudera Manager UI. (normally 7180 but no default is provided).
+
+``--username``
+    The Cloudera Manager user name. The user name for logging into Cloudera Manager.
+
+``--password``
+    The Cloudera Manager password.  The password for `--username`.
+
+``--cluster``
+    The Cloudera cluster we will create the config for. If Cloudera Manager manages more than one cluster
+    we need to know what cluster we will be updating and pulling our config for. Can give the display name of the
+    cluster.
+
+``--db_only``
+    Configure only the database (yes/no).  If there is no existing cdh.conf file and db_only=yes, no cdh.conf file will be created.
+    If there is an existing cdh.conf file and db_only=yes, the command-line parameters for connecting to Cloudera Manager will be used
+    in preference to the contents of cdh.conf.  If the parameters given disagree with the contents of cdh.conf, the cdh.conf file will
+    NOT be updated.  Any parameter for this option other than "yes" (case-insensitive) is treated as "no".
+
+``--db_host``
+    the hostname of your postgres database.
+
+``--db_port``
+    the port number for your postgres installation.
+
+``--db_database``
+    the postgres database name.
+
+``--db_username``
+    the database user name.
+
+``--db_password``
+    the database password.
+
+``--yarn_cluster``
+    Setup Spark to use yarn-cluster mode (yes/no).  Any parameter for this option other than "no" (case-insensitive) is treated as "yes".
+
+   
+
+    
+Configuration of the Database Only
+==================================
+
+If you pass the parameter ``--db_only yes``, **only the 'db.conf' file will be
+created, not the 'cdh.conf' file**.
+
+This is useful for advanced users who may want to change the configuration of
+the Cloudera database backend without modifying the settings used by |PACKAGE|
+to talk to the Cloudera Manager itself.
+
+**CAUTION**: If something in the Cloudera settings changes outside of
+|PACKAGE| and you then run the 'config' script with the ``--db_only yes``
+option, you may end up with an incorrect 'cdh.conf' file.  The 'config' script
+will attempt to warn you in this case, but it will not prevent you from doing
+so, since advanced users may wish to use the 'user.conf' file as described
+above to create their own custom configuration. 
+
+    
 Manual Configuration
 ====================
 
@@ -369,28 +447,14 @@ Manual Configuration
 configuration file are needed.** (:ref:`Skip section <skip_manual_section>`).
 
 /etc/trustedanalytics/rest-server/application.conf
---------------------------------------------------
 
-The REST server package provides a configuration template file which must be
-used to create a configuration file.
-Copy the configuration template file 'application.conf.tpl' to
-'application.conf' in the same directory, like this:
+[Are we still going to provide the '.tpl' template file as a list of possible
+manual settings for 'user.conf'?]
 
-.. code::
-
-    $ cd /etc/trustedanalytics/rest-server
-    $ sudo cp application.conf.tpl application.conf
-
-Open the file with a text editor:
-
-.. code::
-
-    $ sudo vi application.conf
-
-All of the changes that need to be made are located at the top of the file.
 See :doc:`/appendix_application_conf` for an example 'application.conf' file.
 
 .. _ad_inst_tA_configure_file_system_root:
+
 
 Configure File System Root
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -576,7 +640,7 @@ The configuration script configures postgresql automatically.
     single: H2
 
 H2
---
+
 
 .. caution::
 
@@ -666,7 +730,7 @@ After:
     single: PostgreSQL
 
 PostgreSQL
-----------
+
 
 PostgreSQL configuration is more involved than H2 configuration and should
 only be attempted by an advanced user.
@@ -837,7 +901,7 @@ There should only be a single row per api_key:
 
 
      user_id | username  |  api_key  |      created_on     |     modified_on
-    ---------+-----------+-----------+---------------------+---------------------
+    -+-+-+-+-
            1 | metastore | api_key_1 | 2014-11-20 12:37:16 | 2014-11-20 12:37:16
        (1 row)
 
