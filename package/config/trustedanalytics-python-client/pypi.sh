@@ -18,6 +18,8 @@ mkdir -p trustedanalytics/trustedanalytics
 
 tar -xvf $tarFile -C trustedanalytics/
 
+cp -Rv ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/
+
 cp -Rv ${BUILD_DIR}/usr/lib/trustedanalytics/python-client/* trustedanalytics/trustedanalytics
 
 rm -rf usr
@@ -31,7 +33,13 @@ pushd trustedanalytics
 
 
 sed -i "s|VERSION|$version|g" setup.py
-sed -i "s|POSTTAG|${DAY}${BUILD_NUMBER}|g" setup.py
+
+weekly=$(echo $BRANCH | grep "w[0-9]*$")
+if [ "$weekly" == "" ]; then
+    sed -i "s|POSTTAG|${DAY}${BUILD_NUMBER}|g" setup.py
+else
+    sed -i "s|POSTTAG|dev${DAY}${BUILD_NUMBER}|g" setup.py
+fi
 
 cat setup.py
 
