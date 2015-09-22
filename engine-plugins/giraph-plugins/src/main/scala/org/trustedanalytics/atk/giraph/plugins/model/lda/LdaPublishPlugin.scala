@@ -32,7 +32,7 @@ import spray.json._
   extended = """Creates a tar file with the trained Latent Dirichlet Allocation model.
 The tar file is used as input to the scoring engine to predict the conditional topic
 probabilities for a document.""",
-  returns = """Returns the HDFS path to the tar file.""")
+  returns = """The HDFS path to the tar file.""")
 class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

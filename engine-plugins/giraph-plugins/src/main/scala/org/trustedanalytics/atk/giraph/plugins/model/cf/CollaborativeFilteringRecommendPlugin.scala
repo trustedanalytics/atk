@@ -34,8 +34,10 @@ import CollaborativeFilteringJsonFormat._
  * Collaborative filtering recommend model
  */
 @PluginDoc(oneLine = "Collaborative Filtering Recommend (ALS/CGD) model.",
-  extended = "See Collaborative Filtering Train for more information.",
-  returns = "See Collaborative Filtering Train for more information.")
+  extended = """See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.""",
+  returns = """See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.""")
 class CollaborativeFilteringRecommendPlugin
     extends SparkCommandPlugin[CollaborativeFilteringRecommendArgs, FrameReference] {
 

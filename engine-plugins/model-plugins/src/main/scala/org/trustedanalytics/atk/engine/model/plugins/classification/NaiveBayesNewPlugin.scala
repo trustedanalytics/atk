@@ -36,20 +36,20 @@ import MLLibJsonProtocol._
  */
 
 @PluginDoc(oneLine = "Create a 'new' instance of a Naive Bayes model",
-  extended = """
-**Classification using Naive Bayes**
-
-Naive Bayes[1]_ is a probabilistic classifier with strong independence assumptions between features.
-It computes the conditional probability distribution of each feature given label, and then applies
-Bayes' theorem to compute the conditional probability distribution of a label given an observation, and
-use it for prediction.
+  extended = """Naive Bayes [1]_ is a probabilistic classifier with strong
+independence assumptions between features.
+It computes the conditional probability distribution of each feature given label,
+and then applies Bayes' theorem to compute the conditional probability
+distribution of a label given an observation, and use it for prediction.
 The Naive Bayes model is initialized, trained on columns of a frame, and used
-to predict the value of the dependent variable given the independent observations of a frame.
-This model runs the MLLib implementation of Naive Bayes[2]_.
+to predict the value of the dependent variable given the independent
+observations of a frame.
+This model runs the MLLib implementation of Naive Bayes [2]_.
+
+.. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
-""")
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html""")
 class NaiveBayesNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

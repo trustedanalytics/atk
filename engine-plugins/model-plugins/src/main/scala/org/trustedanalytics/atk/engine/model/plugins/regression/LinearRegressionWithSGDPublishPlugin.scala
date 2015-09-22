@@ -32,7 +32,7 @@ import ModelPublishJsonProtocol._
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = "Returns the HDFS path to the tar file.")
+  extended = "The HDFS path to the tar file.")
 class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

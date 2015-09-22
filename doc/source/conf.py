@@ -183,8 +183,7 @@ pygments_style = 'bw'
 #modindex_common_prefix = []
 html_use_modindex = True
 
-# Remove the space immediately before the footnote, which is required to recognize it as such.
-trim_footnote_reference_space = 1
+footnote_references = "superscript"
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False

@@ -33,7 +33,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = "Returns the HDFS path to the tar file.")
+  extended = "",
+  returns = "The HDFS path to the tar file.")
 class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

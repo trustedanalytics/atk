@@ -38,13 +38,14 @@ import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
   extended = "",
-  returns = """Frame
-    A new frame consisting of the existing columns of the frame and new columns.
-    The data returned is composed of multiple components:
-'k' columns : double
-    Containing squared distance of each point to every cluster center.
-predicted_cluster : int
-    Integer containing the cluster assignment.""")
+  returns = """A new frame consisting of the existing columns of the frame
+and new columns.
+The data returned is composed of multiple components\:
+
+|   **double** : *'k' columns*
+|       Squared distance of each point to every cluster center.
+|   **int** : *predicted_cluster*
+|       The cluster assignment.""")
 class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameReference] {
 
   /**

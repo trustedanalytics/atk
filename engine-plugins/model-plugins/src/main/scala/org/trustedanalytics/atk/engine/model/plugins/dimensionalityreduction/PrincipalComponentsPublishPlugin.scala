@@ -34,7 +34,7 @@ import spray.json._
   extended = """Creates a tar file with the trained Principal Components Model.
 The tar file is used as input to the scoring engine to compute the principal components and
 t-squared index of the observation.""",
-  returns = """Returns the HDFS path to the tar file.""")
+  returns = """The HDFS path to the tar file.""")
 class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

@@ -34,7 +34,7 @@ import org.apache.commons.io.FileUtils
  * Rename columns of a frame
  */
 @PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = "Returns the HDFS path to the tar file.")
+  extended = "The HDFS path to the tar file.")
 class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
