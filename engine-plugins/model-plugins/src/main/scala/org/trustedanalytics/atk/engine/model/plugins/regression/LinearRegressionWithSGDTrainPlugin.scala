@@ -48,6 +48,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 109
+
   /**
    * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
    *
@@ -64,31 +65,37 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
 
     //Running MLLib
-    val linReg = initializeLinearRegressionModel(arguments)
+    val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.run(labeledTrainRdd)
     val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
   }
+}
+  object LinearRegressionWithSGDTrainPlugin{
 
-  private def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
-    val linReg = new LinearRegressionWithSGD()
-    linReg.optimizer.setNumIterations(arguments.getNumIterations)
-    linReg.optimizer.setStepSize(arguments.getStepSize)
+    def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
+      val linReg = new LinearRegressionWithSGD()
+      linReg.optimizer.setNumIterations(arguments.getNumIterations)
+      linReg.optimizer.setStepSize(arguments.getStepSize)
 
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+      linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
+      linReg.setIntercept(arguments.getIntercept)
 
-    linReg.optimizer.setRegParam(arguments.getRegParam)
+      linReg.optimizer.setRegParam(arguments.getRegParam)
 
-    if (arguments.regType.isDefined) {
-      linReg.optimizer.setUpdater(arguments.regType.get match {
-        case "L1" => new L1Updater()
-        case other => new SquaredL2Updater()
-      })
+      if (arguments.regType.isDefined) {
+        linReg.optimizer.setUpdater(arguments.regType.get match {
+          case "L1" => new L1Updater()
+          case other => new SquaredL2Updater()
+        })
+      }
+      linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
+      linReg.setIntercept(arguments.getIntercept)
+
     }
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
 
   }
-}
+
+
+

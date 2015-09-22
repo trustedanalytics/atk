@@ -70,6 +70,8 @@ Default is "k-means||".""") initializationMode: Option[String] = None) {
   def getInitializationMode: String = {
     initializationMode.getOrElse("k-means||")
   }
+
+
 }
 
 /**

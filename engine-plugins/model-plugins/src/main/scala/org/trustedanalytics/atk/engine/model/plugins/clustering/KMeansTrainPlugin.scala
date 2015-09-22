@@ -66,25 +66,26 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: KMeansTrainArgs)(implicit invocation: Invocation) = 15
+
   /**
    * Run MLLib's LogisticRegressionWithSGD() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
-   * as well as a function that can be called to produce a SparkContext that
-   * can be used during this invocation.
+   *                   as well as a function that can be called to produce a SparkContext that
+   *                   can be used during this invocation.
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: KMeansTrainArgs)(implicit invocation: Invocation): KMeansTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
-    val kMeans = initializeKmeans(arguments)
+    val kMeans = KMeansTrainPlugin.initializeKmeans(arguments)
 
     val trainFrameRdd = frame.rdd
     trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val kmeansModel = kMeans.run(vectorRDD)
-    val size = computeClusterSize(kmeansModel, trainFrameRdd, arguments.observationColumns, arguments.columnScalings)
+    val size = KMeansTrainPlugin.computeClusterSize(kmeansModel, trainFrameRdd, arguments.observationColumns, arguments.columnScalings)
     val withinSetSumOfSquaredError = kmeansModel.computeCost(vectorRDD)
     trainFrameRdd.unpersist()
 
@@ -95,28 +96,31 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
 
     KMeansTrainReturn(size, withinSetSumOfSquaredError)
   }
+}
 
   /**
    * Constructs a KMeans instance with parameters passed or default parameters if not specified
    */
-  private def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
-    val kmeans = new KMeans()
+  object KMeansTrainPlugin {
+    def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
+      val kmeans = new KMeans()
 
-    kmeans.setK(arguments.getK)
-    kmeans.setMaxIterations(arguments.getMaxIterations)
-    kmeans.setInitializationMode(arguments.getInitializationMode)
-    kmeans.setEpsilon(arguments.geteEpsilon)
+      kmeans.setK(arguments.getK)
+      kmeans.setMaxIterations(arguments.getMaxIterations)
+      kmeans.setInitializationMode(arguments.getInitializationMode)
+      kmeans.setEpsilon(arguments.geteEpsilon)
+    }
+
+    def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
+
+      val predictRDD = trainFrameRdd.mapRows(row => {
+        val array = row.valuesAsArray(observationColumns).map(row => DataTypes.toDouble(row))
+        val columnWeightsArray = columnScalings.toArray
+        val doubles = array.zip(columnWeightsArray).map { case (x, y) => x * y }
+        val point = Vectors.dense(doubles)
+        kmeansModel.predict(point)
+      })
+      predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
+    }
   }
 
-  private def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
-
-    val predictRDD = trainFrameRdd.mapRows(row => {
-      val array = row.valuesAsArray(observationColumns).map(row => DataTypes.toDouble(row))
-      val columnWeightsArray = columnScalings.toArray
-      val doubles = array.zip(columnWeightsArray).map { case (x, y) => x * y }
-      val point = Vectors.dense(doubles)
-      kmeansModel.predict(point)
-    })
-    predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
-  }
-}
