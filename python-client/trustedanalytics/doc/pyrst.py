@@ -46,7 +46,7 @@ def get_command_def_rst(command_def):
 
 {one_line}
 
-""".format(directive=directive, name=display_name, args_text=args_text, one_line=indent(one_line), extended=indent(extended))
+""".format(directive=directive, name=display_name, args_text=args_text, one_line=indent(one_line))
 
 
     if command_def.parameters:
@@ -55,6 +55,8 @@ def get_command_def_rst(command_def):
         rst += indent(_get_returns_rst(command_def.return_info))
 
     rst += indent(extended)
+    if command_def.doc.examples:
+        rst += indent(_get_examples_rst(command_def.doc.examples))
     return rst
 
 
@@ -92,19 +94,13 @@ def _get_returns_rst(return_info):
 """.format(data_type=get_type_name(return_info.data_type), description=indent(return_info.doc, 8))
 
 
-"""
-:Parameters:
+def _get_examples_rst(examples):
+    if not examples:
+        return ''
+    return """
 
-            **rules** : list of Rule (optional)
-
-            ..
-
-                list of rules which specify how the graph will be created; if empty
-                an empty graph will be created
-
-            **name** : str (optional)
-
-"""
+%s
+"""  # todo --all the example .rst files start with an "Examples" header.  It would be better to have that header here.
 
 
 def get_maturity_rst(maturity):
