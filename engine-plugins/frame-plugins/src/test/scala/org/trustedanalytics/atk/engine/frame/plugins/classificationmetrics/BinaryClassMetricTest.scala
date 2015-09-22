@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.engine.frame.plugins.{ MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel }
+import org.trustedanalytics.atk.engine.frame.plugins.{ BinaryClassMetrics, ScoreAndLabel }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class BinaryClassMetricTest extends TestingSparkContextFlatSpec with Matchers {

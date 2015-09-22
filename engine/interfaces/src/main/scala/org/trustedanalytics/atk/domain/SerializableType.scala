@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.domain
 
+import scala.reflect.runtime.universe._
+
 trait SerializableType[T]
 
 /**
@@ -26,5 +28,6 @@ object SerializableType {
   implicit def AnyValToSerializableType[T <: AnyVal]: SerializableType[T] = new SerializableType[T] {}
 
   implicit def SerializableToSerializableType[T <: java.io.Serializable]: SerializableType[T] = new SerializableType[T] {}
+
 }
 

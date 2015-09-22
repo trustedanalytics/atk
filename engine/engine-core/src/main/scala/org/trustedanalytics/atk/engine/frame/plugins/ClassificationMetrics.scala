@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.SerializableType
+import org.trustedanalytics.atk.domain.SerializableType._
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
 
 import scala.reflect.ClassTag
@@ -89,10 +90,10 @@ object ClassificationMetrics extends Serializable {
    * @return a Double of the model f measure, a Double of the model accuracy, a Double of the model recall,
    *         a Double of the model precision, a map of confusion matrix values
    */
-  def binaryClassificationMetrics(frameRdd: FrameRdd,
+  def binaryClassificationMetrics[S: SerializableType](frameRdd: FrameRdd,
                                   labelColumn: String,
                                   predictColumn: String,
-                                  positiveLabel: String,
+                                  positiveLabel: S,
                                   beta: Double,
                                   frequencyColumn: Option[String]): ClassificationMetricValue = {
 

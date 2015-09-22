@@ -79,7 +79,7 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
 
     //predicting a label for the observation columns
     val naiveBayesColumns = arguments.observationColumns.getOrElse(naiveBayesData.observationColumns)
-    val predictColumn = Column("predicted_label", DataTypes.float64)
+    val predictColumn = Column("predicted_class", DataTypes.float64)
     val predictFrame = frame.rdd.addColumn(predictColumn, row => {
       val point = row.valuesAsDenseVector(naiveBayesColumns)
       naiveBayesModel.predict(point)
