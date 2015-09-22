@@ -28,6 +28,10 @@ import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
+<<<<<<< HEAD
+=======
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
+>>>>>>> upstream/master
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -39,13 +43,14 @@ import MLLibJsonProtocol._
   extended = """
 **Regression using Random Forest**
 
-Random Forest[1]_ is a supervised ensemble learning algorithm used to perform
+Random Forest [1]_ is a supervised ensemble learning algorithm used to perform
 regression.
 A Random Forest Regressor model is initialized, trained on columns of a frame,
 and used to predict the value of each observation in the frame.
-This model runs the MLLib implementation of Random Forest[2]_.
+This model runs the MLLib implementation of Random Forest [2]_.
 During training, the decision trees are trained in parallel.
-During prediction, the average over-all tree's predicted value is the predicted value of the random forest.
+During prediction, the average over-all tree's predicted value is the predicted
+value of the random forest.
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
