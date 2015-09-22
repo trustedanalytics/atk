@@ -165,6 +165,9 @@ class HdfsFileStorage extends EventLogging {
     fs.isDirectory(path)
   }
 
+  /**
+   * Given a list of jarNames return the paths in HDFS
+   */
   def hdfsLibs(jarNames: Seq[String]): Seq[String] = {
     val hdfsLib = absolutePath(EngineConfig.hdfsLib)
     jarNames.map(jarName => concatPaths(hdfsLib.toString, jarName))
@@ -204,6 +207,12 @@ class HdfsFileStorage extends EventLogging {
     }
   }
 
+  /**
+   * Sync a local jar to a location in HDFS, if needed.
+   *
+   * Sync is performed if local jar has a newer timestamp or a different
+   * file size than jar in HDFS.
+   */
   private def syncJar(localJarStatus: FileStatus, destDir: Path): Unit = {
     val localJarPath = localJarStatus.getPath
     if (localJarStatus.isFile && localJarPath.getName.endsWith(".jar")) {
