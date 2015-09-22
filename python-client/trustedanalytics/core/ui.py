@@ -38,22 +38,165 @@ class InspectSettings(object):
 
     margin: int (only has meaning in 'stripes' mode)
       If set to integer N, the margin for printing names in a stripe will be limited to N characters
-    """
-    wrap = 20
-    truncate = None
-    round = None
-    width = 80
-    margin = None
 
-    @staticmethod
-    def show():
+    with_types: bool
+      If set to True, header will include the data_type of each column
+    """
+
+    _unspecified = object()  # sentinel
+
+    _default_wrap = 20
+    _default_truncate = None
+    _default_round = None
+    _default_width = 80
+    _default_margin = None
+    _default_with_types = False
+
+    def __init__(self, wrap=None, truncate=None, round=None, width=None, margin=None, with_types=None):
+        self._wrap = None
+        self.wrap = wrap
+        self._truncate = None
+        self.truncate = truncate
+        self._round = None
+        self.round = round
+        self._width = None
+        self.width = width
+        self._margin = None
+        self.margin = margin
+        self._with_types = None
+        self.with_types = with_types
+
+    def reset(self):
+        """returns all the settings to their default values"""
+        # the setters use None to restore to default
+        self.wrap = None
+        self.truncate = None
+        self.round = None
+        self.width = None
+        self.margin = None
+        self.with_types = None
+
+    def copy(self,
+             wrap=_unspecified,
+             truncate=_unspecified,
+             round=_unspecified,
+             width=_unspecified,
+             margin=_unspecified,
+             with_types=_unspecified):
+        """create a copy of this settings object and override any values specified"""
+        c = InspectSettings(self.wrap, self.truncate, self.round, self.width, self.margin, self.with_types)
+        if wrap is not self._unspecified:
+            c.wrap = wrap
+        if truncate is not self._unspecified:
+            c.truncate = truncate
+        if round is not self._unspecified:
+            c.round = round
+        if width is not self._unspecified:
+            c.width = width
+        if margin is not self._unspecified:
+            c.margin = margin
+        if with_types is not self._unspecified:
+            c.with_types = with_types
+        return c
+
+    def __repr__(self):
         """displays current settings"""
-        s = InspectSettings
-        print """wrap     %8s
-truncate %8s
-round    %8s
-width    %8s
-margin   %8s""" % (s.wrap, s.truncate, s.round, s.width, s.margin)
+        return """wrap       %8s
+truncate   %8s
+round      %8s
+width      %8s
+margin     %8s
+with_types %8s""" % (self.wrap, self.truncate, self.round, self.width, self.margin, self.with_types)
+
+    @property
+    def wrap(self):
+        """
+        If set to 'stripes' then inspect prints rows in stripes; if set to an integer N,
+        rows will be printed in clumps of N columns, where the columns are wrapped")
+        """
+        return self._wrap
+
+    @wrap.setter
+    def wrap(self, value):
+        supported_strings = ['stripes']
+        if value is None:
+            value = self._default_wrap
+        if not isinstance(value, (basestring, int, long)) or \
+                (isinstance(value, basestring) and value not in supported_strings) or \
+                (isinstance(value, (int, long)) and value <= 0):
+            raise ValueError("Bad value %s.  wrap must be a integer > 0 or one of the following strings: %s" %
+                             (value, ", ".join(supported_strings)))
+        self._wrap = value
+
+    @property
+    def truncate(self):
+        """If set to integer N, all strings will be truncated to length N, including a tagged ellipses"""
+        return self._truncate
+
+    @truncate.setter
+    def truncate(self, value):
+        if value is None:
+            value = self._default_truncate
+        if value is not None and (not isinstance(value, (int, long)) or value <= 0):
+            raise ValueError("Bad value %s.  truncate must be a integer > 0" % value)
+        self._truncate = value
+
+    @property
+    def round(self):
+        """If set to integer N, all floating point numbers will be rounded and truncated to N digits"""
+        return self._round
+
+    @round.setter
+    def round(self, value):
+        if value is None:
+            value = self._default_round
+        if value is not None and (not isinstance(value, (int, long)) or value < 0):
+            raise ValueError("Bad value %s.  round must be an integer >= 0" % value)
+        self._round = value
+
+    @property
+    def width(self):
+        """If set to integer N, the print out will try to honor a max line width of N"""
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        if value is None:
+            value = self._default_width
+        if not isinstance(value, (int, long)) or value <= 0:
+            raise ValueError("Bad value %s.  width must be an integer >= 0" % value)
+        self._width = value
+
+    @property
+    def margin(self):
+        """
+        (only has meaning in wrap='stripes' mode)
+        If set to integer N, the margin for printing names in a stripe will be limited to N characters
+        """
+        return self._margin
+
+    @margin.setter
+    def margin(self, value):
+        if value is None:
+            value = self._default_margin
+        if value is not None and (not isinstance(value, (int, long)) or value <= 0):
+            raise ValueError("Bad value %s.  margin must be an integer >= 0" % value)
+        self._margin = value
+
+    @property
+    def with_types(self):
+        """If set to True, header will include the data_type of each column"""
+        return self._with_types
+
+    @with_types.setter
+    def with_types(self, value):
+        if value is None:
+            value = self._default_with_types
+        if not isinstance(value, bool):
+            raise ValueError("Bad value %s.  with_types must be an integer >= 0" % value)
+        self._with_types = value
+
+inspect_settings = InspectSettings()
 
 
 class RowsInspection(object):
@@ -61,45 +204,29 @@ class RowsInspection(object):
     class used specifically for inspect, where the __repr__ is the main use case
     """
 
-    def __init__(self,
-                 rows,
-                 schema,
-                 offset,
-                 wrap=InspectSettings.wrap,
-                 truncate=InspectSettings.truncate,
-                 round=InspectSettings.round,
-                 width=InspectSettings.width,
-                 margin=InspectSettings.margin):
-        if isinstance(wrap, basestring):
-            if wrap == 'stripes':
-                self._repr = self._stripes
-            else:
-                raise ValueError("argument wrap must be an integer or the string 'stripes'.  Received '%s'" % wrap)
-        elif isinstance(wrap, int) and wrap >= 0:
-            self.wrap = min(wrap, len(rows)) or len(rows)
-            self._repr = self._wrap
+    def __init__(self, rows, schema, offset, format_settings=inspect_settings):
+        if not isinstance(format_settings, InspectSettings):
+            raise TypeError("argument format_settings must be type %s" % InspectSettings)
+        if format_settings.wrap == 'stripes':
+                self._repr = self._repr_stripes
         else:
-            raise TypeError("argument wrap must be an integer or the string 'stripes'.  Received '%s'" % wrap)
-
-        if not rows:
-            self._repr = self._empty
+            self.wrap = min(format_settings.wrap, len(rows)) or len(rows)
+            self._repr = self._repr_wrap
 
         self.rows = rows
         self.schema = schema
         self.offset = offset
-        self.truncate = get_validated_positive_int("truncate", truncate)
-        self.round = get_validated_positive_int("round_floats", round)
-        self.width = get_validated_positive_int("width", width)
-        self.margin = get_validated_positive_int("margin", margin)
+        self.truncate = format_settings.truncate
+        self.round = format_settings.round
+        self.width = format_settings.width
+        self.margin = format_settings.margin
+        self.with_types = format_settings.with_types
         self.value_formatters = [self._get_value_formatter(data_type) for name, data_type in schema]
 
     def __repr__(self):
         return self._repr()
 
-    def _empty(self):
-        return "(empty)"
-
-    def _wrap(self):
+    def _repr_wrap(self):
         """print rows in a 'clumps' style"""
         row_index_str_format = '[%s]' + ' ' * spaces_between_cols
 
@@ -108,12 +235,14 @@ class RowsInspection(object):
 
         row_count = len(self.rows)
         row_clump_count = _get_row_clump_count(row_count, self.wrap)
-        header_sizes = _get_schema_name_sizes(self.schema)
+        header_sizes = _get_header_entry_sizes(self.schema, self.with_types)
         column_spacer = ' ' * spaces_between_cols
         lines_list = []
         extra_tuples = []
 
         for row_clump_index in xrange(row_clump_count):
+            if row_clump_index > 0:
+                lines_list.append('')  # extra line for new clump
             start_row_index = row_clump_index * self.wrap
             stop_row_index = start_row_index + self.wrap
             if stop_row_index > row_count:
@@ -126,43 +255,43 @@ class RowsInspection(object):
                 num_cols = _get_num_cols(self.schema, self.width, col_index, col_sizes, margin)
                 if num_cols == 0:
                     raise RuntimeError("Internal error, num_cols == 0")  # sanity check on algo
-                header_line = row_index_header + column_spacer.join([pad_left(name, min(self.width - margin, col_sizes[col_index+i])) for i, (name, data_type) in enumerate(self.schema[col_index:col_index+num_cols])])
+                header_line = row_index_header + column_spacer.join([pad_left(_get_header_entry(name, data_type, self.with_types), min(self.width - margin, col_sizes[col_index+i])) for i, (name, data_type) in enumerate(self.schema[col_index:col_index+num_cols])])
                 thick_line = "=" * len(header_line)
                 lines_list.extend(["", header_line, thick_line])
-                for row_index in xrange(start_row_index, stop_row_index):
-                    new_line = pad_right(_get_row_index_str(self.offset+row_index), margin) + column_spacer.join([self._get_wrap_entry(data, col_sizes[col_index+i], self.value_formatters[col_index+i], i, extra_tuples) for i, data in enumerate(self.rows[row_index][col_index:col_index+num_cols])])
-                    lines_list.append(new_line.rstrip())
-                    if extra_tuples:
-                        lines_list.extend(_get_lines_from_extra_tuples(extra_tuples, col_sizes[col_index:col_index+num_cols], margin))
+                if row_count:
+                    for row_index in xrange(start_row_index, stop_row_index):
+                        new_line = pad_right(_get_row_index_str(self.offset+row_index), margin) + column_spacer.join([self._get_wrap_entry(data, col_sizes[col_index+i], self.value_formatters[col_index+i], i, extra_tuples) for i, data in enumerate(self.rows[row_index][col_index:col_index+num_cols])])
+                        lines_list.append(new_line.rstrip())
+                        if extra_tuples:
+                            lines_list.extend(_get_lines_from_extra_tuples(extra_tuples, col_sizes[col_index:col_index+num_cols], margin))
                 col_index += num_cols
 
-            lines_list.append('')  # extra line for new clump
+        return "\n".join(lines_list[1:])  # 1: skips the first blank line caused by the algo
 
-        return "\n".join(lines_list)
-
-    def _stripes(self):
+    def _repr_stripes(self):
         """print rows as stripes style"""
         max_margin = 0
         for name, data_type in self.schema:
-            length = len(name) + 1 # to account for the '='
+            length = len(_get_header_entry(name, data_type, self.with_types)) + 1 # to account for the '='
             if length > max_margin:
                 max_margin = length
         if not self.margin or max_margin < self.margin:
             self.margin = max_margin
         lines_list = []
-        for row_index in xrange(len(self.rows)):
+        rows = self.rows or [['' for entry in self.schema]]
+        for row_index in xrange(len(rows)):
             lines_list.append(self._get_stripe_header(self.offset+row_index))
-            lines_list.extend([self._get_stripe_entry(i, name, value)
-                               for i, (name, value) in enumerate(zip(map(lambda x: x[0], self.schema),
-                                                                     self.rows[row_index]))])
+            lines_list.extend([self._get_stripe_entry(i, name, data_type, value)
+                               for i, ((name, data_type), value) in enumerate(zip(self.schema, rows[row_index]))])
         return "\n".join(lines_list)
 
     def _get_stripe_header(self, index):
         row_number = "[%s]" % index
         return row_number + "-" * (self.margin - len(row_number))
 
-    def _get_stripe_entry(self, i, name, value):
-        return "%s=%s" % (pad_right(name, self.margin - 1), self.value_formatters[i](value))
+    def _get_stripe_entry(self, i, name, data_type, value):
+        entry = _get_header_entry(name, data_type, self.with_types)
+        return "%s=%s" % (pad_right(entry, self.margin - 1), self.value_formatters[i](value))
 
     def _get_value_formatter(self, data_type):
         if self.round and is_type_float(data_type):
@@ -202,6 +331,16 @@ class RowsInspection(object):
         return rounder
 
 
+def _get_header_entry(name, data_type, with_type):
+    if with_type:
+        return "%s:%s" % (name, ta.valid_data_types.to_string(data_type))
+    return name
+
+
+def _get_header_entry_sizes(schema, with_types):
+    return [len(_get_header_entry(name, data_type, with_types)) for name, data_type in schema]
+
+
 def is_type_float(t):
     tpe = ta.valid_data_types.get_from_type(t)
     return tpe is ta.float32 or tpe is ta.float64 or isinstance(t, ta.vector)
@@ -209,15 +348,6 @@ def is_type_float(t):
 
 def is_type_unicode(t):
     return ta.valid_data_types.get_from_type(t) is unicode
-
-
-def get_validated_positive_int(arg_name, arg_value):
-    if arg_value is not None:
-        if not isinstance(arg_value, int):
-            raise TypeError('%s argument must be an integer, got %s' % (arg_name, type(arg_value)))
-        if arg_value <= 0:
-            raise ValueError('%s argument must be an integer > 0, got %s' % (arg_name, arg_value))
-    return arg_value
 
 
 def pad_left(s, target_len):
@@ -293,11 +423,9 @@ def _get_num_cols(schema, width, start_col_index, col_sizes, margin):
     return num_cols
 
 
-def _get_schema_name_sizes(schema):
-    return [len("%s" % name) for name, data_type in schema]
-
-
 def _get_row_clump_count(row_count, wrap):
+    if row_count == 0:
+        return 1
     return row_count / wrap + (1 if row_count % wrap else 0)
 
 

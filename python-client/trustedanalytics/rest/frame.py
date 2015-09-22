@@ -419,13 +419,13 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                      'operation' : operation}
         return execute_update_frame_command('columnStatistic', arguments, frame)
 
-    def inspect(self, frame, n, offset, selected_columns, wrap, truncate, round, width, margin):
+    def inspect(self, frame, n, offset, selected_columns, format_settings):
         # inspect is just a pretty-print of take, we'll do it on the client
         # side until there's a good reason not to
         result = self.take(frame, n, offset, selected_columns)
         data = result.data
         schema = result.schema
-        return RowsInspection(data, schema, offset=offset, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
+        return RowsInspection(data, schema, offset=offset, format_settings=format_settings)
 
     def join(self, left, right, left_on, right_on, how, name=None):
         if right_on is None:

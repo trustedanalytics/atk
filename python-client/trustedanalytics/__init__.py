@@ -32,7 +32,7 @@ from trustedanalytics.rest.udfdepends import udf
 from trustedanalytics.core.frame import Frame, VertexFrame
 from trustedanalytics.core.graph import Graph, TitanGraph
 from trustedanalytics.core.model import _BaseModel
-from trustedanalytics.core.ui import InspectSettings as inspect_settings
+from trustedanalytics.core.ui import inspect_settings
 
 from trustedanalytics.rest.atkserver import server
 connect = server.connect

@@ -26,14 +26,13 @@ from trustedanalytics.core.decorators import *
 api = get_api_decorator(logger)
 
 from trustedanalytics.core.api import api_status
-from trustedanalytics.core.atktypes import valid_data_types
 from trustedanalytics.core.column import Column
 from trustedanalytics.core.errorhandle import IaError
 from trustedanalytics.meta.udf import has_udf_arg
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
-from trustedanalytics.core.ui import InspectSettings
+from trustedanalytics.core.ui import inspect_settings
 
 
 def _get_backend():
@@ -848,21 +847,20 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @arg('width', int, 'If set to integer N, the print out will try to honor a max line width of N')
     @arg('margin', int, "('stripes' mode only) If set to integer N, the margin for printing names in a "
                         "stripe will be limited to N characters")
+    @arg('with_types', bool, "If set to True, header will include the data_type of each column")
+    @returns('str', 'A pretty-print formatted string of frame data')
     def __inspect(self,
                   n=10,
                   offset=0,
                   columns=None,
-                  wrap=None,
-                  truncate=None,
-                  round=None,
-                  width=None,
-                  margin=None):
-
+                  wrap=inspect_settings._unspecified,
+                  truncate=inspect_settings._unspecified,
+                  round=inspect_settings._unspecified,
+                  width=inspect_settings._unspecified,
+                  margin=inspect_settings._unspecified,
+                  with_types=inspect_settings._unspecified):
         """
-        Prints the frame data in readable format.
-
-        If not specified, the arguments that control formatting receive default values from
-        'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
+        Returns a string of frame data in readable format.
 
         Examples
         --------
@@ -880,26 +878,50 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
            [3]  elephant    Shep        5     8630.0
 
         # For other examples, see :ref:`example_frame.inspect`.
+
+        Global Settings
+        ---------------
+        If not specified, the arguments that control formatting receive default values from
+        'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
+
+        .. code::
+
+            >>> import trustedanalytics as ta
+            >>> print repr(ta.inspect_settings)
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = 120  # changes inspect to use 120 width globally
+            >>> ta.inspect_settings.truncate = 16  # changes inspect to always truncate strings to 16 chars
+            >>> print repr(ta.inspect_settings)
+            wrap             20
+            truncate         16
+            round          None
+            width           120
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = None  # return value back to default
+            >>> print repr(ta.inspect_settings)
+            wrap             20
+            truncate         16
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.reset()  # set everything back to default
+            >>> print repr(ta.inspect_settings)
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
         """
-        if wrap is None:
-            wrap = InspectSettings.wrap
-        if truncate is None:
-            truncate = InspectSettings.truncate
-        if round is None:
-            round = InspectSettings.round
-        if width is None:
-            width = InspectSettings.width
-        if margin is None:
-            margin = InspectSettings.margin
-        return self._backend.inspect(self,
-                                     n,
-                                     offset,
-                                     columns,
-                                     wrap=wrap,
-                                     truncate=truncate,
-                                     round=round,
-                                     width=width,
-                                     margin=margin)
+        format_settings = inspect_settings.copy(wrap, truncate, round, width, margin, with_types)
+        return self._backend.inspect(self, n, offset, columns, format_settings=format_settings)
 
     @api
     @beta

@@ -91,12 +91,12 @@ class TestUi(unittest.TestCase):
             self.fail("Expected value error for target_len too small")
 
     def test_get_col_sizes1(self):
-        result = ui._get_col_sizes(two_abc_rows, 0, row_count=2, header_sizes=ui._get_schema_name_sizes(abc_schema), formatters=[ui.identity for i in xrange(len(abc_schema))])
+        result = ui._get_col_sizes(two_abc_rows, 0, row_count=2, header_sizes=ui._get_header_entry_sizes(abc_schema, False), formatters=[ui.identity for i in xrange(len(abc_schema))])
         expected = [1, 16,  32]
         self.assertEquals(expected, result)
 
     def go_get_num_cols(self, width, expected):
-        result = ui._get_col_sizes(two_abc_rows, 0, row_count=2, header_sizes=ui._get_schema_name_sizes(abc_schema), formatters=[ui.identity for i in xrange(len(abc_schema))])
+        result = ui._get_col_sizes(two_abc_rows, 0, row_count=2, header_sizes=ui._get_header_entry_sizes(abc_schema, False), formatters=[ui.identity for i in xrange(len(abc_schema))])
 
         def get_splits(width):
             num_cols_0 = ui._get_num_cols(abc_schema, width, 0, result, 0)
@@ -125,7 +125,7 @@ class TestUi(unittest.TestCase):
             self.assertEqual(expected, result, "%s != %s for wrap %s" % (result, expected, wrap))
 
     def test_simple_stripes(self):
-        result = repr(ui.RowsInspection(two_abc_rows, abc_schema, offset=0, wrap='stripes', margin=10))
+        result = repr(ui.RowsInspection(two_abc_rows, abc_schema, offset=0, format_settings=ui.InspectSettings(wrap='stripes', margin=10)))
         expected = '''[0]
 a=1
 b=sixteen_16_abced
@@ -139,27 +139,49 @@ c=really really really really long'''
     def test_wrap_long_str_1(self):
         r = [['12345678901234567890123456789012345678901234567890123456789012345678901234567890']]
         s = [('s', str)]
-        result = repr(ui.RowsInspection(r, s, offset=0, wrap=5, width=80))
-        expected = '''
-[#]                                                                            s
+        settings = ui.InspectSettings(wrap=5)
+        result = repr(ui.RowsInspection(r, s, offset=0, format_settings=settings))
+        expected = '''[#]                                                                            s
 ================================================================================
-[0]  12345678901234567890123456789012345678901234567890123456789012345678901234567890
-'''
+[0]  12345678901234567890123456789012345678901234567890123456789012345678901234567890'''
         self.assertEqual(expected, result)
 
     def test_empty(self):
         r = []
         s = abc_schema
-        result = repr(ui.RowsInspection(r, s, offset=0, wrap=5, width=80))
-        expected = '(empty)'
+        result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap=5, width=80)))
+        expected = '''[##]  a  b  c
+============='''
+        self.assertEqual(expected, result)
+        result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap=5, width=80, with_types=True)))
+        expected = '''[##]  a:int32  b:unicode  c:unicode
+==================================='''
         self.assertEqual(expected, result)
 
+    def test_empty_stripes(self):
+        r = []
+        s = schema1
+        result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap='stripes', width=80)))
+        expected = '''[0]--------------------------
+i32                         =
+floaties                    =
+long_column_name_ugh_and_ugh=
+long_value                  =
+s                           ='''
+        self.assertEqual(expected, result)
+        result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap='stripes', width=80, with_types=True)))
+        expected = '''[0]----------------------------------
+i32:int32                           =
+floaties:float64                    =
+long_column_name_ugh_and_ugh:unicode=
+long_value:unicode                  =
+s:unicode                           ='''
+        self.assertEqual(expected, result)
     def test_line_numbers(self):
         r = [[x, 'b%s' % x, None] for x in xrange(10)]
         s = abc_schema
-        result = repr(ui.RowsInspection(r, s, offset=92, wrap=5, width=80))
-        expected = '''
-[##]  a   b     c
+        result = repr(ui.RowsInspection(r, s, offset=92, format_settings=ui.InspectSettings(wrap=5, width=80)))
+        expected = '''[##]  a   b     c
 =================
 [92]  0  b0  None
 [93]  1  b1  None
@@ -174,15 +196,13 @@ c=really really really really long'''
 [98]   6  b6  None
 [99]   7  b7  None
 [100]  8  b8  None
-[101]  9  b9  None
-'''
+[101]  9  b9  None'''
         self.assertEqual(expected, result)
 
     def test_inspection(self):
-        result = repr(ui.RowsInspection(rows1, schema1, offset=0, wrap=2, truncate=40, width=80))
+        result = repr(ui.RowsInspection(rows1, schema1, offset=0, format_settings=ui.InspectSettings(wrap=2, truncate=40, width=80)))
         result = '\n'.join([line.rstrip() for line in result.splitlines()])
-        expected = '''
-[#]  i32       floaties  long_column_name_ugh_and_ugh
+        expected = '''[#]  i32       floaties  long_column_name_ugh_and_ugh
 =====================================================
 [0]    1  3.14159265358  a
 [1]    2    8.014512183  b
@@ -202,6 +222,199 @@ c=really really really really long'''
 =========================================================
 [2]  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  thirty-two'''
         self.assertEqual(expected, result)
+
+    def test_inspect_round(self):
+        schema = [('f32', ta.float32), ('f64', ta.float64), ('v', ta.vector(2))]
+        rows = [[0.1234, 9.87654321, [1.0095, 2.034]],
+                [1234.5, 9876.54321, [99.999, 33.33]]]
+        result = repr(ui.RowsInspection(rows, schema, offset=0, format_settings=ui.InspectSettings(wrap=2, round=2)))
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
+        expected = '''[#]      f32      f64                v
+======================================
+[0]     0.12     9.88     [1.01, 2.03]
+[1]  1234.50  9876.54  [100.00, 33.33]'''
+        self.assertEqual(expected, result)
+
+        result = repr(ui.RowsInspection(rows, schema, offset=0, format_settings=ui.InspectSettings(wrap='stripes', round=3)))
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
+        expected = '''[0]-
+f32=0.123
+f64=9.877
+v  =[1.010, 2.034]
+[1]-
+f32=1234.500
+f64=9876.543
+v  =[99.999, 33.330]'''
+        self.assertEqual(expected, result)
+
+    def test_inspect_settings_reset(self):
+        settings = ui.InspectSettings()
+        repr1 = repr(settings)
+        settings.wrap = 10
+        settings.truncate = 8
+        settings.round = 2
+        settings.width = 90
+        settings.margin = 4
+        settings.with_types = True
+        settings.reset()
+        repr2 = repr(settings)
+        self.assertEqual(repr1, repr2)
+
+    def test_copy(self):
+        settings1 = ui.InspectSettings(truncate=8, width=40)
+        settings2 = settings1.copy(round=4, width=80)
+        self.assertEqual(8, settings2.truncate)
+        self.assertEqual(80, settings2.width)
+        self.assertEqual(4, settings2.round)
+
+    def test_neg_inspect_settings(self):
+        try:
+            ui.RowsInspection(1, [], 0, format_settings='jump')
+        except TypeError:
+            pass
+        else:
+            self.fail("Expected TypeError")
+
+    def test_settings_wrap(self):
+        settings = ui.InspectSettings()
+        settings.wrap = 10
+        try:
+            settings.wrap = 0
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.wrap = 'stripe'
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.wrap = 3.5
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+
+    def test_settings_truncate(self):
+        settings = ui.InspectSettings()
+        settings.truncate = 4
+        try:
+            settings.truncate = 0
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.truncate = '12'  # no strings
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.truncate = 3.5  # no floats
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+
+    def test_settings_round(self):
+        settings = ui.InspectSettings()
+        settings.round = 4
+        settings.round = 0
+        try:
+            settings.round = -1
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.round = '12'  # no strings
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.round = 3.5  # no floats
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+
+    def test_settings_width(self):
+        settings = ui.InspectSettings()
+        settings.width = 4
+        try:
+            settings.width = 0
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.width = '12'  # no strings
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.width = 3.5  # no floats
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+
+    def test_settings_margin(self):
+        settings = ui.InspectSettings()
+        settings.margin = 4
+        try:
+            settings.margin = 0
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.margin = -1
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.margin = '12'  # no strings
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.margin = 3.5  # no floats
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+
+    def test_settings_with_types(self):
+        settings = ui.InspectSettings()
+        settings.with_types = True
+        settings.with_types = False
+        settings.with_types = None
+        try:
+            settings.with_types = 0
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.with_types = '12'  # no strings
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
+        try:
+            settings.with_types = 3.5  # no floats
+        except ValueError:
+            pass
+        else:
+            self.fail("Expected ValueError")
 
 
 if __name__ == '__main__':
