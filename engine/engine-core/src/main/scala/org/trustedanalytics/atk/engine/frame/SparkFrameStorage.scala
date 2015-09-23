@@ -247,18 +247,16 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]] =
     withContext("frame.getAllRows") {
       require(frame != null, "frame is required")
-      withMyClassLoader {
-        val reader = getReader(frame)
-        val numRows = getRowCount(frame)
-        val rows = reader.take(numRows, 0, None)
-        metaStore.withSession("frame.updateFrameStatus") {
-          implicit session =>
-            {
-              metaStore.frameRepo.updateLastReadDate(frame)
-            }
-        }
-        rows
+      val reader = getReader(frame)
+      val numRows = getRowCount(frame)
+      val rows = reader.take(numRows, 0, None)
+      metaStore.withSession("frame.updateFrameStatus") {
+        implicit session =>
+          {
+            metaStore.frameRepo.updateLastReadDate(frame)
+          }
       }
+      rows
     }
 
   /**
