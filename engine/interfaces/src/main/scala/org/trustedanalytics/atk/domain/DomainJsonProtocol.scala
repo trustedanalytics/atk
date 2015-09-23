@@ -302,10 +302,10 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case JsNumber(n) => n.doubleValue()
         case JsBoolean(b) => b
         case JsString(s) => s
+        case JsArray(v) => v.map(x => read(x)).toList
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
     }
-
   }
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
