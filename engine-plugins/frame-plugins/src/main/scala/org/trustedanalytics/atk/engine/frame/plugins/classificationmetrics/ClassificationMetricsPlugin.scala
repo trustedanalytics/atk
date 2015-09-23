@@ -16,10 +16,11 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
+import org.trustedanalytics.atk.domain.SerializableType
 import org.trustedanalytics.atk.domain.frame.{ ClassificationMetricArgs, ClassificationMetricValue }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 // Implicits needed for JSON conversion
@@ -130,26 +131,41 @@ class ClassificationMetricsPlugin extends SparkCommandPlugin[ClassificationMetri
    */
   override def execute(arguments: ClassificationMetricArgs)(implicit invocation: Invocation): ClassificationMetricValue = {
     val frame: SparkFrame = arguments.frame
-    val schema = frame.schema
-    val betaValue = arguments.beta.getOrElse(1.0)
-    val labelColumnIndex = schema.columnIndex(arguments.labelColumn)
-    val predColumnIndex = schema.columnIndex(arguments.predColumn)
 
     // check if poslabel is an Int, string or None
-    val metricsPoslabel: String = arguments.posLabel.isDefined match {
-      case false => null
-      case true => arguments.posLabel.get match {
-        case Left(x) => x
-        case Right(x) => x.toString
+    import org.trustedanalytics.atk.domain.SerializableType._
+
+    val betaValue = arguments.beta.getOrElse(1.0)
+    val classificationMetrics = arguments.posLabel match {
+      case Some(Left(stringPositiveLabel)) =>
+        ClassificationMetrics.binaryClassificationMetrics(
+          frame.rdd,
+          arguments.labelColumn,
+          arguments.predColumn,
+          stringPositiveLabel,
+          betaValue,
+          arguments.frequencyColumn
+        )
+      case Some(Right(intPositiveLabel)) => {
+        ClassificationMetrics.binaryClassificationMetrics(
+          frame.rdd,
+          arguments.labelColumn,
+          arguments.predColumn,
+          intPositiveLabel,
+          betaValue,
+          arguments.frequencyColumn
+        )
+      }
+      case _ => {
+        ClassificationMetrics.multiclassClassificationMetrics(
+          frame.rdd,
+          arguments.labelColumn,
+          arguments.predColumn,
+          betaValue,
+          arguments.frequencyColumn
+        )
       }
     }
-    // run the operation and return the results
-    if (metricsPoslabel == null) {
-      ClassificationMetrics.multiclassClassificationMetrics(frame.rdd, labelColumnIndex, predColumnIndex, betaValue)
-    }
-    else {
-      ClassificationMetrics.binaryClassificationMetrics(frame.rdd, labelColumnIndex, predColumnIndex, metricsPoslabel, betaValue)
-    }
-
+    classificationMetrics
   }
 }
