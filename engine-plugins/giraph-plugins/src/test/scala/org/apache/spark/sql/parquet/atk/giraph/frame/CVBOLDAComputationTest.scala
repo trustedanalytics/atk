@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.schema.FrameSchema
 import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{CVB0LDAAggregatorWriter, CVB0LDAMasterCompute}
+import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.testutils.SynchronizedInternalVertexRunner
 
@@ -42,8 +42,8 @@ class CVBOLDAComputationTest extends WordSpec {
   }
 
   /** assertion that most likely topic is given by index */
-  def assertLikelyTopic(v: Vector, topicIndex: Int) : Unit = {
-     assert(v.maxValueIndex() == topicIndex, s"topic should equal ${topicIndex}")
+  def assertLikelyTopic(v: Vector, topicIndex: Int): Unit = {
+    assert(v.maxValueIndex() == topicIndex, s"topic should equal ${topicIndex}")
   }
 
   /* assert each element in vector is between 0 and 1 */

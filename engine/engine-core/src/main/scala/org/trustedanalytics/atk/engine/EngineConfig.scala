@@ -55,7 +55,6 @@ trait EngineConfig extends EventLogging {
   val autoPartitionKey = engineConfigKey + ".auto-partitioner"
   val metaStoreRoot = "trustedanalytics.atk.metastore"
   val metaStoreConnection = metaStoreRoot + ".connection"
-  
 
   // val's are not lazy because failing early is better
 
