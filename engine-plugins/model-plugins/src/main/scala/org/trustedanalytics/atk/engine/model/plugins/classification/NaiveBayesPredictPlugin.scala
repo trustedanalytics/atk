@@ -1,16 +1,19 @@
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vectors
+
+//Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -28,7 +31,10 @@ was trained on.""") observationColumns: Option[List[String]]) {
 
 }
 
-@PluginDoc(oneLine = "Predict")
+@PluginDoc(oneLine = "Predict labels for data points using trained Naive Bayes model.",
+  extended = """Predict the labels for a test frame using trained Naive Bayes model,
+      and create a new frame revision with existing columns and a new predicted label's column.""",
+  returns = "Frame containing the original frame's columns and a column with the predicted label.")
 class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, FrameReference] {
   /**
    * The name of the command.
@@ -60,30 +66,28 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
-    //Running MLLib
-    val naiveBayesJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
+    // Loading model
+    val naiveBayesJsObject = model.dataOption.getOrElse(
+      throw new RuntimeException("This model has not be trained yet. Please train before trying to predict")
+    )
     val naiveBayesData = naiveBayesJsObject.convertTo[NaiveBayesData]
     val naiveBayesModel = naiveBayesData.naiveBayesModel
     if (arguments.observationColumns.isDefined) {
-      require(naiveBayesData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
+      require(naiveBayesData.observationColumns.length == arguments.observationColumns.get.length,
+        "Number of columns for train and predict should be same")
     }
-    val naiveBayesColumns = arguments.observationColumns.getOrElse(naiveBayesData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(naiveBayesColumns)
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      val point = Vectors.dense(doubles)
-      val prediction = naiveBayesModel.predict(point)
-      row.addValue(DataTypes.toDouble(prediction))
+    val naiveBayesColumns = arguments.observationColumns.getOrElse(naiveBayesData.observationColumns)
+    val predictColumn = Column("predicted_class", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val point = row.valuesAsDenseVector(naiveBayesColumns)
+      naiveBayesModel.predict(point)
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_class", DataTypes.float64)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by NaiveBayes predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 

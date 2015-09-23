@@ -446,15 +446,24 @@ trait Schema {
 
   /**
    * Add a column to the schema
+   * @param column New column
+   * @return a new copy of the Schema with the column added
+   */
+  def addColumn(column: Column): Schema = {
+    if (columnNames.contains(column.name)) {
+      throw new IllegalArgumentException(s"Cannot add a duplicate column name: ${column.name}")
+    }
+    copy(columns = columns :+ column)
+  }
+
+  /**
+   * Add a column to the schema
    * @param columnName name
    * @param dataType the type for the column
    * @return a new copy of the Schema with the column added
    */
   def addColumn(columnName: String, dataType: DataType): Schema = {
-    if (columnNames.contains(columnName)) {
-      throw new IllegalArgumentException(s"Cannot add a duplicate column name: $columnName")
-    }
-    copy(columns = columns :+ Column(columnName, dataType))
+    addColumn(Column(columnName, dataType))
   }
 
   /**
@@ -476,6 +485,7 @@ trait Schema {
    * Returns a new schema with the given columns appended.
    */
   def addColumns(newColumns: Seq[Column]): Schema = {
+
     copy(columns = columns ++ newColumns)
   }
 
