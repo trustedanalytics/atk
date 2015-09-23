@@ -33,7 +33,7 @@ import spray.json._
 
 // TODO: all plugins should move out of engine-core into plugin modules
 
-@PluginDoc(oneLine = "Train LIBSVM model based on another frame.",
+@PluginDoc(oneLine = "Train LIBSVM model.",
   extended = """Creating a LIBSVM Model using the observation column and label column of the
 train frame.""")
 class LibSvmTrainPlugin extends SparkCommandPlugin[LibSvmTrainArgs, UnitReturn] {
