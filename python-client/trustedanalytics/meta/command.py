@@ -36,7 +36,7 @@ ApiVersion = namedtuple("ApiVersion", ['added', 'changed', 'deprecated', 'doc'])
 class Doc(object):
     """Represents descriptive text for an object, but not its individual pieces"""
 
-    def __init__(self, one_line='<Missing Doc>', extended='', examples=None):  # todo add examples!!
+    def __init__(self, one_line='<Missing Doc>', extended='', examples=None):
         self.one_line = one_line.strip()
         self.extended = extended
         self.examples = examples
@@ -45,6 +45,8 @@ class Doc(object):
         r = self.one_line
         if self.extended:
             r += ("\n\n" + self.extended)
+        if self.examples:
+            r += ("\n\n" + self.examples)
         return r
 
     def __repr__(self):

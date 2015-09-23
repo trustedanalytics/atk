@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.classificationmetrics
 
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
-import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.domain.frame.ConfusionMatrixEntry
+import org.trustedanalytics.atk.engine.frame.plugins.{ MultiClassMetrics, BinaryClassMetrics, ScoreAndLabel, ClassificationMetrics }
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -29,50 +29,87 @@ class ConfusionMatrixTest extends TestingSparkContextFlatSpec with Matchers {
   // fp = 0
   // fn = 1
   val inputListBinary = List(
-    Row(0, 0),
-    Row(1, 1),
-    Row(0, 0),
-    Row(1, 0))
+    ScoreAndLabel(0, 0),
+    ScoreAndLabel(1, 1),
+    ScoreAndLabel(0, 0),
+    ScoreAndLabel(0, 1))
 
   val inputListBinaryChar = List(
-    Row("no", "no"),
-    Row("yes", "yes"),
-    Row("no", "no"),
-    Row("yes", "no"))
+    ScoreAndLabel("no", "no"),
+    ScoreAndLabel("yes", "yes"),
+    ScoreAndLabel("no", "no"),
+    ScoreAndLabel("no", "yes"))
 
   val inputListMulti = List(
-    Row(0, 0),
-    Row(1, 2),
-    Row(2, 1),
-    Row(0, 0),
-    Row(1, 0),
-    Row(2, 1))
+    ScoreAndLabel(0, 0),
+    ScoreAndLabel(2, 1),
+    ScoreAndLabel(1, 2),
+    ScoreAndLabel(0, 0),
+    ScoreAndLabel(0, 1),
+    ScoreAndLabel(1, 2))
 
-  "confusion matrix" should "compute correct TP, TN, FP, FN values" in {
+  val inputListMultiChar = List(
+    ScoreAndLabel("red", "red"),
+    ScoreAndLabel("blue", "green"),
+    ScoreAndLabel("green", "blue"),
+    ScoreAndLabel("red", "red"),
+    ScoreAndLabel("red", "green"),
+    ScoreAndLabel("green", "blue"))
+
+  "confusion matrix" should "compute predicted vs. actual class for binary classifier" in {
     val rdd = sparkContext.parallelize(inputListBinary)
+    val binaryClassMetrics = new BinaryClassMetrics(rdd, 1)
+    val confusionMatrix = binaryClassMetrics.confusionMatrix()
 
-    val metricValue = ClassificationMetrics.binaryClassificationMetrics(rdd, 0, 1, "1", 1)
-    metricValue.confusionMatrix get "tp" shouldEqual Some(1)
-    metricValue.confusionMatrix get "tn" shouldEqual Some(2)
-    metricValue.confusionMatrix get "fp" shouldEqual Some(0)
-    metricValue.confusionMatrix get "fn" shouldEqual Some(1)
+    confusionMatrix.numRows should equal(2)
+    confusionMatrix.numColumns should equal(2)
+    confusionMatrix.get("pos", "pos") should equal(1)
+    confusionMatrix.get("pos", "neg") should equal(0)
+    confusionMatrix.get("neg", "pos") should equal(1)
+    confusionMatrix.get("neg", "neg") should equal(2)
   }
 
-  "confusion matrix" should "compute correct TP, TN, FP, FN values for string labels" in {
+  "confusion matrix" should "compute predicted vs. actual class for binary classifier with string labels" in {
     val rdd = sparkContext.parallelize(inputListBinaryChar)
 
-    val metricValue = ClassificationMetrics.binaryClassificationMetrics(rdd, 0, 1, "yes", 1)
-    metricValue.confusionMatrix get "tp" shouldEqual Some(1)
-    metricValue.confusionMatrix get "tn" shouldEqual Some(2)
-    metricValue.confusionMatrix get "fp" shouldEqual Some(0)
-    metricValue.confusionMatrix get "fn" shouldEqual Some(1)
+    val binaryClassMetrics = new BinaryClassMetrics(rdd, "yes")
+    val confusionMatrix = binaryClassMetrics.confusionMatrix()
+
+    confusionMatrix.numRows should equal(2)
+    confusionMatrix.numColumns should equal(2)
+    confusionMatrix.get("pos", "pos") should equal(1)
+    confusionMatrix.get("pos", "neg") should equal(0)
+    confusionMatrix.get("neg", "pos") should equal(1)
+    confusionMatrix.get("neg", "neg") should equal(2)
   }
 
-  "confusion matrix" should "return an empty map if user gives multi-class data as input" in {
+  "confusion matrix" should "compute predicted vs. actual class for multi-class classifier" in {
     val rdd = sparkContext.parallelize(inputListMulti)
 
-    val metricValue = ClassificationMetrics.multiclassClassificationMetrics(rdd, 0, 1, 1)
-    metricValue.confusionMatrix.isEmpty
+    val multiClassMetrics = new MultiClassMetrics(rdd)
+    val confusionMatrix = multiClassMetrics.confusionMatrix()
+
+    confusionMatrix.numRows should equal(3)
+    confusionMatrix.numColumns should equal(3)
+    confusionMatrix.get("0", "0") should equal(2)
+    confusionMatrix.get("0", "1") should equal(1)
+    confusionMatrix.get("1", "2") should equal(2)
+    confusionMatrix.get("2", "1") should equal(1)
+  }
+
+  "confusion matrix" should "compute predicted vs. actual class for multi-class classifier with string labels" in {
+    val rdd = sparkContext.parallelize(inputListMultiChar)
+
+    val multiClassMetrics = new MultiClassMetrics(rdd)
+    val confusionMatrix = multiClassMetrics.confusionMatrix()
+
+    confusionMatrix.numRows should equal(3)
+    confusionMatrix.numColumns should equal(3)
+    confusionMatrix.get("red", "red") should equal(2)
+    confusionMatrix.get("red", "green") should equal(1)
+    confusionMatrix.get("green", "blue") should equal(2)
+    confusionMatrix.get("blue", "green") should equal(1)
+
   }
 
 }
