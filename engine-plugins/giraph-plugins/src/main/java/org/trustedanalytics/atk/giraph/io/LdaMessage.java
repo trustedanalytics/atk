@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.giraph.io;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.mahout.math.Vector;
-import org.apache.mahout.math.VectorWritable;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -27,14 +26,14 @@ import java.io.IOException;
 public class LdaMessage implements Writable {
 
     private LdaVertexId vid = new LdaVertexId();
-    private VectorWritable vectorWritable = new VectorWritable();
+    private DoubleArrayWritable arrayWritable = new DoubleArrayWritable();
 
     public LdaMessage() {
     }
 
     public LdaMessage(LdaVertexId vid, Vector vector) {
         this.vid = vid;
-        this.vectorWritable.set(vector);
+        this.arrayWritable.set(vector);
     }
 
     public LdaVertexId getVid() {
@@ -42,18 +41,18 @@ public class LdaMessage implements Writable {
     }
 
     public Vector getVector() {
-        return vectorWritable.get();
+        return arrayWritable.getVector();
     }
 
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         vid.write(dataOutput);
-        vectorWritable.write(dataOutput);
+        arrayWritable.write(dataOutput);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         vid.readFields(dataInput);
-        vectorWritable.readFields(dataInput);
+        arrayWritable.readFields(dataInput);
     }
 }

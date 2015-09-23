@@ -24,6 +24,7 @@ import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -94,9 +95,8 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameRef
     val kmeansColumns = arguments.observationColumns.getOrElse(kmeansData.observationColumns)
     val scalingValues = kmeansData.columnScalings
 
-    //Predicting the cluster for each row
     val predictionsRDD = frame.rdd.mapRows(row => {
-      val columnsArray = row.valuesAsArray(kmeansColumns).map(row => DataTypes.toDouble(row))
+      val columnsArray = row.valuesAsDenseVector(kmeansColumns).toArray
       val columnScalingsArray = scalingValues.toArray
       val doubles = columnsArray.zip(columnScalingsArray).map { case (x, y) => x * y }
       val point = Vectors.dense(doubles)

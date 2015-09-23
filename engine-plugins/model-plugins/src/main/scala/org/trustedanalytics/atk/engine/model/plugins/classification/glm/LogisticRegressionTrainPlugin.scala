@@ -21,11 +21,11 @@ import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.engine.plugin.PluginDoc
-import FrameRddImplicits._
+import ModelPluginImplicits._
 
 //Implicits needed for JSON conversion
 import MLLibJsonProtocol._
@@ -45,8 +45,8 @@ The data returned is composed of multiple components\:
 |   A summary table composed of:
 | **Frame** : *CovarianceMatrix (optional)*
 |   Covariance matrix of the trained model.
-    The covariance matrix is the inverse of the Hessian matrix for the trained model.
-    The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function.""")
+The covariance matrix is the inverse of the Hessian matrix for the trained model.
+The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function.""")
 class LogisticRegressionTrainPlugin extends SparkCommandPlugin[LogisticRegressionTrainArgs, LogisticRegressionSummaryTable] {
   /**
    * The name of the command.

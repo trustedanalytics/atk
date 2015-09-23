@@ -286,6 +286,16 @@ trait AbstractRow {
   }
 
   /**
+   * Select several property values from their names as an array of doubles
+   * @param names the names of the properties to put into an array
+   * @param flattenInputs If true, flatten vector data types
+   * @return array of doubles with values for the supplied properties
+   */
+  def valuesAsDoubleArray(names: Seq[String] = schema.columnNames, flattenInputs: Boolean = false): Array[Double] = {
+    valuesAsArray(names, flattenInputs).map(value => DataTypes.toDouble(value))
+  }
+
+  /**
    * Values of the row as a Seq[Any]
    */
   def toSeq: Seq[Any] = {
