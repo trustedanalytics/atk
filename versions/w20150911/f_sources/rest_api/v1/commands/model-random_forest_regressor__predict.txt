@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee2150>>
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e257a50>>
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee20d0>>
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e2579d0>>
 
     ..
 
@@ -117,7 +117,7 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee20d0>>``
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e2579d0>>``
 
         Frame
             A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.

@@ -34,7 +34,7 @@
 
     :Returns:
 
-        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee20d0>>
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e2579d0>>
 
         ..
 

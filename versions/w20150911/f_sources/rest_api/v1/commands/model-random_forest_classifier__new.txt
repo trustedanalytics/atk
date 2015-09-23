@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **dummy_model_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee2150>>
+    **dummy_model_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e257a50>>
 
     ..
 
@@ -104,7 +104,7 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee2150>>``
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e257a50>>``
 
 
 

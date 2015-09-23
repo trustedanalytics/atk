@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee2150>>
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e257a50>>
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee20d0>>
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e2579d0>>
 
     ..
 
@@ -116,7 +116,7 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f34abee20d0>>``
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f498e2579d0>>``
 
         A new frame containing the original frame's columns and a column
         *predicted_label* containing the score calculated for each observation.
