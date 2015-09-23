@@ -91,11 +91,11 @@ object ClassificationMetrics extends Serializable {
    *         a Double of the model precision, a map of confusion matrix values
    */
   def binaryClassificationMetrics[S: SerializableType](frameRdd: FrameRdd,
-                                  labelColumn: String,
-                                  predictColumn: String,
-                                  positiveLabel: S,
-                                  beta: Double,
-                                  frequencyColumn: Option[String]): ClassificationMetricValue = {
+                                                       labelColumn: String,
+                                                       predictColumn: String,
+                                                       positiveLabel: S,
+                                                       beta: Double,
+                                                       frequencyColumn: Option[String]): ClassificationMetricValue = {
 
     val binaryClassMetrics = new BinaryClassMetrics(frameRdd, labelColumn, predictColumn,
       positiveLabel, beta, frequencyColumn)

@@ -78,7 +78,7 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
     val predictColumn = Column("predicted_label", DataTypes.float64)
     val predictFrame = frame.rdd.addColumn(predictColumn, row => {
       val vector = row.valuesAsDoubleArray(observationColumns).toVector
-      LibSvmPluginFunctions.score(libsvmModel, vector)
+      LibSvmPluginFunctions.score(libsvmModel, vector).value
     })
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by LibSvm's predict operation"))) {

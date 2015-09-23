@@ -93,7 +93,7 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
       val vector = row.valuesAsDoubleArray(observationColumns).toVector
       val label = row.doubleValue(arguments.labelColumn)
       val score = LibSvmPluginFunctions.score(libsvmModel, vector)
-      ScoreAndLabel(score, label)
+      ScoreAndLabel(score.value, label)
     })
 
     //Run Binary classification metrics
