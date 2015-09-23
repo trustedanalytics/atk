@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._

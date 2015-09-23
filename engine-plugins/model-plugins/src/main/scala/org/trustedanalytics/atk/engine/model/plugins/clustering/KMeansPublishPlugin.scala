@@ -21,7 +21,7 @@ import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.hadoop.fs.Path
 // Implicits needed for JSON conversion
