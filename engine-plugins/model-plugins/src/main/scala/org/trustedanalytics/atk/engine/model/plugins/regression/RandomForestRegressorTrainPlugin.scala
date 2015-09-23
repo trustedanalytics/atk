@@ -32,8 +32,8 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, _ }
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
+import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._

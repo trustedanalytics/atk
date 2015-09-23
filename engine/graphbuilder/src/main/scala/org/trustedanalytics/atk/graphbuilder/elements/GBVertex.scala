@@ -26,6 +26,7 @@ package org.trustedanalytics.atk.graphbuilder.elements
  * @param physicalId the unique Physical ID for the Vertex from the underlying Graph storage layer (optional)
  * @param gbId the unique id that will be used by graph builder
  * @param properties the other properties that exist on this vertex
+ *
  */
 case class GBVertex(physicalId: Any, gbId: Property, properties: Set[Property]) extends GraphElement with Mergeable[GBVertex] {
 
