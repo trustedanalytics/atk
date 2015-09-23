@@ -27,8 +27,8 @@ setup(
     version=u"VERSION-POSTTAG",
 
     # Application author details:
-    author="Intel",
-    author_email="atksupport@trustedanalytics.org",
+    author="trustedanalytics",
+
 
     # Packages
     packages=["trustedanalytics","trustedanalytics/core","trustedanalytics/rest","trustedanalytics/tests"],
@@ -37,11 +37,14 @@ setup(
     include_package_data=True,
 
     # Details
-    url="https://trustedanalytics.org",
+    url="http://trustedanalytics.github.io/atk",
 
     #
-    license="LICENSE.txt",
-    description="trusted analytics Toolkit build ID #BUILD_NUMBER#",
+    license="Apache 2",
+
+    description="Trusted Analytics Toolkit",
+
+    keywords="analytics big data yarn cloudera hadoop hdfs spark",
 
     long_description=open("README").read(),
 
