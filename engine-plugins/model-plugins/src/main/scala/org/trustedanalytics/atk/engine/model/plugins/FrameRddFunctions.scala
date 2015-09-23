@@ -23,8 +23,11 @@ import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.DataTypes
 
 /**
- *
- * @param self
+ * Functions for extending frames with model-related methods.
+ * <p>
+ * This is best used by importing ModelPluginImplicits._
+ * </p>
+ * @param self input that these functions are applicable to
  */
 class FrameRddFunctions(self: FrameRdd) {
   /**

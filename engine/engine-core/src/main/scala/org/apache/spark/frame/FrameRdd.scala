@@ -398,6 +398,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @param labelColumn Column of class labels
    * @param predictionColumn Column of predictions (or scores)
    * @param frequencyColumn Column with frequency of observations
+   * @tparam T type of score and label
    * @return RDD with score, label, and frequency
    */
   def toScoreAndLabelRdd[T](labelColumn: String,
@@ -418,6 +419,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * Convert FrameRdd into RDD of scores, labels, and associated frequency
    *
    * @param scoreAndLabelFunc Function that extracts score and label from row
+   * @tparam T type of score and label
    * @return RDD with score, label, and frequency
    */
   def toScoreAndLabelRdd[T](scoreAndLabelFunc: (RowWrapper) => ScoreAndLabel[T]): RDD[ScoreAndLabel[T]] = {
@@ -431,9 +433,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    *
    * @param column Column to add
    * @param addColumnFunc Function that extracts column value to add from row
+   * @tparam T type of added column
    * @return Frame with added column
    */
-  def addColumn[P](column: Column, addColumnFunc: (RowWrapper) => P): FrameRdd = {
+  def addColumn[T](column: Column, addColumnFunc: (RowWrapper) => T): FrameRdd = {
     val rows = this.mapRows(row => {
       val columnValue = addColumnFunc(row)
       row.addValue(columnValue)
