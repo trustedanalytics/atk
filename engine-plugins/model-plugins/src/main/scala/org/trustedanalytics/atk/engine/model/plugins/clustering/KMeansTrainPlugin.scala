@@ -34,15 +34,10 @@ import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Creates KMeans Model from train frame.",
   extended = "Upon training the 'k' cluster centers are computed.",
-  returns = """dict
-    Results.
-    The data returned is composed of multiple components:
-cluster_size : dict
-    Cluster size
-ClusterId : int
-    Number of elements in the cluster 'ClusterId'.
-within_set_sum_of_squared_error : double
-    The set of sum of squared error for the model.""")
+  returns = """object
+    Object containing a dictionary storing the cluster id and cluster size, and the within set sum of squared error
+<object>.cluster_size : Cluster id is the key and cluster size is the value
+<object>.within_set_sum_of_squared_error : The set of sum of squared error for the model.""")
 class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainReturn] {
   /**
    * The name of the command.
@@ -102,10 +97,10 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
   private def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
     val kmeans = new KMeans()
 
-    kmeans.setK(arguments.getK)
-    kmeans.setMaxIterations(arguments.getMaxIterations)
-    kmeans.setInitializationMode(arguments.getInitializationMode)
-    kmeans.setEpsilon(arguments.geteEpsilon)
+    kmeans.setK(arguments.k)
+    kmeans.setMaxIterations(arguments.maxIterations)
+    kmeans.setInitializationMode(arguments.initializationMode)
+    kmeans.setEpsilon(arguments.epsilon)
   }
 
   private def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {

@@ -32,44 +32,24 @@ observations.""") observationColumns: List[String],
 The scaling value is multiplied by the corresponding value in the
 observation column.""") columnScalings: List[Double],
                            @ArgDoc("""Desired number of clusters.
-Default is 2.""") k: Option[Int] = None,
+Default is 2.""") k: Int = 2,
                            @ArgDoc("""Number of iterations for which the algorithm should run.
-Default is 20.""") maxIterations: Option[Int] = None,
+Default is 20.""") maxIterations: Int = 20,
                            @ArgDoc("""Distance threshold within which we consider k-means to have converged.
-Default is 1e-4.""") epsilon: Option[Double] = None,
+Default is 1e-4.""") epsilon: Double = 1e-4,
                            @ArgDoc("""The initialization technique for the algorithm.
 It could be either "random" or "k-means||".
-Default is "k-means||".""") initializationMode: Option[String] = None) {
+Default is "k-means||".""") initializationMode: String = "k-means||") {
+
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
   require(columnScalings != null && columnScalings.nonEmpty, "columnWeights must not be null or empty")
   require(columnScalings.length == observationColumns.length, "Length of columnWeights and observationColumns needs to be the same")
+  require(k > 0, "k must be at least 1")
+  require(maxIterations > 0, "maxIterations must be a positive value")
+  require(epsilon > 0.0, "epsilon must be a positive value")
 
-  def getK: Int = {
-    if (k.isDefined) {
-      require(k.get > 0, "k must be at least 1")
-    }
-    k.getOrElse(2)
-  }
-
-  def getMaxIterations: Int = {
-    if (maxIterations.isDefined) {
-      require(maxIterations.get > 0, "maxIterations must be a positive value")
-    }
-    maxIterations.getOrElse(20)
-  }
-
-  def geteEpsilon: Double = {
-    if (epsilon.isDefined) {
-      require(epsilon.get > 0.0, "epsilon must be a positive value")
-    }
-    epsilon.getOrElse(1e-4)
-  }
-
-  def getInitializationMode: String = {
-    initializationMode.getOrElse("k-means||")
-  }
 }
 
 /**

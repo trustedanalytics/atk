@@ -73,13 +73,13 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
 
   private def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
     val linReg = new LinearRegressionWithSGD()
-    linReg.optimizer.setNumIterations(arguments.getNumIterations)
-    linReg.optimizer.setStepSize(arguments.getStepSize)
+    linReg.optimizer.setNumIterations(arguments.numIterations)
+    linReg.optimizer.setStepSize(arguments.stepSize)
 
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
-    linReg.optimizer.setRegParam(arguments.getRegParam)
+    linReg.optimizer.setRegParam(arguments.regParam)
 
     if (arguments.regType.isDefined) {
       linReg.optimizer.setUpdater(arguments.regType.get match {
@@ -87,8 +87,8 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
         case other => new SquaredL2Updater()
       })
     }
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
   }
 }

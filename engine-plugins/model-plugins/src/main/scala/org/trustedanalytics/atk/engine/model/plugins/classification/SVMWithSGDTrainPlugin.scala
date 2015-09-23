@@ -35,7 +35,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Train SVM model based on another frame.",
-  extended = """Creating a SVM Model using the observation column and label column of the train frame.""")
+  extended = """Creating a SVM Model using the observation column and label column of the train frame.""",
+  returns = """A trained SVMWithSGD model""")
 class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -78,9 +79,9 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
 
   private def initializeSVMModel(arguments: ClassificationWithSGDTrainArgs): SVMWithSGD = {
     val svm = new SVMWithSGD()
-    svm.optimizer.setNumIterations(arguments.getNumIterations)
-    svm.optimizer.setStepSize(arguments.getStepSize)
-    svm.optimizer.setRegParam(arguments.getRegParam)
+    svm.optimizer.setNumIterations(arguments.numIterations)
+    svm.optimizer.setStepSize(arguments.stepSize)
+    svm.optimizer.setRegParam(arguments.regParam)
 
     if (arguments.regType.isDefined) {
       svm.optimizer.setUpdater(arguments.regType.get match {
@@ -88,7 +89,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
         case other => new SquaredL2Updater()
       })
     }
-    svm.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    svm.setIntercept(arguments.getIntercept)
+    svm.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    svm.setIntercept(arguments.intercept)
   }
 }

@@ -78,16 +78,17 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
 @PluginDoc(oneLine = "Build Random Forests Regressor model.",
   extended = """Creating a Random Forests Regressor Model using the observation columns and label column.""",
   returns =
-    """Values of the Random Forest Classifier model object storing:
-      | the list of observation columns on which the model was trained,
-      | the column name containing the labels of the observations,
-      | the number of decison trees in the random forest,
-      | the number of nodes in the random forest,
-      | the map storing arity of categorical features,
-      | the criterion used for information gain calculation,
-      | the maximum depth of the tree,
-      | the maximum number of bins used for splitting features,
-      | the random seed used for bootstrapping and choosing feature subset.
+    """object
+      |An object with Random Forest Regressor model storing:
+      |<object>.observation_columns: the list of observation columns on which the model was trained,
+      |<object>.label_columns: the column name containing the labels of the observations,
+      |<object>.num_trees: the number of decision trees in the random forest,
+      |<object>.num_nodes: the number of nodes in the random forest,
+      |<object>.categorical_features_info: the map storing arity of categorical features,
+      |<object>.impurity: the criterion used for information gain calculation,
+      |<object>.max_depth: the maximum depth of the tree,
+      |<object>.max_bins: the maximum number of bins used for splitting features,
+      |<object>.seed: the random seed used for bootstrapping and choosing feature subset.
     """.stripMargin)
 class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRegressorTrainArgs, RandomForestRegressorTrainReturn] {
   /**

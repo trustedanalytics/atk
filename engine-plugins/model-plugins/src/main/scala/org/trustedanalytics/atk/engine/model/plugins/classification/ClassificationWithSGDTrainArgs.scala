@@ -31,33 +31,22 @@ for each observation.""") labelColumn: String,
                                           @ArgDoc("""Column(s) containing the
 observations.""") observationColumns: List[String],
                                           @ArgDoc("""The algorithm adds an intercept.
-Default is true.""") intercept: Option[Boolean] = None,
+Default is true.""") intercept: Boolean = true,
                                           @ArgDoc("""Number of iterations.
-Default is 100.""") numIterations: Option[Int] = None,
+Default is 100.""") numIterations: Int = 100,
                                           @ArgDoc("""Step size for optimizer.
-Default is 1.0.""") stepSize: Option[Int] = None,
+Default is 1.0.""") stepSize: Int = 1,
                                           @ArgDoc("""Regularization L1 or L2.
 Default is L2.""") regType: Option[String] = None,
                                           @ArgDoc("""Regularization parameter.
-Default is 0.01.""") regParam: Option[Double] = None,
+Default is 0.01.""") regParam: Double = 0.01,
                                           @ArgDoc("""Mini batch fraction parameter.
-Default is 1.0.""") miniBatchFraction: Option[Double] = None) {
+Default is 1.0.""") miniBatchFraction: Double = 1.0) {
+
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
-
-  def getNumIterations: Int = {
-    if (numIterations.isDefined) { require(numIterations.get > 0, "numIterations must be a positive value") }
-    numIterations.getOrElse(100)
-  }
-
-  def getIntercept: Boolean = { intercept.getOrElse(true) }
-
-  def getStepSize: Int = { stepSize.getOrElse(1) }
-
-  def getRegParam: Double = { regParam.getOrElse(0.01) }
-
-  def getMiniBatchFraction: Double = { miniBatchFraction.getOrElse(1.0) }
+  require(numIterations > 0, "numIterations must be a positive value")
 
 }
