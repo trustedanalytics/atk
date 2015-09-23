@@ -273,7 +273,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, null, 1,  "Iceland")),
+      new GenericRow(Array[Any](1, null, 1, "Iceland")),
       new GenericRow(Array[Any](1, null, 1, "Ice-land")),
       new GenericRow(Array[Any](2, null, 2, "India")),
       new GenericRow(Array[Any](3, null, 3, "Norway")),
