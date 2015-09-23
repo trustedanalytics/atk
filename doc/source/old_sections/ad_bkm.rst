@@ -1,3 +1,7 @@
+.. _old_sections/ad_bkm:
+
+.. _old_ad_sections/ad_bkm:
+
 .. _ad_bkm:
 
 ==========================

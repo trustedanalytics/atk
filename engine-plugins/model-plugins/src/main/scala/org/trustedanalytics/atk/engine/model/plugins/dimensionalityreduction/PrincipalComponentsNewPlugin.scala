@@ -23,9 +23,25 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Create a 'new' instance of principal component model.",
-  extended = "",
-  returns = "")
+/**
+ * Create a 'new' instance of a Principal Components model
+ */
+@PluginDoc(oneLine = "Create a 'new' instance of a Principal Components model.",
+  extended = """
+**Dimensionality Reduction using Principal Component Analysis**
+
+Principal component analysis[1]_ is a statistical algorithm that converts possibly correlated features to linearly uncorrelated
+variables called principal components. The number of principal components is less than or equal to the number of original
+variables. This implementation of computing Principal Components is done by Singular Value Decomposition[2]_ of the data,
+providing the user with an option to mean center the data. The user may initialize a PrincipalComponentsModel, train the model
+specifying the observation columns of the frame, the number of components, and predict principal components using the trained model.
+The MLLib Singular Value Decomposition[3]_ implementation has been used for this, with additional features to mean center the data during train and
+predict and compute the t-squared index during prediction.
+
+.. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+.. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
+.. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html
+             """)
 class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
