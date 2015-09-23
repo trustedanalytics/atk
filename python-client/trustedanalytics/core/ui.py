@@ -255,7 +255,7 @@ class RowsInspection(object):
                 num_cols = _get_num_cols(self.schema, self.width, col_index, col_sizes, margin)
                 if num_cols == 0:
                     raise RuntimeError("Internal error, num_cols == 0")  # sanity check on algo
-                header_line = row_index_header + column_spacer.join([pad_left(_get_header_entry(name, data_type, self.with_types), min(self.width - margin, col_sizes[col_index+i])) for i, (name, data_type) in enumerate(self.schema[col_index:col_index+num_cols])])
+                header_line = row_index_header + column_spacer.join([pad_right(_get_header_entry(name, data_type, self.with_types), min(self.width - margin, col_sizes[col_index+i])) for i, (name, data_type) in enumerate(self.schema[col_index:col_index+num_cols])])
                 thick_line = "=" * len(header_line)
                 lines_list.extend(["", header_line, thick_line])
                 if row_count:
@@ -308,6 +308,8 @@ class RowsInspection(object):
             if len(lines) > 1:
                 entry = lines[0]  # take the first line now, and save the rest in an 'extra' tuple
                 extra_tuples.append((relative_column_index, lines[1:]))
+            return pad_right(entry, size)
+        elif data is None or isinstance(data, list) or isinstance(data, tuple):
             return pad_right(entry, size)
         else:
             return pad_left(entry, size)

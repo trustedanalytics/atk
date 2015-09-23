@@ -848,7 +848,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @arg('margin', int, "('stripes' mode only) If set to integer N, the margin for printing names in a "
                         "stripe will be limited to N characters")
     @arg('with_types', bool, "If set to True, header will include the data_type of each column")
-    @returns('str', 'A pretty-print formatted string of frame data')
+    @returns('RowsInspection', "An object which naturally converts to a pretty-print string")
     def __inspect(self,
                   n=10,
                   offset=0,
@@ -860,7 +860,12 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
                   margin=inspect_settings._unspecified,
                   with_types=inspect_settings._unspecified):
         """
-        Returns a string of frame data in readable format.
+        Pretty-print of the frame data
+
+        Essentially returns a string, but technically returns a RowInspection object which renders a string.
+        The RowInspection object naturally converts to a str when needed, like when printed or when displayed
+        by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
+        to be printed, then it must be explicitly printed, then `print frame.inspect()`
 
         Examples
         --------
@@ -869,7 +874,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> print my_frame.inspect(4)
+            >>> my_frame.inspect(4)
            [#]    animal      name    age     weight
            =========================================
            [0]  human       George      8      542.5
@@ -887,7 +892,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         .. code::
 
             >>> import trustedanalytics as ta
-            >>> print repr(ta.inspect_settings)
+            >>> ta.inspect_settings
             wrap             20
             truncate       None
             round          None
@@ -896,7 +901,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             with_types    False
             >>> ta.inspect_settings.width = 120  # changes inspect to use 120 width globally
             >>> ta.inspect_settings.truncate = 16  # changes inspect to always truncate strings to 16 chars
-            >>> print repr(ta.inspect_settings)
+            >>> ta.inspect_settings
             wrap             20
             truncate         16
             round          None
@@ -904,7 +909,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             margin         None
             with_types    False
             >>> ta.inspect_settings.width = None  # return value back to default
-            >>> print repr(ta.inspect_settings)
+            >>> ta.inspect_settings
             wrap             20
             truncate         16
             round          None
@@ -912,7 +917,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             margin         None
             with_types    False
             >>> ta.inspect_settings.reset()  # set everything back to default
-            >>> print repr(ta.inspect_settings)
+            >>> ta.inspect_settings
             wrap             20
             truncate       None
             round          None

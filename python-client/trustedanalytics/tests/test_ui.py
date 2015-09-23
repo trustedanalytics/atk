@@ -141,7 +141,8 @@ c=really really really really long'''
         s = [('s', str)]
         settings = ui.InspectSettings(wrap=5)
         result = repr(ui.RowsInspection(r, s, offset=0, format_settings=settings))
-        expected = '''[#]                                                                            s
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
+        expected = '''[#]  s
 ================================================================================
 [0]  12345678901234567890123456789012345678901234567890123456789012345678901234567890'''
         self.assertEqual(expected, result)
@@ -162,6 +163,7 @@ c=really really really really long'''
         r = []
         s = schema1
         result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap='stripes', width=80)))
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
         expected = '''[0]--------------------------
 i32                         =
 floaties                    =
@@ -170,6 +172,7 @@ long_value                  =
 s                           ='''
         self.assertEqual(expected, result)
         result = repr(ui.RowsInspection(r, s, offset=0, format_settings=ui.InspectSettings(wrap='stripes', width=80, with_types=True)))
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
         expected = '''[0]----------------------------------
 i32:int32                           =
 floaties:float64                    =
@@ -181,7 +184,8 @@ s:unicode                           ='''
         r = [[x, 'b%s' % x, None] for x in xrange(10)]
         s = abc_schema
         result = repr(ui.RowsInspection(r, s, offset=92, format_settings=ui.InspectSettings(wrap=5, width=80)))
-        expected = '''[##]  a   b     c
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
+        expected = '''[##]  a  b   c
 =================
 [92]  0  b0  None
 [93]  1  b1  None
@@ -190,7 +194,7 @@ s:unicode                           ='''
 [96]  4  b4  None
 
 
-[###]  a   b     c
+[###]  a  b   c
 ==================
 [97]   5  b5  None
 [98]   6  b6  None
@@ -202,12 +206,12 @@ s:unicode                           ='''
     def test_inspection(self):
         result = repr(ui.RowsInspection(rows1, schema1, offset=0, format_settings=ui.InspectSettings(wrap=2, truncate=40, width=80)))
         result = '\n'.join([line.rstrip() for line in result.splitlines()])
-        expected = '''[#]  i32       floaties  long_column_name_ugh_and_ugh
+        expected = '''[#]  i32  floaties       long_column_name_ugh_and_ugh
 =====================================================
 [0]    1  3.14159265358  a
 [1]    2    8.014512183  b
 
-[#]                                long_value    s
+[#]  long_value                                s
 ==================================================
 [0]  The sun was shining on the sea,           one
      Shini...
@@ -218,7 +222,7 @@ s:unicode                           ='''
 ================================================
 [2]   32       1.0  c
 
-[#]                                long_value           s
+[#]  long_value                                s
 =========================================================
 [2]  AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA  thirty-two'''
         self.assertEqual(expected, result)
@@ -229,9 +233,9 @@ s:unicode                           ='''
                 [1234.5, 9876.54321, [99.999, 33.33]]]
         result = repr(ui.RowsInspection(rows, schema, offset=0, format_settings=ui.InspectSettings(wrap=2, round=2)))
         result = '\n'.join([line.rstrip() for line in result.splitlines()])
-        expected = '''[#]      f32      f64                v
+        expected = '''[#]  f32      f64      v
 ======================================
-[0]     0.12     9.88     [1.01, 2.03]
+[0]     0.12     9.88  [1.01, 2.03]
 [1]  1234.50  9876.54  [100.00, 33.33]'''
         self.assertEqual(expected, result)
 
