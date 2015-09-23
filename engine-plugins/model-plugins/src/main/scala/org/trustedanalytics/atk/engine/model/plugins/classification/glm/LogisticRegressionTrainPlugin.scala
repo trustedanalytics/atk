@@ -21,18 +21,18 @@ import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.engine.plugin.PluginDoc
-import FrameRddImplicits._
+import ModelPluginImplicits._
 
 //Implicits needed for JSON conversion
 import MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build logistic regression model.",
-  extended = "Creating a LogisticRegression Model using the observation column and label column of the train frame.",
+  extended = "Create a LogisticRegressionModel using the observation column and label column of the train frame.",
   returns = """object
     An object with a summary of the trained model.
     The data returned is composed of multiple components:

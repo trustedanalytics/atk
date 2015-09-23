@@ -29,9 +29,10 @@ class ClassificationMetricsResult(object):
         self.recall = json_result['recall']
         cm_result = json_result['confusion_matrix']
         if cm_result:
-            header = ['Predicted_Pos', 'Predicted_Neg']
-            row_index = ['Actual_Pos', 'Actual_Neg']
-            data = [(cm_result['tp'], cm_result['fn']), (cm_result['fp'],cm_result['tn'])]
+            header = map (lambda x: "Predicted_" + x.title(),  cm_result['column_labels'])
+            row_index = map (lambda x: "Actual_" + x.title(),  cm_result['row_labels'])
+            #data = [item for row in cm_result['matrix'] for item in row]
+            data = cm_result['matrix']
             self.confusion_matrix = pd.DataFrame(data, index=row_index, columns=header)
         else:
             #empty pandas frame
