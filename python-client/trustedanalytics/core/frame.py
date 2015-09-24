@@ -26,13 +26,13 @@ from trustedanalytics.core.decorators import *
 api = get_api_decorator(logger)
 
 from trustedanalytics.core.api import api_status
-from trustedanalytics.core.atktypes import valid_data_types
 from trustedanalytics.core.column import Column
 from trustedanalytics.core.errorhandle import IaError
 from trustedanalytics.meta.udf import has_udf_arg
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
+from trustedanalytics.core.ui import inspect_settings
 
 
 def _get_backend():
@@ -847,9 +847,25 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @arg('width', int, 'If set to integer N, the print out will try to honor a max line width of N')
     @arg('margin', int, "('stripes' mode only) If set to integer N, the margin for printing names in a "
                         "stripe will be limited to N characters")
-    def __inspect(self, n=10, offset=0, columns=None, wrap=None, truncate=None, round=None, width=80, margin=None):
+    @arg('with_types', bool, "If set to True, header will include the data_type of each column")
+    @returns('RowsInspection', "An object which naturally converts to a pretty-print string")
+    def __inspect(self,
+                  n=10,
+                  offset=0,
+                  columns=None,
+                  wrap=inspect_settings._unspecified,
+                  truncate=inspect_settings._unspecified,
+                  round=inspect_settings._unspecified,
+                  width=inspect_settings._unspecified,
+                  margin=inspect_settings._unspecified,
+                  with_types=inspect_settings._unspecified):
         """
-        Prints the frame data in readable format.
+        Pretty-print of the frame data
+
+        Essentially returns a string, but technically returns a RowInspection object which renders a string.
+        The RowInspection object naturally converts to a str when needed, like when printed or when displayed
+        by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
+        to be printed, then it must be explicitly printed, then `print frame.inspect()`
 
         Examples
         --------
@@ -858,20 +874,61 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> print my_frame.inspect(4)
-
-            column defs ->  animal:str  name:str    age:int     weight:float
-                          /--------------------------------------------------/
-            frame data ->   human       George        8            542.5
-                            human       Ursula        6            495.0
-                            ape         Ape          41            400.0
-                            elephant    Shep          5           8630.0
-
-
+            >>> my_frame.inspect(4)
+           [#]    animal      name    age     weight
+           =========================================
+           [0]  human       George      8      542.5
+           [1]  human       Ursula      6      495.0
+           [2]  ape         Ape        41      400.0
+           [3]  elephant    Shep        5     8630.0
 
         # For other examples, see :ref:`example_frame.inspect`.
+
+        **Global Settings**
+
+        If not specified, the arguments that control formatting receive default values from
+        'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
+
+        .. code::
+
+            >>> import trustedanalytics as ta
+            >>> ta.inspect_settings
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = 120  # changes inspect to use 120 width globally
+            >>> ta.inspect_settings.truncate = 16  # changes inspect to always truncate strings to 16 chars
+            >>> ta.inspect_settings
+            wrap             20
+            truncate         16
+            round          None
+            width           120
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = None  # return value back to default
+            >>> ta.inspect_settings
+            wrap             20
+            truncate         16
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.reset()  # set everything back to default
+            >>> ta.inspect_settings
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
+
+        ..
         """
-        return self._backend.inspect(self, n, offset, columns, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
+        format_settings = inspect_settings.copy(wrap, truncate, round, width, margin, with_types)
+        return self._backend.inspect(self, n, offset, columns, format_settings=format_settings)
 
     @api
     @beta
