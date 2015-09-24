@@ -13,3 +13,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
+
+package org.trustedanalytics.atk.domain
+
+import scala.reflect.runtime.universe._
+
+trait SerializableType[T]
+
+/**
+ * Serializable type for representing Scala and Java serializable types
+ */
+object SerializableType {
+
+  implicit def AnyValToSerializableType[T <: AnyVal]: SerializableType[T] = new SerializableType[T] {}
+
+  implicit def SerializableToSerializableType[T <: java.io.Serializable]: SerializableType[T] = new SerializableType[T] {}
+
+}
+

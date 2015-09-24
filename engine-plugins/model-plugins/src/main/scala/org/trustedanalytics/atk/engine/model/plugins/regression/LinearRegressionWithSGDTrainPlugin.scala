@@ -22,7 +22,7 @@ import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTrainArgs
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._

@@ -16,15 +16,15 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDPredictArgs
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
+
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 
@@ -73,20 +73,15 @@ class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[Classifica
     val linRegColumns = arguments.observationColumns.getOrElse(linRegData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(linRegColumns)
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      val point = Vectors.dense(doubles)
-      val prediction = linRegModel.predict(point)
-      row.addValue(DataTypes.toDouble(prediction))
+    val predictColumn = Column("predicted_value", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val point = row.valuesAsDenseVector(linRegColumns)
+      linRegModel.predict(point)
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_value", DataTypes.float64)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by LinearRegressionWithSGDs predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 

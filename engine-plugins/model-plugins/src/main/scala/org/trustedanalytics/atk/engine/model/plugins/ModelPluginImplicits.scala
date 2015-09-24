@@ -13,3 +13,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
+
+package org.trustedanalytics.atk.engine.model.plugins
+
+import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.engine.frame.RowWrapper
+
+/**
+ * These implicits can be imported to add frame-related functions to model plugins
+ */
+object ModelPluginImplicits {
+
+  implicit def frameToFrameRddFunctions(frame: FrameRdd): FrameRddFunctions = {
+    new FrameRddFunctions(frame)
+  }
+
+  implicit def rowWrapperToRowWrapperFunctions(rowWrapper: RowWrapper): RowWrapperFunctions = {
+    new RowWrapperFunctions(rowWrapper)
+  }
+}
