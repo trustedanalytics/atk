@@ -367,13 +367,15 @@ def truncate(s, target_len):
     if target_len < len(ellipses):
         raise ValueError("Bad truncate length %s.  "
                          "Must be set to at least %s to allow for a '%s'." % (target_len, len(ellipses), ellipses))
-    if len(s) <= target_len:
+    if s is None or len(s) <= target_len:
         return s
     return s[:target_len - len(ellipses)] + ellipses
 
 
 def round_float(f, float_type, num_digits):
     """provides a rounded, formatted string for the given number of decimal places"""
+    if f is None:
+        return None
     value = float_type(f)
     max_len = len(str(value).split('.')[1])
     padding = '0' * (num_digits - max_len)
@@ -383,6 +385,8 @@ def round_float(f, float_type, num_digits):
 
 def round_vector(v, num_digits):
     """provides a rounded, formatted string to represent the vector"""
+    if v is None:
+        return None
     return "[%s]" % ", ".join([round_float(f, ta.float64, num_digits) for f in v])
 
 

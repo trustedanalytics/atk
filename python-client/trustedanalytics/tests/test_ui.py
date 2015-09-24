@@ -180,6 +180,7 @@ long_column_name_ugh_and_ugh:unicode=
 long_value:unicode                  =
 s:unicode                           ='''
         self.assertEqual(expected, result)
+
     def test_line_numbers(self):
         r = [[x, 'b%s' % x, None] for x in xrange(10)]
         s = abc_schema
@@ -270,6 +271,14 @@ v  =[99.999, 33.330]'''
         self.assertEqual(8, settings2.truncate)
         self.assertEqual(80, settings2.width)
         self.assertEqual(4, settings2.round)
+
+    def test_inspect_nones(self):
+        schema = [('s', str), ('v', ta.vector(2))]
+        rows = [['super', [1.0095, 2.034]],
+                [None, None]]
+        result = repr(ui.RowsInspection(rows, schema, offset=0, format_settings=ui.InspectSettings(wrap=2, round=2, truncate=4)))
+        result = '\n'.join([line.rstrip() for line in result.splitlines()])
+        print result
 
     def test_neg_inspect_settings(self):
         try:
