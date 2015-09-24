@@ -73,7 +73,11 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(), "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    //Extracting the RandomForestRegressorModel from the stored JsObject
+    val randomForestData = model.data.convertTo[RandomForestRegressorData]
+    val randomForestModel = randomForestData.randomForestModel
+    val jsvalue: JsValue = randomForestModel.toJson
+
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }

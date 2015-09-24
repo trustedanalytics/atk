@@ -72,8 +72,11 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
   override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
 
     val model: Model = arguments.model
+    //Extracting the RandomForestClassifierModel from the stored JsObject
+    val randomForestData = model.data.convertTo[RandomForestClassifierData]
+    val randomForestModel = randomForestData.randomForestModel
+    val jsvalue: JsValue = randomForestModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(), "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }
