@@ -99,12 +99,13 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 Notes
 -----
 The **confusion_matrix** is not yet implemented for multi-class classifiers.""",
-  returns = """object
-<object>.accuracy : double
-<object>.confusion_matrix : table
-<object>.f_measure : double
-<object>.precision : double
-<object>.recall : double""")
+  returns = """The data returned is composed of multiple components\:
+
+|   <object>.accuracy : double
+|   <object>.confusion_matrix : table
+|   <object>.f_measure : double
+|   <object>.precision : double
+|   <object>.recall : double""")
 class ClassificationMetricsPlugin extends SparkCommandPlugin[ClassificationMetricArgs, ClassificationMetricValue] {
 
   /**

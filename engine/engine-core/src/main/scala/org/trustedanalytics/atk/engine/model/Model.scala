@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model
 
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
 import org.trustedanalytics.atk.engine.ModelStorage
-import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
 import spray.json.JsObject
 
 /**

@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Get the RDD partition count after loading a frame (useful for debugging purposes)
  */
-@PluginDoc(oneLine = "Calculate the size on disk in bytes of a frame.",
+@PluginDoc(oneLine = "Calculate the size of a frame on disk in bytes.",
   extended = "",
   returns = "")
 class SizeOnDiskPlugin extends CommandPlugin[FrameNoArgs, LongValue] {

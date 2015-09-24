@@ -31,10 +31,10 @@ import ModelPublishJsonProtocol._
 /**
  * Publish a Random Forest Classifier Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+@PluginDoc(oneLine = "Creates a scoring engine tar file.",
   extended = """Creates a tar file with the trained Random Forest Classifier Model
 The tar file is used as input to the scoring engine to predict the class of an observation.""",
-  returns = """Returns the HDFS path to the tar file""")
+  returns = """The HDFS path to the tar file.""")
 class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

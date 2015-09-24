@@ -64,7 +64,7 @@ Setup
 
         i)  Choose *Manual Configure*.
         #)  Choose the *New* button.
-        #)  Browse for Python 2.7.  On RedHat and Centos this is probably
+        #)  Browse for Python 2.7.  On RedHat and CentOS this is probably
             /usr/bin/python.
         #)  Choose the *Ok* button.
         #)  Choose the *Ok* button.
@@ -81,7 +81,7 @@ Setup
     #)  Choose the *External Libraries* tab.
     #)  Choose *Add source folder* button.
     #)  Browse for the |PACKAGE| Python REST Client libraries.
-        On RedHat and Centos these are found under
+        On RedHat and CentOS these are found under
         '/usr/lib/trustedanalytics/rest-client/python'.
     #)  Choose the *OK* button.
 

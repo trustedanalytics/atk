@@ -55,7 +55,7 @@ import HelloWorldPluginFormat._
   returns =
     """
         string
-        String that echos input message
+        String that echoes input message
     """)
 class HelloWorldPlugin
     extends SparkCommandPlugin[HelloWorldPluginInput, HelloWorldPluginOutput] {
