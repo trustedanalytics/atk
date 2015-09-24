@@ -37,7 +37,7 @@ calculation, as are all data elements whose weight is NaN or infinite.
 If there are no data elements of finite weight greater than 0,
 no mode is returned.
 
-Because data distributions often have mutliple modes, it is possible for a
+Because data distributions often have multiple modes, it is possible for a
 set of modes to be returned.
 By default, only one is returned, but by setting the optional parameter
 max_modes_returned, a larger number of modes can be returned.""",

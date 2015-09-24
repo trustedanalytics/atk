@@ -71,11 +71,11 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
 }
 
 /**
- * Input arguments class for export to Jdbc
+ * Input arguments class for export to JDBC
  */
-case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to jdbc""") frame: FrameReference,
-                              @ArgDoc("""jdbc table name""") tableName: String,
-                              @ArgDoc("""(optional) jdbc connector type""") connectorType: Option[String],
+case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
+                              @ArgDoc("""JDBC table name""") tableName: String,
+                              @ArgDoc("""(optional) JDBC connector type""") connectorType: Option[String],
                               @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
                               @ArgDoc("""(optional) driver name""") driverName: Option[String],
                               @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {

@@ -29,12 +29,12 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.classification.NaiveBayes
 import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
+import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
@@ -56,8 +56,9 @@ Default is 1.0.""") lambdaParameter: Option[Double] = None) {
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
 }
 
-@PluginDoc(oneLine = "Build a naive bayes model.",
-  extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""")
+@PluginDoc(oneLine = "Train a Naive Bayes model.",
+  extended = """Train a NaiveBayesModel using the observation column, label column of the train
+frame and an optional lambda value.""")
 class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, UnitReturn] {
   /**
    * The name of the command.

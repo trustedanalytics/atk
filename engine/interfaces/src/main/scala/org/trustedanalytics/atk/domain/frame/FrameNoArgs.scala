@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.domain.frame
 
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+
 /**
  * The args for any frame plugin that takes "no args" except the frame
  * @param frame the frame to operate on

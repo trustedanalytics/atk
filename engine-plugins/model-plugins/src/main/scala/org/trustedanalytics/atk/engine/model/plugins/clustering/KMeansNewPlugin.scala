@@ -29,18 +29,21 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Create a 'new' instance of a k-means model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a k-means model.",
-  extended =
-    """
-**Clustering using k-means**
+  extended = """k-means [1]_ is an unsupervised algorithm used to partition
+the data into 'k' clusters.
+Each observation can belong to only one cluster, the cluster with the nearest
+mean.
+The k-means model is initialized, trained on columns of a frame, and used to
+predict cluster assignments for a frame.
+This model runs the MLLib implementation of k-means [2]_ with enhanced
+features, computing the number of elements in each cluster during training.
+During predict, it computes the distance of each observation from its cluster
+center and also from every other cluster center.
 
-k-means[1]_ is an unsupervised algorithm used to partition the data into 'k' clusters. Each observation can belong to only one cluster, the cluster with the nearest mean.
-The user may initialize a k-means model, train the model on columns of a frame and predict cluster assignments for a frame using a trained model.
-This model runs the MLLib implementation of k-means[2]_ with enhanced features, computing the number of elements in each cluster during training and during predict
-computing the distance of each observation from its cluster center and also from every other cluster center.
+.. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/K-means_clustering
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means
-    """)
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means""")
 class KMeansNewPlugin extends SparkCommandPlugin[KMeansNewArgs, ModelReference] {
 
   override def name: String = "model:k_means/new"

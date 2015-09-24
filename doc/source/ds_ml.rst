@@ -28,25 +28,8 @@ be done automatically, without directly involving analysts.
 There are many other problems that are amenable to :term:`machine learning`
 solutions.
 Translation of text for example is a difficult issue.
-A corpus of pre-translated text can be used to teach an algorithm a mapping
-from one language to another.
-
-----------
-Algorithms
-----------
-
-.. toctree::
-    :maxdepth: 2
-
-    ds_mlal_0
-
-.. index::
-    single: supervised
-    single: unsupervised
-    single: semi-supervised
-    single: binary logistic regression
-    single: classification
-    single: prediction
+A corpus of previously translated text can be used to teach an algorithm a
+mapping from one language to another.
 
 -----------
 Supervision
@@ -62,7 +45,7 @@ collection of days) to a known binary label (e.g., whether or not someone
 went for a trail run on that day).
 Once the relationship between temperature and running activity is learned,
 then the model can be used to make predictions about new running activity,
-given the days temperatures.
+given the daily temperatures.
 Unsupervised machine learning algorithms are used to find patterns or
 groupings in data for which class labels are unknown.
 For example, given a data set of observations about flowers (e.g., petal

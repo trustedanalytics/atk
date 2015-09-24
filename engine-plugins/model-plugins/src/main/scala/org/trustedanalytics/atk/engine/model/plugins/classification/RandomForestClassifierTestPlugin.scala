@@ -20,15 +20,15 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, ClassificationMetricValue }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
+import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
+import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
@@ -37,11 +37,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param model Handle to the model to be written to.
- * @param frame Handle to the data frame
- * @param observationColumns Handle to the list of observation columns of the data frame
- * @param labelColumn Handle to the label column of the data frame
+ * Command for testing model data in the model.
  */
 case class RandomForestClassifierTestArgs(@ArgDoc("""Handle of the model to be used""") model: ModelReference,
                                           @ArgDoc("""The frame whose labels are to be predicted""") frame: FrameReference,
@@ -57,14 +53,14 @@ By default, we predict the labels over columns the RandomForest was trained on."
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
 and target labels.""",
-  returns = """object
-    An object with classification metrics.
-    The data returned is composed of multiple components:
-  <object>.accuracy : double
-  <object>.confusion_matrix : table
-  <object>.f_measure : double
-  <object>.precision : double
-  <object>.recall : double""")
+  returns = """An object with classification metrics.
+The data returned is composed of multiple components\:
+
+|  **double** : *accuracy*
+|  **table** : *confusion_matrix*
+|  **double** : *f_measure*
+|  **double** : *precision*
+|  **double** : *recall*""")
 class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestClassifierTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.
@@ -103,20 +99,19 @@ class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestCl
     }
     val rfColumns = arguments.observationColumns.getOrElse(rfData.observationColumns)
 
-    val labeledTestRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, rfColumns)
-
     //predicting and testing
-    val scoreAndLabelRDD: RDD[Row] = labeledTestRDD.map { point =>
-      val prediction = rfModel.predict(point.features)
-      Row(point.label, prediction)
-    }
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val labeledPoint = row.valuesAsLabeledPoint(rfColumns, arguments.labelColumn)
+      val score = rfModel.predict(labeledPoint.features)
+      ScoreAndLabel(score, labeledPoint.label)
+    })
 
     val output = rfData.numClasses match {
       case 2 => {
-        val posLabel: String = "1.0"
-        ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRDD, 0, 1, posLabel, 1)
+        val posLabel = 1d
+        ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
       }
-      case _ => ClassificationMetrics.multiclassClassificationMetrics(scoreAndLabelRDD, 0, 1, 1)
+      case _ => ClassificationMetrics.multiclassClassificationMetrics(scoreAndLabelRdd)
     }
     output
   }

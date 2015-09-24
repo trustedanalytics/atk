@@ -65,7 +65,7 @@ import MapreduceWordCountFormat._
   returns =
     """
         string
-        String that echos input message
+        String that echoes input message
     """)
 class MapreduceWordCountPlugin
     extends CommandPlugin[MapreduceWordCountInput, MapreduceWordCountOutput] {
