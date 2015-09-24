@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename a model in the database
  */
-@PluginDoc(oneLine = "rename a model")
+@PluginDoc(oneLine = "Rename a model.")
 class RenameModelPlugin extends SparkCommandPlugin[RenameModelArgs, ModelReference] {
 
   /**

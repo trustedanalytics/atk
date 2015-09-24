@@ -21,12 +21,12 @@ install the "go" language and the required libraries.
     $ sudo yum install golang
 
 To read more about "go" see https://golang.org/ .
-To test the "go" installation, run the command ``go``.
-The response should be similar to:
+To test the "go" installation:
 
 .. code::
 
-    <show what it looks like>
+    $ go version
+    go version go1.4.2 linux/amd64
 
 Install the CloudFoundry |CLI| package:
 
@@ -34,7 +34,7 @@ Install the CloudFoundry |CLI| package:
    
     $ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
 
-This downloads the pre-packaged RPM to your local machine.
+This downloads the prepackaged RPM to your local machine.
 Install this package:
 
 .. code::
@@ -48,48 +48,55 @@ Install this package:
 Test the package installation:
 
 .. code::
-   
-    $ cf
-    < put response here>
+    $ cf --version
+    cf version 6.11.2-2a26d55-2015-04-27T21:11:44+00:00
 
-Setting up CF for ATK deployment (Ireland instance):
-First run cf api https://api.run.gotapaas.eu to set your API endpoint.
-You should see a message like this:
-[hadoop@master ~]$ cf api https://api.run.gotapaas.eu --skip-ssl-validation
-Setting api endpoint to https://api.run.gotapaas.eu...
-OK
+Setting Up CF for ATK Deployment
+================================
 
-API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
-Not logged in. Use 'cf login' to log in.
-now try login by running the command "cf login -u admin -p c1oudc0w -o seedorg -s seedspace":
+First, add the <CLOUD_FOUNDRY_API_ENDPOINT> to the "no_proxy" list.
+
+Now run ``cf api <CLOUD_FOUNDRY_API_ENDPOINT> -skip-ssl-validation`` to set your API endpoint.
+You should see a message like this\:
+
+.. code::
+
+    $ cf api my_endpoint -skip-ssl-validation
+    Setting api endpoint to my_endpoint...
+    OK
+    API endpoint: my_endpoint (API version: 2.25.0)
+    Not logged in. Use 'cf login' to log in.
+
+Now try login by running the command ``cf login -u <CLOUD_FOUNDRY_USERNAME> -p <CLOUD_FOUNDRY_PASSWORD>  -o <CLOUD_FOUNDRY_ORGANIZATION > -s <CLOUD_FOUNDRY_SPACE>``
+
 Your output should look something like this:
 
 .. code::
 
-    [hadoop@master ~]$ cf login -u admin -p c1oudc0w -o seedorg -s seedspace
-    API endpoint: https://api.run.gotapaas.eu
+    $ cf login -u my_name -p my_password -o my_org -s my_space
+    API endpoint: my_endpoint
     Authenticating...
     OK
-    Targeted org seedorg
-    Targeted space seedspace
-    API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
-    User: admin
-    Org: seedorg
-    Space: seedspace
+    Targeted org my_org
+    Targeted space my_space
+    API endpoint: my_endpoint (API version: 2.25.0)
+    User: my_name
+    Org: my_org
+    Space: my_space
 
 Verify that you are still connected by running "cf target"
 And your output looks like this:
 
 .. code::
 
-    [hadoop@master ~]$ cf target
-    API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
-    User: admin
-    Org: seedorg
-    Space: seedspace
-    TBD
+    $ cf target
+    API endpoint: my_endpoint (API version: 2.25.0)
+    User: my_name
+    Org: my_org
+    Space: my_space
 
-Prepare ATK tarball:
+Prepare ATK Tarball
+===================
 
 For QA:
 
@@ -100,7 +107,7 @@ In order to download the file, simply run the command:
 
     wget https://s3.amazonaws.com/gao-internal-archive/<Your_Branch_Name>/trustedanalytics.tar.gz
 
-for example if you are on "master" branch you run:
+For example, if you are on "master" branch you run:
 
 .. code::
 
@@ -137,8 +144,13 @@ In order to do so, do the following:
         - bryn-cdh
         - <YOUR_POSTGRESQL_SERVICE_NAME_HERE> for example "pg-atk-ebi"
         - bryn-zk
+        env:
+          CC_URI: <CLOUD_FOUNDRY_API_ENDPOINT> 
+          UAA_URI: <UAA_ENDPOINT> 
+          UAA_CLIENT_NAME: atk-client
+          UAA_CLIENT_PASSWORD: c1oudc0w
 
-#)  Create an instance of postgresql by running the command: 
+#)  Create an instance of PostgreSQL by running the command: 
 
     .. code::
 
@@ -150,12 +162,6 @@ In order to do so, do the following:
 
         Creating service instance pg-atk-ebi in org seedorg / space seedspace as admin...
         OK
-
-#)  Change conf/application.conf, making sure "fs.root" is set to:
-
-    .. code::
-       
-        fs.root = ${FS_ROOT}"/"${APP_NAME}
 
 #)  Change to the "~/vcap/app" folder (or wherever you have
     "trustedanalytics.tar.gz" unpacked).

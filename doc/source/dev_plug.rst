@@ -204,7 +204,7 @@ For example, for graphon.jar, just use the word graphon by itself.
 
 ``<archive-class>`` is optional.
 If provided, it must be the name of a class that can be found in the jar file
-or in its parent classloader.
+or in its parent class loader.
 This class must implement the Archive trait, which makes it the archive
 manager.
 The archive manager is the service that the system uses to discover plugins in

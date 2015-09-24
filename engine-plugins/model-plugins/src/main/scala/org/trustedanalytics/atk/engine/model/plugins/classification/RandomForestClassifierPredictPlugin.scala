@@ -46,8 +46,8 @@ was trained on. """) observationColumns: Option[List[String]]) {
 
 @PluginDoc(oneLine = "Predict the labels for the data points.",
   extended = "",
-  returns = """Frame
-    A new frame consisting of the existing columns of the frame and a new column with predicted label for each observation.""")
+  returns = """A new frame consisting of the existing columns of the frame and
+a new column with predicted label for each observation.""")
 class RandomForestClassifierPredictPlugin extends SparkCommandPlugin[RandomForestClassifierPredictArgs, FrameReference] {
   /**
    * The name of the command.
