@@ -1,7 +1,3 @@
-.. _old_sections/ad_inst_ta1:
-
-.. _old_ad_sections/ad_inst_ta1:
-
 .. _ad_inst_ta1:
 
 .. index::

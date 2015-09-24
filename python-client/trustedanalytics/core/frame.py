@@ -1214,7 +1214,7 @@ Default is None.""")
 
 @api
 class VertexFrame(_DocStubsVertexFrame, _BaseFrame):
-    """A list of Vertices owned by a Graph..
+    """A list of Vertices owned by a Graph.
 
 A VertexFrame is similar to a Frame but with a few important differences:
 
@@ -1242,6 +1242,10 @@ A VertexFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:vertex'
 
     @api
+    @arg('source','?',"""?""")
+    @arg('graph','?',"""?""")
+    @arg('label','?',"""?""")
+    @arg('_info','?',"""?""")
     def __init__(self, source=None, graph=None, label=None, _info=None):
         """
     Examples
@@ -1376,13 +1380,12 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('graph','?',"""graph these edges belong to""")
-    @arg('label','?',"""edge label""")
-    @arg('src_vertex_label','?',"""label of the source vertex type""")
-    @arg('dest_vertex_label','?',"""label of the destination vertex type""")
-    @arg('directed','?',"""directed or undirected""")
+    @arg('graph','?',"""Graph these edges belong to.""")
+    @arg('label','?',"""Edge label.""")
+    @arg('src_vertex_label','?',"""Label of the source vertex type.""")
+    @arg('dest_vertex_label','?',"""Label of the destination vertex type.""")
+    @arg('directed','str',"""``directed`` or ``undirected``""")
     @arg('_info','?',"""""")
-    @returns('VertexFrame object',"""An object with access to the frame.""")
     def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 
