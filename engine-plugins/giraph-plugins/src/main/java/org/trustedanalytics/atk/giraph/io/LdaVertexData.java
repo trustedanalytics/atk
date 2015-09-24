@@ -17,9 +17,7 @@
 package org.trustedanalytics.atk.giraph.io;
 
 import org.apache.hadoop.io.Writable;
-import org.apache.mahout.math.DenseVector;
 import org.apache.mahout.math.Vector;
-import org.apache.mahout.math.VectorWritable;
 import org.apache.spark.mllib.atk.plugins.VectorUtils;
 
 import java.io.DataInput;
@@ -30,14 +28,33 @@ import java.io.IOException;
  * Writable to handle serialization of the fields associated with vertex data of LDA
  */
 public class LdaVertexData implements Writable {
+    /* Original Id of vertex from data */
+    private String originalId;
 
-    /** The vector value at this vertex */
-    private final VectorWritable ldaResult = new VectorWritable(new DenseVector());
+    /**
+     * The vector value at this vertex
+     */
+    private final DoubleArrayWritable ldaResult = new DoubleArrayWritable();
 
-    /** The conditional probability of topic given word */
-    private final VectorWritable topicGivenWord = new VectorWritable(new DenseVector());
+    /**
+     * The conditional probability of topic given word
+     */
+    private final DoubleArrayWritable topicGivenWord = new DoubleArrayWritable();
 
     public LdaVertexData() {
+    }
+
+    public LdaVertexData(String id) {
+
+        this.originalId = id;
+    }
+
+    public void setOriginalId(String id) {
+        this.originalId = id;
+    }
+
+    public String getOriginalId() {
+        return originalId;
     }
 
     public void setLdaResult(Vector vector) {
@@ -45,16 +62,15 @@ public class LdaVertexData implements Writable {
     }
 
     public Vector getLdaResult() {
-        return ldaResult.get();
+        return ldaResult.getVector();
     }
-
 
     public void setTopicGivenWord(Vector vector) {
         topicGivenWord.set(vector);
     }
 
     public Vector getTopicGivenWord() {
-        return topicGivenWord.get();
+        return topicGivenWord.getVector();
     }
 
     public double[] getLdaResultAsDoubleArray() {
@@ -68,12 +84,12 @@ public class LdaVertexData implements Writable {
     @Override
     public void readFields(DataInput in) throws IOException {
         ldaResult.readFields(in);
-        topicGivenWord.readFields(in);
+        originalId = in.readUTF();
     }
 
     @Override
     public void write(DataOutput out) throws IOException {
         ldaResult.write(out);
-        topicGivenWord.write(out);
+        out.writeUTF(originalId);
     }
 }
