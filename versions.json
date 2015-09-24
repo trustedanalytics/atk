@@ -9,6 +9,10 @@
    "type": "Production", 
    "version": "v0.4.0"
   }, 
+  "v0.4.1": {
+   "type": "Production", 
+   "version": "v0.4.1"
+  }, 
   "w20150819": {
    "type": "Weekly", 
    "version": "w20150819"

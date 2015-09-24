@@ -1,0 +1,34 @@
+.. _python_api/models/model-naive_bayes/name:
+
+
+:doc:`NaiveBayesModel <index>`  name
+************************************
+
+------
+
+
+.. attribute:: name
+
+    Set or get the name of the model object.
+
+
+    :Parameters:
+
+    Change or retrieve model object identification.
+    Identification names must start with a letter and are limited to
+    alphanumeric characters and the ``_`` character.
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> my_model.name
+
+        "csv_data"
+
+        >>> my_model.name = "cleaned_data"
+        >>> my_model.name
+
+        "cleaned_data"

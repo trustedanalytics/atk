@@ -1,0 +1,89 @@
+.. _python_api/models/model-linear_regression/index:
+
+
+:doc:`Models<../index>` LinearRegressionModel
+*********************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    train
+
+.. class:: LinearRegressionModel
+
+    Create a 'new' instance of a Linear Regression model.
+
+    Linear Regression [1]_ is used to model the relationship between a scalar
+    dependent variable and one or more independent variables.
+    The Linear Regression model is initialized, trained on columns of a frame and
+    used to predict the value of the dependent variable given the independent
+    observations of a frame.
+    This model runs the MLLib implementation of Linear Regression [2]_ with the
+    SGD [3]_ optimizer.
+                    
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Linear_regression
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
+    .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LinearRegressionModel__init__>`\ (self[, name, _info])                                Create a 'new' instance of a Linear Regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Make new frame with column for label prediction.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, intercept, ...])              |ALPHA| Build linear regression model.
+    ====================================================================================================  ====================================================================================================
+
+.. _LinearRegressionModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of a Linear Regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e68702090>>
+
+        ..
+
+
+    Linear Regression [1]_ is used to model the relationship between a scalar
+    dependent variable and one or more independent variables.
+    The Linear Regression model is initialized, trained on columns of a frame and
+    used to predict the value of the dependent variable given the independent
+    observations of a frame.
+    This model runs the MLLib implementation of Linear Regression [2]_ with the
+    SGD [3]_ optimizer.
+                    
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Linear_regression
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
+    .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent

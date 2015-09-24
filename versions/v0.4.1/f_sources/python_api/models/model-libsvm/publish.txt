@@ -1,0 +1,27 @@
+.. _python_api/models/model-libsvm/publish:
+
+
+:doc:`LibsvmModel <index>`  publish
+***********************************
+
+------
+
+
+.. function:: publish(self)
+
+    |BETA|
+    Creates a scoring engine tar file.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    The HDFS path to the tar file.

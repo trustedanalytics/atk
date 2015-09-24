@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-edge/filter:
+
+
+:doc:`EdgeFrame <index>`  filter
+********************************
+
+------
+
+
+.. function:: filter(self, predicate)
+
+    Select all rows which satisfy a predicate.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row to a boolean; rows that answer False are dropped from the Frame
+
+
+    Modifies the current frame to save defined rows and delete everything
+    else.
+
+    Examples
+    --------
+    For this example, *my_frame* is a Frame object with lots of data for
+    the attributes of ``lizards``, ``frogs``, and ``snakes``.
+    Get rid of everything, except information about ``lizards`` and
+    ``frogs``:
+
+    .. code::
+
+        >>> def my_filter(row):
+        ... return row['animal_type'] == 'lizard' or
+        ... row['animal_type'] == "frog"
+
+        >>> my_frame.filter(my_filter)
+
+    The frame now only has data about ``lizards`` and ``frogs``.
+
+    More information on a |UDF| can be found at :doc:`/ds_apir`.
+

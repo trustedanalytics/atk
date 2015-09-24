@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Deploy and Run ATK App on DP2 &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="next" title="Python API" href="python_api/index.html" >
+    <link rel="prev" title="Plugin Authoring Guide" href="dev_plug.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="dev_plug.html" title="Plugin Authoring Guide"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="python_api/index.html" title="Python API"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Deploy and Run ATK App on DP2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installing-required-packages">Installing Required Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="deploy-and-run-atk-app-on-dp2">
+<span id="ad-over"></span><h1>Deploy and Run ATK App on DP2<a class="headerlink" href="#deploy-and-run-atk-app-on-dp2" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installing-required-packages">
+<h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-golang-from-the-package-manager">
+<h3>Install &#8220;golang&#8221; from the package manager<a class="headerlink" href="#install-golang-from-the-package-manager" title="Permalink to this headline">¶</a></h3>
+<p>On RedHat/CentOS, ensure &#8220;EPEL&#8221; repo is enabled.
+For more information, see <span class="xref std std-ref">Yum Repo</span>.</p>
+<p>From the command line interface (terminal),
+install the &#8220;go&#8221; language and the required libraries.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install golang
+</pre></div>
+</div>
+<p>To read more about &#8220;go&#8221; see <a class="reference external" href="https://golang.org/">https://golang.org/</a> .
+To test the &#8220;go&#8221; installation:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ go version
+go version go1.4.2 linux/amd64
+</pre></div>
+</div>
+<p>Install the CloudFoundry <abbr title="Command Line Interface">CLI</abbr> package:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
+</pre></div>
+</div>
+<p>This downloads the prepackaged RPM to your local machine.
+Install this package:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install cf-cli_amd64.rpm
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">See <a class="reference external" href="https://github.com/cloudfoundry/cli/releases">https://github.com/cloudfoundry/cli/releases</a> for installation on a system not running RedHat/CentOS.</p>
+</div>
+<p>Test the package installation:</p>
+</div>
+<div class="section" id="setting-up-cf-for-atk-deployment">
+<h3>Setting Up CF for ATK Deployment<a class="headerlink" href="#setting-up-cf-for-atk-deployment" title="Permalink to this headline">¶</a></h3>
+<p>First, add the &lt;CLOUD_FOUNDRY_API_ENDPOINT&gt; to the &#8220;no_proxy&#8221; list.</p>
+<p>Now run <code class="docutils literal"><span class="pre">cf</span> <span class="pre">api</span> <span class="pre">&lt;CLOUD_FOUNDRY_API_ENDPOINT&gt;</span> <span class="pre">-skip-ssl-validation</span></code> to set your API endpoint.
+You should see a message like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cf api my_endpoint -skip-ssl-validation
+Setting api endpoint to my_endpoint...
+OK
+API endpoint: my_endpoint (API version: 2.25.0)
+Not logged in. Use &#39;cf login&#39; to log in.
+</pre></div>
+</div>
+<p>Now try login by running the command <code class="docutils literal"><span class="pre">cf</span> <span class="pre">login</span> <span class="pre">-u</span> <span class="pre">&lt;CLOUD_FOUNDRY_USERNAME&gt;</span> <span class="pre">-p</span> <span class="pre">&lt;CLOUD_FOUNDRY_PASSWORD&gt;</span>&nbsp; <span class="pre">-o</span> <span class="pre">&lt;CLOUD_FOUNDRY_ORGANIZATION</span> <span class="pre">&gt;</span> <span class="pre">-s</span> <span class="pre">&lt;CLOUD_FOUNDRY_SPACE&gt;</span></code></p>
+<p>Your output should look something like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cf login -u my_name -p my_password -o my_org -s my_space
+API endpoint: my_endpoint
+Authenticating...
+OK
+Targeted org my_org
+Targeted space my_space
+API endpoint: my_endpoint (API version: 2.25.0)
+User: my_name
+Org: my_org
+Space: my_space
+</pre></div>
+</div>
+<p>Verify that you are still connected by running &#8220;cf target&#8221;
+And your output looks like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cf target
+API endpoint: my_endpoint (API version: 2.25.0)
+User: my_name
+Org: my_org
+Space: my_space
+</pre></div>
+</div>
+</div>
+<div class="section" id="prepare-atk-tarball">
+<h3>Prepare ATK Tarball<a class="headerlink" href="#prepare-atk-tarball" title="Permalink to this headline">¶</a></h3>
+<p>For QA:</p>
+<p>ATK tarballs are built as part of the TeamCity build and are uploaded to S3.
+In order to download the file, simply run the command:</p>
+<div class="code highlight-python"><div class="highlight"><pre>wget https://s3.amazonaws.com/gao-internal-archive/&lt;Your_Branch_Name&gt;/trustedanalytics.tar.gz
+</pre></div>
+</div>
+<p>For example, if you are on &#8220;master&#8221; branch you run:</p>
+<div class="code highlight-python"><div class="highlight"><pre>wget https://s3.amazonaws.com/gao-internal-archive/master/trustedanalytics.tar.gz
+</pre></div>
+</div>
+<p>For Dev:</p>
+<p>You can build ATK tarball from scratch yourself.
+In order to do so, do the following:</p>
+<ol class="arabic">
+<li><p class="first">CD to directory where your have the &#8220;atk&#8221; code checked out.</p>
+</li>
+<li><p class="first">Build the atk code using Maven tool.
+Details for this change frequently, so please look at other Wiki pages like this one: Maven build</p>
+</li>
+<li><p class="first">CD to &#8220;package&#8221; directory and from there run this script:
+&#8220;config/trustedanalytics-rest-server-tar/package.sh&#8221;.
+This creates a tar file like &#8220;atk.tar.gz&#8221; in the current directory.</p>
+</li>
+<li><p class="first">Deploy ATK to DP2 (Ireland instance):
+Create a directory anywhere on your system, for example at &#8220;~/vcap/app&#8221; and
+unpack your &#8220;trustedanalytics.tar.gz&#8221; inside that directory.</p>
+</li>
+<li><p class="first">CD to &#8220;~/vcap/app&#8221; and create a file &#8220;manifest.yml&#8221; with this content:
+(For now please ensure you are using below memory and disk_quota values and
+do not change them)</p>
+<div class="code highlight-python"><div class="highlight"><pre>applications:
+- name: &lt;YOUR_ATK_APP_NAME_HERE&gt; for example &quot;atk-ebi&quot;
+  command: bin/rest-server.sh
+  memory: 1G
+  disk_quota: 2G
+  timeout: 180
+  instances: 1
+services:
+- bryn-cdh
+- &lt;YOUR_POSTGRESQL_SERVICE_NAME_HERE&gt; for example &quot;pg-atk-ebi&quot;
+- bryn-zk
+env:
+  CC_URI: &lt;CLOUD_FOUNDRY_API_ENDPOINT&gt;
+  UAA_URI: &lt;UAA_ENDPOINT&gt;
+  UAA_CLIENT_NAME: atk-client
+  UAA_CLIENT_PASSWORD: c1oudc0w
+</pre></div>
+</div>
+</li>
+<li><p class="first">Create an instance of PostgreSQL by running the command:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cf create-service postgresql93 free pg-atk-ebi
+</pre></div>
+</div>
+<p>and you should see an output like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>Creating service instance pg-atk-ebi in org seedorg / space seedspace as admin...
+OK
+</pre></div>
+</div>
+</li>
+<li><p class="first">Change to the &#8220;~/vcap/app&#8221; folder (or wherever you have
+&#8220;trustedanalytics.tar.gz&#8221; unpacked).</p>
+</li>
+<li><p class="first">Now run the command <code class="docutils literal"><span class="pre">cf</span> <span class="pre">push</span></code>.
+This takes a few minutes to run and you should see the following output:</p>
+<div class="code highlight-python"><div class="highlight"><pre>[hadoop@master app]$ cf push
+Using manifest file /home/hadoop/vcap/app/manifest.yaml
+Creating app atk-ebi in org seedorg / space seedspace as admin...
+OK
+Using route atk-ebi.apps.gotapaas.eu
+Binding atk-ebi.apps.gotapaas.eu to atk-ebi...
+OK
+Uploading atk-ebi...
+Uploading app files from: /home/hadoop/vcap/app
+Uploading 48.3K, 9 files
+Done uploading
+OK
+Binding service bryn-cdh to app atk-ebi in org seedorg / space seedspace as admin...
+OK
+Binding service pg-atk-ebi to app atk-ebi in org seedorg / space seedspace as admin...
+OK
+Binding service bryn-zk to app atk-ebi in org seedorg / space seedspace as admin...
+OK
+Starting app atk-ebi in org seedorg / space seedspace as admin...
+0 of 1 instances running, 1 starting
+1 of 1 instances running
+App started
+
+OK
+App atk-ebi was started using this command `bin/rest-server.sh`
+Showing health and status for app atk-ebi in org seedorg / space seedspace as admin...
+OK
+requested state: started
+instances: 1/1
+usage: 1G x 1 instances
+urls: atk-ebi.apps.gotapaas.eu
+last uploaded: Wed May 20 22:22:54 UTC 2015
+stack: cflinuxfs2
+state since cpu memory disk details
+#0 running 2015-05-20 03:25:13 PM 0.0% 622.9M of 1G 432.9M of 2G
+</pre></div>
+</div>
+<p>If you like to see the complete configuration for your app, run the
+command &#8220;cf env atk-ebi&#8221;.</p>
+</li>
+<li><p class="first">Retrieve data from VCAP_APPLICATION uris.</p>
+</li>
+<li><p class="first">Create a client credentials file.
+For more information,
+see <a class="reference external" href="https://github.com/trustedanalytics/atk/wiki/python-client">https://github.com/trustedanalytics/atk/wiki/python-client</a></p>
+</li>
+<li><p class="first">To tail your app logs:</p>
+<div class="code highlight-python"><div class="highlight"><pre>cf logs atk-ebi
+</pre></div>
+</div>
+</li>
+<li><p class="first">Open a Python2.7 or IPython session and do the following:</p>
+<div class="code highlight-python"><div class="highlight"><pre>In [1]: import trustedanalytics as atk
+In [2]: atk.connect(&quot;&lt;PATH_TO_YOUR_CREDENTIALS_FILE&quot;)
+Connected to intelanalytics server.
+In [3]: atk.server.host
+Out[3]: &#39;atk-ebi.apps.gotapaas.eu&#39;
+In [4]: exit
+</pre></div>
+</div>
+</li>
+<li><p class="first">Ready to run some examples:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">TBD</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 24, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

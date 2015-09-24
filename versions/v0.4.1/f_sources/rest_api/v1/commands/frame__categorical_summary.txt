@@ -1,0 +1,138 @@
+.. _rest_api/v1/commands/frame__categorical_summary:
+
+
+
+-------------------------------------------------
+:doc:`Commands <index>` frame/categorical_summary
+-------------------------------------------------
+
+Build summary of the data.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/categorical_summary
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e686f3fd0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **column_input** : list
+
+    ..
+
+        List of Categorical Column Input consisting of column, topk and/or threshold
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Optional parameters:
+
+    top_k *: int*
+        Displays levels which are in the top k most frequently
+        occurring values for that column.
+        Default is 10.
+
+    threshold *: float*
+        Displays levels which are above the threshold percentage with
+        respect to the total row count.
+        Default is 0.0.
+
+Compute a summary of the data in a column(s) for categorical or numerical data types.
+The returned value is a Map containing categorical summary for each specified column.
+
+For each column, levels which satisfy the top k and/or threshold cutoffs are
+displayed along with their frequency and percentage occurrence with respect to
+the total rows in the dataset.
+
+Performs level pruning first based on top k and then filters
+out levels which satisfy the threshold criterion.
+
+Missing data is reported when a column value is empty ("") or null.
+
+All remaining data is grouped together in the Other category and its frequency
+and percentage are reported as well.
+
+User must specify the column name and can optionally specify top_k and/or threshold.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Summary for specified column(s) consisting of levels with their frequency and percentage.
+
+

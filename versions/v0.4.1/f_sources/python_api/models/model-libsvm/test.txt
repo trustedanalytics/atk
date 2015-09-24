@@ -1,0 +1,131 @@
+.. _python_api/models/model-libsvm/test:
+
+
+:doc:`LibsvmModel <index>`  test
+********************************
+
+------
+
+
+.. function:: test(self, frame, label_column, observation_columns=None)
+
+    |ALPHA|
+    Predict test frame labels and return metrics.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e686f3fd0>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the actual label for each
+            observation.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose
+            labels are to be predicted and tested.
+            Default is to test over the columns the LIBSVM model
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Object with binary classification metrics.
+            The data returned is composed of multiple components\:
+
+            |  **double** : *accuracy*
+            |      The degree of correctness of the test frame labels.
+            |  **table** : *confusion_matrix*
+            |     A specific table layout that allows visualization of the performance of the
+            test.
+            |  **double** : *f_measure*
+            |     A measure of a test's accuracy.
+            It considers both the precision and the recall of the test to compute the score.
+            |  **double** : *precision*
+            |     The degree to which the correctness of the label is expressed.
+            |  **double** : *recall*
+            |      The fraction of relevant instances that are retrieved.
+    Predict the labels for a test frame and run classification
+    metrics on predicted and target labels.
+
+    Examples
+    --------
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.LibsvmModel(name='mySVM')
+            >>> my_model.train(train_frame, 'name_of_label_column',['List_of_observation_column/s'])
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column',['List_of_observation_column/s'])
+
+            >>> metrics.f_measure
+            0.66666666666666663
+
+            >>> metrics.recall
+            0.5
+
+            >>> metrics.accuracy
+            0.75
+
+            >>> metrics.precision
+            1.0
+
+            >>> metrics.confusion_matrix
+
+                          Predicted
+                        _pos_ _neg__
+            Actual  pos |  1     1
+                    neg |  0     2
+
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.LibsvmModel(name='mySVM')
+            >>> my_model.train(train_frame, 'name_of_label_column',
+            ... ['List_of_observation_column/s'])
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column',
+            ... ['List_of_observation_column/s'])
+
+            >>> metrics.f_measure
+            0.66666666666666663
+
+            >>> metrics.recall
+            0.5
+
+            >>> metrics.accuracy
+            0.75
+
+            >>> metrics.precision
+            1.0
+
+            >>> metrics.confusion_matrix
+
+                          Predicted
+                        _pos_ _neg__
+            Actual  pos |  1     1
+                    neg |  0     2
+
+
+

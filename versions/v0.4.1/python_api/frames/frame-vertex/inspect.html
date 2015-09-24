@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame inspect &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame join" href="join.html" >
+    <link rel="prev" title="VertexFrame histogram" href="histogram.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="histogram.html" title="VertexFrame histogram"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="join.html" title="VertexFrame join"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-inspect">
+<span id="python-api-frames-frame-vertex-inspect"></span><h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  inspect<a class="headerlink" href="#vertexframe-inspect" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="inspect">
+<code class="descname">inspect</code><span class="sig-paren">(</span><em>self</em>, <em>n=10</em>, <em>offset=0</em>, <em>columns=None</em>, <em>wrap=None</em>, <em>truncate=None</em>, <em>round=None</em>, <em>width=80</em>, <em>margin=None</em><span class="sig-paren">)</span><a class="headerlink" href="#inspect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the frame data in readable format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>n</strong> : int (default=10)</p>
+<blockquote>
+<div><p>The number of rows to print.</p>
+</div></blockquote>
+<p><strong>offset</strong> : int (default=0)</p>
+<blockquote>
+<div><p>The number of rows to skip before printing.</p>
+</div></blockquote>
+<p><strong>columns</strong> : int (default=None)</p>
+<blockquote>
+<div><p>Filter columns to be included.  By default, all columns are included</p>
+</div></blockquote>
+<p><strong>wrap</strong> : int or &#8216;stripes&#8217; (default=None)</p>
+<blockquote>
+<div><p>If set to &#8216;stripes&#8217; then inspect prints rows in stripes; if set to an integer N, rows will be printed in clumps of N columns, where the columns are wrapped</p>
+</div></blockquote>
+<p><strong>truncate</strong> : int (default=None)</p>
+<blockquote>
+<div><p>If set to integer N, all strings will be truncated to length N, including a tagged ellipses</p>
+</div></blockquote>
+<p><strong>round</strong> : int (default=None)</p>
+<blockquote>
+<div><p>If set to integer N, all floating point numbers will be rounded and truncated to N digits</p>
+</div></blockquote>
+<p><strong>width</strong> : int (default=80)</p>
+<blockquote>
+<div><p>If set to integer N, the print out will try to honor a max line width of N</p>
+</div></blockquote>
+<p><strong>margin</strong> : int (default=None)</p>
+<blockquote class="last">
+<div><p>(&#8216;stripes&#8217; mode only) If set to integer N, the margin for printing names in a stripe will be limited to N characters</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Given a frame of data and a Frame to access it.
+To look at the first 4 rows of data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="go">column defs -&gt;  animal:str  name:str    age:int     weight:float</span>
+<span class="go">              /--------------------------------------------------/</span>
+<span class="go">frame data -&gt;   human       George        8            542.5</span>
+<span class="go">                human       Ursula        6            495.0</span>
+<span class="go">                ape         Ape          41            400.0</span>
+<span class="go">                elephant    Shep          5           8630.0</span>
+</pre></div>
+</div>
+<p># For other examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-inspect"><span>Inspect the Data</span></a>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 24, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

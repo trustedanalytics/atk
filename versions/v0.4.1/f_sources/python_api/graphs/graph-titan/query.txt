@@ -1,0 +1,25 @@
+.. _python_api/graphs/graph-titan/query:
+
+
+:doc:`TitanGraph <index>`  fget
+*******************************
+
+------
+
+
+.. attribute:: __private_query
+
+    Access to object's query functionality (See :class:`~trustedanalytics.core.docstubs.TitanGraphQuery`)
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : TitanGraphQuery
+
+        ..
+
+            TitanGraphQuery object

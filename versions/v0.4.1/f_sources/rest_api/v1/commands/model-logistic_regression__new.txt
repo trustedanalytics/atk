@@ -1,0 +1,126 @@
+.. _rest_api/v1/commands/model-logistic_regression__new:
+
+
+
+-----------------------------------------------------
+:doc:`Commands <index>` model:logistic_regression/new
+-----------------------------------------------------
+
+Create a 'new' instance of logistic regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:logistic_regression/new
+
+:arguments:
+
+
+    **dummy_model_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e68702090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Logistic Regression [1]_ is a widely used supervised binary and multi-class classification algorithm.
+The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+of observations, and tests the predicted labels against the true labels.
+This model runs the MLLib implementation of Logistic Regression [2]_, with enhanced features |EM|
+trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+of the train and test observations.
+Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD [4]_.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Logistic_regression
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression
+.. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
+.. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+    
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e68702090>>``
+
+
+
+

@@ -1,0 +1,95 @@
+.. _python_api/graphs/graph-titan/graphx_connected_components:
+
+
+:doc:`TitanGraph <index>`  graphx_connected_components
+******************************************************
+
+------
+
+
+.. function:: graphx_connected_components(self, output_property)
+
+    Implements the connected components computation on a graph by invoking graphx api.
+
+
+    :Parameters:
+
+        **output_property** : unicode
+
+        ..
+
+            The name of the column containing the connected component value.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Dictionary containing the vertex type as the key and the corresponding
+              vertex's frame with a connected component column.
+              Call dictionary_name['label'] to get the handle to frame whose vertex type is label.
+    Pulls graph from underlying store, sends it off to the ConnectedComponentGraphXDefault,
+    and then writes the output graph back to the underlying store.
+
+    |
+    **Connected Components (CC)**
+
+    Connected components are disjoint subgraphs in which all vertices are
+    connected to all other vertices in the same component via paths, but not
+    connected via paths to vertices in any other component.
+    The connected components algorithm uses message passing along a specified edge
+    type to find all of the connected components of a graph and label each edge
+    with the identity of the component to which it belongs.
+    The algorithm is specific to an edge type, hence in graphs with several
+    different types of edges, there may be multiple, overlapping sets of connected
+    components.
+
+    The algorithm works by assigning each vertex a unique numerical index and
+    passing messages between neighbors.
+    Vertices pass their indices back and forth with their neighbors and update
+    their own index as the minimum of their current index and all other indices
+    received.
+    This algorithm continues until there is no change in any of the vertex
+    indices.
+    At the end of the algorithm, the unique levels of the indices denote the
+    distinct connected components.
+    The complexity of the algorithm is proportional to the diameter of the graph.
+
+
+    Examples
+    --------
+    .. code::
+
+        >>> f= g.graphx_connected_components(output_property = "ccId")
+
+    The expected output is like this:
+
+    .. code::
+
+        {u'movie': Frame "None"
+         row_count = 597
+         schema =
+           _vid:int64
+           _label:unicode
+           movie:int32
+           Con_Com:int64, u'user': Frame "None"
+         row_count = 597
+         schema =
+           _vid:int64
+           _label:unicode
+           vertexType:unicode
+           user:int32
+           Con_Com:int64}
+
+    To query:
+
+    .. code::
+
+        >>> movie_frame = f['movie']
+        >>> user_frame = f['user']
+
+

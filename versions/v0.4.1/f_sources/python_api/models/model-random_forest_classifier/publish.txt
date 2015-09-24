@@ -1,0 +1,28 @@
+.. _python_api/models/model-random_forest_classifier/publish:
+
+
+:doc:`RandomForestClassifierModel <index>`  publish
+***************************************************
+
+------
+
+
+.. function:: publish(self)
+
+    |BETA|
+    Creates a scoring engine tar file.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            The HDFS path to the tar file.
+    Creates a tar file with the trained Random Forest Classifier Model
+    The tar file is used as input to the scoring engine to predict the class of an observation.

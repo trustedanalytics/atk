@@ -1,0 +1,118 @@
+.. _rest_api/v1/commands/frame__cumulative_sum:
+
+
+
+--------------------------------------------
+:doc:`Commands <index>` frame/cumulative_sum
+--------------------------------------------
+
+|BETA|
+Add column to frame with cumulative percent sum.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/cumulative_sum
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f9e686f3fd0>>
+
+    ..
+
+        Identifier for the input dataframe
+
+
+
+    **sample_col** : unicode
+
+    ..
+
+        The name of the column from which to compute
+        the cumulative sum.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+A cumulative sum is computed by sequentially stepping through the rows,
+observing the column values and keeping track of the cumulative sum for each value.
+
+Notes
+-----
+This method applies only to columns containing numerical data.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+
