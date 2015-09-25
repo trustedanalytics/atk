@@ -307,13 +307,20 @@ trait EngineConfig extends EventLogging {
   /**
    * Determines whether SparkContex.addJars() paths get "local:" prefix or not.
    *
-   * True if engine-core.jar, interfaces.jar and ohters are installed locally on each cluster node (preferred).
+   * True if engine-core.jar, interfaces.jar and others are installed locally on each cluster node (preferred).
    * False is useful mainly for development on a cluster.  False results in many copies of the application jars
    * being made and copied to all of the cluster nodes.
    */
   val sparkAppJarsLocal: Boolean = config.getBoolean(sparkConfigKey + ".app-jars-local")
 
-  /** Fully qualified Hostname for current system */
+  /**
+   * Represents a ":" separated set of fully qualified strings (jars) needed by the application.
+   */
+  val extraJarsForSparkSubmit: String = config.getString(sparkConfigKey + ".extra-jars-for-spark-submit")
+
+  /**
+   * Fully qualified hostname for current system.
+   */
   private def hostname: String = InetAddress.getLocalHost.getCanonicalHostName
 
   // log important settings
