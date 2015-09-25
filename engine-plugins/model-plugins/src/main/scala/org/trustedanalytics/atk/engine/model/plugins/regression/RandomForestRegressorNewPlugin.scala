@@ -26,7 +26,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, CommandPlugin }
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -49,7 +49,7 @@ value of the random forest.
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html""")
-class RandomForestRegressorNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class RandomForestRegressorNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

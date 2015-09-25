@@ -27,7 +27,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -50,7 +50,7 @@ This model runs the MLLib implementation of Naive Bayes [2]_.
 
 .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html""")
-class NaiveBayesNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class NaiveBayesNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

@@ -20,7 +20,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
@@ -43,7 +43,7 @@ It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD 
 .. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
 .. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
     """)
-class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class LogisticRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
