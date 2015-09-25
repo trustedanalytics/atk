@@ -289,7 +289,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
     @api
     @has_udf_arg
-    @arg('func', 'UDF', "User-Defined Function (|UDF|) which takkes the values in the row and produces a value, or "
+    @arg('func', 'UDF', "User-Defined Function (|UDF|) which takes the values in the row and produces a value, or "
          "collection of values, for the new cell(s).")
     @arg('schema', 'tuple | list of tuples', "The schema for the results of the |UDF|, indicating the new column(s) to "
          "add.  Each tuple provides the column name and data type, and is of the form (str, type).")
