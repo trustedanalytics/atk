@@ -182,6 +182,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
         Column identifications in the current frame.
 
+        Returns the names of the columns of the current frame.
+
         Examples
         --------
         Given a Frame object, *my_frame* accessing a frame.
@@ -208,6 +210,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     def __row_count(self):
         """
         Number of rows in the current frame.
+
+        Counts all of the rows in the frame.
 
         Examples
         --------

@@ -85,46 +85,27 @@ The data returned is composed of multiple components\:
 |   mean : [ double | None ]
 |       Arithmetic mean of the data.
 |   geometric_mean : [ double | None ]
-|       Geometric mean of the data.
-None when there is a data element <= 0, 1.0 when there are no
-data elements.
+|       Geometric mean of the data. None when there is a data element <= 0, 1.0 when there are no data elements.
 |   variance : [ double | None ]
-|       None when there are <= 1 many data elements.
-Sample variance is the weighted sum of the squared distance of
-each data element from the weighted mean, divided by the total
-weight minus 1.
-None when the sum of the weights is <= 1.
-Population variance is the weighted sum of the squared distance
-of each data element from the weighted mean, divided by the total
-weight.
+|       None when there are <= 1 many data elements. Sample variance is the weighted sum of the squared distance of each data element from the weighted mean, divided by the total weight minus 1. None when the sum of the weights is <= 1. Population variance is the weighted sum of the squared distance of each data element from the weighted mean, divided by the total weight.
 |   standard_deviation : [ double | None ]
-|       The square root of the variance. None when  sample variance
-is being used and the sum of weights is <= 1.
+|       The square root of the variance. None when  sample variance is being used and the sum of weights is <= 1.
 |   total_weight : long
-|       The count of all data elements that are finite numbers.
-(In other words, after excluding NaNs and infinite values.)
+|       The count of all data elements that are finite numbers. In other words, after excluding NaNs and infinite values.
 |   minimum : [ double | None ]
-|       Minimum value in the data.
-None when there are no data elements.
+|       Minimum value in the data. None when there are no data elements.
 |   maximum : [ double | None ]
 |       Maximum value in the data. None when there are no data elements.
 |   mean_confidence_lower : [ double | None ]
-|       Lower limit of the 95% confidence interval about the mean.
-Assumes a Gaussian distribution.
-None when there are no elements of positive weight.
+|       Lower limit of the 95% confidence interval about the mean. Assumes a Gaussian distribution. None when there are no elements of positive weight.
 |   mean_confidence_upper : [ double | None ]
-|       Upper limit of the 95% confidence interval about the mean.
-Assumes a Gaussian distribution.
-None when there are no elements of positive weight.
+|       Upper limit of the 95% confidence interval about the mean. Assumes a Gaussian distribution. None when there are no elements of positive weight.
 |   bad_row_count : [ double | None ]
-|       The number of rows containing a NaN or infinite value
-in either the data or weights column.
+|       The number of rows containing a NaN or infinite value in either the data or weights column.
 |   good_row_count : [ double | None ]
-|       The number of rows not containing a NaN or infinite
-value in either the data or weights column.
+|       The number of rows not containing a NaN or infinite value in either the data or weights column.
 |   positive_weight_count : [ double | None ]
-|       The number of valid data elements with weight > 0.
-This is the number of entries used in the statistical calculation.
+|       The number of valid data elements with weight > 0. This is the number of entries used in the statistical calculation.
 |   non_positive_weight_count : [ double | None ]
 |       The number valid data elements with finite weight <= 0.""")
 class ColumnSummaryStatisticsPlugin extends SparkCommandPlugin[ColumnSummaryStatisticsArgs, ColumnSummaryStatisticsReturn] {
