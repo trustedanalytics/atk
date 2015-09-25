@@ -71,6 +71,6 @@ object JdbcFunctions extends Serializable {
       throw new RuntimeException("Connector type is required if the url is not provided")
     )
 
-    ConfigFactory.load().getString("trustedanalytics.atk." + connector + ".url")
+    ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url")
   }
 }
