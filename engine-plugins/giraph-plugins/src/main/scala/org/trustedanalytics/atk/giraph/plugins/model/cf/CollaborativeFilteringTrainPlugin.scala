@@ -34,9 +34,9 @@ import spray.json._
 import CollaborativeFilteringJsonFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-@PluginDoc(oneLine = "Collaborative filtering (als/cgd) model",
-  extended = """""",
-  returns = """Execution result summary for Giraph""")
+@PluginDoc(oneLine = "Collaborative filtering (ALS/CGD) model",
+  extended = "",
+  returns = "Execution result summary for Giraph")
 class CollaborativeFilteringTrainPlugin
     extends CommandPlugin[CollaborativeFilteringTrainArgs, StringValue] {
 

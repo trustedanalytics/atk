@@ -29,9 +29,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "Append data from a Jdbc table into an existing (possibly empty) frame",
-  extended = "Append data from a Jdbc table into an existing (possibly empty) frame",
-  returns = "the initial frame with the Jdbc data appended")
+@PluginDoc(oneLine = "Append data from a JDBC table into an existing (possibly empty) frame",
+  extended = "Append data from a JDBC table into an existing (possibly empty) frame",
+  returns = "the initial frame with the JDBC data appended")
 class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
 
   /**

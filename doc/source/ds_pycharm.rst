@@ -37,12 +37,12 @@ Setup
         button.
 
         i)  If *Python 2.7* does not appear in the list you will need to
-            configure a Python 2.7 Intepreter.
+            configure a Python 2.7 interpreter.
 
             1)  Choose the button that looks like a "gear".
             #)  Choose *Add Local*.
             #)  Browse for your local Python 2.7 installation.
-                On RedHat or Centos this is probably /usr/bin/python.
+                On RedHat or CentOS this is probably /usr/bin/python.
             #)  Choose the *OK* button.
 
 #)  Choose :menuselection:`File --> Settings`.
@@ -50,7 +50,7 @@ Setup
     a)  Choose *Project Structure*.
     #)  Choose *Add Content Root* and browse to the |PACKAGE| Python REST Client
         libraries.
-        On RedHat or Centos these are found under
+        On RedHat or CentOS these are found under
         '/usr/lib/trustedanalytics/rest-client/python'.
     #)  Choose *Apply* button.
     #)  Choose *OK* button.

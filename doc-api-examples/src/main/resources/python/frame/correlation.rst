@@ -16,8 +16,8 @@ Consider Frame *my_frame*, which contains the data
 
 my_frame.correlation computes the common correlation coefficient (Pearson's) on the pair
 of columns provided.
-In this example, the idnum and most of the columns have trivial correlations: -1, 0, or +1.
-Column x3 provides a contrasting coefficient of 3 / sqrt(3) = 0.948683298051 .
+In this example, the *idnum* and most of the columns have trivial correlations: -1, 0, or +1.
+Column *x3* provides a contrasting coefficient of 3 / sqrt(3) = 0.948683298051 .
 
 .. code::
 

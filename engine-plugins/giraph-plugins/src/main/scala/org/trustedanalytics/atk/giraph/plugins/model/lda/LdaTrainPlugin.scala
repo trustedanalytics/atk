@@ -44,17 +44,17 @@ import LdaJsonFormat._
  */
 @PluginDoc(oneLine = "Creates Latent Dirichlet Allocation model",
   extended = """See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__""",
-  returns = """dict
-    The data returned is composed of multiple components:
-topics_given_doc : Frame
-    Frame with conditional probabilities of topic given document.
-word_given_topics : Frame
-    Frame with conditional probabilities of word given topic.
-topics_given_word : Frame
-    Frame with conditional probabilities of topic given word.
-report : str
-   The configuration and learning curve report for Latent Dirichlet
-   Allocation as a multiple line str.""")
+  returns = """The data returned is composed of multiple components\:
+
+|   **Frame** : *topics_given_doc*
+|       Conditional probabilities of topic given document.
+|   **Frame** : *word_given_topics*
+|       Conditional probabilities of word given topic.
+|   **Frame** : *topics_given_word*
+|       Conditional probabilities of topic given word.
+|   **str** : *report*
+|       The configuration and learning curve report for Latent Dirichlet
+Allocation as a multiple line str.""")
 class LdaTrainPlugin
     extends SparkCommandPlugin[LdaTrainArgs, LdaTrainResult] {
 

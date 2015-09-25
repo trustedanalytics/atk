@@ -31,10 +31,10 @@ import ModelPublishJsonProtocol._
 /**
  * Publish a Random Forest Regressor Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+@PluginDoc(oneLine = "Creates a scoring engine tar file.",
   extended = """Creates a tar file with the trained Random Forest Regressor Model
 The tar file is used as input to the scoring engine to predict the value of an observation.""",
-  returns = """Returns the HDFS path to the tar file""")
+  returns = """The HDFS path to the tar file.""")
 class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -73,7 +73,11 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(), "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    //Extracting the RandomForestRegressorModel from the stored JsObject
+    val randomForestData = model.data.convertTo[RandomForestRegressorData]
+    val randomForestModel = randomForestData.randomForestModel
+    val jsvalue: JsValue = randomForestModel.toJson
+
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }
