@@ -30,12 +30,27 @@ export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/appli
 
 export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
 export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
+
 export PG_HOST=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.hostname' | tr -d '"')
 export PG_PORT=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.port' | tr -d '"')
 export PG_USER=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.username' | tr -d '"')
 export PG_PASS=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.password' | tr -d '"')
 export PG_DB=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.dbname' | tr -d '"')
 export PG_URL=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.uri' | tr -d '"')
+
+export POSTGRES_HOST=$PG_HOST
+export POSTGRES_PORT=$PG_PORT
+export POSTGRES_USER=$PG_USER
+export POSTGRES_PASS=$PG_PASS
+export POSTGRES_DB=$PG_DB
+export POSTGRES_URL=$PG_URL
+
+export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.hostname' | tr -d '"')
+export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.port' | tr -d '"')
+export MYSQL_USER=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.username' | tr -d '"')
+export MYSQL_PASS=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.password' | tr -d '"')
+export MYSQL_DB=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.dbname' | tr -d '"')
+export MYSQL_URL=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.uri' | tr -d '"')
 env
 
 pushd $ATK_CONF_DIR
