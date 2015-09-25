@@ -327,17 +327,12 @@ Configuration Script
 ====================
 
 The server configuration is semi-automated via the use of a Python script
-'/etc/trustedanalytics/rest-server/config'.
-It will query Cloudera Manager and
-write out two files: 'cdh.conf' containing general |PACKAGE| and Cloudera
-configuration parameters and 'db.conf' containing parameters related to the
-PostgreSQL installation for |PACKAGE|.
-
+'/etc/trustedanalytics/rest-server/config.py'.
+It will query Cloudera Manager for the necessary configuration values and
 There is a single "master" configuration file called 'atk.conf'.  You can open
 'atk.conf' in any text editor to see that it is simply a list of
 "include"si.e., 'atk.conf' tells |PACKAGE| to read, upon initialization, in
 order, the following files:
-
 gen.conf
     Parameters set by the scripts installed with the 'cluster_config' package.
 
