@@ -33,7 +33,7 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ApiMaturityTag, Invocation, SparkCommandPlugin }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -44,19 +44,19 @@ import spray.json._
 
 @PluginDoc(oneLine = "Build Random Forests Classifier model.",
   extended = """Creating a Random Forests Classifier Model using the observation columns and label column.""",
-  returns =
-    """Values of the Random Forest Classifier model object storing:
-      | the list of observation columns on which the model was trained,
-      | the column name containing the labels of the observations,
-      | the number of classes,
-      | the number of decison trees in the random forest,
-      | the number of nodes in the random forest,
-      | the map storing arity of categorical features,
-      | the criterion used for information gain calculation,
-      | the maximum depth of the tree,
-      | the maximum number of bins used for splitting features,
-      | the random seed used for bootstrapping and choosing feature subset.
-    """.stripMargin)
+  returns = """Values of the Random Forest Classifier model object storing\:
+
+|  the list of observation columns on which the model was trained,
+|  the column name containing the labels of the observations,
+|  the number of classes,
+|  the number of decision trees in the random forest,
+|  the number of nodes in the random forest,
+|  the map storing :term:`arity` of categorical features,
+|  the criterion used for information gain calculation,
+|  the maximum depth of the tree,
+|  the maximum number of bins used for splitting features,
+|  the random seed used for bootstrapping and choosing feature subset.
+""")
 class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestClassifierTrainArgs, RandomForestClassifierTrainReturn] {
   /**
    * The name of the command.

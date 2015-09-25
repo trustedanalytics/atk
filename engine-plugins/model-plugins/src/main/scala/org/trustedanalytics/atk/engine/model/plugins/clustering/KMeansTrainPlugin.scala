@@ -32,17 +32,16 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Creates KMeans Model from train frame.",
+@PluginDoc(oneLine = "Creates k-means model from trained frame.",
   extended = "Upon training the 'k' cluster centers are computed.",
-  returns = """dict
-    Results.
-    The data returned is composed of multiple components:
-cluster_size : dict
-    Cluster size
-ClusterId : int
-    Number of elements in the cluster 'ClusterId'.
-within_set_sum_of_squared_error : double
-    The set of sum of squared error for the model.""")
+  returns = """The data returned is composed of multiple components\:
+
+|   **dict** : *cluster_size*
+|       Cluster size.
+|   **int** : *ClusterId*
+|       Number of elements in the cluster 'ClusterId'.
+|   **double** : *within_set_sum_of_squared_error*
+|       Sum of squared error for the model.""")
 class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainReturn] {
   /**
    * The name of the command.

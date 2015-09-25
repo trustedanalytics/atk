@@ -78,7 +78,7 @@ to be considered a classifier.
 Nonetheless, the discrete |LBP| algorithm allows Test/Train/Validate splits of
 the data and the algorithm will treat "Train" observations
 differently from "Test" and "Validate" observations.
-Vertices labelled with "Test" or "Validate" will be treated as though they have
+Vertices labeled with "Test" or "Validate" will be treated as though they have
 uninformative (uniform) priors and are
 allowed to receive messages, but not send messages.
 This simulates a "scoring scenario" in which a new observation is added to a

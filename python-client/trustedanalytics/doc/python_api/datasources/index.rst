@@ -47,6 +47,12 @@ Pandas
     :members:
     :inherited-members:
 
+UploadRows
+----------
+.. autoclass:: trustedanalytics.UploadRows
+    :members:
+    :inherited-members:
+
 XmlFile
 -------
 .. autoclass:: trustedanalytics.XmlFile

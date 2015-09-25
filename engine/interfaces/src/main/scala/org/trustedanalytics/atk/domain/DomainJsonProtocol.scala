@@ -35,7 +35,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.graph.construction._
-import org.trustedanalytics.atk.domain.graph.{ GraphEntity, LoadGraphArgs, GraphReference, GraphTemplate }
+import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference, GraphTemplate }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.joda.time.{ Duration, DateTime }
@@ -129,6 +129,31 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     override def read(json: JsValue): FileName = json match {
       case JsString(name) => FileName(name)
       case x => deserializationError("Expected file name, but got " + x)
+    }
+  }
+
+  implicit object ConfusionMatrixFormat extends JsonFormat[ConfusionMatrix] {
+    override def read(json: JsValue): ConfusionMatrix = json match {
+      case obj: JsObject => {
+        val fields = json.asJsObject.fields
+
+        val rowLabels = getOrInvalid(fields, "row_labels").convertTo[List[String]]
+        val columnLabels = getOrInvalid(fields, "column_labels").convertTo[List[String]]
+        val matrix = getOrInvalid(fields, "matrix").convertTo[Array[Array[Long]]]
+
+        val confusionMatrix = ConfusionMatrix(rowLabels, columnLabels)
+        confusionMatrix.setMatrix(matrix)
+        confusionMatrix
+      }
+      case x => deserializationError("Expected confusion matrix, but got " + x)
+    }
+
+    override def write(obj: ConfusionMatrix): JsValue = {
+      JsObject(
+        "row_labels" -> obj.rowLabels.toJson,
+        "column_labels" -> obj.columnLabels.toJson,
+        "matrix" -> obj.getMatrix.toJson
+      )
     }
   }
 
@@ -277,11 +302,17 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case JsNumber(n) => n.doubleValue()
         case JsBoolean(b) => b
         case JsString(s) => s
+        case JsArray(v) => v.map(x => read(x)).toList
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
     }
-
   }
+
+  def getOrInvalid[T](map: Map[String, T], key: String): T = {
+    // throw exception if a programmer made a mistake
+    map.getOrElse(key, deserializationError(s"expected key $key was not found in JSON $map"))
+  }
+
   implicit val longValueFormat = jsonFormat1(LongValue)
   implicit val intValueFormat = jsonFormat1(IntValue)
   implicit val stringValueFormat = jsonFormat1(StringValue)
@@ -371,7 +402,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   // model performance formats
 
-  implicit val classificationMetricLongFormat = jsonFormat5(ClassificationMetricArgs)
+  implicit val classificationMetricLongFormat = jsonFormat6(ClassificationMetricArgs)
   implicit val classificationMetricValueLongFormat = jsonFormat5(ClassificationMetricValue)
   implicit val commandActionFormat = jsonFormat1(CommandPost)
 
@@ -402,16 +433,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val graphNoArgsFormat = jsonFormat1(GraphNoArgs)
 
-  implicit val schemaListFormat = jsonFormat1(SchemaList)
-
   // graph loading formats for specifying graphbuilder and graphload rules
 
-  implicit val valueFormat = jsonFormat2(ValueRule)
-  implicit val propertyFormat = jsonFormat2(PropertyRule)
-  implicit val edgeRuleFormat = jsonFormat5(EdgeRule)
-  implicit val vertexRuleFormat = jsonFormat2(VertexRule)
-  implicit val frameRuleFormat = jsonFormat3(FrameRule)
-  implicit val graphLoadFormat = jsonFormat3(LoadGraphArgs)
   implicit val quantileFormat = jsonFormat2(Quantile)
   implicit val QuantileCalculationResultFormat = jsonFormat1(QuantileValues)
   implicit val defineVertexFormat = jsonFormat2(DefineVertexArgs)

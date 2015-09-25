@@ -61,7 +61,8 @@ def return_graph(json_result):
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
 
-@postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test', 'model:random_forest_classifier/test')
+@postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test',
+               'model:random_forest_classifier/test', "model:libsvm/test")
 def return_metrics(json_result):
      from trustedanalytics.core.classifymetrics import ClassificationMetricsResult
      return ClassificationMetricsResult(json_result)
@@ -144,10 +145,3 @@ def return_belief_propagation(json_result):
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
-@postprocessor('model:principal_components/predict')
-def return_principal_components_predict(json_result):
-    from trustedanalytics import get_frame
-    train_output = {'output_frame': get_frame(json_result['output_frame']['uri']) }
-    if json_result.get('t_squared_index', None) is not None:
-        train_output['t_squared_index'] = json_result['t_squared_index']
-    return train_output

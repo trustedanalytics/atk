@@ -20,7 +20,7 @@ from trustedanalytics.core.atktypes import valid_data_types, datetime
 def atk_dtype_to_pandas_str(dtype):
     """maps ATK schema types to types understood by pandas, returns string"""
     if dtype is not datetime and valid_data_types.is_primitive_type(dtype):
-        valid_data_types.to_string(dtype)
+        return valid_data_types.to_string(dtype)
     return "object"
 
 
@@ -57,28 +57,37 @@ class Pandas(object):
 
         Examples
         --------
-        For this example, we are going to use a raw data file named "pandas_df.csv".
-        It consists of three columns named: *a*, *b*, *c*.
-        The columns have the data types: *int32*, *int32*, *str*.
-        The fields of data are separated by commas.
-        '0th' row in the file indicates the header.
+        For this example, we are going to create a 0-5 ratings system with corresponding descriptions.
+        It consists of two columns, rating number and rating description.
+        The columns have the data types, int32 and string.
 
-        First bring in the stuff::
+        First import trustedanalytics and pandas::
 
             import trustedanalytics as ta
             import pandas
 
+        Connect::
+
+            ta.connect()
+
+        Create data::
+
+            ratings_data = [[0, "invalid"], [1, "Very Poor"], [2, "Poor"], [3, "Average"], [4, "Good"], [5, "Very Good"]]
+            df = pandas.DataFrame(ratings_data, columns=['weight', 'rating_text'])
+
         At this point create a schema that defines the data::
 
-            schema = [("a", ta.int32),
-                          ("b", ta.int32),
-                          ("c", str)]
-
-        your_pandas = pandas.read_csv("pandas_df.csv")
+            schema = [('weight', ta.int32), ('rating_text', unicode)]
 
         Now build a PandasFrame object with this schema::
 
-            my_pandas = ta.PandasFrame(your_pandas, schema, False)
+            ratings= ta.Frame(ta.Pandas(df, schema))
+
+        To check the result:: 
+            ratings.inspect()
+
+
+
 
         """
         import pandas

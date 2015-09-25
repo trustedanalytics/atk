@@ -22,8 +22,27 @@ import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, Plug
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-@PluginDoc(oneLine = "model:libsvm/new",
-  extended = "")
+/**
+ * Create a 'new' instance of a Support Vector Machine model
+ */
+@PluginDoc(oneLine = "Create a 'new' instance of a Support Vector Machine model.",
+  extended = """Support Vector Machine [1]_ is a supervised algorithm used to
+perform binary classification.
+A support vector machine constructs a high dimensional hyperplane which is
+said to achieve a good separation when a hyperplane has the largest distance to
+the nearest training-data point of any class. This model runs the
+LIBSVM [2]_ [3]_ implementation of SVM.
+The LIBSVM model is initialized, trained on columns of a frame, used to
+predict the labels of observations in a frame and used to test the predicted
+labels against the true labels.
+During testing, labels of the observations are predicted and tested against
+the true labels using built-in binary Classification Metrics.
+
+.. rubric: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Support_vector_machine
+.. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
+.. [3] https://en.wikipedia.org/wiki/LIBSVM""")
 class LibSvmNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

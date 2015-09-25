@@ -84,7 +84,7 @@ specified, and then writes the output graph to the underlying store.
 
 **Degree Calculation**
 
-A fundamental quantity in graph analyses is the degree of a vertex:
+A fundamental quantity in graph analysis is the degree of a vertex:
 The degree of a vertex is the number of edges adjacent to it.
 
 For a directed edge relation, a vertex has both an out-degree (the number of

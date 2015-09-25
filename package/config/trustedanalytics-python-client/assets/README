@@ -10,3 +10,6 @@ programming abstraction to significantly ease the complexity of cluster computin
 The platform is fully extensible through a plugin architecture that allows incorporating the full range of analytics
 and machine learning for any solution need in a unified workflow that frees the researchers from the overhead of
 understanding, integrating, and inefficiently iterating across a diversity of formats and interfaces.
+
+Documentation http://trustedanalytics.github.io/atk/
+Source  https://github.com/trustedanalytics/atk

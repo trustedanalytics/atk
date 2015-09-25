@@ -33,11 +33,26 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 /**
- * Create a 'new' instance of Random Forest Classifier model
+ * Create a 'new' instance of a Random Forest Classifier model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of random forest classifier model.",
-  extended = "",
-  returns = "")
+@PluginDoc(oneLine = "Create a 'new' instance of a Random Forest Classifier model.",
+  extended = """Random Forest [1]_ is a supervised ensemble learning algorithm
+which can be used to perform binary and multi-class classification.
+The Random Forest Classifier model is initialized, trained on columns of a
+frame, used to predict the labels of observations in a frame, and tests the
+predicted labels against the true labels.
+This model runs the MLLib implementation of Random Forest [2]_.
+During training, the decision trees are trained in parallel.
+During prediction, each tree's prediction is counted as vote for one class.
+The label is predicted to be the class which receives the most votes.
+During testing, labels of the observations are predicted and tested against the true labels
+using built-in binary and multi-class Classification Metrics.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Random_forest
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
+ """)
 class RandomForestClassifierNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

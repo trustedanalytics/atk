@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  */
 case class FilterVerticesArgs(frame: FrameReference,
                               @ArgDoc("""UDF which evaluates a row to a boolean;
-                                        |rows that evaluate to False are dropped from the Frame""") udf: Udf) {
+rows that evaluate to False are dropped from the Frame""") udf: Udf) {
   require(frame != null, "frame is required")
   require(udf != null, "udf is required")
 }
