@@ -314,48 +314,6 @@ running the spark worker role.
         $ sudo yum -y install trustedanalytics-spark-deps
         $ sudo yum -y install trustedanalytics-python-rest-client
 
-.. _rest_server_configuration:
-
--------------------------
-REST Server Configuration
--------------------------
-
-From the postgresql client, create a new database and user in postgresql.
-See the section on :ref:`postgresql <ad_inst_ta1_postgresql>`.
-
-Configuration Script
-====================
-
-The server configuration is semi-automated via the use of a Python script
-'/etc/trustedanalytics/rest-server/config'.
-It will query Cloudera Manager and
-create a new 'application.conf' file based on the 'application.conf.tpl' file.
-The script will also fully configure the local PostgreSQL installation to
-work with the |PACKAGE| server.
-
-To configure |PACKAGE| installation, do this:
-
-.. code::
-
-    $ cd /etc/trustedanalytics/rest-server/
-    $ sudo ./config
-
-Answer the prompts to configure the cluster.
-To see an example of the prompts see :doc:`/ad_inst_ta3`.
-
-The script goes through all the necessary configurations to get the |PACKAGE|
-service running.
-The script can be run multiple times but there is a danger that configuring the
-database multiple times can wipe out a users data frames and graphs.
-
-Command line arguments can also be supplied for every prompt.
-If a command line argument is given, no prompt will be presented.
-To get a list of all the command line arguments for the configuration script,
-run the same command with --help:
-
-.. code::
-
-    $ sudo ./config --help
 
 Manual Configuration
 ====================
@@ -368,22 +326,6 @@ configuration file are needed.** (:ref:`Skip section <skip_manual_section>`).
 
 The REST server package provides a configuration template file which must be
 used to create a configuration file.
-Copy the configuration template file 'application.conf.tpl' to
-'application.conf' in the same directory, like this:
-
-.. code::
-
-    $ cd /etc/trustedanalytics/rest-server
-    $ sudo cp application.conf.tpl application.conf
-
-Open the file with a text editor:
-
-.. code::
-
-    $ sudo vi application.conf
-
-All of the changes that need to be made are located at the top of the file.
-See :doc:`/appendix_application_conf` for an example 'application.conf' file.
 
 .. _ad_inst_tA_configure_file_system_root:
 
