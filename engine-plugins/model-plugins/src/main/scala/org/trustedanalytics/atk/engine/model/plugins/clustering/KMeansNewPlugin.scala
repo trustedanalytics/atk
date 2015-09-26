@@ -18,8 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ KMeansNewArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -44,7 +43,7 @@ center and also from every other cluster center.
 
 .. [1] https://en.wikipedia.org/wiki/K-means_clustering
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means""")
-class KMeansNewPlugin extends SparkCommandPlugin[KMeansNewArgs, ModelReference] {
+class KMeansNewPlugin extends CommandPlugin[KMeansNewArgs, ModelReference] {
 
   override def name: String = "model:k_means/new"
 

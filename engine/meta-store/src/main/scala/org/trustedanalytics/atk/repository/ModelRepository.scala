@@ -30,4 +30,9 @@ trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelE
    */
   def scanAll()(implicit session: Session): Seq[ModelEntity]
 
+  /**
+   * Return list of model entities (without data) for all Active model entities with a name
+   * @param session current session
+   */
+  def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity]
 }
