@@ -109,7 +109,7 @@ class ModelStorageImpl(metaStore: MetaStore)
     metaStore.withSession("spark.modelstorage.getModels") {
       implicit session =>
         {
-          metaStore.modelRepo.scanAll().filter(m => m.isStatus(Status.Active) && m.name.isDefined)
+          metaStore.modelRepo.scanNamedActiveModelsNoData()
         }
     }
   }

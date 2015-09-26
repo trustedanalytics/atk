@@ -37,4 +37,9 @@ trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelE
 
   /** gets sequence of all models with status Dropped */
   def droppedModels(implicit session: Session): Seq[ModelEntity]
+  /**
+   * Return list of model entities (without data) for all Active model entities with a name
+   * @param session current session
+   */
+  def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity]
 }

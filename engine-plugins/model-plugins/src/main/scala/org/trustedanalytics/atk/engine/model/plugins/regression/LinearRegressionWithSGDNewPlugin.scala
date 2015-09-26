@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, CommandPlugin }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 /**
@@ -39,7 +39,7 @@ SGD [3]_ optimizer.
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
 .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent""")
-class LinearRegressionWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class LinearRegressionWithSGDNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

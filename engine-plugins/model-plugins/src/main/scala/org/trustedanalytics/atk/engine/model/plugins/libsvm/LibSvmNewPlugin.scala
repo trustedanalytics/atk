@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
@@ -43,7 +43,7 @@ the true labels using built-in binary Classification Metrics.
 .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
 .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
 .. [3] https://en.wikipedia.org/wiki/LIBSVM""")
-class LibSvmNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class LibSvmNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
