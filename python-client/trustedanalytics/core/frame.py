@@ -26,13 +26,13 @@ from trustedanalytics.core.decorators import *
 api = get_api_decorator(logger)
 
 from trustedanalytics.core.api import api_status
-from trustedanalytics.core.atktypes import valid_data_types
 from trustedanalytics.core.column import Column
 from trustedanalytics.core.errorhandle import IaError
 from trustedanalytics.meta.udf import has_udf_arg
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
+from trustedanalytics.core.ui import inspect_settings
 
 
 def _get_backend():
@@ -170,17 +170,17 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     def __eq__(self, other):
             if not isinstance(other, Frame):
                 return False
-            return self._id == other._id
+            return self.uri == other.uri
 
     def __hash__(self):
-        return hash(self._id)
+        return hash(self.uri)
 
     @api
     @property
     @returns(list, "list of names of all the frame's columns")
     def __column_names(self):
         """
-        Column identifications in the current Frame.
+        Column identifications in the current frame.
 
         Examples
         --------
@@ -485,11 +485,11 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         return self._backend.get_row_count(self, where)
 
     @api
-    @arg('count', int, 'The number of rows to download to the client')
+    @arg('n', int, 'The number of rows to download to the client')
     @arg('offset', int, 'The number of rows to skip before copying')
     @arg('columns', list, 'Column filter, the names of columns to be included (default is all columns)')
     @returns('pandas.DataFrame', 'A new pandas dataframe object containing the downloaded frame data' )
-    def __download(self, count=100, offset=0, columns=None):
+    def __download(self, n=100, offset=0, columns=None):
         """
         Download a frame from the server into client workspace.
 
@@ -523,13 +523,14 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             import pandas
         except:
             raise RuntimeError("pandas module not found, unable to download.  Install pandas or try the take command.")
-        result = self._backend.take(self, count, offset, columns)
+        from trustedanalytics.core.atkpandas import atk_dtype_to_pandas_str
+        result = self._backend.take(self, n, offset, columns)
         headers, data_types = zip(*result.schema)
 
         pandas_df = pandas.DataFrame(result.data, columns=headers)
 
         for i, dtype in enumerate(data_types):
-            dtype_str = valid_data_types.to_string(dtype) if valid_data_types.is_primitive_type(dtype) else "object"
+            dtype_str = atk_dtype_to_pandas_str(dtype)
             pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
         return pandas_df
 
@@ -608,7 +609,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
             A new object accessing a frame that contains the parse errors of
             the currently active Frame or None if no error frame exists.
         """
-        return self._backend.get_frame_by_id(self._error_frame_id)
+        return self._backend.get_error_frame(self)
 
     @api
     @beta
@@ -846,9 +847,25 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @arg('width', int, 'If set to integer N, the print out will try to honor a max line width of N')
     @arg('margin', int, "('stripes' mode only) If set to integer N, the margin for printing names in a "
                         "stripe will be limited to N characters")
-    def __inspect(self, n=10, offset=0, columns=None, wrap=None, truncate=None, round=None, width=80, margin=None):
+    @arg('with_types', bool, "If set to True, header will include the data_type of each column")
+    @returns('RowsInspection', "An object which naturally converts to a pretty-print string")
+    def __inspect(self,
+                  n=10,
+                  offset=0,
+                  columns=None,
+                  wrap=inspect_settings._unspecified,
+                  truncate=inspect_settings._unspecified,
+                  round=inspect_settings._unspecified,
+                  width=inspect_settings._unspecified,
+                  margin=inspect_settings._unspecified,
+                  with_types=inspect_settings._unspecified):
         """
-        Prints the frame data in readable format.
+        Pretty-print of the frame data
+
+        Essentially returns a string, but technically returns a RowInspection object which renders a string.
+        The RowInspection object naturally converts to a str when needed, like when printed or when displayed
+        by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
+        to be printed, then it must be explicitly printed, then `print frame.inspect()`
 
         Examples
         --------
@@ -857,20 +874,61 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         .. code::
 
-            >>> print my_frame.inspect(4)
-
-            column defs ->  animal:str  name:str    age:int     weight:float
-                          /--------------------------------------------------/
-            frame data ->   human       George        8            542.5
-                            human       Ursula        6            495.0
-                            ape         Ape          41            400.0
-                            elephant    Shep          5           8630.0
-
-
+            >>> my_frame.inspect(4)
+           [#]    animal      name    age     weight
+           =========================================
+           [0]  human       George      8      542.5
+           [1]  human       Ursula      6      495.0
+           [2]  ape         Ape        41      400.0
+           [3]  elephant    Shep        5     8630.0
 
         # For other examples, see :ref:`example_frame.inspect`.
+
+        **Global Settings**
+
+        If not specified, the arguments that control formatting receive default values from
+        'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
+
+        .. code::
+
+            >>> import trustedanalytics as ta
+            >>> ta.inspect_settings
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = 120  # changes inspect to use 120 width globally
+            >>> ta.inspect_settings.truncate = 16  # changes inspect to always truncate strings to 16 chars
+            >>> ta.inspect_settings
+            wrap             20
+            truncate         16
+            round          None
+            width           120
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.width = None  # return value back to default
+            >>> ta.inspect_settings
+            wrap             20
+            truncate         16
+            round          None
+            width            80
+            margin         None
+            with_types    False
+            >>> ta.inspect_settings.reset()  # set everything back to default
+            >>> ta.inspect_settings
+            wrap             20
+            truncate       None
+            round          None
+            width            80
+            margin         None
+            with_types    False
+
+        ..
         """
-        return self._backend.inspect(self, n, offset, columns, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
+        format_settings = inspect_settings.copy(wrap, truncate, round, width, margin, with_types)
+        return self._backend.inspect(self, n, offset, columns, format_settings=format_settings)
 
     @api
     @beta
@@ -1135,9 +1193,7 @@ Default is None.""")
     A frame has been created and Frame *your_frame* is its proxy.
     It has no data yet, but it does have the name *yourframe*.
         """
-        self._error_frame_id = None
-        self._id = 0
-        self._ia_uri = None
+        self.uri = None
         with api_context(logger, 3, self.__init__, self, source, name, _info):
             api_status.verify_installed()
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
@@ -1298,9 +1354,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
         """
         try:
             api_status.verify_installed()
-            self._error_frame_id = None
-            self._id = 0
-            self._ia_uri = None
+            self.uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
@@ -1379,15 +1433,14 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('source','?',"""<TBD>""")
-    @arg('graph','?',"""<TBD>""")
-    @arg('label','?',"""<TBD>""")
-    @arg('src_vertex_label','?',"""<TBD>""")
-    @arg('dest_vertex_label','?',"""<TBD>""")
-    @arg('directed','?',"""<TBD>""")
-    @arg('_info','?',"""<TBD>""")
+    @arg('graph','?',"""graph these edges belong to""")
+    @arg('label','?',"""edge label""")
+    @arg('src_vertex_label','?',"""label of the source vertex type""")
+    @arg('dest_vertex_label','?',"""label of the destination vertex type""")
+    @arg('directed','?',"""directed or undirected""")
+    @arg('_info','?',"""""")
     @returns('VertexFrame object',"""An object with access to the frame.""")
-    def __init__(self, source=None, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
+    def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 
     Examples
@@ -1455,13 +1508,11 @@ An EdgeFrame is similar to a Frame but with a few important differences:
         """
         try:
             api_status.verify_installed()
-            self._error_frame_id = None
-            self._id = 0
-            self._ia_uri = None
+            self.uri = None
             if not hasattr(self, '_backend'):  # if a subclass has not already set the _backend
                 self._backend = _get_backend()
             _BaseFrame.__init__(self)
-            new_frame_name = self._backend.create_edge_frame(self, source, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
+            new_frame_name = self._backend.create_edge_frame(self, label, graph, src_vertex_label, dest_vertex_label, directed, _info)
             logger.info('Created new edge frame "%s"', new_frame_name)
         except:
             error = IaError(logger)

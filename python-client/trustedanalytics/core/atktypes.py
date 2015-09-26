@@ -20,7 +20,7 @@ trusted_analytics definitions for Data Types
 
 # TODO - consider server providing types, similar to commands
 
-__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector']
+__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit', 'datetime']
 
 import numpy as np
 import json
@@ -31,6 +31,13 @@ float32 = np.float32
 float64 = np.float64
 int32 = np.int32
 int64 = np.int64
+
+from datetime import datetime
+import dateutil.parser as datetime_parser
+# Chose python's datetime over numpy.datetime64 because of time zone support and string serialization
+# Here's a long thread discussing numpy's datetime64 timezone problem:
+#   http://mail.scipy.org/pipermail/numpy-discussion/2013-April/066038.html
+# If need be, UDFs can create numpy objects from x using: numpy.datatime64(x.isoformat())
 
 
 class _Vector(object):
@@ -79,8 +86,14 @@ class _Vector(object):
     def __repr__(self):
         return "vector(%d)" % self.length
 
-
 vector = _Vector
+
+
+class _Unit(object):
+    """Ignore type used for schemas during file import"""
+    pass
+
+unit = _Unit
 
 
 class _Ignore(object):
@@ -108,7 +121,8 @@ _primitive_type_to_str_table = {
     int64: "int64",
     #list: "list", TODO
     unicode: "unicode",
-    ignore: "ignore"
+    ignore: "ignore",
+    datetime: "datetime",
 }
 
 # build reverse map string -> type
@@ -137,6 +151,17 @@ def get_float_constructor(float_type):
     return float_constructor
 
 
+def datetime_constructor(value):
+    """Creates special constructor for datetime parsing"""
+    if valid_data_types.value_is_string(value):
+        return datetime_parser.parse(value)
+    else:
+        try:
+            return datetime(*value)
+        except:
+            raise TypeError("cannot convert type to the datetime")
+
+
 class _DataTypes(object):
     """
     Provides functions with define and operate on supported data types.
@@ -152,11 +177,6 @@ class _DataTypes(object):
     def __repr__(self):
         aliases = "\n(and aliases: %s)" % (", ".join(sorted(["%s->%s" % (alias.__name__, self.to_string(data_type)) for alias, data_type in _primitive_alias_type_to_type_table.iteritems()])))
         return ", ".join(sorted(_primitive_str_to_type_table.keys() + ["vector(n)"])) + aliases
-
-    @staticmethod
-    def value_is_number(value):
-        """get bool indication that value is a number, like int, long, float"""
-        return isinstance(value, (int, long, float, int32, int64, float32, float64))   # not supporting complex
 
     @staticmethod
     def value_is_string(value):
@@ -229,7 +249,6 @@ class _DataTypes(object):
                 except:
                    raise ValueError("Unsupported type string '%s' " % data_type_str)
 
-
     @staticmethod
     def is_primitive_type(data_type):
         return data_type in _primitive_type_to_str_table or data_type in _primitive_alias_type_to_type_table
@@ -285,6 +304,8 @@ class _DataTypes(object):
         except AttributeError:
             if to_type == float64 or to_type == float32:
                 return get_float_constructor(to_type)
+            if to_type == datetime:
+                return datetime_constructor
 
             def constructor(value):
                 if value is None:
@@ -332,6 +353,11 @@ class _DataTypes(object):
         except Exception as e:
             raise ValueError(("Unable to cast to type %s\n" % to_type) + str(e))
 
+    @staticmethod
+    def datetime_from_iso(iso_string):
+        """create datetime object from ISO 8601 string"""
+        return datetime_parser.parse(iso_string)
+
 
 valid_data_types = _DataTypes()
 
@@ -343,6 +369,8 @@ def numpy_to_bson_friendly(obj):
         return int(obj)
     if isinstance(obj, vector.base_type):
         return obj.tolist()
+    if isinstance(obj, datetime):
+        return obj.isoformat()
     # Let the base class default method raise the TypeError
     return obj
 

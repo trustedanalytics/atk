@@ -22,18 +22,15 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /**
- * Command for testing a lib svm model with the provided dataset
- * @param model Handle to the model to be used.
- * @param frame Handle to the data frame
- * @param observationColumns Handle to the observation column/s of the data frame
+ * Command for testing a LIBSVM model with the provided dataset
  */
-case class LibSvmTestArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class LibSvmTestArgs(model: ModelReference,
                           @ArgDoc("""A frame whose labels are to be predicted.""") frame: FrameReference,
                           @ArgDoc("""Column containing the actual label for each
 observation.""") labelColumn: String,
                           @ArgDoc("""Column(s) containing the observations whose
 labels are to be predicted and tested.
-Default is to test over the columns the LibsvmModel
+Default is to test over the columns the LIBSVM model
 was trained on.""") observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")

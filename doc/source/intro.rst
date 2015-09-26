@@ -1,3 +1,5 @@
+.. _intro:
+
 =================
 Technical Summary
 =================
@@ -99,7 +101,7 @@ propagation, exploit the connections in the graph structure and provide
 powerful new methods of labeling or classifying graph data.
 Examples of other machine learning capabilities provided include recommender
 systems using alternating least squares and conjugate gradient descent, topic
-modeling using Latent Dirchelet Allocation, clustering using K-means, and
+modeling using Latent Dirichlet Allocation, clustering using K-means, and
 classification using logistic regression.
 See the section on :doc:`machine learning </ds_ml>` and the
 :doc:`API </python_api/index>` for further information.
@@ -112,7 +114,7 @@ Plugins Summary
 In addition to the extensive set of capabilities provided, the platform is
 fully extensible using a plugin architecture.
 This allows developers to incorporate graph analytical tools into the existing
-range of machine learning abilities, expanding the capabilities of the |PACKAGE|
+range of machine learning abilities, expanding the capabilities of |PACKAGE|
 for new problem solutions.
 Plugins are developed using a thin Scala wrapper, and the |ATK| framework
 automatically generates a Python presentation for those added functions.

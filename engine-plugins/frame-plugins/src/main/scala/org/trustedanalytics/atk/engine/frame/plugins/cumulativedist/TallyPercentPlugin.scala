@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
-import org.trustedanalytics.atk.domain.frame.{ TallyPercentArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.TallyPercentArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -33,10 +34,10 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 @PluginDoc(oneLine = "Compute a cumulative percent count.",
   extended = """A cumulative percent count is computed by sequentially stepping through
-the column values and keeping track of the current percentage of the
+the rows, observing the column values and keeping track of the percentage of the
 total number of times the specified *count_value* has been seen up to
 the current value.""")
-class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, FrameEntity] {
+class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -57,12 +58,11 @@ class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, FrameEntit
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: TallyPercentArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: TallyPercentArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
-    val sampleIndex = frame.schema.columnIndex(arguments.sampleCol)
 
     // run the operation
-    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentCount(frame.rdd, sampleIndex, arguments.countVal)
+    val cumulativeDistRdd = CumulativeDistFunctions.cumulativePercentCount(frame.rdd, arguments.sampleCol, arguments.countVal)
     val updatedSchema = frame.schema.addColumnFixName(Column(arguments.sampleCol + "_tally_percent", DataTypes.float64))
     frame.save(new FrameRdd(updatedSchema, cumulativeDistRdd))
   }

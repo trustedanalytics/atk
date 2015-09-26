@@ -44,7 +44,7 @@ object CovarianceFunctions extends Serializable {
                  dataColumnNames: List[String]): DoubleValue = {
 
     // compute and return covariance
-    def rowMatrix: RowMatrix = new RowMatrix(frameRdd.toVectorDenseRDD(dataColumnNames))
+    def rowMatrix: RowMatrix = new RowMatrix(frameRdd.toDenseVectorRDD(dataColumnNames))
 
     val covariance: Matrix = rowMatrix.computeCovariance()
 
@@ -65,7 +65,7 @@ object CovarianceFunctions extends Serializable {
                        dataColumnNames: List[String],
                        outputVectorLength: Option[Long] = None): RDD[Row] = {
 
-    def rowMatrix: RowMatrix = new RowMatrix(frameRdd.toVectorDenseRDD(dataColumnNames))
+    def rowMatrix: RowMatrix = new RowMatrix(frameRdd.toDenseVectorRDD(dataColumnNames))
 
     val covariance: Matrix = rowMatrix.computeCovariance()
     val vecArray = covariance.toArray.grouped(covariance.numCols).toArray

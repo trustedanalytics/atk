@@ -69,82 +69,85 @@ class AddEdgesPlugin extends SparkCommandPlugin[AddEdgesArgs, UnitReturn] {
   override def execute(arguments: AddEdgesArgs)(implicit invocation: Invocation): UnitReturn = {
 
     val edgeFrame: SparkEdgeFrame = arguments.edgeFrame
-    var graph: SparkGraph = edgeFrame.graph
+    val graph: SparkGraph = edgeFrame.graph
     val sourceFrame: SparkFrame = arguments.sourceFrame
     sourceFrame.schema.validateColumnsExist(arguments.allColumnNames)
+    if (sourceFrame.rowCount.getOrElse(0L) > 0L || !sourceFrame.rdd.isEmpty()) {
 
-    // assign unique ids to source data
-    val edgeDataToAdd = sourceFrame.rdd.selectColumns(arguments.allColumnNames).assignUniqueIds(GraphSchema.edgeProperty, startId = graph.nextId)
-    edgeDataToAdd.cache()
-    graph.incrementIdCounter(edgeDataToAdd.count())
+      // assign unique ids to source data
+      val edgeDataToAdd = sourceFrame.rdd.selectColumns(arguments.allColumnNames).assignUniqueIds(GraphSchema.edgeProperty, startId = graph.nextId)
+      edgeDataToAdd.cache()
+      graph.incrementIdCounter(edgeDataToAdd.count())
 
-    // convert to appropriate schema, adding edge system columns
-    val edgesWithoutVids = edgeDataToAdd.convertToNewSchema(edgeDataToAdd.frameSchema.addColumn(GraphSchema.srcVidProperty, DataTypes.int64).addColumn(GraphSchema.destVidProperty, DataTypes.int64))
-    edgesWithoutVids.cache()
-    edgeDataToAdd.unpersist(blocking = false)
+      // convert to appropriate schema, adding edge system columns
+      val edgesWithoutVids = edgeDataToAdd.convertToNewSchema(edgeDataToAdd.frameSchema.addColumn(GraphSchema.srcVidProperty, DataTypes.int64).addColumn(GraphSchema.destVidProperty, DataTypes.int64))
+      edgesWithoutVids.cache()
+      edgeDataToAdd.unpersist(blocking = false)
 
-    val srcLabel = edgeFrame.schema.srcVertexLabel
-    val destLabel = edgeFrame.schema.destVertexLabel
+      val srcLabel = edgeFrame.schema.srcVertexLabel
+      val destLabel = edgeFrame.schema.destVertexLabel
 
-    // create vertices from edge data and append to vertex frames
-    if (arguments.isCreateMissingVertices) {
-      val sourceVertexData = edgesWithoutVids.selectColumns(List(arguments.columnNameForSourceVertexId))
-      val destVertexData = edgesWithoutVids.selectColumns(List(arguments.columnNameForDestVertexId))
-      val addVerticesPlugin = new AddVerticesPlugin
-      addVerticesPlugin.addVertices(AddVerticesArgs(edgeFrame.graphMeta.vertexMeta(srcLabel).toReference, null, arguments.columnNameForSourceVertexId), sourceVertexData, preferNewVertexData = false)
-      addVerticesPlugin.addVertices(AddVerticesArgs(edgeFrame.graphMeta.vertexMeta(destLabel).toReference, null, arguments.columnNameForDestVertexId), destVertexData, preferNewVertexData = false)
+      // create vertices from edge data and append to vertex frames
+      if (arguments.isCreateMissingVertices) {
+        val sourceVertexData = edgesWithoutVids.selectColumns(List(arguments.columnNameForSourceVertexId))
+        val destVertexData = edgesWithoutVids.selectColumns(List(arguments.columnNameForDestVertexId))
+        val addVerticesPlugin = new AddVerticesPlugin
+        addVerticesPlugin.addVertices(AddVerticesArgs(edgeFrame.graphMeta.vertexMeta(srcLabel).toReference, null, arguments.columnNameForSourceVertexId), sourceVertexData, preferNewVertexData = false)
+        addVerticesPlugin.addVertices(AddVerticesArgs(edgeFrame.graphMeta.vertexMeta(destLabel).toReference, null, arguments.columnNameForDestVertexId), destVertexData, preferNewVertexData = false)
+      }
+
+      // load src and dest vertex ids
+      val srcVertexIds = graph.vertexRdd(srcLabel).idColumns.groupByKey()
+      srcVertexIds.cache()
+      val destVertexIds = if (srcLabel == destLabel) {
+        srcVertexIds
+      }
+      else {
+        graph.vertexRdd(destLabel).idColumns.groupByKey()
+      }
+
+      // check that at least some source and destination vertices actually exist
+      if (srcVertexIds.count() == 0) {
+        throw new IllegalArgumentException("Source vertex frame does NOT contain any vertices.  Please add source vertices first or enable create_missing_vertices=True.")
+      }
+      if (destVertexIds.count() == 0) {
+        throw new IllegalArgumentException("Destination vertex frame does NOT contain any vertices.  Please add destination vertices first or enable create_missing_vertices=True.")
+      }
+
+      // match ids with vertices
+      val edgesByTail = edgesWithoutVids.groupByRows(row => row.value(arguments.columnNameForDestVertexId))
+      val edgesWithTail = destVertexIds.join(edgesByTail).flatMapValues { value =>
+        val idMap = value._1
+        val vid = idMap.head
+        val edgeRows = value._2
+        edgeRows.map(e => edgesWithoutVids.rowWrapper(e).setValue(GraphSchema.destVidProperty, vid))
+      }.values
+
+      val edgesByHead = new FrameRdd(edgesWithoutVids.frameSchema, edgesWithTail).groupByRows(row => row.value(arguments.columnNameForSourceVertexId))
+      val edgesWithVids = srcVertexIds.join(edgesByHead).flatMapValues(value => {
+        val idMap = value._1
+        val vid = idMap.head
+        val edges = value._2
+        edges.map(e => edgesWithoutVids.rowWrapper(e).setValue(GraphSchema.srcVidProperty, vid))
+      }).values
+
+      srcVertexIds.unpersist(blocking = false)
+      destVertexIds.unpersist(blocking = false)
+      edgesWithoutVids.unpersist(blocking = false)
+
+      // convert convert edges to add to correct schema
+      val correctedSchema = edgesWithoutVids.frameSchema
+        //.convertType("_src_vid", DataTypes.int64)
+        //.convertType("_dest_vid", DataTypes.int64)
+        .dropColumns(List(arguments.columnNameForSourceVertexId, arguments.columnNameForDestVertexId))
+      val edgesToAdd = new FrameRdd(edgesWithoutVids.frameSchema, edgesWithVids).convertToNewSchema(correctedSchema)
+
+      // append to existing data
+      val existingEdgeData = edgeFrame.rdd
+      val combinedRdd = existingEdgeData.append(edgesToAdd)
+      edgeFrame.save(combinedRdd)
     }
 
-    // load src and dest vertex ids
-    val srcVertexIds = graph.vertexRdd(srcLabel).idColumns.groupByKey()
-    srcVertexIds.cache()
-    val destVertexIds = if (srcLabel == destLabel) {
-      srcVertexIds
-    }
-    else {
-      graph.vertexRdd(destLabel).idColumns.groupByKey()
-    }
-
-    // check that at least some source and destination vertices actually exist
-    if (srcVertexIds.count() == 0) {
-      throw new IllegalArgumentException("Source vertex frame does NOT contain any vertices.  Please add source vertices first or enable create_missing_vertices=True.")
-    }
-    if (destVertexIds.count() == 0) {
-      throw new IllegalArgumentException("Destination vertex frame does NOT contain any vertices.  Please add destination vertices first or enable create_missing_vertices=True.")
-    }
-
-    // match ids with vertices
-    val edgesByTail = edgesWithoutVids.groupByRows(row => row.value(arguments.columnNameForDestVertexId))
-    val edgesWithTail = destVertexIds.join(edgesByTail).flatMapValues { value =>
-      val idMap = value._1
-      val vid = idMap.head
-      val edgeRows = value._2
-      edgeRows.map(e => edgesWithoutVids.rowWrapper(e).setValue(GraphSchema.destVidProperty, vid))
-    }.values
-
-    val edgesByHead = new FrameRdd(edgesWithoutVids.frameSchema, edgesWithTail).groupByRows(row => row.value(arguments.columnNameForSourceVertexId))
-    val edgesWithVids = srcVertexIds.join(edgesByHead).flatMapValues(value => {
-      val idMap = value._1
-      val vid = idMap.head
-      val edges = value._2
-      edges.map(e => edgesWithoutVids.rowWrapper(e).setValue(GraphSchema.srcVidProperty, vid))
-    }).values
-
-    srcVertexIds.unpersist(blocking = false)
-    destVertexIds.unpersist(blocking = false)
-    edgesWithoutVids.unpersist(blocking = false)
-
-    // convert convert edges to add to correct schema
-    val correctedSchema = edgesWithoutVids.frameSchema
-      //.convertType("_src_vid", DataTypes.int64)
-      //.convertType("_dest_vid", DataTypes.int64)
-      .dropColumns(List(arguments.columnNameForSourceVertexId, arguments.columnNameForDestVertexId))
-    val edgesToAdd = new FrameRdd(edgesWithoutVids.frameSchema, edgesWithVids).convertToNewSchema(correctedSchema)
-
-    // append to existing data
-    val existingEdgeData = edgeFrame.rdd
-    val combinedRdd = existingEdgeData.append(edgesToAdd)
-    edgeFrame.save(combinedRdd)
   }
 
 }

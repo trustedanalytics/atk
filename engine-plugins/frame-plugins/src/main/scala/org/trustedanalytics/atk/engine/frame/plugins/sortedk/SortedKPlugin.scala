@@ -18,8 +18,8 @@ package org.trustedanalytics.atk.engine.frame.plugins.sortedk
 
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
@@ -35,30 +35,28 @@ import SortedKJsonFormat._
  */
 
 @PluginDoc(oneLine = "Get a sorted subset of the data.",
-  extended = """Take the first k (sorted) rows for the currently active Frame.
-Rows are sorted by column values in either ascending or descending order.
+  extended = """Take a number of rows and return them
+sorted in either ascending or descending order.
 
-Returning the first k (sorted) rows is more efficient than sorting the
-entire frame when k is much smaller than the number of rows in the frame.
+Sorting a subset of rows is more efficient than sorting the entire frame when
+the number of sorted rows is much less than the total number of rows in the frame.
 
 Notes
 -----
-The number of sorted rows (k) should be much smaller than the number of rows
+The number of sorted rows should be much smaller than the number of rows
 in the original frame.
 
 In particular:
 
-1) The number of sorted rows (k) returned should fit in Spark driver memory.
-  The maximum size of serialized results that can fit in the Spark driver is
-  set by the Spark configuration parameter *spark.driver.maxResultSize*.
-
-2) If you encounter a Kryo buffer overflow exception, increase the Spark
-  configuration parameter *spark.kryoserializer.buffer.max.mb*.
-
-3) Use Frame.sort() instead if the number of sorted rows (k) is
-  very large (i.e., cannot fit in Spark driver memory).""",
-  returns = "A new frame with the first k sorted rows from the original frame.")
-class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameEntity] {
+#)  The number of sorted rows returned should fit in Spark driver memory.
+    The maximum size of serialized results that can fit in the Spark driver is
+    set by the Spark configuration parameter *spark.driver.maxResultSize*.
+#)  If you encounter a Kryo buffer overflow exception, increase the Spark
+    configuration parameter *spark.kryoserializer.buffer.max.mb*.
+#)  Use Frame.sort() instead if the number of sorted rows is very large (in
+    other words, it cannot fit in Spark driver memory).""",
+  returns = "A new frame with a subset of sorted rows from the original frame.")
+class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -85,7 +83,7 @@ class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return New frame with top-K sorted rows.
    */
-  override def execute(arguments: SortedKArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: SortedKArgs)(implicit invocation: Invocation): FrameReference = {
     // load frame
     val frame: SparkFrame = arguments.frame
 

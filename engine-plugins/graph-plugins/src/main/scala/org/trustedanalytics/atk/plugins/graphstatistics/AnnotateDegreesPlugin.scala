@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
 import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilderConfig, GraphBuilder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate, GraphReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -76,7 +76,7 @@ in the degree calculation, regardless of label.""") inputEdgeLabels: Option[List
   def useOutDegree() = "out".startsWith(degreeMethod)
 }
 
-case class AnnotateDegreesReturn(frameDictionaryOutput: Map[String, FrameEntity])
+case class AnnotateDegreesReturn(frameDictionaryOutput: Map[String, FrameReference])
 
 import DomainJsonProtocol._
 import spray.json._
@@ -98,12 +98,11 @@ and then writes the output graph to the underlying store.
 
 @PluginDoc(oneLine = "Make new graph with degrees.",
   extended = """Creates a new graph which is the same as the input graph, with the addition
-that every vertex of the graph has its :term:`degree` stored in a
-user-specified property.
+that every vertex of the graph has its :term:`degree` stored in a user-specified property.
 
 **Degree Calculation**
 
-A fundamental quantity in graph analyses is the degree of a vertex:
+A fundamental quantity in graph analysis is the degree of a vertex:
 The degree of a vertex is the number of edges adjacent to it.
 
 For a directed edge relation, a vertex has both an out-degree (the number of
@@ -121,7 +120,7 @@ Analogously, the weighted in-degree of a vertex is the sum of the weights of
 the edges entering it, and the weighted out-degree is the sum
 of the weights of the edges leaving the vertex.
 
-The toolkit provides `annotate_weighted_degrees <annotate_weighted_degrees.html>`_
+The toolkit provides :ref:`annotate_weighted_degrees <python_api/graphs/graph-/annotate_weighted_degrees>`
 for the distributed calculation of weighted vertex degrees.""",
   returns = """Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a column storing the annotated degree for the vertex
@@ -162,7 +161,7 @@ class AnnotateDegreesPlugin extends SparkCommandPlugin[AnnotateDegreesArgs, Anno
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new AnnotateDegreesReturn(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotated degrees operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotated degrees operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

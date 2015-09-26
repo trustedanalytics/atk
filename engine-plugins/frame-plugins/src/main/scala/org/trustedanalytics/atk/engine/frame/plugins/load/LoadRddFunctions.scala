@@ -16,17 +16,22 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
-import org.apache.hadoop.io.{ LongWritable, Text }
-import org.apache.spark.SparkContext
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.{ Row, DataFrame }
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
-import org.apache.spark.sql.types.{ BooleanType, ByteType, DateType, DecimalType, ShortType, StructField, TimestampType }
-import org.apache.spark.sql.{ Row, SchemaRDD, types => SparkType }
+import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.domain.frame.load.{ LineParser, LineParserArguments }
+import org.trustedanalytics.atk.domain.schema.Column
+import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame._
+import org.apache.hadoop.io.LongWritable
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
+import org.apache.hadoop.io.Text
+import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin._
+import org.trustedanalytics.atk.engine.plugin.Invocation
 
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
@@ -64,8 +69,8 @@ object LoadRddFunctions extends Serializable {
       startTag match {
         case Some(s) =>
           val conf = new org.apache.hadoop.conf.Configuration()
-          val e = endTag.get
           conf.setStrings(MultiLineTaggedInputFormat.START_TAG_KEY, s: _*) //Treat s as a Varargs parameter
+          val e = endTag.get
           conf.setStrings(MultiLineTaggedInputFormat.END_TAG_KEY, e: _*)
           conf.setBoolean(MultiLineTaggedInputFormat.IS_XML_KEY, isXml)
           sc.newAPIHadoopFile[LongWritable, Text, MultiLineTaggedInputFormat](fileName, classOf[MultiLineTaggedInputFormat], classOf[LongWritable], classOf[Text], conf)
@@ -113,6 +118,16 @@ object LoadRddFunctions extends Serializable {
   }
 
   /**
+   * Union the additionalData onto the end of the existingFrame
+   * @param existingFrame the target DataFrame that may or may not already have data
+   * @param additionalData the data to add to the existingFrame
+   * @return the frame with updated schema
+   */
+  def unionAndSave(existingFrame: SparkFrame, additionalData: FrameRdd)(implicit invocation: Invocation): SparkFrame = {
+    existingFrame.save(existingFrame.rdd.union(additionalData))
+  }
+
+  /**
    * Parse a sample of the file so we can bail early if a certain threshold fails.
    *
    * Throw an exception if too many rows can't be parsed.
@@ -143,12 +158,8 @@ object LoadRddFunctions extends Serializable {
 
     if (failedRatio >= threshold) {
       val errorExampleRecord = preEvaluateResults.errorLines.first().copy()
-      val errorRow = errorExampleRecord {
-        0
-      }
-      val errorMessage = errorExampleRecord {
-        1
-      }
+      val errorRow = errorExampleRecord { 0 }
+      val errorMessage = errorExampleRecord { 1 }
       throw new Exception(s"Parse failed on $failedCount rows out of the first $sampleRowsCount, " +
         s" please ensure your schema is correct.\nExample record that parser failed on : $errorRow    " +
         s" \n$errorMessage")
@@ -210,44 +221,4 @@ object LoadRddFunctions extends Serializable {
     }
   }
 
-  private[frame] def convertHiveRddToFrameRdd(rdd: SchemaRDD): FrameRdd = {
-    val array: Seq[StructField] = rdd.schema.fields
-    val list = new ListBuffer[Column]
-    for (field <- array) {
-      list += new Column(field.name, FrameRdd.sparkDataTypeToSchemaDataType(field.dataType))
-    }
-    val schema = new FrameSchema(list.toList)
-    val convertedRdd: RDD[org.apache.spark.sql.Row] = rdd.map(row => {
-      val mutableRow = new GenericMutableRow(row.length)
-      row.toSeq.zipWithIndex.foreach {
-        case (o, i) =>
-          if (o == null) {
-            mutableRow(i) = null
-          }
-          else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
-            mutableRow(i) = o.toString
-          }
-          else if (array(i).dataType.getClass == ShortType.getClass) {
-            mutableRow(i) = row.getShort(i).toInt
-          }
-          else if (array(i).dataType.getClass == BooleanType.getClass) {
-            mutableRow(i) = row.getBoolean(i).compareTo(false)
-          }
-          else if (array(i).dataType.getClass == ByteType.getClass) {
-            mutableRow(i) = row.getByte(i).toInt
-          }
-          else if (array(i).dataType.getClass == classOf[DecimalType]) {
-            // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
-            mutableRow(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
-          }
-          else {
-            val colType = schema.columns(i).dataType
-            mutableRow(i) = o.asInstanceOf[colType.ScalaType]
-          }
-      }
-      mutableRow
-    }
-    )
-    new FrameRdd(schema, convertedRdd)
-  }
 }

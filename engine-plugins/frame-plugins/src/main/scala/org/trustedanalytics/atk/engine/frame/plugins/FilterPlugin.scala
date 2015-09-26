@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.FilterArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame, PythonRddStorage }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -32,7 +32,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Select all rows which satisfy a predicate.",
   extended = """Modifies the current frame to save defined rows and
 delete everything else.""")
-class FilterPlugin extends SparkCommandPlugin[FilterArgs, FrameEntity] {
+class FilterPlugin extends SparkCommandPlugin[FilterArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -57,7 +57,7 @@ class FilterPlugin extends SparkCommandPlugin[FilterArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: FilterArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: FilterArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val updatedRdd = PythonRddStorage.mapWith(frame.rdd, arguments.udf, sc = sc)
     frame.save(updatedRdd)

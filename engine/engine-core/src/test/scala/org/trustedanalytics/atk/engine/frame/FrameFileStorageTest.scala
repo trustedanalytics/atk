@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.EngineExecutionContext
 import org.trustedanalytics.atk.engine.plugin.Call
 import org.scalatest.FlatSpec
@@ -26,7 +27,7 @@ class FrameFileStorageTest extends FlatSpec {
   val frameFileStorage = new FrameFileStorage("hdfs://hostname/user/atkuser", null)
 
   "FrameFileStorage" should "determine the correct data frames base directory" in {
-    assert(frameFileStorage.frameBaseDirectory(1L).toString == "hdfs://hostname/user/atkuser/trustedanalytics/dataframes/1")
+    assert(frameFileStorage.calculateFramePath(FrameEntity(id = 1L, status = 0, name = None, createdOn = null, modifiedOn = null)).toString == "hdfs://hostname/user/atkuser/trustedanalytics/frames/1")
   }
 
 }

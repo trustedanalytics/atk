@@ -22,8 +22,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Arguments for RenameModel
  */
 
-case class RenameModelArgs(@ArgDoc("""The ModelReference of the model to be
-renamed.""") model: ModelReference,
+case class RenameModelArgs(model: ModelReference,
                            @ArgDoc("""The name to which the model will be renamed.""") newName: String) {
   require(model != null, "model is required")
   require(newName != null && newName.nonEmpty, "newName is required")

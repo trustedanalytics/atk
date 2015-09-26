@@ -24,11 +24,11 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Arguments for Join plugin
  *
  */
-case class JoinArgs(@ArgDoc("""Join arguments for first data frame.""") leftFrame: JoinFrameArgs,
+case class JoinArgs(leftFrame: JoinFrameArgs,
                     @ArgDoc("""Join arguments for first data frame.""") rightFrame: JoinFrameArgs,
                     @ArgDoc("""Methods of join (inner, left, right or outer).""") how: String,
                     @ArgDoc("""Name of new frame to be created.""") name: Option[String] = None,
-                    @ArgDoc("""<TBD>""") skewedJoinType: Option[String] = None) {
+                    @ArgDoc("""The type of skewed join: 'skewedhash' or 'skewedbroadcast'""") skewedJoinType: Option[String] = None) {
   require(leftFrame != null && leftFrame.frame != null, "left frame is required")
   require(rightFrame != null && rightFrame.frame != null, "right frame is required")
   require(leftFrame.joinColumn != null, "left join column is required")

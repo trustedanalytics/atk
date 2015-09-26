@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.clusteringcoefficient
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }
 import org.trustedanalytics.atk.engine.graph.SparkGraph
@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
-case class ClusteringCoefficientArgs(@ArgDoc("<TBD>") graph: GraphReference,
+case class ClusteringCoefficientArgs(graph: GraphReference,
                                      @ArgDoc("""The name of the new property to which each
 vertex's local clustering coefficient will be written.
 If this option is not specified, no output frame will be produced and only
@@ -56,7 +56,7 @@ analysis be undirected.""") inputEdgeLabels: Option[List[String]] = None) {
  * @param frame If local clustering coefficients are requested, a reference to the frame with local clustering
  *              coefficients stored at properties at each vertex.
  */
-case class ClusteringCoefficientResult(globalClusteringCoefficient: Double, frame: Option[FrameEntity] = None)
+case class ClusteringCoefficientResult(globalClusteringCoefficient: Double, frame: Option[FrameReference] = None)
 
 /** Json conversion for arguments and return value case classes */
 object ClusteringCoefficientJsonFormat {
@@ -67,7 +67,7 @@ object ClusteringCoefficientJsonFormat {
 import ClusteringCoefficientJsonFormat._
 
 @PluginDoc(oneLine = "Coefficient of graph with respect to labels.",
-  extended = """Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.
+  extended = """Calculates the clustering coefficient of the graph with respect to an (optional) set of labels.
 
 Pulls graph from underlying store, calculates degrees and writes them into the property specified,
 and then writes the output graph to the underlying store.

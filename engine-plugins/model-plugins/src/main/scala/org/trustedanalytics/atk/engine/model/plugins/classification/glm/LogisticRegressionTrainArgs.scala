@@ -23,60 +23,47 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 /**
  * Input arguments for logistic regression train plugin
  */
-case class LogisticRegressionTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
-
+case class LogisticRegressionTrainArgs(model: ModelReference,
                                        @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-
-                                       @ArgDoc("""Column name containing the label for each observation.""") labelColumn: String,
-
-                                       @ArgDoc("""Column(s) containing the observations.""") observationColumns: List[String],
-
-                                       @ArgDoc("""Optional column containing the frequency of observations.""") frequencyColumn: Option[String] = None,
-
+                                       @ArgDoc("""Column name containing the label for each
+observation.""") labelColumn: String,
+                                       @ArgDoc("""Column(s) containing the
+observations.""") observationColumns: List[String],
+                                       @ArgDoc("""Optional column containing the frequency of
+observations.""") frequencyColumn: Option[String] = None,
                                        @ArgDoc("""Number of classes""") numClasses: Int = 2,
-
-                                       @ArgDoc(
-                                         """Set type of optimizer.
-                                           LBFGS - Limited-memory BFGS. LBFGS supports multinomial logistic regression.
-                                           SGD - Stochastic Gradient Descent. SGD only supports binary logistic regression.
-                                         """) optimizer: String = "LBFGS",
-
-                                       @ArgDoc("""If true, compute covariance matrix for the model.""") computeCovariance: Boolean = true,
-
-                                       @ArgDoc("""If true, add intercept column to training data.""") intercept: Boolean = true,
-
-                                       @ArgDoc("""If true, perform feature scaling before training model.""") featureScaling: Boolean = false,
-
+                                       @ArgDoc("""Set type of optimizer.
+| LBFGS - Limited-memory BFGS.
+| LBFGS supports multinomial logistic regression.
+| SGD - Stochastic Gradient Descent.
+| SGD only supports binary logistic regression.""") optimizer: String = "LBFGS",
+                                       @ArgDoc("""Compute covariance matrix for the
+model.""") computeCovariance: Boolean = true,
+                                       @ArgDoc("""Add intercept column to training
+data.""") intercept: Boolean = true,
+                                       @ArgDoc("""Perform feature scaling before training
+model.""") featureScaling: Boolean = false,
                                        //TODO: Check if threshold needs to be set in both train() and predict
-                                       @ArgDoc("""Threshold for separating positive predictions from negative predictions.""") threshold: Double = 0.5,
-
-                                       @ArgDoc(
-                                         """Set type of regularization
-                                           L1 - L1 regularization with sum of absolute values of coefficients
-                                           L2 - L2 regularization with sum of squares of coefficients
-                                         """) regType: String = "L2",
-
+                                       @ArgDoc("""Threshold for separating positive predictions from
+negative predictions.""") threshold: Double = 0.5,
+                                       @ArgDoc("""Set type of regularization
+| L1 - L1 regularization with sum of absolute values of coefficients
+| L2 - L2 regularization with sum of squares of coefficients""") regType: String = "L2",
                                        @ArgDoc("""Regularization parameter""") regParam: Double = 0,
                                        //TODO: What input type should this be?
                                        //gradient : Option[Double] = None,
-
                                        @ArgDoc("""Maximum number of iterations""") numIterations: Int = 100,
-
-                                       @ArgDoc(
-                                         """Convergence tolerance of iterations for L-BFGS.
-                                            Smaller value will lead to higher accuracy with the cost of more iterations.
-                                         """) convergenceTolerance: Double = 0.0001,
-
-                                       @ArgDoc(
-                                         """Number of corrections used in LBFGS update. Default 10.
-                                           Values of numCorrections less than 3 are not recommended; large values
-                                           of numCorrections will result in excessive computing time.
-                                         """) numCorrections: Int = 10,
-
-                                       @ArgDoc("""Fraction of data to be used for each SGD iteration""") miniBatchFraction: Double = 1.0,
-
-                                       @ArgDoc("""Initial step size for SGD. In subsequent steps,
-                                                  the step size decreases by stepSize/sqrt(t)""") stepSize: Int = 1) {
+                                       @ArgDoc("""Convergence tolerance of iterations for L-BFGS.
+Smaller value will lead to higher accuracy with the cost of more
+iterations.""") convergenceTolerance: Double = 0.0001,
+                                       @ArgDoc("""Number of corrections used in LBFGS update.
+Default is 10.
+Values of less than 3 are not recommended;
+large values will result in excessive computing time.""") numCorrections: Int = 10,
+                                       @ArgDoc("""Fraction of data to be used for each SGD
+iteration""") miniBatchFraction: Double = 1.0,
+                                       @ArgDoc("""Initial step size for SGD.
+In subsequent steps, the step size decreases by stepSize/sqrt(t)""") stepSize: Int = 1) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(optimizer == "LBFGS" || optimizer == "SGD", "optimizer name must be 'LBFGS' or 'SGD'")

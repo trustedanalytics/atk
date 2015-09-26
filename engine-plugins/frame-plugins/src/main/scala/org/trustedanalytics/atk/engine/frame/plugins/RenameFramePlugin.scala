@@ -16,20 +16,37 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins
 
-import org.trustedanalytics.atk.domain.frame.{ RenameFrameArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.DomainJsonProtocol
+import org.trustedanalytics.atk.domain.frame.{ FrameName, FrameReference }
 import org.trustedanalytics.atk.engine.frame.Frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation, PluginDoc }
 
 // Implicits needed for JSON conversion
 import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
+case class RenameFrameArgs(frame: FrameReference,
+                           @ArgDoc("""The new name of the frame.""") newName: String) {
+  require(frame != null, "frame is required")
+  require(newName != null && newName.nonEmpty, "newName is required")
+  FrameName.validate(newName)
+}
+
+/** Json conversion for arguments and return value case classes */
+object RenameFrameJsonFormat {
+  import DomainJsonProtocol._
+  implicit val RenameFrameArgsFormat = jsonFormat2(RenameFrameArgs)
+}
+
+import RenameFrameJsonFormat._
+import DomainJsonProtocol._
 
 /**
  * Rename a frame
  */
 @PluginDoc(oneLine = "Change the name of the current frame.",
   extended = """Set the name of this frame.""")
-class RenameFramePlugin extends CommandPlugin[RenameFrameArgs, FrameEntity] {
+class RenameFramePlugin extends CommandPlugin[RenameFrameArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -48,7 +65,7 @@ class RenameFramePlugin extends CommandPlugin[RenameFrameArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: RenameFrameArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: RenameFrameArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: Frame = arguments.frame
     frame.name = arguments.newName
     frame

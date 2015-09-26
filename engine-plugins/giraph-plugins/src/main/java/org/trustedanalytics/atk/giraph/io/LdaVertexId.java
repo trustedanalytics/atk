@@ -24,7 +24,7 @@ import java.io.IOException;
 
 public class LdaVertexId implements WritableComparable {
 
-    private String value;
+    private Long value;
 
     /** vertex type has been embedded in the ID since it was needed for VID uniqueness */
     private boolean isDocument = false;
@@ -37,12 +37,12 @@ public class LdaVertexId implements WritableComparable {
      * @param value document name or word value
      * @param isDocument true if Document, false if vertex is for a Word
      */
-    public LdaVertexId(String value, boolean isDocument) {
+    public LdaVertexId(Long value, boolean isDocument) {
         this.value = value;
         this.isDocument = isDocument;
     }
 
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 
@@ -64,13 +64,13 @@ public class LdaVertexId implements WritableComparable {
     @Override
     public void write(DataOutput dataOutput) throws IOException {
         dataOutput.writeBoolean(isDocument);
-        dataOutput.writeUTF(value);
+        dataOutput.writeLong(value);
     }
 
     @Override
     public void readFields(DataInput dataInput) throws IOException {
         isDocument = dataInput.readBoolean();
-        value = dataInput.readUTF();
+        value = dataInput.readLong();
     }
 
     @Override

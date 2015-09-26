@@ -17,16 +17,37 @@ package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Create a 'new' instance of principal component model.",
-  extended = "",
-  returns = "")
-class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+/**
+ * Create a 'new' instance of a Principal Components model
+ */
+@PluginDoc(oneLine = "Create a 'new' instance of a Principal Components model.",
+  extended = """Principal component analysis [1]_ is a statistical algorithm
+that converts possibly correlated features to linearly uncorrelated variables
+called principal components.
+The number of principal components is less than or equal to the number of
+original variables.
+This implementation of computing Principal Components is done by Singular
+Value Decomposition [2]_ of the data, providing the user with an option to
+mean center the data.
+The Principal Components model is initialized; trained on
+specifying the observation columns of the frame and the number of components;
+used to predict principal components.
+The MLLib Singular Value Decomposition [3]_ implementation has been used for
+this, with additional features to 1) mean center the data during train and
+predict and 2) compute the t-squared index during prediction.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+.. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
+.. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html""")
+class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -35,7 +56,7 @@ class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArg
    */
   override def name: String = "model:principal_components/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:principal_components")))
   }
 }

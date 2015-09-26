@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.plugins.graphstatistics
 
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -29,11 +29,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
 
 case class AnnotateWeightedDegreesArgs(graph: GraphReference,
-                                       @ArgDoc("<TBD>") outputPropertyName: String,
-                                       @ArgDoc("<TBD>") degreeOption: Option[String] = None,
-                                       @ArgDoc("<TBD>") inputEdgeLabels: Option[List[String]] = None,
-                                       @ArgDoc("<TBD>") edgeWeightProperty: Option[String] = None,
-                                       @ArgDoc("<TBD>") edgeWeightDefault: Option[Double] = None) {
+                                       @ArgDoc("property name of where to store output") outputPropertyName: String,
+                                       @ArgDoc("choose from 'out', 'in', 'undirected'") degreeOption: Option[String] = None,
+                                       @ArgDoc("labels of edge types that should be included") inputEdgeLabels: Option[List[String]] = None,
+                                       @ArgDoc("property name of edge weight, if not provided all edges are weighted equally") edgeWeightProperty: Option[String] = None,
+                                       @ArgDoc("default edge weight") edgeWeightDefault: Option[Double] = None) {
 
   // validate arguments
 
@@ -64,7 +64,7 @@ case class AnnotateWeightedDegreesArgs(graph: GraphReference,
   }
 }
 
-case class AnnotateWeightedDegreesReturn(frameDictionaryOutput: Map[String, FrameEntity])
+case class AnnotateWeightedDegreesReturn(frameDictionaryOutput: Map[String, FrameReference])
 
 import DomainJsonProtocol._
 import spray.json._
@@ -84,14 +84,15 @@ specified, and then writes the output graph to the underlying store.
 
 **Degree Calculation**
 
-A fundamental quantity in graph analyses is the degree of a vertex:
+A fundamental quantity in graph analysis is the degree of a vertex:
 The degree of a vertex is the number of edges adjacent to it.
 
 For a directed edge relation, a vertex has both an out-degree (the number of
 edges leaving the vertex) and an in-degree (the number of edges entering the
 vertex).
 
-The toolkit provides a routine `annotate_degrees <annotate_degrees.html>`_
+The toolkit provides a routine :ref:`annotate_degrees
+<python_api/graphs/graph-/annotate_weighted_degrees>`
 for calculating the degrees of vertices.
 This calculation could be performed with a Gremlin query on smaller datasets
 because Gremlin queries cannot be executed on a distributed scale.
@@ -142,7 +143,7 @@ class AnnotateWeightedDegreesPlugin extends SparkCommandPlugin[AnnotateWeightedD
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new AnnotateWeightedDegreesReturn(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotate weighted degrees operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by annotate weighted degrees operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

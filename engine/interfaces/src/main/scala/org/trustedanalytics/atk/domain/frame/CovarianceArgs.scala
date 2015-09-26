@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Input arguments class for covariance
  */
-case class CovarianceArgs(@ArgDoc("""<TBD>""") frame: FrameReference,
+case class CovarianceArgs(frame: FrameReference,
                           @ArgDoc("""The names of two columns from which
 to compute the covariance.""") dataColumnNames: List[String]) {
   require(frame != null, "frame is required")

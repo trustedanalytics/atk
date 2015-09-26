@@ -60,7 +60,7 @@ class GraphSmokeTest(unittest.TestCase):
         print "create graph"
         graph = ta.Graph()
 
-        self.assertIsNotNone(graph._id)
+        self.assertIsNotNone(graph.uri)
 
         print "define vertices and edges"
         graph.define_vertex_type('movies')

@@ -48,6 +48,7 @@ import org.trustedanalytics.atk.giraph.io.LdaVertexId;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -84,6 +85,8 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     private static String MAX_DELTA = "max_delta";
     /** Max delta value of previous super step for convergence monitoring */
     private static String PREV_MAX_DELTA = "prev_max_delta";
+    /** Map of conditional probability of topics given word */
+    private Map<String, DenseVector> topicWordMap = new HashMap<>();
 
     /** Number of words in vocabulary */
     private long numWords = 0;
@@ -121,8 +124,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         if (config.evaluationCost()) {
             evaluateCost(vertex, messages, map);
         }
-        updateEdge(vertex, map);
-        updateVertex(vertex);
+        updateVertex(vertex, map);
 
         if (step < getConf().getLong(CURRENT_MAX_SUPERSTEPS, config.maxIterations())) {
             // send out messages
@@ -130,6 +132,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                     vertex.getValue().getLdaResult());
             sendMessageToAllEdges(vertex, newMessage);
         } else {
+            // set conditional probability of topic given word
+            setTopicGivenWord(vertex);
+
             // normalize vertex value, i.e., theta and phi in LDA, for final output
             normalizeVertex(vertex);
         }
@@ -147,7 +152,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
         // initialize vertex vector, i.e., the theta for doc and phi for word in LDA
         double[] vertexValues = new double[config.numTopics()];
         vertex.getValue().setLdaResult(new DenseVector(vertexValues));
-
+        Vector updatedVector = vertex.getValue().getLdaResult().clone().assign(0d);
         // initialize edge vector, i.e., the gamma in LDA
         Random rand1 = new Random(vertex.getId().seed());
         long seed1 = rand1.nextInt();
@@ -175,10 +180,12 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             }
             // the sum of weights from all edges
             sumWeights += weight;
+            updatedVector = updateVector(updatedVector, edge);
         }
         // update vertex value
-        updateVertex(vertex);
+        vertex.getValue().setLdaResult(updatedVector);;
         // aggregate max delta value
+        aggregateWord(vertex);
         aggregate(MAX_DELTA, new DoubleWritable(maxDelta));
 
         // collect graph statistics
@@ -196,32 +203,37 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     }
 
     /**
-     * Update vertex value according to edge value
+     * Update vertex value with edge value
      *
+     * @param vector vector of vertex value
+     * @param edge of the graph
+     */
+    private Vector updateVector(Vector vector, Edge<LdaVertexId, LdaEdgeData> edge) {
+        double weight = edge.getValue().getWordCount();
+        Vector gamma = edge.getValue().getVector();
+        vector = vector.plus(gamma.times(weight));
+        return vector;
+    }
+
+    /**
+     * Aggregate vertex values for word
      * @param vertex of the graph
      */
-    private void updateVertex(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex) {
-        Vector vector = vertex.getValue().getLdaResult().clone().assign(0d);
-        for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getEdges()) {
-            double weight = edge.getValue().getWordCount();
-            Vector gamma = edge.getValue().getVector();
-            vector = vector.plus(gamma.times(weight));
-        }
-        vertex.getValue().setLdaResult(vector);
+    private void aggregateWord(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex) {
         if (vertex.getId().isWord()) {
-            aggregate(SUM_WORD_VERTEX_VALUE, new VectorWritable(vector));
+            aggregate(SUM_WORD_VERTEX_VALUE, new VectorWritable(vertex.getValue().getLdaResult()));
         }
     }
 
     /**
-     * Update edge value according to vertex and messages
+     * Update vertex and outgoing edge values using current vertex values and messages
      *
      * @param vertex of the graph
-     * @param map of type HashMap
+     * @param map    Map of vertices
      */
-    private void updateEdge(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex, HashMap<LdaVertexId, Vector> map) {
+    private void updateVertex(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex, HashMap<LdaVertexId, Vector> map) {
         Vector vector = vertex.getValue().getLdaResult();
-
+        Vector updatedVector = vertex.getValue().getLdaResult().clone().assign(0d);
         double maxDelta = 0d;
         for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
             Vector gamma = edge.getValue().getVector();
@@ -248,7 +260,14 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 // this happens when you don't have your Vertex Id's being setup correctly
                 throw new IllegalArgumentException(String.format("Vertex ID %s: A message is mis-matched.",vertex.getId()));
             }
+
+            updatedVector = updateVector(updatedVector, edge);
         }
+
+
+        vertex.getValue().setLdaResult(updatedVector);
+
+        aggregateWord(vertex);
         aggregate(MAX_DELTA, new DoubleWritable(maxDelta));
     }
 
@@ -299,6 +318,33 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
             }
         }
         aggregate(SUM_COST, new DoubleWritable(cost));
+    }
+
+    /**
+     * Compute the conditional probability of topics given word
+     *
+     * Each element of the vector contains the conditional probability of topic k given word
+     * @param vertex of the graph
+     */
+    private void setTopicGivenWord(Vertex<LdaVertexId, LdaVertexData, LdaEdgeData> vertex) {
+        if (vertex.getId().isDocument()) {
+            return;
+        }
+
+        double wordCount = 0d;
+
+        // LDA result before normalization contains word_count * probability of topic given word and document
+        Vector weightedGamma = vertex.getValue().getLdaResult();
+
+        for (Edge<LdaVertexId, LdaEdgeData> edge : vertex.getMutableEdges()) {
+            wordCount += edge.getValue().getWordCount();
+        }
+
+        Vector topicsGivenWord = new DenseVector(new double[config.numTopics()]);
+        if (wordCount > 0d) {
+            topicsGivenWord = weightedGamma.divide(wordCount);
+        }
+        vertex.getValue().setTopicGivenWord(topicsGivenWord);
     }
 
     /**

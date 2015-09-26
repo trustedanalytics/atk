@@ -21,7 +21,6 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /** Arguments to CoalescePlugin (see Spark API) */
-case class CoalesceArgs(
-  @ArgDoc("""<TBD>""") frame: FrameReference,
-  @ArgDoc("""<TBD>""") numberPartitions: Int,
-  @ArgDoc("""<TBD>""") shuffle: Option[Boolean] = Some(false))
+case class CoalesceArgs(frame: FrameReference,
+                        @ArgDoc("""number of Spark RDD partitions""") numberPartitions: Int,
+                        @ArgDoc("""shuffle data between partitions""") shuffle: Option[Boolean] = Some(false))

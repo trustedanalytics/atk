@@ -1,3 +1,5 @@
+.. _ds_eclipse:
+
 .. index:: ! Eclipse
     single: IDE
 
@@ -20,7 +22,7 @@ These instructions assume you have already installed:
     dependencies.
 -   Eclipse Standard.
 
-The |PACKAGE| should work with any version of Eclipse, but these instructions were
+|PACKAGE| should work with any version of Eclipse, but these instructions were
 tested with Eclipse Standard Version 4.4 Luna.
 
 If you are on a corporate network, you may need to configure proxy settings in
@@ -62,7 +64,7 @@ Setup
 
         i)  Choose *Manual Configure*.
         #)  Choose the *New* button.
-        #)  Browse for Python 2.7.  On RedHat and Centos this is probably
+        #)  Browse for Python 2.7.  On RedHat and CentOS this is probably
             /usr/bin/python.
         #)  Choose the *Ok* button.
         #)  Choose the *Ok* button.
@@ -79,7 +81,7 @@ Setup
     #)  Choose the *External Libraries* tab.
     #)  Choose *Add source folder* button.
     #)  Browse for the |PACKAGE| Python REST Client libraries.
-        On RedHat and Centos these are found under
+        On RedHat and CentOS these are found under
         '/usr/lib/trustedanalytics/rest-client/python'.
     #)  Choose the *OK* button.
 

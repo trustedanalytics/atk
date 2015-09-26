@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.trianglecount
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.graph.SparkGraph
@@ -31,8 +31,7 @@ import spray.json._
 /**
  * Variables for executing triangle count.
  */
-case class TriangleCountArgs(@ArgDoc("""Reference to the graph object on which
-to compute triangle count.""") graph: GraphReference,
+case class TriangleCountArgs(graph: GraphReference,
                              @ArgDoc("""The name of output property to be
 added to vertex/edge upon completion.""") output_property: String,
                              @ArgDoc("""The name of edge labels to be considered for triangle count.
@@ -44,7 +43,7 @@ Default is all edges are considered.""") input_edge_labels: Option[List[String]]
  * The result object
  * @param frameDictionaryOutput Name of the output graph
  */
-case class TriangleCountResult(frameDictionaryOutput: Map[String, FrameEntity])
+case class TriangleCountResult(frameDictionaryOutput: Map[String, FrameReference])
 
 /** Json conversion for arguments and return value case classes */
 object TriangleCountJsonFormat {
@@ -57,12 +56,13 @@ import TriangleCountJsonFormat._
 
 @PluginDoc(oneLine = "Number of triangles among vertices of current graph.",
   extended = """** Experimental Feature **
-Triangle Count.
+
 Counts the number of triangles among vertices in an undirected graph.
 If an edge is marked bidirectional, the implementation opts for canonical
 orientation of edges hence counting it only once (similar to an
 undirected graph).""",
   returns = """dict(label, Frame).
+
 Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a triangle_count column.
 Call dictionary_name['label'] to get the handle to frame whose vertex
@@ -89,7 +89,7 @@ class TriangleCountPlugin extends SparkCommandPlugin[TriangleCountArgs, Triangle
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 
     new TriangleCountResult(frameRddMap.keys.map(label => {
-      val result = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
+      val result: FrameReference = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by connected components operation"))) { newOutputFrame: FrameEntity =>
         val frameRdd = frameRddMap(label)
         newOutputFrame.save(frameRdd)
       }

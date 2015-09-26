@@ -31,6 +31,9 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://"${HOSTNAME}"/user/atkuser"
 
+    # Absolute local paths where jars are copied from to hdfs-lib
+    //local-libs = [ "file:/usr/lib/trustedanalytics/rest-server/lib" ]
+
     # The (comma separated, no spaces) Zookeeper hosts that
     # Titan needs to be able to connect to HBase
     titan.load.storage.hostname = ${HOSTNAME}

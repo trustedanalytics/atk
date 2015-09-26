@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.load
 import java.io.File
 import java.nio.charset.Charset
 
+import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin.MultiLineTaggedInputFormat
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import org.apache.commons.codec.Charsets
 import org.apache.commons.io.FileUtils

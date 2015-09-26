@@ -16,7 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.assignsample
 
-import org.trustedanalytics.atk.domain.frame.{ AssignSampleArgs, FrameEntity }
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.frame.AssignSampleArgs
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.plugins.{ LabeledLine, MLDataSplitter }
 import org.apache.spark.sql.Row
@@ -45,9 +46,7 @@ The labels are non-negative integers drawn from the range
 Optionally, the user can specify a list of strings to be used as the labels.
 If the number of labels is 3, the labels will default to "TR", "TE" and "VA".
 
-Notes
------
-**Probability Validation**
+**Notes**
 
 The sample percentages provided by the user are preserved to at least eight
 decimal places, but beyond this there may be small changes due to floating
@@ -55,12 +54,12 @@ point imprecision.
 
 In particular:
 
-1)  The engine validates that the sum of probabilities sums to 1.0 within
+#)  The engine validates that the sum of probabilities sums to 1.0 within
     eight decimal places and returns an error if the sum falls outside of this
     range.
-2)  The probability of the final class is clamped so that each row receives a
+#)  The probability of the final class is clamped so that each row receives a
     valid label with probability one.""")
-class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, FrameEntity] {
+class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -78,7 +77,7 @@ class AssignSamplePlugin extends SparkCommandPlugin[AssignSampleArgs, FrameEntit
    *                   can be used during this invocation.
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: AssignSampleArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: AssignSampleArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val samplePercentages = arguments.samplePercentages.toArray
 

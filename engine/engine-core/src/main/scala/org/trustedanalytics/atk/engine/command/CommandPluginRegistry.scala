@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.command
 import org.trustedanalytics.atk.domain.command.{ CommandDocLoader, CommandDefinition, CommandDoc }
 import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.shared.JsonSchemaExtractor
-import org.trustedanalytics.atk.spray.json.ObjectSchema
+import org.trustedanalytics.atk.spray.json.{ JsonSchema, ObjectSchema }
 import scala.reflect.runtime.{ universe => ru }
 import ru._
 
@@ -80,13 +80,15 @@ class CommandPluginRegistry(loader: CommandLoader) {
     JsonSchemaExtractor.getProductSchema(p.argumentManifest, includeDefaultValues = true)
   }
 
-  private def getReturnSchema(p: CommandPlugin[_, _]): ObjectSchema = {
-    val schema = JsonSchemaExtractor.getProductSchema(p.returnManifest, includeDefaultValues = false)
+  private def getReturnSchema(p: CommandPlugin[_, _]): JsonSchema = {
+
     // if plugin annotation has a returns description, add it to the schema
-    JsonSchemaExtractor.getPluginDocAnnotation(p.thisManifest) match {
-      case None => schema
-      case Some(pluginDoc) => schema.copy(description = pluginDoc.getReturnsDescription)
+    val description = JsonSchemaExtractor.getPluginDocAnnotation(p.thisManifest) match {
+      case None => None
+      case Some(pluginDoc) => pluginDoc.getReturnsDescription
     }
+
+    JsonSchemaExtractor.getReturnSchema(p.returnManifest, description = description)
   }
 
   private def getCommandDoc(p: CommandPlugin[_, _]): Option[CommandDoc] = {

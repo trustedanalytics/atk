@@ -18,16 +18,32 @@ package org.trustedanalytics.atk.engine.model.plugins.classification.glm
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Create a 'new' instance of logistic regression model.",
-  extended = "",
-  returns = "")
-class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+  extended =
+    """
+Logistic Regression [1]_ is a widely used supervised binary and multi-class classification algorithm.
+The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+of observations, and tests the predicted labels against the true labels.
+This model runs the MLLib implementation of Logistic Regression [2]_, with enhanced features |EM|
+trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+of the train and test observations.
+Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD [4]_.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Logistic_regression
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression
+.. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
+.. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+    """)
+class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -36,7 +52,7 @@ class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs
    */
   override def name: String = "model:logistic_regression/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity = {
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:logistic_regression")))
   }
 }

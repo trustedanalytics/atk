@@ -1,3 +1,18 @@
+/*
+// Copyright (c) 2015 Intel Corporation 
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+*/
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
 import org.apache.spark.Logging
@@ -19,16 +34,15 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
    */
   def leftBroadcastJoin(other: RddJoinParam): RDD[Row] = {
     val rightBroadcastVariable = JoinBroadcastVariable(other)
-    lazy val rightNullRow: Row = new GenericRow(other.columnCount)
+    lazy val rightNullRow: Row = new GenericRow(other.frame.numColumns)
 
-    self.frame.flatMap {
-      case (leftRow) =>
-        val leftKey = leftRow.get(self.joinColumnIndex)
-        rightBroadcastVariable.get(leftKey) match {
-          case Some(rightRowSet) => for (rightRow <- rightRowSet) yield Row.merge(leftRow, rightRow)
-          case _ => List(Row.merge(leftRow, rightNullRow.copy()))
-        }
-    }
+    self.frame.flatMapRows(left => {
+      val leftKey = left.value(self.joinColumn)
+      rightBroadcastVariable.get(leftKey) match {
+        case Some(rightRowSet) => for (rightRow <- rightRowSet) yield Row.merge(left.row, rightRow)
+        case _ => List(Row.merge(left.row, rightNullRow.copy()))
+      }
+    })
   }
 
   /**
@@ -40,16 +54,15 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
    */
   def rightBroadcastJoin(other: RddJoinParam): RDD[Row] = {
     val leftBroadcastVariable = JoinBroadcastVariable(self)
-    lazy val leftNullRow: Row = new GenericRow(self.columnCount)
+    lazy val leftNullRow: Row = new GenericRow(self.frame.numColumns)
 
-    other.frame.flatMap {
-      case (rightRow) =>
-        val rightKey = rightRow.get(other.joinColumnIndex)
-        leftBroadcastVariable.get(rightKey) match {
-          case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow)
-          case _ => List(Row.merge(leftNullRow.copy(), rightRow))
-        }
-    }
+    other.frame.flatMapRows(right => {
+      val rightKey = right.value(other.joinColumn)
+      leftBroadcastVariable.get(rightKey) match {
+        case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, right.row)
+        case _ => List(Row.merge(leftNullRow.copy(), right.row))
+      }
+    })
   }
 
   /**
@@ -65,22 +78,22 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
 
     val innerJoinedRDD = if (rightSizeInBytes <= broadcastJoinThreshold) {
       val rightBroadcastVariable = JoinBroadcastVariable(other)
-      self.frame.flatMap(leftRow => {
-        val leftKey = leftRow.get(self.joinColumnIndex)
+      self.frame.flatMapRows(left => {
+        val leftKey = left.value(self.joinColumn)
         rightBroadcastVariable.get(leftKey) match {
           case Some(rightRowSet) =>
-            for (rightRow <- rightRowSet) yield Row.merge(leftRow, rightRow)
+            for (rightRow <- rightRowSet) yield Row.merge(left.row, rightRow)
           case _ => Set.empty[Row]
         }
       })
     }
     else if (leftSizeInBytes <= broadcastJoinThreshold) {
       val leftBroadcastVariable = JoinBroadcastVariable(self)
-      other.frame.flatMap(rightRow => {
-        val rightKey = rightRow.get(other.joinColumnIndex)
+      other.frame.flatMapRows(rightRow => {
+        val rightKey = rightRow.value(other.joinColumn)
         leftBroadcastVariable.get(rightKey) match {
           case Some(leftRowSet) =>
-            for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow)
+            for (leftRow <- leftRowSet) yield Row.merge(leftRow, rightRow.row)
           case _ => Set.empty[Row]
         }
       })

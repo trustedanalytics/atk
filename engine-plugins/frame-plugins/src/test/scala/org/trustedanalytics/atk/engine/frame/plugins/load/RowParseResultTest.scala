@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
 import org.scalatest.WordSpec
+import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin.RowParseResult
 
 class RowParseResultTest extends WordSpec {
 

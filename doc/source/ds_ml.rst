@@ -1,3 +1,5 @@
+.. _ds_ml:
+
 .. index::
     single: machine learning
 
@@ -26,31 +28,14 @@ be done automatically, without directly involving analysts.
 There are many other problems that are amenable to :term:`machine learning`
 solutions.
 Translation of text for example is a difficult issue.
-A corpus of pre-translated text can be used to teach an algorithm a mapping
-from one language to another.
-
-----------
-Algorithms
-----------
-
-.. toctree::
-    :maxdepth: 2
-
-    ds_mlal_0
-
-.. index::
-    single: supervised
-    single: unsupervised
-    single: semi-supervised
-    single: binary logistic regression
-    single: classification
-    single: prediction
+A corpus of previously translated text can be used to teach an algorithm a
+mapping from one language to another.
 
 -----------
 Supervision
 -----------
 
-The |PACKAGE| incorporates supervised, unsupervised, and
+|PACKAGE| incorporates supervised, unsupervised, and
 semi-supervised machine learning algorithms.
 Supervised algorithms are used to learn the relationship between features in
 a dataset and some labeling schema, such as is in classification.
@@ -60,7 +45,7 @@ collection of days) to a known binary label (e.g., whether or not someone
 went for a trail run on that day).
 Once the relationship between temperature and running activity is learned,
 then the model can be used to make predictions about new running activity,
-given the days temperatures.
+given the daily temperatures.
 Unsupervised machine learning algorithms are used to find patterns or
 groupings in data for which class labels are unknown.
 For example, given a data set of observations about flowers (e.g., petal
@@ -72,7 +57,7 @@ as "similar species appear to cluster together."
 Semi-supervised learning is the natural combination of these two classes of
 algorithms, in which unlabeled data are supplemented with smaller amounts of
 labeled data, with the goal of increasing the accuracy of learning.
-For more information on these approaches, the respective wikipedia entries
+For more information on these approaches, the respective Wikipedia entries
 to these approaches provide an easy-to-read overview of their strengths and
 limitations.
 

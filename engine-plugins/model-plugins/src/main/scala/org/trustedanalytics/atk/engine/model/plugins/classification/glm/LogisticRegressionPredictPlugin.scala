@@ -16,25 +16,26 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification.glm
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDPredictArgs
-import org.apache.spark.mllib.linalg.Vectors
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
+
+//Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Make a new frame with a column for label prediction.",
-  extended = """Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted label's column.""",
+@PluginDoc(oneLine = "Predict labels for data points using trained logistic regression model.",
+  extended = """Predict the labels for a test frame using trained logistic regression model,
+              and create a new frame revision with existing columns and a new predicted label's column.""",
   returns = "Frame containing the original frame's columns and a column with the predicted label.")
-class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameEntity] {
+class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -61,7 +62,7 @@ class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationW
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
@@ -75,20 +76,15 @@ class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationW
     val logRegColumns = arguments.observationColumns.getOrElse(logRegData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(logRegColumns)
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      val point = Vectors.dense(doubles)
-      val prediction = logRegModel.predict(point)
-      row.addValue(prediction.toInt)
+    val predictColumn = Column("predicted_label", DataTypes.int32)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val point = row.valuesAsDenseVector(logRegColumns)
+      logRegModel.predict(point).toInt
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_label", DataTypes.int32)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by LogisticRegression predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 

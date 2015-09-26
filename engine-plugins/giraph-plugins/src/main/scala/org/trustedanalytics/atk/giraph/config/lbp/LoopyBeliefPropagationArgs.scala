@@ -33,8 +33,8 @@ destination vertex id.""") destColName: String,
 edge weight.""") weightColName: String,
                                       @ArgDoc("""The column name for the
 label properties for the source vertex.""") srcLabelColName: String,
-                                      @ArgDoc("""The column name for the
-results (holding the post labels for the vertices).""") resultColName: Option[String] = None,
+                                      @ArgDoc("""The column name for the results (holding
+the post labels for the vertices).""") resultColName: Option[String] = None,
                                       @ArgDoc("""If True, all vertex will be treated as training data.
 Default is False.""") ignoreVertexType: Option[Boolean] = None,
                                       @ArgDoc("""The maximum number of
@@ -49,20 +49,18 @@ The valid value range is all float and zero.
 The default value is 0.00000001f.""") convergenceThreshold: Option[Float] = None,
                                       @ArgDoc("""The parameter that determines
 if a node's posterior will be updated or not.
-If a node's maximum prior value is greater than this threshold, the node
-will be treated as anchor node, whose posterior will inherit from prior
-without update.
+If a node's maximum prior value is greater than this threshold, the node will be
+treated as anchor node, whose posterior will inherit from prior without update.
 This is for the case where we have confident prior estimation for some
-nodes and don't want the algorithm updates these nodes.
+nodes and don't want the algorithm to update these nodes.
 The valid value range is in [0, 1].
 Default is 1.0.""") anchorThreshold: Option[Double] = None,
                                       @ArgDoc("""The Ising smoothing parameter.
 This parameter adjusts the relative strength of closeness encoded edge
-weights, similar to the width of Gussian distribution.
-Larger value implies smoother decay and the edge weight beomes less
-important.
+weights, similar to the width of Gaussian distribution.
+Larger value implies smoother decay and the edge weight becomes less important.
 Default is 2.0.""") smoothing: Option[Float] = None,
-                                      @ArgDoc("""Should LBP use max_product or not.
+                                      @ArgDoc("""Should |LBP| use max_product or not.
 Default is False.""") maxProduct: Option[Boolean] = None,
                                       @ArgDoc("""Power coefficient for power edge potential.
 Default is 0.""") power: Option[Float] = None) {

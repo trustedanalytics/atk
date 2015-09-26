@@ -1,3 +1,5 @@
+.. _ds_mlal_0:
+
 .. index::
     single: machine learning
     single: model
@@ -10,52 +12,28 @@ Machine Learning Algorithms
     :local:
     :backlinks: none
 
-The graph machine learning algorithms currently supported fall into these
-categories:
-*Collaborative Filtering*, *Graphical Models*, and *Topic Modeling*.
+-------------------------
+Classification Algorithms
+-------------------------
+-   :ref:`Logistic Regression <python_api/models/model-logistic_regression/index>`
+-   :ref:`Naive Bayes <python_api/models/model-naive_bayes/index>`
+-   :ref:`Random Forest <python_api/models/model-random_forest_classifier/index>`
+-   :ref:`SVM with SGD <python_api/models/model-svm/index>`
+-   :ref:`Lib SVM <python_api/models/model-libsvm/index>`
 
------------------------
-Collaborative Filtering
------------------------
-See the `models section of the API
-<python_api/models/model-collaborative_filtering/index.html>`_ for details.
+---------------------
+Regression Algorithms
+---------------------
+-   :ref:`Linear Regression <python_api/models/model-linear_regression/index>`
+-   :ref:`Random Forest <python_api/models/model-random_forest_regressor/index>`
 
-* `Graphical_Models`_
-    * `LP`_
-    * `LBP`_
+---------------------
+Clustering Algorithms
+---------------------
+-   :ref:`K means <python_api/models/model-k_means/index>`
 
-* `Topic_Modeling`_
-    * `LDA`_
-
-
-.. _ALS:
-.. include:: ds_mlal_als.inc
-
-.. _CGD:
-.. include:: ds_mlal_cgd.inc
-
-
-.. _Graphical_Models:
-
-----------------
-Graphical Models
-----------------
-
-
-The graphical models find more insights from structured noisy data.
-See `graph API <python_api/graphs/index.html>`_ for details of the
-**Label Propagation (LP)** and **Loopy Belief Propagation (LBP)**.
-
-
-.. _Topic_Modeling:
-
---------------
-Topic Modeling
---------------
-
-
-For Topic Modeling, see: http://en.wikipedia.org/wiki/Topic_model
-
-.. _LDA:
-.. include:: ds_mlal_lda.inc
+-----------------------------------
+Dimensionality Reduction Algorithms
+-----------------------------------
+-   :ref:`Principal Component Analysis <python_api/models/model-principal_components/index>`
 

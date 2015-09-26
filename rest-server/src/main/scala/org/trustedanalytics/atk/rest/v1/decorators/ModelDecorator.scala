@@ -36,7 +36,7 @@ object ModelDecorator extends EntityDecorator[ModelEntity, GetModels, GetModel] 
    */
   override def decorateEntity(uri: String, links: Iterable[RelLink], entity: ModelEntity): GetModel = {
 
-    GetModel(id = entity.id, ia_uri = entity.uri, name = entity.name, links.toList, entity.entityType,
+    GetModel(uri = entity.uri, name = entity.name, links.toList, entity.entityType,
       Status.getName(entity.statusId))
   }
 

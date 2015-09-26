@@ -29,8 +29,9 @@ import org.apache.spark.frame.FrameRdd
 import spray.json._
 
 case class EcdfArgs(frame: FrameReference,
-                    @ArgDoc("The name of the input column containing sample.") column: String,
-                    @ArgDoc("A name for the resulting frame which is created by this operation.") resultFrameName: Option[String] = None) {
+                    @ArgDoc("""The name of the input column containing sample.""") column: String,
+                    @ArgDoc("""A name for the resulting frame which is created
+by this operation.""") resultFrameName: Option[String] = None) {
   require(frame != null, "frame is required")
   require(column != null, "column is required")
 
@@ -59,7 +60,7 @@ import DomainJsonProtocol._
 @PluginDoc(oneLine = "Builds new frame with columns for data and distribution.",
   extended = """Generates the :term:`empirical cumulative distribution` for the input column.""",
   returns = "A new Frame containing each distinct value in the sample and its corresponding ECDF value.")
-class EcdfPlugin extends SparkCommandPlugin[EcdfArgs, FrameEntity] {
+class EcdfPlugin extends SparkCommandPlugin[EcdfArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -80,7 +81,7 @@ class EcdfPlugin extends SparkCommandPlugin[EcdfArgs, FrameEntity] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: EcdfArgs)(implicit invocation: Invocation): FrameEntity = {
+  override def execute(arguments: EcdfArgs)(implicit invocation: Invocation): FrameReference = {
     // validate arguments
     val frame: SparkFrame = arguments.frame
     val sampleColumn = frame.schema.column(arguments.column)

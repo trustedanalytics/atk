@@ -494,45 +494,6 @@ def get_zookeeper_details(services):
     return zookeeper_server_role_hostnames, zookeeper_client_port
 
 
-def get_spark_details(services):
-    """
-    Look for the spark master host name, spark master port, executor memory and update the spark_env.sh with the
-    necessary class path to build graphs
-    :param services: all the cluster services
-    :return: spark master host name, port and executor max memory
-    """
-    spark_service = find_service(services, "SPARK")
-    if spark_service is None:
-       print color_text("no spark service found", ERROR)
-       exit(1)
-
-    spark_roles = spark_service.get_all_roles()
-
-    spark_master_roles = find_service_roles(spark_roles, "SPARK_MASTER")
-
-    spark_master_role_hostnames = get_role_host_names(api, spark_master_roles)
-
-    spark_config_groups = role_config_groups.get_all_role_config_groups(api, spark_service.name, cluster.name)
-
-    spark_config_executor_total_max_heapsize, _ = find_config(spark_config_groups, "spark-SPARK_WORKER-BASE",
-                                                           "executor_total_max_heapsize")
-
-    spark_config_master_port, _ = find_config(spark_config_groups, "spark-SPARK_MASTER-BASE", "master_port")
-
-    #spark_config_env_sh, group = find_config(spark_config_groups, "spark-GATEWAY-BASE",
-    #                               "spark-conf/spark-env.sh_client_config_safety_valve")
-    #spark_config_env_sh, group = find_config(spark_config_groups, "spark-SPARK_WORKER-BASE",
-                                             #"SPARK_WORKER_role_env_safety_valve")
-
-    #updated = update_spark_env(group, spark_config_env_sh)
-
-    #if updated and True:
-    #    deploy_config(spark_service, spark_roles)
-    #    restart_service(spark_service)
-
-    return spark_master_role_hostnames, spark_config_executor_total_max_heapsize, spark_config_master_port
-
-
 def search_replace_config(search, replace, search_text):
     """
     search and replace the application.conf.tpl with the config pulled from cloudera manager or as a result of asking
@@ -799,18 +760,13 @@ def set_db_details(db, db_username, db_password, reconfig):
 
         print color_text("postgres is configured", GOOD)
 
-
 def create_trusted_analytics_config( hdfs_host_name, hdfs_namenode_port, zookeeper_host_names, zookeeper_client_port,
-                                   spark_master_host, spark_master_port, spark_worker_memory,
                                    db_host, db_port, db, db_username, db_password):
     """
     create a new application.conf file from the tempalte
 
     :param hdfs_host_name: hdfs host name
     :param zookeeper_host_names: zookeeper host names
-    :param spark_master_host: spark master host
-    :param spark_master_port: spakr master port
-    :param spark_worker_memory: spark worker executor max memory
     :return:
     """
     print "\nCreating application.conf file from application.conf.tpl"
@@ -825,8 +781,7 @@ def create_trusted_analytics_config( hdfs_host_name, hdfs_namenode_port, zookeep
 
     print "Updating configuration"
     #set fs.root
-    config_tpl_text = search_replace_config("fs.root",
-                                            'fs.root = "hdfs://' + hdfs_host_name[0] +
+    config_tpl_text = search_replace_config("fs.root", 'fs.root = "hdfs://' + hdfs_host_name[0] +
                                             ":" + hdfs_namenode_port + '/user/' + ATKUSER + '"', config_tpl_text)
     #set titan zookeeper list titan.load.storage.hostname
     config_tpl_text = search_replace_config("titan.load.storage.hostname",
@@ -835,13 +790,9 @@ def create_trusted_analytics_config( hdfs_host_name, hdfs_namenode_port, zookeep
     config_tpl_text = search_replace_config("titan.load.storage.port",
                                             'titan.load.storage.port = "' + zookeeper_client_port  + '"',
                                             config_tpl_text)
+
     #set spark master
-    config_tpl_text = search_replace_config("spark.master",
-                                            'spark.master = "spark://' + spark_master_host[0] +
-                                            ':' + spark_master_port + '"', config_tpl_text)
-    #set spark executor memory
-    config_tpl_text = search_replace_config("spark.executor.memory",
-                                            'spark.executor.memory = "' + spark_worker_memory + '"', config_tpl_text)
+    config_tpl_text = search_replace_config("spark.master", 'spark.master = ' + "\"yarn-cluster\"", config_tpl_text)
 
     #set spark event logging
     config_tpl_text = search_replace_config("spark.eventLog.dir",
@@ -941,18 +892,12 @@ if cluster:
     #get zookeeper host names
     zookeeper_server_role_host_names, zookeeper_client_port = get_zookeeper_details(services)
 
-    #get spark service details
-    spark_master_role_host_names, spark_config_executor_total_max_heapsize, spark_config_master_port = \
-        get_spark_details(services)
-
 
     db_host, db_port, db, db_username, db_password, db_reconfig = get_db_details()
 
     #write changes to our config
     create_trusted_analytics_config(hdfs_namenode_role_host_names, hdfs_namenode_port, zookeeper_server_role_host_names,
-                                  zookeeper_client_port, spark_master_role_host_names, spark_config_master_port,
-                                  spark_config_executor_total_max_heapsize, db_host, db_port, db,
-                                  db_username, db_password)
+                                   zookeeper_client_port, db_host, db_port, db, db_username, db_password)
 
     set_db_details(db, db_username, db_password, db_reconfig)
 
