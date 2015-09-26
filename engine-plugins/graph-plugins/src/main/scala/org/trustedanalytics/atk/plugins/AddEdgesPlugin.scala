@@ -77,7 +77,7 @@ class AddEdgesPlugin extends SparkCommandPlugin[AddEdgesArgs, UnitReturn] {
       // assign unique ids to source data
       val edgeDataToAdd = sourceFrame.rdd.selectColumns(arguments.allColumnNames).assignUniqueIds(GraphSchema.edgeProperty, startId = graph.nextId)
       edgeDataToAdd.cache()
-      
+
       // convert to appropriate schema, adding edge system columns
       val edgesWithoutVids = edgeDataToAdd.convertToNewSchema(edgeDataToAdd.frameSchema.addColumn(GraphSchema.srcVidProperty, DataTypes.int64).addColumn(GraphSchema.destVidProperty, DataTypes.int64))
       edgesWithoutVids.cache()

@@ -922,7 +922,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     override def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
       // special query which avoids pulling the data field, which can be large!
       (for {
-        m <- models; if m.name.isNotNull && m.statusId === Status.Active
+        m <- models; if m.name.isNotNull && m.statusId === Status.Active.id
       } yield (m.id, m.name, m.modelType)).list.map {
         case (id, name, modelType) => ModelEntity(
           id = id,
