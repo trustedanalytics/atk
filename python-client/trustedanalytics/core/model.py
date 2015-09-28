@@ -28,6 +28,7 @@ from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
 from trustedanalytics.rest.atkserver import server
+from trustedanalytics import valid_data_types
 
 # _BaseModel
 try:
@@ -76,7 +77,9 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     def __repr__(self):
         try:
             model_info = self._get_model_info()
-            return "\n".join([self.__class__.__name__, 'name =  "%s"' % (model_info.name), "status = %s" % model_info.status])
+            return "\n".join([self.__class__.__name__,
+                              'name =  "%s"' % (model_info.name),
+                              "status = %s (last_read_date = %s)" % (model_info.status, model_info.last_read_date)])
         except:
             return super(_BaseModel,self).__repr__() + " (Unable to collect metadata from server)"
 
@@ -84,6 +87,35 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
         if not isinstance(other, _BaseModel):
             return False
         return self.uri == other.uri
+
+    @api
+    @property
+    @returns(data_type=str, description="Status of the model")
+    def __status(self):
+        """
+        Current model life cycle status.
+
+        One of three statuses: Active, Dropped, Finalized
+           Active:    Entity is available for use
+           Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+           Finalized: Entity's data has been deleted
+        """
+        try:
+            return self._get_model_info().status
+        except:
+            return super(_BaseModel, self).__repr__() + " (Unable to collect metadata from server)"
+
+    @api
+    @property
+    @returns(data_type=str, description="Date string of the last time this model's data was accessed")
+    def __last_read_date(self):
+        """
+        Last time this frame's data was accessed.
+        """
+        try:
+            return self._get_model_info().last_read_date
+        except:
+            return "(Unable to collect metadata from server)"
 
 
 class ModelInfo(object):
@@ -116,11 +148,15 @@ class ModelInfo(object):
 
     @property
     def links(self):
-        return self._links['links']
+        return self._payload['links']
 
     @property
     def status(self):
         return self._payload['status']
+
+    @property
+    def last_read_date(self):
+        return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
 
     def initialize_model(self, model):
         model.uri = self.uri

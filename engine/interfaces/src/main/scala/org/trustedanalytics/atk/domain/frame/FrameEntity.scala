@@ -79,6 +79,8 @@ case class FrameEntity(id: Long,
 
   def withSchema(newSchema: Schema) = this.copy(schema = newSchema)
 
+  def isStatus(s: Status): Boolean = status == (s: Long)
+
   // TODO: we should be able to enable this check but it isn't working currently because 'lazy' removes graphId from old revisions --Todd 12/9/2014
   //if (isVertexFrame || isEdgeFrame) {
   //  require(graphId != None, "graphId is required for vertex and edge frames")

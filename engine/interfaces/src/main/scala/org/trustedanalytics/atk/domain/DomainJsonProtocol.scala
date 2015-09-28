@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, Comman
 import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf }
 import org.trustedanalytics.atk.domain.frame.load.{ LoadFrameArgs, LineParser, LoadSource, LineParserArguments }
 import org.trustedanalytics.atk.domain.frame.partitioning.{ RepartitionArgs, CoalesceArgs }
-import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionArgs, GarbageCollectionEntry, GarbageCollection }
+import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntry, GarbageCollection }
 import org.trustedanalytics.atk.domain.model._
 import org.trustedanalytics.atk.domain.frame.load._
 import org.trustedanalytics.atk.domain.schema._
@@ -591,8 +591,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val seamlessGraphMetaFormat = jsonFormat2(SeamlessGraphMeta)
 
   implicit val binColumnResultFormat = jsonFormat2(BinColumnResults)
-
-  implicit val garbageCollectionArgsFormat = jsonFormat2(GarbageCollectionArgs)
 
   implicit val hBaseArgsSchemaFormat = jsonFormat3(HBaseSchemaArgs)
 

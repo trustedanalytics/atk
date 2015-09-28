@@ -53,9 +53,9 @@ class FrameFileStorage(fsRoot: String,
    * Remove the directory and underlying data for a particular frame
    * @param frame the data frame to act on
    */
-  def delete(frame: FrameEntity): Unit = {
+  def deleteFrameData(frame: FrameEntity): Unit = {
     if (frame.storageLocation.isDefined) {
-      deletePath(getStoredRevisionPath(frame).getParent)
+      deletePath(getStoredPath(frame).getParent)
     }
   }
 
@@ -69,11 +69,11 @@ class FrameFileStorage(fsRoot: String,
 
   /**
    * Determine if a dataFrame is saved as parquet
-   * @param dataFrame the data frame to verify
+   * @param frame the data frame to verify
    * @return true if the data frame is saved in the parquet format
    */
-  private[frame] def isParquet(dataFrame: FrameEntity): Boolean = {
-    val path = getStoredRevisionPath(dataFrame)
+  private[frame] def isParquet(frame: FrameEntity): Boolean = {
+    val path = getStoredPath(frame)
     hdfs.globList(path, "*.parquet").nonEmpty
   }
 
@@ -82,7 +82,7 @@ class FrameFileStorage(fsRoot: String,
    * @param frame the frame to interrogate
    * @return
    */
-  private[frame] def getStoredRevisionPath(frame: FrameEntity): Path = {
+  private[frame] def getStoredPath(frame: FrameEntity): Path = {
     frame.storageLocation match {
       case Some(path) => new Path(path)
       case None => throw new RuntimeException(s"Frame ${frame.id} does not have a storage location set")
