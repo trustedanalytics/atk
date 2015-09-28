@@ -62,6 +62,8 @@ all spark nodes (master and worker).
 The |PACKAGE| Dependency repository and the yum-s3 package must be installed before
 the |PACKAGE| private repository.
 
+.. _epel repository:
+
 EPEL Repository
 ---------------
 

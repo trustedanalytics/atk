@@ -1,7 +1,5 @@
 .. _ad_dp2:
 
-.. _ad_over:
-
 =============================
 Deploy and Run ATK App on DP2
 =============================
@@ -13,7 +11,7 @@ Installing Required Packages
 Install "golang" from the package manager 
 =========================================
 On RedHat/CentOS, ensure "EPEL" repo is enabled.
-For more information, see :ref:`Yum Repo <ad_yum_epel_repo>`.
+For more information, see :ref:`Yum Repo <EPEL Repository>`.
 
 From the command line interface (terminal),
 install the "go" language and the required libraries.
@@ -50,6 +48,7 @@ Install this package:
 Test the package installation:
 
 .. code::
+
     $ cf --version
     cf version 6.11.2-2a26d55-2015-04-27T21:11:44+00:00
 
