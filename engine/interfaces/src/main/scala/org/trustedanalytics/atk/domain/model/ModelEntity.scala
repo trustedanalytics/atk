@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.domain.model
 
-import org.trustedanalytics.atk.domain.{ Naming, HasId }
+import org.trustedanalytics.atk.domain.{ Status, Naming, HasId }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.joda.time.DateTime
 import spray.json.JsObject
@@ -68,4 +68,6 @@ case class ModelEntity(id: Long,
   def uri: String = toReference.uri
 
   def toReference: ModelReference = ModelReference(id)
+
+  def isStatus(s: Status): Boolean = statusId == (s: Long)
 }

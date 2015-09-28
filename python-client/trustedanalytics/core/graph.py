@@ -100,6 +100,17 @@ One of three statuses: ``Active``, ``Deleted``, ``Deleted_Final``\:
         except:
             return super(_BaseGraph, self).__repr__() + " (Unable to collect metadata from server)"
 
+    @api
+    @property
+    @returns(data_type=str, description="Date string of the last time this frame's data was accessed")
+    def __last_read_date(self):
+        """
+        Last time this frame's data was accessed.
+        """
+        try:
+            return self._backend.get_last_read_date(self)
+        except:
+            return "(Unable to collect metadata from server)"
 
 
 @api
@@ -488,9 +499,7 @@ class GraphFrameCollection(object):
 
 @api
 class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
-    """
-Proxy to a graph in Titan, supports Gremlin query
-    """
+    """Proxy to a graph in Titan, supports Gremlin query."""
 
     _entity_type = 'graph:titan'
 

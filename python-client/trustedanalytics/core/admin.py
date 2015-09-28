@@ -21,12 +21,17 @@ Admin commands, not part of public API
 from trustedanalytics.rest.command import execute_command
 
 
-def _explicit_garbage_collection(age_to_delete_data = None, age_to_delete_meta_data = None):
+def drop_stale(stale_age=None):
     """
-    Execute garbage collection out of cycle age ranges specified using the typesafe config duration format.
-    :param age_to_delete_data: Minimum age for data deletion. Defaults to server config.
-    :param age_to_delete_meta_data: Minimum age for meta data deletion. Defaults to server config.
+    Execute garbage collection out of cycle to drop stale entities
+    :param stale_age: Minimum age to qualify as "stale".  Defaults to server config.  Age specified using the typesafe config duration format.
+    :type stale_age: str
     """
-    execute_command("_admin:/_explicit_garbage_collection", None,
-                    age_to_delete_data=age_to_delete_data,
-                    age_to_delete_meta_data=age_to_delete_meta_data)
+    execute_command("_admin:/_drop_stale", None, stale_age=stale_age)
+
+
+def finalize_dropped():
+    """
+    Execute garbage collection out of cycle to finalize all dropped entities (i.e. erase their data)
+    """
+    execute_command("_admin:/_finalize_dropped", None, bogus=0)
