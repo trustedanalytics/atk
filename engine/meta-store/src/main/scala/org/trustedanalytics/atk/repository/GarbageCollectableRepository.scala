@@ -24,33 +24,15 @@ import scala.util.Try
 
 trait GarbageCollectableRepository[Session, Entity <: HasId] extends ReadRepository[Session, Entity] {
   /**
-   * Return a list of entities ready to delete
-   * @param age the length of time in milliseconds for the newest possible record to be deleted
+   * Return a list of Active entities which meet "stale" criteria, meaning GC can drop them
+   * @param age milliseconds that must have passed since the last access to the entity for it to be considered "stale"
    * @param session current session
    */
-  def listReadyForDeletion(age: Long)(implicit session: Session): Seq[Entity]
+  def getStaleEntities(age: Long)(implicit session: Session): Seq[Entity]
 
-  /**
-   * update and mark an entity as having it's data deleted
-   * @param entity entity to be deleted
-   * @param session the user session
-   * @return the entity
-   */
-  def updateDataDeleted(entity: Entity)(implicit session: Session): Try[Entity]
+  /** update entity as having its data deleted */
+  def finalizeEntity(entity: Entity)(implicit session: Session): Try[Entity]
 
-  /**
-   * update the last read data of an entity if it has been marked as deleted change it's status
-   * @param entity entity to be updated
-   * @param session the user session
-   */
+  /** update the last read data of an entity */
   def updateLastReadDate(entity: Entity)(implicit session: Session): Try[Entity]
-
-  /**
-   * update and mark an entity as being ready to delete in the next garbage collection execution
-   * @param entity
-   * @param session
-   * @return
-   */
-  def updateReadyToDelete(entity: Entity)(implicit session: Session): Try[Entity]
-
 }
