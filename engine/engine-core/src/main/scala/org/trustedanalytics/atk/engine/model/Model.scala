@@ -32,6 +32,8 @@ trait Model {
   /** name assigned by user for this model instance */
   def name: Option[String]
 
+  def name_=(updatedName: String): Unit
+
   /** the type of the model eg: OLS, LogisticRegression */
   def modelType: String
 
@@ -69,6 +71,8 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
 
   /** name assigned by user for this model instance */
   override def name: Option[String] = entity.name
+
+  override def name_=(updatedName: String): Unit = modelStorage.renameModel(entity, updatedName)
 
   /** the type of the model eg: OLS, LogisticRegression */
   override def modelType: String = entity.modelType

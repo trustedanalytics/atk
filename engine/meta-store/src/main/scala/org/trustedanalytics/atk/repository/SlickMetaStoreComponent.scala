@@ -1006,6 +1006,27 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       models.list
     }
 
+    /**
+     * Return list of model entities (without data) for all Active model entities with a name
+     * @param session current session
+     */
+    override def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
+      // special query which avoids pulling the data field, which can be large!
+      (for {
+        m <- models; if m.name.isNotNull && m.statusId === Status.Active
+      } yield (m.id, m.name, m.modelType)).list.map {
+        case (id, name, modelType) => ModelEntity(
+          id = id,
+          name = name,
+          modelType = modelType,
+          description = None,
+          statusId = Status.Active,
+          data = None,
+          createdOn = null,
+          modifiedOn = null)
+      }
+    }
+
     override def lookup(id: Long)(implicit session: Session): Option[ModelEntity] = {
       models.where(_.id === id).firstOption
     }
