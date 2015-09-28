@@ -23,7 +23,7 @@ package org.trustedanalytics.atk.rest.v1.viewmodels
  * @param name name assigned by user
  * @param url the URI to 'this' dataFrame in terms of the REST API
  */
-case class GetDataFrames(id: Long, name: Option[String], url: String, entityType: String) {
+case class GetFrames(id: Long, name: Option[String], url: String, entityType: String) {
   require(id > 0, "id must be greater than zero")
   require(name != null, "name must not be null")
   require(url != null, "url must not be null")
