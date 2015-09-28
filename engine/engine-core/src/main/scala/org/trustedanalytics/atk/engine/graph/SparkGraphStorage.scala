@@ -81,24 +81,6 @@ class SparkGraphStorage(metaStore: MetaStore,
   def expectSeamless(graphRef: GraphReference): SeamlessGraphMeta = expectSeamless(graphRef.id)
 
   /**
-   * Deletes a graph by synchronously deleting its information from the meta-store and asynchronously
-   * deleting it from the backend storage.
-   * @param graph Graph metadata object.
-   */
-  override def drop(graph: GraphEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.graphstorage.drop") {
-      implicit session =>
-        {
-          info(s"dropping graph id:${graph.id}, name:${graph.name}, entityType:${graph.entityType}")
-          if (graph.isTitan) {
-            backendStorage.deleteUnderlyingTable(graph.storage, quiet = true, inBackground = true)
-          }
-          metaStore.graphRepo.delete(graph.id).get
-        }
-    }
-  }
-
-  /**
    * @param graph the graph to be copied
    * @param name name to be given to the copied graph
    * @return
@@ -142,7 +124,7 @@ class SparkGraphStorage(metaStore: MetaStore,
           val check = metaStore.graphRepo.lookupByName(graph.name)
           check match {
             case Some(g) =>
-              if (g.statusId == Status.Active) {
+              if (g.isStatus(Status.Active)) {
                 throw new RuntimeException("Graph with same name exists. Create aborted.")
               }
               else {
@@ -171,8 +153,7 @@ class SparkGraphStorage(metaStore: MetaStore,
             throw new RuntimeException("Graph with same name exists. Rename aborted.")
           }
           val newGraph = graph.copy(name = Some(newName))
-          val renamedGraph = metaStore.graphRepo.update(newGraph).get
-          metaStore.graphRepo.updateLastReadDate(renamedGraph).get
+          metaStore.graphRepo.update(newGraph).get
         }
     }
   }
@@ -185,7 +166,7 @@ class SparkGraphStorage(metaStore: MetaStore,
     metaStore.withSession("spark.graphstorage.getGraphs") {
       implicit session =>
         {
-          metaStore.graphRepo.scanAll().filter(g => g.statusId != Status.Deleted && g.statusId != Status.Deleted_Final && g.name.isDefined)
+          metaStore.graphRepo.scanAll().filter(g => g.isStatus(Status.Active) && g.name.isDefined)
         }
     }
   }
@@ -209,15 +190,6 @@ class SparkGraphStorage(metaStore: MetaStore,
       implicit session =>
         {
           metaStore.graphRepo.lookup(id)
-        }
-    }
-  }
-
-  def incrementIdCounter(graph: GraphReference, idCounter: Long)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.graphstorage.updateIdCounter") {
-      implicit session =>
-        {
-          metaStore.graphRepo.incrementIdCounter(graph.id, idCounter)
         }
     }
   }
@@ -418,18 +390,17 @@ class SparkGraphStorage(metaStore: MetaStore,
   }
 
   /**
-   * Set a graph to be deleted on the next execution of garbage collection
-   * @param graph graph to delete
+   * Mark graph as Dropped
+   * @param graph graph to drop
    * @param invocation current invocation
    */
-  override def scheduleDeletion(graph: GraphEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.graphstorage.scheduleDeletion") {
+  def dropGraph(graph: GraphEntity)(implicit invocation: Invocation): Unit = {
+    metaStore.withSession("spark.graphstorage.dropGraph") {
       implicit session =>
         {
-          info(s"marking as ready to delete: graph id:${graph.id}, name:${graph.name}, entityType:${graph.entityType}")
-          metaStore.graphRepo.updateReadyToDelete(graph)
+          info(s"marking graph entity (id=${graph.id}, name=${graph.name}) as dropped")
+          metaStore.graphRepo.dropGraph(graph)
         }
     }
   }
-
 }

@@ -27,47 +27,29 @@ import org.joda.time.DateTime
  * @param modifiedOn date/time this record was last modified
  */
 case class Status(id: Long, name: String, description: String, createdOn: DateTime, modifiedOn: DateTime) extends HasId {
-
   require(name != null, "name must not be null")
-
-  /** Active and can be interacted with */
-  def isActive: Boolean = id.equals(Status.Active)
-
-  /** Deleted but can still be un-deleted, no action has yet been taken on disk */
-  def isDeleted: Boolean = id.equals(Status.Deleted)
-
-  /** Underlying storage has been reclaimed, no un-delete is possible */
-  def isDeleteFinal: Boolean = id.equals(Status.Deleted_Final)
 }
 
 object Status {
 
   /**
-   * Return the proper id for a read garbage collectible entity
-   * @param id the status id before the read
-   * @return proper status id for after the read
+   * Available to user
    */
-  def getNewStatusForRead(id: Long): Long =
-    if (id == Deleted)
-      Active
-    else
-      id
+  final val Active = Status(1, "ACTIVE", "Available to user", new DateTime, null)
+  /**
+   * No longer available to user
+   */
+  final val Dropped = Status(2, "DROPPED", "No longer available to user", new DateTime, null)
+  /**
+   * Not available and data has been deleted
+   */
+  final val Finalized = Status(3, "FINALIZED", "Not available and data has been deleted", new DateTime, null)
 
-  def getName(id: Long): String = {
-    id match {
-      case Active => "Active"
-      case Deleted => "Deleted (scheduled may be undeleted by modifying or inspecting)"
-      case Deleted_Final => "Deleted Final"
-      case _ => "Unkown"
-    }
+  implicit def toString(v: Status): String = v.name
+  implicit def toLong(v: Status): Long = v.id
+  implicit def fromLong(v: Long): Status = v match {
+    case Active.id => Active
+    case Dropped.id => Dropped
+    case Finalized.id => Finalized
   }
-
-  /** Active and can be interacted with */
-  final val Active: Long = 1
-
-  /** User has marked as Deleted but can still be un-deleted, no action has yet been taken on disk */
-  final val Deleted: Long = 2
-
-  /** Underlying storage has been reclaimed, no un-delete is possible */
-  final val Deleted_Final: Long = 3
 }
