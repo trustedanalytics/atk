@@ -69,16 +69,19 @@ Logging Invalid Data
     (when the weight is greater than 0) it contributes to
     valid_data_weight_pair_count.
 
-Equations
-    ``bad_row_count + good_row_count = # rows in the frame``
+**Equations**
 
-    ``positive_weight_count + non_positive_weight_count = good_row_count``
+    .. code::
 
-    In particular, when no weights column is provided and all weights
-    are 1.0, ``non_positive_weight_count = 0`` and
-    ``positive_weight_count = good_row_count``
+        bad_row_count + good_row_count = # rows in the frame
+        positive_weight_count + non_positive_weight_count = good_row_count
 
-""",
+    In particular, when no weights column is provided and all weights are 1.0:
+
+    .. code::
+
+        non_positive_weight_count = 0 and
+        positive_weight_count = good_row_count""",
   returns = """Dictionary containing summary statistics.
 The data returned is composed of multiple components\:
 
