@@ -325,7 +325,7 @@ object GarbageCollector {
       if (garbageCollector == null)
         garbageCollector = new GarbageCollector(metaStore, frameStorage, graphBackendStorage)
       if (gcScheduler == null) {
-        gcScheduler = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(garbageCollector, 0, EngineConfig.gcInterval, TimeUnit.MILLISECONDS)
+        gcScheduler = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(garbageCollector, EngineConfig.gcInterval, EngineConfig.gcInterval, TimeUnit.MILLISECONDS)
       }
     }
   }
