@@ -129,10 +129,16 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             sparkInternalDriverClass ++
             pluginArguments
 
+          val kerberosConfig = KerberosAuthenticator.getKerberosConfigJVMParam
+
           // Launch Spark Submit 
           info(s"Launching Spark Submit with InputArgs: ${inputArgs.mkString(" ")}")
           val pluginDependencyJarsStr = s"${SparkContextFactory.jarPath("engine-core")}:${pluginExtraClasspath.mkString(":")}"
-          val javaArgs = Array("java", "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          val javaArgs = kerberosConfig.isDefined match {
+            case true => Array("java", kerberosConfig.get, "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+            case false => Array("java", "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          }
+          info(s"javaArgs: ${javaArgs.mkString(" ")}")
 
           // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
           // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
