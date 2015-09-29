@@ -1,5 +1,6 @@
 Examples
 --------
+Predict using a Naive Bayes Model
 
 .. only:: html
 

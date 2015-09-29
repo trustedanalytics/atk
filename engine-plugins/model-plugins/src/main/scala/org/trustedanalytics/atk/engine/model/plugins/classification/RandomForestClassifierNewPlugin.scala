@@ -49,7 +49,8 @@ using in-built binary and multiclass ClassificationMetrics.
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
- """)
+ """,
+returns="""A new instance of RandomForestClassifierModel""")
 class RandomForestClassifierNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

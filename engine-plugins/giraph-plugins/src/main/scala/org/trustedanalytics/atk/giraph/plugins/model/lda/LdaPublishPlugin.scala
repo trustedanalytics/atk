@@ -26,12 +26,11 @@ import ModelPublishJsonProtocol._
 import spray.json._
 
 /**
- * Rename columns of a frame
+ * Publish a Lda Model for scoring
  */
 @PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = """Creates a tar file with the trained Latent Dirichlet Allocation model.
-The tar file is used as input to the scoring engine to predict the conditional topic
-probabilities for a document.""",
+  extended = """Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
+              The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.""",
   returns = """Returns the HDFS path to the tar file""")
 class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 

@@ -28,20 +28,17 @@ case class ClassificationWithSGDTrainArgs(model: ModelReference,
                                           @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                           @ArgDoc("""Column name containing the label
 for each observation.""") labelColumn: String,
-                                          @ArgDoc("""Column(s) containing the
+                                          @ArgDoc("""List of column(s) containing the
 observations.""") observationColumns: List[String],
-                                          @ArgDoc("""The algorithm adds an intercept.
+                                          @ArgDoc("""Flag indicating if the algorithm adds an intercept.
 Default is true.""") intercept: Boolean = true,
-                                          @ArgDoc("""Number of iterations.
-Default is 100.""") numIterations: Int = 100,
-                                          @ArgDoc("""Step size for optimizer.
+                                          @ArgDoc("""Number of iterations for SGD. Default is 100.""") numIterations: Int = 100,
+                                          @ArgDoc("""Initial step size for SGD optimizer for the first step.
 Default is 1.0.""") stepSize: Int = 1,
-                                          @ArgDoc("""Regularization L1 or L2.
-Default is L2.""") regType: Option[String] = None,
-                                          @ArgDoc("""Regularization parameter.
-Default is 0.01.""") regParam: Double = 0.01,
-                                          @ArgDoc("""Mini batch fraction parameter.
-Default is 1.0.""") miniBatchFraction: Double = 1.0) {
+                                          @ArgDoc("""Regularization "L1" or "L2".
+Default is "L2".""") regType: Option[String] = None,
+                                          @ArgDoc("""Regularization parameter. Default is 0.01.""") regParam: Double = 0.01,
+                                          @ArgDoc("""Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.""") miniBatchFraction: Double = 1.0) {
 
   require(model != null, "model is required")
   require(frame != null, "frame is required")

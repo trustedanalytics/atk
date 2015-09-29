@@ -1,6 +1,5 @@
 Examples
 --------
-
 Inspect the input frame:
 
 .. code::

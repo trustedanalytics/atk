@@ -36,9 +36,9 @@ Default is 2.""") k: Int = 2,
                            @ArgDoc("""Number of iterations for which the algorithm should run.
 Default is 20.""") maxIterations: Int = 20,
                            @ArgDoc("""Distance threshold within which we consider k-means to have converged.
-Default is 1e-4.""") epsilon: Double = 1e-4,
+Default is 1e-4. If all centers move less than this Euclidean distance, we stop iterating one run.""") epsilon: Double = 1e-4,
                            @ArgDoc("""The initialization technique for the algorithm.
-It could be either "random" or "k-means||".
+It could be either "random" to choose random points as initial clusters, or "k-means||" to use a parallel variant of k-means++.
 Default is "k-means||".""") initializationMode: String = "k-means||") {
 
   require(model != null, "model must not be null")

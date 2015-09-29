@@ -45,18 +45,18 @@ import spray.json._
 @PluginDoc(oneLine = "Build Random Forests Classifier model.",
   extended = """Creating a Random Forests Classifier Model using the observation columns and label column.""",
   returns =
-    """object
-      |An object with Random Forest Classifier model storing:
-      |<object>.observation_columns: the list of observation columns on which the model was trained,
-      |<object>.label_column: the column name containing the labels of the observations,
-      |<object>.num_classes: the number of classes,
-      |<object>.num_trees: the number of decision trees in the random forest,
-      |<object>.num_nodes: the number of nodes in the random forest,
-      |<object>.feature_subset_category: the map storing arity of categorical features,
-      |<object>.impurity: the criterion used for information gain calculation,
-      |<object>.max_depth: the maximum depth of the tree,
-      |<object>.max_bins: the maximum number of bins used for splitting features,
-      |<object>.seed: the random seed used for bootstrapping and choosing feature subset.
+    """dictionary
+      |A dictionary with trained Random Forest Classifier model with the following keys:
+      |'observation_columns': the list of observation columns on which the model was trained,
+      |'label_column': the column name containing the labels of the observations,
+      |'num_classes': the number of classes,
+      |'num_trees': the number of decision trees in the random forest,
+      |'num_nodes': the number of nodes in the random forest,
+      |'feature_subset_category': the map storing arity of categorical features,
+      |'impurity': the criterion used for information gain calculation,
+      |'max_depth': the maximum depth of the tree,
+      |'max_bins': the maximum number of bins used for splitting features,
+      |'seed': the random seed used for bootstrapping and choosing feature subset.
     """.stripMargin)
 class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestClassifierTrainArgs, RandomForestClassifierTrainReturn] {
   /**

@@ -42,13 +42,15 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
                                           @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
-                                          @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
-                                          @ArgDoc("""Criterion used for information gain calculation. Supported values "variance"""") impurity: String = "variance",
-                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
-                                          @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
-                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
+                                          @ArgDoc("""Number of tress in the random forest. Default is 1.""") numTrees: Int = 1,
+                                          @ArgDoc("""Criterion used for information gain calculation. Default supported value is "variance".""") impurity: String = "variance",
+                                          @ArgDoc("""Maxium depth of the tree. Default is 4.""") maxDepth: Int = 4,
+                                          @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
+                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.""") seed: Int = scala.util.Random.nextInt(),
                                           @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                          @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird"""") featureSubsetCategory: Option[String] = None) {
+                                          @ArgDoc(
+                                            """Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird".
+                                              | If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".""".stripMargin) featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
@@ -76,19 +78,19 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
 }
 
 @PluginDoc(oneLine = "Build Random Forests Regressor model.",
-  extended = """Creating a Random Forests Regressor Model using the observation columns and label column.""",
+  extended = """Creating a Random Forests Regressor Model using the observation columns and target column.""",
   returns =
-    """object
-      |An object with Random Forest Regressor model storing:
-      |<object>.observation_columns: the list of observation columns on which the model was trained,
-      |<object>.label_columns: the column name containing the labels of the observations,
-      |<object>.num_trees: the number of decision trees in the random forest,
-      |<object>.num_nodes: the number of nodes in the random forest,
-      |<object>.categorical_features_info: the map storing arity of categorical features,
-      |<object>.impurity: the criterion used for information gain calculation,
-      |<object>.max_depth: the maximum depth of the tree,
-      |<object>.max_bins: the maximum number of bins used for splitting features,
-      |<object>.seed: the random seed used for bootstrapping and choosing feature subset.
+    """dictionary
+      |A dictionary with trained Random Forest Regressor model with the following keys:
+      |'observation_columns': the list of observation columns on which the model was trained
+      |'label_columns': the column name containing the labels of the observations
+      |'num_trees': the number of decision trees in the random forest
+      |'num_nodes': the number of nodes in the random forest
+      |'categorical_features_info': the map storing arity of categorical features
+      |'impurity': the criterion used for information gain calculation
+      |'max_depth': the maximum depth of the tree
+      |'max_bins': the maximum number of bins used for splitting features
+      |'seed': the random seed used for bootstrapping and choosing featur subset
     """.stripMargin)
 class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRegressorTrainArgs, RandomForestRegressorTrainReturn] {
   /**

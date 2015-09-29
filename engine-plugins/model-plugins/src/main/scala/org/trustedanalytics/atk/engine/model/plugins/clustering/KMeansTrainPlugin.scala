@@ -33,11 +33,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Creates KMeans Model from train frame.",
-  extended = "Upon training the 'k' cluster centers are computed.",
-  returns = """object
-    Object containing a dictionary storing the cluster id and cluster size, and the within set sum of squared error
-<object>.cluster_size : Cluster id is the key and cluster size is the value
-<object>.within_set_sum_of_squared_error : The set of sum of squared error for the model.""")
+  extended = "Creating a KMeans Model using the observation columns.",
+  returns = """dictionary
+    A dictionary with trained KMeans model with the following keys:
+'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
+'within_set_sum_of_squared_error' : The set of sum of squared error for the model.""")
 class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainReturn] {
   /**
    * The name of the command.

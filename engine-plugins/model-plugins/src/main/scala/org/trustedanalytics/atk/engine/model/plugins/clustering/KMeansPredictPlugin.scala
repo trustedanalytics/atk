@@ -38,14 +38,11 @@ import org.apache.spark.mllib.atk.plugins.VectorUtils._
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
-  extended = "",
+  extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along ",
   returns = """Frame
-    A new frame consisting of the existing columns of the frame and new columns.
-    The data returned is composed of multiple components:
-'k' columns : double
-    Containing squared distance of each point to every cluster center.
-predicted_cluster : int
-    Integer containing the cluster assignment.""")
+    A new frame consisting of the existing columns of the frame and the following new columns:
+    'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
+    predicted_cluster column: The cluster assignment for the observation""")
 class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameReference] {
 
   /**
