@@ -75,7 +75,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         </repository>
         <repository>
             <id>atk</id>
-            <url>http://ec2-52-88-56-123.us-west-2.compute.amazonaws.com/content/repositories/public/</url>
+            <url>http://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -123,24 +123,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <akka.version>2.3.2</akka.version>
 
         <scoverage-plugin.version>1.0.4</scoverage-plugin.version>
+
+        <event.version>0.4.1</event.version>
     </properties>
     <modules>
 
     </modules>
     <profiles>
-        <profile>
-            <id>events</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>NEVERSETME</name>
-                </property>
-            </activation>
-            <modules>
-                <module>misc/event-api</module>
-                <module>misc/event</module>
-            </modules>
-        </profile>
         <profile>
             <id>modules-all</id>
             <activation>
@@ -601,12 +590,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event-api</artifactId>
-                <version>${project.version}</version>
+                <version>${event.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event</artifactId>
-                <version>${project.version}</version>
+                <version>${event.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
