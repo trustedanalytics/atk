@@ -4,6 +4,7 @@ Examples
 Inspect the input frame:
 
 .. code::
+
     >>> frame.inspect()
 
     doc_id:unicode   word_id:unicode   word_count:int64

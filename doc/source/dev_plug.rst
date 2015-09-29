@@ -93,7 +93,7 @@ Name components are separated by slashes.
 For instance, the command that drops columns from a frame is called
 frame/drop_column.
 The Python client sees that name, knows that frame commands are associated
-with the :term:`Frame` class, and therefore generates a function
+with the Frame class, and therefore generates a function
 named drop_column on the Frame.
 When the user calls that function, its arguments will be converted to JSON,
 sent to the REST server, and then on to the engine for processing.
