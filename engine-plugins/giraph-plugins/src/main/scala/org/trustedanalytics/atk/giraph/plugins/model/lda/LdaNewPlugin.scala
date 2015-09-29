@@ -300,7 +300,7 @@ regarding topic membership, using this information.
 .. [#LDA6] http://machinelearning.wustl.edu/mlpapers/paper_files/NIPS2006_511.pdf
 .. [#LDA7] http://www.cs.princeton.edu/~blei/papers/Blei2011.pdf
 """,
-returns = """Trained LDA model""")
+  returns = """Trained LDA model""")
 class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

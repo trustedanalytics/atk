@@ -48,7 +48,7 @@ runs the MLLib implementation of Naive Bayes[2]_.
 .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
              """,
-returns="""A new instance of NaiveBayesModel""")
+  returns = """A new instance of NaiveBayesModel""")
 class NaiveBayesNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

@@ -32,7 +32,7 @@ import spray.json._
 
 @PluginDoc(oneLine = "Build linear regression model.",
   extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
-returns = "Trained linear regression model")
+  returns = "Trained linear regression model")
 class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.

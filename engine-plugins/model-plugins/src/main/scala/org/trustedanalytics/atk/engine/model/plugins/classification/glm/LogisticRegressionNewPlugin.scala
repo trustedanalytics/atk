@@ -40,7 +40,7 @@ the user to select the optimizer to be used - L-BFGS[3]_ or SGD[4]_.
 .. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
 .. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
     """,
-returns="""A new instance of LogisticRegressionModel""")
+  returns = """A new instance of LogisticRegressionModel""")
 class LogisticRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

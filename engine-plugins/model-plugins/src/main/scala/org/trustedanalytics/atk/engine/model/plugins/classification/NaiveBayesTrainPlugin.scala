@@ -58,7 +58,7 @@ Default is 1.0.""") lambdaParameter: Double = 1.0) {
 
 @PluginDoc(oneLine = "Build a naive bayes model.",
   extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""",
-returns = """Trained NaiveBayes model""")
+  returns = """Trained NaiveBayes model""")
 class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, UnitReturn] {
   /**
    * The name of the command.
