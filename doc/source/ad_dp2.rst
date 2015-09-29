@@ -1,8 +1,8 @@
 .. _ad_dp2:
 
-=============================
-Deploy and Run ATK App on DP2
-=============================
+===============================
+Deploy and Run |ATK| App on DP2
+===============================
 
 ----------------------------
 Installing Required Packages
@@ -52,8 +52,8 @@ Test the package installation:
     $ cf --version
     cf version 6.11.2-2a26d55-2015-04-27T21:11:44+00:00
 
-Setting Up CF for ATK Deployment
-================================
+Setting Up CF for |ATK| Deployment
+==================================
 
 First, add the <CLOUD_FOUNDRY_API_ENDPOINT> to the "no_proxy" list.
 
@@ -96,12 +96,12 @@ And your output looks like this:
     Org: my_org
     Space: my_space
 
-Prepare ATK Tarball
-===================
+Prepare |ATK| Tarball
+=====================
 
 For QA:
 
-ATK tarballs are built as part of the TeamCity build and are uploaded to S3.
+|ATK| tarballs are built as part of the TeamCity build and are uploaded to S3.
 In order to download the file, simply run the command:
 
 .. code::
@@ -116,10 +116,10 @@ For example, if you are on "master" branch you run:
 
 For Dev:
 
-You can build ATK tarball from scratch yourself.
+You can build |ATK| tarball from scratch yourself.
 In order to do so, do the following:
 
-#)  CD to directory where your have the "atk" code checked out.
+#)  CD to directory where the "atk" code is checked out.
 #)  Build the atk code using Maven tool.
     Details for this change frequently, so please look at other Wiki pages like this one: Maven build
 #)  CD to "package" directory and from there run this script:
@@ -223,10 +223,10 @@ In order to do so, do the following:
 
     .. code::
 
-        In [1]: import trustedanalytics as atk
-        In [2]: atk.connect("<PATH_TO_YOUR_CREDENTIALS_FILE")
+        In [1]: import trustedanalytics as ta
+        In [2]: ta.connect("<PATH_TO_YOUR_CREDENTIALS_FILE")
         Connected to intelanalytics server.
-        In [3]: atk.server.host
+        In [3]: ta.server.host
         Out[3]: 'atk-ebi.apps.gotapaas.eu'
         In [4]: exit
 

@@ -1312,10 +1312,6 @@ A VertexFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:vertex'
 
     @api
-    @arg('source','?',"""?""")
-    @arg('graph','?',"""?""")
-    @arg('label','?',"""?""")
-    @arg('_info','?',"""?""")
     def __init__(self, source=None, graph=None, label=None, _info=None):
         """
     Examples
@@ -1450,12 +1446,6 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('graph','?',"""Graph these edges belong to.""")
-    @arg('label','?',"""Edge label.""")
-    @arg('src_vertex_label','?',"""Label of the source vertex type.""")
-    @arg('dest_vertex_label','?',"""Label of the destination vertex type.""")
-    @arg('directed','str',"""``directed`` or ``undirected``""")
-    @arg('_info','?',"""""")
     def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 

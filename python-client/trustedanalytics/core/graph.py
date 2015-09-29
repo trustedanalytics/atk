@@ -84,16 +84,15 @@ class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
 
     @api
     @property
-    @returns(data_type=str, description="""Status of the graph.
-One of three statuses: ``Active``, ``Deleted``, ``Deleted_Final``\:
-
-|   Active:   available for use
-|   Deleted:  has been scheduled for deletion
-|   Deleted_Final: backend files have been removed from disk.
-    """)
+    @returns(data_type=str, description="Status of the graph.")
     def __status(self):
         """
         Current graph life cycle status.
+
+        One of three statuses: Active, Dropped, Finalized
+        -   Active:    Entity is available for use
+        -   Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+        -   Finalized: Entity's data has been deleted
         """
         try:
             return self._backend.get_status(self)

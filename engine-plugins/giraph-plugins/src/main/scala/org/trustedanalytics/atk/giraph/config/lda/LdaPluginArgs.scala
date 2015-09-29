@@ -42,7 +42,7 @@ Larger value implies that documents are assumed to cover all topics
 more uniformly; smaller value implies that documents are more
 concentrated on a small subset of topics.
 Valid value range is all positive float.
- Default is 0.1.""") alpha: Option[Float] = None,
+Default is 0.1.""") alpha: Option[Float] = None,
                         @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
