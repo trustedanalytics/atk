@@ -34,12 +34,17 @@ if [ \"\`cat /etc/passwd | grep \$restUser\`\" == \"\" ]; then
 	useradd -G hadoop \$restUser
 fi
 
-hadoop fs -ls /user/\$restUser 2>/dev/null
+hadoop fs -ls /user/\$restUser
 if [ \$? -eq 1 ]; then
 	echo create \$restUser hdfs home directory
 	su -c \"hadoop fs -mkdir /user/\$restUser\" hdfs
 	su -c \"hadoop fs -chown \$restUser:\$restUser /user/\$restUser\" hdfs
 	su -c \"hadoop fs -chmod 755 /user/\$restUser\" hdfs
+elif
+	echo HDFS is not running!
+	echo Please start HDFS from the Cloudera Management interface console
+	echo and rerun the 'rpm' or 'yum' command.
+	exit 1
 fi
 "
 
