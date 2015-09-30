@@ -30,7 +30,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""Name of the user column from input data""") userColName: String,
                                            @ArgDoc("""Name of the item column from input data""") itemColName: String,
                                            @ArgDoc("""Name of the rating column from input data""") ratingColName: String,
-                                           @ArgDoc("""als/cgd""") evaluationFunction: Option[String] = None,
+                                           @ArgDoc("""ALS/CGD""") evaluationFunction: Option[String] = None,
                                            @ArgDoc("""Size of the desired factors (default is 3)""") numFactors: Option[Int] = None,
                                            @ArgDoc("""Max number of iterations for Giraph""") maxIterations: Option[Int] = None,
                                            @ArgDoc("""float value between 0 .. 1""") convergenceThreshold: Option[Double] = None,
@@ -39,7 +39,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""minimum edge weight value""") minValue: Option[Float] = None,
                                            @ArgDoc("""minimum edge weight value""") maxValue: Option[Float] = None,
                                            @ArgDoc("""iteration interval to output learning curve""") learningCurveInterval: Option[Int] = None,
-                                           @ArgDoc("""custom argument for cgd learning curve output interval (default: every iteration)""") cgdIterations: Option[Int] = None) {
+                                           @ArgDoc("""custom argument for CGD learning curve output interval (default: every iteration)""") cgdIterations: Option[Int] = None) {
 
   require(frame != null, "frame is required")
   require(StringUtils.isNotBlank(userColName), "user column name property list is required")

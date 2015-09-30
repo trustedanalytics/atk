@@ -28,13 +28,13 @@ Array can be list or tuple.
 Array values must be progressively increasing.
 All bin boundaries must be included, so, with N bins, you need N+1 values.""") cutoffs: List[Double],
                          @ArgDoc("""Specify how the boundary conditions are handled.
-True indicates that the lower bound of the bin is inclusive.
-False indicates that the upper bound is inclusive.
-Default is True.""") includeLowest: Option[Boolean],
+``True`` indicates that the lower bound of the bin is inclusive.
+``False`` indicates that the upper bound is inclusive.
+Default is ``True``.""") includeLowest: Option[Boolean],
                          @ArgDoc("""Specify how values outside of the cutoffs array should be binned.
-If set to True, each value less than cutoffs[0] or greater than
+If set to ``True``, each value less than cutoffs[0] or greater than
 cutoffs[-1] will be assigned a bin value of -1.
-If set to False, values less than cutoffs[0] will be included in the first
+If set to ``False``, values less than cutoffs[0] will be included in the first
 bin while values greater than cutoffs[-1] will be included in the final
 bin.""") strictBinning: Option[Boolean],
                          @ArgDoc("""The name for the new binned column.

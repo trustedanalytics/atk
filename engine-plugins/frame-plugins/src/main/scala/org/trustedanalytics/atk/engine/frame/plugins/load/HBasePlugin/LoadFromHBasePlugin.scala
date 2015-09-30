@@ -30,9 +30,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
-  extended = "Append data from an hBase table into an existing (possibly empty) FrameRDD",
-  returns = "the initial FrameRDD with the hbase data appended")
+@PluginDoc(oneLine = "Append data from an HBase table into an existing (possibly empty) FrameRDD",
+  extended = "Append data from an HBase table into an existing (possibly empty) FrameRDD",
+  returns = "the initial FrameRDD with the HBase data appended")
 class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] {
 
   /**

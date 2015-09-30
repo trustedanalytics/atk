@@ -101,6 +101,10 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
     val genericRowFrame = new FrameRdd(frame.rdd.frameSchema, JoinRddFunctions.toGenericRowRdd(frame.rdd))
 
     val frameSize = if (broadcastJoinThreshold > 0) frame.sizeInBytes else None
+    val estimatedRddSize = frameSize match {
+      case Some(size) => Some(size * EngineConfig.frameCompressionRatio)
+      case _ => None
+    }
     RddJoinParam(genericRowFrame, joinColumn, frameSize)
   }
 

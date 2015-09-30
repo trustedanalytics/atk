@@ -35,13 +35,12 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Build principal components model.",
-  extended = """Creating a PrincipalComponents Model using the observation columns.""",
-  returns =
-    """Values of the  principal components model object storing:
-    | principal components count used to train the model,
-    | the list of observation columns on which the model was trained,
-    | the singular values vector and the vFactor matrix stored as an array of double values.
-  """.stripMargin)
+  extended = """Creating a Principal Components Model using the observation columns.""",
+  returns = """Values of the  principal components model object storing\:
+
+|   principal components count used to train the model,
+|   the list of observation columns on which the model was trained,
+|   the singular values vector and the vFactor matrix stored as an array of double values.""")
 class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
 
   /**

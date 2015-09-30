@@ -276,7 +276,7 @@ object JoinRddFunctions extends Serializable {
     val newLeftSchema = leftSchema.renameColumn(left.joinColumn, dropColumnName)
     val newSchema = FrameSchema(Schema.join(newLeftSchema.columns, rightSchema.columns))
 
-    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
+    new FrameRdd(newSchema, joinedRdd)
   }
 
   /**
@@ -303,6 +303,6 @@ object JoinRddFunctions extends Serializable {
     val newRightSchema = rightSchema.renameColumn(right.joinColumn, dropColumnName)
     val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
 
-    new FrameRdd(newSchema, joinedRdd).dropColumns(List(dropColumnName))
+    new FrameRdd(newSchema, joinedRdd)
   }
 }

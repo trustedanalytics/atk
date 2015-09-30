@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.UnflattenColumnArgs
 import org.trustedanalytics.atk.domain.schema.{ Schema, DataTypes, Column }
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame, RowWrapper }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.commons.lang.StringUtils
@@ -35,7 +35,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Compacts data from multiple rows based on cell data.",
   extended = """Groups together cells in all columns (less the composite key) using "," as string delimiter.
 The original rows are deleted.
-The grouping takes place based on a composite key passed as arguments.""")
+The grouping takes place based on a composite key created from cell values.
+The column datatypes are changed to string.""")
 class UnflattenColumnPlugin extends SparkCommandPlugin[UnflattenColumnArgs, UnitReturn] {
 
   private val defaultDelimiter = ","

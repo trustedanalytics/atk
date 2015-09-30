@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.frame.{ SparkFrame, VectorFunctions }
 import org.trustedanalytics.atk.giraph.config.cf.{ CollaborativeFilteringData, CollaborativeFilteringJsonFormat, CollaborativeFilteringRecommendArgs }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
@@ -33,9 +33,11 @@ import CollaborativeFilteringJsonFormat._
 /**
  * Collaborative filtering recommend model
  */
-@PluginDoc(oneLine = "Collaborative filtering (als/cgd) model",
-  extended = "see collaborative filtering train for more information",
-  returns = "see collaborative filtering train for more information")
+@PluginDoc(oneLine = "Collaborative Filtering Recommend (ALS/CGD) model.",
+  extended = """See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.""",
+  returns = """See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.""")
 class CollaborativeFilteringRecommendPlugin
     extends SparkCommandPlugin[CollaborativeFilteringRecommendArgs, FrameReference] {
 

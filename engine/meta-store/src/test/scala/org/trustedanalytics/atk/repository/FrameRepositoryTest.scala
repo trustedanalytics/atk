@@ -64,10 +64,13 @@ class FrameRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         // look it up and validate expected values
         val frame2 = frameRepo.lookup(frame.id)
         frame2.get.errorFrameId.get shouldBe errorFrame.id
+
+        frameRepo.isErrorFrame(frame) shouldBe false
+        frameRepo.isErrorFrame(errorFrame) shouldBe true
     }
   }
 
-  it should "return a list of frames ready to have their data deleted" in {
+  it should "detect stale frames and dropped frames" in {
     val frameRepo = slickMetaStoreComponent.metaStore.frameRepo
     val graphRepo = slickMetaStoreComponent.metaStore.graphRepo
     slickMetaStoreComponent.metaStore.withSession("frame-test") {
@@ -86,44 +89,47 @@ class FrameRepositoryTest extends SlickMetaStoreH2Testing with Matchers {
         val frame2 = frameRepo.insert(new DataFrameTemplate(None, None)).get
         frameRepo.update(frame2.copy(lastReadDate = new DateTime().minus(age * 2)))
 
-        //should be in list old things that are referenced can be weakly live
+        //should not be in list since it is owned by frame 4, as an error frame
         val frame3 = frameRepo.insert(new DataFrameTemplate(None, None)).get
         frameRepo.update(frame3.copy(lastReadDate = new DateTime().minus(age * 2)))
 
         //should not be in list. it is named
         val frame4 = frameRepo.insert(new DataFrameTemplate(frameName, None)).get
-        frameRepo.update(frame4.copy(lastReadDate = new DateTime().minus(age * 2), parent = Some(frame3.id)))
+        frameRepo.update(frame4.copy(lastReadDate = new DateTime().minus(age * 2), errorFrameId = Some(frame3.id)))
 
-        val seamlessWeak: GraphEntity = graphRepo.insert(new GraphTemplate(None)).get
-        val seamlessLive: GraphEntity = graphRepo.insert(new GraphTemplate(Some("liveGraph"))).get
+        val seamlessNoName: GraphEntity = graphRepo.insert(new GraphTemplate(None)).get
+        val seamlessWithName: GraphEntity = graphRepo.insert(new GraphTemplate(Some("named_graph"))).get
 
-        //should not be in list. it is too new
+        //should not be in list.  It is too new
         val frame5 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-        frameRepo.update(frame5.copy(lastReadDate = new DateTime(), graphId = Some(seamlessWeak.id)))
+        frameRepo.update(frame5.copy(lastReadDate = new DateTime(), graphId = Some(seamlessNoName.id)))
 
-        //should be in list. it is old and referenced by a weakly live graph
+        //should not be in list.  Though it is old and has no name, it referenced by another entity seamlessNoName
         val frame6 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-        frameRepo.update(frame6.copy(lastReadDate = new DateTime().minus(age * 2), graphId = Some(seamlessWeak.id)))
+        frameRepo.update(frame6.copy(lastReadDate = new DateTime().minus(age * 2), graphId = Some(seamlessNoName.id)))
 
-        //should not be in list. it is old but referenced by a live graph
+        //should not be in list.  Though it is old and has no name, it referenced by another entity seamlessWithName
         val frame7 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-        frameRepo.update(frame7.copy(lastReadDate = new DateTime().minus(age * 2), graphId = Some(seamlessLive.id)))
+        frameRepo.update(frame7.copy(lastReadDate = new DateTime().minus(age * 2), graphId = Some(seamlessWithName.id)))
 
-        //should be in list. User has marked as ready to delete
+        // should not be in the stale list.  User has dropped it
         val frame8 = frameRepo.insert(new DataFrameTemplate(frameName, None)).get
-        frameRepo.update(frame8.copy(status = DeletedStatus))
+        frameRepo.update(frame8.copy(status = DroppedStatus))
 
-        // should not be in list. Has already been deleted
+        // should not be in the stale list. Has already been finalized
         val frame9 = frameRepo.insert(new DataFrameTemplate(None, None)).get
-        frameRepo.update(frame9.copy(status = DeletedFinalStatus))
+        frameRepo.update(frame9.copy(status = FinalizedStatus))
 
-        val readyForDeletion = frameRepo.listReadyForDeletion(age)
-        val idList = readyForDeletion.map(f => f.id).toList
-        idList should contain(frame2.id)
-        idList should contain(frame3.id)
-        idList should contain(frame6.id)
-        idList should contain(frame8.id)
-        readyForDeletion.length should be(4)
+        frameRepo.isErrorFrame(frame2) shouldBe false
+        frameRepo.isErrorFrame(frame3) shouldBe true
+
+        val stale = frameRepo.getStaleEntities(age).map(f => f.id).toList
+        stale should contain(frame2.id)
+        stale.length should be(1)
+
+        val dropped = frameRepo.droppedFrames.map(f => f.id).toList
+        dropped should contain(frame8.id)
+        dropped.length should be(1)
     }
   }
 }

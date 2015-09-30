@@ -14,15 +14,14 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.domain.gc
-
-import org.trustedanalytics.atk.engine.plugin.ArgDoc
+package org.trustedanalytics.atk.engine.frame.plugins
 
 /**
- * Arguments used for a single execution of garbage collection
+ * Frequency of scores and corresponding labels in model predictions
+ *
+ * @param score Score or prediction by model
+ * @param label Ground-truth label
+ * @param frequency Frequency of predictions that match score and label
+ * @tparam T Type of score and label
  */
-case class GarbageCollectionArgs(
-  @ArgDoc("""Minimum age of entity for data deletion.
-Defaults to server config.""") ageToDeleteData: Option[String] = None,
-  @ArgDoc("""Minimum age of entity for meta data deletion.
-Defaults to server config.""") ageToDeleteMetaData: Option[String] = None)
+case class ScoreAndLabel[T](score: T, label: T, frequency: Long = 1)

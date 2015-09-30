@@ -1,7 +1,7 @@
 Examples
 --------
 
-ven a Frame *my_frame* identifying a data frame with two int32
+Given a Frame *my_frame* identifying a data frame with two int32
 columns *column1* and *column2*.
 Add a third column *column3* as an int32 and fill it with the
 contents of *column1* and *column2* multiplied together:
@@ -85,16 +85,18 @@ be populated with the column names which are being accessed in |UDF|. This
 speeds up the execution by working on only the limited feature set than the
 entire row.
 
-Let's say a frame has 4 columns named *a*,*b*,*c* and *d* and we want to add a new column
-with value from column *a* multiplied by value in column *b* and call it *a_times_b*.
+Let's say a frame has 4 columns named *a*,*b*,*c* and *d* and we want to add
+a new column with value from column *a* multiplied by value in column *b* and
+call it *a_times_b*.
 In the example below, columns_accessed is a list with column names *a* and *b*.
 
 .. code::
 
     >>> my_frame.add_columns(lambda row: row.a * row.b, ("a_times_b", float32), columns_accessed=["a", "b"])
 
-add_columns would fail if columns_accessed parameter is not populated with the correct list of accessed
-columns. If not specified, columns_accessed defaults to None which implies that all columns might be accessed
-by the |UDF|.
+The function **add_columns** would fail if columns_accessed parameter is not
+populated with the correct list of accessed columns.
+If not specified, columns_accessed defaults to ``None`` which implies that
+all columns might be accessed by the |UDF|.
 
 More information on a row |UDF| can be found at :doc:`/ds_apir`.
