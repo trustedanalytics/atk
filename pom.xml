@@ -956,7 +956,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>com.google.code.findbugs</groupId>
                         <artifactId>annotations</artifactId>
                     </exclusion>
-             
+
                 </exclusions>
             </dependency>
             <dependency>
@@ -1439,5 +1439,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 
 </project>
