@@ -35,14 +35,14 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
 and target labels.""",
-  returns = """object
-    An object with binary classification metrics.
-    The data returned is composed of multiple components:
-  <object>.accuracy : double
-  <object>.confusion_matrix : table
-  <object>.f_measure : double
-  <object>.precision : double
-  <object>.recall : double""")
+  returns = """An object with binary classification metrics.
+The data returned is composed of multiple components\:
+
+|  **double** : *accuracy*
+|  **table** : *confusion_matrix*
+|  **double** : *f_measure*
+|  **double** : *precision*
+|  **double** : *recall*""")
 class SVMWithSGDTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.

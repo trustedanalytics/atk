@@ -28,9 +28,8 @@ case class SortedKArgs(frame: FrameReference,
                        @ArgDoc("""Column names to sort by, and true to sort column by ascending order,
 or false for descending order.""") columnNamesAndAscending: List[(String, Boolean)],
                        @ArgDoc("""Advanced tuning parameter which determines the depth of the
-reduce-tree for the sorted_k plugin.
-This plugin uses Spark's treeReduce() for scalability.
-The default depth is 2.""") reduceTreeDepth: Option[Int] = None) {
+reduce-tree (uses Spark's treeReduce() for scalability.)
+Default is 2.""") reduceTreeDepth: Option[Int] = None) {
   require(frame != null, "frame is required")
   require(k > 0, "k should be greater than zero") //TODO: Should we add an upper bound for K
   require(columnNamesAndAscending != null && columnNamesAndAscending.nonEmpty, "one or more columnNames is required")

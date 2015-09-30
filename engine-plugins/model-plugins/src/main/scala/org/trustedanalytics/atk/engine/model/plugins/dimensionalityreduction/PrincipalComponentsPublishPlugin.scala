@@ -33,9 +33,8 @@ import spray.json._
 @PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
   extended =
     """The publish method exports the PrincipalComponentsModel and its implementation into a tar file. The tar file is then published
-      |on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
-      |then be used to compute the principal components and t-squared index(if requested) of an observation.
-    """.stripMargin,
+on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
+then be used to compute the principal components and t-squared index(if requested) of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
 class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 

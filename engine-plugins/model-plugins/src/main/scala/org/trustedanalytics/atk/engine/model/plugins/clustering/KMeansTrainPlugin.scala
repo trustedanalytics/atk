@@ -35,7 +35,7 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Creates KMeans Model from train frame.",
   extended = "Creating a KMeans Model using the observation columns.",
   returns = """dictionary
-    A dictionary with trained KMeans model with the following keys:
+    A dictionary with trained KMeans model with the following keys\:
 'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
 'within_set_sum_of_squared_error' : The set of sum of squared error for the model.""")
 class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainReturn] {

@@ -38,14 +38,14 @@ import MLLibJsonProtocol._
   extended = """Creating a PrincipalComponents Model using the observation columns.""",
   returns =
     """dictionary
-    |A dictionary with trained Principal Components Model with the following keys:
+    |A dictionary with trained Principal Components Model with the following keys\:
     |'column_means': the list of the means of each observation column
     |'k': number of principal components used to train the model
     |'mean_centered': Flag indicating if the model was mean centered during training
     |'observation_columns': the list of observation columns on which the model was trained,
-    |right_singular_vectors: list of a list storing the right singular vectors of the specified columns of the input frame
-    |singular_values: list storing the singular values of the specified columns of the input frame
-  """.stripMargin)
+    |'right_singular_vectors': list of a list storing the right singular vectors of the specified columns of the input frame
+    |'singular_values': list storing the singular values of the specified columns of the input frame
+  """)
 class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
 
   /**

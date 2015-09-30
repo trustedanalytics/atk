@@ -3,6 +3,7 @@ Examples
 Inspect the input frame:
 
 .. code::
+
     >>> frame.inspect()
 
     doc_id:unicode   word_id:unicode   word_count:int64
@@ -36,6 +37,7 @@ The variable *results* is a dictionary with four keys:
 Inspect the results:
 
 .. code::
+
     >>> print("conditional probability of topics given document")
     >>> topics_given_doc.inspect()
 

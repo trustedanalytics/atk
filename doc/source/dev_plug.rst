@@ -93,7 +93,7 @@ Name components are separated by slashes.
 For instance, the command that drops columns from a frame is called
 frame/drop_column.
 The Python client sees that name, knows that frame commands are associated
-with the :term:`Frame` class, and therefore generates a function
+with the Frame class, and therefore generates a function
 named drop_column on the Frame.
 When the user calls that function, its arguments will be converted to JSON,
 sent to the REST server, and then on to the engine for processing.
@@ -204,7 +204,7 @@ For example, for graphon.jar, just use the word graphon by itself.
 
 ``<archive-class>`` is optional.
 If provided, it must be the name of a class that can be found in the jar file
-or in its parent classloader.
+or in its parent class loader.
 This class must implement the Archive trait, which makes it the archive
 manager.
 The archive manager is the service that the system uses to discover plugins in

@@ -19,28 +19,32 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Create a 'new' instance of a Support Vector Machine model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a Support Vector Machine model.",
-  extended = """
-**Classification using Support Vector Machine**
+  extended = """Support Vector Machine [1]_ is a supervised algorithm used to
+perform binary classification.
+A support vector machine constructs a high dimensional hyperplane which is
+said to achieve a good separation when a hyperplane has the largest distance to
+the nearest training-data point of any class. This model runs the
+LIBSVM [2]_ [3]_ implementation of SVM.
+The LIBSVM model is initialized, trained on columns of a frame, used to
+predict the labels of observations in a frame and used to test the predicted
+labels against the true labels.
+During testing, labels of the observations are predicted and tested against
+the true labels using built-in binary Classification Metrics.
 
-Support Vector Machine[1]_ is a supervised algorithm used to perform binary classification. A support vector machine
-constructs a high dimensional hyperplane which is said to achieve a good separation when a hyperplane has the largest distance to
-the nearest training-data point of any class. This model runs the LIBSVM[2]_[3]_ implementation of SVM.
-The user may initialize a LibsvmModel, train the model on columns of a frame, use the model to predict the labels of observations in a frame and
-test the predicted labels against the true labels. During testing, labels of the observations are predicted and tested against the true labels using
-built-in binary ClassificationMetrics.
+.. rubric: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
 .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
-.. [3] https://en.wikipedia.org/wiki/LIBSVM
-             """)
-class LibSvmNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+.. [3] https://en.wikipedia.org/wiki/LIBSVM""",
+  returns = """A new instance of LibsvmModel""")
+class LibSvmNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

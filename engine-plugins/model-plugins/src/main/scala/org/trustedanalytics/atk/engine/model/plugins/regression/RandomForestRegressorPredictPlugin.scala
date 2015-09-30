@@ -35,7 +35,7 @@ case class RandomForestRegressorPredictArgs(@ArgDoc("""Handle of the model to be
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
                                             @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
-By default, we predict the labels over columns the RandomForestModel
+By default, we predict the labels over columns the Random Forest model
 was trained on. """) observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
@@ -43,9 +43,11 @@ was trained on. """) observationColumns: Option[List[String]]) {
 }
 
 @PluginDoc(oneLine = "Predict the values for the data points.",
-  extended = "",
-  returns = """Frame
-    A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.""")
+  extended =
+    """Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+existing columns and a new predicted value's column.""",
+  returns = """A new frame consisting of the existing columns of the frame and
+a new column with predicted value for each observation.""")
 class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForestRegressorPredictArgs, FrameReference] {
   /**
    * The name of the command.
