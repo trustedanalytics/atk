@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.domain.graph
 
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+
 /**
  * The args for any graph plugin that takes "no args" except the graph
  * @param graph the graph to operate on

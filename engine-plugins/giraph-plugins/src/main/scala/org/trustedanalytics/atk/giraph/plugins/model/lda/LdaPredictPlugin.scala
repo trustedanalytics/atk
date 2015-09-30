@@ -29,15 +29,15 @@ import LdaJsonFormat._
   extended =
     """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings""",
-  returns = """dict
-    Dictionary containing predicted topics.
-    The data returned is composed of multiple components:
-topics_given_doc : list of doubles
-    List of conditional probabilities of topics given document.
-new_words_count : int
-    Count of new words in test document not present in training set.
-new_words_percentage: double
-    Percentage of new words in test document.""")
+  returns = """Dictionary containing predicted topics.
+The data returned is composed of multiple components\:
+
+|   **list of doubles** | *topics_given_doc*
+|       List of conditional probabilities of topics given document.
+|   **int** : *new_words_count*
+|       Count of new words in test document not present in training set.
+|   **double** | *new_words_percentage*
+|       Percentage of new words in test document.""")
 class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredictReturn] {
   /**
    * The name of the command.

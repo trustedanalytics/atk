@@ -26,7 +26,6 @@ References
 * :doc:`Index <genindex>`
 * :doc:`appendices`
 * :doc:`errata`
-* :download:`PDF <_downloads/Documentation.pdf>`
 
 .. toctree::
     :hidden:
@@ -37,6 +36,4 @@ References
     genindex
     appendices
     errata
-
-.. TODOLIST::
 

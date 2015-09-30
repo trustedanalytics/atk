@@ -745,7 +745,7 @@ function sphinx_build() {
         delete_previous $BuildDirectory $2 $3 $4 $5
         if [ "$?" != "0" ]; then return 1; fi
     fi
-    RunCommand="sphinx-build -b $1 -D pngmath_latex=/usr/bin/tex source $BuildDirectory"
+    RunCommand="sphinx-build -b $1 source $BuildDirectory"
     do_this "$RunCommand" $2 $3 $4 $5
     return $?
 }

@@ -1,7 +1,3 @@
-.. _old_sections/ad_hbtune:
-
-.. _old_ad_sections/ad_hbtune:
-
 .. _ad_hbtune:
 
 .. index::

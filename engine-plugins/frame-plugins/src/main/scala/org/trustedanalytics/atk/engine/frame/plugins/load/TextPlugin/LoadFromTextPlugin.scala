@@ -29,9 +29,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Parsing data to load and append to data frames
  */
-@PluginDoc(oneLine = "Append data from a csv/xml into an existing (possibly empty) frame",
-  extended = "Append data from a csv/xml into an existing (possibly empty) frame",
-  returns = "The initial frame with the csv/xml data appended")
+@PluginDoc(oneLine = "Append data from a CSV/XML into an existing (possibly empty) frame",
+  extended = "Append data from a CSV/XML into an existing (possibly empty) frame",
+  returns = "The initial frame with the CSV/XML data appended")
 class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
 
   /**

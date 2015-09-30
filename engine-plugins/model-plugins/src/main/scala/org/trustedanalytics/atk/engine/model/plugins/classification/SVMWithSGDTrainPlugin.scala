@@ -34,7 +34,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Train SVM model based on another frame.",
+@PluginDoc(oneLine = "Train SVM model.",
   extended = """Creating a SVM Model using the observation column and label column of the train frame.""")
 class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**

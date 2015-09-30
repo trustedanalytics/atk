@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.domain.graph
 
-import org.trustedanalytics.atk.domain.{ StorageFormats, HasId }
+import org.trustedanalytics.atk.domain.{ Status, StorageFormats, HasId }
 import org.joda.time.DateTime
 
 /**
@@ -82,4 +82,6 @@ case class GraphEntity(id: Long,
   def toReference: GraphReference = {
     GraphReference(id)
   }
+
+  def isStatus(s: Status): Boolean = statusId == (s: Long)
 }
