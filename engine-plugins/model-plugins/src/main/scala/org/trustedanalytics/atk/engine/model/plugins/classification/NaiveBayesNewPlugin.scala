@@ -33,9 +33,9 @@ independence assumptions between features.
 It computes the conditional probability distribution of each feature given label,
 and then applies Bayes' theorem to compute the conditional probability
 distribution of a label given an observation, and use it for prediction.
-The Naive Bayes model is initialized, trained on columns of a frame, and used
+The Naive Bayes model is initialized, trained on columns of a frame, used
 to predict the value of the dependent variable given the independent
-observations of a frame.
+observations of a frame and test the performance of the classification on test data.
 This model runs the MLLib implementation of Naive Bayes [2]_.
 
 .. rubric:: footnotes

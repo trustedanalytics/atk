@@ -62,7 +62,7 @@ def return_graph(json_result):
     return get_graph(json_result['uri'])
 
 @postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test',
-               'model:random_forest_classifier/test', "model:libsvm/test")
+               'model:random_forest_classifier/test', "model:libsvm/test", "model:naive_bayes/test")
 def return_metrics(json_result):
      from trustedanalytics.core.classifymetrics import ClassificationMetricsResult
      return ClassificationMetricsResult(json_result)

@@ -24,6 +24,7 @@ import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
 import org.apache.spark.mllib.tree.model._
+import org.apache.spark.mllib.classification._
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 
@@ -567,6 +568,26 @@ object ScoringJsonReaderWriters {
       val trees = getOrInvalid(fields, "trees").asInstanceOf[JsArray].elements.map(i => DecisionTreeModelFormat.read(i)).toArray
       new RandomForestModel(algo, trees)
     }
+  }
+
+  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
+
+    override def write(obj: NaiveBayesModel): JsValue = {
+      JsObject(
+        "labels" -> obj.labels.toJson,
+        "pi" -> obj.pi.toJson,
+        "theta" -> obj.theta.toJson
+      )
+    }
+
+    override def read(json: JsValue): NaiveBayesModel = {
+      val fields = json.asJsObject.fields
+      val labels = getOrInvalid(fields, "labels").convertTo[Array[Double]]
+      val pi = getOrInvalid(fields, "pi").convertTo[Array[Double]]
+      val theta = getOrInvalid(fields, "theta").convertTo[Array[Array[Double]]]
+      new NaiveBayesModel(labels, pi, theta)
+    }
+
   }
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {

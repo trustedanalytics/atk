@@ -15,14 +15,14 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.classification.NaiveBayesModel
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.Model
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
+class NaiveBayesScoringModel(naiveBayesModel: NaiveBayesModel) extends NaiveBayesModel(naiveBayesModel.labels, naiveBayesModel.pi, naiveBayesModel.theta) with Model {
 
   override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
     var score = Seq[Any]()
@@ -33,7 +33,7 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) e
         row.zipWithIndex.foreach {
           case (value: Any, index: Int) => x(index) = value.toDouble
         }
-        score = score :+ (predict(Vectors.dense(x)))
+        score = score :+ predict(Vectors.dense(x))
       }
     }
     score
