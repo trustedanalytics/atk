@@ -1,0 +1,48 @@
+.. _python_api/frames/frame-/covariance:
+
+
+:doc:`Frame <index>`  covariance
+********************************
+
+------
+
+
+.. function:: covariance(self, data_column_names)
+
+    Calculate covariance for exactly two columns.
+
+
+    :Parameters:
+
+        **data_column_names** : list
+
+        ..
+
+            The names of two columns from which
+            to compute the covariance.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Covariance of the two columns.
+    Notes
+    -----
+    This method applies only to columns containing numerical data.
+
+    Examples
+    --------
+    Consider Frame *my_frame*, which accesses a frame that contains a single
+    column named *obs*:
+
+    .. code::
+
+        >>> cov = my_frame.covariance(['col_0', 'col_1'])
+        >>> print(cov)
+
+

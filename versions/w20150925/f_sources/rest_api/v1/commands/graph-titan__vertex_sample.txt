@@ -1,0 +1,135 @@
+.. _rest_api/v1/commands/graph-titan__vertex_sample:
+
+
+
+-------------------------------------------------
+:doc:`Commands <index>` graph:titan/vertex_sample
+-------------------------------------------------
+
+Make subgraph from vertex sampling.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph:titan/vertex_sample
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066390>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **size** : int32
+
+    ..
+
+        The number of vertices to sample from the graph.
+
+
+
+    **sample_type** : unicode
+
+    ..
+
+        The type of vertex sample among: ['uniform', 'degree', 'degreedist'].
+
+
+
+    **seed** : int64 (default=None)
+
+    ..
+
+        Random seed value.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Create a vertex induced subgraph obtained by vertex sampling.
+Three types of vertex sampling are provided: 'uniform', 'degree', and
+'degreedist'.
+A 'uniform' vertex sample is obtained by sampling vertices uniformly at random.
+For 'degree' vertex sampling, each vertex is weighted by its out-degree.
+For 'degreedist' vertex sampling, each vertex is weighted by the total
+number of vertices that have the same out-degree as it.
+That is, the weight applied to each vertex for 'degreedist' vertex sampling
+is given by the out-degree histogram bin size.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        A new Graph object representing the vertex induced subgraph.
+
+

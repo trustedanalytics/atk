@@ -1,0 +1,35 @@
+.. _python_api/models/model-lda/new:
+
+
+:doc:`LdaModel <index>`  new
+****************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Creates Latent Dirichlet Allocation model
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+        ..
+
+
+    |LDA| is a commonly-used algorithm for topic modeling, but,
+    more broadly, is considered a dimensionality reduction technique.
+    For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.

@@ -1,0 +1,69 @@
+.. _python_api/frames/frame-edge/ecdf:
+
+
+:doc:`EdgeFrame <index>`  ecdf
+******************************
+
+------
+
+
+.. function:: ecdf(self, column, result_frame_name=None)
+
+    Builds new frame with columns for data and distribution.
+
+
+    :Parameters:
+
+        **column** : unicode
+
+        ..
+
+            The name of the input column containing sample.
+
+
+
+        **result_frame_name** : unicode (default=None)
+
+        ..
+
+            A name for the resulting frame which is created
+            by this operation.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+        ..
+
+            A new Frame containing each distinct value in the sample and its corresponding ECDF value.
+    Generates the :term:`empirical cumulative distribution` for the input column.
+
+    Examples
+    --------
+    Consider the following sample data set in *frame* with actual data labels
+    specified in the *labels* column and the predicted labels in the
+    *predictions* column:
+
+    >>> import trustedanalytics as ta
+    >>> import pandas as p
+    >>> f = ta.Frame(ta.Pandas(p.DataFrame([1, 3, 1, 0]), [('numbers', ta.int32)]))
+      [==Job Progress...]
+
+    >>> f.take(5)
+    [[1], [3], [1], [0]]
+
+    #[==Job Progress...]
+    #    >>> result = f.ecdf('numbers')
+    #    >>> result.inspect()
+    #
+    #      b:int32   b_ECDF:float64
+    #    /--------------------------/
+    #       1             0.2
+    #       2             0.5
+    #       3             0.8
+    #       4             1.0
+
+

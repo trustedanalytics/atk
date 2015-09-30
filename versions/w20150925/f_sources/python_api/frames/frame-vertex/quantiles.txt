@@ -1,0 +1,85 @@
+.. _python_api/frames/frame-vertex/quantiles:
+
+
+:doc:`VertexFrame <index>`  quantiles
+*************************************
+
+------
+
+
+.. function:: quantiles(self, column_name, quantiles)
+
+    New frame with Quantiles and their values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column to calculate quantiles.
+
+
+
+        **quantiles** : list
+
+        ..
+
+            What is being requested.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+        ..
+
+            A new frame with two columns (float64): requested Quantiles and their respective values.
+    Calculate quantiles on the given column.
+
+    Examples
+    --------
+    Consider Frame *my_frame*, which accesses a frame that contains a single
+    column *final_sale_price*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+
+          final_sale_price:int32
+        /------------------------/
+                    100
+                    250
+                     95
+                    179
+                    315
+                    660
+                    540
+                    420
+                    250
+                    335
+
+    To calculate 10th, 50th, and 100th quantile:
+
+    .. code::
+
+        >>> quantiles_frame = my_frame.quantiles('final_sale_price', [10, 50, 100])
+
+    A new Frame containing the requested Quantiles and their respective values
+    will be returned :
+
+    .. code::
+
+       >>> quantiles_frame.inspect()
+
+         Quantiles:float64   final_sale_price_QuantileValue:float64
+       /------------------------------------------------------------/
+                10.0                                     95.0
+                50.0                                    250.0
+               100.0                                    660.0
+
+
+

@@ -1,0 +1,123 @@
+.. _rest_api/v1/commands/model-linear_regression__new:
+
+
+
+---------------------------------------------------
+:doc:`Commands <index>` model:linear_regression/new
+---------------------------------------------------
+
+Create a 'new' instance of a Linear Regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:linear_regression/new
+
+:arguments:
+
+
+    **dummy_model_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Linear Regression [1]_ is used to model the relationship between a scalar
+dependent variable and one or more independent variables.
+The Linear Regression model is initialized, trained on columns of a frame and
+used to predict the value of the dependent variable given the independent
+observations of a frame.
+This model runs the MLLib implementation of Linear Regression [2]_ with the
+SGD [3]_ optimizer.
+                
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Linear_regression
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
+.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>``
+
+
+
+

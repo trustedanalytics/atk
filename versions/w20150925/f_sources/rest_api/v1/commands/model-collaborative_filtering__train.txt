@@ -1,0 +1,215 @@
+.. _rest_api/v1/commands/model-collaborative_filtering__train:
+
+
+
+-----------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/train
+-----------------------------------------------------------
+
+Collaborative filtering (ALS/CGD) model
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:collaborative_filtering/train
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **user_col_name** : unicode
+
+    ..
+
+        Name of the user column from input data
+
+
+
+    **item_col_name** : unicode
+
+    ..
+
+        Name of the item column from input data
+
+
+
+    **rating_col_name** : unicode
+
+    ..
+
+        Name of the rating column from input data
+
+
+
+    **evaluation_function** : unicode (default=None)
+
+    ..
+
+        ALS/CGD
+
+
+
+    **num_factors** : int32 (default=None)
+
+    ..
+
+        Size of the desired factors (default is 3)
+
+
+
+    **max_iterations** : int32 (default=None)
+
+    ..
+
+        Max number of iterations for Giraph
+
+
+
+    **convergence_threshold** : float64 (default=None)
+
+    ..
+
+        float value between 0 .. 1
+
+
+
+    **regularization** : float32 (default=None)
+
+    ..
+
+        float value between 0 .. 1 
+
+
+
+    **bias_on** : bool (default=None)
+
+    ..
+
+        bias on/off switch 
+
+
+
+    **min_value** : float32 (default=None)
+
+    ..
+
+        minimum edge weight value
+
+
+
+    **max_value** : float32 (default=None)
+
+    ..
+
+        minimum edge weight value
+
+
+
+    **learning_curve_interval** : int32 (default=None)
+
+    ..
+
+        iteration interval to output learning curve
+
+
+
+    **cgd_iterations** : int32 (default=None)
+
+    ..
+
+        custom argument for CGD learning curve output interval (default: every iteration)
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Execution result summary for Giraph
+
+

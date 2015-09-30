@@ -1,0 +1,26 @@
+.. _python_api/models/model-k_means/publish:
+
+
+:doc:`KMeansModel <index>`  publish
+***********************************
+
+------
+
+
+.. function:: publish(self)
+
+    |BETA|
+    Creates a scoring engine tar file.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            The HDFS path to the tar file.

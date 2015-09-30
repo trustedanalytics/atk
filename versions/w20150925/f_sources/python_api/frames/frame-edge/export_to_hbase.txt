@@ -1,0 +1,60 @@
+.. _python_api/frames/frame-edge/export_to_hbase:
+
+
+:doc:`EdgeFrame <index>`  export_to_hbase
+*****************************************
+
+------
+
+
+.. function:: export_to_hbase(self, table_name, key_column_name=None, family_name=None)
+
+    Write current frame to HBase table.
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            The name of the HBase table that will contain the exported frame
+
+
+
+        **key_column_name** : unicode (default=None)
+
+        ..
+
+            The name of the column to be used as row key in hbase table
+
+
+
+        **family_name** : unicode (default=None)
+
+        ..
+
+            The family name of the HBase table that will contain the exported frame
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Table must exist in HBase.
+    Export of Vectors is not currently supported.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_hbase('covarianceresults')
+
+

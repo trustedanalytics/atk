@@ -1,0 +1,70 @@
+.. _python_api/graphs/graph-/define_edge_type:
+
+
+:doc:`Graph <index>`  define_edge_type
+**************************************
+
+------
+
+
+.. function:: define_edge_type(self, label, src_vertex_label, dest_vertex_label, directed=False)
+
+    Define an edge type.
+
+
+    :Parameters:
+
+        **label** : unicode
+
+        ..
+
+            Label of the edge type.
+
+
+
+        **src_vertex_label** : unicode
+
+        ..
+
+            The source "type" of vertices this edge
+            connects.
+
+
+
+        **dest_vertex_label** : unicode
+
+        ..
+
+            The destination "type" of vertices this
+            edge connects.
+
+
+
+        **directed** : bool (default=False)
+
+        ..
+
+            True if edges are directed,
+            false if they are undirected.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+
+
+    Examples
+    --------
+    .. code::
+
+        >>> graph = ta.Graph()
+        >>> graph.define_vertex_type('users')
+        >>> graph.define_vertex_type('movie')
+        >>> graph.define_edge_type('ratings', 'users', 'movie', directed=True)
+

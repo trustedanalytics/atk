@@ -1,0 +1,140 @@
+.. _rest_api/v1/commands/model-naive_bayes__train:
+
+
+
+-----------------------------------------------
+:doc:`Commands <index>` model:naive_bayes/train
+-----------------------------------------------
+
+|ALPHA|
+Train a Naive Bayes model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:naive_bayes/train
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column containing the label for each
+        observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Column(s) containing the
+        observations.
+
+
+
+    **lambda_parameter** : float64 (default=None)
+
+    ..
+
+        Additive smoothing parameter
+        Default is 1.0.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Train a NaiveBayesModel using the observation column, label column of the train
+frame and an optional lambda value.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

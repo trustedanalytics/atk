@@ -1,0 +1,34 @@
+.. _python_api/models/model-collaborative_filtering/new:
+
+
+:doc:`CollaborativeFilteringModel <index>`  new
+***********************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a new Collaborative Filtering Recommend model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+        ..
+
+
+    For details about Collaborative Filter Recommend modelling,
+    see :ref:`Collaborative Filter <CollaborativeFilteringNewPlugin_Summary>`.

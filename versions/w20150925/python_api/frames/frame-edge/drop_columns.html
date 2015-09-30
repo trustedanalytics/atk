@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>EdgeFrame drop_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames EdgeFrame" href="index.html" >
+    <link rel="next" title="EdgeFrame drop_duplicates" href="drop_duplicates.html" >
+    <link rel="prev" title="EdgeFrame download" href="download.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> EdgeFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="download.html" title="EdgeFrame download"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="drop_duplicates.html" title="EdgeFrame drop_duplicates"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="edgeframe-drop-columns">
+<span id="python-api-frames-frame-edge-drop-columns"></span><h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  drop_columns<a class="headerlink" href="#edgeframe-drop-columns" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="drop_columns">
+<code class="descname">drop_columns</code><span class="sig-paren">(</span><em>self</em>, <em>columns</em><span class="sig-paren">)</span><a class="headerlink" href="#drop_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove columns from the frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>columns</strong> : list</p>
+<blockquote>
+<div><p>Column name OR list of column names to be removed from the frame.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: _Unit</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The data from the columns is lost.</p>
+<p class="rubric">Notes</p>
+<p>It is not possible to delete all columns from a frame.
+At least one column needs to remain.
+If it is necessary to delete all columns, then delete the frame.</p>
+<p class="rubric">Examples</p>
+<p>For this example, Frame object <em>my_frame</em> accesses a frame with
+columns <em>column_a</em>, <em>column_b</em>, <em>column_c</em> and <em>column_d</em>.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(&quot;column_a&quot;, str), (&quot;column_b&quot;, ta.int32), (&quot;column_c&quot;, str), (&quot;column_d&quot;, ta.int32)]</span>
+</pre></div>
+</div>
+<p>Eliminate columns <em>column_b</em> and <em>column_d</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&quot;column_b&quot;</span><span class="p">,</span> <span class="s">&quot;column_d&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(&quot;column_a&quot;, str), (&quot;column_c&quot;, str)]</span>
+</pre></div>
+</div>
+<p>Now the frame only has the columns <em>column_a</em> and <em>column_c</em>.
+For further examples, see: ref:<cite>example_frame.drop_columns</cite>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Sep 30, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

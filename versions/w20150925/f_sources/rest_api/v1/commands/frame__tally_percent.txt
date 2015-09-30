@@ -1,0 +1,124 @@
+.. _rest_api/v1/commands/frame__tally_percent:
+
+
+
+-------------------------------------------
+:doc:`Commands <index>` frame/tally_percent
+-------------------------------------------
+
+|BETA|
+Compute a cumulative percent count.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/tally_percent
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **sample_col** : unicode
+
+    ..
+
+        The name of the column from which to compute
+        the cumulative sum.
+
+
+
+    **count_val** : unicode
+
+    ..
+
+        The column value to be used for the counts.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+A cumulative percent count is computed by sequentially stepping through
+the rows, observing the column values and keeping track of the percentage of the
+total number of times the specified *count_value* has been seen up to
+the current value.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

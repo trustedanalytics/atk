@@ -1,0 +1,140 @@
+.. _rest_api/v1/commands/model-logistic_regression__test:
+
+
+
+------------------------------------------------------
+:doc:`Commands <index>` model:logistic_regression/test
+------------------------------------------------------
+
+|ALPHA|
+Predict test frame labels using trained logistic regression model, and show metrics.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:logistic_regression/test
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        Frame whose labels are to be
+        predicted.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column containing the actual
+        label for each observation.
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        Column(s) containing the observations
+        whose labels are to be predicted and tested.
+        Default is to test over the columns the SVM model
+        was trained on.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predict the labels for a test frame and run classification metrics on predicted and target labels.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        An object with binary classification metrics.
+        The data returned is composed of multiple components\:
+
+        | **double** : *accuracy*
+        | **table** : *confusion_matrix*
+        | **double** : *f_measure*
+        | **double** : *precision*
+        | **double** : *recall*
+
+

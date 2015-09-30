@@ -1,0 +1,133 @@
+.. _rest_api/v1/commands/model-k_means__predict:
+
+
+
+---------------------------------------------
+:doc:`Commands <index>` model:k_means/predict
+---------------------------------------------
+
+|BETA|
+Predict the cluster assignments for the data points.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:k_means/predict
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        A frame whose labels are to be predicted.
+        By default, predict is run on the same columns over which the model is
+        trained.
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        Column(s) containing the observations
+        whose clusters are to be predicted.
+        Default is to predict the clusters over columns the KMeans model was trained on.
+        The columns are scaled using the same values used when training the
+        model.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>``
+
+        A new frame consisting of the existing columns of the frame
+        and new columns.
+        The data returned is composed of multiple components\:
+
+        |   **double** : *'k' columns*
+        |       Squared distance of each point to every cluster center.
+        |   **int** : *predicted_cluster*
+        |       The cluster assignment.
+
+

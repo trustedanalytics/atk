@@ -1,0 +1,134 @@
+.. _rest_api/v1/commands/frame__top_k:
+
+
+
+-----------------------------------
+:doc:`Commands <index>` frame/top_k
+-----------------------------------
+
+Most or least frequent column values.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/top_k
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **column_name** : unicode
+
+    ..
+
+        The column whose top (or bottom) K distinct values are
+        to be calculated.
+
+
+
+    **k** : int32
+
+    ..
+
+        Number of entries to return (If k is negative, return bottom k).
+
+
+
+    **weights_column** : unicode (default=None)
+
+    ..
+
+        The column that provides weights (frequencies) for the topK calculation.
+        Must contain numerical data.
+        Default is 1 for all items.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Calculate the top (or bottom) K distinct values by count of a column.
+The column can be weighted.
+All data elements of weight <= 0 are excluded from the calculation, as are
+all data elements whose weight is NaN or infinite.
+If there are no data elements of finite weight > 0, then topK is empty.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df7066350>>``
+
+        An object with access to the frame of data.
+
+

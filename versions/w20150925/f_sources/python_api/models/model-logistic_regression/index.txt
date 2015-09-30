@@ -1,0 +1,97 @@
+.. _python_api/models/model-logistic_regression/index:
+
+
+:doc:`Models<../index>` LogisticRegressionModel
+***********************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    name
+    predict
+    test
+    train
+
+.. class:: LogisticRegressionModel
+
+    Create a 'new' instance of logistic regression model.
+
+    Logistic Regression [1]_ is a widely used supervised binary and multi-class classification algorithm.
+    The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+    of observations, and tests the predicted labels against the true labels.
+    This model runs the MLLib implementation of Logistic Regression [2]_, with enhanced features |EM|
+    trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+    of the train and test observations.
+    Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+    It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD [4]_.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Logistic_regression
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression
+    .. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
+    .. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LogisticRegressionModel__init__>`\ (self[, name, _info])                              Create a 'new' instance of logistic regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict labels for data points using trained logistic regression model.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels using trained logistic regression model, and show metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, frequency_column, ...])       |ALPHA| Build logistic regression model.
+    ====================================================================================================  ====================================================================================================
+
+.. _LogisticRegressionModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of logistic regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f5df70663d0>>
+
+        ..
+
+
+    Logistic Regression [1]_ is a widely used supervised binary and multi-class classification algorithm.
+    The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+    of observations, and tests the predicted labels against the true labels.
+    This model runs the MLLib implementation of Logistic Regression [2]_, with enhanced features |EM|
+    trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+    of the train and test observations.
+    Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+    It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD [4]_.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Logistic_regression
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression
+    .. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
+    .. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+        
