@@ -315,21 +315,21 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
         if isinstance(source, HBaseTable):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadhbase", arguments, frame)
+             result = execute_update_frame_command("frame/_loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(source, JdbcTable):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
+             result = execute_update_frame_command("frame/_loadjdbc", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(source, HiveQuery):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadhive", arguments, frame)
+             result = execute_update_frame_command("frame/_loadhive", arguments, frame)
              self._handle_error(result)
              return
 
