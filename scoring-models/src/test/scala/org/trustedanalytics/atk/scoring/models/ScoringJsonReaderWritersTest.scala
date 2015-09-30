@@ -15,11 +15,8 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.tree.configuration.Algo._
-import org.apache.spark.mllib.tree.configuration.{Algo, FeatureType}
-import org.apache.spark.mllib.tree.configuration.FeatureType._
-import org.apache.spark.mllib.tree.model._
-import org.scalatest.{ Matchers, FlatSpec }
+import org.scalatest.{FlatSpec, Matchers}
+import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
 import ScoringJsonReaderWriters._
