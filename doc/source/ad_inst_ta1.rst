@@ -1,7 +1,3 @@
-.. _old_sections/ad_inst_ta1:
-
-.. _old_ad_sections/ad_inst_ta1:
-
 .. _ad_inst_ta1:
 
 .. index::
@@ -65,6 +61,8 @@ The EPEL and |PACKAGE| repositories must be installed on the REST server node an
 all spark nodes (master and worker).
 The |PACKAGE| Dependency repository and the yum-s3 package must be installed before
 the |PACKAGE| private repository.
+
+.. _epel repository:
 
 EPEL Repository
 ---------------

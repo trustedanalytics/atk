@@ -30,18 +30,24 @@ class GarbageCollectionEntryRepositoryTest extends SlickMetaStoreH2Testing with 
         //create gc to use for foreign key reference
         val startTime: DateTime = new DateTime
         val gc = slickMetaStoreComponent.metaStore.gcRepo.insert(new GarbageCollectionTemplate("hostname", 100, startTime))
-        val template = new GarbageCollectionEntryTemplate(gc.get.id, "description", startTime)
+        val dropStaleTemplate = new GarbageCollectionEntryTemplate(gc.get.id, "description: drop stale", startTime)
+        val finalizeDroppedTemplate = new GarbageCollectionEntryTemplate(gc.get.id, "description: finalize dropped", startTime)
 
-        val entry = gcEntryRepo.insert(template)
+        val entry = gcEntryRepo.insert(dropStaleTemplate)
         entry.get should not be null
 
         //look it up
         val entry2: Option[GarbageCollectionEntry] = gcEntryRepo.lookup(entry.get.id)
         entry2.get should not be null
         entry2.get.garbageCollectionId should be(gc.get.id)
-        entry2.get.description should be("description")
+        entry2.get.description should be("description: drop stale")
         entry2.get.startTime.getMillis should be(startTime.getMillis)
         entry2.get.endTime should be(None)
+
+        // shouldn't have a problem adding a another entry
+        val entryFinalize = gcEntryRepo.insert(finalizeDroppedTemplate)
+        entryFinalize.get should not be null
+
     }
 
   }

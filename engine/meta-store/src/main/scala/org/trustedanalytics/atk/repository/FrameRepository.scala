@@ -44,5 +44,12 @@ trait FrameRepository[Session] extends Repository[Session, DataFrameTemplate, Fr
 
   def lookupByGraphId(graphId: Long)(implicit session: Session): Seq[FrameEntity]
 
-  def isLive(frame: FrameEntity): Boolean
+  /** updates a frame entity as Dropped */
+  def dropFrame(frame: FrameEntity)(implicit session: Session): Try[FrameEntity]
+
+  /** gets sequence of all frames with status Dropped */
+  def droppedFrames(implicit session: Session): Seq[FrameEntity]
+
+  /** determines if a frame is listed as an error frame of any other active frame */
+  def isErrorFrame(frame: FrameEntity)(implicit session: Session): Boolean
 }

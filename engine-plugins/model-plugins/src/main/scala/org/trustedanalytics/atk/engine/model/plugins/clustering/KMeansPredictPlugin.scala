@@ -24,6 +24,7 @@ import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -38,13 +39,14 @@ import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
   extended = "",
-  returns = """Frame
-    A new frame consisting of the existing columns of the frame and new columns.
-    The data returned is composed of multiple components:
-'k' columns : double
-    Containing squared distance of each point to every cluster center.
-predicted_cluster : int
-    Integer containing the cluster assignment.""")
+  returns = """A new frame consisting of the existing columns of the frame
+and new columns.
+The data returned is composed of multiple components\:
+
+|   **double** : *'k' columns*
+|       Squared distance of each point to every cluster center.
+|   **int** : *predicted_cluster*
+|       The cluster assignment.""")
 class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameReference] {
 
   /**
@@ -93,9 +95,8 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameRef
     val kmeansColumns = arguments.observationColumns.getOrElse(kmeansData.observationColumns)
     val scalingValues = kmeansData.columnScalings
 
-    //Predicting the cluster for each row
     val predictionsRDD = frame.rdd.mapRows(row => {
-      val columnsArray = row.valuesAsArray(kmeansColumns).map(row => DataTypes.toDouble(row))
+      val columnsArray = row.valuesAsDenseVector(kmeansColumns).toArray
       val columnScalingsArray = scalingValues.toArray
       val doubles = columnsArray.zip(columnScalingsArray).map { case (x, y) => x * y }
       val point = Vectors.dense(doubles)

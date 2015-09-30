@@ -23,10 +23,10 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
-from trustedanalytics.core.column import Column
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.core.frame import VertexFrame, EdgeFrame
 from trustedanalytics.rest.command import executor
+from trustedanalytics import valid_data_types
 
 
 def initialize_graph(graph, graph_info):
@@ -67,11 +67,16 @@ class GraphBackendRest(object):
 
     def get_repr(self, graph):
         graph_info = self._get_graph_info(graph)
-        return "\n".join(['%s "%s"' % (graph.__class__.__name__, graph_info.name), 'status = %s' % graph_info.status])
+        return "\n".join(['%s "%s"' % (graph.__class__.__name__, graph_info.name),
+                          'status = %s  (last_read_date = %s)' % (graph_info.status,
+                                                                  graph_info.last_read_date.isoformat())])
 
     def get_status(self, graph):
         graph_info = self._get_graph_info(graph)
         return graph_info.status
+
+    def get_last_read_date(self, graph):
+        return self._get_graph_info(graph).last_read_date
 
     def _get_graph_info(self, graph):
         response = self.server.get(self._get_graph_full_uri(graph))
@@ -137,6 +142,10 @@ class GraphInfo(object):
     @property
     def status(self):
         return self._payload['status']
+
+    @property
+    def last_read_date(self):
+        return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
 
     def update(self,payload):
         if self._payload and self.uri != payload['uri']:

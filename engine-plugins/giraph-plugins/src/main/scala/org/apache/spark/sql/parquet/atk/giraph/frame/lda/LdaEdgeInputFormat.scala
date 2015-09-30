@@ -34,7 +34,6 @@ import parquet.hadoop.{ ParquetInputFormat, ParquetRecordReader }
  */
 class LdaParquetFrameEdgeInputFormat extends EdgeInputFormat[LdaVertexId, LdaEdgeData] {
 
-  //val clazz: java.lang.Class[ReadSupport[Row]] = classOf[RowReadSupport].asInstanceOf[Class[ReadSupport[Row]]]
   private val parquetInputFormat = new ParquetInputFormat[Row](classOf[RowReadSupport])
 
   override def checkInputSpecs(conf: Configuration): Unit = {
@@ -56,7 +55,7 @@ class LdaParquetFrameEdgeReader(config: LdaConfiguration) extends EdgeReader[Lda
 
   private val ldaConfig = config.ldaConfig
   private val reader = new ParquetRecordReader[Row](new RowReadSupport)
-  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.frameSchema)
+  private val row = new RowWrapper(config.ldaConfig.inputFormatConfig.edgeFrameSchema)
 
   private var currentSourceId: LdaVertexId = null
   private var currentEdge: DefaultEdge[LdaVertexId, LdaEdgeData] = null
@@ -82,8 +81,8 @@ class LdaParquetFrameEdgeReader(config: LdaConfiguration) extends EdgeReader[Lda
     if (hasNext) {
       row.apply(reader.getCurrentValue)
 
-      val docId = new LdaVertexId(row.stringValue(ldaConfig.documentColumnName), true)
-      val wordId = new LdaVertexId(row.stringValue(ldaConfig.wordColumnName), false)
+      val docId = new LdaVertexId(row.longValue(ldaConfig.documentIdColumnName), true)
+      val wordId = new LdaVertexId(row.longValue(ldaConfig.wordIdColumnName), false)
       val wordCount = row.longValue(ldaConfig.wordCountColumnName)
 
       currentSourceId = docId

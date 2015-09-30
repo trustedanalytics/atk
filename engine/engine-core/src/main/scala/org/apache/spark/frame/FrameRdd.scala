@@ -30,8 +30,10 @@ import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow
 import org.apache.spark.sql.types.{ ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType }
 import org.apache.spark.sql.{ DataFrame, Row, SQLContext, types => SparkType }
 import org.apache.spark.{ Partition, TaskContext }
+import org.trustedanalytics.atk.domain.SerializableType
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.domain.schema._
+import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
 import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ EdgeHolder, EdgeSchemaAggregator, VertexSchemaAggregator }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
@@ -388,6 +390,58 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
       case "file/parquet" => this.toDataFrame.saveAsParquetFile(absolutePath)
       case format => throw new IllegalArgumentException(s"Unrecognized storage format: $format")
     }
+  }
+
+  /**
+   * Convert FrameRdd into RDD of scores, labels, and associated frequency
+   *
+   * @param labelColumn Column of class labels
+   * @param predictionColumn Column of predictions (or scores)
+   * @param frequencyColumn Column with frequency of observations
+   * @tparam T type of score and label
+   * @return RDD with score, label, and frequency
+   */
+  def toScoreAndLabelRdd[T](labelColumn: String,
+                            predictionColumn: String,
+                            frequencyColumn: Option[String] = None): RDD[ScoreAndLabel[T]] = {
+    this.mapRows(row => {
+      val label = row.value(labelColumn).asInstanceOf[T]
+      val score = row.value(predictionColumn).asInstanceOf[T]
+      val frequency = frequencyColumn match {
+        case Some(column) => DataTypes.toLong(row.value(column))
+        case _ => 1
+      }
+      ScoreAndLabel[T](score, label, frequency)
+    })
+  }
+
+  /**
+   * Convert FrameRdd into RDD of scores, labels, and associated frequency
+   *
+   * @param scoreAndLabelFunc Function that extracts score and label from row
+   * @tparam T type of score and label
+   * @return RDD with score, label, and frequency
+   */
+  def toScoreAndLabelRdd[T](scoreAndLabelFunc: (RowWrapper) => ScoreAndLabel[T]): RDD[ScoreAndLabel[T]] = {
+    this.mapRows(row => {
+      scoreAndLabelFunc(row)
+    })
+  }
+
+  /**
+   * Add column to frame
+   *
+   * @param column Column to add
+   * @param addColumnFunc Function that extracts column value to add from row
+   * @tparam T type of added column
+   * @return Frame with added column
+   */
+  def addColumn[T](column: Column, addColumnFunc: (RowWrapper) => T): FrameRdd = {
+    val rows = this.mapRows(row => {
+      val columnValue = addColumnFunc(row)
+      row.addValue(columnValue)
+    })
+    new FrameRdd(frameSchema.addColumn(column), rows)
   }
 
 }

@@ -85,7 +85,7 @@ max_supersteps:
 alpha:
     Float (optional)
 
-    The hyper-parameter for document-specific distribution over topics.
+    The :term:`hyperparameter` for document-specific distribution over topics.
     Larger values imply that documents are assumed to cover topics more
     uniformly; smaller values imply documents are concentrated
     on a small subset of topics.
@@ -95,7 +95,7 @@ alpha:
 beta:
     Float (optional)
 
-    The hyper-parameter for word-specific distribution over topics.
+    The :term:`hyperparameter` for word-specific distribution over topics.
     Larger values imply topics contain all words more uniformly, while
     smaller values imply topics are concentrated on a smaller subset of
     words.
@@ -143,7 +143,7 @@ bidirectional_check:
     Boolean (optional)
 
     Turns bidirectional check on and off.
-    |LDA| expects a bi-partite input graph, so each edge should be
+    |LDA| expects a bipartite input graph, so each edge should be
     bi-directional.
     This option is mainly for graph integrity check.
 
