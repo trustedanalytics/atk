@@ -351,14 +351,11 @@ Glossary
 
         A real number with 64 bits of precision.
 
-    frame (lower case f)
-
-        A table database with rows and columns containing data.
-
     Frame (capital F)
 
-        A class object with the functionality to manipulate the data in a
-        :term:`frame (lower case f)`.
+        1.  A table database with rows and columns containing data.
+
+        2.  A class object with the functionality to manipulate the data in a frame.
 
     GaBP
 
