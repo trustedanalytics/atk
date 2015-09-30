@@ -12,19 +12,19 @@ CsvFile
     :inherited-members:
 
 HiveQuery
---------
+---------
 .. autoclass:: trustedanalytics.HiveQuery
     :members:
     :inherited-members:
 
 HBase
---------
+-----
 .. autoclass:: trustedanalytics.HBaseTable
     :members:
     :inherited-members:
 
 Jdbc
---------
+----
 .. autoclass:: trustedanalytics.JdbcTable
     :members:
     :inherited-members:
@@ -44,6 +44,12 @@ LineFile
 Pandas
 ------
 .. autoclass:: trustedanalytics.Pandas
+    :members:
+    :inherited-members:
+
+UploadRows
+----------
+.. autoclass:: trustedanalytics.UploadRows
     :members:
     :inherited-members:
 

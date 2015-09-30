@@ -23,8 +23,10 @@ Given a frame of coin flips, half heads and half tails, the entropy is simply ln
             Computed entropy: 0.69314718056
 
 If we have more choices and weights, the computation is not as simple.
-An on-line serach for "Shannon Entropy" will provide more detail.
+An on-line search for "Shannon Entropy" will provide more detail.
+
 .. code::
+
    >>> print frame.inspect()
               data:int32   weight:int32  
             -----------------------------

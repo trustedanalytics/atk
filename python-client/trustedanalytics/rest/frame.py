@@ -31,6 +31,7 @@ from trustedanalytics.core.column import Column
 from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
+from trustedanalytics.core.ui import RowsInspection
 
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.atktypes import get_data_type_from_rest_str, get_rest_str_from_data_type
@@ -107,6 +108,9 @@ class FrameBackendRest(object):
     def get_status(self, frame):
         return self._get_frame_info(frame).status
 
+    def get_last_read_date(self, frame):
+        return self._get_frame_info(frame).last_read_date
+
     def get_row_count(self, frame, where):
         if not where:
             return self._get_frame_info(frame).row_count
@@ -141,6 +145,11 @@ class FrameBackendRest(object):
         except Exception as e:
             status = "Unable to determine status (%s)" % e
 
+        try:
+            last_read_date = frame_info.last_read_date.isoformat()
+        except Exception as e:
+            last_read_date = "Unable to determine last_read_date (%s)" % e
+
         if frame_info._has_vertex_schema():
             frame_type = "VertexFrame"
             graph_data = "\nLabel = %s" % frame_info.label
@@ -154,7 +163,13 @@ class FrameBackendRest(object):
         return """{type} {name}{graph_data}
 row_count = {row_count}
 schema = [{schema}]
-status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_data, row_count=row_count, schema=schema, status=status)
+status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type,
+                                                                 name=frame_name,
+                                                                 graph_data=graph_data,
+                                                                 row_count=row_count,
+                                                                 schema=schema,
+                                                                 status=status,
+                                                                 last_read_date=last_read_date)
 
     def _get_frame_info(self, frame):
         response = self.server.get(self._get_frame_full_uri(frame))
@@ -418,51 +433,13 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                      'operation' : operation}
         return execute_update_frame_command('columnStatistic', arguments, frame)
 
-    class InspectionTable(object):
-        """
-        Inline class used specifically for inspect, where the __repr__ is king
-        """
-        _align = defaultdict(lambda: 'c')  # 'l', 'c', 'r'
-        _align.update([(bool, 'r'),
-                       (bytearray, 'l'),
-                       (dict, 'l'),
-                       (float32, 'r'),
-                       (float64, 'r'),
-                       (int32, 'r'),
-                       (int64, 'r'),
-                       (list, 'l'),
-                       (unicode, 'l'),
-                       (str, 'l')])
-
-        def __init__(self, schema, rows):
-            self.schema = schema
-            self.rows = rows
-
-        def __repr__(self):
-            # keep the import localized, as serialization doesn't like prettytable
-            import trustedanalytics.rest.prettytable as prettytable
-            table = prettytable.PrettyTable()
-            fields = OrderedDict([("{0}:{1}".format(key, valid_data_types.to_string(val)), self._align[val]) for key, val in self.schema])
-            table.field_names = fields.keys()
-            table.align.update(fields)
-            table.hrules = prettytable.HEADER
-            table.vrules = prettytable.NONE
-            for r in self.rows:
-                table.add_row(r)
-            return table.get_string().encode('utf8','replace')
-
-         #def _repr_html_(self): TODO - Add this method for ipython notebooks
-
-    def inspect(self, frame, n, offset, selected_columns, wrap=None, truncate=None, round=None, width=80, margin=None):
+    def inspect(self, frame, n, offset, selected_columns, format_settings):
         # inspect is just a pretty-print of take, we'll do it on the client
         # side until there's a good reason not to
         result = self.take(frame, n, offset, selected_columns)
         data = result.data
         schema = result.schema
-        if wrap:
-            from trustedanalytics.core.ui import RowsInspection
-            return RowsInspection(data, schema, offset=offset, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
-        return FrameBackendRest.InspectionTable(schema, data)
+        return RowsInspection(data, schema, offset=offset, format_settings=format_settings)
 
     def join(self, left, right, left_on, right_on, how, name=None):
         if right_on is None:
@@ -728,12 +705,15 @@ class FrameInfo(object):
     def status(self):
         return self._payload['status']
 
+    @property
+    def last_read_date(self):
+        return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
+
     def _has_edge_schema(self):
         return "edge_schema" in self._payload['schema']
 
     def _has_vertex_schema(self):
         return "vertex_schema" in self._payload['schema']
-
 
     def update(self, payload):
         if self._payload and self.uri != payload['uri']:
@@ -742,8 +722,6 @@ class FrameInfo(object):
             logger.error(msg)
             raise RuntimeError(msg)
         self._payload = payload
-
-
 
 
 class FrameSchema:

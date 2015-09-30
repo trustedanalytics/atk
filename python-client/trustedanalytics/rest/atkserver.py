@@ -200,26 +200,32 @@ class AtkServer(Server):
         """
         Connect to the trustedanalytics server.
 
-        This method calls the server, downloads its API information and dynamically generates and adds
-        the appropriate Python code to the Python package for this python session.  Calling this method
-        is required before invoking any server activity.
+        This method calls the server, downloads its API information and
+        dynamically generates and adds the appropriate Python code to the
+        Python package for this python session.
+        Calling this method is required before invoking any server activity.
 
-        After the client has connected to the server, the server config cannot be changed.
+        After the client has connected to the server, the server config
+        cannot be changed.
         User must restart Python in order to change connection info.
 
         Subsequent calls to this method invoke no action.
 
-        There is no "connection" object or notion of being continuously "connected".  The call to
-        connect is just a one-time process to download the API and prepare the client.  If the server
-        goes down and comes back up, this client will not recognize any difference from a connection
-        point of view, and will still be operating with the API information originally downloaded.
+        There is no "connection" object or notion of being continuously
+        "connected".
+        The call to connect is just a one-time process to download the API
+        and prepare the client.
+        If the server goes down and comes back up, this client will not
+        recognize any difference from a connection point of view, and will
+        still be operating with the API information originally downloaded.
 
         Parameters
         ==========
         credentials_file: str (optional)
-            file name of a credentials file.   If supplied, it will override the settings authentication
-            settings in the client's server configuration.  The credentials file is normally obtained
-            through the env.
+            File name of a credentials file.
+            If supplied, it will override the settings authentication
+            settings in the client's server configuration.
+            The credentials file is normally obtained through the environment.
         """
 
         #with api_status._api_lock:

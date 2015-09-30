@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
 import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
+import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -31,22 +31,21 @@ import LibSvmJsonProtocol._
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification
 metrics on predicted and target labels.""",
-  returns = """Object
-    Object with binary classification metrics.
-    The data returned is composed of multiple components:
-<object>.accuracy : double
-     The degree of correctness of the test frame labels.
-<object>.confusion_matrix : table
-    A specific table layout that allows visualization of the performance of the
-    test.
-<object>.f_measure : double
-    A measure of a test's accuracy.
-    It considers both the precision and the recall of the test to compute
-    the score.
-<object>.precision : double
-    The degree to which the correctness of the label is expressed.
-<object>.recall : double
-     The fraction of relevant instances that are retrieved.""")
+  returns = """Object with binary classification metrics.
+The data returned is composed of multiple components\:
+
+|  **double** : *accuracy*
+|      The degree of correctness of the test frame labels.
+|  **table** : *confusion_matrix*
+|     A specific table layout that allows visualization of the performance of the
+test.
+|  **double** : *f_measure*
+|     A measure of a test's accuracy.
+It considers both the precision and the recall of the test to compute the score.
+|  **double** : *precision*
+|     The degree to which the correctness of the label is expressed.
+|  **double** : *recall*
+|      The fraction of relevant instances that are retrieved.""")
 class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.
@@ -88,27 +87,17 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
     }
 
     //predicting a label for the observation column/s
-    val predictionsRdd: RDD[Row] = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(arguments.observationColumns.getOrElse(libsvmData.observationColumns))
-      val label = row.value(arguments.labelColumn) match {
-        case x: Int => x.toInt
-        case y: Double => y.toDouble
-        case _ => throw new RuntimeException(s"Only Int and Double are supported as label columns")
-      }
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      var vector = Vector.empty[Double]
-      var i: Int = 0
-      while (i < doubles.length) {
-        vector = vector :+ doubles(i)
-        i += 1
-      }
-      val predictionLabel = LibSvmPluginFunctions.score(libsvmModel, vector)
-      Row(label, predictionLabel.value)
+    val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
+    val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
+      val vector = row.valuesAsDoubleArray(observationColumns).toVector
+      val label = row.doubleValue(arguments.labelColumn)
+      val score = LibSvmPluginFunctions.score(libsvmModel, vector)
+      ScoreAndLabel(score.value, label)
     })
 
     //Run Binary classification metrics
-    val posLabel: String = "1.0"
-    ClassificationMetrics.binaryClassificationMetrics(predictionsRdd, 0, 1, posLabel, 1)
+    val posLabel: Double = 1d
+    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
   }
 
 }

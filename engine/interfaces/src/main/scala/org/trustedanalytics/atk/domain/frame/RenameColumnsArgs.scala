@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 case class RenameColumnsArgs(frame: FrameReference,
-                             @ArgDoc("""dictionary of old names to new names""") names: Map[String, String]) {
+                             @ArgDoc("""Dictionary of old names to new names.""") names: Map[String, String]) {
   require(frame != null, "frame is required")
   require(names != null, "names is required")
 }

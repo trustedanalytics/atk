@@ -29,12 +29,12 @@ import spray.json._
 
 /**
  * Parameters for executing page rank.
- * @param graph Reference to the graph object on which to compute pagerank.
+ * @param graph Reference to the graph object on which to compute PageRank.
  */
 case class PageRankArgs(graph: GraphReference,
-                        @ArgDoc("""Name of the property to which pagerank
+                        @ArgDoc("""Name of the property to which PageRank
 value will be stored on vertex and edge.""") output_property: String,
-                        @ArgDoc("""List of edge labels to consider for pagerank computation.
+                        @ArgDoc("""List of edge labels to consider for PageRank computation.
 Default is all edges are considered.""") input_edge_labels: Option[List[String]] = None,
                         @ArgDoc("""The maximum number of iterations that will be invoked.
 The valid range is all positive int.
