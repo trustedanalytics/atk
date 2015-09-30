@@ -25,7 +25,7 @@ import scala.concurrent._
 
 class LibSvmModel(libSvmModel: svm_model) extends svm_model with Model {
 
-  override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
     data.foreach { vector =>
       val output = columnFormatter(vector.zipWithIndex)

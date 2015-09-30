@@ -15,10 +15,10 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import org.scalatest.{ Matchers, FlatSpec }
+import org.scalatest.{FlatSpec, Matchers}
+import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
-import ScoringJsonReaderWriters._
 
 class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
   val epsilon = 1e-6
