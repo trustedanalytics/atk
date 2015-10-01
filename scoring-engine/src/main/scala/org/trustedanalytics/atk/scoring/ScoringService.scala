@@ -26,8 +26,6 @@ import ExecutionContext.Implicits.global
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import scala.util.{ Failure, Success }
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import spray.json._
-import spray.json.DefaultJsonProtocol._
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -100,7 +98,7 @@ class ScoringService(model: Model) extends Directives {
                 records = records :+ splitSegment
               }
               onComplete(model.score(records)) {
-                case Success(scored) => complete(scored.toJson)
+                case Success(scored) => complete(scored.toString)
                 case Failure(ex) => ctx => {
                   ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
                 }
