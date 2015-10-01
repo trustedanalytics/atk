@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6210>>
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f675f7ab0d0>>
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f675f7ab050>>
 
     ..
 
@@ -118,7 +118,7 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe61e2b6190>>``
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f675f7ab050>>``
 
         Frame containing the original frame's columns and a column with the predicted label.
 
