@@ -98,7 +98,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
       columnNames += colName
       columnTypes += DataTypes.float64
     }
-    val yNew = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, y, columnNames, columnTypes)
+    val yNew = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, c, y, columnNames, columnTypes)
 
     val resultFrameRdd = yNew.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
       .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
@@ -143,11 +143,11 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * @param columnTypes ListBuffer storing the column type(s) of the output frame
    * @return IndexedRowMatrix
    */
-  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData,
+  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData, c:Int,
                             y: IndexedRowMatrix, columnNames: ListBuffer[String], columnTypes: ListBuffer[DataType]): IndexedRowMatrix = {
     tSquaredIndex match {
       case true => {
-        val t = computeTSquaredIndex(y, principalComponentData.singularValues, principalComponentData.k)
+        val t = computeTSquaredIndex(y, principalComponentData.singularValues, c)
         columnNames += "t_squared_index"
         columnTypes += DataTypes.float64
         t
@@ -178,14 +178,14 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * Compute the t-squared index for an IndexedRowMatrix created from the input frame
    * @param y IndexedRowMatrix storing the projection into k dimensional space
    * @param E Singular Values
-   * @param k Number of dimensions
+   * @param c Number of dimensions
    * @return IndexedRowMatrix with existing elements in the RDD and computed t-squared index
    */
-  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, k: Int): IndexedRowMatrix = {
+  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, c: Int): IndexedRowMatrix = {
     val matrix = y.rows.map(row => {
       val rowVectorToArray = row.vector.toArray
       var t = 0.0
-      for (i <- 0 until k) {
+      for (i <- 0 until c) {
         if (E(i) > 0)
           t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
       }
