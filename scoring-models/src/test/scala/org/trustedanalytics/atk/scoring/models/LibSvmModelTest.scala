@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import java.io.{InputStreamReader, BufferedReader, ByteArrayInputStream}
+import java.io.{ InputStreamReader, BufferedReader, ByteArrayInputStream }
 
 import libsvm.svm
 import org.scalatest.WordSpec
