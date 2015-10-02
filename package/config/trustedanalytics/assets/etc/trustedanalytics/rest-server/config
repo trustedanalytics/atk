@@ -457,6 +457,10 @@ def run(args, cluster=None):
         'username': args.username if args.username else None,
         'password': args.password if args.password else None }
 
+    conf_file_directory = args.path
+    if not conf_file_directory.endswith(os.pathsep):
+        conf_file_directory = conf_file_directory + os.pathsep
+
     # Query Cloudera for the parameters we can get from it using the
     # config_cluster API.  Login and password must be provided on the
     # commandline.
@@ -526,19 +530,19 @@ def run(args, cluster=None):
             'titan.load.storage.hostname': '"' + ','.join(yarn_host_names) + '"',
             'titan.load.storage.port': '"' + zookeeper_client_port + '"' }
         create_config(identifier='CDH', prefix='trustedanalytics.atk.engine',
-                      confs=cdh_conf_to_write, filename=args.path+CLOUDERA_CONF_FILENAME)
+                      confs=cdh_conf_to_write, filename=conf_file_directory+CLOUDERA_CONF_FILENAME)
 
     # Write new db.conf regardless of the --db_only parameter.
     create_config(identifier='database',
                   prefix='trustedanalytics.atk.metastore.connection-postgresql',
-                  confs=db_conf, filename=args.path+DATABASE_CONF_FILENAME)
+                  confs=db_conf, filename=conf_file_directory+DATABASE_CONF_FILENAME)
 
     set_db_details(db_conf.database, db_conf.username, db_conf.password)
 
     if args.yarn_cluster.lower().strip() != 'no':
         setup_yarn_cluster_mode(cluster)
 
-    os.system("touch " + args.path + USER_CUSTOM_CONF_FILENAME)
+    os.system("touch " + conf_file_directory + USER_CUSTOM_CONF_FILENAME)
 
     print (color_text("Intel Analytics is ready for use.", GOOD))
 
