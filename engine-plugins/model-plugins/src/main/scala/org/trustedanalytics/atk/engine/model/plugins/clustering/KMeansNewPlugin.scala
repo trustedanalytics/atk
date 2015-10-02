@@ -42,7 +42,8 @@ center and also from every other cluster center.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/K-means_clustering
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means""")
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means""",
+  returns = """A new instance of KMeansModel""")
 class KMeansNewPlugin extends CommandPlugin[KMeansNewArgs, ModelReference] {
 
   override def name: String = "model:k_means/new"

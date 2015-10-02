@@ -1,5 +1,6 @@
 Examples
 --------
+Predict using a Linear Regression Model
 
 .. only:: html
 

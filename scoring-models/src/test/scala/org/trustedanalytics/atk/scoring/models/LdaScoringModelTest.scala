@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
