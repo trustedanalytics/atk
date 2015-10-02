@@ -447,9 +447,6 @@ def create_config(identifier, prefix, confs, filename):
 
 def run(args, cluster=None):
 
-    from ptpdb import set_trace
-    set_trace()
-
     # Take what is on the commandline for CDH initial parameters, if anything.
     cdh_conf_from_commandline = {
         'host':     args.host     if args.host     else None,
