@@ -538,6 +538,8 @@ def run(args, cluster=None):
     if args.yarn_cluster.lower().strip() != 'no':
         setup_yarn_cluster_mode(cluster)
 
+    os.system("touch " + args.path + USER_CUSTOM_CONF_FILENAME)
+
     print (color_text("Intel Analytics is ready for use.", GOOD))
 
 
