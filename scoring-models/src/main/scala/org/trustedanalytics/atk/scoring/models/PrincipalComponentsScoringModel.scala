@@ -40,10 +40,10 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
         row.zipWithIndex.foreach {
           case (value: Any, index: Int) => x(index) = value.toDouble
         }
-        val y: DenseMatrix = computePrincipalComponents(x)
+        val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length-1))
         val pcaScoreOutput: Map[String, Any] = Map[String, Any]()
         pcaScoreOutput.put("principal_components", y.values.toList)
-        val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
+        val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length-1).toInt)
         pcaScoreOutput.put("t_squared_index", t_squared_index)
         score = score :+ pcaScoreOutput
       }
@@ -76,7 +76,9 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
     val yArray: Array[Double] = y
     var t: Double = 0.0
     for (i <- 0 to k - 1) {
-      t += (yArray(i) * yArray(i)) / (E(i) * E(i))
+      val ySquared = yArray(i) * yArray(i)
+      val eSquared = E(i) * E(i)
+      t += (ySquared/eSquared)
     }
     t
   }

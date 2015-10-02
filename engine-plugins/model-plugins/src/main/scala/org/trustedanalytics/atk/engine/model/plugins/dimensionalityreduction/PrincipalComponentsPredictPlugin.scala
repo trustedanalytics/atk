@@ -143,7 +143,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * @param columnTypes ListBuffer storing the column type(s) of the output frame
    * @return IndexedRowMatrix
    */
-  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData, c:Int,
+  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData, c: Int,
                             y: IndexedRowMatrix, columnNames: ListBuffer[String], columnTypes: ListBuffer[DataType]): IndexedRowMatrix = {
     tSquaredIndex match {
       case true => {
@@ -186,11 +186,13 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
       val rowVectorToArray = row.vector.toArray
       var t = 0.0
       for (i <- 0 until c) {
-        if (E(i) > 0)
-          t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
+        if (E(i) > 0) {
+          val squaredY = rowVectorToArray(i) * rowVectorToArray(i)
+          val squaredE = E(i) * E(i)
+          t += (squaredY / squaredE)
+        }
       }
       new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+ t))
-
     })
     new IndexedRowMatrix(matrix)
 
