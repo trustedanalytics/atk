@@ -62,7 +62,7 @@ class Module private[moduleloader] (val name: String,
    * @return newly instantiated instance
    */
   def load[T](className: String): T = {
-    classLoader.loadClass(className).newInstance().asInstanceOf[T]
+    loadClass(className).newInstance().asInstanceOf[T]
   }
 
   /**

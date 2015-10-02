@@ -2,7 +2,8 @@
 #set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
-export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:~/.m2/repository/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:/home/iauser/.m2/repository/com/typesafe/config/1.2.1/config-1.2.1.jar:~/.m2/repository/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar
+export MAVEN_REPO=~/.m2/repository
+export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar
 
 pushd $DIR/..
 pwd

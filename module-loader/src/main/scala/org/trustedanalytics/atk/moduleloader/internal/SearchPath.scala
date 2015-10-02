@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.moduleloader.Module
 
 import scala.collection.JavaConversions._
 
-import com.typesafe.config.{ ConfigFactory, Config }
+import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory, Config }
 
 /**
  * The SearchPath is used to find Modules and Jars
@@ -153,7 +153,7 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
 object SearchPath {
 
   val defaultSearchPath: String = {
-    val config = ConfigFactory.load(this.getClass.getClassLoader)
+    val config = ConfigFactory.load(this.getClass.getClassLoader, ConfigResolveOptions.defaults().setAllowUnresolved(true))
     config.getString("atk.module-loader.search-path")
   }
 
