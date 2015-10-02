@@ -45,20 +45,6 @@ class ModelStorageImpl(metaStore: MetaStore)
   }
 
   /**
-   * Deletes a model from the metastore.
-   * @param modelRef Model metadata object.
-   */
-  override def drop(modelRef: ModelReference): Unit = {
-    metaStore.withSession("spark.modelstorage.drop") {
-      implicit session =>
-        {
-          metaStore.modelRepo.delete(modelRef.id)
-          Unit
-        }
-    }
-  }
-
-  /**
    * Registers a new model.
    * @param createArgs arguments to create the model entity
    * @return Model metadata.
@@ -95,8 +81,7 @@ class ModelStorageImpl(metaStore: MetaStore)
           }
 
           val newModel = expectModel(modelRef).copy(name = Some(newName))
-          val renamed = metaStore.modelRepo.update(newModel).get
-          metaStore.modelRepo.updateLastReadDate(renamed).get
+          metaStore.modelRepo.update(newModel).get
         }
     }
   }
@@ -118,7 +103,7 @@ class ModelStorageImpl(metaStore: MetaStore)
     metaStore.withSession("spark.modelstorage.getModels") {
       implicit session =>
         {
-          metaStore.modelRepo.scanAll().filter(m => m.statusId != Status.Deleted && m.statusId != Status.Deleted_Final && m.name.isDefined)
+          metaStore.modelRepo.scanNamedActiveModelsNoData()
         }
     }
   }
@@ -128,7 +113,6 @@ class ModelStorageImpl(metaStore: MetaStore)
    * @param modelRef The model to update
    * @param newData JsObject storing the result of training.
    */
-
   override def updateModel(modelRef: ModelReference, newData: JsObject)(implicit invocation: Invocation): ModelEntity = {
     metaStore.withSession("spark.modelstorage.updateModel") {
       implicit session =>
@@ -136,22 +120,36 @@ class ModelStorageImpl(metaStore: MetaStore)
           val currentModel = expectModel(modelRef)
           val newModel = currentModel.copy(data = Option(newData))
 
-          metaStore.modelRepo.update(newModel).get
+          val updatedModel = metaStore.modelRepo.update(newModel).get
+          updateLastReadDate(updatedModel)
         }
     }
   }
 
   /**
-   * Set a model to be deleted on the next execution of garbage collection
-   * @param model model to delete
-   * @param invocation current invocation
+   * Update last read date of the model
+   * @param model The model to update
    */
-  override def scheduleDeletion(model: ModelEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.modelstorage.scheduleDeletion") {
+  override def updateLastReadDate(model: ModelEntity)(implicit invocation: Invocation): ModelEntity = {
+    metaStore.withSession("spark.modelstorage.updateLastReadDate") {
       implicit session =>
         {
-          info(s"marking as ready to delete: model id:${model.id}, name:${model.name}")
-          metaStore.modelRepo.updateReadyToDelete(model)
+          metaStore.modelRepo.updateLastReadDate(model).get
+        }
+    }
+  }
+
+  /**
+   * Mark model as Dropped
+   * @param model model to drop
+   * @param invocation current invocation
+   */
+  def dropModel(model: ModelEntity)(implicit invocation: Invocation): Unit = {
+    metaStore.withSession("spark.modelstorage.dropModel") {
+      implicit session =>
+        {
+          info(s"marking model entity (id=${model.id}, name=${model.name}) as dropped")
+          metaStore.modelRepo.dropModel(model)
         }
     }
   }

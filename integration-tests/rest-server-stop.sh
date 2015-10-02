@@ -19,10 +19,10 @@ then
     while ps -p $API_SERVER_PID > /dev/null
     do
         sleep 1
-        echo "$NAME API Sever is still running..."
+        echo "$NAME API Server is still running..."
         if [ $COUNTER -gt 20 ]
         then
-            echo "$NAME Sending kill -9 to API Sever"
+            echo "$NAME Sending kill -9 to API Server"
             kill -9 $API_SERVER_PID
             exit 1
         else

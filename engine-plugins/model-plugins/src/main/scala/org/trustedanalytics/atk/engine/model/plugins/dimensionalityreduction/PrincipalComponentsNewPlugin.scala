@@ -19,7 +19,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
@@ -47,7 +47,7 @@ predict and 2) compute the t-squared index during prediction.
 .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
 .. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
 .. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html""")
-class PrincipalComponentsNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+class PrincipalComponentsNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

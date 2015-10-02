@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
-import org.trustedanalytics.atk.engine.gc.GarbageCollectionPlugin
+import org.trustedanalytics.atk.engine.gc.{ GarbageCollectionDropStalePlugin, GarbageCollectionFinalizeDroppedPlugin }
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Call
@@ -78,6 +78,10 @@ abstract class AbstractEngineComponent extends DbProfileComponent
       password = EngineConfig.metaStoreConnectionPassword,
       poolMaxActive = EngineConfig.metaStorePoolMaxActive)
   }(startupCall.eventContext)
+
+  // Administrative plugins
+  commandPluginRegistry.registerCommand(new GarbageCollectionDropStalePlugin)
+  commandPluginRegistry.registerCommand(new GarbageCollectionFinalizeDroppedPlugin)
 
   val engine = new EngineImpl(sparkContextFactory,
     commandExecutor, commands, frameStorage, graphStorage, modelStorage, userStorage,

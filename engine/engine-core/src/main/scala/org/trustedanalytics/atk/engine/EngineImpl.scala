@@ -114,10 +114,10 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       frames.create(arguments)
     }
 
-  override def deleteFrame(id: Identifier)(implicit invocation: Invocation): Future[Unit] = withContext("se.delete") {
+  override def dropFrame(id: Identifier)(implicit invocation: Invocation): Future[Unit] = withContext("se.delete") {
     future {
       val frame = frames.expectFrame(FrameReference(id))
-      frames.scheduleDeletion(frame)
+      frames.dropFrame(frame)
     }
   }
 
@@ -200,11 +200,11 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * @param graphId The graph to be deleted.
    * @return A future of unit.
    */
-  override def deleteGraph(graphId: Identifier)(implicit invocation: Invocation): Future[Unit] = {
+  override def dropGraph(graphId: Identifier)(implicit invocation: Invocation): Future[Unit] = {
     withContext("se.deletegraph") {
       future {
         val graph = graphs.expectGraph(GraphReference(graphId))
-        graphs.scheduleDeletion(graph)
+        graphs.dropGraph(graph)
       }
     }
   }
@@ -249,11 +249,11 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * Delete a model from the metastore.
    * @param id Model id
    */
-  override def deleteModel(id: Identifier)(implicit invocation: Invocation): Future[Unit] = {
+  override def dropModel(id: Identifier)(implicit invocation: Invocation): Future[Unit] = {
     withContext("se.deletemodel") {
       future {
         val model = models.expectModel(ModelReference(id))
-        models.scheduleDeletion(model)
+        models.dropModel(model)
       }
     }
   }
@@ -319,4 +319,5 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       seamless.edgeFrames
     }
   }
+
 }

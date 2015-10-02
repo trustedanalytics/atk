@@ -32,6 +32,8 @@ trait Model {
   /** name assigned by user for this model instance */
   def name: Option[String]
 
+  def name_=(updatedName: String): Unit
+
   /** the type of the model eg: OLS, LogisticRegression */
   def modelType: String
 
@@ -70,6 +72,8 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
   /** name assigned by user for this model instance */
   override def name: Option[String] = entity.name
 
+  override def name_=(updatedName: String): Unit = modelStorage.renameModel(entity, updatedName)
+
   /** the type of the model eg: OLS, LogisticRegression */
   override def modelType: String = entity.modelType
 
@@ -82,10 +86,13 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
   /**
    * Expects model has been trained and data exists, throws appropriate exception otherwise
    */
-  override def data: JsObject = entity.data.getOrElse(throw new RuntimeException("Model has not yet been trained"))
+  override def data: JsObject = dataOption.getOrElse(throw new RuntimeException("Model has not yet been trained"))
 
   override def data_=(updatedData: JsObject): Unit = modelStorage.updateModel(modelRef, updatedData)
 
-  override def dataOption: Option[JsObject] = entity.data
+  override def dataOption: Option[JsObject] = {
+    modelStorage.updateLastReadDate(entity)
+    entity.data
+  }
 
 }
