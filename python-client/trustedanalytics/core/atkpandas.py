@@ -73,11 +73,11 @@ class Pandas(object):
         Create data::
 
             ratings_data = [[0, "invalid"], [1, "Very Poor"], [2, "Poor"], [3, "Average"], [4, "Good"], [5, "Very Good"]]
-            df = pandas.DataFrame(ratings_data, columns=['weight', 'rating_text'])
+            df = pandas.DataFrame(ratings_data, columns=['rating_id', 'rating_text'])
 
         At this point create a schema that defines the data::
 
-            schema = [('weight', ta.int32), ('rating_text', unicode)]
+            schema = [('rating_id', ta.int32), ('rating_text', unicode)]
 
         Now build a PandasFrame object with this schema::
 
