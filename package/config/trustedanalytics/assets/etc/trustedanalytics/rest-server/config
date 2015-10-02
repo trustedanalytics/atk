@@ -68,7 +68,13 @@ Command Line Arguments
 
 --db_password the database password.
 
---yarn_cluster Setup Spark to use yarn-cluster mode (yes/no).  Any parameter for this option other than "no" (case-insensitive) is treated as "yes".
+--path  Directory to save new configuration files and read old ones (if present).
+        Defaults to working directory
+
+--log  Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
+
+--yarn_cluster Setup Spark to use yarn-cluster mode (yes/no).
+Any parameter for this option other than "no" (case-insensitive) is treated as "yes".
 
 """
 
@@ -138,6 +144,10 @@ GOOD = '\033[92m'
 WARNING = '\033[93m'
 ERROR = '\033[91m'
 RESET = '\033[0m'
+
+
+class ConfigurationException(Exception):
+    pass
 
 
 def color_text(text, color):
@@ -440,9 +450,10 @@ def run(args, cluster=None):
     from ptpdb import set_trace
     set_trace()
 
-    
     # Take what is on the commandline for CDH initial parameters, if anything.
     cdh_conf_from_commandline = {
+        'host':     args.host     if args.host     else None,
+        'port':     args.port     if args.port     else None,
         'username': args.username if args.username else None,
         'password': args.password if args.password else None }
 
@@ -454,6 +465,7 @@ def run(args, cluster=None):
 
     # FIXME - Are these calls to the cluster_config API correct for
     # these parameters to write to cdh.conf?
+    cdh_conf = {}
     yarn_host_names = []
     for host in cluster.yarn.nodemanager.hosts.hosts:
         yarn_host_names.append(cluster.yarn.nodemanager.hosts[host].hostname)
@@ -496,11 +508,11 @@ def run(args, cluster=None):
             test_old_cdh_conf()
         except Exception as e:
             cc.log.warning(e)
-            print (color_text(e + "\nDid you mean to create a new one?", WARNING))
+            print (color_text(e + "\nDid you mean to create a new CDH configuration file?", WARNING))
         else:
             cc.log.warning("Existing " + CLOUDERA_CONF_FILENAME + " file being used.")
             print (color_text("Existing " + CLOUDERA_CONF_FILENAME + " file being used.  " +
-                             "Did you mean to create a new one?", WARNING))
+                              "Did you mean to create a new one?", WARNING))
     else:   # db_only == 'no'
         cc.log.warning("New " + CLOUDERA_CONF_FILENAME + " file will be written.")
         for key in cdh_conf:
@@ -514,7 +526,7 @@ def run(args, cluster=None):
             'titan.load.storage.hostname': '"' + ','.join(yarn_host_names) + '"',
             'titan.load.storage.port': '"' + zookeeper_client_port + '"' }
         create_config(identifier='CDH', prefix='trustedanalytics.atk.engine',
-                           confs=cdh_conf_to_write, filename=args.path+CLOUDERA_CONF_FILENAME)
+                      confs=cdh_conf_to_write, filename=args.path+CLOUDERA_CONF_FILENAME)
 
     # Write new db.conf regardless of the --db_only parameter.
     create_config(identifier='database',
