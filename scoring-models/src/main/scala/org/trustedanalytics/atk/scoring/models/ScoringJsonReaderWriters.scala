@@ -32,7 +32,7 @@ import scala.collection.immutable.Map
 /**
  * Implicit conversions for Logistic Regression objects to/from JSON
  */
-
+//this module needs to be moved to another place
 object ScoringJsonReaderWriters {
 
   implicit object SparseVectorFormat extends JsonFormat[SparseVector] {

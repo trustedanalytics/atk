@@ -182,6 +182,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
         Column identifications in the current frame.
 
+        Returns the names of the columns of the current frame.
+
         Examples
         --------
         Given a Frame object, *my_frame* accessing a frame.
@@ -208,6 +210,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     def __row_count(self):
         """
         Number of rows in the current frame.
+
+        Counts all of the rows in the frame.
 
         Examples
         --------
@@ -298,7 +302,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
     @api
     @has_udf_arg
-    @arg('func', 'UDF', "User-Defined Function (|UDF|) which takkes the values in the row and produces a value, or "
+    @arg('func', 'UDF', "User-Defined Function (|UDF|) which takes the values in the row and produces a value, or "
          "collection of values, for the new cell(s).")
     @arg('schema', 'tuple | list of tuples', "The schema for the results of the |UDF|, indicating the new column(s) to "
          "add.  Each tuple provides the column name and data type, and is of the form (str, type).")
@@ -1280,7 +1284,7 @@ Default is None.""")
 
 @api
 class VertexFrame(_DocStubsVertexFrame, _BaseFrame):
-    """A list of Vertices owned by a Graph..
+    """A list of Vertices owned by a Graph.
 
 A VertexFrame is similar to a Frame but with a few important differences:
 
@@ -1442,13 +1446,6 @@ An EdgeFrame is similar to a Frame but with a few important differences:
     _entity_type = 'frame:edge'
 
     @api
-    @arg('graph','?',"""graph these edges belong to""")
-    @arg('label','?',"""edge label""")
-    @arg('src_vertex_label','?',"""label of the source vertex type""")
-    @arg('dest_vertex_label','?',"""label of the destination vertex type""")
-    @arg('directed','?',"""directed or undirected""")
-    @arg('_info','?',"""""")
-    @returns('VertexFrame object',"""An object with access to the frame.""")
     def __init__(self, graph=None, label=None, src_vertex_label=None, dest_vertex_label=None, directed=None, _info=None):
         """
 
