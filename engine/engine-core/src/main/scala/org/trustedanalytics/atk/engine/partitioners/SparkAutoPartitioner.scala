@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.partitioners
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy.{ ShrinkOnly, ShrinkOrGrow }
+import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy.{ Disabled, ShrinkOnly, ShrinkOrGrow }
 import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.apache.spark.frame.FrameRdd
 
@@ -38,7 +38,7 @@ class SparkAutoPartitioner(fileStorage: HdfsFileStorage) extends EventLogging wi
    * @param path relative path
    * @return number of partitions that should be used for loading this file into a Spark RDD
    */
-  def partitionsForFile(path: String)(implicit invocation: Invocation): Int = withContext[Int]("spark-auto-partioning") {
+  def partitionsForFile(path: String)(implicit invocation: Invocation): Option[Int] = withContext[Option[Int]]("spark-auto-partioning") {
     //General Advice on Paritioning:
     // - Choose a reasonable number of partitions: no smaller than 100, no larger than 10,000 (large cluster)
     // - Lower bound: at least 2x number of cores in your cluster
@@ -46,9 +46,14 @@ class SparkAutoPartitioner(fileStorage: HdfsFileStorage) extends EventLogging wi
     //   time scheduling tasks than executing them)
     // - Generally better to have slightly too many partitions than too few
     val size = fileStorage.size(path)
-    val partitions = partitionsFromFileSize(size)
-    info("auto partitioning path:" + path + ", size:" + size + ", partitions:" + partitions)
-    partitions
+
+    EngineConfig.repartitionStrategy match {
+      case Disabled => None
+      case _ =>
+        val partitions = partitionsFromFileSize(size)
+        info("auto partitioning path:" + path + ", size:" + size + ", partitions:" + partitions)
+        Some(partitions)
+    }
   }
 
   /**

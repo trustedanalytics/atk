@@ -94,10 +94,10 @@ trustedanalytics.atk {
       max-partitions = 10000
 
       repartition {
-        # re-partitioning strategies:
         # disabled - disable re-partitioning
-        # shrink_only - re-partition only when the number partitions is less than existing partitions. Uses less-expensive Spark merge
-        # shrink_or_grow - re-partition can either increase or decrease the number of partitions using more-expensive Spark shuffle
+        # frame_create_only - re-partition only during frame creation
+        # shrink_only - re-partition during frame creation, and when the number partitions is less than existing partitions. Uses less-expensive Spark merge
+        # shrink_or_grow - during frame creation, and either increase or decrease the number of partitions using more-expensive Spark shuffle
         #                  Using this option will also change the ordering of the frame during the shuffle
         strategy = "disabled"
 

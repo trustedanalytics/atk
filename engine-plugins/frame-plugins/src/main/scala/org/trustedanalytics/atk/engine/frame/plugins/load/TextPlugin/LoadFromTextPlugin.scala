@@ -72,9 +72,9 @@ class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
     }
     else if (arguments.source.isSinglelineFile || arguments.source.isMultilineFile) {
       val filePath = getAbsolutePath(arguments.source.uri)
-      val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
+      val minPartitions = sparkAutoPartitioner.partitionsForFile(filePath)
       val parseResult = LoadRddFunctions.loadAndParseLines(sc, filePath,
-        null, partitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
+        null, minPartitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
       LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines)
 
     }
@@ -82,8 +82,8 @@ class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
       val parser = arguments.source.parser.get
       val filePath = getAbsolutePath(arguments.source.uri)
       val parseResult = if (arguments.source.isFieldDelimited) {
-        val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
-        LoadRddFunctions.loadAndParseLines(sc, filePath, parser, partitions)
+        val minPartitions = sparkAutoPartitioner.partitionsForFile(filePath)
+        LoadRddFunctions.loadAndParseLines(sc, filePath, parser, minPartitions)
       }
       else {
         val data = arguments.source.data.get

@@ -51,12 +51,16 @@ object LoadRddFunctions extends Serializable {
    * @param sc SparkContext used for textFile reading
    * @param fileName name of file to parse
    * @param parser the parser
-   * @return  RDD of Row objects
+   * @param minPartitions minimum number of partitions for text file.
+   * @param startTag Start tag for XML or JSON parsers
+   * @param endTag Start tag for XML or JSON parsers
+   * @param isXml True for XML input files
+   * @return RDD of Row objects
    */
   def loadAndParseLines(sc: SparkContext,
                         fileName: String,
                         parser: LineParser,
-                        partitions: Int,
+                        minPartitions: Option[Int] = None,
                         startTag: Option[List[String]] = None,
                         endTag: Option[List[String]] = None,
                         isXml: Boolean = false): ParseResultRddWrapper = {
@@ -71,7 +75,12 @@ object LoadRddFunctions extends Serializable {
           conf.setBoolean(MultiLineTaggedInputFormat.IS_XML_KEY, isXml)
           sc.newAPIHadoopFile[LongWritable, Text, MultiLineTaggedInputFormat](fileName, classOf[MultiLineTaggedInputFormat], classOf[LongWritable], classOf[Text], conf)
             .map(row => row._2.toString).filter(_.trim() != "")
-        case None => sc.textFile(fileName, partitions).filter(_.trim() != "")
+        case None =>
+          val rdd = minPartitions match {
+            case Some(partitions) => sc.textFile(fileName, partitions)
+            case _ => sc.textFile(fileName)
+          }
+          rdd.filter(_.trim() != "")
       }
 
     if (parser != null) {
