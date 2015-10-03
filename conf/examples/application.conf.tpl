@@ -77,7 +77,7 @@ trustedanalytics.atk {
   engine {
     auto-partitioner {
       # auto-partitioning spark based on the file size
-      file-size-to-partition-size = [{upper-bound = "1MB", partitions = 15}
+      file-size-to-partition-size = [{upper-bound = "1MB", partitions = 15},
         {upper-bound = "1GB", partitions = 45},
         {upper-bound = "5GB", partitions = 100},
         {upper-bound = "10GB", partitions = 200},
