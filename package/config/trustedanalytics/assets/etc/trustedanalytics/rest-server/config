@@ -463,13 +463,10 @@ def run(args, cluster=None):
     # commandline.
     if cluster is None:
         cluster = Cluster(args.host, args.port, args.username, args.password, args.cluster)
-
-    # FIXME - Are these calls to the cluster_config API correct for
-    # these parameters to write to cdh.conf?
     cdh_conf = {}
     yarn_host_names = []
     for host in cluster.yarn.nodemanager.hosts.hosts:
-        yarn_host_names.append(cluster.yarn.nodemanager.hosts[host].hostname)
+        yarn_host_names.append(cluster.yarn.nodemanager.hosts.hosts[host].hostname)
     zookeeper_client_port = cluster.zookeeper.server.server_base.clientport.get()
     cdh_conf.port = cluster.hdfs.namenode.namenode_base.namenode_port.get()
     cdh_conf.host = cluster.hdfs.namenode.hosts.hostnames()[0]
