@@ -57,6 +57,67 @@ class FrameDropTest(unittest.TestCase):
         ta.drop_frames("test_frame_drop")
         self.assertFalse("test_frame_drop" in frames, "test_frame_drop should not exist in list of frames")
 
+    # Tests the generic ta.drop() using the frame proxy object
+    def test_generic_drop_by_object(self):
+        # drop existing frames
+        for frame_name in ta.get_frame_names():
+            ta.drop(frame_name)
+
+        print "create frame"
+        frame_name = "test_frame"
+        frame = ta.Frame(name=frame_name)
+
+        # Check that the frame we just created now exists
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frame names")
+
+        print "drop frame"
+        ta.drop(frame)
+
+        # check that the frame no longer exists
+        self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not exist in the list of frames")
+
+    # Tests the generic ta.drop() using the frame name
+    def test_generic_drop_by_name(self):
+        # drop existing frames
+        for frame_name in ta.get_frame_names():
+            ta.drop(frame_name)
+
+        print "create frame"
+        frame_name = "test_frame"
+        frame = ta.Frame(name=frame_name)
+
+        # Check that the frame we just created now exists
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frame names")
+
+        print "drop frame"
+        ta.drop(frame_name)
+
+        # check that the frame no longer exists
+        self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not exist in the list of frames")
+
+    # Tests the generic ta.drop() using a frame name that does not exist
+    def test_generic_drop_by_invalid_name(self):
+        import time
+        frame_name = "frame_" + str(time.time())    # generate frame name with timestamp
+
+        # Double check that we don't already have another frame, graph, or model with this name.  If we do, delete it.
+        if (frame_name in ta.get_frame_names()):
+            ta.drop_frame(frame_name)
+
+        # Verify that calling drop on a frame that does not exist does not fail
+        print "drop frame " + str(frame_name)
+        ta.drop(frame_name)
+
+    # Tests the generic drop() with an invalid object argument
+    def test_generic_drop_with_invalid_object(self):
+        # Setup test class, which won't be valid to drop()
+        class InvalidDropObject:
+            pass
+        test_object = InvalidDropObject()
+        # Call drop() with the test object
+        print "call drop with invalid object type, and expect to get an AttributeError"
+        with self.assertRaises(AttributeError):
+            ta.drop(test_object)
 
 if __name__ == "__main__":
     unittest.main()
