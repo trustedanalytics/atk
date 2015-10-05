@@ -412,25 +412,12 @@ def setup_yarn_cluster_mode(cluster):
 def cli(parser=None):
     if parser is None:
         parser = argparse.ArgumentParser(description="Configure a new ATK install")
-        parser.add_argument("--host", type=str, help="Cloudera Manager Host", required=True)
-        parser.add_argument("--port", type=int, help="Cloudera Manager Port", required=True)
-        parser.add_argument("--username", type=str, help="Cloudera Manager User Name", required=True)
-        parser.add_argument("--password", type=str, help="Cloudera Manager Password", required=True)
-        parser.add_argument("--cluster", type=str,
-                            help="Cloudera Manager Cluster Name if more than one cluster is "
-                            "managed by Cloudera Manager.", default="cluster")
         parser.add_argument("--db_only", type=str, help="configure only the database yes/no", required=True)
         parser.add_argument("--db_host", type=str, help="Database host name")
         parser.add_argument("--db_port", type=str, help="Database port number")
         parser.add_argument("--db_database", type=str, help="Database name")
         parser.add_argument("--db_username", type=str, help="Database username")
         parser.add_argument("--db_password", type=str, help="Database password")
-        parser.add_argument("--path", type=str,
-                            help="Directory to save new configuration files "
-                            "and read old ones (if present). "
-                            "Defaults to working directory {0}".format(os.getcwd()))
-        parser.add_argument("--log", type=str, help="Log level [INFO|DEBUG|WARNING|FATAL|ERROR]", default="INFO",
-                            choices=["INFO", "DEBUG", "WARNING", "FATAL", "ERROR"])
         parser.add_argument("--yarn_cluster", type=str, help="configure for Spark / Yarn-cluster mode, (yes/no)")
     return parser
 
