@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.model._
 import org.trustedanalytics.atk.domain.{ Status, CreateEntityArgs }
 import org.trustedanalytics.atk.engine.ModelStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.repository.{ MetaStore }
+import org.trustedanalytics.atk.repository.MetaStore
 import spray.json.{ JsValue, JsObject }
 import org.trustedanalytics.atk.component.ClassLoaderAware
 import scala.slick.model

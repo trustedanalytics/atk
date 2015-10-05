@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.parquet.ParquetReader
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitioner
-import org.trustedanalytics.atk.repository.{ NameableRepository, SlickMetaStoreComponent }
+import org.trustedanalytics.atk.repository.{ SlickMetaStoreComponent }
 import org.trustedanalytics.atk.{ EventLoggingImplicits, DuplicateNameException, NotFoundException }
 import org.apache.hadoop.fs.Path
 import org.apache.spark.frame.FrameRdd
