@@ -25,7 +25,7 @@ class KMeansScoreModelTest extends WordSpec {
   "KMeansScoreModel" should {
     val kmeansModel = new KMeansModel(Array(new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
     var kmeansScoreModel = new KMeansScoreModel(kmeansModel)
-    val numRows = 5    // number of rows of data to test with
+    val numRows = 5 // number of rows of data to test with
 
     "throw an exception when attempting to score null data" in {
       ScoringModelTestUtils.nullDataTest(kmeansScoreModel)
