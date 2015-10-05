@@ -62,7 +62,7 @@ Command Line Arguments
 
 --db_port the port number for your postgres installation.
 
---db the postgres database name.
+--db_database the postgres database name.
 
 --db_username the database user name.
 
