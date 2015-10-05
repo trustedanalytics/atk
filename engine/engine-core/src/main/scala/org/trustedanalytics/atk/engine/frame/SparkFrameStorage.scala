@@ -320,13 +320,13 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       implicit session =>
         {
           if (metaStore.frameRepo.lookupByName(Some(newName)).isDefined) {
-            throw new RuntimeException("Frame with same name exists. Rename aborted.")
+            throw new DuplicateNameException("frame", newName, "Frame with same name exists. Rename aborted.")
           }
           else if (metaStore.graphRepo.lookupByName(Some(newName)).isDefined) {
-            throw new RuntimeException("Graph with same name exists. Rename aborted.")
+            throw new DuplicateNameException("graph", newName, "Graph with same name exists. Rename aborted.")
           }
           else if (metaStore.modelRepo.lookupByName(Some(newName)).isDefined) {
-            throw new RuntimeException("Model with same name exists. Rename aborted.")
+            throw new DuplicateNameException("model", newName, "Model with same name exists. Rename aborted.")
           }
           val newFrame = frame.copy(name = Some(newName))
           metaStore.frameRepo.update(newFrame).get
