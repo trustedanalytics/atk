@@ -128,7 +128,7 @@ case class AtkLdaModel(numTopics: Int) {
     setWordGivenTopicsFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
     setTopicsGivenWordFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
     topicWordMap = topicsGivenWordFrame.mapRows(row => {
-      (row.stringValue(outputWordColumnName), row.value(outputTopicVectorColumnName).asInstanceOf[MlVector].toArray.toVector)
+      (row.stringValue(outputWordColumnName), row.value(outputTopicVectorColumnName).asInstanceOf[Vector[Double]])
     }).collectAsMap().toMap
   }
 
@@ -145,7 +145,7 @@ case class AtkLdaModel(numTopics: Int) {
     val topicDist = distLdaModel.topicDistributions
     val topicsGivenDocs: RDD[Row] = corpus.join(topicDist).map {
       case (documentId, ((document, wordVector), topicVector)) =>
-        new GenericRow(Array[Any](document, topicVector))
+        new GenericRow(Array[Any](document, topicVector.toArray.toVector))
     }
 
     val schema = FrameSchema(List(
@@ -270,7 +270,7 @@ case class AtkLdaModel(numTopics: Int) {
 
     val wordGivenTopicRows: RDD[Row] = wordTopicsRdd.map {
       case ((word, (wordGivenTopics, topicsGivenWord))) =>
-        new GenericRow(Array[Any](word, wordGivenTopics))
+        new GenericRow(Array[Any](word, wordGivenTopics.toArray.toVector))
     }
 
     this.wordGivenTopicsFrame = new FrameRdd(frameSchema, wordGivenTopicRows)
@@ -293,7 +293,7 @@ case class AtkLdaModel(numTopics: Int) {
 
     val topicsGivenWordRows: RDD[Row] = wordTopicsRdd.map {
       case ((word, (wordGivenTopics, topicsGivenWord))) =>
-        new GenericRow(Array[Any](word, topicsGivenWord))
+        new GenericRow(Array[Any](word, topicsGivenWord.toArray.toVector))
     }
 
     this.topicsGivenWordFrame = new FrameRdd(frameSchema, topicsGivenWordRows)

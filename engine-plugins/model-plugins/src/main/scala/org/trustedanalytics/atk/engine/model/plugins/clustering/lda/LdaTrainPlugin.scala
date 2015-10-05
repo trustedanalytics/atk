@@ -54,6 +54,9 @@ class LdaTrainPlugin
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
+  //TODO remove when we move to  spark 1.4+
+  override def kryoRegistrator: Option[String] = None
+
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
@@ -91,7 +94,7 @@ class LdaTrainPlugin
       frame: FrameEntity => frame.save(ldaModel.getTopicsGivenWordFrame)
     }
 
-    LdaTrainResult(topicsGivenDocFrame, wordGivenTopicsFrame, topicsGivenWordFrame, "")
+    LdaTrainResult(topicsGivenDocFrame, wordGivenTopicsFrame, topicsGivenWordFrame, "dummy report")
   }
 
 }

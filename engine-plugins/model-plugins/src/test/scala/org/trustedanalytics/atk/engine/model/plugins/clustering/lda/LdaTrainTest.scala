@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.{ SparseVector, Vector }
+import org.apache.spark.mllib.linalg.SparseVector
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.domain.frame.FrameReference
@@ -55,34 +55,27 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
   val frame = new FrameReference(1)
   val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count", numTopics = 2, maxIterations = 10)
 
-  val ldaData = List[(Long, Vector)](
-    (0, new SparseVector(8, Array(0, 1, 2, 3, 4, 5), Array(3, 35, 40, 1, 15, 6))),
-    (1, new SparseVector(8, Array(1, 2, 4, 5, 0, 3), Array(50, 35, 20, 1, 1, 1))),
-    (2, new SparseVector(8, Array(0, 3, 6, 7), Array(40, 30, 20, 30)))
-  )
-
   /** round to so many decimal places */
   def round(d: Double): BigDecimal = {
     BigDecimal(d).setScale(5, BigDecimal.RoundingMode.HALF_UP)
   }
 
   /** assertion that checks values are close */
-  def assertVectorApproximate(v: Vector, expectedDouble1: Double, expectedDouble2: Double): Unit = {
+  def assertVectorApproximate(v: Vector[Double], expectedDouble1: Double, expectedDouble2: Double): Unit = {
     assert(round(v(0)) == round(expectedDouble1))
     assert(round(v(1)) == round(expectedDouble2))
   }
 
   /** assertion that most likely topic is given by index */
-  def assertLikelyTopic(v: Vector, topicIndex: Int): Unit = {
-    val arr = v.toArray
-    assert(arr.indexOf(arr.max) == topicIndex, s"topic should equal ${topicIndex}")
+  def assertLikelyTopic(v: Vector[Double], topicIndex: Int): Unit = {
+    assert(v.indexOf(v.max) == topicIndex, s"topic should equal ${topicIndex}")
   }
 
   /* assert each element in vector is between 0 and 1 */
-  def assertHasValidProbabilities(map: Map[String, Vector]): Unit = {
+  def assertHasValidProbabilities(map: Map[String, Vector[Double]]): Unit = {
     map.foreach {
       case (s, vector) => {
-        for (x <- vector.toArray) {
+        for (x <- vector) {
           assert(x >= 0 && x <= 1, s"topic probabilities for ${s} should lie between 0 and 1")
         }
       }
@@ -90,10 +83,10 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
   }
 
   /* assert sum of probabilities in vectors is one */
-  def assertProbabilitySumIsOne(map: Map[String, Vector]): Unit = {
+  def assertProbabilitySumIsOne(map: Map[String, Vector[Double]]): Unit = {
     map.foreach {
       case (s, vector) => {
-        assert(round(vector.toArray.sum) == 1, s"sum of topic probabilities for ${s} should equal 1")
+        assert(round(vector.sum) == 1, s"sum of topic probabilities for ${s} should equal 1")
       }
     }
   }
@@ -105,17 +98,17 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
       val ldaModel = LdaFunctions.trainLdaModel(edgeFrame, trainArgs)
 
       val topicsGivenDoc = ldaModel.getTopicsGivenDocFrame.map(row => {
-        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector])
+        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector[Double]])
       }).collectAsMap()
       val wordGivenTopic = ldaModel.getWordGivenTopicsFrame.map(row => {
-        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector])
+        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector[Double]])
       }).collectAsMap()
       val topicsGivenWord = ldaModel.getTopicsGivenWordFrame.map(row => {
-        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector])
+        (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector[Double]])
       }).collectAsMap()
 
-      val harryPotterArr = topicsGivenDoc("harrypotter").toArray
-      val harryPotterTopic = harryPotterArr.indexOf(harryPotterArr.max)
+      val harryPotterVector = topicsGivenDoc("harrypotter")
+      val harryPotterTopic = harryPotterVector.indexOf(harryPotterVector.max)
       val newsTopic = 1 - harryPotterTopic
 
       assertLikelyTopic(topicsGivenDoc("nytimes"), newsTopic)

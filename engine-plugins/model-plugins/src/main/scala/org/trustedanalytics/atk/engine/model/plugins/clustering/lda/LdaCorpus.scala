@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.{ SparseVector, Vector }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.Row
+import org.apache.spark.sql.{ DataFrame, Row }
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 
@@ -78,20 +78,33 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
    * @return Edge frame with word Ids
    */
   private[clustering] def addWordIdsToEdgeFrame(): FrameRdd = {
-    val edgeDataFrame = edgeFrame.toDataFrame
-    val wordDataFrame = uniqueWordsFrame.toDataFrame
+    val edgeDataFrame = toDataFrame(edgeFrame)
+    val wordDataFrame = toDataFrame(uniqueWordsFrame)
 
-    val joinedDataFrame: RDD[Row] = edgeDataFrame.join(
+    val joinedDataFrame = edgeDataFrame.join(
       wordDataFrame,
       edgeDataFrame(args.wordColumnName) === wordDataFrame(wordIdAssigner.ldaWordColumnName)
     ).select(
         args.documentColumnName,
         args.wordColumnName,
         args.wordCountColumnName,
-        wordIdAssigner.ldaWordIdColumnName)
-      .map(row => new GenericRow(row.toSeq.toArray)) //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
+        wordIdAssigner.ldaWordIdColumnName
+      )
 
     val joinedSchema = edgeFrame.frameSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64))
-    new FrameRdd(joinedSchema, joinedDataFrame)
+    new FrameRdd(joinedSchema, joinedDataFrame.rdd)
+  }
+
+  /**
+   * Wrapper for creating Spark dataframes that works around kryo serialization bug
+   *
+   * Work-around for kyro serialization bug when rows are represented as GenericRowWithSchema
+   *
+   * @see https://issues.apache.org/jira/browse/SPARK-6465
+   */
+  def toDataFrame(rdd: FrameRdd): DataFrame = {
+    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
+    val rowRdd: RDD[Row] = rdd.map(row => new GenericRow(row.toSeq.toArray))
+    new FrameRdd(rdd.frameSchema, rowRdd).toDataFrame
   }
 }
