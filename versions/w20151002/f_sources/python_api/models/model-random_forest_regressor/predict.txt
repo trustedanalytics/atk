@@ -1,0 +1,69 @@
+.. _python_api/models/model-random_forest_regressor/predict:
+
+
+:doc:`RandomForestRegressorModel <index>`  predict
+**************************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    Predict the values for the data points.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations whose labels are to be predicted.
+            By default, we predict the labels over columns the Random Forest model
+            was trained on. 
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+
+        ..
+
+            A new frame consisting of the existing columns of the frame and
+            a new column with predicted value for each observation.
+    Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+    existing columns and a new predicted value's column.
+
+    Examples
+    --------
+    Predict using a Random Forest Regressor Model.
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.RandomForestRegressorModel()
+            >>> my_model.train(train_frame, 'Class', ['Dim_1','Dim_2'])
+            >>> predict_regressor_output = my_model.predict(train_frame)
+            >>> predict_regressor_output.inspect(5)
+              Class:int32   Dim_1:float64   Dim_2:float64   predicted_value:float64
+            -------------------------------------------------------------------------
+                1           16.8973559126    2.6933495054                1.0
+                1            5.5548729596    2.7777687995                1.0
+                0           46.1810010826    3.1611961917                0.0
+                0           44.3117586448    3.3458963222                0.0
+                0           34.6334526911    3.6429838715                0.0
+

@@ -1,0 +1,29 @@
+.. _python_api/models/model-logistic_regression/status:
+
+
+:doc:`LogisticRegressionModel <index>`  status
+**********************************************
+
+------
+
+
+.. attribute:: status
+
+    Current model life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the model
+    One of three statuses: Active, Dropped, Finalized
+       Active:    Entity is available for use
+       Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+       Finalized: Entity's data has been deleted

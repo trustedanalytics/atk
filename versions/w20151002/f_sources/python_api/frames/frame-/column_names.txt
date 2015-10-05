@@ -1,0 +1,44 @@
+.. _python_api/frames/frame-/column_names:
+
+
+:doc:`Frame <index>`  column_names
+**********************************
+
+------
+
+
+.. attribute:: column_names
+
+    Column identifications in the current frame.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            list of names of all the frame's columns
+    Returns the names of the columns of the current frame.
+
+    Examples
+    --------
+    Given a Frame object, *my_frame* accessing a frame.
+    To get the column names:
+
+    .. code::
+
+        >>> my_columns = my_frame.column_names
+        >>> print my_columns
+
+    Now, given there are three columns *col1*,
+    *col2*, and *col3*, the result is:
+
+    .. code::
+
+        ["col1", "col2", "col3"]
+

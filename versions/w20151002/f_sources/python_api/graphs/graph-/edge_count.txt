@@ -1,0 +1,43 @@
+.. _python_api/graphs/graph-/edge_count:
+
+
+:doc:`Graph <index>`  edge_count
+********************************
+
+------
+
+
+.. attribute:: edge_count
+
+    Get the total number of edges in the graph.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : int
+
+        ..
+
+            Total number of edges in the graph
+    Returns
+    -------
+    int32
+        The number of edges in the graph.
+
+
+    Examples
+    --------
+    .. code::
+
+        >>> my_graph.edge_count
+
+    The result given is:
+
+    .. code::
+
+        1194
+

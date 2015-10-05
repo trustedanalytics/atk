@@ -1,0 +1,169 @@
+.. _rest_api/v1/commands/graph__annotate_degrees:
+
+
+
+----------------------------------------------
+:doc:`Commands <index>` graph/annotate_degrees
+----------------------------------------------
+
+Make new graph with degrees.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/annotate_degrees
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb0d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **output_property_name** : unicode
+
+    ..
+
+        The name of the new property.
+        The degree is stored in this property.
+
+
+
+    **degree_option** : unicode (default=None)
+
+    ..
+
+        Indicator for the definition of degree to be used for the
+        calculation.
+        Permitted values:
+
+        *   "out" (default value) : Degree is calculated as the out-degree.
+        *   "in" : Degree is calculated as the in-degree.
+        *   "undirected" : Degree is calculated as the undirected degree.
+            (Assumes that the edges are all undirected.)
+           
+        Any prefix of the strings "out", "in", "undirected" will select the
+        corresponding option.
+
+
+
+    **input_edge_labels** : list (default=None)
+
+    ..
+
+        If this list is provided, only edges whose labels are
+        included in the given set will be considered in the degree calculation.
+        In the default situation (when no list is provided), all edges will be used
+        in the degree calculation, regardless of label.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creates a new graph which is the same as the input graph, with the addition
+that every vertex of the graph has its :term:`degree` stored in a user-specified property.
+
+**Degree Calculation**
+
+A fundamental quantity in graph analysis is the degree of a vertex:
+The degree of a vertex is the number of edges adjacent to it.
+
+For a directed edge relation, a vertex has both an out-degree (the number of
+edges leaving the vertex) and an in-degree (the number of edges entering the
+vertex).
+
+The toolkit provides this routine for calculating the degrees of vertices.
+This calculation could be performed with a Gremlin query on smaller datasets
+because Gremlin queries cannot be executed on a distributed scale.
+The |PACKAGE| routine ``annotate_degrees`` can be executed at distributed scale.
+
+In the presence of edge weights, vertices can have weighted degrees: The
+weighted degree of a vertex is the sum of weights of edges adjacent to it.
+Analogously, the weighted in-degree of a vertex is the sum of the weights of
+the edges entering it, and the weighted out-degree is the sum
+of the weights of the edges leaving the vertex.
+
+The toolkit provides :ref:`annotate_weighted_degrees <python_api/graphs/graph-/annotate_weighted_degrees>`
+for the distributed calculation of weighted vertex degrees.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Dictionary containing the vertex type as the key and the corresponding
+        vertex's frame with a column storing the annotated degree for the vertex
+        in a user specified property.
+        Call dictionary_name['label'] to get the handle to frame whose vertex type
+        is label.
+
+

@@ -1,0 +1,163 @@
+.. _rest_api/v1/commands/frame__dot_product:
+
+
+
+-----------------------------------------
+:doc:`Commands <index>` frame/dot_product
+-----------------------------------------
+
+|ALPHA|
+Calculate dot product for each row in current frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/dot_product
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **left_column_names** : list
+
+    ..
+
+        Names of columns used to create the left vector (A) for each row.
+        Names should refer to a single column of type vector, or two or more
+        columns of numeric scalars.
+
+
+
+    **right_column_names** : list
+
+    ..
+
+        Names of columns used to create right vector (B) for each row.
+        Names should refer to a single column of type vector, or two or more
+        columns of numeric scalars.
+
+
+
+    **dot_product_column_name** : unicode
+
+    ..
+
+        Name of column used to store the
+        dot product.
+
+
+
+    **default_left_values** : list (default=None)
+
+    ..
+
+        Default values used to substitute null values in left vector.
+        Default is None.
+
+
+
+    **default_right_values** : list (default=None)
+
+    ..
+
+        Default values used to substitute null values in right vector.
+        Default is None.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Calculate the dot product for each row in a frame using values from two
+equal-length sequences of columns.
+
+Dot product is computed by the following formula:
+
+The dot product of two vectors :math:`A=[a_1, a_2, ..., a_n]` and
+:math:`B =[b_1, b_2, ..., b_n]` is :math:`a_1*b_1 + a_2*b_2 + ...+ a_n*b_n`.
+The dot product for each row is stored in a new column in the existing frame.
+
+Notes
+-----
+If default_left_values or default_right_values are not specified, any null
+values will be replaced by zeros.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

@@ -1,0 +1,150 @@
+.. _rest_api/v1/commands/frame__sorted_k:
+
+
+
+--------------------------------------
+:doc:`Commands <index>` frame/sorted_k
+--------------------------------------
+
+|ALPHA|
+Get a sorted subset of the data.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/sorted_k
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **k** : int32
+
+    ..
+
+        Number of sorted records to return.
+
+
+
+    **column_names_and_ascending** : list
+
+    ..
+
+        Column names to sort by, and true to sort column by ascending order,
+        or false for descending order.
+
+
+
+    **reduce_tree_depth** : int32 (default=None)
+
+    ..
+
+        Advanced tuning parameter which determines the depth of the
+        reduce-tree (uses Spark's treeReduce() for scalability.)
+        Default is 2.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Take a number of rows and return them
+sorted in either ascending or descending order.
+
+Sorting a subset of rows is more efficient than sorting the entire frame when
+the number of sorted rows is much less than the total number of rows in the frame.
+
+Notes
+-----
+The number of sorted rows should be much smaller than the number of rows
+in the original frame.
+
+In particular:
+
+#)  The number of sorted rows returned should fit in Spark driver memory.
+    The maximum size of serialized results that can fit in the Spark driver is
+    set by the Spark configuration parameter *spark.driver.maxResultSize*.
+#)  If you encounter a Kryo buffer overflow exception, increase the Spark
+    configuration parameter *spark.kryoserializer.buffer.max.mb*.
+#)  Use Frame.sort() instead if the number of sorted rows is very large (in
+    other words, it cannot fit in Spark driver memory).
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>``
+
+        A new frame with a subset of sorted rows from the original frame.
+
+

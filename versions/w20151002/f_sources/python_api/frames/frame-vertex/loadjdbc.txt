@@ -1,0 +1,65 @@
+.. _python_api/frames/frame-vertex/loadjdbc:
+
+
+:doc:`VertexFrame <index>`  loadjdbc
+************************************
+
+------
+
+
+.. function:: loadjdbc(self, table_name, connector_type=None, url=None, driver_name=None, query=None)
+
+    Append data from a JDBC table into an existing (possibly empty) frame
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            table name
+
+
+
+        **connector_type** : unicode (default=None)
+
+        ..
+
+            (optional) connector type
+
+
+
+        **url** : unicode (default=None)
+
+        ..
+
+            (optional) connection url (includes server name, database name, user acct and password
+
+
+
+        **driver_name** : unicode (default=None)
+
+        ..
+
+            (optional) driver name
+
+
+
+        **query** : unicode (default=None)
+
+        ..
+
+            (optional) query for filtering. Not supported yet.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+
+        ..
+
+            the initial frame with the JDBC data appended
+    Append data from a JDBC table into an existing (possibly empty) frame
