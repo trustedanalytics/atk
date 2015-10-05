@@ -1,5 +1,6 @@
 Examples
 --------
+Predict using a Principal Components Model
 
 .. only:: html
 

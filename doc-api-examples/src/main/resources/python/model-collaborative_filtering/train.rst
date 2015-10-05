@@ -4,33 +4,35 @@ Examples
 
     .. code::
 
-    input frame (lp.csv)
-    "a"        "b"        "c"
-    1,         2,         0.5
-    2,         3,         0.4
-    3,         1,         0.1
-
     script
 
     ta.connect()
-    s = [("a", ta.string), ("b", ta.string), ("c", ta.float32)]
-    d = "lp.csv"
-    c = ta.CsvFile(d,s)
-    f = ta.Frame(c)
-    r = f.collaborative_filtering("a", "b", "c", "als")
-    r['user_frame'].inspect()
-    r['item_frame'].inspect()
-    r['report']
+    dataset = "/datasets/movie_data_with_names.csv"
+
+    schema = [("user_id", str),("movie_id", str), ("rating", atk.int32),
+             ("timestamp", atk.int32), ("movie_name",str), ("release_date", str), ("splits", str)]
+    csv = atk.CsvFile(dataset, schema, skip_header_lines = 0)
+    frame = atk.Frame(csv, movie_frame_name)
+    cgd_cf_model = atk.CollaborativeFilteringModel(cgd_name)
+    cgd_cf_model_train = cgd_cf_model.train(frame, "user_id", "movie_name", "rating", "cgd",
+                                            max_value = 19, regularization=0.65, min_value=1, bias_on=False)
+    cgd_cf_model_recommend = cgd_cf_model.recommend (uid, 10)
 
 .. only:: latex
 
     .. code::
 
-        >>> f.collaborative_filtering(
-        ... userColName = "a",
-        ... itemColName  = "b",
-        ... ratingColName = "c",
-        ... evaluationFunction = "als")
+    ta.connect()
+    dataset = "/datasets/movie_data_with_names.csv"
+
+    schema = [("user_id", str),("movie_id", str), ("rating", atk.int32),
+             ("timestamp", atk.int32), ("movie_name",str), ("release_date", str), ("splits", str)]
+    csv = atk.CsvFile(dataset, schema, skip_header_lines = 0)
+    frame = atk.Frame(csv, movie_frame_name)
+    cgd_cf_model = atk.CollaborativeFilteringModel(cgd_name)
+    cgd_cf_model_train = cgd_cf_model.train(frame, "user_id", "movie_name", "rating", "cgd",
+                                            max_value = 19, regularization=0.65, min_value=1, bias_on=False)
+    cgd_cf_model_recommend = cgd_cf_model.recommend (uid, 10)
 
 
 The expected output for ALS is like this:

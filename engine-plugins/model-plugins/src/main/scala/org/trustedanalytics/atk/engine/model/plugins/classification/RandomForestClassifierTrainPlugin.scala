@@ -36,19 +36,20 @@ import spray.json._
 
 @PluginDoc(oneLine = "Build Random Forests Classifier model.",
   extended = """Creating a Random Forests Classifier Model using the observation columns and label column.""",
-  returns = """Values of the Random Forest Classifier model object storing\:
-
-|  the list of observation columns on which the model was trained,
-|  the column name containing the labels of the observations,
-|  the number of classes,
-|  the number of decision trees in the random forest,
-|  the number of nodes in the random forest,
-|  the map storing :term:`arity` of categorical features,
-|  the criterion used for information gain calculation,
-|  the maximum depth of the tree,
-|  the maximum number of bins used for splitting features,
-|  the random seed used for bootstrapping and choosing feature subset.
-""")
+  returns =
+    """dictionary
+      A dictionary with trained Random Forest Classifier model with the following keys\:
+      |'observation_columns': the list of observation columns on which the model was trained,
+      |'label_column': the column name containing the labels of the observations,
+      |'num_classes': the number of classes,
+      |'num_trees': the number of decision trees in the random forest,
+      |'num_nodes': the number of nodes in the random forest,
+      |'feature_subset_category': the map storing arity of categorical features,
+      |'impurity': the criterion used for information gain calculation,
+      |'max_depth': the maximum depth of the tree,
+      |'max_bins': the maximum number of bins used for splitting features,
+      |'seed': the random seed used for bootstrapping and choosing feature subset.
+    """)
 class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestClassifierTrainArgs, RandomForestClassifierTrainReturn] {
   /**
    * The name of the command.

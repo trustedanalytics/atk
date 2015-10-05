@@ -1,5 +1,6 @@
 Examples
 --------
+Train a Principal Components Model
 
 .. only:: html
 

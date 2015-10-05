@@ -1,5 +1,7 @@
 Examples
 --------
+Train a Libsvm Model
+
 .. only:: html
 
     .. code::
