@@ -1,5 +1,7 @@
 Examples
 --------
+Test the peformance of a trained Svm Model
+
 .. only:: html
 
     .. code::

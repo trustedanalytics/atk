@@ -1,5 +1,7 @@
 Examples
 --------
+Train a KMeans Model
+
 .. only:: html
 
     .. code::

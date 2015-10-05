@@ -41,16 +41,16 @@ observation.""") labelColumn: String,
                                @ArgDoc("""Column(s) containing the
 observations.""") observationColumns: List[String],
                                @ArgDoc("""Additive smoothing parameter
-Default is 1.0.""") lambdaParameter: Option[Double] = None) {
+Default is 1.0.""") lambdaParameter: Double = 1.0) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
 }
 
-@PluginDoc(oneLine = "Train a Naive Bayes model.",
-  extended = """Train a NaiveBayesModel using the observation column, label column of the train
-frame and an optional lambda value.""")
+@PluginDoc(oneLine = "Build a naive bayes model.",
+  extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""",
+  returns = """Trained NaiveBayes model""")
 class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -86,7 +86,7 @@ class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, Unit
 
     //Running MLLib
     val naiveBayes = new NaiveBayes()
-    naiveBayes.setLambda(arguments.lambdaParameter.getOrElse(1.0))
+    naiveBayes.setLambda(arguments.lambdaParameter)
 
     val naiveBayesModel = naiveBayes.run(labeledTrainRdd)
     val jsonModel = new NaiveBayesData(naiveBayesModel, arguments.observationColumns)
