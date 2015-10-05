@@ -17,8 +17,8 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{GenericNewModelArgs, ModelReference}
-import org.trustedanalytics.atk.engine.plugin.{CommandPlugin, Invocation, PluginDoc}
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
+import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
@@ -38,10 +38,10 @@ class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:sparklda/new"
+  override def name: String = "model:lda/new"
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     val models = engine.models
-    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:sparklda")))
+    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:lda")))
   }
 }

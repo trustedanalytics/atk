@@ -16,11 +16,12 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
-import org.apache.spark.mllib.clustering.{AtkLdaModel, AtkLdaModel$}
+import org.apache.spark.mllib.clustering.{ AtkLdaModel, AtkLdaModel$ }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import org.apache.commons.lang3.StringUtils
+import spray.json.{ JsNumber, JsObject, JsValue, JsonFormat }
 
 /**
  * Arguments to the LDA train plugin - see user docs for more on the parameters
@@ -113,10 +114,31 @@ case class LdaModelPredictReturn(topicsGivenDoc: Vector[Double],
 /** Json conversion for arguments and return value case classes */
 object LdaJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+  import spray.json._
   implicit val ldaFormat = jsonFormat10(LdaTrainArgs)
   implicit val ldaResultFormat = jsonFormat4(LdaTrainResult)
-  implicit val ldaModelFormat = jsonFormat1(AtkLdaModel)
   implicit val ldaPredictArgsFormat = jsonFormat2(LdaModelPredictArgs)
   implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
+
+  implicit object AtkLdaModelFormat extends JsonFormat[AtkLdaModel] {
+
+    override def write(obj: AtkLdaModel): JsValue = {
+      JsObject(
+        "num_topics" -> JsNumber(obj.numTopics),
+        "topic_word_map" -> obj.topicWordMap.toJson
+      )
+    }
+
+    override def read(json: JsValue): AtkLdaModel = {
+      val fields = json.asJsObject.fields
+      val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
+      val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, Vector[Double]]]
+      val ldaModel = new AtkLdaModel(numTopics)
+      ldaModel.topicWordMap = topicWordMap
+      ldaModel
+    }
+
+  }
+
 }
 

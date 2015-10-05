@@ -19,7 +19,7 @@ import org.apache.spark.SparkException
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
-import org.trustedanalytics.atk.domain.schema.{DataTypes, Column, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class LdaWordIdAssignerTest extends TestingSparkContextWordSpec with Matchers {
@@ -72,13 +72,13 @@ class LdaWordIdAssignerTest extends TestingSparkContextWordSpec with Matchers {
     "return empty frame" in {
       val rows = sparkContext.parallelize(Array.empty[Row])
       val edgeFrame = new FrameRdd(edgeSchema, rows)
-      val uniqueWords =  LdaWordIdAssigner(edgeFrame, "word", "word_count").assignUniqueIds().collect()
+      val uniqueWords = LdaWordIdAssigner(edgeFrame, "word", "word_count").assignUniqueIds().collect()
 
-      assert (uniqueWords.isEmpty)
+      assert(uniqueWords.isEmpty)
     }
 
     "throw a SparkException for invalid column names" in {
-      intercept[SparkException]{
+      intercept[SparkException] {
         val rows = sparkContext.parallelize(edgeData)
         val edgeFrame = new FrameRdd(edgeSchema, rows)
         LdaWordIdAssigner(edgeFrame, "invalid_word", "invalid_word_count").assignUniqueIds().collect()

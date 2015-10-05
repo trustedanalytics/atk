@@ -21,7 +21,7 @@ import org.apache.spark.sql.Row
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class LdaCorpusTest extends TestingSparkContextWordSpec with Matchers {
@@ -53,7 +53,7 @@ class LdaCorpusTest extends TestingSparkContextWordSpec with Matchers {
 
   val model = new ModelReference(1)
   val frame = new FrameReference(1)
-  val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count")
+  val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count", numTopics = 2)
 
   "LDA corpus" should {
 
@@ -91,18 +91,19 @@ class LdaCorpusTest extends TestingSparkContextWordSpec with Matchers {
         ((document, word), wordCount)
       }).toMap
 
-      trainCorpus.foreach { case (docId, (doc, wordCountVector)) =>
-        for (i <- wordCountVector.toArray.indices) {
-          val wordCount = wordCountVector.toArray(i)
-          val word = idWordMap(i.toLong)
+      trainCorpus.foreach {
+        case (docId, (doc, wordCountVector)) =>
+          for (i <- wordCountVector.toArray.indices) {
+            val wordCount = wordCountVector.toArray(i)
+            val word = idWordMap(i.toLong)
 
-          if (docWordCountMap.contains(doc, word)) {
-            assert(wordCount == docWordCountMap(doc, word))
+            if (docWordCountMap.contains(doc, word)) {
+              assert(wordCount == docWordCountMap(doc, word))
+            }
+            else {
+              assert(wordCount == 0)
+            }
           }
-          else {
-            assert(wordCount == 0)
-          }
-        }
       }
     }
 

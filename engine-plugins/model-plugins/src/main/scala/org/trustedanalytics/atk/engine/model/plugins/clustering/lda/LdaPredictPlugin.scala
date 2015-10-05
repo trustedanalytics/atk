@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
-import org.apache.spark.mllib.clustering.{AtkLdaModel, AtkLdaModel$}
+import org.apache.spark.mllib.clustering.{ AtkLdaModel, AtkLdaModel$ }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -46,9 +46,9 @@ class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredic
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:sparklda/predict"
+  override def name: String = "model:lda/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

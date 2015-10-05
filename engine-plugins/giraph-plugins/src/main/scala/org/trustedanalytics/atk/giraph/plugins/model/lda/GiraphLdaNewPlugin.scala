@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -30,17 +30,19 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """|LDA| is a commonly-used algorithm for topic modeling, but,
 more broadly, is considered a dimensionality reduction technique.
 For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.""")
-class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
+class GiraphLdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:lda/new"
+  override def name: String = "giraph_model:lda/new"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Deprecated)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     val models = engine.models
-    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:lda")))
+    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:giraph_lda")))
   }
 }

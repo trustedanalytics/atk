@@ -18,8 +18,8 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.scoring.{ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs}
-import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, CommandPlugin, Invocation, PluginDoc}
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
@@ -30,11 +30,10 @@ import LdaJsonFormat._
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = """Creates a tar file with the trained Latent Dirichlet Allocation model.
-The tar file is used as input to the scoring engine to predict the conditional topic
-probabilities for a document.""",
-  returns = """The HDFS path to the tar file.""")
+@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
+  extended = """Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
+              The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.""",
+  returns = """Returns the HDFS path to the tar file""")
 class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -43,9 +42,9 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:sparklda/publish"
+  override def name: String = "model:lda/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

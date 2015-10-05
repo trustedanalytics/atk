@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
@@ -49,9 +50,15 @@ class LdaTrainPlugin
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:sparklda/train"
+  override def name: String = "model:lda/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+
+  /**
+   * Number of Spark jobs that get created by running this command
+   * (this configuration is used to prevent multiple progress bars in Python client)
+   */
+  override def numberOfJobs(arguments: LdaTrainArgs)(implicit invocation: Invocation) = arguments.maxIterations + 5
 
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
@@ -66,6 +73,8 @@ class LdaTrainPlugin
     require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     val ldaModel = LdaFunctions.trainLdaModel(edgeFrame.rdd, arguments)
+    val model: Model = arguments.model
+    model.data = ldaModel.toJson.asJsObject
 
     val topicsGivenDocFrame = engine.frames.tryNewFrame(CreateEntityArgs(
       description = Some("LDA frame with conditional probabilities of topics given document"))) {

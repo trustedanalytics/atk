@@ -28,10 +28,10 @@ import spray.json._
  * Config for LDA Input
  * @param parquetEdgeFrameLocation parquet input frame
  */
-case class LdaInputFormatConfig(parquetEdgeFrameLocation: String,
-                                edgeFrameSchema: Schema,
-                                parquetVertexFrameLocation: String,
-                                vertexFrameSchema: Schema) {
+case class GiraphLdaInputFormatConfig(parquetEdgeFrameLocation: String,
+                                      edgeFrameSchema: Schema,
+                                      parquetVertexFrameLocation: String,
+                                      vertexFrameSchema: Schema) {
   require(StringUtils.isNotBlank(parquetEdgeFrameLocation), "input edge file location is required")
   require(edgeFrameSchema != null, "input edge frame schema is required")
   require(StringUtils.isNotBlank(parquetVertexFrameLocation), "input vertex file location is required")
@@ -44,22 +44,22 @@ case class LdaInputFormatConfig(parquetEdgeFrameLocation: String,
  * @param wordResultsFileLocation parquet output frame file location in HDFS
  * @param topicResultsFileLocation parquet output frame file location in HDFS
  */
-case class LdaOutputFormatConfig(documentResultsFileLocation: String,
-                                 wordResultsFileLocation: String,
-                                 topicResultsFileLocation: String) {
+case class GiraphLdaOutputFormatConfig(documentResultsFileLocation: String,
+                                       wordResultsFileLocation: String,
+                                       topicResultsFileLocation: String) {
   require(StringUtils.isNotBlank(documentResultsFileLocation), "document lda results file location is required")
   require(StringUtils.isNotBlank(wordResultsFileLocation), "word lda results file location is required")
   require(StringUtils.isNotBlank(topicResultsFileLocation), "topics given word results file location is required")
 }
 
-import LdaVertexInputFormatConfig._
-case class LdaVertexInputFormatConfig(documentIdColumnName: String,
-                                      wordIdColumnName: String,
-                                      isDocumentColumnName: String,
-                                      vertexIdColumnName: String,
-                                      vertexOriginalIdColumnName: String) {
+import GiraphLdaVertexInputFormatConfig._
+case class GiraphLdaVertexInputFormatConfig(documentIdColumnName: String,
+                                            wordIdColumnName: String,
+                                            isDocumentColumnName: String,
+                                            vertexIdColumnName: String,
+                                            vertexOriginalIdColumnName: String) {
 
-  def this(args: LdaTrainArgs) = {
+  def this(args: GiraphLdaTrainArgs) = {
     this(
       LdaAutoGenPrefix + args.documentColumnName,
       LdaAutoGenPrefix + args.wordColumnName,
@@ -71,7 +71,7 @@ case class LdaVertexInputFormatConfig(documentIdColumnName: String,
 
 }
 
-object LdaVertexInputFormatConfig {
+object GiraphLdaVertexInputFormatConfig {
   val LdaAutoGenPrefix = "_lda_autogen_"
 }
 /**
@@ -88,24 +88,24 @@ object LdaVertexInputFormatConfig {
  * @param evaluationCost see LdaTrainArgs for doc
  * @param numTopics see LdaTrainArgs for doc
  */
-case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
-                     outputFormatConfig: LdaOutputFormatConfig,
-                     documentColumnName: String,
-                     wordColumnName: String,
-                     wordCountColumnName: String,
-                     maxIterations: Long,
-                     alpha: Float,
-                     beta: Float,
-                     convergenceThreshold: Float,
-                     evaluationCost: Boolean,
-                     numTopics: Int,
-                     documentIdColumnName: String,
-                     wordIdColumnName: String,
-                     isDocumentColumnName: String,
-                     vertexIdColumnName: String,
-                     vertexOriginalIdColumnName: String) {
+case class GiraphLdaConfig(inputFormatConfig: GiraphLdaInputFormatConfig,
+                           outputFormatConfig: GiraphLdaOutputFormatConfig,
+                           documentColumnName: String,
+                           wordColumnName: String,
+                           wordCountColumnName: String,
+                           maxIterations: Long,
+                           alpha: Float,
+                           beta: Float,
+                           convergenceThreshold: Float,
+                           evaluationCost: Boolean,
+                           numTopics: Int,
+                           documentIdColumnName: String,
+                           wordIdColumnName: String,
+                           isDocumentColumnName: String,
+                           vertexIdColumnName: String,
+                           vertexOriginalIdColumnName: String) {
 
-  def this(inputFormatConfig: LdaInputFormatConfig, outputFormatConfig: LdaOutputFormatConfig, args: LdaTrainArgs, vertexInputFormatConfig: LdaVertexInputFormatConfig) = {
+  def this(inputFormatConfig: GiraphLdaInputFormatConfig, outputFormatConfig: GiraphLdaOutputFormatConfig, args: GiraphLdaTrainArgs, vertexInputFormatConfig: GiraphLdaVertexInputFormatConfig) = {
     this(inputFormatConfig,
       outputFormatConfig,
       args.documentColumnName,
@@ -139,11 +139,11 @@ case class LdaConfig(inputFormatConfig: LdaInputFormatConfig,
 /**
  * JSON formats needed by Lda.
  */
-object LdaConfigJSONFormat {
-  implicit val ldaInputFormatConfigFormat = jsonFormat4(LdaInputFormatConfig)
-  implicit val ldaOutputFormatConfigFormat = jsonFormat3(LdaOutputFormatConfig)
-  implicit val ldaConfigFormat = jsonFormat16(LdaConfig)
-  implicit val vertexInputConfigFormat = jsonFormat5(LdaVertexInputFormatConfig.apply)
+object GiraphLdaConfigJSONFormat {
+  implicit val ldaInputFormatConfigFormat = jsonFormat4(GiraphLdaInputFormatConfig)
+  implicit val ldaOutputFormatConfigFormat = jsonFormat3(GiraphLdaOutputFormatConfig)
+  implicit val ldaConfigFormat = jsonFormat16(GiraphLdaConfig)
+  implicit val vertexInputConfigFormat = jsonFormat5(GiraphLdaVertexInputFormatConfig.apply)
 }
 
 /**
@@ -152,8 +152,8 @@ object LdaConfigJSONFormat {
  * All of the settings can go into one JSON string so we don't need a bunch of String
  * constants passed around.
  */
-class LdaConfiguration(other: Configuration) extends GiraphConfiguration(other) {
-  import LdaConfigJSONFormat._
+class GiraphLdaConfiguration(other: Configuration) extends GiraphConfiguration(other) {
+  import GiraphLdaConfigJSONFormat._
   private val LdaConfigPropertyName = "lda.config"
 
   def this() = {
@@ -165,12 +165,12 @@ class LdaConfiguration(other: Configuration) extends GiraphConfiguration(other) 
     require(get(LdaConfigPropertyName) != null, "lda.config property was not set in the Configuration")
   }
 
-  def ldaConfig: LdaConfig = {
+  def ldaConfig: GiraphLdaConfig = {
     // all of the settings can go into one JSON string so we don't need a bunch of String constants passed around
-    JsonParser(get(LdaConfigPropertyName)).asJsObject.convertTo[LdaConfig]
+    JsonParser(get(LdaConfigPropertyName)).asJsObject.convertTo[GiraphLdaConfig]
   }
 
-  def setLdaConfig(value: LdaConfig): Unit = {
+  def setLdaConfig(value: GiraphLdaConfig): Unit = {
     // all of the settings can go into one JSON string so we don't need a bunch of String constants passed around
     set(LdaConfigPropertyName, value.toJson.compactPrint)
   }

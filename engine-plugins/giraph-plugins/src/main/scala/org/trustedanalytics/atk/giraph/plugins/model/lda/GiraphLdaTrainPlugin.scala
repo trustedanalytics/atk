@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.trustedanalytics.atk.domain.frame.{ CovarianceMatrixArgs, FrameEntity }
+import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
@@ -36,7 +36,7 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.apache.spark.SparkContext._
 
 import spray.json._
-import LdaJsonFormat._
+import GiraphLdaJsonFormat._
 
 /**
  * Train plugin for Latent Dirichlet Allocation
@@ -54,8 +54,8 @@ import LdaJsonFormat._
 |   **str** : *report*
 |       The configuration and learning curve report for Latent Dirichlet
 Allocation as a multiple line str.""")
-class LdaTrainPlugin
-    extends SparkCommandPlugin[LdaTrainArgs, LdaTrainResult] {
+class GiraphLdaTrainPlugin
+    extends SparkCommandPlugin[GiraphLdaTrainArgs, GiraphLdaTrainResult] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -63,11 +63,11 @@ class LdaTrainPlugin
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:lda/train"
+  override def name: String = "model:giraph_lda/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Deprecated)
 
-  override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
+  override def execute(arguments: GiraphLdaTrainArgs)(implicit invocation: Invocation): GiraphLdaTrainResult = {
 
     val frames = engine.frames
     val config = configuration
@@ -81,7 +81,7 @@ class LdaTrainPlugin
 
     // setup and run
     val hConf = GiraphConfigurationUtil.newHadoopConfigurationFrom(EngineConfig.config, "trustedanalytics.atk.engine.giraph")
-    val giraphConf = new LdaConfiguration(hConf)
+    val giraphConf = new GiraphLdaConfiguration(hConf)
 
     val docOut = frames.create(CreateEntityArgs(description = Some("LDA doc results")))
     val wordOut = frames.create(CreateEntityArgs(description = Some("LDA word results")))
@@ -92,11 +92,10 @@ class LdaTrainPlugin
     val topicOutSaveInfo = frames.prepareForSave(topicOut)
 
     // assign unique long vertex Ids to vertices
-    val vertexInputConfig = new LdaVertexInputFormatConfig(arguments)
+    val vertexInputConfig = new GiraphLdaVertexInputFormatConfig(arguments)
     edgeFrame.rdd.cache()
     val docVertexFrame = createVertexFrame(edgeFrame.rdd, arguments.documentColumnName, 1, vertexInputConfig)
     val wordVertexFrame = createVertexFrame(edgeFrame.rdd, arguments.wordColumnName, 0, vertexInputConfig)
-    //TODO : Remove forward refs
     var edgeFrameWithIds = joinFramesById(edgeFrame.rdd, docVertexFrame, arguments.documentColumnName, vertexInputConfig.vertexOriginalIdColumnName, vertexInputConfig.documentIdColumnName)
     edgeFrameWithIds = joinFramesById(edgeFrameWithIds, wordVertexFrame, arguments.wordColumnName, vertexInputConfig.vertexOriginalIdColumnName, vertexInputConfig.wordIdColumnName)
     val vertexValueFrame = createVertexValueFrame(docVertexFrame, wordVertexFrame, vertexInputConfig)
@@ -110,19 +109,19 @@ class LdaTrainPlugin
       description = Some("LDA vertex frame with auto-assigned Ids"))) {
       frame: FrameEntity => frame.save(vertexValueFrame)
     }
-    val inputFormatConfig = new LdaInputFormatConfig(
+    val inputFormatConfig = new GiraphLdaInputFormatConfig(
       newEdgeFrame.getStorageLocation,
       newEdgeFrame.schema,
       newVertexFrame.getStorageLocation,
       newVertexFrame.schema
     )
 
-    val outputFormatConfig = new LdaOutputFormatConfig(
+    val outputFormatConfig = new GiraphLdaOutputFormatConfig(
       docOutSaveInfo.targetPath,
       wordOutSaveInfo.targetPath,
       topicOutSaveInfo.targetPath
     )
-    val ldaConfig = new LdaConfig(inputFormatConfig, outputFormatConfig, arguments, vertexInputConfig)
+    val ldaConfig = new GiraphLdaConfig(inputFormatConfig, outputFormatConfig, arguments, vertexInputConfig)
 
     giraphConf.setLdaConfig(ldaConfig)
     GiraphConfigurationUtil.set(giraphConf, "giraphjob.maxSteps", arguments.maxIterations)
@@ -156,14 +155,14 @@ class LdaTrainPlugin
 
     val model: Model = arguments.model
 
-    model.data = LdaModel.createLdaModel(frames.getAllRows(topicFrame),
+    model.data = GiraphLdaModel.createLdaModel(frames.getAllRows(topicFrame),
       topicFrame.schema,
       arguments.wordColumnName,
       resultsColumnName,
       arguments.getNumTopics
     ).toJson.asJsObject
 
-    LdaTrainResult(
+    GiraphLdaTrainResult(
       frames.expectFrame(docOut.toReference),
       frames.expectFrame(wordOut.toReference),
       frames.expectFrame(topicOut.toReference),
@@ -177,14 +176,14 @@ class LdaTrainPlugin
    * @param columnName Input column
    * @return Frame with IDs assigned
    */
-  def createVertexFrame(frameRdd: FrameRdd, columnName: String, isDocument: Int, config: LdaVertexInputFormatConfig): FrameRdd = {
+  def createVertexFrame(frameRdd: FrameRdd, columnName: String, isDocument: Int, config: GiraphLdaVertexInputFormatConfig): FrameRdd = {
     val longIdColumnName = if (isDocument == 1) config.documentIdColumnName else config.wordIdColumnName
     val vertexFrameSchema = FrameSchema(List(
       Column(longIdColumnName, DataTypes.int64),
       Column(config.vertexOriginalIdColumnName, DataTypes.string),
       Column(config.isDocumentColumnName, DataTypes.int32)))
 
-    val idAssigner = new LdaGraphIDAssigner()
+    val idAssigner = new GiraphLdaGraphIDAssigner()
 
     val uniqueVertices = frameRdd.mapRows(row => {
       row.stringValue(columnName)
@@ -212,7 +211,7 @@ class LdaTrainPlugin
     new FrameRdd(newSchema, joinedRdd)
   }
 
-  def createVertexValueFrame(docVertexFrame: RDD[Row], wordVertexFrame: RDD[Row], config: LdaVertexInputFormatConfig): FrameRdd = {
+  def createVertexValueFrame(docVertexFrame: RDD[Row], wordVertexFrame: RDD[Row], config: GiraphLdaVertexInputFormatConfig): FrameRdd = {
     val vertexFrameSchema = FrameSchema(List(
       Column(config.vertexIdColumnName, DataTypes.int64),
       Column(config.vertexOriginalIdColumnName, DataTypes.string),

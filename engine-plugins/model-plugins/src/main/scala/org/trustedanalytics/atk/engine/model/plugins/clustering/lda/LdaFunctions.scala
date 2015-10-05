@@ -16,10 +16,9 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.clustering.{AtkLdaModel, DistributedLDAModel, LDA}
+import org.apache.spark.mllib.clustering.{ AtkLdaModel, DistributedLDAModel, LDA }
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
-
 
 object LdaFunctions extends Serializable {
 
@@ -35,8 +34,8 @@ object LdaFunctions extends Serializable {
     ldaRunner.setTopicConcentration(args.beta)
     ldaRunner.setMaxIterations(args.maxIterations)
     ldaRunner.setK(args.numTopics)
-    args.randomSeed match {
-      case Some(seed) => ldaRunner.setSeed(seed)
+    if (args.randomSeed.isDefined) {
+      ldaRunner.setSeed(args.randomSeed.get)
     }
     ldaRunner
   }
@@ -53,7 +52,6 @@ object LdaFunctions extends Serializable {
     val ldaModel = initializeLdaRunner(args).run(ldaCorpus)
     ldaModel
   }
-
 
   def trainLdaModel(edgeFrame: FrameRdd, args: LdaTrainArgs): AtkLdaModel = {
     val ldaRunner = initializeLdaRunner(args)

@@ -32,7 +32,7 @@ import spray.json._
   extended = """Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
               The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.""",
   returns = """Returns the HDFS path to the tar file""")
-class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class GiraphLdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
    * The name of the command.
@@ -40,7 +40,7 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:lda/publish"
+  override def name: String = "model:giraph_lda/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 

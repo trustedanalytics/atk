@@ -17,11 +17,11 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.{SparseVector, Vector}
+import org.apache.spark.mllib.linalg.{ SparseVector, Vector }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 
 /**
  * Corpus of documents for training LDA model
@@ -58,16 +58,17 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
 
     val corpus: RDD[(String, Vector)] = docWordRdd.aggregateByKey(
       Map[Long, Long]())((wordCountMap, value) => value match {
-      case (wordId, wordCount) => wordCountMap + (wordId -> wordCount)
-    }, (map1, map2) => map1 ++ map2).map {
-      case (document, wordCountMap: Map[Long, Long]) =>
-        val wordIndices = wordCountMap.keys.map(_.toInt).toArray
-        val wordCountValues = wordCountMap.values.map(_.toDouble).toArray
-        (document, new SparseVector(wordCount, wordIndices, wordCountValues))
-    }
+        case (wordId, wordCount) => wordCountMap + (wordId -> wordCount)
+      }, (map1, map2) => map1 ++ map2).map {
+        case (document, wordCountMap: Map[Long, Long]) =>
+          val wordIndices = wordCountMap.keys.map(_.toInt).toArray
+          val wordCountValues = wordCountMap.values.map(_.toDouble).toArray
+          (document, new SparseVector(wordCount, wordIndices, wordCountValues))
+      }
 
-    corpus.zipWithIndex.map { case ((document, wordVector), documentId) =>
-      (documentId, (document, wordVector))
+    corpus.zipWithIndex.map {
+      case ((document, wordVector), documentId) =>
+        (documentId, (document, wordVector))
     }
   }
 

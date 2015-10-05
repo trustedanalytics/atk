@@ -19,11 +19,11 @@ import org.apache.spark.SparkContext
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.clustering.LDA.TopicCounts
-import org.apache.spark.mllib.linalg.{DenseVector => MlDenseVector, Matrix, Vector => MlVector}
+import org.apache.spark.mllib.linalg.{ DenseVector => MlDenseVector, Matrix, Vector => MlVector }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.model.plugins.clustering.lda.LdaModelPredictReturn
 
 import scala.collection.immutable.Map
@@ -35,9 +35,11 @@ import scala.util.Try
  * @param numTopics Number of topics in trained model
  */
 case class AtkLdaModel(numTopics: Int) {
+  import AtkLdaModel._
   require(numTopics > 0, "number of topics must be greater than zero")
 
-  val topicWordMap = Map[String, Vector[Double]]()
+  //TODO: Stop storing model in metastore
+  var topicWordMap = Map[String, Vector[Double]]()
 
   /** Trained LDA model */
   private var distLdaModel: DistributedLDAModel = null
@@ -52,8 +54,8 @@ case class AtkLdaModel(numTopics: Int) {
   private var topicsGivenWordFrame: FrameRdd = null
 
   /**
-   * Create ATK LDA model 
-   * @param distLdaModel Trained LDA model 
+   * Create ATK LDA model
+   * @param distLdaModel Trained LDA model
    */
   def this(distLdaModel: DistributedLDAModel) = {
     this(distLdaModel.k)
@@ -125,6 +127,9 @@ case class AtkLdaModel(numTopics: Int) {
 
     setWordGivenTopicsFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
     setTopicsGivenWordFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
+    topicWordMap = topicsGivenWordFrame.mapRows(row => {
+      (row.stringValue(outputWordColumnName), row.value(outputTopicVectorColumnName).asInstanceOf[MlVector].toArray.toVector)
+    }).collectAsMap().toMap
   }
 
   /**
@@ -138,8 +143,9 @@ case class AtkLdaModel(numTopics: Int) {
                        outputDocumentColumnName: String,
                        outputTopicVectorColumnName: String): Unit = {
     val topicDist = distLdaModel.topicDistributions
-    val topicsGivenDocs: RDD[Row] = corpus.join(topicDist).map { case (documentId, ((document, wordVector), topicVector)) =>
-      new GenericRow(Array[Any](document, topicVector.toArray))
+    val topicsGivenDocs: RDD[Row] = corpus.join(topicDist).map {
+      case (documentId, ((document, wordVector), topicVector)) =>
+        new GenericRow(Array[Any](document, topicVector))
     }
 
     val schema = FrameSchema(List(
@@ -262,8 +268,9 @@ case class AtkLdaModel(numTopics: Int) {
       Column(topicVectorColumnName, DataTypes.vector(numTopics))
     ))
 
-    val wordGivenTopicRows: RDD[Row] = wordTopicsRdd.map { case ((word, (wordGivenTopics, topicsGivenWord))) =>
-      new GenericRow(Array[Any](word, wordGivenTopics))
+    val wordGivenTopicRows: RDD[Row] = wordTopicsRdd.map {
+      case ((word, (wordGivenTopics, topicsGivenWord))) =>
+        new GenericRow(Array[Any](word, wordGivenTopics))
     }
 
     this.wordGivenTopicsFrame = new FrameRdd(frameSchema, wordGivenTopicRows)
@@ -284,51 +291,12 @@ case class AtkLdaModel(numTopics: Int) {
       Column(topicVectorColumnName, DataTypes.vector(numTopics))
     ))
 
-    val topicsGivenWordRows: RDD[Row] = wordTopicsRdd.map { case ((word, (wordGivenTopics, topicsGivenWord))) =>
-      new GenericRow(Array[Any](word, topicsGivenWord))
+    val topicsGivenWordRows: RDD[Row] = wordTopicsRdd.map {
+      case ((word, (wordGivenTopics, topicsGivenWord))) =>
+        new GenericRow(Array[Any](word, topicsGivenWord))
     }
 
     this.topicsGivenWordFrame = new FrameRdd(frameSchema, topicsGivenWordRows)
-  }
-
-  /**
-   * Calculate conditional probability of word given topics
-   *
-   * @param topicVector Vector with counts of word in topics
-   * @param globalTopicCounts Global topic counts
-   * @param scaledVocabSize Vocabulary size * (eta - 1)
-   * @param eta1 Topic concentration minus 1 (eta - 1)
-   * @return Vector with conditional probability of word given topics
-   */
-  private[clustering] def calcWordGivenTopicProb(topicVector: MlVector,
-                                                 globalTopicCounts: TopicCounts,
-                                                 scaledVocabSize: Double,
-                                                 eta1: Double): MlVector = {
-    val wordGivenTopic = topicVector.copy.toArray
-    var k = 0
-    while (k < wordGivenTopic.size) {
-      // (Nwk + eta -1 )/(Nk + W*eta - W) in Asuncion 2009
-      wordGivenTopic(k) = (wordGivenTopic(k) + eta1) / (globalTopicCounts(k) + scaledVocabSize)
-      k += 1
-    }
-    new MlDenseVector(wordGivenTopic)
-  }
-
-  /**
-   * Calculate conditional probability of topics given word
-   *
-   * @param topicVector Vector with counts of word in topics
-   * @param wordCount Count of word in corpus
-   * @return Vector with conditional probability of topics given word
-   */
-  private[clustering] def calcTopicsGivenWord(topicVector: MlVector, wordCount: Long): MlVector = {
-    val topicGivenWord = topicVector.copy.toArray
-    var k = 0
-    while (k < topicGivenWord.size) {
-      topicGivenWord(k) = topicGivenWord(k) / wordCount
-      k += 1
-    }
-    new MlDenseVector(topicGivenWord)
   }
 
   /**
@@ -379,3 +347,44 @@ case class AtkLdaModel(numTopics: Int) {
   }
 }
 
+object AtkLdaModel extends Serializable {
+  /**
+   * Calculate conditional probability of word given topics
+   *
+   * @param topicVector Vector with counts of word in topics
+   * @param globalTopicCounts Global topic counts
+   * @param scaledVocabSize Vocabulary size * (eta - 1)
+   * @param eta1 Topic concentration minus 1 (eta - 1)
+   * @return Vector with conditional probability of word given topics
+   */
+  def calcWordGivenTopicProb(topicVector: MlVector,
+                             globalTopicCounts: TopicCounts,
+                             scaledVocabSize: Double,
+                             eta1: Double): MlVector = {
+    val wordGivenTopic = topicVector.copy.toArray
+    var k = 0
+    while (k < wordGivenTopic.size) {
+      // (Nwk + eta -1 )/(Nk + W*eta - W) in Asuncion 2009
+      wordGivenTopic(k) = (wordGivenTopic(k) + eta1) / (globalTopicCounts(k) + scaledVocabSize)
+      k += 1
+    }
+    new MlDenseVector(wordGivenTopic)
+  }
+
+  /**
+   * Calculate conditional probability of topics given word
+   *
+   * @param topicVector Vector with counts of word in topics
+   * @param wordCount Count of word in corpus
+   * @return Vector with conditional probability of topics given word
+   */
+  def calcTopicsGivenWord(topicVector: MlVector, wordCount: Long): MlVector = {
+    val topicGivenWord = topicVector.copy.toArray
+    var k = 0
+    while (k < topicGivenWord.size) {
+      topicGivenWord(k) = topicGivenWord(k) / wordCount
+      k += 1
+    }
+    new MlDenseVector(topicGivenWord)
+  }
+}

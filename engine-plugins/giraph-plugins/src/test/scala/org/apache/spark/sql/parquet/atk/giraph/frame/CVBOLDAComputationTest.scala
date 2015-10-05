@@ -103,7 +103,7 @@ class CVBOLDAComputationTest extends WordSpec {
 
   "LDA" should {
     "produce results" in {
-      val conf = new LdaConfiguration()
+      val conf = new GiraphLdaConfiguration()
       conf.setComputationClass(classOf[CVB0LDAComputation])
       conf.setMasterComputeClass(classOf[CVB0LDAMasterCompute])
       conf.setAggregatorWriterClass(classOf[CVB0LDAAggregatorWriter])
@@ -111,14 +111,14 @@ class CVBOLDAComputationTest extends WordSpec {
       conf.setVertexInputFormatClass(classOf[TestingLdaVertexInputFormat])
       conf.setVertexOutputFormatClass(classOf[TestingLdaVertexOutputFormat])
 
-      val ldaInputConfig = new LdaInputFormatConfig("dummy-edge-input-location", new FrameSchema(), "dummy-vertex-input-location", new FrameSchema())
-      val ldaOutputConfig = new LdaOutputFormatConfig("dummy-doc-results", "dummy-word-results", "dummy-topic-results")
+      val ldaInputConfig = new GiraphLdaInputFormatConfig("dummy-edge-input-location", new FrameSchema(), "dummy-vertex-input-location", new FrameSchema())
+      val ldaOutputConfig = new GiraphLdaOutputFormatConfig("dummy-doc-results", "dummy-word-results", "dummy-topic-results")
 
       val numTopics = 2
-      val ldaArgs = new LdaTrainArgs(new ModelReference(1), new FrameReference(2), "dummy_doc", "dummy_word", "dummy_word_count",
+      val ldaArgs = new GiraphLdaTrainArgs(new ModelReference(1), new FrameReference(2), "dummy_doc", "dummy_word", "dummy_word_count",
         maxIterations = Some(10), numTopics = Some(numTopics))
 
-      val ldaConfig = new LdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new LdaVertexInputFormatConfig(ldaArgs))
+      val ldaConfig = new GiraphLdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new GiraphLdaVertexInputFormatConfig(ldaArgs))
       conf.setLdaConfig(ldaConfig)
 
       // run internally

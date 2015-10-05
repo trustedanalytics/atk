@@ -23,11 +23,9 @@ import scala.reflect.ClassTag
 /**
  * Renames the vertices of a graph from some arbitrary type T (that provides a ClassTag for Spark's benefit)
  * to Long IDs.
- *
- * @tparam T type of the vertex IDs in the incoming graph
  */
 
-class LdaGraphIDAssigner() extends Serializable {
+class GiraphLdaGraphIDAssigner() extends Serializable {
 
   /**
    * Rename the vertices of the incoming graph from IDs of type T to Longs

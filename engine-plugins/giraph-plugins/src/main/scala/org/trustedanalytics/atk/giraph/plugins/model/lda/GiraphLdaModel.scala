@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.giraph.plugins.model.lda
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
-import org.trustedanalytics.atk.giraph.config.lda.LdaModelPredictReturn
+import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaModelPredictReturn
 
 import scala.collection.immutable.Map
 
@@ -28,8 +28,8 @@ import scala.collection.immutable.Map
  * @param numTopics Number of topics in trained model
  * @param topicWordMap Map of conditional probabilities of topics given word
  */
-case class LdaModel(numTopics: Int,
-                    topicWordMap: Map[String, Vector[Double]]) {
+case class GiraphLdaModel(numTopics: Int,
+                          topicWordMap: Map[String, Vector[Double]]) {
   require(numTopics > 0, "number of topics must be greater than zero")
 
   /**
@@ -38,7 +38,7 @@ case class LdaModel(numTopics: Int,
    * @param document Test document represented as a list of words
    * @return Topic predictions for document
    */
-  def predict(document: List[String]): LdaModelPredictReturn = {
+  def predict(document: List[String]): GiraphLdaModelPredictReturn = {
     require(document != null, "document must not be null")
 
     val docLength = document.length
@@ -57,7 +57,7 @@ case class LdaModel(numTopics: Int,
 
     val newWordCount = computeNewWordCount(document)
     val percentOfNewWords = computeNewWordPercentage(newWordCount, docLength)
-    new LdaModelPredictReturn(topicGivenDoc.toVector, newWordCount, percentOfNewWords)
+    new GiraphLdaModelPredictReturn(topicGivenDoc.toVector, newWordCount, percentOfNewWords)
   }
 
   /**
@@ -131,7 +131,7 @@ case class LdaModel(numTopics: Int,
   }
 }
 
-object LdaModel {
+object GiraphLdaModel {
 
   /**
    * Create LDA model from frame
@@ -148,7 +148,7 @@ object LdaModel {
                      frameSchema: Schema,
                      wordColumnName: String,
                      topicProbColumnName: String,
-                     numTopics: Int): LdaModel = {
+                     numTopics: Int): GiraphLdaModel = {
     val rowWrapper = new RowWrapper(frameSchema)
     val topicWordMap = topicsGivenWord.map(row => {
       val sqlRowWrapper = rowWrapper(new GenericRow(row))
@@ -157,6 +157,6 @@ object LdaModel {
       (word, prob)
     }).toMap
 
-    new LdaModel(numTopics, topicWordMap)
+    new GiraphLdaModel(numTopics, topicWordMap)
   }
 }

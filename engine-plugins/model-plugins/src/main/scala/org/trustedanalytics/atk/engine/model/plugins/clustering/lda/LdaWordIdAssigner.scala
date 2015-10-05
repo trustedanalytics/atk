@@ -19,7 +19,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 
 /**
  * Assigns unique long Ids to words
@@ -35,10 +35,10 @@ case class LdaWordIdAssigner(edgeFrame: FrameRdd,
   require(wordColumnName != null, "word column is required")
   require(wordCountColumnName != null, "word count column is required")
 
-  val LdaWordPrefix : String = "_lda_word_"
-  val ldaWordIdColumnName : String = LdaWordPrefix + "id_" + wordColumnName
-  val ldaWordColumnName : String  = LdaWordPrefix + wordColumnName
-  val ldaWordCountColumnName : String = LdaWordPrefix + "total_" + wordCountColumnName
+  val LdaWordPrefix: String = "_lda_word_"
+  val ldaWordIdColumnName: String = LdaWordPrefix + "id_" + wordColumnName
+  val ldaWordColumnName: String = LdaWordPrefix + wordColumnName
+  val ldaWordCountColumnName: String = LdaWordPrefix + "total_" + wordCountColumnName
 
   /**
    * Assign unique Ids to words
@@ -53,9 +53,10 @@ case class LdaWordIdAssigner(edgeFrame: FrameRdd,
       (row.stringValue(wordColumnName), row.longValue(wordCountColumnName))
     }).reduceByKey(_ + _)
       .zipWithIndex()
-      .map { case ((word, count), index) =>
-      new GenericRow(Array[Any](index, word, count))
-    }
+      .map {
+        case ((word, count), index) =>
+          new GenericRow(Array[Any](index, word, count))
+      }
 
     val schema = FrameSchema(List(
       Column(ldaWordIdColumnName, DataTypes.int64),
