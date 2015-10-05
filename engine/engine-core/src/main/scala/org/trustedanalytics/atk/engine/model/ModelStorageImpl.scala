@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.model._
 import org.trustedanalytics.atk.domain.{ Status, CreateEntityArgs }
 import org.trustedanalytics.atk.engine.ModelStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.repository.MetaStore
+import org.trustedanalytics.atk.repository.{ MetaStore }
 import spray.json.{ JsValue, JsObject }
 import org.trustedanalytics.atk.component.ClassLoaderAware
 import scala.slick.model
@@ -60,9 +60,14 @@ class ModelStorageImpl(metaStore: MetaStore)
       implicit session =>
         {
           if (createArgs.name.isDefined) {
-            metaStore.modelRepo.lookupByName(createArgs.name).foreach {
-              existingModel =>
-                throw new DuplicateNameException("model", createArgs.name.get, "Model with same name exists. Create aborted.")
+            if (metaStore.modelRepo.lookupByName(Some(createArgs.name.get)).isDefined) {
+              throw new DuplicateNameException("model", createArgs.name.get, "Model with same name already exists. Create aborted.")
+            }
+            else if (metaStore.graphRepo.lookupByName(Some(createArgs.name.get)).isDefined) {
+              throw new DuplicateNameException("graph", createArgs.name.get, "Graph with same name already exists. Create aborted.")
+            }
+            else if (metaStore.frameRepo.lookupByName(Some(createArgs.name.get)).isDefined) {
+              throw new DuplicateNameException("frame", createArgs.name.get, "Frame with same name already exists. Create aborted.")
             }
           }
           val modelTemplate = ModelTemplate(createArgs.name, createArgs.entityType.get)
@@ -81,9 +86,14 @@ class ModelStorageImpl(metaStore: MetaStore)
     metaStore.withSession("spark.modelstorage.rename") {
       implicit session =>
         {
-          val check = metaStore.modelRepo.lookupByName(Some(newName))
-          if (check.isDefined) {
+          if (metaStore.modelRepo.lookupByName(Some(newName)).isDefined) {
             throw new RuntimeException("Model with same name exists. Rename aborted.")
+          }
+          else if (metaStore.graphRepo.lookupByName(Some(newName)).isDefined) {
+            throw new RuntimeException("Graph with same name exists. Rename aborted.")
+          }
+          else if (metaStore.frameRepo.lookupByName(Some(newName)).isDefined) {
+            throw new RuntimeException("Frame with same name exists. Rename aborted.")
           }
 
           val newModel = expectModel(modelRef).copy(name = Some(newName))

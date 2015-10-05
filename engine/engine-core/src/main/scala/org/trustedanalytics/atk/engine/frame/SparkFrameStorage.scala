@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.parquet.ParquetReader
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitioner
-import org.trustedanalytics.atk.repository.SlickMetaStoreComponent
+import org.trustedanalytics.atk.repository.{ NameableRepository, SlickMetaStoreComponent }
 import org.trustedanalytics.atk.{ EventLoggingImplicits, DuplicateNameException, NotFoundException }
 import org.apache.hadoop.fs.Path
 import org.apache.spark.frame.FrameRdd
@@ -319,9 +319,14 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     metaStore.withSession("frame.rename") {
       implicit session =>
         {
-          val check = metaStore.frameRepo.lookupByName(Some(newName))
-          if (check.isDefined) {
+          if (metaStore.frameRepo.lookupByName(Some(newName)).isDefined) {
             throw new RuntimeException("Frame with same name exists. Rename aborted.")
+          }
+          else if (metaStore.graphRepo.lookupByName(Some(newName)).isDefined) {
+            throw new RuntimeException("Graph with same name exists. Rename aborted.")
+          }
+          else if (metaStore.modelRepo.lookupByName(Some(newName)).isDefined) {
+            throw new RuntimeException("Model with same name exists. Rename aborted.")
           }
           val newFrame = frame.copy(name = Some(newName))
           metaStore.frameRepo.update(newFrame).get
@@ -370,9 +375,14 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       implicit session =>
         {
           if (arguments.name.isDefined) {
-            metaStore.frameRepo.lookupByName(arguments.name).foreach {
-              existingFrame =>
-                throw new DuplicateNameException("frame", arguments.name.get, "Frame with same name exists. Create aborted.")
+            if (metaStore.frameRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("frame", arguments.name.get, "Frame with same name exists. Create aborted.")
+            }
+            else if (metaStore.graphRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("graph", arguments.name.get, "Graph with same name exists. Create aborted.")
+            }
+            else if (metaStore.modelRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("model", arguments.name.get, "Model with same name exists. Create aborted.")
             }
           }
           val frameTemplate = DataFrameTemplate(arguments.name, arguments.description)
