@@ -19,6 +19,8 @@ package org.trustedanalytics.atk.repository
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate }
 
+import scala.util.Try
+
 /**
  * Repository for graphs
  */
@@ -32,11 +34,9 @@ trait GraphRepository[Session] extends Repository[Session, GraphTemplate, GraphE
 
   def incrementIdCounter(id: Long, idCounter: Long)(implicit session: Session): Unit
 
-  /**
-   * Returns the liveness of the graph. If it is named or has named frames then it is a live graph.
-   * @param id id of graph in question
-   * @return true if graph is live, false if it is not
-   */
-  def isLive(id: GraphEntity)(implicit session: Session): Boolean
+  /** update a graph entity as Dropped */
+  def dropGraph(graph: GraphEntity)(implicit session: Session): Try[GraphEntity]
 
+  /** gets sequence of all graphs with status Dropped */
+  def droppedGraphs(implicit session: Session): Seq[GraphEntity]
 }

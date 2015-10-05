@@ -30,7 +30,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Make new frame with additional column for predicted label.",
+@PluginDoc(oneLine = "Predict the labels for the data points",
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted label's column.""",
   returns = """A frame containing the original frame's columns and a column with the

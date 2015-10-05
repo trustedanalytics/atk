@@ -27,7 +27,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename a model in the database
  */
-@PluginDoc(oneLine = "Rename a model.")
+@PluginDoc(oneLine = "Rename a model.",
+  extended = "")
 class RenameModelPlugin extends CommandPlugin[RenameModelArgs, ModelReference] {
 
   /**

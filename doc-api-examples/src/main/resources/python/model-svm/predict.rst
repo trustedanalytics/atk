@@ -1,5 +1,7 @@
 Examples
 --------
+Predict using a Svm Model.
+
 .. only:: html
 
     .. code::

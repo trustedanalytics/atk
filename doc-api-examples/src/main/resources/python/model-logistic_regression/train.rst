@@ -1,6 +1,6 @@
 Examples
 --------
-Train logistic regression model using Limited-memory-BFGS.
+Train a Logistic Regression Model using Limited-memory-BFGS.
 
 In the example below, the flag for computing the covariance matrix is enabled.
 When the covariance matrix is enabled, the summary table contains additional

@@ -43,7 +43,9 @@ was trained on. """) observationColumns: Option[List[String]]) {
 }
 
 @PluginDoc(oneLine = "Predict the values for the data points.",
-  extended = "",
+  extended =
+    """Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+existing columns and a new predicted value's column.""",
   returns = """A new frame consisting of the existing columns of the frame and
 a new column with predicted value for each observation.""")
 class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForestRegressorPredictArgs, FrameReference] {

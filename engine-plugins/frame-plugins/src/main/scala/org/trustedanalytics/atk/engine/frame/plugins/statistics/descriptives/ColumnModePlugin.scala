@@ -41,9 +41,9 @@ Because data distributions often have multiple modes, it is possible for a
 set of modes to be returned.
 By default, only one is returned, but by setting the optional parameter
 max_modes_returned, a larger number of modes can be returned.""",
-  returns = """dict
-    Dictionary containing summary statistics.
-    The data returned is composed of multiple components:
+  returns = """Dictionary containing summary statistics.
+    The data returned is composed of multiple components\:
+
 mode : A mode is a data element of maximum net weight.
     A set of modes is returned.
     The empty set is returned when the sum of the weights is 0.
