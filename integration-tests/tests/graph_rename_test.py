@@ -51,6 +51,7 @@ class GraphRenameTest(unittest.TestCase):
 
         print "rename graph to: " + str(new_graph_name)
         graph.name = new_graph_name
+        print "graphs: " + ta.get_graph_names()
         self.assertTrue(new_graph_name in ta.get_graph_names(), new_graph_name + " should be in list of graphs")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " shoule not be in list of graphs")
 
@@ -74,6 +75,7 @@ class GraphRenameTest(unittest.TestCase):
         graph2 = ta.Graph(name=graph_name2)
 
         # After creating graphs, check that graphs with each name exists on the server
+        print "graphs: " + ta.get_graph_names()
         self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should exist in list of graphs")
         self.assertTrue(graph_name2 in ta.get_graph_names(), graph_name2 + " should exist in list of graphs")
 
@@ -83,12 +85,13 @@ class GraphRenameTest(unittest.TestCase):
             graph2.name = graph_name1
 
         # Both graph names should still exist on the server
+        print "graphs: " + ta.get_graph_names()
         self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should still exist in list of graphs")
         self.assertTrue(graph_name2 in ta.get_graph_names(), graph_name2 + " should still exist in list of graphs")
 
         # Delete both graphs from the server (to clean up after the test)
-        ta.drop(graph_name1)
-        ta.drop(graph_name2)
+        ta.drop(graph1)
+        ta.drop(graph2)
 
     # Tests that we cannot rename a graph to have the same name as an existing model
     def test_duplicate_model_rename(self):
@@ -112,12 +115,14 @@ class GraphRenameTest(unittest.TestCase):
             graph.name = model_name
 
         # The original graph and model name should still exist on the server
+        print "graphs: " + ta.get_graph_names()
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
+        print "models: " + ta.get_model_names()
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
 
         # Delete the graph and the graph from the server (to clean up after the test)
         ta.drop(graph)
-        ta.drop(graph)
+        ta.drop(model)
 
     # Tests that we cannot rename a graph to have the same name as an existing frame
     def test_duplicate_frame_rename(self):
@@ -141,7 +146,9 @@ class GraphRenameTest(unittest.TestCase):
             graph.name = frame_name
 
         # The original graph and frame name should still exist on the server
+        print "graphs: " + ta.get_graph_names()
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
+        print "frames: " + ta.get_frame_names()
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
 
         # Delete the graph and the frame from the server (to clean up after the test)
