@@ -118,7 +118,7 @@ class ModelKMeansTest(unittest.TestCase):
         print "try to create a model with the same name as the graph"
         with self.assertRaises(Exception):
             model = ta.KMeansModel(name=graph_name)
-            ta.drop_models(graph_name)
+            ta.drop(graph_name)
 
         # Delete the graph to clean up after the test
         ta.drop_graphs(graph_name)

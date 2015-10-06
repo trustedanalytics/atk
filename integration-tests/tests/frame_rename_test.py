@@ -81,8 +81,8 @@ class FrameRenameTest(unittest.TestCase):
         self.assertTrue(frame_name2 in ta.get_frame_names(), frame_name2 + " should still exist in list of frames")
 
         # Delete both frames from the server (to clean up after the test)
-        ta.drop(frame_name1)
-        ta.drop(frame_name2)
+        ta.drop(frame1)
+        ta.drop(frame2)
 
     # Tests that we cannot rename a frame to have the same name as an existing graph
     def test_duplicate_graph_rename(self):
