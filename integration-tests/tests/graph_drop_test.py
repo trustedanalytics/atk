@@ -47,7 +47,7 @@ class GraphDropTest(unittest.TestCase):
 
         # Drop graph by name
         print "dropping graph by name"
-        ta.drop_graph(graph_name)
+        ta.drop_graphs(graph_name)
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests ta.drop_graph() with the graph proxy object
@@ -61,7 +61,7 @@ class GraphDropTest(unittest.TestCase):
 
         # Drop graph using the graph object
         print "dropping graph by entity"
-        ta.drop_graph(graph)
+        ta.drop_graphs(graph)
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests the generic ta.drop() using the graph proxy object

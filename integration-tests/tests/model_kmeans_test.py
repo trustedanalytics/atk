@@ -61,7 +61,7 @@ class ModelKMeansTest(unittest.TestCase):
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should be in the list of models")
 
         # Delete the model to clean up after the test
-        ta.drop_model(model_name)
+        ta.drop_models(model_name)
 
     # Tests trying to create a kmeans model with the same name as an existing model
     def test_create_kmeans_model_with_duplicte_model_name(self):
@@ -69,7 +69,7 @@ class ModelKMeansTest(unittest.TestCase):
 
         # If a model with name already exists, delete it
         if model_name in ta.get_model_names():
-            ta.drop_model(model_name)
+            ta.drop_models(model_name)
 
         print "create kmeans model named: " + str(model_name)
         model1 = ta.KMeansModel(name=model_name)
@@ -81,7 +81,7 @@ class ModelKMeansTest(unittest.TestCase):
             model2 = ta.KMeansModel(name=model_name)
 
         # Delete the model to clean up after the test
-        ta.drop_model(model_name)
+        ta.drop_models(model_name)
 
     # Tests trying to create a kmeans model with the same name as an existing frame
     def test_create_kmeans_model_with_duplicte_frame_name(self):
@@ -89,7 +89,7 @@ class ModelKMeansTest(unittest.TestCase):
 
         # If a model with name already exists, delete it
         if frame_name in ta.get_model_names():
-            ta.drop_model(frame_name)
+            ta.drop_models(frame_name)
 
         # If a frame with this name does not already exist, create it
         if frame_name not in ta.get_frame_names():
@@ -98,10 +98,10 @@ class ModelKMeansTest(unittest.TestCase):
         print "try to create a model with the same name as the frame"
         with self.assertRaises(Exception):
             model = ta.KMeansModel(name=frame_name)
-            ta.drop_model(frame_name)
+            ta.drop_models(frame_name)
 
         # Delete the frame to clean up after the test
-        ta.drop_frame(frame_name)
+        ta.drop_frames(frame_name)
 
     # Tests trying to create a kmeans model with the same name as an existing graph
     def test_create_kmeans_model_with_duplicte_graph_name(self):
@@ -109,7 +109,7 @@ class ModelKMeansTest(unittest.TestCase):
 
         # If a model with name already exists, delete it
         if graph_name in ta.get_model_names():
-            ta.drop_model(graph_name)
+            ta.drop_models(graph_name)
 
         # If a graph with this name does not already exist, create it
         if graph_name not in ta.get_graph_names():
@@ -118,10 +118,10 @@ class ModelKMeansTest(unittest.TestCase):
         print "try to create a model with the same name as the graph"
         with self.assertRaises(Exception):
             model = ta.KMeansModel(name=graph_name)
-            ta.drop_model(graph_name)
+            ta.drop_models(graph_name)
 
         # Delete the graph to clean up after the test
-        ta.drop_graph(graph_name)
+        ta.drop_graphs(graph_name)
 
 
 if __name__ == "__main__":

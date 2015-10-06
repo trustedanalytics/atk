@@ -42,12 +42,12 @@ class ModelDropTest(unittest.TestCase):
 
         # Create model and verify that it's in the get_model_names() list
         print "create model"
-        model = ta.Model(name=model_name)
+        model = ta.KMeansModel(name=model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
         # Drop model by name
         print "dropping model by name"
-        ta.drop_model(model_name)
+        ta.drop_models(model_name)
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
     # Tests ta.drop_model() with the model proxy object
@@ -56,12 +56,12 @@ class ModelDropTest(unittest.TestCase):
 
         # Create model and verify that it's in the get_model_names() list
         print "create model"
-        model = ta.Model(name=model_name)
+        model = ta.KMeansModel(name=model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
         # Drop model using the model object
         print "dropping model by entity"
-        ta.drop_model(model)
+        ta.drop_models(model)
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
     # Tests the generic ta.drop() using the model proxy object
@@ -72,7 +72,7 @@ class ModelDropTest(unittest.TestCase):
 
         print "create model"
         model_name = "test_model"
-        model = ta.Model(name=model_name)
+        model = ta.KMeansModel(name=model_name)
 
         # Check that the model we just created now exists
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of model names")
@@ -91,7 +91,7 @@ class ModelDropTest(unittest.TestCase):
 
         print "create model"
         model_name = "test_model"
-        model = ta.Model(name=model_name)
+        model = ta.KMeansModel(name=model_name)
 
         # Check that the model we just created now exists
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of model names")

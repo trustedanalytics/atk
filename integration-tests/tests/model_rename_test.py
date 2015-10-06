@@ -55,7 +55,7 @@ class ModelRenameTest(unittest.TestCase):
         self.assertFalse(model_name in ta.get_model_names(), model_name + " shoule not be in list of models")
 
         # Drop model to clean up after the test
-        ta.drop_model(model)
+        ta.drop_models(model)
 
 
     # Tests that we cannot rename a model to have the same name as an existing model
