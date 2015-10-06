@@ -32,7 +32,7 @@ import LibSvmJsonProtocol._
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted label's column.""",
   returns = """A new frame containing the original frame's columns and a column
-*predicted_label* containing the score calculated for each observation.""")
+*predicted_label* containing the label calculated for each observation.""")
 class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameReference] {
   /**
    * The name of the command.
