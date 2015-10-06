@@ -70,12 +70,14 @@ class ModelRenameTest(unittest.TestCase):
 
         print "create model1 named: " + model_name1
         model1 = ta.KMeansModel(name=model_name1)
+        self.assertTrue(model1.name == model_name1)
 
         print "create model2 named: " + model_name2
         model2 = ta.KMeansModel(name=model_name2)
+        self.assertTrue(model2.name == model_name2)
 
         # After creating models, check that models with each name exists on the server
-        print "models: " + ta.get_model_names()
+        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should exist in list of models")
 

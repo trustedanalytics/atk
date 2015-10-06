@@ -104,10 +104,12 @@ class GraphRenameTest(unittest.TestCase):
 
         print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
+        self.assertTrue(graph.name == graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
         print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
+        self.assertTrue(model_name == model.name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
         print "check for an exception when we try to rename the graph to the same name as the model"
