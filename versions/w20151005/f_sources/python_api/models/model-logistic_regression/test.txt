@@ -1,0 +1,125 @@
+.. _python_api/models/model-logistic_regression/test:
+
+
+:doc:`LogisticRegressionModel <index>`  test
+********************************************
+
+------
+
+
+.. function:: test(self, frame, label_column, observation_columns=None)
+
+    |ALPHA|
+    Predict test frame labels using trained logistic regression model, and show metrics.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4090>>
+
+        ..
+
+            Frame whose labels are to be
+            predicted.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the actual
+            label for each observation.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose labels are to be predicted and tested.
+            Default is to test over the columns the SVM model
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            An object with binary classification metrics.
+            The data returned is composed of multiple components\:
+
+            | **double** : *accuracy*
+            | **table** : *confusion_matrix*
+            | **double** : *f_measure*
+            | **double** : *precision*
+            | **double** : *recall*
+    Predict the labels for a test frame and run classification metrics on predicted and target labels.
+
+    Examples
+    --------
+    Test the performance of a trained Logistic Regression Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+            >>> my_model.train(train_frame, 'name_of_observation_column', 'name_of_label_column')
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column','name_of_observation_column')
+
+            >>> metrics.f_measure
+            0.66666666666666663
+
+            >>> metrics.recall
+            0.5
+
+            >>> metrics.accuracy
+            0.75
+
+            >>> metrics.precision
+            1.0
+
+            >>> metrics.confusion_matrix
+
+                          Predicted
+                        _pos_ _neg__
+            Actual  pos |  1     1
+                    neg |  0     2
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+            >>> my_model.train(train_frame, 'name_of_observation_column',
+            ... 'name_of_label_column')
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column',
+            ... 'name_of_observation_column')
+
+            >>> metrics.f_measure
+            0.66666666666666663
+
+            >>> metrics.recall
+            0.5
+
+            >>> metrics.accuracy
+            0.75
+
+            >>> metrics.precision
+            1.0
+
+            >>> metrics.confusion_matrix
+
+                          Predicted
+                        _pos_ _neg__
+            Actual  pos |  1     1
+                    neg |  0     2
+
+
+

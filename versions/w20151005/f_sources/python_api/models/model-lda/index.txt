@@ -1,0 +1,75 @@
+.. _python_api/models/model-lda/index:
+
+
+:doc:`Models<../index>` LdaModel
+********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    publish
+    status
+    train
+
+.. class:: LdaModel
+
+    Creates Latent Dirichlet Allocation model
+
+    |LDA| is a commonly-used algorithm for topic modeling, but,
+    more broadly, is considered a dimensionality reduction technique.
+    For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LdaModel__init__>`\ (self[, name, _info])                                             Creates Latent Dirichlet Allocation model
+    :doc:`predict <predict>`\ (self, document)                                                            |BETA| Predict conditional probabilities of topics given document.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, document_column_name, word_column_name, word_count_column_name)   |BETA| Creates Latent Dirichlet Allocation model
+    ====================================================================================================  ====================================================================================================
+
+.. _LdaModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Creates Latent Dirichlet Allocation model
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4110>>
+
+        ..
+
+
+    |LDA| is a commonly-used algorithm for topic modeling, but,
+    more broadly, is considered a dimensionality reduction technique.
+    For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.

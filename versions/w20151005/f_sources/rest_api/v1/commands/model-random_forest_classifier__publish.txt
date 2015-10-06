@@ -1,0 +1,106 @@
+.. _rest_api/v1/commands/model-random_forest_classifier__publish:
+
+
+
+--------------------------------------------------------------
+:doc:`Commands <index>` model:random_forest_classifier/publish
+--------------------------------------------------------------
+
+|BETA|
+Creates a tar file that will be used as input to the scoring engine
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:random_forest_classifier/publish
+
+:arguments:
+
+
+    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4110>>
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+The publish method exports the RandomForestClassifierModel and its implementation into a tar file. 
+  The tar file is then published on HDFS and this method returns the path to the tar file. 
+  The tar file serves as input to the scoring engine. This model can then be used to predict the cluster assignment of an observation.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Returns the HDFS path to the trained model's tar file
+
+

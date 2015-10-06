@@ -1,0 +1,98 @@
+.. _python_api/frames/frame-edge/copy:
+
+
+:doc:`EdgeFrame <index>`  copy
+******************************
+
+------
+
+
+.. function:: copy(self, columns=None, where=None, name=None)
+
+    Create new frame from current frame.
+
+
+    :Parameters:
+
+        **columns** : str | list of str | dict (default=None)
+
+        ..
+
+            If not None, the copy will only include the columns specified. If dict, the string pairs represent a column renaming, {source_column_name: destination_column_name}
+
+
+
+        **where** : function (default=None)
+
+        ..
+
+            If not None, only those rows for which the UDF evaluates to True will be copied.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            Name of the copied frame
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new Frame of the copied data.
+    Copy frame or certain frame columns entirely or filtered.
+    Useful for frame query.
+
+    Examples
+    --------
+    Build a Frame from a csv file with 5 million rows of data; call the
+    frame "cust":
+
+    .. code::
+
+        >>> my_frame = ta.Frame(source="my_data.csv")
+        >>> my_frame.name("cust")
+
+    Given the frame has columns *id*, *name*, *hair*, and *shoe*.
+    Copy it to a new frame:
+
+    .. code::
+
+        >>> your_frame = my_frame.copy()
+
+    Now we have two frames of data, each with 5 million rows.
+    Checking the names:
+
+    .. code::
+
+        >>> print my_frame.name()
+        >>> print your_frame.name()
+
+    Gives the results:
+
+    .. code::
+
+        "cust"
+        "frame_75401b7435d7132f5470ba35..."
+
+    Now, let's copy *some* of the columns from the original frame:
+
+    .. code::
+
+        >>> our_frame = my_frame.copy(['id', 'hair'])
+
+    Our new frame now has two columns, *id* and *hair*, and has 5 million
+    rows.
+    Let's try that again, but this time change the name of the *hair*
+    column to *color*:
+
+    .. code::
+
+        >>> last_frame = my_frame.copy(('id': 'id', 'hair': 'color'))
+

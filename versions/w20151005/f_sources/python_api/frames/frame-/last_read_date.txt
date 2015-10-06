@@ -1,0 +1,25 @@
+.. _python_api/frames/frame-/last_read_date:
+
+
+:doc:`Frame <index>`  last_read_date
+************************************
+
+------
+
+
+.. attribute:: last_read_date
+
+    Last time this frame's data was accessed.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Date string of the last time this frame's data was accessed

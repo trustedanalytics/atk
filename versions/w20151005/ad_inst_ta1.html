@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Package Installation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Administration" href="ad_over.html" >
+    <link rel="next" title="Configuration Script" href="ad_inst_ta3.html" >
+    <link rel="prev" title="Cloudera Hadoop 5 Configuration" href="ad_inst_cloudera.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" accesskey="U">Administration</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_inst_cloudera.html" title="Cloudera Hadoop 5 Configuration"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_inst_ta3.html" title="Configuration Script"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_dp2.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on DP2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ad-inst-ta1"></span><div class="section" id="package-installation">
+<span id="index-0"></span><h1>Package Installation<a class="headerlink" href="#package-installation" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="contents">
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id9">Introduction</a></li>
+<li><a class="reference internal" href="#requirements" id="id10">Requirements</a><ul>
+<li><a class="reference internal" href="#operating-system-requirements" id="id11">Operating System Requirements</a></li>
+<li><a class="reference internal" href="#cluster-requirements" id="id12">Cluster Requirements</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#toolkit-installation" id="id13">Trusted Analytics Platform Package Installation</a><ul>
+<li><a class="reference internal" href="#adding-extra-repositories" id="id14">Adding Extra Repositories</a><ul>
+<li><a class="reference internal" href="#epel-repository" id="id15">EPEL Repository</a></li>
+<li><a class="reference internal" href="#package-dependency-repository" id="id16">Trusted Analytics Platform Dependency Repository</a></li>
+<li><a class="reference internal" href="#package-private-repository" id="id17">Trusted Analytics Platform Private Repository</a><ul>
+<li><a class="reference internal" href="#troubleshooting-private-repository" id="id18">Troubleshooting Private Repository</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installing-toolkit" id="id19">Installing Trusted Analytics Platform Package</a><ul>
+<li><a class="reference internal" href="#installing-on-the-master-node" id="id20">Installing On The Master Node</a></li>
+<li><a class="reference internal" href="#installing-on-a-worker-node" id="id21">Installing On A Worker Node</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#rest-server-configuration" id="id22">REST Server Configuration</a><ul>
+<li><a class="reference internal" href="#configuration-script" id="id23">Configuration Script</a></li>
+<li><a class="reference internal" href="#manual-configuration" id="id24">Manual Configuration</a><ul>
+<li><a class="reference internal" href="#etc-trustedanalytics-rest-server-application-conf" id="id25">/etc/trustedanalytics/rest-server/application.conf</a><ul>
+<li><a class="reference internal" href="#configure-file-system-root" id="id26">Configure File System Root</a></li>
+<li><a class="reference internal" href="#configure-zookeeper-hosts" id="id27">Configure Zookeeper Hosts</a></li>
+<li><a class="reference internal" href="#configure-spark-master-host" id="id28">Configure Spark Master Host</a></li>
+<li><a class="reference internal" href="#configure-spark-executor-memory" id="id29">Configure Spark Executor Memory</a></li>
+<li><a class="reference internal" href="#set-the-bind-ip-address-optional" id="id30">Set the Bind IP Address (Optional)</a></li>
+<li><a class="reference internal" href="#updating-the-spark-class-path" id="id31">Updating the Spark Class Path</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#database-configuration" id="id32">Database Configuration</a><ul>
+<li><a class="reference internal" href="#h2" id="id33">H2</a></li>
+<li><a class="reference internal" href="#postgresql" id="id34">PostgreSQL</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#starting-the-package-rest-server" id="id35">Starting The Trusted Analytics Platform REST Server</a></li>
+<li><a class="reference internal" href="#troubleshooting-package-rest-server" id="id36">Troubleshooting Trusted Analytics Platform REST Server</a></li>
+<li><a class="reference internal" href="#upgrading" id="id37">Upgrading</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This guide covers Trusted Analytics Platform installation and configuration.</p>
+<p>Cloudera installation documentation can be found at:
+<a class="reference external" href="http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_cm_cdh.html">http://www.cloudera.com/content/cloudera-content/cloudera-docs/CM5/latest/Cloudera-Manager-Installation-Guide/cm5ig_install_cm_cdh.html</a> .</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="operating-system-requirements">
+<h3>Operating System Requirements<a class="headerlink" href="#operating-system-requirements" title="Permalink to this headline">¶</a></h3>
+<p>These instructions are oriented towards <a class="reference external" href="http://redhat.com/">Red Hat Enterprise Linux</a> or <a class="reference external" href="http://centos.org/">CentOS</a> version 6.6.
+Trusted Analytics Platform uses &#8216;yum&#8217; for installation, &#8216;sudo&#8217; for proper authority.</p>
+</div>
+<div class="section" id="cluster-requirements">
+<span id="index-1"></span><h3>Cluster Requirements<a class="headerlink" href="#cluster-requirements" title="Permalink to this headline">¶</a></h3>
+<p>Cloudera cluster 5.3.x with following services:</p>
+<ol class="arabic simple">
+<li>HDFS</li>
+<li>SPARK</li>
+<li>Hbase</li>
+<li>Yarn(MR2)</li>
+<li>Zookeeper</li>
+</ol>
+<p>Trusted Analytics Platform Python client supports Python 2.7.</p>
+</div>
+</div>
+<div class="section" id="toolkit-installation">
+<h2>Trusted Analytics Platform Package Installation<a class="headerlink" href="#toolkit-installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="adding-extra-repositories">
+<span id="index-2"></span><h3>Adding Extra Repositories<a class="headerlink" href="#adding-extra-repositories" title="Permalink to this headline">¶</a></h3>
+<p>The EPEL and Trusted Analytics Platform repositories must be installed on the REST server node and
+all spark nodes (master and worker).
+The Trusted Analytics Platform Dependency repository and the yum-s3 package must be installed before
+the Trusted Analytics Platform private repository.</p>
+<div class="section" id="epel-repository">
+<span id="id1"></span><h4>EPEL Repository<a class="headerlink" href="#epel-repository" title="Permalink to this headline">¶</a></h4>
+<p>Verify the installation of the &#8220;epel&#8221; repository:</p>
+<p>..code:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo yum repolist
+</pre></div>
+</div>
+<p>Sample output:</p>
+<div class="highlight-python"><div class="highlight"><pre>repo id                                    repo name
+cloudera-cdh5                              Cloudera Hadoop, Version 5                                           141
+cloudera-manager                           Cloudera Manager, Version 5.3.1                                        7
+epel                                       Extra Packages for Enterprise Linux 6 - x86_64                    11,022
+rhui-REGION-client-config-server-6         Red Hat Update Infrastructure 2.0 Client Configuration Server 6        2
+rhui-REGION-rhel-server-releases           Red Hat Enterprise Linux Server 6 (RPMs)                          12,690
+rhui-REGION-rhel-server-releases-optional  Red Hat Enterprise Linux Server 6 Optional (RPMs)                  7,168
+</pre></div>
+</div>
+<p>If the &#8220;epel&#8221; repository is not listed, do this to install it:</p>
+<p>..code:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+$ sudo rpm -ivh epel-release-6-8.noarch.rpm
+</pre></div>
+</div>
+</div>
+<div class="section" id="package-dependency-repository">
+<span id="index-3"></span><h4>Trusted Analytics Platform Dependency Repository<a class="headerlink" href="#package-dependency-repository" title="Permalink to this headline">¶</a></h4>
+<p>Some open source libraries are included to aid with the installation of the
+Trusted Analytics Platform.
+Some of these libraries are newer versions than what is available in RHEL,
+EPEL or CentOS repositories.</p>
+<p>To add the dependency repository, do this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ wget https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/ta-deps.repo
+$ sudo cp ta-deps.repo /etc/yum.repos.d/
+</pre></div>
+</div>
+<p>Alternatively, do this to build the dependency repository information file
+directly:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ echo &quot;[trustedanalytics-deps]
+&gt; name=trustedanalytics-deps
+&gt; baseurl=https://trustedanalytics-dependencies.s3-us-west-2.amazonaws.com/yum
+&gt; gpgcheck=0
+&gt; priority=1 enabled=1&quot;  | sudo tee -a /etc/yum.repos.d/ta-deps.repo
+</pre></div>
+</div>
+<p>This code is <a class="reference download internal" href="f_downloads/ta-deps.sh"><code class="xref download docutils literal"><span class="pre">downloadable</span></code></a> (open, copy, and paste).</p>
+<p>Test the installation of the dependencies repository:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum info yum-s3
+</pre></div>
+</div>
+<p>Results should be similar to this:</p>
+<div class="highlight-python"><div class="highlight"><pre>Available Packages
+Name        : yum-s3
+Arch        : noarch
+Version     : 0.2.4
+Release     : 1
+Size        : 9.0 k
+Repo        : trustedanalytics-deps
+Summary     : Amazon S3 plugin for yum.
+URL         : git@github.com:NumberFour/yum-s3-plugin.git
+License     : Apache License 2.0
+</pre></div>
+</div>
+<p>Installing the <em>yum-s3</em> package allows access to the Amazon S3 repository.
+To install the <em>yum-s3</em> package, do this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum -y install yum-s3
+</pre></div>
+</div>
+<span class="target" id="add-ta-private-repository"></span></div>
+<div class="section" id="package-private-repository">
+<span id="index-4"></span><h4>Trusted Analytics Platform Private Repository<a class="headerlink" href="#package-private-repository" title="Permalink to this headline">¶</a></h4>
+<p>Create &#8216;/etc/yum.repos.d/ta.repo&#8217;:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ echo &quot;[trustedanalytics]
+&gt; name=trustedanalytics
+&gt; baseurl=https://trustedanalytics-repo.s3-us-west-2.amazonaws.com/release/latest/yum/dists/rhel/6
+&gt; gpgcheck=0
+&gt; priority=1
+&gt; s3_enabled=1
+&gt; key_id=ACCESS_TOKEN
+&gt; secret_key=SECRET_TOKEN&quot; | sudo tee -a /etc/yum.repos.d/ta.repo
+</pre></div>
+</div>
+<p>This code is <a class="reference download internal" href="f_downloads/ta-repo.sh"><code class="xref download docutils literal"><span class="pre">downloadable</span></code></a> (open, copy, and paste).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Replace &#8220;ACCESS_TOKEN&#8221; and &#8220;SECRET_TOKEN&#8221; with appropriate tokens.</p>
+</div>
+<p>To verify the installation of the Trusted Analytics Platform repository, do this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum info trustedanalytics-rest-server
+</pre></div>
+</div>
+<p>Example results:</p>
+<div class="highlight-python"><div class="highlight"><pre>Available Packages
+Name        : trustedanalytics-rest-server
+Arch        : x86_64
+Version     : #.#.#
+Release     : ####
+Size        : 419 M
+Repo        : trustedanalytics
+Summary     : trustedanalytics-rest-server-0.9
+URL         : trustedanalytics.com
+License     : Confidential
+</pre></div>
+</div>
+<div class="section" id="troubleshooting-private-repository">
+<h5>Troubleshooting Private Repository<a class="headerlink" href="#troubleshooting-private-repository" title="Permalink to this headline">¶</a></h5>
+<ul>
+<li><p class="first">The most common errors when using the private repository:</p>
+<ul class="simple">
+<li>Incorrect access token/key</li>
+<li>Incorect secret token/key</li>
+<li>The server time is out of sync with the world</li>
+</ul>
+</li>
+<li><p class="first">Double check the access and secret keys in the ta.repo file.</p>
+</li>
+<li><p class="first">AWS S3 will fail with access denied errors if the system time is out of
+sync with the website.
+To keep the system time in sync with the website run:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo service ntpd start
+</pre></div>
+</div>
+</li>
+<li><p class="first">The Trusted Analytics Platform Dependency repository and the yum-s3 package must be installed
+before the Trusted Analytics Platform private repository.</p>
+</li>
+<li><p class="first">To use the yum command inside a corporate proxy make sure the
+<em>http_proxy</em> and <em>https_proxy</em> environment variables are set.</p>
+</li>
+<li><p class="first">The sudo command may need the -E option to maintain environment variables:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo -E yum command
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="installing-toolkit">
+<span id="installing-ta-packages"></span><h3>Installing Trusted Analytics Platform Package<a class="headerlink" href="#installing-toolkit" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="installing-on-the-master-node">
+<h4>Installing On The Master Node<a class="headerlink" href="#installing-on-the-master-node" title="Permalink to this headline">¶</a></h4>
+<p>Install Trusted Analytics Platform Python REST server and its dependencies.
+Only one instance of the REST server needs to be installed.
+Installation location is flexible, but it is usually installed
+with the HDFS name node.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum -y install trustedanalytics-rest-server
+</pre></div>
+</div>
+</div>
+<div class="section" id="installing-on-a-worker-node">
+<h4>Installing On A Worker Node<a class="headerlink" href="#installing-on-a-worker-node" title="Permalink to this headline">¶</a></h4>
+<p>The Trusted Analytics Platform spark dependencies package needs to be installed on every node
+running the spark worker role.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum -y install trustedanalytics-spark-deps trustedanalytics-python-rest-client
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="rest-server-configuration">
+<span id="id2"></span><h2>REST Server Configuration<a class="headerlink" href="#rest-server-configuration" title="Permalink to this headline">¶</a></h2>
+<p>From the postgresql client, create a new database and user in postgresql.
+See the section on <a class="reference internal" href="#ad-inst-ta1-postgresql"><span>postgresql</span></a>.</p>
+<div class="section" id="configuration-script">
+<h3>Configuration Script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h3>
+<p>The server configuration is semi-automated via the use of a Python script
+&#8216;/etc/trustedanalytics/rest-server/config.py&#8217;.
+It will query Cloudera Manager for the necessary configuration values and
+create a new &#8216;application.conf&#8217; file based on the &#8216;application.conf.tpl&#8217; file.
+The script will also fully configure the local PostgreSQL installation to
+work with the Trusted Analytics Platform server.</p>
+<p>To configure Trusted Analytics Platform installation, do this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cd /etc/trustedanalytics/rest-server/
+$ sudo ./config
+</pre></div>
+</div>
+<p>Answer the prompts to configure the cluster.
+To see an example of the prompts see <a class="reference internal" href="ad_inst_ta3.html"><em>Configuration Script</em></a>.</p>
+<p>The script goes through all the necessary configurations to get the Trusted Analytics Platform
+service running.
+The script can be run multiple times but there is a danger that configuring the
+database multiple times can wipe out a users data frames and graphs.</p>
+<p>Command line arguments can also be supplied for every prompt.
+If a command line argument is given, no prompt will be presented.
+To get a list of all the command line arguments for the configuration script,
+run the same command with &#8211;help:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo ./config --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-configuration">
+<h3>Manual Configuration<a class="headerlink" href="#manual-configuration" title="Permalink to this headline">¶</a></h3>
+<p><strong>This section is optional, but informative if additional changes to the
+configuration file are needed.</strong> (<a class="reference internal" href="#skip-manual-section"><span>Skip section</span></a>).</p>
+<div class="section" id="etc-trustedanalytics-rest-server-application-conf">
+<h4>/etc/trustedanalytics/rest-server/application.conf<a class="headerlink" href="#etc-trustedanalytics-rest-server-application-conf" title="Permalink to this headline">¶</a></h4>
+<p>The REST server package provides a configuration template file which must be
+used to create a configuration file.
+Copy the configuration template file &#8216;application.conf.tpl&#8217; to
+&#8216;application.conf&#8217; in the same directory, like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ cd /etc/trustedanalytics/rest-server
+$ sudo cp application.conf.tpl application.conf
+</pre></div>
+</div>
+<p>Open the file with a text editor:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo vi application.conf
+</pre></div>
+</div>
+<p>All of the changes that need to be made are located at the top of the file.
+See <a class="reference internal" href="appendix_application_conf.html"><em>Appendix A — Sample Application Configuration File</em></a> for an example &#8216;application.conf&#8217; file.</p>
+<div class="section" id="configure-file-system-root">
+<span id="ad-inst-ta-configure-file-system-root"></span><h5>Configure File System Root<a class="headerlink" href="#configure-file-system-root" title="Permalink to this headline">¶</a></h5>
+<p>Replace the text &#8220;invalid-fsroot-host&#8221; with the fully qualified domain of the
+HDFS Namenode.</p>
+<p>Example:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">fs</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="s">&quot;hdfs://invalid-fsroot-host/user/atkuser&quot;</span>
+</pre></div>
+</div>
+<p>Becomes:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">fs</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="s">&quot;hdfs://localhost.localdomain/user/atkuser&quot;</span>
+</pre></div>
+</div>
+<p>If the HDFS Name Node port does not use the standard port, specify it
+after the host name with a colon:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">fs</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="s">&quot;hdfs://localhost.localdomain:8020/user/atkuser&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-zookeeper-hosts">
+<h5>Configure Zookeeper Hosts<a class="headerlink" href="#configure-zookeeper-hosts" title="Permalink to this headline">¶</a></h5>
+<p>Replace the text &#8220;invalid-titan-host&#8221; with a comma delimited list of fully
+qualified domain names of all nodes running the zookeeper service.</p>
+<p>Example:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="s">&quot;invalid-titan-host&quot;</span>
+</pre></div>
+</div>
+<p>Becomes:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="s">&quot;localhost.localdomain,localhost.localdomain&quot;</span>
+</pre></div>
+</div>
+<p>If the zookeeper client port is not 2181, un-comment the following line and
+replace 2181 with the zookeeper client port:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="s">&quot;2181&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-spark-master-host">
+<h5>Configure Spark Master Host<a class="headerlink" href="#configure-spark-master-host" title="Permalink to this headline">¶</a></h5>
+<p>Update &#8220;invalid-spark-master&#8221;.</p>
+<p>To run Spark on Yarn in yarn-cluster mode, set:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">spark</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">yarn</span><span class="o">-</span><span class="n">cluster</span>
+</pre></div>
+</div>
+<p>To run Spark on Yarn in yarn-client mode, set:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">spark</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">yarn</span><span class="o">-</span><span class="n">client</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-spark-executor-memory">
+<h5>Configure Spark Executor Memory<a class="headerlink" href="#configure-spark-executor-memory" title="Permalink to this headline">¶</a></h5>
+<p>The Spark executor memory needs to be set equal to or less than what is
+configured in Cloudera Manager.
+The Cloudera Spark installation will, by default, set the Spark executor
+memory to 8g, so 8g is usually a safe setting.</p>
+<p>Example:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">spark</span><span class="o">.</span><span class="n">executor</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="s">&quot;invalid executor memory&quot;</span>
+</pre></div>
+</div>
+<p>Becomes:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">spark</span><span class="o">.</span><span class="n">executor</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="s">&quot;8g&quot;</span>
+</pre></div>
+</div>
+<p>Click on the Spark service then configuration in Cloudera Manager to get
+executor memory.
+See <a class="reference internal" href="#fig-12-01"><span>Fig. 12.1</span></a>.</p>
+<div class="figure align-center" id="id3">
+<span id="fig-12-01"></span><img alt="f_images/ad_inst_ta1_spark_executor_memory.png" src="f_images/ad_inst_ta1_spark_executor_memory.png" />
+<p class="caption"><span class="caption-text">Fig. 12.1
+Spark Executor Memory</span></p>
+</div>
+</div>
+<div class="section" id="set-the-bind-ip-address-optional">
+<h5>Set the Bind IP Address (Optional)<a class="headerlink" href="#set-the-bind-ip-address-optional" title="Permalink to this headline">¶</a></h5>
+<p>The Trusted Analytics Platform server can bind to all IP addresses, as opposed to just a single
+address, by updating the following lines and follow the commented instructions.
+This configuration section is also near the top of the file.</p>
+<div class="code highlight-python"><div class="highlight"><pre>#bind address - change to 0.0.0.0 to listen on all interfaces
+//host = &quot;127.0.0.1&quot;
+</pre></div>
+</div>
+</div>
+<div class="section" id="updating-the-spark-class-path">
+<h5>Updating the Spark Class Path<a class="headerlink" href="#updating-the-spark-class-path" title="Permalink to this headline">¶</a></h5>
+<p>The automatic configuration script updates the classpath in Cloudera Manager.
+The spark class path can also be configured through Cloudera Manager under the
+spark configuration / Worker Environment Advanced Configuration Snippet.
+See <a class="reference internal" href="#fig-12-02"><span>Fig 12.2</span></a>.
+If it isn&#8217;t already set, add:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="n">SPARK_CLASSPATH</span><span class="o">=</span><span class="s">&quot;/usr/lib/trustedanalytics/graphbuilder/lib/ispark-deps.jar&quot;</span>
+</pre></div>
+</div>
+<div class="figure align-center" id="id5">
+<span id="fig-12-02"></span><img alt="f_images/ad_inst_ta1_spark_class_path.png" src="f_images/ad_inst_ta1_spark_class_path.png" />
+<p class="caption"><span class="caption-text">Fig. 12.2
+Spark Class Path</span></p>
+</div>
+<p id="skip-manual-section"><strong>End of manual configuration</strong></p>
+<p>Restart the Spark service.
+See <a class="reference internal" href="#fig-13-03"><span>Fig. 13.3</span></a>.</p>
+<div class="figure align-center" id="id7">
+<span id="fig-13-03"></span><img alt="f_images/ad_inst_ta1_restart_spark.png" src="f_images/ad_inst_ta1_restart_spark.png" />
+<p class="caption"><span class="caption-text">Fig. 13.3
+Restart Spark</span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="database-configuration">
+<h3>Database Configuration<a class="headerlink" href="#database-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The Trusted Analytics Platform service can use two different databases H2 and PostgreSQL.
+The configuration script configures postgresql automatically.</p>
+<div class="section" id="h2">
+<span id="index-5"></span><h4>H2<a class="headerlink" href="#h2" title="Permalink to this headline">¶</a></h4>
+<div class="admonition caution">
+<p class="first admonition-title">Caution</p>
+<p class="last">H2 will lose all metadata upon service restart.</p>
+</div>
+<p>Enabling H2 is very easy and only requires some changes to <em>application.conf</em>.
+To comment a line in the configuration file either prepend the line with two
+forward slashes &#8216;//&#8217; or a pound sign &#8216;#&#8217;.</p>
+<p>The following lines need to be commented:</p>
+<p>Before:</p>
+<div class="code highlight-python"><div class="highlight"><pre>metastore.connection-postgresql.host = &quot;invalid-postgresql-host&quot;
+metastore.connection-postgresql.port = 5432
+metastore.connection-postgresql.database = &quot;ta-metastore&quot;
+metastore.connection-postgresql.username = &quot;atkuser&quot;
+metastore.connection-postgresql.password = &quot;myPassword&quot;
+metastore.connection-postgresql.url = &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:&quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/&quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+</pre></div>
+</div>
+<p>After:</p>
+<div class="code highlight-python"><div class="highlight"><pre>//metastore.connection-postgresql.host = &quot;invalid-postgresql-host&quot;
+//metastore.connection-postgresql.port = 5432
+//metastore.connection-postgresql.database = &quot;ta-metastore&quot;
+//metastore.connection-postgresql.username = &quot;atkuser&quot;
+//metastore.connection-postgresql.password = &quot;myPassword&quot;
+//metastore.connection-postgresql.url = &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:&quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/&quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+//metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+</pre></div>
+</div>
+<p>Next, uncomment the following line:</p>
+<p>Before:</p>
+<div class="code highlight-python"><div class="highlight"><pre>//metastore.connection = ${trustedanalytics.atk.metastore.connection-h2}
+</pre></div>
+</div>
+<p>After:</p>
+<div class="code highlight-python"><div class="highlight"><pre>metastore.connection = ${trustedanalytics.atk.metastore.connection-h2}
+</pre></div>
+</div>
+<span class="target" id="ad-inst-ta1-postgresql"></span></div>
+<div class="section" id="postgresql">
+<span id="index-6"></span><h4>PostgreSQL<a class="headerlink" href="#postgresql" title="Permalink to this headline">¶</a></h4>
+<p>PostgreSQL configuration is more involved than H2 configuration and should
+only be attempted by an advanced user.
+Using PostgreSQL allows graphs and frames to persist across service restarts.</p>
+<p>First, log into the postgres user on the linux system:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo su postgres
+</pre></div>
+</div>
+<p>Start the postgres command line client:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ psql
+</pre></div>
+</div>
+<p>Wait for the command line prompt to come:</p>
+<div class="highlight-python"><div class="highlight"><pre>postgres=#
+</pre></div>
+</div>
+<p>Then create a user:</p>
+<div class="highlight-python"><div class="highlight"><pre>postgres=# create user YOURUSER with createdb encrypted password &#39;YOUR_PASSWORD&#39;;
+</pre></div>
+</div>
+<p>User creation confirmation:</p>
+<div class="highlight-python"><div class="highlight"><pre>CREATE ROLE
+</pre></div>
+</div>
+<p>Then create a database for that user:</p>
+<div class="highlight-python"><div class="highlight"><pre>postgres=# create database YOURDATABASE with owner YOURUSER;
+</pre></div>
+</div>
+<p>Database creation confirmation:</p>
+<div class="highlight-python"><div class="highlight"><pre>CREATE DATABASE
+</pre></div>
+</div>
+<p>After creating the database exit the postgres command line by hitting
+<code class="docutils literal"><span class="pre">ctrl</span> <span class="pre">+</span> <span class="pre">d</span></code></p>
+<p>Once the database and user are created, open &#8216;/var/lib/pgsql/data/pg_hba.conf&#8217;
+and add this line
+<code class="docutils literal"><span class="pre">host</span>&nbsp;&nbsp;&nbsp; <span class="pre">all</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">YOURUSER</span>&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">127.0.0.1/32</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="pre">md5</span></code>
+to very the top of the file:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ vi /var/lib/pgsql/data/pg_hba.conf
+</pre></div>
+</div>
+<p>Add the new line at the very top of the file or before any uncommented lines.
+If the pg_hba.conf file doesn&#8217;t exist, initialize postgresql with:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo survice postgresql initdb
+</pre></div>
+</div>
+<p>Now that the database is created, uncomment all the postgres lines in
+<code class="docutils literal"><span class="pre">application.conf</span></code>.</p>
+<p>Before:</p>
+<div class="code highlight-python"><div class="highlight"><pre>//metastore.connection-postgresql.host = &quot;invalid-postgresql-host&quot;
+//metastore.connection-postgresql.port = 5432
+//metastore.connection-postgresql.database = &quot;ta-metastore&quot;
+//metastore.connection-postgresql.username = &quot;atkuser&quot;
+//metastore.connection-postgresql.password = &quot;myPassword&quot;
+//metastore.connection-postgresql.url = &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:&quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/&quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+//metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+</pre></div>
+</div>
+<p>After:</p>
+<div class="code highlight-python"><div class="highlight"><pre>metastore.connection-postgresql.host = &quot;localhost&quot;
+metastore.connection-postgresql.port = 5432
+metastore.connection-postgresql.database = &quot;YOURDATABASE&quot;
+metastore.connection-postgresql.username = &quot;YOURUSER&quot;
+metastore.connection-postgresql.password = &quot;YOUR_PASSWORD&quot;
+metastore.connection-postgresql.url = &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:&quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/&quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+</pre></div>
+</div>
+<p>Restart the Trusted Analytics Platform service:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo service trustedanalytics restart
+</pre></div>
+</div>
+<p>After restarting the service, Trusted Analytics Platform will create all the database tables.
+Now insert a meta user to enable Python client requests.</p>
+<p>Login to the postgres linux user:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo su postgres
+</pre></div>
+</div>
+<p>Open the postgres command line:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ psql
+</pre></div>
+</div>
+<p>Switch databases:</p>
+<div class="code highlight-python"><div class="highlight"><pre>postgres=# \c YOURDATABASE
+psql (8.4.18)
+You are now connected to database &quot;YOURDATABASE&quot;.
+</pre></div>
+</div>
+<p>Then insert into the users table:</p>
+<div class="code highlight-python"><div class="highlight"><pre>postgres=# insert into users (username, api_key, created_on, modified_on) values( &#39;metastore&#39;, &#39;test_api_key_1&#39;, now(), now() );
+INSERT 0 1
+</pre></div>
+</div>
+<p>View the insertion by doing a select on the users table:</p>
+<div class="code highlight-python"><div class="highlight"><pre>postgres=# select * from users;
+</pre></div>
+</div>
+<p>There should only be a single row per api_key:</p>
+<div class="code highlight-python"><div class="highlight"><pre> user_id | username  |  api_key  |      created_on     |     modified_on
+---------+-----------+-----------+---------------------+---------------------
+       1 | metastore | api_key_1 | 2014-11-20 12:37:16 | 2014-11-20 12:37:16
+   (1 row)
+</pre></div>
+</div>
+<p>If there is more than one row for a single api key, remove one of them or
+create a new database.
+The server will not be able to validate a request from the REST client if there
+are duplicate api keys.</p>
+<p>After the confirmation of the insert, commands from the python client can be
+sent.</p>
+</div>
+</div>
+<div class="section" id="starting-the-package-rest-server">
+<span id="index-7"></span><h3>Starting The Trusted Analytics Platform REST Server<a class="headerlink" href="#starting-the-package-rest-server" title="Permalink to this headline">¶</a></h3>
+<p>Starting the REST server is very easy.
+It can be started like any other Linux service.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo service trustedanalytics start
+</pre></div>
+</div>
+<p>After starting the REST server, browse to the host on port 9099
+(&lt;master node ip address&gt;:9099) to see if the server started successfully.</p>
+</div>
+<div class="section" id="troubleshooting-package-rest-server">
+<h3>Troubleshooting Trusted Analytics Platform REST Server<a class="headerlink" href="#troubleshooting-package-rest-server" title="Permalink to this headline">¶</a></h3>
+<p>A log gets written to &#8216;/var/log/trustedanalytics/rest-server/output.log or
+&#8216;/var/log/trustedanalytics/rest-server/application.log&#8217;.
+To resolve issues starting or running jobs, tail either log to see what
+error is getting reported while running the task:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo tail -f /var/log/trustedanalytics/rest-server/output.log
+</pre></div>
+</div>
+<p>or:</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ sudo tail -f /var/log/trustedanalytics/rest-server/application.log
+</pre></div>
+</div>
+</div>
+<div class="section" id="upgrading">
+<h3>Upgrading<a class="headerlink" href="#upgrading" title="Permalink to this headline">¶</a></h3>
+<p>Unless specified otherwise in the release notes, upgrading requires removal of
+old software prior to installation of new software.</p>
+<div class="toctree-wrapper compound">
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 05, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

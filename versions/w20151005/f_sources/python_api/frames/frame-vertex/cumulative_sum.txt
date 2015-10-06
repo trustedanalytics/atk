@@ -1,0 +1,83 @@
+.. _python_api/frames/frame-vertex/cumulative_sum:
+
+
+:doc:`VertexFrame <index>`  cumulative_sum
+******************************************
+
+------
+
+
+.. function:: cumulative_sum(self, sample_col)
+
+    |BETA|
+    Add column to frame with cumulative percent sum.
+
+
+    :Parameters:
+
+        **sample_col** : unicode
+
+        ..
+
+            The name of the column from which to compute
+            the cumulative sum.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    A cumulative sum is computed by sequentially stepping through the rows,
+    observing the column values and keeping track of the cumulative sum for each value.
+
+    Notes
+    -----
+    This method applies only to columns containing numerical data.
+
+    Examples
+    --------
+    Consider Frame *my_frame*, which accesses a frame that contains a single
+    column named *obs*:
+
+    .. code::
+
+         >>> my_frame.inspect()
+
+           obs:int32
+         /-----------/
+              0
+              1
+              2
+              0
+              1
+              2
+
+    The cumulative sum for column *obs* is obtained by:
+
+    .. code::
+
+        >>> my_frame.cumulative_sum('obs')
+
+    The Frame *my_frame* accesses the original frame that now contains two
+    columns, *obs* that contains the original column values, and
+    *obsCumulativeSum* that contains the cumulative percent count:
+
+    .. code::
+
+        >>> my_frame.inspect()
+
+          obs:int32   obs_cumulative_sum:int32
+        /--------------------------------------/
+             0                          0
+             1                          1
+             2                          3
+             0                          3
+             1                          4
+             2                          6
+
+

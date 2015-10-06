@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-edge/status:
+
+
+:doc:`EdgeFrame <index>`  status
+********************************
+
+------
+
+
+.. attribute:: status
+
+    Current frame life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the frame
+    One of three statuses: Active, Dropped, Finalized
+       Active:    Entity is available for use
+       Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+       Finalized: Entity's data has been deleted
+
+    Examples
+    --------
+    Given that we have an existing data frame *my_data*, create a Frame,
+    then show the frame schema:
+
+    .. code::
+
+        >>> BF = ta.get_frame('my_data')
+        >>> print BF.status
+
+    The result is:
+
+    .. code::
+
+        u'Active'

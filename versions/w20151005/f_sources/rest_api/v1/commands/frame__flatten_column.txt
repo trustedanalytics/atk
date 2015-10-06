@@ -1,0 +1,124 @@
+.. _rest_api/v1/commands/frame__flatten_column:
+
+
+
+--------------------------------------------
+:doc:`Commands <index>` frame/flatten_column
+--------------------------------------------
+
+Spread data to multiple rows based on cell data.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/flatten_column
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4090>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **column** : unicode
+
+    ..
+
+        The column to be flattened.
+
+
+
+    **delimiter** : unicode (default=None)
+
+    ..
+
+        The delimiter string.
+        Default is comma (,).
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Splits cells in the specified column into multiple rows according to a string
+delimiter.
+New rows are a full copy of the original row, but the specified column only
+contains one value.
+The original row is deleted.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

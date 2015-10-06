@@ -1,0 +1,115 @@
+.. _python_api/models/model-principal_components/train:
+
+
+:doc:`PrincipalComponentsModel <index>`  train
+**********************************************
+
+------
+
+
+.. function:: train(self, frame, observation_columns, mean_centered=True, k=None)
+
+    Build principal components model.
+
+
+    :Parameters:
+
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4090>>
+
+        ..
+
+            A frame to train the model
+            on.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing
+            the observations.
+
+
+
+        **mean_centered** : bool (default=True)
+
+        ..
+
+            Option to mean center the
+            columns
+
+
+
+        **k** : int32 (default=None)
+
+        ..
+
+            Principal component count.
+            Default is the number of observation columns
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dictionary
+                |A dictionary with trained Principal Components Model with the following keys\:
+                |'column_means': the list of the means of each observation column
+                |'k': number of principal components used to train the model
+                |'mean_centered': Flag indicating if the model was mean centered during training
+                |'observation_columns': the list of observation columns on which the model was trained,
+                |'right_singular_vectors': list of a list storing the right singular vectors of the specified columns of the input frame
+                |'singular_values': list storing the singular values of the specified columns of the input frame
+              
+    Creating a PrincipalComponents Model using the observation columns.
+
+    Examples
+    --------
+    Train a Principal Components Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+            >>> train_output = my_model.train(train_frame,["1","2","3"],k=3)
+            >>> train_output
+            {u'column_means': [3.0, 1.5699999999999998, 0.30000000000000004],
+             u'k': 3,
+             u'mean_centered': True,
+             u'observation_columns': [u'1', u'2', u'3'],
+             u'right_singular_vectors': [[-0.9880604079662845, 0.1524554460423363,0.022225372472291664],
+               [-0.1475177133741632, -0.9777763055278146, 0.1489698647016758],
+               [0.044442709754897426, 0.14391258916581845, 0.9885919341311823]],
+             u'singular_values': [1.9528500871335064,1.258951004642986,0.3498841309506238]}
+            >>> right_singular_vectors = output['right_singular_vectors']
+            >>> right_singular_vectors[0]
+             [-0.9880604079662845, 0.1524554460423363, 0.022225372472291664]
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+            >>> train_output = my_model.train(train_frame,["1","2","3"],k=3)
+            >>> train_output
+            {u'column_means': [3.0, 1.5699999999999998, 0.30000000000000004],
+             u'k': 3,
+             u'mean_centered': True,
+             u'observation_columns': [u'1', u'2', u'3'],
+             u'right_singular_vectors': [[-0.9880604079662845, 0.1524554460423363,0.022225372472291664],
+               [-0.1475177133741632, -0.9777763055278146, 0.1489698647016758],
+               [0.044442709754897426, 0.14391258916581845, 0.9885919341311823]],
+             u'singular_values': [1.9528500871335064,1.258951004642986,0.3498841309506238]}
+            >>> right_singular_vectors = output['right_singular_vectors']
+            >>> right_singular_vectors[0]
+             [-0.9880604079662845, 0.1524554460423363, 0.022225372472291664]
+
+
+
+

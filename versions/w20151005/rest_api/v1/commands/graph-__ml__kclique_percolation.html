@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Commands graph:/ml/kclique_percolation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API Commands" href="index.html" >
+    <link rel="next" title="Commands graph:/vertex_count" href="graph-__vertex_count.html" >
+    <link rel="prev" title="Commands graph:/export_to_titan" href="graph-__export_to_titan.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Commands</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="graph-__export_to_titan.html" title="Commands graph:/export_to_titan"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="graph-__vertex_count.html" title="Commands graph:/vertex_count"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="commands-graph-ml-kclique-percolation">
+<span id="rest-api-v1-commands-graph-ml-kclique-percolation"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> graph:/ml/kclique_percolation<a class="headerlink" href="#commands-graph-ml-kclique-percolation" title="Permalink to this headline">¶</a></h1>
+<p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+Find groups of vertices with similar attributes.</p>
+<div class="section" id="post-v1-commands">
+<h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="get-v1-commands-id">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>POST /v1/commands/
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">graph:/ml/kclique_percolation</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac40d0&gt;&gt;</p>
+<blockquote>
+<div><p>&lt;Missing Description&gt;</p>
+</div></blockquote>
+<p><strong>clique_size</strong> : int32</p>
+<blockquote>
+<div><p>The sizes of the cliques used to form communities.
+Larger values of clique size result in fewer, smaller communities that are more connected.
+Must be at least 2.</p>
+</div></blockquote>
+<p><strong>community_property_label</strong> : unicode</p>
+<blockquote class="last">
+<div><p>Name of the community property of vertex that will be updated/created in the graph.
+This property will contain for each vertex the set of communities that contain that
+vertex.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Description</strong></p>
+<p><strong>Community Detection Using the K-Clique Percolation Algorithm</strong></p>
+<p><strong>Overview</strong></p>
+<p>Modeling data as a graph captures relations, for example, friendship ties
+between social network users or chemical interactions between proteins.
+Analyzing the structure of the graph reveals collections (often termed
+&#8216;communities&#8217;) of vertices that are more likely to interact amongst each
+other.
+Examples could include a community of friends in a social network or a
+collection of highly interacting proteins in a cellular process.</p>
+<p>Trusted Analytics Platform provides community detection using the k-Clique
+percolation method first proposed by Palla et. al. <a class="footnote-reference" href="#id3" id="id1">[1]</a> that has been widely
+used in many contexts.</p>
+<p><strong>K-Clique Percolation</strong></p>
+<p>K-clique percolation is a method for detecting community structure in graphs.
+Here we provide mathematical background on how communities are defined in the
+context of the k-clique percolation algorithm.</p>
+<p>A clique is a group of vertices in which every vertex is connected (via
+undirected edge) with every other vertex in the clique.
+This graphically looks like a triangle or a structure composed of triangles:</p>
+<img alt="../../../f_images/k-clique_201508281155.png" src="../../../f_images/k-clique_201508281155.png" />
+<p>A clique is certainly a community in the sense that its vertices are all
+connected, but, it is too restrictive for most purposes,
+since it is natural some members of a community may not interact.</p>
+<p>Mathematically, a k-clique has <img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> vertices, each with <img class="math" src="../../../f_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/>
+common edges, each of which connects to another vertex in the k-clique.
+The k-clique percolation method forms communities by taking unions of k-cliques
+that have <img class="math" src="../../../f_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/> vertices in common.</p>
+<p><strong>K-Clique Example</strong></p>
+<p>In the graph below, the cliques are the sections defined by their triangular
+appearance and the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7, 8}.
+The vertices 9, 10, 11, 12 are not in 3-cliques, therefore they do not belong
+to any community.
+Vertex 4 belongs to two distinct (but overlapping) communities.</p>
+<img alt="../../../f_images/ds_mlal_a1.png" src="../../../f_images/ds_mlal_a1.png" />
+<p><strong>Distributed Implementation of K-Clique Community Detection</strong></p>
+<p>The implementation of k-clique community detection in Trusted Analytics Platform is a fully
+distributed implementation that follows the map-reduce
+algorithm proposed in Varamesh et. al. <a class="footnote-reference" href="#id4" id="id2">[2]</a> .</p>
+<p>It has the following steps:</p>
+<ol class="arabic simple">
+<li>All k-cliques are <a class="reference internal" href="../../../glossary.html#term-enumerate"><span class="xref std std-term">enumerated</span></a>.</li>
+<li>k-cliques are used to build a &#8220;clique graph&#8221; by declaring each k-clique to
+be a vertex in a new graph and placing edges between k-cliques that share
+k-1 vertices in the base graph.</li>
+<li>A <a class="reference internal" href="../../../glossary.html#term-connected-component"><span class="xref std std-term">connected component</span></a> analysis is performed on the clique graph.
+Connected components of the clique graph correspond to k-clique communities
+in the base graph.</li>
+<li>The connected components information for the clique graph is projected back
+down to the base graph, providing each vertex with the set of k-clique
+communities to which it belongs.</li>
+</ol>
+</div>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p>Spawns a number of Spark jobs that cannot be calculated before execution
+(it is bounded by the diameter of the clique graph derived from the input graph).
+For this reason, the initial loading, clique enumeration and clique-graph
+construction steps are tracked with a single progress bar (this is most of
+the time), and then successive iterations of analysis of the clique graph
+are tracked with many short-lived progress bars, and then finally the
+result is written out.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>G. Palla, I. Derenyi, I. Farkas, and T. Vicsek. Uncovering the overlapping
+community structure of complex networks in nature and society.
+Nature, 435:814, 2005 ( See <a class="reference external" href="http://hal.elte.hu/cfinder/wiki/papers/communitylettm.pdf">http://hal.elte.hu/cfinder/wiki/papers/communitylettm.pdf</a> )</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td>Varamesh, A.; Akbari, M.K.; Fereiduni, M.; Sharifian, S.; Bagheri, A.,
+&#8220;Distributed Clique Percolation based community detection on social
+networks using MapReduce,&#8221;
+Information and Knowledge Technology (IKT), 2013 5th Conference on, vol.,
+no., pp.478,483, 28-30 May 2013</td></tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Request<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>Response<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<blockquote>
+<div>Dictionary of vertex label and frame, Execution time.</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 05, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

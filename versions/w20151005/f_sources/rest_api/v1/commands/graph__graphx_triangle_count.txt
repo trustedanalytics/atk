@@ -1,0 +1,131 @@
+.. _rest_api/v1/commands/graph__graphx_triangle_count:
+
+
+
+---------------------------------------------------
+:doc:`Commands <index>` graph/graphx_triangle_count
+---------------------------------------------------
+
+Number of triangles among vertices of current graph.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    graph/graphx_triangle_count
+
+:arguments:
+
+
+    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac40d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **output_property** : unicode
+
+    ..
+
+        The name of output property to be
+        added to vertex/edge upon completion.
+
+
+
+    **input_edge_labels** : list (default=None)
+
+    ..
+
+        The name of edge labels to be considered for triangle count.
+        Default is all edges are considered.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+** Experimental Feature **
+
+Counts the number of triangles among vertices in an undirected graph.
+If an edge is marked bidirectional, the implementation opts for canonical
+orientation of edges hence counting it only once (similar to an
+undirected graph).
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dict(label, Frame).
+
+        Dictionary containing the vertex type as the key and the corresponding
+        vertex's frame with a triangle_count column.
+        Call dictionary_name['label'] to get the handle to frame whose vertex
+        type is label.
+
+
