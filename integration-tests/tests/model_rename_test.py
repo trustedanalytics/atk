@@ -51,7 +51,7 @@ class ModelRenameTest(unittest.TestCase):
 
         print "rename model to: " + str(new_model_name)
         model.name = new_model_name
-        print "models: " + ta.get_model_names()
+        print "models: " + str(ta.get_model_names())
         self.assertTrue(new_model_name in ta.get_model_names(), new_model_name + " should be in list of models")
         self.assertFalse(model_name in ta.get_model_names(), model_name + " shoule not be in list of models")
 
@@ -85,7 +85,7 @@ class ModelRenameTest(unittest.TestCase):
             model2.name = model_name1
 
         # Both model names should still exist on the server
-        print "models: " + ta.get_model_names()
+        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should still exist in list of models")
 
@@ -115,9 +115,9 @@ class ModelRenameTest(unittest.TestCase):
             model.name = graph_name
 
         # The original model and graph name should still exist on the server
-        print "models: " + ta.get_model_names()
+        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-        print "graphs: " + ta.get_graph_names()
+        print "graphs: " + str(ta.get_graph_names())
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
 
         # Delete the model and the graph from the server (to clean up after the test)
@@ -146,9 +146,9 @@ class ModelRenameTest(unittest.TestCase):
             model.name = frame_name
 
         # The original model and frame name should still exist on the server
-        print "models: " + ta.get_model_names()
+        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-        print "frames: " + ta.get_frame_names()
+        print "frames: " + str(ta.get_frame_names())
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
 
         # Delete the model and the frame from the server (to clean up after the test)
