@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame
 import java.io.File
 import java.util
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.Udf
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }

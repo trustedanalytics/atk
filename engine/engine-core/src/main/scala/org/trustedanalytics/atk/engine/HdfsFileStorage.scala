@@ -22,8 +22,9 @@ import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.apache.commons.lang3.ArrayUtils
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{ FileSystem, LocalFileSystem, Path }
+import org.apache.hadoop.fs._
 import org.apache.hadoop.hdfs.DistributedFileSystem
+import org.trustedanalytics.atk.moduleloader.{ ClassLoaderAware, Module }
 
 /**
  * HDFS Access
@@ -31,20 +32,18 @@ import org.apache.hadoop.hdfs.DistributedFileSystem
  * IMPORTANT! Make sure you aren't breaking wild card support - it is easy to forget about
  */
 class HdfsFileStorage extends EventLogging {
+
   implicit val eventContext = EventContext.enter("HDFSFileStorage")
 
   private val securedConfiguration = withContext("HDFSFileStorage.configuration") {
-
     info("fsRoot: " + EngineConfig.fsRoot)
 
     val hadoopConfig = new Configuration()
+
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
     hadoopConfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
     hadoopConfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
     hadoopConfig.set("fs.defaultFS", EngineConfig.fsRoot)
-
-    require(hadoopConfig.getClassByNameOrNull(classOf[LocalFileSystem].getName) != null,
-      "Could not load local filesystem for Hadoop")
 
     KerberosAuthenticator.loginConfigurationWithKeyTab(hadoopConfig)
     hadoopConfig
@@ -167,55 +166,75 @@ class HdfsFileStorage extends EventLogging {
   }
 
   /**
+   * Given a list of jarNames return the paths in HDFS
+   */
+  def hdfsLibs(jarNames: Seq[String]): Seq[String] = {
+    val hdfsLib = absolutePath(EngineConfig.hdfsLib)
+    jarNames.map(jarName => concatPaths(hdfsLib.toString, jarName))
+  }
+
+  /**
    * Synchronize local-lib folders to hdfs-lib by copying jars to HDFS.
    */
   def syncLibs(): Unit = withContext("synclibs") {
     val destDir = absolutePath(EngineConfig.hdfsLib)
-    val srcDirs = EngineConfig.localLibs.map(path => new Path(path))
+    val localLibs = Module.libs.map(url => new Path(url.toURI))
     info(s"hdfs-lib: $destDir")
     if (!fs.exists(destDir)) {
       info(s"Creating $destDir")
       fs.mkdirs(destDir)
     }
     require(fs.isDirectory(destDir), s"Not a directory $destDir, please configure hdfs-lib")
-    srcDirs.foreach(srcDir => {
-      info(s"local-lib: $srcDir")
-      syncDir(srcDir, destDir)
+    localLibs.foreach(localLib => {
+      sync(localLib, destDir)
     })
   }
 
   /**
    * Synchronize a local-lib folder to hdfs-lib by copying jars to HDFS
    */
-  private def syncDir(srcDir: Path, destDir: Path): Unit = {
-    require(localFileSystem.exists(srcDir), s"Directory does not exist $srcDir, please configure local-libs")
-    require(localFileSystem.isDirectory(srcDir), s"local-libs had a path that was NOT a directory: $srcDir")
+  private def sync(localLib: Path, destDir: Path): Unit = {
+    require(localFileSystem.exists(localLib), s"Does not exist $localLib")
+    if (localFileSystem.isDirectory(localLib)) {
+      val localJars = localFileSystem.listFiles(localLib, false)
+      while (localJars.hasNext) {
+        val localJarStatus = localJars.next()
+        syncJar(localJarStatus, destDir)
+      }
+    }
+    else {
+      syncJar(localFileSystem.getFileStatus(localLib), destDir)
+    }
+  }
 
-    val localJars = localFileSystem.listFiles(srcDir, false)
-    while (localJars.hasNext) {
-      val localJarStatus = localJars.next()
-      val localJarPath = localJarStatus.getPath
-      if (localJarStatus.isFile && localJarPath.getName.endsWith(".jar")) {
-        val destJarPath = new Path(destDir, localJarPath.getName)
-        if (fs.exists(destJarPath)) {
-          val destJarStatus = fs.getFileStatus(destJarPath)
-          if (localJarStatus.getModificationTime > destJarStatus.getModificationTime) {
-            info(s"jar is out of date, copying $localJarPath to $destJarPath")
-            fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
-          }
-          else if (localJarStatus.getLen != destJarStatus.getLen) {
-            // this is a slight fail-safe in case timestamps aren't correct
-            info(s"jars were different, copying $localJarPath to $destJarPath")
-            fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
-          }
-          else {
-            info(s"jar is up to date, $localJarPath matches $destJarPath")
-          }
-        }
-        else {
-          info(s"jar does not exist, copying $localJarPath to $destJarPath")
+  /**
+   * Sync a local jar to a location in HDFS, if needed.
+   *
+   * Sync is performed if local jar has a newer timestamp or a different
+   * file size than jar in HDFS.
+   */
+  private def syncJar(localJarStatus: FileStatus, destDir: Path): Unit = {
+    val localJarPath = localJarStatus.getPath
+    if (localJarStatus.isFile && localJarPath.getName.endsWith(".jar")) {
+      val destJarPath = new Path(destDir, localJarPath.getName)
+      if (fs.exists(destJarPath)) {
+        val destJarStatus = fs.getFileStatus(destJarPath)
+        if (localJarStatus.getModificationTime > destJarStatus.getModificationTime) {
+          info(s"jar is out of date, copying $localJarPath to $destJarPath")
           fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
         }
+        else if (localJarStatus.getLen != destJarStatus.getLen) {
+          // this is a slight fail-safe in case timestamps aren't correct
+          info(s"jars were different, copying $localJarPath to $destJarPath")
+          fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
+        }
+        else {
+          info(s"jar is up to date, $localJarPath matches $destJarPath")
+        }
+      }
+      else {
+        info(s"jar does not exist, copying $localJarPath to $destJarPath")
+        fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
       }
     }
   }

@@ -15,6 +15,37 @@ A module has a ClassLoader that includes the list of jar dependencies and whose 
 Both Modules and jars are searched for in the module-search-path.
 
 
+Configuring a Module
+====================
+
+Modules are configured by adding an atk-module.conf file to the root of a jar
+
+Modules typically have two styles:
+
+1. Modules that have a parent.  The parent relationship between modules means the ClassLoaders for the modules will 
+share a parent relationship.  "system" is a special parent value reserved for the module loader itself.
+
+```
+atk.module {
+  name = "my-name"
+  parent = "my-parent" 
+}
+```
+
+2. Modules that are a member-of other modules.  The member-of relationship means the modules will be combined at 
+runtime into a single module definition with a single classloader.  This is used when Spark plugins are spread
+accross multiple modules that will need to share the same runtime environment.
+
+```
+atk.module {
+  name = "my-name"
+  member-of = "another-module" 
+}
+```
+
+Modules cannot define both a parent and a member-of value.  Usually, a module's name will be the same as its jar name.
+
+
 Known Limitations / Possible Future Work
 ========================================
 * Assumes jar names are unique.

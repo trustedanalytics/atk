@@ -16,11 +16,11 @@
 
 package org.trustedanalytics.atk.engine.graph
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.HBaseAdmin
 import org.apache.hadoop.conf.Configuration
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 
 /**
  * Create HBaseAdmin instances

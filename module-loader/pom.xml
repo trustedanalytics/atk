@@ -38,6 +38,10 @@
                     <skipTests>true</skipTests>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.trustedanalytics</groupId>
+                <artifactId>atk-maven-plugin</artifactId>
+            </plugin>
         </plugins>
     </build>
 
