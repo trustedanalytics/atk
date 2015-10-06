@@ -569,12 +569,14 @@ function rename_folders() {
     # $5 = LogFile
     # $6 = Modified Arguments
 
-    # debug: rename_folders
+    # debug: rename_folders because of incompatibility of leading _ characters
 
     BuildDirectory="$ScriptPath/build/$1"
     pushd $BuildDirectory > /dev/null
     LongNames=$(find -name "_*"|sort -r)
+    # debug: $LongNames: A list of files needing change with path.
 
+    # debug: Make a list of unique file names without path
     ShortNames=""
     for Name in $LongNames; do
         TestName=$(basename $Name)
@@ -587,16 +589,22 @@ function rename_folders() {
     WorkingFile=$(date +%Y%m%d%H%M%N.tmp)
     for Name in $ShortNames; do
 
-        ChangeFiles=$(grep -rl --exclude=*.png --exclude=*.pdf $Name ./)
+        # debug: find all the files with refer to a file in the short name list
+        ChangeFiles=$(grep -rl --exclude=*.png --exclude=*.pdf --exclude=$WorkingFile $Name ./)
 
+        # debug: move each file found to a temporary file, then use sed the change the applicable string
         for ChangeFile in $ChangeFiles; do
             mv $ChangeFile $WorkingFile
             sed "s/$Name/$UnderbarFolderPrefix\0/g" < $WorkingFile > $ChangeFile
         done
     done
+
+    # debug: now rename the file itself
     for Name in $LongNames; do
         mv $Name $(echo "$(dirname $Name)/$UnderbarFolderPrefix$(basename $Name)")
     done
+
+    # debug: deleting the temporary file
     if [[ -e "$WorkingFile" ]]; then
         rm $WorkingFile
     fi

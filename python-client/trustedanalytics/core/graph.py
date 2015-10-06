@@ -84,36 +84,53 @@ class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
 
     @api
     @property
-    @returns(data_type=str, description="Status of the graph")
+    @returns(data_type=str, description="Status of the graph.")
     def __status(self):
         """
         Current graph life cycle status.
 
-        One of three statuses: Active, Deleted, Deleted_Final
-           Active:   available for use
-           Deleted:  has been scheduled for deletion
-           Deleted_Final: backend files have been removed from disk.
+        One of three statuses: Active, Dropped, Finalized
+        -   Active:    Entity is available for use
+        -   Dropped:   Entity has been dropped by user or by garbage collection which found it stale
+        -   Finalized: Entity's data has been deleted
         """
         try:
             return self._backend.get_status(self)
         except:
             return super(_BaseGraph, self).__repr__() + " (Unable to collect metadata from server)"
 
+    @api
+    @property
+    @returns(data_type=str, description="Date string of the last time this frame's data was accessed")
+    def __last_read_date(self):
+        """
+        Last time this frame's data was accessed.
+        """
+        try:
+            return self._backend.get_last_read_date(self)
+        except:
+            return "(Unable to collect metadata from server)"
 
 
 @api
 class Graph(_DocStubsGraph, _BaseGraph):
+    """Creates a seamless property graph.
+
+A seamless graph is a collection of vertex and edge lists stored as frames.
+This allows frame-like operations against graph data.
+Many frame methods are available to work with vertices and edges.
+Vertex and edge properties are stored as columns.
+
+A seamless graph is better suited for bulk :term:`OLAP`-type operations
+whereas a Titan graph is better suited to :term:`OLTP`.
     """
-    Creates a seamless property graph.
+    _entity_type = 'graph:'
 
-    A seamless graph is a collection of vertex and edge lists stored as frames.
-    This allows frame-like operations against graph data.
-    Many frame methods are available to work with vertices and edges.
-    Vertex and edge properties are stored as columns.
-
-    A seamless graph is better suited for bulk :term:`OLAP`-type operations
-    whereas a Titan graph is better suited to :term:`OLTP`.
-
+    @api
+    @arg('name', str, """Name for the new graph.
+Default is None.""")
+    def __init__(self, name=None, _info=None):
+        """Initialize the graph.
 
     Examples
     --------
@@ -174,7 +191,7 @@ class Graph(_DocStubsGraph, _BaseGraph):
             ... 'movie_id', ['rating'])
 
     |
-    
+
     Adding additional data to the graph from another frame (my_frame2),
     is simply adding vertices (and edges) in row formation.
 
@@ -301,13 +318,7 @@ class Graph(_DocStubsGraph, _BaseGraph):
         >>> my_graph.vertices['Employee'].inspect(20)
         >>> my_graph.edges['worksunder'].inspect(20)
 
-    """
-    _entity_type = 'graph:'
-
-    @api
-    @arg('name', str, """Name for the new graph.
-Default is None.""")
-    def __init__(self, name=None, _info=None):
+        """
         if not hasattr(self, '_backend'):
             self._backend = _get_backend()
         from trustedanalytics.rest.graph import GraphInfo
@@ -487,8 +498,13 @@ class GraphFrameCollection(object):
 
 @api
 class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
-    """
-    Proxy to a graph in Titan, supports Gremlin query
+    """Proxy to a graph in Titan, supports Gremlin query."""
+
+    _entity_type = 'graph:titan'
+
+    @api
+    def __init__(self, name=None, _info=None):
+        """Initialize the graph.
 
     Examples
     --------
@@ -498,14 +514,7 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
 
         >>> graph = ta.get_graph("my_graph")
         >>> titan_graph = graph.export_to_titan("titan_graph")
-
     """
-
-    _entity_type = 'graph:titan'
-
-    @api
-    def __init__(self, name=None, _info=None):
-        """Initialize the graph."""
         try:
             self.uri = None
             if not hasattr(self, '_backend'):

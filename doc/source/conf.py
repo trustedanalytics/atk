@@ -40,6 +40,7 @@ rst_epilog = """
 .. |BETA|   replace:: :abbr:`[BETA] (This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.)`
 .. |BP|     replace:: :abbr:`BP (Belief Propagation)`
 .. |CDH|    replace:: :abbr:`CDH (Cloudera Hadoop)`
+.. |CLI|    replace:: :abbr:`CLI (Command Line Interface)`
 .. |COPY|   unicode:: U+000A9 .. Copyright symbol
 .. |CSV|    replace:: :abbr:`CSV (Character-Separated Variables)`
 .. |DEPRECATED| replace:: :abbr:`[DEPRECATED] (This is a function or feature which is no longer supported.
@@ -65,13 +66,13 @@ rst_epilog = """
 .. |VM|     replace:: :abbr:`VM (Virtual Machine)`
 .. |XML|    replace:: :abbr:`XML (Extensible Markup Language)`
 .. |YCSB|   replace:: :abbr:`YCSB (Yahoo! Cloud Serving Benchmarking)`
-.. |PACKAGE|    replace:: Trusted Analytics
-.. |ATK|    replace:: ATK
+.. |PACKAGE|    replace:: Trusted Analytics Platform
+.. |ATK|    replace:: :abbr:`ATK (Trusted Analytics Platform Toolkit)`
 .. |PACKAGE_1LC|    replace:: trustedanalytics
 .. |PACKAGE_DLC|    replace:: trusted-analytics
 .. |PACKAGE_SLC|    replace:: ta
 .. |PACKAGE_SUC|    replace:: TA
-.. |PACKAGE_USER|   replace:: ta
+.. |PACKAGE_USER|   replace:: atkuser
 .. |TOOLKIT|    replace:: |PACKAGE| Package
 """
 
@@ -132,7 +133,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Trusted Analytics Package'
+project = u'Trusted Analytics Platform'
 copyright = u'2015, Intel'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -181,6 +182,8 @@ pygments_style = 'bw'
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 html_use_modindex = True
+
+footnote_references = "superscript"
 
 # If true, keep warnings as "system message" paragraphs in the built documents.
 #keep_warnings = False
@@ -305,7 +308,8 @@ latex_elements = {
 
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
-latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Documentation', 'Author: Intel', 'manual')]
+#latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Documentation', 'Author: Intel', 'manual')]
+latex_documents = [('index', 'Documentation.tex', 'Trusted Analytics Platform Documentation', '', 'manual')]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.

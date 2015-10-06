@@ -22,17 +22,22 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
 import ModelPublishJsonProtocol._
 
 /**
- * Rename columns of a frame
+ * Publish a Linear Regression Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the LinearRegressionModel and its implementation into a tar file. The tar file is then
+       published on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+       This model can then be used to predict the target value of an observation.
+    """,
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

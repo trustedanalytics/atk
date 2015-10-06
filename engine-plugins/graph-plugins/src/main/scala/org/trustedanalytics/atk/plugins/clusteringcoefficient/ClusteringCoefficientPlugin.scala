@@ -67,7 +67,7 @@ object ClusteringCoefficientJsonFormat {
 import ClusteringCoefficientJsonFormat._
 
 @PluginDoc(oneLine = "Coefficient of graph with respect to labels.",
-  extended = """Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.
+  extended = """Calculates the clustering coefficient of the graph with respect to an (optional) set of labels.
 
 Pulls graph from underlying store, calculates degrees and writes them into the property specified,
 and then writes the output graph to the underlying store.

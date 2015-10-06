@@ -141,7 +141,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                         }
                       } ~
                         delete {
-                          onComplete(engine.deleteGraph(id)) {
+                          onComplete(engine.dropGraph(id)) {
                             case Success(ok) => complete("OK")
                             case Failure(ex) => throw ex
                           }
@@ -162,7 +162,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                                       onComplete(engine.getVertex(id, label)) {
                                         case Success(frame) => {
                                           import spray.httpx.SprayJsonSupport._
-                                          import ViewModelJsonImplicits.getDataFrameFormat
+                                          import ViewModelJsonImplicits.getFrameFormat
                                           complete(FrameDecorator.decorateEntity(uri.toString, Nil, frame))
                                         }
                                         case Failure(ex) => throw ex
@@ -173,7 +173,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                                         case Success(frames) =>
                                           import spray.httpx.SprayJsonSupport._
                                           import AtkDefaultJsonProtocol._
-                                          import ViewModelJsonImplicits.getDataFrameFormat
+                                          import ViewModelJsonImplicits.getFrameFormat
                                           complete(FrameDecorator.decorateEntities(uri.toString(), Nil, frames))
                                         case Failure(ex) => throw ex
                                       }
@@ -199,7 +199,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                                       onComplete(engine.getEdge(id, label)) {
                                         case Success(frame) => {
                                           import spray.httpx.SprayJsonSupport._
-                                          import ViewModelJsonImplicits.getDataFrameFormat
+                                          import ViewModelJsonImplicits.getFrameFormat
                                           complete(FrameDecorator.decorateEntity(uri.toString, Nil, frame))
                                         }
                                         case Failure(ex) => throw ex
@@ -210,7 +210,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                                         case Success(frames) =>
                                           import spray.httpx.SprayJsonSupport._
                                           import AtkDefaultJsonProtocol._
-                                          import ViewModelJsonImplicits.getDataFrameFormat
+                                          import ViewModelJsonImplicits.getFrameFormat
                                           complete(FrameDecorator.decorateEntities(uri.toString(), Nil, frames))
                                         case Failure(ex) => throw ex
                                       }

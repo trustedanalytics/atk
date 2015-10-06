@@ -600,6 +600,52 @@ class XmlFile(MultiLineFile):
         return repr(self.file_name)
 
 
+class UploadRows(object):
+    """
+    Raw data source for upload: list of lists + schema
+    """
+
+    def __init__(self, data, schema):
+        """
+        Data source to upload raw list data
+
+        Parameters
+        ==========
+        data: list
+            List of lists, where each item in the list represents a raw row data
+        schema: list of tuples
+            List of tuples (column_name, data_type)
+
+        Examples
+        ========
+
+        >>> import trustedanalytics as ta
+        >>> data = [[1, 'one', [1.0, 1.1]], [2, 'two', [2.0, 2.2]], [3, 'three', [3.0, 3.3]]]
+        >>> schema = [('n', int), ('s', str), ('v', ta.vector(2))]
+        >>> frame = ta.Frame(ta.UploadRows(data, schema))
+        >>> frame.inspect()
+        [#]  n      s           v
+        =========================
+        [0]  1  one    [1.0, 1.1]
+        [1]  2  two    [2.0, 2.2]
+        [2]  3  three  [3.0, 3.3]
+
+        """
+        self.data = data or []
+        self.schema = schema
+        if len(self.data) and len(self.schema):
+            row = self.data[0]
+            if len(row) != len(self.schema):
+                raise RuntimeError("schema length %d != length %d of the first row" % (len(self.schema), len(row)))
+
+    def __repr__(self):
+        return repr(self.__dict__)
+
+    def _schema_to_json(self):
+        return [(field[0], valid_data_types.to_string(field[1]))
+                for field in self.schema]
+
+
 class HiveQuery(DataFile):
     """
     Define the sql query to retrieve the data from a Hive table.
@@ -713,8 +759,8 @@ class HBaseTable(object):
 
             >>> import trustedanalytics as ta
             >>> ta.connect()
-            >>> h = tp.HBaseTable ("my_table", [("pants", "aisle", unicode), ("pants", "row", int),( "shirts", "aisle", unicode),("shirts", "row", unicode)])
-            >>> f = tp.Frame(h)
+            >>> h = ta.HBaseTable ("my_table", [("pants", "aisle", unicode), ("pants", "row", int),( "shirts", "aisle", unicode),("shirts", "row", unicode)])
+            >>> f = ta.Frame(h)
             >>> f.inspect()
 
         """
@@ -780,11 +826,11 @@ class JdbcTable(object):
 
             >>> import trustedanalytics as ta
             >>> ta.connect()
-            >>> jdbcTable = tp.JdbcTable ("test",
+            >>> jdbcTable = ta.JdbcTable ("test",
                                           "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
                                           "com.microsoft.sqlserver.jdbc.SQLServerDriver",
                                           "select * FROM SomeTable")
-            >>> frame = tp.Frame(jdbcTable)
+            >>> frame = ta.Frame(jdbcTable)
             >>> frame.inspect()
 
         """

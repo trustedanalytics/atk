@@ -1,5 +1,6 @@
 Examples
 --------
+Predict using a Logistic Regression Model
 
 .. only:: html
 

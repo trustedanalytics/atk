@@ -1,5 +1,7 @@
 Examples
 --------
+Predict using a KMeans Model
+
 .. only:: html
 
     .. code::

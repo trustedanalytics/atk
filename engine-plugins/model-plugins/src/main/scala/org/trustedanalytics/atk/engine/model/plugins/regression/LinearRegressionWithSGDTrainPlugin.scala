@@ -22,7 +22,7 @@ import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTrainArgs
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -31,7 +31,8 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build linear regression model.",
-  extended = "Creating a LinearRegression Model using the observation column and label column of the train frame.")
+  extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
+  returns = "Trained linear regression model")
 class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -73,13 +74,13 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
 
   private def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
     val linReg = new LinearRegressionWithSGD()
-    linReg.optimizer.setNumIterations(arguments.getNumIterations)
-    linReg.optimizer.setStepSize(arguments.getStepSize)
+    linReg.optimizer.setNumIterations(arguments.numIterations)
+    linReg.optimizer.setStepSize(arguments.stepSize)
 
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
-    linReg.optimizer.setRegParam(arguments.getRegParam)
+    linReg.optimizer.setRegParam(arguments.regParam)
 
     if (arguments.regType.isDefined) {
       linReg.optimizer.setUpdater(arguments.regType.get match {
@@ -87,8 +88,8 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
         case other => new SquaredL2Updater()
       })
     }
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
   }
 }

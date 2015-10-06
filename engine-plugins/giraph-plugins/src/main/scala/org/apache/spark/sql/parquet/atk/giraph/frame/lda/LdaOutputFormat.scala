@@ -122,14 +122,14 @@ class LdaParquetFrameVertexWriter(conf: LdaConfiguration,
 
   private def giraphLdaResultToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): Row = {
     val content = new Array[Any](2)
-    content(0) = vertex.getId.getValue
+    content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getLdaResultAsDoubleArray.toSeq
     new GenericRow(content)
   }
 
   private def giraphTopicGivenWordToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): Row = {
     val content = new Array[Any](2)
-    content(0) = vertex.getId.getValue
+    content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getTopicGivenWordAsDoubleArray.toSeq
     new GenericRow(content)
   }

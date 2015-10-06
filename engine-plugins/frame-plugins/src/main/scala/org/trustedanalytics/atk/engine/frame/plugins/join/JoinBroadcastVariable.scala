@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
-import org.apache.spark.SparkContext._
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.sql._
 
