@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **graph_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb0d0>>
+    **graph_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe7507160d0>>
 
     ..
 

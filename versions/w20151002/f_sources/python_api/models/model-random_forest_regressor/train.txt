@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=-1707220501, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=966272425, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Regressor model.
@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe750716090>>
 
         ..
 
@@ -71,7 +71,7 @@
 
 
 
-        **seed** : int32 (default=-1707220501)
+        **seed** : int32 (default=966272425)
 
         ..
 

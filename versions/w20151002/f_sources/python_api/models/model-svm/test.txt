@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb5168bb090>>
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fe750716090>>
 
         ..
 
