@@ -107,18 +107,14 @@ class ModelKMeansTest(unittest.TestCase):
     def test_create_kmeans_model_with_duplicte_graph_name(self):
         graph_name = "test_graph_name"
 
-        # If a model with name already exists, delete it
-        if graph_name in ta.get_model_names():
-            ta.drop_models(graph_name)
-
         # If a graph with this name does not already exist, create it
         if graph_name not in ta.get_graph_names():
-            ta.Frame(name=graph_name)
+            ta.Graph(name=graph_name)
+        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should be in the list of graphs")
 
         print "try to create a model with the same name as the graph"
         with self.assertRaises(Exception):
             model = ta.KMeansModel(name=graph_name)
-            ta.drop(graph_name)
 
         # Delete the graph to clean up after the test
         ta.drop_graphs(graph_name)

@@ -85,19 +85,19 @@ class GraphDropTest(unittest.TestCase):
 
     # Tests the generic ta.drop() using the graph name
     def test_generic_drop_by_object(self):
-        # drop existing graphs
-        for graph_name in ta.get_graph_names():
-            ta.drop(graph_name)
+        graph_name = "test_graph"
+
+        # Drop in case graph was used for a previous test
+        ta.drop(graph_name)
 
         print "create graph"
-        graph_name = "test_graph"
         graph = ta.Graph(name=graph_name)
 
         # Check that the graph we just created now exists
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graph names")
 
         print "drop graph"
-        ta.drop(graph_name)
+        ta.drop(graph)
 
         # check that the graph no longer exists
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graph")
