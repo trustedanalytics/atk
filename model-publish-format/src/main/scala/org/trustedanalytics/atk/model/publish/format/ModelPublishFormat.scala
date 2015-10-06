@@ -100,7 +100,7 @@ object ModelPublishFormat {
     var modelName: String = null
     var ModelBytesFileName: String = null
     var archiveName: String = null
-    var urls: Array[URL] = null
+    var urls = Array.empty[URL]
 
     try {
       myTarFile = new TarArchiveInputStream(new FileInputStream(new File(modelArchiveInput.getAbsolutePath)))
@@ -118,7 +118,7 @@ object ModelPublishFormat {
         if (individualFile.contains(".jar")) {
           val file = new File(individualFile)
           val url = file.toURI.toURL
-          urls :+ url
+          urls = urls :+ url
         }
         else if (individualFile.contains("modelname")) {
           val s = new String(content)
