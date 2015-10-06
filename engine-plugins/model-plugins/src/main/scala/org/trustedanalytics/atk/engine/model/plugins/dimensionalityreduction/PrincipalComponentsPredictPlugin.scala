@@ -88,9 +88,12 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
 
     val indexedRowMatrix: IndexedRowMatrix = toIndexedRowMatrix(arguments.meanCentered, frame, principalComponentData, predictColumns, indexedFrameRdd)
+    val indexedRowMatrixArray = indexedRowMatrix.rows.collect()
 
     val eigenVectors = principalComponentData.vFactor
     val y = indexedRowMatrix.multiply(eigenVectors)
+    val yArray = y.rows.collect()
+
     var columnNames = new ListBuffer[String]()
     var columnTypes = new ListBuffer[DataType]()
     for (i <- 1 to c) {
@@ -99,10 +102,12 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
       columnTypes += DataTypes.float64
     }
     val yNew = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, c, y, columnNames, columnTypes)
+    val yNewArray = yNew.rows.collect()
 
     val resultFrameRdd = yNew.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
       .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
 
+    val resultFrameRddArray = resultFrameRdd.collect()
     val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
     val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
     val resultFrame = new FrameRdd(updatedSchema, resultFrameRdd)
@@ -148,6 +153,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     tSquaredIndex match {
       case true => {
         val t = computeTSquaredIndex(y, principalComponentData.singularValues, c)
+
         columnNames += "t_squared_index"
         columnTypes += DataTypes.float64
         t
@@ -185,15 +191,26 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val matrix = y.rows.map(row => {
       val rowVectorToArray = row.vector.toArray
       var t = 0.0
+      var flag = false
       for (i <- 0 until c) {
         if (E(i) > 0) {
           val squaredY = rowVectorToArray(i) * rowVectorToArray(i)
           val squaredE = E(i) * E(i)
-          t += (squaredY / squaredE)
+          val tSquaredIndex = squaredY / squaredE
+          if (tSquaredIndex < 0.01)
+            t += 0
+          else
+            t += tSquaredIndex
         }
+      }
+      if (t < 0) {
+        println("\n @@@yes@@@")
+        flag = true
       }
       new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+ t))
     })
+
+    val matrixArray = matrix.collect()
     new IndexedRowMatrix(matrix)
 
   }
