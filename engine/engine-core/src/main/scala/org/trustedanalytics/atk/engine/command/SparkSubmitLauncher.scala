@@ -95,8 +95,10 @@ class SparkSubmitLauncher(hdfsFileStorage: HdfsFileStorage) extends EventLogging
 
         val engineClasspath = Module.allLibs("engine").mkString(":")
 
+        val kerberosConfig = KerberosAuthenticator.getKerberosConfigJVMParam
+
         // Launch Spark Submit
-        val javaArgs = Array("java", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+        val javaArgs = Array("java", kerberosConfig.getOrElse(""), "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one

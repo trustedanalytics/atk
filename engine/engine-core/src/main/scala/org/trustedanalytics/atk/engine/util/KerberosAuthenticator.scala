@@ -69,7 +69,9 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
     if (EngineConfig.enableKerberos) {
       try {
         info("Authenticate to Kerberos using kinit")
-        val command = s"kinit ${EngineConfig.kerberosPrincipalName.get} -k -t ${EngineConfig.kerberosKeyTabPath.get}"
+        val kerberosConfig = s"env KRB5_CONFIG=${sys.env.get("KRB5_CONFIG").getOrElse("")}"
+        val command = s"$kerberosConfig kinit ${EngineConfig.kerberosPrincipalName.get} -k -t ${EngineConfig.kerberosKeyTabPath.get}"
+        info(s"Command: $command")
         val p = Runtime.getRuntime.exec(command)
         val exitValue = p.waitFor()
         info(s"kinit exited with Exit Value: $exitValue")
@@ -82,5 +84,7 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
       }
     }
   }
+
+  def getKerberosConfigJVMParam: Option[String] = sys.env.get("JAVA_KRB_CONF")
 
 }

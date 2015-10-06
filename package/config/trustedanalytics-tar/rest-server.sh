@@ -4,6 +4,7 @@ echo "Starting ATK startup script"
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 export KEYTAB=$DIR/../atk.keytab
+export KRB5_CONFIG=$DIR/../krb5.conf
 export PRINCIPAL="atk-user@US-WEST-2.COMPUTE.INTERNAL"
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
@@ -84,8 +85,12 @@ if [ -f $DIR/../lib/$jar ]; then
  ln -s $DIR/../lib/deploy.jar $DIR/../lib/$jar
 done
 
-echo java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
-java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+if [ -f ${KRB5_CONFIG} ]; then
+ export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+fi
+
+echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
 
 popd
 
