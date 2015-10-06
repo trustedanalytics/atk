@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.engine.frame
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.{ AnalysisException, Row }
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
@@ -59,7 +59,7 @@ class FrameSortTest extends TestingSparkContextWordSpec with Matchers {
     }
 
     "throw an IllegalArgumentException if column names are invalid" in {
-      intercept[AnalysisException] {
+      intercept[IllegalArgumentException] {
         val rdd = sparkContext.parallelize(inputRows)
         val frameRdd = new FrameRdd(inputSchema, rdd)
         val sortColumns = List(("invalid_col", true))

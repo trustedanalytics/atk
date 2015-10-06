@@ -84,7 +84,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return Dataframe representing the FrameRdd
    */
   def toDataFrame: DataFrame = {
-    //TODO: Work-around for kyro serialization bug in GenericRowWithSchema once we upgrade to Spark1.4
+    //TODO: Delete work-around for kyro serialization bug (SPARK-6465) once we upgrade to Spark1.4
     // Work-around for kyro serialization bug in GenericRowWithSchema
     // https://issues.apache.org/jira/browse/SPARK-6465
     // This issue is affecting dataframe operations with shuffles like sort and join

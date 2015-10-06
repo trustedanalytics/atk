@@ -17,10 +17,10 @@
 package org.apache.spark.frame.ordering
 
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{ Column => SparkSqlColumn }
 import org.apache.spark.util
 import org.apache.spark.util.BoundedPriorityQueue
-import org.apache.spark.sql.{ Column => SparkSqlColumn }
-import org.apache.spark.sql.functions._
 
 import scala.reflect.ClassTag
 
@@ -72,7 +72,6 @@ object FrameOrderingUtils extends Serializable {
    */
   def getSortOrder(columnNamesAndAscending: List[(String, Boolean)]): Seq[SparkSqlColumn] = {
     require(columnNamesAndAscending != null && columnNamesAndAscending.nonEmpty, "one or more sort columns required")
-
     columnNamesAndAscending.map {
       case (columnName, ascending) =>
         if (ascending) {
