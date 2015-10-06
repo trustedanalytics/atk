@@ -80,8 +80,8 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     try {
       file = File.createTempFile("tmp", ".txt")
-      svm.svm_save_model(file.getAbsolutePath(), libsvmModel)
-      val modelValues = FileUtils.readFileToString(file)
+      svm.svm_save_model(file.getAbsolutePath, libsvmModel)
+      val modelValues = FileUtils.readFileToByteArray(file)
 
       StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
     }

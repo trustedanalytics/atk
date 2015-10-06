@@ -78,6 +78,6 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
     val kmeansModel = kmeansData.kMeansModel
     val jsvalue: JsValue = kmeansModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes, "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin"))
   }
 }

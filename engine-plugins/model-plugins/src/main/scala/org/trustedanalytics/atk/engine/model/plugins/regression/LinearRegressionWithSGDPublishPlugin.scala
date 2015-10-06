@@ -76,6 +76,6 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
     val linRegModel: LinearRegressionModel = linRegData.linRegModel
     val jsvalue: JsValue = linRegModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes, "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
   }
 }
