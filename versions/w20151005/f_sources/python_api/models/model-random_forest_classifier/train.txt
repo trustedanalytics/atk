@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-1115234253, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-826228004, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Classifier model.
@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f0040ac4090>>
+        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7fb980ff5090>>
 
         ..
 
@@ -79,7 +79,7 @@
 
 
 
-        **seed** : int32 (default=-1115234253)
+        **seed** : int32 (default=-826228004)
 
         ..
 
