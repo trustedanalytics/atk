@@ -194,8 +194,10 @@ class HdfsFileStorage extends EventLogging {
    * Synchronize a local-lib folder to hdfs-lib by copying jars to HDFS
    */
   private def sync(localLib: Path, destDir: Path): Unit = {
-    require(localFileSystem.exists(localLib), s"Does not exist $localLib")
-    if (localFileSystem.isDirectory(localLib)) {
+    if(!localFileSystem.exists(localLib)) {
+      warn(s"Does not exist $localLib")
+    }
+    else if (localFileSystem.isDirectory(localLib)) {
       val localJars = localFileSystem.listFiles(localLib, false)
       while (localJars.hasNext) {
         val localJarStatus = localJars.next()
