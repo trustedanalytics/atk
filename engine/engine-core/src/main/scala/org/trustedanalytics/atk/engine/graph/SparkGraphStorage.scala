@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilder, 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, GraphElement }
 import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.{DuplicateNameException, NotFoundException}
+import org.trustedanalytics.atk.{ DuplicateNameException, NotFoundException }
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.graph._
