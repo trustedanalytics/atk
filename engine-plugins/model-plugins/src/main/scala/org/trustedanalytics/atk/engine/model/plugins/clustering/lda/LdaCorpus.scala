@@ -91,8 +91,8 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
         wordIdAssigner.ldaWordIdColumnName
       )
 
-    val joinedSchema = edgeFrame.frameSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64))
-    new FrameRdd(joinedSchema, joinedDataFrame.rdd)
+    val joinedSchema = edgeFrame.frameSchema.copySubset(List(args.documentColumnName, args.wordColumnName, args.wordCountColumnName))
+    new FrameRdd(joinedSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64)), joinedDataFrame.rdd)
   }
 
   /**
