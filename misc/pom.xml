@@ -20,7 +20,7 @@
         <!--<module>event-api</module>-->
         <!--<module>event</module>-->
         <!--<module>titan-shaded</module>-->
-        <module>launcher</module>
+        <!--<module>launcher</module>-->
     </modules>
 
 </project>

@@ -95,7 +95,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- START TITAN -->
-        <dep.titan-shaded.version>0.5.4-SNAPSHOT</dep.titan-shaded.version>
+        <dep.titan-shaded.version>0.5.4c-SNAPSHOT</dep.titan-shaded.version>
         <dep.aurelius.version>0.5.4</dep.aurelius.version>
         <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
         <dep.reflections>0.9.9-RC1</dep.reflections>
@@ -160,7 +160,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-engine</module>
                 <module>scoring-models</module>
                 <module>rest-server</module>
-                <module>deploy</module>
+                <!--<module>deploy</module>-->
                 <module>package</module>
             </modules>
         </profile>
@@ -237,6 +237,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <scalaVersion>${scala.long.version}</scalaVersion>
                                 <checkMultipleScalaVersions>false</checkMultipleScalaVersions>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.trustedanalytics</groupId>
+                            <artifactId>atk-maven-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <executions>
+                                <execution>
+                                    <id>compile</id>
+                                    <goals>
+                                        <goal>generate-conf</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                         </plugin>
                         <!--END DO NOT TOUCH-->
                     </plugins>
@@ -641,7 +654,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>launcher</artifactId>
+                <artifactId>module-loader</artifactId>
                 <version>${project.version}</version>
                 <scope>provided</scope>
             </dependency>

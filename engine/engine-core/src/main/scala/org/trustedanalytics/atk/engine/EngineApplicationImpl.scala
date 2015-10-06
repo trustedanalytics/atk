@@ -16,18 +16,21 @@
 
 package org.trustedanalytics.atk.engine
 
-import org.trustedanalytics.atk.engine.command._
+import org.trustedanalytics.atk.engine.command.CommandLoader
 import org.trustedanalytics.atk.engine.gc.GarbageCollector
-import org.trustedanalytics.atk.engine.util.{ EnvironmentLogger, JvmVersionReporter }
+import org.trustedanalytics.atk.engine.util.{ JvmVersionReporter, EnvironmentLogger }
+import org.trustedanalytics.atk.event.EventLogging
 
-/**
- * Main class for initializing the Spark Engine
- */
-class EngineComponent extends AbstractEngineComponent {
+class EngineApplicationImpl extends AbstractEngineComponent with EngineApplication with EventLogging {
+
   EnvironmentLogger.log()
   EngineConfig.logSettings()
   JvmVersionReporter.check()
+
+  override lazy val commandLoader = new CommandLoader(loadFromModules = true)
+
   metaStore.initializeSchema()
   fileStorage.syncLibs()
   GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
 }
+

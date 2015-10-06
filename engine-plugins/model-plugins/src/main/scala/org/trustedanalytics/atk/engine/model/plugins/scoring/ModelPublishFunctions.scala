@@ -20,7 +20,6 @@ import java.io._
 import java.net.URI
 import java.util.UUID
 
-import org.trustedanalytics.atk.component.Archive
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveOutputStream }
 import org.apache.commons.io.IOUtils
 import java.io.File
@@ -30,6 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.moduleloader.Module
 
 object ModelPublishJsonProtocol {
 
@@ -48,6 +48,7 @@ object ModelPublish {
     var tOut: TarArchiveOutputStream = null
 
     try {
+      // TODO: why write temp file, we should write directly to tar
       val modelDatafile = new File("/tmp/modelbytes")
       // if file doesnt exists, then create it
       if (!modelDatafile.exists()) {
@@ -57,7 +58,8 @@ object ModelPublish {
       writer.print(modelData)
       writer.close()
 
-      val modelClassNamefile = new File("/tmp/" + "modelname.txt")
+      // TODO: why write temp file, we should write directly to tar
+      val modelClassNamefile = new File("/tmp/modelname.txt")
       // if file doesnt exists, then create it
       if (!modelClassNamefile.exists()) {
         modelDatafile.createNewFile()
@@ -65,8 +67,6 @@ object ModelPublish {
       val classWriter: PrintWriter = new PrintWriter(modelClassNamefile)
       classWriter.print(modelClassName)
       classWriter.close()
-
-      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5)) //remove the first 5 characeters of the file location
 
       val tarTempPath = "/tmp/scoring.tar"
       val tarTempFile = new File(tarTempPath)
@@ -77,23 +77,22 @@ object ModelPublish {
 
       tOut = new TarArchiveOutputStream(new BufferedOutputStream(new FileOutputStream(tarTempFile)))
 
-      var entryName = modelDatafile.getName
-      var tarEntry: TarArchiveEntry = new TarArchiveEntry(modelDatafile, entryName)
-      tOut.putArchiveEntry(tarEntry)
+      tOut.putArchiveEntry(new TarArchiveEntry(modelDatafile, modelDatafile.getName))
       IOUtils.copy(new FileInputStream(modelDatafile), tOut)
       tOut.closeArchiveEntry()
 
-      entryName = modelClassNamefile.getName
-      tarEntry = new TarArchiveEntry(modelClassNamefile, entryName)
-      tOut.putArchiveEntry(tarEntry)
+      tOut.putArchiveEntry(new TarArchiveEntry(modelClassNamefile, modelClassNamefile.getName))
       IOUtils.copy(new FileInputStream(modelClassNamefile), tOut)
       tOut.closeArchiveEntry()
 
-      entryName = jarFile.getName
-      tarEntry = new TarArchiveEntry(jarFile, entryName)
-      tOut.putArchiveEntry(tarEntry)
-      IOUtils.copy(new FileInputStream(jarFile), tOut)
-      tOut.closeArchiveEntry()
+      val jarFiles = Module.allLibs("scoring-models")
+      jarFiles.foreach(jarUrl => {
+        val jarFile = new File(jarUrl.toURI)
+        tOut.putArchiveEntry(new TarArchiveEntry(jarFile, jarFile.getName))
+        IOUtils.copy(new FileInputStream(jarFile), tOut)
+        tOut.closeArchiveEntry()
+      })
+
       tOut.finish()
 
       val localPath = new Path(tarTempPath)
