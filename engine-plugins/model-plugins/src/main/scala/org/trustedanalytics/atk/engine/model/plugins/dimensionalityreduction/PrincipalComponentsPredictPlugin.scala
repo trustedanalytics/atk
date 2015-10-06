@@ -40,9 +40,11 @@ import scala.RuntimeException
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict using principal components model.",
-  extended = """Predicting on a dataframe's columns using a Principal Components Model.""",
-  returns = """A frame with existing columns and 'c' additional columns containing
-the projections of V on the frame and an additional column storing the t-square-index value if requested.""")
+  extended = """Predicting on a dataframe's columns using a PrincipalComponents Model.""",
+  returns =
+    """A frame with existing columns and following additional columns\:
+      'c' additional columns: containing the projections of V on the the frame
+      't_squared_index': column storing the t-square-index value, if requested""")
 class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalComponentsPredictArgs, FrameEntity] {
 
   /**

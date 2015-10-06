@@ -1,14 +1,14 @@
 Examples
 --------
-Test the performance of a trained random forest classifier
+Test the performance of a trained Random Forest Classifier Model
 
 .. only:: html
 
     .. code::
 
-        >>> rf_classifier = ta.RandomForestClassifierModel()
-        >>> rf_classifier.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
-        >>> rf_classifier.test(train_frame,'Class')
+        >>> my_model = ta.RandomForestClassifierModel()
+        >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
+        >>> my_model.test(train_frame,'Class')
           Precision: 1.0
           Recall: 1.0
           Accuracy: 1.0
@@ -22,9 +22,9 @@ Test the performance of a trained random forest classifier
 
     .. code::
 
-        >>> rf_classifier = ta.RandomForestClassifierModel()
-        >>> rf_classifier.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
-        >>> rf_classifier.test(train_frame,'Class')
+        >>> my_model = ta.RandomForestClassifierModel()
+        >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
+        >>> my_model.test(train_frame,'Class')
           Precision: 1.0
           Recall: 1.0
           Accuracy: 1.0
