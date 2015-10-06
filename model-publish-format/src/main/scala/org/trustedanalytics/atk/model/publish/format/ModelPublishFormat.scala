@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
-import java.net.URLClassLoader
+import java.net.{ URL, URLClassLoader }
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
 import org.apache.commons.compress.archivers.tar.{ TarArchiveInputStream, TarArchiveOutputStream, TarArchiveEntry }
 import org.apache.commons.compress.archivers.ArchiveStreamFactory
@@ -100,6 +100,7 @@ object ModelPublishFormat {
     var modelName: String = null
     var ModelBytesFileName: String = null
     var archiveName: String = null
+    var urls: Array[URL] = null
 
     try {
       myTarFile = new TarArchiveInputStream(new FileInputStream(new File(modelArchiveInput.getAbsolutePath)))
@@ -115,7 +116,9 @@ object ModelPublishFormat {
         IOUtils.write(content, outputFile)
         outputFile.close()
         if (individualFile.contains(".jar")) {
-          archiveName = individualFile.substring(0, individualFile.indexOf(".jar"))
+          val file = new File(individualFile)
+          val url = file.toURI.toURL
+          urls :+ url
         }
         else if (individualFile.contains("modelname")) {
           val s = new String(content)
@@ -131,9 +134,8 @@ object ModelPublishFormat {
       val byteArray = source.map(_.toByte).toArray
       source.close()
 
-      //val classLoader = new URLClassLoader(urls, parentClassLoader)
-      //val modelLoader = classLoader.loadClass(modelName).newInstance()
-      val modelLoader = org.trustedanalytics.atk.component.Boot.getArchive(archiveName).load(modelName)
+      val classLoader = new URLClassLoader(urls, parentClassLoader)
+      val modelLoader = classLoader.loadClass(modelName).newInstance()
 
       modelLoader.asInstanceOf[ModelLoader].load(byteArray)
     }
