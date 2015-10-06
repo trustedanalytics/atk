@@ -17,10 +17,6 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
-import java.nio.file.{ FileSystems, Files }
-
-import com.typesafe.config.ConfigFactory
-import org.apache.commons.io.FileUtils
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.util.{ JvmMemory, KerberosAuthenticator }
