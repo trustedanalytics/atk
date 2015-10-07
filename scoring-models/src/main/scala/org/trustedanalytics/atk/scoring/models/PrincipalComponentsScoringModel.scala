@@ -76,9 +76,7 @@ class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends
     val yArray: Array[Double] = y
     var t: Double = 0.0
     for (i <- 0 to k - 1) {
-      val ySquared = yArray(i) * yArray(i)
-      val eSquared = E(i) * E(i)
-      t += (ySquared / eSquared)
+      t += ((yArray(i) * yArray(i))/(E(i) * E(i)))
     }
     t
   }
