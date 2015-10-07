@@ -4,7 +4,7 @@ import itertools
 
 from serializers import UTF8Deserializer, CloudPickleSerializer
 from trustedanalytics.rest.spark import _wrap_row_function, get_copy_columns_function, IaBatchedSerializer, ifiltermap
-from trustedanalytics.rest.udfzip import get_dependencies, UdfDependencies
+from trustedanalytics.rest.udfzip import get_dependencies
 
 
 def pickle_function(func):
@@ -51,7 +51,7 @@ def get_udf_arg_for_copy_columns(frame, predicate_function, column_names):
 def make_http_ready(function):
     pickled_function = pickle_function(function)
     http_ready_function = encode_bytes_for_http(pickled_function)
-    return { 'function': http_ready_function, 'dependencies':get_dependencies(UdfDependencies)}
+    return { 'function': http_ready_function, 'dependencies':get_dependencies()}
 
 
 

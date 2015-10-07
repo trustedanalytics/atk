@@ -20,6 +20,7 @@ This file zips and converts necessary modules to evaluate a lambda expression by
 
 import zipfile
 import os
+import base64
 import os.path
 from types import ModuleType
 
@@ -97,9 +98,9 @@ def get_file_content_as_str(filename):
         return (name, base64.urlsafe_b64encode(f.read()))
 
 
-def get_dependencies(filenames):
+def get_dependencies():
     dependencies = []
-    for filename in filenames:
+    for filename in UdfDependencies:
         name, content = get_file_content_as_str(filename)
         dependencies.append({'file_name': name, 'file_content': content})
     return dependencies
