@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid     # for generating unique model names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -49,11 +50,7 @@ class ModelKMeansTest(unittest.TestCase):
 
     # Tests creating a kmeans model and verifying that it's listed in get_model_names()
     def test_create_kmeans_model(self):
-        model_name = "test_kmeans_model"
-
-        # If a model with name already exists, delete it
-        if model_name in ta.get_model_names():
-            ta.drop_model(model_name)
+        model_name = str(uuid.uuid1()).replace('-','_')
 
         print "create kmeans model named: " + str(model_name)
         model = ta.KMeansModel(name=model_name)
@@ -61,15 +58,11 @@ class ModelKMeansTest(unittest.TestCase):
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should be in the list of models")
 
         # Delete the model to clean up after the test
-        ta.drop_models(model_name)
+        self.assertTrue(1 == ta.drop_models(model_name), "drop_models() should have deleted one model.")
 
     # Tests trying to create a kmeans model with the same name as an existing model
     def test_create_kmeans_model_with_duplicte_model_name(self):
-        model_name = "test_kmeans_model"
-
-        # If a model with name already exists, delete it
-        if model_name in ta.get_model_names():
-            ta.drop_models(model_name)
+        model_name = str(uuid.uuid1()).replace('-','_')
 
         print "create kmeans model named: " + str(model_name)
         model1 = ta.KMeansModel(name=model_name)
@@ -81,19 +74,15 @@ class ModelKMeansTest(unittest.TestCase):
             model2 = ta.KMeansModel(name=model_name)
 
         # Delete the model to clean up after the test
-        ta.drop_models(model_name)
+        self.assertTrue(1 == ta.drop_models(model_name), "drop_models() should have deleted one model.")
 
     # Tests trying to create a kmeans model with the same name as an existing frame
     def test_create_kmeans_model_with_duplicte_frame_name(self):
-        frame_name = "test_frame_name"
+        frame_name = str(uuid.uuid1()).replace('-','_')
 
-        # If a model with name already exists, delete it
-        if frame_name in ta.get_model_names():
-            ta.drop_models(frame_name)
-
-        # If a frame with this name does not already exist, create it
-        if frame_name not in ta.get_frame_names():
-            ta.Frame(name=frame_name)
+        # Create frame
+        print "Create frame named: " + frame_name
+        ta.Frame(name=frame_name)
 
         print "try to create a model with the same name as the frame"
         with self.assertRaises(Exception):
@@ -101,15 +90,15 @@ class ModelKMeansTest(unittest.TestCase):
             ta.drop_models(frame_name)
 
         # Delete the frame to clean up after the test
-        ta.drop_frames(frame_name)
+        self.assertTrue(1 == ta.drop_frames(frame_name), "drop_frames() should have deleted one frame.")
 
     # Tests trying to create a kmeans model with the same name as an existing graph
     def test_create_kmeans_model_with_duplicte_graph_name(self):
-        graph_name = "test_graph_name"
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
-        # If a graph with this name does not already exist, create it
-        if graph_name not in ta.get_graph_names():
-            ta.Graph(name=graph_name)
+        # Create graph
+        print "Create graph named: " + graph_name
+        ta.Graph(name=graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should be in the list of graphs")
 
         print "try to create a model with the same name as the graph"
@@ -117,7 +106,7 @@ class ModelKMeansTest(unittest.TestCase):
             model = ta.KMeansModel(name=graph_name)
 
         # Delete the graph to clean up after the test
-        ta.drop_graphs(graph_name)
+        self.assertTrue(1 == ta.drop_graphs(graph_name), "drop_graphs() should have deleted one graph.")
 
 
 if __name__ == "__main__":
