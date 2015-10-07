@@ -154,9 +154,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>testutils</module>
                 <module>misc</module>
                 <module>module-loader</module>
+                <module>scoring-interfaces</module>
+                <module>model-publish-format</module>
                 <module>engine</module>
                 <module>engine-plugins</module>
-                <module>scoring-interfaces</module>
                 <module>scoring-engine</module>
                 <module>scoring-models</module>
                 <module>rest-server</module>
@@ -683,6 +684,27 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>giraph-plugins</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-interfaces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>model-publish-format</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-models</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!--STARTititan-->
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -1106,6 +1128,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.7</version>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>

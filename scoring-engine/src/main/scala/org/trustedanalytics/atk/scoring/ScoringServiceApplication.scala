@@ -20,21 +20,20 @@ import java.io.{ FileOutputStream, File, FileInputStream }
 
 import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
-import org.apache.commons.io.IOUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
-import org.trustedanalytics.atk.moduleloader.{ Module, Component }
+import org.trustedanalytics.atk.moduleloader.Component
 import spray.can.Http
+import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
 import org.trustedanalytics.atk.event.EventLogging
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.reflect.ClassTag
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import org.trustedanalytics.atk.scoring.interfaces.Model
 import java.net.URI
+import org.apache.commons.io.FileUtils
 
 /**
  * Scoring Service Application - a REST application used by client layer to communicate with the Model.
@@ -54,21 +53,12 @@ class ScoringServiceApplication extends Component with EventLogging {
   EventLogging.profiling = config.getBoolean("trustedanalytics.atk.scoring.logging.profile")
   info(s"Scoring server profiling: ${EventLogging.profiling}")
 
-  var moduleName: String = null
-  var modelClassName: String = null
-  var ModelBytesFileName: String = null
-
   /**
    * Main entry point to start the Scoring Service Application
    */
   override def start() = {
-
-    modelLoadRead()
-
-    lazy val modelLoader: ModelLoader = Module.load(moduleName, modelClassName)
-
-    val service = initializeScoringServiceDependencies(modelLoader, ModelBytesFileName)
-
+    val model = getModel
+    val service = new ScoringService(model)
     createActorSystemAndBindToHttp(service)
   }
 
@@ -78,59 +68,22 @@ class ScoringServiceApplication extends Component with EventLogging {
   override def stop(): Unit = {
   }
 
-  private def initializeScoringServiceDependencies(modelLoader: ModelLoader, modelFile: String): ScoringService = {
-    val source = scala.io.Source.fromFile(modelFile)
-    val byteArray = source.map(_.toByte).toArray
-    source.close()
-    val model = modelLoader.load(byteArray)
-    new ScoringService(model)
-  }
+  private def getModel: Model = {
 
-  private def modelLoadRead(): Unit = {
+    var tempTarFile: File = null
 
-    var outputFile: FileOutputStream = null
-    var myTarFile: TarArchiveInputStream = null
     try {
       var tarFilePath = config.getString("trustedanalytics.scoring-engine.archive-tar")
       if (tarFilePath.startsWith("hdfs://")) {
         val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
-        val tempFilePath = "/tmp/models.tar"
-        hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempFilePath))
-        tarFilePath = tempFilePath
+        tempTarFile = File.createTempFile("modelTar", ".tar")
+        hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
+        tarFilePath = tempTarFile.getAbsolutePath
       }
-      val tmpPath = "/tmp/"
-      myTarFile = new TarArchiveInputStream(new FileInputStream(new File(tarFilePath)))
-      var entry: TarArchiveEntry = null
-      entry = myTarFile.getNextTarEntry
-      while (entry != null) {
-        // Get the name of the file
-        val individualFile: String = entry.getName
-        // Get Size of the file and create a byte array for the size
-        val content: Array[Byte] = new Array[Byte](entry.getSize.toInt)
-        myTarFile.read(content, 0, content.length)
-        outputFile = new FileOutputStream(new File(tmpPath + individualFile))
-        IOUtils.write(content, outputFile)
-        outputFile.close()
-
-        // TODO: tar may have more than one jar
-
-        if (individualFile.contains(".jar")) {
-          moduleName = individualFile.substring(0, individualFile.indexOf(".jar"))
-        }
-        else if (individualFile.contains("modelname")) {
-          val s = new String(content)
-          modelClassName = s.replaceAll("\n", "")
-          info("model name is " + modelClassName)
-        }
-        else {
-          ModelBytesFileName = tmpPath + individualFile
-        }
-        entry = myTarFile.getNextTarEntry
-      }
+      ModelPublishFormat.read(new File(tarFilePath), this.getClass.getClassLoader.getParent)
     }
     finally {
-      IOUtils.closeQuietly(outputFile)
-      IOUtils.closeQuietly(myTarFile)
+      FileUtils.deleteQuietly(tempTarFile)
     }
   }
 
@@ -145,6 +98,7 @@ class ScoringServiceApplication extends Component with EventLogging {
     // Bind the Spray Actor to an HTTP Port
     // start a new HTTP server with our service actor as the handler
     IO(Http) ? Http.Bind(service, interface = config.getString("trustedanalytics.atk.scoring.host"), port = config.getInt("trustedanalytics.atk.scoring.port"))
+    println("scoring server is running now")
   }
 
 }

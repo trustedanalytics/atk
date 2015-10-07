@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.command
 
-import com.typesafe.config.{Config, ConfigFactory}
+import com.typesafe.config.{ Config, ConfigFactory }
 import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.moduleloader.Module
 import scala.collection.JavaConverters._
