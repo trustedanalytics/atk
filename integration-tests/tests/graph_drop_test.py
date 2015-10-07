@@ -48,7 +48,7 @@ class GraphDropTest(unittest.TestCase):
 
         # Drop graph by name
         print "dropping graph by name"
-        ta.drop_graphs(graph_name)
+        self.assertTrue(1 == ta.drop_graphs(graph_name), "drop_graphs() should have deleted one graph.")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests ta.drop_graphs() with the graph proxy object
@@ -62,7 +62,7 @@ class GraphDropTest(unittest.TestCase):
 
         # Drop graph using the graph object
         print "dropping graph by entity"
-        ta.drop_graphs(graph)
+        self.assertTrue(1 == ta.drop_graphs(graph), "drop_graphs() should have deleted one graph.")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests that ta.drop_graphs() does not fail when called with a graph name that does not exist
@@ -72,7 +72,7 @@ class GraphDropTest(unittest.TestCase):
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
         print "call drop_graphs() for " + graph_name
-        ta.drop_graphs(graph_name)
+        self.assertTrue(0 == ta.drop_graphs(graph_name), "drop_graphs() shouldn't have deleted any graphs")
 
         # expect no exception
 

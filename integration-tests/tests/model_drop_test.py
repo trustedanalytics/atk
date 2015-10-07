@@ -48,7 +48,7 @@ class ModelDropTest(unittest.TestCase):
 
         # Drop model by name
         print "dropping model by name"
-        ta.drop_models(model_name)
+        self.assertTrue(1 == ta.drop_models(model_name), "drop_models() should have deleted one model.")
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
     # Tests ta.drop_models() with the model proxy object
@@ -62,7 +62,7 @@ class ModelDropTest(unittest.TestCase):
 
         # Drop model using the model object
         print "dropping model by entity"
-        ta.drop_models(model)
+        self.assertTrue(1 == ta.drop_models(model), "drop_models() should have deleted one model.")
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
     # Tests ta.drop_models() with a model name that does not exist
@@ -72,7 +72,7 @@ class ModelDropTest(unittest.TestCase):
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
         print "call drop_models() for " + model_name
-        ta.drop_models(model_name)
+        self.assertTrue(0 == ta.drop_models(model_name), "drop_models() shouldn't have deleted any models.")
 
         # expect no exception
 

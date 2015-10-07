@@ -55,7 +55,7 @@ class FrameDropTest(unittest.TestCase):
         frame = ta.Frame(csv, name="test_frame_drop")
 
         print "dropping frame by name"
-        ta.drop_frames("test_frame_drop")
+        self.assertTrue(1 == ta.drop_frames("test_frame_drop"), "drop_frames() should have deleted one frame")
         self.assertFalse("test_frame_drop" in frames, "test_frame_drop should not exist in list of frames")
 
     # Tests ta.drop_frames() with a frame name that does not exist
@@ -65,7 +65,7 @@ class FrameDropTest(unittest.TestCase):
         self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not exist in the list of frames")
 
         print "call drop_frames() for " + frame_name
-        ta.drop_frames(frame_name)
+        self.assertTrue(0 == ta.drop_frames(frame_name), "drop_frames() should not have deleted any frames")
 
         # expect no exception
 
