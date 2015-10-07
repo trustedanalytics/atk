@@ -28,9 +28,13 @@ import ru._
  */
 class CommandPluginRegistry(loader: CommandLoader) {
 
-  private val registry: CommandPluginRegistryMaps = loader.loadFromConfig()
-  private def commandPlugins = registry.commandPlugins
-  private def pluginsToArchiveMap = registry.pluginsToArchiveMap
+  private lazy val registry = loader.loadFromConfig()
+
+  /** keys are plugin names, values are the plugins */
+  private lazy val commandPlugins: Map[String, CommandPlugin[_, _]] = registry.map { case (module, plugin) => plugin.name -> plugin }.toMap
+
+  /** keys are plugin names, values are the module names */
+  private lazy val pluginsToModuleMap: Map[String, String] = registry.filter { case (module, plugin) => module.isDefined }.map { case (module, plugin) => plugin.name -> module.get.name }.toMap
 
   /**
    * Get command plugin by name
@@ -42,23 +46,11 @@ class CommandPluginRegistry(loader: CommandLoader) {
   }
 
   /**
-   * Adds the given command to the registry.
-   * @param command the command to add
-   * @return the same command that was passed, for convenience
-   */
-  def registerCommand[A <: Product, R <: Product](command: CommandPlugin[A, R]): CommandPlugin[A, R] = {
-    synchronized {
-      registry.commandPlugins += (command.name -> command)
-    }
-    command
-  }
-
-  /**
    * Returns all the command definitions registered with this command executor.
    *
    * NOTE: this is a val because the underlying operations are not thread-safe -- Todd 3/10/2015
    */
-  lazy val commandDefinitions: Iterable[CommandDefinition] =
+  lazy val commandDefinitions: Iterable[CommandDefinition] = {
     commandPlugins.values.map(p => {
       // It seems that the underlying operations are not thread-safe -- Todd 3/10/2015
       val argSchema = getArgumentsSchema(p)
@@ -66,14 +58,14 @@ class CommandPluginRegistry(loader: CommandLoader) {
       val doc = getCommandDoc(p)
       CommandDefinition(p.name, argSchema, retSchema, doc, p.apiMaturityTag)
     })
+  }
 
   def getCommandDefinition(name: String): Option[CommandPlugin[_, _]] = {
     commandPlugins.get(name)
   }
 
-  // Get archive name for the plugin. If it does not exist in the map, check if it is in commandPlugins as a valid plugin
-  def getArchiveNameFromPlugin(name: String): Option[String] = {
-    pluginsToArchiveMap.get(name)
+  def moduleNameForPlugin(pluginName: String): String = {
+    pluginsToModuleMap.getOrElse(pluginName, throw new RuntimeException(s"No module found for plugin named $pluginName"))
   }
 
   private def getArgumentsSchema(p: CommandPlugin[_, _]): ObjectSchema = {
@@ -99,5 +91,3 @@ class CommandPluginRegistry(loader: CommandLoader) {
     }
   }
 }
-
-case class CommandPluginRegistryMaps(var commandPlugins: Map[String, CommandPlugin[_, _]], var pluginsToArchiveMap: Map[String, String])
