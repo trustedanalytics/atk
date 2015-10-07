@@ -51,7 +51,7 @@ Returns information about the command
 | progress                      | command execution progress                       |
 |                               | ``progress``: percentage complete                |
 |                               | ``tasks_info``: info about each task in the      |
-|                               |   command including number of retries            |
+|                               | command including number of retries              |
 +-------------------------------+--------------------------------------------------+
 | complete                      | boolean indicating if the command has finished   |
 +-------------------------------+--------------------------------------------------+

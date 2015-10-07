@@ -46,7 +46,8 @@ the true labels using built-in binary Classification Metrics.
 
 .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html
-.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent""")
+.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent""",
+  returns = """A new instance of SvmModel""")
 class SVMWithSGDNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

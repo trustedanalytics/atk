@@ -7,6 +7,9 @@
 Process Flow Examples
 =====================
 
+The information in this section displays the general path taken to build
+using |ATK| with Python.
+
 .. contents:: Table of Contents
     :local:
     :backlinks: none
@@ -214,7 +217,8 @@ There are several ways to create frames\:
 #.  As "empty", with no schema or data
 #.  With a schema and data
 #.  By copying (all or a part of) another frame
-#.  As a return value from a Frame-based method; this is part of the ETL data flow.
+#.  As a return value from a Frame-based method; this is part of the
+    :term:`ETL <Extract, Transform, and Load>` data flow.
 
 See the Python API :ref:`Frames section <python_api/frames/index>` for more information.
 
@@ -1248,6 +1252,8 @@ API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
     :hidden:
 
     ds_apir
+    CollaborativeFilteringNewPlugin_Summary
+    LdaNewPlugin_Summary
 
 ------
 Models
@@ -1256,16 +1262,16 @@ Models
 Collaborative Filtering
 -----------------------
 See the :ref:`models section of the API
-<python_api/models/model-collaborative_filtering/index.rst>` for details.
+<python_api/models/model-collaborative_filtering/index>` for details.
 
 Graphical Models
 ----------------
 Graphical models find more insights from structured noisy data.
-See :ref:`graph API <python_api/graphs/index.rst>` for details of the
+See :ref:`graph API <python_api/graphs/index>` for details of the
 :term:`Label Propagation` (LP) and :term:`Loopy Belief Propagation` (LBP).
 
 Topic Modeling
 --------------
 For Topic Modeling, see the :ref:`LDA Model section of the API
-<python_api/models/model-lda/index.rst>` and
+<python_api/models/model-lda/index>` and
 http://en.wikipedia.org/wiki/Topic_model

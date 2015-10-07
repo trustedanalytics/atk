@@ -27,6 +27,7 @@ ta.connect()
 
 class ModelKMeansTest(unittest.TestCase):
     def testKMeans(self):
+        """basic KMeans train + piggyback model last_read_date"""
         print "define csv file"
         csv = ta.CsvFile("/datasets/KMeansTestFile.csv", schema= [('data', ta.float64),
                                                              ('name', str)], skip_header_lines=1)
@@ -36,9 +37,15 @@ class ModelKMeansTest(unittest.TestCase):
 
         print "Initializing a KMeansModel object"
         k = ta.KMeansModel(name='myKMeansModel')
+        t0 = k.last_read_date
+        t1 = k.last_read_date
+        #print "t0=%s" % t0.isoformat()
+        self.assertEqual(t0, t1)
 
         print "Training the model on the Frame"
         k.train(frame,['data'],[2.0])
+        t2 = k.last_read_date
+        self.assertLess(t1, t2)
 
 
 if __name__ == "__main__":

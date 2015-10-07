@@ -14,8 +14,6 @@
 # limitations under the License.
 #
 
-import sys
-sys.path.insert(0, "/home/blbarker/dev/atk/python-client")
 import unittest
 import trustedanalytics as ta
 import pytz
