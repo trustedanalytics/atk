@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid         # for generating unique frame names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -54,32 +55,25 @@ class FrameRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a frame to have the same name as an existing frame
     def test_duplicate_frame_rename(self):
-        frame_name1 = "test_frame_name"
-        frame_name2 = "other_frame_name"
+        frame_name1 = str(uuid.uuid1()).replace('-','_')
+        frame_name2 = str(uuid.uuid1()).replace('-','_')
 
-        # Drop frames by name, in case they already exist from a previous test
-        ta.drop(frame_name1)
-        ta.drop(frame_name2)
-
-        print "create frame1 named " + frame_name1
+        print "create frame1 named: " + frame_name1
         frame1 = ta.Frame(name=frame_name1)
-        self.assertTrue(frame1.name == frame_name1)
 
-        print "create frame2 named " + frame_name2
+        print "create frame2 named: " + frame_name2
         frame2 = ta.Frame(name=frame_name2)
-        self.assertTrue(frame2.name == frame_name2)
 
         # After creating frames, check that frames with each name exists on the server
         self.assertTrue(frame_name1 in ta.get_frame_names(), frame_name1 + " should exist in list of frames")
         self.assertTrue(frame_name2 in ta.get_frame_names(), frame_name2 + " should exist in list of frames")
 
         # Try to rename frame2 to have the same name as frame1 (we expect an exception here)
-        print "check for an excpetion when we try to rename frame2 to have the same name as frame1"
+        print "check for an exception when we try to rename frame2 to have the same name as frame1"
         with self.assertRaises(Exception):
             frame2.name = frame_name1
 
         # Both frame names should still exist on the server
-        print "frames: " + str(ta.get_frames_names())
         self.assertTrue(frame_name1 in ta.get_frame_names(), frame_name1 + " should still exist in list of frames")
         self.assertTrue(frame_name2 in ta.get_frame_names(), frame_name2 + " should still exist in list of frames")
 
@@ -89,21 +83,15 @@ class FrameRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a frame to have the same name as an existing graph
     def test_duplicate_graph_rename(self):
-        frame_name = "test_frame_name"
-        graph_name = "test_graph_name"
+        frame_name = str(uuid.uuid1()).replace('-','_')
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
-        # Drop frame and graph by name, in case they already exist from a previous test
-        ta.drop(frame_name)
-        ta.drop(graph_name)
-
-        print "create frame named " + frame_name
+        print "create frame named: " + frame_name
         frame = ta.Frame(name=frame_name)
-        self.assertTrue(frame.name == frame_name)
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frames")
 
-        print "create graph named " + graph_name
+        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
-        self.assertTrue(graph.name == graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
         print "check for an exception when we try to rename the frame to the same name as the graph"
@@ -111,9 +99,7 @@ class FrameRenameTest(unittest.TestCase):
             frame.name = graph_name
 
         # The original frame and graph name should still exist on the server
-        print "frames: " + str(ta.get_frames_names())
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
-        print "graphs: " + str(ta.get_graph_names())
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
 
         # Delete the frame and the graph from the server (to clean up after the test)
@@ -122,21 +108,15 @@ class FrameRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a frame to have the same name as an existing model
     def test_duplicate_model_rename(self):
-        frame_name = "test_frame_name"
-        model_name = "test_model_name"
+        frame_name = str(uuid.uuid1()).replace('-','_')
+        model_name = str(uuid.uuid1()).replace('-','_')
 
-        # Drop frame and model by name, in case they already exist from a previous test
-        ta.drop(frame_name)
-        ta.drop(model_name)
-
-        print "create frame named " + frame_name
+        print "create frame named: " + frame_name
         frame = ta.Frame(name=frame_name)
-        self.assertTrue(frame.name == frame_name)
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frames")
 
-        print "create model named " + model_name
+        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
-        self.assertTrue(model.name == model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
         print "check for an exception when we try to rename the frame to the same name as the model"
@@ -144,9 +124,7 @@ class FrameRenameTest(unittest.TestCase):
             frame.name = model_name
 
         # The original frame and model name should still exist on the server
-        print "frames: " + str(ta.get_frames_names())
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
-        print "models: " + str(ta.get_models_names())
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
 
         # Delete the frame and the model from the server (to clean up after the test)

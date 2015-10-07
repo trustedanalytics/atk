@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid     # for generating unique graph names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -36,12 +37,12 @@ class GraphDropTest(unittest.TestCase):
     """
     _multiprocess_can_split_ = True
 
-    # Tests ta.drop_graph() with the graph name
+    # Tests ta.drop_graphs() with the graph name
     def test_drop_graph_by_name(self):
-        graph_name = "test_graph"
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
         # Create graph and verify that it's in the get_graph_names() list
-        print "create graph"
+        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
@@ -50,12 +51,12 @@ class GraphDropTest(unittest.TestCase):
         ta.drop_graphs(graph_name)
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
-    # Tests ta.drop_graph() with the graph proxy object
+    # Tests ta.drop_graphs() with the graph proxy object
     def test_drop_graph_by_object(self):
-        graph_name = "test_graph"
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
         # Create graph and verify that it's in the get_graph_names() list
-        print "create graph"
+        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
@@ -64,14 +65,22 @@ class GraphDropTest(unittest.TestCase):
         ta.drop_graphs(graph)
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
+    # Tests that ta.drop_graphs() does not fail when called with a graph name that does not exist
+    def test_drop_graph_that_does_not_exist(self):
+        graph_name = str(uuid.uuid1()).replace('-','_')
+
+        self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
+
+        print "call drop_graphs() for " + graph_name
+        ta.drop_graphs(graph_name)
+
+        # expect no exception
+
     # Tests the generic ta.drop() using the graph proxy object
     def test_generic_drop_by_object(self):
-        # drop existing graphs
-        for graph_name in ta.get_graph_names():
-            ta.drop(graph_name)
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
-        print "create graph"
-        graph_name = "test_graph"
+        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
 
         # Check that the graph we just created now exists
@@ -85,12 +94,9 @@ class GraphDropTest(unittest.TestCase):
 
     # Tests the generic ta.drop() using the graph name
     def test_generic_drop_by_object(self):
-        graph_name = "test_graph"
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
-        # Drop in case graph was used for a previous test
-        ta.drop(graph_name)
-
-        print "create graph"
+        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
 
         # Check that the graph we just created now exists

@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid         # for generating unique model names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -36,12 +37,12 @@ class ModelDropTest(unittest.TestCase):
     """
     _multiprocess_can_split_ = True
 
-    # Tests ta.drop_model() with the model name
+    # Tests ta.drop_models() with the model name
     def test_drop_model_by_name(self):
-        model_name = "test_model"
+        model_name = str(uuid.uuid1()).replace('-','_')
 
         # Create model and verify that it's in the get_model_names() list
-        print "create model"
+        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
@@ -50,12 +51,12 @@ class ModelDropTest(unittest.TestCase):
         ta.drop_models(model_name)
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
-    # Tests ta.drop_model() with the model proxy object
+    # Tests ta.drop_models() with the model proxy object
     def test_drop_model_by_object(self):
-        model_name = "test_model"
+        model_name = str(uuid.uuid1()).replace('-','_')
 
         # Create model and verify that it's in the get_model_names() list
-        print "create model"
+        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
 
@@ -64,14 +65,22 @@ class ModelDropTest(unittest.TestCase):
         ta.drop_models(model)
         self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
 
+    # Tests ta.drop_models() with a model name that does not exist
+    def test_drop_model_that_does_not_exist(self):
+        model_name = str(uuid.uuid1()).replace('-','_')
+
+        self.assertFalse(model_name in ta.get_model_names(), model_name + " should not exist in the list of models")
+
+        print "call drop_models() for " + model_name
+        ta.drop_models(model_name)
+
+        # expect no exception
+
     # Tests the generic ta.drop() using the model proxy object
     def test_generic_drop_by_object(self):
-        # drop existing model
-        for model_name in ta.get_model_names():
-            ta.drop(model_name)
+        model_name =  str(uuid.uuid1()).replace('-','_')
 
-        print "create model"
-        model_name = "test_model"
+        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
 
         # Check that the model we just created now exists
@@ -85,12 +94,9 @@ class ModelDropTest(unittest.TestCase):
 
     # Tests the generic ta.drop() using the model name
     def test_generic_drop_by_object(self):
-        # drop existing model
-        for model_name in ta.get_model_names():
-            ta.drop(model_name)
+        model_name =  str(uuid.uuid1()).replace('-','_')
 
-        print "create model"
-        model_name = "test_model"
+        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
 
         # Check that the model we just created now exists

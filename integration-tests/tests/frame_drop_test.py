@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid         # for generating unique frame names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -57,14 +58,22 @@ class FrameDropTest(unittest.TestCase):
         ta.drop_frames("test_frame_drop")
         self.assertFalse("test_frame_drop" in frames, "test_frame_drop should not exist in list of frames")
 
+    # Tests ta.drop_frames() with a frame name that does not exist
+    def test_drop_frame_that_does_not_exist(self):
+        frame_name = str(uuid.uuid1()).replace('-','_')
+
+        self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not exist in the list of frames")
+
+        print "call drop_frames() for " + frame_name
+        ta.drop_frames(frame_name)
+
+        # expect no exception
+
     # Tests the generic ta.drop() using the frame proxy object
     def test_generic_drop_by_object(self):
-        # drop existing frames
-        for frame_name in ta.get_frame_names():
-            ta.drop(frame_name)
+        frame_name = str(uuid.uuid1()).replace('-','_')
 
-        print "create frame"
-        frame_name = "test_frame"
+        print "create frame named: " + frame_name
         frame = ta.Frame(name=frame_name)
 
         # Check that the frame we just created now exists
@@ -78,12 +87,9 @@ class FrameDropTest(unittest.TestCase):
 
     # Tests the generic ta.drop() using the frame name
     def test_generic_drop_by_name(self):
-        # drop existing frames
-        for frame_name in ta.get_frame_names():
-            ta.drop(frame_name)
+        frame_name = str(uuid.uuid1()).replace('-','_')
 
-        print "create frame"
-        frame_name = "test_frame"
+        print "create frame named: " + frame_name
         frame = ta.Frame(name=frame_name)
 
         # Check that the frame we just created now exists
@@ -97,15 +103,11 @@ class FrameDropTest(unittest.TestCase):
 
     # Tests the generic ta.drop() using a frame name that does not exist
     def test_generic_drop_by_invalid_name(self):
-        import time
-        frame_name = "frame_" + str(time.time())    # generate frame name with timestamp
-
-        # Double check that we don't already have another frame, graph, or model with this name.  If we do, delete it.
-        if (frame_name in ta.get_frame_names()):
-            ta.drop_frame(frame_name)
+        frame_name = str(uuid.uuid1()).replace('-','_')
+        self.assertTrue(frame_name not in ta.get_frame_names(), frame_name + " should not exist in the list of frames")
 
         # Verify that calling drop on a frame that does not exist does not fail
-        print "drop frame " + str(frame_name)
+        print "drop frame: " + str(frame_name)
         ta.drop(frame_name)
 
     # Tests the generic drop() with an invalid object argument

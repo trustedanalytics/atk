@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid     # for generating unique model names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -37,21 +38,16 @@ class ModelRenameTest(unittest.TestCase):
     _multiprocess_can_split_ = True
 
     def test_model_rename(self):
-        model_name = "original_model_name"
-        new_model_name = "new_model_name"
+        model_name = str(uuid.uuid1()).replace('-','_')
+        new_model_name = str(uuid.uuid1()).replace('-','_')
 
-        # Create model if it doesn't already exist
-        if (model_name not in ta.get_model_names()):
-            print "create model"
-            ta.KMeansModel(name=model_name)
-
-        print "get model named: " + str(model_name)
-        model = ta.get_model(model_name)
-        self.assertTrue(model is not None)
+        print "create model named: " + model_name
+        model = ta.KMeansModel(name=model_name)
+        self.assertTrue(model_name in ta.get_model_names(), model_name + " should be in the list of models")
 
         print "rename model to: " + str(new_model_name)
         model.name = new_model_name
-        print "models: " + str(ta.get_model_names())
+
         self.assertTrue(new_model_name in ta.get_model_names(), new_model_name + " should be in list of models")
         self.assertFalse(model_name in ta.get_model_names(), model_name + " shoule not be in list of models")
 
@@ -61,12 +57,8 @@ class ModelRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a model to have the same name as an existing model
     def test_duplicate_model_rename(self):
-        model_name1 = "test_model_name"
-        model_name2 = "other_model_name"
-
-        # Drop models by name, in case they already exist from a previous test
-        ta.drop(model_name1)
-        ta.drop(model_name2)
+        model_name1 = str(uuid.uuid1()).replace('-','_')
+        model_name2 = str(uuid.uuid1()).replace('-','_')
 
         print "create model1 named: " + model_name1
         model1 = ta.KMeansModel(name=model_name1)
@@ -77,17 +69,15 @@ class ModelRenameTest(unittest.TestCase):
         self.assertTrue(model2.name == model_name2)
 
         # After creating models, check that models with each name exists on the server
-        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should exist in list of models")
 
         # Try to rename model2 to have the same name as model1 (we expect an exception here)
-        print "check for an excpetion when we try to rename model2 to have the same name as model1"
+        print "check for an exception when we try to rename model2 to have the same name as model1"
         with self.assertRaises(Exception):
             model2.name = model_name1
 
         # Both model names should still exist on the server
-        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should still exist in list of models")
 
@@ -97,12 +87,8 @@ class ModelRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a model to have the same name as an existing graph
     def test_duplicate_graph_rename(self):
-        model_name = "test_model_name"
-        graph_name = "test_graph_name"
-
-        # Drop model and graph by name, in case they already exist from a previous test
-        ta.drop(model_name)
-        ta.drop(graph_name)
+        model_name = str(uuid.uuid1()).replace('-','_')
+        graph_name = str(uuid.uuid1()).replace('-','_')
 
         print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
@@ -117,9 +103,7 @@ class ModelRenameTest(unittest.TestCase):
             model.name = graph_name
 
         # The original model and graph name should still exist on the server
-        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-        print "graphs: " + str(ta.get_graph_names())
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
 
         # Delete the model and the graph from the server (to clean up after the test)
@@ -128,12 +112,8 @@ class ModelRenameTest(unittest.TestCase):
 
     # Tests that we cannot rename a model to have the same name as an existing frame
     def test_duplicate_frame_rename(self):
-        model_name = "test_model_name"
-        frame_name = "test_frame_name"
-
-        # Drop model and frame by name, in case they already exist from a previous test
-        ta.drop(model_name)
-        ta.drop(frame_name)
+        model_name = str(uuid.uuid1()).replace('-','_')
+        frame_name = str(uuid.uuid1()).replace('-','_')
 
         print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
@@ -148,9 +128,7 @@ class ModelRenameTest(unittest.TestCase):
             model.name = frame_name
 
         # The original model and frame name should still exist on the server
-        print "models: " + str(ta.get_model_names())
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-        print "frames: " + str(ta.get_frame_names())
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
 
         # Delete the model and the frame from the server (to clean up after the test)
