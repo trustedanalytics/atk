@@ -21,8 +21,8 @@ import trustedanalytics as ta
 ta.errors.show_details = True
 ta.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
+if ta.server.port != 9099:
+    ta.server.port = 9099
 ta.connect()
 
 class GraphRenameTest(unittest.TestCase):

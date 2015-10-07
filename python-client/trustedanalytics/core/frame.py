@@ -101,11 +101,20 @@ def __drop(*items):
                 item_name = str(item)
 
                 if item_name in get_frame_names():
-                    drop_frames(item)
+                    try:
+                        drop_frames(item)
+                    except:
+                        pass
                 elif item_name in get_graph_names():
-                    drop_graphs(item)
+                    try:
+                        drop_graphs(item)
+                    except:
+                        pass
                 elif item_name in get_model_names():
-                    drop_models(item)
+                    try:
+                        drop_models(item)
+                    except:
+                        pass
 
                 # Note that if the item_name is not found in frames, graphs, or models, we intentionally do not fail
             else:
