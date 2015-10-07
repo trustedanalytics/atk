@@ -84,14 +84,12 @@ except Exception as e:
 @arg("items", "List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself).", "Deletes the specified frames, graphs, and models from the server.")
 def __drop(*items):
     """
-    drop() is essentially serving as an alias to drop_frames, drop_graphs, and drop_models.  It accepts a list of items,
-    which can contain strings (the name of the frame, graph, or model) or proxy objects (the frame, graph, or model
-    object itself).
-    If the item is a string, it attempts to call drop_frames, drop_graphs, and drop_models, until the
-    drop is successful (since at this point, we don't know what type of object it is, if we just have the string name).
-    If no frame, graph, or model is found with the specified name, we just continue (no error is reported).
-    If the item is not a string, we check the object type to determine which drop_* function to call.  If the item type
-    is not recognized, an ArgumentError is raised.
+    drop() serves as an alias to drop_frames, drop_graphs, and drop_models.  It accepts a list of items,
+    which can contain strings (the name of the frame, graph, or model) or proxy objects (the frame,
+    graph, or model object itself).
+    If the item provided is a string and no frame, graph, or model is found with the specified name, no
+    action is taken.
+    If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
     """
     from trustedanalytics import drop_frames, drop_graphs, drop_models, _BaseGraph, _BaseModel, get_frame_names, get_graph_names, get_model_names
     for item in items:
