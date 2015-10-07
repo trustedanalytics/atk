@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.command
 
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 import org.trustedanalytics.atk.engine.plugin.CommandPlugin
 import org.trustedanalytics.atk.moduleloader.Module
 import scala.collection.JavaConverters._
@@ -36,32 +36,28 @@ class CommandLoader(loadFromModules: Boolean) {
       // This is how the engine finds plugins
       Module.modules.flatMap(module => {
         val configs = module.getResources("atk-plugin.conf").map(url => ConfigFactory.parseURL(url))
-        val classNames = configs.flatMap(config => {
-          if (config.hasPath("atk.plugin.command-plugins")) {
-            config.getStringList("atk.plugin.command-plugins").asScala
-          }
-          else {
-            Nil
-          }
-        })
+        val classNames = getClassNames(configs)
         classNames.map(className => (Some(module), module.load(className)))
       })
     }
     else {
       // This is how plugins are loaded in SparkCommandJob (running in Yarn)
       val configs = this.getClass.getClassLoader.getResources("atk-plugin.conf").asScala.map(url => ConfigFactory.parseURL(url))
-      val classNames = configs.flatMap(config => {
-        if (config.hasPath("atk.plugin.command-plugins")) {
-          config.getStringList("atk.plugin.command-plugins").asScala
-        }
-        else {
-          Nil
-        }
-      })
+      val classNames = getClassNames(configs.toList)
       classNames.map(className => {
         (Option.empty[Module], this.getClass.getClassLoader.loadClass(className).newInstance().asInstanceOf[CommandPlugin[Product, Product]])
       }).toIterable
     }
   }
 
+  private def getClassNames(configs: List[Config]): List[String] = {
+    configs.flatMap(config => {
+      if (config.hasPath("atk.plugin.command-plugins")) {
+        config.getStringList("atk.plugin.command-plugins").asScala
+      }
+      else {
+        Nil
+      }
+    })
+  }
 }
