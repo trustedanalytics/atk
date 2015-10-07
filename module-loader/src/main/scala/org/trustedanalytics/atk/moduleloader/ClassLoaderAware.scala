@@ -24,7 +24,7 @@ trait ClassLoaderAware {
    * Sometimes 3rd party libraries will use the ContextClassLoader
    */
   def withMyClassLoader[T](expr: => T): T = {
-    withContextCloassLoader(this.getClass.getClassLoader)(expr)
+    withContextClassLoader(this.getClass.getClassLoader)(expr)
   }
 
   /**
@@ -32,7 +32,7 @@ trait ClassLoaderAware {
    *
    * Sometimes 3rd party libraries will use the ContextClassLoader
    */
-  def withContextCloassLoader[T](loader: ClassLoader)(expr: => T): T = {
+  def withContextClassLoader[T](loader: ClassLoader)(expr: => T): T = {
     val prior = Thread.currentThread().getContextClassLoader
     try {
       Thread.currentThread().setContextClassLoader(loader)
