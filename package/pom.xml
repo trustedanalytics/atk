@@ -26,6 +26,7 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
     <modelVersion>4.0.0</modelVersion>
     <artifactId>package</artifactId>
     <name>package</name>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>org.trustedanalytics.atk</groupId>
@@ -46,6 +47,10 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
                     <value>0</value>
                 </property>
             </activation>
+            <modules>
+                <module>rest-server-lib</module>
+                <module>scoring-engine-lib</module>
+            </modules>
             <build>
                 <plugins>
                     <plugin>

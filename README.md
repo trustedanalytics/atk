@@ -87,7 +87,6 @@ This is an overview. Additional details and instructions are in the user documen
 # Folders Overview
 * bin/ - scripts for starting REST server and scoring engine, etc.
 * conf/ - configuration templates for setting up a system, put your application.conf here for running out of source code
-* deploy/ - a module for creating an uber jar needed for deployment on Analytics PaaS.
 * doc/ - end user docs for the system (except doc for specific plugins goes in the plugins themselves)
 * doc-api-examples/ - examples of api usage for plugins
 * engine/
