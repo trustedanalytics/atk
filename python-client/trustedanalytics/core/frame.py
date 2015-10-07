@@ -100,21 +100,13 @@ def __drop(*items):
                 # If the item is a string, try calling drop_* functions, until we're successful.
                 item_name = str(item)
 
-                if item_name in get_frame_names():
-                    try:
-                        drop_frames(item)
-                    except:
-                        pass
-                elif item_name in get_graph_names():
-                    try:
-                        drop_graphs(item)
-                    except:
-                        pass
-                elif item_name in get_model_names():
-                    try:
-                        drop_models(item)
-                    except:
-                        pass
+                num_items_dropped = drop_frames(item)
+
+                if (num_items_dropped == 0):
+                    num_items_dropped = drop_graphs(item)
+
+                if (num_items_dropped == 0):
+                    drop_models(item)
 
                 # Note that if the item_name is not found in frames, graphs, or models, we intentionally do not fail
             else:
