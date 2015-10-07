@@ -34,7 +34,7 @@ atk.module {
 
 2. Modules that are a member-of other modules.  The member-of relationship means the modules will be combined at 
 runtime into a single module definition with a single classloader.  This is used when Spark plugins are spread
-accross multiple modules that will need to share the same runtime environment.
+across multiple modules that will need to share the same runtime environment.
 
 ```
 atk.module {
