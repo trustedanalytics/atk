@@ -1,12 +1,12 @@
 Examples
 --------
-Test the performance of a trained Svm Model
+Test the performance of a trained NaiveBayesModel
 
 .. only:: html
 
     .. code::
 
-        >>> my_model = ta.SvmModel(name='mySVM')
+        >>> my_model = ta.NaiveBayesModel(name='myNaiveBayes')
         >>> my_model.train(train_frame, 'name_of_label_column',['List_of_observation_column/s'])
         >>> metrics = my_model.test(test_frame, 'name_of_label_column',['List_of_observation_column/s'])
 
@@ -33,7 +33,7 @@ Test the performance of a trained Svm Model
 
     .. code::
 
-        >>> my_model = ta.SvmModel(name='mySVM')
+        >>> my_model = ta.NaiveBayesModel(name='myNaiveBayes')
         >>> my_model.train(train_frame, 'name_of_label_column',
         ... ['List_of_observation_column/s'])
         >>> metrics = my_model.test(test_frame, 'name_of_label_column',
