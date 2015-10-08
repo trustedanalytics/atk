@@ -62,7 +62,11 @@ echo $jarPath
 #enable this to copy the regular launcher.jar to the correct place
 cp -v $jarPath ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/launcher.jar
 
-
+mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
+ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
+cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
+ls -l python-client/target
+cp -v python-client/target/trustedanalytics.zip ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
 
 popd
 
