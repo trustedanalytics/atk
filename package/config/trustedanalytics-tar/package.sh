@@ -36,16 +36,18 @@ ls -l
 ls -l rest-server-lib/target
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
 
+echo "create client"
 mkdir -pv tarballs/$package/client
 ls -l config/trustedanalytics-python-client/trustedanalytics/dist
 cp -v config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz tarballs/$package/client
 ls -l ../python-client/target
 cp -v ../python-client/target/trustedanalytics.zip tarballs/$package/lib/
 
+echo "create trustedanalytics.tar.gz"
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics.tar.gz .
 popd
 
 
-
+echo "remove tarballs"
 rm -rf tarballs
