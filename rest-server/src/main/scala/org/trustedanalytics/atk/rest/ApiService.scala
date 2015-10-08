@@ -54,7 +54,7 @@ class ApiServiceActor(val apiService: ApiService) extends Actor with HttpService
  */
 class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1Service) extends Directives with ActorSystemImplicits {
 
-  def homepage = {
+  def homepage(requestUri: Uri) = {
     respondWithMediaType(`text/html`) {
       complete {
         <html>
@@ -62,6 +62,8 @@ class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1
             <h1>Welcome to the Trusted Analytics Toolkit API Server</h1>
             <h2>Server Version: { version }</h2>
             <h2><a href={ docLink }>Server/Client Documentation</a></h2>
+            <h3>To download the client and install it with pip, run the following command:</h3>
+            <code style="padding-left:5em">pip install { requestUri }client</code>
           </body>
         </html>
       }
@@ -87,7 +89,12 @@ class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1
    */
   val serviceRoute: Route = logRequest("api service", Logging.InfoLevel) {
     path("") {
-      get { homepage }
+      requestUri {
+        uri =>
+          get {
+            homepage(uri)
+          }
+      }
     } ~
       pathPrefix("v1") {
         apiV1Service.route
