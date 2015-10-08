@@ -38,6 +38,9 @@ class FilterVerticesPlugin extends SparkCommandPlugin[FilterVerticesArgs, UnitRe
    */
   override def name: String = "frame:vertex/filter"
 
+  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
+  override def executesPythonUdf = true
+
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)

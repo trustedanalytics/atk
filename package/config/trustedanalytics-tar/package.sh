@@ -1,5 +1,7 @@
 #!/bin/bash
-package="trustedanalytics-tar"
+package=$1
+BUILD_NUMBER=$2
+VERSION=$3
 workDir=$(pwd)
 baseDir=${workDir##*/}
 gitRoot="."
@@ -27,11 +29,44 @@ cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarball
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
+<<<<<<< HEAD
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
+=======
+
+jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
+
+#popd
+
+pushd $gitRoot
+for jar in $jars
+do
+	jarPath=$(find .  -path ./package -prune -o -name $jar -print )
+	echo $jarPath
+	cp -v $jarPath package/tarballs/$package/lib/
+
+done
+
+jarPath=$(find .  -path ./package -prune -o -name launcher.jar -print)
+
+echo $jarPath
+#enable this to copy the regular launcher.jar to the correct place
+cp -v $jarPath package/tarballs/$package/launcher.jar
+
+
+mkdir -p package/tarballs/$package/client
+ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
+cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz package/tarballs/$package/client
+ls -l python-client/target
+cp -v python-client/target/trustedanalytics.zip package/tarballs/$package/lib/
+
+popd
+
+>>>>>>> c6b523c1f41c52e38d68f4aac8310dab023e018c
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics.tar.gz .
 popd
+
 
 
 rm -rf tarballs

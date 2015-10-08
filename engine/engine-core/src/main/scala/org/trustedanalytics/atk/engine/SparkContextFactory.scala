@@ -23,6 +23,8 @@ import org.trustedanalytics.atk.event.EventLogging
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.{ SparkConf, SparkContext }
 
+import scala.reflect.io.Directory
+
 /**
  * Class Factory for creating spark contexts
  */
@@ -63,6 +65,22 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     new SparkContext(sparkConf)
   }
 
+  def getResourcePath(resourceName: String, additionalPaths: Option[Seq[String]] = None): Option[String] = {
+    val currentDirectory = Directory.Current.getOrElse(
+      throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
+    val searchableDirectories = additionalPaths.isDefined match {
+      case false => Array(currentDirectory)
+      case true => Array(currentDirectory) ++ (for { path <- additionalPaths.get } yield Directory(path))
+    }
+
+    val result = for {
+      directory <- searchableDirectories
+      file <- directory.deepFiles.toList.map(_.toString)
+      if (file.endsWith(resourceName))
+    } yield (file)
+
+    result.headOption
+  }
 }
 
 object SparkContextFactory extends SparkContextFactory {
