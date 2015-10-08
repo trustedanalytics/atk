@@ -18,19 +18,15 @@ package org.apache.spark.frame
 
 import breeze.linalg.DenseVector
 import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
-import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
-import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
-import org.apache.spark.frame.ordering.MultiColumnOrdering
+import org.apache.spark.frame.ordering.FrameOrderingUtils
 import org.apache.spark.mllib.linalg.distributed.IndexedRow
 import org.apache.spark.mllib.linalg.{ Vector, Vectors }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.apache.spark.sql.types.{ ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType }
-import org.apache.spark.sql.{ DataFrame, Row, SQLContext, types => SparkType }
+import org.apache.spark.sql.{ DataFrame, Row, SQLContext }
 import org.apache.spark.{ Partition, TaskContext }
-import org.trustedanalytics.atk.domain.SerializableType
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
@@ -87,7 +83,14 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * Convert a FrameRdd to a Spark Dataframe
    * @return Dataframe representing the FrameRdd
    */
-  def toDataFrame = new SQLContext(this.sparkContext).createDataFrame(this, sparkSchema)
+  def toDataFrame: DataFrame = {
+    //TODO: Delete work-around for kyro serialization bug (SPARK-6465) once we upgrade to Spark1.4
+    // Work-around for kyro serialization bug in GenericRowWithSchema
+    // https://issues.apache.org/jira/browse/SPARK-6465
+    // This issue is affecting dataframe operations with shuffles like sort and join
+    val rowRdd: RDD[Row] = this.map(row => new GenericRow(row.toSeq.toArray))
+    new SQLContext(this.sparkContext).createDataFrame(rowRdd, sparkSchema)
+  }
 
   def toDataFrameUsingHiveContext = new org.apache.spark.sql.hive.HiveContext(this.sparkContext).createDataFrame(this, sparkSchema)
 
@@ -327,16 +330,12 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return the sorted Frame
    */
   def sortByColumns(columnNamesAndAscending: List[(String, Boolean)]): FrameRdd = {
-    require(columnNamesAndAscending != null && columnNamesAndAscending.nonEmpty, "one or more columnNames is required")
+    require(columnNamesAndAscending != null && columnNamesAndAscending.nonEmpty, "one or more sort columns required")
+    this.frameSchema.validateColumnsExist(columnNamesAndAscending.map(_._1))
+    val sortOrder = FrameOrderingUtils.getSortOrder(columnNamesAndAscending)
 
-    val columnNames = columnNamesAndAscending.map(_._1)
-    val ascendingPerColumn = columnNamesAndAscending.map(_._2)
-
-    implicit val multiColumnOrdering = new MultiColumnOrdering(ascendingPerColumn)
-
-    // ascending is always true here because we control in the ordering
-    val sortedRows = this.sortBy(row => rowWrapper(row).values(columnNames), ascending = true)
-    new FrameRdd(frameSchema, sortedRows)
+    val sortedFrame = this.toDataFrame.orderBy(sortOrder: _*)
+    new FrameRdd(frameSchema, sortedFrame.rdd)
   }
 
   /**
