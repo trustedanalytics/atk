@@ -89,7 +89,7 @@ class ModelRenameTest(unittest.TestCase):
 
         # model1 and the frame should still exist on the server
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in the list of models")
-        self.assertTrue(frame_name in ta.get_frames_names(), frame_name + " should still exist in the list of frames")
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
 
 
 if __name__ == "__main__":
