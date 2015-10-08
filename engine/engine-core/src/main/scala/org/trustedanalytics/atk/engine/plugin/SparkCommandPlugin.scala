@@ -110,7 +110,7 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
     val sparkInvocation = invocation.asInstanceOf[SparkInvocation]
     SparkCommandPlugin.stop(sparkInvocation.commandId)
   }
-  
+
   /* plugins which execute python UDF will override this to true; by default this is false .
      if true, additional files are shipped for udf execution during a yarn job
    */
