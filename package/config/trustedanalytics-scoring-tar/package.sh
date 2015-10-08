@@ -17,16 +17,18 @@ rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
-mkdir -p  tarballs/$package/bin
-mkdir -p  tarballs/$package/conf
-mkdir -p  tarballs/$package/lib
-mkdir -p  tarballs/$package/data
+echo "create package directories"
+mkdir -pv  tarballs/$package/bin
+mkdir -pv  tarballs/$package/conf
+mkdir -pv  tarballs/$package/lib
+mkdir -pv  tarballs/$package/data
 
+echo "copy config into package"
 cp -v  config/$package/logback.xml tarballs/$package/conf
-
 cp -v config/$package/scoring-server.sh tarballs/$package/bin/
 cp -v config/$package/application.conf tarballs/$package/conf
 
+echo "copy jar dependencies"
 cp -v scoring-engine-lib/target/dependency/*.jar tarballs/$package/lib/
 
 pushd tarballs/$package
