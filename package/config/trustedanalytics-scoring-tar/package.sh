@@ -27,7 +27,7 @@ cp -v  config/$package/logback.xml tarballs/$package/conf
 cp -v config/$package/scoring-server.sh tarballs/$package/bin/
 cp -v config/$package/application.conf tarballs/$package/conf
 
-cp -v scoring-engine-lib/target/dependency/*.jar package/tarballs/$package/lib/
+cp -v scoring-engine-lib/target/dependency/*.jar tarballs/$package/lib/
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics-scoring.tar.gz .

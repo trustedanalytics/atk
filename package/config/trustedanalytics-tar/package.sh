@@ -27,7 +27,7 @@ cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarball
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
-cp -v rest-server-lib/target/dependency/*.jar package/tarballs/$package/lib/
+cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics.tar.gz .
