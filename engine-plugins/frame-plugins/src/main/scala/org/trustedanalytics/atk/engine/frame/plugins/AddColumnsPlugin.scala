@@ -51,6 +51,9 @@ class AddColumnsPlugin extends SparkCommandPlugin[AddColumnsArgs, UnitReturn] {
    */
   override def name: String = "frame/add_columns"
 
+  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
+  override def executesPythonUdf = true
+
   /**
    * Adds one or more new columns to the frame by evaluating the given func on each row.
    *

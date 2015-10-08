@@ -37,6 +37,9 @@ class CopyFramePlugin extends SparkCommandPlugin[CopyFrameArgs, FrameReference] 
 
   override def name: String = "frame/copy"
 
+  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
+  override def executesPythonUdf = true
+
   override def numberOfJobs(arguments: CopyFrameArgs)(implicit invocation: Invocation) = {
     arguments.where match {
       case Some(function) => 2 // predicated copy requires a row count operation
