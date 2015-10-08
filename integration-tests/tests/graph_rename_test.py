@@ -37,41 +37,36 @@ class GraphRenameTest(unittest.TestCase):
     """
     _multiprocess_can_split_ = True
 
+    # Tests that we are able to rename a graph
     def test_graph_rename(self):
         graph_name = str(uuid.uuid1()).replace('-','_')
         new_graph_name = str(uuid.uuid1()).replace('-','_')
 
         # Create graph
-        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
-
-        print "rename graph to: " + new_graph_name
         graph.name = new_graph_name
 
         self.assertTrue(new_graph_name in ta.get_graph_names(), new_graph_name + " should be in list of graphs")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not be in list of graphs")
 
-        # Drop graph to clean up after the test
-        ta.drop_graphs(graph)
-
-
-    # Tests that we cannot rename a graph to have the same name as an existing graph
+    # Tests that we cannot rename a graph to have the same name as an existing graph, frame, or model
     def test_duplicate_graph_rename(self):
         graph_name1 = str(uuid.uuid1()).replace('-','_')
         graph_name2 = str(uuid.uuid1()).replace('-','_')
+        model_name =  str(uuid.uuid1()).replace('-','_')
+        frame_name =  str(uuid.uuid1()).replace('-','_')
 
-        print "create graph1 named: " + graph_name1
+        # Create graphs, model, and frame
         graph1 = ta.Graph(name=graph_name1)
-
-        print "create graph2 named: " + graph_name2
         graph2 = ta.Graph(name=graph_name2)
+        ta.KMeansModel(name=model_name)
+        ta.Frame(name=frame_name)
 
         # After creating graphs, check that graphs with each name exists on the server
         self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should exist in list of graphs")
         self.assertTrue(graph_name2 in ta.get_graph_names(), graph_name2 + " should exist in list of graphs")
 
         # Try to rename graph2 to have the same name as graph1 (we expect an exception here)
-        print "check for an exception when we try to rename graph2 to have the same name as graph1"
         with self.assertRaises(Exception):
             graph2.name = graph_name1
 
@@ -79,59 +74,21 @@ class GraphRenameTest(unittest.TestCase):
         self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should still exist in list of graphs")
         self.assertTrue(graph_name2 in ta.get_graph_names(), graph_name2 + " should still exist in list of graphs")
 
-        # Delete both graphs from the server (to clean up after the test)
-        ta.drop(graph1)
-        ta.drop(graph2)
-
-    # Tests that we cannot rename a graph to have the same name as an existing model
-    def test_duplicate_model_rename(self):
-        graph_name = str(uuid.uuid1()).replace('-','_')
-        model_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create graph named: " + graph_name
-        graph = ta.Graph(name=graph_name)
-        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
-
-        print "create model named: " + model_name
-        model = ta.KMeansModel(name=model_name)
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
-
-        print "check for an exception when we try to rename the graph to the same name as the model"
+        # Try to rename graph1 to have the same name as the frame (we expect an exception here)
         with self.assertRaises(Exception):
-            graph.name = model_name
+            graph1.name = frame_name
 
-        # The original graph and model name should still exist on the server
-        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-
-        # Delete the graph and the graph from the server (to clean up after the test)
-        ta.drop(graph)
-        ta.drop(model)
-
-    # Tests that we cannot rename a graph to have the same name as an existing frame
-    def test_duplicate_frame_rename(self):
-        graph_name = str(uuid.uuid1()).replace('-','_')
-        frame_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create graph named: " + graph_name
-        graph = ta.Graph(name=graph_name)
-        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
-
-        print "create frame named: " + frame_name
-        frame = ta.Frame(name=frame_name)
-        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frames")
-
-        print "check for an exception when we try to rename the graph to the same name as the frame"
-        with self.assertRaises(Exception):
-            graph.name = frame_name
-
-        # The original graph and frame name should still exist on the server
-        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
+        # graph1 and the frame name should still exist on the server
+        self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should still exist in the list of graphs")
         self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
 
-        # Delete the graph and the frame from the server (to clean up after the test)
-        ta.drop(graph)
-        ta.drop(frame)
+        # Try to rename graph1 to have the same name as the model (we expect an exception here)
+        with self.assertRaises(Exception):
+            graph1.name = model_name
+
+        # graph1 and the frame name should still exist on the server
+        self.assertTrue(graph_name1 in ta.get_graph_names(), graph_name1 + " should still exist in the list of graphs")
+        self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
 
 if __name__ == "__main__":
     unittest.main()

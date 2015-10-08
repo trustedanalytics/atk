@@ -219,7 +219,7 @@ class _NamedObjectsFunctionFactory(object):
             for name, uri in victim_uris.items():
                 module_logger.info("Drop %s %s", obj_term, name)
                 http.delete(uri)
-                num_items_deleted = num_items_deleted + 1
+                num_items_deleted += 1
             return num_items_deleted
         set_entity_collection(drop_objects, entity_type_to_collection_name(self._term))  # so meta knows where it goes
         drop_objects.__name__ = drop_objects_name

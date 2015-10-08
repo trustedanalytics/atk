@@ -42,13 +42,11 @@ class GraphDropTest(unittest.TestCase):
         graph_name = str(uuid.uuid1()).replace('-','_')
 
         # Create graph and verify that it's in the get_graph_names() list
-        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
         # Drop graph by name
-        print "dropping graph by name"
-        self.assertTrue(1 == ta.drop_graphs(graph_name), "drop_graphs() should have deleted one graph.")
+        self.assertEqual(1, ta.drop_graphs(graph_name), "drop_graphs() should have deleted one graph.")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests ta.drop_graphs() with the graph proxy object
@@ -56,13 +54,11 @@ class GraphDropTest(unittest.TestCase):
         graph_name = str(uuid.uuid1()).replace('-','_')
 
         # Create graph and verify that it's in the get_graph_names() list
-        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
 
         # Drop graph using the graph object
-        print "dropping graph by entity"
-        self.assertTrue(1 == ta.drop_graphs(graph), "drop_graphs() should have deleted one graph.")
+        self.assertEqual(1, ta.drop_graphs(graph), "drop_graphs() should have deleted one graph.")
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
     # Tests that ta.drop_graphs() does not fail when called with a graph name that does not exist
@@ -71,39 +67,36 @@ class GraphDropTest(unittest.TestCase):
 
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graphs")
 
-        print "call drop_graphs() for " + graph_name
-        self.assertTrue(0 == ta.drop_graphs(graph_name), "drop_graphs() shouldn't have deleted any graphs")
+        self.assertEqual(0, ta.drop_graphs(graph_name), "drop_graphs() shouldn't have deleted any graphs")
 
         # expect no exception
 
     # Tests the generic ta.drop() using the graph proxy object
     def test_generic_drop_by_object(self):
+        # Create graph
         graph_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
 
         # Check that the graph we just created now exists
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graph names")
 
-        print "drop graph"
-        ta.drop(graph)
+        # drop item using graph object
+        self.assertEqual(1, ta.drop(graph), "drop() should have deleted one item")
 
         # check that the graph no longer exists
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graph")
 
     # Tests the generic ta.drop() using the graph name
-    def test_generic_drop_by_object(self):
+    def test_generic_drop_by_name(self):
+        # Create graph
         graph_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create graph named: " + graph_name
         graph = ta.Graph(name=graph_name)
 
         # Check that the graph we just created now exists
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graph names")
 
-        print "drop graph"
-        ta.drop(graph)
+        # drop item using graph name
+        self.assertEqual(1, ta.drop(graph_name), "drop() should have deleted one item")
 
         # check that the graph no longer exists
         self.assertFalse(graph_name in ta.get_graph_names(), graph_name + " should not exist in the list of graph")

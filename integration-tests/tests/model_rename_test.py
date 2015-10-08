@@ -37,43 +37,37 @@ class ModelRenameTest(unittest.TestCase):
     """
     _multiprocess_can_split_ = True
 
+    # Tests that we are able to rename a model
     def test_model_rename(self):
         model_name = str(uuid.uuid1()).replace('-','_')
         new_model_name = str(uuid.uuid1()).replace('-','_')
 
-        print "create model named: " + model_name
         model = ta.KMeansModel(name=model_name)
         self.assertTrue(model_name in ta.get_model_names(), model_name + " should be in the list of models")
 
-        print "rename model to: " + str(new_model_name)
         model.name = new_model_name
 
         self.assertTrue(new_model_name in ta.get_model_names(), new_model_name + " should be in list of models")
         self.assertFalse(model_name in ta.get_model_names(), model_name + " shoule not be in list of models")
 
-        # Drop model to clean up after the test
-        ta.drop_models(model)
-
-
-    # Tests that we cannot rename a model to have the same name as an existing model
+    # Tests that we cannot rename a model to have the same name as an existing model, graph, or frame
     def test_duplicate_model_rename(self):
         model_name1 = str(uuid.uuid1()).replace('-','_')
         model_name2 = str(uuid.uuid1()).replace('-','_')
+        graph_name  = str(uuid.uuid1()).replace('-','_')
+        frame_name  = str(uuid.uuid1()).replace('-','_')
 
-        print "create model1 named: " + model_name1
+        # Create models, graph, and frame to test with
         model1 = ta.KMeansModel(name=model_name1)
-        self.assertTrue(model1.name == model_name1)
-
-        print "create model2 named: " + model_name2
         model2 = ta.KMeansModel(name=model_name2)
-        self.assertTrue(model2.name == model_name2)
+        ta.Graph(name=graph_name)
+        ta.Frame(name=frame_name)
 
         # After creating models, check that models with each name exists on the server
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should exist in list of models")
 
         # Try to rename model2 to have the same name as model1 (we expect an exception here)
-        print "check for an exception when we try to rename model2 to have the same name as model1"
         with self.assertRaises(Exception):
             model2.name = model_name1
 
@@ -81,59 +75,22 @@ class ModelRenameTest(unittest.TestCase):
         self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in list of models")
         self.assertTrue(model_name2 in ta.get_model_names(), model_name2 + " should still exist in list of models")
 
-        # Delete both models from the server (to clean up after the test)
-        ta.drop(model_name1)
-        ta.drop(model_name2)
-
-    # Tests that we cannot rename a model to have the same name as an existing graph
-    def test_duplicate_graph_rename(self):
-        model_name = str(uuid.uuid1()).replace('-','_')
-        graph_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create model named: " + model_name
-        model = ta.KMeansModel(name=model_name)
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
-
-        print "create graph named: " + graph_name
-        graph = ta.Graph(name=graph_name)
-        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should exist in the list of graphs")
-
-        print "check for an exception when we try to rename the model to the same name as the graph"
+        # Try to rename model1 to have the same name as the graph (we expect an exception here)
         with self.assertRaises(Exception):
-            model.name = graph_name
+            model1.name = graph_name
 
-        # The original model and graph name should still exist on the server
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
+        # model1 and the graph should still exist on the server
+        self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in the list of models")
         self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should still exist in the list of graphs")
 
-        # Delete the model and the graph from the server (to clean up after the test)
-        ta.drop(model)
-        ta.drop(graph)
-
-    # Tests that we cannot rename a model to have the same name as an existing frame
-    def test_duplicate_frame_rename(self):
-        model_name = str(uuid.uuid1()).replace('-','_')
-        frame_name = str(uuid.uuid1()).replace('-','_')
-
-        print "create model named: " + model_name
-        model = ta.KMeansModel(name=model_name)
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should exist in the list of models")
-
-        print "create frame named: " + frame_name
-        frame = ta.Frame(name=frame_name)
-        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frames")
-
-        print "check for an exception when we try to rename the model to the same name as the frame"
+        # Try to rename model1 to have the same name as the frame (we expect an exception here)
         with self.assertRaises(Exception):
-            model.name = frame_name
+            model1.name = frame_name
 
-        # The original model and frame name should still exist on the server
-        self.assertTrue(model_name in ta.get_model_names(), model_name + " should still exist in the list of models")
-        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should still exist in the list of frames")
+        # model1 and the frame should still exist on the server
+        self.assertTrue(model_name1 in ta.get_model_names(), model_name1 + " should still exist in the list of models")
+        self.assertTrue(frame_name in ta.get_frames_names(), frame_name + " should still exist in the list of frames")
 
-        # Delete the model and the frame from the server (to clean up after the test)
-        ta.drop(model)
-        ta.drop(frame)
 
 if __name__ == "__main__":
     unittest.main()
