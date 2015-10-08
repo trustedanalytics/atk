@@ -32,6 +32,8 @@ cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
 echo "copy jar dependencies"
+ls -l
+ls -l rest-server-lib/target
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
 
 mkdir -pv tarballs/$package/client
