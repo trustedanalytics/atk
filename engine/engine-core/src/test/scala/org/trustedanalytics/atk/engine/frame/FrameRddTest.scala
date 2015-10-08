@@ -22,8 +22,6 @@ import org.scalatest.Matchers
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
-import scala.collection.JavaConversions._
-
 class FrameRddTest extends TestingSparkContextWordSpec with Matchers {
   "FrameRdd" should {
 

@@ -96,16 +96,12 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
   private def createRDDJoinParam(frame: SparkFrame,
                                  joinColumn: String,
                                  broadcastJoinThreshold: Long): RddJoinParam = {
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-    //https://issues.apache.org/jira/browse/SPARK-6465
-    val genericRowFrame = new FrameRdd(frame.rdd.frameSchema, JoinRddFunctions.toGenericRowRdd(frame.rdd))
-
     val frameSize = if (broadcastJoinThreshold > 0) frame.sizeInBytes else None
     val estimatedRddSize = frameSize match {
-      case Some(size) => Some(size * EngineConfig.frameCompressionRatio)
+      case Some(size) => Some((size * EngineConfig.frameCompressionRatio).toLong)
       case _ => None
     }
-    RddJoinParam(genericRowFrame, joinColumn, frameSize)
+    RddJoinParam(frame.rdd, joinColumn, estimatedRddSize)
   }
 
 }
