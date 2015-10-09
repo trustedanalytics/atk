@@ -32,7 +32,7 @@ import scala.collection.immutable.Map
 /**
  * Implicit conversions for Logistic Regression objects to/from JSON
  */
-
+//this module needs to be moved to another place
 object ScoringJsonReaderWriters {
 
   implicit object SparseVectorFormat extends JsonFormat[SparseVector] {
@@ -147,20 +147,20 @@ object ScoringJsonReaderWriters {
   implicit object DenseMatrixFormat extends JsonFormat[DenseMatrix] {
     override def write(obj: DenseMatrix): JsValue = {
       JsObject(
-        "numRows" -> JsNumber(obj.numRows),
-        "numCols" -> JsNumber(obj.numCols),
+        "num_rows" -> JsNumber(obj.numRows),
+        "num_cols" -> JsNumber(obj.numCols),
         "values" -> new JsArray(obj.values.map(d => JsNumber(d)).toList),
-        "isTransposed" -> JsBoolean(obj.isTransposed)
+        "is_transposed" -> JsBoolean(obj.isTransposed)
       )
     }
 
     override def read(json: JsValue): DenseMatrix = {
       val fields = json.asJsObject.fields
 
-      val numRows = getOrInvalid(fields, "numRows").convertTo[Int]
-      val numCols = getOrInvalid(fields, "numCols").convertTo[Int]
+      val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
+      val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
       val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
-      val isTransposed = getOrInvalid(fields, "isTransposed").convertTo[Boolean]
+      val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
 
       new DenseMatrix(numRows, numCols, values, isTransposed)
     }
@@ -246,6 +246,48 @@ object ScoringJsonReaderWriters {
       new SVMModel(weights, intercept)
     }
 
+  }
+
+  implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
+    /**
+     * The write methods converts from PrincipalComponentsData to JsValue
+     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     * @return JsValue
+     */
+    override def write(obj: PrincipalComponentsData): JsValue = {
+      val singularValues = VectorFormat.write(obj.singularValues)
+      val meanVector = VectorFormat.write(obj.meanVector)
+      JsObject(
+        "k" -> obj.k.toJson,
+        "observation_columns" -> obj.observationColumns.toJson,
+        "mean_centered" -> obj.meanCentered.toJson,
+        "mean_vector" -> meanVector,
+        "singular_values" -> singularValues,
+        "v_factor" -> obj.vFactor.toJson
+      )
+    }
+
+    /**
+     * The read methods converts from PrincipalComponentsData to JsValue
+     * @param json JsValue
+     * @return PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
+     *            meanVector: org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
+     *            vFactor: org.apache.spark.mllib.linalg.Matrix)
+     */
+    override def read(json: JsValue): PrincipalComponentsData = {
+      val fields = json.asJsObject.fields
+      val k = getOrInvalid(fields, "k").convertTo[Int]
+      val observationColumns = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val meanCentered = getOrInvalid(fields, "mean_centered").convertTo[Boolean]
+      val meanVector = VectorFormat.read(getOrInvalid(fields, "mean_vector"))
+      val singularValues = VectorFormat.read(getOrInvalid(fields, "singular_values"))
+      val vFactor = MatrixFormat.read(getOrInvalid(fields, "v_factor"))
+
+      new PrincipalComponentsData(k, observationColumns, meanCentered, meanVector, singularValues, vFactor)
+    }
   }
 
   implicit object LdaModelFormat extends JsonFormat[LdaModel] {
@@ -526,26 +568,6 @@ object ScoringJsonReaderWriters {
       new RandomForestModel(algo, trees)
     }
   }
-
-  //  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
-  //
-  //    override def write(obj: NaiveBayesModel): JsValue = {
-  //      JsObject(
-  //        "labels" -> obj.labels.toJson,
-  //        "pi" -> obj.pi.toJson,
-  //        "theta" -> obj.theta.toJson
-  //      )
-  //    }
-  //
-  //    override def read(json: JsValue): NaiveBayesModel = {
-  //      val fields = json.asJsObject.fields
-  //      val labels = getOrInvalid(fields, "labels").convertTo[Array[Double]]
-  //      val pi = getOrInvalid(fields, "pi").convertTo[Array[Double]]
-  //      val theta = getOrInvalid(fields, "theta").convertTo[Array[Array[Double]]]
-  //      new NaiveBayesModel(labels, pi, theta)
-  //    }
-  //
-  //  }
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake

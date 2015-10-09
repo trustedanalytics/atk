@@ -18,11 +18,10 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
@@ -33,7 +32,7 @@ import LibSvmJsonProtocol._
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted label's column.""",
   returns = """A new frame containing the original frame's columns and a column
-*predicted_label* containing the score calculated for each observation.""")
+*predicted_label* containing the label calculated for each observation.""")
 class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameReference] {
   /**
    * The name of the command.
@@ -75,25 +74,16 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
     }
 
     //predicting a label for the observation column/s
-    val predictionsRdd = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(arguments.observationColumns.getOrElse(libsvmData.observationColumns))
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      var vector = Vector.empty[Double]
-      var i: Int = 0
-      while (i < doubles.length) {
-        vector = vector :+ doubles(i)
-        i += 1
-      }
-      val predictionLabel = LibSvmPluginFunctions.score(libsvmModel, vector)
-      row.addValue(predictionLabel.value)
+    val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
+    val predictColumn = Column("predicted_label", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val vector = row.valuesAsDoubleArray(observationColumns).toVector
+      LibSvmPluginFunctions.score(libsvmModel, vector).value
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_label", DataTypes.float64)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRdd)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by LibSvm's predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 }

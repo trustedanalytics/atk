@@ -1,5 +1,6 @@
 Examples
 --------
+Train a Naive Bayes Model
 
 .. only:: html
 

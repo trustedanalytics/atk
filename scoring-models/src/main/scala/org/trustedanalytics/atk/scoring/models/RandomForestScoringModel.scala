@@ -27,7 +27,7 @@ import scala.concurrent._
  */
 class RandomForestScoringModel(randomForestClassifierModel: RandomForestModel) extends RandomForestModel(randomForestClassifierModel.algo, randomForestClassifierModel.trees) with Model {
 
-  override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
     data.foreach { row =>
       {

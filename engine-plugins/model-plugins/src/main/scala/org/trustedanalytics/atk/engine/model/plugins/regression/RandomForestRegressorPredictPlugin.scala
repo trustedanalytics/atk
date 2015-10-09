@@ -18,16 +18,14 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.SparkContext._
-import org.apache.spark.mllib.linalg.Vectors
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -37,7 +35,7 @@ case class RandomForestRegressorPredictArgs(@ArgDoc("""Handle of the model to be
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
                                             @ArgDoc("""Column(s) containing the observations whose labels are to be predicted.
-By default, we predict the labels over columns the RandomForestModel
+By default, we predict the labels over columns the Random Forest model
 was trained on. """) observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
@@ -45,9 +43,11 @@ was trained on. """) observationColumns: Option[List[String]]) {
 }
 
 @PluginDoc(oneLine = "Predict the values for the data points.",
-  extended = "",
-  returns = """Frame
-    A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.""")
+  extended =
+    """Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+existing columns and a new predicted value's column.""",
+  returns = """A new frame consisting of the existing columns of the frame and
+a new column with predicted value for each observation.""")
 class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForestRegressorPredictArgs, FrameReference] {
   /**
    * The name of the command.
@@ -88,20 +88,15 @@ class RandomForestRegressorPredictPlugin extends SparkCommandPlugin[RandomForest
     val rfColumns = arguments.observationColumns.getOrElse(rfData.observationColumns)
 
     //predicting a label for the observation columns
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val array = row.valuesAsArray(rfColumns)
-      val doubles = array.map(i => DataTypes.toDouble(i))
-      val point = Vectors.dense(doubles)
-      val prediction = rfModel.predict(point)
-      row.addValue(prediction)
+    val predictColumn = Column("predicted_value", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val point = row.valuesAsDenseVector(rfColumns)
+      rfModel.predict(point)
     })
-
-    val updatedSchema = frame.schema.addColumn("predicted_class", DataTypes.float64)
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by RandomForests as a regressor predict operation"))) {
       newPredictedFrame: FrameEntity =>
-        newPredictedFrame.save(predictFrameRdd)
+        newPredictedFrame.save(predictFrame)
     }
   }
 

@@ -27,7 +27,7 @@ case class LibSvmPredictArgs(model: ModelReference,
                              @ArgDoc("""A frame whose labels are to be predicted.""") frame: FrameReference,
                              @ArgDoc("""Column(s) containing the observations whose labels are to be
 predicted.
-Default is the columns the LibsvmModel was trained on.""") observationColumns: Option[List[String]]) {
+Default is the columns the LIBSVM model was trained on.""") observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
 

@@ -32,18 +32,18 @@ Column should contain a str value.""") documentColumnName: String,
                         @ArgDoc("""Column name for words.
 Column should contain a str value.""") wordColumnName: String,
                         @ArgDoc("""Column name for word count.
-Column should contain an int64 value.""") wordCountColumnName: String,
+Column should contain an int32 or int64 value.""") wordCountColumnName: String,
                         @ArgDoc("""The maximum number of iterations that the algorithm will execute.
 The valid value range is all positive int.
 Default is 20.""") maxIterations: Option[Int] = None,
-                        @ArgDoc("""The hyper-parameter for document-specific distribution over topics.
+                        @ArgDoc("""The :term:`hyperparameter` for document-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that documents are assumed to cover all topics
 more uniformly; smaller value implies that documents are more
 concentrated on a small subset of topics.
 Valid value range is all positive float.
- Default is 0.1.""") alpha: Option[Float] = None,
-                        @ArgDoc("""The hyper-parameter for word-specific distribution over topics.
+Default is 0.1.""") alpha: Option[Float] = None,
+                        @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
 smaller value implies that topics are more concentrated on a small

@@ -28,14 +28,16 @@ import trustedanalytics.rest.config as config
 from trustedanalytics.core.frame import Frame
 from trustedanalytics.core.atkpandas import Pandas
 from trustedanalytics.core.column import Column
-from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable
+from trustedanalytics.core.files import CsvFile, LineFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
 from trustedanalytics.core.atktypes import *
 from trustedanalytics.core.aggregation import agg
+from trustedanalytics.core.ui import RowsInspection
 
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.atktypes import get_data_type_from_rest_str, get_rest_str_from_data_type
 from trustedanalytics.rest.command import CommandRequest, executor
-from trustedanalytics.rest.spark import get_udf_arg, get_add_one_column_function, get_add_many_columns_function
+from trustedanalytics.rest.spark import get_add_one_column_function, get_add_many_columns_function
+from trustedanalytics.rest.spark_helper import get_udf_arg
 
 TakeResult = namedtuple("TakeResult", ['data', 'schema'])
 """
@@ -107,6 +109,9 @@ class FrameBackendRest(object):
     def get_status(self, frame):
         return self._get_frame_info(frame).status
 
+    def get_last_read_date(self, frame):
+        return self._get_frame_info(frame).last_read_date
+
     def get_row_count(self, frame, where):
         if not where:
             return self._get_frame_info(frame).row_count
@@ -141,6 +146,11 @@ class FrameBackendRest(object):
         except Exception as e:
             status = "Unable to determine status (%s)" % e
 
+        try:
+            last_read_date = frame_info.last_read_date.isoformat()
+        except Exception as e:
+            last_read_date = "Unable to determine last_read_date (%s)" % e
+
         if frame_info._has_vertex_schema():
             frame_type = "VertexFrame"
             graph_data = "\nLabel = %s" % frame_info.label
@@ -154,7 +164,13 @@ class FrameBackendRest(object):
         return """{type} {name}{graph_data}
 row_count = {row_count}
 schema = [{schema}]
-status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_data, row_count=row_count, schema=schema, status=status)
+status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type,
+                                                                 name=frame_name,
+                                                                 graph_data=graph_data,
+                                                                 row_count=row_count,
+                                                                 schema=schema,
+                                                                 status=status,
+                                                                 last_read_date=last_read_date)
 
     def _get_frame_info(self, frame):
         response = self.server.get(self._get_frame_full_uri(frame))
@@ -217,6 +233,20 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                         },
                     }
 
+        if isinstance(source, UploadRows):
+            return{'destination': frame.uri,
+                   'source': {"source_type": "strings",
+                              "uri": "raw_list",
+                              "parser": {"name": "builtin/upload",
+                                         "arguments": { "separator": ',',
+                                                       "skip_rows": 0,
+                                                       "schema":{ "columns": source._schema_to_json()
+                                    }
+                                }
+                              },
+                              "data": data
+                   }
+            }
         if isinstance(source, Pandas):
             return{'destination': frame.uri,
                    'source': {"source_type": "strings",
@@ -289,51 +319,50 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
             sys.stderr.write("There were parse errors during load, please see frame.get_error_frame()\n")
             logger.warn("There were parse errors during load, please see frame.get_error_frame()")
 
-    def append(self, frame, data):
-        logger.info("REST Backend: append data to frame {0}: {1}".format(frame.uri, repr(data)))
+    def append(self, frame, source):
+        logger.info("REST Backend: append data to frame {0}: {1}".format(frame.uri, repr(source)))
         # for now, many data sources requires many calls to append
-        if isinstance(data, list) or isinstance(data, tuple):
-            for d in data:
+        if isinstance(source, list) or isinstance(source, tuple):
+            for d in source:
                 self.append(frame, d)
             return
 
-        if isinstance(data, HBaseTable):
-             arguments = data.to_json()
+        if isinstance(source, HBaseTable):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, JdbcTable):
-             arguments = data.to_json()
+        if isinstance(source, JdbcTable):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, HiveQuery):
-             arguments = data.to_json()
+        if isinstance(source, HiveQuery):
+             arguments = source.to_json()
              arguments['destination'] = frame.uri
              result = execute_update_frame_command("frame/loadhive", arguments, frame)
              self._handle_error(result)
              return
 
-        if isinstance(data, Pandas):
-            pan = data.pandas_frame
-            if not data.row_index:
+        if isinstance(source, Pandas):
+            pan = source.pandas_frame
+            if not source.row_index:
                 pan = pan.reset_index()
             pan = pan.dropna(thresh=len(pan.columns))
             #number of columns should match the number of columns in the schema, else throw an error
-            if len(pan.columns) != len(data.field_names):
+            if len(pan.columns) != len(source.field_names):
                 raise ValueError("Number of columns in Pandasframe {0} does not match the number of columns in the "
-                                 " schema provided {1}.".format(len(pan.columns), len(data.field_names)))
-
+                                 " schema provided {1}.".format(len(pan.columns), len(source.field_names)))
             begin_index = 0
             iteration = 1
             end_index = config.upload_defaults.rows
             while True:
                 pandas_rows = pan[begin_index:end_index].values.tolist()
-                arguments = self._get_load_arguments(frame, data, pandas_rows)
+                arguments = self._get_load_arguments(frame, source, pandas_rows)
                 result = execute_update_frame_command("frame:/load", arguments, frame)
                 self._handle_error(result)
                 if end_index > len(pan.index):
@@ -341,10 +370,34 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                 iteration += 1
                 begin_index = end_index
                 end_index = config.upload_defaults.rows * iteration
+        elif isinstance(source, UploadRows):
+            self._upload_raw_data_in_chunks(frame, source, source.data)
         else:
-            arguments = self._get_load_arguments(frame, data)
+            arguments = self._get_load_arguments(frame, source)
             result = execute_update_frame_command("frame:/load", arguments, frame)
             self._handle_error(result)
+
+    def _upload_raw_data_in_chunks(self, frame, source, data):
+        """
+        uploads data in chunks
+        :param frame: frame proxy
+        :param source: data source, like Pandas or RawListData
+        :param data: list of data
+        """
+        # convoluted, but follows existing pattern
+        begin_index = 0
+        iteration = 1
+        end_index = config.upload_defaults.rows
+        while True:
+            rows = data[begin_index:end_index]
+            arguments = self._get_load_arguments(frame, source, rows)
+            result = execute_update_frame_command("frame:/load", arguments, frame)
+            self._handle_error(result)
+            if end_index > len(data):
+                break
+            iteration += 1
+            begin_index = end_index
+            end_index = config.upload_defaults.rows * iteration
 
     def drop(self, frame, predicate):
         from trustedanalytics.rest.spark import ifilterfalse  # use the REST API filter, with a ifilterfalse iterator
@@ -381,51 +434,13 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                      'operation' : operation}
         return execute_update_frame_command('columnStatistic', arguments, frame)
 
-    class InspectionTable(object):
-        """
-        Inline class used specifically for inspect, where the __repr__ is king
-        """
-        _align = defaultdict(lambda: 'c')  # 'l', 'c', 'r'
-        _align.update([(bool, 'r'),
-                       (bytearray, 'l'),
-                       (dict, 'l'),
-                       (float32, 'r'),
-                       (float64, 'r'),
-                       (int32, 'r'),
-                       (int64, 'r'),
-                       (list, 'l'),
-                       (unicode, 'l'),
-                       (str, 'l')])
-
-        def __init__(self, schema, rows):
-            self.schema = schema
-            self.rows = rows
-
-        def __repr__(self):
-            # keep the import localized, as serialization doesn't like prettytable
-            import trustedanalytics.rest.prettytable as prettytable
-            table = prettytable.PrettyTable()
-            fields = OrderedDict([("{0}:{1}".format(key, valid_data_types.to_string(val)), self._align[val]) for key, val in self.schema])
-            table.field_names = fields.keys()
-            table.align.update(fields)
-            table.hrules = prettytable.HEADER
-            table.vrules = prettytable.NONE
-            for r in self.rows:
-                table.add_row(r)
-            return table.get_string().encode('utf8','replace')
-
-         #def _repr_html_(self): TODO - Add this method for ipython notebooks
-
-    def inspect(self, frame, n, offset, selected_columns, wrap=None, truncate=None, round=None, width=80, margin=None):
+    def inspect(self, frame, n, offset, selected_columns, format_settings):
         # inspect is just a pretty-print of take, we'll do it on the client
         # side until there's a good reason not to
         result = self.take(frame, n, offset, selected_columns)
         data = result.data
         schema = result.schema
-        if wrap:
-            from trustedanalytics.core.ui import RowsInspection
-            return RowsInspection(data, schema, offset=offset, wrap=wrap, truncate=truncate, round=round, width=width, margin=margin)
-        return FrameBackendRest.InspectionTable(schema, data)
+        return RowsInspection(data, schema, offset=offset, format_settings=format_settings)
 
     def join(self, left, right, left_on, right_on, how, name=None):
         if right_on is None:
@@ -446,7 +461,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
                 column_names = columns.keys()
             else:
                 column_names = columns
-            from trustedanalytics.rest.spark import get_udf_arg_for_copy_columns
+            from trustedanalytics.rest.spark_helper import get_udf_arg_for_copy_columns
             where = get_udf_arg_for_copy_columns(frame, where, column_names)
         else:
             where = None
@@ -578,7 +593,7 @@ status = {status}""".format(type=frame_type, name=frame_name, graph_data=graph_d
         self.copy_graph_frame(source_frame, frame)
         return source_frame.name
 
-    def create_edge_frame(self, frame, source, label, graph, src_vertex_label, dest_vertex_label, directed, _info=None):
+    def create_edge_frame(self, frame, label, graph, src_vertex_label, dest_vertex_label, directed, _info=None):
         logger.info("REST Backend: create vertex_frame with label %s" % label)
         if _info is not None and isinstance(_info, dict):
             _info = FrameInfo(_info)
@@ -691,12 +706,15 @@ class FrameInfo(object):
     def status(self):
         return self._payload['status']
 
+    @property
+    def last_read_date(self):
+        return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
+
     def _has_edge_schema(self):
         return "edge_schema" in self._payload['schema']
 
     def _has_vertex_schema(self):
         return "vertex_schema" in self._payload['schema']
-
 
     def update(self, payload):
         if self._payload and self.uri != payload['uri']:
@@ -705,8 +723,6 @@ class FrameInfo(object):
             logger.error(msg)
             raise RuntimeError(msg)
         self._payload = payload
-
-
 
 
 class FrameSchema:

@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.engine.FrameStorage
-import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
 import org.apache.spark.SparkContext
 import org.apache.spark.frame.FrameRdd
 

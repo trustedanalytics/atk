@@ -19,6 +19,17 @@ from setuptools import setup
 import os
 import time
 
+
+install_requires = [
+    'bottle >= 0.12',
+    'requests >= 2.4.0',
+    'ordereddict >= 1.1',
+    'decorator >= 3.4.0',
+    ]
+system_spec_requires = {'posix' : ['numpy >= 1.8.1', 'pandas >= 0.15.0', 'pymongo >= 3.0',]}
+
+install_requires.extend(system_spec_requires.get(os.name, []))
+
 setup(
     # Application name:
     name="trustedanalytics",
@@ -27,8 +38,8 @@ setup(
     version=u"VERSION-POSTTAG",
 
     # Application author details:
-    author="Intel",
-    author_email="atksupport@trustedanalytics.org",
+    author="trustedanalytics",
+
 
     # Packages
     packages=["trustedanalytics","trustedanalytics/core","trustedanalytics/rest","trustedanalytics/tests"],
@@ -37,22 +48,18 @@ setup(
     include_package_data=True,
 
     # Details
-    url="https://trustedanalytics.org",
+    url="http://trustedanalytics.github.io/atk",
 
     #
-    license="LICENSE.txt",
-    description="trusted analytics Toolkit build ID #BUILD_NUMBER#",
+    license="Apache 2",
+
+    description="Trusted Analytics Toolkit",
+
+    keywords="analytics big data yarn cloudera hadoop hdfs spark",
 
     long_description=open("README").read(),
 
     # Dependent packages (distributions)
-    install_requires=[
-        'bottle >= 0.12',
-        'numpy >= 1.8.1',
-        'requests >= 2.4.0',
-        'ordereddict >= 1.1',
-        'decorator >= 3.4.0',
-        'pandas >= 0.15.0',
-        'pymongo >= 3.0',
-    ],
+    install_requires=install_requires,
+
 )

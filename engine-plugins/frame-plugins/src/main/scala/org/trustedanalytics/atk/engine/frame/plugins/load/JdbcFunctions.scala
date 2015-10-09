@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
+import com.typesafe.config.ConfigFactory
+
 /**
  * Helper class for creating an RDD from jdbc
  */
@@ -25,11 +27,15 @@ object JdbcFunctions extends Serializable {
    * Builds connection argmuments for jdbc
    * @param tableName table name
    * @param url optional connection url
+   * @param connectorType optional connector type
    * @param driverName optional driver name
    * @return connection args as map
    */
-  def buildConnectionArgs(tableName: String, url: Option[String], driverName: Option[String]): Map[String, String] = {
-    val connectionUrl = url.getOrElse(buildUrl())
+  def buildConnectionArgs(tableName: String,
+                          connectorType: Option[String],
+                          url: Option[String],
+                          driverName: Option[String]): Map[String, String] = {
+    val connectionUrl = url.getOrElse(buildUrl(connectorType))
 
     if (driverName.isEmpty) {
       Map(
@@ -57,10 +63,14 @@ object JdbcFunctions extends Serializable {
   def dbTableKey = "dbtable"
 
   /**
-   * Builds connection url for cluster/cloud deployment. Not supported yet.
+   * Builds connection url for cluster/cloud deployment.
    * @return a connection url
    */
-  private def buildUrl(): String = {
-    throw new IllegalArgumentException("Connection url is required")
+  private def buildUrl(connectorType: Option[String]): String = {
+    val connector = connectorType.getOrElse(
+      throw new RuntimeException("Connector type is required if the url is not provided")
+    )
+
+    ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".url")
   }
 }

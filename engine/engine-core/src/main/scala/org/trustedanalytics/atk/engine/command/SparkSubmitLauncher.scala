@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.event.EventLogging
+import org.apache.commons.lang.StringUtils
 
 /**
  * Our wrapper for calling SparkSubmit to run a plugin.
@@ -63,33 +64,52 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
 
           val pluginDependencyJars = EngineConfig.sparkAppJarsLocal match {
             case true => Array[String]() /* Expect jars to installed locally and available */
-            case false => Array("--jars",
-              s"${SparkContextFactory.jarPath("interfaces")}," +
-                s"${SparkContextFactory.jarPath("launcher")}," +
-                s"${getPluginJarPath(pluginJarsList)}")
+            case false => {
+              val extraJarsForSparkSubmitValue = s"${EngineConfig.extraJarsForSparkSubmit}"
+              val extraJarsForSparkSubmit = if (StringUtils.isEmpty(extraJarsForSparkSubmitValue))
+                StringUtils.EMPTY
+              else (extraJarsForSparkSubmitValue + ",")
+
+              Array("--jars",
+                s"${SparkContextFactory.jarPath("interfaces")}," +
+                  s"${SparkContextFactory.jarPath("launcher")}," +
+                  extraJarsForSparkSubmit +
+                  s"${getPluginJarPath(pluginJarsList)}")
+            }
           }
 
-          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile",
+          val pythonDependencyPath = plugin.executesPythonUdf match {
+            case true => "," + SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
+              .getOrElse(throw new RuntimeException("Default Python dependency trustedanalytics.zip was not found"))
+            case false => ""
+          }
+
+          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile$pythonDependencyPath",
             "--conf", s"config.resource=application.conf")
           val executionParams = Array(
-            "--num-executors", s"${EngineConfig.sparkOnYarnNumExecutors}",
             "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
 
           val executorClassPathString = "spark.executor.extraClassPath"
+          val dbLib: String = s"${EngineConfig.hiveLib}:${EngineConfig.jdbcLib}:"
+          val dbConf: String = s"${EngineConfig.hiveConf}:"
+          val executorSparkConf: String = s"${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, StringUtils.EMPTY)}"
+
           val executorClassPathTuple = EngineConfig.sparkAppJarsLocal match {
             case true => (executorClassPathString,
               s".:${SparkContextFactory.jarPath("interfaces")}:${SparkContextFactory.jarPath("launcher")}:" +
-              s"${EngineConfig.hiveLib}:${getPluginJarPath(pluginJarsList, ":")}" +
-              s"${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
+              dbLib + s"${getPluginJarPath(pluginJarsList, ":")}" +
+              executorSparkConf)
             case false => (executorClassPathString,
-              s"${EngineConfig.hiveLib}:${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
+              dbLib + executorSparkConf)
           }
 
           val driverClassPathString = "spark.driver.extraClassPath"
           val driverClassPathTuple = (driverClassPathString,
             s".:interfaces.jar:launcher.jar:engine-core.jar:frame-plugins.jar:graph-plugins.jar:model-plugins.jar:application.conf:" +
-            s"${pluginExtraClasspath.mkString(":")}:${EngineConfig.hiveLib}:${EngineConfig.hiveConf}:" +
-            s"${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, "")}")
+            s"${pluginExtraClasspath.mkString(":")}:" +
+            dbLib +
+            dbConf +
+            s"${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, StringUtils.EMPTY)}")
 
           val executionConfigs = {
             for {
@@ -115,10 +135,16 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             sparkInternalDriverClass ++
             pluginArguments
 
+          val kerberosConfig = KerberosAuthenticator.getKerberosConfigJVMParam
+
           // Launch Spark Submit 
           info(s"Launching Spark Submit with InputArgs: ${inputArgs.mkString(" ")}")
           val pluginDependencyJarsStr = s"${SparkContextFactory.jarPath("engine-core")}:${pluginExtraClasspath.mkString(":")}"
-          val javaArgs = Array("java", "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          val javaArgs = kerberosConfig.isDefined match {
+            case true => Array("java", kerberosConfig.get, "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+            case false => Array("java", "-cp", s"$pluginDependencyJarsStr", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          }
+          info(s"javaArgs: ${javaArgs.mkString(" ")}")
 
           // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
           // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to

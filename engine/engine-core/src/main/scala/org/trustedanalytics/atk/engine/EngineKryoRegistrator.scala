@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine
 
 import com.esotericsoftware.kryo.Kryo
 import org.trustedanalytics.atk.domain.schema.Schema
-import org.trustedanalytics.atk.engine.frame.plugins.ClassificationMetrics
+import org.trustedanalytics.atk.engine.frame.plugins._
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.frame.MiscFrameFunctions
 import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderKryoRegistrator

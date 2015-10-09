@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.schema.{DataTypes, FrameSchema, Schema}
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame._
@@ -40,8 +40,7 @@ import JoinJsonFormat._
 /**
  * Join two data frames (similar to SQL JOIN)
  */
-@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Join two data frames (similar to SQL JOIN).")
 class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
 
   /**
@@ -75,7 +74,7 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
     require(DataTypes.isCompatibleDataType(
       leftFrame.schema.columnDataType(arguments.leftFrame.joinColumn),
       rightFrame.schema.columnDataType(arguments.rightFrame.joinColumn)),
-      "Join columns must have the same data type")
+      "Join columns must have compatible data types")
 
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold
@@ -98,12 +97,12 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
   private def createRDDJoinParam(frame: SparkFrame,
                                  joinColumn: String,
                                  broadcastJoinThreshold: Long): RddJoinParam = {
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-    //https://issues.apache.org/jira/browse/SPARK-6465
-    val genericRowFrame = new FrameRdd(frame.rdd.frameSchema, JoinRddFunctions.toGenericRowRdd(frame.rdd))
-
     val frameSize = if (broadcastJoinThreshold > 0) frame.sizeInBytes else None
-    RddJoinParam(genericRowFrame, joinColumn, frameSize)
+    val estimatedRddSize = frameSize match {
+      case Some(size) => Some((size * EngineConfig.frameCompressionRatio).toLong)
+      case _ => None
+    }
+    RddJoinParam(frame.rdd, joinColumn, estimatedRddSize)
   }
 
 }

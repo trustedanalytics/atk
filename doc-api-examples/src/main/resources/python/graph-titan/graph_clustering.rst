@@ -18,7 +18,7 @@ The edge column name should be passed in as an argument to the plug-in.
 
     >>> import trustedanalytics as ta
     >>> ta.connect()
-    >>> my_graph = ta.TitanGraph([src, dest, dist], "sample_graph")
+    >>> my_graph = ta.get_graph("mytitangraph")
     >>> my_graph.graph_clustering("dist")
 
 The expected output (new vertices) can be queried:

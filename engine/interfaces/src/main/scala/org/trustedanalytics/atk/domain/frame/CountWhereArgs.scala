@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 case class CountWhereArgs(frame: FrameReference,
-                          @ArgDoc("""<TBD>""") udf: Udf) {
+                          @ArgDoc("""where predicate""") udf: Udf) {
   require(frame != null, "frame is required")
   require(udf != null, "where predicate is required")
 }

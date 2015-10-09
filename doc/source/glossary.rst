@@ -8,13 +8,6 @@ Glossary
 ..  glossary::
     :sorted:
 
-    ASCII
-
-        Abbreviated from American Standard Code for Information Interchange,
-        ASCII is a character-encoding scheme.
-        Originally based on the English alphabet, it encodes 128 specified
-        characters into 7-bit binary integers.
-
     Adjacency List
 
         A representation of a graph as a list.
@@ -83,6 +76,19 @@ Glossary
         It is recommended that an alternate solution be found.
         This function may be removed in future releases.
 
+    Arity
+
+        In logic, mathematics, and computer science, the arity of a function
+        or operation is the number of arguments or operands the function or
+        operation accepts.
+
+    ASCII
+
+        Abbreviated from American Standard Code for Information Interchange,
+        ASCII is a character-encoding scheme.
+        Originally based on the English alphabet, it encodes 128 specified
+        characters into 7-bit binary integers.
+
     Average Path Length
 
         In network topology, the average number of steps along the shortest
@@ -107,7 +113,7 @@ Glossary
 
         See :term:`API Maturity Tags`.
 
-    Bias-variance tradeoff
+    Bias-variance trade-off
 
         In supervised classifier training, the problem of minimizing two
         sources of prediction error: erroneous assumptions in the learning
@@ -153,7 +159,7 @@ Glossary
         A file containing tabular data (numbers and text) in plain-text form.
         The file can consist of any number of records, separated by a unique
         character.
-        New line characters are ususally used for this purpose.
+        New line characters are usually used for this purpose.
         Each record consists of one or more fields, separated by some unique
         character.
         Commas are usually used for this purpose.
@@ -345,14 +351,11 @@ Glossary
 
         A real number with 64 bits of precision.
 
-    frame (lower case f)
-
-        A table database with rows and columns containing data.
-
     Frame (capital F)
 
-        A class object with the functionality to manipulate the data in a
-        :term:`frame (lower case f)`.
+        1.  A table database with rows and columns containing data.
+
+        2.  A class object with the functionality to manipulate the data in a frame.
 
     GaBP
 
@@ -421,7 +424,7 @@ Glossary
         structural properties of a graph, including:
 
         #.  Traversals --
-            Algorithmic walk throughs of the graph to determine optimal
+            Algorithmic walk-through of the graph to determine optimal
             paths and relationship between vertices.
 
         #.  Statistics --
@@ -476,6 +479,24 @@ Glossary
         Apache HBase is the Hadoop database, a distributed, scalable, big data
         store.
 
+    Hyperparameter
+
+        Parameter that describe the prior distribution (the assumption about
+        the data before observing it) as opposed to the parameters that govern
+        the underlying system.
+
+        In particular, for Latent Dirichlet Allocation:
+
+        Alpha is the parameter of the Dirichlet "prior" on the per-document
+        distribution of words.
+        In other words, how the distribution of words per
+        document is modeled before seeing any data. 
+
+        Beta is the parameter of the Dirichlet "prior" on the per-topic word
+        distribution.
+        In other words, how the distribution of words per
+        topic is modeled before seeing any data.
+
     int32
 
         An integer is a member of the set of positive whole numbers {1, 2,
@@ -504,7 +525,7 @@ Glossary
 
         Data in the JavaScript Object Notation format. An open standard format
         that uses human-readable text to transmit data objects consisting of
-        attributevalue pairs. For more information see `http:/json.org`__.
+        attribute/value pairs. For more information see `http:/json.org`__.
 
     Katz Centrality
 
@@ -564,10 +585,10 @@ Glossary
 
         Adapted from: `Stanford\: Machine Learning`_:
 
-            This is the tradeoff parameter, used in :term:`Label Propagation`
+            This is the trade-off parameter, used in :term:`Label Propagation`
             on :term:`Gaussian Random Fields`.
             The regularization parameter is a control on fitting parameters.
-            It is used in machine learning algorithms to prevent overfitting.
+            It is used in machine learning algorithms to prevent over-fitting.
             As the magnitude of the fitting parameter increases, there will be
             an increasing penalty on the cost function.
             This penalty is dependent on the squares of the parameters as well
@@ -1005,7 +1026,7 @@ Glossary
     http://en.wikipedia.org/wiki/Convergence_(mathematics)
 .. _Wikipedia\: Directed Acyclic Graph:
     https://en.wikipedia.org/wiki/Directed_acyclic_graph
-.. _Tinkerpop\: Property Graph Model:
+.. _TinkerPop\: Property Graph Model:
     https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model
 .. _Wikipedia\: Extract, Transform, and Load:
     http://en.wikipedia.org/wiki/Extract,_transform,_load

@@ -1,5 +1,7 @@
 Examples
 --------
+Test the performance of a trained LibsvmModel
+
 .. only:: html
 
     .. code::

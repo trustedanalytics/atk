@@ -1,26 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-// INTEL CONFIDENTIAL
+/*
+// Copyright (c) 2015 Intel Corporation 
 //
-// Copyright 2015 Intel Corporation All Rights Reserved.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// The source code contained or described herein and all documents related to
-// the source code (Material) are owned by Intel Corporation or its suppliers
-// or licensors. Title to the Material remains with Intel Corporation or its
-// suppliers and licensors. The Material may contain trade secrets and
-// proprietary and confidential information of Intel Corporation and its
-// suppliers and licensors, and is protected by worldwide copyright and trade
-// secret laws and treaty provisions. No part of the Material may be used,
-// copied, reproduced, modified, published, uploaded, posted, transmitted,
-// distributed, or disclosed in any way without Intel's prior express written
-// permission.
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
-// No license under any patent, copyright, trade secret or other intellectual
-// property right is granted to or conferred upon you by disclosure or
-// delivery of the Materials, either expressly, by implication, inducement,
-// estoppel or otherwise. Any license under such intellectual property rights
-// must be express and approved by Intel in writing.
-//////////////////////////////////////////////////////////////////////////////
-
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+*/
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
@@ -32,7 +24,7 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits._
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -42,13 +34,14 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
                                           @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
-                                          @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
-                                          @ArgDoc("""Criterion used for information gain calculation. Supported values "variance"""") impurity: String = "variance",
-                                          @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
-                                          @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
-                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
+                                          @ArgDoc("""Number of tress in the random forest. Default is 1.""") numTrees: Int = 1,
+                                          @ArgDoc("""Criterion used for information gain calculation. Default supported value is "variance".""") impurity: String = "variance",
+                                          @ArgDoc("""Maxium depth of the tree. Default is 4.""") maxDepth: Int = 4,
+                                          @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
+                                          @ArgDoc("""Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.""") seed: Int = scala.util.Random.nextInt(),
                                           @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                          @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird"""") featureSubsetCategory: Option[String] = None) {
+                                          @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird".
+If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
@@ -76,19 +69,20 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
 }
 
 @PluginDoc(oneLine = "Build Random Forests Regressor model.",
-  extended = """Creating a Random Forests Regressor Model using the observation columns and label column.""",
+  extended = """Creating a Random Forests Regressor Model using the observation columns and target column.""",
   returns =
-    """Values of the Random Forest Classifier model object storing:
-      | the list of observation columns on which the model was trained,
-      | the column name containing the labels of the observations,
-      | the number of decison trees in the random forest,
-      | the number of nodes in the random forest,
-      | the map storing arity of categorical features,
-      | the criterion used for information gain calculation,
-      | the maximum depth of the tree,
-      | the maximum number of bins used for splitting features,
-      | the random seed used for bootstrapping and choosing feature subset.
-    """.stripMargin)
+    """dictionary
+      |A dictionary with trained Random Forest Regressor model with the following keys\:
+      |'observation_columns': the list of observation columns on which the model was trained
+      |'label_columns': the column name containing the labels of the observations
+      |'num_trees': the number of decision trees in the random forest
+      |'num_nodes': the number of nodes in the random forest
+      |'categorical_features_info': the map storing arity of categorical features
+      |'impurity': the criterion used for information gain calculation
+      |'max_depth': the maximum depth of the tree
+      |'max_bins': the maximum number of bins used for splitting features
+      |'seed': the random seed used for bootstrapping and choosing featur subset
+    """)
 class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRegressorTrainArgs, RandomForestRegressorTrainReturn] {
   /**
    * The name of the command.

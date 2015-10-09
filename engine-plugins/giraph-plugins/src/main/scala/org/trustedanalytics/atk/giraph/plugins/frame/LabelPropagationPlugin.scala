@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema }
 import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
 import LabelPropagationJsonFormat._
 
-@PluginDoc(oneLine = "<TBD>",
+@PluginDoc(oneLine = "Label Propagation on Gaussian Random Fields.",
   extended = """Label Propagation on Gaussian Random Fields.
 
 This algorithm is presented in `X. Zhu and Z. Ghahramani.
@@ -37,7 +37,7 @@ Technical Report CMU-CALD-02-107, CMU, 2002 <http://www.cs.cmu.edu/~zhuxj/pub/CM
 **Label Propagation (LP)**
 
 |LP| is a message passing technique for inputing or
-:term:`smoothing` labels in partially-labelled datasets.
+:term:`smoothing` labels in partially-labeled datasets.
 Labels are propagated from *labeled* data to *unlabeled* data along a graph
 encoding similarity relationships among data points.
 The labels of known data can be probabilistic, in other words, a known point
