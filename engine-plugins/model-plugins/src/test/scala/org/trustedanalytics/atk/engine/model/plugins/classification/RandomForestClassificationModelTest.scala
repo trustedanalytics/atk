@@ -50,7 +50,7 @@ class RandomForestClassificationModelTest extends TestingSparkContextFlatSpec wi
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "label", List(), 2, 1, "gini", 4, 100, 10, None, None)
+      RandomForestClassifierTrainArgs(modelRef, frameRef, "label", List(), 2, 1, "gini", 4, 100, 10, None, None)
     }
   }
 
@@ -60,7 +60,7 @@ class RandomForestClassificationModelTest extends TestingSparkContextFlatSpec wi
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"), 2, 1, "gini", 4, 100, 10, None, None)
+      RandomForestClassifierTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"), 2, 1, "gini", 4, 100, 10, None, None)
     }
   }
 

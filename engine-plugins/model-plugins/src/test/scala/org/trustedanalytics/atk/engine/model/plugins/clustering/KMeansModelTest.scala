@@ -59,7 +59,7 @@ class KMeansModelTest extends TestingSparkContextFlatSpec with Matchers with Moc
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = KMeansTrainArgs(modelRef, frameRef, List("obs1", "obs2"), List())
+      KMeansTrainArgs(modelRef, frameRef, List("obs1", "obs2"), List())
     }
   }
 }

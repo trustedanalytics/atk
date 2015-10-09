@@ -63,7 +63,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
+      ClassificationWithSGDTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
     }
   }
 

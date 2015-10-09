@@ -16,22 +16,21 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
-import org.apache.spark.mllib.classification.NaiveBayes
+import org.apache.spark.mllib.classification.{ SVMModel, SVMWithSGD }
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.mllib.tree.RandomForest
+import org.apache.spark.mllib.tree.model.RandomForestModel
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
+class SVMWithModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
 
-class NaiveBayesModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
-
-  "NaiveBayesModel" should "create a NaiveBayesModel" in {
+  "SVMWithSGDModel" should "create a SVMWithSGDModel" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
-    val trainArgs = NaiveBayesTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"), 0.5)
-
     val labeledPoint: Array[LabeledPoint] = Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126, 2.6933495054))),
       new LabeledPoint(1, new DenseVector(Array(5.5548729596, 2.7777687995))),
       new LabeledPoint(0, new DenseVector(Array(46.1810010826, 3.1611961917))),
@@ -39,31 +38,32 @@ class NaiveBayesModelTest extends TestingSparkContextFlatSpec with Matchers with
 
     val rdd = sparkContext.parallelize(labeledPoint)
 
-    val model = new NaiveBayes()
-    model.setLambda(trainArgs.lambdaParameter)
-    val naiveBayesModel = model.run(rdd)
+    val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"))
+    val svmWithSGDObject = SVMWithSGDTrainPlugin.initializeSVMModel(trainArgs)
 
-    val naiveBayesData = new NaiveBayesData(naiveBayesModel, trainArgs.observationColumns)
-    naiveBayesData shouldBe a[NaiveBayesData]
+    svmWithSGDObject shouldBe a[SVMWithSGD]
+
+    val svmWithSGDModel = svmWithSGDObject.run(rdd)
+    svmWithSGDModel shouldBe a[SVMModel]
   }
 
-  "NaiveBayesModel" should "thow an IllegalArgumentException for empty observationColumns" in {
+  "SVMWithSGDModel" should "thow an IllegalArgumentException for empty observationColumns" in {
     intercept[IllegalArgumentException] {
 
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      NaiveBayesTrainArgs(modelRef, frameRef, "label", List(), 0.5)
+      ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List())
     }
   }
 
-  "NaiveBayesModel" should "thow an IllegalArgumentException for empty labelColumn" in {
+  "SVMWithSGDModel" should "thow an IllegalArgumentException for empty labelColumn" in {
     intercept[IllegalArgumentException] {
 
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      NaiveBayesTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"), 0.5)
+      ClassificationWithSGDTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
     }
   }
 
