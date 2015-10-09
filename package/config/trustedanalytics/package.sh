@@ -43,24 +43,8 @@ pushd $SCRIPTPATH
     cp -Rv assets/* ${BUILD_DIR}
 popd
 
-#excluded jars are now combined in deploy.jar
-# giraph-plugins.jar graphon.jar
-jars=" rest-server.jar interfaces.jar engine-core.jar deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
-
-pushd ..
-for jar in $jars
-do
-	jarPath=$(find .  -path ./package -prune -o -name $jar -print )
-	echo $jarPath
-	cp -v $jarPath ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-
-done
-
-jarPath=$(find .  -path ./package -prune -o -name launcher.jar -print)
-
-echo $jarPath
-#enable this to copy the regular launcher.jar to the correct place
-cp -v $jarPath ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/launcher.jar
+echo "copy jar dependencies"
+cp -v package/rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
 ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
