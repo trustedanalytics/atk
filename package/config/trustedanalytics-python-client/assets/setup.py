@@ -19,6 +19,17 @@ from setuptools import setup
 import os
 import time
 
+
+install_requires = [
+    'bottle >= 0.12',
+    'requests >= 2.4.0',
+    'ordereddict >= 1.1',
+    'decorator >= 3.4.0',
+    ]
+system_spec_requires = {'posix' : ['numpy >= 1.8.1', 'pandas >= 0.15.0', 'pymongo >= 3.0',]}
+
+install_requires.extend(system_spec_requires.get(os.name, []))
+
 setup(
     # Application name:
     name="trustedanalytics",
@@ -49,13 +60,6 @@ setup(
     long_description=open("README").read(),
 
     # Dependent packages (distributions)
-    install_requires=[
-        'bottle >= 0.12',
-        'numpy >= 1.8.1',
-        'requests >= 2.4.0',
-        'ordereddict >= 1.1',
-        'decorator >= 3.4.0',
-        'pandas >= 0.15.0',
-        'pymongo >= 3.0',
-    ],
+    install_requires=install_requires,
+
 )

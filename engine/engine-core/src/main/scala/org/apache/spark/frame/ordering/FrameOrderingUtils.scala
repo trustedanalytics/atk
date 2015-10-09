@@ -17,9 +17,10 @@
 package org.apache.spark.frame.ordering
 
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.{ Column => SparkSqlColumn }
 import org.apache.spark.util
 import org.apache.spark.util.BoundedPriorityQueue
-import org.apache.spark.mllib.rdd.RDDFunctions._
 
 import scala.reflect.ClassTag
 
@@ -55,12 +56,30 @@ object FrameOrderingUtils extends Serializable {
         Array.empty[T]
       }
       else {
-        //TODO: Revisit when tree-reduce gets moved to org.apache.spark.rdd.RDD in Spark 1.3
         mapRDDs.treeReduce({ (queue1, queue2) =>
           queue1 ++= queue2
           queue1
         }, reduceTreeDepth).toArray.sorted(ord)
       }
+    }
+  }
+
+  /**
+   * Get sort order for Spark data frames
+   *
+   * @param columnNamesAndAscending column names to sort by, true for ascending, false for descending
+   * @return Sort order for data frames
+   */
+  def getSortOrder(columnNamesAndAscending: List[(String, Boolean)]): Seq[SparkSqlColumn] = {
+    require(columnNamesAndAscending != null && columnNamesAndAscending.nonEmpty, "one or more sort columns required")
+    columnNamesAndAscending.map {
+      case (columnName, ascending) =>
+        if (ascending) {
+          asc(columnName)
+        }
+        else {
+          desc(columnName)
+        }
     }
   }
 }

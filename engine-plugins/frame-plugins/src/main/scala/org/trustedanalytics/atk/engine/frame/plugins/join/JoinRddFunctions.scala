@@ -19,11 +19,9 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
-import org.apache.spark.sql.catalyst.expressions.{ GenericRow, GenericMutableRow }
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
-
-//implicit conversion for PairRDD
 
 /**
  *
@@ -92,8 +90,7 @@ object JoinRddFunctions extends Serializable {
         rightFrame,
         leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn))
       )
-      //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-      toGenericRowRdd(joinedFrame.rdd)
+      joinedFrame.rdd
     }
   }
 
@@ -115,8 +112,7 @@ object JoinRddFunctions extends Serializable {
       leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
       joinType = "fullouter"
     )
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-    toGenericRowRdd(joinedFrame.rdd)
+    joinedFrame.rdd
   }
 
   /**
@@ -146,8 +142,7 @@ object JoinRddFunctions extends Serializable {
           leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
           joinType = "right"
         )
-        //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-        toGenericRowRdd(joinedFrame.rdd)
+        joinedFrame.rdd
     }
   }
 
@@ -176,21 +171,8 @@ object JoinRddFunctions extends Serializable {
           leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
           joinType = "left"
         )
-        //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.3.1+
-        toGenericRowRdd(joinedFrame.rdd)
+        joinedFrame.rdd
     }
-  }
-
-  /**
-   * Converts RDD of rows of GenericRowWithSchema to GenericRow
-   *
-   * Work-around for kyro serialization bug in GenericRowWithSchema
-   *
-   * @see https://issues.apache.org/jira/browse/SPARK-6465
-   */
-  def toGenericRowRdd(rdd: RDD[Row]): RDD[Row] = {
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
-    rdd.map(row => new GenericRow(row.toSeq.toArray))
   }
 
   /**
