@@ -1,5 +1,6 @@
 Examples
 --------
+Train a Linear Regression Model
 
 .. only:: html
 

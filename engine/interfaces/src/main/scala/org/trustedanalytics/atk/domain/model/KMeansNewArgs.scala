@@ -19,4 +19,4 @@ package org.trustedanalytics.atk.domain.model
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 case class KMeansNewArgs(dummyModelRef: ModelReference,
-                         @ArgDoc("""name for the model""") name: Option[String] = None)
+                         @ArgDoc("""Name for the model.""") name: Option[String] = None)

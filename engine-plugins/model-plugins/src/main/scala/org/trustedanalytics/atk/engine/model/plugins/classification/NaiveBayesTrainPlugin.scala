@@ -1,26 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-// INTEL CONFIDENTIAL
+/*
+// Copyright (c) 2015 Intel Corporation 
 //
-// Copyright 2015 Intel Corporation All Rights Reserved.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-// The source code contained or described herein and all documents related to
-// the source code (Material) are owned by Intel Corporation or its suppliers
-// or licensors. Title to the Material remains with Intel Corporation or its
-// suppliers and licensors. The Material may contain trade secrets and
-// proprietary and confidential information of Intel Corporation and its
-// suppliers and licensors, and is protected by worldwide copyright and trade
-// secret laws and treaty provisions. No part of the Material may be used,
-// copied, reproduced, modified, published, uploaded, posted, transmitted,
-// distributed, or disclosed in any way without Intel's prior express written
-// permission.
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
-// No license under any patent, copyright, trade secret or other intellectual
-// property right is granted to or conferred upon you by disclosure or
-// delivery of the Materials, either expressly, by implication, inducement,
-// estoppel or otherwise. Any license under such intellectual property rights
-// must be express and approved by Intel in writing.
-//////////////////////////////////////////////////////////////////////////////
-
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+*/
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
@@ -29,12 +21,12 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.FrameRddImplicits
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, PluginDoc, ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.classification.NaiveBayes
 import org.apache.spark.mllib.regression.LabeledPoint
-import FrameRddImplicits._
+import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
 
 //Implicits needed for JSON conversion
@@ -49,7 +41,7 @@ observation.""") labelColumn: String,
                                @ArgDoc("""Column(s) containing the
 observations.""") observationColumns: List[String],
                                @ArgDoc("""Additive smoothing parameter
-Default is 1.0.""") lambdaParameter: Option[Double] = None) {
+Default is 1.0.""") lambdaParameter: Double = 1.0) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
@@ -57,7 +49,8 @@ Default is 1.0.""") lambdaParameter: Option[Double] = None) {
 }
 
 @PluginDoc(oneLine = "Build a naive bayes model.",
-  extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""")
+  extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""",
+  returns = """Trained NaiveBayes model""")
 class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -93,7 +86,7 @@ class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, Unit
 
     //Running MLLib
     val naiveBayes = new NaiveBayes()
-    naiveBayes.setLambda(arguments.lambdaParameter.getOrElse(1.0))
+    naiveBayes.setLambda(arguments.lambdaParameter)
 
     val naiveBayesModel = naiveBayes.run(labeledTrainRdd)
     val jsonModel = new NaiveBayesData(naiveBayesModel, arguments.observationColumns)

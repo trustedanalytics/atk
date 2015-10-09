@@ -37,7 +37,7 @@ trait GraphStorage {
 
   def renameGraph(graph: GraphEntity, newName: String)(implicit invocation: Invocation): GraphEntity
 
-  def drop(graph: GraphEntity)(implicit invocation: Invocation)
+  def dropGraph(graph: GraphEntity)(implicit invocation: Invocation)
 
   def copyGraph(graph: GraphEntity, name: Option[String])(implicit invocation: Invocation): GraphEntity
 
@@ -45,10 +45,7 @@ trait GraphStorage {
 
   def getGraphByName(name: Option[String])(implicit invocation: Invocation): Option[GraphEntity]
 
-  def scheduleDeletion(graph: GraphEntity)(implicit invocation: Invocation): Unit
-
   def defineVertexType(graphRef: GraphReference, vertexSchema: VertexSchema)(implicit invocation: Invocation): SeamlessGraphMeta
 
   def defineEdgeType(graphRef: GraphReference, edgeSchema: EdgeSchema)(implicit invocation: Invocation): SeamlessGraphMeta
-
 }

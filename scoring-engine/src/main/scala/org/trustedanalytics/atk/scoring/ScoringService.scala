@@ -97,7 +97,7 @@ class ScoringService(model: Model) extends Directives {
                 val splitSegment = decoded.split(",")
                 records = records :+ splitSegment
               }
-              onComplete(model.score(records)) {
+              onComplete(Future { model.score(records) }) {
                 case Success(scored) => complete(scored.toString)
                 case Failure(ex) => ctx => {
                   ctx.complete(StatusCodes.InternalServerError, ex.getMessage)

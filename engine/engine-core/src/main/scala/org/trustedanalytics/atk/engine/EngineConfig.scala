@@ -27,6 +27,7 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.HBaseAdmin
 import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 import scala.concurrent.duration._
 import org.apache.commons.lang.StringUtils
 
@@ -307,13 +308,20 @@ trait EngineConfig extends EventLogging {
   /**
    * Determines whether SparkContex.addJars() paths get "local:" prefix or not.
    *
-   * True if engine-core.jar, interfaces.jar and ohters are installed locally on each cluster node (preferred).
+   * True if engine-core.jar, interfaces.jar and others are installed locally on each cluster node (preferred).
    * False is useful mainly for development on a cluster.  False results in many copies of the application jars
    * being made and copied to all of the cluster nodes.
    */
   val sparkAppJarsLocal: Boolean = config.getBoolean(sparkConfigKey + ".app-jars-local")
 
-  /** Fully qualified Hostname for current system */
+  /**
+   * Represents a ":" separated set of fully qualified strings (jars) needed by the application.
+   */
+  val extraJarsForSparkSubmit: String = config.getString(sparkConfigKey + ".extra-jars-for-spark-submit")
+
+  /**
+   * Fully qualified hostname for current system.
+   */
   private def hostname: String = InetAddress.getLocalHost.getCanonicalHostName
 
   // log important settings
@@ -336,6 +344,8 @@ trait EngineConfig extends EventLogging {
   // Python execution command for workers
   val pythonWorkerExec: String = config.getString(sparkConfigKey + ".python-worker-exec")
   val pythonUdfDependenciesDirectory: String = config.getString(sparkConfigKey + ".python-udf-deps-directory")
+  val pythonDefaultDependencySearchDirectories: List[String] =
+    config.getList(sparkConfigKey + ".python-default-deps-search-directories").map(_.render).toList
 
   // val's are not lazy because failing early is better
   val metaStoreConnectionUrl: String = nonEmptyString(metaStoreConnection + ".url")
@@ -356,7 +366,7 @@ trait EngineConfig extends EventLogging {
 
   //gc variables
   val gcInterval = config.getDuration(engineConfigKey + ".gc.interval", TimeUnit.MILLISECONDS)
-  val gcAgeToDeleteData = config.getDuration(engineConfigKey + ".gc.data-lifespan", TimeUnit.MILLISECONDS)
+  val gcStaleAge = config.getDuration(engineConfigKey + ".gc.stale-age", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean(engineConfigKey + ".hadoop.kerberos.enabled")
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.principal-name")) else None

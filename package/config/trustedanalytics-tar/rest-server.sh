@@ -4,6 +4,7 @@ echo "Starting ATK startup script"
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 export KEYTAB=$DIR/../atk.keytab
+export KRB5_CONFIG=$DIR/../krb5.conf
 export PRINCIPAL="atk-user@US-WEST-2.COMPUTE.INTERNAL"
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
@@ -30,12 +31,27 @@ export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/appli
 
 export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
 export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
+
 export PG_HOST=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.hostname' | tr -d '"')
 export PG_PORT=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.port' | tr -d '"')
 export PG_USER=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.username' | tr -d '"')
 export PG_PASS=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.password' | tr -d '"')
 export PG_DB=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.dbname' | tr -d '"')
 export PG_URL=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.uri' | tr -d '"')
+
+export POSTGRES_HOST=$PG_HOST
+export POSTGRES_PORT=$PG_PORT
+export POSTGRES_USER=$PG_USER
+export POSTGRES_PASS=$PG_PASS
+export POSTGRES_DB=$PG_DB
+export POSTGRES_URL=$PG_URL
+
+export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.hostname' | tr -d '"')
+export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.port' | tr -d '"')
+export MYSQL_USER=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.username' | tr -d '"')
+export MYSQL_PASS=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.password' | tr -d '"')
+export MYSQL_DB=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.dbname' | tr -d '"')
+export MYSQL_URL=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.uri' | tr -d '"')
 env
 
 pushd $ATK_CONF_DIR
@@ -69,8 +85,12 @@ if [ -f $DIR/../lib/$jar ]; then
  ln -s $DIR/../lib/deploy.jar $DIR/../lib/$jar
 done
 
-echo java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
-java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+if [ -f ${KRB5_CONFIG} ]; then
+ export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+fi
+
+echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
 
 popd
 

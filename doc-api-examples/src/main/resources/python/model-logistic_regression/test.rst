@@ -1,5 +1,7 @@
 Examples
 --------
+Test the performance of a trained Logistic Regression Model
+
 .. only:: html
 
     .. code::

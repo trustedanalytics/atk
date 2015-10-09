@@ -72,7 +72,7 @@ their own index as the minimum of their current index and all other indices
 received.
 This algorithm continues until there is no change in any of the vertex
 indices.
-At the end of the alorithm, the unique levels of the indices denote the
+At the end of the algorithm, the unique levels of the indices denote the
 distinct connected components.
 The complexity of the algorithm is proportional to the diameter of the graph.
 """,

@@ -19,25 +19,28 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, CommandPlugin }
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 /**
  * Create a 'new' instance of a Linear Regression model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a Linear Regression model.",
-  extended = """
-**Regression using Linear Regression**
-
-Linear Regression[1]_ is used to model the relationship between a scalar dependent variable and one or more independent variables. The user may initialize a LinearRegressionModel,
-train the model on columns of a frame and use the trained model to predict the value of the dependent variable given the independent observations of a frame. This model
-runs the MLLib implementation of LinearRegression[2]_ with the SGD[3]_ optimizer.
+  extended = """Linear Regression [1]_ is used to model the relationship between a scalar
+dependent variable and one or more independent variables.
+The Linear Regression model is initialized, trained on columns of a frame and
+used to predict the value of the dependent variable given the independent
+observations of a frame.
+This model runs the MLLib implementation of Linear Regression [2]_ with the
+SGD [3]_ optimizer.
                 
+.. rubric:: footnotes
+
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
 .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
-.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
-    """)
-class LinearRegressionWithSGDNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {
+.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent""",
+  returns = """A new instance of LinearRegressionModel""")
+class LinearRegressionWithSGDNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *

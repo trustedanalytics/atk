@@ -21,7 +21,7 @@ import ModelPublishJsonProtocol._
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -31,10 +31,15 @@ import java.io.File
 import org.apache.commons.io.FileUtils
 
 /**
- * Rename columns of a frame
+ * Publish a Libsvm Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the LibsvmModel and its implementation into a tar file. The tar file is then published on 
+HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+This model can then be used to predict the class of an observation.
+    """,
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

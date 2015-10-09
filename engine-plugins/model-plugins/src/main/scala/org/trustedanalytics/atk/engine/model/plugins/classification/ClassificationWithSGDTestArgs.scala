@@ -22,20 +22,16 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param model Handle to the model to be written to.
- * @param frame Handle to the data frame
- * @param observationColumns Handle to the list of observation columns of the data frame
- * @param labelColumn Handle to the label column of the data frame
+ * Command for testing model data.
  */
 case class ClassificationWithSGDTestArgs(model: ModelReference,
-                                         @ArgDoc("""frame whose labels are to be
+                                         @ArgDoc("""Frame whose labels are to be
 predicted.""") frame: FrameReference,
                                          @ArgDoc("""Column containing the actual
 label for each observation.""") labelColumn: String,
                                          @ArgDoc("""Column(s) containing the observations
 whose labels are to be predicted and tested.
-Default is to test over the columns the SvmModel
+Default is to test over the columns the SVM model
 was trained on.""") observationColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")

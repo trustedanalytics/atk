@@ -1,6 +1,6 @@
 Examples
 --------
-Consider the following sample data set:
+Consider the following sample data set\:
 
 .. code::
 
@@ -14,8 +14,10 @@ Consider the following sample data set:
         d          9
         e          1
 
-A simple call for 3 equal-width bins gives:
+A simple call for 3 equal-width bins gives\:
+
 .. code::
+
     >>> hist = frame.histogram("b", num_bins=3)
     >>> print hist
 
@@ -25,8 +27,10 @@ A simple call for 3 equal-width bins gives:
         density: [0.6, 0.0, 0.4]
 
 
-Switching to equal depth gives:
+Switching to equal depth gives\:
+
 .. code::
+
     >>> hist = frame.histogram("b", num_bins=3, bin_type='equaldepth')
     >>> print hist
 
@@ -37,7 +41,8 @@ Switching to equal depth gives:
 
 
 .. only:: html
-       Plot hist as a bar chart using matplotlib:
+
+       Plot hist as a bar chart using matplotlib\:
 
     .. code::
 
@@ -46,7 +51,8 @@ Switching to equal depth gives:
         >>> plt.bar(hist.cutoffs[:1], hist.hist, width=hist.cutoffs[1] - hist.cutoffs[0])
 
 .. only:: latex
-       Plot hist as a bar chart using matplotlib:
+
+       Plot hist as a bar chart using matplotlib\:
 
     .. code::
 

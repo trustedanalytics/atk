@@ -54,6 +54,20 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>package-python-yarn-client</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>bash</executable>
+                            <workingDirectory>${basedir}</workingDirectory>
+                            <arguments>
+                                <argument>${basedir}/yarn-client/python-yarn-client.sh</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

@@ -100,7 +100,7 @@ def _get_examples_rst(examples):
     return """
 
 %s
-"""  # todo --all the example .rst files start with an "Examples" header.  It would be better to have that header here.
+""" % examples  # todo --all the example .rst files start with an "Examples" header.  It would be better to have that header here.
 
 
 def get_maturity_rst(maturity):

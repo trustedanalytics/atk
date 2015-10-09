@@ -32,10 +32,12 @@ View and edit the server connection:
 .. code::
 
     >>> print ta.server
-    host:    localhost
-    port:    9099
-    scheme:  http
-    version: v1
+    ------------------------------------------------------------------------------
+    headers        : {u'Content-type': u'application/json', u'Authorization': u...
+    scheme         : http
+    uri            : 10.54.8.187:9099
+    user           : test_api_key_1
+    ------------------------------------------------------------------------------
 
     >>> ta.server.host
     'localhost'
@@ -64,7 +66,8 @@ Errors
 
 By default, the toolkit does not print the full stack trace when exceptions
 occur.
-To see the full Python stack trace of the last (i.e. most recent) exception:
+To see the full Python stack trace of the last (in other words, the most
+recent) exception:
 
 .. code::
 
@@ -92,9 +95,9 @@ issues, etc.
 Tab Completion
 ==============
 
-Allows you to use the tab key to complete your typing for you.
+Enabling tab completion allows you to use the tab key to complete your typing for you.
 
-If you are running with a standard Python REPL (not iPython, bPython, or the
+If you are running with a standard Python `REPL`_ (not IPython, bPython, or the
 like) you will have to set up the tab completion manually:
 
 Create a .pythonrc file in your home directory with the following contents:
@@ -105,7 +108,7 @@ Create a .pythonrc file in your home directory with the following contents:
     >>> readline.parse_and_bind('tab:complete')
 
 
-Or you can just run the two lines in your REPL session.
+Or you can just run the two lines in your `REPL`_ session.
 
 This will let you do the tab completion, but will also remember your history
 over multiple sessions:
@@ -121,7 +124,7 @@ over multiple sessions:
     >>> import rlcompleter
     >>> import sys
 
-    # Autocomplete is bound to the Esc key by default, so change it to tab.
+    # Auto-complete is bound to the ESC key by default, so change it to tab.
     >>> readline.parse_and_bind("tab: complete")
 
     >>> historyPath = os.path.expanduser("~/.pyhistory")
@@ -146,67 +149,4 @@ Note:
 
         export PYTHONSTARTUP=~/.pythonrc
 
-.. Outdated 20150727::
-
-    .. index::
-        single: Spark
-
-    -----
-    Spark
-    -----
-
-    Resolving disk full issue while running Spark jobs
-    ==================================================
-
-    Using a Red Hat cluster, or an old CentOS cluster,
-    the /tmp drive may become full while running spark jobs.
-    This causes the jobs to fail, and it is caused by the way the /tmp file system
-    is setup,
-    Spark and other |CDH| services, by default, use /tmp as the temporary location
-    to store files required during run time, including, but not limited to, shuffle
-    data.
-
-    Steps to resolve this issue:
-
-    1)  Stop the Trustedanalytics service.
-    #)  From |CDH| Web UI:
-
-        a)  Stop the Cloudera Management Service.
-        #)  Stop the |CDH|.
-
-    #)  Now run the following steps on each node:
-
-        a)  Find the largest partition by running the command::
-
-                $ df -h
-
-        #)  Assuming /mnt is your largest partition, create the folder
-            "/mnt/.bda/tmp", if it isn't already present::
-
-                $ sudo mkdir -p /mnt/.bda/tmp
-
-        #)  Set the permissions on this directory so that it's wide open::
-
-                $ sudo chmod 1777 /mnt/.bda/tmp
-
-        #)  Add the following line to your '/etc/fstab' file and save it::
-
-                /mnt/.bda/tmp    /tmp    none   bind   0   0
-
-        #)  Reboot the machine.
-
-    Spark space concerns
-    ====================
-    Whenever you run a Spark application, jars and logs go to '/va/run/spark/work'
-    (or other location configured in Cloudera Manager).
-    These can use up a bit of space eventually (over 140MB per command).
-
-    * Short-term workaround: periodically delete these files
-    * Long-term fix: Spark 1.0 will automatically clean up the files
-
-    ----------
-    References
-    ----------
-
-    `Spark Docs <https://spark.apache.org/documentation.html>`__
-
+.. _REPL: https://pypi.python.org/pypi/repl/1.0
