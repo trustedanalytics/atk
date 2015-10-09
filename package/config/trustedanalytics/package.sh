@@ -44,13 +44,13 @@ pushd $SCRIPTPATH
 popd
 
 echo "copy jar dependencies"
-cp -v package/rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
+cp -v rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
-ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
-cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
-ls -l python-client/target
-cp -v python-client/target/trustedanalytics.zip ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
+ls -l config/trustedanalytics-python-client/trustedanalytics/dist
+cp -v config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
+ls -l ../python-client/target
+cp -v ../python-client/target/trustedanalytics.zip ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
 
 popd
 
