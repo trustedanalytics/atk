@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.Udf
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.apache.spark.SparkContext
 import org.apache.spark.api.python.{ AtkPythonBroadcast, EnginePythonAccumulatorParam, EnginePythonRdd }
 import org.apache.commons.codec.binary.Base64.decodeBase64
@@ -140,9 +140,14 @@ object PythonRddStorage {
 
     var pyIncludes = new JArrayList[String]()
 
+    val pythonDefaultDependency = SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
+      .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution"))
+    sc.addFile(s"file://$pythonDefaultDependency")
+    pyIncludes.add("trustedanalytics.zip")
+
     if (udf.dependencies != null) {
       val includes = uploadUdfDependencies(udf)
-      pyIncludes = uploadFilesToSpark(includes, sc)
+      pyIncludes.addAll(uploadFilesToSpark(includes, sc))
     }
 
     val pyRdd = new EnginePythonRdd[Array[Byte]](

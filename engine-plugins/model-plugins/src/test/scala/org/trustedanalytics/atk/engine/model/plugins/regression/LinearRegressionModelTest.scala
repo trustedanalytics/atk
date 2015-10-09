@@ -31,14 +31,14 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
   "LinearRegressionModel" should "create a LinearRegressionModel" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
-    val labeledPoint: Array[LabeledPoint] =  Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126,2.6933495054))),
-      new LabeledPoint(1, new DenseVector(Array(5.5548729596,2.7777687995))),
-      new LabeledPoint(0, new DenseVector(Array(46.1810010826,3.1611961917))),
-      new LabeledPoint(0, new DenseVector(Array(44.3117586448,3.3458963222))))
+    val labeledPoint: Array[LabeledPoint] = Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126, 2.6933495054))),
+      new LabeledPoint(1, new DenseVector(Array(5.5548729596, 2.7777687995))),
+      new LabeledPoint(0, new DenseVector(Array(46.1810010826, 3.1611961917))),
+      new LabeledPoint(0, new DenseVector(Array(44.3117586448, 3.3458963222))))
 
     val rdd = sparkContext.parallelize(labeledPoint)
 
-    val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "label",List("obs1","obs2"))
+    val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"))
     val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(trainArgs)
     val linRegModel = linReg.run(rdd)
 
@@ -47,17 +47,15 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
     linRegData shouldBe a[LinearRegressionData]
   }
 
-
   "LinearRegressionModel" should "thow an IllegalArgumentException for empty observationColumns during train" in {
     intercept[IllegalArgumentException] {
 
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      ClassificationWithSGDTrainArgs(modelRef, frameRef, "label",List())
+      ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List())
     }
   }
-
 
   "LinearRegressionModel" should "thow an IllegalArgumentException for empty labelColumn during train" in {
     intercept[IllegalArgumentException] {
@@ -65,7 +63,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs =  ClassificationWithSGDTrainArgs(modelRef, frameRef, "",List("obs1","obs2"))
+      val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
     }
   }
 

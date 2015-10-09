@@ -184,6 +184,11 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
   def archiveName: String = withMyClassLoader {
     Archive.system.lookupArchiveNameByLoader(Thread.currentThread().getContextClassLoader)
   }
+
+  /* plugins which execute python UDF will override this to true; by default this is false .
+     if true, additional files are shipped for udf execution during a yarn job
+   */
+  def executesPythonUdf = false
 }
 
 object SparkCommandPlugin extends EventLogging {

@@ -30,20 +30,19 @@ class RandomForestClassificationModelTest extends TestingSparkContextFlatSpec wi
   "RandomForestClassifierModel" should "create a RandomForestClassifierModel" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
-    val labeledPoint: Array[LabeledPoint] =  Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126,2.6933495054))),
-    new LabeledPoint(1, new DenseVector(Array(5.5548729596,2.7777687995))),
-    new LabeledPoint(0, new DenseVector(Array(46.1810010826,3.1611961917))),
-    new LabeledPoint(0, new DenseVector(Array(44.3117586448,3.3458963222))))
+    val labeledPoint: Array[LabeledPoint] = Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126, 2.6933495054))),
+      new LabeledPoint(1, new DenseVector(Array(5.5548729596, 2.7777687995))),
+      new LabeledPoint(0, new DenseVector(Array(46.1810010826, 3.1611961917))),
+      new LabeledPoint(0, new DenseVector(Array(44.3117586448, 3.3458963222))))
 
     val rdd = sparkContext.parallelize(labeledPoint)
 
-    val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "label",List("obs1","obs2"),2,1,"gini",4,100,10,None, None)
-    val model = RandomForest.trainClassifier(rdd,trainArgs.numClasses,trainArgs.getCategoricalFeaturesInfo,trainArgs.numTrees,
-    trainArgs.getFeatureSubsetCategory, trainArgs.impurity, trainArgs.maxDepth, trainArgs.maxBins, trainArgs.seed)
+    val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"), 2, 1, "gini", 4, 100, 10, None, None)
+    val model = RandomForest.trainClassifier(rdd, trainArgs.numClasses, trainArgs.getCategoricalFeaturesInfo, trainArgs.numTrees,
+      trainArgs.getFeatureSubsetCategory, trainArgs.impurity, trainArgs.maxDepth, trainArgs.maxBins, trainArgs.seed)
 
     model shouldBe a[RandomForestModel]
   }
-
 
   "RandomForestClassifierModel" should "thow an IllegalArgumentException for empty observationColumns" in {
     intercept[IllegalArgumentException] {
@@ -51,10 +50,9 @@ class RandomForestClassificationModelTest extends TestingSparkContextFlatSpec wi
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "label",List(),2,1,"gini",4,100,10,None, None)
+      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "label", List(), 2, 1, "gini", 4, 100, 10, None, None)
     }
   }
-
 
   "RandomForestClassifierModel" should "thow an IllegalArgumentException for empty labelColumn" in {
     intercept[IllegalArgumentException] {
@@ -62,7 +60,7 @@ class RandomForestClassificationModelTest extends TestingSparkContextFlatSpec wi
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "",List("obs1","obs2"),2,1,"gini",4,100,10,None, None)
+      val trainArgs = RandomForestClassifierTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"), 2, 1, "gini", 4, 100, 10, None, None)
     }
   }
 

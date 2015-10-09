@@ -21,9 +21,6 @@ Spark-specific implementation on the client-side
 
 import base64
 import os
-import itertools
-from udfzip import UdfZip
-from types import ModuleType
 
 spark_home = os.getenv('SPARK_HOME')
 if not spark_home:
@@ -35,43 +32,12 @@ import sys
 if spark_python not in sys.path:
     sys.path.append(spark_python)
 
-from serializers import PickleSerializer, BatchedSerializer, UTF8Deserializer, CloudPickleSerializer, write_int
+from serializers import PickleSerializer, BatchedSerializer, write_int
 
 from trustedanalytics.core.row import Row
 from trustedanalytics.core.atktypes import valid_data_types, numpy_to_bson_friendly
 
 import bson
-
-UdfDependencies = []
-
-
-def get_file_content_as_str(filename):
-
-    if isinstance(filename, ModuleType) and hasattr(filename, '__path__'): # Serialize modules
-        UdfZip.zipdir(filename.__path__)
-        name, fileToSerialize = ('%s.zip' % os.path.basename(filename), '/tmp/iapydependencies.zip')
-    elif isinstance(filename, ModuleType) and hasattr(filename, '__file__'): # Serialize single file based modules
-        name, fileToSerialize = (filename.__file__, filename.__file__)
-    elif os.path.isdir(filename): # Serialize local directories
-        UdfZip.zipdir(filename)
-        name, fileToSerialize = ('%s.zip' % os.path.basename(filename), '/tmp/iapydependencies.zip')
-    elif os.path.isfile(filename) and filename.endswith('.py'): # Serialize local files
-        name, fileToSerialize = (filename, filename)
-    else:
-        raise Exception('%s should be either local python script without any packaging structure \
-        or the absolute path to a valid python package/module which includes the intended python file to be included and all \
-                        its dependencies.' % filename)
-    # Serialize the file contents and send back along with the new serialized file names
-    with open(fileToSerialize, 'rb') as f:
-        return (name, base64.urlsafe_b64encode(f.read()))
-
-
-def _get_dependencies(filenames):
-    dependencies = []
-    for filename in filenames:
-        name, content = get_file_content_as_str(filename)
-        dependencies.append({'file_name': name, 'file_content': content})
-    return dependencies
 
 def ifiltermap(predicate, function, iterable):
     """creates a generator than combines filter and map"""
@@ -140,22 +106,6 @@ class RowWrapper(Row):
     def load_row(self, data):
         self._set_data(bson.decode_all(data)[0]['array'])
 
-
-def pickle_function(func):
-    """Pickle the function the way Pyspark does"""
-
-    command = (func, None, UTF8Deserializer(), IaBatchedSerializer())
-    pickled_function = CloudPickleSerializer().dumps(command)
-    return pickled_function
-
-
-def encode_bytes_for_http(b):
-    """
-    Encodes bytes using base64, so they can travel as a string
-    """
-    return base64.urlsafe_b64encode(b)
-
-
 def _wrap_row_function(frame, row_function, optional_schema=None):
     """
     Wraps a python row function, like one used for a filter predicate, such
@@ -183,40 +133,6 @@ def _wrap_row_function(frame, row_function, optional_schema=None):
                 msg = base64.urlsafe_b64encode(u'Exception running UDF, unable to provide details.'.encode('utf-8'))
             raise IaPyWorkerError(msg)
     return row_func
-
-
-def get_udf_arg(frame, subject_function, iteration_function, optional_schema=None):
-    """
-    Prepares a python row function for server execution and http transmission
-
-    Parameters
-    ----------
-    frame : Frame
-        frame on whose rows the function will execute
-    subject_function : function
-        a function with a single row parameter
-    iteration_function: function
-        the iteration function to apply for the frame.  In general, it is
-        imap.  For filter however, it is ifilter
-    """
-    row_ready_function = _wrap_row_function(frame, subject_function, optional_schema)
-    def iterator_function(iterator): return iteration_function(row_ready_function, iterator)
-    def iteration_ready_function(s, iterator): return iterator_function(iterator)
-    return make_http_ready(iteration_ready_function)
-
-
-def get_udf_arg_for_copy_columns(frame, predicate_function, column_names):
-    row_ready_predicate = _wrap_row_function(frame, predicate_function)
-    row_ready_map = _wrap_row_function(frame, get_copy_columns_function(column_names, frame.schema))
-    def iteration_ready_function(s, iterator): return ifiltermap(row_ready_predicate, row_ready_map, iterator)
-    return make_http_ready(iteration_ready_function)
-
-
-def make_http_ready(function):
-    pickled_function = pickle_function(function)
-    http_ready_function = encode_bytes_for_http(pickled_function)
-    return { 'function': http_ready_function, 'dependencies':_get_dependencies(UdfDependencies)}
-
 
 class IaBatchedSerializer(BatchedSerializer):
     def __init__(self):

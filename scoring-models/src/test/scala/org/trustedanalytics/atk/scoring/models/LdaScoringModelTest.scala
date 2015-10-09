@@ -17,9 +17,9 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
-import ScoringJsonReaderWriters._
 
 class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
   val epsilon = 1e-6
@@ -47,7 +47,7 @@ class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
       Array.empty[String]
     )
 
-    val scores = scoringModel.score(documents).futureValue
+    val scores = scoringModel.score(documents)
 
     scores.size should equal(3)
 

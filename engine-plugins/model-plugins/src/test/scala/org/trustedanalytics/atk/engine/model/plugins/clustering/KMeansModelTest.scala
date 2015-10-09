@@ -43,7 +43,6 @@ class KMeansModelTest extends TestingSparkContextFlatSpec with Matchers with Moc
     kmeansData shouldBe a[KMeansData]
   }
 
-
   "KMeansModel" should "thow an IllegalArgumentException for empty observationColumns during train" in {
     intercept[IllegalArgumentException] {
 
@@ -54,14 +53,13 @@ class KMeansModelTest extends TestingSparkContextFlatSpec with Matchers with Moc
     }
   }
 
-
   "KMeansModel" should "thow an IllegalArgumentException for empty columnScalings during train" in {
     intercept[IllegalArgumentException] {
 
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      val trainArgs =  KMeansTrainArgs(modelRef, frameRef,List("obs1","obs2"), List())
+      val trainArgs = KMeansTrainArgs(modelRef, frameRef, List("obs1", "obs2"), List())
     }
   }
 }
