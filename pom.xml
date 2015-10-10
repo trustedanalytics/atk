@@ -468,7 +468,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 			    <exclude>findbugs-exclude.xml</exclude>
 			    <exclude>scalastyle-config.xml</exclude>
 			    <exclude>checkstyle.xml</exclude>
-			    <exclude>pom.xml</exclude>
+			    <exclude>**/pom.xml</exclude>
 			    <exclude>doc/**/*.*</exclude>
 			    <exclude>conf/**/*.*</exclude>
 			    <exclude>**/*.txt</exclude>
