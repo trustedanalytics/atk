@@ -30,7 +30,14 @@ class EngineApplicationImpl extends AbstractEngineComponent with EngineApplicati
   override lazy val commandLoader = new CommandLoader(loadFromModules = true)
 
   metaStore.initializeSchema()
-  fileStorage.syncLibs()
-  GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+
+  // Some of the Engine initialization we can do in a background thread.
+  BackgroundInit.initFunction = () => {
+    new HdfsLibSync(fileStorage).syncLibs()
+    GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+  }
+
+  BackgroundInit.start
+
 }
 

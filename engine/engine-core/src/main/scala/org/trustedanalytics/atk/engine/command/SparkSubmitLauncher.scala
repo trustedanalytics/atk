@@ -33,12 +33,16 @@ import org.trustedanalytics.atk.moduleloader.Module
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-class SparkSubmitLauncher(hdfsFileStorage: HdfsFileStorage) extends EventLogging with EventLoggingImplicits {
+class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging with EventLoggingImplicits {
 
   def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
 
       try {
+
+        // make sure hdfs libs have been uploaded
+        BackgroundInit.waitTillCompleted
+
         //Requires a TGT in the cache before executing SparkSubmit if CDH has Kerberos Support
         KerberosAuthenticator.loginWithKeyTabCLI()
         val (kerbFile, kerbOptions) = EngineConfig.kerberosKeyTabPath match {

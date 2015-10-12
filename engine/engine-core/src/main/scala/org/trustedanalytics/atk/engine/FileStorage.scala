@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import java.io.{ InputStream, OutputStream }
+import java.util.concurrent.TimeUnit
 
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
@@ -24,16 +25,20 @@ import org.apache.commons.lang3.ArrayUtils
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs._
 import org.apache.hadoop.hdfs.DistributedFileSystem
-import org.trustedanalytics.atk.moduleloader.{ ClassLoaderAware, Module }
+import org.trustedanalytics.atk.moduleloader.Module
+
+import scala.concurrent.duration.Duration
+import scala.concurrent.{ Await, Future }
+import EngineExecutionContext._
 
 /**
  * HDFS Access
  *
  * IMPORTANT! Make sure you aren't breaking wild card support - it is easy to forget about
  */
-class HdfsFileStorage extends EventLogging {
+class FileStorage extends EventLogging {
 
-  implicit val eventContext = EventContext.enter("HDFSFileStorage")
+  implicit val eventContext = EventContext.enter("FileStorage")
 
   private val securedConfiguration = withContext("HDFSFileStorage.configuration") {
     info("fsRoot: " + EngineConfig.fsRoot)
@@ -56,14 +61,14 @@ class HdfsFileStorage extends EventLogging {
     securedConfiguration
   }
 
-  private val localFileSystem = FileSystem.getLocal(configuration)
+  val localFileSystem = FileSystem.getLocal(configuration)
   private val fileSystem = FileSystem.get(configuration)
 
   /**
    * Verifies that the Kerberos Ticket is still valid and if not relogins before returning fileSystem object
    * @return Hadoop FileSystem
    */
-  def fs: FileSystem = {
+  def hdfs: FileSystem = {
     if (EngineConfig.enableKerberos) {
       KerberosAuthenticator.loginConfigurationWithKeyTab(securedConfiguration)
     }
@@ -88,15 +93,15 @@ class HdfsFileStorage extends EventLogging {
   def write(sink: Path, append: Boolean): OutputStream = withContext("file.write") {
     val path: Path = absolutePath(sink.toString)
     if (append) {
-      fs.append(path)
+      hdfs.append(path)
     }
     else {
-      fs.create(path, true)
+      hdfs.create(path, true)
     }
   }
 
   def list(source: Path): Seq[Path] = withContext("file.list") {
-    fs.listStatus(absolutePath(source.toString)).map(fs => fs.getPath)
+    hdfs.listStatus(absolutePath(source.toString)).map(fs => fs.getPath)
   }
 
   /**
@@ -106,17 +111,17 @@ class HdfsFileStorage extends EventLogging {
    * @return Sequence of Path objects
    */
   def globList(source: Path, filter: String): Seq[Path] = withContext("file.globList") {
-    fs.globStatus(new Path(source, filter)).map(fs => fs.getPath)
+    hdfs.globStatus(new Path(source, filter)).map(fs => fs.getPath)
   }
 
   def read(source: Path): InputStream = withContext("file.read") {
     val path: Path = absolutePath(source.toString)
-    fs.open(path)
+    hdfs.open(path)
   }
 
   def exists(path: Path): Boolean = withContext("file.exists") {
     val p: Path = absolutePath(path.toString)
-    fs.exists(p)
+    hdfs.exists(p)
   }
 
   /**
@@ -125,8 +130,8 @@ class HdfsFileStorage extends EventLogging {
    */
   def delete(path: Path, recursive: Boolean = true): Unit = withContext("file.delete") {
     val fullPath = absolutePath(path.toString)
-    if (fs.exists(fullPath)) {
-      val success = fs.delete(fullPath, recursive)
+    if (hdfs.exists(fullPath)) {
+      val success = hdfs.delete(fullPath, recursive)
       if (!success) {
         error("Could not delete path: " + fullPath.toUri.toString)
       }
@@ -134,12 +139,12 @@ class HdfsFileStorage extends EventLogging {
   }
 
   def create(file: Path): Unit = withContext("file.create") {
-    fs.create(absolutePath(file.toString))
+    hdfs.create(absolutePath(file.toString))
   }
 
   def createDirectory(directory: Path): Unit = withContext("file.createDirectory") {
     val adjusted = absolutePath(directory.toString)
-    fs.mkdirs(adjusted)
+    hdfs.mkdirs(adjusted)
   }
 
   /**
@@ -149,7 +154,7 @@ class HdfsFileStorage extends EventLogging {
   def size(path: String): Long = {
     val abPath: Path = absolutePath(path)
     // globStatus() was returning zero if File was directory
-    val fileStatuses = if (fs.isDirectory(abPath)) fs.listStatus(abPath) else fs.globStatus(abPath)
+    val fileStatuses = if (hdfs.isDirectory(abPath)) hdfs.listStatus(abPath) else hdfs.globStatus(abPath)
     if (ArrayUtils.isEmpty(fileStatuses.asInstanceOf[Array[AnyRef]])) {
       throw new RuntimeException("No file found at path " + abPath)
     }
@@ -162,7 +167,7 @@ class HdfsFileStorage extends EventLogging {
    * @return true if the path is a directory false if it is not
    */
   def isDirectory(path: Path): Boolean = withContext("file.isDirectory") {
-    fs.isDirectory(path)
+    hdfs.isDirectory(path)
   }
 
   /**
@@ -171,74 +176,6 @@ class HdfsFileStorage extends EventLogging {
   def hdfsLibs(jarNames: Seq[String]): Seq[String] = {
     val hdfsLib = absolutePath(EngineConfig.hdfsLib)
     jarNames.map(jarName => concatPaths(hdfsLib.toString, jarName))
-  }
-
-  /**
-   * Synchronize local-lib folders to hdfs-lib by copying jars to HDFS.
-   */
-  def syncLibs(): Unit = withContext("synclibs") {
-    val destDir = absolutePath(EngineConfig.hdfsLib)
-    val localLibs = Module.libs.map(url => new Path(url.toURI))
-    info(s"hdfs-lib: $destDir")
-    if (!fs.exists(destDir)) {
-      info(s"Creating $destDir")
-      fs.mkdirs(destDir)
-    }
-    require(fs.isDirectory(destDir), s"Not a directory $destDir, please configure hdfs-lib")
-    localLibs.foreach(localLib => {
-      sync(localLib, destDir)
-    })
-  }
-
-  /**
-   * Synchronize a local-lib folder to hdfs-lib by copying jars to HDFS
-   */
-  private def sync(localLib: Path, destDir: Path): Unit = {
-    if (!localFileSystem.exists(localLib)) {
-      warn(s"Does not exist $localLib")
-    }
-    else if (localFileSystem.isDirectory(localLib)) {
-      val localJars = localFileSystem.listFiles(localLib, false)
-      while (localJars.hasNext) {
-        val localJarStatus = localJars.next()
-        syncJar(localJarStatus, destDir)
-      }
-    }
-    else {
-      syncJar(localFileSystem.getFileStatus(localLib), destDir)
-    }
-  }
-
-  /**
-   * Sync a local jar to a location in HDFS, if needed.
-   *
-   * Sync is performed if local jar has a newer timestamp or a different
-   * file size than jar in HDFS.
-   */
-  private def syncJar(localJarStatus: FileStatus, destDir: Path): Unit = {
-    val localJarPath = localJarStatus.getPath
-    if (localJarStatus.isFile && localJarPath.getName.endsWith(".jar")) {
-      val destJarPath = new Path(destDir, localJarPath.getName)
-      if (fs.exists(destJarPath)) {
-        val destJarStatus = fs.getFileStatus(destJarPath)
-        if (localJarStatus.getModificationTime > destJarStatus.getModificationTime) {
-          info(s"jar is out of date, copying $localJarPath to $destJarPath")
-          fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
-        }
-        else if (localJarStatus.getLen != destJarStatus.getLen) {
-          // this is a slight fail-safe in case timestamps aren't correct
-          info(s"jars were different, copying $localJarPath to $destJarPath")
-          fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
-        }
-        else {
-          info(s"jar is up to date, $localJarPath matches $destJarPath")
-        }
-      }
-      else {
-        info(s"jar does not exist, copying $localJarPath to $destJarPath")
-        fs.copyFromLocalFile(false, true, localJarStatus.getPath, destJarPath)
-      }
-    }
   }
 
   /**

@@ -26,7 +26,7 @@ import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.mapreduce.filecache.DistributedCache
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
 import org.trustedanalytics.atk.engine.plugin.{ CommandInvocation, Invocation }
-import org.trustedanalytics.atk.engine.{ CommandStorage, EngineConfig, HdfsFileStorage, ProgressInfo }
+import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.moduleloader.Module
 
 import scala.collection.mutable
@@ -118,8 +118,11 @@ object GiraphJobManager {
 
     giraphConf.setLong(CommandIdPropertyName, commandInvocation.commandId)
 
+    // make sure jars are in HDFS
+    BackgroundInit.waitTillCompleted
+
     // Use jars that have been cached in HDFS
-    val hdfs = new HdfsFileStorage
+    val hdfs = new FileStorage
     val hdfsLibs = hdfs.hdfsLibs(Module.allJarNames("giraph-plugins"))
     hdfsLibs.foreach(path => DistributedCache.addFileToClassPath(new Path(path), giraphConf))
 

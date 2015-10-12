@@ -27,7 +27,7 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk
@@ -60,7 +60,7 @@ object ModelPublish {
 
       ModelPublishFormat.write(fileList, modelClassName, modelData, tarOutput)
 
-      val fileStorage = new HdfsFileStorage
+      val fileStorage = new FileStorage
       val tarFileName = fileStorage.absolutePath("models_" + UUID.randomUUID().toString.replaceAll("-", "") + ".tar").toString
       val hdfsPath = new Path(tarFileName)
       val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFileName), new Configuration())
