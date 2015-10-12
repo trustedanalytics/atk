@@ -25,19 +25,23 @@ if ta.server.port != 19099:
     ta.server.port = 19099
 ta.connect()
 
-class FrameColumnSummaryStatisticsTest(unittest.TestCase):
-    def testColumnSummaryStatistics(self):
+class FrameColumnSummaryStatisticsTestNew(unittest.TestCase):
+    def testColumnSummaryStatisticsNew(self):
         print "define csv file"
         csv = ta.CsvFile("/datasets/dates.csv", schema= [('start', ta.datetime), ('id', int), ('stop', ta.datetime),
-                                                                ('color', str)], delimiter=',')
+                                                         ('color', str)], delimiter=',')
+
+        name = "update_last_read"
+        if name in ta.get_frame_names():
+            ta.drop_frames(name)
 
         print "create frame"
-        frame = ta.Frame(csv)
+        frame = ta.Frame(csv, name=name)
 
         print "Calling column summary statistics"
         stats = frame.column_summary_statistics("id")
         self.assertEqual(stats['maximum'], 4.0)
-        self.asserEqual(stats['variance'], 2.5)
+        self.assertEqual(stats['variance'], 2.5)
 
 
 
