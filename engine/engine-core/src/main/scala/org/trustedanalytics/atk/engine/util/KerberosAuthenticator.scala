@@ -21,11 +21,8 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.security.UserGroupInformation
-import org.apache.spark.deploy.SparkHadoopUtil
-import org.trustedanalytics.atk.component.ClassLoaderAware
-
-import scala.reflect.io.{ File, Directory, Path }
-
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
+import scala.reflect.io.Directory
 import scala.util.control.NonFatal
 
 /**

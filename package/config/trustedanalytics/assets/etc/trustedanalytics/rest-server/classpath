@@ -3,8 +3,10 @@
 /etc/trustedanalytics/rest-server
 #logback jars
 /usr/lib/trustedanalytics/rest-server/lib/logback-*
-#the launcher jar that boots the server
-/usr/lib/trustedanalytics/rest-server/launcher.jar
+/usr/lib/trustedanalytics/rest-server/lib/module-loader-*.jar
+/usr/lib/trustedanalytics/rest-server/lib/scala-library-2.10.4.jar
+/usr/lib/trustedanalytics/rest-server/lib/config-1.2.1.jar
+/usr/lib/trustedanalytics/rest-server/lib/scala-reflect-2.10.4.jar
 #END REQUIRED
 
 /etc/hbase/conf
