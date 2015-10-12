@@ -14,19 +14,63 @@
 // limitations under the License.
 */
 
-//package org.trustedanalytics.atk.model.publish.format
-//
-//import java.io._
-//import org.scalatest.WordSpec
-//
-//class ModelPublishFormatTest extends WordSpec {
-//
-//  "ModelPublishFormat" should {
-//    "create a tar of given files and place into an output stream" in {
-//      val jarfile = new File("scoring-models.jar")
-//      val fileList = jarfile :: jarfile :: Nil
-//      val myOutputStream = ModelPublishFormat.write(fileList, "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin", "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin")
-//      print(myOutputStream)
-//    }
-//  }
-//}
+package org.trustedanalytics.atk.model.publish.format
+
+import java.io._
+import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream }
+import org.scalatest.WordSpec
+import org.apache.commons.io.{ FileUtils, IOUtils }
+import org.scalatest.Assertions._
+
+class ModelPublishFormatTest extends WordSpec {
+
+  "ModelPublishFormat" should {
+    "create a tar of given files and place into an output stream" in {
+      val jarfile = new File("scoring-models.jar")
+      val fileList = jarfile :: Nil
+      var tarFile: File = null
+      var tarOutput: FileOutputStream = null
+      var counter = 0
+      val modelReader = "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin"
+      val model = "This is a test Model"
+
+      var myTarFileStream: TarArchiveInputStream = null
+      try {
+        tarFile = File.createTempFile("TestTar", ".tar")
+        tarOutput = new FileOutputStream(tarFile)
+        ModelPublishFormat.write(fileList, modelReader, model.getBytes, tarOutput)
+
+        myTarFileStream = new TarArchiveInputStream(new FileInputStream(new File(tarFile.getAbsolutePath)))
+
+        var entry = myTarFileStream.getNextTarEntry
+
+        while (entry != null) {
+          val individualFile = entry.getName
+          val content = new Array[Byte](entry.getSize.toInt)
+          myTarFileStream.read(content, 0, content.length)
+
+          if (individualFile.contains(".jar")) {
+            assert(individualFile.equals("scoring-models.jar"))
+            counter = counter + 1
+          }
+          else if (individualFile.contains("modelReader")) {
+            assert(new String(content).equals(modelReader))
+          }
+          else {
+            assert(content.length == model.getBytes.length)
+          }
+          entry = git myTarFileStream.getNextTarEntry
+        }
+        assert(counter == 1)
+      }
+      finally {
+        FileUtils.deleteQuietly(tarFile)
+      }
+    }
+  }
+
+  //  "create a model given a tar file" in {
+  //
+  //  }
+}
+
