@@ -35,7 +35,7 @@ NOSE_SMOKE="nosetests $DIR/smoketests --nologcapture --with-xunitmp --xunitmp-fi
 NOSE="nosetests $DIR/tests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT2 --processes=10 --process-timeout=300 --with-isolation"
 NOSE_NONCONCURRENT="nosetests $DIR/nonconcurrenttests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT3 --process-timeout=300 --with-isolation"
 
-if [ "$1" = "-c" -o "$2" = "-c"] ; then
+if [ "$1" = "-c" -o "$2" = "-c" ] ; then
     echo "$NAME Running with coverage ENABLED.  (runs in a single process, takes a bit longer)"
     COVERAGE_ARGS_BASE="--with-coverage --cover-package=trustedanalytics --cover-erase --cover-inclusive --cover-html"
     COVERAGE_ARGS_SMOKE="$COVERAGE_ARGS_BASE --cover-html-dir=$TARGET_DIR/surefire-reports/cover-smoke"
