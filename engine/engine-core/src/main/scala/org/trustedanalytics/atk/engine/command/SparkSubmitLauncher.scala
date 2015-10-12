@@ -78,7 +78,13 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             }
           }
 
-          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile",
+          val pythonDependencyPath = plugin.executesPythonUdf match {
+            case true => "," + SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
+              .getOrElse(throw new RuntimeException("Default Python dependency trustedanalytics.zip was not found"))
+            case false => ""
+          }
+
+          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile$pythonDependencyPath",
             "--conf", s"config.resource=application.conf")
           val executionParams = Array(
             "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
