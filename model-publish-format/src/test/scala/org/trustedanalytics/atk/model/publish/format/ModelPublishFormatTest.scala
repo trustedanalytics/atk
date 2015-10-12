@@ -25,7 +25,7 @@ import org.scalatest.Assertions._
 class ModelPublishFormatTest extends WordSpec {
 
   "ModelPublishFormat" should {
-    "create a tar of given files and place into an output stream" in {
+    "create a tar of given files and place into an output stream" ignore {
       val jarfile = new File("scoring-models.jar")
       val fileList = jarfile :: Nil
       var tarFile: File = null
