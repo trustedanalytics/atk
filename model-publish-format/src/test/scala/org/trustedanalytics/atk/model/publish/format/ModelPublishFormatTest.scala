@@ -25,9 +25,10 @@ import org.scalatest.Assertions._
 class ModelPublishFormatTest extends WordSpec {
 
   "ModelPublishFormat" should {
-    "create a tar of given files and place into an output stream" ignore {
-      val jarfile = new File("scoring-models.jar")
-      val fileList = jarfile :: Nil
+    "create a tar of given files and place into an output stream" in {
+      val myJar = File.createTempFile("test", ".jar")
+      val filePath = myJar.getAbsolutePath
+      val fileList = myJar :: myJar :: Nil
       var tarFile: File = null
       var tarOutput: FileOutputStream = null
       var counter = 0
@@ -50,7 +51,8 @@ class ModelPublishFormatTest extends WordSpec {
           myTarFileStream.read(content, 0, content.length)
 
           if (individualFile.contains(".jar")) {
-            assert(individualFile.equals("scoring-models.jar"))
+            val fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
+            assert(individualFile.equals(fileName))
             counter = counter + 1
           }
           else if (individualFile.contains("modelReader")) {
@@ -61,10 +63,11 @@ class ModelPublishFormatTest extends WordSpec {
           }
           entry = myTarFileStream.getNextTarEntry
         }
-        assert(counter == 1)
+        assert(counter == 2)
       }
       finally {
         FileUtils.deleteQuietly(tarFile)
+        FileUtils.deleteQuietly(myJar)
       }
     }
   }
