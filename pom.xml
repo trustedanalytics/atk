@@ -75,7 +75,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         </repository>
         <repository>
             <id>atk</id>
-            <url>http://ec2-54-69-244-31.us-west-2.compute.amazonaws.com/content/repositories/public/</url>
+            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -84,6 +84,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </releases>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atk</id>
+            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
     <prerequisites>
         <maven>3.0</maven>
