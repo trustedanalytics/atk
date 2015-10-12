@@ -59,7 +59,7 @@ class ModelPublishFormatTest extends WordSpec {
           else {
             assert(content.length == model.getBytes.length)
           }
-          entry = git myTarFileStream.getNextTarEntry
+          entry = myTarFileStream.getNextTarEntry
         }
         assert(counter == 1)
       }
