@@ -34,10 +34,10 @@ import java.util.regex.Pattern
  *
  */
 @PluginDoc(oneLine = "Spread data to multiple rows based on cell data.",
-  extended = """Splits cells in the specified column into multiple rows according to a string
+  extended = """Splits cells in the specified columns into multiple rows according to a string
 delimiter.
-New rows are a full copy of the original row, but the specified column only
-contains one value.
+New rows are a full copy of the original row, but the specified columns only
+contain one value.
 The original row is deleted.""")
 class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitReturn] {
 
@@ -65,14 +65,34 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
     val frame: SparkFrame = arguments.frame
     var schema = frame.schema
     var flattener: RDD[Row] => RDD[Row] = null
-    val columnIndex = schema.columnIndex(arguments.column)
-    val columnDataType = schema.columnDataType(arguments.column)
-    columnDataType match {
-      case DataTypes.string => flattener = FlattenColumnFunctions.flattenRddByStringColumnIndex(columnIndex, arguments.delimiter.getOrElse(","))
-      case DataTypes.vector(length) =>
-        schema = schema.convertType(arguments.column, DataTypes.float64)
-        flattener = FlattenColumnFunctions.flattenRddByVectorColumnIndex(columnIndex, length)
-      case _ => throw new IllegalArgumentException(s"Flatten column does not support type $columnDataType")
+    val columnIndexes = arguments.columns.map(c => schema.columnIndex(c))
+    val columnDataTypes = arguments.columns.map(c => schema.columnDataType(c))
+
+    // If delimiters were provided, use them, otherwise use the default commas
+    var delimiters = if (arguments.delimiters.isDefined) arguments.delimiters.get else arguments.columns.map(c => ",")
+
+    if (delimiters.size < arguments.columns.size) {
+      if (delimiters.size == 1) {
+        // If just one delelimiter was provided, just use the same one for all columns
+        delimiters = arguments.columns.map(c => delimiters(0))
+      }
+      else {
+        throw new IllegalArgumentException(s"The number of delimiters provided does not match the number of columns provided.")
+      }
+    }
+
+    for (i <- arguments.columns.indices) {
+      val columnDataType = columnDataTypes(i)
+      val columnIndex = columnIndexes(i)
+      val column = arguments.columns(i)
+
+      columnDataType match {
+        case DataTypes.string => flattener = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)
+        case DataTypes.vector(length) =>
+          schema = schema.convertType(column, DataTypes.float64)
+          flattener = FlattenColumnFunctions.flattenRddByVectorColumnIndex(columnIndex, length)
+        case _ => throw new IllegalArgumentException(s"Flatten column does not support type $columnDataType")
+      }
     }
 
     // run the operation
@@ -117,6 +137,18 @@ object FlattenColumnFunctions extends Serializable {
   }
 
   /**
+   * Flatten RDD by the columns with the specified indexes
+   * @param indexes column indexes
+   * @param separators separators for splitting
+   * @param rdd RDD for flattening
+   * @return new RDD with column flattened
+   */
+  def flattenRddByStringColumnIndexes(indexes: List[Int], separators: List[String])(rdd: RDD[Row]): RDD[Row] = {
+    val flattener = flattenRowByStringColumnIndexes(indexes, separators)_
+    rdd.flatMap(row => flattener(row))
+  }
+
+  /**
    * flatten a row by the column with specified column index.  Column must be a vector
    * @param index column index
    * @param row row data
@@ -145,5 +177,41 @@ object FlattenColumnFunctions extends Serializable {
       r(index) = s
       Row.fromSeq(r)
     })
+  }
+
+  private[frame] def flattenRowByStringColumnIndexes(indexes: List[Int], delimiter: List[String])(row: Row): Array[Row] = {
+    // split each of the specified columns using its specified delimiter
+    val splitColumns = indexes.zipWithIndex.map { case (rowIndex, index) => row(rowIndex).asInstanceOf[String].split(Pattern.quote(delimiter(index))) }
+
+    // figure out how many items we are splitting
+    var maxItems = 0
+
+    for (i <- splitColumns.indices) {
+      val numItems = splitColumns(i).size
+
+      if (numItems > maxItems)
+        maxItems = numItems
+    }
+
+    var rows: Array[Row] = new Array[Row](maxItems)
+
+    for (rowIndex <- rows.indices) {
+      val r = row.toSeq.toArray.clone()
+
+      for (colIndex <- indexes.indices) {
+        if (splitColumns(colIndex).size <= rowIndex)
+          r(indexes(colIndex)) = ""
+        else
+          r(indexes(colIndex)) = splitColumns(colIndex)(rowIndex)
+      }
+
+      for (j <- 0 until r.length) {
+        val temp = r(j).toString()
+      }
+
+      rows(rowIndex) = Row.fromSeq(r)
+    }
+
+    return rows
   }
 }
