@@ -16,10 +16,8 @@
 
 package org.trustedanalytics.atk.moduleloader.internal
 
-import java.net.URLClassLoader
-
+import java.net.{ URL, URLClassLoader }
 import org.trustedanalytics.atk.moduleloader.Module
-
 import scala.collection.mutable
 
 /**
@@ -29,6 +27,7 @@ private[moduleloader] class ModuleLoader(searchPath: SearchPath) {
 
   /**
    * Search the searchPath, find all modules, load their config, and initializes them with ClassLoaders setup appropriately
+   * @return map with module names as keys and the modules as values
    */
   private[moduleloader] def load(): Map[String, Module] = {
     val configs = loadModuleConfigs()
@@ -81,12 +80,12 @@ private[moduleloader] class ModuleLoader(searchPath: SearchPath) {
   private[internal] def configToModules(configs: Seq[ModuleConfig]): Map[String, Module] = {
 
     val configsMap = toMap(configs)
-    val classLoaders = new mutable.HashMap[String, ClassLoader]()
+    val classLoaders = new mutable.HashMap[String, URLClassLoader]()
 
     // 'system' is a special name reserved for the module-loader itself
-    classLoaders.put(Module.SystemName, this.getClass.getClassLoader)
+    classLoaders.put(Module.SystemName, this.getClass.getClassLoader.asInstanceOf[URLClassLoader])
 
-    def resolveClassLoader(name: String): ClassLoader = {
+    def resolveClassLoader(name: String): URLClassLoader = {
 
       if (classLoaders.contains(name)) {
         val classLoader = classLoaders(name)
@@ -100,7 +99,7 @@ private[moduleloader] class ModuleLoader(searchPath: SearchPath) {
         classLoaders.put(name, null)
 
         val moduleConfig = configsMap(name)
-        val urls = searchPath.findJars(moduleConfig.jarNames)
+        val urls = jarUrls(moduleConfig)
         val classLoader = moduleConfig.parentName match {
           case Some(parentName) => new URLClassLoader(urls, resolveClassLoader(parentName))
           case None => new URLClassLoader(urls)
@@ -115,6 +114,22 @@ private[moduleloader] class ModuleLoader(searchPath: SearchPath) {
       val name = moduleConfig.name
       name -> moduleConfig.toModule(resolveClassLoader(name))
     }).toMap
+  }
+
+  private[internal] def jarUrls(moduleConfig: ModuleConfig): Array[URL] = {
+    try {
+      searchPath.findJars(moduleConfig.jarNames)
+    }
+    catch {
+      case e: Exception =>
+        try {
+          val developerSearchPath = new SearchPath(moduleConfig.buildClasspath.mkString(":"))
+          developerSearchPath.findJars(moduleConfig.jarNames)
+        }
+        catch {
+          case e2: Exception => throw e
+        }
+    }
   }
 
   /**

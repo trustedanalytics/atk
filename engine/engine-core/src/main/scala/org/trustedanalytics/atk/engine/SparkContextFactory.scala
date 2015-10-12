@@ -17,7 +17,6 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.component.Archive
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.EventLogging
@@ -63,32 +62,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
 
     info("SparkConf settings: " + sparkConf.toDebugString)
 
-    val sparkContext = new SparkContext(sparkConf)
-    if (!EngineConfig.isSparkOnYarn) {
-      // TODO: plugin jars should be added based on the jar the plugin is coming from instead of all of them like this
-      val paths = List(jarPath("engine-core"), jarPath("frame-plugins"), jarPath("graph-plugins"), jarPath("model-plugins"))
-      info(s"addJar() paths=$paths")
-      paths.foreach(sparkContext.addJar)
-    }
-
-    sparkContext
-  }
-
-  /**
-   * Path for jars adding local: prefix or not depending on configuration for use in SparkContext
-   *
-   * "local:/some/path" means the jar is installed on every worker node.
-   *
-   * @param archive e.g. "engine-core"
-   * @return "local:/usr/lib/trustedanalytics/lib/engine-core.jar" or similar
-   */
-  def jarPath(archive: String): String = {
-    if (EngineConfig.sparkAppJarsLocal) {
-      "local:" + StringUtils.removeStart(Archive.getJar(archive).getPath, "file:")
-    }
-    else {
-      Archive.getJar(archive).toString
-    }
+    new SparkContext(sparkConf)
   }
 
   def getResourcePath(resourceName: String, additionalPaths: Option[Seq[String]] = None): Option[String] = {

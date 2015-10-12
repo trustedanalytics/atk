@@ -13,45 +13,23 @@ fi
 
 echo "$SCRIPTPATH"
 
-#pushd $SCRIPTPATH
-
 rm -rf ../bin/stage
 rm -rf tarballs/$package
 rm $package-source.tar.gz
 
-mkdir -p  tarballs/$package/bin
-mkdir -p  tarballs/$package/conf
-mkdir -p  tarballs/$package/lib
-mkdir -p  tarballs/$package/data
+echo "create package directories"
+mkdir -pv  tarballs/$package/bin
+mkdir -pv  tarballs/$package/conf
+mkdir -pv  tarballs/$package/lib
+mkdir -pv  tarballs/$package/data
 
+echo "copy config into package"
 cp -v  config/$package/logback.xml tarballs/$package/conf
-
 cp -v config/$package/scoring-server.sh tarballs/$package/bin/
 cp -v config/$package/application.conf tarballs/$package/conf
 
-
-jars="scoring-engine.jar interfaces.jar"
-
-#popd
-
-pushd $gitRoot
-for jar in $jars
-do
-	jarPath=$(find .  -path ./package -prune -o -name $jar -print )
-	echo $jarPath
-	cp -v $jarPath package/tarballs/$package/lib/
-
-done
-
-jarPath=$(find .  -path ./package -prune -o -name launcher.jar -print)
-
-echo $jarPath
-#enable this to copy the regular launcher.jar to the correct place
-cp -v $jarPath package/tarballs/$package/launcher.jar
-
-
-popd
-
+echo "copy jar dependencies"
+cp -v scoring-engine-lib/target/dependency/*.jar tarballs/$package/lib/
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics-scoring.tar.gz .

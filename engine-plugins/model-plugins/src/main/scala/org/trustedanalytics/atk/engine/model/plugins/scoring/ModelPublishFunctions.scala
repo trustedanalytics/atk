@@ -20,7 +20,6 @@ import java.io._
 import java.net.URI
 import java.util.UUID
 
-import org.trustedanalytics.atk.component.Archive
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveOutputStream }
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import java.io.File
@@ -30,6 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk
 import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
 
@@ -51,8 +51,10 @@ object ModelPublish {
     var tarOutput: FileOutputStream = null
 
     try {
-      val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
-      val fileList = jarFile :: Nil
+      //val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
+      //val fileList = jarFile :: Nil
+      val fileList = Module.allLibs("scoring-models").map(jarUrl => new File(jarUrl.getProtocol)).toList
+
       tarFile = File.createTempFile("modelTar", ".tar")
       tarOutput = new FileOutputStream(tarFile)
 

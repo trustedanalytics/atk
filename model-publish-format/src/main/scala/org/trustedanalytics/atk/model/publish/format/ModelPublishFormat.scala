@@ -23,7 +23,6 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory
 import org.apache.commons.compress.archivers.ArchiveOutputStream
 //import org.apache.commons.compress.utils.IOUtils
 import org.apache.commons.io.IOUtils
-import org.trustedanalytics.atk.component.Boot
 import org.apache.commons.io.FileUtils
 
 /**

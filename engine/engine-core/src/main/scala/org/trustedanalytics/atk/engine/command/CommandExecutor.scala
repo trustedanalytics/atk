@@ -16,11 +16,11 @@
 
 package org.trustedanalytics.atk.engine.command
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, CommandPlugin }
 import org.trustedanalytics.atk.engine.util.JvmMemory
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.atk.{ EventLoggingImplicits, NotFoundException }
 import spray.json._
 import scala.concurrent._
@@ -81,13 +81,16 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @param commandTemplate the CommandTemplate from which to extract the command name and the arguments
    * @return an Execution object that can be used to track the command's execution
    */
-  def execute[A <: Product, R <: Product](commandTemplate: CommandTemplate)(implicit invocation: Invocation): Execution =
-    withContext("ce.execute(ct)") {
-      val cmd = commands.create(commandTemplate.copy(createdBy = if (invocation.user != null) Some(invocation.user.user.id) else None))
-      validatePluginExists(cmd)
-      val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
-      Execution(cmd, executeCommandContextInFuture(context))
+  def execute[A <: Product, R <: Product](commandTemplate: CommandTemplate)(implicit invocation: Invocation): Execution = {
+    withMyClassLoader {
+      withContext("ce.execute(ct)") {
+        val cmd = commands.create(commandTemplate.copy(createdBy = if (invocation.user != null) Some(invocation.user.user.id) else None))
+        validatePluginExists(cmd)
+        val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
+        Execution(cmd, executeCommandContextInFuture(context))
+      }
     }
+  }
 
   def executeCommand[A <: Product, R <: Product](cmd: Command)(implicit invocation: Invocation): Unit =
     withContext(s"ce.executeCommand.${cmd.name}") {
@@ -103,18 +106,16 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * On complete - mark progress as 100% or failed
    */
   private def executeCommandContextInFuture[T](commandContext: CommandContext)(implicit invocation: Invocation): Future[Command] = {
-    withMyClassLoader {
-      withContext(commandContext.command.name) {
-        // run the command in a future so that we don't make the client wait for initial response
-        val cmdFuture = future {
-          commands.complete(commandContext.command.id, Try {
-            executeCommandContext(commandContext)
-          })
-          // get the latest command progress from DB when command is done executing
-          commands.expectCommand(commandContext.command.id)
-        }
-        cmdFuture
+    withContext(commandContext.command.name) {
+      // run the command in a future so that we don't make the client wait for initial response
+      val cmdFuture = future {
+        commands.complete(commandContext.command.id, Try {
+          executeCommandContext(commandContext)
+        })
+        // get the latest command progress from DB when command is done executing
+        commands.expectCommand(commandContext.command.id)
       }
+      cmdFuture
     }
   }
 
@@ -132,8 +133,8 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
       case sparkCommandPlugin: SparkCommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
-        val archiveName = commandPluginRegistry.getArchiveNameFromPlugin(plugin.name)
-        new SparkSubmitLauncher().execute(commandContext.command, sparkCommandPlugin, archiveName)
+        val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
+        new SparkSubmitLauncher(new HdfsFileStorage).execute(commandContext.command, sparkCommandPlugin, moduleName)
         // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
         val updatedCommand = commands.expectCommand(commandContext.command.id)
         if (updatedCommand.error.isDefined) {
