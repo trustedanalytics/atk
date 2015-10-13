@@ -38,7 +38,7 @@ class UserExamples(unittest.TestCase):
         vars = mgs.run("/datasets/movie_data_random.csv", ta)
 
         assert vars["frame"].row_count == 2
-        assert vars["frame"].name == "MGS" and vars["graph"].name == "MGS"
+        assert vars["frame"].name == "MGS_frame" and vars["graph"].name == "MGS_graph"
         assert vars["graph"].vertex_count == 4
         assert vars["graph"].edge_count == 2
 
@@ -48,7 +48,7 @@ class UserExamples(unittest.TestCase):
         vars = pr.run("/datasets/movie_data_random.csv", ta)
 
         assert vars["frame"].row_count == 20
-        assert vars["frame"].name == "PR" and vars["graph"].name == "PR"
+        assert vars["frame"].name == "PR_frame" and vars["graph"].name == "PR_graph"
         assert vars["graph"].vertex_count == 29
         assert vars["graph"].edge_count == 20
         assert vars["result"]["vertex_dictionary"]["user_id"].row_count == 18

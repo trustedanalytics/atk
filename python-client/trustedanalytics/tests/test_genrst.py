@@ -18,7 +18,7 @@ import iatest
 iatest.init()
 import unittest
 
-from trustedanalytics.meta.command import Doc
+from trustedanalytics.meta.doc import Doc
 
 class DocExtraction(unittest.TestCase):
 

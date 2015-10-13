@@ -18,42 +18,62 @@
         <version>master-SNAPSHOT</version>
     </parent>
 
+    <profiles>
+        <profile>
+            <id>python-unittests</id>
+            <activation>
+                <property>
+                    <name>!skipTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>chmod-shellscripts</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>chmod</executable>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>+x</argument>
+                                        <argument>trustedanalytics/tests/exec_all.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>python-tests</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>trustedanalytics/tests/exec_all.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-
                 <executions>
-                    <execution>
-                        <id>chmod-shellscripts</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>chmod</executable>
-                            <workingDirectory>${basedir}</workingDirectory>
-                            <arguments>
-                                <argument>+x</argument>
-                                <argument>trustedanalytics/tests/exec_all.sh</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>python-tests</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>bash</executable>
-                            <workingDirectory>${basedir}</workingDirectory>
-                            <arguments>
-                                <argument>trustedanalytics/tests/exec_all.sh</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
                     <execution>
                         <id>package-python-yarn-client</id>
                         <phase>package</phase>

@@ -78,7 +78,8 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
 
 
     """
-    NAME = "PR"
+    FRAME_NAME = "PR_frame"
+    GRAPH_NAME = "PR_graph"
 
     if ta is None:
         ta = examples.connect()
@@ -92,29 +93,29 @@ def run(path=r"datasets/movie_data_random.csv", ta=None):
     csv = ta.CsvFile(path, schema, skip_header_lines=1)
 
     frames = ta.get_frame_names()
-    if NAME in frames:
-        print "Deleting old '{0}' frame.".format(NAME)
-        ta.drop_frames(NAME)
+    if FRAME_NAME in frames:
+        print "Deleting old '{0}' frame.".format(FRAME_NAME)
+        ta.drop_frames(FRAME_NAME)
 
-    print "Building frame '{0}'.".format(NAME)
+    print "Building frame '{0}'.".format(FRAME_NAME)
 
-    frame = ta.Frame(csv, NAME)
+    frame = ta.Frame(csv, FRAME_NAME)
 
-    print "Inspecting frame '{0}'.".format(NAME)
+    print "Inspecting frame '{0}'.".format(FRAME_NAME)
 
     print frame.inspect()
 
-    print "Creating graph '{0}'".format(NAME)
+    print "Creating graph '{0}'".format(GRAPH_NAME)
 
     # Create a graph
     graphs = ta.get_graph_names()
-    if NAME in graphs:
-        print "Deleting old '{0}' graph".format(NAME)
-        ta.drop_graphs(NAME)
+    if GRAPH_NAME in graphs:
+        print "Deleting old '{0}' graph".format(GRAPH_NAME)
+        ta.drop_graphs(GRAPH_NAME)
 
     # Create some rules
     graph = ta.Graph()
-    graph.name = NAME
+    graph.name = GRAPH_NAME
     graph.define_vertex_type("user_id")
     graph.define_vertex_type("movie_id")
     graph.define_edge_type("rating", "user_id", "movie_id", directed=True)
