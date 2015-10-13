@@ -77,17 +77,6 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
-echo "Creating jar links"
-for jar in $jars
-do
-if [ -f $DIR/../lib/$jar ]; then
-   rm $DIR/../lib/$jar
- fi
-
- ln -s $DIR/../lib/deploy.jar $DIR/../lib/$jar
-done
-
 if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 fi
