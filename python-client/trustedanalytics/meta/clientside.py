@@ -25,6 +25,7 @@ from decorator import decorator
 from trustedanalytics.core.api import api_globals
 from trustedanalytics.meta.names import class_name_to_entity_type
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo
+from trustedanalytics.meta.doc import parse_for_doc
 from trustedanalytics.meta.context import get_api_context_decorator
 from trustedanalytics.meta.reflect import get_args_spec_from_function, get_args_text_from_function
 from trustedanalytics.meta.spa import get_spa_docstring
@@ -110,9 +111,11 @@ class ClientCommandDefinition(CommandDefinition):
 
         maturity = function.maturity if hasattr(function, "maturity") else None
 
-        super(ClientCommandDefinition, self).__init__(json_schema, full_name, params, return_info, is_property, function.__doc__, maturity=maturity)
+        doc_string = parse_for_doc(function.__doc__)
 
-        spa_doc = get_spa_docstring(self)
+        super(ClientCommandDefinition, self).__init__(json_schema, full_name, params, return_info, is_property, doc_string, maturity=maturity)
+
+        spa_doc = get_spa_docstring(self)  # todo: make this numpydoc/googledoc
         function.__doc__ = spa_doc
 
     @staticmethod
