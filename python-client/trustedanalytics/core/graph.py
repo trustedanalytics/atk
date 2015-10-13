@@ -437,12 +437,6 @@ Default is None.""")
         Get the total number of edges in the graph.
 
 
-        Returns
-        -------
-        int32
-            The number of edges in the graph.
-
-
         Examples
         --------
         .. code::
