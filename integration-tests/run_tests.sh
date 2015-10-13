@@ -72,6 +72,7 @@ do
     if [ $COUNTER -gt 120 ]
     then
         echo "$NAME Tired of waiting for REST Server to start up, giving up..."
+        cat $TARGET_DIR/rest-server.log
         $DIR/rest-server-stop.sh
         exit 3
     else
