@@ -195,7 +195,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
         if (E(i) > 0)
           t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
       }
-      new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+t))
+      new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+ t))
     })
     new IndexedRowMatrix(matrix)
 
