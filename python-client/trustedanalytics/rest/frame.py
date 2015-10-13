@@ -618,6 +618,11 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         target._label = source._label
         target._graph = source._graph
 
+    def flatten_column(self, frame, column=None, delimiter=None):
+        arguments = {'frame': frame.uri,
+                     'columns': [column],
+                     'delimiters': None if delimiter is None else [delimiter]}
+        executor.execute('frame/flatten_columns', self, arguments)
 
 
 class FrameInfo(object):

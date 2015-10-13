@@ -47,7 +47,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/flatten_column"
+  override def name: String = "frame/flatten_columns"
 
   override def numberOfJobs(arguments: FlattenColumnArgs)(implicit invocation: Invocation): Int = 2
 

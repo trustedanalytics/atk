@@ -1196,6 +1196,67 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         result = self._backend.take(self, n, offset, columns)
         return result.data
 
+    @api
+    @arg('column', 'str', "The name of the column to be flattened.")
+    @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
+    def __flatten_column(self, column, delimiter=None):
+        """
+        Spread data to multiple rows based on cell data.
+
+        Splits cells in the specified column into multiple rows according to a string
+        delimiter.
+        New rows are a full copy of the original row, but the specified column only
+        contains one value.
+        The original row is deleted.
+
+        Examples
+        --------
+        Given a data file::
+
+            1-"solo,mono,single"
+            2-"duo,double"
+
+        The commands to bring the data into a frame, where it can be worked on:
+
+        .. code::
+
+            >>> my_csv = CsvFile("original_data.csv", schema=[('a', int32), ('b', str)], delimiter='-')
+            >>> my_frame = Frame(source=my_csv)
+
+        Looking at it:
+
+        .. code::
+
+            >>> my_frame.inspect()
+
+              a:int32   b:str
+            /-------------------------------/
+                1       solo, mono, single
+                2       duo, double
+
+        Now, spread out those sub-strings in column *b*:
+
+        .. code::
+
+            >>> my_frame.flatten_column('b')
+
+        Check again:
+
+        .. code::
+
+            >>> my_frame.inspect()
+
+              a:int32   b:str
+            /------------------/
+                1       solo
+                1       mono
+                1       single
+                2       duo
+                2       double
+
+        """
+
+        self._backend.flatten_column(self,column,delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):

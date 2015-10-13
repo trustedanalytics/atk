@@ -93,5 +93,41 @@ class FrameFlattenColumnTest(unittest.TestCase):
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
+    def test_flatten_columns_with_a_single_column(self):
+        # validate expected pre-conditions
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
+        # call method under test
+        self.frame.flatten_columns('abc','|')
+
+        # validate
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 16)
+
+    def test_flatten_columns_with_multiple_columns(self):
+        # validate expected pre-conditions
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
+        # call method under test
+        self.frame.flatten_columns(['abc', 'food'],['|','+'])
+
+        # validate
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 20)
+
+    def test_flatten_columns_does_nothing_with_wrong_delimiter(self):
+        # validate expected pre-conditions
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
+        # call method under test
+        self.frame.flatten_columns('abc', ',')
+
+        # validate
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
 if __name__ == "__main__":
     unittest.main()
