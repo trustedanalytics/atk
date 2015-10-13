@@ -106,6 +106,53 @@ except Exception as e:
 
 
 @api
+@arg("items", "List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself).", "Deletes the specified frames, graphs, and models from the server.")
+@returns('num_deleted', 'Number of items deleted.' )
+def __drop(*items):
+    """
+    drop() serves as an alias to drop_frames, drop_graphs, and drop_models.  It accepts a list of items,
+    which can contain strings (the name of the frame, graph, or model) or proxy objects (the frame,
+    graph, or model object itself).
+    If the item provided is a string and no frame, graph, or model is found with the specified name, no
+    action is taken.
+    If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
+    """
+    from trustedanalytics import drop_frames, drop_graphs, drop_models, _BaseGraph, _BaseModel, get_frame_names, get_graph_names, get_model_names
+
+    num_deleted = 0     # track the number of items we delete to return
+
+    for item in items:
+        if item is not None:
+            if isinstance(item, basestring):
+                # If the item is a string, try calling drop_* functions, until we're successful.
+                item_name = str(item)
+
+                temp_drop_count = drop_frames(item)
+
+                if temp_drop_count == 0:
+                    temp_drop_count = drop_graphs(item)
+
+                if temp_drop_count == 0:
+                    temp_drop_count = drop_models(item)
+
+                # Note that if the item_name is not found in frames, graphs, or models, we intentionally do not fail
+
+                num_deleted += temp_drop_count
+            else:
+                # If the item isn't a string, check the object type to call the appropriate drop_* function
+                if isinstance(item, _BaseFrame):
+                    num_deleted += drop_frames(item)
+                elif isinstance(item, _BaseGraph):
+                    num_deleted += drop_graphs(item)
+                elif isinstance(item, _BaseModel):
+                    num_deleted += drop_models(item)
+                else:
+                    # Unsupported object type passed to drop(), raise an exception
+                    raise AttributeError("Unsupported item type: {0}".format(type(item)))
+
+    return num_deleted
+
+@api
 @name_support('frame')
 class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     _entity_type = 'frame'
@@ -1239,7 +1286,6 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
         result = self._backend.take(self, n, offset, columns)
         return result.data
-
 
 
 @api

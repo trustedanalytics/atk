@@ -311,9 +311,14 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     metaStore.withSession("frame.rename") {
       implicit session =>
         {
-          val check = metaStore.frameRepo.lookupByName(Some(newName))
-          if (check.isDefined) {
-            throw new RuntimeException("Frame with same name exists. Rename aborted.")
+          if (metaStore.frameRepo.lookupByName(Some(newName)).isDefined) {
+            throw new DuplicateNameException("frame", newName, "Frame with same name exists. Rename aborted.")
+          }
+          else if (metaStore.graphRepo.lookupByName(Some(newName)).isDefined) {
+            throw new DuplicateNameException("graph", newName, "Graph with same name exists. Rename aborted.")
+          }
+          else if (metaStore.modelRepo.lookupByName(Some(newName)).isDefined) {
+            throw new DuplicateNameException("model", newName, "Model with same name exists. Rename aborted.")
           }
           val newFrame = frame.copy(name = Some(newName))
           metaStore.frameRepo.update(newFrame).get
@@ -362,9 +367,14 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       implicit session =>
         {
           if (arguments.name.isDefined) {
-            metaStore.frameRepo.lookupByName(arguments.name).foreach {
-              existingFrame =>
-                throw new DuplicateNameException("frame", arguments.name.get, "Frame with same name exists. Create aborted.")
+            if (metaStore.frameRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("frame", arguments.name.get, "Frame with same name exists. Create aborted.")
+            }
+            else if (metaStore.graphRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("graph", arguments.name.get, "Graph with same name exists. Create aborted.")
+            }
+            else if (metaStore.modelRepo.lookupByName(Some(arguments.name.get)).isDefined) {
+              throw new DuplicateNameException("model", arguments.name.get, "Model with same name exists. Create aborted.")
             }
           }
           val frameTemplate = DataFrameTemplate(arguments.name, arguments.description)
