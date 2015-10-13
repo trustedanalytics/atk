@@ -175,7 +175,7 @@ def install_command_def(cls, command_def, execute_command_function):
 
 def handle_constructor_command_defs(constructor_command_defs):
     for d in sorted(constructor_command_defs, key=lambda x: len(x.full_name)):  # sort so base classes are created first
-        metaprog.create_entity_class(d)
+        metaprog.create_entity_class_from_constructor_command_def(d)
 
 
 def is_command_name_installable(cls, command_name):
