@@ -123,6 +123,10 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
    * @return true if jar file contained atk-module.conf file
    */
   private def jarContainsModuleConf(jar: File): Boolean = {
+    if (!jar.exists()) {
+      System.err.println(s"Jar ${jar.getAbsolutePath} didn't exist")
+      return false
+    }
     val zipInputStream = new ZipInputStream(new FileInputStream(jar))
     try {
       while (true) {
