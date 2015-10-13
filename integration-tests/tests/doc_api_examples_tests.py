@@ -14,6 +14,27 @@
 # limitations under the License.
 #
 
+"""
+runs the Python API documentation examples through doctest
+
+https://docs.python.org/2/library/doctest.html
+
+There are 2 source areas for the documentation examples:
+
+1. The .rst files found recursively in doc-api-examples/src/main/resources/python
+
+2. The specific API .py files in python-client/trustedanalytics/core
+
+This test module locates all the files for testing and runs a preprocessor on them which edits the
+text appropriately for running in doctest.  These edits enable skipping some test content or adding
+ELLIPSIS_MARKERs (to ignore some output).
+
+The processed text from each file is loaded into the __test__ variable of the doc_api_examples_dummy_module
+and that module is submitted to doctest.
+
+(see integration-tests/README_doctest.md)
+"""
+
 import unittest
 
 import trustedanalytics as ta
@@ -96,7 +117,7 @@ class ExampleDocTests(unittest.TestCase):
         """test all .rst files with doctest"""
         files = get_all_example_rst_file_paths()
         filtered_files = filter_exemptions(files)
-        #filtered_files.extend([os.path.join(path_to_core, "frame.py")])  # todo: add graph.py, maybe others
+        filtered_files.extend([os.path.join(path_to_core, "frame.py")])  # todo: add graph.py, maybe others
         results = _run_files_as_doctests(filtered_files, verbose=doctest_verbose)
         self.assertEqual(0, results.failed, "Tests in the example documentation failed.")
 
