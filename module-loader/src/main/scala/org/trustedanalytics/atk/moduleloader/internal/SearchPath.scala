@@ -71,20 +71,22 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
    * @return jars with fully qualified paths
    */
   private[internal] def findJars(jarNames: Seq[String]): Array[URL] = {
-    val files = jarNames.map(jar => {
+    val files = jarNames.flatMap(jar => {
       val jarsListedExplicitlyInPath = searchPath.filter(file => file.getName.equals(jar) && file.exists())
       if (jarsListedExplicitlyInPath.isEmpty) {
         val locations = searchPath.map(new File(_, jar)).filter(_.exists())
         if (locations.isEmpty) {
-          throw new RuntimeException(s"jar $jar not found in search path: " + searchPath.mkString(", "))
+          // not throwing an Exception here because sometimes it doesn't matter if a jar isn't found
+          System.err.println(s"$jar not found in search path.  Please exclude jar or add it to the search path: " + searchPath.mkString(":"))
+          None
         }
         else {
           // only return the first jar found
-          locations.head
+          Some(locations.head)
         }
       }
       else {
-        jarsListedExplicitlyInPath.head
+        Some(jarsListedExplicitlyInPath.head)
       }
     })
     files.map(_.toURI.toURL).toArray

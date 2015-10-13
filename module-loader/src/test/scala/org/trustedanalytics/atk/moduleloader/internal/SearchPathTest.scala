@@ -71,16 +71,12 @@ class SearchPathTest extends WordSpec {
       assert(jars(3).getFile.endsWith("b.jar"), s"not expected file ${jars(3)}")
     }
 
-    "error when jar is missing" in {
-      intercept[RuntimeException] {
-        searchPathWithOne.findJars(Seq("does-not-exist.jar"))
-      }
+    "not error when jar is missing" in {
+      assert(searchPathWithOne.findJars(Seq("does-not-exist.jar")).length == 0)
     }
 
-    "error when one of two jars is missing" in {
-      intercept[RuntimeException] {
-        searchPathWithOne.findJars(Seq("test-module.jar", "does-not-exist.jar"))
-      }
+    "not error when one of two jars is missing" in {
+      assert(searchPathWithOne.findJars(Seq("test-module.jar", "does-not-exist.jar")).length == 1)
     }
 
     "not mind if path does not exist" in {
