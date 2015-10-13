@@ -16,6 +16,7 @@
 
 import unittest
 import trustedanalytics as ta
+import uuid     # for generating unique model names
 
 # show full stack traces
 ta.errors.show_details = True
@@ -46,6 +47,41 @@ class ModelKMeansTest(unittest.TestCase):
         k.train(frame,['data'],[2.0])
         t2 = k.last_read_date
         self.assertLess(t1, t2)
+
+    # Tests creating a kmeans model with the same name as an existing model
+    def test_create_duplicate_kmeans_model(self):
+        model_name = str(uuid.uuid1()).replace('-','_')
+
+        ta.KMeansModel(name=model_name)
+        self.assertTrue(model_name in ta.get_model_names(), model_name + " should be in the list of models")
+
+        # try to create another model with the same name (we expect an exception)
+        with self.assertRaises(Exception):
+            ta.KMeansModel(name=model_name)
+
+    # Tests trying to create a kmeans model with the same name as an existing frame
+    def test_create_kmeans_model_with_duplicte_frame_name(self):
+        frame_name = str(uuid.uuid1()).replace('-','_')
+
+        # Create frame
+        ta.Frame(name=frame_name)
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should be in the list of frames")
+
+        # Try to create model with the same name as the frame (we expect an exception)
+        with self.assertRaises(Exception):
+            ta.KMeansModel(name=frame_name)
+
+    # Tests trying to create a kmeans model with the same name as an existing graph
+    def test_create_kmeans_model_with_duplicte_graph_name(self):
+        graph_name = str(uuid.uuid1()).replace('-','_')
+
+        # Create graph
+        ta.Graph(name=graph_name)
+        self.assertTrue(graph_name in ta.get_graph_names(), graph_name + " should be in the list of graphs")
+
+        # Try to create a model with the same name as the graph (we expect an exception)
+        with self.assertRaises(Exception):
+            ta.KMeansModel(name=graph_name)
 
 
 if __name__ == "__main__":
