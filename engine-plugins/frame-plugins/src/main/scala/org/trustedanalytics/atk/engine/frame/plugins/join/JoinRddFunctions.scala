@@ -221,7 +221,7 @@ object JoinRddFunctions extends Serializable {
     val rightSchema = right.frame.frameSchema
 
     val leftJoinIndex = leftSchema.columnIndex(left.joinColumn)
-    val rightJoinIndex = rightSchema.columnIndex(right.joinColumn) + rightSchema.columns.size
+    val rightJoinIndex = rightSchema.columnIndex(right.joinColumn) + leftSchema.columns.size
 
     joinedRdd.map(row => {
       val leftKey = row.get(leftJoinIndex)
