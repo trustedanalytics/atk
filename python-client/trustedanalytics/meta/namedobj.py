@@ -202,12 +202,16 @@ class _NamedObjectsFunctionFactory(object):
         http = self._http
 
         def drop_objects(items):
+            num_items_deleted = 0
             if not isinstance(items, list) and not isinstance(items, tuple):
                 items = [items]
             victim_uris = {}
             for item in items:
                 if isinstance(item, basestring):
-                    victim_uris[item] = self.get_entity_uri_from_name(item)
+                    try:
+                        victim_uris[item] = self.get_entity_uri_from_name(item)
+                    except:
+                        pass    #  Don't fail if item with the specified name was not found
                 elif isinstance(item, obj_class):
                     victim_uris[item.name] = item.uri
                 else:
@@ -215,6 +219,8 @@ class _NamedObjectsFunctionFactory(object):
             for name, uri in victim_uris.items():
                 module_logger.info("Drop %s %s", obj_term, name)
                 http.delete(uri)
+                num_items_deleted += 1
+            return num_items_deleted
         set_entity_collection(drop_objects, entity_type_to_collection_name(self._term))  # so meta knows where it goes
         drop_objects.__name__ = drop_objects_name
         drop_objects.__doc__ = """Deletes the {obj_term} on the server.""".format(obj_term=obj_term)
@@ -223,5 +229,6 @@ class _NamedObjectsFunctionFactory(object):
         arg_decorator = arg(name="items",
                             data_type="[ str | {obj_term} object | list [ str | {obj_term} objects ]]".format(obj_term=obj_term),
                             description="Either the name of the {obj_term} object to delete or the {obj_term} object itself".format(obj_term=obj_term))
-        decorated_method = api_decorator(arg_decorator(drop_objects))
+        returns_decorator = returns(list, "Number of {obj_term}s deleted.".format(obj_term=obj_term))
+        decorated_method = api_decorator(returns_decorator(arg_decorator(drop_objects)))
         return decorated_method
