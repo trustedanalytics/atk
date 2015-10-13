@@ -161,20 +161,9 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-engine</module>
                 <module>scoring-models</module>
                 <module>rest-server</module>
+                <module>python-client</module>
                 <module>deploy</module>
                 <module>package</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>python-unittests</id>
-            <activation>
-                <property>
-                    <name>!skipTests</name>
-                </property>
-            </activation>
-            <modules>
-                <module>python-client</module>
             </modules>
         </profile>
 
