@@ -1199,6 +1199,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @api
     @arg('column', 'str', "The name of the column to be flattened.")
     @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
+    @deprecated
     def __flatten_column(self, column, delimiter=None):
         """
         Spread data to multiple rows based on cell data.
@@ -1257,6 +1258,17 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
 
         self._backend.flatten_column(self,column,delimiter)
+
+    @api
+    @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
+    @arg('delimiter', 'str', "Separator for the data in the result columns. Default is comma (,).")
+    @deprecated
+    def __unflatten_column(self, columns, delimiter=None):
+        """
+        Deprecated, use unflatten_columns() instead.
+        """
+
+        self._backend.unflatten_column(self,columns,delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):

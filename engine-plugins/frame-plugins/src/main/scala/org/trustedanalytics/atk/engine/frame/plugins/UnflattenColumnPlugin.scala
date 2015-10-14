@@ -47,7 +47,7 @@ class UnflattenColumnPlugin extends SparkCommandPlugin[UnflattenColumnArgs, Unit
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/unflatten_column"
+  override def name: String = "frame/unflatten_columns"
 
   override def numberOfJobs(arguments: UnflattenColumnArgs)(implicit invocation: Invocation): Int = 2
 

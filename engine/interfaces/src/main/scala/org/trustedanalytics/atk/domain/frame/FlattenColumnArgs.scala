@@ -27,5 +27,8 @@ case class FlattenColumnArgs(frame: FrameReference,
                              @ArgDoc("""The list of delimiter strings for each column.
 Default is comma (,).""") delimiters: Option[List[String]] = None) {
   require(frame != null, "frame is required")
-  require(columns != null, "columns is required")
+  require(columns != null && columns.nonEmpty, "column list is required")
+  if (delimiters != null)
+    require((delimiters.size == columns.size) || (delimiters.size == 1),
+      "number of delimiters provided must match the number of columns")
 }
