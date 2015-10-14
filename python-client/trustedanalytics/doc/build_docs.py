@@ -136,7 +136,10 @@ def get_entity_collection_name_and_install_path(obj, attr):
         entity_collection_name = get_entity_collection(attr)
         install_path = ''
     else:
-        raise RuntimeError("Unable to determine the entity collection for method %s" % attr)
+        # todo: fix me
+        entity_collection_name = "frames"  # hack to put global items in frames, until we get a global area in the docs
+        install_path = ''
+        # raise RuntimeError("Unable to determine the entity collection for method %s" % attr)
     return entity_collection_name, install_path
 
 

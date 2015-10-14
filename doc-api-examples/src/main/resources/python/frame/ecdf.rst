@@ -1,29 +1,31 @@
-Examples
---------
-Consider the following sample data set in *frame* with actual data labels
-specified in the *labels* column and the predicted labels in the
-*predictions* column:
 
-.. code::
+Consider the following sample data set in *frame* 'frame' containing several numbers.
 
-    >>> import trustedanalytics as ta
-    >>> import pandas as p
-    >>> f = ta.Frame(ta.Pandas(p.DataFrame([1, 3, 1, 0]), [('numbers', ta.int32)]))
+<hide>
+>>> frame = ta.Frame(ta.UploadRows([[1], [3], [1], [0], [2], [1], [4], [3]], [('numbers', ta.int32)]))
+-etc-
 
-    [==Job Progress...]
+</hide>
 
-    >>> f.take(5)
-    [[1], [3], [1], [0]]
-
-    [==Job Progress...]
-
-    >>> result = f.ecdf('numbers')
-    >>> result.inspect()
-
-      b:int32   b_ECDF:float64
-    /--------------------------/
-       1             0.2
-       2             0.5
-       3             0.8
-       4             1.0
+>>> frame.inspect()
+[#]  numbers
+============
+[0]        1
+[1]        3
+[2]        1
+[3]        0
+[4]        2
+[5]        1
+[6]        4
+[7]        3
+>>> ecdf_frame = frame.ecdf('numbers')
+<progress>
+>>> ecdf_frame.inspect()
+[#]  numbers  numbers_ECDF
+==========================
+[0]        0         0.125
+[1]        1           0.5
+[2]        2         0.625
+[3]        3         0.875
+[4]        4           1.0
 
