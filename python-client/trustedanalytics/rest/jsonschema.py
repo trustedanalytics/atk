@@ -69,9 +69,9 @@ class AtkEntityType(object):
         self.name = name
         self.constructor = constructor
 
+    @property
     def __name__(self):
         return self.name
-
 
     def __str__(self):
         return self.name
