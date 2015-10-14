@@ -25,17 +25,26 @@ Consider the following frame containing four columns.
 <progress>
 >>> model.train(frame, 'Class',['Dim_1','Dim_2','Dim_3'])
 <progress>
->>> metrics = model.test(frame, 'Class', ['Dim_1','Dim_2','Dim_3'])
+>>> test_metrics = model.test(frame, 'Class', ['Dim_1','Dim_2','Dim_3'])
 <progress>
->>> metrics['f_measure']
+>>> test_metrics['f_measure']
 1.0
->>> metrics['recall']
+>>> test_metrics['recall']
 1.0
->>> metrics['accuracy']
+>>> test_metrics['accuracy']
 1.0
->>> metrics['precision']
+>>> test_metrics['precision']
 1.0
->>> metrics['confusion_matrix']
-{u'column_labels': [u'pos', u'neg'],
- u'matrix': [[2, 0], [0, 4]],
- u'row_labels': [u'pos', u'neg']}
+>>> test_metrics['confusion_matrix']
+{u'row_labels': [u'pos', u'neg'], u'column_labels': [u'pos', u'neg'], u'matrix': [[2, 0], [0, 4]]}
+>>> predicted_frame = model.predict(frame, ['Dim_1','Dim_2','Dim_3'])
+<progress>
+>>> predicted_frame.inspect()
+[#]  Class  Dim_1  Dim_2  Dim_3  predicted_class
+================================================
+[0]      0      1      0      0              0.0
+[1]      2      0      0      0              2.0
+[2]      1      0      1      0              1.0
+[3]      1      0      2      0              1.0
+[4]      2      0      0      1              2.0
+[5]      2      0      0      2              2.0
