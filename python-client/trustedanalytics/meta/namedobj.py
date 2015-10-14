@@ -213,7 +213,8 @@ class _NamedObjectsFunctionFactory(object):
                     except:
                         pass    #  Don't fail if item with the specified name was not found
                 elif isinstance(item, obj_class):
-                    victim_uris[item.name] = item.uri
+                    if item.status == "ACTIVE":
+                        victim_uris[item.name] = item.uri
                 else:
                     raise TypeError("Excepted argument of type {term} or else the {term}'s name".format(term=obj_term))
             for name, uri in victim_uris.items():

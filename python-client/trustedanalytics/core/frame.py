@@ -18,7 +18,7 @@
 Frame entity types
 """
 
-
+import types
 import logging
 logger = logging.getLogger(__name__)
 
@@ -112,9 +112,10 @@ def __drop(*items):
     """
     drop() serves as an alias to drop_frames, drop_graphs, and drop_models.
 
-    It accepts a list of items, which can contain strings (the name of the frame, graph, or model)
-    or proxy objects (the frame, graph, or model object itself).  If the item provided is a string
-    and no frame, graph, or model is found with the specified name, no action is taken.
+    It accepts multiple parameters, which can contain strings (the name of the frame, graph, or model),
+    proxy objects (the frame, graph, or model object itself), or a list of strings and/or proxy objects.
+    If the item provided is a string and no frame, graph, or model is found with the specified name,
+    no action is taken.
 
     If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
     """
@@ -122,7 +123,17 @@ def __drop(*items):
 
     num_deleted = 0     # track the number of items we delete to return
 
+    # Flatten out the items (break out lists)
+    flat_item_list = []
+
     for item in items:
+        if isinstance(item, types.ListType):
+            for list_item in item:
+                flat_item_list.append(list_item)
+        else:
+            flat_item_list.append(item)
+
+    for item in flat_item_list:
         if item is not None:
             if isinstance(item, basestring):
                 # If the item is a string, try calling drop_* functions, until we're successful.

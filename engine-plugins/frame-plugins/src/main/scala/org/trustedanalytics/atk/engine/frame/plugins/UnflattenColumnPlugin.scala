@@ -63,7 +63,7 @@ class UnflattenColumnPlugin extends SparkCommandPlugin[UnflattenColumnArgs, Unit
   override def execute(arguments: UnflattenColumnArgs)(implicit invocation: Invocation): UnitReturn = {
     val frame: SparkFrame = arguments.frame
     val schema = frame.schema
-    val compositeKeyNames = arguments.compositeKeyColumnNames
+    val compositeKeyNames = arguments.columns
     val compositeKeyIndices = compositeKeyNames.map(schema.columnIndex)
 
     // run the operation
