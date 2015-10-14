@@ -17,10 +17,11 @@
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
-import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream }
+import org.apache.commons.compress.archivers.tar.{TarArchiveOutputStream, TarArchiveEntry, TarArchiveInputStream}
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.scalatest.Assertions._
+import org.trustedanalytics.atk.scoring.interfaces.Model
 
 class ModelPublishFormatTest extends WordSpec {
 
@@ -72,8 +73,73 @@ class ModelPublishFormatTest extends WordSpec {
     }
   }
 
-  //  "create a model given a tar file" in {
-  //
-  //  }
+    "create a model given a tar file" in {
+      val testTarFile = File.createTempFile("TestTar", ".tar")
+      val myTestJar = File.createTempFile("test", ".jar")
+      val myTestTarBall = new TarArchiveOutputStream(new BufferedOutputStream(new FileOutputStream(testTarFile)))
+      var modelDataFile = File.createTempFile("modelData", ".txt")
+      var modelLoaderFile = File.createTempFile("modelReader", ".txt")
+
+      try {
+        val entryName = myTestJar.getName
+        val fileEntry = new TarArchiveEntry(myTestJar, entryName)
+        fileEntry.setSize(myTestJar.length())
+        myTestTarBall.putArchiveEntry(fileEntry)
+        IOUtils.copy(new FileInputStream(myTestJar), myTestTarBall)
+        myTestTarBall.closeArchiveEntry()
+
+        FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes)
+        var nextEntryName = modelDataFile.getName
+        var tarEntry = new TarArchiveEntry(modelDataFile, nextEntryName)
+        myTestTarBall.putArchiveEntry(tarEntry)
+        IOUtils.copy(new FileInputStream(modelDataFile), myTestTarBall)
+        myTestTarBall.closeArchiveEntry()
+
+        FileUtils.writeStringToFile(modelLoaderFile, "org.trustedanalytics.atk.model.publish.format.TestModelReaderPlugin")
+        nextEntryName = modelLoaderFile.getName
+        tarEntry = new TarArchiveEntry(modelLoaderFile, nextEntryName)
+        myTestTarBall.putArchiveEntry(tarEntry)
+        IOUtils.copy(new FileInputStream(modelLoaderFile), myTestTarBall)
+        myTestTarBall.closeArchiveEntry()
+
+        myTestTarBall.finish()
+
+        val testModel = ModelPublishFormat.read (testTarFile, this.getClass.getClassLoader)
+
+        assert(testModel.isInstanceOf[Model])
+        assert(testModel != null)
+      }
+      finally {
+
+        IOUtils.closeQuietly(myTestTarBall)
+        FileUtils.deleteQuietly(modelLoaderFile)
+        FileUtils.deleteQuietly(modelDataFile)
+        FileUtils.deleteQuietly(testTarFile)
+        FileUtils.deleteQuietly(myTestJar)
+      }
+    }
 }
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+
+class TestModelReaderPlugin extends ModelLoader {
+
+  private var testModel: TestModel = _
+
+  override def load(bytes: Array[Byte]): Model = {
+    testModel = new TestModel
+    testModel.asInstanceOf[Model]
+  }
+}
+
+class TestModel() extends Model {
+
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
+    var score = Seq[Any]()
+    score = score :+ 2
+    score
+    }
+  }
+
+
+
 
