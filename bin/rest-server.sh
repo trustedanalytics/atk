@@ -8,7 +8,7 @@ export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/t
 pushd $DIR/..
 pwd
 
-export SEARCH_PATH="-Datk.module-loader.search-path=module-loader/target:rest-server/target:engine/engine-core/target:engine/interfaces/target:engine-plugins/frame-plugins/target:engine-plugins/graph-plugins/target:engine-plugins/model-plugins/target:engine-plugins/giraph-plugins/target"
+export SEARCH_PATH="-Datk.module-loader.search-path=${DIR}/..:${HOME}/.m2/"
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
 

@@ -25,14 +25,14 @@ class SearchPathTest extends WordSpec {
 
   val searchPathWithNone = new SearchPath("src/test/resources/does-not-exist")
 
-  val searchPathWithTwo = new SearchPath("src/test/resources/test-module:src/main/resources:src/test/resources/does-not-exist")
+  val searchPathWithTwo = new SearchPath("src/test/resources/test-module:src/test/resources/fake-module-loader:src/test/resources/does-not-exist")
 
   val searchPathWithThree = new SearchPath("src/test/resources/does-not-exist:src/test/resources/valid-parent-modules:src/test/resources/fake-lib")
 
   val searchPathWithFour = new SearchPath("src/test/resources/does-not-exist"
     + ":src/test/resources/valid-parent-modules"
     + ":src/test/resources/fake-lib"
-    + ":src/test/resources/test-module/test-module.jar")
+    + ":src/test/resources/test-module")
 
   "SearchPath" should {
 

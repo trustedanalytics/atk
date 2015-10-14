@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.moduleloader.internal
 
 import java.net.{ URL, URLClassLoader }
+import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory }
 import org.trustedanalytics.atk.moduleloader.{ ModuleException, Module }
 import scala.collection.mutable
 
@@ -121,14 +122,7 @@ private[moduleloader] class ModuleLoader(searchPath: SearchPath) {
       searchPath.findJars(moduleConfig.jarNames)
     }
     catch {
-      case e: Exception =>
-        try {
-          val developerSearchPath = new SearchPath(moduleConfig.buildClasspath.mkString(":"))
-          developerSearchPath.findJars(moduleConfig.jarNames)
-        }
-        catch {
-          case e2: Exception => throw new ModuleException(s"Exception in findJars for module '${moduleConfig.name}' (located at: ${moduleConfig.moduleLocation}), please check searchPath", e)
-        }
+      case e: Exception => throw new ModuleException(s"Exception in findJars for module '${moduleConfig.name}' (located at: ${moduleConfig.moduleLocation}), please check searchPath", e)
     }
   }
 

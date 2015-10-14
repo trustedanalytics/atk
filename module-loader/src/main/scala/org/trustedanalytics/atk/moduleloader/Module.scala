@@ -16,10 +16,7 @@
 
 package org.trustedanalytics.atk.moduleloader
 
-import java.io.File
 import java.net.{ URLClassLoader, URL }
-
-import com.sun.tracing.dtrace.ModuleName
 import org.trustedanalytics.atk.moduleloader.internal.{ ModuleLoader, SearchPath }
 import scala.collection.JavaConversions._
 
@@ -52,7 +49,12 @@ class Module private[moduleloader] (val name: String,
    * @return the class definition
    */
   def loadClass[T](className: String): Class[T] = {
-    classLoader.loadClass(className).asInstanceOf[Class[T]]
+    try {
+      classLoader.loadClass(className).asInstanceOf[Class[T]]
+    }
+    catch {
+      case e: Exception => throw new ModuleException(s"could not load class '$className' from module '$name'", e)
+    }
   }
 
   /**

@@ -81,7 +81,7 @@ do
     echo "$NAME Waiting for REST Server to start up on port $PORT..."
     sleep 1
     httpCode=$(curl -s -o /dev/null -w "%{http_code}" localhost:$PORT)
-    echo "$NAME REST Server http status code was $httpCode"
+    echo "$NAME REST Server http status code was $httpCode, attempt: $COUNTER"
 done
 
 echo "$NAME nosetests will be run in three calls: 1) make sure system works in basic way, 2) the tests that can run concurrently, 3) and the nonconcurrent tests collection tests (use -skipnc to skip the nonconcurrent tests, like garbage collection)."

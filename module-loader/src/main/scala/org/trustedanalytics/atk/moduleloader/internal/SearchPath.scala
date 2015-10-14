@@ -16,15 +16,14 @@
 
 package org.trustedanalytics.atk.moduleloader.internal
 
-import java.io.{ IOException, File, FileInputStream, FilenameFilter }
+import java.io.{ IOException, File, FileInputStream }
 import java.net.URL
+import java.util.regex.Pattern
 import java.util.zip.ZipInputStream
-
 import org.trustedanalytics.atk.moduleloader.Module
-
+import scala.collection.mutable
 import scala.collection.JavaConversions._
-
-import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory, Config }
+import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory }
 
 /**
  * The SearchPath is used to find Modules and Jars
@@ -36,8 +35,34 @@ import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory, Config }
 private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPath) {
 
   private lazy val searchPath: List[File] = path.split(":").toList.map(file => new File(file))
-
   println("searchPath: " + searchPath.mkString(":"))
+
+  private lazy val jarsInSearchPath: Map[String, File] = {
+    val files = searchPath.flatMap(recursiveListOfJars)
+    val results = mutable.Map[String, File]()
+    for (file <- files) {
+      // only take the first jar with a given name on the search path
+      if (!results.contains(file.getName)) {
+        results += (file.getName -> file)
+      }
+    }
+    results.toMap
+  }
+
+  /**
+   * Recursively find jars under a directory
+   */
+  private def recursiveListOfJars(dir: File): Array[File] = {
+    if (dir.exists()) {
+      require(dir.isDirectory, s"Only directories are allowed in the search path: '${dir.getAbsolutePath}' was not a directory")
+      val files = dir.listFiles()
+      val jars = files.filter(f => f.exists() && f.getName.endsWith(".jar"))
+      jars ++ files.filter(_.isDirectory).flatMap(recursiveListOfJars)
+    }
+    else {
+      Array.empty
+    }
+  }
 
   /**
    * Search the searchPath and find all jars and directories that contain "atk-module.conf"
@@ -45,21 +70,7 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
    * @return list of jars and directories that include atk-module.conf
    */
   private[internal] def findModules(): Seq[File] = {
-    expandSearchPath(searchPath).filter(path => {
-      if (path.isDirectory && path.listFiles(new FilenameFilter {
-        override def accept(dir: File, name: String): Boolean = {
-          Module.primaryModuleConfigFileName == name
-        }
-      }).nonEmpty) {
-        true
-      }
-      else if (path.getName.endsWith(".jar")) {
-        jarContainsModuleConf(path)
-      }
-      else {
-        false
-      }
-    })
+    jarsInSearchPath.values.filter(isModule).toSeq
   }
 
   /**
@@ -71,52 +82,15 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
    * @return jars with fully qualified paths
    */
   private[internal] def findJars(jarNames: Seq[String]): Array[URL] = {
-    val files = jarNames.flatMap(jar => {
-      val jarsListedExplicitlyInPath = searchPath.filter(file => file.getName.equals(jar) && file.exists())
-      if (jarsListedExplicitlyInPath.isEmpty) {
-        val locations = searchPath.map(new File(_, jar)).filter(_.exists())
-        if (locations.isEmpty) {
+    jarNames.flatMap(jarName => {
+      jarsInSearchPath.get(jarName) match {
+        case Some(file) => Some(file.toURI.toURL)
+        case None =>
           // not throwing an Exception here because sometimes it doesn't matter if a jar isn't found
-          System.err.println(s"$jar not found in search path.  Please exclude jar or add it to the search path: " + searchPath.mkString(":"))
+          System.err.println(s"$jarName not found in search path.  Please exclude jar or add it to the search path: " + searchPath.mkString(":"))
           None
-        }
-        else {
-          // only return the first jar found
-          Some(locations.head)
-        }
       }
-      else {
-        Some(jarsListedExplicitlyInPath.head)
-      }
-    })
-    files.map(_.toURI.toURL).toArray
-  }
-
-  /**
-   * Takes a searchPath and expands it to include files and directories one level deep.
-   *
-   * For example, a "/lib" might expand to "/lib/some.jar, /list/another.jar".
-   *
-   * Also, drop files and directories that do NOT exist.
-   *
-   * @param searchPath the searchPath to expand
-   * @return the expanded path with
-   */
-  private def expandSearchPath(searchPath: Seq[File]): Seq[File] = {
-    searchPath.flatMap(path => {
-      if (!path.exists()) {
-        // don't include files or directories that don't exist
-        None
-      }
-      else if (path.isDirectory) {
-        // go one more level deep for directories but also keep the directory in the list
-        path.listFiles().toSeq :+ path
-      }
-      else {
-        // files are kept but have nothing to expand to
-        Some(path)
-      }
-    })
+    }).toArray
   }
 
   /**
@@ -124,9 +98,9 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
    * @param jar the jar to check
    * @return true if jar file contained atk-module.conf file
    */
-  private def jarContainsModuleConf(jar: File): Boolean = {
-    if (!jar.exists()) {
-      System.err.println(s"Jar ${jar.getAbsolutePath} didn't exist")
+  private def isModule(jar: File): Boolean = {
+    if (!SearchPath.moduleNamePattern.matcher(jar.getName).matches()) {
+      // bail early so that we don't have to open up every single jar on the path
       return false
     }
     val zipInputStream = new ZipInputStream(new FileInputStream(jar))
@@ -158,9 +132,10 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
 
 object SearchPath {
 
-  val defaultSearchPath: String = {
-    val config = ConfigFactory.load(this.getClass.getClassLoader, ConfigResolveOptions.defaults().setAllowUnresolved(true))
-    config.getString("atk.module-loader.search-path")
-  }
+  private val config = ConfigFactory.load(this.getClass.getClassLoader, ConfigResolveOptions.defaults().setAllowUnresolved(true))
+
+  val defaultSearchPath: String = config.getString("atk.module-loader.search-path")
+
+  val moduleNamePattern: Pattern = Pattern.compile(config.getString("atk.module-loader.module-name-pattern"))
 
 }
