@@ -286,6 +286,8 @@ def _create_class(install_path, doc=None):
                                    doc=str(doc) or install_path.get_generic_doc_str(),
                                    init=get_class_init_from_path(install_path))
     set_installation(new_class, CommandInstallation(install_path, host_class_was_created=True))
+    if install_path.is_entity and not install_path.full.startswith('_'):
+        decorate_api_class(new_class)
     return new_class
 
 
@@ -306,11 +308,10 @@ def create_classes(install_path):
     return new_class
 
 
-def create_entity_class(command_def):
+def create_entity_class_from_constructor_command_def(command_def):
     if not command_def.is_constructor:
         raise RuntimeError("Internal Error: algo was not a constructor command_def")
-    new_class = _create_class(command_def.install_path, command_def.doc)
-    decorate_api_class(new_class)
+    _create_class(command_def.install_path, command_def.doc)
 
 
 def _create_class_type(new_class_name, baseclass, doc, init=None):
@@ -361,15 +362,11 @@ def _create_class_type(new_class_name, baseclass, doc, init=None):
 def get_class_init_from_path(install_path):
     if install_path.is_entity:
         # Means a class is being created for an entity and requires more information about the __init__ method
-        # We return an __init__ that will throw an error when called.  It must be overwritten by a special plugin
-        plugin_name = get_entity_constructor_command_full_name(install_path)
-        msg = "Internal Error: server does not know how to construct entity type %s.  A command plugin " \
-              "named \"%s\" must be registered." % (install_path.entity_type, plugin_name)
-
-        def insufficient_init(self, *args, **kwargs):
-            raise RuntimeError(msg)
-        return insufficient_init
-
+        # We return a simple __init__ for an entity class.  It may be overridden by a "new" plugin
+        def simple_init(self, *args, **kwargs):
+            self._entity = self
+            self.uri = None
+        return simple_init
     return get_default_init()
 
 
@@ -485,6 +482,8 @@ def get_repr_function(command_def):
 def default_repr(self, collection_name):
     """Default __repr__ for a synthesized class"""
     entity = type(self).__name__
+    if self.uri is None:
+        return "%s" % entity
     try:
         from trustedanalytics.rest.atkserver import server
         uri = server.create_full_uri(self.uri)
@@ -507,7 +506,10 @@ def _get_init_body_text(command_def):
     base_class.__init__(self)
     if {info} is None:
         {info} = {call_execute_create}
-    self.uri = {info}['uri']
+    if isinstance({info}, dict):
+        self.uri = {info}['uri']
+    else:
+        self.uri = None
     # initialize_from_info(self, {info})  todo: implement
     '''.format(info='_info', call_execute_create=get_call_execute_command_text(command_def))
 

@@ -149,20 +149,9 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-engine</module>
                 <module>scoring-models</module>
                 <module>rest-server</module>
+                <module>python-client</module>
                 <module>deploy</module>
                 <module>package</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>python-unittests</id>
-            <activation>
-                <property>
-                    <name>!skipTests</name>
-                </property>
-            </activation>
-            <modules>
-                <module>python-client</module>
             </modules>
         </profile>
 
@@ -689,11 +678,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-es</artifactId>
-                <version>${dep.aurelius.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
                 <artifactId>titan-hbase</artifactId>
                 <version>${dep.aurelius.version}</version>
                 <exclusions>
@@ -857,6 +841,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.hadoop</groupId>
                 <artifactId>hadoop-client</artifactId>
                 <version>${dep.hadoop2.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-aws</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop</groupId>

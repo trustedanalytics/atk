@@ -88,16 +88,15 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
     var outputFile: FileOutputStream = null
     var myTarFile: TarArchiveInputStream = null
     try {
-      val pt = new Path(config.getString("trustedanalytics.scoring-engine.archive-tar"))
-      val uri = new URI(config.getString("trustedanalytics.scoring-engine.archive-tar"))
-      val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(uri, new Configuration())
-
-      val tempFilePath = "/tmp/models.tar"
-      val local = new Path(tempFilePath)
-
-      hdfsFileSystem.copyToLocalFile(false, pt, local)
+      var tarFilePath = config.getString("trustedanalytics.scoring-engine.archive-tar")
+      if (tarFilePath.startsWith("hdfs://")) {
+        val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
+        val tempFilePath = "/tmp/models.tar"
+        hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempFilePath))
+        tarFilePath = tempFilePath
+      }
       val tmpPath = "/tmp/"
-      myTarFile = new TarArchiveInputStream(new FileInputStream(new File(tempFilePath)))
+      myTarFile = new TarArchiveInputStream(new FileInputStream(new File(tarFilePath)))
       var entry: TarArchiveEntry = null
       entry = myTarFile.getNextTarEntry
       while (entry != null) {
