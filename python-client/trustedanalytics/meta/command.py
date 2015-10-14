@@ -23,6 +23,7 @@ logger = logging.getLogger('meta')
 from collections import namedtuple
 
 from trustedanalytics.meta.installpath import InstallPath
+from trustedanalytics.meta.doc import Doc
 from trustedanalytics.meta.names import default_value_to_str, is_entity_constructor_command_name
 
 
@@ -32,50 +33,6 @@ ReturnInfo = namedtuple("Returns", ['data_type', 'use_self', 'doc'])
 
 ApiVersion = namedtuple("ApiVersion", ['added', 'changed', 'deprecated', 'doc'])
 
-
-class Doc(object):
-    """Represents descriptive text for an object, but not its individual pieces"""
-
-    def __init__(self, one_line='<Missing Doc>', extended='', examples=None):
-        self.one_line = one_line.strip()
-        self.extended = extended
-        self.examples = examples
-
-    def __str__(self):
-        r = self.one_line
-        if self.extended:
-            r += ("\n\n" + self.extended)
-        if self.examples:
-            r += ("\n\n" + self.examples)
-        return r
-
-    def __repr__(self):
-        import json
-        return json.dumps(self.__dict__)
-
-    @staticmethod
-    def _pop_blank_lines(lines):
-        while lines and not lines[0].strip():
-            lines.pop(0)
-
-    @staticmethod
-    def get_from_str(doc_str):
-        if doc_str:
-            lines = doc_str.split('\n')
-
-            Doc._pop_blank_lines(lines)
-            summary = lines.pop(0).strip() if lines else ''
-            Doc._pop_blank_lines(lines)
-            if lines:
-                margin = len(lines[0]) - len(lines[0].lstrip())
-                extended = '\n'.join([line[margin:] for line in lines])
-            else:
-                extended = ''
-
-            if summary:
-                return Doc(summary, extended)
-
-        return Doc("<Missing Doc>", doc_str)
 
 
 class CommandDefinition(object):
