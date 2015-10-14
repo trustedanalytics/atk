@@ -38,6 +38,9 @@ class CountWherePlugin extends SparkCommandPlugin[CountWhereArgs, LongValue] {
 
   override def name: String = "frame/count_where"
 
+  /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
+  override def executesPythonUdf = true
+
   /**
    * Return count of rows which meet criteria specified by a UDF predicate
    *

@@ -16,7 +16,7 @@
 
 import os
 import sys
-import trustedanalytics.rest.spark
+import trustedanalytics.rest.udfzip
 
 
 class udf(object):
@@ -53,7 +53,7 @@ class udf(object):
         :return: nothing
         """
         if dependencies is not None:
-            trustedanalytics.rest.spark.UdfDependencies = dependencies
+            trustedanalytics.rest.udfzip.UdfDependencies = dependencies
         else:
             raise ValueError ("The dependencies list to be installed on the cluster cannot be empty")
 
@@ -63,4 +63,4 @@ class udf(object):
         lists all the user files getting copied to the cluster
         :return: list of files to be copied to the cluster
         """
-        return trustedanalytics.rest.spark.UdfDependencies
+        return trustedanalytics.rest.udfzip.UdfDependencies

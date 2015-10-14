@@ -21,7 +21,7 @@ Library for creating pieces of rst text for the Python API, based on metaprog
 import re
 from collections import OrderedDict
 
-from trustedanalytics.meta.command import Doc
+from trustedanalytics.meta.doc import Doc
 from trustedanalytics.meta.metaprog import get_installation, get_intermediate_class
 from trustedanalytics.meta.names import is_name_private, indent, get_type_name
 from trustedanalytics.meta.reflect import get_args_text_from_function
@@ -94,13 +94,20 @@ def _get_returns_rst(return_info):
 """.format(data_type=get_type_name(return_info.data_type), description=indent(return_info.doc, 8))
 
 
+
 def _get_examples_rst(examples):
     if not examples:
         return ''
+
+    if not examples.lstrip().startswith("Examples"):
+        # todo --many example .rst files start with an "Examples" header, would be better to have that header here.
+        examples = """Examples
+--------
+""" + examples
     return """
 
 %s
-""" % examples  # todo --all the example .rst files start with an "Examples" header.  It would be better to have that header here.
+""" % examples
 
 
 def get_maturity_rst(maturity):
