@@ -31,43 +31,9 @@ import scala.collection.JavaConversions._
  * project should avoid dependencies as much as possible so there won't
  * be any conflicts with module dependencies.
  */
-private[internal] object FileUtils {
+private[internal] object ZipUtils {
 
   private val EMPTY_STRING = ""
-
-  /**
-   * Read a list of text files to Strings
-   *
-   * Non-existent files and empty files are read as the empty string.
-   *
-   * @param dirOrZip directory or zip file to treat as root
-   * @param fileNames file names to read (if they exist)
-   * @return each file contents as a String
-   */
-  def readFiles(dirOrZip: File, fileNames: Seq[String]): Seq[String] = {
-    if (dirOrZip.isDirectory) {
-      readFilesFromDirectory(dirOrZip, fileNames)
-    }
-    else {
-      readFilesFromZip(dirOrZip, fileNames)
-
-    }
-  }
-
-  /**
-   * Read a list of text files to Strings
-   *
-   * Non-existent files and empty files are read as the empty string.
-   *
-   * @param parentDir the directory containing the files
-   * @param names the file names
-   * @return each file contents as a String
-   */
-  def readFilesFromDirectory(parentDir: File, names: Seq[String]): Seq[String] = {
-    names.map(name => {
-      readFileToString(new File(parentDir, name))
-    })
-  }
 
   /**
    * Read a list of text files from a zip to Strings
@@ -109,21 +75,6 @@ private[internal] object FileUtils {
     val s = new Scanner(inputStream).useDelimiter("\\A")
     if (s.hasNext) {
       s.next()
-    }
-    else {
-      EMPTY_STRING
-    }
-  }
-
-  /**
-   * Read a File's contents to a String
-   * @param file the file to read
-   * @return the file contents
-   */
-  def readFileToString(file: File): String = {
-    if (file.exists()) {
-      val lines = Files.readAllLines(Paths.get(file.toURI), Charset.defaultCharset())
-      lines.toList.mkString(System.getProperty("line.separator"))
     }
     else {
       EMPTY_STRING

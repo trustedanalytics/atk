@@ -22,15 +22,14 @@ import java.util.regex.Pattern
 import java.util.zip.ZipInputStream
 import org.trustedanalytics.atk.moduleloader.Module
 import scala.collection.mutable
-import scala.collection.JavaConversions._
 import com.typesafe.config.{ ConfigResolveOptions, ConfigFactory }
 
 /**
  * The SearchPath is used to find Modules and Jars
  *
- * Modules are expected to either be in a directory or in a jar.
+ * Modules are expected jar's containing an atk-module.conf file.
  *
- * @param path list of jars and directories delimited by colons
+ * @param path list of directories delimited by colons
  */
 private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPath) {
 
@@ -65,7 +64,7 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
   }
 
   /**
-   * Search the searchPath and find all jars and directories that contain "atk-module.conf"
+   * Search the searchPath and find all jars whose name matches a regex and that contain "atk-module.conf"
    *
    * @return list of jars and directories that include atk-module.conf
    */
@@ -76,7 +75,7 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
   /**
    * Search the searchPath for the jar file names supplied
    *
-   * Throws error if jar is not found in searchPath
+   * Prints error if jar is not found in searchPath
    *
    * @param jarNames the names of the jars to search for
    * @return jars with fully qualified paths
@@ -94,9 +93,9 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
   }
 
   /**
-   * Check if the supplied jar contains a atk-module.conf file
+   * Check if the supplied jar has a name that matches the module regex and that the jar contains a atk-module.conf file
    * @param jar the jar to check
-   * @return true if jar file contained atk-module.conf file
+   * @return true if jar file is a module
    */
   private def isModule(jar: File): Boolean = {
     if (!SearchPath.moduleNamePattern.matcher(jar.getName).matches()) {
@@ -134,8 +133,15 @@ object SearchPath {
 
   private val config = ConfigFactory.load(this.getClass.getClassLoader, ConfigResolveOptions.defaults().setAllowUnresolved(true))
 
+  /** By default we load the search path from config */
   val defaultSearchPath: String = config.getString("atk.module-loader.search-path")
 
+  /**
+   * Regular expression for what jars names to consider being a "module".
+   * Otherwise we'd have to open every jar or have a hard-coded list.
+   * Opening every jar takes too long with local development where you might add ~/.m2 to your search path.
+   * A hard-coded list didn't seem nice because you'd need config change every time a 3rd party wants to add plugins.
+   */
   val moduleNamePattern: Pattern = Pattern.compile(config.getString("atk.module-loader.module-name-pattern"))
 
 }

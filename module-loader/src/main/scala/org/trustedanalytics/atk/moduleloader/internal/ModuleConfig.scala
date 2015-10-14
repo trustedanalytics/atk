@@ -124,11 +124,11 @@ private[internal] object ModuleConfig {
 
   /**
    * Load a ModuleConfig from
-   * @param moduleFile jar or directory containing an atk-module.conf
+   * @param moduleFile jar containing an atk-module.conf
    * @return the loaded configuration for a Module
    */
   def loadModuleConfig(moduleFile: File): ModuleConfig = {
-    val fileContents = FileUtils.readFiles(moduleFile, Module.moduleConfigFileNames)
+    val fileContents = ZipUtils.readFilesFromZip(moduleFile, Module.moduleConfigFileNames)
     val configs = fileContents.map(fileContent => ConfigFactory.parseString(fileContent))
     val config = combineConfigs(configs)
     new ModuleConfig(moduleFile.getAbsolutePath, config)
