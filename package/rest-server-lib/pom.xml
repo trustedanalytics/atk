@@ -67,6 +67,10 @@
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>model-plugins</artifactId>
         </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
