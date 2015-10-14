@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 ## Copyright (c) 2015 Intel Corporation 
 ##
 ## Licensed under the Apache License, Version 2.0 (the "License");
@@ -83,7 +83,6 @@ import os
 import sys
 import argparse
 import cluster_config as cc
-from cluster_config import cli
 from cluster_config.const import Const
 from cluster_config.cdh.cluster import Cluster, save_config
 import cluster_config.cdh as cdh
@@ -270,7 +269,7 @@ def create_db(db, db_username):
     :param db_username: the postgres user that will own the database
 
     """
-    print(os.system"su -c \"echo \\\"create database " + db + " with owner " + db_username + ";\\\" | psql \"  postgres"))
+    print(os.system("su -c \"echo \\\"create database " + db + " with owner " + db_username + ";\\\" | psql \"  postgres"))
 
 
 def create_IA_metauser(db):
@@ -281,7 +280,7 @@ def create_IA_metauser(db):
     :param db: the database we will be inserting the record into
 
     """
-    print(os.system"su -c \" echo \\\" \c " + db +
+    print(os.system("su -c \" echo \\\" \c " + db +
                  "; \\\\\\\\\  insert into users (username, api_key, created_on, modified_on) "
                  "values( 'metastore', 'test_api_key_1', now(), now() );\\\" | psql \" postgres "))
 
@@ -293,7 +292,7 @@ def restart_db():
 
     :return:
     """
-    print(os.system"service postgresql  restart "))
+    print(os.system("service postgresql  restart "))
     time.sleep(POSTGRES_WAIT)
 
 
@@ -327,7 +326,7 @@ def restart_IA():
         print(color_text("Starting ATK...", GOOD))
 
     #restart IA
-    print(os.system"service trustedanalytics restart "))
+    print(os.system("service trustedanalytics restart "))
     cc.log.info("Waiting for server to restart")
     print(color_text("Waiting for server to restart", GOOD))
 
