@@ -37,6 +37,7 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
   println("searchPath: " + searchPath.mkString(":"))
 
   private lazy val jarsInSearchPath: Map[String, File] = {
+    val startTime = System.currentTimeMillis()
     val files = searchPath.flatMap(recursiveListOfJars)
     val results = mutable.Map[String, File]()
     for (file <- files) {
@@ -45,6 +46,8 @@ private[moduleloader] class SearchPath(path: String = SearchPath.defaultSearchPa
         results += (file.getName -> file)
       }
     }
+    // debug to make sure we're not taking forever when someone adds some huge Maven repo to search path
+    println(s"searchPath found ${files.size} jars (${results.size} of them unique) in ${System.currentTimeMillis() - startTime} milliseconds")
     results.toMap
   }
 
