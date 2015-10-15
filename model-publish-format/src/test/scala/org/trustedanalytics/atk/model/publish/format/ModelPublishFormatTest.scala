@@ -53,7 +53,7 @@ class ModelPublishFormatTest extends WordSpec {
           myTarFileStream.read(content, 0, content.length)
 
           if (individualFile.contains(".jar")) {
-            val fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
+            val fileName = filePath.substring(filePath.indexOf("/") + 1)
             assert(individualFile.equals(fileName))
             counter = counter + 1
           }
