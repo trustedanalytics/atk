@@ -4,8 +4,6 @@ echo "Starting ATK startup script"
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 export KEYTAB=$DIR/../atk.keytab
-export KRB5_CONFIG=$DIR/../krb5.conf
-export PRINCIPAL="atk-user@US-WEST-2.COMPUTE.INTERNAL"
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
 
@@ -29,8 +27,10 @@ export USE_HTTP=true
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.cdh | .[0].credentials.hdfs_root')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
 
-export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.zookeeper | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")')
-export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.zookeeper | .[0].credentials.uri / "," | .[0] / ":" | .[1]')
+export PRINCIPAL=$(echo $VCAP_SERVICES | $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["dfs.datanode.kerberos.principal"]')
+
+export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.zookeeper[0].credentials["zk.cluster"] / "," | map(. / ":" | .[0]) | join(",")')
+export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.zookeeper[0].credentials["zk.cluster"] / "," | .[0] / ":" | .[1]')
 
 export PG_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.hostname')
 export PG_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.port')
@@ -85,12 +85,7 @@ if [ -f $DIR/../lib/$jar ]; then
  ln -s $DIR/../lib/deploy.jar $DIR/../lib/$jar
 done
 
-if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
-fi
-
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+echo java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+java $@ -XX:MaxPermSize=384m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
 
 popd
-
