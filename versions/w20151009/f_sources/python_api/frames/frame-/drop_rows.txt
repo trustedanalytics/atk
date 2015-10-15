@@ -1,0 +1,40 @@
+.. _python_api/frames/frame-/drop_rows:
+
+
+:doc:`Frame <index>`  drop_rows
+*******************************
+
+------
+
+
+.. function:: drop_rows(self, predicate)
+
+    Erase any row in the current frame which qualifies.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row to a boolean; rows that answer True are dropped from the Frame
+
+
+    Examples
+    --------
+    For this example, my_frame is a Frame object accessing a frame with
+    lots of data for the attributes of ``lions``, ``tigers``, and
+    ``ligers``.
+    Get rid of the ``lions`` and ``tigers``:
+
+    .. code::
+
+        >>> my_frame.drop_rows(lambda row: row.animal_type == "lion" or
+        ...    row.animal_type == "tiger")
+
+    Now the frame only has information about ``ligers``.
+
+    More information on a |UDF| can be found at :doc:`/ds_apir`.
+
+

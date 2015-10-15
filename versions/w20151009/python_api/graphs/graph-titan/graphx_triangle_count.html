@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>TitanGraph graphx_triangle_count &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Graphs TitanGraph" href="index.html" >
+    <link rel="next" title="TitanGraph last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="TitanGraph graphx_pagerank" href="graphx_pagerank.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Graphs</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Graphs</span></code> TitanGraph</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="graphx_pagerank.html" title="TitanGraph graphx_pagerank"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="last_read_date.html" title="TitanGraph last_read_date"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="titangraph-graphx-triangle-count">
+<span id="python-api-graphs-graph-titan-graphx-triangle-count"></span><h1><a class="reference internal" href="index.html"><em>TitanGraph</em></a>  graphx_triangle_count<a class="headerlink" href="#titangraph-graphx-triangle-count" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="graphx_triangle_count">
+<code class="descname">graphx_triangle_count</code><span class="sig-paren">(</span><em>self</em>, <em>output_property</em>, <em>input_edge_labels=None</em><span class="sig-paren">)</span><a class="headerlink" href="#graphx_triangle_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of triangles among vertices of current graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_property</strong> : unicode</p>
+<blockquote>
+<div><p>The name of output property to be
+added to vertex/edge upon completion.</p>
+</div></blockquote>
+<p><strong>input_edge_labels</strong> : list (default=None)</p>
+<blockquote>
+<div><p>The name of edge labels to be considered for triangle count.
+Default is all edges are considered.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><p>dict(label, Frame).</p>
+<p>Dictionary containing the vertex type as the key and the corresponding
+vertex&#8217;s frame with a triangle_count column.
+Call dictionary_name[&#8216;label&#8217;] to get the handle to frame whose vertex
+type is label.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>** Experimental Feature **</p>
+<p>Counts the number of triangles among vertices in an undirected graph.
+If an edge is marked bidirectional, the implementation opts for canonical
+orientation of edges hence counting it only once (similar to an
+undirected graph).</p>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">graphx_triangle_count</span><span class="p">(</span><span class="n">output_property</span> <span class="o">=</span> <span class="s">&quot;triangle_count&quot;</span><span class="p">,</span> <span class="n">output_graph_name</span> <span class="o">=</span> <span class="s">&quot;tc_graph&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The expected output is like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>{u&#39;label1&#39;: Frame &quot;None&quot;
+row_count = 110
+schema =
+  _vid:int64
+  _label:unicode
+  max_k:int64
+  cc:int64
+  TC:int32
+  node:unicode,
+u&#39;label2&#39;: Frame &quot;None&quot;
+row_count = 430
+schema =
+  _vid:int64
+  _label:unicode
+  max_k:int64
+  cc:int64
+  TC:int32
+  node:unicode}
+</pre></div>
+</div>
+<p>To query:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame_for_label1</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;label1&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame_for_label1</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="go">  _vid:int64   _label:unicode   max_k:int64   cc:int64   TC:int32   node:unicode</span>
+<span class="go">/--------------------------------------------------------------------------------/</span>
+<span class="go">      106656   label1                     2         12          0   node158</span>
+<span class="go">      129504   label1                     3         23          1   node2116</span>
+<span class="go">       86640   label1                     7         17         15   node183</span>
+<span class="go">       20424   label1                     7         47         15   node4248</span>
+<span class="go">      164184   label1                     2         72          0   node7388</span>
+<span class="go">       23232   label1                     9         39         28   node3210</span>
+<span class="go">       93840   label1                     3         83          1   node8446</span>
+<span class="go">      114480   label1                     8         58         21   node5311</span>
+<span class="go">       48480   label1                    10         30         36   node2166</span>
+<span class="go">       31152   label1                     6         96         10   node9516</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 15, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

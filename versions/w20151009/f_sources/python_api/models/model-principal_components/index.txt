@@ -1,0 +1,109 @@
+.. _python_api/models/model-principal_components/index:
+
+
+:doc:`Models<../index>` PrincipalComponentsModel
+************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    publish
+    status
+    train
+
+.. class:: PrincipalComponentsModel
+
+    Create a 'new' instance of a Principal Components model.
+
+    Principal component analysis [1]_ is a statistical algorithm
+    that converts possibly correlated features to linearly uncorrelated variables
+    called principal components.
+    The number of principal components is less than or equal to the number of
+    original variables.
+    This implementation of computing Principal Components is done by Singular
+    Value Decomposition [2]_ of the data, providing the user with an option to
+    mean center the data.
+    The Principal Components model is initialized; trained on
+    specifying the observation columns of the frame and the number of components;
+    used to predict principal components.
+    The MLLib Singular Value Decomposition [3]_ implementation has been used for
+    this, with additional features to 1) mean center the data during train and
+    predict and 2) compute the t-squared index during prediction.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+    .. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
+    .. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <PrincipalComponentsModel__init__>`\ (self[, name, _info])                             Create a 'new' instance of a Principal Components model.
+    :doc:`predict <predict>`\ (self, frame[, mean_centered, t_squared_index, observation_columns, ...])   |ALPHA| Predict using principal components model.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, observation_columns[, mean_centered, k])                          Build principal components model.
+    ====================================================================================================  ====================================================================================================
+
+.. _PrincipalComponentsModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of a Principal Components model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b5926850>>
+
+        ..
+
+            A new instance of PrincipalComponentsModel
+    Principal component analysis [1]_ is a statistical algorithm
+    that converts possibly correlated features to linearly uncorrelated variables
+    called principal components.
+    The number of principal components is less than or equal to the number of
+    original variables.
+    This implementation of computing Principal Components is done by Singular
+    Value Decomposition [2]_ of the data, providing the user with an option to
+    mean center the data.
+    The Principal Components model is initialized; trained on
+    specifying the observation columns of the frame and the number of components;
+    used to predict principal components.
+    The MLLib Singular Value Decomposition [3]_ implementation has been used for
+    this, with additional features to 1) mean center the data during train and
+    predict and 2) compute the t-squared index during prediction.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+    .. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
+    .. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html

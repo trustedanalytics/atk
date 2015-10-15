@@ -1,0 +1,123 @@
+.. _rest_api/v1/commands/frame__cumulative_percent:
+
+
+
+------------------------------------------------
+:doc:`Commands <index>` frame/cumulative_percent
+------------------------------------------------
+
+|BETA|
+Add column to frame with cumulative percent sum.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/cumulative_percent
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b59267d0>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **sample_col** : unicode
+
+    ..
+
+        The name of the column from which to compute
+        the cumulative percent sum.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+A cumulative percent sum is computed by sequentially stepping through the
+rows, observing the column values and keeping track of the current percentage of the total sum
+accounted for at the current value.
+
+
+Notes
+-----
+This method applies only to columns containing numerical data.
+Although this method will execute for columns containing negative
+values, the interpretation of the result will change (for example,
+negative percentages).
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

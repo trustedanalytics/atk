@@ -1,0 +1,33 @@
+.. _python_api/frames/frame-edge/loadhive:
+
+
+:doc:`EdgeFrame <index>`  loadhive
+**********************************
+
+------
+
+
+.. function:: loadhive(self, query)
+
+    Append data from a hive table into an existing (possibly empty) frame
+
+
+    :Parameters:
+
+        **query** : unicode
+
+        ..
+
+            Initial query to run at load time
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b59267d0>>
+
+        ..
+
+            the initial frame with the hive data appended
+    Append data from a hive table into an existing (possibly empty) frame

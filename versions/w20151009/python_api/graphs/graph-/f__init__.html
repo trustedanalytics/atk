@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Graph __init__ &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Graphs Graph" href="index.html" >
+    <link rel="next" title="Graph fget" href="ml.html" >
+    <link rel="prev" title="Graphs Graph" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Graphs</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Graphs</span></code> Graph</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Graphs Graph"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ml.html" title="Graph fget"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="graph-init">
+<span id="python-api-graphs-graph-init"></span><h1><a class="reference internal" href="index.html"><em>Graph</em></a>  __init__<a class="headerlink" href="#graph-init" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the graph.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : str (default=None)</p>
+<blockquote class="last">
+<div><p>Name for the new graph.
+Default is None.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>This example uses a single source data frame and creates a graph of &#8216;user&#8217;
+and &#8216;movie&#8217; vertices connected by &#8216;rating&#8217; edges.</p>
+<p>The first step is to bring in some data to create a frame as the source
+for a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;user_name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie_title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/movie.csv&quot;</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, make an empty graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Then, define the types of vertices and edges this graph will be made of:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;movies&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;ratings&#39;</span><span class="p">,</span><span class="s">&#39;users&#39;</span><span class="p">,</span><span class="s">&#39;movies&#39;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And finally, add the data to the graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;user_name&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;movies&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;movie_title&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;ratings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>Adding additional data to the graph from another frame (my_frame2),
+is simply adding vertices (and edges) in row formation.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame2</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;user_name&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Getting basic information about the graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertex_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edge_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>This example uses multiple source data frames and creates a graph of
+&#8216;user&#8217; and &#8216;movie&#8217; vertices connected by &#8216;rating&#8217; edges.</p>
+<p>Create a frame as the source for a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">user_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;user_name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/users.csv&quot;</span><span class="p">,</span> <span class="n">userSchema</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">movie_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie_title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">movie_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/movie.csv&quot;</span><span class="p">,</span> <span class="n">movie_schema</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ratings_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;ser_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ratings_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/ratings.csv&quot;</span><span class="p">,</span> <span class="n">ratings_schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Define the types of vertices and edges this graph will be made of:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;movies&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;ratings&#39;</span><span class="p">,</span><span class="s">&#39;users&#39;</span><span class="p">,</span><span class="s">&#39;movies&#39;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add data to the graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">user_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;user_name&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;movies&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">movie_frame</span><span class="p">,</span> <span class="s">&#39;movie_id&#39;</span><span class="p">)</span> <span class="c"># all columns automatically added as properties</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;ratings&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">ratings_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p>This example shows edges between vertices of the same type.
+Specifically, &#8220;employees work under other employees&#8221;.</p>
+<p>Create a frame to use as the source for the graph data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">employees_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;employees.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Manager&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Years&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;employees_frame&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Define a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;Employee&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;worksunder&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Title&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Manager&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Years&#39;</span><span class="p">],</span> <span class="n">create_missing_vertices</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Inspect the graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertex_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edge_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 15, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

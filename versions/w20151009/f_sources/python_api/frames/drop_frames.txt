@@ -1,0 +1,23 @@
+.. _python_api/frames/drop_frames:
+
+
+:doc:`trustedanalytics <index>`  drop_frames
+********************************************
+
+------
+
+
+.. function:: drop_frames(items)
+
+    Deletes the frame on the server.
+
+
+    :Parameters:
+
+        **items** : [ str | frame object | list [ str | frame objects ]]
+
+        ..
+
+            Either the name of the frame object to delete or the frame object itself
+
+

@@ -1,0 +1,157 @@
+.. _rest_api/v1/commands/frame__bin_column_equal_depth:
+
+
+
+----------------------------------------------------
+:doc:`Commands <index>` frame/bin_column_equal_depth
+----------------------------------------------------
+
+Classify column into groups with the same frequency.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/bin_column_equal_depth
+
+:arguments:
+
+
+    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b59267d0>>
+
+    ..
+
+        Identifier for the input dataframe.
+
+
+
+    **column_name** : unicode
+
+    ..
+
+        The column whose values are to be binned.
+
+
+
+    **num_bins** : int32 (default=None)
+
+    ..
+
+        The maximum number of bins.
+        Default is the Square-root choice
+        :math:`\lfloor \sqrt{m} \rfloor`, where :math:`m` is the number of rows.
+
+
+
+    **bin_column_name** : unicode (default=None)
+
+    ..
+
+        The name for the new column holding the grouping labels.
+        Default is ``<column_name>_binned``.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Group rows of data based on the value in a single column and add a label
+to identify grouping.
+
+Equal depth binning attempts to label rows such that each bin contains the
+same number of elements.
+For :math:`n` bins of a column :math:`C` of length :math:`m`, the bin
+number is determined by:
+
+.. math::
+
+    \lceil n * \frac { f(C) }{ m } \rceil
+
+where :math:`f` is a tie-adjusted ranking function over values of
+:math:`C`.
+If there are multiples of the same value in :math:`C`, then their
+tie-adjusted rank is the average of their ordered rank values.
+
+**Notes**
+
+#)  Unicode in column names is not supported and will likely cause the
+    drop_frames() method (and others) to fail!
+#)  The num_bins parameter is considered to be the maximum permissible number
+    of bins because the data may dictate fewer bins.
+    For example, if the column to be binned has a quantity of :math"`X`
+    elements with only 2 distinct values and the *num_bins* parameter is
+    greater than 2, then the actual number of bins will only be 2.
+    This is due to a restriction that elements with an identical value must
+    belong to the same bin.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        A list containing the edges of each bin.
+
+

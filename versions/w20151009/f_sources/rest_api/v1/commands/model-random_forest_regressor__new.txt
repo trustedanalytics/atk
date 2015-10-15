@@ -1,0 +1,123 @@
+.. _rest_api/v1/commands/model-random_forest_regressor__new:
+
+
+
+---------------------------------------------------------
+:doc:`Commands <index>` model:random_forest_regressor/new
+---------------------------------------------------------
+
+Create a 'new' instance of a Random Forest Regressor model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:random_forest_regressor/new
+
+:arguments:
+
+
+    **dummy_model_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b5926850>>
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Random Forest [1]_ is a supervised ensemble learning algorithm
+used to perform regression.
+A Random Forest Regressor model is initialized, trained on columns of a frame,
+and used to predict the value of each observation in the frame.
+This model runs the MLLib implementation of Random Forest [2]_.
+During training, the decision trees are trained in parallel.
+During prediction, the average over-all tree's predicted value is the predicted
+value of the random forest.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Random_forest
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b5926850>>``
+
+        A new instance of RandomForestRegressor Model
+
+

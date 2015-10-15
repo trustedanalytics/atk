@@ -1,0 +1,50 @@
+.. _python_api/models/model-libsvm/new:
+
+
+:doc:`LibsvmModel <index>`  new
+*******************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    Create a 'new' instance of a Support Vector Machine model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f02b5926850>>
+
+        ..
+
+            A new instance of LibsvmModel
+    Support Vector Machine [1]_ is a supervised algorithm used to
+    perform binary classification.
+    A support vector machine constructs a high dimensional hyperplane which is
+    said to achieve a good separation when a hyperplane has the largest distance to
+    the nearest training-data point of any class. This model runs the
+    LIBSVM [2]_ [3]_ implementation of SVM.
+    The LIBSVM model is initialized, trained on columns of a frame, used to
+    predict the labels of observations in a frame and used to test the predicted
+    labels against the true labels.
+    During testing, labels of the observations are predicted and tested against
+    the true labels using built-in binary Classification Metrics.
+
+    .. rubric: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
+    .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
+    .. [3] https://en.wikipedia.org/wiki/LIBSVM
