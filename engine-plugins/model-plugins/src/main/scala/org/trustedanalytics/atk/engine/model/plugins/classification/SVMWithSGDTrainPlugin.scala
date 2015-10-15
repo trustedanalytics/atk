@@ -53,6 +53,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 103
+
   /**
    * Run MLLib's SVMWithSGD() on the training frame and create a Model for it.
    *
@@ -70,14 +71,17 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
     val labeledTrainRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
 
     //Running MLLib
-    val svm = initializeSVMModel(arguments)
+    val svm = SVMWithSGDTrainPlugin.initializeSVMModel(arguments)
     val svmModel = svm.run(labeledTrainRDD)
 
     val jsonModel = new SVMData(svmModel, arguments.observationColumns)
     model.data = jsonModel.toJson.asJsObject
   }
+}
 
-  private def initializeSVMModel(arguments: ClassificationWithSGDTrainArgs): SVMWithSGD = {
+object SVMWithSGDTrainPlugin {
+
+  def initializeSVMModel(arguments: ClassificationWithSGDTrainArgs): SVMWithSGD = {
     val svm = new SVMWithSGD()
     svm.optimizer.setNumIterations(arguments.numIterations)
     svm.optimizer.setStepSize(arguments.stepSize)
@@ -93,3 +97,4 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
     svm.setIntercept(arguments.intercept)
   }
 }
+

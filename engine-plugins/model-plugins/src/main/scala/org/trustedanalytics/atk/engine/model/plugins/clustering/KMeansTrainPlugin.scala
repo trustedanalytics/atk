@@ -73,13 +73,13 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
   override def execute(arguments: KMeansTrainArgs)(implicit invocation: Invocation): KMeansTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
-    val kMeans = initializeKmeans(arguments)
+    val kMeans = KMeansTrainPlugin.initializeKmeans(arguments)
 
     val trainFrameRdd = frame.rdd
     trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val kmeansModel = kMeans.run(vectorRDD)
-    val size = computeClusterSize(kmeansModel, trainFrameRdd, arguments.observationColumns, arguments.columnScalings)
+    val size = KMeansTrainPlugin.computeClusterSize(kmeansModel, trainFrameRdd, arguments.observationColumns, arguments.columnScalings)
     val withinSetSumOfSquaredError = kmeansModel.computeCost(vectorRDD)
     trainFrameRdd.unpersist()
 
@@ -90,11 +90,13 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
 
     KMeansTrainReturn(size, withinSetSumOfSquaredError)
   }
+}
 
-  /**
-   * Constructs a KMeans instance with parameters passed or default parameters if not specified
-   */
-  private def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
+/**
+ * Constructs a KMeans instance with parameters passed or default parameters if not specified
+ */
+object KMeansTrainPlugin {
+  def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
     val kmeans = new KMeans()
 
     kmeans.setK(arguments.k)
@@ -103,7 +105,7 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
     kmeans.setEpsilon(arguments.epsilon)
   }
 
-  private def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
+  def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
 
     val predictRDD = trainFrameRdd.mapRows(row => {
       val array = row.valuesAsArray(observationColumns).map(row => DataTypes.toDouble(row))
@@ -115,3 +117,4 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
     predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
   }
 }
+
