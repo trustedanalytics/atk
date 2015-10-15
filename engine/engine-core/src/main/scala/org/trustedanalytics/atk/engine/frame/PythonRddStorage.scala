@@ -138,9 +138,9 @@ object PythonRddStorage {
     val accumulator = rdd.sparkContext.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
 
-    var pyIncludes = new JArrayList[String]()
+    val pyIncludes = new JArrayList[String]()
 
-    val pythonDefaultDependency = SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
+    val pythonDefaultDependency = getResourcePath("trustedanalytics.zip", EngineConfig.pythonDefaultDependencySearchDirectories)
       .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution (searched: " + EngineConfig.pythonDefaultDependencySearchDirectories.mkString(", ") + ")"))
     sc.addFile(s"file://$pythonDefaultDependency")
     pyIncludes.add("trustedanalytics.zip")
@@ -156,6 +156,20 @@ object PythonRddStorage {
       pythonExec = pythonExec,
       broadcastVars, accumulator)
     pyRdd
+  }
+
+  def getResourcePath(resourceName: String, additionalPaths: Seq[String]): Option[String] = {
+    val currentDirectory = Directory.Current.getOrElse(
+      throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
+    val searchableDirectories = Array(currentDirectory) ++ (for { path <- additionalPaths } yield Directory(path))
+
+    val result = for {
+      directory <- searchableDirectories
+      file <- directory.deepFiles.toList.map(_.toString())
+      if file.endsWith(resourceName)
+    } yield file
+
+    result.headOption
   }
 
   def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null): RDD[Array[Any]] = {

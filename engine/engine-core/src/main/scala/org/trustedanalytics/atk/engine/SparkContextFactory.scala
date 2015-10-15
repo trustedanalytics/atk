@@ -65,22 +65,6 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     new SparkContext(sparkConf)
   }
 
-  def getResourcePath(resourceName: String, additionalPaths: Option[Seq[String]] = None): Option[String] = {
-    val currentDirectory = Directory.Current.getOrElse(
-      throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
-    val searchableDirectories = additionalPaths.isDefined match {
-      case false => Array(currentDirectory)
-      case true => Array(currentDirectory) ++ (for { path <- additionalPaths.get } yield Directory(path))
-    }
-
-    val result = for {
-      directory <- searchableDirectories
-      file <- directory.deepFiles.toList.map(_.toString)
-      if (file.endsWith(resourceName))
-    } yield (file)
-
-    result.headOption
-  }
 }
 
 object SparkContextFactory extends SparkContextFactory {
@@ -100,4 +84,5 @@ object SparkContextFactory extends SparkContextFactory {
     }
     sc
   }
+
 }
