@@ -20,7 +20,7 @@ import org.apache.spark.sql.Row
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
@@ -55,8 +55,8 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
   val epsilon = 1e-6
 
   /** assertion that two doubles are almost equal */
-  def assertAlmostEqual(x: Double, y: Double, tolerance : Double = 1e-6): Unit = {
-     assert(Math.abs(x-y) < tolerance, s"${x} should equal ${y}+-${tolerance}")
+  def assertAlmostEqual(x: Double, y: Double, tolerance: Double = 1e-6): Unit = {
+    assert(Math.abs(x - y) < tolerance, s"${x} should equal ${y}+-${tolerance}")
   }
 
   /** assertion that most likely topic is given by index */
@@ -88,7 +88,7 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
 
     "initialize LDA runner" in {
       val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count",
-        numTopics = 2, maxIterations = 10, alpha = 1.3f, beta= 1.6f, randomSeed = Some(25))
+        numTopics = 2, maxIterations = 10, alpha = 1.3f, beta = 1.6f, randomSeed = Some(25))
       val ldaRunner = LdaTrainFunctions.initializeLdaRunner(trainArgs)
 
       assert(ldaRunner.getK == 2)

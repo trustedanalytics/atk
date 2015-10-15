@@ -93,7 +93,7 @@ case class AtkLdaModel(numTopics: Int) {
    * @param maxIterations Maximum number of iterations that the algorithm will execute
    * @return model summary
    */
-  def getModelSummary(edgeFrame: FrameRdd, maxIterations : Int) : String = {
+  def getModelSummary(edgeFrame: FrameRdd, maxIterations: Int): String = {
     require(distLdaModel != null, "Trained LDA model must not be null")
     val buf = new StringBuilder()
     val numDocs = distLdaModel.topicDistributions.count()

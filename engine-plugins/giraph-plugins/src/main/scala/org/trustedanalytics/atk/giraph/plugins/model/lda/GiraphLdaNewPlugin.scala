@@ -37,7 +37,7 @@ class GiraphLdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReferen
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "giraph_model:lda/new"
+  override def name: String = "model:giraph_lda/new"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Deprecated)
 
