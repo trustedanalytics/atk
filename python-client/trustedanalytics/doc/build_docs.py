@@ -70,7 +70,7 @@ ta.connect()
 
 from trustedanalytics.meta.metaprog import get_installation, has_entity_collection, get_entity_collection, get_function_text
 from trustedanalytics.meta.docstub import get_doc_stub_modules_text, get_doc_stub_init_text
-from trustedanalytics.meta.names import upper_first, entity_type_to_class_name, indent, get_type_name
+from trustedanalytics.meta.names import upper_first, entity_type_to_class_name, indent, get_type_name, is_entity_constructor_command_name
 from trustedanalytics.meta.installapi import download_server_details
 from trustedanalytics.doc.pyrst import  get_command_def_rst, get_class_rst
 from trustedanalytics.doc.restrst import get_command_def_rest_rst, get_commands_rest_index_content, get_command_rest_rst_file_name
@@ -169,7 +169,8 @@ def get_index_ref(cls):
 def get_rst_attr_file_header(class_name, index_ref, attr_name):
     """produce the rst content to begin an attribute-level *.rst file"""
     # use  :doc:`class_name<index>` syntax to create reference back to the index.rst file
-    title = ":doc:`%s <%s>`  %s" % (class_name, index_ref, attr_name)
+    display_attr_name = '__init__' if is_entity_constructor_command_name(attr_name) else attr_name
+    title = ":doc:`%s <%s>`  %s" % (class_name, index_ref, display_attr_name)
     return get_rst_file_header(title)
 
 
