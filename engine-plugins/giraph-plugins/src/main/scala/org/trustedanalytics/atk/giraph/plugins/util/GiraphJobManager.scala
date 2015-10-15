@@ -18,19 +18,21 @@ package org.trustedanalytics.atk.giraph.plugins.util
 
 import java.io.File
 
-import org.trustedanalytics.atk.component.Boot
-import org.trustedanalytics.atk.engine.{ EngineConfig, CommandStorage, ProgressInfo }
-import org.trustedanalytics.atk.engine.plugin.{ CommandInvocation, Invocation }
 import org.apache.giraph.conf.GiraphConfiguration
 import org.apache.giraph.job.{ DefaultJobObserver, GiraphJob }
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.{ Path, FileSystem }
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.apache.hadoop.mapreduce.Job
-import com.typesafe.config.Config
-import scala.collection.mutable
+import org.apache.hadoop.mapreduce.filecache.DistributedCache
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat
+import org.trustedanalytics.atk.engine.plugin.{ CommandInvocation, Invocation }
+import org.trustedanalytics.atk.engine._
+import org.trustedanalytics.atk.moduleloader.Module
+
+import scala.collection.mutable
 
 object GiraphJobListener {
+  // TODO: this map doesn't make any sense, there is only one instance of CommandStorage in the Engine so we just need a single reference
   var commandIdMap = new mutable.HashMap[Long, CommandStorage]
 }
 
@@ -91,7 +93,8 @@ class GiraphJobListener extends DefaultJobObserver {
     }
   }
 
-  private def getCommandId(job: Job): Long = job.getConfiguration.getLong("giraph.ml.commandId", 0)
+  private def getCommandId(job: Job): Long = job.getConfiguration.getLong(GiraphJobManager.CommandIdPropertyName, 0)
+
   private def getCommandStorage(commandId: Long): CommandStorage = GiraphJobListener.commandIdMap.getOrElse(commandId, null)
 
 }
@@ -102,7 +105,7 @@ class GiraphJobListener extends DefaultJobObserver {
  */
 object GiraphJobManager {
 
-  private val archiveName = EngineConfig.config.getString("trustedanalytics.atk.engine.giraph.archive.name")
+  val CommandIdPropertyName = "atk.commandId"
 
   def run(jobName: String,
           computationClassCanonicalName: String,
@@ -110,33 +113,36 @@ object GiraphJobManager {
           invocation: Invocation,
           reportName: String): String = {
 
-    val giraphLoader = Boot.getClassLoader(archiveName)
-    Thread.currentThread().setContextClassLoader(giraphLoader)
-
     val commandInvocation = invocation.asInstanceOf[CommandInvocation]
-
     GiraphJobListener.commandIdMap(commandInvocation.commandId) = commandInvocation.commandStorage
-    giraphConf.setJobObserverClass(classOf[GiraphJobListener])
 
-    giraphConf.setLong("giraph.ml.commandId", commandInvocation.commandId)
+    giraphConf.setLong(CommandIdPropertyName, commandInvocation.commandId)
 
-    val job = new GiraphJob(giraphConf, jobName)
-    val internalJob: Job = job.getInternalJob
+    // make sure jars are in HDFS
+    BackgroundInit.waitTillCompleted
+
+    // Use jars that have been cached in HDFS
+    val hdfs = new FileStorage
+    val hdfsLibs = hdfs.hdfsLibs(Module.allJarNames("giraph-plugins"))
+    hdfsLibs.foreach(path => DistributedCache.addFileToClassPath(new Path(path), giraphConf))
 
     // Clear Giraph Report Directory
     val fs = FileSystem.get(new Configuration())
     val outputDir = outputDirectory(fs, commandInvocation.commandId)
-
     fs.delete(outputDir, true)
 
-    FileOutputFormat.setOutputPath(internalJob, outputDir)
+    val job = new GiraphJob(giraphConf, jobName)
+    FileOutputFormat.setOutputPath(job.getInternalJob, outputDir)
 
     job.run(true) match {
-      case false => "Error: No Learning Report found!!"
+      case false => throw new RuntimeException("Error: No Learning Report found!!")
       case true =>
         val stream = fs.open(getFullyQualifiedPath(outputDir + File.separator + reportName, fs))
         def readLines = Stream.cons(stream.readLine, Stream.continually(stream.readLine))
         val result = readLines.takeWhile(_ != null).toList.mkString("\n")
+
+        fs.delete(outputDir, true)
+
         result
     }
   }

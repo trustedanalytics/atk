@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.engine.HdfsFileStorage
+import org.trustedanalytics.atk.engine.FileStorage
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.event.EventLogging
 
@@ -30,7 +30,7 @@ import org.trustedanalytics.atk.event.EventLogging
  * @param hdfs methods for interacting with underlying storage (e.g. HDFS)
  */
 class FrameFileStorage(fsRoot: String,
-                       val hdfs: HdfsFileStorage)(implicit startupInvocation: Invocation)
+                       val hdfs: FileStorage)(implicit startupInvocation: Invocation)
     extends EventLogging with EventLoggingImplicits {
 
   private val framesBaseDirectory = new Path(fsRoot + "/trustedanalytics/frames")

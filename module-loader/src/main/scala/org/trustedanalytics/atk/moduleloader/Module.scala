@@ -16,23 +16,32 @@
 
 package org.trustedanalytics.atk.moduleloader
 
-import com.typesafe.config.ConfigFactory
+import java.net.{ URLClassLoader, URL }
 import org.trustedanalytics.atk.moduleloader.internal.{ ModuleLoader, SearchPath }
+import scala.collection.JavaConversions._
 
 /**
  * Modules provide ClassLoader isolation in Atk.
  *
  * @param name name of module
  * @param parentName name of parent module
- * @param jarNames jars this module needs in its ClassLoader
- * @param commandPlugins the commandPlugin class names in this module
  * @param classLoader the classloader for this module
  */
 class Module private[moduleloader] (val name: String,
                                     val parentName: Option[String],
-                                    val jarNames: Seq[String],
-                                    val commandPlugins: Seq[String],
-                                    private[moduleloader] val classLoader: ClassLoader) {
+                                    private[moduleloader] val classLoader: URLClassLoader) extends ClassLoaderAware {
+
+  /**
+   * jars this module needs in its ClassLoader
+   */
+  private[moduleloader] lazy val jarNames: Seq[String] = {
+    classLoaderUrls.map(url => {
+      val file = url.getFile
+      file.substring(file.lastIndexOf("/") + 1)
+    })
+  }
+
+  lazy val classLoaderUrls: Seq[URL] = classLoader.getURLs
 
   /**
    * Load a class definition from this module
@@ -40,7 +49,12 @@ class Module private[moduleloader] (val name: String,
    * @return the class definition
    */
   def loadClass[T](className: String): Class[T] = {
-    classLoader.loadClass(className).asInstanceOf[Class[T]]
+    try {
+      classLoader.loadClass(className).asInstanceOf[Class[T]]
+    }
+    catch {
+      case e: Exception => throw new ModuleException(s"could not load class '$className' from module '$name'", e)
+    }
   }
 
   /**
@@ -50,9 +64,20 @@ class Module private[moduleloader] (val name: String,
    * @return newly instantiated instance
    */
   def load[T](className: String): T = {
-    classLoader.loadClass(className).newInstance().asInstanceOf[T]
+    loadClass(className).newInstance().asInstanceOf[T]
   }
 
+  /**
+   * Load resources from this modules ClassLoader
+   * @return the resources or empty list if not found
+   */
+  def getResources(name: String): List[URL] = {
+    classLoader.getResources(name).toList
+  }
+
+  override def toString: String = {
+    s"Module(name:$name, parent:$parentName, classLoader:$classLoader})"
+  }
 }
 
 /**
@@ -65,9 +90,9 @@ object Module {
 
   private[moduleloader] val primaryModuleConfigFileName = "atk-module.conf"
 
-  private[moduleloader] val moduleConfigFileNames = Seq(primaryModuleConfigFileName, "atk-module-jars.conf")
+  private[moduleloader] val moduleConfigFileNames = Seq(primaryModuleConfigFileName, "atk-module-generated.conf")
 
-  private lazy val modules = new ModuleLoader(new SearchPath(ConfigFactory.load())).load()
+  private lazy val moduleMap = new ModuleLoader(new SearchPath()).load()
 
   /**
    * Setup modules and start a Component
@@ -82,6 +107,7 @@ object Module {
       System.exit(1)
     }
     else {
+      println("classpath: " + System.getProperty("java.class.path"))
       val component: Component = load(args(0), args(1))
       component.start()
     }
@@ -119,22 +145,45 @@ object Module {
    * Get a module throwing an error if Module does not exist
    */
   def get(moduleName: String): Module = {
-    modules.getOrElse(moduleName, throw new IllegalArgumentException(s"No module with name $moduleName, please choose from: " + moduleNames.mkString(", ")))
+    moduleMap.getOrElse(moduleName, throw new IllegalArgumentException(s"No module with name $moduleName, please choose from: " + moduleNames.mkString(", ")))
   }
 
   /**
    * The list of module names available
    */
   def moduleNames: Seq[String] = {
-    modules.keys.toSeq
+    moduleMap.keys.toSeq
+  }
+
+  def modules: Iterable[Module] = {
+    moduleMap.values
+  }
+
+  def libs: Iterable[URL] = {
+    modules.flatMap(_.classLoader.getURLs)
+  }
+
+  def allJarNames(moduleName: String): Seq[String] = {
+    val module = get(moduleName)
+    module.parentName match {
+      case Some(parentName) => module.jarNames ++ allJarNames(parentName)
+      case None => module.jarNames
+    }
+  }
+
+  def allLibs(moduleName: String): Iterable[URL] = {
+    val module = get(moduleName)
+    module.parentName match {
+      case Some(parentName) => module.classLoader.getURLs ++ allLibs(parentName)
+      case None => module.classLoader.getURLs
+    }
   }
 
   /**
    * Print usage of main()
    */
   private def printUsage(): Unit = {
-    println("USAGE: ModuleLoader requires two args:")
-    println("requires 2 args")
+    println("USAGE: ModuleLoader requires two args: the module name and class name")
   }
 
 }

@@ -1,0 +1,27 @@
+<configuration scan="true">
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date - [%level] - from %logger in %thread %message %n%ex{full}%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="play" level="INFO" />
+    <logger name="application" level="INFO" />
+    <logger name="scala.slick" level="INFO" />
+    <logger name="org.apache" level="INFO" />
+    <logger name="org.eclipse.jetty" level="INFO" />
+    <!--
+        log levels
+        TRACE
+        DEBUG
+        INFO
+        WARN
+        ERROR
+    -->
+    <root level="INFO">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="STDOUT" />
+    </root>
+
+</configuration>

@@ -22,13 +22,13 @@ import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.moduleloader.Component
 import spray.can.Http
 import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.duration._
 import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.component.{ ArchiveDefinition, Archive }
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.reflect.ClassTag
 import org.trustedanalytics.atk.scoring.interfaces.Model
@@ -40,25 +40,18 @@ import org.apache.commons.io.FileUtils
  *
  * See the 'scoring_server.sh' to see how the launcher starts the application.
  */
-class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoader: ClassLoader, config: Config)
-    extends Archive(archiveDefinition, classLoader, config) with EventLogging {
+class ScoringServiceApplication extends Component with EventLogging {
+
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
 
   EventLogging.raw = true
   info("Scoring server setting log adapter from configuration")
 
-  EventLogging.raw = configuration.getBoolean("trustedanalytics.atk.scoring.logging.raw")
+  EventLogging.raw = config.getBoolean("trustedanalytics.atk.scoring.logging.raw")
   info("Scoring server set log adapter from configuration")
 
-  EventLogging.profiling = configuration.getBoolean("trustedanalytics.atk.scoring.logging.profile")
+  EventLogging.profiling = config.getBoolean("trustedanalytics.atk.scoring.logging.profile")
   info(s"Scoring server profiling: ${EventLogging.profiling}")
-
-  //Direct subsequent archive messages to the normal log
-  Archive.logger = s => info(s)
-  Archive.logger("Archive logger installed")
-
-  var archiveName: String = null
-  var modelName: String = null
-  var ModelBytesFileName: String = null
 
   /**
    * Main entry point to start the Scoring Service Application
@@ -69,9 +62,14 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
     createActorSystemAndBindToHttp(service)
   }
 
+  /**
+   * Stop this component
+   */
+  override def stop(): Unit = {
+  }
+
   private def getModel: Model = {
 
-    var outputFile: FileOutputStream = null
     var tempTarFile: File = null
 
     try {
@@ -82,8 +80,7 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
         tarFilePath = tempTarFile.getAbsolutePath
       }
-      println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>about to read the model")
-      ModelPublishFormat.read(new File(tarFilePath), classLoader.getParent)
+      ModelPublishFormat.read(new File(tarFilePath), this.getClass.getClassLoader.getParent)
     }
     finally {
       FileUtils.deleteQuietly(tempTarFile)
@@ -104,15 +101,4 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
     println("scoring server is running now")
   }
 
-  /**
-   * Obtain instances of a given class. The keys are established purely
-   * by convention.
-   *
-   * @param descriptor the string key of the desired class instance.
-   * @tparam T the type of the requested instances
-   * @return the requested instances, or the empty sequence if no such instances could be produced.
-   */
-  override def getAll[T: ClassTag](descriptor: String): Seq[T] = {
-    throw new Exception("API server provides no components at this time")
-  }
 }
