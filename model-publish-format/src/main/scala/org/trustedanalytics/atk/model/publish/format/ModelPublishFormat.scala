@@ -45,31 +45,26 @@ object ModelPublishFormat {
     var modelDataFile: File = null
     var modelLoader: File = null
 
-    try {
-      classLoaderFiles.foreach((file: File) => {
-        val entryName = file.getName
-        val fileEntry = new TarArchiveEntry(file, entryName)
-        fileEntry.setSize(file.length())
+    def writeEntry(file: File): Unit =
+      {
+        val fileEntry = new TarArchiveEntry(file)
         myTarBall.putArchiveEntry(fileEntry)
         IOUtils.copy(new FileInputStream(file), myTarBall)
         myTarBall.closeArchiveEntry()
+      }
+
+    try {
+      classLoaderFiles.foreach((file: File) => {
+        writeEntry(file)
       })
 
       modelDataFile = File.createTempFile("modelData", ".txt")
       FileUtils.writeByteArrayToFile(modelDataFile, modelData)
-      var nextEntryName = modelDataFile.getName
-      var tarEntry = new TarArchiveEntry(modelDataFile, nextEntryName)
-      myTarBall.putArchiveEntry(tarEntry)
-      IOUtils.copy(new FileInputStream(modelDataFile), myTarBall)
-      myTarBall.closeArchiveEntry()
+      writeEntry(modelDataFile)
 
       modelLoader = File.createTempFile("modelReader", ".txt")
       FileUtils.writeStringToFile(modelLoader, modelLoaderClass)
-      nextEntryName = modelLoader.getName
-      tarEntry = new TarArchiveEntry(modelLoader, nextEntryName)
-      myTarBall.putArchiveEntry(tarEntry)
-      IOUtils.copy(new FileInputStream(modelLoader), myTarBall)
-      myTarBall.closeArchiveEntry()
+      writeEntry(modelLoader)
     }
     finally {
       myTarBall.finish()

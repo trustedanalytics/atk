@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
+import com.google.common.base.Charsets
 import org.apache.commons.compress.archivers.tar.{ TarArchiveOutputStream, TarArchiveEntry, TarArchiveInputStream }
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
@@ -40,7 +41,7 @@ class ModelPublishFormatTest extends WordSpec {
       try {
         tarFile = File.createTempFile("TestTar", ".tar")
         tarOutput = new FileOutputStream(tarFile)
-        ModelPublishFormat.write(fileList, modelReader, model.getBytes, tarOutput)
+        ModelPublishFormat.write(fileList, modelReader, model.getBytes(Charsets.UTF_8), tarOutput)
 
         myTarFileStream = new TarArchiveInputStream(new FileInputStream(new File(tarFile.getAbsolutePath)))
 
@@ -60,7 +61,7 @@ class ModelPublishFormatTest extends WordSpec {
             assert(new String(content).equals(modelReader))
           }
           else {
-            assert(content.length == model.getBytes.length)
+            assert(content.length == model.getBytes(Charsets.UTF_8).length)
           }
           entry = myTarFileStream.getNextTarEntry
         }
@@ -88,7 +89,7 @@ class ModelPublishFormatTest extends WordSpec {
       IOUtils.copy(new FileInputStream(myTestJar), myTestTarBall)
       myTestTarBall.closeArchiveEntry()
 
-      FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes)
+      FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes(Charsets.UTF_8))
       var nextEntryName = modelDataFile.getName
       var tarEntry = new TarArchiveEntry(modelDataFile, nextEntryName)
       myTestTarBall.putArchiveEntry(tarEntry)

@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
+import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.apache.spark.mllib.regression.LinearRegressionModel
@@ -81,6 +82,6 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
     val linRegModel: LinearRegressionModel = linRegData.linRegModel
     val jsvalue: JsValue = linRegModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes, "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin"))
   }
 }
