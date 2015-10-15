@@ -588,6 +588,7 @@ object MLLibJsonProtocol {
   implicit val naiveBayesDataFormat = jsonFormat2(NaiveBayesData)
   implicit val naiveBayesTrainFormat = jsonFormat5(NaiveBayesTrainArgs)
   implicit val naiveBayesPredictFormat = jsonFormat3(NaiveBayesPredictArgs)
+  implicit val naiveBayesTestFormat = jsonFormat4(NaiveBayesTestArgs)
   implicit val logRegTrainFormat = jsonFormat18(LogisticRegressionTrainArgs)
   implicit val logRegTrainResultsFormat = jsonFormat8(LogisticRegressionSummaryTable)
   implicit val pcaPredictFormat = jsonFormat7(PrincipalComponentsPredictArgs)

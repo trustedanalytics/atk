@@ -49,18 +49,22 @@ By default, we predict the labels over columns the RandomForest was trained on."
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
 
 }
-
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
 and target labels.""",
-  returns = """An object with classification metrics.
-The data returned is composed of multiple components\:
+  returns = """A dictionary with binary classification metrics.
+The data returned is composed of the following keys\:
 
-|  **double** : *accuracy*
-|  **table** : *confusion_matrix*
-|  **double** : *f_measure*
-|  **double** : *precision*
-|  **double** : *recall*""")
+              |  'accuracy' : double
+              |  The proportion of predictions that are correctly identified
+              |  'confusion_matrix' : dictionary
+              |  A table used to describe the performance of a classification model
+              |  'f_measure' : double
+              |  The harmonic mean of precision and recall
+              |  'precision' : double
+              |  The proportion of predicted positive instances that are correctly identified
+              |  'recall' : double
+              |  The proportion of positive instances that are correctly identified.""")
 class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestClassifierTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.

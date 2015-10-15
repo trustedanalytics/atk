@@ -283,7 +283,7 @@ def _create_class(install_path, doc=None):
         baseclass = get_or_create_class(baseclass_install_path)
     new_class = _create_class_type(new_class_name,
                                    baseclass,
-                                   doc=str(doc) or install_path.get_generic_doc_str(),
+                                   doc=str(doc) if doc else install_path.get_generic_doc_str(),
                                    init=get_class_init_from_path(install_path))
     set_installation(new_class, CommandInstallation(install_path, host_class_was_created=True))
     if install_path.is_entity and not install_path.full.startswith('_'):
@@ -311,7 +311,7 @@ def create_classes(install_path):
 def create_entity_class_from_constructor_command_def(command_def):
     if not command_def.is_constructor:
         raise RuntimeError("Internal Error: algo was not a constructor command_def")
-    _create_class(command_def.install_path, command_def.doc)
+    _create_class(command_def.install_path)
 
 
 def _create_class_type(new_class_name, baseclass, doc, init=None):
