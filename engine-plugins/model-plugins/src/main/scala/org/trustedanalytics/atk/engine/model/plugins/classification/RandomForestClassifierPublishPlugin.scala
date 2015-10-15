@@ -78,6 +78,6 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes, "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }

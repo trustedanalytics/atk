@@ -61,7 +61,7 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, S
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(),
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes,
       "scoring-models",
       "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin"))
   }

@@ -104,6 +104,10 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>model-publish-format</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>engine-core</artifactId>
         </dependency>
         <dependency>
