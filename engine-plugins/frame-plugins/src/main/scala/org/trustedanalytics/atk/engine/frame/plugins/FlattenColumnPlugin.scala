@@ -194,7 +194,34 @@ object FlattenColumnFunctions extends Serializable {
     }
 
     var rows: Array[Row] = new Array[Row](maxItems)
+    val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
 
+    for (colIndex <- splitColumns.indices) {
+
+      for (rowIndex <- splitColumns(colIndex).indices) {
+
+        val isNewRow = rowBuffer.length <= rowIndex
+        val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
+
+        r(indexes(colIndex)) = splitColumns(colIndex)(rowIndex)
+
+        if (isNewRow) {
+          for (tempColIndex <- splitColumns.indices) {
+            if (tempColIndex != colIndex)
+              r(indexes(tempColIndex)) = ""
+          }
+
+          rowBuffer += Row.fromSeq(r)
+        }
+        else
+          rowBuffer(rowIndex) = Row.fromSeq(r)
+      }
+
+    }
+
+    return rowBuffer.toArray
+
+    /*
     for (rowIndex <- rows.indices) {
       val r = row.toSeq.toArray.clone()
 
@@ -205,13 +232,9 @@ object FlattenColumnFunctions extends Serializable {
           r(indexes(colIndex)) = splitColumns(colIndex)(rowIndex)
       }
 
-      for (j <- 0 until r.length) {
-        val temp = r(j).toString()
-      }
-
       rows(rowIndex) = Row.fromSeq(r)
     }
 
-    return rows
+    return rows*/
   }
 }
