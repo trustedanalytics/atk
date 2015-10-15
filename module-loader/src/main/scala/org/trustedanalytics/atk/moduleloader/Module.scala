@@ -107,7 +107,7 @@ object Module {
       System.exit(1)
     }
     else {
-      println("Module:main() classpath: " + System.getProperty("java.class.path"))
+      println("classpath: " + System.getProperty("java.class.path"))
       val component: Component = load(args(0), args(1))
       component.start()
     }
