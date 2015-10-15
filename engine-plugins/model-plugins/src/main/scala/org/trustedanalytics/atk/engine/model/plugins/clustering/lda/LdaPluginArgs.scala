@@ -137,8 +137,6 @@ object LdaJsonFormat {
       ldaModel.topicWordMap = topicWordMap
       ldaModel
     }
-
   }
-
 }
 

@@ -87,6 +87,30 @@ case class AtkLdaModel(numTopics: Int) {
   }
 
   /**
+   * Get model summary
+   *
+   * @param edgeFrame Frame of edges between documents and words
+   * @param maxIterations Maximum number of iterations that the algorithm will execute
+   * @return model summary
+   */
+  def getModelSummary(edgeFrame: FrameRdd, maxIterations : Int) : String = {
+    require(distLdaModel != null, "Trained LDA model must not be null")
+    val buf = new StringBuilder()
+    val numDocs = distLdaModel.topicDistributions.count()
+    val numEdges = edgeFrame.count()
+
+    buf ++= "======Graph Statistics======\n"
+    buf ++= s"Number of vertices: ${numDocs + distLdaModel.vocabSize}} (doc: ${numDocs}, word: ${distLdaModel.vocabSize}})\n"
+    buf ++= s"Number of edges: ${numEdges}\n\n"
+    buf ++= "======LDA Configuration======\n"
+    buf ++= s"numTopics: ${distLdaModel.k}\n"
+    buf ++= s"alpha: ${getDocConcentration}\n"
+    buf ++= s"beta: ${getTopicConcentration}\n"
+    buf ++= s"maxIterations: ${maxIterations}\n"
+    buf.toString()
+  }
+
+  /**
    * Set frames with conditional probabilities of word given topics, and topics given words
    *
    * Calculates the conditional probabilities of word given topics, and topics given words
@@ -332,6 +356,18 @@ case class AtkLdaModel(numTopics: Int) {
       throw new SecurityException("Cannot access global topic counts in distributed LDA model.")
     )
     privateField.get(distLdaModel).asInstanceOf[TopicCounts]
+  }
+
+  /**
+   * Get document concentration (alpha)
+   */
+  private[clustering] def getDocConcentration: Double = {
+    //TODO: Delete reflection once these private variables are accessible in Spark1.4.+
+    val privateField = classOf[DistributedLDAModel].getDeclaredField("docConcentration")
+    Try(privateField.setAccessible(true)).orElse(
+      throw new SecurityException("Cannot access document concentration in distributed LDA model.")
+    )
+    privateField.get(distLdaModel).asInstanceOf[Double]
   }
 
   /**

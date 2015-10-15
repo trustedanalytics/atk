@@ -49,6 +49,7 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
     val wordCount = uniqueWordsFrame.count().toInt
     val edgeFrameWithWordIds = addWordIdsToEdgeFrame()
 
+    // create rdd of document, word Id, and word count
     val docWordRdd = edgeFrameWithWordIds.mapRows(row => {
       val document = row.stringValue(args.documentColumnName)
       val wordId = row.longValue(wordIdAssigner.ldaWordIdColumnName)
@@ -56,6 +57,7 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
       (document, (wordId, wordCount))
     })
 
+    // aggregate word counts by document
     val corpus: RDD[(String, Vector)] = docWordRdd.aggregateByKey(
       Map[Long, Long]())((wordCountMap, value) => value match {
         case (wordId, wordCount) => wordCountMap + (wordId -> wordCount)
@@ -66,6 +68,7 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
           (document, new SparseVector(wordCount, wordIndices, wordCountValues))
       }
 
+    // assign Ids to documents
     corpus.zipWithIndex.map {
       case ((document, wordVector), documentId) =>
         (documentId, (document, wordVector))
@@ -78,8 +81,8 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
    * @return Edge frame with word Ids
    */
   private[clustering] def addWordIdsToEdgeFrame(): FrameRdd = {
-    val edgeDataFrame = toDataFrame(edgeFrame)
-    val wordDataFrame = toDataFrame(uniqueWordsFrame)
+    val edgeDataFrame = edgeFrame.toDataFrame
+    val wordDataFrame = uniqueWordsFrame.toDataFrame
 
     val joinedDataFrame = edgeDataFrame.join(
       wordDataFrame,
@@ -95,16 +98,4 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
     new FrameRdd(joinedSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64)), joinedDataFrame.rdd)
   }
 
-  /**
-   * Wrapper for creating Spark dataframes that works around kryo serialization bug
-   *
-   * Work-around for kyro serialization bug when rows are represented as GenericRowWithSchema
-   *
-   * @see https://issues.apache.org/jira/browse/SPARK-6465
-   */
-  def toDataFrame(rdd: FrameRdd): DataFrame = {
-    //TODO: Delete the conversion from GenericRowWithSchema to GenericRow once we upgrade to Spark1.4
-    val rowRdd: RDD[Row] = rdd.map(row => new GenericRow(row.toSeq.toArray))
-    new FrameRdd(rdd.frameSchema, rowRdd).toDataFrame
-  }
 }

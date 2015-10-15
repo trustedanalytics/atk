@@ -41,8 +41,6 @@ case class LdaWordIdAssigner(edgeFrame: FrameRdd,
   val ldaWordCountColumnName: String = LdaWordPrefix + "total_" + wordCountColumnName
 
   /**
-   * Assign unique Ids to words
-   *
    * Assign unique Ids to words, and count total occurrences of each word in documents.
    *
    * @return Frame with word Id, word, and total count

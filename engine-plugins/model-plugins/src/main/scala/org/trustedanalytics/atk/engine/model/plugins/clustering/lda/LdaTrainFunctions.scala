@@ -20,7 +20,32 @@ import org.apache.spark.mllib.clustering.{ AtkLdaModel, DistributedLDAModel, LDA
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 
-object LdaFunctions extends Serializable {
+object LdaTrainFunctions extends Serializable {
+
+  /**
+   * Train LDA model
+   *
+   * @param edgeFrame Frame of edges between documents and words
+   * @param args LDA train arguments
+   * @return Trained LDA model
+   */
+  def trainLdaModel(edgeFrame: FrameRdd, args: LdaTrainArgs): AtkLdaModel = {
+    val ldaCorpus = LdaCorpus(edgeFrame, args)
+    val trainCorpus = ldaCorpus.createCorpus().cache()
+    val distLdaModel = runLda(trainCorpus, args)
+
+    val ldaModel = new AtkLdaModel(distLdaModel)
+    ldaModel.setDocTopicFrame(trainCorpus, args.documentColumnName, "topic_probabilities")
+    ldaModel.setWordTopicFrames(
+      ldaCorpus.uniqueWordsFrame,
+      ldaCorpus.wordIdAssigner.ldaWordIdColumnName,
+      ldaCorpus.wordIdAssigner.ldaWordColumnName,
+      ldaCorpus.wordIdAssigner.ldaWordCountColumnName,
+      args.wordColumnName,
+      "topic_probabilities"
+    )
+    ldaModel
+  }
 
   /**
    * Initialize LDA runner with training arguments supplied by user
@@ -28,7 +53,7 @@ object LdaFunctions extends Serializable {
    * @param args LDA train arguments
    * @return LDA runner
    */
-  def initializeLdaRunner(args: LdaTrainArgs): LDA = {
+  private[clustering] def initializeLdaRunner(args: LdaTrainArgs): LDA = {
     val ldaRunner = new LDA()
     ldaRunner.setDocConcentration(args.alpha)
     ldaRunner.setTopicConcentration(args.beta)
@@ -47,28 +72,9 @@ object LdaFunctions extends Serializable {
    * @param args LDA train arguments
    * @return Trained LDA model
    */
-  def runLda(corpus: RDD[(Long, (String, Vector))], args: LdaTrainArgs): DistributedLDAModel = {
+  private[clustering] def runLda(corpus: RDD[(Long, (String, Vector))], args: LdaTrainArgs): DistributedLDAModel = {
     val ldaCorpus = corpus.map { case ((documentId, (document, wordVector))) => (documentId, wordVector) }
     val ldaModel = initializeLdaRunner(args).run(ldaCorpus)
-    ldaModel
-  }
-
-  def trainLdaModel(edgeFrame: FrameRdd, args: LdaTrainArgs): AtkLdaModel = {
-    val ldaRunner = initializeLdaRunner(args)
-    val ldaCorpus = LdaCorpus(edgeFrame, args)
-    val trainCorpus = ldaCorpus.createCorpus().cache()
-    val distLdaModel = runLda(trainCorpus, args)
-
-    val ldaModel = new AtkLdaModel(distLdaModel)
-    ldaModel.setDocTopicFrame(trainCorpus, args.documentColumnName, "topic_probabilities")
-    ldaModel.setWordTopicFrames(
-      ldaCorpus.uniqueWordsFrame,
-      ldaCorpus.wordIdAssigner.ldaWordIdColumnName,
-      ldaCorpus.wordIdAssigner.ldaWordColumnName,
-      ldaCorpus.wordIdAssigner.ldaWordCountColumnName,
-      args.wordColumnName,
-      "topic_probabilities"
-    )
     ldaModel
   }
 }

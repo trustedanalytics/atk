@@ -16,12 +16,11 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.SparseVector
 import org.apache.spark.sql.Row
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
+import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
@@ -53,17 +52,11 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
 
   val model = new ModelReference(1)
   val frame = new FrameReference(1)
-  val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count", numTopics = 2, maxIterations = 10)
+  val epsilon = 1e-6
 
-  /** round to so many decimal places */
-  def round(d: Double): BigDecimal = {
-    BigDecimal(d).setScale(5, BigDecimal.RoundingMode.HALF_UP)
-  }
-
-  /** assertion that checks values are close */
-  def assertVectorApproximate(v: Vector[Double], expectedDouble1: Double, expectedDouble2: Double): Unit = {
-    assert(round(v(0)) == round(expectedDouble1))
-    assert(round(v(1)) == round(expectedDouble2))
+  /** assertion that two doubles are almost equal */
+  def assertAlmostEqual(x: Double, y: Double, tolerance : Double = 1e-6): Unit = {
+     assert(Math.abs(x-y) < tolerance, s"${x} should equal ${y}+-${tolerance}")
   }
 
   /** assertion that most likely topic is given by index */
@@ -86,16 +79,30 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
   def assertProbabilitySumIsOne(map: Map[String, Vector[Double]]): Unit = {
     map.foreach {
       case (s, vector) => {
-        assert(round(vector.sum) == 1, s"sum of topic probabilities for ${s} should equal 1")
+        assert(Math.round(vector.sum) == 1, s"sum of topic probabilities for ${s} should equal 1")
       }
     }
   }
 
   "LDA train" should {
+
+    "initialize LDA runner" in {
+      val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count",
+        numTopics = 2, maxIterations = 10, alpha = 1.3f, beta= 1.6f, randomSeed = Some(25))
+      val ldaRunner = LdaTrainFunctions.initializeLdaRunner(trainArgs)
+
+      assert(ldaRunner.getK == 2)
+      assert(ldaRunner.getMaxIterations == 10)
+      assertAlmostEqual(ldaRunner.getAlpha, 1.3)
+      assertAlmostEqual(ldaRunner.getBeta, 1.6d)
+      assert(ldaRunner.getSeed == 25)
+    }
+
     "compute topic probabilities" in {
       val rows = sparkContext.parallelize(edgeData)
       val edgeFrame = new FrameRdd(edgeSchema, rows)
-      val ldaModel = LdaFunctions.trainLdaModel(edgeFrame, trainArgs)
+      val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count", numTopics = 2, maxIterations = 10)
+      val ldaModel = LdaTrainFunctions.trainLdaModel(edgeFrame, trainArgs)
 
       val topicsGivenDoc = ldaModel.getTopicsGivenDocFrame.map(row => {
         (row(0).asInstanceOf[String], row(1).asInstanceOf[Vector[Double]])

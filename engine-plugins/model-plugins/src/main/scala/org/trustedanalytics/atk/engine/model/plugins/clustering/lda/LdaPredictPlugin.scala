@@ -72,6 +72,5 @@ class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredic
     val ldaModel = model.data.convertTo[AtkLdaModel]
     ldaModel.predict(document)
   }
-
 }
 

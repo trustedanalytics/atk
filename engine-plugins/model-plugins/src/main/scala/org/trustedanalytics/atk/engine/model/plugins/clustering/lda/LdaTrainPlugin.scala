@@ -62,9 +62,6 @@ class LdaTrainPlugin
 
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
-    val frames = engine.frames
-    val config = configuration
-
     // validate arguments
     val edgeFrame: SparkFrame = arguments.frame
     edgeFrame.schema.requireColumnIsType(arguments.documentColumnName, DataTypes.string)
@@ -72,7 +69,8 @@ class LdaTrainPlugin
     edgeFrame.schema.requireColumnIsType(arguments.wordCountColumnName, DataTypes.isIntegerDataType)
     require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
-    val ldaModel = LdaFunctions.trainLdaModel(edgeFrame.rdd, arguments)
+    val ldaModel = LdaTrainFunctions.trainLdaModel(edgeFrame.rdd, arguments)
+    val modelSummary = ldaModel.getModelSummary(edgeFrame.rdd, arguments.maxIterations)
     val model: Model = arguments.model
     model.data = ldaModel.toJson.asJsObject
 
@@ -91,7 +89,7 @@ class LdaTrainPlugin
       frame: FrameEntity => frame.save(ldaModel.getTopicsGivenWordFrame)
     }
 
-    LdaTrainResult(topicsGivenDocFrame, wordGivenTopicsFrame, topicsGivenWordFrame, "dummy report")
+    LdaTrainResult(topicsGivenDocFrame, wordGivenTopicsFrame, topicsGivenWordFrame, modelSummary)
   }
 
 }

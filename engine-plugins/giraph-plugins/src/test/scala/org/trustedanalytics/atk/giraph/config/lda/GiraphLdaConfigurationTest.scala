@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.schema.FrameSchema
 import org.apache.hadoop.conf.Configuration
 import org.scalatest.WordSpec
 
-class GiraphGiraphLdaConfigurationTest extends WordSpec {
+class GiraphLdaConfigurationTest extends WordSpec {
 
   "LdaConfiguration" should {
 
