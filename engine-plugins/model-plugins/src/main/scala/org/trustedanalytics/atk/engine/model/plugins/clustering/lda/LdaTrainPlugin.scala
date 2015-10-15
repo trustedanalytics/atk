@@ -32,14 +32,14 @@ import LdaJsonFormat._
   extended = """See the discussion about `Latent Dirichlet Allocation at Wikipedia. <http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation>`__""",
   returns = """The data returned is composed of multiple components\:
 
-|   **Frame** : *topics_given_doc*
-|       Conditional probabilities of topic given document.
-|   **Frame** : *word_given_topics*
-|       Conditional probabilities of word given topic.
-|   **Frame** : *topics_given_word*
-|       Conditional probabilities of topic given word.
-|   **str** : *report*
-|       The configuration and learning curve report for Latent Dirichlet
+              |   **Frame** : *topics_given_doc*
+              |       Conditional probabilities of topic given document.
+              |   **Frame** : *word_given_topics*
+              |       Conditional probabilities of word given topic.
+              |   **Frame** : *topics_given_word*
+              |       Conditional probabilities of topic given word.
+              |   **str** : *report*
+              |       The configuration and learning curve report for Latent Dirichlet
 Allocation as a multiple line str.""")
 class LdaTrainPlugin
     extends SparkCommandPlugin[LdaTrainArgs, LdaTrainResult] {
