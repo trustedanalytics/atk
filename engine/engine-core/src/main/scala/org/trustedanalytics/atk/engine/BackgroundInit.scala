@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.engine
 
 import java.util.concurrent.TimeUnit
 
+import org.trustedanalytics.atk.event.EventLogging
+
 import scala.concurrent.{ Future, Await }
 import scala.concurrent.duration.Duration
 import EngineExecutionContext._
@@ -30,7 +32,7 @@ import EngineExecutionContext._
  *
  * We don't actually need the libraries in HDFS until we go to run our first command.
  */
-object BackgroundInit {
+object BackgroundInit extends EventLogging {
 
   /**
    * Ugly global for waiting
@@ -47,7 +49,7 @@ object BackgroundInit {
    */
   lazy val waitTillCompleted: Unit = {
     if (initFunction == null) {
-      throw new RuntimeException("initFunciton wasn't initialized before waiting")
+      warn("initFunciton wasn't initialized before waiting")
     }
     else {
       Await.result(start, Duration(5, TimeUnit.MINUTES))
