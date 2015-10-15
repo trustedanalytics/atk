@@ -29,23 +29,21 @@ import org.apache.spark.sql.Row
 import LibSvmJsonProtocol._
 
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
-  extended = """Predict the labels for a test frame and run classification
-metrics on predicted and target labels.""",
-  returns = """Object with binary classification metrics.
-The data returned is composed of multiple components\:
+  extended = """Predict the labels for a test frame and run classification metrics on predicted
+and target labels.""",
+  returns = """A dictionary with binary classification metrics.
+The data returned is composed of the following keys\:
 
-|  **double** : *accuracy*
-|      The degree of correctness of the test frame labels.
-|  **table** : *confusion_matrix*
-|     A specific table layout that allows visualization of the performance of the
-test.
-|  **double** : *f_measure*
-|     A measure of a test's accuracy.
-It considers both the precision and the recall of the test to compute the score.
-|  **double** : *precision*
-|     The degree to which the correctness of the label is expressed.
-|  **double** : *recall*
-|      The fraction of relevant instances that are retrieved.""")
+              |  'accuracy' : double
+              |  The proportion of predictions that are correctly identified
+              |  'confusion_matrix' : dictionary
+              |  A table used to describe the performance of a classification model
+              |  'f_measure' : double
+              |  The harmonic mean of precision and recall
+              |  'precision' : double
+              |  The proportion of predicted positive instances that are correctly identified
+              |  'recall' : double
+              |  The proportion of positive instances that are correctly identified.""")
 class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.
