@@ -77,21 +77,10 @@ trustedanalytics.atk {
   engine {
     auto-partitioner {
       # auto-partitioning spark based on the file size
-      file-size-to-partition-size = [{upper-bound = "1MB", partitions = 15}
-        {upper-bound = "1GB", partitions = 45},
-        {upper-bound = "5GB", partitions = 100},
-        {upper-bound = "10GB", partitions = 200},
-        {upper-bound = "15GB", partitions = 375},
-        {upper-bound = "25GB", partitions = 500},
-        {upper-bound = "50GB", partitions = 750},
-        {upper-bound = "100GB", partitions = 1000},
-        {upper-bound = "200GB", partitions = 1500},
-        {upper-bound = "300GB", partitions = 2000},
-        {upper-bound = "400GB", partitions = 2500},
-        {upper-bound = "600GB", partitions = 3750}]
+      file-size-to-partition-size = [{upper-bound = "128MB", partitions = 2}]
 
       # max-partitions is used if value is above the max upper-bound
-      max-partitions = 10000
+      max-partitions = 2
 
       repartition {
         # re-partitioning strategies:
