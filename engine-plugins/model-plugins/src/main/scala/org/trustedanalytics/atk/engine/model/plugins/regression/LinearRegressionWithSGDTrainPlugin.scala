@@ -65,14 +65,16 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
 
     //Running MLLib
-    val linReg = initializeLinearRegressionModel(arguments)
+    val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.run(labeledTrainRdd)
     val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
   }
+}
+object LinearRegressionWithSGDTrainPlugin {
 
-  private def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
+  def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
     val linReg = new LinearRegressionWithSGD()
     linReg.optimizer.setNumIterations(arguments.numIterations)
     linReg.optimizer.setStepSize(arguments.stepSize)
@@ -92,4 +94,6 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     linReg.setIntercept(arguments.intercept)
 
   }
+
 }
+
