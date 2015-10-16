@@ -393,7 +393,7 @@ def setup_yarn_cluster_mode(cluster):
     # Update pg_hba.conf for all the nodes in the cluster.
     yarn_internal_IPs = []
     for host in cluster.yarn.nodemanager.hosts.hosts:
-        yarn_internal_IPs.append(cluster.yarn.nodemanager.hosts[host].ipAddress)
+        yarn_internal_IPs.append(cluster.yarn.nodemanager.hosts.ipAddresses())
 
     try:
         pg_hba_conf = codecs.open("/var/lib/pgsql/data/pg_hba.conf", encoding="utf-8", mode="a")
