@@ -65,7 +65,7 @@ class LinearRegressionModelTest extends WordSpec {
       for (i <- data.indices) {
         val x1 = data(i)(0).toDouble
         val x2 = data(i)(1).toDouble
-        val y = (x1 * testWeights.apply(0)) + (x2 * testWeights.apply(1)) + testIntercept + 1
+        val y = (x1 * testWeights.apply(0)) + (x2 * testWeights.apply(1)) + testIntercept
         assert(score(i).equals(y))
       }
     }

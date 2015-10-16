@@ -13,23 +13,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
-
 package org.trustedanalytics.atk.scoring.models
 
-import java.io.IOException
-
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
+import org.trustedanalytics.atk.scoring.interfaces.Model
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent._
 import spray.json._
+import ScoringJsonReaderWriters._
 
-/* Reader plugin for Principal Components */
-class PrincipalComponentsReaderPlugin() extends ModelLoader {
+/**
+ * Scoring model for Latent Dirichlet Allocation
+ */
+class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
-  override def load(bytes: Array[Byte]): Model = {
-    val str = new String(bytes)
-    println(str)
-    val json: JsValue = str.parseJson
-    val pcaModel = json.convertTo[PrincipalComponentsData]
-    new PrincipalComponentsScoringModel(pcaModel).asInstanceOf[Model]
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
+    var score = Seq[Any]()
+    data.foreach { document =>
+      {
+        val predictReturn = predict(document.toList)
+        score = score :+ predictReturn.toJson
+      }
+    }
+    score
   }
 }

@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
 
-class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
+class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
   val epsilon = 1e-6
   val numTopics = 2
 
@@ -33,13 +33,13 @@ class LdaScoringModelTest extends FlatSpec with Matchers with ScalaFutures {
 
   "LdaScoringModel" should "throw an IllegalArgumentException if number of topics is less than one" in {
     intercept[IllegalArgumentException] {
-      new LdaScoringModel(LdaModel(0, topicWordMap))
+      new LdaScoreModel(LdaModel(0, topicWordMap))
     }
   }
 
   "predict" should "compute topic probabilities for document" in {
     val ldaModel = LdaModel(numTopics, topicWordMap)
-    val scoringModel = new LdaScoringModel(ldaModel)
+    val scoringModel = new LdaScoreModel(ldaModel)
 
     val documents = Seq(
       Array("jobs", "harry", "jobs", "harry", "harry", "new_word"),

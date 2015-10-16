@@ -15,6 +15,8 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.classification.SVMModel
+import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.tree.configuration.Algo
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
@@ -280,4 +282,20 @@ class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
 
   }
 
+  "SVMModelFormat" should "serialize" in {
+    val s = new SVMModel(new DenseVector(Array(2.3, 3.4, 4.5)), 3.0)
+    s.toJson.compactPrint should equal("{\"svm_model\":{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}}")
+  }
+
+  "SVMModelFormat" should "parse json" in {
+    val string = "{\"svm_model\":{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}}"
+    val json = JsonParser(string).asJsObject
+    val s = json.convertTo[SVMModel]
+
+    s.weights.size should equal(3)
+    s.intercept should equal(3.0)
+
+  }
+
 }
+
