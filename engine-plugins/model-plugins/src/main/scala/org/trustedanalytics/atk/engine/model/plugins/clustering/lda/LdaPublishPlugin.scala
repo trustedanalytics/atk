@@ -14,19 +14,21 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.giraph.plugins.model.lda
+package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, CommandPlugin, ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+
 import spray.json._
+import LdaJsonFormat._
 
 /**
- * Publish a Lda Model for scoring
+ *  Publish Latent Dirichlet Allocation model for scoring
  */
 @PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
   extended = """Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
@@ -42,7 +44,7 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    */
   override def name: String = "model:lda/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command
@@ -64,7 +66,7 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes,
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(),
       "scoring-models",
       "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin"))
   }

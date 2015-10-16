@@ -21,14 +21,14 @@ import org.scalatest.WordSpec
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.schema.FrameSchema
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
+import org.trustedanalytics.atk.giraph.algorithms.lda.GiraphLdaComputation
+import org.trustedanalytics.atk.giraph.algorithms.lda.GiraphLdaComputation.{ GiraphLdaAggregatorWriter, GiraphLdaMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.testutils.SynchronizedInternalVertexRunner
 
 import scala.collection.JavaConversions._
 
-class CVBOLDAComputationTest extends WordSpec {
+class GiraphLdaComputationTest extends WordSpec {
 
   /** round to so many decimal places */
   def round(d: Double): BigDecimal = {
@@ -103,22 +103,22 @@ class CVBOLDAComputationTest extends WordSpec {
 
   "LDA" should {
     "produce results" in {
-      val conf = new LdaConfiguration()
-      conf.setComputationClass(classOf[CVB0LDAComputation])
-      conf.setMasterComputeClass(classOf[CVB0LDAMasterCompute])
-      conf.setAggregatorWriterClass(classOf[CVB0LDAAggregatorWriter])
+      val conf = new GiraphLdaConfiguration()
+      conf.setComputationClass(classOf[GiraphLdaComputation])
+      conf.setMasterComputeClass(classOf[GiraphLdaMasterCompute])
+      conf.setAggregatorWriterClass(classOf[GiraphLdaAggregatorWriter])
       conf.setEdgeInputFormatClass(classOf[TestingLdaEdgeInputFormat])
       conf.setVertexInputFormatClass(classOf[TestingLdaVertexInputFormat])
       conf.setVertexOutputFormatClass(classOf[TestingLdaVertexOutputFormat])
 
-      val ldaInputConfig = new LdaInputFormatConfig("dummy-edge-input-location", new FrameSchema(), "dummy-vertex-input-location", new FrameSchema())
-      val ldaOutputConfig = new LdaOutputFormatConfig("dummy-doc-results", "dummy-word-results", "dummy-topic-results")
+      val ldaInputConfig = new GiraphLdaInputFormatConfig("dummy-edge-input-location", new FrameSchema(), "dummy-vertex-input-location", new FrameSchema())
+      val ldaOutputConfig = new GiraphLdaOutputFormatConfig("dummy-doc-results", "dummy-word-results", "dummy-topic-results")
 
       val numTopics = 2
-      val ldaArgs = new LdaTrainArgs(new ModelReference(1), new FrameReference(2), "dummy_doc", "dummy_word", "dummy_word_count",
+      val ldaArgs = new GiraphLdaTrainArgs(new ModelReference(1), new FrameReference(2), "dummy_doc", "dummy_word", "dummy_word_count",
         maxIterations = Some(10), numTopics = Some(numTopics))
 
-      val ldaConfig = new LdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new LdaVertexInputFormatConfig(ldaArgs))
+      val ldaConfig = new GiraphLdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new GiraphLdaVertexInputFormatConfig(ldaArgs))
       conf.setLdaConfig(ldaConfig)
 
       // run internally

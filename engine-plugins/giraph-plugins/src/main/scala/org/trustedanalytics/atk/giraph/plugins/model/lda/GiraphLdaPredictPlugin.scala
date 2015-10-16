@@ -18,9 +18,9 @@ package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.giraph.config.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaJsonFormat }
+import org.trustedanalytics.atk.giraph.config.lda.{ GiraphLdaModelPredictReturn, GiraphLdaModelPredictArgs, GiraphLdaJsonFormat }
 import spray.json._
-import LdaJsonFormat._
+import GiraphLdaJsonFormat._
 
 /**
  * Predict plugin for Latent Dirichlet Allocation
@@ -30,7 +30,7 @@ import LdaJsonFormat._
     """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings""",
   returns = """Dictionary containing predicted topics.
-The data returned is composed of multiple components\:
+The data returned is composed of multiple keys\:
 
 |   **list of doubles** | *topics_given_doc*
 |       List of conditional probabilities of topics given document.
@@ -38,22 +38,22 @@ The data returned is composed of multiple components\:
 |       Count of new words in test document not present in training set.
 |   **double** | *new_words_percentage*
 |       Percentage of new words in test document.""")
-class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredictReturn] {
+class GiraphLdaPredictPlugin extends CommandPlugin[GiraphLdaModelPredictArgs, GiraphLdaModelPredictReturn] {
   /**
    * The name of the command.
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:lda/predict"
+  override def name: String = "model:giraph_lda/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Deprecated)
 
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: LdaModelPredictArgs)(implicit invocation: Invocation) = 1
+  override def numberOfJobs(arguments: GiraphLdaModelPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -64,11 +64,11 @@ class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredic
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: LdaModelPredictArgs)(implicit invocation: Invocation): LdaModelPredictReturn = {
+  override def execute(arguments: GiraphLdaModelPredictArgs)(implicit invocation: Invocation): GiraphLdaModelPredictReturn = {
     val model: Model = arguments.model
     val document: List[String] = arguments.document
 
-    val ldaModel = model.data.convertTo[LdaModel]
+    val ldaModel = model.data.convertTo[GiraphLdaModel]
     ldaModel.predict(document)
   }
 
