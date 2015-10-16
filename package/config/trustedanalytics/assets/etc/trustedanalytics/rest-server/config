@@ -73,9 +73,6 @@ Command Line Arguments
 
 --log  Log level [INFO|DEBUG|WARNING|FATAL|ERROR]
 
---yarn_cluster Setup Spark to use yarn-cluster mode (yes/no).
-Any parameter for this option other than "no" (case-insensitive) is treated as "yes".
-
 """
 
 from __future__ import print_function
@@ -421,7 +418,6 @@ def cli(parser=None):
         parser.add_argument("--db_database", type=str, help="Database name")
         parser.add_argument("--db_username", type=str, help="Database username")
         parser.add_argument("--db_password", type=str, help="Database password")
-        parser.add_argument("--yarn_cluster", type=str, help="configure for Spark / Yarn-cluster mode, (yes/no)")
     return parser
 
 
@@ -537,8 +533,7 @@ def run(args, cluster=None):
 
     set_db_details(db_conf['database'], db_conf['username'], db_conf['password'])
 
-    if args.yarn_cluster.lower().strip() != 'no':
-        setup_yarn_cluster_mode(cluster)
+    setup_yarn_cluster_mode(cluster)
 
     os.system("touch " + conf_file_directory + USER_CUSTOM_CONF_FILENAME)
 
