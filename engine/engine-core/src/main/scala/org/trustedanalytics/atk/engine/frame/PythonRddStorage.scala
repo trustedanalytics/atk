@@ -140,9 +140,7 @@ object PythonRddStorage {
 
     val pyIncludes = new JArrayList[String]()
 
-    val pythonDefaultDependency = getResourcePath("trustedanalytics.zip", EngineConfig.pythonDefaultDependencySearchDirectories)
-      .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution (searched: " + EngineConfig.pythonDefaultDependencySearchDirectories.mkString(", ") + ")"))
-    sc.addFile(s"file://$pythonDefaultDependency")
+    sc.addFile(s"file://$pythonDepZip")
     pyIncludes.add("trustedanalytics.zip")
 
     if (udf.dependencies != null) {
@@ -158,7 +156,14 @@ object PythonRddStorage {
     pyRdd
   }
 
-  def getResourcePath(resourceName: String, additionalPaths: Seq[String]): Option[String] = {
+  /** Path to trustedanalytics.zip (our python code) */
+  lazy val pythonDepZip: String = {
+    getResourcePath("trustedanalytics.zip", EngineConfig.pythonDefaultDependencySearchDirectories)
+      .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution (searched: " + EngineConfig.pythonDefaultDependencySearchDirectories.mkString(", ") + ")"))
+  }
+
+  // TODO: this recursive searching is quite slow, there must be a better way to do this
+  private def getResourcePath(resourceName: String, additionalPaths: Seq[String]): Option[String] = {
     val currentDirectory = Directory.Current.getOrElse(
       throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
     val searchableDirectories = Array(currentDirectory) ++ (for { path <- additionalPaths } yield Directory(path))

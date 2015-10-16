@@ -60,8 +60,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
         val pluginDependencyJars = Array("--jars", hdfsJars.filter(_.endsWith(".jar")).mkString(","))
 
         val pythonDependencyPath = plugin.executesPythonUdf match {
-          case true => "," + PythonRddStorage.getResourcePath("trustedanalytics.zip", EngineConfig.pythonDefaultDependencySearchDirectories)
-            .getOrElse(throw new RuntimeException("Default Python dependency trustedanalytics.zip was not found"))
+          case true => "," + PythonRddStorage.pythonDepZip
           case false => ""
         }
 
