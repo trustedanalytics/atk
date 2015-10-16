@@ -179,21 +179,110 @@ object FlattenColumnFunctions extends Serializable {
     })
   }
 
-  private[frame] def flattenRowByStringColumnIndexes(indexes: List[Int], delimiter: List[String])(row: Row): Array[Row] = {
+  private[frame] def flattenRowByStringColumnIndexes(indexes: List[Int], delimiters: List[String])(row: Row): Array[Row] = {
+
+    // Check if we are only flattening one column
+    if (indexes.length == 1) {
+      val index = indexes(0)
+      val delimiter = delimiters(0)
+
+      // Split the specified column and find out how many items have after the split
+      val splitted = row(index).asInstanceOf[String].split(Pattern.quote(delimiter))
+      val splitCount = splitted.length
+      var rows: Array[Row] = new Array[Row](splitCount)
+
+      if (splitCount > 1) {
+        for (i <- 0 until splitCount) {
+          val r = row.toSeq.toArray.clone()
+          r(index) = splitted(i)
+          rows(i) = Row.fromSeq(r)
+        }
+      }
+      else {
+        // If the split count was 1, there wasn't anything to split, so just return the original row
+        rows(0) = row
+      }
+
+      return rows
+    }
+    else {
+      // For flattening multiple columns, use an ArrayBuffer, so that we can add on rows as needed,
+      // depending on how many items get split from a column
+      val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
+
+      for (i <- indexes.indices) {
+        val colIndex = indexes(i)
+        val delimiter = delimiters(i)
+        val splitValues = row(colIndex).asInstanceOf[String].split(Pattern.quote(delimiter))
+
+        if (splitValues.length > 1) {
+          for (rowIndex <- splitValues.indices) {
+            val isNewRow = rowBuffer.length <= rowIndex
+            val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
+
+            r(colIndex) = splitValues(rowIndex)
+
+            if (isNewRow) {
+              for (tempColIndex <- indexes.indices) {
+                if (tempColIndex != i)
+                  r(indexes(tempColIndex)) = ""
+              }
+
+              rowBuffer += Row.fromSeq(r)
+            }
+            else
+              rowBuffer(rowIndex) = Row.fromSeq(r)
+          }
+        }
+        else {
+          if (rowBuffer.length == 0)
+            rowBuffer += row
+          else {
+            val r = rowBuffer(0).toSeq.toArray.clone()
+            r(colIndex) = splitValues(0)
+            rowBuffer(0) = Row.fromSeq(r)
+          }
+        }
+      }
+
+      return rowBuffer.toArray
+    }
+
+    /*
+    val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
+
+    for (i <- indexes.indices) {
+      val colIndex = indexes(i)
+      val delimiter = delimiters(i)
+      val splitValues = row(colIndex).asInstanceOf[String].split(Pattern.quote(delimiter))
+
+      for (rowIndex <- splitValues.indices) {
+        val isNewRow = rowBuffer.length <= rowIndex
+        val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
+
+        r(colIndex) = splitValues(rowIndex)
+
+        if (isNewRow) {
+          /*
+          for (tempColIndex <- indexes.indices) {
+            if (tempColIndex != i)
+              r(indexes(tempColIndex)) = ""
+          }*/
+
+          rowBuffer += Row.fromSeq(r)
+        }
+        else
+          rowBuffer(rowIndex) = Row.fromSeq(r)
+      }
+    }
+
+    return rowBuffer.toArray
+    */
+
+    /*
     // split each of the specified columns using its specified delimiter
     val splitColumns = indexes.zipWithIndex.map { case (rowIndex, index) => row(rowIndex).asInstanceOf[String].split(Pattern.quote(delimiter(index))) }
 
-    // figure out how many items we are splitting
-    var maxItems = 0
-
-    for (i <- splitColumns.indices) {
-      val numItems = splitColumns(i).size
-
-      if (numItems > maxItems)
-        maxItems = numItems
-    }
-
-    var rows: Array[Row] = new Array[Row](maxItems)
     val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
 
     for (colIndex <- splitColumns.indices) {
@@ -220,8 +309,24 @@ object FlattenColumnFunctions extends Serializable {
     }
 
     return rowBuffer.toArray
+    */
 
     /*
+    // split each of the specified columns using its specified delimiter
+    val splitColumns = indexes.zipWithIndex.map { case (rowIndex, index) => row(rowIndex).asInstanceOf[String].split(Pattern.quote(delimiters(index))) }
+
+    // figure out how many items we are splitting
+    var maxItems = 0
+
+    for (i <- splitColumns.indices) {
+      val numItems = splitColumns(i).size
+
+      if (numItems > maxItems)
+        maxItems = numItems
+    }
+
+    var rows: Array[Row] = new Array[Row](maxItems)
+
     for (rowIndex <- rows.indices) {
       val r = row.toSeq.toArray.clone()
 
