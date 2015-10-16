@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.moduleloader.internal
 
 import java.io.File
+import java.net.{ URLClassLoader, URL }
 import com.typesafe.config.{ Config, ConfigFactory }
 import org.trustedanalytics.atk.moduleloader.Module
 import scala.collection.JavaConversions._
@@ -72,15 +73,15 @@ private[internal] case class ModuleConfig(moduleLocation: String, config: Config
     (myJarNames ++ memberJarNames).distinct
   }
 
-  lazy val commandPlugins: Seq[String] = {
-    val myPlugins = if (config.hasPath("atk.module.command-plugins")) {
-      config.getStringList("atk.module.command-plugins").toSeq
+  lazy val buildClasspath: Seq[String] = {
+    val myJars = if (config.hasPath("atk.module.build-classpath")) {
+      config.getString("atk.module.build-classpath").split(":").toSeq
     }
     else {
       Nil
     }
-    val memberPlugins = members.flatMap(_.commandPlugins)
-    myPlugins ++ memberPlugins
+    val memberJars = members.flatMap(_.buildClasspath)
+    (myJars ++ memberJars).distinct
   }
 
   override def toString: String = {
@@ -101,8 +102,8 @@ private[internal] case class ModuleConfig(moduleLocation: String, config: Config
   /**
    * Use this config and the supplied classLoader to instantiate a Module
    */
-  def toModule(classLoader: ClassLoader): Module = {
-    new Module(name, parentName, jarNames, commandPlugins, classLoader)
+  def toModule(classLoader: URLClassLoader): Module = {
+    new Module(name, parentName, classLoader)
   }
 
   /**
@@ -123,11 +124,11 @@ private[internal] object ModuleConfig {
 
   /**
    * Load a ModuleConfig from
-   * @param moduleFile jar or directory containing an atk-module.conf
+   * @param moduleFile jar containing an atk-module.conf
    * @return the loaded configuration for a Module
    */
   def loadModuleConfig(moduleFile: File): ModuleConfig = {
-    val fileContents = FileUtils.readFiles(moduleFile, Module.moduleConfigFileNames)
+    val fileContents = ZipUtils.readFilesFromZip(moduleFile, Module.moduleConfigFileNames)
     val configs = fileContents.map(fileContent => ConfigFactory.parseString(fileContent))
     val config = combineConfigs(configs)
     new ModuleConfig(moduleFile.getAbsolutePath, config)

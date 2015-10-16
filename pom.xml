@@ -75,7 +75,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         </repository>
         <repository>
             <id>atk</id>
-            <url>http://ec2-54-69-244-31.us-west-2.compute.amazonaws.com/content/repositories/public/</url>
+            <url>http://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -84,6 +84,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </releases>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atk</id>
+            <url>http://maven.trustedanalytics.org/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 
     <prerequisites>
         <maven>3.0</maven>
@@ -95,7 +108,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- START TITAN -->
-        <dep.titan-shaded.version>0.5.4-SNAPSHOT</dep.titan-shaded.version>
+        <dep.titan-shaded.version>0.5.4c-SNAPSHOT</dep.titan-shaded.version>
         <dep.aurelius.version>0.5.4</dep.aurelius.version>
         <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
         <dep.reflections>0.9.9-RC1</dep.reflections>
@@ -154,14 +167,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>testutils</module>
                 <module>misc</module>
                 <module>module-loader</module>
+                <module>scoring-interfaces</module>
+                <module>model-publish-format</module>
                 <module>engine</module>
                 <module>engine-plugins</module>
-                <module>scoring-interfaces</module>
                 <module>scoring-engine</module>
                 <module>scoring-models</module>
                 <module>rest-server</module>
                 <module>python-client</module>
-                <module>deploy</module>
                 <module>package</module>
             </modules>
         </profile>
@@ -226,6 +239,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <scalaVersion>${scala.long.version}</scalaVersion>
                                 <checkMultipleScalaVersions>false</checkMultipleScalaVersions>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.trustedanalytics</groupId>
+                            <artifactId>atk-maven-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <executions>
+                                <execution>
+                                    <id>compile</id>
+                                    <goals>
+                                        <goal>generate-conf</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                         </plugin>
                         <!--END DO NOT TOUCH-->
                     </plugins>
@@ -596,6 +622,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event</artifactId>
                 <version>${project.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -630,9 +662,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>launcher</artifactId>
+                <artifactId>module-loader</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -659,6 +690,27 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>giraph-plugins</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-interfaces</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>model-publish-format</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>scoring-models</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <!--STARTititan-->
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -932,12 +984,26 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.apache.solr</groupId>
                         <artifactId>solr-commons-csv</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-math3</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.mahout</groupId>
                 <artifactId>mahout-math</artifactId>
                 <version>${dep.mahout.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-math3</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--org.apache.giraph-->
             <dependency>
@@ -957,7 +1023,18 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>com.google.code.findbugs</groupId>
                         <artifactId>annotations</artifactId>
                     </exclusion>
-             
+                    <exclusion>
+                        <groupId>com.thoughtworks.paranamer</groupId>
+                        <artifactId>paranamer</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1083,6 +1160,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>1.7</version>
             </dependency>
             <dependency>
                 <groupId>commons-lang</groupId>

@@ -22,7 +22,7 @@ import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
@@ -85,8 +85,8 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     try {
       file = File.createTempFile("tmp", ".txt")
-      svm.svm_save_model(file.getAbsolutePath(), libsvmModel)
-      val modelValues = FileUtils.readFileToString(file)
+      svm.svm_save_model(file.getAbsolutePath, libsvmModel)
+      val modelValues = FileUtils.readFileToByteArray(file)
 
       StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
     }

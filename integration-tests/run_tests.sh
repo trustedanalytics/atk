@@ -35,7 +35,7 @@ NOSE_SMOKE="nosetests $DIR/smoketests --nologcapture --with-xunitmp --xunitmp-fi
 NOSE="nosetests $DIR/tests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT2 --processes=10 --process-timeout=300 --with-isolation"
 NOSE_NONCONCURRENT="nosetests $DIR/nonconcurrenttests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT3 --process-timeout=300 --with-isolation"
 
-if [ "$1" = "-c" -o "$2" = "-c"] ; then
+if [ "$1" = "-c" -o "$2" = "-c" ] ; then
     echo "$NAME Running with coverage ENABLED.  (runs in a single process, takes a bit longer)"
     COVERAGE_ARGS_BASE="--with-coverage --cover-package=trustedanalytics --cover-erase --cover-inclusive --cover-html"
     COVERAGE_ARGS_SMOKE="$COVERAGE_ARGS_BASE --cover-html-dir=$TARGET_DIR/surefire-reports/cover-smoke"
@@ -72,6 +72,7 @@ do
     if [ $COUNTER -gt 120 ]
     then
         echo "$NAME Tired of waiting for REST Server to start up, giving up..."
+        cat $TARGET_DIR/rest-server.log
         $DIR/rest-server-stop.sh
         exit 3
     else
@@ -80,7 +81,7 @@ do
     echo "$NAME Waiting for REST Server to start up on port $PORT..."
     sleep 1
     httpCode=$(curl -s -o /dev/null -w "%{http_code}" localhost:$PORT)
-    echo "$NAME REST Server http status code was $httpCode"
+    echo "$NAME REST Server http status code was $httpCode, attempt: $COUNTER"
 done
 
 echo "$NAME nosetests will be run in three calls: 1) make sure system works in basic way, 2) the tests that can run concurrently, 3) and the nonconcurrent tests collection tests (use -skipnc to skip the nonconcurrent tests, like garbage collection)."
