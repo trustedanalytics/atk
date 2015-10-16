@@ -31,7 +31,7 @@ import LdaJsonFormat._
     """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings""",
   returns = """Dictionary containing predicted topics.
-The data returned is composed of multiple components\:
+The data returned is composed of multiple keys\:
 
 |   **list of doubles** | *topics_given_doc*
 |       List of conditional probabilities of topics given document.

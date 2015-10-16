@@ -20,8 +20,8 @@ import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation
-import org.trustedanalytics.atk.giraph.algorithms.lda.CVB0LDAComputation.{ CVB0LDAAggregatorWriter, CVB0LDAMasterCompute }
+import org.trustedanalytics.atk.giraph.algorithms.lda.GiraphLdaComputation
+import org.trustedanalytics.atk.giraph.algorithms.lda.GiraphLdaComputation.{ GiraphLdaAggregatorWriter, GiraphLdaMasterCompute }
 import org.trustedanalytics.atk.giraph.config.lda._
 import org.trustedanalytics.atk.giraph.io.{ LdaVertexId, LdaEdgeData, BigDataEdges }
 import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, GiraphJobManager }
@@ -130,9 +130,9 @@ class GiraphLdaTrainPlugin
     giraphConf.setEdgeInputFormatClass(classOf[LdaParquetFrameEdgeInputFormat])
     giraphConf.setVertexOutputFormatClass(classOf[LdaParquetFrameVertexOutputFormat])
     giraphConf.setVertexInputFormatClass(classOf[LdaVertexValueInputFormat])
-    giraphConf.setMasterComputeClass(classOf[CVB0LDAMasterCompute])
-    giraphConf.setComputationClass(classOf[CVB0LDAComputation])
-    giraphConf.setAggregatorWriterClass(classOf[CVB0LDAAggregatorWriter])
+    giraphConf.setMasterComputeClass(classOf[GiraphLdaMasterCompute])
+    giraphConf.setComputationClass(classOf[GiraphLdaComputation])
+    giraphConf.setAggregatorWriterClass(classOf[GiraphLdaAggregatorWriter])
 
     //Enable only if serialized edges for single vertex exceed 1GB
     if (config.getBoolean("useBigDataEdges")) {
@@ -140,7 +140,7 @@ class GiraphLdaTrainPlugin
     }
 
     val report = GiraphJobManager.run(s"ia_giraph_lda_train_${invocation.asInstanceOf[CommandInvocation].commandId}",
-      classOf[CVB0LDAComputation].getCanonicalName,
+      classOf[GiraphLdaComputation].getCanonicalName,
       giraphConf,
       invocation,
       "lda-learning-report_0")
@@ -183,7 +183,7 @@ class GiraphLdaTrainPlugin
       Column(config.vertexOriginalIdColumnName, DataTypes.string),
       Column(config.isDocumentColumnName, DataTypes.int32)))
 
-    val idAssigner = new GiraphLdaGraphIDAssigner()
+    val idAssigner = new GiraphLdaGraphIdAssigner()
 
     val uniqueVertices = frameRdd.mapRows(row => {
       row.stringValue(columnName)

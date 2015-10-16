@@ -61,7 +61,7 @@ import java.util.Random;
 @Algorithm(
     name = "CVB0 Latent Dirichlet Allocation"
 )
-public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexData,
+public class GiraphLdaComputation extends BasicComputation<LdaVertexId, LdaVertexData,
         LdaEdgeData, LdaMessage> {
 
     // TODO: looks like SUM_OCCURRENCE_COUNT might cause divide by zero error if word_count is zero or you had an unconnected vertex
@@ -348,9 +348,9 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     }
 
     /**
-     * Master compute associated with {@link CVB0LDAComputation}. It registers required aggregators.
+     * Master compute associated with {@link GiraphLdaComputation}. It registers required aggregators.
      */
-    public static class CVB0LDAMasterCompute extends DefaultMasterCompute {
+    public static class GiraphLdaMasterCompute extends DefaultMasterCompute {
 
         private GiraphLdaConfig config = null;
 
@@ -397,7 +397,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
      * This is an aggregator writer for LDA, which after each super step will persist the
      * aggregator values to disk, by use of the Writable interface.
      */
-    public static class CVB0LDAAggregatorWriter implements AggregatorWriter {
+    public static class GiraphLdaAggregatorWriter implements AggregatorWriter {
         /** Name of the file we wrote to */
         private static String FILENAME;
         /** Saved output stream to write to */

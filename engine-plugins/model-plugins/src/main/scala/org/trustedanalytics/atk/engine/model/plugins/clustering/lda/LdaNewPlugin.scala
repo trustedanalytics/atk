@@ -30,7 +30,9 @@ import LdaJsonFormat._
 @PluginDoc(oneLine = "Creates Latent Dirichlet Allocation model",
   extended = """|LDA| is a commonly-used algorithm for topic modeling, but,
 more broadly, is considered a dimensionality reduction technique.
-For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.""")
+For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.""",
+  returns = "A new instance of LdaModel"
+)
 class LdaNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

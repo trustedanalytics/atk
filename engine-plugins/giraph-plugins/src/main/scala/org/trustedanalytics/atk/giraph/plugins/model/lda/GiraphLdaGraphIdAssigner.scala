@@ -25,7 +25,7 @@ import scala.reflect.ClassTag
  * to Long IDs.
  */
 
-class GiraphLdaGraphIDAssigner() extends Serializable {
+class GiraphLdaGraphIdAssigner() extends Serializable {
 
   /**
    * Rename the vertices of the incoming graph from IDs of type T to Longs
