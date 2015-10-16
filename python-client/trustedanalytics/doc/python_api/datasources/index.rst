@@ -17,14 +17,14 @@ HiveQuery
     :members:
     :inherited-members:
 
-HBase
------
+HBaseTable
+----------
 .. autoclass:: trustedanalytics.HBaseTable
     :members:
     :inherited-members:
 
-Jdbc
-----
+JdbcTable
+---------
 .. autoclass:: trustedanalytics.JdbcTable
     :members:
     :inherited-members:

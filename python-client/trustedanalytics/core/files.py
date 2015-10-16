@@ -799,7 +799,7 @@ class JdbcTable(object):
     Define the object to retrieve the data from an jdbc table.
     """
 
-    def __init__(self, table_name, connector_type = None, url = None, driver_name = None, query = None):
+    def __init__(self, table_name, connector_type = None, url = None, driver_name = None):
         """
         Define the object to retrieve the data from an jdbc table.
 
@@ -813,7 +813,6 @@ class JdbcTable(object):
             Jdbc connection string (as url)
         driver_name : str
             An optional driver name
-        query : initial query (for data filtering / processing)
 
         Returns
         -------
@@ -841,7 +840,7 @@ class JdbcTable(object):
         self.connector_type = connector_type
         self.url = url
         self.driver_name = driver_name
-        self.query = query
+        self.query = None
 
     def to_json(self):
         return {"url": self.url,
