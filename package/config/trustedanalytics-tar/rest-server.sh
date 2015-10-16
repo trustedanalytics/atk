@@ -29,8 +29,8 @@ export USE_HTTP=true
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq '.cdh | .[0].credentials.hdfs_root' | tr -d '"')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
 
-export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
-export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
+export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
+export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
 
 export PG_HOST=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.hostname' | tr -d '"')
 export PG_PORT=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.port' | tr -d '"')

@@ -20,49 +20,49 @@ import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import org.apache.commons.lang3.StringUtils
-import org.trustedanalytics.atk.giraph.plugins.model.lda.LdaModel
+import org.trustedanalytics.atk.giraph.plugins.model.lda.GiraphLdaModel
 
 /**
  * Arguments to the LDA train plugin - see user docs for more on the parameters
  */
-case class LdaTrainArgs(model: ModelReference,
-                        @ArgDoc("""Input frame data.""") frame: FrameReference,
-                        @ArgDoc("""Column Name for documents.
+case class GiraphLdaTrainArgs(model: ModelReference,
+                              @ArgDoc("""Input frame data.""") frame: FrameReference,
+                              @ArgDoc("""Column Name for documents.
 Column should contain a str value.""") documentColumnName: String,
-                        @ArgDoc("""Column name for words.
+                              @ArgDoc("""Column name for words.
 Column should contain a str value.""") wordColumnName: String,
-                        @ArgDoc("""Column name for word count.
+                              @ArgDoc("""Column name for word count.
 Column should contain an int32 or int64 value.""") wordCountColumnName: String,
-                        @ArgDoc("""The maximum number of iterations that the algorithm will execute.
+                              @ArgDoc("""The maximum number of iterations that the algorithm will execute.
 The valid value range is all positive int.
 Default is 20.""") maxIterations: Option[Int] = None,
-                        @ArgDoc("""The :term:`hyperparameter` for document-specific distribution over topics.
+                              @ArgDoc("""The :term:`hyperparameter` for document-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that documents are assumed to cover all topics
 more uniformly; smaller value implies that documents are more
 concentrated on a small subset of topics.
 Valid value range is all positive float.
 Default is 0.1.""") alpha: Option[Float] = None,
-                        @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
+                              @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
 smaller value implies that topics are more concentrated on a small
 subset of words.
 Valid value range is all positive float.
 Default is 0.1.""") beta: Option[Float] = None,
-                        @ArgDoc("""The amount of change in LDA model parameters that will be tolerated
+                              @ArgDoc("""The amount of change in LDA model parameters that will be tolerated
 at convergence.
 If the change is less than this threshold, the algorithm exits
 before it reaches the maximum number of supersteps.
 Valid value range is all positive float and 0.0.
 Default is 0.001.""") convergenceThreshold: Option[Float] = None,
-                        @ArgDoc(""""True" means turn on cost evaluation and "False" means turn off
+                              @ArgDoc(""""True" means turn on cost evaluation and "False" means turn off
 cost evaluation.
 It's relatively expensive for LDA to evaluate cost function.
 For time-critical applications, this option allows user to turn off cost
 function evaluation.
 Default is "False".""") evaluateCost: Option[Boolean] = None,
-                        @ArgDoc("""The number of topics to identify in the LDA model.
+                              @ArgDoc("""The number of topics to identify in the LDA model.
 Using fewer topics will speed up the computation, but the extracted topics
 might be more abstract or less specific; using more topics will
 result in more computation but lead to more specific topics.
@@ -118,7 +118,7 @@ Default is 10.""") numTopics: Option[Int] = None) {
  * @param topicsGivenWord Frame with conditional probabilities of topic given word
  * @param report Configuration and learning curve report for LDA as a multiple line string
  */
-case class LdaTrainResult(topicsGivenDoc: FrameEntity, wordGivenTopics: FrameEntity, topicsGivenWord: FrameEntity, report: String) {
+case class GiraphLdaTrainResult(topicsGivenDoc: FrameEntity, wordGivenTopics: FrameEntity, topicsGivenWord: FrameEntity, report: String) {
   require(topicsGivenDoc != null, "topic given document frame is required")
   require(wordGivenTopics != null, "word given topic frame is required")
   require(topicsGivenWord != null, "topic given word frame is required")
@@ -128,8 +128,8 @@ case class LdaTrainResult(topicsGivenDoc: FrameEntity, wordGivenTopics: FrameEnt
 /**
  * Arguments to the LDA predict plugin - see user docs for more on the parameters
  */
-case class LdaModelPredictArgs(@ArgDoc("""Reference to the model for which topics are to be determined.""") model: ModelReference,
-                               @ArgDoc("""Document whose topics are to be predicted. """) document: List[String])
+case class GiraphLdaModelPredictArgs(@ArgDoc("""Reference to the model for which topics are to be determined.""") model: ModelReference,
+                                     @ArgDoc("""Document whose topics are to be predicted. """) document: List[String])
 
 /**
  * Return arguments to the LDA predict plugin
@@ -138,17 +138,17 @@ case class LdaModelPredictArgs(@ArgDoc("""Reference to the model for which topic
  * @param newWordsCount Count of new words in test document not present in training set
  * @param newWordsPercentage Percentage of new word in test document
  */
-case class LdaModelPredictReturn(topicsGivenDoc: Vector[Double],
-                                 newWordsCount: Int,
-                                 newWordsPercentage: Double)
+case class GiraphLdaModelPredictReturn(topicsGivenDoc: Vector[Double],
+                                       newWordsCount: Int,
+                                       newWordsPercentage: Double)
 
 /** Json conversion for arguments and return value case classes */
-object LdaJsonFormat {
+object GiraphLdaJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val ldaFormat = jsonFormat11(LdaTrainArgs)
-  implicit val ldaResultFormat = jsonFormat4(LdaTrainResult)
-  implicit val ldaModelFormat = jsonFormat2(LdaModel.apply)
-  implicit val ldaPredictArgsFormat = jsonFormat2(LdaModelPredictArgs)
-  implicit val ldaPredictReturnFormat = jsonFormat3(LdaModelPredictReturn)
+  implicit val ldaFormat = jsonFormat11(GiraphLdaTrainArgs)
+  implicit val ldaResultFormat = jsonFormat4(GiraphLdaTrainResult)
+  implicit val ldaModelFormat = jsonFormat2(GiraphLdaModel.apply)
+  implicit val ldaPredictArgsFormat = jsonFormat2(GiraphLdaModelPredictArgs)
+  implicit val ldaPredictReturnFormat = jsonFormat3(GiraphLdaModelPredictReturn)
 }
 

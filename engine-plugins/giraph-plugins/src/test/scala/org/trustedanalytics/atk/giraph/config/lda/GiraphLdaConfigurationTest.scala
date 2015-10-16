@@ -22,23 +22,23 @@ import org.trustedanalytics.atk.domain.schema.FrameSchema
 import org.apache.hadoop.conf.Configuration
 import org.scalatest.WordSpec
 
-class LdaConfigurationTest extends WordSpec {
+class GiraphLdaConfigurationTest extends WordSpec {
 
   "LdaConfiguration" should {
 
     "require a value to be set" in {
-      val config = new LdaConfiguration(new Configuration())
+      val config = new GiraphLdaConfiguration(new Configuration())
       intercept[IllegalArgumentException] {
         config.validate()
       }
     }
 
     "support ldaConfig json serialization/deserialization" in {
-      val config = new LdaConfiguration(new Configuration())
-      val ldaInputConfig = new LdaInputFormatConfig("edge-input-location", new FrameSchema(), "vertex-input-location", new FrameSchema())
-      val ldaOutputConfig = new LdaOutputFormatConfig("doc-results", "word-results", "topic-results")
-      val ldaArgs = new LdaTrainArgs(new ModelReference(1), new FrameReference(2), "doc", "word", "word_count")
-      val ldaConfig = new LdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new LdaVertexInputFormatConfig(ldaArgs))
+      val config = new GiraphLdaConfiguration(new Configuration())
+      val ldaInputConfig = new GiraphLdaInputFormatConfig("edge-input-location", new FrameSchema(), "vertex-input-location", new FrameSchema())
+      val ldaOutputConfig = new GiraphLdaOutputFormatConfig("doc-results", "word-results", "topic-results")
+      val ldaArgs = new GiraphLdaTrainArgs(new ModelReference(1), new FrameReference(2), "doc", "word", "word_count")
+      val ldaConfig = new GiraphLdaConfig(ldaInputConfig, ldaOutputConfig, ldaArgs, new GiraphLdaVertexInputFormatConfig(ldaArgs))
       config.setLdaConfig(ldaConfig)
       assert(config.ldaConfig.toString == ldaConfig.toString, "ldaConfig was not the same after deserialization")
     }
