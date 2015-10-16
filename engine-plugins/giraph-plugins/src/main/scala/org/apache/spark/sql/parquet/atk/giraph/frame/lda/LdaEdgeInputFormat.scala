@@ -20,7 +20,7 @@ import java.util
 
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.io.{ LdaEdgeData, LdaVertexId }
-import org.trustedanalytics.atk.giraph.config.lda.LdaConfiguration
+import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
 import org.apache.giraph.edge.{ DefaultEdge, Edge }
 import org.apache.giraph.io._
 import org.apache.hadoop.conf.Configuration
@@ -37,11 +37,11 @@ class LdaParquetFrameEdgeInputFormat extends EdgeInputFormat[LdaVertexId, LdaEdg
   private val parquetInputFormat = new ParquetInputFormat[Row](classOf[RowReadSupport])
 
   override def checkInputSpecs(conf: Configuration): Unit = {
-    new LdaConfiguration(conf).validate()
+    new GiraphLdaConfiguration(conf).validate()
   }
 
   override def createEdgeReader(split: InputSplit, context: TaskAttemptContext): EdgeReader[LdaVertexId, LdaEdgeData] = {
-    val ldaEdgeReader = new LdaParquetFrameEdgeReader(new LdaConfiguration(context.getConfiguration))
+    val ldaEdgeReader = new LdaParquetFrameEdgeReader(new GiraphLdaConfiguration(context.getConfiguration))
     // algorithm expects edges that go both ways (seems to be how undirected is modeled in Giraph)
     new ReverseEdgeDuplicator[LdaVertexId, LdaEdgeData](ldaEdgeReader)
   }
@@ -51,7 +51,7 @@ class LdaParquetFrameEdgeInputFormat extends EdgeInputFormat[LdaVertexId, LdaEdg
   }
 }
 
-class LdaParquetFrameEdgeReader(config: LdaConfiguration) extends EdgeReader[LdaVertexId, LdaEdgeData] {
+class LdaParquetFrameEdgeReader(config: GiraphLdaConfiguration) extends EdgeReader[LdaVertexId, LdaEdgeData] {
 
   private val ldaConfig = config.ldaConfig
   private val reader = new ParquetRecordReader[Row](new RowReadSupport)

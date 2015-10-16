@@ -62,6 +62,9 @@ model-collaborative_filtering/train.rst
 model-lda/train.rst
 model-lda/predict.rst
 model-lda/publish.rst
+model-giraph_lda/train.rst
+model-giraph_lda/predict.rst
+model-giraph_lda/publish.rst
 model-svm/train.rst
 model-svm/predict.rst
 model-svm/test.rst
