@@ -284,11 +284,11 @@ class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
 
   "SVMModelFormat" should "serialize" in {
     val s = new SVMModel(new DenseVector(Array(2.3, 3.4, 4.5)), 3.0)
-    s.toJson.compactPrint should equal("{\"svm_model\":{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}}")
+    s.toJson.compactPrint should equal("{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}")
   }
 
   "SVMModelFormat" should "parse json" in {
-    val string = "{\"svm_model\":{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}}"
+    val string = "{\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}"
     val json = JsonParser(string).asJsObject
     val s = json.convertTo[SVMModel]
 
