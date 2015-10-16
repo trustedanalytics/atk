@@ -82,15 +82,20 @@ class ModelPublishFormatTest extends WordSpec {
     var modelLoaderFile = File.createTempFile("modelReader", ".txt")
 
     def writeEntry(file: File): Unit =
-      {
-        val fileEntry = new TarArchiveEntry(file)
-        testTarBall.putArchiveEntry(fileEntry)
-        IOUtils.copy(new FileInputStream(file), testTarBall)
-        testTarBall.closeArchiveEntry()
-      }
+    {
+      val fileEntry = new TarArchiveEntry(file)
+      testTarBall.putArchiveEntry(fileEntry)
+      IOUtils.copy(new FileInputStream(file), testTarBall)
+      testTarBall.closeArchiveEntry()
+    }
 
     try {
-      writeEntry(testJar)
+      val entryName = testJar.getName
+      val fileEntry = new TarArchiveEntry(testJar, entryName)
+      fileEntry.setSize(testJar.length())
+      testTarBall.putArchiveEntry(fileEntry)
+      IOUtils.copy(new FileInputStream(testJar), testTarBall)
+      testTarBall.closeArchiveEntry()
 
       FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes(Charsets.UTF_8))
       writeEntry(modelDataFile)
