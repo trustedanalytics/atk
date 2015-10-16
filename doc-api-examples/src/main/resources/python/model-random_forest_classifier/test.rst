@@ -6,32 +6,52 @@ Test the performance of a trained Random Forest Classifier Model
 
     .. code::
 
-        >>> my_model = ta.RandomForestClassifierModel()
-        >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
-        >>> my_model.test(train_frame,'Class')
-          Precision: 1.0
-          Recall: 1.0
-          Accuracy: 1.0
-          FMeasure: 1.0
-          Confusion Matrix:
-                        Predicted_Pos  Predicted_Neg
-          Actual_Pos            94              0
-          Actual_Neg             0            406
+        >>> my_model = ta.RandomForestClassifierModel(name='myRF')
+        >>> my_model.train(train_frame, 'name_of_label_column',['List_of_observation_column/s'])
+        >>> metrics = my_model.test(test_frame, 'name_of_label_column',['List_of_observation_column/s'])
+
+        >>> metrics['f_measure']
+        0.66666666666666663
+
+        >>> metrics['recall']
+        0.5
+
+        >>> metrics['accuracy']
+        0.75
+
+        >>> metrics['precision']
+        1.0
+
+        >>> metrics['confusion_matrix']
+        {u'column_labels': [u'pos', u'neg'],
+         u'matrix': [[2, 0], [0, 3]],
+         u'row_labels': [u'pos', u'neg']}
+
+
 
 .. only:: latex
 
     .. code::
 
-        >>> my_model = ta.RandomForestClassifierModel()
-        >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
-        >>> my_model.test(train_frame,'Class')
-          Precision: 1.0
-          Recall: 1.0
-          Accuracy: 1.0
-          FMeasure: 1.0
-          Confusion Matrix:
-                            Predicted_Pos  Predicted_Neg
-          Actual_Pos                94              0
-          Actual_Neg                 0            406
+        >>> my_model = ta.RandomForestClassifierModel(name='myRF')
+        >>> my_model.train(train_frame, 'name_of_label_column',
+        ... ['List_of_observation_column/s'])
+        >>> metrics = my_model.test(test_frame, 'name_of_label_column',
+        ... ['List_of_observation_column/s'])
 
+        >>> metrics['f_measure']
+        0.66666666666666663
 
+        >>> metrics['recall']
+        0.5
+
+        >>> metrics['accuracy']
+        0.75
+
+        >>> metrics['precision']
+        1.0
+
+        >>> metrics['confusion_matrix']
+        {u'column_labels': [u'pos', u'neg'],
+         u'matrix': [[2, 0], [0, 3]],
+         u'row_labels': [u'pos', u'neg']}

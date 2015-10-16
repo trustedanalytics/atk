@@ -10,24 +10,23 @@ Test the performance of a trained LibsvmModel
         >>> my_model.train(train_frame, 'name_of_label_column',['List_of_observation_column/s'])
         >>> metrics = my_model.test(test_frame, 'name_of_label_column',['List_of_observation_column/s'])
 
-        >>> metrics.f_measure
+        >>> metrics['f_measure']
         0.66666666666666663
 
-        >>> metrics.recall
+        >>> metrics['recall']
         0.5
 
-        >>> metrics.accuracy
+        >>> metrics['accuracy']
         0.75
 
-        >>> metrics.precision
+        >>> metrics['precision']
         1.0
 
-        >>> metrics.confusion_matrix
+        >>> metrics['confusion_matrix']
+        {u'column_labels': [u'pos', u'neg'],
+         u'matrix': [[2, 0], [0, 3]],
+         u'row_labels': [u'pos', u'neg']}
 
-                      Predicted
-                    _pos_ _neg__
-        Actual  pos |  1     1
-                neg |  0     2
 
 
 .. only:: latex
@@ -40,23 +39,19 @@ Test the performance of a trained LibsvmModel
         >>> metrics = my_model.test(test_frame, 'name_of_label_column',
         ... ['List_of_observation_column/s'])
 
-        >>> metrics.f_measure
+        >>> metrics['f_measure']
         0.66666666666666663
 
-        >>> metrics.recall
+        >>> metrics['recall']
         0.5
 
-        >>> metrics.accuracy
+        >>> metrics['accuracy']
         0.75
 
-        >>> metrics.precision
+        >>> metrics['precision']
         1.0
 
-        >>> metrics.confusion_matrix
-
-                      Predicted
-                    _pos_ _neg__
-        Actual  pos |  1     1
-                neg |  0     2
-
-
+        >>> metrics['confusion_matrix']
+        {u'column_labels': [u'pos', u'neg'],
+         u'matrix': [[2, 0], [0, 3]],
+         u'row_labels': [u'pos', u'neg']}
