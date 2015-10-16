@@ -76,34 +76,28 @@ class ModelPublishFormatTest extends WordSpec {
 
   "create a model given a tar file" in {
     val testTarFile = File.createTempFile("TestTar", ".tar")
-    val myTestJar = File.createTempFile("test", ".jar")
-    val myTestTarBall = new TarArchiveOutputStream(new BufferedOutputStream(new FileOutputStream(testTarFile)))
+    val testJar = File.createTempFile("test", ".jar")
+    val testTarBall = new TarArchiveOutputStream(new BufferedOutputStream(new FileOutputStream(testTarFile)))
     var modelDataFile = File.createTempFile("modelData", ".txt")
     var modelLoaderFile = File.createTempFile("modelReader", ".txt")
 
+    def writeEntry(file: File): Unit =
+      {
+        val fileEntry = new TarArchiveEntry(file)
+        testTarBall.putArchiveEntry(fileEntry)
+        IOUtils.copy(new FileInputStream(file), testTarBall)
+        testTarBall.closeArchiveEntry()
+      }
+
     try {
-      val entryName = myTestJar.getName
-      val fileEntry = new TarArchiveEntry(myTestJar, entryName)
-      fileEntry.setSize(myTestJar.length())
-      myTestTarBall.putArchiveEntry(fileEntry)
-      IOUtils.copy(new FileInputStream(myTestJar), myTestTarBall)
-      myTestTarBall.closeArchiveEntry()
+      writeEntry(testJar)
 
       FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes(Charsets.UTF_8))
-      var nextEntryName = modelDataFile.getName
-      var tarEntry = new TarArchiveEntry(modelDataFile, nextEntryName)
-      myTestTarBall.putArchiveEntry(tarEntry)
-      IOUtils.copy(new FileInputStream(modelDataFile), myTestTarBall)
-      myTestTarBall.closeArchiveEntry()
+      writeEntry(modelDataFile)
 
       FileUtils.writeStringToFile(modelLoaderFile, "org.trustedanalytics.atk.model.publish.format.TestModelReaderPlugin")
-      nextEntryName = modelLoaderFile.getName
-      tarEntry = new TarArchiveEntry(modelLoaderFile, nextEntryName)
-      myTestTarBall.putArchiveEntry(tarEntry)
-      IOUtils.copy(new FileInputStream(modelLoaderFile), myTestTarBall)
-      myTestTarBall.closeArchiveEntry()
-
-      myTestTarBall.finish()
+      writeEntry(modelLoaderFile)
+      testTarBall.finish()
 
       val testModel = ModelPublishFormat.read(testTarFile, this.getClass.getClassLoader)
 
@@ -112,11 +106,11 @@ class ModelPublishFormatTest extends WordSpec {
     }
     finally {
 
-      IOUtils.closeQuietly(myTestTarBall)
+      IOUtils.closeQuietly(testTarBall)
       FileUtils.deleteQuietly(modelLoaderFile)
       FileUtils.deleteQuietly(modelDataFile)
       FileUtils.deleteQuietly(testTarFile)
-      FileUtils.deleteQuietly(myTestJar)
+      FileUtils.deleteQuietly(testJar)
     }
   }
 }

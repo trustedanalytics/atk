@@ -40,17 +40,20 @@ object ModelPublishFormat {
    *   
    */
 
+  val modelDataString = "modelData"
+  val modelReaderString = "modelReader"
+
   def write(classLoaderFiles: List[File], modelLoaderClass: String, modelData: Array[Byte], outputStream: FileOutputStream): Unit = {
-    val myTarBall = new TarArchiveOutputStream(new BufferedOutputStream(outputStream))
+    val tarBall = new TarArchiveOutputStream(new BufferedOutputStream(outputStream))
     var modelDataFile: File = null
-    var modelLoader: File = null
+    var modelLoaderFile: File = null
 
     def writeEntry(file: File): Unit =
       {
         val fileEntry = new TarArchiveEntry(file)
-        myTarBall.putArchiveEntry(fileEntry)
-        IOUtils.copy(new FileInputStream(file), myTarBall)
-        myTarBall.closeArchiveEntry()
+        tarBall.putArchiveEntry(fileEntry)
+        IOUtils.copy(new FileInputStream(file), tarBall)
+        tarBall.closeArchiveEntry()
       }
 
     try {
@@ -58,18 +61,18 @@ object ModelPublishFormat {
         writeEntry(file)
       })
 
-      modelDataFile = File.createTempFile("modelData", ".txt")
+      modelDataFile = File.createTempFile(modelDataString, ".txt")
       FileUtils.writeByteArrayToFile(modelDataFile, modelData)
       writeEntry(modelDataFile)
 
-      modelLoader = File.createTempFile("modelReader", ".txt")
-      FileUtils.writeStringToFile(modelLoader, modelLoaderClass)
-      writeEntry(modelLoader)
+      modelLoaderFile = File.createTempFile(modelReaderString, ".txt")
+      FileUtils.writeStringToFile(modelLoaderFile, modelLoaderClass)
+      writeEntry(modelLoaderFile)
     }
     finally {
-      myTarBall.finish()
-      IOUtils.closeQuietly(myTarBall)
-      FileUtils.deleteQuietly(modelLoader)
+      tarBall.finish()
+      IOUtils.closeQuietly(tarBall)
+      FileUtils.deleteQuietly(modelLoaderFile)
       outputStream.close()
       FileUtils.deleteQuietly(modelDataFile)
     }
@@ -87,7 +90,7 @@ object ModelPublishFormat {
   def read(modelArchiveInput: File, parentClassLoader: ClassLoader): Model = {
 
     var outputFile: FileOutputStream = null
-    var myTarFile: TarArchiveInputStream = null
+    var tarFile: TarArchiveInputStream = null
     var modelName: String = null
     var ModelBytesFileName: String = null
     var archiveName: String = null
@@ -96,14 +99,14 @@ object ModelPublishFormat {
     var byteArray: Array[Byte] = null
 
     try {
-      myTarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
+      tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
-      var entry = myTarFile.getNextTarEntry
+      var entry = tarFile.getNextTarEntry
       while (entry != null) {
         val individualFile = entry.getName
         // Get Size of the file and create a byte array for the size
         val content = new Array[Byte](entry.getSize.toInt)
-        myTarFile.read(content, 0, content.length)
+        tarFile.read(content, 0, content.length)
 
         if (individualFile.contains(".jar")) {
           val file = new File(tmpPath + individualFile)
@@ -113,14 +116,14 @@ object ModelPublishFormat {
           val url = file.toURI.toURL
           urls = urls :+ url
         }
-        else if (individualFile.contains("modelReader")) {
+        else if (individualFile.contains(modelReaderString)) {
           val s = new String(content)
           modelName = s.replaceAll("\n", "")
         }
-        else {
+        else if (individualFile.contains(modelDataString)) {
           byteArray = content
         }
-        entry = myTarFile.getNextTarEntry
+        entry = tarFile.getNextTarEntry
       }
 
       val classLoader = new URLClassLoader(urls, parentClassLoader)
@@ -130,7 +133,7 @@ object ModelPublishFormat {
     }
     finally {
       IOUtils.closeQuietly(outputFile)
-      IOUtils.closeQuietly(myTarFile)
+      IOUtils.closeQuietly(tarFile)
     }
 
   }
