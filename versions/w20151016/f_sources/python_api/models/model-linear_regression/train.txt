@@ -1,0 +1,124 @@
+.. _python_api/models/model-linear_regression/train:
+
+
+:doc:`LinearRegressionModel <index>`  train
+*******************************************
+
+------
+
+
+.. function:: train(self, frame, label_column, observation_columns, intercept=True, num_iterations=100, step_size=1, reg_type=None, reg_param=0.01, mini_batch_fraction=1.0)
+
+    |ALPHA|
+    Build linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column name containing the label
+            for each observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing the
+            observations.
+
+
+
+        **intercept** : bool (default=True)
+
+        ..
+
+            Flag indicating if the algorithm adds an intercept.
+            Default is true.
+
+
+
+        **num_iterations** : int32 (default=100)
+
+        ..
+
+            Number of iterations for SGD. Default is 100.
+
+
+
+        **step_size** : int32 (default=1)
+
+        ..
+
+            Initial step size for SGD optimizer for the first step.
+            Default is 1.0.
+
+
+
+        **reg_type** : unicode (default=None)
+
+        ..
+
+            Regularization "L1" or "L2".
+            Default is "L2".
+
+
+
+        **reg_param** : float64 (default=0.01)
+
+        ..
+
+            Regularization parameter. Default is 0.01.
+
+
+
+        **mini_batch_fraction** : float64 (default=1.0)
+
+        ..
+
+            Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Creating a LinearRegression Model using the observation column and target column of the train frame
+
+    Examples
+    --------
+    Train a Linear Regression Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.LinearRegressionModel(name='LinReg')
+            >>> my_model.train(train_frame, 'name_of_label_column',['name_of_observation_column(s)'],false, 50, 1.0, "L1", 0.02, 1.0)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.LinearRegressionModel(name='LinReg')
+            >>> my_model.train(train_frame, 'name_of_label_column', ['name_of_observation_column(s)'],
+            ...  false, 50, 1.0, "L1", 0.02, 1.0)
+
+

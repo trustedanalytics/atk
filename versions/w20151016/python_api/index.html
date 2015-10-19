@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Python API &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../index.html" >
+    <link rel="next" title="Connect to the Server" href="connect.html" >
+    <link rel="prev" title="PyCharm Setup Instructions" href="../ds_pycharm.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../ds_pycharm.html" title="PyCharm Setup Instructions"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="connect.html" title="Connect to the Server"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Python API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/index.html">Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="python-api-index"></span><div class="section" id="python-api">
+<span id="index-0"></span><h1>Python API<a class="headerlink" href="#python-api" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="connect.html">Connect to the Server</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="connect.html#basic-connecting">Basic connecting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connect.html#connections-requiring-oauth">Connections requiring OAuth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connect.html#using-environmental-variables">Using Environmental Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="connect.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="connect.html#client-s-server-settings">Client&#8217;s Server Settings</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="datatypes/index.html">Data Types</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasources/index.html">Data Sources</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#csvfile">CsvFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#hivequery">HiveQuery</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#hbasetable">HBaseTable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#jdbctable">JdbcTable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#jsonfile">JsonFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#linefile">LineFile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#pandas">Pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#uploadrows">UploadRows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html#xmlfile">XmlFile</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="frames/index.html">Frames</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="frames/frame-edge/index.html">EdgeFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frames/frame-vertex/index.html">VertexFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frames/frame-/index.html">Frame</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="graphs/index.html">Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graphs/graph-/index.html">Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/graph-titan/index.html">TitanGraph</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="models/index.html">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="models/model-libsvm/index.html">LibsvmModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-random_forest_classifier/index.html">RandomForestClassifierModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-principal_components/index.html">PrincipalComponentsModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-collaborative_filtering/index.html">CollaborativeFilteringModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-k_means/index.html">KMeansModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-svm/index.html">SvmModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-lda/index.html">LdaModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-logistic_regression/index.html">LogisticRegressionModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-naive_bayes/index.html">NaiveBayesModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-linear_regression/index.html">LinearRegressionModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/model-random_forest_regressor/index.html">RandomForestRegressorModel</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 19, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

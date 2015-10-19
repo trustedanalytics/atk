@@ -1,0 +1,146 @@
+.. _rest_api/v1/commands/model-svm__test:
+
+
+
+--------------------------------------
+:doc:`Commands <index>` model:svm/test
+--------------------------------------
+
+|ALPHA|
+Predict test frame labels and return metrics.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:svm/test
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame whose labels are to be
+        predicted.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column containing the actual
+        label for each observation.
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        Column(s) containing the observations
+        whose labels are to be predicted and tested.
+        Default is to test over the columns the SVM model
+        was trained on.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predict the labels for a test frame and run classification metrics on predicted
+and target labels.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        A dictionary with binary classification metrics.
+        The data returned is composed of the following keys\:
+
+                      |  'accuracy' : double
+                      |  The proportion of predictions that are correctly identified
+                      |  'confusion_matrix' : dictionary
+                      |  A table used to describe the performance of a classification model
+                      |  'f_measure' : double
+                      |  The harmonic mean of precision and recall
+                      |  'precision' : double
+                      |  The proportion of predicted positive instances that are correctly identified
+                      |  'recall' : double
+                      |  The proportion of positive instances that are correctly identified.
+
+

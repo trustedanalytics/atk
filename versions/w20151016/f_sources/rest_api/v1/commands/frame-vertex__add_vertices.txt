@@ -1,0 +1,129 @@
+.. _rest_api/v1/commands/frame-vertex__add_vertices:
+
+
+
+-------------------------------------------------
+:doc:`Commands <index>` frame:vertex/add_vertices
+-------------------------------------------------
+
+Add vertices to a graph.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame:vertex/add_vertices
+
+:arguments:
+
+
+    **vertex_frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **source_frame** : Frame
+
+    ..
+
+        Frame that will be the source of
+        the vertex data.
+
+
+
+    **id_column_name** : unicode
+
+    ..
+
+        Column name for a unique id for each vertex.
+
+
+
+    **column_names** : list (default=None)
+
+    ..
+
+        Column names that will be turned
+        into properties for each vertex.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Includes appending to a list of existing vertices.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``_Unit``
+
+
+
+

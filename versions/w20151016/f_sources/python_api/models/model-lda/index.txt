@@ -1,0 +1,71 @@
+.. _python_api/models/model-lda/index:
+
+
+:doc:`Models<../index>` LdaModel
+********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    publish
+    status
+    train
+
+.. class:: LdaModel
+
+    Entity LdaModel
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LdaModel__init__>`\ (self[, name, _info])                                             Creates Latent Dirichlet Allocation model
+    :doc:`predict <predict>`\ (self, document)                                                            |ALPHA| Predict conditional probabilities of topics given document.
+    :doc:`publish <publish>`\ (self)                                                                      |ALPHA| Creates a tar file that will used as input to the scoring engine
+    :doc:`train <train>`\ (self, frame, document_column_name, word_column_name, word_count_column_name)   |ALPHA| Creates Latent Dirichlet Allocation model
+    ====================================================================================================  ====================================================================================================
+
+.. _LdaModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Creates Latent Dirichlet Allocation model
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            A new instance of LdaModel
+    |LDA| is a commonly-used algorithm for topic modeling, but,
+    more broadly, is considered a dimensionality reduction technique.
+    For more detail see :ref:`LDA <LdaNewPlugin_Summary>`.

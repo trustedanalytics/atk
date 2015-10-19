@@ -1,0 +1,43 @@
+.. _python_api/graphs/graph-titan/copy:
+
+
+:doc:`TitanGraph <index>`  copy
+*******************************
+
+------
+
+
+.. function:: copy(self, name=None)
+
+    Make a copy of the current graph.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            The name for the copy of the graph.
+            Default is None.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A copy of the original graph.
+
+
+    Examples
+    --------
+    For this example, graph object *my_graph* accesses a graph:
+
+    .. code::
+
+        >>> copied_graph = my_graph.copy('my_graph2')
+

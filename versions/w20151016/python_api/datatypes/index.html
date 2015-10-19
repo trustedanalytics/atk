@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Data Types &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../index.html" >
+    <link rel="up" title="Python API" href="../index.html" >
+    <link rel="next" title="Data Sources" href="../datasources/index.html" >
+    <link rel="prev" title="Connect to the Server" href="../connect.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" accesskey="U">Python API</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../connect.html" title="Connect to the Server"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="../datasources/index.html" title="Data Sources"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../models/index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="python-api-datatypes-index"></span><div class="section" id="data-types">
+<span id="api-datatypes"></span><span id="index-0"></span><h1>Data Types<a class="headerlink" href="#data-types" title="Permalink to this headline">¶</a></h1>
+<p>All data manipulated and stored using frames and graphs must fit into one of
+the supported Python data types.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">valid_data_types</span>
+
+<span class="go">float32, float64, ignore, int32, int64, unicode, vector(n), datetime</span>
+<span class="go">(and aliases: float-&gt;float64, int-&gt;int32, list-&gt;vector, long-&gt;int64, str-&gt;unicode)</span>
+</pre></div>
+</div>
+<table border="1" class="docutils">
+<colgroup>
+<col width="14%" />
+<col width="86%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><strong>datetime</strong></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> object for date and time; equivalent to python&#8217;s datetime.datetime class.
+Converts to and from strings using the ISO 8601 format.  Inside the server, the object
+is represented by the nscala/joda DateTime object.  When interfacing with various data
+sources and sinks that use different data types for datetime, the datetime value will
+be converted to a string by default.</td>
+</tr>
+<tr class="row-even"><td><strong>float32</strong></td>
+<td>32-bit floating point number; equivalent to numpy.float32</td>
+</tr>
+<tr class="row-odd"><td><strong>float64</strong></td>
+<td>64-bit floating point number; equivalent to numpy.float64</td>
+</tr>
+<tr class="row-even"><td><strong>ignore</strong></td>
+<td>type available to describe a field in a data source that the
+parser should ignore</td>
+</tr>
+<tr class="row-odd"><td><strong>int32</strong></td>
+<td>32-bit integer; equivalent to numpy.int32</td>
+</tr>
+<tr class="row-even"><td><strong>int64</strong></td>
+<td>32-bit integer; equivalent to numpy.int64</td>
+</tr>
+<tr class="row-odd"><td><strong>unicode</strong></td>
+<td>Python&#8217;s unicode representation for strings.</td>
+</tr>
+<tr class="row-even"><td><strong>vector(n)</strong></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>  Ordered list of n float64 numbers (array of fixed-length n); uses numpy.ndarray</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Note:</strong>  Numpy values of positive infinity (np.inf), negative infinity
+(-np.inf) or nan (np.nan) are treated as Python&#8217;s None when sent to the server.
+Results of any user-defined functions which deal with such values are
+automatically converted to None.
+Any further usage of those data points should treat the values as None.</p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 19, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

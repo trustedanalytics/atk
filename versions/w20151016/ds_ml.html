@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Machine Learning &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="User Manual" href="ds_over.html" >
+    <link rel="next" title="Algorithms" href="ds_algorithms.html" >
+    <link rel="prev" title="Topic Modeling with Latent Dirichlet Allocation" href="LdaNewPlugin_Summary.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ds_over.html" accesskey="U">User Manual</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="LdaNewPlugin_Summary.html" title="Topic Modeling with Latent Dirichlet Allocation"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_algorithms.html" title="Algorithms"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ds-ml"></span><div class="section" id="machine-learning">
+<span id="index-0"></span><h1>Machine Learning<a class="headerlink" href="#machine-learning" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">Machine learning</span></a> is the study of constructing algorithms that can learn
+from data.</p>
+<p>When someone uses a search engine to perform a query, they are returned a
+ranked list of websites, ordered according to predicted relevance.
+Ranking these sites is typically done using page content, as well as the
+relevance of other sites that link to a particular page.
+Machine learning is used to automate this process, allowing search engine
+companies to scale this process up to billions of potential web pages.</p>
+<p>Online retailers often use a machine learning algorithm called collaborative
+filtering to suggest products users might be interested in purchasing.
+These suggestions are produced dynamically and without the use of a specific
+input query, so retailers use a customer&#8217;s purchase and browsing history,
+along with those of customers with whom shared interests can be identified.
+Implementations of collaborative filtering enable these recommendations to
+be done automatically, without directly involving analysts.</p>
+<p>There are many other problems that are amenable to <a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a>
+solutions.
+Translation of text for example is a difficult issue.
+A corpus of previously translated text can be used to teach an algorithm a
+mapping from one language to another.</p>
+<div class="section" id="supervision">
+<h2>Supervision<a class="headerlink" href="#supervision" title="Permalink to this headline">¶</a></h2>
+<p>Trusted Analytics Platform incorporates supervised, unsupervised, and
+semi-supervised machine learning algorithms.
+Supervised algorithms are used to learn the relationship between features in
+a dataset and some labeling schema, such as is in classification.
+For example, binary logistic regression builds a model for relating a linear
+combination of input features (e.g., high and low temperatures for a
+collection of days) to a known binary label (e.g., whether or not someone
+went for a trail run on that day).
+Once the relationship between temperature and running activity is learned,
+then the model can be used to make predictions about new running activity,
+given the daily temperatures.
+Unsupervised machine learning algorithms are used to find patterns or
+groupings in data for which class labels are unknown.
+For example, given a data set of observations about flowers (e.g., petal
+length, petal width, sepal length, and sepal width), an unsupervised
+clustering algorithm could be used to cluster observations according to
+similarity.
+Then, a researcher could look for reasonable patterns in the groupings, such
+as &#8220;similar species appear to cluster together.&#8221;
+Semi-supervised learning is the natural combination of these two classes of
+algorithms, in which unlabeled data are supplemented with smaller amounts of
+labeled data, with the goal of increasing the accuracy of learning.
+For more information on these approaches, the respective Wikipedia entries
+to these approaches provide an easy-to-read overview of their strengths and
+limitations.</p>
+</div>
+<div class="section" id="other-resources">
+<h2>Other Resources<a class="headerlink" href="#other-resources" title="Permalink to this headline">¶</a></h2>
+<p>There is plenty of literature on <a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a> for those who want to
+gain a more thorough understanding of it.
+We recommend: <a class="reference external" href="http://alex.smola.org/drafts/thebook.pdf">Introduction to Machine Learning</a> and <a class="reference external" href="http://en.wikipedia.org/wiki/Machine_learning">Wikipedia: Machine
+Learning</a>.
+You might find this link helpful as well: <a class="reference external" href="http://blog.bigml.com/2013/02/21/everything-you-wanted-to-know-about-machine-learning-but-were-too-afraid-to-ask-part-two/">Everything You Wanted to Know About
+Machine Learning, But Were Too Afraid To Ask (Part Two)</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 19, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

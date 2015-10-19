@@ -1,0 +1,130 @@
+.. _python_api/frames/frame-edge/sort:
+
+
+:doc:`EdgeFrame <index>`  sort
+******************************
+
+------
+
+
+.. function:: sort(self, columns, ascending=True)
+
+    |BETA|
+    Sort the data in a frame.
+
+
+    :Parameters:
+
+        **columns** : str | list of str | list of tuples
+
+        ..
+
+            Either a column name, a list of column names, or a list of tuples where each tuple is a name and an ascending bool value.
+
+
+
+        **ascending** : bool (default=True)
+
+        ..
+
+            True for ascending, False for descending.
+
+
+    Sort a frame by column values either ascending or descending.
+
+    Examples
+    --------
+
+
+    Consider the frame
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     3  foxtrot
+        [1]     1  charlie
+        [2]     3  bravo
+        [3]     2  echo
+        [4]     4  delta
+        [5]     3  alpha
+
+    Sort a single column:
+
+    .. code::
+
+        >>> frame.sort('col1')
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     1  charlie
+        [1]     2  echo
+        [2]     3  foxtrot
+        [3]     3  bravo
+        [4]     3  alpha
+        [5]     4  delta
+
+    Sort a single column descending:
+
+    .. code::
+
+        >>> frame.sort('col2', False)
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     3  foxtrot
+        [1]     2  echo
+        [2]     4  delta
+        [3]     1  charlie
+        [4]     3  bravo
+        [5]     3  alpha
+
+    Sort multiple columns:
+
+    .. code::
+
+        >>> frame.sort(['col1', 'col2'])
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     1  charlie
+        [1]     2  echo
+        [2]     3  alpha
+        [3]     3  bravo
+        [4]     3  foxtrot
+        [5]     4  delta
+
+
+    Sort multiple columns descending:
+
+    .. code::
+
+        >>> frame.sort(['col1', 'col2'], False)
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     4  delta
+        [1]     3  foxtrot
+        [2]     3  bravo
+        [3]     3  alpha
+        [4]     2  echo
+        [5]     1  charlie
+
+    Sort multiple columns: 'col1' decending and 'col2' ascending:
+
+    .. code::
+
+        >>> frame.sort([ ('col1', False), ('col2', True) ])
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  col1  col2
+        ==================
+        [0]     4  delta
+        [1]     3  alpha
+        [2]     3  bravo
+        [3]     3  foxtrot
+        [4]     2  echo
+        [5]     1  charlie
+

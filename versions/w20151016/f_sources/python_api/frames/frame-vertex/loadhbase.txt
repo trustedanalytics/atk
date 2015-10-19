@@ -1,0 +1,57 @@
+.. _python_api/frames/frame-vertex/loadhbase:
+
+
+:doc:`VertexFrame <index>`  loadhbase
+*************************************
+
+------
+
+
+.. function:: loadhbase(self, table_name, schema, start_tag=None, end_tag=None)
+
+    Append data from an HBase table into an existing (possibly empty) FrameRDD
+
+
+    :Parameters:
+
+        **table_name** : unicode
+
+        ..
+
+            hbase table name
+
+
+
+        **schema** : list
+
+        ..
+
+            hbase schema as a list of tuples (columnFamily, columnName, dataType for cell value)
+
+
+
+        **start_tag** : unicode (default=None)
+
+        ..
+
+            optional start tag for filtering
+
+
+
+        **end_tag** : unicode (default=None)
+
+        ..
+
+            optional end tag for filtering
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            the initial FrameRDD with the HBase data appended
+    Append data from an HBase table into an existing (possibly empty) FrameRDD
