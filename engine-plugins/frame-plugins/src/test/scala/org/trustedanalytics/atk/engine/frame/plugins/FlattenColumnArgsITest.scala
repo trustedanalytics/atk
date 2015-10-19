@@ -39,24 +39,69 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
 
   }
 
-  it should "check performance when flattening a single column" in {
-    val columnIndexes = List(1)
-    val delimiters = List(",")
-    val rows = List(Row("a,b,c", "10,18,20"),Row("d,e", "7,8"),Row("f,g,h", "17,2"),Row("i,j", "37,6,8"))
-    val rdd = sparkContext.parallelize(rows)
-    val startTime = System.nanoTime()
-    val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)(rdd)
-    val endTime = System.nanoTime()
-    assertResult(10) {
-      flattened.count()
+  it should "flatten a column in the dataset in less than 5ms, on average" in {
+    val elapsedTime = new Array[Long](20)
+    var count = 0
+
+    for (i <- 0 until 10) {
+      val rows = List(Row("a,b,c", "10,18,20"), Row("d,e", "7,8"), Row("f,g,h", "17,2"), Row("i,j", "37,6,8"))
+      val rdd = sparkContext.parallelize(rows)
+      var startTime = System.nanoTime()
+      val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(List(1), List(","))(rdd)
+      var endTime = System.nanoTime()
+      assertResult(10) {
+        flattened.count()
+      }
+      elapsedTime(count) = endTime - startTime
+      count += 1
+      startTime = System.nanoTime()
+      FlattenColumnFunctions.flattenRddByStringColumnIndexes(List(0), List(","))(rdd)
+      endTime = System.nanoTime()
+      elapsedTime(count) = endTime - startTime
+      count += 1
     }
-    println("Elapsed time for flattening a single column: " + (endTime - startTime).toString + " ns")
+
+    var totalTime : Long = 0
+
+    for (i <- elapsedTime.indices) {
+      totalTime += elapsedTime(i)
+    }
+
+    val average = totalTime / elapsedTime.length
+    assert(average < 5000000, "Expected the average flatten column time to be less than 5000000 ns, but was " + average.toString)
   }
 
-  it should "check performance when flattening multiple columns" in {
-    val columnIndexes = List(0,1)
-    val delimiters = List(",",",")
-    val rows = List(Row("a,b,c", "10,18,20"),Row("d,e", "7,8"),Row("f,g,h", "17,2"),Row("i,j", "37,6,8"))
+  it should "flatten multiple columns in the dataset in less than 5 ms, on average" in {
+    val elapsedTime = new Array[Long](20)
+    var count = 0
+
+    for (i <- 0 until 20) {
+      val rows = List(Row("a,b,c", "10,18,20"), Row("d,e", "7,8"), Row("f,g,h", "17,2"), Row("i,j", "37,6,8"))
+      val rdd = sparkContext.parallelize(rows)
+      var startTime = System.nanoTime()
+      val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(List(0, 1), List(",",","))(rdd)
+      var endTime = System.nanoTime()
+      assertResult(11) {
+        flattened.count()
+      }
+      elapsedTime(count) = endTime - startTime
+      count += 1
+    }
+
+    var totalTime : Long = 0
+
+    for (i <- elapsedTime.indices) {
+      totalTime += elapsedTime(i)
+    }
+
+    val average = totalTime / elapsedTime.length
+    assert(average < 5000000, "Expected the average flatten column time to be less than 5000000 ns, but was " + average.toString)
+  }
+
+  it should "flatten multiple columns with empty strings when the number of items in each column do not match" in {
+    val columnIndexes = List(0, 1)
+    val delimiters = List(",", ",")
+    val rows = List(Row("a,b,c", "10,18,20"), Row("d,e", "7,8"), Row("f,g,h", "17,2"), Row("i,j", "37,6,8"))
     val rdd = sparkContext.parallelize(rows)
     val startTime = System.nanoTime()
     val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)(rdd)
@@ -64,6 +109,20 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     assertResult(11) {
       flattened.count()
     }
+
+    val result = flattened.take(11)
+    result(0) shouldBe Row("a", "10")
+    result(1) shouldBe Row("b", "18")
+    result(2) shouldBe Row("c", "20")
+    result(3) shouldBe Row("d", "7")
+    result(4) shouldBe Row("e", "8")
+    result(5) shouldBe Row("f", "17")
+    result(6) shouldBe Row("g", "2")
+    result(7) shouldBe Row("h", "")
+    result(8) shouldBe Row("i", "37")
+    result(9) shouldBe Row("j", "6")
+    result(10) shouldBe Row("", "8")
+
     println("Elapsed time for flattening multiple columns: " + (endTime - startTime).toString + " ns")
   }
 }

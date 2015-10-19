@@ -93,6 +93,15 @@ class FrameFlattenColumnTest(unittest.TestCase):
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
+    def test_flatten_column_with_wrong_column_name(self):
+        # validate expected pre-conditions
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
+        # expect an exception when we call the method under test with a non-existent column name
+        with self.assertRaises(Exception):
+            self.frame.flatten_column('hamburger')
+
     def test_flatten_columns_with_a_single_column(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
@@ -128,6 +137,15 @@ class FrameFlattenColumnTest(unittest.TestCase):
         # validate
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
+
+    def test_flatten_columns_with_wrong_column_name(self):
+        # validate expected pre-conditions
+        self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
+        self.assertEqual(self.frame.row_count, 10)
+
+        # expect an exception when we call the method under test with a non-existent column name
+        with self.assertRaises(Exception):
+            self.frame.flatten_columns('hamburger')
 
 if __name__ == "__main__":
     unittest.main()
