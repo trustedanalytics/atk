@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.apache.spark.sql.Row
-import org.scalatest.{ BeforeAndAfterEach, FlatSpec, Matchers }
+import org.scalatest.{ BeforeAndAfterEach, FlatSpec, Matchers, Assertions }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterEach with TestingSparkContextFlatSpec {
@@ -37,6 +37,34 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     result(7) shouldBe Row("Tim", "Beatle")
     result(8) shouldBe Row("Becky", "")
 
+  }
+
+  it should "check performance when flattening a single column" in {
+    val columnIndexes = List(1)
+    val delimiters = List(",")
+    val rows = List(Row("a,b,c", "10,18,20"),Row("d,e", "7,8"),Row("f,g,h", "17,2"),Row("i,j", "37,6,8"))
+    val rdd = sparkContext.parallelize(rows)
+    val startTime = System.nanoTime()
+    val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)(rdd)
+    val endTime = System.nanoTime()
+    assertResult(10) {
+      flattened.count()
+    }
+    println("Elapsed time for flattening a single column: " + (endTime - startTime).toString + " ns")
+  }
+
+  it should "check performance when flattening multiple columns" in {
+    val columnIndexes = List(0,1)
+    val delimiters = List(",",",")
+    val rows = List(Row("a,b,c", "10,18,20"),Row("d,e", "7,8"),Row("f,g,h", "17,2"),Row("i,j", "37,6,8"))
+    val rdd = sparkContext.parallelize(rows)
+    val startTime = System.nanoTime()
+    val flattened = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)(rdd)
+    val endTime = System.nanoTime()
+    assertResult(11) {
+      flattened.count()
+    }
+    println("Elapsed time for flattening multiple columns: " + (endTime - startTime).toString + " ns")
   }
 }
 
