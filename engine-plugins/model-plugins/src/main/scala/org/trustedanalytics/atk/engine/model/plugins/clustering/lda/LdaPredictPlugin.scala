@@ -14,11 +14,12 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.giraph.plugins.model.lda
+package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
+import org.apache.spark.mllib.clustering.{ AtkLdaModel, AtkLdaModel$ }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.giraph.config.lda.{ LdaModelPredictReturn, LdaModelPredictArgs, LdaJsonFormat }
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
 import LdaJsonFormat._
 
@@ -30,7 +31,7 @@ import LdaJsonFormat._
     """Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings""",
   returns = """Dictionary containing predicted topics.
-The data returned is composed of multiple components\:
+The data returned is composed of multiple keys\:
 
 |   **list of doubles** | *topics_given_doc*
 |       List of conditional probabilities of topics given document.
@@ -47,7 +48,7 @@ class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredic
    */
   override def name: String = "model:lda/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command
@@ -68,9 +69,8 @@ class LdaPredictPlugin extends CommandPlugin[LdaModelPredictArgs, LdaModelPredic
     val model: Model = arguments.model
     val document: List[String] = arguments.document
 
-    val ldaModel = model.data.convertTo[LdaModel]
+    val ldaModel = model.data.convertTo[AtkLdaModel]
     ldaModel.predict(document)
   }
-
 }
 

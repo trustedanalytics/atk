@@ -39,8 +39,8 @@ import org.apache.mahout.math.Vector;
 import org.apache.mahout.math.VectorWritable;
 import org.apache.mahout.math.function.Functions;
 import org.trustedanalytics.atk.giraph.aggregators.VectorSumAggregator;
-import org.trustedanalytics.atk.giraph.config.lda.LdaConfig;
-import org.trustedanalytics.atk.giraph.config.lda.LdaConfiguration;
+import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfig;
+import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration;
 import org.trustedanalytics.atk.giraph.io.LdaEdgeData;
 import org.trustedanalytics.atk.giraph.io.LdaMessage;
 import org.trustedanalytics.atk.giraph.io.LdaVertexData;
@@ -61,12 +61,12 @@ import java.util.Random;
 @Algorithm(
     name = "CVB0 Latent Dirichlet Allocation"
 )
-public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexData,
+public class GiraphLdaComputation extends BasicComputation<LdaVertexId, LdaVertexData,
         LdaEdgeData, LdaMessage> {
 
     // TODO: looks like SUM_OCCURRENCE_COUNT might cause divide by zero error if word_count is zero or you had an unconnected vertex
 
-    private LdaConfig config = null;
+    private GiraphLdaConfig config = null;
 
     /** This value gets changed on convergence */
     private static final String CURRENT_MAX_SUPERSTEPS = "lda.maxSupersteps";
@@ -96,7 +96,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
 
     @Override
     public void preSuperstep() {
-        config = new LdaConfiguration(getConf()).ldaConfig();
+        config = new GiraphLdaConfiguration(getConf()).ldaConfig();
         getConf().setLong(CURRENT_MAX_SUPERSTEPS, config.maxIterations());
         // Set custom parameters
         numWords = this.<LongWritable>getAggregatedValue(SUM_WORD_VERTEX_COUNT).get();
@@ -348,15 +348,15 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
     }
 
     /**
-     * Master compute associated with {@link CVB0LDAComputation}. It registers required aggregators.
+     * Master compute associated with {@link GiraphLdaComputation}. It registers required aggregators.
      */
-    public static class CVB0LDAMasterCompute extends DefaultMasterCompute {
+    public static class GiraphLdaMasterCompute extends DefaultMasterCompute {
 
-        private LdaConfig config = null;
+        private GiraphLdaConfig config = null;
 
         @Override
         public void initialize() throws InstantiationException, IllegalAccessException {
-            config = new LdaConfiguration(getConf()).ldaConfig();
+            config = new GiraphLdaConfiguration(getConf()).ldaConfig();
             registerPersistentAggregator(SUM_DOC_VERTEX_COUNT, LongSumAggregator.class);
             registerPersistentAggregator(SUM_WORD_VERTEX_COUNT, LongSumAggregator.class);
             registerPersistentAggregator(SUM_OCCURRENCE_COUNT, DoubleSumAggregator.class);
@@ -397,7 +397,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
      * This is an aggregator writer for LDA, which after each super step will persist the
      * aggregator values to disk, by use of the Writable interface.
      */
-    public static class CVB0LDAAggregatorWriter implements AggregatorWriter {
+    public static class GiraphLdaAggregatorWriter implements AggregatorWriter {
         /** Name of the file we wrote to */
         private static String FILENAME;
         /** Saved output stream to write to */
@@ -455,7 +455,7 @@ public class CVB0LDAComputation extends BasicComputation<LdaVertexId, LdaVertexD
                 map.put(entry.getKey(), entry.getValue().toString());
             }
 
-            LdaConfig ldaConfig = new LdaConfiguration(getConf()).ldaConfig();
+            GiraphLdaConfig ldaConfig = new GiraphLdaConfiguration(getConf()).ldaConfig();
 
             if (realStep == 0) {
                 // output graph statistics

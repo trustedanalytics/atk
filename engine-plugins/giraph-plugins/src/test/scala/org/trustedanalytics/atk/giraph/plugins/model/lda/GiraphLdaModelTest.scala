@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.testutils.MatcherUtils._
 
 import scala.collection.immutable.Map
 
-class LdaModelTest extends FlatSpec with Matchers {
+class GiraphLdaModelTest extends FlatSpec with Matchers {
   val epsilon = 1e-6
   val numTopics = 2
 
@@ -39,12 +39,12 @@ class LdaModelTest extends FlatSpec with Matchers {
 
   "ldaModel" should "throw an IllegalArgumentException if number of topics is less than one" in {
     intercept[IllegalArgumentException] {
-      val ldaModel = LdaModel(0, topicWordMap)
+      val ldaModel = GiraphLdaModel(0, topicWordMap)
     }
   }
 
   "predict" should "compute topic probabilities for document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
 
     val document = List("jobs", "harry", "jobs", "harry", "harry", "new_word")
     val prediction = ldaModel.predict(document)
@@ -54,7 +54,7 @@ class LdaModelTest extends FlatSpec with Matchers {
   }
 
   "predict" should "compute topic probabilities for empty document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
 
     val document = List()
     val prediction = ldaModel.predict(document)
@@ -64,7 +64,7 @@ class LdaModelTest extends FlatSpec with Matchers {
   }
 
   "computeWordCounts" should "compute counts of each word in document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
     val document = List("jobs", "harry", "jobs", "harry", "harry", "new_word")
     val wordCounts = ldaModel.computeWordOccurrences(document)
 
@@ -78,20 +78,20 @@ class LdaModelTest extends FlatSpec with Matchers {
 
   "computeWordCounts" should "throw an IllegalArgumentException if document is null" in {
     intercept[IllegalArgumentException] {
-      val ldaModel = LdaModel(numTopics, topicWordMap)
+      val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
       ldaModel.computeWordOccurrences(null)
     }
   }
 
   "wordProbabilityGivenDocument" should "compute probability of word given document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
 
     ldaModel.wordProbabilityGivenDocument("jobs", wordOccurrences, 15) should equal(0.333333 +- epsilon)
     ldaModel.wordProbabilityGivenDocument("new_word", wordOccurrences, 15) should equal(0)
   }
 
   "computeNewWordCount" should "count words not present in trained model" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
 
     ldaModel.computeNewWordCount(List("jobs", "harry", "economy", "new_word1", "new_word2")) should equal(2)
     ldaModel.computeNewWordCount(List("jobs", "harry", "new_word", "new_word", "new_word2")) should equal(3)
@@ -101,13 +101,13 @@ class LdaModelTest extends FlatSpec with Matchers {
 
   "computeNewWordCount" should "throw an IllegalArgumentException if document is null" in {
     intercept[IllegalArgumentException] {
-      val ldaModel = LdaModel(numTopics, topicWordMap)
+      val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
       ldaModel.computeNewWordCount(null) should equal(0)
     }
   }
 
   "computeNewWordPercentage" should "compute percentage of words not present in trained model" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = GiraphLdaModel(numTopics, topicWordMap)
     ldaModel.computeNewWordPercentage(3, 12) should equal(25d +- epsilon)
     ldaModel.computeNewWordPercentage(0, 0) should equal(0d +- epsilon)
   }
