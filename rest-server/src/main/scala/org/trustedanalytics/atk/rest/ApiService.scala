@@ -76,13 +76,13 @@ class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1
       apiVersions = List("v1"))
   }
 
-  lazy val oauthServer = { new OAuthServer(RestServerConfig.uaaUri, RestServerConfig.uaaClientName, RestServerConfig.uaaClientPassword) }
+  lazy val oauthServer = { new OAuthServer(RestServerConfig.uaaUri) }
 
   import spray.json._
   import spray.httpx.SprayJsonSupport._
   import AtkDefaultJsonProtocol._
   implicit val descFormat = jsonFormat3(ServiceDescription)
-  implicit val oauthServerFormat = jsonFormat3(OAuthServer)
+  implicit val oauthServerFormat = jsonFormat1(OAuthServer)
 
   /**
    * Main Route entry point to the API Server
@@ -129,4 +129,4 @@ class ApiService(val commonDirectives: CommonDirectives, val apiV1Service: ApiV1
 }
 
 case class ServiceDescription(name: String, identifier: String, apiVersions: List[String])
-case class OAuthServer(uri: String, clientName: String, clientPassword: String)
+case class OAuthServer(uri: String)
