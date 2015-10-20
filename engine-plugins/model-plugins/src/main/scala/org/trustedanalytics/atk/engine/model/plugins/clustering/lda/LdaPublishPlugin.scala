@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
+import com.google.common.base.Charsets
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
@@ -66,7 +67,7 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes,
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
       "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin"))
   }

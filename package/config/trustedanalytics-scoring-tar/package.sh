@@ -33,7 +33,7 @@ cp -v scoring-engine-lib/target/dependency/*.jar tarballs/$package/lib/
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics-scoring.tar.gz .
-pop
+popd
 
 
 rm -rf tarballs

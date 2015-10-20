@@ -36,7 +36,7 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
     </parent>
 
     <properties>
-        <pkg.version>0.4.1</pkg.version>
+        <pkg.version>0.4.2</pkg.version>
     </properties>
     <profiles>
         <profile>
