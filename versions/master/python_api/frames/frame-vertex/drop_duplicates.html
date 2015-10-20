@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame drop_duplicates &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame drop_duplicates &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame drop_rows" href="drop_rows.html" >
     <link rel="prev" title="VertexFrame drop_columns" href="drop_columns.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -130,6 +130,27 @@
 <p>Remove duplicate vertex rows, keeping only one vertex row per uniqueness
 criteria match.
 Edges that were connected to removed vertices are also automatically dropped.</p>
+<p class="rubric">Examples</p>
+<p>Remove any rows that have the same data in column <em>b</em> as a previously
+checked row:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a frame with unique values in column <em>b</em>.</p>
+<p>Remove any rows that have the same data in columns <em>a</em> and <em>b</em> as a
+previously checked row:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span> <span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">]</span> <span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is a frame with unique values for the combination of columns
+<em>a</em> and <em>b</em>.</p>
+<p>Remove any rows that have the whole row identical:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The result is a frame where something is different in every row from every
+other row.
+Each row is unique.</p>
 </dd></dl>
 
 </div>
@@ -155,7 +176,7 @@ Edges that were connected to removed vertices are also automatically dropped.</p
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

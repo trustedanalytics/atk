@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame append &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame append &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame assign_sample" href="assign_sample.html" >
     <link rel="prev" title="Frame add_columns" href="add_columns.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -130,55 +130,31 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>Given a frame with a single column, <em>col_1</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre>      &gt;&gt;&gt; my_frame.inspect(4)
-        col_1:str
-      /-----------/
-        dog
-        cat
-        bear
-        donkey
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s">&#39;dog&#39;</span><span class="p">,</span> <span class="s">&#39;snoopy&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                   <span class="p">[</span><span class="s">&#39;cat&#39;</span><span class="p">,</span> <span class="s">&#39;tom&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                   <span class="p">[</span><span class="s">&#39;bear&#39;</span><span class="p">,</span> <span class="s">&#39;yogi&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                   <span class="p">[</span><span class="s">&#39;mouse&#39;</span><span class="p">,</span> <span class="s">&#39;jerry&#39;</span><span class="p">]],</span>
+<span class="gp">... </span>                                   <span class="p">[(</span><span class="s">&#39;animal&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s">&#39;donkey&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                               <span class="p">[</span><span class="s">&#39;elephant&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                               <span class="p">[</span><span class="s">&#39;ostrich&#39;</span><span class="p">]],</span>
+<span class="gp">... </span>                               <span class="p">[(</span><span class="s">&#39;animal&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]))</span>
+<span class="go">[===Job Progress===]</span>
 
-and a frame with two columns, *col_1* and *col_2*:
-
-..code::
-
-      &gt;&gt;&gt; your_frame.inspect(4)
-        col_1:str  col_qty:int32
-      /--------------------------/
-        bear          15
-        cat            2
-        snake          8
-        horse          5
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  animal    name</span>
+<span class="go">=====================</span>
+<span class="go">[0]  dog       snoopy</span>
+<span class="go">[1]  cat       tom</span>
+<span class="go">[2]  bear      yogi</span>
+<span class="go">[3]  mouse     jerry</span>
+<span class="go">[4]  donkey    None</span>
+<span class="go">[5]  elephant  None</span>
+<span class="go">[6]  ostrich   None</span>
 </pre></div>
 </div>
-<p>Column <em>col_1</em> means the same thing in both frames.
-The Frame <em>my_frame</em> points to the first frame and <em>your_frame</em> points
-to the second.
-To add the contents of <em>your_frame</em> to <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">your_frame</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-<span class="go">  col_1:str  col_2:int32</span>
-<span class="go">/------------------------/</span>
-<span class="go">  dog           None</span>
-<span class="go">  bear            15</span>
-<span class="go">  bear          None</span>
-<span class="go">  horse            5</span>
-<span class="go">  cat           None</span>
-<span class="go">  cat              2</span>
-<span class="go">  donkey        None</span>
-<span class="go">  snake            5</span>
-</pre></div>
-</div>
-<p>Now the first frame has two columns, <em>col_1</em> and <em>col_2</em>.
-Column <em>col_1</em> has the data from <em>col_1</em> in both original frames.
-Column <em>col_2</em> has None (undefined) in all of the rows in the original
-first frame, and has the value of the second frame column, <em>col_2</em>, in
-the rows matching the new data in <em>col_1</em>.</p>
-<p>Breaking it down differently, the original rows referred to by
-<em>my_frame</em> have a new column, <em>col_2</em>, and this new column is filled
-with non-defined data.
-The frame referred to by <em>your_frame</em>, is then added to the bottom.</p>
+<p>The data we added didn&#8217;t have names, so None values were inserted for the new rows.</p>
 </dd></dl>
 
 </div>
@@ -204,7 +180,7 @@ The frame referred to by <em>your_frame</em>, is then added to the bottom.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

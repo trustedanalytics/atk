@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame ecdf &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame ecdf &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame entropy" href="entropy.html" >
     <link rel="prev" title="EdgeFrame drop_rows" href="drop_rows.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -132,7 +132,7 @@ by this operation.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
 <div><p>A new Frame containing each distinct value in the sample and its corresponding ECDF value.</p>
 </div></blockquote>
@@ -141,6 +141,31 @@ by this operation.</p>
 </tbody>
 </table>
 <p>Generates the <a class="reference internal" href="../../../glossary.html#term-empirical-cumulative-distribution"><span class="xref std std-term">empirical cumulative distribution</span></a> for the input column.</p>
+<p class="rubric">Examples</p>
+<p>Consider the following sample data set in <em>frame</em> &#8216;frame&#8217; containing several numbers.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers</span>
+<span class="go">============</span>
+<span class="go">[0]        1</span>
+<span class="go">[1]        3</span>
+<span class="go">[2]        1</span>
+<span class="go">[3]        0</span>
+<span class="go">[4]        2</span>
+<span class="go">[5]        1</span>
+<span class="go">[6]        4</span>
+<span class="go">[7]        3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecdf_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">ecdf</span><span class="p">(</span><span class="s">&#39;numbers&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecdf_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  numbers_ECDF</span>
+<span class="go">==========================</span>
+<span class="go">[0]        0         0.125</span>
+<span class="go">[1]        1           0.5</span>
+<span class="go">[2]        2         0.625</span>
+<span class="go">[3]        3         0.875</span>
+<span class="go">[4]        4           1.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -166,7 +191,7 @@ by this operation.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

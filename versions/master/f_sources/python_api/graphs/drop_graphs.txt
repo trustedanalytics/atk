@@ -21,3 +21,12 @@
             Either the name of the graph object to delete or the graph object itself
 
 
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            Number of graphs deleted.

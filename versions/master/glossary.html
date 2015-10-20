@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Glossary &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Glossary &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="next" title="Legal Statement" href="legal.html" >
     <link rel="prev" title="REST API Info" href="rest_api/v1/info.html" > 
   </head>
@@ -91,8 +91,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -168,6 +168,10 @@ supported.
 It is recommended that an alternate solution be found.
 This function may be removed in future releases.</p>
 </dd>
+<dt id="term-arity">Arity</dt>
+<dd>In logic, mathematics, and computer science, the arity of a function
+or operation is the number of arguments or operands the function or
+operation accepts.</dd>
 <dt id="term-ascii">ASCII</dt>
 <dd>Abbreviated from American Standard Code for Information Interchange,
 ASCII is a character-encoding scheme.
@@ -190,7 +194,7 @@ graph.</p>
 <dt id="term-bias-vs-variance">Bias vs Variance</dt>
 <dd>In this context, &#8220;bias&#8221; means accuracy, while &#8220;variance&#8221; means
 accounting for outlier data points.</dd>
-<dt id="term-bias-variance-tradeoff">Bias-variance tradeoff</dt>
+<dt id="term-bias-variance-trade-off">Bias-variance trade-off</dt>
 <dd>In supervised classifier training, the problem of minimizing two
 sources of prediction error: erroneous assumptions in the learning
 algorithm, and sensitivity to small details in the training data (in
@@ -221,7 +225,7 @@ sociological origin. <a class="footnote-reference" href="#f10" id="id2">[8]</a><
 <dd>A file containing tabular data (numbers and text) in plain-text form.
 The file can consist of any number of records, separated by a unique
 character.
-New line characters are ususally used for this purpose.
+New line characters are usually used for this purpose.
 Each record consists of one or more fields, separated by some unique
 character.
 Commas are usually used for this purpose.
@@ -254,7 +258,7 @@ instances of the true class.
 Also known as contingency table, error matrix, or misclassification
 matrix.</dd>
 <dt id="term-conjugate-gradient-descent">Conjugate Gradient Descent</dt>
-<dd><p class="first">Trusted Analytics implements this algorithm.
+<dd><p class="first">Trusted Analytics Platform implements this algorithm.
 Specifically, it uses CGD with bias for collaborative filtering.</p>
 <p class="last">For more information: <a class="reference external" href="http://public.research.att.com/~volinsky/netflix/kdd08koren.pdf">Factorization Meets the Neighborhood (pdf)</a>
 (see equation 5).</p>
@@ -282,84 +286,8 @@ degree of its vertices.</p>
 <dt id="term-directed-acyclic-graph-dag">Directed Acyclic Graph (DAG)</dt>
 <dd><p class="first">In mathematics and computer science, a graph formed by a collection of
 vertices and directed edges, each edge connecting one vertex to
-another, such that there is no way to start at some vertex <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-
-and follow a sequence of edges that eventually loops back to <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-
+another, such that there is no way to start at some vertex <img class="math" src="f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/>
+and follow a sequence of edges that eventually loops back to <img class="math" src="f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/>
 again.</p>
 <p>Contrast with <a class="reference internal" href="#term-undirected-graph"><span class="xref std std-term">Undirected Graph</span></a>.</p>
 <p class="last">See <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Wikipedia: Directed Acyclic Graph</a>.</p>
@@ -370,695 +298,23 @@ again.</p>
 <dd>A connection — either directed or not — between two vertices in a
 graph.</dd>
 <dt id="term-empirical-cumulative-distribution">Empirical Cumulative Distribution</dt>
-<dd><p class="first"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\hat F_{n}(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 440 bytes).
-Transcript written on math.log.
-</div>
- is a step function with jumps <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">i/n</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 364 bytes).
-Transcript written on math.log.
-</div>
- at
-observation values, where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">i</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the number of tied observations
+<dd><p class="first"><img class="math" src="f_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is a step function with jumps <img class="math" src="f_images/math/df37a8a72d641ab47d7bb55d37e235062b469770.png" alt="i/n"/> at
+observation values, where <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> is the number of tied observations
 at that value.
 Missing values are ignored.</p>
-<p>For observations <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">x = (x_{1},x_{2}, ... x_{n})</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 500 bytes).
-Transcript written on math.log.
-</div>
-,
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\hat F_{n}(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 440 bytes).
-Transcript written on math.log.
-</div>
- is the fraction of observations less than or
-equal to <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">t</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-.</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
-\sum_{i=1}^{n} Indicator\{x_{i} \le t\}.</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \mathaccent 
-\hat -&gt;\mathaccent 
-                   &#8220;705E 
-l.13 \begin{split}\hat
-                       F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
-! Undefined control sequence.
-l.13 \begin{split}\hat F_{n}(t) = \frac
-                                        {x_{i} \le t}{n} = \frac {1}{n} \
-! Undefined control sequence.
-l.13 ... F_{n}(t) = \frac {x_{i} \le t}{n} = \frac
-                                                   {1}{n} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 \sum_{i=1}^{n} Indicator\{x_{i} \le t\}.\end
-                                                 {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 704 bytes).
-Transcript written on math.log.
-</div>
-<p class="last">where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">Indicator\{A\}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 424 bytes).
-Transcript written on math.log.
-</div>
- is the indicator of event <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">A</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-.
-For a fixed <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">t</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-, the indicator <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">Indicator\{x_{i} \le t\}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 484 bytes).
-Transcript written on math.log.
-</div>
-
-is a Bernoulli random variable with parameter <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">p = F(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 380 bytes).
-Transcript written on math.log.
-</div>
-, hence
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n \hat F_{n}(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 440 bytes).
-Transcript written on math.log.
-</div>
- is a binomial random variable with mean
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n F(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 372 bytes).
-Transcript written on math.log.
-</div>
- and variance <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n F(t)(1 - F(t))</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 432 bytes).
-Transcript written on math.log.
-</div>
-.
-This implies that <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\hat F_{n}(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 440 bytes).
-Transcript written on math.log.
-</div>
- is an unbiased estimator for
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F(t)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 368 bytes).
-Transcript written on math.log.
-</div>
-.</p>
+<p>For observations <img class="math" src="f_images/math/9ce404145facac6c588b54395e49e7c4b7db8bba.png" alt="x = (x_{1},x_{2}, ... x_{n})"/>,
+<img class="math" src="f_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is the fraction of observations less than or
+equal to <img class="math" src="f_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.</p>
+<div class="math">
+<p><img src="f_images/math/9eeeefbeaf71ffe3770521016159044715aa43fe.png" alt="\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
+\sum_{i=1}^{n} Indicator\{x_{i} \le t\}."/></p>
+</div><p class="last">where <img class="math" src="f_images/math/abcb304578fb16af504b213cb90b156849d328cc.png" alt="Indicator\{A\}"/> is the indicator of event <img class="math" src="f_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/>.
+For a fixed <img class="math" src="f_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, the indicator <img class="math" src="f_images/math/205c84c7f2cc4a182862ebd5d7a5435077d45d3b.png" alt="Indicator\{x_{i} \le t\}"/>
+is a Bernoulli random variable with parameter <img class="math" src="f_images/math/431c0555606dbd53681c3a5a564fe355573329ed.png" alt="p = F(t)"/>, hence
+<img class="math" src="f_images/math/5b25d3bb413ef259a81db898392745b1fc3e2a9f.png" alt="n \hat F_{n}(t)"/> is a binomial random variable with mean
+<img class="math" src="f_images/math/4c9170be5a67f0522ecfc41ebbf5978abe944699.png" alt="n F(t)"/> and variance <img class="math" src="f_images/math/d71684fe0c3dbc92e8491bb9add1828f349e37d0.png" alt="n F(t)(1 - F(t))"/>.
+This implies that <img class="math" src="f_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is an unbiased estimator for
+<img class="math" src="f_images/math/a32e81020a3ca462e0631810c836a2a84632ee82.png" alt="F(t)"/>.</p>
 </dd>
 <dt id="term-enumerate">Enumerate</dt>
 <dd>Verb — To specify each member of a sequence individually in incrementing order.</dd>
@@ -1103,10 +359,11 @@ Also known as F1 score.</dd>
 <dt id="term-float64">float64</dt>
 <dd>A real number with 64 bits of precision.</dd>
 <dt id="term-frame-capital-f">Frame (capital F)</dt>
-<dd>A class object with the functionality to manipulate the data in a
-<a class="reference internal" href="#term-frame-lower-case-f"><span class="xref std std-term">frame (lower case f)</span></a>.</dd>
-<dt id="term-frame-lower-case-f">frame (lower case f)</dt>
-<dd>A table database with rows and columns containing data.</dd>
+<dd><ol class="first last arabic simple">
+<li>A table database with rows and columns containing data.</li>
+<li>A class object with the functionality to manipulate the data in a frame.</li>
+</ol>
+</dd>
 <dt id="term-gabp">GaBP</dt>
 <dd>See <a class="reference internal" href="#term-gaussian-belief-propagation"><span class="xref std std-term">Gaussian Belief Propagation</span></a>.</dd>
 <dt id="term-gaussian-belief-propagation">Gaussian Belief Propagation</dt>
@@ -1120,150 +377,12 @@ are <a class="reference internal" href="#term-gaussian-distribution"><span class
 <li>approaches zero on either side of the mean.</li>
 </ul>
 <p>A Gaussian distribution is defined as:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
-e^{-i \frac{(x-i \mu)^{2}}{2i \sigma^2}}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \mu 
-l.13 \begin{split}f(x, \mu
-                          , \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
-! Undefined control sequence.
-l.13 \begin{split}f(x, \mu, \sigma) = \frac
-                                           {1}{ \sigma \sqrt{2 \pi}} \
-! Undefined control sequence.
-l.14 e^{-i \frac
-                {(x-i \mu)^{2}}{2i \sigma^2}}\end{split}\notag
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 e^{-i \frac{(x-i \mu)^{2}}{2i \sigma^2}}\end
-                                                 {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 704 bytes).
-Transcript written on math.log.
-</div>
-<ul class="last simple">
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\mu</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the mean of the distribution.</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\sigma</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the standard deviation.</li>
+<div class="math">
+<p><img src="f_images/math/cc236ed043767edb1ba2315fb4f0fa9f9f542feb.png" alt="f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
+e^{-i \frac{(x-i \mu)^{2}}{2i \sigma^2}}"/></p>
+</div><ul class="last simple">
+<li><img class="math" src="f_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> is the mean of the distribution.</li>
+<li><img class="math" src="f_images/math/2298cf1485084afe72757a9c8483af49a138d81f.png" alt="\sigma"/> is the standard deviation.</li>
 </ul>
 </dd>
 <dt id="term-gaussian-random-fields">Gaussian Random Fields</dt>
@@ -1295,7 +414,7 @@ Graphs are one of the objects of study in discrete mathematics.</p>
 structural properties of a graph, including:</p>
 <ol class="arabic simple">
 <li>Traversals &#8211;
-Algorithmic walk throughs of the graph to determine optimal
+Algorithmic walk-through of the graph to determine optimal
 paths and relationship between vertices.</li>
 <li>Statistics &#8211;
 Important attributes of the graph such as degrees of
@@ -1340,6 +459,20 @@ For more information see: <a class="reference external" href="https://github.com
 <dt id="term-hbase">HBase</dt>
 <dd>Apache HBase is the Hadoop database, a distributed, scalable, big data
 store.</dd>
+<dt id="term-hyperparameter">Hyperparameter</dt>
+<dd><p class="first">Parameter that describe the prior distribution (the assumption about
+the data before observing it) as opposed to the parameters that govern
+the underlying system.</p>
+<p>In particular, for Latent Dirichlet Allocation:</p>
+<p>Alpha is the parameter of the Dirichlet &#8220;prior&#8221; on the per-document
+distribution of words.
+In other words, how the distribution of words per
+document is modeled before seeing any data.</p>
+<p class="last">Beta is the parameter of the Dirichlet &#8220;prior&#8221; on the per-topic word
+distribution.
+In other words, how the distribution of words per
+topic is modeled before seeing any data.</p>
+</dd>
 <dt id="term-int32">int32</dt>
 <dd>An integer is a member of the set of positive whole numbers {1, 2,
 3, . . . }, negative whole numbers {-1, -2, -3, . . . }, and zero {0}.
@@ -1361,7 +494,7 @@ adjacent random variables in the graph.</p>
 <dt id="term-json">JSON</dt>
 <dd>Data in the JavaScript Object Notation format. An open standard format
 that uses human-readable text to transmit data objects consisting of
-attributevalue pairs. For more information see <a href="#id12"><span class="problematic" id="id13">`http:/json.org`__</span></a>.</dd>
+attribute/value pairs. For more information see <a href="#id12"><span class="problematic" id="id13">`http:/json.org`__</span></a>.</dd>
 <dt id="term-k-s-test"><abbr title="Kolmogorov-Smirnov">K-S</abbr> Test</dt>
 <dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/K-S_Test">Wikipedia: Kolmogorov|EM|Smirnov Test</a>:</p>
 <blockquote class="last">
@@ -1411,10 +544,10 @@ considerable improvement in learning accuracy.</p>
 <dt id="term-lambda">Lambda</dt>
 <dd><p class="first">Adapted from: <a class="reference external" href="http://openclassroom.stanford.edu/MainFolder/DocumentPage.php?course=MachineLearning&amp;doc=exercises/ex5/ex5.html">Stanford: Machine Learning</a>:</p>
 <blockquote class="last">
-<div>This is the tradeoff parameter, used in <a class="reference internal" href="#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a>
+<div>This is the trade-off parameter, used in <a class="reference internal" href="#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a>
 on <a class="reference internal" href="#term-gaussian-random-fields"><span class="xref std std-term">Gaussian Random Fields</span></a>.
 The regularization parameter is a control on fitting parameters.
-It is used in machine learning algorithms to prevent overfitting.
+It is used in machine learning algorithms to prevent over-fitting.
 As the magnitude of the fitting parameter increases, there will be
 an increasing penalty on the cost function.
 This penalty is dependent on the squares of the parameters as well
@@ -1708,50 +841,7 @@ The edge (a, b) is identical to the edge (b, a), in other words,
 they are not ordered pairs, but sets {u, v} (or 2-multisets) of
 vertices.
 The maximum number of edges in an undirected graph without a self-loop
-is <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\dfrac{n (n - 1)}{2}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-&lt;recently read&gt; \dfrac 
-                       
-l.12 $\dfrac
-            {n (n - 1)}{2}$
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 424 bytes).
-Transcript written on math.log.
-</div>
-</p>
+is <img class="math" src="f_images/math/c41466d523aac6f3233cd76649231c243315a59f.png" alt="\dfrac{n (n - 1)}{2}"/></p>
 <p>Contrast with <a class="reference internal" href="#term-directed-acyclic-graph-dag"><span class="xref std std-term">Directed Acyclic Graph (DAG)</span></a>.</p>
 <p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Undirected_graph#Undirected_graph">Wikipedia: Undirected Graph</a>.</p>
 </dd>
@@ -1780,200 +870,10 @@ Each vertex is connected to others by edges.</p>
 <div>In graph theory, the degree (or valency) of a vertex of a graph is
 the number of edges incident to the vertex, with loops counted
 twice <a class="footnote-reference" href="#f7" id="id10">[5]</a>.
-The degree of a vertex <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is denoted <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\deg(v)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 376 bytes).
-Transcript written on math.log.
-</div>
-.
-The maximum degree of a graph <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">G</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-, denoted by
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\Delta(G)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 364 bytes).
-Transcript written on math.log.
-</div>
-,
-and the minimum degree of a graph, denoted by <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\delta(G)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 368 bytes).
-Transcript written on math.log.
-</div>
-, are
+The degree of a vertex <img class="math" src="f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> is denoted <img class="math" src="f_images/math/616c733212302e887503ce0ca417573c6155b39b.png" alt="\deg(v)"/>.
+The maximum degree of a graph <img class="math" src="f_images/math/b92c09a649305a0aef3239729d93cdf941e0e5cf.png" alt="G"/>, denoted by
+<img class="math" src="f_images/math/a0e977c73b5db44242842aeb84d5807437d0c6a3.png" alt="\Delta(G)"/>,
+and the minimum degree of a graph, denoted by <img class="math" src="f_images/math/a2a79e9e669d3eb53c3dc44afad2110dc13acf8e.png" alt="\delta(G)"/>, are
 the maximum and minimum degree of its vertices.</div></blockquote>
 </dd>
 <dt id="term-vertex-degree-distribution">Vertex Degree Distribution</dt>
@@ -2077,7 +977,7 @@ PMID 11570995.</td></tr>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

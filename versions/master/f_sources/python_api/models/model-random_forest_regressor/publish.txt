@@ -23,6 +23,29 @@
 
         ..
 
-            Returns the HDFS path to the tar file
-    Creates a tar file with the trained Random Forest Regressor Model
-    The tar file is used as input to the scoring engine to predict the value of an observation.
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the RandomForestRegressorModel and its implementation into a tar file. The tar file is then published
+    on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+    This model can then be used to predict the target value of an observation.
+
+    Examples
+    --------
+    Publish a trained Random Forest Regressor model for scoring
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.RandomForestRegressorModel()
+            >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'])
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.RandomForestRegressorModel()
+            >>> my_model.train(train_frame,'Class',['Dim_1','Dim_2'])
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>

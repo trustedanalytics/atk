@@ -9,7 +9,7 @@
 
 .. function:: __init__(self, name=None)
 
-    <Missing Doc>
+    Initialize the graph.
 
 
     :Parameters:
@@ -22,3 +22,190 @@
             Default is None.
 
 
+    Examples
+    --------
+    This example uses a single source data frame and creates a graph of 'user'
+    and 'movie' vertices connected by 'rating' edges.
+
+    The first step is to bring in some data to create a frame as the source
+    for a graph:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_schema = [('user_id', ta.int32), ('user_name', str), ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
+            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
+            >>> my_frame = ta.Frame(my_csv)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_schema = [('user_id', ta.int32), ('user_name', str),
+            ... ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
+            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
+            >>> my_frame = ta.Frame(my_csv)
+
+    Now, make an empty graph:
+
+    .. code::
+
+        >>> my_graph = ta.Graph()
+
+    Then, define the types of vertices and edges this graph will be made of:
+
+    .. code::
+
+        >>> my_graph.define_vertex_type('users')
+        >>> my_graph.define_vertex_type('movies')
+        >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+
+    And finally, add the data to the graph:
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
+            >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
+            >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id', 'movie_id', ['rating']
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
+            >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
+            >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id',
+            ... 'movie_id', ['rating'])
+
+    |
+
+    Adding additional data to the graph from another frame (my_frame2),
+    is simply adding vertices (and edges) in row formation.
+
+    .. code::
+
+        >>> my_graph.vertices['users'].add_vertices(my_frame2, 'user_id', ['user_name'])
+
+    Getting basic information about the graph:
+
+    .. code::
+
+        >>> my_graph.vertex_count
+        >>> my_graph.edge_count
+        >>> my_graph.vertices['users'].inspect(20)
+
+    |
+
+    This example uses multiple source data frames and creates a graph of
+    'user' and 'movie' vertices connected by 'rating' edges.
+
+    Create a frame as the source for a graph:
+
+    .. code::
+
+        >>> user_schema = [('user_id', ta.int32), ('user_name', str), ('age', ta.int32)]))
+        >>> user_frame = ta.Frame(ta.CsvFile("/users.csv", userSchema)
+
+        >>> movie_schema = [('movie_id', ta.int32), ('movie_title', str), ('year', str)]))
+        >>> movie_frame = ta.Frame(ta.CsvFile("/movie.csv", movie_schema)
+
+        >>> ratings_schema = [('ser_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
+        >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", ratings_schema)
+
+    Create a graph:
+
+    .. code::
+
+        >>> my_graph = ta.Graph()
+
+    Define the types of vertices and edges this graph will be made of:
+
+    .. code::
+
+        >>> my_graph.define_vertex_type('users')
+        >>> my_graph.define_vertex_type('movies')
+        >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+
+    Add data to the graph:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id', ['user_name', 'age'])
+            >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id') # all columns automatically added as properties
+            >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id', 'movie_id', ['rating'])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id',
+            ... ['user_name', 'age'])
+            >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id')
+            ... # all columns automatically added as properties
+            >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id',
+            ... 'movie_id', ['rating'])
+
+    |
+
+    This example shows edges between vertices of the same type.
+    Specifically, "employees work under other employees".
+
+    Create a frame to use as the source for the graph data:
+
+    .. only:: html
+
+        .. code::
+
+            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv", schema = [('Employee', str), ('Manager', str), ('Title', str), ('Years', ta.int64)], skip_header_lines=1), 'employees_frame')
+
+    .. only:: latex
+
+        .. code::
+
+            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv",
+            ... schema = [('Employee', str), ('Manager', str),
+            ... ('Title', str), ('Years', ta.int64)], skip_header_lines=1),
+            ... 'employees_frame')
+
+    Define a graph:
+
+    .. code::
+
+        >>> my_graph = ta.Graph()
+        >>> my_graph.define_vertex_type('Employee')
+        >>> my_graph.define_edge_type('worksunder', 'Employee', 'Employee', directed=True)
+
+    Add data:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_graph.vertices['Employee'].add_vertices(employees_frame, 'Employee', ['Title'])
+            >>> my_graph.edges['worksunder'].add_edges(employees_frame, 'Employee', 'Manager', ['Years'], create_missing_vertices = True)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_graph.vertices['Employee'].add_vertices(employees_frame,
+            ... 'Employee', ['Title'])
+            >>> my_graph.edges['worksunder'].add_edges(employees_frame,
+            ... 'Employee', 'Manager', ['Years'],
+            ... create_missing_vertices = True)
+
+    Inspect the graph:
+
+    .. code::
+
+        >>> my_graph.vertex_count
+        >>> my_graph.edge_count
+        >>> my_graph.vertices['Employee'].inspect(20)
+        >>> my_graph.edges['worksunder'].inspect(20)
+
+        

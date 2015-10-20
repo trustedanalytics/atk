@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, observation_columns, column_scalings, k=None, max_iterations=None, epsilon=None, initialization_mode=None)
+.. function:: train(self, frame, observation_columns, column_scalings, k=2, max_iterations=20, epsilon=0.0001, initialization_mode='k-means||')
 
     |BETA|
     Creates KMeans Model from train frame.
@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
@@ -42,7 +42,7 @@
 
 
 
-        **k** : int32 (default=None)
+        **k** : int32 (default=2)
 
         ..
 
@@ -51,7 +51,7 @@
 
 
 
-        **max_iterations** : int32 (default=None)
+        **max_iterations** : int32 (default=20)
 
         ..
 
@@ -60,21 +60,21 @@
 
 
 
-        **epsilon** : float64 (default=None)
+        **epsilon** : float64 (default=0.0001)
 
         ..
 
             Distance threshold within which we consider k-means to have converged.
-            Default is 1e-4.
+            Default is 1e-4. If all centers move less than this Euclidean distance, we stop iterating one run.
 
 
 
-        **initialization_mode** : unicode (default=None)
+        **initialization_mode** : unicode (default=k-means||)
 
         ..
 
             The initialization technique for the algorithm.
-            It could be either "random" or "k-means||".
+            It could be either "random" to choose random points as initial clusters, or "k-means||" to use a parallel variant of k-means++.
             Default is "k-means||".
 
 
@@ -86,13 +86,28 @@
 
         ..
 
-            dict
-                Results.
-                The data returned is composed of multiple components:
-            cluster_size : dict
-                Cluster size
-            ClusterId : int
-                Number of elements in the cluster 'ClusterId'.
-            within_set_sum_of_squared_error : double
-                The set of sum of squared error for the model.
-    Upon training the 'k' cluster centers are computed.
+            dictionary
+                A dictionary with trained KMeans model with the following keys\:
+            'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
+            'within_set_sum_of_squared_error' : The set of sum of squared error for the model.
+    Creating a KMeans Model using the observation columns.
+
+    Examples
+    --------
+    Train a KMeans Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.KMeansModel(name='MyKMeansModel')
+            >>> my_model.train(train_frame, ['name_of_observation_column1', 'name_of_observation_column2'],[1.0,2.0] 3, 10, 0.0002, "random")
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.KMeansModel(name='MyKMeansModel')
+            >>> my_model.train(train_frame, ['name_of_observation_column1',
+            ... 'name_of_observation_column2'],[1.0,2.0] 3, 10, 0.0002, "random")
+

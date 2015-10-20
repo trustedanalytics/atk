@@ -49,7 +49,7 @@
             Dictionary of the global clustering coefficient of the graph or,
             if local clustering coefficients are requested, a reference to the frame with local
             clustering coefficients stored at properties at each vertex.
-    Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.
+    Calculates the clustering coefficient of the graph with respect to an (optional) set of labels.
 
     Pulls graph from underlying store, calculates degrees and writes them into the property specified,
     and then writes the output graph to the underlying store.
@@ -96,4 +96,20 @@
 
     For more details on the mathematics and applications of clustering
     coefficients, see http://en.wikipedia.org/wiki/Clustering_coefficient.
+
+
+
+    Examples
+    --------
+    .. code::
+
+        >>> results = g.clustering_coefficient('ccgraph', 'local_clustering_coefficient')
+
+        >>> results
+            Out[8]:
+            ClusteringCoefficient:
+            global_clustering_coefficient: 0.0853107962708,
+            frame: Frame
+
+        >>> results.frame.inspect()
 

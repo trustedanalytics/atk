@@ -30,17 +30,17 @@
 
     Examples
     --------
-    Given that we have an existing data frame *my_data*, create a Frame,
-    then show the frame schema:
 
     .. code::
 
-        >>> BF = ta.get_frame('my_data')
-        >>> print BF.schema
+        >>> frame.schema
+        [(u'name', <type 'unicode'>), (u'age', <type 'numpy.int32'>), (u'tenure', <type 'numpy.int32'>), (u'phone', <type 'unicode'>)]
 
-    The result is:
-
-    .. code::
-
-        [("col1", str), ("col2", numpy.int32)]
+    Note how the types shown are the raw, underlying types used in python.  To see the schema in a friendlier
+    format, used the __repr__ presentation, invoke by simply entering the frame:
+        >>> frame
+        Frame "example_frame"
+        row_count = 4
+        schema = [name:unicode, age:int32, tenure:int32, phone:unicode]
+        status = ACTIVE  (last_read_date = -etc-)
 

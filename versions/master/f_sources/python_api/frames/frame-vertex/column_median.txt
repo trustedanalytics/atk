@@ -56,3 +56,10 @@
     calculation, as are all data elements whose weight is NaN or infinite.
     If a weight column is provided and no weights are finite numbers greater
     than 0, None is returned.
+
+    Examples
+    --------
+    .. code::
+
+        >>> median = frame.column_median('middling column')
+

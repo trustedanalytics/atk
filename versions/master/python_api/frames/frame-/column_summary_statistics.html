@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame column_summary_statistics &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame column_summary_statistics &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame compute_misplaced_score" href="compute_misplaced_score.html" >
     <link rel="prev" title="Frame column_names" href="column_names.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -145,362 +145,83 @@ Default is false.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>dict</dt>
-<dd><p class="first last">Dictionary containing summary statistics.
+<div><p>Dictionary containing summary statistics.
 The data returned is composed of multiple components:</p>
-</dd>
-<dt>mean <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Arithmetic mean of the data.</p>
-</dd>
-<dt>geometric_mean <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Geometric mean of the data.
-None when there is a data element &lt;= 0, 1.0 when there are no
-data elements.</p>
-</dd>
-<dt>variance <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">None when there are &lt;= 1 many data elements.
-Sample variance is the weighted sum of the squared distance of
-each data element from the weighted mean, divided by the total
-weight minus 1.
-None when the sum of the weights is &lt;= 1.
-Population variance is the weighted sum of the squared distance
-of each data element from the weighted mean, divided by the total
-weight.</p>
-</dd>
-<dt>standard_deviation <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">The square root of the variance. None when  sample variance
-is being used and the sum of weights is &lt;= 1.</p>
-</dd>
-<dt>total_weight <span class="classifier-delimiter">:</span> <span class="classifier">long</span></dt>
-<dd><p class="first last">The count of all data elements that are finite numbers.
-(In other words, after excluding NaNs and infinite values.)</p>
-</dd>
-<dt>minimum <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Minimum value in the data.
-None when there are no data elements.</p>
-</dd>
-<dt>maximum <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Maximum value in the data. None when there are no data elements.</p>
-</dd>
-<dt>mean_confidence_lower <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Lower limit of the 95% confidence interval about the mean.
-Assumes a Gaussian distribution.
-None when there are no elements of positive weight.</p>
-</dd>
-<dt>mean_confidence_upper <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">Upper limit of the 95% confidence interval about the mean.
-Assumes a Gaussian distribution.
-None when there are no elements of positive weight.</p>
-</dd>
-<dt>bad_row_count <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">The number of rows containing a NaN or infinite value
-in either the data or weights column.</p>
-</dd>
-<dt>good_row_count <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">The number of rows not containing a NaN or infinite
-value in either the data or weights column.</p>
-</dd>
-<dt>positive_weight_count <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">The number of valid data elements with weight &gt; 0.
-This is the number of entries used in the statistical calculation.</p>
-</dd>
-<dt>non_positive_weight_count <span class="classifier-delimiter">:</span> <span class="classifier">[ double | None ]</span></dt>
-<dd><p class="first last">The number valid data elements with finite weight &lt;= 0.</p>
-</dd>
-</dl>
+<div class="line-block">
+<div class="line">mean : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Arithmetic mean of the data.</div>
+</div>
+<div class="line">geometric_mean : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Geometric mean of the data. None when there is a data element &lt;= 0, 1.0 when there are no data elements.</div>
+</div>
+<div class="line">variance : [ double | None ]</div>
+<div class="line-block">
+<div class="line">None when there are &lt;= 1 many data elements. Sample variance is the weighted sum of the squared distance of each data element from the weighted mean, divided by the total weight minus 1. None when the sum of the weights is &lt;= 1. Population variance is the weighted sum of the squared distance of each data element from the weighted mean, divided by the total weight.</div>
+</div>
+<div class="line">standard_deviation : [ double | None ]</div>
+<div class="line-block">
+<div class="line">The square root of the variance. None when  sample variance is being used and the sum of weights is &lt;= 1.</div>
+</div>
+<div class="line">total_weight : long</div>
+<div class="line-block">
+<div class="line">The count of all data elements that are finite numbers. In other words, after excluding NaNs and infinite values.</div>
+</div>
+<div class="line">minimum : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Minimum value in the data. None when there are no data elements.</div>
+</div>
+<div class="line">maximum : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Maximum value in the data. None when there are no data elements.</div>
+</div>
+<div class="line">mean_confidence_lower : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Lower limit of the 95% confidence interval about the mean. Assumes a Gaussian distribution. None when there are no elements of positive weight.</div>
+</div>
+<div class="line">mean_confidence_upper : [ double | None ]</div>
+<div class="line-block">
+<div class="line">Upper limit of the 95% confidence interval about the mean. Assumes a Gaussian distribution. None when there are no elements of positive weight.</div>
+</div>
+<div class="line">bad_row_count : [ double | None ]</div>
+<div class="line-block">
+<div class="line">The number of rows containing a NaN or infinite value in either the data or weights column.</div>
+</div>
+<div class="line">good_row_count : [ double | None ]</div>
+<div class="line-block">
+<div class="line">The number of rows not containing a NaN or infinite value in either the data or weights column.</div>
+</div>
+<div class="line">positive_weight_count : [ double | None ]</div>
+<div class="line-block">
+<div class="line">The number of valid data elements with weight &gt; 0. This is the number of entries used in the statistical calculation.</div>
+</div>
+<div class="line">non_positive_weight_count : [ double | None ]</div>
+<div class="line-block">
+<div class="line">The number valid data elements with finite weight &lt;= 0.</div>
+</div>
+</div>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Notes</p>
 <dl class="docutils">
 <dt>Sample Variance</dt>
 <dd><p class="first">Sample Variance is computed by the following formula:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\left( \frac{1}{W - 1} \right) * sum_{i} \
-\left(x_{i} - M \right) ^{2}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\left( \frac{1}{W - 1} \right) * sum_{i} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \left 
-l.13 \begin{split}\left
-                       ( \frac{1}{W - 1} \right) * sum_{i} \
-! Undefined control sequence.
-l.13 \begin{split}\left( \frac
-                              {1}{W - 1} \right) * sum_{i} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 \left(x_{i} - M \right) ^{2}\end
-                                     {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 604 bytes).
-Transcript written on math.log.
-</div>
-<p class="last">where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">W</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is sum of weights over valid elements of positive
-weight, and <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">M</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the weighted mean.</p>
+<div class="math">
+<p><img src="../../../f_images/math/7e856f4a76cf7335af8494ff0e1c04a62b719bc0.png" alt="\left( \frac{1}{W - 1} \right) * sum_{i} \
+\left(x_{i} - M \right) ^{2}"/></p>
+</div><p class="last">where <img class="math" src="../../../f_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
+weight, and <img class="math" src="../../../f_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
 </dd>
 <dt>Population Variance</dt>
 <dd><p class="first">Population Variance is computed by the following formula:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\left( \frac{1}{W} \right) * sum_{i} \
-\left(x_{i} - M \right) ^{2}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\left( \frac{1}{W} \right) * sum_{i} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \left 
-l.13 \begin{split}\left
-                       ( \frac{1}{W} \right) * sum_{i} \
-! Undefined control sequence.
-l.13 \begin{split}\left( \frac
-                              {1}{W} \right) * sum_{i} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 \left(x_{i} - M \right) ^{2}\end
-                                     {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 592 bytes).
-Transcript written on math.log.
-</div>
-<p class="last">where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">W</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is sum of weights over valid elements of positive
-weight, and <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">M</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the weighted mean.</p>
+<div class="math">
+<p><img src="../../../f_images/math/06ac37cf6834622a410bea2c3dc59574f32472b4.png" alt="\left( \frac{1}{W} \right) * sum_{i} \
+\left(x_{i} - M \right) ^{2}"/></p>
+</div><p class="last">where <img class="math" src="../../../f_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
+weight, and <img class="math" src="../../../f_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
 </dd>
 <dt>Standard Deviation</dt>
 <dd>The square root of the variance.</dd>
@@ -515,14 +236,23 @@ In this case, it contributes to non_positive_weight_count, otherwise
 (when the weight is greater than 0) it contributes to
 valid_data_weight_pair_count.</p>
 </dd>
-<dt>Equations</dt>
-<dd><p class="first"><code class="docutils literal"><span class="pre">bad_row_count</span> <span class="pre">+</span> <span class="pre">good_row_count</span> <span class="pre">=</span> <span class="pre">#</span> <span class="pre">rows</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">frame</span></code></p>
-<p><code class="docutils literal"><span class="pre">positive_weight_count</span> <span class="pre">+</span> <span class="pre">non_positive_weight_count</span> <span class="pre">=</span> <span class="pre">good_row_count</span></code></p>
-<p class="last">In particular, when no weights column is provided and all weights
-are 1.0, <code class="docutils literal"><span class="pre">non_positive_weight_count</span> <span class="pre">=</span> <span class="pre">0</span></code> and
-<code class="docutils literal"><span class="pre">positive_weight_count</span> <span class="pre">=</span> <span class="pre">good_row_count</span></code></p>
-</dd>
 </dl>
+<p><strong>Equations</strong></p>
+<blockquote>
+<div><div class="code highlight-python"><div class="highlight"><pre>bad_row_count + good_row_count = # rows in the frame
+positive_weight_count + non_positive_weight_count = good_row_count
+</pre></div>
+</div>
+<p>In particular, when no weights column is provided and all weights are 1.0:</p>
+<div class="code highlight-python"><div class="highlight"><pre>non_positive_weight_count = 0 and
+positive_weight_count = good_row_count
+</pre></div>
+</div>
+</div></blockquote>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">stats</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s">&#39;data column&#39;</span><span class="p">,</span> <span class="s">&#39;weight column&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -548,7 +278,7 @@ are 1.0, <code class="docutils literal"><span class="pre">non_positive_weight_co
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -10,7 +10,7 @@
 .. function:: recommend(self, name, top_k)
 
     |BETA|
-    Collaborative filtering (als/cgd) model
+    Collaborative Filtering Recommend (ALS/CGD) model.
 
 
     :Parameters:
@@ -34,9 +34,11 @@
 
     :Returns:
 
-        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        : Frame
 
         ..
 
-            see collaborative filtering train for more information
-    see collaborative filtering train for more information
+            See :ref:`Collaborative Filtering Train
+            <python_api/models/model-collaborative_filtering/train>` for more information.
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.

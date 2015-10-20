@@ -7,7 +7,7 @@
 ---------------------------------------------------------------
 
 |BETA|
-Collaborative filtering (als/cgd) model
+Collaborative Filtering Recommend (ALS/CGD) model.
 
 POST /v1/commands/
 ==================
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -67,7 +67,8 @@ Request
 
 **Description**
 
-see collaborative filtering train for more information
+See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.
 
 |
 
@@ -113,8 +114,9 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
-        see collaborative filtering train for more information
+        See :ref:`Collaborative Filtering Train
+        <python_api/models/model-collaborative_filtering/train>` for more information.
 
 

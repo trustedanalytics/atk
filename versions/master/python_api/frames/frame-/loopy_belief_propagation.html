@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame loopy_belief_propagation &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame loopy_belief_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame name" href="name.html" >
     <link rel="prev" title="Frame loadjdbc" href="loadjdbc.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -182,8 +182,8 @@ Default is 1.0.</p>
 <blockquote>
 <div><p>The Ising smoothing parameter.
 This parameter adjusts the relative strength of closeness encoded edge
-weights, similar to the width of Gussian distribution.
-Larger value implies smoother decay and the edge weight beomes less important.
+weights, similar to the width of Gaussian distribution.
+Larger value implies smoother decay and the edge weight becomes less important.
 Default is 2.0.</p>
 </div></blockquote>
 <p><strong>max_product</strong> : bool (default=None)</p>
@@ -256,7 +256,7 @@ to be considered a classifier.
 Nonetheless, the discrete <abbr title="Loopy Belief Propagation">LBP</abbr> algorithm allows Test/Train/Validate splits of
 the data and the algorithm will treat &#8220;Train&#8221; observations
 differently from &#8220;Test&#8221; and &#8220;Validate&#8221; observations.
-Vertices labelled with &#8220;Test&#8221; or &#8220;Validate&#8221; will be treated as though they have
+Vertices labeled with &#8220;Test&#8221; or &#8220;Validate&#8221; will be treated as though they have
 uninformative (uniform) priors and are
 allowed to receive messages, but not send messages.
 This simulates a &#8220;scoring scenario&#8221; in which a new observation is added to a
@@ -270,387 +270,19 @@ The Gaussian (continuous) version of <abbr title="Loopy Belief Propagation">LBP<
 splits.</p>
 <p>The standard <abbr title="Loopy Belief Propagation">LBP</abbr> algorithm included with the toolkit assumes an ordinal and
 cardinal set of discrete states.
-For notational convenience, we&#8217;ll denote the value of state <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">s_{i}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- as
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">i</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-, and the prior probability of state
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">s_{i}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- as <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">prior_{i}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 416 bytes).
-Transcript written on math.log.
-</div>
-.</p>
+For notational convenience, we&#8217;ll denote the value of state <img class="math" src="../../../f_images/math/2e1911d6c0e2374d2139d10492392e6e75b5a0aa.png" alt="s_{i}"/> as
+<img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>, and the prior probability of state
+<img class="math" src="../../../f_images/math/2e1911d6c0e2374d2139d10492392e6e75b5a0aa.png" alt="s_{i}"/> as <img class="math" src="../../../f_images/math/09b2ea56ef067824027053ca21794b0d2165026d.png" alt="prior_{i}"/>.</p>
 <p>Each node sends out initial messages of the form:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ^{p} }{ n - 1 } \
-* w * s + \ln (prior_{i}) \right ) \right )</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \mathop 
-\ln -&gt;\mathop 
-              {\rm ln}\nolimits 
-l.13 \begin{split}\ln
-                      \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ...
-
-! Undefined control sequence.
-l.13 ... \left ( \sum_{s_{j}} \exp \left ( - \frac
-                                                   { | i - j | ^{p} }{ n - 1...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 ... s + \ln (prior_{i}) \right ) \right )\end
-                                                  {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 732 bytes).
-Transcript written on math.log.
-</div>
-<p>Where</p>
+<div class="math">
+<p><img src="../../../f_images/math/7afea94052a7255274c2d4ff4adebe5a7209d81d.png" alt="\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ^{p} }{ n - 1 } \
+* w * s + \ln (prior_{i}) \right ) \right )"/></p>
+</div><p>Where</p>
 <ul class="simple">
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">w</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the weight between the messages destination and origin vertices</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">s</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the <a class="reference internal" href="../../../glossary.html#term-smoothing"><span class="xref std std-term">smoothing</span></a> parameter</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">p</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the power parameter</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the number of states</li>
+<li><img class="math" src="../../../f_images/math/8659700e6646cd91bc02c32affaa5ec046ee9935.png" alt="w"/> is the weight between the messages destination and origin vertices</li>
+<li><img class="math" src="../../../f_images/math/6859317dd1b439cef34131bcd4bafee8393444e0.png" alt="s"/> is the <a class="reference internal" href="../../../glossary.html#term-smoothing"><span class="xref std std-term">smoothing</span></a> parameter</li>
+<li><img class="math" src="../../../f_images/math/3eca8557203e86160952e1c0f735f7417f3285b1.png" alt="p"/> is the power parameter</li>
+<li><img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> is the number of states</li>
 </ul>
 <p>The larger the weight between two nodes, or the higher the smoothing parameter,
 the more neighboring vertices are assumed to &#8220;agree&#8221; on states.
@@ -658,160 +290,8 @@ We represent messages as sums of log probabilities rather than products
 of non-logged probabilities which makes it easier to subtract messages in the
 future steps of the algorithm.
 Also note that the states are cardinal in the sense that the &#8220;pull&#8221; of state
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">i</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- on state <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">j</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- depends on the distance between <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">i</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- and
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">j</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-.
+<img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> on state <img class="math" src="../../../f_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> depends on the distance between <img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> and
+<img class="math" src="../../../f_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>.
 The <em>power</em> parameter intensifies the rate at which the pull of distant states
 drops off.</p>
 <p>In order for the algorithm to work properly, all edges of the graph must be
@@ -827,46 +307,8 @@ an error.</p>
 The 0 state has a prior probability of 0.9 and the 1 state has a prior
 probability of 0.2.
 The states have uniform weights of 1, power of 1 and a smoothing parameter of 2.
-The nodes initial message would be <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\textstyle \left [ \ln \left ( 0.2 \
-+ 0.8 e ^{-2} \right ), \ln \left ( 0.8 + 0.2 e ^{-2} \right ) \right ]</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 652 bytes).
-Transcript written on math.log.
-</div>
-,
+The nodes initial message would be <img class="math" src="../../../f_images/math/3079aadf373db4dad93b9940cc3d3c1e0a50b0a2.png" alt="\textstyle \left [ \ln \left ( 0.2 \
++ 0.8 e ^{-2} \right ), \ln \left ( 0.8 + 0.2 e ^{-2} \right ) \right ]"/>,
 which gets sent to each of that node&#8217;s neighbors.
 Note that messages will typically not be proper probability distributions,
 hence each message is normalized so that the probability of all states sum to 1
@@ -875,187 +317,22 @@ For simplicity of discussion, we will consider all messages as normalized
 messages.</p>
 <p>After nodes have sent out their initial messages, they then update their
 beliefs based on messages that they have received from their neighbors,
-denoted by the set <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">k</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-.</p>
+denoted by the set <img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
 <p>Updated Posterior Beliefs:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\ln (newbelief) = \propto \exp \left [ \ln (prior) + \sum_k message _{k} \
-\right ]</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\ln (newbelief) = \propto \exp \left [ \ln (prior) + \sum_...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \mathop 
-\ln -&gt;\mathop 
-              {\rm ln}\nolimits 
-l.13 \begin{split}\ln
-                      (newbelief) = \propto \exp \left [ \ln (prior) + \sum_...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 \right ]\end
-                 {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 632 bytes).
-Transcript written on math.log.
-</div>
-<p>Note that the messages in the above equation are still in log form.
+<div class="math">
+<p><img src="../../../f_images/math/2698aa55e8a9d5cc8a66eb4844aaefa35e7abb2d.png" alt="\ln (newbelief) = \propto \exp \left [ \ln (prior) + \sum_k message _{k} \
+\right ]"/></p>
+</div><p>Note that the messages in the above equation are still in log form.
 Nodes then send out new messages which take the same form as their initial
 messages, with updated beliefs in place of priors and subtracting out the
 information previously received from the new message&#8217;s recipient.
 The recipient&#8217;s prior message is subtracted out to prevent feedback loops of
 nodes &#8220;learning&#8221; from themselves.</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ^{p} }{ n - 1 } \
+<div class="math">
+<p><img src="../../../f_images/math/f87351af351b109819c482b5bfd285734954d0bd.png" alt="\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ^{p} }{ n - 1 } \
 * w * s + \ln (newbelief_{i}) - \
-previous\ message\ from\ recipient \right ) \right )</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\ln \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \mathop 
-\ln -&gt;\mathop 
-              {\rm ln}\nolimits 
-l.13 \begin{split}\ln
-                      \left ( \sum_{s_{j}} \exp \left ( - \frac { | i - j | ...
-
-! Undefined control sequence.
-l.13 ... \left ( \sum_{s_{j}} \exp \left ( - \frac
-                                                   { | i - j | ^{p} }{ n - 1...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.15 ...age\ from\ recipient \right ) \right )\end
-                                                  {split}\notag
-
-Overfull \hbox (48.04568pt too wide) in paragraph at lines 11&#8211;15
-[]\tenrm document gather split$[] []$ |
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 816 bytes).
-Transcript written on math.log.
-</div>
-<p>In updating beliefs, new beliefs tend to be most influenced by the largest
+previous\ message\ from\ recipient \right ) \right )"/></p>
+</div><p>In updating beliefs, new beliefs tend to be most influenced by the largest
 message.
 Setting the <code class="docutils literal"><span class="pre">max_product</span></code> option to &#8220;True&#8221; ignores all incoming messages
 other than the strongest signal.
@@ -1078,6 +355,25 @@ algorithm has converged overall.
 If this condition is not met, the algorithm will continue up to the maximum
 number of <a class="reference internal" href="../../../glossary.html#term-supersteps"><span class="xref std std-term">supersteps</span></a>.</p>
 <p>See: <a class="reference external" href="http://en.wikipedia.org/wiki/Belief_propagation">http://en.wikipedia.org/wiki/Belief_propagation</a>.</p>
+<p class="rubric">Examples</p>
+<p>input frame (lbp.csv)
+&#8220;a&#8221;        &#8220;b&#8221;        &#8220;c&#8221;        &#8220;d&#8221;
+1,         2,         0.5,       &#8220;0.5,0.5&#8221;
+2,         3,         0.4,       &#8220;-1,-1&#8221;
+3,         1,         0.1,       &#8220;0.8,0.2&#8221;</p>
+<p>script</p>
+<p>ta.connect()
+s = [(&#8220;a&#8221;, ta.int32), (&#8220;b&#8221;, ta.int32), (&#8220;c&#8221;, ta.float32), (&#8220;d&#8221;, ta.vector(2))]
+d = &#8220;lbp.csv&#8221;
+c = ta.CsvFile(d,s)
+f = ta.Frame(c)
+r = f.loopy_belief_propagation(&#8220;a&#8221;, &#8220;b&#8221;, &#8220;c&#8221;, &#8220;d&#8221;, &#8220;results&#8221;)
+r[&#8216;frame&#8217;].inspect()
+r[&#8216;report&#8217;]</p>
+<p>The expected output is like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">u&#39;value&#39;</span><span class="p">:</span> <span class="s">u&#39;======Graph Statistics======</span><span class="se">\n</span><span class="s">Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)</span><span class="se">\n</span><span class="s">Number of edges: 318400</span><span class="se">\n\n</span><span class="s">======LBP Configuration======</span><span class="se">\n</span><span class="s">maxSupersteps: 10</span><span class="se">\n</span><span class="s">convergenceThreshold: 0.000000</span><span class="se">\n</span><span class="s">anchorThreshold: 0.900000</span><span class="se">\n</span><span class="s">smoothing: 2.000000</span><span class="se">\n</span><span class="s">bidirectionalCheck: false</span><span class="se">\n</span><span class="s">ignoreVertexType: false</span><span class="se">\n</span><span class="s">maxProduct: false</span><span class="se">\n</span><span class="s">power: 0.000000</span><span class="se">\n\n</span><span class="s">======Learning Progress======</span><span class="se">\n</span><span class="s">superstep = 1</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.594534</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.542366</span><span class="se">\t</span><span class="s">avgTestDelta = 0.542801</span><span class="se">\n</span><span class="s">superstep = 2</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.322596</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.373647</span><span class="se">\t</span><span class="s">avgTestDelta = 0.371556</span><span class="se">\n</span><span class="s">superstep = 3</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.180468</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.194503</span><span class="se">\t</span><span class="s">avgTestDelta = 0.198478</span><span class="se">\n</span><span class="s">superstep = 4</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.113280</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.117436</span><span class="se">\t</span><span class="s">avgTestDelta = 0.122555</span><span class="se">\n</span><span class="s">superstep = 5</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.076510</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.074419</span><span class="se">\t</span><span class="s">avgTestDelta = 0.077451</span><span class="se">\n</span><span class="s">superstep = 6</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.051452</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.051683</span><span class="se">\t</span><span class="s">avgTestDelta = 0.052538</span><span class="se">\n</span><span class="s">superstep = 7</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.038257</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.033629</span><span class="se">\t</span><span class="s">avgTestDelta = 0.034017</span><span class="se">\n</span><span class="s">superstep = 8</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.027924</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.026722</span><span class="se">\t</span><span class="s">avgTestDelta = 0.025877</span><span class="se">\n</span><span class="s">superstep = 9</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.022886</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.019267</span><span class="se">\t</span><span class="s">avgTestDelta = 0.018190</span><span class="se">\n</span><span class="s">superstep = 10</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.018271</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.015924</span><span class="se">\t</span><span class="s">avgTestDelta = 0.015377&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -1103,7 +399,7 @@ number of <a class="reference internal" href="../../../glossary.html#term-supers
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

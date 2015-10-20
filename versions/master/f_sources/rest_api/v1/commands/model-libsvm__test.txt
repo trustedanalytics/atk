@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -64,7 +64,7 @@ Request
 
         Column(s) containing the observations whose
         labels are to be predicted and tested.
-        Default is to test over the columns the LibsvmModel
+        Default is to test over the columns the LIBSVM model
         was trained on.
 
 
@@ -79,8 +79,8 @@ Request
 
 **Description**
 
-Predict the labels for a test frame and run classification
-metrics on predicted and target labels.
+Predict the labels for a test frame and run classification metrics on predicted
+and target labels.
 
 |
 
@@ -128,21 +128,18 @@ Response
 
 ``dict``
 
-        Object
-            Object with binary classification metrics.
-            The data returned is composed of multiple components:
-        <object>.accuracy : double
-             The degree of correctness of the test frame labels.
-        <object>.confusion_matrix : table
-            A specific table layout that allows visualization of the performance of the
-            test.
-        <object>.f_measure : double
-            A measure of a test's accuracy.
-            It considers both the precision and the recall of the test to compute
-            the score.
-        <object>.precision : double
-            The degree to which the correctness of the label is expressed.
-        <object>.recall : double
-             The fraction of relevant instances that are retrieved.
+        A dictionary with binary classification metrics.
+        The data returned is composed of the following keys\:
+
+                      |  'accuracy' : double
+                      |  The proportion of predictions that are correctly identified
+                      |  'confusion_matrix' : dictionary
+                      |  A table used to describe the performance of a classification model
+                      |  'f_measure' : double
+                      |  The harmonic mean of precision and recall
+                      |  'precision' : double
+                      |  The proportion of predicted positive instances that are correctly identified
+                      |  'recall' : double
+                      |  The proportion of positive instances that are correctly identified.
 
 

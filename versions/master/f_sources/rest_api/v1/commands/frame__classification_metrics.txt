@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -73,6 +73,15 @@ Request
         This is the beta value to use for
         :math:`F_{ \beta}` measure (default F1 measure is computed); must be greater than zero.
         Defaults is 1.
+
+
+
+    **frequency_column** : unicode (default=None)
+
+    ..
+
+        The name of an optional column containing the
+        frequency of observations.
 
 
 
@@ -200,11 +209,12 @@ Response
 
 ``dict``
 
-        object
-        <object>.accuracy : double
-        <object>.confusion_matrix : table
-        <object>.f_measure : double
-        <object>.precision : double
-        <object>.recall : double
+        The data returned is composed of multiple components\:
+
+        |   <object>.accuracy : double
+        |   <object>.confusion_matrix : table
+        |   <object>.f_measure : double
+        |   <object>.precision : double
+        |   <object>.recall : double
 
 

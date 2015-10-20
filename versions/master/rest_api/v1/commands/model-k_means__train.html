@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:k_means/train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:k_means/train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:lda/new" href="model-lda__new.html" >
     <link rel="prev" title="Commands model:k_means/publish" href="model-k_means__publish.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -132,11 +132,11 @@ Creates KMeans Model from train frame.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:k_means/train</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame to train the model on.</p>
 </div></blockquote>
@@ -151,25 +151,25 @@ observations.</p>
 The scaling value is multiplied by the corresponding value in the
 observation column.</p>
 </div></blockquote>
-<p><strong>k</strong> : int32 (default=None)</p>
+<p><strong>k</strong> : int32 (default=2)</p>
 <blockquote>
 <div><p>Desired number of clusters.
 Default is 2.</p>
 </div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=None)</p>
+<p><strong>max_iterations</strong> : int32 (default=20)</p>
 <blockquote>
 <div><p>Number of iterations for which the algorithm should run.
 Default is 20.</p>
 </div></blockquote>
-<p><strong>epsilon</strong> : float64 (default=None)</p>
+<p><strong>epsilon</strong> : float64 (default=0.0001)</p>
 <blockquote>
 <div><p>Distance threshold within which we consider k-means to have converged.
-Default is 1e-4.</p>
+Default is 1e-4. If all centers move less than this Euclidean distance, we stop iterating one run.</p>
 </div></blockquote>
-<p><strong>initialization_mode</strong> : unicode (default=None)</p>
+<p><strong>initialization_mode</strong> : unicode (default=k-means||)</p>
 <blockquote class="last">
 <div><p>The initialization technique for the algorithm.
-It could be either &#8220;random&#8221; or &#8220;k-means||&#8221;.
+It could be either &#8220;random&#8221; to choose random points as initial clusters, or &#8220;k-means||&#8221; to use a parallel variant of k-means++.
 Default is &#8220;k-means||&#8221;.</p>
 </div></blockquote>
 </td>
@@ -188,7 +188,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Upon training the &#8216;k&#8217; cluster centers are computed.</p>
+<p>Creating a KMeans Model using the observation columns.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -232,16 +232,11 @@ Content-type: application/json
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
 <div><dl class="docutils">
-<dt>dict</dt>
-<dd>Results.
-The data returned is composed of multiple components:</dd>
-<dt>cluster_size <span class="classifier-delimiter">:</span> <span class="classifier">dict</span></dt>
-<dd>Cluster size</dd>
-<dt>ClusterId <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Number of elements in the cluster &#8216;ClusterId&#8217;.</dd>
-<dt>within_set_sum_of_squared_error <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>The set of sum of squared error for the model.</dd>
+<dt>dictionary</dt>
+<dd>A dictionary with trained KMeans model with the following keys:</dd>
 </dl>
+<p>&#8216;cluster_size&#8217; : dictionary with &#8216;Cluster:id&#8217; as the key and the corresponding cluster size is the value
+&#8216;within_set_sum_of_squared_error&#8217; : The set of sum of squared error for the model.</p>
 </div></blockquote>
 </div>
 </div>
@@ -268,7 +263,7 @@ The data returned is composed of multiple components:</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

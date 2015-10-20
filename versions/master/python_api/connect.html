@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Connect to the Server &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Connect to the Server &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../f_static/doctools.js"></script>
     <script type="text/javascript" src="../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../index.html" >
     <link rel="up" title="Python API" href="index.html" >
     <link rel="next" title="Data Types" href="datatypes/index.html" >
     <link rel="prev" title="Python API" href="index.html" > 
@@ -93,8 +93,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datatypes/index.html">Data Types</a></li>
@@ -130,31 +130,37 @@
 </li>
 </ul>
 </div>
-<p>The Python client must &#8216;connect&#8217; to an Trusted Analytics server before it can be used.
+<p>The Python client must &#8216;connect&#8217; to an Trusted Analytics Platform server before it can be used.
 Here is the &#8216;connect&#8217; process described by the method&#8217;s documentation:</p>
 <dl class="function">
 <dt id="trustedanalytics.connect">
 <code class="descclassname">trustedanalytics.</code><code class="descname">connect</code><span class="sig-paren">(</span><em>self</em>, <em>credentials_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.connect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Connect to the trustedanalytics server.</p>
-<p>This method calls the server, downloads its API information and dynamically generates and adds
-the appropriate Python code to the Python package for this python session.  Calling this method
-is required before invoking any server activity.</p>
-<p>After the client has connected to the server, the server config cannot be changed.
+<p>This method calls the server, downloads its API information and
+dynamically generates and adds the appropriate Python code to the
+Python package for this python session.
+Calling this method is required before invoking any server activity.</p>
+<p>After the client has connected to the server, the server config
+cannot be changed.
 User must restart Python in order to change connection info.</p>
 <p>Subsequent calls to this method invoke no action.</p>
-<p>There is no &#8220;connection&#8221; object or notion of being continuously &#8220;connected&#8221;.  The call to
-connect is just a one-time process to download the API and prepare the client.  If the server
-goes down and comes back up, this client will not recognize any difference from a connection
-point of view, and will still be operating with the API information originally downloaded.</p>
+<p>There is no &#8220;connection&#8221; object or notion of being continuously
+&#8220;connected&#8221;.
+The call to connect is just a one-time process to download the API
+and prepare the client.
+If the server goes down and comes back up, this client will not
+recognize any difference from a connection point of view, and will
+still be operating with the API information originally downloaded.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>credentials_file: str (optional)</strong></p>
 <blockquote class="last">
-<div><p>file name of a credentials file.   If supplied, it will override the settings authentication
-settings in the client&#8217;s server configuration.  The credentials file is normally obtained
-through the env.</p>
+<div><p>File name of a credentials file.
+If supplied, it will override the settings authentication
+settings in the client&#8217;s server configuration.
+The credentials file is normally obtained through the environment.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -178,9 +184,9 @@ through the env.</p>
 </div>
 <div class="section" id="connections-requiring-oauth">
 <h2>Connections requiring OAuth<a class="headerlink" href="#connections-requiring-oauth" title="Permalink to this headline">¶</a></h2>
-<p>To connect to a DP2 instance of Trusted Analytics, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
+<p>To connect to a DP2 instance of Trusted Analytics Platform, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
 The user must have a credentials file which holds an OAuth access token and a refresh token.</p>
-<p>The user can create a credentials file using Trusted Analytics client running in an interactive python session.  Call <cite>create_credentials_file(&#8216;filename_of_your_choice&#8217;)</cite> and interactively provide answers to its prompt.</p>
+<p>The user can create a credentials file using Trusted Analytics Platform client running in an interactive python session.  Call <cite>create_credentials_file(&#8216;filename_of_your_choice&#8217;)</cite> and interactively provide answers to its prompt.</p>
 <div class="code highlight-python"><div class="highlight"><pre>$ python2.7
 
 &gt;&gt;&gt; import trustedanalytics as ta
@@ -204,7 +210,7 @@ They should be protected with appropriate OS privileges.</p>
 </div>
 <div class="section" id="using-environmental-variables">
 <h2>Using Environmental Variables<a class="headerlink" href="#using-environmental-variables" title="Permalink to this headline">¶</a></h2>
-<p>The URI of the Trusted Analytics server can be specified by the environmental variable <code class="docutils literal"><span class="pre">$TA_URI</span></code>.
+<p>The URI of the Trusted Analytics Platform server can be specified by the environmental variable <code class="docutils literal"><span class="pre">$TA_URI</span></code>.
 The python client will initialize its config setting to this value.
 It may still be overridden as shown above in the session or script.</p>
 <div class="code highlight-python"><div class="highlight"><pre>$ export TA_URI=ta-server.demo-gotapaas.com
@@ -264,7 +270,7 @@ It may still be overridden as shown above in the session or script.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

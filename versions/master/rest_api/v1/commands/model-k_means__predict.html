@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:k_means/predict &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:k_means/predict &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:k_means/publish" href="model-k_means__publish.html" >
     <link rel="prev" title="Commands model:k_means/new" href="model-k_means__new.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -132,11 +132,11 @@ Predict the cluster assignments for the data points.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:k_means/predict</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
@@ -144,9 +144,11 @@ trained.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote class="last">
-<div><p>Column(s) containing the observations whose clusters are to be predicted.
-By default, we predict the clusters over columns the KMeansModel was trained on.
-The columns are scaled using the same values used when training the model.</p>
+<div><p>Column(s) containing the observations
+whose clusters are to be predicted.
+Default is to predict the clusters over columns the KMeans model was trained on.
+The columns are scaled using the same values used when training the
+model.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -164,6 +166,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
+<p>Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -204,16 +207,13 @@ Content-type: application/json
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<p><code class="docutils literal"><span class="pre">&lt;bound</span> <span class="pre">method</span> <span class="pre">AtkEntityType.__name__</span> <span class="pre">of</span> <span class="pre">&lt;trustedanalytics.rest.jsonschema.AtkEntityType</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f6895328090&gt;&gt;</span></code></p>
+<p><code class="docutils literal"><span class="pre">Frame</span></code></p>
 <blockquote>
 <div><dl class="docutils">
 <dt>Frame</dt>
-<dd>A new frame consisting of the existing columns of the frame and new columns.
-The data returned is composed of multiple components:</dd>
-<dt>&#8216;k&#8217; columns <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>Containing squared distance of each point to every cluster center.</dd>
-<dt>predicted_cluster <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd>Integer containing the cluster assignment.</dd>
+<dd>A new frame consisting of the existing columns of the frame and the following new columns:
+&#8216;k&#8217; columns : Each of the &#8216;k&#8217; columns containing squared distance of that observation to the &#8216;k&#8217;th cluster center
+predicted_cluster column: The cluster assignment for the observation</dd>
 </dl>
 </div></blockquote>
 </div>
@@ -241,7 +241,7 @@ The data returned is composed of multiple components:</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

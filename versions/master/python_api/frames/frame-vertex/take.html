@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame take &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame take &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame tally" href="tally.html" >
     <link rel="prev" title="VertexFrame status" href="status.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -144,31 +144,14 @@
 </tbody>
 </table>
 <p>Take a subset of the currently active Frame.</p>
-<p class="rubric">Notes</p>
-<p>The data is considered &#8216;unstructured&#8217;, therefore taking a certain
-number of rows, the rows obtained may be different every time the
-command is executed, even if the parameters do not change.</p>
 <p class="rubric">Examples</p>
-<p>Frame <em>my_frame</em> accesses a frame with millions of rows of data.
-Get a sample of 5000 rows:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_data_list</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">take</span><span class="p">(</span> <span class="mi">5000</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>We now have a list of data from the original frame.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_data_list</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[[u&#39;Fred&#39;, 39, 16, u&#39;555-1234&#39;], [u&#39;Susan&#39;, 33, 3, u&#39;555-0202&#39;]]</span>
 
-<span class="go">[[ 1, &quot;text&quot;, 3.1415962 ]</span>
-<span class="go"> [ 2, &quot;bob&quot;, 25.0 ]</span>
-<span class="go"> [ 3, &quot;weave&quot;, .001 ]</span>
-<span class="go"> ...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[[u&#39;Thurston&#39;, 65, 26, u&#39;555-4510&#39;], [u&#39;Judy&#39;, 44, 14, u&#39;555-2183&#39;]]</span>
 </pre></div>
 </div>
-<p>If we use the method with an offset like:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_data_list</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">take</span><span class="p">(</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">1000</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>We end up with a new list, but this time it has a copy of the data from
-rows 1001 to 5000 of the original frame.</p>
 </dd></dl>
 
 </div>
@@ -194,7 +177,7 @@ rows 1001 to 5000 of the original frame.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

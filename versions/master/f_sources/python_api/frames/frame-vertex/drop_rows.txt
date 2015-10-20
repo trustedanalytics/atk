@@ -23,18 +23,23 @@
 
     Examples
     --------
-    For this example, my_frame is a Frame object accessing a frame with
-    lots of data for the attributes of ``lions``, ``tigers``, and
-    ``ligers``.
-    Get rid of the ``lions`` and ``tigers``:
 
     .. code::
 
-        >>> my_frame.drop_rows(lambda row: row.animal_type == "lion" or
-        ...    row.animal_type == "tiger")
 
-    Now the frame only has information about ``ligers``.
+        >>> frame.inspect()
+        [#]  name      age  tenure  phone
+        ====================================
+        [0]  Fred       39      16  555-1234
+        [1]  Susan      33       3  555-0202
+        [2]  Thurston   65      26  555-4510
+        [3]  Judy       44      14  555-2183
+        >>> frame.drop_rows(lambda row: row.name[-1] == 'n')  # drop people whose name ends in 'n'
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  name  age  tenure  phone
+        ================================
+        [0]  Fred   39      16  555-1234
+        [1]  Judy   44      14  555-2183
 
     More information on a |UDF| can be found at :doc:`/ds_apir`.
-
-

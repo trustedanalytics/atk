@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>LogisticRegressionModel test &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>LogisticRegressionModel test &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LogisticRegressionModel" href="index.html" >
     <link rel="next" title="LogisticRegressionModel train" href="train.html" >
-    <link rel="prev" title="LogisticRegressionModel predict" href="predict.html" > 
+    <link rel="prev" title="LogisticRegressionModel status" href="status.html" > 
   </head>
   <body>
 
@@ -57,7 +57,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="predict.html" title="LogisticRegressionModel predict"
+        <a href="status.html" title="LogisticRegressionModel status"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -117,14 +117,14 @@
 <dt id="test">
 <code class="descname">test</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#test" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Predict test frame labels and show metrics.</p>
+Predict test frame labels and return metrics.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>frame whose labels are to be
+<div><p>Frame whose labels are to be
 predicted.</p>
 </div></blockquote>
 <p><strong>label_column</strong> : unicode</p>
@@ -136,30 +136,60 @@ label for each observation.</p>
 <blockquote>
 <div><p>Column(s) containing the observations
 whose labels are to be predicted and tested.
-Default is to test over the columns the SvmModel
+Default is to test over the columns the SVM model
 was trained on.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>object</dt>
-<dd><p class="first last">An object with binary classification metrics.
-The data returned is composed of multiple components:</p>
-</dd>
-</dl>
-<p>&lt;object&gt;.accuracy : double
-&lt;object&gt;.confusion_matrix : table
-&lt;object&gt;.f_measure : double
-&lt;object&gt;.precision : double
-&lt;object&gt;.recall : double</p>
+<div><p>A dictionary with binary classification metrics.
+The data returned is composed of the following keys:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&#8216;accuracy&#8217; : double</div>
+<div class="line">The proportion of predictions that are correctly identified</div>
+<div class="line">&#8216;confusion_matrix&#8217; : dictionary</div>
+<div class="line">A table used to describe the performance of a classification model</div>
+<div class="line">&#8216;f_measure&#8217; : double</div>
+<div class="line">The harmonic mean of precision and recall</div>
+<div class="line">&#8216;precision&#8217; : double</div>
+<div class="line">The proportion of predicted positive instances that are correctly identified</div>
+<div class="line">&#8216;recall&#8217; : double</div>
+<div class="line">The proportion of positive instances that are correctly identified.</div>
+</div>
+</div></blockquote>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Predict the labels for a test frame and run classification metrics on predicted and target labels.</p>
+<p>Predict the labels for a test frame and run classification metrics on predicted
+and target labels.</p>
+<p class="rubric">Examples</p>
+<p>Test the performance of a trained Logistic Regression Model</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;myLogReg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">test_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;f_measure&#39;</span><span class="p">]</span>
+<span class="go">0.66666666666666663</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;recall&#39;</span><span class="p">]</span>
+<span class="go">0.5</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="go">0.75</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;precision&#39;</span><span class="p">]</span>
+<span class="go">1.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;confusion_matrix&#39;</span><span class="p">]</span>
+<span class="go">{u&#39;column_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;],</span>
+<span class="go"> u&#39;matrix&#39;: [[2, 0], [0, 3]],</span>
+<span class="go"> u&#39;row_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;]}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -185,7 +215,7 @@ The data returned is composed of multiple components:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

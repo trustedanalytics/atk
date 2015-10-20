@@ -10,7 +10,7 @@
 .. function:: publish(self)
 
     |BETA|
-    Creates a tar file that will used as input to the scoring engine
+    Creates a tar file that will be used as input to the scoring engine
 
 
     :Parameters:
@@ -23,5 +23,8 @@
 
         ..
 
-
-    Returns the HDFS path to the tar file
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the LibsvmModel and its implementation into a tar file. The tar file is then published on 
+    HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+    This model can then be used to predict the class of an observation.
+        

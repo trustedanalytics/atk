@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Deploy and Run ATK App on DP2 &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Administration &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
-    <link rel="next" title="Python API" href="python_api/index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="next" title="Deploy and Run ATK App on DP2" href="ad_dp2.html" >
     <link rel="prev" title="Plugin Authoring Guide" href="dev_plug.html" > 
   </head>
   <body>
@@ -57,7 +57,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="python_api/index.html" title="Python API"
+        <a href="ad_dp2.html" title="Deploy and Run ATK App on DP2"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -91,9 +91,16 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Deploy and Run ATK App on DP2</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#installing-required-packages">Installing Required Packages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Administration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_dp2.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on DP2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
@@ -109,208 +116,60 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="deploy-and-run-atk-app-on-dp2">
-<span id="ad-over"></span><h1>Deploy and Run ATK App on DP2<a class="headerlink" href="#deploy-and-run-atk-app-on-dp2" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="installing-required-packages">
-<h2>Installing Required Packages<a class="headerlink" href="#installing-required-packages" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="install-golang-from-the-package-manager">
-<h3>Install &#8220;golang&#8221; from the package manager<a class="headerlink" href="#install-golang-from-the-package-manager" title="Permalink to this headline">¶</a></h3>
-<p>On RedHat/CentOS, ensure &#8220;EPEL&#8221; repo is enabled.
-For more information, see <span class="xref std std-ref">Yum Repo</span>.</p>
-<p>From the command line interface (terminal),
-install the &#8220;go&#8221; language and the required libraries.</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install golang
-</pre></div>
-</div>
-<p>To read more about &#8220;go&#8221; see <a class="reference external" href="https://golang.org/">https://golang.org/</a> .
-To test the &#8220;go&#8221; installation, run the command <code class="docutils literal"><span class="pre">go</span></code>.
-The response should be similar to:</p>
-<div class="code highlight-python"><div class="highlight"><pre>&lt;show what it looks like&gt;
-</pre></div>
-</div>
-<p>Install the CloudFoundry <abbr title="Command Line Interface">CLI</abbr> package:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
-</pre></div>
-</div>
-<p>This downloads the pre-packaged RPM to your local machine.
-Install this package:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install cf-cli_amd64.rpm
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">See <a class="reference external" href="https://github.com/cloudfoundry/cli/releases">https://github.com/cloudfoundry/cli/releases</a> for installation on a system not running RedHat/CentOS.</p>
-</div>
-<p>Test the package installation:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf
-&lt; put response here&gt;
-</pre></div>
-</div>
-<p>Setting up CF for ATK deployment (Ireland instance):
-First run cf api <a class="reference external" href="https://api.run.gotapaas.eu">https://api.run.gotapaas.eu</a> to set your API endpoint.
-You should see a message like this:
-[<a class="reference external" href="mailto:hadoop&#37;&#52;&#48;master">hadoop<span>&#64;</span>master</a> ~]$ cf api <a class="reference external" href="https://api.run.gotapaas.eu">https://api.run.gotapaas.eu</a> &#8211;skip-ssl-validation
-Setting api endpoint to <a class="reference external" href="https://api.run.gotapaas.eu">https://api.run.gotapaas.eu</a>...
-OK</p>
-<p>API endpoint: <a class="reference external" href="https://api.run.gotapaas.eu">https://api.run.gotapaas.eu</a> (API version: 2.25.0)
-Not logged in. Use &#8216;cf login&#8217; to log in.
-now try login by running the command &#8220;cf login -u admin -p c1oudc0w -o seedorg -s seedspace&#8221;:
-Your output should look something like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>[hadoop@master ~]$ cf login -u admin -p c1oudc0w -o seedorg -s seedspace
-API endpoint: https://api.run.gotapaas.eu
-Authenticating...
-OK
-Targeted org seedorg
-Targeted space seedspace
-API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
-User: admin
-Org: seedorg
-Space: seedspace
-</pre></div>
-</div>
-<p>Verify that you are still connected by running &#8220;cf target&#8221;
-And your output looks like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>[hadoop@master ~]$ cf target
-API endpoint: https://api.run.gotapaas.eu (API version: 2.25.0)
-User: admin
-Org: seedorg
-Space: seedspace
-TBD
-</pre></div>
-</div>
-<p>Prepare ATK tarball:</p>
-<p>For QA:</p>
-<p>ATK tarballs are built as part of the TeamCity build and are uploaded to S3.
-In order to download the file, simply run the command:</p>
-<div class="code highlight-python"><div class="highlight"><pre>wget https://s3.amazonaws.com/gao-internal-archive/&lt;Your_Branch_Name&gt;/trustedanalytics.tar.gz
-</pre></div>
-</div>
-<p>for example if you are on &#8220;master&#8221; branch you run:</p>
-<div class="code highlight-python"><div class="highlight"><pre>wget https://s3.amazonaws.com/gao-internal-archive/master/trustedanalytics.tar.gz
-</pre></div>
-</div>
-<p>For Dev:</p>
-<p>You can build ATK tarball from scratch yourself.
-In order to do so, do the following:</p>
-<ol class="arabic">
-<li><p class="first">CD to directory where your have the &#8220;atk&#8221; code checked out.</p>
+  <span class="target" id="ad-over"></span><div class="section" id="administration">
+<span id="index-0"></span><h1>Administration<a class="headerlink" href="#administration" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ad_dp2.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on DP2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_dp2.html#installing-required-packages">Installing Required Packages</a></li>
+</ul>
 </li>
-<li><p class="first">Build the atk code using Maven tool.
-Details for this change frequently, so please look at other Wiki pages like this one: Maven build</p>
+<li class="toctree-l1"><a class="reference internal" href="ad_reqs.html">System Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_pre_cloudera.html">Physical Machine Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html">Cloudera Hadoop 5 Configuration</a></li>
+</ul>
 </li>
-<li><p class="first">CD to &#8220;package&#8221; directory and from there run this script:
-&#8220;config/trustedanalytics-rest-server-tar/package.sh&#8221;.
-This creates a tar file like &#8220;atk.tar.gz&#8221; in the current directory.</p>
+<li class="toctree-l1"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html#toolkit-installation">Trusted Analytics Platform Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html#rest-server-configuration">REST Server Configuration</a></li>
+</ul>
 </li>
-<li><p class="first">Deploy ATK to DP2 (Ireland instance):
-Create a directory anywhere on your system, for example at &#8220;~/vcap/app&#8221; and
-unpack your &#8220;trustedanalytics.tar.gz&#8221; inside that directory.</p>
+<li class="toctree-l1"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html#scoring-models-implementation">Scoring Models Implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html#configuration-of-the-engine">Configuration of the Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html#starting-the-scoring-engine-service">Starting the Scoring Engine Service</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html#scoring-client">Scoring Client</a></li>
+</ul>
 </li>
-<li><p class="first">CD to &#8220;~/vcap/app&#8221; and create a file &#8220;manifest.yml&#8221; with this content:
-(For now please ensure you are using below memory and disk_quota values and
-do not change them)</p>
-<div class="code highlight-python"><div class="highlight"><pre>applications:
-- name: &lt;YOUR_ATK_APP_NAME_HERE&gt; for example &quot;atk-ebi&quot;
-  command: bin/rest-server.sh
-  memory: 1G
-  disk_quota: 2G
-  timeout: 180
-  instances: 1
-services:
-- bryn-cdh
-- &lt;YOUR_POSTGRESQL_SERVICE_NAME_HERE&gt; for example &quot;pg-atk-ebi&quot;
-- bryn-zk
-</pre></div>
-</div>
+<li class="toctree-l1"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#download-vm-image">Download <abbr title="Virtual Machine">VM</abbr> Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#windows-gui-client">Windows GUI Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#extract-archive">Extract Archive</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#import-image">Import Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#running-package-vm-image">Running Trusted Analytics Platform <abbr title="Virtual Machine">VM</abbr> Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#eclipse-pydev">Eclipse/PyDev</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#logs">Logs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#updating">Updating</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html#common-vm-problems">Common VM problems</a></li>
+</ul>
 </li>
-<li><p class="first">Create an instance of postgresql by running the command:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf create-service postgresql93 free pg-atk-ebi
-</pre></div>
-</div>
-<p>and you should see an output like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>Creating service instance pg-atk-ebi in org seedorg / space seedspace as admin...
-OK
-</pre></div>
-</div>
+<li class="toctree-l1"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html#configuration-information">Configuration information</a></li>
+</ul>
 </li>
-<li><p class="first">Change conf/application.conf, making sure &#8220;fs.root&#8221; is set to:</p>
-<div class="code highlight-python"><div class="highlight"><pre>fs.root = ${FS_ROOT}&quot;/&quot;${APP_NAME}
-</pre></div>
-</div>
+<li class="toctree-l1"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_eclipse.html">Eclipse Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_intellij.html">IntelliJ IDEA Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_pycharm.html">PyCharm Setup Instructions</a></li>
+</ul>
 </li>
-<li><p class="first">Change to the &#8220;~/vcap/app&#8221; folder (or wherever you have
-&#8220;trustedanalytics.tar.gz&#8221; unpacked).</p>
-</li>
-<li><p class="first">Now run the command <code class="docutils literal"><span class="pre">cf</span> <span class="pre">push</span></code>.
-This takes a few minutes to run and you should see the following output:</p>
-<div class="code highlight-python"><div class="highlight"><pre>[hadoop@master app]$ cf push
-Using manifest file /home/hadoop/vcap/app/manifest.yaml
-Creating app atk-ebi in org seedorg / space seedspace as admin...
-OK
-Using route atk-ebi.apps.gotapaas.eu
-Binding atk-ebi.apps.gotapaas.eu to atk-ebi...
-OK
-Uploading atk-ebi...
-Uploading app files from: /home/hadoop/vcap/app
-Uploading 48.3K, 9 files
-Done uploading
-OK
-Binding service bryn-cdh to app atk-ebi in org seedorg / space seedspace as admin...
-OK
-Binding service pg-atk-ebi to app atk-ebi in org seedorg / space seedspace as admin...
-OK
-Binding service bryn-zk to app atk-ebi in org seedorg / space seedspace as admin...
-OK
-Starting app atk-ebi in org seedorg / space seedspace as admin...
-0 of 1 instances running, 1 starting
-1 of 1 instances running
-App started
-
-OK
-App atk-ebi was started using this command `bin/rest-server.sh`
-Showing health and status for app atk-ebi in org seedorg / space seedspace as admin...
-OK
-requested state: started
-instances: 1/1
-usage: 1G x 1 instances
-urls: atk-ebi.apps.gotapaas.eu
-last uploaded: Wed May 20 22:22:54 UTC 2015
-stack: cflinuxfs2
-state since cpu memory disk details
-#0 running 2015-05-20 03:25:13 PM 0.0% 622.9M of 1G 432.9M of 2G
-</pre></div>
-</div>
-<p>If you like to see the complete configuration for your app, run the
-command &#8220;cf env atk-ebi&#8221;.</p>
-</li>
-<li><p class="first">Retrieve data from VCAP_APPLICATION uris.</p>
-</li>
-<li><p class="first">Create a client credentials file.
-For more information,
-see <a class="reference external" href="https://github.com/trustedanalytics/atk/wiki/python-client">https://github.com/trustedanalytics/atk/wiki/python-client</a></p>
-</li>
-<li><p class="first">To tail your app logs:</p>
-<div class="code highlight-python"><div class="highlight"><pre>cf logs atk-ebi
-</pre></div>
-</div>
-</li>
-<li><p class="first">Open a Python2.7 or IPython session and do the following:</p>
-<div class="code highlight-python"><div class="highlight"><pre>In [1]: import trustedanalytics as atk
-In [2]: atk.connect(&quot;&lt;PATH_TO_YOUR_CREDENTIALS_FILE&quot;)
-Connected to intelanalytics server.
-In [3]: atk.server.host
-Out[3]: &#39;atk-ebi.apps.gotapaas.eu&#39;
-In [4]: exit
-</pre></div>
-</div>
-</li>
-<li><p class="first">Ready to run some examples:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">TBD</span>
-</pre></div>
-</div>
-</li>
-</ol>
-</div>
+</ul>
 </div>
 </div>
 
@@ -335,7 +194,7 @@ In [4]: exit
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

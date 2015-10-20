@@ -58,3 +58,13 @@
 
 
     Export the frame to a file in csv format as a Hadoop file.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_csv('covarianceresults')
+
+

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame dot_product &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame dot_product &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame download" href="download.html" >
     <link rel="prev" title="Frame cumulative_sum" href="cumulative_sum.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -159,126 +159,62 @@ Default is None.</p>
 <p>Calculate the dot product for each row in a frame using values from two
 equal-length sequences of columns.</p>
 <p>Dot product is computed by the following formula:</p>
-<p>The dot product of two vectors <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">A=[a_1, a_2, ..., a_n]</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 504 bytes).
-Transcript written on math.log.
-</div>
- and
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">B =[b_1, b_2, ..., b_n]</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 504 bytes).
-Transcript written on math.log.
-</div>
- is <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">a_1*b_1 + a_2*b_2 + ...+ a_n*b_n</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 580 bytes).
-Transcript written on math.log.
-</div>
-.
+<p>The dot product of two vectors <img class="math" src="../../../f_images/math/7fec7654f7e0ae3ee52113eaaf1858601c33d0d7.png" alt="A=[a_1, a_2, ..., a_n]"/> and
+<img class="math" src="../../../f_images/math/7b5f16ab76361e542173d429f7207e0179435cd1.png" alt="B =[b_1, b_2, ..., b_n]"/> is <img class="math" src="../../../f_images/math/11aa982b927a3b858e2da0ab77872af693f30e79.png" alt="a_1*b_1 + a_2*b_2 + ...+ a_n*b_n"/>.
 The dot product for each row is stored in a new column in the existing frame.</p>
 <p class="rubric">Notes</p>
 <p>If default_left_values or default_right_values are not specified, any null
 values will be replaced by zeros.</p>
+<p class="rubric">Examples</p>
+<p>Calculate the dot product for a sequence of columns in Frame object <em>my_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  col_0:int32  col_1:float64  col_2:int32  col3:int32</span>
+<span class="go">/-----------------------------------------------------/</span>
+<span class="go">  1            0.2            -2           5</span>
+<span class="go">  2            0.4            -1           6</span>
+<span class="go">  3            0.6             0           7</span>
+<span class="go">  4            0.8             1           8</span>
+<span class="go">  5            None            2           None</span>
+</pre></div>
+</div>
+<p>Modify the frame by computing the dot product for a sequence of columns:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">dot_product</span><span class="p">([</span><span class="s">&#39;col_0&#39;</span><span class="p">,</span><span class="s">&#39;col_1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;col_2&#39;</span><span class="p">,</span> <span class="s">&#39;col_3&#39;</span><span class="p">],</span> <span class="s">&#39;dot_product&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  col_0:int32  col_1:float64 col_2:int32 col3:int32  dot_product:float64</span>
+<span class="go">/------------------------------------------------------------------------/</span>
+<span class="go">  1            0.2           -2          5            -1.0</span>
+<span class="go">  2            0.4           -1          6             0.4</span>
+<span class="go">  3            0.6            0          7             4.2</span>
+<span class="go">  4            0.8            1          8            10.4</span>
+<span class="go">  5            None           2          None         10.0</span>
+</pre></div>
+</div>
+<p>Modify the frame by computing the dot product with default values for nulls:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">dot_product</span><span class="p">([</span><span class="s">&#39;col_0&#39;</span><span class="p">,</span><span class="s">&#39;col_1&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;col_2&#39;</span><span class="p">,</span> <span class="s">&#39;col_3&#39;</span><span class="p">],</span> <span class="s">&#39;dot_product_2&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  col_0:int32  col_1:float64 col_2:int32 col3:int32  dot_product:float64  dot_product_2:float64</span>
+<span class="go">/--------------------------------------------------------------------------------------------/</span>
+<span class="go">   1            0.2           -2          5            -1.0               -1.0</span>
+<span class="go">   2            0.4           -1          6             0.4                0.4</span>
+<span class="go">   3            0.6            0          7             4.2                4.2</span>
+<span class="go">   4            0.8            1          8            10.4                10.4</span>
+<span class="go">   5            None           2          None         10.0                10.08</span>
+</pre></div>
+</div>
+<p>Calculate the dot product for columns of vectors in Frame object <em>my_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">dot_product</span><span class="p">(</span><span class="s">&#39;col_4&#39;</span><span class="p">,</span> <span class="s">&#39;col_5, &#39;</span><span class="n">dot_product</span><span class="s">&#39;)</span>
+
+<span class="go">col_4:vector  col_5:vector  dot_product:float64</span>
+<span class="go">/----------------------------------------------/</span>
+<span class="go"> [1, 0.2]     [-2, 5]       -1.0</span>
+<span class="go"> [2, 0.4]     [-1, 6]        0.4</span>
+<span class="go"> [3, 0.6]     [0,  7]        4.2</span>
+<span class="go"> [4, 0.8]     [1,  8]       10.4</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -304,7 +240,7 @@ values will be replaced by zeros.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

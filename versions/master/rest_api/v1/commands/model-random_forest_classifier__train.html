@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:random_forest_classifier/train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:random_forest_classifier/train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:random_forest_regressor/new" href="model-random_forest_regressor__new.html" >
     <link rel="prev" title="Commands model:random_forest_classifier/test" href="model-random_forest_classifier__test.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -132,45 +132,45 @@ Build Random Forests Classifier model.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:random_forest_classifier/train</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>Handle to the model to be used.</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train the model on.</p>
+<div><p>A frame to train the model on</p>
 </div></blockquote>
 <p><strong>label_column</strong> : unicode</p>
 <blockquote>
-<div><p>Column name containing the label for each observation.</p>
+<div><p>Column name containing the label for each observation</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>Column(s) containing the observations.</p>
+<div><p>Column(s) containing the observations</p>
 </div></blockquote>
 <p><strong>num_classes</strong> : int32 (default=2)</p>
 <blockquote>
-<div><p>Number of classes for classification</p>
+<div><p>Number of classes for classification. Default is 2.</p>
 </div></blockquote>
 <p><strong>num_trees</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>Number of tress in the random forest</p>
+<div><p>Number of tress in the random forest. Default is 1.</p>
 </div></blockquote>
 <p><strong>impurity</strong> : unicode (default=gini)</p>
 <blockquote>
-<div><p>Criterion used for information gain calculation. Supported values &#8220;gini&#8221; or &#8220;entropy&#8221;</p>
+<div><p>Criterion used for information gain calculation. Supported values &#8220;gini&#8221; or &#8220;entropy&#8221;. Default is &#8220;gini&#8221;.</p>
 </div></blockquote>
 <p><strong>max_depth</strong> : int32 (default=4)</p>
 <blockquote>
-<div><p>Maximum depth of the tree</p>
+<div><p>Maximum depth of the tree. Default is 4.</p>
 </div></blockquote>
 <p><strong>max_bins</strong> : int32 (default=100)</p>
 <blockquote>
-<div><p>Maximum number of bins used for splitting features</p>
+<div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=-1910466087)</p>
+<p><strong>seed</strong> : int32 (default=-687814711)</p>
 <blockquote>
-<div><p>Random seed for bootstrapping and choosing feature subsets</p>
+<div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
 <p><strong>categorical_features_info</strong> : None (default=None)</p>
 <blockquote>
@@ -178,7 +178,8 @@ Build Random Forests Classifier model.</p>
 </div></blockquote>
 <p><strong>feature_subset_category</strong> : unicode (default=None)</p>
 <blockquote class="last">
-<div><p>Number of features to consider for splits at each node. Supported values &#8220;auto&#8221;,&#8221;all&#8221;,&#8221;sqrt&#8221;,&#8221;log2&#8221;,&#8221;onethird&#8221;</p>
+<div><p>Number of features to consider for splits at each node. Supported values &#8220;auto&#8221;,&#8221;all&#8221;,&#8221;sqrt&#8221;,&#8221;log2&#8221;,&#8221;onethird.
+If &#8220;auto&#8221; is set, this is based on num_trees: if num_trees == 1, set to &#8220;all&#8221; ; if num_trees &gt; 1, set to &#8220;sqrt&#8221;</p>
 </div></blockquote>
 </td>
 </tr>
@@ -238,6 +239,22 @@ Content-type: application/json
 </div>
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>dictionary</dt>
+<dd>A dictionary with trained Random Forest Classifier model with the following keys:
+<a href="#id4"><span class="problematic" id="id5">|</span></a>&#8216;observation_columns&#8217;: the list of observation columns on which the model was trained,
+<a href="#id6"><span class="problematic" id="id7">|</span></a>&#8216;label_column&#8217;: the column name containing the labels of the observations,
+<a href="#id8"><span class="problematic" id="id9">|</span></a>&#8216;num_classes&#8217;: the number of classes,
+<a href="#id10"><span class="problematic" id="id11">|</span></a>&#8216;num_trees&#8217;: the number of decision trees in the random forest,
+<a href="#id12"><span class="problematic" id="id13">|</span></a>&#8216;num_nodes&#8217;: the number of nodes in the random forest,
+<a href="#id14"><span class="problematic" id="id15">|</span></a>&#8216;feature_subset_category&#8217;: the map storing arity of categorical features,
+<a href="#id16"><span class="problematic" id="id17">|</span></a>&#8216;impurity&#8217;: the criterion used for information gain calculation,
+<a href="#id18"><span class="problematic" id="id19">|</span></a>&#8216;max_depth&#8217;: the maximum depth of the tree,
+<a href="#id20"><span class="problematic" id="id21">|</span></a>&#8216;max_bins&#8217;: the maximum number of bins used for splitting features,
+<a href="#id22"><span class="problematic" id="id23">|</span></a>&#8216;seed&#8217;: the random seed used for bootstrapping and choosing feature subset.</dd>
+</dl>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -263,7 +280,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

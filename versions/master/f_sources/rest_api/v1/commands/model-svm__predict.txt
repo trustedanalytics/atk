@@ -7,7 +7,7 @@
 -----------------------------------------
 
 |ALPHA|
-Make new frame with additional column for predicted label.
+Predict the labels for the data points
 
 POST /v1/commands/
 ==================
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -55,9 +55,9 @@ Request
 
     ..
 
-        Column(s) containing the observations whose labels are to be predicted.
-        By default, we predict the labels over columns the LogisticRegressionModel
-        was trained on. 
+        Column(s) containing the observations
+        whose labels are to be predicted.
+        Default is the labels the model was trained on.
 
 
 
@@ -118,9 +118,9 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
         A frame containing the original frame's columns and a column with the
-        predicted label
+        predicted label.
 
 

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame quantiles &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame quantiles &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame rename_columns" href="rename_columns.html" >
     <link rel="prev" title="EdgeFrame name" href="name.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -131,7 +131,7 @@
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
 <div><p>A new frame with two columns (float64): requested Quantiles and their respective values.</p>
 </div></blockquote>
@@ -140,6 +140,40 @@
 </tbody>
 </table>
 <p>Calculate quantiles on the given column.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
+column <em>final_sale_price</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  final_sale_price:int32</span>
+<span class="go">/------------------------/</span>
+<span class="go">            100</span>
+<span class="go">            250</span>
+<span class="go">             95</span>
+<span class="go">            179</span>
+<span class="go">            315</span>
+<span class="go">            660</span>
+<span class="go">            540</span>
+<span class="go">            420</span>
+<span class="go">            250</span>
+<span class="go">            335</span>
+</pre></div>
+</div>
+<p>To calculate 10th, 50th, and 100th quantile:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">quantiles</span><span class="p">(</span><span class="s">&#39;final_sale_price&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>A new Frame containing the requested Quantiles and their respective values
+will be returned :</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  Quantiles:float64   final_sale_price_QuantileValue:float64</span>
+<span class="go">/------------------------------------------------------------/</span>
+<span class="go">         10.0                                     95.0</span>
+<span class="go">         50.0                                    250.0</span>
+<span class="go">        100.0                                    660.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -165,7 +199,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

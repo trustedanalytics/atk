@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>TitanGraph graphx_pagerank &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>TitanGraph graphx_pagerank &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs TitanGraph" href="index.html" >
     <link rel="next" title="TitanGraph graphx_triangle_count" href="graphx_triangle_count.html" >
     <link rel="prev" title="TitanGraph graphx_connected_components" href="graphx_connected_components.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -123,12 +123,12 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_property</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the property to which pagerank
+<div><p>Name of the property to which PageRank
 value will be stored on vertex and edge.</p>
 </div></blockquote>
 <p><strong>input_edge_labels</strong> : list (default=None)</p>
 <blockquote>
-<div><p>List of edge labels to consider for pagerank computation.
+<div><p>List of edge labels to consider for PageRank computation.
 Default is all edges are considered.</p>
 </div></blockquote>
 <p><strong>max_iterations</strong> : int32 (default=None)</p>
@@ -198,352 +198,20 @@ analyzing predator-prey food webs to predict extinctions.</p>
 <li>Applications to recommendation systems: <a class="reference external" href="http://www.ploscompbiol.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pcbi.1000494&amp;representation=PDF">PLoS: Computational Biology</a></li>
 </ul>
 <p><strong>Mathematical Details of PageRank Implementation</strong></p>
-<p>The Trusted Analytics implementation of <em>PageRank</em> satisfies the following equation
-at each vertex <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- of the graph:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
-\frac {PR(u)}{L(u)} \right)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
-! Undefined control sequence.
-l.13 \begin{split}PR(v) = \frac
-                                {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \rho 
-l.13 \begin{split}PR(v) = \frac {\rho
-                                     }{n} + \rho \left( \sum_{u\in InSet(v)} \
-! Extra }, or forgotten $.
-l.13 \begin{split}PR(v) = \frac {\rho}
-                                      {n} + \rho \left( \sum_{u\in InSet(v)} \
-! Undefined control sequence.
-l.14 \frac
-           {PR(u)}{L(u)} \right)\end{split}\notag
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 \frac {PR(u)}{L(u)} \right)\end
-                                    {split}\notag
-[1] )
-(\end occurred inside a group at level 1)
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 668 bytes).
-Transcript written on math.log.
-</div>
-<dl class="docutils">
+<p>The Trusted Analytics Platform implementation of <em>PageRank</em> satisfies the following equation
+at each vertex <img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> of the graph:</p>
+<div class="math">
+<p><img src="../../../f_images/math/fc9164648b5a91c1b09ae8af18e3b618286d39ad.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
+\frac {PR(u)}{L(u)} \right)"/></p>
+</div><dl class="docutils">
 <dt>Where:</dt>
 <dd><div class="first last line-block">
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- — a vertex</div>
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">L(v)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 368 bytes).
-Transcript written on math.log.
-</div>
- — outbound degree of the vertex v</div>
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">PR(v)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 376 bytes).
-Transcript written on math.log.
-</div>
- — <em>PageRank</em> score of the vertex v</div>
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">InSet(v)</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 380 bytes).
-Transcript written on math.log.
-</div>
- — set of vertices pointing to the vertex v</div>
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- — total number of vertices in the graph</div>
-<div class="line"><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\rho</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- — user specified damping factor (also known as reset
+<div class="line"><img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> — a vertex</div>
+<div class="line"><img class="math" src="../../../f_images/math/1d30d1b165056b1a222ff4e2b76ada68c35b8145.png" alt="L(v)"/> — outbound degree of the vertex v</div>
+<div class="line"><img class="math" src="../../../f_images/math/caf98a87c9c974e4d964d153c5d59ab90ad7ebb5.png" alt="PR(v)"/> — <em>PageRank</em> score of the vertex v</div>
+<div class="line"><img class="math" src="../../../f_images/math/f27930a9cd2e383f6c235e32c3ee002e327ba2ea.png" alt="InSet(v)"/> — set of vertices pointing to the vertex v</div>
+<div class="line"><img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> — total number of vertices in the graph</div>
+<div class="line"><img class="math" src="../../../f_images/math/f574498915fa9e02eeb5141c24835d077eba3e75.png" alt="\rho"/> — user specified damping factor (also known as reset
 probability)</div>
 </div>
 </dd>
@@ -557,6 +225,18 @@ threshold.</li>
 <li>The user can specify a maximum number of iterations after which the
 algorithm will terminate.</li>
 </ul>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;node&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&quot;node&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="s">&quot;follows&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&quot;node&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="s">&quot;followed&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&quot;e1&quot;</span><span class="p">,</span><span class="s">&quot;node&quot;</span><span class="p">,</span><span class="s">&quot;node&quot;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&quot;e1&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="s">&quot;follows&quot;</span><span class="p">,</span><span class="s">&quot;followed&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">graphx_pagerank</span><span class="p">(</span><span class="n">output_property</span><span class="o">=</span><span class="s">&quot;PageRank&quot;</span><span class="p">,</span><span class="n">max_iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">convergence_tolerance</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vertex_dict</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;vertex_dictionary&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">edge_dict</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;edge_dictionary&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -582,7 +262,7 @@ algorithm will terminate.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

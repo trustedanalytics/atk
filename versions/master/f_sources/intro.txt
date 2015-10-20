@@ -101,7 +101,7 @@ propagation, exploit the connections in the graph structure and provide
 powerful new methods of labeling or classifying graph data.
 Examples of other machine learning capabilities provided include recommender
 systems using alternating least squares and conjugate gradient descent, topic
-modeling using Latent Dirchelet Allocation, clustering using K-means, and
+modeling using Latent Dirichlet Allocation, clustering using K-means, and
 classification using logistic regression.
 See the section on :doc:`machine learning </ds_ml>` and the
 :doc:`API </python_api/index>` for further information.

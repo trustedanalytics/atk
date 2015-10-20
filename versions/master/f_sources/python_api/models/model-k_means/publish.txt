@@ -10,7 +10,7 @@
 .. function:: publish(self)
 
     |BETA|
-    Creates a tar file that will used as input to the scoring engine
+    Creates a tar file that will be used as input to the scoring engine
 
 
     :Parameters:
@@ -23,5 +23,32 @@
 
         ..
 
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the KMeansModel and its implementation into a tar file. The tar file is then published
+    on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. 
+    This model can then be used to predict the cluster assignment of an observation.
 
-    Returns the HDFS path to the tar file
+    Examples
+    --------
+    Publish a trained KMeans Model for scoring
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.KMeansModel(name='MyKmeansModel')
+            >>> my_model.train(my_frame, ['name_of_observation_column1', 'name_of_observation_column2'],[2.0, 5.0] 3, 10, 0.0002, "random")
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.KMeansModel(name='MyKmeansModel')
+            >>> my_model.train(my_frame, ['name_of_observation_column1', 'name_of_observation_column2'],[2.0, 5.0] 3, 10, 0.0002, "random")
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>
+
+
+

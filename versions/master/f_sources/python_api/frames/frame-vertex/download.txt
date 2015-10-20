@@ -9,7 +9,7 @@
 
 .. function:: download(self, n=100, offset=0, columns=None)
 
-    Download a frame from the server into client workspace.
+    Download frame data from the server into client workspace as a pandas dataframe
 
 
     :Parameters:
@@ -46,28 +46,18 @@
         ..
 
             A new pandas dataframe object containing the downloaded frame data
-    Copies an trustedanalytics Frame into a Pandas DataFrame.
-
+    Similar to the 'take' function, but puts the data in a pandas dataframe.
 
     Examples
     --------
-    Frame *my_frame* accesses a frame with millions of rows of data.
-    Get a sample of 500 rows:
 
     .. code::
 
-        >>> pandas_frame = my_frame.download( 500 )
-
-    We now have a new frame accessed by a pandas DataFrame *pandas_frame*
-    with a copy of the first 500 rows of the original frame.
-
-    If we use the method with an offset like:
-
-    .. code::
-
-        >>> pandas_frame = my_frame.take( 500, 100 )
-
-    We end up with a new frame accessed by the pandas DataFrame
-    *pandas_frame* again, but this time it has a copy of rows 101 to 600 of
-    the original frame.
+        >>> pandas_frame = frame.download(columns=['name', 'phone'])
+        >>> pandas_frame
+               name     phone
+        0      Fred  555-1234
+        1     Susan  555-0202
+        2  Thurston  555-4510
+        3      Judy  555-2183
 

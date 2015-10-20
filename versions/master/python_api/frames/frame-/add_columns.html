@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame add_columns &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame add_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame append" href="append.html" >
     <link rel="prev" title="Frame __init__" href="f__init__.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -123,7 +123,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>func</strong> : UDF</p>
 <blockquote>
-<div><p>User-Defined Function (<abbr title="Python User-defined Function">UDF</abbr>) which takkes the values in the row and produces a value, or collection of values, for the new cell(s).</p>
+<div><p>User-Defined Function (<abbr title="Python User-defined Function">UDF</abbr>) which takes the values in the row and produces a value, or collection of values, for the new cell(s).</p>
 </div></blockquote>
 <p><strong>schema</strong> : tuple | list of tuples</p>
 <blockquote>
@@ -147,73 +147,99 @@ See <a class="reference internal" href="../../../ds_apir.html"><em>Python User F
 drop_frames() method (and others) to fail!</li>
 </ol>
 <p class="rubric">Examples</p>
-<p>Given a Frame <em>my_frame</em> identifying a data frame with two int32
-columns <em>column1</em> and <em>column2</em>.
-Add a third column <em>column3</em> as an int32 and fill it with the
-contents of <em>column1</em> and <em>column2</em> multiplied together:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">column1</span><span class="o">*</span><span class="n">row</span><span class="o">.</span><span class="n">column2</span><span class="p">,</span>
-<span class="gp">... </span><span class="p">(</span><span class="s">&#39;column3&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">))</span>
+<p>Given our frame, let&#8217;s add a column which has how many years the person has been over 18</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  tenure  phone</span>
+<span class="go">====================================</span>
+<span class="go">[0]  Fred       39      16  555-1234</span>
+<span class="go">[1]  Susan      33       3  555-0202</span>
+<span class="go">[2]  Thurston   65      26  555-4510</span>
+<span class="go">[3]  Judy       44      14  555-2183</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">age</span> <span class="o">-</span> <span class="mi">18</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;adult_years&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years</span>
+<span class="go">=================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21</span>
+<span class="go">[1]  Susan      33       3  555-0202           15</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47</span>
+<span class="go">[3]  Judy       44      14  555-2183           26</span>
 </pre></div>
 </div>
-<p>The frame now has three columns, <em>column1</em>, <em>column2</em> and <em>column3</em>.
-The type of <em>column3</em> is an int32, and the value is the product of
-<em>column1</em> and <em>column2</em>.</p>
-<p>Add a string column <em>column4</em> that is empty:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;column4&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+<p>Multiple columns can be added at the same time.  Let&#8217;s add percentage of
+life and percentage of adult life in one call, which is more efficient.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">tenure</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">age</span><span class="p">),</span> <span class="n">row</span><span class="o">.</span><span class="n">tenure</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">adult_years</span><span class="p">)],</span> <span class="p">[(</span><span class="s">&quot;of_age&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;of_adult&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years  of_age  of_adult</span>
+<span class="go">===================================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21    0.41      0.76</span>
+<span class="go">[1]  Susan      33       3  555-0202           15    0.09      0.20</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47    0.40      0.55</span>
+<span class="go">[3]  Judy       44      14  555-2183           26    0.32      0.54</span>
 </pre></div>
 </div>
-<p>The Frame object <em>my_frame</em> now has four columns <em>column1</em>, <em>column2</em>,
-<em>column3</em>, and <em>column4</em>.
-The first three columns are int32 and the fourth column is str.
-Column <em>column4</em> has an empty string (&#8216;&#8217;) in every row.</p>
-<p>Multiple columns can be added at the same time.
-Add a column <em>a_times_b</em> and fill it with the contents of column <em>a</em>
-multiplied by the contents of column <em>b</em>.
-At the same time, add a column <em>a_plus_b</em> and fill it with the contents
-of column <em>a</em> plus the contents of column <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">row</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">a</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">b</span><span class="p">],</span> <span class="p">[(</span><span class="s">&quot;a_times_b&quot;</span><span class="p">,</span> <span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;a_plus_b&quot;</span><span class="p">,</span> <span class="n">float32</span><span class="p">))</span>
+<p>Note that the function returns a list, and therefore the schema also needs to be a list.</p>
+<p>It is not necessary to use lambda syntax, any function will do, as long as it takes a single row argument.  We
+can also call other local functions within.</p>
+<p>Let&#8217;s add a column which shows the amount of person&#8217;s name based on their adult tenure percentage.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">percentage_of_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">percentage</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&#39;&#39;&#39;returns a substring of the given string according to the given percentage&#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="n">substring_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">percentage</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">string</span><span class="p">[:</span><span class="n">substring_len</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>Two new columns are created, &#8220;a_times_b&#8221; and &#8220;a_plus_b&#8221;, with the
-appropriate contents.</p>
-<p>Given a frame of data and Frame <em>my_frame</em> points to it.
-In addition we have defined a <abbr title="Python User-defined Function">UDF</abbr> <em>func</em>.
-Run <em>func</em> on each row of the frame and put the result in a new int
-column <em>calculated_a</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span> <span class="n">func</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;calculated_a&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add_name_by_adult_tenure</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">percentage_of_string</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">of_adult</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now the frame has a column <em>calculated_a</em> which has been filled with
-the results of the <abbr title="Python User-defined Function">UDF</abbr> <em>func</em>.</p>
-<p>A <abbr title="Python User-defined Function">UDF</abbr> must return a value in the same format as the column is
-defined.
-In most cases this is automatically the case, but sometimes it is less
-obvious.
-Given a <abbr title="Python User-defined Function">UDF</abbr> <em>function_b</em> which returns a value in a list, store
-the result in a new column <em>calculated_b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">function_b</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;calculated_b&quot;</span><span class="p">,</span> <span class="n">float32</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">add_name_by_adult_tenure</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;tenured_name&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p>This would result in an error because function_b is returning a value
-as a single element list like [2.4], but our column is defined as a
-tuple.
-The column must be defined as a list:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">function_b</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;calculated_b&quot;</span><span class="p">,</span> <span class="n">float32</span><span class="p">)])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<span class="go">Frame &quot;example_frame&quot;</span>
+<span class="go">row_count = 4</span>
+<span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode]</span>
+<span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
 </pre></div>
 </div>
-<p>To run an optimized version of add_columns, columns_accessed parameter can
-be populated with the column names which are being accessed in <abbr title="Python User-defined Function">UDF</abbr>. This
-speeds up the execution by working on only the limited feature set than the
-entire row.</p>
-<p>Let&#8217;s say a frame has 4 columns named <em>a</em>,*b*,*c* and <em>d</em> and we want to add a new column
-with value from column <em>a</em> multiplied by value in column <em>b</em> and call it <em>a_times_b</em>.
-In the example below, columns_accessed is a list with column names <em>a</em> and <em>b</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">a</span> <span class="o">*</span> <span class="n">row</span><span class="o">.</span><span class="n">b</span><span class="p">,</span> <span class="p">(</span><span class="s">&quot;a_times_b&quot;</span><span class="p">,</span> <span class="n">float32</span><span class="p">),</span> <span class="n">columns_accessed</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;of_adult&#39;</span><span class="p">,</span> <span class="s">&#39;tenured_name&#39;</span><span class="p">],</span> <span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      of_adult  tenured_name</span>
+<span class="go">=====================================</span>
+<span class="go">[0]  Fred          0.76  Fre</span>
+<span class="go">[1]  Susan         0.20  S</span>
+<span class="go">[2]  Thurston      0.55  Thur</span>
+<span class="go">[3]  Judy          0.54  Ju</span>
 </pre></div>
 </div>
-<p>add_columns would fail if columns_accessed parameter is not populated with the correct list of accessed
-columns. If not specified, columns_accessed defaults to None which implies that all columns might be accessed
-by the <abbr title="Python User-defined Function">UDF</abbr>.</p>
+<p><strong>Optimization</strong> - If we know up front which columns our row function will access, we
+can tell add_columns to speed up the execution by working on only the limited feature
+set rather than the entire row.</p>
+<p>Let&#8217;s add a name based on tenure percentage of age.  We know we&#8217;re only going to use
+columns &#8216;name&#8217; and &#8216;of_age&#8217;.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">percentage_of_string</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">of_age</span><span class="p">),</span>
+<span class="gp">... </span>                  <span class="p">(</span><span class="s">&#39;tenured_name_age&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span>
+<span class="gp">... </span>                  <span class="n">columns_accessed</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;of_age&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years  of_age  of_adult</span>
+<span class="go">===================================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21    0.41      0.76</span>
+<span class="go">[1]  Susan      33       3  555-0202           15    0.09      0.20</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47    0.40      0.55</span>
+<span class="go">[3]  Judy       44      14  555-2183           26    0.32      0.54</span>
+
+<span class="go">[#]  tenured_name  tenured_name_age</span>
+<span class="go">===================================</span>
+<span class="go">[0]  Fre           F</span>
+<span class="go">[1]  S</span>
+<span class="go">[2]  Thur          Thu</span>
+<span class="go">[3]  Ju            J</span>
+</pre></div>
+</div>
 <p>More information on a row <abbr title="Python User-defined Function">UDF</abbr> can be found at <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a></p>
 </dd></dl>
 
@@ -240,7 +266,7 @@ by the <abbr title="Python User-defined Function">UDF</abbr>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

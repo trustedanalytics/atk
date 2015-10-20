@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands graph/clustering_coefficient &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands graph/clustering_coefficient &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands graph/copy" href="graph__copy.html" >
     <link rel="prev" title="Commands graph/annotate_weighted_degrees" href="graph__annotate_weighted_degrees.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -131,7 +131,7 @@
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">graph/clustering_coefficient</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f68953280d0&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
@@ -168,7 +168,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.</p>
+<p>Calculates the clustering coefficient of the graph with respect to an (optional) set of labels.</p>
 <p>Pulls graph from underlying store, calculates degrees and writes them into the property specified,
 and then writes the output graph to the underlying store.</p>
 <div class="admonition warning">
@@ -187,243 +187,19 @@ Informally, if the edge relation denotes &#8220;friendship&#8221;, the clusterin
 coefficient of the graph is the probability that two people are friends given
 that they share a common friend.</p>
 <p>More formally:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
-E \} \| }{\| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\} \in E \} \|}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Undefined control sequence.
-l.13 \begin{split}cc(G)  = \frac
-                                { \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \delimiter 
-\|-&gt;\delimiter 
-               &#8220;26B30D 
-l.13 \begin{split}cc(G)  = \frac{ \|
-                                     \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Extra }, or forgotten $.
-l.14 E \} \| }
-              {\| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\} \in E \} \|}\end{s...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 ... V^3: \ \{u,v\}, \{u, w\} \in E \} \|}\end
-                                                  {split}\notag
-
-Overfull \hbox (53.91489pt too wide) in paragraph at lines 11&#8211;14
-[]\tenrm document gather splitcc(G) =  $\tensy kf\tenrm (\teni u; v; w\tenrm ) 
-\tensy 2 \teni V[] \tenrm :  \tensy f\teni u; v\tensy g\teni ; \tensy f\teni u;
- w\tensy g\teni ; \tensy f\teni v; w\tensy g 2  \teni E\tensy gk[]$ |
-[1] )
-(\end occurred inside a group at level 1)
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 696 bytes).
-Transcript written on math.log.
-</div>
-<p>Analogously, the clustering coefficient of a vertex provides a measure of how
+<div class="math">
+<p><img src="../../../f_images/math/6649bd3917af7ad4fce98f93063c1c656e9463f5.png" alt="cc(G)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+E \} \| }{\| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\} \in E \} \|}"/></p>
+</div><p>Analogously, the clustering coefficient of a vertex provides a measure of how
 tightly clustered that vertex&#8217;s neighborhood is.
 Informally, if the edge relation denotes &#8220;friendship&#8221;, the clustering
-coefficient at a vertex <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is the probability that two acquaintances of
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">v</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- are themselves friends.</p>
+coefficient at a vertex <img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> is the probability that two acquaintances of
+<img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> are themselves friends.</p>
 <p>More formally:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
-E \} \| }{\| \{ (u,v,w) \in V^3: \ \{v, u \}, \{v, w\} \in E \} \|}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Undefined control sequence.
-l.13 \begin{split}cc(v)  = \frac
-                                { \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \delimiter 
-\|-&gt;\delimiter 
-               &#8220;26B30D 
-l.13 \begin{split}cc(v)  = \frac{ \|
-                                     \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}...
-
-! Extra }, or forgotten $.
-l.14 E \} \| }
-              {\| \{ (u,v,w) \in V^3: \ \{v, u \}, \{v, w\} \in E \} \|}\end...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.14 ...^3: \ \{v, u \}, \{v, w\} \in E \} \|}\end
-                                                  {split}\notag
-
-Overfull \hbox (50.82799pt too wide) in paragraph at lines 11&#8211;14
-[]\tenrm document gather splitcc(v) =  $\tensy kf\tenrm (\teni u; v; w\tenrm ) 
-\tensy 2 \teni V[] \tenrm :  \tensy f\teni u; v\tensy g\teni ; \tensy f\teni u;
- w\tensy g\teni ; \tensy f\teni v; w\tensy g 2  \teni E\tensy gk[]$ |
-[1] )
-(\end occurred inside a group at level 1)
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 696 bytes).
-Transcript written on math.log.
-</div>
-<p>The toolkit provides the function clustering_coefficient which computes both
+<div class="math">
+<p><img src="../../../f_images/math/5cc2e19d99fa230334dab1c87f83705be1285ce3.png" alt="cc(v)  = \frac{ \| \{ (u,v,w) \in V^3: \ \{u,v\}, \{u, w\}, \{v,w \} \in \
+E \} \| }{\| \{ (u,v,w) \in V^3: \ \{v, u \}, \{v, w\} \in E \} \|}"/></p>
+</div><p>The toolkit provides the function clustering_coefficient which computes both
 local and global clustering coefficients for a given undirected graph.</p>
 <p>For more details on the mathematics and applications of clustering
 coefficients, see <a class="reference external" href="http://en.wikipedia.org/wiki/Clustering_coefficient">http://en.wikipedia.org/wiki/Clustering_coefficient</a>.</p>
@@ -497,7 +273,7 @@ clustering coefficients stored at properties at each vertex.</div></blockquote>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

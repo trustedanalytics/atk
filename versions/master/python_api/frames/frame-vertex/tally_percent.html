@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame tally_percent &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame tally_percent &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame top_k" href="top_k.html" >
     <link rel="prev" title="VertexFrame tally" href="tally.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -142,6 +142,40 @@ the cumulative sum.</p>
 the rows, observing the column values and keeping track of the percentage of the
 total number of times the specified <em>count_value</em> has been seen up to
 the current value.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
+column named <em>obs</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  obs:int32</span>
+<span class="go">/-----------/</span>
+<span class="go">     0</span>
+<span class="go">     1</span>
+<span class="go">     2</span>
+<span class="go">     0</span>
+<span class="go">     1</span>
+<span class="go">     2</span>
+</pre></div>
+</div>
+<p>The cumulative percent count for column <em>obs</em> is obtained by:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">tally_percent</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The Frame <em>my_frame</em> accesses the original frame that now contains two
+columns, <em>obs</em> that contains the original column values, and
+<em>obsCumulativePercentCount</em> that contains the cumulative percent count:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  obs:int32    obs_tally_percent:float64</span>
+<span class="go">/----------------------------------------/</span>
+<span class="go">     0                         0.0</span>
+<span class="go">     1                         0.5</span>
+<span class="go">     2                         0.5</span>
+<span class="go">     0                         0.5</span>
+<span class="go">     1                         1.0</span>
+<span class="go">     2                         1.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -167,7 +201,7 @@ the current value.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

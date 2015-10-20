@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -44,7 +44,7 @@ Request
 
     ..
 
-        name of the user column to be used as keys
+        Name of the column(s) to be used as keys
         for unflattening.
 
 
@@ -53,7 +53,7 @@ Request
 
     ..
 
-        separator for the data in the result columns.
+        Separator for the data in the result columns.
         Default is comma (,).
 
 
@@ -70,7 +70,8 @@ Request
 
 Groups together cells in all columns (less the composite key) using "," as string delimiter.
 The original rows are deleted.
-The grouping takes place based on a composite key passed as arguments.
+The grouping takes place based on a composite key created from cell values.
+The column datatypes are changed to string.
 
 |
 

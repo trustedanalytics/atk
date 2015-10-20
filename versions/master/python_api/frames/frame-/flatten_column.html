@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame flatten_column &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame flatten_column &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame get_error_frame" href="get_error_frame.html" >
     <link rel="prev" title="Frame filter" href="filter.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -142,6 +142,42 @@ delimiter.
 New rows are a full copy of the original row, but the specified column only
 contains one value.
 The original row is deleted.</p>
+<p class="rubric">Examples</p>
+<p>Given a data file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="s">&quot;solo,mono,single&quot;</span>
+<span class="mi">2</span><span class="o">-</span><span class="s">&quot;duo,double&quot;</span>
+</pre></div>
+</div>
+<p>The commands to bring the data into a frame, where it can be worked on:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Looking at it:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:int32   b:str</span>
+<span class="go">/-------------------------------/</span>
+<span class="go">    1       solo, mono, single</span>
+<span class="go">    2       duo, double</span>
+</pre></div>
+</div>
+<p>Now, spread out those sub-strings in column <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">flatten_column</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Check again:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:int32   b:str</span>
+<span class="go">/------------------/</span>
+<span class="go">    1       solo</span>
+<span class="go">    1       mono</span>
+<span class="go">    1       single</span>
+<span class="go">    2       duo</span>
+<span class="go">    2       double</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -167,7 +203,7 @@ The original row is deleted.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

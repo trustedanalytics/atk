@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -68,7 +68,7 @@ Request
 **Description**
 
 A cumulative count is computed by sequentially stepping through the rows,
-observing the column values and keeping track of the the number of times the specified
+observing the column values and keeping track of the number of times the specified
 *count_value* has been seen.
 
 |

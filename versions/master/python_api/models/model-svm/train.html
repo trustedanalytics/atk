@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>SvmModel train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>SvmModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models SvmModel" href="index.html" >
     <link rel="next" title="Models LdaModel" href="../model-lda/index.html" >
     <link rel="prev" title="SvmModel test" href="test.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -115,14 +115,14 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>intercept=None</em>, <em>num_iterations=None</em>, <em>step_size=None</em>, <em>reg_type=None</em>, <em>reg_param=None</em>, <em>mini_batch_fraction=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>intercept=True</em>, <em>num_iterations=100</em>, <em>step_size=1</em>, <em>reg_type=None</em>, <em>reg_param=0.01</em>, <em>mini_batch_fraction=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Train SVM model based on another frame.</p>
+Build SVM with SGD model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame to train the model on.</p>
 </div></blockquote>
@@ -133,38 +133,35 @@ for each observation.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>Column(s) containing the
+<div><p>List of column(s) containing the
 observations.</p>
 </div></blockquote>
-<p><strong>intercept</strong> : bool (default=None)</p>
+<p><strong>intercept</strong> : bool (default=True)</p>
 <blockquote>
-<div><p>The algorithm adds an intercept.
+<div><p>Flag indicating if the algorithm adds an intercept.
 Default is true.</p>
 </div></blockquote>
-<p><strong>num_iterations</strong> : int32 (default=None)</p>
+<p><strong>num_iterations</strong> : int32 (default=100)</p>
 <blockquote>
-<div><p>Number of iterations.
-Default is 100.</p>
+<div><p>Number of iterations for SGD. Default is 100.</p>
 </div></blockquote>
-<p><strong>step_size</strong> : int32 (default=None)</p>
+<p><strong>step_size</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>Step size for optimizer.
+<div><p>Initial step size for SGD optimizer for the first step.
 Default is 1.0.</p>
 </div></blockquote>
 <p><strong>reg_type</strong> : unicode (default=None)</p>
 <blockquote>
-<div><p>Regularization L1 or L2.
-Default is L2.</p>
+<div><p>Regularization &#8220;L1&#8221; or &#8220;L2&#8221;.
+Default is &#8220;L2&#8221;.</p>
 </div></blockquote>
-<p><strong>reg_param</strong> : float64 (default=None)</p>
+<p><strong>reg_param</strong> : float64 (default=0.01)</p>
 <blockquote>
-<div><p>Regularization parameter.
-Default is 0.01.</p>
+<div><p>Regularization parameter. Default is 0.01.</p>
 </div></blockquote>
-<p><strong>mini_batch_fraction</strong> : float64 (default=None)</p>
+<p><strong>mini_batch_fraction</strong> : float64 (default=1.0)</p>
 <blockquote>
-<div><p>Mini batch fraction parameter.
-Default is 1.0.</p>
+<div><p>Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -174,6 +171,12 @@ Default is 1.0.</p>
 </tbody>
 </table>
 <p>Creating a SVM Model using the observation column and label column of the train frame.</p>
+<p class="rubric">Examples</p>
+<p>Train a Svm Model</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">SvmModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mySVM&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;name_of_observation_column&#39;</span><span class="p">],</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,</span> <span class="n">false</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="s">&quot;L1&quot;</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -199,7 +202,7 @@ Default is 1.0.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

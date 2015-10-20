@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:libsvm/test &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:libsvm/test &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:libsvm/train" href="model-libsvm__train.html" >
     <link rel="prev" title="Commands model:libsvm/score" href="model-libsvm__score.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -132,11 +132,11 @@ Predict test frame labels and return metrics.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:libsvm/test</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame whose labels are to be predicted.</p>
 </div></blockquote>
@@ -149,7 +149,7 @@ observation.</p>
 <blockquote class="last">
 <div><p>Column(s) containing the observations whose
 labels are to be predicted and tested.
-Default is to test over the columns the LibsvmModel
+Default is to test over the columns the LIBSVM model
 was trained on.</p>
 </div></blockquote>
 </td>
@@ -168,8 +168,8 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Predict the labels for a test frame and run classification
-metrics on predicted and target labels.</p>
+<p>Predict the labels for a test frame and run classification metrics on predicted
+and target labels.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -212,24 +212,22 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div><dl class="docutils">
-<dt>Object</dt>
-<dd>Object with binary classification metrics.
-The data returned is composed of multiple components:</dd>
-<dt>&lt;object&gt;.accuracy <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>The degree of correctness of the test frame labels.</dd>
-<dt>&lt;object&gt;.confusion_matrix <span class="classifier-delimiter">:</span> <span class="classifier">table</span></dt>
-<dd>A specific table layout that allows visualization of the performance of the
-test.</dd>
-<dt>&lt;object&gt;.f_measure <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>A measure of a test&#8217;s accuracy.
-It considers both the precision and the recall of the test to compute
-the score.</dd>
-<dt>&lt;object&gt;.precision <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>The degree to which the correctness of the label is expressed.</dd>
-<dt>&lt;object&gt;.recall <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd>The fraction of relevant instances that are retrieved.</dd>
-</dl>
+<div><p>A dictionary with binary classification metrics.
+The data returned is composed of the following keys:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&#8216;accuracy&#8217; : double</div>
+<div class="line">The proportion of predictions that are correctly identified</div>
+<div class="line">&#8216;confusion_matrix&#8217; : dictionary</div>
+<div class="line">A table used to describe the performance of a classification model</div>
+<div class="line">&#8216;f_measure&#8217; : double</div>
+<div class="line">The harmonic mean of precision and recall</div>
+<div class="line">&#8216;precision&#8217; : double</div>
+<div class="line">The proportion of predicted positive instances that are correctly identified</div>
+<div class="line">&#8216;recall&#8217; : double</div>
+<div class="line">The proportion of positive instances that are correctly identified.</div>
+</div>
+</div></blockquote>
 </div></blockquote>
 </div>
 </div>
@@ -256,7 +254,7 @@ the score.</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands frame/unflatten_column &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands frame/unflatten_column &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands graph:/_info" href="graph-___info.html" >
     <link rel="prev" title="Commands frame/top_k" href="frame__top_k.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -131,18 +131,18 @@
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">frame/unflatten_column</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
 <p><strong>composite_key_column_names</strong> : list</p>
 <blockquote>
-<div><p>name of the user column to be used as keys
+<div><p>Name of the column(s) to be used as keys
 for unflattening.</p>
 </div></blockquote>
 <p><strong>delimiter</strong> : unicode (default=None)</p>
 <blockquote class="last">
-<div><p>separator for the data in the result columns.
+<div><p>Separator for the data in the result columns.
 Default is comma (,).</p>
 </div></blockquote>
 </td>
@@ -163,7 +163,8 @@ Content-type: application/json
 <p><strong>Description</strong></p>
 <p>Groups together cells in all columns (less the composite key) using &#8221;,&#8221; as string delimiter.
 The original rows are deleted.
-The grouping takes place based on a composite key passed as arguments.</p>
+The grouping takes place based on a composite key created from cell values.
+The column datatypes are changed to string.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -230,7 +231,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

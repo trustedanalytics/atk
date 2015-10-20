@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Graph annotate_degrees &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Graph annotate_degrees &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
     <link rel="next" title="Graph annotate_weighted_degrees" href="annotate_weighted_degrees.html" >
     <link rel="prev" title="Graph fget" href="ml.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -164,7 +164,7 @@ is label.</p>
 <p>Creates a new graph which is the same as the input graph, with the addition
 that every vertex of the graph has its <a class="reference internal" href="../../../glossary.html#term-degree"><span class="xref std std-term">degree</span></a> stored in a user-specified property.</p>
 <p><strong>Degree Calculation</strong></p>
-<p>A fundamental quantity in graph analyses is the degree of a vertex:
+<p>A fundamental quantity in graph analysis is the degree of a vertex:
 The degree of a vertex is the number of edges adjacent to it.</p>
 <p>For a directed edge relation, a vertex has both an out-degree (the number of
 edges leaving the vertex) and an in-degree (the number of edges entering the
@@ -172,7 +172,7 @@ vertex).</p>
 <p>The toolkit provides this routine for calculating the degrees of vertices.
 This calculation could be performed with a Gremlin query on smaller datasets
 because Gremlin queries cannot be executed on a distributed scale.
-The Trusted Analytics routine <code class="docutils literal"><span class="pre">annotate_degrees</span></code> can be executed at distributed scale.</p>
+The Trusted Analytics Platform routine <code class="docutils literal"><span class="pre">annotate_degrees</span></code> can be executed at distributed scale.</p>
 <p>In the presence of edge weights, vertices can have weighted degrees: The
 weighted degree of a vertex is the sum of weights of edges adjacent to it.
 Analogously, the weighted in-degree of a vertex is the sum of the weights of
@@ -180,6 +180,26 @@ the edges entering it, and the weighted out-degree is the sum
 of the weights of the edges leaving the vertex.</p>
 <p>The toolkit provides <a class="reference internal" href="annotate_weighted_degrees.html#python-api-graphs-graph-annotate-weighted-degrees"><span>annotate_weighted_degrees</span></a>
 for the distributed calculation of weighted vertex degrees.</p>
+<p class="rubric">Examples</p>
+<p>Given a graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&#39;g.V [ 0 .. 1]&#39;</span><span class="p">)</span>
+
+<span class="go">Out[12]:</span>
+<span class="go">   {u&#39;results&#39;: [{u&#39;_id&#39;: 19456,</span>
+<span class="go">    u&#39;_label&#39;: u&#39;vertex&#39;,</span>
+<span class="go">    u&#39;_type&#39;: u&#39;vertex&#39;,</span>
+<span class="go">    u&#39;_vid&#39;: 545413,</span>
+<span class="go">    u&#39;source&#39;: 6961},</span>
+<span class="go">   {u&#39;_id&#39;: 19968,</span>
+<span class="go">    u&#39;_label&#39;: u&#39;vertex&#39;,</span>
+<span class="go">    u&#39;_type&#39;: u&#39;vertex&#39;,</span>
+<span class="go">    u&#39;_vid&#39;: 511316,</span>
+<span class="go">    u&#39;source&#39;: 31599}],</span>
+<span class="go">    u&#39;run_time_seconds&#39;: 1.822}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">annotate_degrees</span><span class="p">(</span><span class="s">&#39;degree&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -205,7 +225,7 @@ for the distributed calculation of weighted vertex degrees.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

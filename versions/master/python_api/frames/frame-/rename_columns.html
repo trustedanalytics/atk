@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame rename_columns &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame rename_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame row_count" href="row_count.html" >
     <link rel="prev" title="Frame quantiles" href="quantiles.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -127,6 +127,21 @@
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Start with a frame with columns <em>Wrong</em> and <em>Wong</em>.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(&#39;Wrong&#39;, str), (&#39;Wong&#39;, str)]</span>
+</pre></div>
+</div>
+<p>Rename the columns to <em>Right</em> and <em>Wite</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&quot;Wrong&quot;</span><span class="p">:</span> <span class="s">&quot;Right, &quot;</span><span class="n">Wong</span><span class="s">&quot;: &quot;</span><span class="n">Wite</span><span class="s">&quot;})</span>
+</pre></div>
+</div>
+<p>Now, what was <em>Wrong</em> is now <em>Right</em> and what was <em>Wong</em> is now <em>Wite</em>.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(&#39;Right&#39;, str), (&#39;Wite&#39;, str)]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -152,7 +167,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>PrincipalComponentsModel train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>PrincipalComponentsModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models PrincipalComponentsModel" href="index.html" >
     <link rel="next" title="Models CollaborativeFilteringModel" href="../model-collaborative_filtering/index.html" >
-    <link rel="prev" title="PrincipalComponentsModel publish" href="publish.html" > 
+    <link rel="prev" title="PrincipalComponentsModel status" href="status.html" > 
   </head>
   <body>
 
@@ -57,7 +57,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="publish.html" title="PrincipalComponentsModel publish"
+        <a href="status.html" title="PrincipalComponentsModel status"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -121,30 +121,65 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train the model on.</p>
+<div><p>A frame to train the model
+on.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>List of column(s) containing the observations.</p>
+<div><p>List of column(s) containing
+the observations.</p>
 </div></blockquote>
 <p><strong>mean_centered</strong> : bool (default=True)</p>
 <blockquote>
-<div><p>Option to mean center the columns</p>
+<div><p>Option to mean center the
+columns</p>
 </div></blockquote>
 <p><strong>k</strong> : int32 (default=None)</p>
 <blockquote>
-<div><p>Principal component count. Default is the number of observation columns</p>
+<div><p>Principal component count.
+Default is the number of observation columns</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: dict</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>dictionary</dt>
+<dd><p class="first last"><a href="#id1"><span class="problematic" id="id2">|</span></a>A dictionary with trained Principal Components Model with the following keys:
+<a href="#id3"><span class="problematic" id="id4">|</span></a>&#8216;column_means&#8217;: the list of the means of each observation column
+<a href="#id5"><span class="problematic" id="id6">|</span></a>&#8216;k&#8217;: number of principal components used to train the model
+<a href="#id7"><span class="problematic" id="id8">|</span></a>&#8216;mean_centered&#8217;: Flag indicating if the model was mean centered during training
+<a href="#id9"><span class="problematic" id="id10">|</span></a>&#8216;observation_columns&#8217;: the list of observation columns on which the model was trained,
+<a href="#id11"><span class="problematic" id="id12">|</span></a>&#8216;right_singular_vectors&#8217;: list of a list storing the right singular vectors of the specified columns of the input frame
+<a href="#id13"><span class="problematic" id="id14">|</span></a>&#8216;singular_values&#8217;: list storing the singular values of the specified columns of the input frame</p>
+</dd>
+</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Creating a PrincipalComponents Model using the observation columns.</p>
+<p class="rubric">Examples</p>
+<p>Train a Principal Components Model</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PrincipalComponentsModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;principalcomponentsmodel&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,[</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="s">&quot;2&quot;</span><span class="p">,</span><span class="s">&quot;3&quot;</span><span class="p">],</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{u&#39;column_means&#39;: [3.0, 1.5699999999999998, 0.30000000000000004],</span>
+<span class="go"> u&#39;k&#39;: 3,</span>
+<span class="go"> u&#39;mean_centered&#39;: True,</span>
+<span class="go"> u&#39;observation_columns&#39;: [u&#39;1&#39;, u&#39;2&#39;, u&#39;3&#39;],</span>
+<span class="go"> u&#39;right_singular_vectors&#39;: [[-0.9880604079662845, 0.1524554460423363,0.022225372472291664],</span>
+<span class="go">   [-0.1475177133741632, -0.9777763055278146, 0.1489698647016758],</span>
+<span class="go">   [0.044442709754897426, 0.14391258916581845, 0.9885919341311823]],</span>
+<span class="go"> u&#39;singular_values&#39;: [1.9528500871335064,1.258951004642986,0.3498841309506238]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_singular_vectors</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s">&#39;right_singular_vectors&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">right_singular_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go"> [-0.9880604079662845, 0.1524554460423363, 0.022225372472291664]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -170,7 +205,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

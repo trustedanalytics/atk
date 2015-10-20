@@ -7,15 +7,15 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, intercept=None, num_iterations=None, step_size=None, reg_type=None, reg_param=None, mini_batch_fraction=None)
+.. function:: train(self, frame, label_column, observation_columns, intercept=True, num_iterations=100, step_size=1, reg_type=None, reg_param=0.01, mini_batch_fraction=1.0)
 
     |ALPHA|
-    Train SVM model based on another frame.
+    Build SVM with SGD model
 
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
@@ -36,34 +36,33 @@
 
         ..
 
-            Column(s) containing the
+            List of column(s) containing the
             observations.
 
 
 
-        **intercept** : bool (default=None)
+        **intercept** : bool (default=True)
 
         ..
 
-            The algorithm adds an intercept.
+            Flag indicating if the algorithm adds an intercept.
             Default is true.
 
 
 
-        **num_iterations** : int32 (default=None)
+        **num_iterations** : int32 (default=100)
 
         ..
 
-            Number of iterations.
-            Default is 100.
+            Number of iterations for SGD. Default is 100.
 
 
 
-        **step_size** : int32 (default=None)
+        **step_size** : int32 (default=1)
 
         ..
 
-            Step size for optimizer.
+            Initial step size for SGD optimizer for the first step.
             Default is 1.0.
 
 
@@ -72,26 +71,24 @@
 
         ..
 
-            Regularization L1 or L2.
-            Default is L2.
+            Regularization "L1" or "L2".
+            Default is "L2".
 
 
 
-        **reg_param** : float64 (default=None)
-
-        ..
-
-            Regularization parameter.
-            Default is 0.01.
-
-
-
-        **mini_batch_fraction** : float64 (default=None)
+        **reg_param** : float64 (default=0.01)
 
         ..
 
-            Mini batch fraction parameter.
-            Default is 1.0.
+            Regularization parameter. Default is 0.01.
+
+
+
+        **mini_batch_fraction** : float64 (default=1.0)
+
+        ..
+
+            Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.
 
 
 
@@ -104,3 +101,24 @@
 
 
     Creating a SVM Model using the observation column and label column of the train frame.
+
+    Examples
+    --------
+    Train a Svm Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.SvmModel(name='mySVM')
+            >>> my_model.train(train_frame, ['name_of_observation_column'], 'name_of_label_column', false, 50, 1.0, "L1", 0.02, 1.0)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.SvmModel(name='mySVM')
+            >>> my_model.train(train_frame, ['name_of_observation_column'],
+            ... 'name_of_label_column', false, 50, 1.0, "L1", 0.02, 1.0)
+
+

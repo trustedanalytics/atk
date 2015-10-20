@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -53,7 +53,8 @@ Request
 
     ..
 
-        Column name containing the label for each observation.
+        Column name containing the label for each
+        observation.
 
 
 
@@ -61,7 +62,8 @@ Request
 
     ..
 
-        Column(s) containing the observations.
+        Column(s) containing the
+        observations.
 
 
 
@@ -69,7 +71,8 @@ Request
 
     ..
 
-        Optional column containing the frequency of observations.
+        Optional column containing the frequency of
+        observations.
 
 
 
@@ -86,9 +89,10 @@ Request
     ..
 
         Set type of optimizer.
-                                                   LBFGS - Limited-memory BFGS. LBFGS supports multinomial logistic regression.
-                                                   SGD - Stochastic Gradient Descent. SGD only supports binary logistic regression.
-                                                 
+        | LBFGS - Limited-memory BFGS.
+        | LBFGS supports multinomial logistic regression.
+        | SGD - Stochastic Gradient Descent.
+        | SGD only supports binary logistic regression.
 
 
 
@@ -96,7 +100,8 @@ Request
 
     ..
 
-        If true, compute covariance matrix for the model.
+        Compute covariance matrix for the
+        model.
 
 
 
@@ -104,7 +109,8 @@ Request
 
     ..
 
-        If true, add intercept column to training data.
+        Add intercept column to training
+        data.
 
 
 
@@ -112,7 +118,8 @@ Request
 
     ..
 
-        If true, perform feature scaling before training model.
+        Perform feature scaling before training
+        model.
 
 
 
@@ -120,7 +127,8 @@ Request
 
     ..
 
-        Threshold for separating positive predictions from negative predictions.
+        Threshold for separating positive predictions from
+        negative predictions.
 
 
 
@@ -129,9 +137,8 @@ Request
     ..
 
         Set type of regularization
-                                                   L1 - L1 regularization with sum of absolute values of coefficients
-                                                   L2 - L2 regularization with sum of squares of coefficients
-                                                 
+        | L1 - L1 regularization with sum of absolute values of coefficients
+        | L2 - L2 regularization with sum of squares of coefficients
 
 
 
@@ -156,8 +163,8 @@ Request
     ..
 
         Convergence tolerance of iterations for L-BFGS.
-                                                    Smaller value will lead to higher accuracy with the cost of more iterations.
-                                                 
+        Smaller value will lead to higher accuracy with the cost of more
+        iterations.
 
 
 
@@ -165,10 +172,10 @@ Request
 
     ..
 
-        Number of corrections used in LBFGS update. Default 10.
-                                                   Values of numCorrections less than 3 are not recommended; large values
-                                                   of numCorrections will result in excessive computing time.
-                                                 
+        Number of corrections used in LBFGS update.
+        Default is 10.
+        Values of less than 3 are not recommended;
+        large values will result in excessive computing time.
 
 
 
@@ -176,7 +183,8 @@ Request
 
     ..
 
-        Fraction of data to be used for each SGD iteration
+        Fraction of data to be used for each SGD
+        iteration
 
 
 
@@ -184,8 +192,8 @@ Request
 
     ..
 
-        Initial step size for SGD. In subsequent steps,
-                                                          the step size decreases by stepSize/sqrt(t)
+        Initial step size for SGD.
+        In subsequent steps, the step size decreases by stepSize/sqrt(t)
 
 
 
@@ -199,7 +207,8 @@ Request
 
 **Description**
 
-Creating a LogisticRegression Model using the observation column and label column of the train frame.
+Creating a Logistic Regression Model using the observation column and
+label column of the train frame.
 
 |
 
@@ -247,19 +256,18 @@ Response
 
 ``dict``
 
-        object
-            An object with a summary of the trained model.
-            The data returned is composed of multiple components:
-        numFeatures : Int
-            Number of features in the training data
-        numClasses : Int
-            Number of classes in the training data
-        summaryTable: table
-            A summary table composed of:
-        covarianceMatrix: Frame (optional)
-            Covariance matrix of the trained model.
-            The covariance matrix is the inverse of the Hessian matrix for the trained model.
-            The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function
-        ""
+        An object with a summary of the trained model.
+        The data returned is composed of multiple components\:
+
+        | **int** : *numFeatures*
+        |   Number of features in the training data
+        | **int** : *numClasses*
+        |   Number of classes in the training data
+        | **table** : *summaryTable*
+        |   A summary table composed of:
+        | **Frame** : *CovarianceMatrix (optional)*
+        |   Covariance matrix of the trained model.
+        The covariance matrix is the inverse of the Hessian matrix for the trained model.
+        The Hessian matrix is the second-order partial derivatives of the model's log-likelihood function.
 
 

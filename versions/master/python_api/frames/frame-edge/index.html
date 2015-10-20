@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frames EdgeFrame &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frames EdgeFrame &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames" href="../index.html" >
     <link rel="next" title="EdgeFrame __init__" href="f__init__.html" >
     <link rel="prev" title="Frames" href="../index.html" > 
@@ -94,8 +94,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
@@ -152,16 +152,19 @@ Edges</li>
 <tr class="row-odd"><td><a class="reference internal" href="column_names.html"><em>column_names</em></a></td>
 <td>Column identifications in the current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<td>Last time this frame&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
 <td>Set or get the name of the frame object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="row_count.html"><em>row_count</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="row_count.html"><em>row_count</em></a></td>
 <td>Number of rows in the current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="schema.html"><em>schema</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="schema.html"><em>schema</em></a></td>
 <td>Current frame column names and types.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
 <td>Current frame life cycle status.</td>
 </tr>
 </tbody>
@@ -240,7 +243,7 @@ Edges</li>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate dot product for each row in current frame.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="download.html"><em>download</em></a>(self[, n, offset, columns])</td>
-<td>Download a frame from the server into client workspace.</td>
+<td>Download frame data from the server into client workspace as a pandas dataframe</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="drop_columns.html"><em>drop_columns</em></a>(self, columns)</td>
 <td>Remove columns from the frame.</td>
@@ -267,7 +270,7 @@ Edges</li>
 <td>Write current frame to Hive table.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="export_to_jdbc.html"><em>export_to_jdbc</em></a>(self, table_name[, connector_type, url, driver_name, ...])</td>
-<td>Write current frame to Jdbc table.</td>
+<td>Write current frame to JDBC table.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="export_to_json.html"><em>export_to_json</em></a>(self, folder_name[, count, offset])</td>
 <td>Write current frame to HDFS in JSON format.</td>
@@ -287,20 +290,20 @@ Edges</li>
 <tr class="row-even"><td><a class="reference internal" href="histogram.html"><em>histogram</em></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute the histogram for a column in a frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin])</td>
-<td>Prints the frame data in readable format.</td>
+<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
+<td>Pretty-print of the frame data</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="join.html"><em>join</em></a>(self, right, left_on[, right_on, how, name])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Join operation on one or two frames, creating a new frame.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="loadhbase.html"><em>loadhbase</em></a>(self, table_name, schema[, start_tag, end_tag])</td>
-<td>Append data from an hBase table into an existing (possibly empty) FrameRDD</td>
+<td>Append data from an HBase table into an existing (possibly empty) FrameRDD</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="loadhive.html"><em>loadhive</em></a>(self, query)</td>
 <td>Append data from a hive table into an existing (possibly empty) frame</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="loadjdbc.html"><em>loadjdbc</em></a>(self, table_name[, connector_type, url, driver_name, query])</td>
-<td>Append data from a Jdbc table into an existing (possibly empty) frame</td>
+<td>Append data from a JDBC table into an existing (possibly empty) frame</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="quantiles.html"><em>quantiles</em></a>(self, column_name, quantiles)</td>
 <td>New frame with Quantiles and their values.</td>
@@ -341,32 +344,11 @@ Edges</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : ? (default=None)</p>
-<blockquote>
-<div><p>graph these edges belong to</p>
-</div></blockquote>
-<p><strong>label</strong> : ? (default=None)</p>
-<blockquote>
-<div><p>edge label</p>
-</div></blockquote>
-<p><strong>src_vertex_label</strong> : ? (default=None)</p>
-<blockquote>
-<div><p>label of the source vertex type</p>
-</div></blockquote>
-<p><strong>dest_vertex_label</strong> : ? (default=None)</p>
-<blockquote>
-<div><p>label of the destination vertex type</p>
-</div></blockquote>
-<p><strong>directed</strong> : ? (default=None)</p>
-<blockquote>
-<div><p>directed or undirected</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: VertexFrame object</p>
-<blockquote class="last">
-<div><p>An object with access to the frame.</p>
-</div></blockquote>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> :  (default=None)</p>
+<p><strong>label</strong> :  (default=None)</p>
+<p><strong>src_vertex_label</strong> :  (default=None)</p>
+<p><strong>dest_vertex_label</strong> :  (default=None)</p>
+<p class="last"><strong>directed</strong> :  (default=None)</p>
 </td>
 </tr>
 </tbody>
@@ -410,6 +392,7 @@ Create an empty graph and define some vertex and edge types.</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_frame</span> <span class="o">=</span> <span class="n">my_new_edge_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
+<p>&lt;/skip&gt;</p>
 </dd></dl>
 
 </div>
@@ -435,7 +418,7 @@ Create an empty graph and define some vertex and edge types.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

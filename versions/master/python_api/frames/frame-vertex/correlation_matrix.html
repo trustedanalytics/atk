@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame correlation_matrix &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame correlation_matrix &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame count" href="count.html" >
     <link rel="prev" title="VertexFrame correlation" href="correlation.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -133,7 +133,7 @@ matrix Frame.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
 <div><p>A Frame with the matrix of the correlation values for the columns.</p>
 </div></blockquote>
@@ -142,6 +142,28 @@ matrix Frame.</p>
 </tbody>
 </table>
 <p>This method applies only to columns containing numerical data.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame</em>, which contains the data</p>
+<div class="code highlight-python"><div class="highlight"><pre> &gt;&gt;&gt; my_frame.inspect()
+
+  idnum:int32   x1:float32   x2:float32   x3:float32   x4:float32
+/-------------------------------------------------------------------/
+            0          1.0          4.0          0.0         -1.0
+            1          2.0          3.0          0.0         -1.0
+            2          3.0          2.0          1.0         -1.0
+            3          4.0          1.0          2.0         -1.0
+            4          5.0          0.0          2.0         -1.0
+</pre></div>
+</div>
+<p>my_frame.correlation_matrix computes the common correlation coefficient (Pearson&#8217;s) on each pair
+of columns in the user-provided list.
+In this example, the <em>idnum</em> and most of the columns have trivial correlations: -1, 0, or +1.
+Column <em>x3</em> provides a contrasting coefficient of 3 / sqrt(3) = 0.948683298051 .
+The resulting table (specifying all columns) is</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">correlation_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">corr_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -167,7 +189,7 @@ matrix Frame.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

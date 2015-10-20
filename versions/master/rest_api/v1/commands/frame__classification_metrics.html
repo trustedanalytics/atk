@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands frame/classification_metrics &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands frame/classification_metrics &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands frame/column_median" href="frame__column_median.html" >
     <link rel="prev" title="Commands frame/categorical_summary" href="frame__categorical_summary.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -131,7 +131,7 @@
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">frame/classification_metrics</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
@@ -150,49 +150,15 @@ predicted label for each instance.</p>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
 <p><strong>beta</strong> : float64 (default=None)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>This is the beta value to use for
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- measure (default F1 measure is computed); must be greater than zero.
+<img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure (default F1 measure is computed); must be greater than zero.
 Defaults is 1.</p>
+</div></blockquote>
+<p><strong>frequency_column</strong> : unicode (default=None)</p>
+<blockquote class="last">
+<div><p>The name of an optional column containing the
+frequency of observations.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -211,578 +177,35 @@ Content-type: application/json
 </div>
 <p><strong>Description</strong></p>
 <p>Calculate the accuracy, precision, confusion_matrix, recall and
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- measure for a classification model.</p>
+<img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a classification model.</p>
 <ul>
-<li><p class="first">The <strong>f_measure</strong> result is the <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- measure for a
+<li><p class="first">The <strong>f_measure</strong> result is the <img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a
 classification model.
-The <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- measure of a binary classification model is the
+The <img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure of a binary classification model is the
 harmonic mean of precision and recall.
 If we let:</p>
 <ul class="simple">
-<li>beta <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\equiv \beta</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
-,</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">T_{P}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- denotes the number of true positives,</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{P}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- denotes the number of false positives, and</li>
-<li><div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{N}</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</div>
- denotes the number of false negatives</li>
+<li>beta <img class="math" src="../../../f_images/math/c021a156350bbff6870830df3fdbff3dcbae198d.png" alt="\equiv \beta"/>,</li>
+<li><img class="math" src="../../../f_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denotes the number of true positives,</li>
+<li><img class="math" src="../../../f_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denotes the number of false positives, and</li>
+<li><img class="math" src="../../../f_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denotes the number of false negatives</li>
 </ul>
 <p>then:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
+<div class="math">
+<p><img src="../../../f_images/math/e462dbf448b4a4ab78b92edf47b97dc5ea49d849.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
 \frac{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
-F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} +...
-
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   _
-l.13 \begin{split}F_
-                    { \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} +...
-
-! Undefined control sequence.
-l.13 ...split}F_{ \beta} = (1 + \beta ^ 2) * \frac
-                                                  { \frac{T_{P}}{T_{P} + F_{...
-
-! Undefined control sequence.
-l.13 ..._{ \beta} = (1 + \beta ^ 2) * \frac{ \frac
-                                                  {T_{P}}{T_{P} + F_{P}} * \
-! Undefined control sequence.
-l.14 \frac
-          {T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
-! Undefined control sequence.
-l.14 ...{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac
-                                                  {T_{P}}{T_{P} + \
-! Undefined control sequence.
-l.15 F_{P}}  + \frac
-                    {T_{P}}{T_{P} + F_{N}}}\end{split}\notag
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.15 F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}\end
-                                               {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 776 bytes).
-Transcript written on math.log.
-</p>
-</div>
-<p>The <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- measure for a multi-class classification model is
-computed as the weighted average of the <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- measure for
+F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}"/></p>
+</div><p>The <img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
+computed as the weighted average of the <img class="math" src="../../../f_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for
 each label, where the weight is the number of instances of each label.
 The determination of binary vs. multi-class is automatically inferred
 from the data.</p>
 </li>
 <li><p class="first">The <strong>recall</strong> result of a binary classification model is the proportion
 of positive instances that are correctly identified.
-If we let <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">T_{P}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of true positives and
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{N}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of false negatives, then the model
-recall is given by <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\frac {T_{P}} {T_{P} + F_{N}}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-&lt;recently read&gt; \frac 
-                      
-l.12 $\frac
-            {T_{P}} {T_{P} + F_{N}}$
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 448 bytes).
-Transcript written on math.log.
-</p>
-</div>
-.</p>
+If we let <img class="math" src="../../../f_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
+<img class="math" src="../../../f_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denote the number of false negatives, then the model
+recall is given by <img class="math" src="../../../f_images/math/a7088c6f8b686e3d3207b7a88acfd124f7e255de.png" alt="\frac {T_{P}} {T_{P} + F_{N}}"/>.</p>
 <p>For multi-class classification models, the recall measure is computed as
 the weighted average of the recall for each label, where the weight is
 the number of instances of each label.
@@ -791,131 +214,9 @@ from the data.</p>
 </li>
 <li><p class="first">The <strong>precision</strong> of a binary classification model is the proportion of
 predicted positive instances that are correctly identified.
-If we let <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">T_{P}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of true positives and
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{P}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of false positives, then the model
-precision is given by: <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\frac {T_{P}} {T_{P} + F_{P}}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-&lt;recently read&gt; \frac 
-                      
-l.12 $\frac
-            {T_{P}} {T_{P} + F_{P}}$
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 448 bytes).
-Transcript written on math.log.
-</p>
-</div>
-.</p>
+If we let <img class="math" src="../../../f_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
+<img class="math" src="../../../f_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denote the number of false positives, then the model
+precision is given by: <img class="math" src="../../../f_images/math/7a83263eae4c163ea9df233054bee9f269c514fb.png" alt="\frac {T_{P}} {T_{P} + F_{P}}"/>.</p>
 <p>For multi-class classification models, the precision measure is computed
 as the weighted average of the precision for each label, where the
 weight is the number of instances of each label.
@@ -924,171 +225,10 @@ from the data.</p>
 </li>
 <li><p class="first">The <strong>accuracy</strong> of a classification model is the proportion of
 predictions that are correctly identified.
-If we let <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">T_{P}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of true positives,
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">T_{N}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 412 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote the number of true negatives, and <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">K</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</p>
-</div>
- denote
+If we let <img class="math" src="../../../f_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives,
+<img class="math" src="../../../f_images/math/5a919304e203d46d38918eee30dc7eacb0b325b3.png" alt="T_{N}"/> denote the number of true negatives, and <img class="math" src="../../../f_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> denote
 the total number of classified instances, then the model accuracy is
-given by: <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\frac{T_{P} + T_{N}}{K}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-&lt;recently read&gt; \frac 
-                      
-l.12 $\frac
-           {T_{P} + T_{N}}{K}$
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 440 bytes).
-Transcript written on math.log.
-</p>
-</div>
-.</p>
+given by: <img class="math" src="../../../f_images/math/cd19688e8d357e7c88ff82e833f43d925bafba95.png" alt="\frac{T_{P} + T_{N}}{K}"/>.</p>
 <p>This measure applies to binary and multi-class classifiers.</p>
 </li>
 <li><p class="first">The <strong>confusion_matrix</strong> result is a confusion matrix for a
@@ -1141,12 +281,15 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div>object
-&lt;object&gt;.accuracy : double
-&lt;object&gt;.confusion_matrix : table
-&lt;object&gt;.f_measure : double
-&lt;object&gt;.precision : double
-&lt;object&gt;.recall : double</div></blockquote>
+<div><p>The data returned is composed of multiple components:</p>
+<div class="line-block">
+<div class="line">&lt;object&gt;.accuracy : double</div>
+<div class="line">&lt;object&gt;.confusion_matrix : table</div>
+<div class="line">&lt;object&gt;.f_measure : double</div>
+<div class="line">&lt;object&gt;.precision : double</div>
+<div class="line">&lt;object&gt;.recall : double</div>
+</div>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -1172,7 +315,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

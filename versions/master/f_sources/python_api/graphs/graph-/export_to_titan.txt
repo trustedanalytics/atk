@@ -34,3 +34,12 @@
     Convert this Graph into a TitanGraph object.
     This will be a new graph backed by Titan with all of the data found in this
     graph.
+
+    Examples
+    --------
+    .. code::
+
+        >>> graph = ta.get_graph("my_graph")
+        >>> titan_graph = graph.export_to_titan("titan_graph")
+
+

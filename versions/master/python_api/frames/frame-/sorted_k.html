@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame sorted_k &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame sorted_k &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame status" href="status.html" >
     <link rel="prev" title="Frame sort" href="sort.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -134,44 +134,95 @@ or false for descending order.</p>
 <p><strong>reduce_tree_depth</strong> : int32 (default=None)</p>
 <blockquote>
 <div><p>Advanced tuning parameter which determines the depth of the
-reduce-tree for the sorted_k plugin.
-This plugin uses Spark&#8217;s treeReduce() for scalability.
-The default depth is 2.</p>
+reduce-tree (uses Spark&#8217;s treeReduce() for scalability.)
+Default is 2.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
-<div><p>A new frame with the first k sorted rows from the original frame.</p>
+<div><p>A new frame with a subset of sorted rows from the original frame.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Take the first k (sorted) rows for the currently active Frame.
-Rows are sorted by column values in either ascending or descending order.</p>
-<p>Returning the first k (sorted) rows is more efficient than sorting the
-entire frame when k is much smaller than the number of rows in the frame.</p>
+<p>Take a number of rows and return them
+sorted in either ascending or descending order.</p>
+<p>Sorting a subset of rows is more efficient than sorting the entire frame when
+the number of sorted rows is much less than the total number of rows in the frame.</p>
 <p class="rubric">Notes</p>
-<p>The number of sorted rows (k) should be much smaller than the number of rows
+<p>The number of sorted rows should be much smaller than the number of rows
 in the original frame.</p>
 <p>In particular:</p>
 <ol class="arabic simple">
-<li>The number of sorted rows (k) returned should fit in Spark driver memory.</li>
+<li>The number of sorted rows returned should fit in Spark driver memory.
+The maximum size of serialized results that can fit in the Spark driver is
+set by the Spark configuration parameter <em>spark.driver.maxResultSize</em>.</li>
+<li>If you encounter a Kryo buffer overflow exception, increase the Spark
+configuration parameter <em>spark.kryoserializer.buffer.max.mb</em>.</li>
+<li>Use Frame.sort() instead if the number of sorted rows is very large (in
+other words, it cannot fit in Spark driver memory).</li>
 </ol>
-<blockquote>
-<div>The maximum size of serialized results that can fit in the Spark driver is
-set by the Spark configuration parameter <em>spark.driver.maxResultSize</em>.</div></blockquote>
-<ol class="arabic simple" start="2">
-<li>If you encounter a Kryo buffer overflow exception, increase the Spark</li>
-</ol>
-<blockquote>
-<div>configuration parameter <em>spark.kryoserializer.buffer.max.mb</em>.</div></blockquote>
-<ol class="arabic simple" start="3">
-<li>Use Frame.sort() instead if the number of sorted rows (k) is</li>
-</ol>
-<blockquote>
-<div>very large (i.e., cannot fit in Spark driver memory).</div></blockquote>
+<p class="rubric">Examples</p>
+<p>These examples deal with the most recently-released movies in a private collection.
+Consider the movie collection already stored in the frame below:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">big_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="go">  genre:str  year:int32   title:str</span>
+<span class="go">/-----------------------------------/</span>
+<span class="go">  Drama        1957       12 Angry Men</span>
+<span class="go">  Crime        1946       The Big Sleep</span>
+<span class="go">  Western      1969       Butch Cassidy and the Sundance Kid</span>
+<span class="go">  Drama        1971       A Clockwork Orange</span>
+<span class="go">  Drama        2008       The Dark Knight</span>
+<span class="go">  Animation    2013       Frozen</span>
+<span class="go">  Drama        1972       The Godfather</span>
+<span class="go">  Animation    1994       The Lion King</span>
+<span class="go">  Animation    2010       Tangled</span>
+<span class="go">  Fantasy      1939       The Wonderful Wizard of Oz</span>
+</pre></div>
+</div>
+<p>This example returns the top 3 rows sorted by a single column: &#8216;year&#8217; descending:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">big_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  genre:str  year:int32   title:str</span>
+<span class="go">/-----------------------------------/</span>
+<span class="go">  Animation    2013       Frozen</span>
+<span class="go">  Animation    2010       Tangled</span>
+<span class="go">  Drama        2008       The Dark Knight</span>
+</pre></div>
+</div>
+<p>This example returns the top 5 rows sorted by multiple columns: &#8216;genre&#8217; ascending, then &#8216;year&#8217; descending:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">big_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  genre:str  year:int32   title:str</span>
+<span class="go">/-----------------------------------/</span>
+<span class="go">  Animation    2013       Frozen</span>
+<span class="go">  Animation    2010       Tangled</span>
+<span class="go">  Animation    1994       The Lion King</span>
+<span class="go">  Crime        1946       The Big Sleep</span>
+<span class="go">  Drama        2008       The Dark Knight</span>
+</pre></div>
+</div>
+<p>This example returns the top 5 rows sorted by multiple columns: &#8216;genre&#8217;
+ascending, then &#8216;year&#8217; ascending.
+It also illustrates the optional tuning parameter for reduce-tree depth
+(which does not affect the final result).</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span> <span class="o">=</span> <span class="n">big_frame</span><span class="o">.</span><span class="n">sorted_k</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="p">[</span> <span class="p">(</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;year&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="p">],</span> <span class="n">reduce_tree_depth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topk_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  genre:str  year:int32   title:str</span>
+<span class="go">/-----------------------------------/</span>
+<span class="go">  Animation    1994       The Lion King</span>
+<span class="go">  Animation    2010       Tangled</span>
+<span class="go">  Animation    2013       Frozen</span>
+<span class="go">  Crime        1946       The Big Sleep</span>
+<span class="go">  Drama        1972       The Godfather</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -197,7 +248,7 @@ set by the Spark configuration parameter <em>spark.driver.maxResultSize</em>.</d
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

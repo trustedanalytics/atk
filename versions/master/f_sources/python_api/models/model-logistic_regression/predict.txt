@@ -10,12 +10,12 @@
 .. function:: predict(self, frame, observation_columns=None)
 
     |ALPHA|
-    Make a new frame with a column for label prediction.
+    Predict labels for data points using trained logistic regression model.
 
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
@@ -29,19 +29,42 @@
 
         ..
 
-            Column(s) containing the observations whose labels are to be predicted.
-            By default, we predict the labels over columns the LogisticRegressionModel
-            was trained on. 
+            Column(s) containing the observations
+            whose labels are to be predicted.
+            Default is the labels the model was trained on.
 
 
 
 
     :Returns:
 
-        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        : Frame
 
         ..
 
             Frame containing the original frame's columns and a column with the predicted label.
-    Predict the labels for a test frame and create a new frame revision with
-    existing columns and a new predicted label's column.
+    Predict the labels for a test frame using trained logistic regression model,
+                  and create a new frame revision with existing columns and a new predicted label's column.
+
+    Examples
+    --------
+    Predict using a Logistic Regression Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+            >>> my_model.train(train_frame, 'name_of_observation_column', 'name_of_label_column', num_classes=2, optimizer="LBFGS"))
+            >>> my_model.predict(predict_frame, ['predict_for_observation_column'])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.LogisticRegressionModel(name='LogReg')
+            >>> my_model.train(train_frame, 'name_of_observation_column',
+            ... 'name_of_label_column', num_classes=2, optimizer="LBFGS"))
+            >>> my_model.predict(predict_frame, ['predict_for_observation_column'])
+
+

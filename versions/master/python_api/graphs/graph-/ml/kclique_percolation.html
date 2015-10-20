@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>GraphMl kclique_percolation &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>GraphMl kclique_percolation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../../index.html" >
     <link rel="up" title="Graphs Graph" href="../index.html" >
     <link rel="next" title="Graph name" href="../name.html" >
     <link rel="prev" title="GraphMl belief_propagation" href="belief_propagation.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -153,7 +153,7 @@ Analyzing the structure of the graph reveals collections (often termed
 other.
 Examples could include a community of friends in a social network or a
 collection of highly interacting proteins in a cellular process.</p>
-<p>Trusted Analytics provides community detection using the k-Clique
+<p>Trusted Analytics Platform provides community detection using the k-Clique
 percolation method first proposed by Palla et. al. <a class="reference internal" href="#r1" id="id1">[R1]</a> that has been widely
 used in many contexts.</p>
 <p><strong>K-Clique Percolation</strong></p>
@@ -167,124 +167,10 @@ This graphically looks like a triangle or a structure composed of triangles:</p>
 <p>A clique is certainly a community in the sense that its vertices are all
 connected, but, it is too restrictive for most purposes,
 since it is natural some members of a community may not interact.</p>
-<p>Mathematically, a k-clique has <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">k</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- vertices, each with <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">k - 1</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 416 bytes).
-Transcript written on math.log.
-</div>
-
+<p>Mathematically, a k-clique has <img class="math" src="../../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> vertices, each with <img class="math" src="../../../../f_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/>
 common edges, each of which connects to another vertex in the k-clique.
 The k-clique percolation method forms communities by taking unions of k-cliques
-that have <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">k - 1</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 416 bytes).
-Transcript written on math.log.
-</div>
- vertices in common.</p>
+that have <img class="math" src="../../../../f_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/> vertices in common.</p>
 <p><strong>K-Clique Example</strong></p>
 <p>In the graph below, the cliques are the sections defined by their triangular
 appearance and the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7, 8}.
@@ -293,7 +179,7 @@ to any community.
 Vertex 4 belongs to two distinct (but overlapping) communities.</p>
 <img alt="../../../../f_images/ds_mlal_a1.png" src="../../../../f_images/ds_mlal_a1.png" />
 <p><strong>Distributed Implementation of K-Clique Community Detection</strong></p>
-<p>The implementation of k-clique community detection in Trusted Analytics is a fully
+<p>The implementation of k-clique community detection in Trusted Analytics Platform is a fully
 distributed implementation that follows the map-reduce
 algorithm proposed in Varamesh et. al. <a class="reference internal" href="#r2" id="id2">[R2]</a> .</p>
 <p>It has the following steps:</p>
@@ -336,6 +222,30 @@ Information and Knowledge Technology (IKT), 2013 5th Conference on, vol.,
 no., pp.478,483, 28-30 May 2013</td></tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="s">r&quot;datasets/kclique_edges.csv&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;source&quot;</span><span class="p">,</span> <span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;target&quot;</span><span class="p">,</span> <span class="n">int64</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csvfile</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;mygraph&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">source_vertex_type</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;source&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">target_vertex_type</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;target&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">direction_edge_type</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&quot;direction&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="s">&quot;source&quot;</span><span class="p">,</span> <span class="s">&quot;target&quot;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;target&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;direction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;target&#39;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">is_directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_titan_graph</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">export_to_titan</span><span class="p">(</span><span class="s">&quot;mytitangraph&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_titan_graph</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">kclique_percolation</span><span class="p">(</span><span class="n">cliqueSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">communityPropertyDefaultLabel</span> <span class="o">=</span> <span class="s">&quot;Community&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -361,7 +271,7 @@ no., pp.478,483, 28-30 May 2013</td></tr>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

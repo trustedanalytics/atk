@@ -30,3 +30,18 @@
         ..
 
             number of rows for which the where |UDF| evaluated to True.
+    Examples
+    --------
+
+
+        >>> frame.inspect()
+        [#]  name      age  tenure  phone
+        ====================================
+        [0]  Fred       39      16  555-1234
+        [1]  Susan      33       3  555-0202
+        [2]  Thurston   65      26  555-4510
+        [3]  Judy       44      14  555-2183
+        >>> frame.count(lambda row: row.age > 35)
+        [===Job Progress===]
+        3
+

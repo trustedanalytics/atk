@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame bin_column_equal_depth &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame bin_column_equal_depth &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame bin_column_equal_width" href="bin_column_equal_width.html" >
     <link rel="prev" title="VertexFrame bin_column" href="bin_column.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -129,85 +129,7 @@
 <blockquote>
 <div><p>The maximum number of bins.
 Default is the Square-root choice
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\lfloor \sqrt{m} \rfloor</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 448 bytes).
-Transcript written on math.log.
-</p>
-</div>
-, where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">m</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</p>
-</div>
- is the number of rows.</p>
+<img class="math" src="../../../f_images/math/ba432cd68613e43bf4d687471b871c16a94289d3.png" alt="\lfloor \sqrt{m} \rfloor"/>, where <img class="math" src="../../../f_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> is the number of rows.</p>
 </div></blockquote>
 <p><strong>bin_column_name</strong> : unicode (default=None)</p>
 <blockquote>
@@ -228,302 +150,13 @@ Default is <code class="docutils literal"><span class="pre">&lt;column_name&gt;_
 to identify grouping.</p>
 <p>Equal depth binning attempts to label rows such that each bin contains the
 same number of elements.
-For <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">n</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- bins of a column <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">C</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- of length <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">m</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-, the bin
+For <img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> bins of a column <img class="math" src="../../../f_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> of length <img class="math" src="../../../f_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/>, the bin
 number is determined by:</p>
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\lceil n * \frac { f(C) }{ m } \rceil</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-! Undefined control sequence.
-l.12 \begin
-           {gather}
-! Undefined control sequence.
-l.13 \begin
-           {split}\lceil n * \frac { f(C) }{ m } \rceil\end{split}\notag
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \delimiter 
-\lceil -&gt;\delimiter 
-                    &#8220;4264306 
-l.13 \begin{split}\lceil
-                         n * \frac { f(C) }{ m } \rceil\end{split}\notag
-! Undefined control sequence.
-l.13 \begin{split}\lceil n * \frac
-                                   { f(C) }{ m } \rceil\end{split}\notag
-! Missing $ inserted.
-&lt;inserted text&gt; 
-                $
-&lt;to be read again&gt; 
-                   \end 
-l.13 ...}\lceil n * \frac { f(C) }{ m } \rceil\end
-                                                  {split}\notag
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 452 bytes).
-Transcript written on math.log.
-</div>
-<p>where <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">f</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
- is a tie-adjusted ranking function over values of
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">C</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-.
-If there are multiples of the same value in <div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">C</tt>)</p>
-latex exited with error
-[stdout]
-This is TeX, Version 3.1415926 (TeX Live 2013/Debian)
-(./math.tex
-! Undefined control sequence.
-l.2 \documentclass
-                  [12pt]{article}
-! Undefined control sequence.
-l.3 \usepackage
-               [utf8x]{inputenc}
-! Undefined control sequence.
-l.4 \usepackage
-               {amsmath}
-! Undefined control sequence.
-l.5 \usepackage
-               {amsthm}
-! Undefined control sequence.
-l.6 \usepackage
-               {amssymb}
-! Undefined control sequence.
-l.7 \usepackage
-               {amsfonts}
-! Undefined control sequence.
-l.8 \usepackage
-               {bm}
-! Undefined control sequence.
-l.9 \pagestyle
-              {empty}
-! Undefined control sequence.
-l.11 \begin
-           {document}
-[1] )
-(see the transcript file for additional information)
-Output written on math.dvi (1 page, 360 bytes).
-Transcript written on math.log.
-</div>
-, then their
+<div class="math">
+<p><img src="../../../f_images/math/43300a84d4067757d828ab860333ef7b9e537836.png" alt="\lceil n * \frac { f(C) }{ m } \rceil"/></p>
+</div><p>where <img class="math" src="../../../f_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> is a tie-adjusted ranking function over values of
+<img class="math" src="../../../f_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>.
+If there are multiples of the same value in <img class="math" src="../../../f_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>, then their
 tie-adjusted rank is the average of their ordered rank values.</p>
 <p><strong>Notes</strong></p>
 <ol class="arabic simple">
@@ -537,6 +170,50 @@ greater than 2, then the actual number of bins will only be 2.
 This is due to a restriction that elements with an identical value must
 belong to the same bin.</li>
 </ol>
+<p class="rubric">Examples</p>
+<p>Given a frame with column <em>a</em> accessed by a Frame object <em>my_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32</span>
+<span class="go">/---------/</span>
+<span class="go">    1</span>
+<span class="go">    1</span>
+<span class="go">    2</span>
+<span class="go">    3</span>
+<span class="go">    5</span>
+<span class="go">    8</span>
+<span class="go">   13</span>
+<span class="go">   21</span>
+<span class="go">   34</span>
+<span class="go">   55</span>
+<span class="go">   89</span>
+</pre></div>
+</div>
+<p>Modify the frame, adding a column showing what bin the data is in.
+The data should be grouped into a maximum of five bins.
+Note that each bin will have the same quantity of members (as much as
+possible):</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEDBinned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32     aEDBinned:int32</span>
+<span class="go">/-----------------------------/</span>
+<span class="go">      1                   0</span>
+<span class="go">      1                   0</span>
+<span class="go">      2                   1</span>
+<span class="go">      3                   1</span>
+<span class="go">      5                   2</span>
+<span class="go">      8                   2</span>
+<span class="go">     13                   3</span>
+<span class="go">     21                   3</span>
+<span class="go">     34                   4</span>
+<span class="go">     55                   4</span>
+<span class="go">     89                   4</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
+<span class="go">[1.0, 2.0, 5.0, 13.0, 34.0, 89.0]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -562,7 +239,7 @@ belong to the same bin.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:principal_components/predict &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:principal_components/predict &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:principal_components/publish" href="model-principal_components__publish.html" >
     <link rel="prev" title="Commands model:principal_components/new" href="model-principal_components__new.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -132,11 +132,11 @@ Predict using principal components model.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:principal_components/predict</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>Handle to the model to be used.</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>Frame whose principal components are to be computed.</p>
 </div></blockquote>
@@ -154,7 +154,7 @@ Predict using principal components model.</p>
 </div></blockquote>
 <p><strong>c</strong> : int32 (default=None)</p>
 <blockquote>
-<div><p>The number of principal components to be predicted. Default is the count used to train the model.</p>
+<div><p>The number of principal components to be predicted. &#8216;c&#8217; cannot be greater than the count used to train the model. Default is the count used to train the model.</p>
 </div></blockquote>
 <p><strong>name</strong> : unicode (default=None)</p>
 <blockquote class="last">
@@ -217,9 +217,14 @@ Content-type: application/json
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<p><code class="docutils literal"><span class="pre">&lt;bound</span> <span class="pre">method</span> <span class="pre">AtkEntityType.__name__</span> <span class="pre">of</span> <span class="pre">&lt;trustedanalytics.rest.jsonschema.AtkEntityType</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f6895328090&gt;&gt;</span></code></p>
+<p><code class="docutils literal"><span class="pre">Frame</span></code></p>
 <blockquote>
-<div>A frame with existing columns and &#8216;c&#8217; additional columns containing the projections of V on the the frame and an additional column storing the t-square-index value if requested</div></blockquote>
+<div><dl class="docutils">
+<dt>A frame with existing columns and following additional columns:</dt>
+<dd>&#8216;c&#8217; additional columns: containing the projections of V on the the frame
+&#8216;t_squared_index&#8217;: column storing the t-square-index value, if requested</dd>
+</dl>
+</div></blockquote>
 </div>
 </div>
 </div>
@@ -245,7 +250,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

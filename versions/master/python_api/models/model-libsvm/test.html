@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>LibsvmModel test &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>LibsvmModel test &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LibsvmModel" href="index.html" >
     <link rel="next" title="LibsvmModel train" href="train.html" >
-    <link rel="prev" title="LibsvmModel score" href="score.html" > 
+    <link rel="prev" title="LibsvmModel status" href="status.html" > 
   </head>
   <body>
 
@@ -57,7 +57,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="score.html" title="LibsvmModel score"
+        <a href="status.html" title="LibsvmModel status"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -122,7 +122,7 @@ Predict test frame labels and return metrics.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame whose labels are to be predicted.</p>
 </div></blockquote>
@@ -135,44 +135,60 @@ observation.</p>
 <blockquote>
 <div><p>Column(s) containing the observations whose
 labels are to be predicted and tested.
-Default is to test over the columns the LibsvmModel
+Default is to test over the columns the LIBSVM model
 was trained on.</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>Object</dt>
-<dd><p class="first last">Object with binary classification metrics.
-The data returned is composed of multiple components:</p>
-</dd>
-<dt>&lt;object&gt;.accuracy <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd><p class="first last">The degree of correctness of the test frame labels.</p>
-</dd>
-<dt>&lt;object&gt;.confusion_matrix <span class="classifier-delimiter">:</span> <span class="classifier">table</span></dt>
-<dd><p class="first last">A specific table layout that allows visualization of the performance of the
-test.</p>
-</dd>
-<dt>&lt;object&gt;.f_measure <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd><p class="first last">A measure of a test&#8217;s accuracy.
-It considers both the precision and the recall of the test to compute
-the score.</p>
-</dd>
-<dt>&lt;object&gt;.precision <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd><p class="first last">The degree to which the correctness of the label is expressed.</p>
-</dd>
-<dt>&lt;object&gt;.recall <span class="classifier-delimiter">:</span> <span class="classifier">double</span></dt>
-<dd><p class="first last">The fraction of relevant instances that are retrieved.</p>
-</dd>
-</dl>
+<div><p>A dictionary with binary classification metrics.
+The data returned is composed of the following keys:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&#8216;accuracy&#8217; : double</div>
+<div class="line">The proportion of predictions that are correctly identified</div>
+<div class="line">&#8216;confusion_matrix&#8217; : dictionary</div>
+<div class="line">A table used to describe the performance of a classification model</div>
+<div class="line">&#8216;f_measure&#8217; : double</div>
+<div class="line">The harmonic mean of precision and recall</div>
+<div class="line">&#8216;precision&#8217; : double</div>
+<div class="line">The proportion of predicted positive instances that are correctly identified</div>
+<div class="line">&#8216;recall&#8217; : double</div>
+<div class="line">The proportion of positive instances that are correctly identified.</div>
+</div>
+</div></blockquote>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Predict the labels for a test frame and run classification
-metrics on predicted and target labels.</p>
+<p>Predict the labels for a test frame and run classification metrics on predicted
+and target labels.</p>
+<p class="rubric">Examples</p>
+<p>Test the performance of a trained LibsvmModel</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LibsvmModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mySVM&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">test_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;f_measure&#39;</span><span class="p">]</span>
+<span class="go">0.66666666666666663</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;recall&#39;</span><span class="p">]</span>
+<span class="go">0.5</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="go">0.75</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;precision&#39;</span><span class="p">]</span>
+<span class="go">1.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;confusion_matrix&#39;</span><span class="p">]</span>
+<span class="go">{u&#39;column_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;],</span>
+<span class="go"> u&#39;matrix&#39;: [[2, 0], [0, 3]],</span>
+<span class="go"> u&#39;row_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;]}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -198,7 +214,7 @@ metrics on predicted and target labels.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

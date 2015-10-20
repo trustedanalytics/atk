@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>REST API Commands &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>REST API Commands &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API" href="../index.html" >
     <link rel="next" title="Commands Issue Command" href="issue_command.html" >
     <link rel="prev" title="REST API" href="../index.html" > 
@@ -93,8 +93,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">REST API</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Commands</a></li>
@@ -219,7 +219,7 @@
 <td>Write current frame to Hive table.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="frame__export_to_jdbc.html"><em>frame/export_to_jdbc</em></a></td>
-<td>Write current frame to Jdbc table.</td>
+<td>Write current frame to JDBC table.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="frame__export_to_json.html"><em>frame/export_to_json</em></a></td>
 <td>Write current frame to HDFS in JSON format.</td>
@@ -234,13 +234,13 @@
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute the histogram for a column in a frame.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="frame__loadhbase.html"><em>frame/loadhbase</em></a></td>
-<td>Append data from an hBase table into an existing (possibly empty) FrameRDD</td>
+<td>Append data from an HBase table into an existing (possibly empty) FrameRDD</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="frame__loadhive.html"><em>frame/loadhive</em></a></td>
 <td>Append data from a hive table into an existing (possibly empty) frame</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="frame__loadjdbc.html"><em>frame/loadjdbc</em></a></td>
-<td>Append data from a Jdbc table into an existing (possibly empty) frame</td>
+<td>Append data from a JDBC table into an existing (possibly empty) frame</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="frame__quantiles.html"><em>frame/quantiles</em></a></td>
 <td>New frame with Quantiles and their values.</td>
@@ -276,7 +276,7 @@
 <td>Label Propagation on Gaussian Random Fields.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="frame-__load.html"><em>frame:/load</em></a></td>
-<td>Append data from a csv/xml into an existing (possibly empty) frame</td>
+<td>Append data from a CSV/XML into an existing (possibly empty) frame</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="frame-__loopy_belief_propagation.html"><em>frame:/loopy_belief_propagation</em></a></td>
 <td>Message passing to infer state probabilities.</td>
@@ -348,7 +348,7 @@
 <td>Get the total number of vertices in the graph.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="graph-titan__export_to_graph.html"><em>graph:titan/export_to_graph</em></a></td>
-<td>Export from ta.TitanGraph to ta.Graph.</td>
+<td>Export from TitanGraph to Graph.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="graph-titan__graph_clustering.html"><em>graph:titan/graph_clustering</em></a></td>
 <td>Performs graph clustering over an initial titan graph.</td>
@@ -360,25 +360,25 @@
 <td>Make subgraph from vertex sampling.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model__rename.html"><em>model/rename</em></a></td>
-<td>rename a model</td>
+<td>Rename a model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-collaborative_filtering__new.html"><em>model:collaborative_filtering/new</em></a></td>
-<td>Collaborative filtering recommend model.</td>
+<td>Create a new Collaborative Filtering Recommend model.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-collaborative_filtering__recommend.html"><em>model:collaborative_filtering/recommend</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative filtering (als/cgd) model</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Recommend (ALS/CGD) model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-collaborative_filtering__train.html"><em>model:collaborative_filtering/train</em></a></td>
-<td>Collaborative filtering (als/cgd) model</td>
+<td>Collaborative filtering (ALS/CGD) model</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-k_means__new.html"><em>model:k_means/new</em></a></td>
-<td>create a new model</td>
+<td>Create a &#8216;new&#8217; instance of a k-means model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-k_means__predict.html"><em>model:k_means/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Predict the cluster assignments for the data points.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-k_means__publish.html"><em>model:k_means/publish</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will used as input to the scoring engine</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-k_means__train.html"><em>model:k_means/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates KMeans Model from train frame.</td>
@@ -387,22 +387,22 @@
 <td>Creates Latent Dirichlet Allocation model</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-lda__predict.html"><em>model:lda/predict</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Predict conditional probabilities of topics given document.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict conditional probabilities of topics given document.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-lda__publish.html"><em>model:lda/publish</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will used as input to the scoring engine</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates a tar file that will used as input to the scoring engine</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-lda__train.html"><em>model:lda/train</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates Latent Dirichlet Allocation model</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates Latent Dirichlet Allocation model</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-libsvm__new.html"><em>model:libsvm/new</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> model:libsvm/new</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Create a &#8216;new&#8217; instance of a Support Vector Machine model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-libsvm__predict.html"><em>model:libsvm/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> New frame with new predicted label column.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-libsvm__publish.html"><em>model:libsvm/publish</em></a></td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will used as input to the scoring engine</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-libsvm__score.html"><em>model:libsvm/score</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate the prediction label for a single observation.</td>
@@ -411,10 +411,10 @@
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-libsvm__train.html"><em>model:libsvm/train</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Train Lib Svm model based on another frame.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Train a Lib Svm model</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-linear_regression__new.html"><em>model:linear_regression/new</em></a></td>
-<td>&nbsp;</td>
+<td>Create a &#8216;new&#8217; instance of a Linear Regression model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-linear_regression__predict.html"><em>model:linear_regression/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Make new frame with column for label prediction.</td>
@@ -426,73 +426,76 @@
 <td>Create a &#8216;new&#8217; instance of logistic regression model.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-logistic_regression__predict.html"><em>model:logistic_regression/predict</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Make a new frame with a column for label prediction.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict labels for data points using trained logistic regression model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-logistic_regression__test.html"><em>model:logistic_regression/test</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and show metrics.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-logistic_regression__train.html"><em>model:logistic_regression/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build logistic regression model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-naive_bayes__new.html"><em>model:naive_bayes/new</em></a></td>
-<td>create a new model</td>
+<td>Create a &#8216;new&#8217; instance of a Naive Bayes model</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-naive_bayes__predict.html"><em>model:naive_bayes/predict</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict labels for data points using trained Naive Bayes model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-naive_bayes__train.html"><em>model:naive_bayes/train</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-naive_bayes__test.html"><em>model:naive_bayes/test</em></a></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="model-naive_bayes__train.html"><em>model:naive_bayes/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build a naive bayes model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-principal_components__new.html"><em>model:principal_components/new</em></a></td>
-<td>Create a &#8216;new&#8217; instance of principal component model.</td>
+<tr class="row-odd"><td><a class="reference internal" href="model-principal_components__new.html"><em>model:principal_components/new</em></a></td>
+<td>Create a &#8216;new&#8217; instance of a Principal Components model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-principal_components__predict.html"><em>model:principal_components/predict</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-principal_components__predict.html"><em>model:principal_components/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict using principal components model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-principal_components__publish.html"><em>model:principal_components/publish</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-principal_components__publish.html"><em>model:principal_components/publish</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-principal_components__train.html"><em>model:principal_components/train</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-principal_components__train.html"><em>model:principal_components/train</em></a></td>
 <td>Build principal components model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-random_forest_classifier__new.html"><em>model:random_forest_classifier/new</em></a></td>
-<td>Create a &#8216;new&#8217; instance of random forest classifier model.</td>
+<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_classifier__new.html"><em>model:random_forest_classifier/new</em></a></td>
+<td>Create a &#8216;new&#8217; instance of a Random Forest Classifier model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_classifier__predict.html"><em>model:random_forest_classifier/predict</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-random_forest_classifier__predict.html"><em>model:random_forest_classifier/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the labels for the data points.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-random_forest_classifier__publish.html"><em>model:random_forest_classifier/publish</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_classifier__publish.html"><em>model:random_forest_classifier/publish</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_classifier__test.html"><em>model:random_forest_classifier/test</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-random_forest_classifier__test.html"><em>model:random_forest_classifier/test</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-random_forest_classifier__train.html"><em>model:random_forest_classifier/train</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_classifier__train.html"><em>model:random_forest_classifier/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build Random Forests Classifier model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_regressor__new.html"><em>model:random_forest_regressor/new</em></a></td>
-<td>&lt;Missing Doc&gt;</td>
+<tr class="row-even"><td><a class="reference internal" href="model-random_forest_regressor__new.html"><em>model:random_forest_regressor/new</em></a></td>
+<td>Create a &#8216;new&#8217; instance of a Random Forest Regressor model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-random_forest_regressor__predict.html"><em>model:random_forest_regressor/predict</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_regressor__predict.html"><em>model:random_forest_regressor/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the values for the data points.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_regressor__publish.html"><em>model:random_forest_regressor/publish</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-random_forest_regressor__publish.html"><em>model:random_forest_regressor/publish</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-random_forest_regressor__train.html"><em>model:random_forest_regressor/train</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-random_forest_regressor__train.html"><em>model:random_forest_regressor/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build Random Forests Regressor model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-svm__new.html"><em>model:svm/new</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> create a new model</td>
+<tr class="row-even"><td><a class="reference internal" href="model-svm__new.html"><em>model:svm/new</em></a></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Create a &#8216;new&#8217; instance of a Support Vector Machine model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-svm__predict.html"><em>model:svm/predict</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Make new frame with additional column for predicted label.</td>
+<tr class="row-odd"><td><a class="reference internal" href="model-svm__predict.html"><em>model:svm/predict</em></a></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the labels for the data points</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-svm__test.html"><em>model:svm/test</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-svm__test.html"><em>model:svm/test</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-svm__train.html"><em>model:svm/train</em></a></td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Train SVM model based on another frame.</td>
+<tr class="row-odd"><td><a class="reference internal" href="model-svm__train.html"><em>model:svm/train</em></a></td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build SVM with SGD model</td>
 </tr>
 </tbody>
 </table>
@@ -520,7 +523,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

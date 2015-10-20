@@ -32,19 +32,20 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
-        Handle to the model to be used.
+        <Missing Description>
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
-        A frame to train the model on.
+        A frame to train the model
+        on.
 
 
 
@@ -52,7 +53,8 @@ Request
 
     ..
 
-        List of column(s) containing the observations.
+        List of column(s) containing
+        the observations.
 
 
 
@@ -60,7 +62,8 @@ Request
 
     ..
 
-        Option to mean center the columns
+        Option to mean center the
+        columns
 
 
 
@@ -68,7 +71,8 @@ Request
 
     ..
 
-        Principal component count. Default is the number of observation columns
+        Principal component count.
+        Default is the number of observation columns
 
 
 
@@ -130,6 +134,14 @@ Response
 
 ``dict``
 
-
+        dictionary
+            |A dictionary with trained Principal Components Model with the following keys\:
+            |'column_means': the list of the means of each observation column
+            |'k': number of principal components used to train the model
+            |'mean_centered': Flag indicating if the model was mean centered during training
+            |'observation_columns': the list of observation columns on which the model was trained,
+            |'right_singular_vectors': list of a list storing the right singular vectors of the specified columns of the input frame
+            |'singular_values': list storing the singular values of the specified columns of the input frame
+          
 
 

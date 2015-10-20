@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **graph_ref** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f68953280d0>>
+    **graph_ref** : Graph
 
     ..
 
@@ -52,7 +52,7 @@ Request
 
     ..
 
-        The src "type" of vertices this edge
+        The source "type" of vertices this edge
         connects.
 
 

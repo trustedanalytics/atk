@@ -7,7 +7,7 @@
 -------------------------------------------------
 
 |ALPHA|
-Predict
+Predict labels for data points using trained Naive Bayes model.
 
 POST /v1/commands/
 ==================
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -72,7 +72,8 @@ Request
 
 **Description**
 
-
+Predict the labels for a test frame using trained Naive Bayes model,
+      and create a new frame revision with existing columns and a new predicted label's column.
 
 |
 
@@ -118,8 +119,8 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
-
+        Frame containing the original frame's columns and a column with the predicted label.
 
 

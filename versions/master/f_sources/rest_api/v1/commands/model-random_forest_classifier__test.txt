@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -125,13 +125,18 @@ Response
 
 ``dict``
 
-        object
-            An object with classification metrics.
-            The data returned is composed of multiple components:
-          <object>.accuracy : double
-          <object>.confusion_matrix : table
-          <object>.f_measure : double
-          <object>.precision : double
-          <object>.recall : double
+        A dictionary with binary classification metrics.
+        The data returned is composed of the following keys\:
+
+                      |  'accuracy' : double
+                      |  The proportion of predictions that are correctly identified
+                      |  'confusion_matrix' : dictionary
+                      |  A table used to describe the performance of a classification model
+                      |  'f_measure' : double
+                      |  The harmonic mean of precision and recall
+                      |  'precision' : double
+                      |  The proportion of predicted positive instances that are correctly identified
+                      |  'recall' : double
+                      |  The proportion of positive instances that are correctly identified.
 
 

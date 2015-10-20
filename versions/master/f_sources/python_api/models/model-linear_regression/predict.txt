@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
@@ -29,19 +29,42 @@
 
         ..
 
-            Column(s) containing the observations whose labels are to be predicted.
-            By default, we predict the labels over columns the LogisticRegressionModel
-            was trained on. 
+            Column(s) containing the observations
+            whose labels are to be predicted.
+            Default is the labels the model was trained on.
 
 
 
 
     :Returns:
 
-        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        : Frame
 
         ..
 
-            Frame containing the original frame's columns and a column with the predicted label.
+            frame\:
+                  Frame containing the original frame's columns and a column with the predicted value.
     Predict the labels for a test frame and create a new frame revision with
-    existing columns and a new predicted label's column.
+    existing columns and a new predicted value column.
+
+    Examples
+    --------
+    Predict using a Linear Regression Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.LinearRegressionModel(name='LinReg')
+            >>> my_model.train(train_frame, 'name_of_label_column',['name_of_observation_column(s)'])
+            >>> my_model.predict(predict_frame, ['name_of_observation_column(s)'])
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.LinearRegressionModel(name='LinReg')
+            >>> my_model.train(train_frame, 'name_of_label_column', ['name_of_observation_column(s)'])
+            >>> my_model.predict(predict_frame, ['name_of_observation_column(s)'])
+
+

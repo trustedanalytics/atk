@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Process Flow Examples &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Process Flow Examples &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
     <link rel="next" title="Python User Functions" href="ds_apir.html" >
     <link rel="prev" title="Getting Started" href="ds_strt.html" > 
@@ -96,12 +96,13 @@
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Process Flow Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_ml.html">Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -117,6 +118,8 @@
             
   <span class="target" id="ds-dflw"></span><div class="section" id="process-flow-examples">
 <span id="index-0"></span><h1>Process Flow Examples<a class="headerlink" href="#process-flow-examples" title="Permalink to this headline">¶</a></h1>
+<p>The information in this section displays the general path taken to build
+using <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> with Python.</p>
 <div class="contents local topic" id="table-of-contents">
 <p class="topic-title first">Table of Contents</p>
 <ul class="simple">
@@ -176,19 +179,21 @@
 <li><a class="reference internal" href="#graph-creation" id="id34">Graph Creation</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#models" id="id35">Models</a></li>
 </ul>
 </div>
 <div class="section" id="python-path-setup">
 <span id="index-1"></span><h2>Python Path Setup<a class="headerlink" href="#python-path-setup" title="Permalink to this headline">¶</a></h2>
-<p id="pythonpath">It is recommended that the location of the &#8216;trustedanalytics&#8217; directory be added
+<p id="pythonpath">The location of the &#8216;trustedanalytics&#8217; directory should be added
 to the PYTHONPATH environmental variable prior to starting Python.
 This can be done from a shell script, like this:</p>
-<div class="highlight-python"><div class="highlight"><pre>PYTHONPATH=$PYTHONPATH:/usr/lib/
-export PYTHONPATH
-python
+<div class="highlight-python"><div class="highlight"><pre>export PYTHONPATH=$PYTHONPATH:/usr/lib/ # appends path where trustedanalytics directory exists to
+                                        # any existing path
+                                        # this could also be added to .bashrc or other profile script
+python  # starts python CLI
 </pre></div>
 </div>
-<p>This way, from inside Python, it is easy to load and connect to the
+<p>This way, from inside Python, it is easier to load and connect to the
 REST server:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
@@ -204,21 +209,6 @@ Each row corresponds to the data associated with one observation, and each
 column corresponds to a variable being observed.
 See the Python API <a class="reference internal" href="python_api/datatypes/index.html#python-api-datatypes-index"><span>Data Types</span></a> for
 a current list of data types supported.</p>
-<p>Connect to the server:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Sometimes it is helpful to see the details of the python stack trace upon
-error.
-Setting the <em>show_details</em> to <code class="docutils literal"><span class="pre">True</span></code> causes the full python stack trace
-to be printed, rather than a friendlier digest.</p>
-<div class="code last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">show_details</span> <span class="o">=</span> <span class="bp">True</span>
-</pre></div>
-</div>
-</div>
 <p>To see the data types supported:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">valid_data_types</span>
 </pre></div>
@@ -230,7 +220,7 @@ to be printed, rather than a friendlier digest.</p>
 </div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">Although Trusted Analytics utilizes the NumPy package, NumPy values of positive
+<p class="last">Although Trusted Analytics Platform utilizes the NumPy package, NumPy values of positive
 infinity (np.inf), negative infinity (-np.inf) or nan (np.nan) are treated
 as None.
 Results of any user-defined functions which deal with such values are
@@ -255,9 +245,9 @@ character.
 In the above example, the separating character is a comma (,).</p>
 <p>To import data, you must tell the system how the input file is formatted.
 This is done by defining a <a class="reference internal" href="glossary.html#term-schema"><span class="xref std std-term">schema</span></a>.
-Schemas are constructed as a list of tuples, each of which contains pairs of
-<a class="reference internal" href="glossary.html#term-ascii"><span class="xref std std-term">ASCII</span></a>-character names and data types (see <a class="reference internal" href="#valid-data-types"><span>Valid Data Types</span></a>), ordered according to the order of columns in the input
-file.</p>
+Schemas are constructed as a list of tuples, each of which contains an
+<a class="reference internal" href="glossary.html#term-ascii"><span class="xref std std-term">ASCII</span></a>-character name and the item&#8217;s <a class="reference internal" href="#valid-data-types"><span>data type</span></a>,
+ordered according to the order of columns in the input file.</p>
 <p>Given a file <em>datasets/small_songs.csv</em> whose contents look like this:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Easy on My Mind&quot;</span>
 <span class="mi">2</span><span class="p">,</span><span class="s">&quot;No Rest For The Wicked&quot;</span>
@@ -297,7 +287,11 @@ parameter:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">,</span> <span class="n">skip_header_lines</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now we use the schema and the file name to create CsvFile classes, which define
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">See <a class="reference internal" href="errata.html#errata"><span>Errata</span></a> for an issue skipping header lines.</p>
+</div>
+<p>Now we use the schema and the file name to create CsvFile objects, which define
 the data layouts:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csv1</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&quot;data1.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema_ab</span><span class="p">)</span>
@@ -312,21 +306,21 @@ the data layouts:</p>
 </div>
 </div>
 <div class="section" id="frames">
-<span id="example-frame-frame"></span><span id="index-5"></span><h2>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h2>
-<p>A <a class="reference internal" href="glossary.html#term-frame-capital-f"><span class="xref std std-term">Frame (capital F)</span></a> is a class of objects capable of accessing and
-controlling a <a class="reference internal" href="glossary.html#term-frame-lower-case-f"><span class="xref std std-term">frame (lower case f)</span></a> containing &#8220;big data&#8221;.
-The frame is visualized as a two-dimensional table structure of rows and
+<span id="example-frame-frame"></span><h2>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h2>
+<p>A Frame is a class of objects capable of accessing and controlling &#8220;big data&#8221;.
+The data can be visualized as a two-dimensional table structure of rows and
 columns.
-Trusted Analytics can handle frames with large volumes of data, because it is
+Trusted Analytics Platform can handle frames with large volumes of data, because it is
 designed to work with data spread over multiple machines.</p>
 <div class="section" id="create-a-frame">
 <h3>Create a Frame<a class="headerlink" href="#create-a-frame" title="Permalink to this headline">¶</a></h3>
 <p>There are several ways to create frames:</p>
 <ol class="arabic simple">
-<li>as &#8220;empty&#8221;, with no schema or data</li>
-<li>with a schema and data</li>
-<li>by copying (all or a part of) another frame</li>
-<li>as a return value from a Frame-based method; this is part of the ETL data flow.</li>
+<li>As &#8220;empty&#8221;, with no schema or data</li>
+<li>With a schema and data</li>
+<li>By copying (all or a part of) another frame</li>
+<li>As a return value from a Frame-based method; this is part of the
+<a class="reference internal" href="glossary.html#term-extract-transform-and-load"><span class="xref std std-term">ETL</span></a> data flow.</li>
 </ol>
 <p>See the Python API <a class="reference internal" href="python_api/frames/index.html#python-api-frames-index"><span>Frames section</span></a> for more information.</p>
 <div class="section" id="examples">
@@ -337,7 +331,7 @@ designed to work with data spread over multiple machines.</p>
 </div>
 <p>The Frame <em>my_frame</em> is now a Python object which references an empty frame
 that has been created on the server.</p>
-<p>For an example, to create a frame defined by the schema <em>my_csv</em> (see
+<p>To create a frame defined by the schema <em>my_csv</em> (see
 <a class="reference internal" href="#example-files-csvfile"><span>Importing a CSV file.</span></a>), import the data, give the frame the name
 <em>myframe</em>, and create a Frame object, <em>my_frame</em>, to access it:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;myframe&#39;</span><span class="p">)</span>
@@ -355,16 +349,14 @@ it a new name, because the name must always be unique:</p>
 </div>
 <p>To create a frame copy of the original columns <em>x</em> and <em>z</em>, but only those
 rows where <em>z</em> is TRUE:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame4</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s">&quot;TRUE&quot;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">z</span><span class="p">),</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame4</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">Harry</span> <span class="n">Potter</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
 <span class="gp">... </span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy_of_myframe_true&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Frames (capital &#8216;F&#8217;) are not the same thing as frames (lower case &#8216;f&#8217;).
-Frames (lower case &#8216;f&#8217;) contain data, viewed similarly to a table, while
-Frames are descriptive pointers to the data.
+<p>Frames are handled by reference.
 Commands such as <code class="code docutils literal"><span class="pre">f4</span> <span class="pre">=</span> <span class="pre">my_frame</span></code> will only give you a copy of the Frame
 proxy pointing to the same data.</p>
-<p>Let&#8217;s create a Frame and check it out:</p>
+<p>Let&#8217;s create a Frame and examine its contents:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;small_songs&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">get_error_frame</span><span class="p">()</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
@@ -372,7 +364,7 @@ proxy pointing to the same data.</p>
 </div>
 </div>
 <div class="section" id="append">
-<span id="example-frame-append"></span><span id="index-6"></span><h4>Append:<a class="headerlink" href="#append" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-append"></span><span id="index-4"></span><h4>Append:<a class="headerlink" href="#append" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference internal" href="python_api/frames/frame-/append.html#python-api-frames-frame-append"><span>append</span></a> method adds rows and columns of data to a frame.
 Columns and rows are added to the database structure, and data is imported
 as appropriate.
@@ -433,7 +425,7 @@ It would still be accessed by Frame <em>my_frame1</em>:</p>
 </div>
 <div class="section" id="inspect-the-data">
 <span id="example-frame-inspect"></span><h3>Inspect the Data<a class="headerlink" href="#inspect-the-data" title="Permalink to this headline">¶</a></h3>
-<p>Trusted Analytics provides several methods that allow you to inspect your data,
+<p>Trusted Analytics Platform provides several methods that allow you to inspect your data,
 including <a class="reference internal" href="python_api/frames/frame-/inspect.html#python-api-frames-frame-inspect"><span>inspect</span></a> and
 <a class="reference internal" href="python_api/frames/frame-/take.html#python-api-frames-frame-take"><span>take</span></a>.
 The Frame class also contains frame information like
@@ -448,7 +440,7 @@ The Frame class also contains frame information like
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">objects1</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To see all the Frame data:</p>
+<p>To see the Frame pointer:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span>
 </pre></div>
 </div>
@@ -463,7 +455,7 @@ The Frame class also contains frame information like
    195.1230         183954
 </pre></div>
 </div>
-<p>Using the take() method, makes a list of lists of frame data.
+<p>The take() method makes a list of lists of frame data.
 Each list has the data from a row in the frame accessed by the Frame,
 in this case, 3 rows beginning from row 2.</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">subset_of_objects1</span> <span class="o">=</span> <span class="n">objects1</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
@@ -502,7 +494,7 @@ by some commands.</p>
 <h3>Clean the Data<a class="headerlink" href="#clean-the-data" title="Permalink to this headline">¶</a></h3>
 <p>The process of &#8220;data cleaning&#8221; encompasses the identification and removal or
 repair of incomplete, incorrect, or malformed information in a data set.
-The Trusted Analytics Python API provides much of the functionality necessary for these
+The Trusted Analytics Platform Python API provides much of the functionality necessary for these
 tasks.
 It is important to keep in mind that it was designed for data scalability.
 Thus, using external Python packages for these tasks, while possible, may
@@ -512,9 +504,9 @@ not provide the same level of efficiency.</p>
 <p>Unless stated otherwise, cleaning functions use the Frame proxy to
 operate directly on the data, so they change the data in the frame,
 rather than return a new frame with the changed data.
-It is recommended that you copy the data to a new frame on a regular
-basis and work on the new frame.
-This way, you have a fallback if something does not work as expected:</p>
+Copying the data to a new frame on a regular
+basis and work on the new frame,
+provides a fallback if something does not work as expected:</p>
 <div class="code last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">next_frame</span> <span class="o">=</span> <span class="n">current_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -537,7 +529,7 @@ For details about row selection based upon its data see <a class="reference inte
 </pre></div>
 </div>
 <div class="section" id="drop-rows">
-<span id="example-frame-drop-rows"></span><span id="index-7"></span><h4>Drop Rows:<a class="headerlink" href="#drop-rows" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-drop-rows"></span><span id="index-5"></span><h4>Drop Rows:<a class="headerlink" href="#drop-rows" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference internal" href="python_api/frames/frame-/drop_rows.html#python-api-frames-frame-drop-rows"><span>drop_rows</span></a>
 method takes a predicate function and removes all rows for
 which the predicate evaluates to <code class="docutils literal"><span class="pre">True</span></code>.</p>
@@ -559,20 +551,20 @@ negative:</p>
 </div>
 </div>
 <div class="section" id="filter-rows">
-<span id="example-frame-filter"></span><span id="index-8"></span><h4>Filter Rows:<a class="headerlink" href="#filter-rows" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-filter"></span><span id="index-6"></span><h4>Filter Rows:<a class="headerlink" href="#filter-rows" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference internal" href="python_api/frames/frame-/filter.html#python-api-frames-frame-filter"><span>filter</span></a> method is like
 <a class="reference internal" href="python_api/frames/frame-/drop_rows.html#python-api-frames-frame-drop-rows"><span>drop_rows</span></a>, except it removes all rows
 for which the predicate evaluates to False.</p>
 <div class="section" id="id3">
 <h5>Examples:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
 <p>To delete those rows where field <em>b</em> is outside the range of 0 to 10:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="n">AND</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="drop-duplicates">
-<span id="example-frame-drop-duplicates"></span><span id="index-9"></span><h4>Drop Duplicates:<a class="headerlink" href="#drop-duplicates" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-drop-duplicates"></span><span id="index-7"></span><h4>Drop Duplicates:<a class="headerlink" href="#drop-duplicates" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference internal" href="python_api/frames/frame-/drop_duplicates.html#python-api-frames-frame-drop-duplicates"><span>drop_duplicates</span></a>
 method performs a row uniqueness comparison across the whole table.</p>
 <div class="section" id="id4">
@@ -582,16 +574,15 @@ duplicates of some previously evaluated row:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>To drop all duplicate rows where the columns <em>User</em> and <em>animals</em> are
-duplicate:</p>
+<p>To drop all duplicate rows where the columns <em>User</em> and <em>animals</em>
+have the same values as in some previous row:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="s">&#39;animals&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">animals</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="drop-columns">
-<span id="example-frame-drop-columns"></span><span id="index-10"></span><h4>Drop Columns:<a class="headerlink" href="#drop-columns" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-drop-columns"></span><span id="index-8"></span><h4>Drop Columns:<a class="headerlink" href="#drop-columns" title="Permalink to this headline">¶</a></h4>
 <p>Columns can be dropped either with a string matching the column name or a
 list of strings:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
@@ -600,7 +591,7 @@ list of strings:</p>
 </div>
 </div>
 <div class="section" id="rename-columns">
-<span id="example-frame-rename-columns"></span><span id="index-11"></span><h4>Rename Columns:<a class="headerlink" href="#rename-columns" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-rename-columns"></span><span id="index-9"></span><h4>Rename Columns:<a class="headerlink" href="#rename-columns" title="Permalink to this headline">¶</a></h4>
 <p>Columns can be renamed by giving the existing column name and the new name,
 in the form of a dictionary.
 Unicode characters should not be used for column names.</p>
@@ -621,7 +612,7 @@ For example, you need the first name combined with the last name, or
 you need the number of times John spent more than five dollars, or
 you need the average age of students attending a college.</p>
 <div class="section" id="add-columns">
-<span id="example-frame-add-columns"></span><span id="index-12"></span><h4>Add Columns:<a class="headerlink" href="#add-columns" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-add-columns"></span><span id="index-10"></span><h4>Add Columns:<a class="headerlink" href="#add-columns" title="Permalink to this headline">¶</a></h4>
 <p>Columns can be added to the frame using values from other columns as their
 value.</p>
 <p>Add a column <em>int1_times_int2</em> as an ta.float64 and fill it with the contents
@@ -637,7 +628,7 @@ of column <em>int1</em> and column <em>int2</em> multiplied together:</p>
 value of column <em>float1</em> plus column <em>float2</em>, then save a summary of
 the frame statistics:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">Float1</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Float2</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span><span class="p">[</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add a new column <em>pwl</em>, type ta.float64, and fill the value according to
@@ -680,7 +671,7 @@ times 0.0032 plus 0.4025</td>
 <span class="gp">... </span>       <span class="k">return</span> <span class="bp">None</span>
 <span class="gp">... </span>   <span class="k">elif</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
 <span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0046</span><span class="p">,</span> <span class="mf">0.4168</span>
-<span class="gp">... </span>   <span class="k">elif</span> <span class="mi">50</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">81</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="mi">50</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="n">AND</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">81</span><span class="p">:</span>
 <span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0071</span><span class="p">,</span> <span class="mf">0.3429</span>
 <span class="gp">... </span>   <span class="k">elif</span> <span class="mi">81</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">:</span>
 <span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0032</span><span class="p">,</span> <span class="mf">0.4025</span>
@@ -699,14 +690,14 @@ values for the new frame columns:</p>
 <span class="target" id="ds-dflw-frame-examine"></span></div>
 </div>
 <div class="section" id="examining-the-data">
-<span id="index-13"></span><h3>Examining the Data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h3>
+<span id="index-11"></span><h3>Examining the Data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h3>
 <p>To get standard descriptive statistics information about my_frame, use the
 frame function <a class="reference internal" href="python_api/frames/frame-/column_summary_statistics.html#python-api-frames-frame-column-summary-statistics"><span>column_summary_statistics</span></a>:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="group-by-and-aggregate">
-<span id="example-frame-group-by"></span><span id="index-14"></span><h4>Group by (and aggregate):<a class="headerlink" href="#group-by-and-aggregate" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-group-by"></span><span id="index-12"></span><h4>Group by (and aggregate):<a class="headerlink" href="#group-by-and-aggregate" title="Permalink to this headline">¶</a></h4>
 <p>Rows can be grouped together based on matching column values, after which an
 aggregation function can be applied on each group, producing a new frame.</p>
 <p>Example process of using aggregation based on columns:</p>
@@ -789,7 +780,7 @@ this time.</p>
 </td></tr></table>
 </div>
 <div class="section" id="join">
-<span id="example-frame-join"></span><span id="index-15"></span><h4>Join:<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-join"></span><span id="index-13"></span><h4>Join:<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h4>
 <p>Create a <strong>new</strong> frame from a <a class="reference internal" href="python_api/frames/frame-/join.html#python-api-frames-frame-join"><span>join</span></a>
 operation with another frame.</p>
 <p>Given two frames <em>my_frame</em> (columns <em>a</em>, <em>b</em>, <em>c</em>) and <em>your_frame</em> (columns
@@ -886,7 +877,7 @@ in <em>my_frame</em> which has a value in <em>b</em> that matches a value in
 </div>
 </div>
 <div class="section" id="flatten-column">
-<span id="example-frame-flatten-column"></span><span id="index-16"></span><h4>Flatten Column:<a class="headerlink" href="#flatten-column" title="Permalink to this headline">¶</a></h4>
+<span id="example-frame-flatten-column"></span><span id="index-14"></span><h4>Flatten Column:<a class="headerlink" href="#flatten-column" title="Permalink to this headline">¶</a></h4>
 <p>The function <a class="reference internal" href="python_api/frames/frame-/flatten_column.html#python-api-frames-frame-flatten-column"><span>flatten_column</span></a>
 creates a <strong>new</strong> frame by splitting a
 particular column and returns a Frame object.
@@ -1058,73 +1049,23 @@ data, based upon which order the records are delivered to the function.</p>
 </div>
 <div class="section" id="titan-graph">
 <h2>Titan Graph<a class="headerlink" href="#titan-graph" title="Permalink to this headline">¶</a></h2>
-<p>For the examples below, we will use a Frame <em>my_frame</em>, which accesses an
-arbitrary frame of data consisting of the <a class="reference download internal" href="f_downloads/employees.csv"><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="22%" />
-<col width="20%" />
-<col width="42%" />
-<col width="16%" />
-</colgroup>
-<thead valign="bottom">
-<tr class="row-odd"><th class="head">Employee</th>
-<th class="head">Manager</th>
-<th class="head">Title</th>
-<th class="head">Years</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr class="row-even"><td>Bob</td>
-<td>Steve</td>
-<td>Associate</td>
-<td>1</td>
-</tr>
-<tr class="row-odd"><td>Jane</td>
-<td>Steve</td>
-<td>Sn Associate</td>
-<td>3</td>
-</tr>
-<tr class="row-even"><td>Anup</td>
-<td>Steve</td>
-<td>Associate</td>
-<td>3</td>
-</tr>
-<tr class="row-odd"><td>Sue</td>
-<td>Steve</td>
-<td>Market Analyst</td>
-<td>1</td>
-</tr>
-<tr class="row-even"><td>Mohit</td>
-<td>Steve</td>
-<td>Associate</td>
-<td>2</td>
-</tr>
-<tr class="row-odd"><td>Steve</td>
-<td>David</td>
-<td>Marketing Manager</td>
-<td>5</td>
-</tr>
-<tr class="row-even"><td>Larry</td>
-<td>David</td>
-<td>Product Manager</td>
-<td>3</td>
-</tr>
-<tr class="row-odd"><td>David</td>
-<td>Rob</td>
-<td>VP of Sales</td>
-<td>7</td>
-</tr>
-</tbody>
-</table>
 <div class="section" id="graph-creation">
 <h3>Graph Creation<a class="headerlink" href="#graph-creation" title="Permalink to this headline">¶</a></h3>
 <p>A Titan graph is created by exporting it from a seamless graph.
 For further information, as well as Titan graph attributes and methods, see the
 API section on <a class="reference internal" href="python_api/graphs/graph-titan/index.html#python-api-graphs-graph-titan-index"><span>Titan Graph</span></a>.</p>
-<span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound" id="index-17">
+<span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound" id="index-15">
 </div>
 </div>
+</div>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>See the <a class="reference internal" href="python_api/models/model-collaborative_filtering/index.html#python-api-models-model-collaborative-filtering-index"><span>models section of the API</span></a> for details.</p>
+<p>Graphical models find more insights from structured noisy data.
+See <a class="reference internal" href="python_api/graphs/index.html#python-api-graphs-index"><span>graph API</span></a> for details of the
+<a class="reference internal" href="glossary.html#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a> (LP) and <a class="reference internal" href="glossary.html#term-loopy-belief-propagation"><span class="xref std std-term">Loopy Belief Propagation</span></a> (LBP).</p>
+<p>For Topic Modeling, see the <a class="reference internal" href="python_api/models/model-lda/index.html#python-api-models-model-lda-index"><span>LDA Model section of the API</span></a> and
+<a class="reference external" href="http://en.wikipedia.org/wiki/Topic_model">http://en.wikipedia.org/wiki/Topic_model</a></p>
 </div>
 </div>
 
@@ -1149,7 +1090,7 @@ API section on <a class="reference internal" href="python_api/graphs/graph-titan
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

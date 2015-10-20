@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands frame/bin_column &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands frame/bin_column &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands frame/bin_column_equal_depth" href="frame__bin_column_equal_depth.html" >
     <link rel="prev" title="Commands frame/assign_sample" href="frame__assign_sample.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -131,7 +131,7 @@
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">frame/bin_column</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
@@ -149,16 +149,16 @@ All bin boundaries must be included, so, with N bins, you need N+1 values.</p>
 <p><strong>include_lowest</strong> : bool (default=None)</p>
 <blockquote>
 <div><p>Specify how the boundary conditions are handled.
-True indicates that the lower bound of the bin is inclusive.
-False indicates that the upper bound is inclusive.
-Default is True.</p>
+<code class="docutils literal"><span class="pre">True</span></code> indicates that the lower bound of the bin is inclusive.
+<code class="docutils literal"><span class="pre">False</span></code> indicates that the upper bound is inclusive.
+Default is <code class="docutils literal"><span class="pre">True</span></code>.</p>
 </div></blockquote>
 <p><strong>strict_binning</strong> : bool (default=None)</p>
 <blockquote>
 <div><p>Specify how values outside of the cutoffs array should be binned.
-If set to True, each value less than cutoffs[0] or greater than
+If set to <code class="docutils literal"><span class="pre">True</span></code>, each value less than cutoffs[0] or greater than
 cutoffs[-1] will be assigned a bin value of -1.
-If set to False, values less than cutoffs[0] will be included in the first
+If set to <code class="docutils literal"><span class="pre">False</span></code>, values less than cutoffs[0] will be included in the first
 bin while values greater than cutoffs[-1] will be included in the final
 bin.</p>
 </div></blockquote>
@@ -189,10 +189,10 @@ into bins, or groups, based on a list of bin cutoff points.</p>
 <ol class="arabic simple">
 <li>Unicode in column names is not supported and will likely cause the
 drop_frames() method (and others) to fail!</li>
-<li>Bins IDs are 0-index: the lowest bin number is 0.</li>
+<li>Bins IDs are 0-index, in other words, the lowest bin number is 0.</li>
 <li>The first and last cutoffs are always included in the bins.
-When include_lowest is <code class="docutils literal"><span class="pre">True</span></code>, the last bin includes both cutoffs.
-When include_lowest is <code class="docutils literal"><span class="pre">False</span></code>, the first bin (bin 0) includes both
+When <em>include_lowest</em> is <code class="docutils literal"><span class="pre">True</span></code>, the last bin includes both cutoffs.
+When <em>include_lowest</em> is <code class="docutils literal"><span class="pre">False</span></code>, the first bin (bin 0) includes both
 cutoffs.</li>
 </ol>
 <div class="line-block">
@@ -261,7 +261,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

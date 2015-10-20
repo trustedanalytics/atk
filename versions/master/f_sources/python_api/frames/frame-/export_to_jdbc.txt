@@ -9,7 +9,7 @@
 
 .. function:: export_to_jdbc(self, table_name, connector_type=None, url=None, driver_name=None, query=None)
 
-    Write current frame to Jdbc table.
+    Write current frame to JDBC table.
 
 
     :Parameters:
@@ -18,7 +18,7 @@
 
         ..
 
-            jdbc table name
+            JDBC table name
 
 
 
@@ -26,7 +26,7 @@
 
         ..
 
-            (optional) jdbc connector type
+            (optional) JDBC connector type
 
 
 
@@ -64,3 +64,13 @@
 
     Table will be created or appended to.
     Export of Vectors is not currently supported.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_jdbc('covarianceresults')
+
+

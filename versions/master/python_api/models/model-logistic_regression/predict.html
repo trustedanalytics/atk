@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>LogisticRegressionModel predict &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>LogisticRegressionModel predict &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LogisticRegressionModel" href="index.html" >
-    <link rel="next" title="LogisticRegressionModel test" href="test.html" >
+    <link rel="next" title="LogisticRegressionModel status" href="status.html" >
     <link rel="prev" title="LogisticRegressionModel name" href="name.html" > 
   </head>
   <body>
@@ -61,7 +61,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="test.html" title="LogisticRegressionModel test"
+        <a href="status.html" title="LogisticRegressionModel status"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -117,12 +117,12 @@
 <dt id="predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#predict" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Make a new frame with a column for label prediction.</p>
+Predict labels for data points using trained logistic regression model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
@@ -130,13 +130,13 @@ trained.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote>
-<div><p>Column(s) containing the observations whose labels are to be predicted.
-By default, we predict the labels over columns the LogisticRegressionModel
-was trained on.</p>
+<div><p>Column(s) containing the observations
+whose labels are to be predicted.
+Default is the labels the model was trained on.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
 <div><p>Frame containing the original frame&#8217;s columns and a column with the predicted label.</p>
 </div></blockquote>
@@ -144,8 +144,17 @@ was trained on.</p>
 </tr>
 </tbody>
 </table>
-<p>Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted label&#8217;s column.</p>
+<dl class="docutils">
+<dt>Predict the labels for a test frame using trained logistic regression model,</dt>
+<dd>and create a new frame revision with existing columns and a new predicted label&#8217;s column.</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Predict using a Logistic Regression Model</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;LogReg&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_observation_column&#39;</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s">&quot;LBFGS&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">predict_frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;predict_for_observation_column&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -171,7 +180,7 @@ existing columns and a new predicted label&#8217;s column.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -6,7 +6,7 @@
 :doc:`Commands <index>` model:collaborative_filtering/train
 -----------------------------------------------------------
 
-Collaborative filtering (als/cgd) model
+Collaborative filtering (ALS/CGD) model
 
 POST /v1/commands/
 ==================
@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -40,7 +40,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -76,7 +76,7 @@ Request
 
     ..
 
-        als/cgd
+        ALS/CGD
 
 
 
@@ -148,7 +148,7 @@ Request
 
     ..
 
-        custom argument for cgd learning curve output interval (default: every iteration)
+        custom argument for CGD learning curve output interval (default: every iteration)
 
 
 

@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -77,7 +77,7 @@ Request
 
     ..
 
-        The number of principal components to be predicted. Default is the count used to train the model.
+        The number of principal components to be predicted. 'c' cannot be greater than the count used to train the model. Default is the count used to train the model.
 
 
 
@@ -145,8 +145,10 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
-        A frame with existing columns and 'c' additional columns containing the projections of V on the the frame and an additional column storing the t-square-index value if requested
+        A frame with existing columns and following additional columns\:
+              'c' additional columns: containing the projections of V on the the frame
+              't_squared_index': column storing the t-square-index value, if requested
 
 

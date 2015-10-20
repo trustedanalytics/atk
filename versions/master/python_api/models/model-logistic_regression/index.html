@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Models LogisticRegressionModel &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Models LogisticRegressionModel &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
-    <link rel="next" title="LogisticRegressionModel new" href="new.html" >
+    <link rel="next" title="LogisticRegressionModel __init__" href="new.html" >
     <link rel="prev" title="LdaModel train" href="../model-lda/train.html" > 
   </head>
   <body>
@@ -60,7 +60,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="new.html" title="LogisticRegressionModel new"
+        <a href="new.html" title="LogisticRegressionModel __init__"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -94,8 +94,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
@@ -125,7 +125,7 @@
 <dl class="class">
 <dt id="LogisticRegressionModel">
 <em class="property">class </em><code class="descname">LogisticRegressionModel</code><a class="headerlink" href="#LogisticRegressionModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a &#8216;new&#8217; instance of logistic regression model.</p>
+<dd><p>Entity LogisticRegressionModel</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -133,8 +133,14 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<td>Last time this frame&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
 <td>Set or get the name of the model object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<td>Current model life cycle status.</td>
 </tr>
 </tbody>
 </table>
@@ -149,10 +155,10 @@
 <td>Create a &#8216;new&#8217; instance of logistic regression model.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Make a new frame with a column for label prediction.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict labels for data points using trained logistic regression model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, label_column[, observation_columns])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and show metrics.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, frequency_column, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build logistic regression model.</td>
@@ -175,9 +181,45 @@
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of LogisticRegressionModel</p>
+</div></blockquote>
 </td>
 </tr>
+</tbody>
+</table>
+<p>Logistic Regression <a class="reference internal" href="#r19" id="id1">[R19]</a> is a widely used supervised binary and multi-class classification algorithm.
+The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+of observations, and tests the predicted labels against the true labels.
+This model runs the MLLib implementation of Logistic Regression <a class="reference internal" href="#r20" id="id2">[R20]</a>, with enhanced features —
+trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+of the train and test observations.
+Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+It also allows the user to select the optimizer to be used - L-BFGS <a class="reference internal" href="#r21" id="id3">[R21]</a> or SGD <a class="reference internal" href="#r22" id="id4">[R22]</a>.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_regression">https://en.wikipedia.org/wiki/Logistic_regression</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R20]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression">https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r21" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Limited-memory_BFGS">https://en.wikipedia.org/wiki/Limited-memory_BFGS</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r22" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[R22]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -205,7 +247,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

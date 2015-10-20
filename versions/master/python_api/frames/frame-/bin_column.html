@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame bin_column &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame bin_column &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame bin_column_equal_depth" href="bin_column_equal_depth.html" >
     <link rel="prev" title="Frame assign_sample" href="assign_sample.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -135,16 +135,16 @@ All bin boundaries must be included, so, with N bins, you need N+1 values.</p>
 <p><strong>include_lowest</strong> : bool (default=None)</p>
 <blockquote>
 <div><p>Specify how the boundary conditions are handled.
-True indicates that the lower bound of the bin is inclusive.
-False indicates that the upper bound is inclusive.
-Default is True.</p>
+<code class="docutils literal"><span class="pre">True</span></code> indicates that the lower bound of the bin is inclusive.
+<code class="docutils literal"><span class="pre">False</span></code> indicates that the upper bound is inclusive.
+Default is <code class="docutils literal"><span class="pre">True</span></code>.</p>
 </div></blockquote>
 <p><strong>strict_binning</strong> : bool (default=None)</p>
 <blockquote>
 <div><p>Specify how values outside of the cutoffs array should be binned.
-If set to True, each value less than cutoffs[0] or greater than
+If set to <code class="docutils literal"><span class="pre">True</span></code>, each value less than cutoffs[0] or greater than
 cutoffs[-1] will be assigned a bin value of -1.
-If set to False, values less than cutoffs[0] will be included in the first
+If set to <code class="docutils literal"><span class="pre">False</span></code>, values less than cutoffs[0] will be included in the first
 bin while values greater than cutoffs[-1] will be included in the final
 bin.</p>
 </div></blockquote>
@@ -166,12 +166,116 @@ into bins, or groups, based on a list of bin cutoff points.</p>
 <ol class="arabic simple">
 <li>Unicode in column names is not supported and will likely cause the
 drop_frames() method (and others) to fail!</li>
-<li>Bins IDs are 0-index: the lowest bin number is 0.</li>
+<li>Bins IDs are 0-index, in other words, the lowest bin number is 0.</li>
 <li>The first and last cutoffs are always included in the bins.
-When include_lowest is <code class="docutils literal"><span class="pre">True</span></code>, the last bin includes both cutoffs.
-When include_lowest is <code class="docutils literal"><span class="pre">False</span></code>, the first bin (bin 0) includes both
+When <em>include_lowest</em> is <code class="docutils literal"><span class="pre">True</span></code>, the last bin includes both cutoffs.
+When <em>include_lowest</em> is <code class="docutils literal"><span class="pre">False</span></code>, the first bin (bin 0) includes both
 cutoffs.</li>
 </ol>
+<p class="rubric">Examples</p>
+<p>For this example, we will use a frame with column <em>a</em> accessed by a Frame
+object <em>my_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32</span>
+<span class="go">/---------/</span>
+<span class="go">    1</span>
+<span class="go">    1</span>
+<span class="go">    2</span>
+<span class="go">    3</span>
+<span class="go">    5</span>
+<span class="go">    8</span>
+<span class="go">   13</span>
+<span class="go">   21</span>
+<span class="go">   34</span>
+<span class="go">   55</span>
+<span class="go">   89</span>
+</pre></div>
+</div>
+<p>Modify the frame with a column showing what bin the data is in.
+The data values should use strict_binning:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32     binned:int32</span>
+<span class="go">/---------------------------/</span>
+<span class="go">      1               -1</span>
+<span class="go">      1               -1</span>
+<span class="go">      2               -1</span>
+<span class="go">      3               -1</span>
+<span class="go">      5                0</span>
+<span class="go">      8                0</span>
+<span class="go">     13                1</span>
+<span class="go">     21                1</span>
+<span class="go">     34                2</span>
+<span class="go">     55                2</span>
+<span class="go">     89               -1</span>
+</pre></div>
+</div>
+<p>Modify the frame with a column showing what bin the data is in.
+The data value should not use strict_binning:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32     binned:int32</span>
+<span class="go">/---------------------------/</span>
+<span class="go">      1                0</span>
+<span class="go">      1                0</span>
+<span class="go">      2                0</span>
+<span class="go">      3                0</span>
+<span class="go">      5                0</span>
+<span class="go">      8                0</span>
+<span class="go">     13                1</span>
+<span class="go">     21                1</span>
+<span class="go">     34                2</span>
+<span class="go">     55                2</span>
+<span class="go">     89                2</span>
+</pre></div>
+</div>
+<p>Modify the frame with a column showing what bin the data is in.
+The bins should be lower inclusive:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32     binned:int32</span>
+<span class="go">/---------------------------/</span>
+<span class="go">      1                0</span>
+<span class="go">      1                0</span>
+<span class="go">      2                0</span>
+<span class="go">      3                0</span>
+<span class="go">      5                1</span>
+<span class="go">      8                1</span>
+<span class="go">     13                1</span>
+<span class="go">     21                1</span>
+<span class="go">     34                2</span>
+<span class="go">     55                3</span>
+<span class="go">     89                3</span>
+</pre></div>
+</div>
+<p>Modify the frame with a column showing what bin the data is in.
+The bins should be upper inclusive:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+
+<span class="go">  a:int32     binned:int32</span>
+<span class="go">/---------------------------/</span>
+<span class="go">   1                   0</span>
+<span class="go">   1                   0</span>
+<span class="go">   2                   0</span>
+<span class="go">   3                   0</span>
+<span class="go">   5                   0</span>
+<span class="go">   8                   1</span>
+<span class="go">  13                   1</span>
+<span class="go">  21                   1</span>
+<span class="go">  34                   1</span>
+<span class="go">  55                   2</span>
+<span class="go">  89                   3</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -197,7 +301,7 @@ cutoffs.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

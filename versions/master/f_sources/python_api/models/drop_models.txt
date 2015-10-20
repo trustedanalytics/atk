@@ -21,3 +21,12 @@
             Either the name of the model object to delete or the model object itself
 
 
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            Number of models deleted.

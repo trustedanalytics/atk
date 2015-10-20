@@ -75,105 +75,46 @@
 
     .. code::
 
-        >>> my_frame.inspect()
 
-          a:str
-        /-------/
-          cat
-          apple
-          bat
-          cat
-          bat
-          cat
+        >>> frame.inspect()
+        [#]  a  b        c     d       e  f    g
+        ========================================
+        [0]  1  alpha     3.0  small   1  3.0  9
+        [1]  1  bravo     5.0  medium  1  4.0  9
+        [2]  1  alpha     5.0  large   1  8.0  8
+        [3]  2  bravo     8.0  large   1  5.0  7
+        [4]  2  charlie  12.0  medium  1  6.0  6
+        [5]  2  bravo     7.0  small   1  8.0  5
+        [6]  2  bravo    12.0  large   1  6.0  4
 
-    Create a new frame, combining similar values of column *a*,
-    and count how many of each value is in the original frame:
+        Count the groups in column 'b'
 
-    .. code::
+        >>> b_count = frame.group_by('b', ta.agg.count)
+        [===Job Progress===]
+        >>> b_count.inspect()
+        [#]  b        count
+        ===================
+        [0]  alpha        2
+        [1]  bravo        4
+        [2]  charlie      1
 
-        >>> new_frame = my_frame.group_by('a', agg.count)
-        >>> new_frame.inspect()
+        >>> avg1 = frame.group_by(['a', 'b'], {'c' : ta.agg.avg})
+        [===Job Progress===]
+        >>> avg1.inspect()
+        [#]  a  b        c_AVG
+        ======================
+        [0]  2  bravo      9.0
+        [1]  1  alpha      4.0
+        [2]  2  charlie   12.0
+        [3]  1  bravo      5.0
 
-          a:str       count:int
-        /-----------------------/
-          cat             3
-          apple           1
-          bat             2
 
-    In this example, 'my_frame' is accessing a frame with three columns,
-    *a*, *b*, and *c*:
-
-    .. code::
-
-        >>> my_frame.inspect()
-
-          a:int   b:str   c:float
-        /-------------------------/
-          1       alpha     3.0
-          1       bravo     5.0
-          1       alpha     5.0
-          2       bravo     8.0
-          2       bravo    12.0
-
-    Create a new frame from this data, grouping the rows by unique
-    combinations of column *a* and *b*.
-    Average the value in *c* for each group:
-
-    .. code::
-
-        >>> new_frame = my_frame.group_by(['a', 'b'], {'c' : agg.avg})
-        >>> new_frame.inspect()
-
-          a:int   b:str   c_avg:float
-        /-----------------------------/
-          1       alpha     4.0
-          1       bravo     5.0
-          2       bravo    10.0
-
-    For this example, we use *my_frame* with columns *a*, *c*, *d*,
-    and *e*:
-
-    .. code::
-
-        >>> my_frame.inspect()
-
-          a:str   c:int   d:float e:int
-        /-------------------------------/
-          ape     1       4.0     9
-          ape     1       8.0     8
-          big     1       5.0     7
-          big     1       6.0     6
-          big     1       8.0     5
-
-    Create a new frame from this data, grouping the rows by unique
-    combinations of column *a* and *c*.
-    Count each group; for column *d* calculate the average, sum and minimum
-    value.
-    For column *e*, save the maximum value:
-
-    .. only:: html
-
-        .. code::
-
-            >>> new_frame = my_frame.group_by(['a', 'c'], agg.count, {'d': [agg.avg, agg.sum, agg.min], 'e': agg.max})
-
-              a:str   c:int   count:int  d_avg:float  d_sum:float   d_min:float   e_max:int
-            /-------------------------------------------------------------------------------/
-              ape     1       2          6.0          12.0          4.0           9
-              big     1       3          6.333333     19.0          5.0           7
-
-    .. only:: latex
-
-        .. code::
-
-            >>> new_frame = my_frame.group_by(['a', 'c'], agg.count,
-            ... {'d': [agg.avg, agg.sum, agg.min], 'e': agg.max})
-
-              a    c    count  d_avg  d_sum  d_min  e_max
-              str  int  int    float  float  float  int
-            /---------------------------------------------/
-              ape  1    2      6.0    12.0   4.0    9
-              big  1    3      6.333  19.0   5.0    7
-
+        >>> mix_frame = frame.group_by('a', ta.agg.count, {'f': [ta.agg.avg, ta.agg.sum, ta.agg.min], 'g': ta.agg.max})
+        [===Job Progress===]
+        >>> mix_frame.inspect()
+        [#]  a  count  g_MAX  f_AVG  f_SUM  f_MIN
+        =========================================
+        [0]  1      3      9    5.0   15.0    3.0
+        [1]  2      4      7   6.25   25.0    5.0
 
     For further examples, see :ref:`example_frame.group_by`.

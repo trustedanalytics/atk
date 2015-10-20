@@ -6,7 +6,7 @@
 :doc:`Commands <index>` frame/loadhbase
 ---------------------------------------
 
-Append data from an hBase table into an existing (possibly empty) FrameRDD
+Append data from an HBase table into an existing (possibly empty) FrameRDD
 
 POST /v1/commands/
 ==================
@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **destination** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **destination** : Frame
 
     ..
 
@@ -82,7 +82,7 @@ Request
 
 **Description**
 
-Append data from an hBase table into an existing (possibly empty) FrameRDD
+Append data from an HBase table into an existing (possibly empty) FrameRDD
 
 |
 
@@ -128,8 +128,8 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
-        the initial FrameRDD with the hbase data appended
+        the initial FrameRDD with the HBase data appended
 
 

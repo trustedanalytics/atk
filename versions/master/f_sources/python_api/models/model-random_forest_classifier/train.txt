@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-1910466087, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-687814711, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Classifier model.
@@ -15,11 +15,11 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
-            A frame to train the model on.
+            A frame to train the model on
 
 
 
@@ -27,7 +27,7 @@
 
         ..
 
-            Column name containing the label for each observation.
+            Column name containing the label for each observation
 
 
 
@@ -35,7 +35,7 @@
 
         ..
 
-            Column(s) containing the observations.
+            Column(s) containing the observations
 
 
 
@@ -43,7 +43,7 @@
 
         ..
 
-            Number of classes for classification
+            Number of classes for classification. Default is 2.
 
 
 
@@ -51,7 +51,7 @@
 
         ..
 
-            Number of tress in the random forest
+            Number of tress in the random forest. Default is 1.
 
 
 
@@ -59,7 +59,7 @@
 
         ..
 
-            Criterion used for information gain calculation. Supported values "gini" or "entropy"
+            Criterion used for information gain calculation. Supported values "gini" or "entropy". Default is "gini".
 
 
 
@@ -67,7 +67,7 @@
 
         ..
 
-            Maximum depth of the tree
+            Maximum depth of the tree. Default is 4.
 
 
 
@@ -75,15 +75,15 @@
 
         ..
 
-            Maximum number of bins used for splitting features
+            Maximum number of bins used for splitting features. Default is 100.
 
 
 
-        **seed** : int32 (default=-1910466087)
+        **seed** : int32 (default=-687814711)
 
         ..
 
-            Random seed for bootstrapping and choosing feature subsets
+            Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.
 
 
 
@@ -99,7 +99,8 @@
 
         ..
 
-            Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird"
+            Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird.
+            If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"
 
 
 
@@ -110,5 +111,66 @@
 
         ..
 
-
+            dictionary
+                  A dictionary with trained Random Forest Classifier model with the following keys\:
+                  |'observation_columns': the list of observation columns on which the model was trained,
+                  |'label_column': the column name containing the labels of the observations,
+                  |'num_classes': the number of classes,
+                  |'num_trees': the number of decision trees in the random forest,
+                  |'num_nodes': the number of nodes in the random forest,
+                  |'feature_subset_category': the map storing arity of categorical features,
+                  |'impurity': the criterion used for information gain calculation,
+                  |'max_depth': the maximum depth of the tree,
+                  |'max_bins': the maximum number of bins used for splitting features,
+                  |'seed': the random seed used for bootstrapping and choosing feature subset.
+                
     Creating a Random Forests Classifier Model using the observation columns and label column.
+
+    Examples
+    --------
+    Train Random Forest Model as a classifier.
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.RandomForestClassifierModel()
+            >>> train_classifier_output = my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
+
+            >>> train_classifier_output
+            {u'feature_subset_category': u'all',
+             u'impurity': u'gini',
+             u'label_column': u'Class',
+             u'max_bins': 100,
+             u'max_depth': 4,
+             u'num_classes': 2,
+             u'num_nodes': 11,
+             u'num_trees': 1,
+             u'observation_columns': [u'Dim_1', u'Dim_2'],
+             u'seed': -579418825}
+
+            >>> train_classifier_output['num_nodes']
+            11
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.RandomForestClassifierModel()
+            >>> train_classifier_output = my_model.train(train_frame,'Class',['Dim_1','Dim_2'],num_classes=2)
+
+            >>> train_classifier_output
+            {u'feature_subset_category': u'all',
+             u'impurity': u'gini',
+             u'label_column': u'Class',
+             u'max_bins': 100,
+             u'max_depth': 4,
+             u'num_classes': 2,
+             u'num_nodes': 11,
+             u'num_trees': 1,
+             u'observation_columns': [u'Dim_1', u'Dim_2'],
+             u'seed': -579418825}
+
+            >>> train_classifier_output['num_nodes']
+            11
+

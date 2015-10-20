@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Graph graphx_connected_components &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Graph graphx_connected_components &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
     <link rel="next" title="Graph graphx_pagerank" href="graphx_pagerank.html" >
     <link rel="prev" title="Graph export_to_titan" href="export_to_titan.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -162,9 +162,35 @@ their own index as the minimum of their current index and all other indices
 received.
 This algorithm continues until there is no change in any of the vertex
 indices.
-At the end of the alorithm, the unique levels of the indices denote the
+At the end of the algorithm, the unique levels of the indices denote the
 distinct connected components.
 The complexity of the algorithm is proportional to the diameter of the graph.</p>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">graphx_connected_components</span><span class="p">(</span><span class="n">output_property</span> <span class="o">=</span> <span class="s">&quot;ccId&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The expected output is like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>{u&#39;movie&#39;: Frame &quot;None&quot;
+ row_count = 597
+ schema =
+   _vid:int64
+   _label:unicode
+   movie:int32
+   Con_Com:int64, u&#39;user&#39;: Frame &quot;None&quot;
+ row_count = 597
+ schema =
+   _vid:int64
+   _label:unicode
+   vertexType:unicode
+   user:int32
+   Con_Com:int64}
+</pre></div>
+</div>
+<p>To query:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">movie_frame</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;movie&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">user_frame</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -190,7 +216,7 @@ The complexity of the algorithm is proportional to the diameter of the graph.</p
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

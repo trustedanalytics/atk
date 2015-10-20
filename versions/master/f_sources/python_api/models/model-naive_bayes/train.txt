@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, lambda_parameter=None)
+.. function:: train(self, frame, label_column, observation_columns, lambda_parameter=1.0)
 
     |ALPHA|
     Build a naive bayes model.
@@ -15,7 +15,7 @@
 
     :Parameters:
 
-        **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+        **frame** : Frame
 
         ..
 
@@ -41,7 +41,7 @@
 
 
 
-        **lambda_parameter** : float64 (default=None)
+        **lambda_parameter** : float64 (default=1.0)
 
         ..
 
@@ -59,3 +59,23 @@
 
 
     Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.
+
+    Examples
+    --------
+    Train a Naive Bayes Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.NaiveBayesModel(name='naivebayesmodel')
+            >>> my_model.train(train_frame, 'name_of_label_column',['name_of_observation_column(s)'],0.9)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.NaiveBayesModel(name='naivebayesmodel')
+            >>> my_model.train(train_frame, 'name_of_label_column',['name_of_observation_column(s)'],0.9)
+
+

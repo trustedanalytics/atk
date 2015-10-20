@@ -48,3 +48,13 @@
 
     Table must exist in HBase.
     Export of Vectors is not currently supported.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_hbase('covarianceresults')
+
+

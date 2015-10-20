@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame download &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame download &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame drop_columns" href="drop_columns.html" >
     <link rel="prev" title="VertexFrame dot_product" href="dot_product.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -116,7 +116,7 @@
 <dl class="function">
 <dt id="download">
 <code class="descname">download</code><span class="sig-paren">(</span><em>self</em>, <em>n=100</em>, <em>offset=0</em>, <em>columns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#download" title="Permalink to this definition">¶</a></dt>
-<dd><p>Download a frame from the server into client workspace.</p>
+<dd><p>Download frame data from the server into client workspace as a pandas dataframe</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -143,22 +143,17 @@
 </tr>
 </tbody>
 </table>
-<p>Copies an trustedanalytics Frame into a Pandas DataFrame.</p>
+<p>Similar to the &#8216;take&#8217; function, but puts the data in a pandas dataframe.</p>
 <p class="rubric">Examples</p>
-<p>Frame <em>my_frame</em> accesses a frame with millions of rows of data.
-Get a sample of 500 rows:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pandas_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">download</span><span class="p">(</span> <span class="mi">500</span> <span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pandas_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;phone&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pandas_frame</span>
+<span class="go">       name     phone</span>
+<span class="go">0      Fred  555-1234</span>
+<span class="go">1     Susan  555-0202</span>
+<span class="go">2  Thurston  555-4510</span>
+<span class="go">3      Judy  555-2183</span>
 </pre></div>
 </div>
-<p>We now have a new frame accessed by a pandas DataFrame <em>pandas_frame</em>
-with a copy of the first 500 rows of the original frame.</p>
-<p>If we use the method with an offset like:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pandas_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">take</span><span class="p">(</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>We end up with a new frame accessed by the pandas DataFrame
-<em>pandas_frame</em> again, but this time it has a copy of rows 101 to 600 of
-the original frame.</p>
 </dd></dl>
 
 </div>
@@ -184,7 +179,7 @@ the original frame.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

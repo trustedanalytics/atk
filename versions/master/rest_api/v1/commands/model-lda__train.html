@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:lda/train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:lda/train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:libsvm/new" href="model-libsvm__new.html" >
     <link rel="prev" title="Commands model:lda/publish" href="model-lda__publish.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -111,7 +111,7 @@
             
   <div class="section" id="commands-model-lda-train">
 <span id="rest-api-v1-commands-model-lda-train"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:lda/train<a class="headerlink" href="#commands-model-lda-train" title="Permalink to this headline">¶</a></h1>
-<p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+<p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Creates Latent Dirichlet Allocation model</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
@@ -132,11 +132,11 @@ Creates Latent Dirichlet Allocation model</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:lda/train</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>Input frame data.</p>
 </div></blockquote>
@@ -155,60 +155,50 @@ Column should contain a str value.</p>
 <div><p>Column name for word count.
 Column should contain an int32 or int64 value.</p>
 </div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=None)</p>
+<p><strong>max_iterations</strong> : int32 (default=20)</p>
 <blockquote>
 <div><p>The maximum number of iterations that the algorithm will execute.
 The valid value range is all positive int.
 Default is 20.</p>
 </div></blockquote>
-<p><strong>alpha</strong> : float32 (default=None)</p>
+<p><strong>alpha</strong> : float32 (default=1.10000002384)</p>
 <blockquote>
-<div><p>The hyper-parameter for document-specific distribution over topics.
+<div><p>The <a class="reference internal" href="../../../glossary.html#term-hyperparameter"><span class="xref std std-term">hyperparameter</span></a> for document-specific distribution over topics.
 Mainly used as a smoothing parameter in <a class="reference internal" href="../../../glossary.html#term-bayesian-inference"><span class="xref std std-term">Bayesian inference</span></a>.
 Larger value implies that documents are assumed to cover all topics
 more uniformly; smaller value implies that documents are more
 concentrated on a small subset of topics.
-Valid value range is all positive float.</p>
+Valid value range is all positive float greater than or equal to 1.</p>
 <blockquote>
 <div><p>Default is 0.1.</p>
 </div></blockquote>
 </div></blockquote>
-<p><strong>beta</strong> : float32 (default=None)</p>
+<p><strong>beta</strong> : float32 (default=1.10000002384)</p>
 <blockquote>
-<div><p>The hyper-parameter for word-specific distribution over topics.
+<div><p>The <a class="reference internal" href="../../../glossary.html#term-hyperparameter"><span class="xref std std-term">hyperparameter</span></a> for word-specific distribution over topics.
 Mainly used as a smoothing parameter in <a class="reference internal" href="../../../glossary.html#term-bayesian-inference"><span class="xref std std-term">Bayesian inference</span></a>.
 Larger value implies that topics contain all words more uniformly and
 smaller value implies that topics are more concentrated on a small
 subset of words.
-Valid value range is all positive float.
+Valid value range is all positive float greater than or equal to 1.
 Default is 0.1.</p>
 </div></blockquote>
-<p><strong>convergence_threshold</strong> : float32 (default=None)</p>
+<p><strong>num_topics</strong> : int32 (default=10)</p>
 <blockquote>
-<div><p>The amount of change in LDA model parameters that will be tolerated
-at convergence.
-If the change is less than this threshold, the algorithm exits
-before it reaches the maximum number of supersteps.
-Valid value range is all positive float and 0.0.
-Default is 0.001.</p>
-</div></blockquote>
-<p><strong>evaluate_cost</strong> : bool (default=None)</p>
-<blockquote>
-<div><p>&#8220;True&#8221; means turn on cost evaluation and &#8220;False&#8221; means turn off
-cost evaluation.
-It&#8217;s relatively expensive for LDA to evaluate cost function.
-For time-critical applications, this option allows user to turn off cost
-function evaluation.
-Default is &#8220;False&#8221;.</p>
-</div></blockquote>
-<p><strong>num_topics</strong> : int32 (default=None)</p>
-<blockquote class="last">
 <div><p>The number of topics to identify in the LDA model.
 Using fewer topics will speed up the computation, but the extracted topics
 might be more abstract or less specific; using more topics will
 result in more computation but lead to more specific topics.
 Valid value range is all positive int.
 Default is 10.</p>
+</div></blockquote>
+<p><strong>random_seed</strong> : int64 (default=None)</p>
+<blockquote class="last">
+<div><p>An optional random seed.
+The random seed is used to initialize the pseudorandom number generator
+used in the LDA model. Setting the random seed to the same value every
+time the model is trained, allows LDA to generate the same topic distribution
+if the corpus and LDA parameters are unchanged.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -269,19 +259,28 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div><dl class="docutils">
-<dt>dict</dt>
-<dd>The data returned is composed of multiple components:</dd>
-<dt>topics_given_doc <span class="classifier-delimiter">:</span> <span class="classifier">Frame</span></dt>
-<dd>Frame with conditional probabilities of topic given document.</dd>
-<dt>word_given_topics <span class="classifier-delimiter">:</span> <span class="classifier">Frame</span></dt>
-<dd>Frame with conditional probabilities of word given topic.</dd>
-<dt>topics_given_word <span class="classifier-delimiter">:</span> <span class="classifier">Frame</span></dt>
-<dd>Frame with conditional probabilities of topic given word.</dd>
-<dt>report <span class="classifier-delimiter">:</span> <span class="classifier">str</span></dt>
-<dd>The configuration and learning curve report for Latent Dirichlet
-Allocation as a multiple line str.</dd>
-</dl>
+<div><p>The data returned is composed of multiple components:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>Frame</strong> : <em>topics_given_doc</em></div>
+<div class="line-block">
+<div class="line">Conditional probabilities of topic given document.</div>
+</div>
+<div class="line"><strong>Frame</strong> : <em>word_given_topics</em></div>
+<div class="line-block">
+<div class="line">Conditional probabilities of word given topic.</div>
+</div>
+<div class="line"><strong>Frame</strong> : <em>topics_given_word</em></div>
+<div class="line-block">
+<div class="line">Conditional probabilities of topic given word.</div>
+</div>
+<div class="line"><strong>str</strong> : <em>report</em></div>
+<div class="line-block">
+<div class="line">The configuration and learning curve report for Latent Dirichlet</div>
+</div>
+</div>
+</div></blockquote>
+<p>Allocation as a multiple line str.</p>
 </div></blockquote>
 </div>
 </div>
@@ -308,7 +307,7 @@ Allocation as a multiple line str.</dd>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

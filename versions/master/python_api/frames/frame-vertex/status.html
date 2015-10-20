@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame status &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame status &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame take" href="take.html" >
     <link rel="prev" title="VertexFrame sorted_k" href="sorted_k.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -132,20 +132,14 @@
 </tbody>
 </table>
 <dl class="docutils">
-<dt>One of three statuses: Active, Deleted, Deleted_Final</dt>
-<dd>Active:   Frame is available for use
-Deleted:  Frame has been scheduled for deletion can be unscheduled by modifying
-Deleted_Final: Frame&#8217;s backend files have been removed from disk.</dd>
+<dt>One of three statuses: ACTIVE, DROPPED, FINALIZED</dt>
+<dd>ACTIVE:    Entity is available for use
+DROPPED:   Entity has been dropped by user or by garbage collection which found it stale
+FINALIZED: Entity&#8217;s data has been deleted</dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Given that we have an existing data frame <em>my_data</em>, create a Frame,
-then show the frame schema:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BF</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="s">&#39;my_data&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">BF</span><span class="o">.</span><span class="n">status</span>
-</pre></div>
-</div>
-<p>The result is:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="s">u&#39;Active&#39;</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">status</span>
+<span class="go">u&#39;ACTIVE&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -173,7 +167,7 @@ then show the frame schema:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

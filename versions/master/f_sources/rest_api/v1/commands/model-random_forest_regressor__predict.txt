@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -56,7 +56,7 @@ Request
     ..
 
         Column(s) containing the observations whose labels are to be predicted.
-        By default, we predict the labels over columns the RandomForestModel
+        By default, we predict the labels over columns the Random Forest model
         was trained on. 
 
 
@@ -71,7 +71,8 @@ Request
 
 **Description**
 
-
+Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+existing columns and a new predicted value's column.
 
 |
 
@@ -117,9 +118,9 @@ Response
 **Body**
 
 
-``<bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>``
+``Frame``
 
-        Frame
-            A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.
+        A new frame consisting of the existing columns of the frame and
+        a new column with predicted value for each observation.
 
 

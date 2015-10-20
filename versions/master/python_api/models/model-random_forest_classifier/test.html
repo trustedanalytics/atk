@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>RandomForestClassifierModel test &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>RandomForestClassifierModel test &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestClassifierModel" href="index.html" >
     <link rel="next" title="RandomForestClassifierModel train" href="train.html" >
-    <link rel="prev" title="RandomForestClassifierModel publish" href="publish.html" > 
+    <link rel="prev" title="RandomForestClassifierModel status" href="status.html" > 
   </head>
   <body>
 
@@ -57,7 +57,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="publish.html" title="RandomForestClassifierModel publish"
+        <a href="status.html" title="RandomForestClassifierModel status"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -122,7 +122,7 @@ Predict test frame labels and return metrics.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>The frame whose labels are to be predicted</p>
 </div></blockquote>
@@ -139,19 +139,22 @@ By default, we predict the labels over columns the RandomForest was trained on.<
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>object</dt>
-<dd><blockquote class="first">
-<div><p>An object with classification metrics.
-The data returned is composed of multiple components:</p>
+<div><p>A dictionary with binary classification metrics.
+The data returned is composed of the following keys:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">&#8216;accuracy&#8217; : double</div>
+<div class="line">The proportion of predictions that are correctly identified</div>
+<div class="line">&#8216;confusion_matrix&#8217; : dictionary</div>
+<div class="line">A table used to describe the performance of a classification model</div>
+<div class="line">&#8216;f_measure&#8217; : double</div>
+<div class="line">The harmonic mean of precision and recall</div>
+<div class="line">&#8216;precision&#8217; : double</div>
+<div class="line">The proportion of predicted positive instances that are correctly identified</div>
+<div class="line">&#8216;recall&#8217; : double</div>
+<div class="line">The proportion of positive instances that are correctly identified.</div>
+</div>
 </div></blockquote>
-<p class="last">&lt;object&gt;.accuracy : double
-&lt;object&gt;.confusion_matrix : table
-&lt;object&gt;.f_measure : double
-&lt;object&gt;.precision : double
-&lt;object&gt;.recall : double</p>
-</dd>
-</dl>
 </div></blockquote>
 </td>
 </tr>
@@ -159,6 +162,30 @@ The data returned is composed of multiple components:</p>
 </table>
 <p>Predict the labels for a test frame and run classification metrics on predicted
 and target labels.</p>
+<p class="rubric">Examples</p>
+<p>Test the performance of a trained Random Forest Classifier Model</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestClassifierModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;myRF&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">test_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;f_measure&#39;</span><span class="p">]</span>
+<span class="go">0.66666666666666663</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;recall&#39;</span><span class="p">]</span>
+<span class="go">0.5</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;accuracy&#39;</span><span class="p">]</span>
+<span class="go">0.75</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;precision&#39;</span><span class="p">]</span>
+<span class="go">1.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;confusion_matrix&#39;</span><span class="p">]</span>
+<span class="go">{u&#39;column_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;],</span>
+<span class="go"> u&#39;matrix&#39;: [[2, 0], [0, 3]],</span>
+<span class="go"> u&#39;row_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;]}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -184,7 +211,7 @@ and target labels.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

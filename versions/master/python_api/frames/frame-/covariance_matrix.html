@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Frame covariance_matrix &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Frame covariance_matrix &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
     <link rel="next" title="Frame cumulative_percent" href="cumulative_percent.html" >
     <link rel="prev" title="Frame covariance" href="covariance.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -134,7 +134,7 @@ matrix.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
 <div><p>A matrix with the covariance values for the columns.</p>
 </div></blockquote>
@@ -143,6 +143,49 @@ matrix.</p>
 </tbody>
 </table>
 <p>This function applies only to columns containing numerical data.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame1</em>, which computes the covariance matrix for three
+numeric columns:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  col_0:int64    col_1:int64   col_3:float64</span>
+<span class="go">\--------------------------------------------\</span>
+<span class="go">    1            4             33.4</span>
+<span class="go">    2            5             43.7</span>
+<span class="go">    3            6             20.1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame1</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">([</span><span class="s">&#39;col_0&#39;</span><span class="p">,</span> <span class="s">&#39;col_1&#39;</span><span class="p">,</span> <span class="s">&#39;col_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  col_0:float64    col_1:float64   col_3:float64</span>
+<span class="go">\------------------------------------------------\</span>
+<span class="go">     1.00             1.00            -6.65</span>
+<span class="go">     1.00             1.00            -6.65</span>
+<span class="go">     -6.65           -6.65            139.99</span>
+</pre></div>
+</div>
+<p>Consider Frame <em>my_frame2</em>, which computes the covariance matrix for a single
+vector column:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  State:unicode             Population_HISTOGRAM:vector</span>
+<span class="go">\-------------------------------------------------------\</span>
+<span class="go">    Louisiana               [0.0, 1.0, 0.0, 0.0]</span>
+<span class="go">    Georgia                 [0.0, 1.0, 0.0, 0.0]</span>
+<span class="go">    Texas                   [0.0, 0.54, 0.46, 0.0]</span>
+<span class="go">    Florida                 [0.0, 0.83, 0.17, 0.0]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame2</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">([</span><span class="s">&#39;Population_HISTOGRAM&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  Population_HISTOGRAM:vector</span>
+<span class="go">\-------------------------------------\</span>
+<span class="go">  [0,  0.00000000,  0.00000000,    0]</span>
+<span class="go">  [0,  0.04709167, -0.04709167,    0]</span>
+<span class="go">  [0, -0.04709167,  0.04709167,    0]</span>
+<span class="go">  [0,  0.00000000,  0.00000000,    0]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -168,7 +211,7 @@ matrix.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

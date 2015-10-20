@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Graphs TitanGraph &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Graphs TitanGraph &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs" href="../index.html" >
     <link rel="next" title="TitanGraph __init__" href="f__init__.html" >
     <link rel="prev" title="Graph vertices" href="../graph-/vertices.html" > 
@@ -94,8 +94,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
@@ -125,8 +125,7 @@
 <dl class="class">
 <dt id="TitanGraph">
 <em class="property">class </em><code class="descname">TitanGraph</code><a class="headerlink" href="#TitanGraph" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div>Proxy to a graph in Titan, supports Gremlin query</div></blockquote>
+<dd><p>Proxy to a graph in Titan, supports Gremlin query.</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -134,10 +133,13 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<td>Last time this frame&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
 <td>Set or get the name of the graph object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
 <td>Current graph life cycle status.</td>
 </tr>
 </tbody>
@@ -171,7 +173,7 @@
 <td>Make a copy of the current graph.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="export_to_graph.html"><em>export_to_graph</em></a>(self)</td>
-<td>Export from ta.TitanGraph to ta.Graph.</td>
+<td>Export from TitanGraph to Graph.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="graph_clustering.html"><em>graph_clustering</em></a>(self, edge_distance)</td>
 <td>Performs graph clustering over an initial titan graph.</td>
@@ -210,6 +212,12 @@
 </tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_graph</span><span class="p">(</span><span class="s">&quot;my_graph&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">titan_graph</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">export_to_titan</span><span class="p">(</span><span class="s">&quot;titan_graph&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -235,7 +243,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

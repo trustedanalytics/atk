@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Models RandomForestClassifierModel &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Models RandomForestClassifierModel &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
-    <link rel="next" title="RandomForestClassifierModel new" href="new.html" >
+    <link rel="next" title="RandomForestClassifierModel __init__" href="new.html" >
     <link rel="prev" title="LibsvmModel train" href="../model-libsvm/train.html" > 
   </head>
   <body>
@@ -60,7 +60,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="new.html" title="RandomForestClassifierModel new"
+        <a href="new.html" title="RandomForestClassifierModel __init__"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -94,8 +94,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
@@ -125,7 +125,7 @@
 <dl class="class">
 <dt id="RandomForestClassifierModel">
 <em class="property">class </em><code class="descname">RandomForestClassifierModel</code><a class="headerlink" href="#RandomForestClassifierModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a &#8216;new&#8217; instance of random forest classifier model.</p>
+<dd><p>Entity RandomForestClassifierModel</p>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -133,8 +133,14 @@
 <col width="50%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<td>Last time this frame&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
 <td>Set or get the name of the model object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<td>Current model life cycle status.</td>
 </tr>
 </tbody>
 </table>
@@ -146,7 +152,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#randomforestclassifiermodel-init"><span>__init__</span></a>(self[, name, _info])</td>
-<td>Create a &#8216;new&#8217; instance of random forest classifier model.</td>
+<td>Create a &#8216;new&#8217; instance of a Random Forest Classifier model.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the labels for the data points.</td>
@@ -167,7 +173,7 @@
 <span class="target" id="randomforestclassifiermodel-init"></span><dl class="function">
 <dt id="__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a &#8216;new&#8217; instance of random forest classifier model.</p>
+<dd><p>Create a &#8216;new&#8217; instance of a Random Forest Classifier model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -178,9 +184,36 @@
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of RandomForestClassifierModel</p>
+</div></blockquote>
 </td>
 </tr>
+</tbody>
+</table>
+<p>Random Forest <a class="reference internal" href="#r37" id="id1">[R37]</a> is a supervised ensemble learning algorithm
+which can be used to perform binary and multi-class classification.
+The Random Forest Classifier model is initialized, trained on columns of a
+frame, used to predict the labels of observations in a frame, and tests the
+predicted labels against the true labels.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r38" id="id2">[R38]</a>.
+During training, the decision trees are trained in parallel.
+During prediction, each tree&#8217;s prediction is counted as vote for one class.
+The label is predicted to be the class which receives the most votes.
+During testing, labels of the observations are predicted and tested against the true labels
+using built-in binary and multi-class Classification Metrics.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r37" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R37]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r38" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R38]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-ensembles.html">https://spark.apache.org/docs/1.3.0/mllib-ensembles.html</a></td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -208,7 +241,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -9,7 +9,7 @@
 
 .. function:: export_to_graph(self)
 
-    Export from ta.TitanGraph to ta.Graph.
+    Export from TitanGraph to Graph.
 
 
     :Parameters:

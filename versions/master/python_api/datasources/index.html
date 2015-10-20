@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Data Sources &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Data Sources &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../index.html" >
     <link rel="up" title="Python API" href="../index.html" >
     <link rel="next" title="Frames" href="../frames/index.html" >
     <link rel="prev" title="Data Types" href="../datatypes/index.html" > 
@@ -93,8 +93,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ad_over.html">Administration</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Python API</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../connect.html">Connect to the Server</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datatypes/index.html">Data Types</a></li>
@@ -123,12 +123,13 @@
 <ul class="simple">
 <li><a class="reference internal" href="#csvfile" id="id1">CsvFile</a></li>
 <li><a class="reference internal" href="#hivequery" id="id2">HiveQuery</a></li>
-<li><a class="reference internal" href="#hbase" id="id3">HBase</a></li>
-<li><a class="reference internal" href="#jdbc" id="id4">Jdbc</a></li>
+<li><a class="reference internal" href="#hbasetable" id="id3">HBaseTable</a></li>
+<li><a class="reference internal" href="#jdbctable" id="id4">JdbcTable</a></li>
 <li><a class="reference internal" href="#jsonfile" id="id5">JsonFile</a></li>
 <li><a class="reference internal" href="#linefile" id="id6">LineFile</a></li>
 <li><a class="reference internal" href="#pandas" id="id7">Pandas</a></li>
-<li><a class="reference internal" href="#xmlfile" id="id8">XmlFile</a></li>
+<li><a class="reference internal" href="#uploadrows" id="id8">UploadRows</a></li>
+<li><a class="reference internal" href="#xmlfile" id="id9">XmlFile</a></li>
 </ul>
 </div>
 <div class="section" id="csvfile">
@@ -214,7 +215,7 @@ It consists of three columns, <em>a</em>, <em>b</em>, and <em>c</em>.
 The columns have the data types <em>int32</em>, <em>int32</em>, and <em>str</em> respectively.
 The fields of data are separated by commas.
 There is no header to the file.</p>
-<p>Import the Trusted Analytics:</p>
+<p>Import the Trusted Analytics Platform:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 </pre></div>
 </div>
@@ -395,8 +396,8 @@ A simple query could be to get the query for the name and age
 </dd></dl>
 
 </div>
-<div class="section" id="hbase">
-<h2><a class="toc-backref" href="#id3">HBase</a><a class="headerlink" href="#hbase" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="hbasetable">
+<h2><a class="toc-backref" href="#id3">HBaseTable</a><a class="headerlink" href="#hbasetable" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="trustedanalytics.HBaseTable">
 <em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">HBaseTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>schema</em>, <em>start_row=None</em>, <em>end_row=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.HBaseTable" title="Permalink to this definition">¶</a></dt>
@@ -436,8 +437,8 @@ A simple query could be to get the query for the name and age
 <p class="rubric">Examples</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">HBaseTable</span> <span class="p">(</span><span class="s">&quot;my_table&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),(</span> <span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),(</span><span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">HBaseTable</span> <span class="p">(</span><span class="s">&quot;my_table&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),(</span> <span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),(</span><span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -446,11 +447,11 @@ A simple query could be to get the query for the name and age
 </dd></dl>
 
 </div>
-<div class="section" id="jdbc">
-<h2><a class="toc-backref" href="#id4">Jdbc</a><a class="headerlink" href="#jdbc" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jdbctable">
+<h2><a class="toc-backref" href="#id4">JdbcTable</a><a class="headerlink" href="#jdbctable" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="trustedanalytics.JdbcTable">
-<em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">JdbcTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em>, <em>query=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">JdbcTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the object to retrieve the data from an jdbc table.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -463,7 +464,7 @@ A simple query could be to get the query for the name and age
 </table>
 <dl class="method">
 <dt id="trustedanalytics.JdbcTable.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em>, <em>query=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>table_name</em>, <em>connector_type=None</em>, <em>url=None</em>, <em>driver_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.JdbcTable.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the object to retrieve the data from an jdbc table.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -485,7 +486,6 @@ A simple query could be to get the query for the name and age
 <blockquote>
 <div><p>An optional driver name</p>
 </div></blockquote>
-<p><strong>query</strong> : initial query (for data filtering / processing)</p>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>class</strong> : JdbcTable object</p>
@@ -499,11 +499,11 @@ A simple query could be to get the query for the name and age
 <p class="rubric">Examples</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span>
 <span class="go">                              &quot;jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord&quot;,</span>
 <span class="go">                              &quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;,</span>
 <span class="go">                              &quot;select * FROM SomeTable&quot;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">jdbcTable</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">jdbcTable</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -571,7 +571,7 @@ obj. Each object contains the attributes color, size, and shape.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Import the Trusted Analytics:</p>
+<p>Import the Trusted Analytics Platform:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
@@ -672,7 +672,7 @@ See <span class="xref std std-ref">Configure File System Root</span>.</p>
 <p>Given a raw data file &#8216;rawline_data.txt&#8217; located at
 &#8216;hdfs://localhost.localdomain/user/trusted/data/&#8217;.
 It consists of multiple lines separated by new line character.</p>
-<p>Import the Trusted Analytics:</p>
+<p>Import the Trusted Analytics Platform:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
@@ -741,27 +741,35 @@ Default value is True.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>For this example, we are going to use a raw data file named &#8220;pandas_df.csv&#8221;.
-It consists of three columns named: <em>a</em>, <em>b</em>, <em>c</em>.
-The columns have the data types: <em>int32</em>, <em>int32</em>, <em>str</em>.
-The fields of data are separated by commas.
-&#8216;0th&#8217; row in the file indicates the header.</p>
-<p>First bring in the stuff:</p>
+<p>For this example, we are going to create a 0-5 ratings system with corresponding descriptions.
+It consists of two columns, rating number and rating description.
+The columns have the data types, int32 and string.</p>
+<p>First import trustedanalytics and pandas:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
 </pre></div>
 </div>
+<p>Connect:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Create data:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ratings_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;invalid&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Very Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s">&quot;Average&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="s">&quot;Good&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s">&quot;Very Good&quot;</span><span class="p">]]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratings_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rating_id&#39;</span><span class="p">,</span> <span class="s">&#39;rating_text&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
 <p>At this point create a schema that defines the data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-              <span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-              <span class="p">(</span><span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;rating_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating_text&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)]</span>
 </pre></div>
 </div>
-<p>your_pandas = pandas.read_csv(&#8220;pandas_df.csv&#8221;)</p>
 <p>Now build a PandasFrame object with this schema:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">my_pandas</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PandasFrame</span><span class="p">(</span><span class="n">your_pandas</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ratings</span><span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">Pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 </pre></div>
 </div>
+<dl class="docutils">
+<dt>To check the result:: </dt>
+<dd>ratings.inspect()</dd>
+</dl>
 </dd></dl>
 
 <dl class="attribute">
@@ -827,8 +835,52 @@ It will have two columns <em>col1</em> and <em>col2</em> with types of <em>int32
 </dd></dl>
 
 </div>
+<div class="section" id="uploadrows">
+<h2><a class="toc-backref" href="#id8">UploadRows</a><a class="headerlink" href="#uploadrows" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="trustedanalytics.UploadRows">
+<em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">UploadRows</code><span class="sig-paren">(</span><em>data</em>, <em>schema</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.UploadRows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raw data source for upload: list of lists + schema</p>
+<dl class="method">
+<dt id="trustedanalytics.UploadRows.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>data</em>, <em>schema</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.UploadRows.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data source to upload raw list data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data: list</strong></p>
+<blockquote>
+<div><p>List of lists, where each item in the list represents a raw row data</p>
+</div></blockquote>
+<p><strong>schema: list of tuples</strong></p>
+<blockquote class="last">
+<div><p>List of tuples (column_name, data_type)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;one&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;two&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">]],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;three&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">]]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">vector</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  n      s           v</span>
+<span class="go">=========================</span>
+<span class="go">[0]  1  one    [1.0, 1.1]</span>
+<span class="go">[1]  2  two    [2.0, 2.2]</span>
+<span class="go">[2]  3  three  [3.0, 3.3]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="xmlfile">
-<h2><a class="toc-backref" href="#id8">XmlFile</a><a class="headerlink" href="#xmlfile" title="Permalink to this headline">¶</a></h2>
+<h2><a class="toc-backref" href="#id9">XmlFile</a><a class="headerlink" href="#xmlfile" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="trustedanalytics.XmlFile">
 <em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">XmlFile</code><span class="sig-paren">(</span><em>file_name</em>, <em>tag_name</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.XmlFile" title="Permalink to this definition">¶</a></dt>
@@ -895,7 +947,7 @@ during the import.</p>
 &lt;/shapes&gt;
 </pre></div>
 </div>
-<p>Import the Trusted Analytics:</p>
+<p>Import the Trusted Analytics Platform:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
@@ -971,7 +1023,7 @@ during the import.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

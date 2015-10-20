@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame group_by &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame group_by &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame histogram" href="histogram.html" >
     <link rel="prev" title="VertexFrame get_error_frame" href="get_error_frame.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -172,80 +172,45 @@ aggregation function supported at this time.</li>
 <p class="rubric">Examples</p>
 <p>For setup, we will use a Frame <em>my_frame</em> accessing a frame with a
 column <em>a</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b        c     d       e  f    g</span>
+<span class="go">========================================</span>
+<span class="go">[0]  1  alpha     3.0  small   1  3.0  9</span>
+<span class="go">[1]  1  bravo     5.0  medium  1  4.0  9</span>
+<span class="go">[2]  1  alpha     5.0  large   1  8.0  8</span>
+<span class="go">[3]  2  bravo     8.0  large   1  5.0  7</span>
+<span class="go">[4]  2  charlie  12.0  medium  1  6.0  6</span>
+<span class="go">[5]  2  bravo     7.0  small   1  8.0  5</span>
+<span class="go">[6]  2  bravo    12.0  large   1  6.0  4</span>
 
-<span class="go">  a:str</span>
-<span class="go">/-------/</span>
-<span class="go">  cat</span>
-<span class="go">  apple</span>
-<span class="go">  bat</span>
-<span class="go">  cat</span>
-<span class="go">  bat</span>
-<span class="go">  cat</span>
-</pre></div>
-</div>
-<p>Create a new frame, combining similar values of column <em>a</em>,
-and count how many of each value is in the original frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">Count the groups in column &#39;b&#39;</span>
 
-<span class="go">  a:str       count:int</span>
-<span class="go">/-----------------------/</span>
-<span class="go">  cat             3</span>
-<span class="go">  apple           1</span>
-<span class="go">  bat             2</span>
-</pre></div>
-</div>
-<p>In this example, &#8216;my_frame&#8217; is accessing a frame with three columns,
-<em>a</em>, <em>b</em>, and <em>c</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_count</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_count</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  b        count</span>
+<span class="go">===================</span>
+<span class="go">[0]  alpha        2</span>
+<span class="go">[1]  bravo        4</span>
+<span class="go">[2]  charlie      1</span>
 
-<span class="go">  a:int   b:str   c:float</span>
-<span class="go">/-------------------------/</span>
-<span class="go">  1       alpha     3.0</span>
-<span class="go">  1       bravo     5.0</span>
-<span class="go">  1       alpha     5.0</span>
-<span class="go">  2       bravo     8.0</span>
-<span class="go">  2       bravo    12.0</span>
-</pre></div>
-</div>
-<p>Create a new frame from this data, grouping the rows by unique
-combinations of column <em>a</em> and <em>b</em>.
-Average the value in <em>c</em> for each group:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;c&#39;</span> <span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">avg1</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;c&#39;</span> <span class="p">:</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">avg1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b        c_AVG</span>
+<span class="go">======================</span>
+<span class="go">[0]  2  bravo      9.0</span>
+<span class="go">[1]  1  alpha      4.0</span>
+<span class="go">[2]  2  charlie   12.0</span>
+<span class="go">[3]  1  bravo      5.0</span>
 
-<span class="go">  a:int   b:str   c_avg:float</span>
-<span class="go">/-----------------------------/</span>
-<span class="go">  1       alpha     4.0</span>
-<span class="go">  1       bravo     5.0</span>
-<span class="go">  2       bravo    10.0</span>
-</pre></div>
-</div>
-<p>For this example, we use <em>my_frame</em> with columns <em>a</em>, <em>c</em>, <em>d</em>,
-and <em>e</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:str   c:int   d:float e:int</span>
-<span class="go">/-------------------------------/</span>
-<span class="go">  ape     1       4.0     9</span>
-<span class="go">  ape     1       8.0     8</span>
-<span class="go">  big     1       5.0     7</span>
-<span class="go">  big     1       6.0     6</span>
-<span class="go">  big     1       8.0     5</span>
-</pre></div>
-</div>
-<p>Create a new frame from this data, grouping the rows by unique
-combinations of column <em>a</em> and <em>c</em>.
-Count each group; for column <em>d</em> calculate the average, sum and minimum
-value.
-For column <em>e</em>, save the maximum value:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">new_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;d&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">],</span> <span class="s">&#39;e&#39;</span><span class="p">:</span> <span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">})</span>
-
-<span class="go">  a:str   c:int   count:int  d_avg:float  d_sum:float   d_min:float   e_max:int</span>
-<span class="go">/-------------------------------------------------------------------------------/</span>
-<span class="go">  ape     1       2          6.0          12.0          4.0           9</span>
-<span class="go">  big     1       3          6.333333     19.0          5.0           7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mix_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">],</span> <span class="s">&#39;g&#39;</span><span class="p">:</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mix_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  count  g_MAX  f_AVG  f_SUM  f_MIN</span>
+<span class="go">=========================================</span>
+<span class="go">[0]  1      3      9    5.0   15.0    3.0</span>
+<span class="go">[1]  2      4      7   6.25   25.0    5.0</span>
 </pre></div>
 </div>
 <p>For further examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-group-by"><span>Group by (and aggregate):</span></a>.</p>
@@ -274,7 +239,7 @@ For column <em>e</em>, save the maximum value:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

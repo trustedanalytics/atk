@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame join &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame join &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
-    <link rel="next" title="VertexFrame loadhbase" href="loadhbase.html" >
+    <link rel="next" title="VertexFrame last_read_date" href="last_read_date.html" >
     <link rel="prev" title="VertexFrame inspect" href="inspect.html" > 
   </head>
   <body>
@@ -61,7 +61,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="loadhbase.html" title="VertexFrame loadhbase"
+        <a href="last_read_date.html" title="VertexFrame last_read_date"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -183,41 +183,81 @@ to using the <code class="docutils literal"><span class="pre">join</span></code>
 Keep in mind that unicode in column names will likely cause the
 drop_frames() method (and others) to fail!</p>
 <p class="rubric">Examples</p>
-<p>For this example, we will use a Frame <em>my_frame</em> accessing a frame with
-columns <em>a</em>, <em>b</em>, <em>c</em>, and a Frame <em>your_frame</em> accessing a frame with
-columns <em>a</em>, <em>d</em>, <em>e</em>.
-Join the two frames keeping only those rows having the same value in
-column <em>a</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:unicode   b:unicode   c:unicode</span>
-<span class="go">/--------------------------------------/</span>
-<span class="go">  alligator   bear        cat</span>
-<span class="go">  apple       berry       cantaloupe</span>
-<span class="go">  auto        bus         car</span>
-<span class="go">  mirror      frog        ball</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">your_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  b:unicode   c:int   d:unicode</span>
-<span class="go">/-------------------------------------/</span>
-<span class="go">  berry        5218   frog</span>
-<span class="go">  blue            0   log</span>
-<span class="go">  bus           871   dog</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">joined_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;inner&#39;</span><span class="p">)</span>
+<p>Consider two frames: codes and colors</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">codes</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers</span>
+<span class="go">============</span>
+<span class="go">[0]        1</span>
+<span class="go">[1]        3</span>
+<span class="go">[2]        1</span>
+<span class="go">[3]        0</span>
+<span class="go">[4]        2</span>
+<span class="go">[5]        1</span>
+<span class="go">[6]        5</span>
+<span class="go">[7]        3</span>
 </pre></div>
 </div>
-<p>Now, joined_frame is a Frame accessing a frame with the columns <em>a</em>,
-<em>b</em>, <em>c_L</em>, <em>ci_R</em>, and <em>d</em>.
-The data in the new frame will be from the rows where column &#8216;a&#8217; was
-the same in both frames.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">joined_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:unicode   b:unicode     c_L:unicode   c_R:int64   d:unicode</span>
-<span class="go">/-------------------------------------------------------------------/</span>
-<span class="go">  apple       berry         cantaloupe         5218   frog</span>
-<span class="go">  auto        bus           car                 871   dog</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">colors</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  color</span>
+<span class="go">====================</span>
+<span class="go">[0]        1  red</span>
+<span class="go">[1]        2  yellow</span>
+<span class="go">[2]        3  green</span>
+<span class="go">[3]        4  blue</span>
+</pre></div>
+</div>
+<p>Join them on the &#8216;numbers&#8217; column (&#8216;inner&#8217; join by default)</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s">&#39;numbers&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  numbers_R  color</span>
+<span class="go">===============================</span>
+<span class="go">[0]        1          1  red</span>
+<span class="go">[1]        3          3  green</span>
+<span class="go">[2]        1          1  red</span>
+<span class="go">[3]        2          2  yellow</span>
+<span class="go">[4]        1          1  red</span>
+<span class="go">[5]        3          3  green</span>
+</pre></div>
+</div>
+<p>(The join adds an extra column <a href="#id1"><span class="problematic" id="id2">*</span></a>_R which is the join column from the right frame; it may be disregarded)</p>
+<p>Try a &#8216;left&#8217; join, which includes all the rows of the codes frame.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j_left</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  numbers_R  color</span>
+<span class="go">===============================</span>
+<span class="go">[0]        1          1  red</span>
+<span class="go">[1]        3          3  green</span>
+<span class="go">[2]        1          1  red</span>
+<span class="go">[3]        0  None       None</span>
+<span class="go">[4]        2          2  yellow</span>
+<span class="go">[5]        1          1  red</span>
+<span class="go">[6]        5  None       None</span>
+<span class="go">[7]        3          3  green</span>
+</pre></div>
+</div>
+<p>And an outer join:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span> <span class="o">=</span> <span class="n">codes</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="s">&#39;numbers&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;outer&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">j_outer</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  numbers  numbers_R  color</span>
+<span class="go">===============================</span>
+<span class="go">[0]        0  None       None</span>
+<span class="go">[1]        1          1  red</span>
+<span class="go">[2]        1          1  red</span>
+<span class="go">[3]        1          1  red</span>
+<span class="go">[4]        2          2  yellow</span>
+<span class="go">[5]        3          3  green</span>
+<span class="go">[6]        3          3  green</span>
+<span class="go">[7]        4  None       None</span>
+<span class="go">&lt;/skip&gt;</span>
 </pre></div>
 </div>
 <p>More examples can be found in the <a class="reference internal" href="../../../ds_dflw.html#example-frame-join"><span>user manual</span></a>.</p>
@@ -246,7 +286,7 @@ the same in both frames.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

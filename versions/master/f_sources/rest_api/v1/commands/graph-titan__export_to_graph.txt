@@ -6,7 +6,7 @@
 :doc:`Commands <index>` graph:titan/export_to_graph
 ---------------------------------------------------
 
-Export from ta.TitanGraph to ta.Graph.
+Export from TitanGraph to Graph.
 
 POST /v1/commands/
 ==================
@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f68953280d0>>
+    **graph** : Graph
 
     ..
 

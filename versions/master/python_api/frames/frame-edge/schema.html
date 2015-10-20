@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame schema &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame schema &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame sort" href="sort.html" >
     <link rel="prev" title="EdgeFrame row_count" href="row_count.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -136,14 +136,17 @@ associated data types.
 It is retrieved as a list of tuples.
 Each tuple has the name and data type of one of the frame&#8217;s columns.</p>
 <p class="rubric">Examples</p>
-<p>Given that we have an existing data frame <em>my_data</em>, create a Frame,
-then show the frame schema:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">BF</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_frame</span><span class="p">(</span><span class="s">&#39;my_data&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">BF</span><span class="o">.</span><span class="n">schema</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(u&#39;name&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;age&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;tenure&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;phone&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
 </div>
-<p>The result is:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">)]</span>
+<p>Note how the types shown are the raw, underlying types used in python.  To see the schema in a friendlier
+format, used the __repr__ presentation, invoke by simply entering the frame:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<span class="go">Frame &quot;example_frame&quot;</span>
+<span class="go">row_count = 4</span>
+<span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode]</span>
+<span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -171,7 +174,7 @@ then show the frame schema:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

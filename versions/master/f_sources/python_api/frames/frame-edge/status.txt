@@ -23,23 +23,16 @@
         ..
 
             Status of the frame
-    One of three statuses: Active, Deleted, Deleted_Final
-       Active:   Frame is available for use
-       Deleted:  Frame has been scheduled for deletion can be unscheduled by modifying
-       Deleted_Final: Frame's backend files have been removed from disk.
+    One of three statuses: ACTIVE, DROPPED, FINALIZED
+       ACTIVE:    Entity is available for use
+       DROPPED:   Entity has been dropped by user or by garbage collection which found it stale
+       FINALIZED: Entity's data has been deleted
 
     Examples
     --------
-    Given that we have an existing data frame *my_data*, create a Frame,
-    then show the frame schema:
 
     .. code::
 
-        >>> BF = ta.get_frame('my_data')
-        >>> print BF.status
+        >>> frame.status
+        u'ACTIVE'
 
-    The result is:
-
-    .. code::
-
-        u'Active'

@@ -6,7 +6,7 @@
 :doc:`Commands <index>` frame/export_to_jdbc
 --------------------------------------------
 
-Write current frame to Jdbc table.
+Write current frame to JDBC table.
 
 POST /v1/commands/
 ==================
@@ -32,11 +32,11 @@ Request
 :arguments:
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
-        Frame to be exported to jdbc
+        Frame to be exported to JDBC
 
 
 
@@ -44,7 +44,7 @@ Request
 
     ..
 
-        jdbc table name
+        JDBC table name
 
 
 
@@ -52,7 +52,7 @@ Request
 
     ..
 
-        (optional) jdbc connector type
+        (optional) JDBC connector type
 
 
 

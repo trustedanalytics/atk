@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>RandomForestRegressorModel predict &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>RandomForestRegressorModel predict &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestRegressorModel" href="index.html" >
     <link rel="next" title="RandomForestRegressorModel publish" href="publish.html" >
     <link rel="prev" title="RandomForestRegressorModel name" href="name.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -122,7 +122,7 @@ Predict the values for the data points.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
@@ -131,23 +131,37 @@ trained.</p>
 <p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote>
 <div><p>Column(s) containing the observations whose labels are to be predicted.
-By default, we predict the labels over columns the RandomForestModel
+By default, we predict the labels over columns the Random Forest model
 was trained on.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>Frame</dt>
-<dd><p class="first last">A new frame consisting of the existing columns of the frame and a new column with predicted value for each observation.</p>
-</dd>
-</dl>
+<div><p>A new frame consisting of the existing columns of the frame and
+a new column with predicted value for each observation.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<p>Predict the values for a test frame using trained Random Forest Classifier model, and create a new frame revision with
+existing columns and a new predicted value&#8217;s column.</p>
+<p class="rubric">Examples</p>
+<p>Predict using a Random Forest Regressor Model.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestRegressorModel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_regressor_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_frame</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_regressor_output</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">  Class:int32   Dim_1:float64   Dim_2:float64   predicted_value:float64</span>
+<span class="go">-------------------------------------------------------------------------</span>
+<span class="go">    1           16.8973559126    2.6933495054                1.0</span>
+<span class="go">    1            5.5548729596    2.7777687995                1.0</span>
+<span class="go">    0           46.1810010826    3.1611961917                0.0</span>
+<span class="go">    0           44.3117586448    3.3458963222                0.0</span>
+<span class="go">    0           34.6334526911    3.6429838715                0.0</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -173,7 +187,7 @@ was trained on.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

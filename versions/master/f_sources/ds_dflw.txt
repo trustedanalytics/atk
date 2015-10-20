@@ -7,6 +7,9 @@
 Process Flow Examples
 =====================
 
+The information in this section displays the general path taken to build
+using |ATK| with Python.
+
 .. contents:: Table of Contents
     :local:
     :backlinks: none
@@ -20,15 +23,16 @@ Python Path Setup
 
 .. _pythonpath:
 
-It is recommended that the location of the 'trustedanalytics' directory be added
+The location of the 'trustedanalytics' directory should be added
 to the PYTHONPATH environmental variable prior to starting Python.
 This can be done from a shell script, like this::
 
-    PYTHONPATH=$PYTHONPATH:/usr/lib/
-    export PYTHONPATH
-    python
+    export PYTHONPATH=$PYTHONPATH:/usr/lib/ # appends path where trustedanalytics directory exists to
+                                            # any existing path
+                                            # this could also be added to .bashrc or other profile script
+    python  # starts python CLI
 
-This way, from inside Python, it is easy to load and connect to the
+This way, from inside Python, it is easier to load and connect to the
 REST server:
 
 .. code::
@@ -52,24 +56,6 @@ Each row corresponds to the data associated with one observation, and each
 column corresponds to a variable being observed.
 See the Python API :ref:`Data Types <python_api/datatypes/index>` for
 a current list of data types supported.
-
-Connect to the server:
-
-.. code::
-
-    >>> import trustedanalytics as ta
-    >>> ta.connect()
-
-.. note::
-
-    Sometimes it is helpful to see the details of the python stack trace upon
-    error.
-    Setting the *show_details* to ``True`` causes the full python stack trace
-    to be printed, rather than a friendlier digest.
-
-    .. code::
-
-        >>> ta.errors.show_details = True
 
 To see the data types supported:
 
@@ -96,9 +82,7 @@ You should see a list of variable types similar to this:
 .. _Importing Data:
 
 .. index::
-    single: CSV
-    single: JSON
-    single: LineFile
+    single: import
 
 Ingesting the Raw Data
 ======================
@@ -107,7 +91,7 @@ See the API section :ref:`Data Sources <python_api/datasources/index>`
 for the various methods of ingesting data.
 
 
-.. _example_files.csvfile:
+.. _example_files.CsvFile:
 
 Importing a |CSV| file.
 -----------------------
@@ -125,10 +109,9 @@ In the above example, the separating character is a comma (,).
 
 To import data, you must tell the system how the input file is formatted.
 This is done by defining a :term:`schema`.
-Schemas are constructed as a list of tuples, each of which contains pairs of
-:term:`ASCII`-character names and data types (see :ref:`Valid Data Types
-<valid_data_types>`), ordered according to the order of columns in the input
-file.
+Schemas are constructed as a list of tuples, each of which contains an
+:term:`ASCII`-character name and the item's :ref:`data type <valid_data_types>`,
+ordered according to the order of columns in the input file.
 
 Given a file *datasets/small_songs.csv* whose contents look like this::
 
@@ -180,7 +163,11 @@ parameter:
 
     >>> csv_description = ta.CsvFile(my_data_file, my_schema, skip_header_lines = 5)
 
-Now we use the schema and the file name to create CsvFile classes, which define
+.. warning::
+
+    See :ref:`Errata` for an issue skipping header lines.
+
+Now we use the schema and the file name to create CsvFile objects, which define
 the data layouts:
 
 .. only:: html
@@ -210,23 +197,14 @@ the data layouts:
         ... schema=column_schema_list, delimiter='|', skip_header_lines=2)
 
 
-.. TODO:: Add example for JsonFile.
-
-.. index::
-    single: frame (lower case f)
-    single: Frame (capital F)
-    pair: frame (lower case f); example
-    pair: Frame (capital F); example
-
 .. _example_frame.frame:
 
 ------
 Frames
 ------
 
-A :term:`Frame (capital F)` is a class of objects capable of accessing and
-controlling a :term:`frame (lower case f)` containing "big data".
-The frame is visualized as a two-dimensional table structure of rows and
+A Frame is a class of objects capable of accessing and controlling "big data".
+The data can be visualized as a two-dimensional table structure of rows and
 columns.
 |PACKAGE| can handle frames with large volumes of data, because it is
 designed to work with data spread over multiple machines.
@@ -236,10 +214,11 @@ Create a Frame
 
 There are several ways to create frames\:
 
-#.  as "empty", with no schema or data
-#.  with a schema and data
-#.  by copying (all or a part of) another frame
-#.  as a return value from a Frame-based method; this is part of the ETL data flow.
+#.  As "empty", with no schema or data
+#.  With a schema and data
+#.  By copying (all or a part of) another frame
+#.  As a return value from a Frame-based method; this is part of the
+    :term:`ETL <Extract, Transform, and Load>` data flow.
 
 See the Python API :ref:`Frames section <python_api/frames/index>` for more information.
 
@@ -254,8 +233,8 @@ Create an empty frame:
 The Frame *my_frame* is now a Python object which references an empty frame
 that has been created on the server.
 
-For an example, to create a frame defined by the schema *my_csv* (see
-:ref:`example_files.csvfile`), import the data, give the frame the name
+To create a frame defined by the schema *my_csv* (see
+:ref:`example_files.CsvFile`), import the data, give the frame the name
 *myframe*, and create a Frame object, *my_frame*, to access it:
 
 .. code::
@@ -281,16 +260,14 @@ rows where *z* is TRUE:
 
 .. code::
 
-    >>> my_frame4 = my_frame.copy(['x', 'z'], where = (lambda row: "TRUE" in row.z),
+    >>> my_frame4 = my_frame.copy(['x', 'z'], where = (lambda row: Harry Potter in row.title),
     ... name = "copy_of_myframe_true")
 
-Frames (capital 'F') are not the same thing as frames (lower case 'f').
-Frames (lower case 'f') contain data, viewed similarly to a table, while
-Frames are descriptive pointers to the data.
+Frames are handled by reference.
 Commands such as :code:`f4 = my_frame` will only give you a copy of the Frame
 proxy pointing to the same data.
 
-Let's create a Frame and check it out:
+Let's create a Frame and examine its contents:
 
 .. code::
 
@@ -415,7 +392,7 @@ To see the number of columns:
 
     >>> len(objects1.schema)
 
-To see all the Frame data:
+To see the Frame pointer:
 
 .. code::
 
@@ -436,7 +413,7 @@ Gives you something like this:
         12.3000            500
        195.1230         183954
 
-Using the take() method, makes a list of lists of frame data.
+The take() method makes a list of lists of frame data.
 Each list has the data from a row in the frame accessed by the Frame,
 in this case, 3 rows beginning from row 2.
 
@@ -514,9 +491,9 @@ not provide the same level of efficiency.
     Unless stated otherwise, cleaning functions use the Frame proxy to
     operate directly on the data, so they change the data in the frame,
     rather than return a new frame with the changed data.
-    It is recommended that you copy the data to a new frame on a regular
-    basis and work on the new frame.
-    This way, you have a fallback if something does not work as expected:
+    Copying the data to a new frame on a regular
+    basis and work on the new frame,
+    provides a fallback if something does not work as expected:
 
     .. code::
 
@@ -596,7 +573,7 @@ To delete those rows where field *b* is outside the range of 0 to 10:
 
 .. code::
 
-    >>> my_frame.filter(lambda row: 0 >= row['b'] >= 10)
+    >>> my_frame.filter(lambda row: 0 >= row['b'] AND row['b'] >= 10)
 
 .. index::
     pair: drop duplicates; example
@@ -621,13 +598,12 @@ duplicates of some previously evaluated row:
 
     >>> my_frame.drop_duplicates(['a', 'b'])
 
-To drop all duplicate rows where the columns *User* and *animals* are
-duplicate:
+To drop all duplicate rows where the columns *User* and *animals*
+have the same values as in some previous row:
 
 .. code::
 
     >>> animals.drop_duplicates(['User', 'animals'])
-    >>> animals.inspect(animals.row_count)
 
 .. index::
     pair: drop column; example
@@ -725,7 +701,7 @@ Add a new column *all_ones* and fill the entire column with the value 1:
     .. code::
 
         >>> animals.add_columns(lambda row: row.Float1 + row.Float2, ('Float1PlusFloat2', ta.float64))
-        >>> summary['Float1PlusFloat2'] = animals.column_summary_statistics('Float1PlusFloat2')
+        >>> summary = animals.column_summary_statistics('Float1PlusFloat2')
 
 .. only:: latex
 
@@ -735,8 +711,7 @@ Add a new column *all_ones* and fill the entire column with the value 1:
 
         >>> animals.add_columns(lambda row: row.Float1 + row.Float2,
         ... ('Float1PlusFloat2', ta.float64))
-        >>> summary['Float1PlusFloat2'] =
-        ... animals.column_summary_statistics('Float1PlusFloat2')
+        >>> summary = animals.column_summary_statistics('Float1PlusFloat2')
 
 Add a new column *pwl*, type ta.float64, and fill the value according to
 this table:
@@ -768,7 +743,7 @@ An example of Piecewise Linear Transformation:
     ...        return None
     ...    elif x < 50:
     ...        m, c =0.0046, 0.4168
-    ...    elif 50 <= x < 81:
+    ...    elif 50 <= x AND x < 81:
     ...        m, c =0.0071, 0.3429
     ...    elif 81 <= x:
     ...        m, c =0.0032, 0.4025
@@ -1261,30 +1236,6 @@ Make an EdgeFrame:
 Titan Graph
 -----------
 
-For the examples below, we will use a Frame *my_frame*, which accesses an
-arbitrary frame of data consisting of the :download:`following
-<f_downloads/employees.csv>`:
-
-+----------+---------+-------------------+-------+
-| Employee | Manager | Title             | Years |
-+==========+=========+===================+=======+
-| Bob      | Steve   | Associate         | 1     |
-+----------+---------+-------------------+-------+
-| Jane     | Steve   | Sn Associate      | 3     |
-+----------+---------+-------------------+-------+
-| Anup     | Steve   | Associate         | 3     |
-+----------+---------+-------------------+-------+
-| Sue      | Steve   | Market Analyst    | 1     |
-+----------+---------+-------------------+-------+
-| Mohit    | Steve   | Associate         | 2     |
-+----------+---------+-------------------+-------+
-| Steve    | David   | Marketing Manager | 5     |
-+----------+---------+-------------------+-------+
-| Larry    | David   | Product Manager   | 3     |
-+----------+---------+-------------------+-------+
-| David    | Rob     | VP of Sales       | 7     |
-+----------+---------+-------------------+-------+
-
 Graph Creation
 ==============
 
@@ -1301,4 +1252,26 @@ API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
     :hidden:
 
     ds_apir
+    CollaborativeFilteringNewPlugin_Summary
+    LdaNewPlugin_Summary
 
+------
+Models
+------
+
+Collaborative Filtering
+-----------------------
+See the :ref:`models section of the API
+<python_api/models/model-collaborative_filtering/index>` for details.
+
+Graphical Models
+----------------
+Graphical models find more insights from structured noisy data.
+See :ref:`graph API <python_api/graphs/index>` for details of the
+:term:`Label Propagation` (LP) and :term:`Loopy Belief Propagation` (LBP).
+
+Topic Modeling
+--------------
+For Topic Modeling, see the :ref:`LDA Model section of the API
+<python_api/models/model-lda/index>` and
+http://en.wikipedia.org/wiki/Topic_model

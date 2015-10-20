@@ -18,7 +18,7 @@
 
         ..
 
-            Name of the property to which pagerank
+            Name of the property to which PageRank
             value will be stored on vertex and edge.
 
 
@@ -27,7 +27,7 @@
 
         ..
 
-            List of edge labels to consider for pagerank computation.
+            List of edge labels to consider for PageRank computation.
             Default is all edges are considered.
 
 
@@ -150,3 +150,34 @@
     .. _Stanford\: Applications of PageRank: http://web.stanford.edu/class/msande233/handouts/lecture8.pdf
     .. _PLoS\: Computational Biology:
         http://www.ploscompbiol.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pcbi.1000494&representation=PDF
+
+    Examples
+    --------
+    .. only:: html
+
+        .. code::
+
+            >>> graph = ta.Graph()
+            >>> graph.define_vertex_type("node")
+            >>> graph.vertices["node"].add_vertices(frame,"follows")
+            >>> graph.vertices["node"].add_vertices(frame,"followed")
+            >>> graph.define_edge_type("e1","node","node",directed=True)
+            >>> graph.edges["e1"].add_edges(frame,"follows","followed")
+            >>> result = graph.graphx_pagerank(output_property="PageRank",max_iterations=2,convergence_tolerance=0.001)
+            >>> vertex_dict = result['vertex_dictionary']
+            >>> edge_dict = result['edge_dictionary']
+
+    .. only:: latex
+
+        .. code::
+
+            >>> graph = ta.Graph()
+            >>> graph.define_vertex_type("node")
+            >>> graph.vertices["node"].add_vertices(frame,"follows")
+            >>> graph.vertices["node"].add_vertices(frame,"followed")
+            >>> graph.define_edge_type("e1","node","node",directed=True)
+            >>> graph.edges["e1"].add_edges(frame,"follows","followed")
+            >>> result = graph.graphx_pagerank(output_property="PageRank",max_iterations=2,convergence_tolerance=0.001)
+            >>> vertex_dict = result['vertex_dictionary']
+            >>> edge_dict = result['edge_dictionary']
+

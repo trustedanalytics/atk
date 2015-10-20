@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame copy &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame copy &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame correlation" href="correlation.html" >
     <link rel="prev" title="EdgeFrame compute_misplaced_score" href="compute_misplaced_score.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -146,37 +146,33 @@
 <p>Copy frame or certain frame columns entirely or filtered.
 Useful for frame query.</p>
 <p class="rubric">Examples</p>
-<p>Build a Frame from a csv file with 5 million rows of data; call the
-frame &#8220;cust&#8221;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="s">&quot;my_data.csv&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">name</span><span class="p">(</span><span class="s">&quot;cust&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<span class="go">Frame &quot;example_frame&quot;</span>
+<span class="go">row_count = 4</span>
+<span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]</span>
+<span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame2</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c"># full copy of the frame</span>
+<span class="go">[===Job Progress===]</span>
+<span class="go">&lt;/skip&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame3</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">])</span>  <span class="c"># copy only two columns</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame3</span>
+<span class="go">Frame  &lt;unnamed&gt;</span>
+<span class="go">row_count = 4</span>
+<span class="go">schema = [name:unicode, age:int32]</span>
+<span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
 </pre></div>
 </div>
-<p>Given the frame has columns <em>id</em>, <em>name</em>, <em>hair</em>, and <em>shoe</em>.
-Copy it to a new frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Now we have two frames of data, each with 5 million rows.
-Checking the names:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">your_frame</span><span class="o">.</span><span class="n">name</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Gives the results:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="s">&quot;cust&quot;</span>
-<span class="s">&quot;frame_75401b7435d7132f5470ba35...&quot;</span>
-</pre></div>
-</div>
-<p>Now, let&#8217;s copy <em>some</em> of the columns from the original frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;hair&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>Our new frame now has two columns, <em>id</em> and <em>hair</em>, and has 5 million
-rows.
-Let&#8217;s try that again, but this time change the name of the <em>hair</em>
-column to <em>color</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">last_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">((</span><span class="s">&#39;id&#39;</span><span class="p">:</span> <span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="s">&#39;hair&#39;</span><span class="p">:</span> <span class="s">&#39;color&#39;</span><span class="p">))</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame4</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">({</span><span class="s">&#39;name&#39;</span><span class="p">:</span> <span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;age&#39;</span><span class="p">:</span> <span class="s">&#39;age&#39;</span><span class="p">,</span> <span class="s">&#39;tenure&#39;</span><span class="p">:</span> <span class="s">&#39;years&#39;</span><span class="p">},</span>
+<span class="gp">... </span>                    <span class="n">where</span><span class="o">=</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">age</span> <span class="o">&gt;</span> <span class="mi">40</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame4</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  years</span>
+<span class="go">=========================</span>
+<span class="go">[0]  Thurston   65     26</span>
+<span class="go">[1]  Judy       44     14</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -204,7 +200,7 @@ column to <em>color</em>:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

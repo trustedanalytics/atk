@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>RandomForestClassifierModel train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>RandomForestClassifierModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestClassifierModel" href="index.html" >
     <link rel="next" title="Models PrincipalComponentsModel" href="../model-principal_components/index.html" >
     <link rel="prev" title="RandomForestClassifierModel test" href="test.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -115,62 +115,101 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-1910466087</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-687814711</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build Random Forests Classifier model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train the model on.</p>
+<div><p>A frame to train the model on</p>
 </div></blockquote>
 <p><strong>label_column</strong> : unicode</p>
 <blockquote>
-<div><p>Column name containing the label for each observation.</p>
+<div><p>Column name containing the label for each observation</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>Column(s) containing the observations.</p>
+<div><p>Column(s) containing the observations</p>
 </div></blockquote>
 <p><strong>num_classes</strong> : int32 (default=2)</p>
 <blockquote>
-<div><p>Number of classes for classification</p>
+<div><p>Number of classes for classification. Default is 2.</p>
 </div></blockquote>
 <p><strong>num_trees</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>Number of tress in the random forest</p>
+<div><p>Number of tress in the random forest. Default is 1.</p>
 </div></blockquote>
 <p><strong>impurity</strong> : unicode (default=gini)</p>
 <blockquote>
-<div><p>Criterion used for information gain calculation. Supported values &#8220;gini&#8221; or &#8220;entropy&#8221;</p>
+<div><p>Criterion used for information gain calculation. Supported values &#8220;gini&#8221; or &#8220;entropy&#8221;. Default is &#8220;gini&#8221;.</p>
 </div></blockquote>
 <p><strong>max_depth</strong> : int32 (default=4)</p>
 <blockquote>
-<div><p>Maximum depth of the tree</p>
+<div><p>Maximum depth of the tree. Default is 4.</p>
 </div></blockquote>
 <p><strong>max_bins</strong> : int32 (default=100)</p>
 <blockquote>
-<div><p>Maximum number of bins used for splitting features</p>
+<div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=-1910466087)</p>
+<p><strong>seed</strong> : int32 (default=-687814711)</p>
 <blockquote>
-<div><p>Random seed for bootstrapping and choosing feature subsets</p>
+<div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
 <p><strong>categorical_features_info</strong> : None (default=None)</p>
 <p><strong>feature_subset_category</strong> : unicode (default=None)</p>
 <blockquote>
-<div><p>Number of features to consider for splits at each node. Supported values &#8220;auto&#8221;,&#8221;all&#8221;,&#8221;sqrt&#8221;,&#8221;log2&#8221;,&#8221;onethird&#8221;</p>
+<div><p>Number of features to consider for splits at each node. Supported values &#8220;auto&#8221;,&#8221;all&#8221;,&#8221;sqrt&#8221;,&#8221;log2&#8221;,&#8221;onethird.
+If &#8220;auto&#8221; is set, this is based on num_trees: if num_trees == 1, set to &#8220;all&#8221; ; if num_trees &gt; 1, set to &#8220;sqrt&#8221;</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: dict</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><dl class="docutils">
+<dt>dictionary</dt>
+<dd><p class="first last">A dictionary with trained Random Forest Classifier model with the following keys:
+<a href="#id1"><span class="problematic" id="id2">|</span></a>&#8216;observation_columns&#8217;: the list of observation columns on which the model was trained,
+<a href="#id3"><span class="problematic" id="id4">|</span></a>&#8216;label_column&#8217;: the column name containing the labels of the observations,
+<a href="#id5"><span class="problematic" id="id6">|</span></a>&#8216;num_classes&#8217;: the number of classes,
+<a href="#id7"><span class="problematic" id="id8">|</span></a>&#8216;num_trees&#8217;: the number of decision trees in the random forest,
+<a href="#id9"><span class="problematic" id="id10">|</span></a>&#8216;num_nodes&#8217;: the number of nodes in the random forest,
+<a href="#id11"><span class="problematic" id="id12">|</span></a>&#8216;feature_subset_category&#8217;: the map storing arity of categorical features,
+<a href="#id13"><span class="problematic" id="id14">|</span></a>&#8216;impurity&#8217;: the criterion used for information gain calculation,
+<a href="#id15"><span class="problematic" id="id16">|</span></a>&#8216;max_depth&#8217;: the maximum depth of the tree,
+<a href="#id17"><span class="problematic" id="id18">|</span></a>&#8216;max_bins&#8217;: the maximum number of bins used for splitting features,
+<a href="#id19"><span class="problematic" id="id20">|</span></a>&#8216;seed&#8217;: the random seed used for bootstrapping and choosing feature subset.</p>
+</dd>
+</dl>
+</div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p>Creating a Random Forests Classifier Model using the observation columns and label column.</p>
+<p class="rubric">Examples</p>
+<p>Train Random Forest Model as a classifier.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestClassifierModel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span><span class="s">&#39;Class&#39;</span><span class="p">,[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">],</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span>
+<span class="go">{u&#39;feature_subset_category&#39;: u&#39;all&#39;,</span>
+<span class="go"> u&#39;impurity&#39;: u&#39;gini&#39;,</span>
+<span class="go"> u&#39;label_column&#39;: u&#39;Class&#39;,</span>
+<span class="go"> u&#39;max_bins&#39;: 100,</span>
+<span class="go"> u&#39;max_depth&#39;: 4,</span>
+<span class="go"> u&#39;num_classes&#39;: 2,</span>
+<span class="go"> u&#39;num_nodes&#39;: 11,</span>
+<span class="go"> u&#39;num_trees&#39;: 1,</span>
+<span class="go"> u&#39;observation_columns&#39;: [u&#39;Dim_1&#39;, u&#39;Dim_2&#39;],</span>
+<span class="go"> u&#39;seed&#39;: -579418825}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span><span class="p">[</span><span class="s">&#39;num_nodes&#39;</span><span class="p">]</span>
+<span class="go">11</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -196,7 +235,7 @@ Build Random Forests Classifier model.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

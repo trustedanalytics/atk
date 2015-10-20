@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **graph** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f68953280d0>>
+    **graph** : Graph
 
     ..
 
@@ -75,7 +75,7 @@ Request
 
 **Description**
 
-Calculates the clustering coefficient of the graph with repect to an (optional) set of labels.
+Calculates the clustering coefficient of the graph with respect to an (optional) set of labels.
 
 Pulls graph from underlying store, calculates degrees and writes them into the property specified,
 and then writes the output graph to the underlying store.

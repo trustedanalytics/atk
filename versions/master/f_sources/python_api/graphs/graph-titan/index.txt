@@ -25,6 +25,7 @@
     graphx_connected_components
     graphx_pagerank
     graphx_triangle_count
+    last_read_date
     ml/belief_propagation
     name
     query/gremlin
@@ -33,23 +34,12 @@
 
 .. class:: TitanGraph
 
-
-        Proxy to a graph in Titan, supports Gremlin query
-
-        Examples
-        --------
-        Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
-
-        .. code::
-
-            >>> graph = ta.get_graph("my_graph")
-            >>> titan_graph = graph.export_to_titan("titan_graph")
-
-        
+    Proxy to a graph in Titan, supports Gremlin query.
 
     .. rubric:: Attributes
 
     ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
     :doc:`name <name>`\                                                                                   Set or get the name of the graph object.
     :doc:`status <status>`\                                                                               Current graph life cycle status.
     ====================================================================================================  ====================================================================================================
@@ -64,7 +54,7 @@
     :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
     :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
     :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
-    :doc:`export_to_graph <export_to_graph>`\ (self)                                                      Export from ta.TitanGraph to ta.Graph.
+    :doc:`export_to_graph <export_to_graph>`\ (self)                                                      Export from TitanGraph to Graph.
     :doc:`graph_clustering <graph_clustering>`\ (self, edge_distance)                                     Performs graph clustering over an initial titan graph.
     :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
@@ -91,3 +81,11 @@
 
 
 
+    Examples
+    --------
+    Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
+
+    .. code::
+
+        >>> graph = ta.get_graph("my_graph")
+        >>> titan_graph = graph.export_to_titan("titan_graph")

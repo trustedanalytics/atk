@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>IntelliJ IDEA Setup Instructions &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>IntelliJ IDEA Setup Instructions &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,7 +25,10 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" > 
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Windows Python Setup" href="ad_other.html" >
+    <link rel="next" title="PyCharm Setup Instructions" href="ds_pycharm.html" >
+    <link rel="prev" title="Eclipse Setup Instructions" href="ds_eclipse.html" > 
   </head>
   <body>
 
@@ -45,11 +48,21 @@
     <ul class="nav nav-pills pull-left">
 	
         <li class="active"><a href="index.html">Trusted Analytics</a></li>
-	 
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_other.html" accesskey="U">Windows Python Setup</a></li> 
     </ul>
               
               
     <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ds_eclipse.html" title="Eclipse Setup Instructions"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_pycharm.html" title="PyCharm Setup Instructions"
+           accesskey="N">next</a>
+      </li>
       <li class="active">
         <a href="genindex.html" title="General Index"
            accesskey="I">index</a>
@@ -78,11 +91,21 @@
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_dp2.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on DP2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -110,13 +133,13 @@
 <p>These instructions assume you have already installed:</p>
 <ul class="simple">
 <li>Python 2.7:</li>
-<li>Trusted Analytics Python REST Client and required dependencies.</li>
+<li>Trusted Analytics Platform Python REST Client and required dependencies.</li>
 <li><a class="reference external" href="http://www.jetbrains.com/idea/">IntelliJ IDEA</a>.</li>
 </ul>
 <p>Verify the Python plugin is enabled in IntelliJ by choosing
 <span class="menuselection">File ‣ Settings</span>, searching for <em>Python</em>, and choosing
 <em>Plugins</em> from the pane on the left-hand side.</p>
-<p>Trusted Analytics should work with any version of IntelliJ IDEA but these instructions
+<p>Trusted Analytics Platform should work with any version of IntelliJ IDEA but these instructions
 were tested with IntelliJ IDEA 13.1.3 Ultimate.</p>
 </div>
 <div class="section" id="setup">
@@ -130,19 +153,19 @@ were tested with IntelliJ IDEA 13.1.3 Ultimate.</p>
 <li>Choose <em>Python 2.7</em> as the Python Interpreter and choose the <em>Next</em>
 button.<ol class="lowerroman">
 <li>If <em>Python 2.7</em> does not appear in the list you will need to
-configure a Python 2.7 Intepreter.<ol class="arabic">
+configure a Python 2.7 Interpreter.<ol class="arabic">
 <li>Choose the <em>Configure</em> button.</li>
 <li>Choose the plus sign <em>+</em>.</li>
 <li>Choose <em>Python SDK</em>.</li>
 <li>Choose <em>Add Local</em>.</li>
 <li>Browse for your local Python 2.7 installation.
-On RedHat and Centos this is probably /usr/bin/python.</li>
+On RedHat and CentOS this is probably /usr/bin/python.</li>
 <li>Choose the <em>OK</em> button.</li>
 </ol>
 </li>
 </ol>
 </li>
-<li>Give your project a name, e.g <em>myproject</em>.</li>
+<li>Give your project a name, for example, <em>myproject</em>.</li>
 <li>Choose the <em>Finish</em> button.</li>
 </ol>
 </li>
@@ -152,8 +175,8 @@ On RedHat and Centos this is probably /usr/bin/python.</li>
 <em>Apply</em>.</li>
 <li>Choose <em>Libraries</em> in the left hand pane.</li>
 <li>Choose the plus sign <em>+</em>.</li>
-<li>Choose <em>Java</em> and browse to the Trusted Analytics Python REST Client libraries.
-On RedHat and Centos these are found under
+<li>Choose <em>Java</em> and browse to the Trusted Analytics Platform Python REST Client libraries.
+On RedHat and CentOS these are found under
 &#8216;/usr/lib/trustedanalytics/rest-client/python&#8217;.</li>
 <li>Choose <em>classes</em>.</li>
 <li>Choose <em>myproject</em> and click <em>OK</em> button.</li>
@@ -203,7 +226,7 @@ On RedHat and Centos these are found under
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

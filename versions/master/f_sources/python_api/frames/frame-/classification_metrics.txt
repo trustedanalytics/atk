@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: classification_metrics(self, label_column, pred_column, pos_label=None, beta=None)
+.. function:: classification_metrics(self, label_column, pred_column, pos_label=None, beta=None, frequency_column=None)
 
     Model statistics of accuracy, precision, and others.
 
@@ -50,6 +50,15 @@
 
 
 
+        **frequency_column** : unicode (default=None)
+
+        ..
+
+            The name of an optional column containing the
+            frequency of observations.
+
+
+
 
     :Returns:
 
@@ -57,12 +66,13 @@
 
         ..
 
-            object
-            <object>.accuracy : double
-            <object>.confusion_matrix : table
-            <object>.f_measure : double
-            <object>.precision : double
-            <object>.recall : double
+            The data returned is composed of multiple components\:
+
+            |   <object>.accuracy : double
+            |   <object>.confusion_matrix : table
+            |   <object>.f_measure : double
+            |   <object>.precision : double
+            |   <object>.recall : double
     Calculate the accuracy, precision, confusion_matrix, recall and
     :math:`F_{ \beta}` measure for a classification model.
 
@@ -130,3 +140,48 @@
     Notes
     -----
     The **confusion_matrix** is not yet implemented for multi-class classifiers.
+
+    Examples
+    --------
+    Consider the following sample data set in *frame* with actual data
+    labels specified in the *labels* column and the predicted labels in the
+    *predictions* column:
+
+    .. code::
+
+        >>> frame.inspect()
+
+          a:unicode   b:int32   labels:int32  predictions:int32
+        /-------------------------------------------------------/
+            red         1              0                  0
+            blue        3              1                  0
+            blue        1              0                  0
+            green       0              1                  1
+
+        >>> cm = frame.classification_metrics(label_column='labels',
+        ... pred_column='predictions', pos_label=1, beta=1)
+
+        >>> cm.f_measure
+
+        0.66666666666666663
+
+        >>> cm.recall
+
+        0.5
+
+        >>> cm.accuracy
+
+        0.75
+
+        >>> cm.precision
+
+        1.0
+
+        >>> cm.confusion_matrix
+
+                      Predicted
+                     _pos_ _neg__
+        Actual  pos |  1     1
+                neg |  0     2
+
+

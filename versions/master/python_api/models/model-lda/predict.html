@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>LdaModel predict &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>LdaModel predict &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LdaModel" href="index.html" >
     <link rel="next" title="LdaModel publish" href="publish.html" >
     <link rel="prev" title="LdaModel name" href="name.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -116,7 +116,7 @@
 <dl class="function">
 <dt id="predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>self</em>, <em>document</em><span class="sig-paren">)</span><a class="headerlink" href="#predict" title="Permalink to this definition">¶</a></dt>
-<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Predict conditional probabilities of topics given document.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -130,21 +130,22 @@ Predict conditional probabilities of topics given document.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>dict</dt>
-<dd><p class="first last">Dictionary containing predicted topics.
-The data returned is composed of multiple components:</p>
-</dd>
-<dt>topics_given_doc <span class="classifier-delimiter">:</span> <span class="classifier">list of doubles</span></dt>
-<dd><p class="first last">List of conditional probabilities of topics given document.</p>
-</dd>
-<dt>new_words_count <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
-<dd><p class="first last">Count of new words in test document not present in training set.</p>
-</dd>
-<dt>new_words_percentage: double</dt>
-<dd><p class="first last">Percentage of new words in test document.</p>
-</dd>
-</dl>
+<div><p>Dictionary containing predicted topics.
+The data returned is composed of multiple keys:</p>
+<div class="line-block">
+<div class="line"><strong>list of doubles</strong> | <em>topics_given_doc</em></div>
+<div class="line-block">
+<div class="line">List of conditional probabilities of topics given document.</div>
+</div>
+<div class="line"><strong>int</strong> : <em>new_words_count</em></div>
+<div class="line-block">
+<div class="line">Count of new words in test document not present in training set.</div>
+</div>
+<div class="line"><strong>double</strong> | <em>new_words_percentage</em></div>
+<div class="line-block">
+<div class="line">Percentage of new words in test document.</div>
+</div>
+</div>
 </div></blockquote>
 </td>
 </tr>
@@ -152,6 +153,38 @@ The data returned is composed of multiple components:</p>
 </table>
 <p>Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings</p>
+<p class="rubric">Examples</p>
+<p>Inspect the input frame:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">doc_id:unicode   word_id:unicode   word_count:int64</span>
+<span class="go">\-------------------------------------------------------\</span>
+<span class="go">  nytimes          harry                            3</span>
+<span class="go">  nytimes          economy                         35</span>
+<span class="go">  nytimes          jobs                            40</span>
+<span class="go">  nytimes          magic                            1</span>
+<span class="go">  nytimes          realestate                      15</span>
+<span class="go">  nytimes          movies                           6</span>
+<span class="go">  economist        economy                         50</span>
+<span class="go">  economist        jobs                            35</span>
+<span class="go">  economist        realestate                      20</span>
+<span class="go">  economist        movies                           1</span>
+</pre></div>
+</div>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;secrets&#39;</span><span class="p">,</span> <span class="s">&#39;magic&#39;</span><span class="p">,</span> <span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;chamber&#39;</span> <span class="s">&#39;test&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The variable <em>prediction</em> is a dictionary with three keys:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_words_percentage</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">new_words_count</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;new_words_count&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
+
+<span class="go">{u&#39;topics_given_doc&#39;: [0.04150190747884333, 0.7584980925211566], u&#39;new_words_percentage&#39;: 20.0, u&#39;new_words_count&#39;: 1}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -177,7 +210,7 @@ The input document is represented as a list of strings</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

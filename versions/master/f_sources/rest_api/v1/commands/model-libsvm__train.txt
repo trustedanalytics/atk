@@ -7,7 +7,7 @@
 ------------------------------------------
 
 |ALPHA|
-Train Lib Svm model based on another frame.
+Train a Lib Svm model
 
 POST /v1/commands/
 ==================
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -53,7 +53,8 @@ Request
 
     ..
 
-        Column name containing the label for each observation.
+        Column name containing the label for each
+        observation.
 
 
 
@@ -61,7 +62,8 @@ Request
 
     ..
 
-        Column(s) containing the observations.
+        Column(s) containing the
+        observations.
 
 
 
@@ -72,11 +74,11 @@ Request
         Set type of SVM.
         Default is one-class SVM.
 
-            0 -- C-SVC
-            1 -- nu-SVC
-            2 -- one-class SVM
-            3 -- epsilon-SVR
-            4 -- nu-SVR
+        |   0 -- C-SVC
+        |   1 -- nu-SVC
+        |   2 -- one-class SVM
+        |   3 -- epsilon-SVR
+        |   4 -- nu-SVR
 
 
 
@@ -87,10 +89,10 @@ Request
         Specifies the kernel type to be used in the algorithm.
         Default is RBF.
 
-            0 -- linear: u\'\*v
-            1 -- polynomial: (gamma*u\'\*v + coef0)^degree
-            2 -- radial basis function: exp(-gamma*|u-v|^2)
-            3 -- sigmoid: tanh(gamma*u\'\*v + coef0)
+        |   0 -- linear: u\'\*v
+        |   1 -- polynomial: (gamma*u\'\*v + coef0)^degree
+        |   2 -- radial basis function: exp(-gamma*|u-v|^2)
+        |   3 -- sigmoid: tanh(gamma*u\'\*v + coef0)
 
 
 
@@ -149,7 +151,8 @@ Request
 
     ..
 
-        Set the parameter nu of nu-SVC, one-class SVM, and nu-SVR.
+        Set the parameter nu of nu-SVC, one-class SVM,
+        and nu-SVR.
 
 
 
@@ -157,7 +160,8 @@ Request
 
     ..
 
-        Specify the size of the kernel cache (in MB).
+        Specify the size of the kernel
+        cache (in MB).
 
 
 

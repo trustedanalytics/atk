@@ -69,7 +69,7 @@
 
     **Degree Calculation**
 
-    A fundamental quantity in graph analyses is the degree of a vertex:
+    A fundamental quantity in graph analysis is the degree of a vertex:
     The degree of a vertex is the number of edges adjacent to it.
 
     For a directed edge relation, a vertex has both an out-degree (the number of
@@ -89,3 +89,28 @@
 
     The toolkit provides :ref:`annotate_weighted_degrees <python_api/graphs/graph-/annotate_weighted_degrees>`
     for the distributed calculation of weighted vertex degrees.
+
+    Examples
+    --------
+    Given a graph:
+
+    .. code::
+
+        >>> g.query.gremlin('g.V [ 0 .. 1]')
+
+        Out[12]:
+           {u'results': [{u'_id': 19456,
+            u'_label': u'vertex',
+            u'_type': u'vertex',
+            u'_vid': 545413,
+            u'source': 6961},
+           {u'_id': 19968,
+            u'_label': u'vertex',
+            u'_type': u'vertex',
+            u'_vid': 511316,
+            u'source': 31599}],
+            u'run_time_seconds': 1.822}
+
+        >>> h = g.annotate_degrees('degree')
+
+

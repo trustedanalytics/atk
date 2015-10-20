@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>VertexFrame column_mode &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>VertexFrame column_mode &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
     <link rel="next" title="VertexFrame column_names" href="column_names.html" >
     <link rel="prev" title="VertexFrame column_median" href="column_median.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -140,9 +140,8 @@ Default is 1.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
 <div><dl class="docutils">
-<dt>dict</dt>
-<dd><p class="first last">Dictionary containing summary statistics.
-The data returned is composed of multiple components:</p>
+<dt>Dictionary containing summary statistics.</dt>
+<dd><p class="first last">The data returned is composed of multiple components:</p>
 </dd>
 <dt>mode <span class="classifier-delimiter">:</span> <span class="classifier">A mode is a data element of maximum net weight.</span></dt>
 <dd><p class="first last">A set of modes is returned.
@@ -181,10 +180,14 @@ All data elements of weight less than or equal to 0 are excluded from the
 calculation, as are all data elements whose weight is NaN or infinite.
 If there are no data elements of finite weight greater than 0,
 no mode is returned.</p>
-<p>Because data distributions often have mutliple modes, it is possible for a
+<p>Because data distributions often have multiple modes, it is possible for a
 set of modes to be returned.
 By default, only one is returned, but by setting the optional parameter
 max_modes_returned, a larger number of modes can be returned.</p>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">column_mode</span><span class="p">(</span><span class="s">&#39;modum columpne&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -210,7 +213,7 @@ max_modes_returned, a larger number of modes can be returned.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

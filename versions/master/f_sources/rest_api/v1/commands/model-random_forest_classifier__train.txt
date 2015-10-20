@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,11 +41,11 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
-        A frame to train the model on.
+        A frame to train the model on
 
 
 
@@ -53,7 +53,7 @@ Request
 
     ..
 
-        Column name containing the label for each observation.
+        Column name containing the label for each observation
 
 
 
@@ -61,7 +61,7 @@ Request
 
     ..
 
-        Column(s) containing the observations.
+        Column(s) containing the observations
 
 
 
@@ -69,7 +69,7 @@ Request
 
     ..
 
-        Number of classes for classification
+        Number of classes for classification. Default is 2.
 
 
 
@@ -77,7 +77,7 @@ Request
 
     ..
 
-        Number of tress in the random forest
+        Number of tress in the random forest. Default is 1.
 
 
 
@@ -85,7 +85,7 @@ Request
 
     ..
 
-        Criterion used for information gain calculation. Supported values "gini" or "entropy"
+        Criterion used for information gain calculation. Supported values "gini" or "entropy". Default is "gini".
 
 
 
@@ -93,7 +93,7 @@ Request
 
     ..
 
-        Maximum depth of the tree
+        Maximum depth of the tree. Default is 4.
 
 
 
@@ -101,15 +101,15 @@ Request
 
     ..
 
-        Maximum number of bins used for splitting features
+        Maximum number of bins used for splitting features. Default is 100.
 
 
 
-    **seed** : int32 (default=-1910466087)
+    **seed** : int32 (default=-687814711)
 
     ..
 
-        Random seed for bootstrapping and choosing feature subsets
+        Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.
 
 
 
@@ -125,7 +125,8 @@ Request
 
     ..
 
-        Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird"
+        Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird.
+        If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"
 
 
 
@@ -187,6 +188,18 @@ Response
 
 ``dict``
 
-
+        dictionary
+              A dictionary with trained Random Forest Classifier model with the following keys\:
+              |'observation_columns': the list of observation columns on which the model was trained,
+              |'label_column': the column name containing the labels of the observations,
+              |'num_classes': the number of classes,
+              |'num_trees': the number of decision trees in the random forest,
+              |'num_nodes': the number of nodes in the random forest,
+              |'feature_subset_category': the map storing arity of categorical features,
+              |'impurity': the criterion used for information gain calculation,
+              |'max_depth': the maximum depth of the tree,
+              |'max_bins': the maximum number of bins used for splitting features,
+              |'seed': the random seed used for bootstrapping and choosing feature subset.
+            
 
 

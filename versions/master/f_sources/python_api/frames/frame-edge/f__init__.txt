@@ -14,54 +14,45 @@
 
     :Parameters:
 
-        **graph** : ? (default=None)
+        **graph** :  (default=None)
 
         ..
 
-            graph these edges belong to
 
 
 
-        **label** : ? (default=None)
 
-        ..
-
-            edge label
-
-
-
-        **src_vertex_label** : ? (default=None)
+        **label** :  (default=None)
 
         ..
 
-            label of the source vertex type
 
 
 
-        **dest_vertex_label** : ? (default=None)
 
-        ..
-
-            label of the destination vertex type
-
-
-
-        **directed** : ? (default=None)
+        **src_vertex_label** :  (default=None)
 
         ..
 
-            directed or undirected
 
 
 
 
-    :Returns:
-
-        : VertexFrame object
+        **dest_vertex_label** :  (default=None)
 
         ..
 
-            An object with access to the frame.
+
+
+
+
+        **directed** :  (default=None)
+
+        ..
+
+
+
+
     --------
     Given a data file */movie.csv*, create a frame to match this data and move
     the data to the frame.
@@ -123,4 +114,6 @@
     .. code::
 
         >>> my_new_frame = my_new_edge_frame.copy()
+
+    </skip>
         

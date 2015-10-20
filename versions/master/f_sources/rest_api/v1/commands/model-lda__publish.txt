@@ -6,7 +6,7 @@
 :doc:`Commands <index>` model:lda/publish
 -----------------------------------------
 
-|BETA|
+|ALPHA|
 Creates a tar file that will used as input to the scoring engine
 
 POST /v1/commands/
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -51,9 +51,8 @@ Request
 
 **Description**
 
-Creates a tar file with the trained Latent Dirichlet Allocation model.
-The tar file is used as input to the scoring engine to predict the conditional topic
-probabilities for a document.
+Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
+              The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.
 
 |
 
@@ -101,6 +100,6 @@ Response
 
 ``dict``
 
-        Returns the HDFS path to the tar file
+        Returns the HDFS path to the trained model's tar file
 
 

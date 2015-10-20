@@ -6,7 +6,7 @@
 :doc:`Commands <index>` frame:/load
 -----------------------------------
 
-Append data from a csv/xml into an existing (possibly empty) frame
+Append data from a CSV/XML into an existing (possibly empty) frame
 
 POST /v1/commands/
 ==================
@@ -32,7 +32,7 @@ Request
 :arguments:
 
 
-    **destination** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **destination** : Frame
 
     ..
 
@@ -58,7 +58,7 @@ Request
 
 **Description**
 
-Append data from a csv/xml into an existing (possibly empty) frame
+Append data from a CSV/XML into an existing (possibly empty) frame
 
 |
 

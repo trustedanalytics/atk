@@ -6,7 +6,7 @@
 :doc:`Commands <index>` model:lda/predict
 -----------------------------------------
 
-|BETA|
+|ALPHA|
 Predict conditional probabilities of topics given document.
 
 POST /v1/commands/
@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -108,14 +108,14 @@ Response
 
 ``dict``
 
-        dict
-            Dictionary containing predicted topics.
-            The data returned is composed of multiple components:
-        topics_given_doc : list of doubles
-            List of conditional probabilities of topics given document.
-        new_words_count : int
-            Count of new words in test document not present in training set.
-        new_words_percentage: double
-            Percentage of new words in test document.
+        Dictionary containing predicted topics.
+        The data returned is composed of multiple keys\:
+
+        |   **list of doubles** | *topics_given_doc*
+        |       List of conditional probabilities of topics given document.
+        |   **int** : *new_words_count*
+        |       Count of new words in test document not present in training set.
+        |   **double** | *new_words_percentage*
+        |       Percentage of new words in test document.
 
 

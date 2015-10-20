@@ -23,7 +23,29 @@
 
         ..
 
-            Returns the HDFS path to the tar file
-    Creates a tar file with the trained Principal Components Model.
-           The tar file is used as input to the scoring engine to compute the principal components and t-squared index
-           of the observation.
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the PrincipalComponentsModel and its implementation into a tar file. The tar file is then published
+    on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
+    then be used to compute the principal components and t-squared index(if requested) of an observation.
+
+    Examples
+    --------
+    Publish a trained Principal Components Model for scoring
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+            >>> my_model.train(train_frame,["1","2","3"],k=3)
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.PrincipalComponentsModel(name='principalcomponentsmodel')
+            >>> my_model.train(train_frame,["1","2","3"],k=3)
+            >>> my_model.publish()
+            <Path in HDFS to model's tar file>

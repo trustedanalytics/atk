@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Technical Summary &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Technical Summary &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="next" title="User Manual" href="ds_over.html" >
-    <link rel="prev" title="Trusted Analytics Package" href="index.html" > 
+    <link rel="prev" title="Trusted Analytics Platform Package" href="index.html" > 
   </head>
   <body>
 
@@ -53,7 +53,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="index.html" title="Trusted Analytics Package"
+        <a href="index.html" title="Trusted Analytics Platform Package"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -99,8 +99,8 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -129,10 +129,10 @@
 </div>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Trusted Analytics is a platform that simplifies applying <a class="reference internal" href="glossary.html#term-graph-analytics"><span class="xref std std-term">graph analytics</span></a> and
+<p>Trusted Analytics Platform is a platform that simplifies applying <a class="reference internal" href="glossary.html#term-graph-analytics"><span class="xref std std-term">graph analytics</span></a> and
 <a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a> to big data for superior knowledge discovery and
 predictive modeling across a wide variety of use cases and solutions.
-Trusted Analytics provides an analytics pipeline (ATK) spanning feature engineering, graph
+Trusted Analytics Platform provides an analytics pipeline (<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr>) spanning feature engineering, graph
 construction, graph analytics, and machine learning using an extensible,
 modular framework.
 By unifying graph and entity-based machine learning, machine learning
@@ -149,13 +149,13 @@ formats and interfaces.</p>
 </div>
 <div class="section" id="python-and-data-frame-user-interface-summary">
 <h2>Python and Data Frame User Interface Summary<a class="headerlink" href="#python-and-data-frame-user-interface-summary" title="Permalink to this headline">¶</a></h2>
-<p>ATK utilizes Python data science abstractions to make programming fully
+<p><abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> utilizes Python data science abstractions to make programming fully
 scalable big data analytic workflows using Spark/Hadoop clusters as familiar
 and accessible as using popular desktop machine learning solutions such as
 Pandas and SciKit Learn.
 The scalable data frame representation is more familiar and intuitive to data
 researchers compared to low level HDFS file and Spark RDD formats.
-ATK provides an extensive library to manipulate the data frames for
+<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> provides an extensive library to manipulate the data frames for
 feature engineering and exploration, such as joins and aggregations.
 User-defined transformations and filters can be written in Python and applied
 to terabytes (and more) of data using distributed processing.
@@ -178,14 +178,14 @@ predictive signals that can otherwise be missed with entity-based methods.
 Working with graph representations can often be more intuitive and
 computationally efficient for data sets where the connections between data
 observations are more numerous and more important than the data points alone.
-ATK offers a representation of graph data as fully-scalable property
+<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> offers a representation of graph data as fully-scalable property
 graph objects with vertices, edges, and associated properties.
 The pipeline brings together into one workflow all the capabilities to create
 and analyze graph objects, including engineering features, linking data,
 performing rich traversal queries, and applying graph-based algorithms.
 Because data scientists often need to iterate analysis using both graph and
 frame representations (for example, applying a clustering algorithm to a vertex
-list with features developed using graph analytics), ATK provides the
+list with features developed using graph analytics), <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> provides the
 seamless ability to move between both data representations.</p>
 </div>
 <div class="section" id="graph-analytics-summary">
@@ -206,7 +206,7 @@ propagation, exploit the connections in the graph structure and provide
 powerful new methods of labeling or classifying graph data.
 Examples of other machine learning capabilities provided include recommender
 systems using alternating least squares and conjugate gradient descent, topic
-modeling using Latent Dirchelet Allocation, clustering using K-means, and
+modeling using Latent Dirichlet Allocation, clustering using K-means, and
 classification using logistic regression.
 See the section on <a class="reference internal" href="ds_ml.html"><em>machine learning</em></a> and the
 <a class="reference internal" href="python_api/index.html"><em>API</em></a> for further information.</p>
@@ -216,9 +216,9 @@ See the section on <a class="reference internal" href="ds_ml.html"><em>machine l
 <p>In addition to the extensive set of capabilities provided, the platform is
 fully extensible using a plugin architecture.
 This allows developers to incorporate graph analytical tools into the existing
-range of machine learning abilities, expanding the capabilities of Trusted Analytics
+range of machine learning abilities, expanding the capabilities of Trusted Analytics Platform
 for new problem solutions.
-Plugins are developed using a thin Scala wrapper, and the ATK framework
+Plugins are developed using a thin Scala wrapper, and the <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> framework
 automatically generates a Python presentation for those added functions.
 Plug-ins can be used for a range of purposes, such as developing custom
 algorithms for specialized data types, building custom transformations for
@@ -249,7 +249,7 @@ See the <a class="reference internal" href="dev_plug.html"><em>Plugin Authoring 
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

@@ -21,3 +21,12 @@
             Either the name of the frame object to delete or the frame object itself
 
 
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            Number of frames deleted.

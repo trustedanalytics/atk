@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>TitanGraphQuery gremlin &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>TitanGraphQuery gremlin &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../../index.html" >
     <link rel="up" title="Graphs TitanGraph" href="../index.html" >
     <link rel="next" title="TitanGraph status" href="../status.html" >
     <link rel="prev" title="TitanGraph name" href="../name.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -153,6 +153,35 @@ that begin with underscores to encode vertex and edge metadata.</p>
 <p>The query does not support pagination so the results of query should be limited
 using the Gremlin range filter [i..j], for example, g.V[0..9] to return the
 first 10 vertices.</p>
+<p class="rubric">Examples</p>
+<p>Get the first two outgoing edges of the vertex whose source equals 5767244:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mygraph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_graph</span><span class="p">(</span><span class="s">&quot;mytitangraph&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">mygraph</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&quot;g.V(&#39;source&#39;, 5767244).outE[0..1]&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="s">&quot;results&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The expected output is a list of edges in GraphSON format:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="p">[{</span><span class="s">u&#39;_label&#39;</span><span class="p">:</span> <span class="s">u&#39;edge&#39;</span><span class="p">,</span> <span class="s">u&#39;_type&#39;</span><span class="p">:</span> <span class="s">u&#39;edge&#39;</span><span class="p">,</span> <span class="s">u&#39;_inV&#39;</span><span class="p">:</span> <span class="mi">1381202500</span><span class="p">,</span> <span class="s">u&#39;weight&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">u&#39;_outV&#39;</span><span class="p">:</span> <span class="mi">1346400004</span><span class="p">,</span> <span class="s">u&#39;_id&#39;</span><span class="p">:</span> <span class="s">u&#39;fDEQC9-1t7m96-1U&#39;</span><span class="p">},{</span><span class="s">u&#39;_label&#39;</span><span class="p">:</span> <span class="s">u&#39;edge&#39;</span><span class="p">,</span> <span class="s">u&#39;_type&#39;</span><span class="p">:</span> <span class="s">u&#39;edge&#39;</span><span class="p">,</span> <span class="s">u&#39;_inV&#39;</span><span class="p">:</span> <span class="mi">1365600772</span><span class="p">,</span> <span class="s">u&#39;weight&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">u&#39;_outV&#39;</span><span class="p">:</span> <span class="mi">1346400004</span><span class="p">,</span> <span class="s">u&#39;_id&#39;</span><span class="p">:</span> <span class="s">u&#39;frtzv9-1t7m96-1U&#39;</span><span class="p">}]</span>
+</pre></div>
+</div>
+<p>Get the count of incoming edges for a vertex:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">mygraph</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&quot;g.V(&#39;target&#39;, 5767243).inE.count()&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="s">&quot;results&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The expected output is:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Get the count of name and age properties from vertices:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">mygraph</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&quot;g.V.transform{[it.name, it.age]}[0..10])&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">results</span><span class="p">[</span><span class="s">&quot;results&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The expected output is:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">u&#39;[&quot;alice&quot;, 29]&#39;</span><span class="p">,</span> <span class="s">u&#39;[ &quot;bob&quot;, 45 ]&#39;</span><span class="p">,</span> <span class="s">u&#39;[&quot;cathy&quot;, 34 ]&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -178,7 +207,7 @@ first 10 vertices.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

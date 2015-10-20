@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Python User Functions &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Python User Functions &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,9 +25,9 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="Process Flow Examples" href="ds_dflw.html" >
-    <link rel="next" title="Machine Learning" href="ds_ml.html" >
+    <link rel="next" title="Collaborative Filtering" href="CollaborativeFilteringNewPlugin_Summary.html" >
     <link rel="prev" title="Process Flow Examples" href="ds_dflw.html" > 
   </head>
   <body>
@@ -60,7 +60,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ds_ml.html" title="Machine Learning"
+        <a href="CollaborativeFilteringNewPlugin_Summary.html" title="Collaborative Filtering"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -140,7 +140,7 @@ named “score” has a value greater than zero:</p>
 <p>This function would be useful in a Frame filter command, which filters a data
 frame keeping only those rows which meet certain criteria, &#8211; in this case,
 only rows with scores greater than zero:</p>
-<div class="code highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; my_csv = CsvFile(“tresults.txt”, [(‘test’, str), (‘score’, int32)])
+<div class="code highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; my_csv = CsvFile(“results.txt”, [(‘test’, str), (‘score’, int32)])
 &gt;&gt;&gt; my_frame = Frame(my_csv)
 &gt;&gt;&gt; my_frame.filter(my_custom_row_func)
 </pre></div>
@@ -201,8 +201,7 @@ For example:</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">This example is for illustration only.
-There are other, perhaps more Pythonic, ways of doing this, like using a
-list comprehension.</p>
+There are other ways of doing this, like using a list comprehension.</p>
 </div>
 </div>
 </div>
@@ -226,8 +225,8 @@ All dependencies used in the <abbr title="Python User-defined Function">UDF</abb
 code file</strong> as the <abbr title="Python User-defined Function">UDF</abbr> or available in the server&#8217;s installed Python
 libraries.
 The serialization technique to get the code distributed throughout the
-cluster will only serialize dependencies in the same Python module (in
-other words, file) right now.</p>
+cluster will serialize dependencies only in the same Python module (in
+other words, file.)</p>
 </li>
 <li><p class="first">Simplicity:
 Stay within the intended simple context of the given command, like a row
@@ -237,8 +236,7 @@ Do not try to call other API methods or perform fancy system operations
 </li>
 <li><p class="first">Performance:
 Be mindful of performance.
-These functions execute on every row of data, in other words, several
-times.</p>
+These functions execute on every row of data, in other words, many times.</p>
 </li>
 <li><p class="first">Printing:
 Printing (to stdout, stderr, …) within the <abbr title="Python User-defined Function">UDF</abbr> will not show up in the
@@ -321,7 +319,7 @@ available to the row function that executes on each row.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

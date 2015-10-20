@@ -1,15 +1,15 @@
 .. _python_api/models/model-naive_bayes/new:
 
 
-:doc:`NaiveBayesModel <index>`  new
-***********************************
+:doc:`NaiveBayesModel <index>`  __init__
+****************************************
 
 ------
 
 
 .. function:: __init__(self, name=None)
 
-    create a new model
+    Create a 'new' instance of a Naive Bayes model
 
 
     :Parameters:
@@ -25,8 +25,23 @@
 
     :Returns:
 
-        : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+        : Model
 
         ..
 
+            A new instance of NaiveBayesModel
+    Naive Bayes [1]_ is a probabilistic classifier with strong
+    independence assumptions between features.
+    It computes the conditional probability distribution of each feature given label,
+    and then applies Bayes' theorem to compute the conditional probability
+    distribution of a label given an observation, and use it for prediction.
+    The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
+    to predict the value of the dependent variable given the independent
+    observations of a frame.
+    This model runs the MLLib implementation of Naive Bayes [2]_.
 
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
+    .. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
+                 

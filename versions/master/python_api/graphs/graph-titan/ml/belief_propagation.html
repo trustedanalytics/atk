@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>TitanGraphMl belief_propagation &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>TitanGraphMl belief_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../../f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../../index.html" >
     <link rel="up" title="Graphs TitanGraph" href="../index.html" >
     <link rel="next" title="TitanGraph name" href="../name.html" >
-    <link rel="prev" title="TitanGraph graphx_triangle_count" href="../graphx_triangle_count.html" > 
+    <link rel="prev" title="TitanGraph last_read_date" href="../last_read_date.html" > 
   </head>
   <body>
 
@@ -57,7 +57,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="../graphx_triangle_count.html" title="TitanGraph graphx_triangle_count"
+        <a href="../last_read_date.html" title="TitanGraph last_read_date"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -163,6 +163,16 @@ The priors are read from a property in the graph, the posteriors are written to 
 This is the GraphX-based implementation of belief propagation.</p>
 <p>See <a class="reference internal" href="../../../frames/frame-/loopy_belief_propagation.html#python-api-frames-frame-loopy-belief-propagation"><span>Loopy Belief Propagation</span></a>
 for a more in-depth discussion of <abbr title="Belief Propagation">BP</abbr> and <abbr title="Loopy Belief Propagation">LBP</abbr>.</p>
+<p class="rubric">Examples</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">ml</span><span class="o">.</span><span class="n">belief_propagation</span><span class="p">(</span><span class="s">&quot;value&quot;</span><span class="p">,</span> <span class="s">&quot;lbp_output&quot;</span><span class="p">,</span> <span class="n">string_output</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">state_space_size</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="go">{u&#39;log&#39;: u&#39;Vertex Count: 80000\nEdge Count: 318398\nAtkPregel engine has completed iteration 1  The average delta is 0.6853413553663811\nAtkPregel engine has completed iteration 2  The average delta is 0.38626944467366386\nAtkPregel engine has completed iteration 3  The average delta is 0.2365329376479823\nAtkPregel engine has completed iteration 4  The average delta is 0.14170840479478952\nAtkPregel engine has completed iteration 5  The average delta is 0.08676093923623975\n&#39;, u&#39;time&#39;: 70.248999999999995}</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&quot;g.V [0..4]&quot;</span><span class="p">)</span>
+
+<span class="go">{u&#39;results&#39;: [{u&#39;vertex_type&#39;: u&#39;VA&#39;, u&#39;target&#39;: 12779523, u&#39;lbp_output&#39;: u&#39;0.9485759073302487, 0.001314151524421738, 0.040916996746627056, 0.001397331576080859, 0.0077956128226217315&#39;, u&#39;_type&#39;: u&#39;vertex&#39;, u&#39;value&#39;: u&#39;0.125 0.125 0.5 0.125 0.125&#39;, u&#39;titanPhysicalId&#39;: 4, u&#39;_id&#39;: 4}, {u&#39;vertex_type&#39;: u&#39;VA&#39;, u&#39;titanPhysicalId&#39;: 8, u&#39;lbp_output&#39;: u&#39;0.7476996339617544, 0.0021769696832380173, 0.24559940461433935, 0.0023272253558738786, 0.002196766384794168&#39;, u&#39;_type&#39;: u&#39;vertex&#39;, u&#39;value&#39;: u&#39;0.125 0.125 0.5 0.125 0.125&#39;, u&#39;source&#39;: 7798852, u&#39;_id&#39;: 8}, {u&#39;vertex_type&#39;: u&#39;TR&#39;, u&#39;target&#39;: 13041863, u&#39;lbp_output&#39;: u&#39;0.7288360734608738, 0.07162637515155296, 0.15391773902131053, 0.022620779563724287, 0.02299903280253846&#39;, u&#39;_type&#39;: u&#39;vertex&#39;, u&#39;value&#39;: u&#39;0.5 0.125 0.125 0.125 0.125&#39;, u&#39;titanPhysicalId&#39;: 12, u&#39;_id&#39;: 12}, {u&#39;vertex_type&#39;: u&#39;TR&#39;, u&#39;titanPhysicalId&#39;: 16, u&#39;lbp_output&#39;: u&#39;0.9996400056392905, 9.382190989071985E-5, 8.879762476576982E-5, 8.867586165695348E-5, 8.869896439624652E-5&#39;, u&#39;_type&#39;: u&#39;vertex&#39;, u&#39;value&#39;: u&#39;0.5 0.125 0.125 0.125 0.125&#39;, u&#39;source&#39;: 11731127, u&#39;_id&#39;: 16}, {u&#39;vertex_type&#39;: u&#39;TE&#39;, u&#39;titanPhysicalId&#39;: 20, u&#39;lbp_output&#39;: u&#39;0.004051247779081896, 0.2257641948616088, 0.01794622866204068, 0.7481547408142287, 0.004083587883039745&#39;, u&#39;_type&#39;: u&#39;vertex&#39;, u&#39;value&#39;: u&#39;0.125 0.125 0.5 0.125 0.125&#39;, u&#39;source&#39;: 3408035, u&#39;_id&#39;: 20}], u&#39;run_time_seconds&#39;: 1.042}</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -188,7 +198,7 @@ for a more in-depth discussion of <abbr title="Belief Propagation">BP</abbr> and
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

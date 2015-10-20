@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame sort &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame sort &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame sorted_k" href="sorted_k.html" >
     <link rel="prev" title="EdgeFrame schema" href="schema.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -136,32 +136,89 @@ Sort the data in a frame.</p>
 </table>
 <p>Sort a frame by column values either ascending or descending.</p>
 <p class="rubric">Examples</p>
-<p>Sort a single column:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;column_name&#39;</span><span class="p">)</span>
+<dl class="docutils">
+<dt>Consider the frame</dt>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     3  foxtrot</span>
+<span class="go">[1]     1  charlie</span>
+<span class="go">[2]     3  bravo</span>
+<span class="go">[3]     2  echo</span>
+<span class="go">[4]     4  delta</span>
+<span class="go">[5]     3  alpha</span>
 </pre></div>
 </div>
-<p>Sort a single column ascending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;column_name&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+</dd>
+</dl>
+<p>Sort a single column:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;col1&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     1  charlie</span>
+<span class="go">[1]     2  echo</span>
+<span class="go">[2]     3  foxtrot</span>
+<span class="go">[3]     3  bravo</span>
+<span class="go">[4]     3  alpha</span>
+<span class="go">[5]     4  delta</span>
 </pre></div>
 </div>
 <p>Sort a single column descending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;column_name&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     3  foxtrot</span>
+<span class="go">[1]     2  echo</span>
+<span class="go">[2]     4  delta</span>
+<span class="go">[3]     1  charlie</span>
+<span class="go">[4]     3  bravo</span>
+<span class="go">[5]     3  alpha</span>
 </pre></div>
 </div>
 <p>Sort multiple columns:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="s">&#39;col2&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>Sort multiple columns ascending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="s">&#39;col2&#39;</span><span class="p">],</span> <span class="bp">True</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     1  charlie</span>
+<span class="go">[1]     2  echo</span>
+<span class="go">[2]     3  alpha</span>
+<span class="go">[3]     3  bravo</span>
+<span class="go">[4]     3  foxtrot</span>
+<span class="go">[5]     4  delta</span>
 </pre></div>
 </div>
 <p>Sort multiple columns descending:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="s">&#39;col2&#39;</span><span class="p">],</span> <span class="bp">False</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     4  delta</span>
+<span class="go">[1]     3  foxtrot</span>
+<span class="go">[2]     3  bravo</span>
+<span class="go">[3]     3  alpha</span>
+<span class="go">[4]     2  echo</span>
+<span class="go">[5]     1  charlie</span>
 </pre></div>
 </div>
-<p>Sort multiple columns: &#8216;col1&#8217; ascending and &#8216;col2&#8217; descending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span> <span class="p">(</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">])</span>
+<p>Sort multiple columns: &#8216;col1&#8217; decending and &#8216;col2&#8217; ascending:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span> <span class="p">(</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  col1  col2</span>
+<span class="go">==================</span>
+<span class="go">[0]     4  delta</span>
+<span class="go">[1]     3  alpha</span>
+<span class="go">[2]     3  bravo</span>
+<span class="go">[3]     3  foxtrot</span>
+<span class="go">[4]     2  echo</span>
+<span class="go">[5]     1  charlie</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -189,7 +246,7 @@ Sort the data in a frame.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

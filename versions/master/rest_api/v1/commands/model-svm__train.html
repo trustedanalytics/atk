@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:svm/train &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:svm/train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model/rename" href="model__rename.html" >
     <link rel="prev" title="Commands model:svm/test" href="model-svm__test.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -112,7 +112,7 @@
   <div class="section" id="commands-model-svm-train">
 <span id="rest-api-v1-commands-model-svm-train"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:svm/train<a class="headerlink" href="#commands-model-svm-train" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Train SVM model based on another frame.</p>
+Build SVM with SGD model</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -132,11 +132,11 @@ Train SVM model based on another frame.</p>
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:svm/train</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>model</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>frame</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090&gt;&gt;</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>A frame to train the model on.</p>
 </div></blockquote>
@@ -147,38 +147,35 @@ for each observation.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>Column(s) containing the
+<div><p>List of column(s) containing the
 observations.</p>
 </div></blockquote>
-<p><strong>intercept</strong> : bool (default=None)</p>
+<p><strong>intercept</strong> : bool (default=True)</p>
 <blockquote>
-<div><p>The algorithm adds an intercept.
+<div><p>Flag indicating if the algorithm adds an intercept.
 Default is true.</p>
 </div></blockquote>
-<p><strong>num_iterations</strong> : int32 (default=None)</p>
+<p><strong>num_iterations</strong> : int32 (default=100)</p>
 <blockquote>
-<div><p>Number of iterations.
-Default is 100.</p>
+<div><p>Number of iterations for SGD. Default is 100.</p>
 </div></blockquote>
-<p><strong>step_size</strong> : int32 (default=None)</p>
+<p><strong>step_size</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>Step size for optimizer.
+<div><p>Initial step size for SGD optimizer for the first step.
 Default is 1.0.</p>
 </div></blockquote>
 <p><strong>reg_type</strong> : unicode (default=None)</p>
 <blockquote>
-<div><p>Regularization L1 or L2.
-Default is L2.</p>
+<div><p>Regularization &#8220;L1&#8221; or &#8220;L2&#8221;.
+Default is &#8220;L2&#8221;.</p>
 </div></blockquote>
-<p><strong>reg_param</strong> : float64 (default=None)</p>
+<p><strong>reg_param</strong> : float64 (default=0.01)</p>
 <blockquote>
-<div><p>Regularization parameter.
-Default is 0.01.</p>
+<div><p>Regularization parameter. Default is 0.01.</p>
 </div></blockquote>
-<p><strong>mini_batch_fraction</strong> : float64 (default=None)</p>
+<p><strong>mini_batch_fraction</strong> : float64 (default=1.0)</p>
 <blockquote class="last">
-<div><p>Mini batch fraction parameter.
-Default is 1.0.</p>
+<div><p>Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -263,7 +260,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

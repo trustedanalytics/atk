@@ -17,6 +17,7 @@ Frames
     drop_frames
     get_frame
     get_frame_names
+    drop
 
 -------
 
@@ -27,3 +28,5 @@ Frames
 :doc:`get_frame<get_frame>`
 
 :doc:`get_frame_names<get_frame_names>`
+
+:doc:`drop<drop>`

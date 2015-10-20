@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>TitanGraph graph_clustering &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>TitanGraph graph_clustering &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs TitanGraph" href="index.html" >
     <link rel="next" title="TitanGraph graphx_connected_components" href="graphx_connected_components.html" >
     <link rel="prev" title="TitanGraph export_to_graph" href="export_to_graph.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -133,6 +133,36 @@
 </tbody>
 </table>
 <p>Performs graph clustering over an initial titan graph using a distributed edge collapse algorithm.</p>
+<p class="rubric">Examples</p>
+<p>The data file sample_graph.txt is a file in the following format: src, dest,
+distance:</p>
+<div class="code highlight-python"><div class="highlight"><pre>1, 2, 1.5f
+2, 1, 1.5f
+2, 3, 1.5f
+3, 2, 1.5f
+1, 3, 1.5f
+3, 1, 1.5f
+</pre></div>
+</div>
+<p>The edge column name should be passed in as an argument to the plug-in.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_graph</span><span class="p">(</span><span class="s">&quot;mytitangraph&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">graph_clustering</span><span class="p">(</span><span class="s">&quot;dist&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The expected output (new vertices) can be queried:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">gremlin</span><span class="p">(</span><span class="s">&#39;g.V.map(</span><span class="se">\&#39;</span><span class="s">id</span><span class="se">\&#39;</span><span class="s">, </span><span class="se">\&#39;</span><span class="s">vertex</span><span class="se">\&#39;</span><span class="s">, </span><span class="se">\&#39;</span><span class="s">_label</span><span class="se">\&#39;</span><span class="s">, </span><span class="se">\&#39;</span><span class="s">name</span><span class="se">\&#39;</span><span class="s">,</span><span class="se">\&#39;</span><span class="s">count</span><span class="se">\&#39;</span><span class="s">)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Snippet output for the above query will look like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>{u&#39;results&#39;: [u&#39;{id=18432, count=null, _label=null, vertex=29, name=null}&#39;, u&#39;{id=24576, count=null, _label=null, vertex=22, name=null}&#39;, u&#39;{id=27136, count=null, _label=2, vertex=null, name=21944_25304}&#39;
+</pre></div>
+</div>
+<p>where:</p>
+<blockquote>
+<div><code class="docutils literal"><span class="pre">24576</span></code> - represents an initial node
+<code class="docutils literal"><span class="pre">27136</span></code> - represents a meta-node of 2 nodes (as per _label value)</div></blockquote>
 </dd></dl>
 
 </div>
@@ -158,7 +188,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

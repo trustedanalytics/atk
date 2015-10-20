@@ -29,7 +29,7 @@
         ..
 
             Names to be used for the split classes.
-            Defaults "TR", "TE", "VA" when the length of *sample_percentages* is 3,
+            Defaults to "TR", "TE", "VA" when the length of *sample_percentages* is 3,
             and defaults to Sample_0, Sample_1, ... otherwise.
 
 
@@ -67,8 +67,6 @@
     floating point values, which add up to 1.
     The labels are non-negative integers drawn from the range
     :math:`[ 0, len(S) - 1]` where :math:`S` is the sample_percentages.
-    Optionally, the user can specify a list of strings to be used as the labels.
-    If the number of labels is 3, the labels will default to "TR", "TE" and "VA".
 
     **Notes**
 
@@ -83,3 +81,50 @@
         range.
     #)  The probability of the final class is clamped so that each row receives a
         valid label with probability one.
+
+    Examples
+    --------
+    Given a frame accessed via Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+          col_nc:str  col_wk:str
+        /------------------------/
+          abc         zzz
+          def         yyy
+          ghi         xxx
+          jkl         www
+          mno         vvv
+          pqr         uuu
+          stu         ttt
+          vwx         sss
+          yza         rrr
+          bcd         qqq
+
+    To append a new column *sample_bin* to the frame and assign the value in the
+    new column to "train", "test", or "validate":
+
+    .. code::
+
+        >>> my_frame.assign_sample([0.3, 0.3, 0.4], ["train", "test", "validate"])
+        >>> my_frame.inspect()
+          col_nc:str  col_wk:str  sample_bin:str
+        /----------------------------------------/
+          abc         zzz         validate
+          def         yyy         test
+          ghi         xxx         test
+          jkl         www         test
+          mno         vvv         train
+          pqr         uuu         validate
+          stu         ttt         validate
+          vwx         sss         train
+          yza         rrr         validate
+          bcd         qqq         train
+
+    Now, the frame accessed by the Frame, *my_frame*, has a new column named
+    "sample_bin" and each row contains one of the values "train", "test", or
+    "validate".
+    Values in the other columns are unaffected.
+
+

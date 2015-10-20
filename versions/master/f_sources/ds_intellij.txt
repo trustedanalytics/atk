@@ -40,17 +40,17 @@ Setup
         button.
 
         i)  If *Python 2.7* does not appear in the list you will need to
-            configure a Python 2.7 Intepreter.
+            configure a Python 2.7 Interpreter.
 
             1)  Choose the *Configure* button.
             #)  Choose the plus sign *+*.
             #)  Choose *Python SDK*.
             #)  Choose *Add Local*.
             #)  Browse for your local Python 2.7 installation.
-                On RedHat and Centos this is probably /usr/bin/python.
+                On RedHat and CentOS this is probably /usr/bin/python.
             #)  Choose the *OK* button.
 
-    #)  Give your project a name, e.g *myproject*.
+    #)  Give your project a name, for example, *myproject*.
     #)  Choose the *Finish* button.
 
 #)  Choose :menuselection:`File --> Project Structure`.
@@ -60,7 +60,7 @@ Setup
     #)  Choose *Libraries* in the left hand pane.
     #)  Choose the plus sign *+*.
     #)  Choose *Java* and browse to the |PACKAGE| Python REST Client libraries.
-        On RedHat and Centos these are found under
+        On RedHat and CentOS these are found under
         '/usr/lib/trustedanalytics/rest-client/python'.
     #)  Choose *classes*.
     #)  Choose *myproject* and click *OK* button.

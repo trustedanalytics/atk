@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>EdgeFrame drop_rows &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>EdgeFrame drop_rows &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
     <link rel="next" title="EdgeFrame ecdf" href="ecdf.html" >
     <link rel="prev" title="EdgeFrame drop_duplicates" href="drop_duplicates.html" > 
@@ -95,8 +95,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -130,15 +130,22 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>For this example, my_frame is a Frame object accessing a frame with
-lots of data for the attributes of <code class="docutils literal"><span class="pre">lions</span></code>, <code class="docutils literal"><span class="pre">tigers</span></code>, and
-<code class="docutils literal"><span class="pre">ligers</span></code>.
-Get rid of the <code class="docutils literal"><span class="pre">lions</span></code> and <code class="docutils literal"><span class="pre">tigers</span></code>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">animal_type</span> <span class="o">==</span> <span class="s">&quot;lion&quot;</span> <span class="ow">or</span>
-<span class="gp">... </span>   <span class="n">row</span><span class="o">.</span><span class="n">animal_type</span> <span class="o">==</span> <span class="s">&quot;tiger&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  tenure  phone</span>
+<span class="go">====================================</span>
+<span class="go">[0]  Fred       39      16  555-1234</span>
+<span class="go">[1]  Susan      33       3  555-0202</span>
+<span class="go">[2]  Thurston   65      26  555-4510</span>
+<span class="go">[3]  Judy       44      14  555-2183</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;n&#39;</span><span class="p">)</span>  <span class="c"># drop people whose name ends in &#39;n&#39;</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name  age  tenure  phone</span>
+<span class="go">================================</span>
+<span class="go">[0]  Fred   39      16  555-1234</span>
+<span class="go">[1]  Judy   44      14  555-2183</span>
 </pre></div>
 </div>
-<p>Now the frame only has information about <code class="docutils literal"><span class="pre">ligers</span></code>.</p>
 <p>More information on a <abbr title="Python User-defined Function">UDF</abbr> can be found at <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a>.</p>
 </dd></dl>
 
@@ -165,7 +172,7 @@ Get rid of the <code class="docutils literal"><span class="pre">lions</span></co
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

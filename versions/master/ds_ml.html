@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Machine Learning &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Machine Learning &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
@@ -25,10 +25,10 @@
     <script type="text/javascript" src="f_static/doctools.js"></script>
     <script type="text/javascript" src="f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
-    <link rel="next" title="Machine Learning Algorithms" href="ds_mlal_0.html" >
-    <link rel="prev" title="Python User Functions" href="ds_apir.html" > 
+    <link rel="next" title="Algorithms" href="ds_algorithms.html" >
+    <link rel="prev" title="Topic Modeling with Latent Dirichlet Allocation" href="LdaNewPlugin_Summary.html" > 
   </head>
   <body>
 
@@ -55,11 +55,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="ds_apir.html" title="Python User Functions"
+        <a href="LdaNewPlugin_Summary.html" title="Topic Modeling with Latent Dirichlet Allocation"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ds_mlal_0.html" title="Machine Learning Algorithms"
+        <a href="ds_algorithms.html" title="Algorithms"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -96,12 +96,13 @@
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -135,24 +136,11 @@ be done automatically, without directly involving analysts.</p>
 <p>There are many other problems that are amenable to <a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a>
 solutions.
 Translation of text for example is a difficult issue.
-A corpus of pre-translated text can be used to teach an algorithm a mapping
-from one language to another.</p>
-<div class="section" id="algorithms">
-<h2>Algorithms<a class="headerlink" href="#algorithms" title="Permalink to this headline">¶</a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="ds_mlal_0.html">Machine Learning Algorithms</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_mlal_0.html#collaborative-filtering">Collaborative Filtering</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_mlal_0.html#graphical-models">Graphical Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_mlal_0.html#topic-modeling">Topic Modeling</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</div>
+A corpus of previously translated text can be used to teach an algorithm a
+mapping from one language to another.</p>
 <div class="section" id="supervision">
-<span id="index-1"></span><h2>Supervision<a class="headerlink" href="#supervision" title="Permalink to this headline">¶</a></h2>
-<p>Trusted Analytics incorporates supervised, unsupervised, and
+<h2>Supervision<a class="headerlink" href="#supervision" title="Permalink to this headline">¶</a></h2>
+<p>Trusted Analytics Platform incorporates supervised, unsupervised, and
 semi-supervised machine learning algorithms.
 Supervised algorithms are used to learn the relationship between features in
 a dataset and some labeling schema, such as is in classification.
@@ -162,7 +150,7 @@ collection of days) to a known binary label (e.g., whether or not someone
 went for a trail run on that day).
 Once the relationship between temperature and running activity is learned,
 then the model can be used to make predictions about new running activity,
-given the days temperatures.
+given the daily temperatures.
 Unsupervised machine learning algorithms are used to find patterns or
 groupings in data for which class labels are unknown.
 For example, given a data set of observations about flowers (e.g., petal
@@ -210,7 +198,7 @@ Machine Learning, But Were Too Afraid To Ask (Part Two)</a>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>

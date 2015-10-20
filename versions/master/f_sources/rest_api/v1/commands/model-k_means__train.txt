@@ -33,7 +33,7 @@ Request
 :arguments:
 
 
-    **model** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110>>
+    **model** : Model
 
     ..
 
@@ -41,7 +41,7 @@ Request
 
 
 
-    **frame** : <bound method AtkEntityType.__name__ of <trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328090>>
+    **frame** : Frame
 
     ..
 
@@ -68,7 +68,7 @@ Request
 
 
 
-    **k** : int32 (default=None)
+    **k** : int32 (default=2)
 
     ..
 
@@ -77,7 +77,7 @@ Request
 
 
 
-    **max_iterations** : int32 (default=None)
+    **max_iterations** : int32 (default=20)
 
     ..
 
@@ -86,21 +86,21 @@ Request
 
 
 
-    **epsilon** : float64 (default=None)
+    **epsilon** : float64 (default=0.0001)
 
     ..
 
         Distance threshold within which we consider k-means to have converged.
-        Default is 1e-4.
+        Default is 1e-4. If all centers move less than this Euclidean distance, we stop iterating one run.
 
 
 
-    **initialization_mode** : unicode (default=None)
+    **initialization_mode** : unicode (default=k-means||)
 
     ..
 
         The initialization technique for the algorithm.
-        It could be either "random" or "k-means||".
+        It could be either "random" to choose random points as initial clusters, or "k-means||" to use a parallel variant of k-means++.
         Default is "k-means||".
 
 
@@ -115,7 +115,7 @@ Request
 
 **Description**
 
-Upon training the 'k' cluster centers are computed.
+Creating a KMeans Model using the observation columns.
 
 |
 
@@ -163,14 +163,9 @@ Response
 
 ``dict``
 
-        dict
-            Results.
-            The data returned is composed of multiple components:
-        cluster_size : dict
-            Cluster size
-        ClusterId : int
-            Number of elements in the cluster 'ClusterId'.
-        within_set_sum_of_squared_error : double
-            The set of sum of squared error for the model.
+        dictionary
+            A dictionary with trained KMeans model with the following keys\:
+        'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
+        'within_set_sum_of_squared_error' : The set of sum of squared error for the model.
 
 

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands model:random_forest_classifier/new &mdash; Trusted Analytics Package 0.4.0 documentation</title>
+    <title>Commands model:random_forest_classifier/new &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../f_static/doctools.js"></script>
     <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Package 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:random_forest_classifier/predict" href="model-random_forest_classifier__predict.html" >
     <link rel="prev" title="Commands model:principal_components/train" href="model-principal_components__train.html" > 
@@ -94,8 +94,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Deploy and Run ATK App on DP2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
@@ -111,7 +111,7 @@
             
   <div class="section" id="commands-model-random-forest-classifier-new">
 <span id="rest-api-v1-commands-model-random-forest-classifier-new"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:random_forest_classifier/new<a class="headerlink" href="#commands-model-random-forest-classifier-new" title="Permalink to this headline">¶</a></h1>
-<p>Create a &#8216;new&#8217; instance of random forest classifier model.</p>
+<p>Create a &#8216;new&#8217; instance of a Random Forest Classifier model.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -131,7 +131,7 @@
 <tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">model:random_forest_classifier/new</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>dummy_model_ref</strong> : &lt;bound method AtkEntityType.__name__ of &lt;trustedanalytics.rest.jsonschema.AtkEntityType object at 0x7f6895328110&gt;&gt;</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>dummy_model_ref</strong> : Model</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
@@ -155,6 +155,30 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
+<p>Random Forest <a class="footnote-reference" href="#id3" id="id1">[1]</a> is a supervised ensemble learning algorithm
+which can be used to perform binary and multi-class classification.
+The Random Forest Classifier model is initialized, trained on columns of a
+frame, used to predict the labels of observations in a frame, and tests the
+predicted labels against the true labels.
+This model runs the MLLib implementation of Random Forest <a class="footnote-reference" href="#id4" id="id2">[2]</a>.
+During training, the decision trees are trained in parallel.
+During prediction, each tree&#8217;s prediction is counted as vote for one class.
+The label is predicted to be the class which receives the most votes.
+During testing, labels of the observations are predicted and tested against the true labels
+using built-in binary and multi-class Classification Metrics.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-ensembles.html">https://spark.apache.org/docs/1.3.0/mllib-ensembles.html</a></td></tr>
+</tbody>
+</table>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -169,10 +193,10 @@ Content-type: application/json
 <p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
 </div>
 </div>
-<div class="section" id="id1">
-<h2>GET /v1/commands/:id<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Request<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
@@ -188,14 +212,16 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="id3">
-<h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Response<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>200 OK
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<p><code class="docutils literal"><span class="pre">&lt;bound</span> <span class="pre">method</span> <span class="pre">AtkEntityType.__name__</span> <span class="pre">of</span> <span class="pre">&lt;trustedanalytics.rest.jsonschema.AtkEntityType</span> <span class="pre">object</span> <span class="pre">at</span> <span class="pre">0x7f6895328110&gt;&gt;</span></code></p>
+<p><code class="docutils literal"><span class="pre">Model</span></code></p>
+<blockquote>
+<div>A new instance of RandomForestClassifierModel</div></blockquote>
 </div>
 </div>
 </div>
@@ -221,7 +247,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Sep 17, 2015.
+      Last updated on Oct 20, 2015.
       </li>
     </ul>
     </div>
