@@ -1,0 +1,7 @@
+all ATK configuration are loaded from here.
+
+application.conf.reference as the reference configuration
+db.conf- db configurations
+cdh.conf- CDH configurations for hdfs zookeeper
+spark.conf- spark yarn configuration
+user.conf- your configuration
