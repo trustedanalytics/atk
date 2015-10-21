@@ -8,7 +8,7 @@ DIR="$( cd "$( dirname "$0" )" && pwd )"
 echo $DIR
 
 LAUNCHER=$DIR/../launcher.jar
-LAUNCHER=$DIR/../conf/logback.xml:$LAUNCHER
+LAUNCHER=$DIR/../conf:$LAUNCHER
 
 env
 
@@ -19,7 +19,7 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-echo java $@ -XX:MaxPermSize=256m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
-java $@ -XX:MaxPermSize=256m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
+echo java $@ -Xmx2G -XX:+HeapDumpOnOutOfMemoryError -XX:MaxMetaspaceSize=500m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
+java $@ -Xmx4G -XX:MaxMetaspaceSize=2G -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
 
 popd
