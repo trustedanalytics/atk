@@ -147,5 +147,25 @@ class FrameFlattenColumnTest(unittest.TestCase):
         with self.assertRaises(Exception):
             self.frame.flatten_columns('hamburger')
 
+    def test_flatten_columns_with_mismatch_delimiter_count(self):
+        # we need a frame with more than three columns for this test
+        data = [[1,"solo,mono,single","a,b,c","1+2+3"],[2,"duo,double","d,e","4+5"]]
+        schema = [('a',ta.int32), ('b', str), ('c', str), ('d', str)]
+        test_frame = ta.Frame(ta.UploadRows(data,schema))
+
+        # when providing more than one delimiter, count must match column count
+        # too few delimiters should throw an exception
+        with self.assertRaises(Exception):
+            test_frame.flatten_columns(['b','c','d'],[',',','])
+
+        # too many delimiters should also throw an exception
+        with self.assertRaises(Exception):
+            test_frame.flatten_columns(['b','c','d'],[',',',','+','|'])
+
+        # giving just one delimiter means that the same delimiter is used for all columns
+        test_frame.flatten_columns(['b','c'], ',')
+        self.assertEqual(test_frame.row_count, 5)
+
+
 if __name__ == "__main__":
     unittest.main()

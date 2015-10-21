@@ -71,33 +71,16 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
     // If delimiters were provided, use them, otherwise use the default commas
     var delimiters = if (arguments.delimiters.isDefined) arguments.delimiters.get else arguments.columns.map(c => ",")
 
-    if (delimiters.size < arguments.columns.size) {
-      if (delimiters.size == 1) {
-        // If just one delimiter was provided, just use the same one for all columns
-        delimiters = arguments.columns.map(c => delimiters(0))
-      }
-      else {
-        throw new IllegalArgumentException(s"The number of delimiters provided does not match the number of columns provided.")
-      }
+    // If just one delimiter was provided, just use the same one for all columns
+    if (delimiters.size == 1) {
+      delimiters = arguments.columns.map(c => delimiters(0))
     }
 
-    /*
-    for (i <- arguments.columns.indices) {
-      val columnDataType = columnDataTypes(i)
-      val columnIndex = columnIndexes(i)
-      val column = arguments.columns(i)
-
-      columnDataType.length()
-
-      columnDataType match {
-        case DataTypes.string => flattener = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)
-        case DataTypes.vector(length) =>
-          schema = schema.convertType(column, DataTypes.float64)
-          flattener = FlattenColumnFunctions.flattenRddByVectorColumnIndex(columnIndex, length)
-        case _ => throw new IllegalArgumentException(s"Flatten column does not support type $columnDataType")
-      }
+    // If the number of delimiters provided does not match the number of columns specified, throw an exception
+    if (delimiters.size != arguments.columns.size) {
+      throw new IllegalArgumentException(s"The number of delimiters provided does not match the number of columns provided.")
     }
-*/
+
     for (i <- arguments.columns.indices) {
       columnDataTypes(i) match {
         case DataTypes.vector(length) =>
