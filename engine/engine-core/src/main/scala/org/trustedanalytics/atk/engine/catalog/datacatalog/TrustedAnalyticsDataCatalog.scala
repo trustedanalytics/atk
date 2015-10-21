@@ -54,9 +54,11 @@ object TrustedAnalyticsDataCatalog extends DataCatalog {
 
     val oauthTokenReceived = invocation.user.user.apiKey.getOrElse("Invalid OAuth token for TrustedAnalytics User")
     println(s"Oauth Token Received: $oauthTokenReceived")
-    val oauthToken = "eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIzMjdkMjhkNy1jM2NlLTRkNTctODQ4NS1jZGMxZjA5NGE0MzkiLCJzdWIiOiI2MzgwNGY2YS0wZmEyLTRjMjItODc1Yi1mYWEyNTYyMDAxMzUiLCJzY29wZSI6WyJzY2ltLnJlYWQiLCJjbG91ZF9jb250cm9sbGVyLmFkbWluIiwicGFzc3dvcmQud3JpdGUiLCJzY2ltLndyaXRlIiwib3BlbmlkIiwiY2xvdWRfY29udHJvbGxlci53cml0ZSIsImNsb3VkX2NvbnRyb2xsZXIucmVhZCIsImRvcHBsZXIuZmlyZWhvc2UiXSwiY2xpZW50X2lkIjoiY2YiLCJjaWQiOiJjZiIsImF6cCI6ImNmIiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6IjYzODA0ZjZhLTBmYTItNGMyMi04NzViLWZhYTI1NjIwMDEzNSIsInVzZXJfbmFtZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbiIsImlhdCI6MTQ0MDAyMzcyMCwiZXhwIjoxNDQwMDI0MzIwLCJpc3MiOiJodHRwczovL3VhYS41Mi4yNC4xMTIuMjM5LnhpcC5pby9vYXV0aC90b2tlbiIsImF1ZCI6WyJkb3BwbGVyIiwic2NpbSIsIm9wZW5pZCIsImNsb3VkX2NvbnRyb2xsZXIiLCJwYXNzd29yZCIsImNmIl19.OY_Djrsc0jVkG8tTtAKmy_HE82EgEtzsh8S9SGJEdsEjjLxm3hEUjMSHlukhr2WknEkpuUEHFUaYlrJpvtYeRODRveR4WtxeKlXaor8zGNMYiJJm7tZOfiLm4wWUD9XHvQ8FiGj8QYvxXA2O_6sy465bGEk0Fg_sTZckxj-2D08"
+    val oauthToken = EngineConfig.oauthToken
+    println(s"Oauth Token ${oauthToken}")
     val headers = List(("Authorization", s"Bearer $oauthToken"))
-    val res = DataCatalogRequests.httpsGetQuery("data-catalog.52.24.112.239.xip.io", s"/rest/datasets", headers)
+    println(s"Data Catalog URI ${EngineConfig.dataCatalogUri}")
+    val res = DataCatalogRequests.httpsGetQuery(EngineConfig.dataCatalogUri, s"/rest/datasets", headers)
     println(s"The result is ${res.prettyPrint}")
     import DataCatalogResponseJsonProtocol._
     val dataCatalogResponse = res.asJsObject.convertTo[DataCatalogResponse]

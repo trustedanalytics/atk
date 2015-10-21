@@ -21,28 +21,24 @@ import org.apache.spark.mllib.linalg.{ Vectors }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
+/**
+ * Scoring model for MLLib's RandomForest
+ * @param randomForestClassifierModel RandomForestModel(val algo: Algo.Algo, override val trees: Array[DecisionTreeModel])
+ */
 class RandomForestScoringModel(randomForestClassifierModel: RandomForestModel) extends RandomForestModel(randomForestClassifierModel.algo, randomForestClassifierModel.trees) with Model {
 
-  override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
     data.foreach { row =>
       {
         val x: Array[Double] = new Array[Double](row.length)
         row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = atof(value)
+          case (value: Any, index: Int) => x(index) = value.toDouble
         }
         score = score :+ predict(Vectors.dense(x))
       }
     }
     score
-  }
-
-  def atof(s: String): Double = {
-    s.toDouble
-  }
-
-  def atoi(s: String): Int = {
-    Integer.parseInt(s)
   }
 
 }

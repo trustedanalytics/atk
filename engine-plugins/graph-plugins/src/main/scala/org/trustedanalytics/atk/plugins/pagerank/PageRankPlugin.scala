@@ -29,13 +29,12 @@ import spray.json._
 
 /**
  * Parameters for executing page rank.
- * @param graph Reference to the graph object on which to compute pagerank.
+ * @param graph Reference to the graph object on which to compute PageRank.
  */
-case class PageRankArgs(@ArgDoc("""Reference to the graph object on which
-to compute pagerank.""") graph: GraphReference,
-                        @ArgDoc("""Name of the property to which pagerank
+case class PageRankArgs(graph: GraphReference,
+                        @ArgDoc("""Name of the property to which PageRank
 value will be stored on vertex and edge.""") output_property: String,
-                        @ArgDoc("""List of edge labels to consider for pagerank computation.
+                        @ArgDoc("""List of edge labels to consider for PageRank computation.
 Default is all edges are considered.""") input_edge_labels: Option[List[String]] = None,
                         @ArgDoc("""The maximum number of iterations that will be invoked.
 The valid range is all positive int.
@@ -72,14 +71,13 @@ object PageRankJsonFormat {
 
 import PageRankJsonFormat._
 
-@PluginDoc(oneLine = "Determining which vertices are the most important.",
-  extended = """Pulls graph from underlying store, sends it off to the PageRankRunner,
-and then writes the output graph back to the underlying store.
+@PluginDoc(oneLine = "Determine which vertices are the most important.",
+  extended = """Pulls graph from underlying store, sends it off to the
+PageRankRunner, and then writes the output graph back to the underlying store.
 
-Right now it is using only Titan for graph storage. Other backends including Parquet will be supported later.
+This method (currently) only supports Titan for graph storage.
 
 ** Experimental Feature **
-The `PageRank algorithm <http://en.wikipedia.org/wiki/PageRank>`_.
 
 **Basics and Background**
 
@@ -109,8 +107,8 @@ analyzing predator-prey food webs to predict extinctions.
 
 **Mathematical Details of PageRank Implementation**
 
-Our implementation of *PageRank* satisfies the following equation at each
-vertex :math:`v` of the graph:
+The |PACKAGE| implementation of *PageRank* satisfies the following equation
+at each vertex :math:`v` of the graph:
 
 .. math::
 
@@ -123,7 +121,7 @@ Where:
     |   :math:`PR(v)` |EM| *PageRank* score of the vertex v
     |   :math:`InSet(v)` |EM| set of vertices pointing to the vertex v
     |   :math:`n` |EM| total number of vertices in the graph
-    |   :math:`\rho` - user specified damping factor (also known as reset
+    |   :math:`\rho` |EM| user specified damping factor (also known as reset
         probability)
 
 Termination is guaranteed by two mechanisms.
@@ -140,13 +138,16 @@ Termination is guaranteed by two mechanisms.
 .. _PLoS\: Computational Biology:
     http://www.ploscompbiol.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pcbi.1000494&representation=PDF""",
   returns = """dict((vertex_dictionary, (label, Frame)), (edge_dictionary,(label,Frame))).
-Dictionary containing a dictionary of labeled vertices and labeled edges.
-For the vertex_dictionary the vertex type is the key and the corresponding
-vertex's frame with a new column storing the page rank value for the vertex
+
+Dictionary containing dictionaries of labeled vertices and labeled edges.
+
+For the *vertex_dictionary* the vertex type is the key and the corresponding
+vertex's frame with a new column storing the page rank value for the vertex.
 Call vertex_dictionary['label'] to get the handle to frame whose vertex
 type is label.
-For the edge_dictionary the edge type is the key and the corresponding
-edge's frame with a new column storing the page rank value for the edge
+
+For the *edge_dictionary* the edge type is the key and the corresponding
+edge's frame with a new column storing the page rank value for the edge.
 Call edge_dictionary['label'] to get the handle to frame whose edge type
 is label.""")
 class PageRankPlugin extends SparkCommandPlugin[PageRankArgs, PageRankResult] {

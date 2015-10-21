@@ -1,3 +1,5 @@
+.. _ds_apir:
+
 .. index:: ! UDF
     single: Python
 
@@ -36,7 +38,7 @@ only rows with scores greater than zero:
 
 .. code::
 
-    >>> my_csv = CsvFile(“tresults.txt”, [(‘test’, str), (‘score’, int32)])
+    >>> my_csv = CsvFile(“results.txt”, [(‘test’, str), (‘score’, int32)])
     >>> my_frame = Frame(my_csv)
     >>> my_frame.filter(my_custom_row_func)
 
@@ -105,8 +107,7 @@ For example::
 .. note::
 
     This example is for illustration only.
-    There are other, perhaps more Pythonic, ways of doing this, like using a
-    list comprehension.
+    There are other ways of doing this, like using a list comprehension.
 
 ----------------
 |UDF| Guidelines
@@ -114,7 +115,7 @@ For example::
 
 Here are some guidelines to follow when writing a |UDF|:
 
-1.  Error handling:
+#.  Error handling:
     Include error handling.
     If the function execution raises an exception, it will cause the entire
     command to fail and possibly leave the frame or graph in an incomplete
@@ -130,8 +131,8 @@ Here are some guidelines to follow when writing a |UDF|:
     code file** as the |UDF| or available in the server's installed Python
     libraries.
     The serialization technique to get the code distributed throughout the
-    cluster will only serialize dependencies in the same Python module (in
-    other words, file) right now.
+    cluster will serialize dependencies only in the same Python module (in
+    other words, file.)
 #.  Simplicity:
     Stay within the intended simple context of the given command, like a row
     operation.
@@ -139,8 +140,7 @@ Here are some guidelines to follow when writing a |UDF|:
     (which will fail due to permissions).
 #.  Performance:
     Be mindful of performance.
-    These functions execute on every row of data, in other words, several
-    times.
+    These functions execute on every row of data, in other words, many times.
 #.  Printing:
     Printing (to stdout, stderr, …) within the |UDF| will not show up in the
     client REPL.

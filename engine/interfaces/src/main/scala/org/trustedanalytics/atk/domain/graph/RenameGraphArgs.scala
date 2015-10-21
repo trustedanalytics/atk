@@ -16,7 +16,10 @@
 
 package org.trustedanalytics.atk.domain.graph
 
-case class RenameGraphArgs(graph: GraphReference, newName: String) {
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+
+case class RenameGraphArgs(graph: GraphReference,
+                           @ArgDoc("""The new name for the graph.""") newName: String) {
   require(graph != null, "graph is required")
   require(newName != null && newName.nonEmpty, "newName is required")
   GraphName.validate(newName)

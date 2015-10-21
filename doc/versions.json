@@ -1,0 +1,17 @@
+{
+    "DEFAULT_VERSION": "v0.4.0",
+    "VERSIONS": {
+        "v0.4.0": {
+            "type": "Production",
+            "version": "v0.4.0"
+        },
+        "ww37.5": {
+            "type": "Weekly",
+            "version": "ww37.5"
+        },
+        "master": {
+            "type": "Master",
+            "version": "NA"
+        }
+    }
+}

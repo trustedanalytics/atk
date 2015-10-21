@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.component.ClassLoaderAware
@@ -99,7 +100,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    * @return the newly created FrameRdd
    */
   def loadFrameData(sc: SparkContext, frame: FrameEntity)(implicit invocation: Invocation): FrameRdd = withContext("loadFrameRdd") {
-    (frame.storageFormat, frame.storageLocation) match {
+    val rdd = (frame.storageFormat, frame.storageLocation) match {
       case (_, None) | (None, _) =>
         //  nothing has been saved to disk yet)
         new FrameRdd(frame.schema, sc.parallelize[Row](Nil, EngineConfig.minPartitions))
@@ -114,6 +115,8 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
         sparkAutoPartitioner.repartitionFromFileSize(absPath.toString, frameRdd)
       case (Some(s), _) => illegalArg(s"Cannot load frame with storage '$s'")
     }
+    updateLastReadDate(frame)
+    rdd
   }
 
   /**
@@ -198,17 +201,20 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
 
           require(schema != null, "frame schema was null, we need developer to add logic to handle this - we used to have this, not sure if we still do --Todd 12/16/2014")
 
+          val now = new DateTime
           val updatedFrame = frameEntity.copy(status = Status.Active,
             schema = schema,
             storageLocation = Some(saveInfo.targetPath),
             storageFormat = Some(saveInfo.storageFormat),
-            materializationComplete = Some(new DateTime),
-            modifiedOn = new DateTime,
+            materializationComplete = Some(now),
+            lastReadDate = now,
+            modifiedOn = now,
             modifiedBy = Some(invocation.user.user.id))
 
           val withCount = updatedFrame.copy(rowCount = Some(getRowCount(updatedFrame)))
 
           metaStore.frameRepo.update(withCount)
+          updateLastReadDate(withCount)
 
           if (saveInfo.victimPath.isDefined) {
             frameFileStorage.deletePath(new Path(saveInfo.victimPath.get))
@@ -233,12 +239,24 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       withMyClassLoader {
         val reader = getReader(frame)
         val rows = reader.take(count, offset, Some(maxRows))
-        metaStore.withSession("frame.updateFrameStatus") {
-          implicit session =>
-            {
-              metaStore.frameRepo.updateLastReadDate(frame)
-            }
-        }
+        updateLastReadDate(frame)
+        rows
+      }
+    }
+
+  /**
+   * Retrieve all records from the given dataframe
+   * @param frame Frame to retrieve records from
+   * @return records in the dataframe
+   */
+  override def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]] =
+    withContext("frame.getAllRows") {
+      require(frame != null, "frame is required")
+      withMyClassLoader {
+        val reader = getReader(frame)
+        val numRows = getRowCount(frame)
+        val rows = reader.take(numRows, 0, None)
+        updateLastReadDate(frame)
         rows
       }
     }
@@ -286,9 +304,10 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     }
   }
 
-  override def drop(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
-    frameFileStorage.delete(frame)
-    metaStore.withSession("frame.drop") {
+  /** Immediately deletes frame file storage and the record in the metastore */
+  private def deleteFrameDateAndMetaDataCompletely(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
+    frameFileStorage.deleteFrameData(frame)
+    metaStore.withSession("frame.erase") {
       implicit session =>
         {
           metaStore.frameRepo.delete(frame.id).get
@@ -305,8 +324,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
             throw new RuntimeException("Frame with same name exists. Rename aborted.")
           }
           val newFrame = frame.copy(name = Some(newName))
-          val renamedFrame = metaStore.frameRepo.update(newFrame).get
-          metaStore.frameRepo.updateLastReadDate(renamedFrame).get
+          metaStore.frameRepo.update(newFrame).get
         }
     }
   }
@@ -342,7 +360,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     metaStore.withSession("frame.getFrames") {
       implicit session =>
         {
-          metaStore.frameRepo.scanAll().filter(f => f.status != Status.Deleted && f.status != Status.Deleted_Final && f.name.isDefined)
+          metaStore.frameRepo.scanAll().filter(f => f.isStatus(Status.Active) && f.name.isDefined)
         }
     }
   }
@@ -357,7 +375,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
                 throw new DuplicateNameException("frame", arguments.name.get, "Frame with same name exists. Create aborted.")
             }
           }
-          val frameTemplate = DataFrameTemplate(arguments.name)
+          val frameTemplate = DataFrameTemplate(arguments.name, arguments.description)
           val frame = metaStore.frameRepo.insert(frameTemplate).get
 
           //remove any existing artifacts to prevent collisions when a database is reinitialized.
@@ -376,19 +394,12 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override def lookupOrCreateErrorFrame(frame: FrameEntity)(implicit invocation: Invocation): FrameEntity = {
     val errorFrame = lookupErrorFrame(frame)
     if (errorFrame.isEmpty) {
-      metaStore.withSession("frame.lookupOrCreateErrorFrame") {
+      val newlyCreatedErrorFrame = create(CreateEntityArgs(description = Some(s"Error frame for frame.id=${frame.id}")))
+      metaStore.withSession("frame.updateErrorFrameId") {
         implicit session =>
-          {
-            val errorTemplate = new DataFrameTemplate(None, Some(s"This frame was automatically created to capture parse errors for ${frame.name} ID: ${frame.id}"))
-            val newlyCreatedErrorFrame = metaStore.frameRepo.insert(errorTemplate).get
-            metaStore.frameRepo.updateErrorFrameId(frame, Some(newlyCreatedErrorFrame.id))
-
-            //remove any existing artifacts to prevent collisions when a database is reinitialized.
-            frameFileStorage.delete(newlyCreatedErrorFrame)
-
-            newlyCreatedErrorFrame
-          }
+          metaStore.frameRepo.updateErrorFrameId(frame, Some(newlyCreatedErrorFrame.id))
       }
+      newlyCreatedErrorFrame
     }
     else {
       errorFrame.get
@@ -428,7 +439,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     } match {
       case Success(f) => f
       case Failure(e) =>
-        drop(frame)
+        deleteFrameDateAndMetaDataCompletely(frame)
         throw e
     }
   }
@@ -451,16 +462,16 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   }
 
   /**
-   * Set a frame to be deleted on the next execution of garbage collection
-   * @param frame frame to delete
+   * Marks a frame as Dropped
+   * @param frame frame to drop
    * @param invocation current invocation
    */
-  override def scheduleDeletion(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
-    metaStore.withSession("spark.framestorage.scheduleDeletion") {
+  override def dropFrame(frame: FrameEntity)(implicit invocation: Invocation): Unit = {
+    metaStore.withSession("spark.framestorage.dropFrame") {
       implicit session =>
         {
-          info(s"marking as ready to delete: frame id:${frame.id}, name:${frame.name}")
-          metaStore.frameRepo.updateReadyToDelete(frame)
+          info(s"marking frame entity (id=${frame.id}, name=${frame.name}) as dropped")
+          metaStore.frameRepo.dropFrame(frame)
         }
     }
   }

@@ -29,10 +29,13 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 
 /**
- * Rename columns of a frame
+ * Publish a Random Forest Classifier Model for scoring
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended = """The publish method exports the RandomForestClassifierModel and its implementation into a tar file. 
+  The tar file is then published on HDFS and this method returns the path to the tar file. 
+  The tar file serves as input to the scoring engine. This model can then be used to predict the cluster assignment of an observation.""",
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -70,8 +73,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
   override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
 
     val model: Model = arguments.model
-
-    //Extracting the RandomForestModel from the stored JsObject
+    //Extracting the RandomForestClassifierModel from the stored JsObject
     val randomForestData = model.data.convertTo[RandomForestClassifierData]
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson

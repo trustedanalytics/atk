@@ -22,17 +22,20 @@ import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
-                                           @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-                                           @ArgDoc("""Column name containing the label for each observation.""") labelColumn: String,
-                                           @ArgDoc("""Column(s) containing the observations.""") observationColumns: List[String],
-                                           @ArgDoc("""Number of classes for classification""") numClasses: Int = 2,
-                                           @ArgDoc("""Number of tress in the random forest""") numTrees: Int = 1,
-                                           @ArgDoc("""Criterion used for information gain calculation. Supported values "gini" or "entropy"""") impurity: String = "gini",
-                                           @ArgDoc("""Maxium depth of the tree""") maxDepth: Int = 4,
-                                           @ArgDoc("""Maximum number of bins used for splitting features""") maxBins: Int = 100,
-                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets""") seed: Int = scala.util.Random.nextInt(),
-                                           @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                           @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird"""") featureSubsetCategory: Option[String] = None) {
+                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
+                                           @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
+                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
+                                           @ArgDoc("""Number of classes for classification. Default is 2.""") numClasses: Int = 2,
+                                           @ArgDoc("""Number of tress in the random forest. Default is 1.""") numTrees: Int = 1,
+                                           @ArgDoc("""Criterion used for information gain calculation. Supported values "gini" or "entropy". Default is "gini".""") impurity: String = "gini",
+                                           @ArgDoc("""Maximum depth of the tree. Default is 4.""") maxDepth: Int = 4,
+                                           @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
+                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.""") seed: Int = scala.util.Random.nextInt(),
+                                           @ArgDoc(
+                                             """Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}.""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
+                                           @ArgDoc(
+                                             """Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird.
+If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
@@ -50,7 +53,7 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
           case _ => "sqrt"
         }
       }
-      case _ => featureSubsetCategory.getOrElse("all")
+      case x => x
 
     }
     value

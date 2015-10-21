@@ -20,8 +20,8 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /** Arguments to GroupByPlugin (see Spark API) */
 case class GroupByArgs(frame: FrameReference,
-                       @ArgDoc("""<TBD>""") groupByColumns: List[String],
-                       @ArgDoc("""<TBD>""") aggregations: List[GroupByAggregationArgs]) {
+                       @ArgDoc("""list of columns to group on""") groupByColumns: List[String],
+                       @ArgDoc("""the aggregations to perform""") aggregations: List[GroupByAggregationArgs]) {
   require(frame != null, "frame is required")
   require(groupByColumns != null, "group_by columns is required")
   require(aggregations != null, "aggregation list is required")

@@ -21,19 +21,23 @@ import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import ModelPublishJsonProtocol._
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.hadoop.fs.Path
 // Implicits needed for JSON conversion
 import spray.json._
+import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
- * Rename columns of a frame
+ * Publish a KMeansModel for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the KMeansModel and its implementation into a tar file. The tar file is then published
+on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. 
+This model can then be used to predict the cluster assignment of an observation.""",
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**

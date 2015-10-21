@@ -23,9 +23,9 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Arguments for defining an edge
  */
-case class DefineEdgeArgs(@ArgDoc("""<TBD>""") graphRef: GraphReference,
+case class DefineEdgeArgs(graphRef: GraphReference,
                           @ArgDoc("""Label of the edge type.""") label: String,
-                          @ArgDoc("""The src "type" of vertices this edge
+                          @ArgDoc("""The source "type" of vertices this edge
 connects.""") srcVertexLabel: String,
                           @ArgDoc("""The destination "type" of vertices this
 edge connects.""") destVertexLabel: String,

@@ -182,17 +182,17 @@ class MLLibJsonProtocolTest extends WordSpec {
 
     "be able to serialize" in {
       val dm = new DenseMatrix(2, 2, Array(1.0, 2.0, 3.0, 4.0), false)
-      assert(dm.toJson.compactPrint == "{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0],\"isTransposed\":false}")
+      assert(dm.toJson.compactPrint == "{\"num_rows\":2,\"num_cols\":2,\"values\":[1.0,2.0,3.0,4.0],\"is_transposed\":false}")
     }
 
     "parse json" in {
       val string =
         """
         |{
-        | "numRows": 2,
-        | "numCols": 2,
+        | "num_rows": 2,
+        | "num_cols": 2,
         | "values": [1.0,2.0,3.0,4.0],
-        | "isTransposed": false
+        | "is_transposed": false
         |}
       """.stripMargin
       val json = JsonParser(string).asJsObject
@@ -205,11 +205,12 @@ class MLLibJsonProtocolTest extends WordSpec {
 
     "be able to serialize" in {
       val singularValuesVector = new DenseVector(Array(1.1, 2.2))
+      val meanVector = new DenseVector(Array(0.5, 0.5))
       val vFactorMatrix = new DenseMatrix(2, 2, Array(1.0, 2.0, 3.0, 4.0), false)
-      val p = new PrincipalComponentsData(2, List("column1", "column2"), singularValuesVector, vFactorMatrix)
-      assert(p.toJson.compactPrint == "{\"k\":2,\"observationColumns\":[\"column1\",\"column2\"]," +
-        "\"singularValues\":{\"values\":[1.1,2.2]}," +
-        "\"vFactor\":{\"numRows\":2,\"numCols\":2,\"values\":[1.0,2.0,3.0,4.0],\"isTransposed\":false}}")
+      val p = new PrincipalComponentsData(2, List("column1", "column2"), true, meanVector, singularValuesVector, vFactorMatrix)
+      assert(p.toJson.compactPrint == "{\"k\":2,\"observation_columns\":[\"column1\",\"column2\"],\"mean_centered\":true," +
+        "\"mean_vector\":{\"values\":[0.5,0.5]},\"singular_values\":{\"values\":[1.1,2.2]},\"v_factor\":{\"num_rows\":2,\"num_cols\":2,\"values\":[1.0,2.0,3.0,4.0]," +
+        "\"is_transposed\":false}}")
     }
 
     "parse json" in {
@@ -217,9 +218,11 @@ class MLLibJsonProtocolTest extends WordSpec {
         """
           |{
           |"k":2,
-          |"observationColumns": ["column1", "column2"],
-          |"singularValues": {"values": [1.1,2.2]},
-          |"vFactor": {"numRows":2, "numCols": 2, "values": [1.0,2.0,3.0,4.0], "isTransposed": false}
+          |"observation_columns": ["column1", "column2"],
+          |"mean_centered":true,
+          |"mean_vector": {"values": [0.5,0.5]},
+          |"singular_values": {"values": [1.1,2.2]},
+          |"v_factor": {"num_rows":2, "num_cols": 2, "values": [1.0,2.0,3.0,4.0], "is_transposed": false}
           |}
         """.stripMargin
       val json = JsonParser(string).asJsObject
@@ -229,6 +232,9 @@ class MLLibJsonProtocolTest extends WordSpec {
       assert(p.observationColumns.length == 2)
       assert(p.singularValues.size == 2)
       assert(p.vFactor.numRows == 2)
+      assert(p.meanCentered == true)
+      assert(p.meanVector(1) == 0.5)
+
     }
   }
 
@@ -237,11 +243,11 @@ class MLLibJsonProtocolTest extends WordSpec {
     "be able to serialize" in {
       val featureString = "Categorical"
       val featureType = FeatureType.withName(featureString)
-      assert(featureType.toJson.compactPrint == "{\"featuretype\":\"Categorical\"}")
+      assert(featureType.toJson.compactPrint == "{\"feature_type\":\"Categorical\"}")
     }
 
     "parse json" in {
-      val string = "{\"featuretype\":\"Categorical\"}"
+      val string = "{\"feature_type\":\"Categorical\"}"
       val json = JsonParser(string).asJsObject
       val f = json.convertTo[FeatureType]
 
@@ -277,11 +283,11 @@ class MLLibJsonProtocolTest extends WordSpec {
       val categories = List(1.1, 2.2)
       val split = new Split(feature, threshold, featureType, categories)
 
-      assert(split.toJson.compactPrint == "{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}")
+      assert(split.toJson.compactPrint == "{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]}")
     }
 
     "parse json" in {
-      val string = "{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}"
+      val string = "{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]}"
       val json = JsonParser(string).asJsObject
       val split = json.convertTo[Split]
 
@@ -323,8 +329,8 @@ class MLLibJsonProtocolTest extends WordSpec {
       val rightPredict = new Predict(0.8, 0.9)
       val i = new InformationGainStats(gain, impurity, leftImpurity, rightImpurity, leftPredict, rightPredict)
 
-      assert(i.toJson.compactPrint == "{\"gain\":0.2,\"impurity\":0.3,\"leftimpurity\":0.4,\"rightimpurity\":0.5," +
-        "\"leftpredict\":{\"predict\":0.6,\"prob\":0.7},\"rightpredict\":{\"predict\":0.8,\"prob\":0.9}}")
+      assert(i.toJson.compactPrint == "{\"gain\":0.2,\"impurity\":0.3,\"left_impurity\":0.4,\"right_impurity\":0.5," +
+        "\"left_predict\":{\"predict\":0.6,\"prob\":0.7},\"right_predict\":{\"predict\":0.8,\"prob\":0.9}}")
     }
 
     "parse json" in {
@@ -333,10 +339,10 @@ class MLLibJsonProtocolTest extends WordSpec {
           |{
           |"gain":0.2,
           |"impurity":0.3,
-          |"leftimpurity":0.4,
-          |"rightimpurity":0.5,
-          |"leftpredict":{"predict":0.6,"prob":0.7},
-          |"rightpredict":{"predict":0.8,"prob":0.9}
+          |"left_impurity":0.4,
+          |"right_impurity":0.5,
+          |"left_predict":{"predict":0.6,"prob":0.7},
+          |"right_predict":{"predict":0.8,"prob":0.9}
           |}
         """.stripMargin
       val json = JsonParser(string).asJsObject
@@ -359,10 +365,10 @@ class MLLibJsonProtocolTest extends WordSpec {
       val node = new Node(id, predict, impurity, isLeaf, Some(split), Some(leftNode), None, None)
 
       assert(node.toJson.compactPrint == "{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"" +
-        "isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5," +
-        "\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null}")
+        "is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5," +
+        "\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null},\"right_node\":null,\"stats\":null}")
     }
 
     "parse json" in {
@@ -373,10 +379,10 @@ class MLLibJsonProtocolTest extends WordSpec {
           |"id":1,
           |"predict":{"predict":0.1,"prob":0.2},
           |"impurity":0.2,
-          |"isLeaf":false,
-          |"split":{"feature":2,"threshold":0.5,"featuretype":{"featuretype":"Categorical"},"categories":[1.1,2.2]},
-          |"leftNode":null,
-          |"rightNode":null,
+          |"is_leaf":false,
+          |"split":{"feature":2,"threshold":0.5,"feature_type":{"feature_type":"Categorical"},"categories":[1.1,2.2]},
+          |"left_node":null,
+          |"right_node":null,
           |"stats":null
           |}
       """.stripMargin
@@ -397,19 +403,19 @@ class MLLibJsonProtocolTest extends WordSpec {
       val algo = Algo.withName(algoString)
       val decisionTree = new DecisionTreeModel(topNode, algo)
 
-      assert(decisionTree.toJson.compactPrint == "{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
-        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
-        "\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}")
+      assert(decisionTree.toJson.compactPrint == "{\"top_node\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
+        "\"impurity\":0.5,\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null},\"right_node\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}")
     }
 
     "parse json" in {
-      val string = "{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
-        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
-        "\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}"
+      val string = "{\"top_node\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4}," +
+        "\"impurity\":0.5,\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null},\"right_node\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}"
 
       val json = JsonParser(string).asJsObject
       val decisionTree = json.convertTo[DecisionTreeModel]
@@ -439,29 +445,29 @@ class MLLibJsonProtocolTest extends WordSpec {
       val trees = Array(decisionTree1, decisionTree2)
       val randomForest = new RandomForestModel(algo1, trees)
 
-      assert(randomForest.toJson.compactPrint == "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"topnode\":{\"id\":1," +
-        "\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5," +
-        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3," +
-        "\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null}," +
-        "\"algo\":{\"algo\":\"Classification\"}},{\"topnode\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"isLeaf\":false," +
-        "\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2," +
-        "\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
-        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null}," +
-        "\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}")
+      assert(randomForest.toJson.compactPrint == "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"top_node\":{\"id\":1," +
+        "\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3," +
+        "\"prob\":0.4},\"impurity\":0.5,\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null},\"right_node\":null,\"stats\":null}," +
+        "\"algo\":{\"algo\":\"Classification\"}},{\"top_node\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2,\"is_leaf\":false," +
+        "\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2," +
+        "\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null}," +
+        "\"right_node\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}")
 
     }
 
     "parse json" in {
-      val string = "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"topnode\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2," +
-        "\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]}," +
-        "\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
-        "\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null,\"rightNode\":null,\"stats\":null}," +
-        "\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}},{\"topnode\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
-        "\"impurity\":0.2,\"isLeaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"}," +
-        "\"categories\":[1.1,2.2]},\"leftNode\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"isLeaf\":true," +
-        "\"split\":{\"feature\":2,\"threshold\":0.5,\"featuretype\":{\"featuretype\":\"Categorical\"},\"categories\":[1.1,2.2]},\"leftNode\":null," +
-        "\"rightNode\":null,\"stats\":null},\"rightNode\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}"
+      val string = "{\"algo\":{\"algo\":\"Classification\"},\"trees\":[{\"top_node\":{\"id\":1,\"predict\":{\"predict\":0.1,\"prob\":0.2},\"impurity\":0.2," +
+        "\"is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]}," +
+        "\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"is_leaf\":true,\"split\":{\"feature\":2,\"threshold\":0.5," +
+        "\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]},\"left_node\":null,\"right_node\":null,\"stats\":null}," +
+        "\"right_node\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}},{\"top_node\":{\"id\":2,\"predict\":{\"predict\":0.1,\"prob\":0.2}," +
+        "\"impurity\":0.2,\"is_leaf\":false,\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"}," +
+        "\"categories\":[1.1,2.2]},\"left_node\":{\"id\":2,\"predict\":{\"predict\":0.3,\"prob\":0.4},\"impurity\":0.5,\"is_leaf\":true," +
+        "\"split\":{\"feature\":2,\"threshold\":0.5,\"feature_type\":{\"feature_type\":\"Categorical\"},\"categories\":[1.1,2.2]},\"left_node\":null," +
+        "\"right_node\":null,\"stats\":null},\"right_node\":null,\"stats\":null},\"algo\":{\"algo\":\"Classification\"}}]}"
 
       val json = JsonParser(string).asJsObject
       val randomForest = json.convertTo[RandomForestModel]

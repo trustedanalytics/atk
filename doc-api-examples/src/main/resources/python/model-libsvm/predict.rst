@@ -1,5 +1,6 @@
 Examples
 --------
+Predict using a Libsvm Model
 
 .. only:: html
 

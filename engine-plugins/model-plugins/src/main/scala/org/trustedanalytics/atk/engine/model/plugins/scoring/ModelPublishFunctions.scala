@@ -37,7 +37,7 @@ object ModelPublishJsonProtocol {
 
 }
 
-case class ModelPublishArgs(@ArgDoc("""""") model: ModelReference) {
+case class ModelPublishArgs(model: ModelReference) {
   require(model != null, "model is required")
 }
 

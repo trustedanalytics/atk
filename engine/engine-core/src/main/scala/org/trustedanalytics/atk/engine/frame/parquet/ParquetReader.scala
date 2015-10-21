@@ -65,9 +65,9 @@ class ParquetReader(val path: Path, fileStorage: HdfsFileStorage, parquetApiFact
 
   /**
    * take from this objects path data from parquet files as a list of arrays.
-   * @param count total rows to be included in the new RDD
-   * @param offset rows to be skipped before including rows in the new RDD
-   * @param limit limit on number of rows to be included in the new RDD
+   * @param count total rows to be included
+   * @param offset rows to be skipped before including rows
+   * @param limit limit on number of rows to be included
    */
   def take(count: Long, offset: Long = 0, limit: Option[Long]): List[Array[Any]] = {
     val files: List[Footer] = getFiles()

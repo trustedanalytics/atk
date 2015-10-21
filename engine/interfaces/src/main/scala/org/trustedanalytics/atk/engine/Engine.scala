@@ -67,7 +67,7 @@ trait Engine {
   @deprecated("use engine.graphs.createFrame()")
   def createFrame(arguments: CreateEntityArgs)(implicit invocation: Invocation): Future[FrameEntity]
 
-  def deleteFrame(id: Identifier)(implicit invocation: Invocation): Future[Unit]
+  def dropFrame(id: Identifier)(implicit invocation: Invocation): Future[Unit]
 
   def getFrames()(implicit invocation: Invocation): Future[Seq[FrameEntity]]
 
@@ -92,7 +92,7 @@ trait Engine {
 
   def getEdges(graphId: Identifier)(implicit invocation: Invocation): Future[Seq[FrameEntity]]
 
-  def deleteGraph(graphId: Identifier)(implicit invocation: Invocation): Future[Unit]
+  def dropGraph(graphId: Identifier)(implicit invocation: Invocation): Future[Unit]
 
   def createModel(arguments: CreateEntityArgs)(implicit invocation: Invocation): Future[ModelEntity]
 
@@ -102,7 +102,7 @@ trait Engine {
 
   def getModelByName(name: String)(implicit invocation: Invocation): Future[Option[ModelEntity]]
 
-  def deleteModel(id: Identifier)(implicit invocation: Invocation): Future[Unit]
+  def dropModel(id: Identifier)(implicit invocation: Invocation): Future[Unit]
 
   /**
    * Cancel a running command

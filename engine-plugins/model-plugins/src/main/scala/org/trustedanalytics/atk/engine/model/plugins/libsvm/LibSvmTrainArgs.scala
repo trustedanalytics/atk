@@ -23,27 +23,27 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 /**
  * Command for training a lib svm model with the provided dataset and params.
  */
-case class LibSvmTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
+case class LibSvmTrainArgs(model: ModelReference,
                            @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-                           @ArgDoc("""Column name containing the label for each observation.""") labelColumn: String,
-                           @ArgDoc("""Column(s) containing the observations.""") observationColumns: List[String],
+                           @ArgDoc("""Column name containing the label for each
+observation.""") labelColumn: String,
+                           @ArgDoc("""Column(s) containing the
+observations.""") observationColumns: List[String],
                            @ArgDoc("""Set type of SVM.
 Default is one-class SVM.
 
-    0 -- C-SVC
-    1 -- nu-SVC
-    2 -- one-class SVM
-    3 -- epsilon-SVR
-    4 -- nu-SVR""") svmType: Int = 2,
-
+|   0 -- C-SVC
+|   1 -- nu-SVC
+|   2 -- one-class SVM
+|   3 -- epsilon-SVR
+|   4 -- nu-SVR""") svmType: Int = 2,
                            @ArgDoc("""Specifies the kernel type to be used in the algorithm.
 Default is RBF.
 
-    0 -- linear: u\'\*v
-    1 -- polynomial: (gamma*u\'\*v + coef0)^degree
-    2 -- radial basis function: exp(-gamma*|u-v|^2)
-    3 -- sigmoid: tanh(gamma*u\'\*v + coef0)""") kernelType: Int = 2,
-
+|   0 -- linear: u\'\*v
+|   1 -- polynomial: (gamma*u\'\*v + coef0)^degree
+|   2 -- radial basis function: exp(-gamma*|u-v|^2)
+|   3 -- sigmoid: tanh(gamma*u\'\*v + coef0)""") kernelType: Int = 2,
                            @ArgDoc("""Default is (Array[Int](0))""") weightLabel: Option[Array[Int]] = None,
                            @ArgDoc("""Default is (Array[Double](0.0))""") weight: Option[Array[Double]] = None,
                            @ArgDoc("""Set tolerance of termination criterion""") epsilon: Double = 0.001,
@@ -53,8 +53,10 @@ Ignored by all other kernels.""") degree: Int = 3,
 Default is 1/n_features.""") gamma: Option[Double] = None,
                            @ArgDoc("""Independent term in kernel function.
 It is only significant in 'poly' and 'sigmoid'.""") coef: Double = 0,
-                           @ArgDoc("""Set the parameter nu of nu-SVC, one-class SVM, and nu-SVR.""") nu: Double = 0.5,
-                           @ArgDoc("""Specify the size of the kernel cache (in MB).""") cacheSize: Double = 100.0,
+                           @ArgDoc("""Set the parameter nu of nu-SVC, one-class SVM,
+and nu-SVR.""") nu: Double = 0.5,
+                           @ArgDoc("""Specify the size of the kernel
+cache (in MB).""") cacheSize: Double = 100.0,
                            @ArgDoc("""Whether to use the shrinking heuristic.
 Default is 1 (true).""") shrinking: Int = 1,
                            @ArgDoc("""Whether to enable probability estimates.

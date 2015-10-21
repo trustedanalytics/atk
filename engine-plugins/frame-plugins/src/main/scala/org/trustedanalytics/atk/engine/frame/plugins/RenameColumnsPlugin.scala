@@ -28,8 +28,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Rename columns of a frame
  */
-@PluginDoc(oneLine = "<TBD>",
-  extended = "<TBD>")
+@PluginDoc(oneLine = "Rename columns",
+  extended = "")
 class RenameColumnsPlugin extends CommandPlugin[RenameColumnsArgs, UnitReturn] {
 
   /**

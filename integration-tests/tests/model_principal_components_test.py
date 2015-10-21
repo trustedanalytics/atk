@@ -35,17 +35,16 @@ class ModelPrincipalComponentsTest(unittest.TestCase):
         print "creating the frame"
         train_frame = ta.Frame(train_file)
 
-        print "initializing the naivebayes model"
+        print "initializing the principalcomponents model"
         p = ta.PrincipalComponentsModel()
 
         print "training the model on the frame"
-        p.train(train_frame,["1","2","3","4","5","6","7","8","9","10","11"],9)
+        p.train(train_frame,["1","2","3","4","5","6","7","8","9","10","11"],k=9)
 
         print "predicting the class using the model and the frame"
-        output = p.predict(train_frame,c=5,t_square_index=True)
-        output_frame = output['output_frame']
+        output = p.predict(train_frame,c=5,t_squared_index=True)
 
-        self.assertEqual(output_frame.column_names,['1','2','3','4','5','6','7','8','9','10','11','p_1','p_2','p_3','p_4','p_5'])
+        self.assertEqual(output.column_names,['1','2','3','4','5','6','7','8','9','10','11','p_1','p_2','p_3','p_4','p_5','t_squared_index'])
 
 
 if __name__ == "__main__":

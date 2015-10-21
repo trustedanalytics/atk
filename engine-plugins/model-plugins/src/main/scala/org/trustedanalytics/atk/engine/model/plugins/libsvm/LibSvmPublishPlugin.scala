@@ -21,18 +21,25 @@ import ModelPublishJsonProtocol._
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, _ }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import spray.json._
 import LibSvmJsonProtocol._
+import libsvm.svm
+import java.io.File
+import org.apache.commons.io.FileUtils
 
 /**
- * Rename columns of a frame
+ * Publish a Libsvm Model for scoring
  */
-@PluginDoc(oneLine = "Creates a tar file that will used as input to the scoring engine",
-  extended = "Returns the HDFS path to the tar file")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the LibsvmModel and its implementation into a tar file. The tar file is then published on 
+HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+This model can then be used to predict the class of an observation.
+    """,
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -71,11 +78,22 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
     val model: Model = arguments.model
 
-    //Extracting the KMeansModel from the stored JsObject
+    //Extracting the LibSvmModel from the stored JsObject
     val libsvmData = model.data.convertTo[LibSvmData]
     val libsvmModel = libsvmData.svmModel
-    val jsvalue: JsValue = libsvmModel.toJson
+    var file: File = null
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    try {
+      file = File.createTempFile("tmp", ".txt")
+      svm.svm_save_model(file.getAbsolutePath(), libsvmModel)
+      val modelValues = FileUtils.readFileToString(file)
+
+      StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+    }
+    catch { case ex: Exception => throw new RuntimeException(s"Unable to Publish the LibSvm Model\n" + ex.toString) }
+    finally {
+      FileUtils.deleteQuietly(file)
+    }
   }
+
 }

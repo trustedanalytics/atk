@@ -73,6 +73,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <enabled>true</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>atk</id>
+            <url>http://ec2-54-69-244-31.us-west-2.compute.amazonaws.com/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <prerequisites>

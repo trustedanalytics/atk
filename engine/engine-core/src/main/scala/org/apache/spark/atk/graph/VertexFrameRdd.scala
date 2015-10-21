@@ -146,7 +146,6 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
           (row1, row1Preferred)
         }
         else {
-          // otherwise choose randomly
           (row2, row2Preferred)
         }
     }.values.map { case (row: Row, rowNew: Boolean) => row }

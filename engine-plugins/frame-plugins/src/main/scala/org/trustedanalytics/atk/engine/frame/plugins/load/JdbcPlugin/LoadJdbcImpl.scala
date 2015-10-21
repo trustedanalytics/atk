@@ -19,9 +19,9 @@ package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 import org.apache.spark._
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.{ DataFrame, SQLContext }
-import org.apache.spark.rdd.{ RDD }
 import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
+import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
 
 /**
  * Helper class for creating an RDD from jdbc
@@ -34,22 +34,8 @@ object LoadJdbcImpl extends Serializable {
    * @param arguments arguments for jdbc connection (including the initial data filtering)
    */
   def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
-    val urlKey = "url"
-    val dbTableKey = "dbtable"
-
     val sqlContext = new SQLContext(sc)
-    val url = arguments.url.getOrElse(buildUrl())
-    val connectionArgs: Map[String, String] = if (arguments.driverName.isEmpty) {
-      Map(
-        urlKey -> url,
-        dbTableKey -> arguments.tableName)
-    }
-    else {
-      Map(
-        urlKey -> url,
-        dbTableKey -> arguments.tableName,
-        "driver" -> arguments.driverName.get)
-    }
+    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.url, arguments.driverName)
 
     sqlContext.load("jdbc", connectionArgs)
   }
@@ -63,11 +49,4 @@ object LoadJdbcImpl extends Serializable {
     FrameRdd.sparkDataTypeToSchemaDataType(sparkDataType)
   }
 
-  /**
-   * Builds connection url for cluster/cloud deployment. Not supported yet.
-   * @return a connection url
-   */
-  def buildUrl(): String = {
-    throw new IllegalArgumentException("Connection url is required")
-  }
 }

@@ -1,3 +1,5 @@
+.. _glossary:
+
 ========
 Glossary
 ========
@@ -5,13 +7,6 @@ Glossary
 
 ..  glossary::
     :sorted:
-
-    ASCII
-
-        Abbreviated from American Standard Code for Information Interchange,
-        ASCII is a character-encoding scheme.
-        Originally based on the English alphabet, it encodes 128 specified
-        characters into 7-bit binary integers.
 
     Adjacency List
 
@@ -55,8 +50,9 @@ Glossary
         steps, each involving the application of the :term:`least squares`
         method of parameter estimation.
 
-        See the :ref:`ALS section <ALS>` on machine learning for an
-        in-depth discussion of this method.
+        See the API section on the
+        :ref:`Collaborative Filter Model <python_api/models/model-collaborative_filtering/index>`
+        for an in-depth discussion of this method.
 
     API Maturity Tags
 
@@ -79,6 +75,19 @@ Glossary
         supported.
         It is recommended that an alternate solution be found.
         This function may be removed in future releases.
+
+    Arity
+
+        In logic, mathematics, and computer science, the arity of a function
+        or operation is the number of arguments or operands the function or
+        operation accepts.
+
+    ASCII
+
+        Abbreviated from American Standard Code for Information Interchange,
+        ASCII is a character-encoding scheme.
+        Originally based on the English alphabet, it encodes 128 specified
+        characters into 7-bit binary integers.
 
     Average Path Length
 
@@ -104,7 +113,7 @@ Glossary
 
         See :term:`API Maturity Tags`.
 
-    Bias-variance tradeoff
+    Bias-variance trade-off
 
         In supervised classifier training, the problem of minimizing two
         sources of prediction error: erroneous assumptions in the learning
@@ -150,7 +159,7 @@ Glossary
         A file containing tabular data (numbers and text) in plain-text form.
         The file can consist of any number of records, separated by a unique
         character.
-        New line characters are ususally used for this purpose.
+        New line characters are usually used for this purpose.
         Each record consists of one or more fields, separated by some unique
         character.
         Commas are usually used for this purpose.
@@ -207,7 +216,7 @@ Glossary
 
     Conjugate Gradient Descent
 
-        The |PACKAGE| implements this algorithm.
+        |PACKAGE| implements this algorithm.
         Specifically, it uses CGD with bias for collaborative filtering.
 
         For more information: `Factorization Meets the Neighborhood (pdf)`_
@@ -256,8 +265,12 @@ Glossary
 
     Edge
 
-        A connection — either directed or not — between two vertices in a
+        A connection |EM| either directed or not |EM| between two vertices in a
         graph.
+
+    Enumerate
+
+        Verb |EM| To specify each member of a sequence individually in incrementing order.
 
     Equal Width Binning
 
@@ -338,14 +351,11 @@ Glossary
 
         A real number with 64 bits of precision.
 
-    frame (lower case f)
-
-        A table database with rows and columns containing data.
-
     Frame (capital F)
 
-        A class object with the functionality to manipulate the data in a
-        :term:`frame (lower case f)`.
+        1.  A table database with rows and columns containing data.
+
+        2.  A class object with the functionality to manipulate the data in a frame.
 
     GaBP
 
@@ -414,7 +424,7 @@ Glossary
         structural properties of a graph, including:
 
         #.  Traversals --
-            Algorithmic walk throughs of the graph to determine optimal
+            Algorithmic walk-through of the graph to determine optimal
             paths and relationship between vertices.
 
         #.  Statistics --
@@ -469,6 +479,24 @@ Glossary
         Apache HBase is the Hadoop database, a distributed, scalable, big data
         store.
 
+    Hyperparameter
+
+        Parameter that describe the prior distribution (the assumption about
+        the data before observing it) as opposed to the parameters that govern
+        the underlying system.
+
+        In particular, for Latent Dirichlet Allocation:
+
+        Alpha is the parameter of the Dirichlet "prior" on the per-document
+        distribution of words.
+        In other words, how the distribution of words per
+        document is modeled before seeing any data. 
+
+        Beta is the parameter of the Dirichlet "prior" on the per-topic word
+        distribution.
+        In other words, how the distribution of words per
+        topic is modeled before seeing any data.
+
     int32
 
         An integer is a member of the set of positive whole numbers {1, 2,
@@ -497,7 +525,7 @@ Glossary
 
         Data in the JavaScript Object Notation format. An open standard format
         that uses human-readable text to transmit data objects consisting of
-        attributevalue pairs. For more information see `http:/json.org`__.
+        attribute/value pairs. For more information see `http:/json.org`__.
 
     Katz Centrality
 
@@ -516,7 +544,7 @@ Glossary
 
     |K-S| Test
 
-        From `Wikipedia\: Kolmogorov–Smirnov Test`_:
+        From `Wikipedia\: Kolmogorov|EM|Smirnov Test`_:
 
             In statistics, the |K-S| test is a nonparametric test of the
             equality of continuous, one-dimensional probability distributions
@@ -532,7 +560,7 @@ Glossary
 
         A multi-pass process for grouping vertices.
 
-        See :ref:`Label Propagation (LP) <LP>`.
+        See :ref:`Label Propagation (LP) <python_api/frames/frame-/label_propagation>`.
 
         For additional reference:
         `Learning from Labeled and Unlabeled Data with Label Propagation`_.
@@ -557,10 +585,10 @@ Glossary
 
         Adapted from: `Stanford\: Machine Learning`_:
 
-            This is the tradeoff parameter, used in :term:`Label Propagation`
+            This is the trade-off parameter, used in :term:`Label Propagation`
             on :term:`Gaussian Random Fields`.
             The regularization parameter is a control on fitting parameters.
-            It is used in machine learning algorithms to prevent overfitting.
+            It is used in machine learning algorithms to prevent over-fitting.
             As the magnitude of the fitting parameter increases, there will be
             an increasing penalty on the cost function.
             This penalty is dependent on the squares of the parameters as well
@@ -998,7 +1026,7 @@ Glossary
     http://en.wikipedia.org/wiki/Convergence_(mathematics)
 .. _Wikipedia\: Directed Acyclic Graph:
     https://en.wikipedia.org/wiki/Directed_acyclic_graph
-.. _Tinkerpop\: Property Graph Model:
+.. _TinkerPop\: Property Graph Model:
     https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model
 .. _Wikipedia\: Extract, Transform, and Load:
     http://en.wikipedia.org/wiki/Extract,_transform,_load
@@ -1041,7 +1069,7 @@ Glossary
     http://en.wikipedia.org/wiki/Statistical_classification
 .. _Wikipedia\: Recommender System:
     http://en.wikipedia.org/wiki/Recommendation_system
-.. _How Computers Know What We Want — Before We Do:
+.. _How Computers Know What We Want |EM| Before We Do:
     http://content.time.com/time/magazine/article/0,9171,1992403,00.html
 .. _Wikipedia\: Topic Modeling: http://en.wikipedia.org/wiki/Topic_modeling
 .. _Wikipedia\: Community Structure:
@@ -1052,7 +1080,7 @@ Glossary
 .. _Wikipedia\: Collaborative Filtering:
     http://en.wikipedia.org/wiki/Collaborative_filtering
 .. _Wikipedia\: Confusion Matrix: http://en.wikipedia.org/wiki/Confusion_matrix
-.. _Wikipedia\: Kolmogorov–Smirnov Test: http://en.wikipedia.org/wiki/K-S_Test
+.. _Wikipedia\: Kolmogorov|EM|Smirnov Test: http://en.wikipedia.org/wiki/K-S_Test
 .. _Wikipedia\: Precision and Recall:
     http://en.wikipedia.org/wiki/Precision_and_recall
 .. _Wikipedia\: F1 score: http://en.wikipedia.org/wiki/F-measure
@@ -1081,7 +1109,7 @@ Glossary
 .. [#f3] Francesco Ricci and Lior Rokach and Bracha Shapira (2011).
     Recommender Systems Handbook, pp. 1-35. Springer.
 .. [#f4] Lev Grossman (2010).
-    `How Computers Know What We Want — Before We Do`_. Time.
+    `How Computers Know What We Want |EM| Before We Do`_. Time.
 .. [#f5] Terveen, Loren; Hill, Will (2001).
     Beyond Recommender Systems: Helping People Help Each Other pp. 6.
     Addison-Wesley.
@@ -1095,7 +1123,7 @@ Glossary
     Oxford University Press.
 .. [#f11] Weiss, Yair; Freeman, William T. (October 2001). "Correctness of
     Belief Propagation in Gaussian Graphical Models of Arbitrary Topology".
-    Neural Computation 13 (10): 2173–2200. doi:10.1162/089976601750541769.
+    Neural Computation 13 (10): 2173|EM|2200. doi:10.1162/089976601750541769.
     PMID 11570995.
 
 

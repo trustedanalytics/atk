@@ -18,16 +18,32 @@ package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 /**
  * Results for principal components train plugin
  */
+import org.trustedanalytics.atk.engine.model.plugins.MatrixImplicits
+import MatrixImplicits._
+
+/**
+ * Object returned on training a principal components model
+ * @param k Handle to the model to be used
+ * @param observationColumns List of observation column name(s) used to train the model
+ * @param meanCentered Indicator whether the columns were mean centered for training
+ * @param columnMeans Means of the columns
+ * @param singularValues Singular values of the specified columns in the input frame
+ * @param rightSingularVectors Right singular vectors of the specified columns in the input frame
+ */
 case class PrincipalComponentsTrainReturn(k: Int,
                                           observationColumns: List[String],
+                                          meanCentered: Boolean,
+                                          columnMeans: Array[Double],
                                           singularValues: Array[Double],
-                                          rightSingularVectors: Array[Double]) {
+                                          rightSingularVectors: List[List[Double]]) {
 
   def this(pcData: PrincipalComponentsData) = {
     this(pcData.k,
       pcData.observationColumns,
+      pcData.meanCentered,
+      pcData.meanVector.toArray,
       pcData.singularValues.toArray,
-      pcData.vFactor.toArray)
+      pcData.vFactor.toListOfList)
   }
 
 }

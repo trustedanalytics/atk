@@ -22,7 +22,7 @@ import spray.json.JsValue
 /**
  * Command for calculating the median of a (possibly weighted) dataframe column.
  */
-case class ColumnMedianArgs(@ArgDoc("""Identifier for the input dataframe.""") frame: FrameReference,
+case class ColumnMedianArgs(frame: FrameReference,
                             @ArgDoc("""The column whose median is to be calculated.""") dataColumn: String,
                             @ArgDoc("""The column that provides weights (frequencies)
 for the median calculation.

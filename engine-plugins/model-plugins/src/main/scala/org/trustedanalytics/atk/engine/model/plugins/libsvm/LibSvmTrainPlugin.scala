@@ -33,9 +33,10 @@ import spray.json._
 
 // TODO: all plugins should move out of engine-core into plugin modules
 
-@PluginDoc(oneLine = "Train Lib Svm model based on another frame.",
+@PluginDoc(oneLine = "Train a Lib Svm model",
   extended = """Creating a lib Svm Model using the observation column and label column of the
-train frame.""")
+train frame.""",
+  returns = """A trained Libsvm model""")
 class LibSvmTrainPlugin extends SparkCommandPlugin[LibSvmTrainArgs, UnitReturn] {
   /**
    * The name of the command.

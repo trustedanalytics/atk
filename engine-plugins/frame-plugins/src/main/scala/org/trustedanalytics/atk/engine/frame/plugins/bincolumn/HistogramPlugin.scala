@@ -35,8 +35,8 @@ import org.apache.spark.SparkContext._
 The returned value is a Histogram object containing 3 lists one each for:
 the cutoff points of the bins, size of each bin, and density of each bin.
 
-Notes
------
+**Notes**
+
 The num_bins parameter is considered to be the maximum permissible number
 of bins because the data may dictate fewer bins.
 With equal depth binning, for example, if the column to be binned has 10

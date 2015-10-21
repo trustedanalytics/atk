@@ -44,8 +44,7 @@ Note that there may be bins with no members:
        55                 3
        89                 4
 
-The method returns a list of 6 cutoff values that define the edges of each
-bin.
+The method returns a list of 6 cutoff values that define the edges of each bin.
 Note that difference between the cutoff values is constant:
 
 .. code::

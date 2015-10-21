@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.domain.frame
 
+import org.apache.commons.lang.StringUtils
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
@@ -52,7 +53,7 @@ Default is zero (0).""") offset: Option[Int] = None) {
 /**
  * Input arguments class for export to Hive
  */
-case class ExportHdfsHiveArgs(@ArgDoc("Frame being exported to Hive") frame: FrameReference,
+case class ExportHdfsHiveArgs(frame: FrameReference,
                               @ArgDoc("The name of the Hive table that will contain the exported frame") tableName: String) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
@@ -67,4 +68,17 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
                                @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: Option[String]) {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
+}
+
+/**
+ * Input arguments class for export to JDBC
+ */
+case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
+                              @ArgDoc("""JDBC table name""") tableName: String,
+                              @ArgDoc("""(optional) JDBC connector type""") connectorType: Option[String],
+                              @ArgDoc("""(optional) connection url (includes server name, database name, user acct and password""") url: Option[String],
+                              @ArgDoc("""(optional) driver name""") driverName: Option[String],
+                              @ArgDoc("""(optional) query for filtering. Not supported yet.""") query: Option[String] = None) {
+  require(frame != null, "frame is required")
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
 }

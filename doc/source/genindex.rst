@@ -1,3 +1,5 @@
+.. _genindex:
+
 =====
 Index
 =====

@@ -14,63 +14,82 @@
 # limitations under the License.
 #
 
-from trustedanalytics.core.atktypes import valid_data_types
+from trustedanalytics.core.atktypes import valid_data_types, datetime
+
+
+def atk_dtype_to_pandas_str(dtype):
+    """maps ATK schema types to types understood by pandas, returns string"""
+    if dtype is not datetime and valid_data_types.is_primitive_type(dtype):
+        return valid_data_types.to_string(dtype)
+    return "object"
 
 
 class Pandas(object):
     """
     Defines a pandas data source
-
-    Parameters
-    ----------
-    pandas_frame : a pandas dataframe object
-    schema : list of tuples of the form (string, type)
-        schema description of the fields for a given line.
-        It is a list of tuples which describe each field, (field name, field type),
-        where the field name is a string, and file is a supported type,
-        (See data_types from the atktypes module).
-        Unicode characters should not be used in the column name.
-    row_index : boolean (optional)
-        indicates if the row_index is present in the pandas dataframe and needs to be ignored when looking at the
-        data values.
-        Default value is True.
-
-    Returns
-    -------
-    class
-        An object which holds both the pandas dataframe and schema associated with it.
-
-    Examples
-    --------
-    For this example, we are going to use a raw data file named "pandas_df.csv".
-    It consists of three columns named: *a*, *b*, *c*.
-    The columns have the data types: *int32*, *int32*, *str*.
-    The fields of data are separated by commas.
-    '0th' row in the file indicates the header.
-
-    First bring in the stuff::
-
-        import trustedanalytics as ta
-        import pandas
-
-    At this point create a schema that defines the data::
-
-        schema = [("a", ta.int32),
-                      ("b", ta.int32),
-                      ("c", str)]
-
-    your_pandas = pandas.read_csv("pandas_df.csv")
-
-    Now build a PandasFrame object with this schema::
-
-        my_pandas = ta.PandasFrame(your_pandas, schema, False)
-
     """
 
     # TODO - Review docstring
     annotation = "pandas_frame"
 
     def __init__(self, pandas_frame, schema, row_index=True):
+        """
+        Defines a pandas data source
+
+        Parameters
+        ----------
+        pandas_frame : a pandas dataframe object
+        schema : list of tuples of the form (string, type)
+            schema description of the fields for a given line.
+            It is a list of tuples which describe each field, (field name, field type),
+            where the field name is a string, and file is a supported type,
+            (See data_types from the atktypes module).
+            Unicode characters should not be used in the column name.
+        row_index : boolean (optional)
+            indicates if the row_index is present in the pandas dataframe and needs to be ignored when looking at the
+            data values.
+            Default value is True.
+
+        Returns
+        -------
+        class
+            An object which holds both the pandas dataframe and schema associated with it.
+
+        Examples
+        --------
+        For this example, we are going to create a 0-5 ratings system with corresponding descriptions.
+        It consists of two columns, rating number and rating description.
+        The columns have the data types, int32 and string.
+
+        First import trustedanalytics and pandas::
+
+            import trustedanalytics as ta
+            import pandas
+
+        Connect::
+
+            ta.connect()
+
+        Create data::
+
+            ratings_data = [[0, "invalid"], [1, "Very Poor"], [2, "Poor"], [3, "Average"], [4, "Good"], [5, "Very Good"]]
+            df = pandas.DataFrame(ratings_data, columns=['rating_id', 'rating_text'])
+
+        At this point create a schema that defines the data::
+
+            schema = [('rating_id', ta.int32), ('rating_text', unicode)]
+
+        Now build a PandasFrame object with this schema::
+
+            ratings= ta.Frame(ta.Pandas(df, schema))
+
+        To check the result:: 
+            ratings.inspect()
+
+
+
+
+        """
         import pandas
         if not isinstance(pandas_frame, pandas.DataFrame):
             raise ValueError("pandas_frame must be a pandas Data Frame")

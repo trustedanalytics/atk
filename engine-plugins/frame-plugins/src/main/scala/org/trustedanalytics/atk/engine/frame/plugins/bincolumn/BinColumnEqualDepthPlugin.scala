@@ -43,25 +43,25 @@ import org.apache.spark.SparkContext._
   extended = """Group rows of data based on the value in a single column and add a label
 to identify grouping.
 
-*   Equal depth binning attempts to label rows such that each bin contains the
-    same number of elements.
-    For :math:`n` bins of a column :math:`C` of length :math:`m`, the bin
-    number is determined by:
+Equal depth binning attempts to label rows such that each bin contains the
+same number of elements.
+For :math:`n` bins of a column :math:`C` of length :math:`m`, the bin
+number is determined by:
 
-    .. math::
+.. math::
 
-        \lceil n * \frac { f(C) }{ m } \rceil
+    \lceil n * \frac { f(C) }{ m } \rceil
 
-    where :math:`f` is a tie-adjusted ranking function over values of
-    :math:`C`.
-    If there are multiples of the same value in :math:`C`, then their
-    tie-adjusted rank is the average of their ordered rank values.
+where :math:`f` is a tie-adjusted ranking function over values of
+:math:`C`.
+If there are multiples of the same value in :math:`C`, then their
+tie-adjusted rank is the average of their ordered rank values.
 
-Notes
------
-1)  Unicode in column names is not supported and will likely cause the
+**Notes**
+
+#)  Unicode in column names is not supported and will likely cause the
     drop_frames() method (and others) to fail!
-2)  The num_bins parameter is considered to be the maximum permissible number
+#)  The num_bins parameter is considered to be the maximum permissible number
     of bins because the data may dictate fewer bins.
     For example, if the column to be binned has a quantity of :math"`X`
     elements with only 2 distinct values and the *num_bins* parameter is
