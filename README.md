@@ -2,25 +2,24 @@ ATK
 ===
 
 #Setting up your build environment
-You will need to increase your maven memory settings before running the maven build.
+You will need to increase your maven memory settings and set the https protocol.
 
 ```
-export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
+export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m -Dhttps.protocols=TLSv1.2"
 ```
+
+You also need to add trustedanalytics.org certificate to your java keystore to download dependencies from our maven server.
+```
+wget https://s3-us-west-2.amazonaws.com/analytics-tool-kit/public.crt -O `pwd`/public.crt &&\
+sudo keytool -importcert -trustcacerts -storepass changeit -file `pwd`/public.crt \
+-alias trustedanalytics.org -noprompt \
+-keystore `find -L $JAVA_HOME -name cacerts`
+```
+If you don't want to trust our public certificate you can change the all repository urls in parent [pom](pom.xml) from https://maven.trustedanalytics.org to http://maven.trustedanalytics.org 
+
 
 #Building
 After cloning the repository (to a directory we'll refer to as 'atk'),
-cd to atk/misc/titan-shaded and install the module.
-```
-cd atk/misc/titan-shaded/
-mvn install
-
-```
-
-go back to the root of the repository
-```
-cd ../../
-```
 
 Start the zinc server for incremental compilation
 ```
@@ -29,31 +28,31 @@ bin/zinc.sh start
 
 Compile source
 ```
-mvn compile -P events
+mvn compile
 ```
 
 
 ## To build all the jars necessary to run the rest server
 
 ```
-mvn package -P events -DskipTests
+mvn package -DskipTests
 ```
 
 If you want to run all the test run the maven package without skipTests option
 ```
-mvn package -P events
+mvn package
 ```
 
 You can add -T option to run maven with [parallel execution](https://cwiki.apache.org/confluence/display/MAVEN/Parallel+builds+in+Maven+3) *except when running tests*.
 ```
 #OK
-mvn -T 4 package -P events -DskipTests
+mvn -T 4 package -DskipTests
 #OK
-mvn -T 4 compile -P events
+mvn -T 4 compile
 
 
 #Not OK, will fail
-mvn -T 4 package -P events
+mvn -T 4 package
 ```
 
 # Running
@@ -61,11 +60,12 @@ mvn -T 4 package -P events
 This is an overview. Additional details and instructions are in the user documentation.
 
 * Pre-requisites
-  * Java 7
+  * Maven 3.3.3
+  * Java 8
   * Access to Cloudera Hadoop cluster with Yarn, HDFS, HBase, Zookeeper
   * PostgreSQL
   * python 2.7
-  * Python depedencies installed (numpy, bson, requests, etc)
+  * [Python depedencies installed](package/config/trustedanalytics-python-client/requirements.txt)
 * Build the project jars
 * Setup conf/ folder
   * Create a conf/application.conf based on the templates under conf/examples
@@ -74,7 +74,7 @@ This is an overview. Additional details and instructions are in the user documen
 * Use bin/rest-server.sh to start the server
 * cd /python-client
 * Open ipython or python shell
-  * Verify you are runing a python 2.7
+  * Verify you are running a python 2.7
   * Run these commands first
     * import trustedanalytics as ta
     * ta.connect()
