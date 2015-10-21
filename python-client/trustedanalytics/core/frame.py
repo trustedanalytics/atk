@@ -118,6 +118,40 @@ def __drop(*items):
     no action is taken.
 
     If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
+
+    Examples
+    --------
+
+    Given a frame, model, and graph like:
+
+        .. code::
+
+            >>> my_frame = ta.Frame()
+
+            >>> my_model = ta.KMeansModel()
+            <progress>
+
+            >>> my_graph = ta.Graph()
+            -etc-
+
+    The drop() command can be used to delete the frame, model, and graph from the server.  It returns the number
+    of items that have been deleted.
+
+        .. code::
+
+            >>> ta.drop(my_frame, my_model, my_graph)
+            -etc-
+            3
+
+    Alternatively, we can pass the object's string name to drop() like:
+
+    .. code::
+
+            >>> my_frame = ta.Frame(name='example_frame')
+
+            >>> ta.drop('example_frame')
+            1
+
     """
     from trustedanalytics import drop_frames, drop_graphs, drop_models, _BaseGraph, _BaseModel, get_frame_names, get_graph_names, get_model_names
 

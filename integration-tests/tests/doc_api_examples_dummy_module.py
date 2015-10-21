@@ -110,9 +110,9 @@ frame/bin_column_equal_depth.rst
 (DELETED)frame/group_by.rst
 (FIXED)frame/drop_duplicates.rst
 frame/column_summary_statistics.rst
-frame/quantiles.rst
+(FIXED)frame/quantiles.rst
 frame/export_to_jdbc.rst
-frame/histogram.rst
+(FIXED)frame/histogram.rst
 frame/entropy.rst
 frame/correlation_matrix.rst
 frame/categorical_summary.rst
@@ -122,7 +122,7 @@ frame/covariance.rst
 (FIXED)frame/flatten_column.rst
 frame/copy.rst
 frame/count_where.rst
-frame/dot_product.rst
+(FIXED)frame/dot_product.rst
 frame/export_to_hbase.rst
 frame/tally.rst
 frame/sort.rst
