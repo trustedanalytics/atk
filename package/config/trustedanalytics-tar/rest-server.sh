@@ -5,7 +5,6 @@ set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 export KEYTAB=$DIR/../atk.keytab
 export KRB5_CONFIG=$DIR/../krb5.conf
-export PRINCIPAL="atk-user@US-WEST-2.COMPUTE.INTERNAL"
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
 
@@ -26,18 +25,20 @@ export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
 export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
 export USE_HTTP=true
 
-export FS_ROOT=$(echo $VCAP_SERVICES |  $jq '.cdh | .[0].credentials.hdfs_root' | tr -d '"')
+export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
 
-export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
-export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.zookeeper | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
+export PRINCIPAL=$(echo $VCAP_SERVICES | $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["dfs.datanode.kerberos.principal"]')
 
-export PG_HOST=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.hostname' | tr -d '"')
-export PG_PORT=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.port' | tr -d '"')
-export PG_USER=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.username' | tr -d '"')
-export PG_PASS=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.password' | tr -d '"')
-export PG_DB=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.dbname' | tr -d '"')
-export PG_URL=$(echo $VCAP_SERVICES | $jq '.postgresql93 | .[0].credentials.uri' | tr -d '"')
+export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
+export ZOOKEEPER_PORT=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri / "," | .[0] / ":" | .[1]' | tr -d '"')
+
+export PG_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.hostname')
+export PG_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.port')
+export PG_USER=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.username')
+export PG_PASS=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.password')
+export PG_DB=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.dbname')
+export PG_URL=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.uri')
 
 export POSTGRES_HOST=$PG_HOST
 export POSTGRES_PORT=$PG_PORT
@@ -46,26 +47,60 @@ export POSTGRES_PASS=$PG_PASS
 export POSTGRES_DB=$PG_DB
 export POSTGRES_URL=$PG_URL
 
-export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.hostname' | tr -d '"')
-export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.port' | tr -d '"')
-export MYSQL_USER=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.username' | tr -d '"')
-export MYSQL_PASS=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.password' | tr -d '"')
-export MYSQL_DB=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.dbname' | tr -d '"')
-export MYSQL_URL=$(echo $VCAP_SERVICES | $jq '.mysql56 | .[0].credentials.uri' | tr -d '"')
+export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.hostname')
+export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.port')
+export MYSQL_USER=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.username')
+export MYSQL_PASS=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.password')
+export MYSQL_DB=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.dbname')
+export MYSQL_URL=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.uri')
 env
 
 pushd $ATK_CONF_DIR
-echo "Downloading yarn, hdfs and hbase configs"
-for url_suffix in "yarn_config" "hdfs_config" "hbase_config"
-do
-  conf_url=$(echo $VCAP_SERVICES |  $jq '.cdh | .[0].credentials.'$url_suffix | tr -d '"')
-  zip_file=conf_$url_suffix.zip
-  curl -X GET -H "content-type:application/json" $conf_url > zip_file
-  unzip -o -j zip_file
-  unlink zip_file
-done
-popd
 
+configurationStart="<configuration>"
+configurationEnd="</configuration>"
+propertyStart="<property>"
+propertyEnd="</property>"
+nameStart="<name>"
+nameEnd="</name>"
+valueStart="<value>"
+valueEnd="</value>"
+tab="    "
+
+hbase_file="hbase-site.xml"
+hdfs_file="hdfs-site.xml"
+yarn_file="yarn-site.xml"
+yarn_json="yarn.json"
+hdfs_json="hdfs.json"
+hbase_json="hbase.json"
+
+echo $VCAP_SERVICES |  $jq -c '.hbase[0].credentials.HADOOP_CONFIG_KEY' > $hbase_json
+echo $VCAP_SERVICES |  $jq -c '.hdfs[0].credentials.HADOOP_CONFIG_KEY' > $hdfs_json
+echo $VCAP_SERVICES |  $jq -c '.yarn[0].credentials.HADOOP_CONFIG_KEY' > $yarn_json
+
+function buildSvcBrokerConfig {
+(echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+ echo $configurationStart
+) >> $1
+key_count=$(cat $2 | $jq -c 'keys' | $jq 'length' )
+keys=$(cat $2 | $jq -c 'keys')
+count=0
+while [ $count -lt $key_count ]
+do
+	key=$( echo $keys | $jq -c -r ".[$count]")
+	value=$( cat $2 | $jq -c  ".[\"$key\"]" | sed -e "s|\"||g" )
+	count=$((count+1))
+	echo $tab$propertyStart$nameStart${key}$nameEnd$valueStart${value}$valueEnd$propertyEnd >> $1
+done
+echo $configurationEnd >> $1
+rm $2
+}
+
+buildSvcBrokerConfig $hbase_file $hbase_json
+buildSvcBrokerConfig $hdfs_file $hdfs_json
+buildSvcBrokerConfig $yarn_file $yarn_json
+
+popd
 
 pushd $DIR/..
 pwd
