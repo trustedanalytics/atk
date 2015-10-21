@@ -18,17 +18,18 @@ package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.apache.spark.sql.Row
 import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.domain.schema.DataTypes
 
 class FlattenColumnArgsTest extends FlatSpec with Matchers {
   "flatten column" should "create multiple rows by splitting a column" in {
     val row = Row(1, "dog,cat")
-    val flattened = FlattenColumnFunctions.flattenRowByStringColumnIndex(1, ",")(row)
+    val flattened = FlattenColumnFunctions.flattenRowByColumnIndices(List(1), List(DataTypes.string), List(","))(row)
     flattened shouldBe Array(Row(1, "dog"), Row(1, "cat"))
   }
 
   "flatten column" should "not produce anything else if column is empty" in {
     val row = Row(1, "")
-    val flattened = FlattenColumnFunctions.flattenRowByStringColumnIndex(1, ",")(row)
+    val flattened = FlattenColumnFunctions.flattenRowByColumnIndices(List(1), List(DataTypes.string), List(","))(row)
     flattened shouldBe Array(Row(1, ""))
   }
 

@@ -73,7 +73,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
 
     if (delimiters.size < arguments.columns.size) {
       if (delimiters.size == 1) {
-        // If just one delelimiter was provided, just use the same one for all columns
+        // If just one delimiter was provided, just use the same one for all columns
         delimiters = arguments.columns.map(c => delimiters(0))
       }
       else {
@@ -81,10 +81,13 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
       }
     }
 
+    /*
     for (i <- arguments.columns.indices) {
       val columnDataType = columnDataTypes(i)
       val columnIndex = columnIndexes(i)
       val column = arguments.columns(i)
+
+      columnDataType.length()
 
       columnDataType match {
         case DataTypes.string => flattener = FlattenColumnFunctions.flattenRddByStringColumnIndexes(columnIndexes, delimiters)
@@ -94,6 +97,16 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
         case _ => throw new IllegalArgumentException(s"Flatten column does not support type $columnDataType")
       }
     }
+*/
+    for (i <- arguments.columns.indices) {
+      columnDataTypes(i) match {
+        case DataTypes.vector(length) =>
+          schema = schema.convertType(arguments.columns(i), DataTypes.float64)
+        case _ =>
+      }
+    }
+
+    flattener = FlattenColumnFunctions.flattenRddByColumnIndexes(columnIndexes, columnDataTypes, delimiters)
 
     // run the operation
     val flattenedRDD = flattener(frame.rdd)
@@ -114,232 +127,104 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
 object FlattenColumnFunctions extends Serializable {
 
   /**
-   * Flatten RDD by the column with specified column index
-   * @param index column index
+   * Flatten RDD by the column with specified column indices
+   * @param indices column indices
+   * @param dataTypes column dataTypes
+   * @param delimiters separators for splitting string columns
    * @param rdd RDD for flattening
-   * @return new RDD with column flattened
+   * @return new RDD with columns flattened
    */
-  def flattenRddByVectorColumnIndex(index: Int, vectorLength: Long)(rdd: RDD[Row]): RDD[Row] = {
-    val flattener = flattenRowByVectorColumnIndex(index, vectorLength)_
+  def flattenRddByColumnIndexes(indices: List[Int],
+                                dataTypes: List[org.trustedanalytics.atk.domain.schema.DataTypes.DataType],
+                                delimiters: List[String] = null)(rdd: RDD[Row]): RDD[Row] = {
+    val flattener = flattenRowByColumnIndices(indices, dataTypes, delimiters)_
     rdd.flatMap(row => flattener(row))
   }
 
   /**
-   * Flatten RDD by the column with specified column index
-   * @param index column index
-   * @param separator separator for splitting
-   * @param rdd RDD for flattening
-   * @return new RDD with column flattened
-   */
-  def flattenRddByStringColumnIndex(index: Int, separator: String)(rdd: RDD[Row]): RDD[Row] = {
-    val flattener = flattenRowByStringColumnIndex(index, separator)_
-    rdd.flatMap(row => flattener(row))
-  }
-
-  /**
-   * Flatten RDD by the columns with the specified indexes
-   * @param indexes column indexes
-   * @param separators separators for splitting
-   * @param rdd RDD for flattening
-   * @return new RDD with column flattened
-   */
-  def flattenRddByStringColumnIndexes(indexes: List[Int], separators: List[String])(rdd: RDD[Row]): RDD[Row] = {
-    val flattener = flattenRowByStringColumnIndexes(indexes, separators)_
-    rdd.flatMap(row => flattener(row))
-  }
-
-  /**
-   * flatten a row by the column with specified column index.  Column must be a vector
-   * @param index column index
+   * flatten a row by the column with specified column indices.  Columns must be a string or vector.
+   * @param indices column indices
+   * @param dataTypes column data types
+   * @param delimiters separators for splitting string columns
    * @param row row data
    * @return flattened out row/rows
    */
-  private[frame] def flattenRowByVectorColumnIndex(index: Int, vectorLength: Long)(row: Row): Array[Row] = {
-    DataTypes.toVector(vectorLength)(row(index)).toArray.map(s => {
-      val r = row.toSeq.toArray.clone()
-      r(index) = s
-      Row.fromSeq(r)
-    })
-  }
+  private[frame] def flattenRowByColumnIndices(indices: List[Int],
+                                               dataTypes: List[org.trustedanalytics.atk.domain.schema.DataTypes.DataType],
+                                               delimiters: List[String])(row: Row): Array[Row] = {
+    val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
+    for (i <- indices.indices) {
+      val columnIndex = indices(i)
 
-  /**
-   * flatten a row by the column with specified column index.  Column must be a string
-   * Eg. for row (1, "dog,cat"), flatten by second column will yield (1,"dog") and (1,"cat")
-   * @param index column index
-   * @param row row data
-   * @param delimiter separator for splitting
-   * @return flattened out row/rows
-   */
-  private[frame] def flattenRowByStringColumnIndex(index: Int, delimiter: String)(row: Row): Array[Row] = {
-    val splitted = row(index).asInstanceOf[String].split(Pattern.quote(delimiter))
-    splitted.map(s => {
-      val r = row.toSeq.toArray.clone()
-      r(index) = s
-      Row.fromSeq(r)
-    })
-  }
+      dataTypes(i) match {
+        case DataTypes.string =>
+          val delimiter = if (delimiters != null && delimiters(i) != "") delimiters(i) else ","
+          val splitItems = row(columnIndex).asInstanceOf[String].split(Pattern.quote(delimiter))
 
-  private[frame] def flattenRowByStringColumnIndexes(indexes: List[Int], delimiters: List[String])(row: Row): Array[Row] = {
+          if (splitItems.length > 1) {
+            // Loop through items being split from the string
+            for (rowIndex <- splitItems.indices) {
+              val isNewRow = rowBuffer.length <= rowIndex
+              val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
 
-    // Check if we are only flattening one column
-    if (indexes.length == 1) {
-      val index = indexes(0)
-      val delimiter = delimiters(0)
+              r(columnIndex) = splitItems(rowIndex)
 
-      // Split the specified column and find out how many items have after the split
-      val splitted = row(index).asInstanceOf[String].split(Pattern.quote(delimiter))
-      val splitCount = splitted.length
-      var rows: Array[Row] = new Array[Row](splitCount)
+              if (isNewRow) {
+                for (tempColIndex <- indices.indices) {
+                  if (tempColIndex != i) {
+                    if (dataTypes(tempColIndex) == DataTypes.string)
+                      r(indices(tempColIndex)) = ""
+                    else
+                      r(indices(tempColIndex)) = ""
+                  }
+                }
 
-      if (splitCount > 1) {
-        for (i <- 0 until splitCount) {
-          val r = row.toSeq.toArray.clone()
-          r(index) = splitted(i)
-          rows(i) = Row.fromSeq(r)
-        }
-      }
-      else {
-        // If the split count was 1, there wasn't anything to split, so just return the original row
-        rows(0) = row
-      }
-
-      return rows
-    }
-    else {
-      // For flattening multiple columns, use an ArrayBuffer, so that we can add on rows as needed,
-      // depending on how many items get split from a column
-      val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
-
-      for (i <- indexes.indices) {
-        val colIndex = indexes(i)
-        val delimiter = delimiters(i)
-        val splitValues = row(colIndex).asInstanceOf[String].split(Pattern.quote(delimiter))
-
-        if (splitValues.length > 1) {
-          for (rowIndex <- splitValues.indices) {
-            val isNewRow = rowBuffer.length <= rowIndex
-            val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
-
-            r(colIndex) = splitValues(rowIndex)
-
-            if (isNewRow) {
-              for (tempColIndex <- indexes.indices) {
-                if (tempColIndex != i)
-                  r(indexes(tempColIndex)) = ""
+                rowBuffer += Row.fromSeq(r)
               }
-
+              else
+                rowBuffer(rowIndex) = Row.fromSeq(r)
+            }
+          }
+          else {
+            // There's nothing to split, just update first row in the rowBuffer
+            if (rowBuffer.length == 0)
+              rowBuffer += row
+            else {
+              val r = rowBuffer(0).toSeq.toArray.clone()
+              r(columnIndex) = splitItems(0)
+              rowBuffer(0) = Row.fromSeq(r)
+            }
+          }
+        case DataTypes.vector(length) =>
+          val vectorItems = DataTypes.toVector(length)(row(columnIndex)).toArray
+          // Loop through items in the vector
+          for (vectorIndex <- vectorItems.indices) {
+            val isNewRow = rowBuffer.length <= vectorIndex
+            val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(vectorIndex).toSeq.toArray.clone()
+            // Set vector item in the column being flattened
+            r(columnIndex) = vectorItems(vectorIndex)
+            if (isNewRow) {
+              // Empty out other columns that are being flattened in the new row
+              for (tempColIndex <- indices.indices) {
+                if (tempColIndex != i) {
+                  if (dataTypes(tempColIndex) == DataTypes.string)
+                    r(indices(tempColIndex)) = ""
+                  else
+                    r(indices(tempColIndex)) = ""
+                }
+              }
+              // Add new row to the rowBuffer
               rowBuffer += Row.fromSeq(r)
             }
             else
-              rowBuffer(rowIndex) = Row.fromSeq(r)
+              rowBuffer(vectorIndex) = Row.fromSeq(r)
           }
-        }
-        else {
-          if (rowBuffer.length == 0)
-            rowBuffer += row
-          else {
-            val r = rowBuffer(0).toSeq.toArray.clone()
-            r(colIndex) = splitValues(0)
-            rowBuffer(0) = Row.fromSeq(r)
-          }
-        }
-      }
-
-      return rowBuffer.toArray
-    }
-
-    /*
-    val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
-
-    for (i <- indexes.indices) {
-      val colIndex = indexes(i)
-      val delimiter = delimiters(i)
-      val splitValues = row(colIndex).asInstanceOf[String].split(Pattern.quote(delimiter))
-
-      for (rowIndex <- splitValues.indices) {
-        val isNewRow = rowBuffer.length <= rowIndex
-        val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
-
-        r(colIndex) = splitValues(rowIndex)
-
-        if (isNewRow) {
-          /*
-          for (tempColIndex <- indexes.indices) {
-            if (tempColIndex != i)
-              r(indexes(tempColIndex)) = ""
-          }*/
-
-          rowBuffer += Row.fromSeq(r)
-        }
-        else
-          rowBuffer(rowIndex) = Row.fromSeq(r)
-      }
-    }
-
-    return rowBuffer.toArray
-    */
-
-    /*
-    // split each of the specified columns using its specified delimiter
-    val splitColumns = indexes.zipWithIndex.map { case (rowIndex, index) => row(rowIndex).asInstanceOf[String].split(Pattern.quote(delimiter(index))) }
-
-    val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
-
-    for (colIndex <- splitColumns.indices) {
-
-      for (rowIndex <- splitColumns(colIndex).indices) {
-
-        val isNewRow = rowBuffer.length <= rowIndex
-        val r = if (isNewRow) row.toSeq.toArray.clone() else rowBuffer(rowIndex).toSeq.toArray.clone()
-
-        r(indexes(colIndex)) = splitColumns(colIndex)(rowIndex)
-
-        if (isNewRow) {
-          for (tempColIndex <- splitColumns.indices) {
-            if (tempColIndex != colIndex)
-              r(indexes(tempColIndex)) = ""
-          }
-
-          rowBuffer += Row.fromSeq(r)
-        }
-        else
-          rowBuffer(rowIndex) = Row.fromSeq(r)
+        case _ =>
+          throw new IllegalArgumentException("Flatten column does not support type: " + dataTypes(i).toString)
       }
 
     }
 
     return rowBuffer.toArray
-    */
-
-    /*
-    // split each of the specified columns using its specified delimiter
-    val splitColumns = indexes.zipWithIndex.map { case (rowIndex, index) => row(rowIndex).asInstanceOf[String].split(Pattern.quote(delimiters(index))) }
-
-    // figure out how many items we are splitting
-    var maxItems = 0
-
-    for (i <- splitColumns.indices) {
-      val numItems = splitColumns(i).size
-
-      if (numItems > maxItems)
-        maxItems = numItems
-    }
-
-    var rows: Array[Row] = new Array[Row](maxItems)
-
-    for (rowIndex <- rows.indices) {
-      val r = row.toSeq.toArray.clone()
-
-      for (colIndex <- indexes.indices) {
-        if (splitColumns(colIndex).size <= rowIndex)
-          r(indexes(colIndex)) = ""
-        else
-          r(indexes(colIndex)) = splitColumns(colIndex)(rowIndex)
-      }
-
-      rows(rowIndex) = Row.fromSeq(r)
-    }
-
-    return rows*/
   }
 }
