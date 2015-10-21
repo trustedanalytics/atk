@@ -626,8 +626,8 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
 
     def unflatten_column(self, frame, columns=None, delimiter=None):
         arguments = {'frame': frame.uri,
-             'composite_key_column_names': [columns],
-             'delimiters': None if delimiter is None else [delimiter]}
+             'columns': columns if isinstance(columns, list) else [columns],
+             'delimiter': None if delimiter is None else [delimiter]}
         executor.execute('frame/unflatten_columns', self, arguments)
 
 class FrameInfo(object):

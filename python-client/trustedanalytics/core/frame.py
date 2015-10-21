@@ -1372,7 +1372,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         """
 
-        self._backend.flatten_column(self,column,delimiter)
+        self._backend.flatten_column(self, column, delimiter)
 
     @api
     @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
@@ -1383,7 +1383,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         Deprecated, use unflatten_columns() instead.
         """
 
-        self._backend.unflatten_column(self,columns,delimiter)
+        self._backend.unflatten_column(self, columns, delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):
