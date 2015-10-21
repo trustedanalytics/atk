@@ -24,7 +24,7 @@ import org.apache.spark.sql.catalyst.expressions.{ GenericRow, Row }
 import org.apache.spark.sql.parquet.RowWriteSupport
 import org.apache.spark.sql.parquet.atk.giraph.frame.MultiOutputCommitter
 import org.apache.spark.sql.types._
-import org.trustedanalytics.atk.giraph.config.lda.LdaConfiguration
+import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
 import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
 import parquet.hadoop.ParquetOutputFormat
 
@@ -39,7 +39,7 @@ class LdaParquetFrameVertexOutputFormat extends VertexOutputFormat[LdaVertexId, 
 
   override def createVertexWriter(context: TaskAttemptContext): LdaParquetFrameVertexWriter = {
     new LdaParquetFrameVertexWriter(
-      new LdaConfiguration(context.getConfiguration),
+      new GiraphLdaConfiguration(context.getConfiguration),
       docResultsOutputFormat,
       wordResultsOutputFormat,
       topicResultsOutputFormat
@@ -47,11 +47,11 @@ class LdaParquetFrameVertexOutputFormat extends VertexOutputFormat[LdaVertexId, 
   }
 
   override def checkOutputSpecs(context: JobContext): Unit = {
-    new LdaConfiguration(context.getConfiguration).validate()
+    new GiraphLdaConfiguration(context.getConfiguration).validate()
   }
 
   override def getOutputCommitter(context: TaskAttemptContext): OutputCommitter = {
-    val outputFormatConfig = new LdaConfiguration(context.getConfiguration).ldaConfig.outputFormatConfig
+    val outputFormatConfig = new GiraphLdaConfiguration(context.getConfiguration).ldaConfig.outputFormatConfig
 
     // configure outputdir for committer
     context.getConfiguration.set("mapreduce.output.fileoutputformat.outputdir", outputFormatConfig.documentResultsFileLocation)
@@ -78,7 +78,7 @@ object LdaOutputFormat {
 
 }
 
-class LdaParquetFrameVertexWriter(conf: LdaConfiguration,
+class LdaParquetFrameVertexWriter(conf: GiraphLdaConfiguration,
                                   docResultsOutputFormat: ParquetOutputFormat[Row],
                                   wordResultsOutputFormat: ParquetOutputFormat[Row],
                                   topicResultsOutputFormat: ParquetOutputFormat[Row]) extends VertexWriter[LdaVertexId, LdaVertexData, Nothing] {

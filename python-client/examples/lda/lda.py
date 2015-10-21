@@ -30,7 +30,7 @@ print("inspect frame")
 frame.inspect(20)
 print("frame row count " + str(frame.row_count))
 
-model = ta.LdaModel()
+model = ta.GiraphLdaModel()
 results = model.train(frame,
             'doc_id', 'word_id', 'word_count',
             max_iterations = 3,

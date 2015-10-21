@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
+import com.google.common.base.Charsets
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
@@ -61,7 +62,7 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, S
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(),
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
       "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin"))
   }

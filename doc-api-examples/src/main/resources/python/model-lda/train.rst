@@ -89,12 +89,5 @@ View the report:
     numTopics: 2
     alpha: 0.100000
     beta: 0.100000
-    convergenceThreshold: 0.001000
     maxIterations: 3
-    evaluateCost: false
-
-    ======Learning Progress======
-    iteration = 1	maxDelta = 0.677352
-    iteration = 2	maxDelta = 0.173309
-    iteration = 3	maxDelta = 0.181216
 
