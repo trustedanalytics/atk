@@ -1,6 +1,5 @@
 Examples
 --------
-Note that unflatten_column has been deprecated.  Use unflatten_columns() instead.
 <hide>
 >>> import trustedanalytics as ta
 >>> ta.connect()
@@ -53,8 +52,8 @@ Unflatten the data using columns a & b:
 
 .. code::
 
-    >>> frame.unflatten_column(['a','b'])
-    -etc-
+    >>> frame.unflatten_columns(['a','b'])
+    <progress>
 
 Check again:
 
@@ -66,7 +65,7 @@ Check again:
     [0]  user2  1/1/2015  1    65
     [1]  user1  1/1/2015  1,2  70,60
 
-Alternatively, unflatten_column() also accepts a single column like:
+Alternatively, unflatten_columns() also accepts a single column like:
 
 <skip>
 # Re-create frame with original data to start over with single column example
@@ -84,8 +83,8 @@ Alternatively, unflatten_column() also accepts a single column like:
 
 .. code::
 
-    >>> frame.unflatten_column('a')
-    -etc-
+    >>> frame.unflatten_columns('a')
+    <progress>
 
     >>> frame.inspect()
     [#]  a      b                  c    d
