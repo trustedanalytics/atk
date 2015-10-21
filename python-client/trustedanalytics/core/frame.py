@@ -1305,6 +1305,8 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @deprecated
     def __flatten_column(self, column, delimiter=None):
         """
+        Note that flatten_column() has been deprecated.  Use flatten_columns instead.
+
         Spread data to multiple rows based on cell data.
 
         Splits cells in the specified column into multiple rows according to a string
@@ -1315,6 +1317,17 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         Examples
         --------
+        <hide>
+        >>> import trustedanalytics as ta
+        >>> ta.connect()
+        <connect>
+
+        >>> my_frame = ta.Frame(ta.UploadRows([[1,"solo,mono,single"],
+        ...                                 [2,"duo,double"]],
+        ...                                 [('a',ta.int32),('b', str)]))
+        <progress>
+
+        </hide>
         Given a data file::
 
             1-"solo,mono,single"
@@ -1323,40 +1336,39 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         The commands to bring the data into a frame, where it can be worked on:
 
         .. code::
-
-            >>> my_csv = CsvFile("original_data.csv", schema=[('a', int32), ('b', str)], delimiter='-')
-            >>> my_frame = Frame(source=my_csv)
-
+        <skip>
+            >>> my_csv = ta.CsvFile("original_data.csv", schema=[('a', int32), ('b', str)], delimiter='-')
+            >>> my_frame = ta.Frame(source=my_csv)
+        </skip>
         Looking at it:
 
         .. code::
 
             >>> my_frame.inspect()
-
-              a:int32   b:str
-            /-------------------------------/
-                1       solo, mono, single
-                2       duo, double
+            [#]  a  b
+            ========================
+            [0]  1  solo,mono,single
+            [1]  2  duo,double
 
         Now, spread out those sub-strings in column *b*:
 
         .. code::
 
             >>> my_frame.flatten_column('b')
+            -etc-
 
         Check again:
 
         .. code::
 
             >>> my_frame.inspect()
-
-              a:int32   b:str
-            /------------------/
-                1       solo
-                1       mono
-                1       single
-                2       duo
-                2       double
+            [#]  a  b
+            ==============
+            [0]  1  solo
+            [1]  1  mono
+            [2]  1  single
+            [3]  2  duo
+            [4]  2  double
 
         """
 

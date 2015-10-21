@@ -119,7 +119,7 @@ frame/categorical_summary.rst
 frame/drop_columns.rst
 frame/assign_sample.rst
 frame/covariance.rst
-frame/flatten_column.rst
+(FIXED)frame/flatten_column.rst
 frame/copy.rst
 frame/count_where.rst
 frame/dot_product.rst
