@@ -67,7 +67,7 @@ Check again:
 
 Alternatively, unflatten_columns() also accepts a single column like:
 
-<skip>
+<hide>
 # Re-create frame with original data to start over with single column example
 >>> ta.drop(frame)
 1
@@ -79,7 +79,7 @@ Alternatively, unflatten_columns() also accepts a single column like:
 <progress>
 
 
-</skip>
+</hide>
 
 .. code::
 

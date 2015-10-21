@@ -131,7 +131,7 @@ frame/classification_metrics.rst
 frame/rename.rst
 frame/tally_percent.rst
 frame/column_median.rst
-frame/unflatten_column.rst
+(FIXED)frame/unflatten_column.rst
 frame/top_k.rst
 frame/bin_column.rst
 frame/sorted_k.rst
