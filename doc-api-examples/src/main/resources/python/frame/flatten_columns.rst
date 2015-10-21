@@ -64,7 +64,7 @@ Check again:
 
 .. code::
 
-    >>> my_frame.inspect()
+    >>> frame.inspect()
     [#]  a  b       c
     ======================
     [0]  1  solo    green
