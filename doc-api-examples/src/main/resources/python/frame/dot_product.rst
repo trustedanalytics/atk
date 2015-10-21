@@ -16,7 +16,7 @@ Calculate the dot product for a sequence of columns in Frame object *my_frame*:
 
 .. code::
 
-     >>> my_frame.inspect()
+    >>> my_frame.inspect()
     [#]  col_0  col_1  col_2  col_3
     ===============================
     [0]      1    0.2     -2      5
@@ -32,7 +32,7 @@ Modify the frame by computing the dot product for a sequence of columns:
      >>> my_frame.dot_product(['col_0','col_1'], ['col_2', 'col_3'], 'dot_product')
      <progress>
 
-     >>> my_frame.inspect()
+    >>> my_frame.inspect()
     [#]  col_0  col_1  col_2  col_3  dot_product
     ============================================
     [0]      1    0.2     -2      5         -1.0
