@@ -78,6 +78,7 @@ private[testutils] object TestingSparkContext {
       .setAppName(this.getClass.getSimpleName + " " + new Date())
     conf.set("spark.serializer", serializer)
     conf.set("spark.kryo.registrator", registrator)
+    conf.set("spark.sql.shuffle.partitions", "2")
 
     new SparkContext(conf)
   }

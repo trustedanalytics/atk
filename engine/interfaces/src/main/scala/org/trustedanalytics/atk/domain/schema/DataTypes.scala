@@ -400,6 +400,22 @@ object DataTypes extends EventLogging {
   def isIntegerDataType: DataType => Boolean = _.isInteger
 
   /**
+   * Checks if two data types are compatible.
+   *
+   * @return True, if both data types are equal, both data types are integers,
+   *         or both data types are floats. False otherwise.
+   */
+  def isCompatibleDataType(dataType1: DataType, dataType2: DataType): Boolean = {
+    dataType1 match {
+      case t if dataType1.equalsDataType(dataType2) => true
+      case i if dataType1.isInteger && dataType2.isInteger => true
+      case d if dataType1.equalsDataType(DataTypes.float32) || dataType1.equalsDataType(DataTypes.float64) =>
+        dataType2.equalsDataType(DataTypes.float32) || dataType2.equalsDataType(DataTypes.float64)
+      case _ => false
+    }
+  }
+
+  /**
    * This is a special type for values that should be ignored while importing from CSV file.
    *
    * Any column with this type should be dropped.

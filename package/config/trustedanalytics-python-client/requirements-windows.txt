@@ -1,4 +1,0 @@
-bottle>=0.12
-requests>=2.2.1
-ordereddict>=1.1
-decorator>=3.4.0

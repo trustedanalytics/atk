@@ -27,6 +27,7 @@ import com.typesafe.config.{ Config, ConfigFactory }
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.HBaseAdmin
 import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 import scala.concurrent.duration._
 import org.apache.commons.lang.StringUtils
 
@@ -343,6 +344,8 @@ trait EngineConfig extends EventLogging {
   // Python execution command for workers
   val pythonWorkerExec: String = config.getString(sparkConfigKey + ".python-worker-exec")
   val pythonUdfDependenciesDirectory: String = config.getString(sparkConfigKey + ".python-udf-deps-directory")
+  val pythonDefaultDependencySearchDirectories: List[String] =
+    config.getList(sparkConfigKey + ".python-default-deps-search-directories").map(_.render).toList
 
   // val's are not lazy because failing early is better
   val metaStoreConnectionUrl: String = nonEmptyString(metaStoreConnection + ".url")

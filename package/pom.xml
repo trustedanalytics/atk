@@ -35,7 +35,7 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
     </parent>
 
     <properties>
-        <pkg.version>0.4.1</pkg.version>
+        <pkg.version>0.4.2</pkg.version>
     </properties>
     <profiles>
         <profile>
@@ -68,6 +68,28 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
                                     </arguments>
                                 </configuration>
                             </execution>
+
+                            <execution>
+                                <id>package-python-rest-client</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>package.sh</argument>
+                                        <argument>-p</argument>
+                                        <argument>trustedanalytics-python-client</argument>
+                                        <argument>-b</argument>
+                                        <argument>${env.BUILD_NUMBER}</argument>
+                                        <argument>-v</argument>
+                                        <argument>${pkg.version}</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+
                             <execution>
                                 <id>tar-gz-rest-server</id>
                                 <phase>package</phase>
@@ -79,9 +101,13 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
                                     <workingDirectory>${basedir}</workingDirectory>
                                     <arguments>
                                         <argument>${basedir}/config/trustedanalytics-tar/package.sh</argument>
+                                        <argument>trustedanalytics-tar</argument>
+                                        <argument>${env.BUILD_NUMBER}</argument>
+                                        <argument>${pkg.version}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
+
                             <execution>
                                 <id>tar-gz-scoring-server</id>
                                 <phase>package</phase>
@@ -109,27 +135,6 @@ RUN apt-get install -y dh-make gnupg pbuilder ubuntu-dev-tools bzr-builddeb apt-
                                         <argument>package.sh</argument>>
                                         <argument>-p</argument>
                                         <argument>trustedanalytics</argument>
-                                        <argument>-b</argument>
-                                        <argument>${env.BUILD_NUMBER}</argument>
-                                        <argument>-v</argument>
-                                        <argument>${pkg.version}</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
-
-                            <execution>
-                                <id>package-python-rest-client</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>bash</executable>
-                                    <workingDirectory>${basedir}</workingDirectory>
-                                    <arguments>
-                                        <argument>package.sh</argument>
-                                        <argument>-p</argument>
-                                        <argument>trustedanalytics-python-client</argument>
                                         <argument>-b</argument>
                                         <argument>${env.BUILD_NUMBER}</argument>
                                         <argument>-v</argument>

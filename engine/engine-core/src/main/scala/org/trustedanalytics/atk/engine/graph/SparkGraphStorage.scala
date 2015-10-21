@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilder, 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, GraphElement }
 import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.NotFoundException
+import org.trustedanalytics.atk.{ DuplicateNameException, NotFoundException }
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.graph._
@@ -125,12 +125,21 @@ class SparkGraphStorage(metaStore: MetaStore,
           check match {
             case Some(g) =>
               if (g.isStatus(Status.Active)) {
-                throw new RuntimeException("Graph with same name exists. Create aborted.")
+                throw new DuplicateNameException("graph", graph.name.get, "Graph with same name exists. Create aborted.")
               }
               else {
                 metaStore.graphRepo.delete(g.id)
               }
             case _ => //do nothing. it is fine that there is no existing graph with same name.
+          }
+
+          if (graph.name.isDefined) {
+            if (metaStore.frameRepo.lookupByName(Some(graph.name.get)).isDefined) {
+              throw new DuplicateNameException("frame", graph.name.get, "Frame with the same name exists. Create aborted.")
+            }
+            else if (metaStore.modelRepo.lookupByName(Some(graph.name.get)).isDefined) {
+              throw new DuplicateNameException("model", graph.name.get, "Model with the same name exists. Create aborted.")
+            }
           }
 
           val graphEntity = metaStore.graphRepo.insert(graph).get
@@ -150,8 +159,15 @@ class SparkGraphStorage(metaStore: MetaStore,
         {
           val check = metaStore.graphRepo.lookupByName(Some(newName))
           if (check.isDefined) {
-            throw new RuntimeException("Graph with same name exists. Rename aborted.")
+            throw new DuplicateNameException("graph", newName, "Graph with same name exists. Rename aborted.")
           }
+          else if (metaStore.frameRepo.lookupByName(Some(newName)).isDefined) {
+            throw new DuplicateNameException("frame", newName, "Frame with same name exists. Rename aborted.")
+          }
+          else if (metaStore.modelRepo.lookupByName(Some(newName)).isDefined) {
+            throw new DuplicateNameException("model", newName, "Model with same name exists. Rename aborted.")
+          }
+
           val newGraph = graph.copy(name = Some(newName))
           metaStore.graphRepo.update(newGraph).get
         }
