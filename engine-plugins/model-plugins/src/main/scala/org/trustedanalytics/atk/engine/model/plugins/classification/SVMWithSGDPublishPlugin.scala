@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
+import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
@@ -78,6 +79,6 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
     val svmModel = svmData.svmModel
     val jsvalue: JsValue = svmModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDReaderPlugin"))
   }
 }
