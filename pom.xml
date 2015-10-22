@@ -75,7 +75,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         </repository>
         <repository>
             <id>atk</id>
-            <url>http://ec2-54-69-244-31.us-west-2.compute.amazonaws.com/content/repositories/public/</url>
+            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
@@ -94,6 +94,17 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </snapshots>
         </repository>
     </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>atk</id>
+            <url>https://maven.trustedanalytics.org/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>atk-snapshots</id>
+            <url>https://maven.trustedanalytics.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <prerequisites>
         <maven>3.0</maven>
@@ -134,24 +145,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <akka.version>2.3.2</akka.version>
 
         <scoverage-plugin.version>1.0.4</scoverage-plugin.version>
+
+        <event.version>0.4.2</event.version>
+
+        <mavenVersion>3.1.1</mavenVersion>
+        <javaVersion>1.8</javaVersion>
     </properties>
     <modules>
 
     </modules>
     <profiles>
-        <profile>
-            <id>events</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>NEVERSETME</name>
-                </property>
-            </activation>
-            <modules>
-                <module>misc/event-api</module>
-                <module>misc/event</module>
-            </modules>
-        </profile>
         <profile>
             <id>modules-all</id>
             <activation>
@@ -583,6 +586,57 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </filesets>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-maven</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>${mavenVersion}</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>${javaVersion}</version>
+                                </requireJavaVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.6</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <skipLocalStaging>true</skipLocalStaging>
+                    <serverId>atk</serverId>
+                    <nexusUrl>https://maven.trustedanalytics.org</nexusUrl>
+                </configuration>
+            </plugin>
         </plugins>
         <testResources>
             <testResource>
@@ -609,12 +663,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event-api</artifactId>
-                <version>${project.version}</version>
+                <version>${event.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event</artifactId>
-                <version>${project.version}</version>
+                <version>${event.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -1002,7 +1056,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>com.google.code.findbugs</groupId>
                         <artifactId>annotations</artifactId>
                     </exclusion>
-             
+
                 </exclusions>
             </dependency>
             <dependency>
@@ -1490,5 +1544,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 
 </project>
