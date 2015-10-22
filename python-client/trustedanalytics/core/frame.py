@@ -1339,7 +1339,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @deprecated
     def __flatten_column(self, column, delimiter=None):
         """
-        Note that flatten_column() has been deprecated.  Use flatten_columns instead.
+        Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
 
         Spread data to multiple rows based on cell data.
 
@@ -1348,62 +1348,6 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         New rows are a full copy of the original row, but the specified column only
         contains one value.
         The original row is deleted.
-
-        Examples
-        --------
-        <hide>
-        >>> import trustedanalytics as ta
-        >>> ta.connect()
-        <connect>
-
-        >>> my_frame = ta.Frame(ta.UploadRows([[1,"solo,mono,single"],
-        ...                                 [2,"duo,double"]],
-        ...                                 [('a',ta.int32),('b', str)]))
-        <progress>
-
-        </hide>
-        Given a data file::
-
-            1-"solo,mono,single"
-            2-"duo,double"
-
-        The commands to bring the data into a frame, where it can be worked on:
-
-        .. code::
-        <skip>
-            >>> my_csv = ta.CsvFile("original_data.csv", schema=[('a', int32), ('b', str)], delimiter='-')
-            >>> my_frame = ta.Frame(source=my_csv)
-        </skip>
-        Looking at it:
-
-        .. code::
-
-            >>> my_frame.inspect()
-            [#]  a  b
-            ========================
-            [0]  1  solo,mono,single
-            [1]  2  duo,double
-
-        Now, spread out those sub-strings in column *b*:
-
-        .. code::
-
-            >>> my_frame.flatten_column('b')
-            -etc-
-
-        Check again:
-
-        .. code::
-
-            >>> my_frame.inspect()
-            [#]  a  b
-            ==============
-            [0]  1  solo
-            [1]  1  mono
-            [2]  1  single
-            [3]  2  duo
-            [4]  2  double
-
         """
 
         self._backend.flatten_column(self, column, delimiter)
@@ -1414,7 +1358,14 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
     @deprecated
     def __unflatten_column(self, columns, delimiter=None):
         """
-        Deprecated, use unflatten_columns() instead.
+        Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
+
+        Compacts data from multiple rows based on cell data.
+
+        Groups together cells in all columns (less the composite key) using "," as string delimiter.
+        The original rows are deleted.
+        The grouping takes place based on a composite key created from cell values.
+        The column datatypes are changed to string.
         """
 
         self._backend.unflatten_column(self, columns, delimiter)
