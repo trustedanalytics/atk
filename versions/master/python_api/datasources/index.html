@@ -401,7 +401,23 @@ A simple query could be to get the query for the name and age
 <dl class="class">
 <dt id="trustedanalytics.HBaseTable">
 <em class="property">class </em><code class="descclassname">trustedanalytics.</code><code class="descname">HBaseTable</code><span class="sig-paren">(</span><em>table_name</em>, <em>schema</em>, <em>start_row=None</em>, <em>end_row=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.HBaseTable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Define the object to retrieve the data from an hBase table.</p>
+<dd><p>Define the object to retrieve the data from an hBase table. A note on how
+we support various overwrite/append scenarios (see below):</p>
+<ol class="arabic simple">
+<li>create a simple hbase table from csv
+load csv into a frame using existing frame api
+save the frame into hbase (it creates a table - lets call it table1)</li>
+<li>overwrite existing table with new data
+do scenario 1 and create table1
+load the second csv into a frame
+save the frame into table1 (old data is gone)</li>
+<li>append data to the existing table 1
+do scenario 1 and create table1
+load table1 into frame1
+load csv into frame2
+let frame1 = frame1 + frame2 (concatenate frame2 into frame1)
+save frame1 into base as table1 (overwrite with initial + appended data)</li>
+</ol>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
 <colgroup>
