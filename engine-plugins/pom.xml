@@ -22,6 +22,7 @@
         <module>model-plugins</module>
         <module>giraph-plugins</module>
         <module>example-plugins</module>
+        <module>daal-plugins</module>
     </modules>
 
     <profiles>
