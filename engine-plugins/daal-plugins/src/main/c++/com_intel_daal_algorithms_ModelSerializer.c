@@ -23,31 +23,36 @@
 */
 
 #include <jni.h>
+#include <stdio.h>
 #include "algorithms/algorithm.h"
 #include "data_management/data/numeric_table.h"
 #include "data_management/data/data_serialize.h"
 #include "services/daal_defines.h"
 #include "algorithms/linear_regression/linear_regression_model.h"
 #include "algorithms/linear_regression/linear_regression_qr_model.h"
+#include "com_intel_daal_algorithms_ModelSerializer.h"
 
 using namespace daal;
 
 JNIEXPORT jobject JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cSerializeQrModel
   (JNIEnv *env, jclass thisClass, jlong cModel) {
 
+    printf("about to serialize qr model\n");
    services::SharedPtr<data_management::NumericTable> dataTable;
    services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr = (services::SharedPtr<algorithms::linear_regression::ModelQR>*)cModel;
 
    algorithms::linear_regression::ModelQR* qrModel = sharedPtr->get();
+   printf("got qr modell\n");
    data_management::InputDataArchive *dataArchive = new data_management::InputDataArchive();
    qrModel->serialize(*dataArchive);
+   printf("serialized qr model\n");
    size_t size = dataArchive->getSizeOfArchive();
    byte* byteArray = new daal::byte[size];
    dataArchive->copyArchiveToArray(byteArray, size);
 
    jobject directBuffer = env->NewDirectByteBuffer(byteArray, size);
    jobject globalRef = env->NewGlobalRef(directBuffer);
-
+   printf("returning serialized qr model\n");
    delete dataArchive;
    return globalRef;
 }

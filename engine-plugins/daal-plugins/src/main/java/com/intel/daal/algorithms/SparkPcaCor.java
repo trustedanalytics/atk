@@ -25,7 +25,6 @@ package com.intel.daal.algorithms;
 
 import com.intel.daal.algorithms.pca.*;
 import com.intel.daal.data_management.data.HomogenNumericTable;
-import com.intel.daal.data_management.data.NumericTable;
 import com.intel.daal.services.DaalContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.PairFunction;
@@ -35,27 +34,15 @@ import java.util.List;
 
 public class SparkPcaCor {
     /* Class containing results of PCA algorithm */
-    static class PCAResult {
-        public HomogenNumericTable eigenVectors;
-        public HomogenNumericTable eigenValues;
+
+    public static PcaResult runPCA(DaalContext context, JavaPairRDD<Integer, HomogenNumericTable> dataRDD) {
+        JavaPairRDD<Integer, PartialResult> partsRDD = computestep1Local(dataRDD);
+
+        return finalizeMergeOnMasterNode(context, partsRDD);
     }
 
-    static int status;
-    static JavaPairRDD<Integer, PartialResult> partsRDD;
-    static NumericTable[] mergedTables = new NumericTable[2];
-    static PCAResult result = new PCAResult();
-    static int nFeatures;
-
-    public static PCAResult runPCA(DaalContext context, JavaPairRDD<Integer, HomogenNumericTable> dataRDD) {
-        computestep1Local(dataRDD);
-
-        finalizeMergeOnMasterNode(context);
-
-        return result;
-    }
-
-    private static void computestep1Local(JavaPairRDD<Integer, HomogenNumericTable> dataRDD) {
-        partsRDD = dataRDD.mapToPair(
+    private static JavaPairRDD<Integer, PartialResult> computestep1Local(JavaPairRDD<Integer, HomogenNumericTable> dataRDD) {
+        JavaPairRDD<Integer, PartialResult> partsRDD = dataRDD.mapToPair(
             new PairFunction<Tuple2<Integer, HomogenNumericTable>, Integer, PartialResult>() {
                 public Tuple2<Integer, PartialResult> call(Tuple2<Integer, HomogenNumericTable> tup) {
                     DaalContext context = new DaalContext();
@@ -76,9 +63,10 @@ public class SparkPcaCor {
                     return new Tuple2<Integer, PartialResult>(tup._1(), pres);
                 }
             });
+        return partsRDD;
     }
 
-    private static void finalizeMergeOnMasterNode(DaalContext context) {
+    private static PcaResult finalizeMergeOnMasterNode(DaalContext context, JavaPairRDD<Integer, PartialResult> partsRDD) {
 
         /* Create algorithm to calculate PCA decomposition using Correlation method on master node */
         DistributedStep2Master pcaMaster = new DistributedStep2Master(context, Double.class, Method.correlationDense);
@@ -97,8 +85,9 @@ public class SparkPcaCor {
         /* Finalize the computations and retrieve PCA results */
         com.intel.daal.algorithms.pca.Result res = pcaMaster.finalizeCompute();
 
-        result.eigenVectors = (HomogenNumericTable) res.get(ResultId.eigenVectors);
-        result.eigenValues = (HomogenNumericTable) res.get(ResultId.eigenValues);
+        PcaResult pcaResult = new PcaResult((HomogenNumericTable) res.get(ResultId.eigenVectors),
+            (HomogenNumericTable) res.get(ResultId.eigenValues));
+        return (pcaResult);
     }
 }
 

@@ -30,7 +30,10 @@ import com.intel.daal.services.DaalContext;
 import java.nio.ByteBuffer;
 
 public final class ModelSerializer {
-
+    static {
+        System.load("/home/spkavuly/git/atk/engine-plugins/daal-plugins/src/main/c++/libAtkDaalJavaAPI.so");
+        //System.loadLibrary("AtkDaalJavaAPI");
+    }
     private ModelSerializer() {
     }
 
@@ -58,8 +61,6 @@ public final class ModelSerializer {
 
     private static native void cFreeByteBuffer(ByteBuffer var1);
 
-    static {
-      System.loadLibrary("AtkDaalJavaAPI");
-    }
+
 
 }

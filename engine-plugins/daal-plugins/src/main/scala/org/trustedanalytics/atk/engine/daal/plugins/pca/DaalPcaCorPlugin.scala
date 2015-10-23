@@ -16,9 +16,12 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
+import java.nio.DoubleBuffer
+
 import com.intel.daal.algorithms.SparkPcaCor
-import com.intel.daal.data_management.data.HomogenNumericTable
+import com.intel.daal.data_management.data.{ NumericTable, HomogenNumericTable }
 import com.intel.daal.services.DaalContext
+import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
@@ -101,7 +104,9 @@ class DaalPcaCorPlugin extends SparkCommandPlugin[DaalPcaCorArgs, FrameReference
     val pcaResults = SparkPcaCor.runPCA(context, new JavaPairRDD[Integer, HomogenNumericTable](numericTableRdd))
 
     // Convert PCA results to ATK data frame
-    val pcaResultsFrameRdd: RDD[Row] = DaalDataConverters.convertPcaResultsToFrame(sc, context, pcaResults.eigenVectors, pcaResults.eigenValues)
+    val pcaResultsRows = DaalDataConverters.convertPcaResultsToFrame(context, pcaResults.getEigenVectors(), pcaResults.getEigenValues())
+
+    val pcaResultsFrameRdd = frameRdd.sparkContext.parallelize(pcaResultsRows)
     val newColumns = List(Column("eigen_vector", DataTypes.vector(arguments.columnNames.size)), Column("eigen_value", DataTypes.float64))
     val newSchema = FrameSchema(newColumns)
 
@@ -110,5 +115,7 @@ class DaalPcaCorPlugin extends SparkCommandPlugin[DaalPcaCorArgs, FrameReference
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by daal_pca_cor command"))) {
       newFrame: FrameEntity => newFrame.save(new FrameRdd(newSchema, pcaResultsFrameRdd))
     }
+
   }
+
 }

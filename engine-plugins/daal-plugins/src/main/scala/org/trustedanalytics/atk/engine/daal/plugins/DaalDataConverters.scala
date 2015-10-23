@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.engine.plugin.Invocation
 
-object DaalDataConverters {
+object DaalDataConverters extends Serializable {
   /**
    * Convert results of PCA algorithm into ATK data frame
    *
@@ -38,22 +38,19 @@ object DaalDataConverters {
    * @param eigenValueTable Eigen value table
    * @return ATK data frame with PCA eigen vectors, and eigen values
    */
-  def convertPcaResultsToFrame(sparkContext: SparkContext,
-                               daalContext: DaalContext,
+  def convertPcaResultsToFrame(daalContext: DaalContext,
                                eigenVectorTable: HomogenNumericTable,
-                               eigenValueTable: HomogenNumericTable)(implicit invocation: Invocation): RDD[Row] = {
+                               eigenValueTable: HomogenNumericTable): Seq[Row] = {
     val eigenVectors = createArrayOfVectors(daalContext, eigenVectorTable)
     val eigenValues = createArrayOfVectors(daalContext, eigenValueTable)
 
-    val results = for {
+    val results: Seq[Row] = for {
       i <- 0 until eigenVectors.length
       eigenVector = eigenVectors(i).asInstanceOf[Any]
       eigenValue = eigenValues(0)(i).asInstanceOf[Any]
     } yield new GenericRow(Array(eigenVector, eigenValue))
 
-    // Save results to ATK data frame
-    val pcaResultsFrameRdd: RDD[Row] = sparkContext.parallelize(results)
-    pcaResultsFrameRdd
+    results
   }
 
   /**

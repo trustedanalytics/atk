@@ -26,10 +26,10 @@ package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, ApiMaturityTag, Invocation }
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -38,8 +38,16 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 import DaalLinearRegressionJsonFormat._
 
-/** Plugin for scoring DAAL's Linear Regression using QR decomposition */
-class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, FrameEntity] {
+/**
+ * Plugin for scoring DAAL's Linear Regression using QR decomposition
+ */
+@PluginDoc(oneLine = "Make new frame with column for label prediction.",
+  extended = """Predict the labels for a test frame and create a new frame revision with
+existing columns and a new predicted value column.""",
+  returns =
+    """frame\:
+  Frame containing the original frame's columns and a column with the predicted value.""")
+class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -68,7 +76,7 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): FrameEntity =
+  override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): FrameReference =
     {
       val model: Model = arguments.model
 
@@ -80,8 +88,6 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
       //Load the libsvm model
       val lrJsObject = model.data
       val modelData = lrJsObject.convertTo[DaalLinearRegressionModelData]
-      val context = new DaalContext()
-      val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray[Byte])
 
       require(modelData.featureColumns.length == arguments.featureColumns.length,
         "Number of feature columns for train and predict should be same")
@@ -89,13 +95,12 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
         "Number of label columns for train and predict should be same")
 
       val lrResultsFrameRdd = DaalLinearRegressionFunctions.predictLinearModel(
-        context,
         modelData,
         testFrame.rdd,
         featureColumns)
 
-      context.dispose()
-      engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL linear regression predict operation"))) {
+      engine.frames.tryNewFrame(CreateEntityArgs(
+        description = Some("created by DAAL linear regression predict operation"))) {
         newPredictedFrame: FrameEntity =>
           newPredictedFrame.save(lrResultsFrameRdd)
       }

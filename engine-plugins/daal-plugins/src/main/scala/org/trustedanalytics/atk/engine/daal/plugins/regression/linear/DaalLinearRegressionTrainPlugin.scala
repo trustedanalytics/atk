@@ -20,9 +20,10 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.daal.plugins.DaalDataConverters
 
 import scala.util.{ Success, Failure, Try }
@@ -64,6 +65,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalLinearRegressionJsonFormat._
 
 /** Plugin for training DAAL's Linear Regression using QR decomposition */
+@PluginDoc(oneLine = "Build linear regression model.",
+  extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
+  returns = "Trained linear regression model")
 class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, DaalLinearRegressionTrainResult] {
   /**
    * The name of the command.

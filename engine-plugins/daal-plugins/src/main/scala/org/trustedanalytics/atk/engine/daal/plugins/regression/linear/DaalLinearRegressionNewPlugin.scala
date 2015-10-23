@@ -17,17 +17,34 @@
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelEntity }
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, Invocation }
+import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, CommandPlugin }
 
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
- * Create a 'new' instance of this model
+ * Create a 'new' instance of a Linear Regression model
  */
-class DaalLinearRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelEntity] {
+
+@PluginDoc(oneLine = "Create a 'new' instance of a Linear Regression model.",
+  extended = """Linear Regression [1]_ is used to model the relationship between a scalar
+dependent variable and one or more independent variables.
+The Linear Regression model is initialized, trained on columns of a frame and
+used to predict the value of the dependent variable given the independent
+observations of a frame.
+This model runs the DAAL implementation of Linear Regression [2]_ with
+QR [3]_ decomposition.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Linear_regression
+.. [2] https://software.intel.com/en-us/daal
+.. [3] https://en.wikipedia.org/wiki/QR_decomposition""",
+  returns = """A new instance of LinearRegressionModel"""
+)
+class DaalLinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
@@ -36,8 +53,10 @@ class DaalLinearRegressionNewPlugin extends SparkCommandPlugin[GenericNewModelAr
    */
   override def name: String = "model:daal_linear_regression/new"
 
-  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelEntity =
-    {
-      engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_linear_regression")))
-    }
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+
+  override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
+    val models = engine.models
+    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_linear_regression")))
+  }
 }
