@@ -28,6 +28,10 @@ Consider the following frame containing two columns.
 <progress>
 >>> train_output = model.train(frame, ["data"], [1], 3)
 <progress>
+<skip>
+>>> train_output
+{u'within_set_sum_of_squared_error': 5.3, u'cluster_size': {u'Cluster:1': 5, u'Cluster:3': 2, u'Cluster:2': 2}}
+</skip>
 >>> train_output.has_key('within_set_sum_of_squared_error')
 True
 >>> predicted_frame = model.predict(frame, ["data"])

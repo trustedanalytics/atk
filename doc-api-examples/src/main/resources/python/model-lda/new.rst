@@ -33,6 +33,19 @@ Consider the following frame containing four columns.
 <progress>
 >>> train_output = model.train(frame, 'doc_id', 'word_id', 'word_count', max_iterations = 3, num_topics = 2)
 <progress>
+<skip>
+>>> train_output
+{'topics_given_word': Frame  <unnamed>
+row_count = 8
+schema = [word_id:unicode, topic_probabilities:vector(2)]
+status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.556000-07:00), 'topics_given_doc': Frame  <unnamed>
+row_count = 3
+schema = [doc_id:unicode, topic_probabilities:vector(2)]
+status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.369000-07:00), 'report': u'======Graph Statistics======\nNumber of vertices: 11} (doc: 3, word: 8})\nNumber of edges: 16\n\n======LDA Configuration======\nnumTopics: 2\nalpha: 1.100000023841858\nbeta: 1.100000023841858\nmaxIterations: 3\n', 'word_given_topics': Frame  <unnamed>
+row_count = 8
+schema = [word_id:unicode, topic_probabilities:vector(2)]
+status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.465000-07:00)}
+</skip>
 >>> topics_given_doc = train_output['topics_given_doc']
 <progress>
 <skip>

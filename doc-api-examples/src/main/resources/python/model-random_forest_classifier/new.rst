@@ -27,6 +27,8 @@ Consider the following frame containing four columns.
 <progress>
 >>> train_output = model.train(frame, 'Class', ['Dim_1', 'Dim_2'], num_classes=2, num_trees=1, impurity="entropy", max_depth=4, max_bins=100)
 <progress>
+>>> train_output
+{u'impurity': u'entropy', u'max_bins': 100, u'observation_columns': [u'Dim_1', u'Dim_2'], u'num_nodes': 3, u'max_depth': 4, u'seed': 157264076, u'num_trees': 1, u'label_column': u'Class', u'feature_subset_category': u'all', u'num_classes': 2}
 >>> train_output['num_nodes']
 3
 >>> train_output['label_column']
