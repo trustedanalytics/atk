@@ -3,7 +3,6 @@ Examples
 Consider Frame *my_frame*, which accesses a frame that contains a single
 column named *obs*:
 
-.. code::
     <hide>
     >>> import trustedanalytics as ta
     >>> ta.connect()

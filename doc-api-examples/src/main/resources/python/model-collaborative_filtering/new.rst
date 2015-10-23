@@ -1,10 +1,5 @@
 Examples
 --------
-.. only:: html
-
-    .. code::
-
-    script
     <skip>
     >>> dataset = "/datasets/movie_data_with_names.csv"
     >>> 

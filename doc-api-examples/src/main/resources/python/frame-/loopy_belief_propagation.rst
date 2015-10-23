@@ -1,27 +1,24 @@
 Examples
 --------
-.. only:: html
-
-    .. code::
-
-    input frame (lbp.csv)
-    "a"        "b"        "c"        "d"
-    1,         2,         0.5,       "0.5,0.5"
-    2,         3,         0.4,       "0.8,0.2"
-    3,         1,         0.1,       "0.8,0.2"
-
-    script
-
     <skip>
     >>> s = [("a", ta.int32), ("b", ta.int32), ("c", ta.float32), ("d", ta.vector(2))]
     >>> rows = [ [1, 2, 0.5,"0.5,0.5"], [2, 3, 0.4, "0.8,0.2"], [3, 1, 0.1, "0.8,0.2"] ]
     >>> f = ta.Frame(ta.UploadRows (rows, s))
     <progress>
 
-    >>> r = f.label_propagation("a", "b", "c", "d", "results")
+    >>> f.inspect()
+    [#]    a   b   c       d
+    =========================
+    [0]    1   2  0.5 "0.5,0.5"
+    [1]    2   3  0.4 "-1,-1"
+    [2]    3   1  0.1 "0.8,0.2"
+
+    >>> r = f.loopy_belief_propagation("a", "b", "c", "d", "results")
     <progress>
 
     >>> r['frame'].inspect()
+    [#]    features
+    ===============
      [1] "0.5,0.5"
      [2] "0.6,0.4"
      [3] "0.8,0.2"
