@@ -28,7 +28,7 @@ case class FlattenColumnArgs(frame: FrameReference,
 Default is comma (,).""") delimiters: Option[List[String]] = None) {
   require(frame != null, "frame is required")
   require(columns != null && columns.nonEmpty, "column list is required")
-  if (delimiters != null)
-    require((delimiters.size == columns.size) || (delimiters.size == 1) || (delimiters.size == 0),
+  if (delimiters != None)
+    require((delimiters.get.size == columns.size) || (delimiters.get.size == 1) || (delimiters.get.size == 0),
       "number of delimiters provided must match the number of columns")
 }
