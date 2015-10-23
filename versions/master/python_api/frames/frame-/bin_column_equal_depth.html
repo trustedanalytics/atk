@@ -172,45 +172,45 @@ belong to the same bin.</li>
 </ol>
 <p class="rubric">Examples</p>
 <p>Given a frame with column <em>a</em> accessed by a Frame object <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
-
-<span class="go">  a:int32</span>
-<span class="go">/---------/</span>
-<span class="go">    1</span>
-<span class="go">    1</span>
-<span class="go">    2</span>
-<span class="go">    3</span>
-<span class="go">    5</span>
-<span class="go">    8</span>
-<span class="go">   13</span>
-<span class="go">   21</span>
-<span class="go">   34</span>
-<span class="go">   55</span>
-<span class="go">   89</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<span class="go">[##]  a</span>
+<span class="go">========</span>
+<span class="go">[0]    1</span>
+<span class="go">[1]    1</span>
+<span class="go">[2]    2</span>
+<span class="go">[3]    3</span>
+<span class="go">[4]    5</span>
+<span class="go">[5]    8</span>
+<span class="go">[6]   13</span>
+<span class="go">[7]   21</span>
+<span class="go">[8]   34</span>
+<span class="go">[9]   55</span>
+<span class="go">[10]  89</span>
 </pre></div>
 </div>
 <p>Modify the frame, adding a column showing what bin the data is in.
 The data should be grouped into a maximum of five bins.
 Note that each bin will have the same quantity of members (as much as
 possible):</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEDBinned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_depth</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEDBinned&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
-
-<span class="go">  a:int32     aEDBinned:int32</span>
-<span class="go">/-----------------------------/</span>
-<span class="go">      1                   0</span>
-<span class="go">      1                   0</span>
-<span class="go">      2                   1</span>
-<span class="go">      3                   1</span>
-<span class="go">      5                   2</span>
-<span class="go">      8                   2</span>
-<span class="go">     13                   3</span>
-<span class="go">     21                   3</span>
-<span class="go">     34                   4</span>
-<span class="go">     55                   4</span>
-<span class="go">     89                   4</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
+<span class="go">[##]  a   aEDBinned</span>
+<span class="go">===================</span>
+<span class="go">[0]    1          0</span>
+<span class="go">[1]    1          0</span>
+<span class="go">[2]    2          1</span>
+<span class="go">[3]    3          1</span>
+<span class="go">[4]    5          2</span>
+<span class="go">[5]    8          2</span>
+<span class="go">[6]   13          3</span>
+<span class="go">[7]   21          3</span>
+<span class="go">[8]   34          4</span>
+<span class="go">[9]   55          4</span>
+<span class="go">[10]  89          4</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
 <span class="go">[1.0, 2.0, 5.0, 13.0, 34.0, 89.0]</span>
 </pre></div>
 </div>
@@ -239,7 +239,7 @@ possible):</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 22, 2015.
+      Last updated on Oct 23, 2015.
       </li>
     </ul>
     </div>

@@ -165,48 +165,47 @@ belong to the same bin.</li>
 </ol>
 <p class="rubric">Examples</p>
 <p>Given a frame with column <em>a</em> accessed by a Frame object <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
-
-<span class="go">  a:int32</span>
-<span class="go">/---------/</span>
-<span class="go">    1</span>
-<span class="go">    1</span>
-<span class="go">    2</span>
-<span class="go">    3</span>
-<span class="go">    5</span>
-<span class="go">    8</span>
-<span class="go">   13</span>
-<span class="go">   21</span>
-<span class="go">   34</span>
-<span class="go">   55</span>
-<span class="go">   89</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<span class="go">[##]  a</span>
+<span class="go">========</span>
+<span class="go">[0]    1</span>
+<span class="go">[1]    1</span>
+<span class="go">[2]    2</span>
+<span class="go">[3]    3</span>
+<span class="go">[4]    5</span>
+<span class="go">[5]    8</span>
+<span class="go">[6]   13</span>
+<span class="go">[7]   21</span>
+<span class="go">[8]   34</span>
+<span class="go">[9]   55</span>
+<span class="go">[10]  89</span>
 </pre></div>
 </div>
 <p>Modify the frame, adding a column showing what bin the data is in.
 The data should be separated into a maximum of five bins and the bin cutoffs
 should be evenly spaced.
 Note that there may be bins with no members:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_width</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEWBinned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cutoffs</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column_equal_width</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&#39;aEWBinned&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
-
-<span class="go">  a:int32     aEWBinned:int32</span>
-<span class="go">/-----------------------------/</span>
-<span class="go">    1                 0</span>
-<span class="go">    1                 0</span>
-<span class="go">    2                 0</span>
-<span class="go">    3                 0</span>
-<span class="go">    5                 0</span>
-<span class="go">    8                 0</span>
-<span class="go">   13                 0</span>
-<span class="go">   21                 1</span>
-<span class="go">   34                 1</span>
-<span class="go">   55                 3</span>
-<span class="go">   89                 4</span>
+<span class="go">[##]  a   aEWBinned</span>
+<span class="go">===================</span>
+<span class="go">[0]    1          0</span>
+<span class="go">[1]    1          0</span>
+<span class="go">[2]    2          0</span>
+<span class="go">[3]    3          0</span>
+<span class="go">[4]    5          0</span>
+<span class="go">[5]    8          0</span>
+<span class="go">[6]   13          0</span>
+<span class="go">[7]   21          1</span>
+<span class="go">[8]   34          1</span>
+<span class="go">[9]   55          3</span>
+<span class="go">[10]  89          4</span>
 </pre></div>
 </div>
 <p>The method returns a list of 6 cutoff values that define the edges of each bin.
 Note that difference between the cutoff values is constant:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cutoffs</span>
 <span class="go">[1.0, 18.6, 36.2, 53.8, 71.4, 89.0]</span>
 </pre></div>
 </div>
@@ -235,7 +234,7 @@ Note that difference between the cutoff values is constant:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 22, 2015.
+      Last updated on Oct 23, 2015.
       </li>
     </ul>
     </div>

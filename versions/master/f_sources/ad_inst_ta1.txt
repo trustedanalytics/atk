@@ -69,7 +69,7 @@ EPEL Repository
 
 Verify the installation of the "epel" repository:
 
-..code::
+.. code::
 
     $ sudo yum repolist
 

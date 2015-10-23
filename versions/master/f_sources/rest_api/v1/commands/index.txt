@@ -29,6 +29,9 @@
     frame-vertex__filter
     frame-vertex__rename_columns
     frame___coalesce
+    frame___loadhbase
+    frame___loadhive
+    frame___loadjdbc
     frame___partition_count
     frame___repartition
     frame___size_on_disk
@@ -64,9 +67,6 @@
     frame__flatten_column
     frame__group_by
     frame__histogram
-    frame__loadhbase
-    frame__loadhive
-    frame__loadjdbc
     frame__quantiles
     frame__rename
     frame__sort
@@ -183,9 +183,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/flatten_column <frame__flatten_column>`                                           Spread data to multiple rows based on cell data.
 :doc:`frame/group_by <frame__group_by>`                                                       |BETA| Summarized Frame with Aggregations.
 :doc:`frame/histogram <frame__histogram>`                                                     |BETA| Compute the histogram for a column in a frame.
-:doc:`frame/loadhbase <frame__loadhbase>`                                                     Append data from an HBase table into an existing (possibly empty) FrameRDD
-:doc:`frame/loadhive <frame__loadhive>`                                                       Append data from a hive table into an existing (possibly empty) frame
-:doc:`frame/loadjdbc <frame__loadjdbc>`                                                       Append data from a JDBC table into an existing (possibly empty) frame
 :doc:`frame/quantiles <frame__quantiles>`                                                     New frame with Quantiles and their values.
 :doc:`frame/rename <frame__rename>`                                                           Change the name of the current frame.
 :doc:`frame/sort <frame__sort>`                                                               |BETA| Sort by one or more columns.
