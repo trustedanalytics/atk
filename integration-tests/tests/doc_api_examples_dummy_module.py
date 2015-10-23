@@ -100,8 +100,9 @@ graph/ml/belief_propagation.rst
 model-k_means/train.rst
 model-k_means/predict.rst
 model-k_means/publish.rst
-model-naive_bayes/train.rst
-model-naive_bayes/predict.rst
+(FIXED)model-naive_bayes/train.rst
+(FIXED)model-naive_bayes/predict.rst
+(FIXED)model-naive_bayes/test.rst
 (FIXED)frame/ecdf.rst
 frame/export_to_hive.rst
 frame/covariance_matrix.rst
