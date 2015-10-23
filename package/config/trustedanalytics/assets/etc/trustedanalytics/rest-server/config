@@ -80,6 +80,7 @@ import os
 import os.path
 import sys
 import argparse
+import getpass
 import cluster_config as cc
 from pyhocon import ConfigFactory
 from cluster_config.const import Const
@@ -381,10 +382,8 @@ def create_config(identifier, prefix, confs, filename, boilerplate=True):
         for key, value in confs.items():
             print("{0}.{1}={2}".format(prefix, key, value), file=configfile)
         cc.log.info("Configuration created for Intel Analytics: {0} at {1}".format(identifier, filename))
-    except:
+    except IOError:
         cc.log.fatal("Error creating or writing configuration file: {0} at {1}".format(identifier, filename))
-    finally:
-        configfile.close()
 
 def create_db_conf(conf_file_directory, host, port, database, username, password):
     db_conf = collections.OrderedDict()
@@ -441,11 +440,11 @@ def run(args, cluster=None):
 
     # Take what is on the commandline for CDH initial parameters, if anything.
     db_conf = {
-        'host':     args.db_host     if args.db_host     else None,
-        'port':     args.db_port     if args.db_port     else None,
-        'database': args.db_database if args.db_database else None,
-        'username': args.db_username if args.db_username else None,
-        'password': args.db_password if args.db_password else None}
+        'host':     args.db_host     if args.db_host     else cc.log.fatal("No database host set, please specify on the command line with --db-host"),
+        'port':     args.db_port     if args.db_port     else cc.log.fatal("No database port set, please specify on the command line with --db-port"),
+        'database': args.db_database if args.db_database else cc.log.fatal("No database name set, please specify on the command line with --db-database"),
+        'username': args.db_username if args.db_username else cc.log.fatal("No database username set, please specify on the command line with --db-username"),
+        'password': args.db_password if args.db_password else getpass.getpass(prompt="What database password would you like for '{0}' database user?".format(args.db_username))}
 
     # Query Cloudera for the parameters we can get from it using the
     # config_cluster API.  Login and password must be provided on the

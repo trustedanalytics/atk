@@ -46,13 +46,10 @@ initctlFunc() {
 }
 
 
-mkdir -p /var/log/trustedanalytics/analytics
 #change ownership log directory so logback has permissions to create application log
-chown $TUSER:$TUSER /var/log/trustedanalytics/analytics
+mkdir -p /var/log/trustedanalytics/rest-server
+chown $TUSER:$TUSER /var/log/trustedanalytics/rest-server
 
-if [ "$1" == start ] || [ "$1" == "stop" ] || [ "$1" == "restart" ]; then
-	rm /var/run/trustedanalytics-rest-server.pid
-fi
 
 # See how we were called.
 case "$1" in
