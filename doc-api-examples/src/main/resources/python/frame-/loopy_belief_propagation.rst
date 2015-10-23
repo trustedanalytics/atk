@@ -27,7 +27,7 @@ Examples
     ======Graph Statistics======
     Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)
     Number of edges: 318400
-
+    <blankline>
     ======LBP Configuration======
          maxSupersteps: 10
          convergenceThreshold: 0.000000
@@ -37,7 +37,7 @@ Examples
          ignoreVertexType: false
          maxProduct: false
          power: 0.000000
-
+    <blankline>
     ======Learning Progress======
          superstep = 1
              avgTrainDelta = 0.594534

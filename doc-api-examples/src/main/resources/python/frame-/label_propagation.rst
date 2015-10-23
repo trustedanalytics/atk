@@ -28,14 +28,14 @@ Examples
      ======Graph Statistics======
      Number of vertices: 600
      Number of edges: 15716
-
+     <blankline>
      ======LP Configuration======
      lambda: 0.000000
      anchorThreshold: 0.900000
      convergenceThreshold: 0.000000
      maxSupersteps: 10
      bidirectionalCheck: false
-
+     <blankline>
      ======Learning Progress======
      superstep = 1\tcost = 0.008692
      superstep = 2\tcost = 0.008155
