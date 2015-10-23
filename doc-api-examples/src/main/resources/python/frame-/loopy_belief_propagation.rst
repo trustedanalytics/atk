@@ -7,11 +7,11 @@ Examples
     <progress>
 
     >>> f.inspect()
-    [#]    a   b   c       d
-    =========================
-    [0]    1   2  0.5 "0.5,0.5"
-    [1]    2   3  0.4 "-1,-1"
-    [2]    3   1  0.1 "0.8,0.2"
+    [#]    a   b  c    d
+    ============================
+    [0]    1   2  0.5  [0.5,0.5]
+    [1]    2   3  0.4  [0.8,0.2]
+    [2]    3   1  0.1  [0.8,0.2]
 
     >>> r = f.loopy_belief_propagation("a", "b", "c", "d", "results")
     <progress>
@@ -19,16 +19,16 @@ Examples
     >>> r['frame'].inspect()
     [#]    features
     ===============
-     [1] "0.5,0.5"
-     [2] "0.6,0.4"
-     [3] "0.8,0.2"
+    [1]   [0.5,0.5]
+    [2]   [0.6,0.4]
+    [3]   [0.8,0.2]
 
     >>> r['report']
-     ======Graph Statistics======
-     Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)
-     Number of edges: 318400
+    ======Graph Statistics======
+    Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)
+    Number of edges: 318400
 
-     ======LBP Configuration======
+    ======LBP Configuration======
          maxSupersteps: 10
          convergenceThreshold: 0.000000
          anchorThreshold: 0.900000
@@ -38,7 +38,7 @@ Examples
          maxProduct: false
          power: 0.000000
 
-     ======Learning Progress======
+    ======Learning Progress======
          superstep = 1
              avgTrainDelta = 0.594534
              avgValidateDelta = 0.542366
