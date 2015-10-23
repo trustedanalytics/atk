@@ -16,6 +16,7 @@ trustedanalytics.atk {
   //api.port = 9099
 
   # The host name for the Postgresql database in which the metadata will be stored
+  # Postgresql
   //metastore.connection-postgresql.host = "invalid-postgresql-host"
   //metastore.connection-postgresql.port = 5432
   //metastore.connection-postgresql.database = "atk-metastore"
@@ -29,6 +30,33 @@ trustedanalytics.atk {
   # This allows the use of an in memory data store. Restarting the rest server will create a fresh database and any
   # data in the h2 DB will be lost
   //metastore.connection = ${trustedanalytics.atk.metastore.connection-h2}
+
+  datastore
+    {
+    # Postgresql
+    //connection-postgresql.host = "invalid-postgresql-host"
+    //connection-postgresql.port = 5432
+    //connection-postgresql.database = "postgresql-datastore"
+    //connection-postgresql.username = "postgresql-user"
+    //connection-postgresql.password = "postgresql-password"
+    connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}"?user="${trustedanalytics.atk.datastore.connection-postgresql.username}"&password="${trustedanalytics.atk.datastore.connection-postgresql.password}
+
+    # MYSQL
+    //connection-mysql.host = "invalid-mysql-host"
+    //connection-mysql.port = 3306
+    //connection-mysql.database = "mysql-datastore"
+    //connection-mysql.username = "mysql-user"
+    //connection-mysql.password = "mysql-password"
+    connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}"?user="${trustedanalytics.atk.datastore.connection-mysql.username}"&password="${trustedanalytics.atk.datastore.connection-mysql.password}
+
+    # SQLSERVER
+    //connection-sqlserver.host = "invalid-sqlserver-host"
+    //connection-sqlserver.port = "invalid-sqlserver-port"
+    //connection-sqlserver.database = "invalid-sqlserver-database"
+    //connection-sqlserver.username = "invalid-sqlserver-username"
+    //connection-sqlserver.password = "invalid-sqlserver-password"
+    //connection-sqlserver.url = "invalid-sqlserver-url"
+  }
 
   engine {
 
@@ -56,6 +84,10 @@ trustedanalytics.atk {
       # Memory should be same or lower than what is listed as available in Cloudera Manager.
       # Values should generally be in gigabytes, e.g. "64g"
       spark.executor.memory = "invalid executor memory"
+
+      # These class paths need to be uncommented and be present on YARN nodes
+      // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
+      // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
     }
 
     #Kerberos authentication configuration. if enabled is set to true will authenticate to kerberos
@@ -194,6 +226,11 @@ trustedanalytics.atk {
           //spark.eventLog.overwrite = true
           spark.eventLog.enabled = true
           spark.eventLog.dir = "hdfs://invalid-spark-application-history-folder:8020/user/spark/applicationHistory"
+
+          # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
+          # Verify that the path below exist across all yarn master/worker nodes.
+          // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
+          // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
         }
 
       }
