@@ -4,38 +4,43 @@ Consider Frame *my_frame*, which accesses a frame that contains a single
 column named *obs*:
 
 .. code::
+    <hide>
+    >>> import trustedanalytics as ta
+    >>> ta.connect()
+    -etc-
 
+    >>> s = [("obs", ta.int32)]
+    >>> rows = [ [0], [1], [2], [0], [1], [2]]
+    >>> my_frame = ta.Frame(ta.UploadRows (rows, s))
+    -etc-
+
+    </hide>
     >>> my_frame.inspect()
-
-      obs:int32
-    /-----------/
-         0
-         1
-         2
-         0
-         1
-         2
+    [#]  obs
+    ========
+    [0]    0
+    [1]    1
+    [2]    2
+    [3]    0
+    [4]    1
+    [5]    2
 
 The cumulative percent count for column *obs* is obtained by:
 
-.. code::
-
-    >>> my_frame.tally_percent('obs', 1)
+    >>> my_frame.tally_percent("obs", "1")
+    <progress>
 
 The Frame *my_frame* accesses the original frame that now contains two
 columns, *obs* that contains the original column values, and
 *obsCumulativePercentCount* that contains the cumulative percent count:
 
-.. code::
-
     >>> my_frame.inspect()
-
-      obs:int32    obs_tally_percent:float64
-    /----------------------------------------/
-         0                         0.0
-         1                         0.5
-         2                         0.5
-         0                         0.5
-         1                         1.0
-         2                         1.0
+    [#]  obs  obs_tally_percent
+    ===========================
+    [0]    0                0.0
+    [1]    1                0.5
+    [2]    2                0.5
+    [3]    0                0.5
+    [4]    1                1.0
+    [5]    2                1.0
 
