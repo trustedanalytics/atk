@@ -71,9 +71,9 @@ model-svm/test.rst
 (FIXED)model-linear_regression/train.rst
 (FIXED)model-linear_regression/predict.rst
 (FIXED)model-linear_regression/publish.rst
-model-logistic_regression/train.rst
-model-logistic_regression/predict.rst
-model-logistic_regression/test.rst
+(FIXED)model-logistic_regression/train.rst
+(FIXED)model-logistic_regression/predict.rst
+(FIXED)model-logistic_regression/test.rst
 graph-titan/graph_clustering.rst
 graph-titan/query/gremlin.rst
 graph-titan/query/recommend.rst
