@@ -32,7 +32,6 @@ cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarball
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
-
 jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
 
 #popd
@@ -51,6 +50,13 @@ jarPath=$(find .  -path ./package -prune -o -name launcher.jar -print)
 echo $jarPath
 #enable this to copy the regular launcher.jar to the correct place
 cp -v $jarPath package/tarballs/$package/launcher.jar
+
+# DAAL jar and dynamic libraries
+cp -v engine-plugins/daal-plugins/lib/daal.jar package/tarballs/$package/lib/
+cp -v engine-plugins/daal-plugins/lib/libAtkDaalJavaAPI.so package/tarballs/$package/lib/
+cp -v engine-plugins/daal-plugins/lib/libiomp5.so package/tarballs/$package/lib/
+cp -v engine-plugins/daal-plugins/lib/libJavaAPI.so package/tarballs/$package/lib/
+cp -v engine-plugins/daal-plugins/lib/libtbb.so.2 package/tarballs/$package/lib/
 
 
 mkdir -p package/tarballs/$package/client

@@ -1,1 +1,6 @@
 package/config/trustedanalytics-tar/jq filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/daal.jar filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/libAtkDaalJavaAPI.so filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/libiomp5.so filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/JavaAPI.so filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/libtbb.so.2 filter=lfs diff=lfs merge=lfs -text

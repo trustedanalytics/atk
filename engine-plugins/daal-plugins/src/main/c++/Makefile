@@ -18,6 +18,7 @@ LFLAGS  = -L${DAALROOT}/lib/intel64_lin
 LDFLAGS = -shared
 
 TARGET  = libAtkDaalJavaAPI.so
+TARGETFILE = ../../../lib/${TARGET}
 SOURCES = com_intel_daal_algorithms_ModelSerializer.c
 OBJ     = serializer.o
 
@@ -28,12 +29,12 @@ ${OBJ} : ${SOURCES}
 	$(CC) $(CFLAGS) $(INCLUDES) -o ${OBJ} $(LFLAGS) ${SOURCES}
 
 ${TARGET} : serializer.o
-	g++ -shared -Wl,-soname,${TARGET} ${LFLAGS} -o ${TARGET} ${OBJ} -lJavaAPI
+	g++ -shared -Wl,-soname,${TARGET} ${LFLAGS} -o ${TARGETFILE} ${OBJ} -lJavaAPI
 
 clean:
-	$(RM) *.o $(TARGET)
+	$(RM) *.o ${TARGETFILE}
 
 install: ${TARGET}
-	sudo cp ${TARGET} ${DAALROOT}/lib/intel64_lin/
+	sudo cp ${TARGETFILE} ${DAALROOT}/lib/intel64_lin/
 
 # DO NOT DELETE THIS LINE -- make depend needs it
