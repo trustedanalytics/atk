@@ -15,7 +15,7 @@ Consider the following model trained and tested on the sample data set in *frame
 -etc-
 
 </hide>
-Consider the following frame containing four columns.
+Consider the following frame containing six columns.
 
 >>> frame.inspect()
 [#]  1    2    3    4    5    6
