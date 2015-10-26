@@ -142,37 +142,35 @@ observing the column values and keeping track of the number of times the specifi
 <em>count_value</em> has been seen.</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
-column <em>obs</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  obs:int32</span>
-<span class="go">/-----------/</span>
-<span class="go">    0</span>
-<span class="go">    1</span>
-<span class="go">    2</span>
-<span class="go">    0</span>
-<span class="go">    1</span>
-<span class="go">    2</span>
+column named <em>obs</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  obs</span>
+<span class="go">========</span>
+<span class="go">[0]    0</span>
+<span class="go">[1]    1</span>
+<span class="go">[2]    2</span>
+<span class="go">[3]    0</span>
+<span class="go">[4]    1</span>
+<span class="go">[5]    2</span>
 </pre></div>
 </div>
-<p>The cumulative count for column <em>obs</em> using <em>count_value = 1</em> is obtained by:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">tally</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+<p>The cumulative percent count for column <em>obs</em> is obtained by:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">tally</span><span class="p">(</span><span class="s">&quot;obs&quot;</span><span class="p">,</span> <span class="s">&quot;1&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p>The Frame <em>my_frame</em> accesses a frame which now contains two columns <em>obs</em>
-and <em>obsCumulativeCount</em>.
-Column <em>obs</em> still has the same data and <em>obsCumulativeCount</em> contains the
-cumulative counts:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  obs:int32        obs_tally:int32</span>
-<span class="go">/----------------------------------/</span>
-<span class="go">     0                      0</span>
-<span class="go">     1                      1</span>
-<span class="go">     2                      1</span>
-<span class="go">     0                      1</span>
-<span class="go">     1                      2</span>
-<span class="go">     2                      2</span>
+<p>The Frame <em>my_frame</em> accesses the original frame that now contains two
+columns, <em>obs</em> that contains the original column values, and
+<em>obsCumulativePercentCount</em> that contains the cumulative percent count:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  obs  obs_tally</span>
+<span class="go">===================</span>
+<span class="go">[0]    0        0.0</span>
+<span class="go">[1]    1        1.0</span>
+<span class="go">[2]    2        1.0</span>
+<span class="go">[3]    0        1.0</span>
+<span class="go">[4]    1        2.0</span>
+<span class="go">[5]    2        2.0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -200,7 +198,7 @@ cumulative counts:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 23, 2015.
+      Last updated on Oct 26, 2015.
       </li>
     </ul>
     </div>

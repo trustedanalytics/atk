@@ -255,22 +255,56 @@ The algorithm requires all nodes to converge before declaring global convergence
 If this condition is not met, the algorithm will continue up to the maximum
 number of <a class="reference internal" href="../../../glossary.html#term-supersteps"><span class="xref std std-term">supersteps</span></a>.</p>
 <p class="rubric">Examples</p>
-<p>input frame (lp.csv)
-&#8220;a&#8221;        &#8220;b&#8221;        &#8220;c&#8221;        &#8220;d&#8221;
-1,         2,         0.5,       &#8220;0.5,0.5&#8221;
-2,         3,         0.4,       &#8220;-1,-1&#8221;
-3,         1,         0.1,       &#8220;0.8,0.2&#8221;</p>
-<p>script</p>
-<p>ta.connect()
-s = [(&#8220;a&#8221;, ta.int32), (&#8220;b&#8221;, ta.int32), (&#8220;c&#8221;, ta.float32), (&#8220;d&#8221;, ta.vector(2))]
-d = &#8220;lp.csv&#8221;
-c = ta.CsvFile(d,s)
-f = ta.Frame(c)
-r = f.label_propagation(&#8220;a&#8221;, &#8220;b&#8221;, &#8220;c&#8221;, &#8220;d&#8221;, &#8220;results&#8221;)
-r[&#8216;frame&#8217;].inspect()
-r[&#8216;report&#8217;]</p>
-<p>The expected output is like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">u&#39;value&#39;</span><span class="p">:</span> <span class="s">u&#39;======Graph Statistics======</span><span class="se">\n</span><span class="s">Number of vertices: 600</span><span class="se">\n</span><span class="s">Number of edges: 15716</span><span class="se">\n\n</span><span class="s">======LP Configuration======</span><span class="se">\n</span><span class="s">lambda: 0.000000</span><span class="se">\n</span><span class="s">anchorThreshold: 0.900000</span><span class="se">\n</span><span class="s">convergenceThreshold: 0.000000</span><span class="se">\n</span><span class="s">maxSupersteps: 10</span><span class="se">\n</span><span class="s">bidirectionalCheck: false</span><span class="se">\n\n</span><span class="s">======Learning Progress======</span><span class="se">\n</span><span class="s">superstep = 1</span><span class="se">\t</span><span class="s">cost = 0.008692</span><span class="se">\n</span><span class="s">superstep = 2</span><span class="se">\t</span><span class="s">cost = 0.008155</span><span class="se">\n</span><span class="s">superstep = 3</span><span class="se">\t</span><span class="s">cost = 0.007809</span><span class="se">\n</span><span class="s">superstep = 4</span><span class="se">\t</span><span class="s">cost = 0.007544</span><span class="se">\n</span><span class="s">superstep = 5</span><span class="se">\t</span><span class="s">cost = 0.007328</span><span class="se">\n</span><span class="s">superstep = 6</span><span class="se">\t</span><span class="s">cost = 0.007142</span><span class="se">\n</span><span class="s">superstep = 7</span><span class="se">\t</span><span class="s">cost = 0.006979</span><span class="se">\n</span><span class="s">superstep = 8</span><span class="se">\t</span><span class="s">cost = 0.006833</span><span class="se">\n</span><span class="s">superstep = 9</span><span class="se">\t</span><span class="s">cost = 0.006701</span><span class="se">\n</span><span class="s">superstep = 10</span><span class="se">\t</span><span class="s">cost = 0.006580&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">vector</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="s">&quot;0.5,0.5&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s">&quot;-1,-1&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s">&quot;0.8,0.2&quot;</span><span class="p">]</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]    a   b  c    d</span>
+<span class="go">============================</span>
+<span class="go">[0]    1   2  0.5  [0.5,0.5]</span>
+<span class="go">[1]    2   3  0.4  [-1,-1]</span>
+<span class="go">[2]    3   1  0.1  [0.8,0.2]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">label_propagation</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="s">&quot;results&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s">&#39;frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]    features</span>
+<span class="go">===============</span>
+<span class="go"> [1]  [0.5,0.5]</span>
+<span class="go"> [2]  [0.6,0.4]</span>
+<span class="go"> [3]  [0.8,0.2]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s">&#39;report&#39;</span><span class="p">]</span>
+<span class="go"> ======Graph Statistics======</span>
+<span class="go"> Number of vertices: 600</span>
+<span class="go"> Number of edges: 15716</span>
+
+<span class="go"> ======LP Configuration======</span>
+<span class="go"> lambda: 0.000000</span>
+<span class="go"> anchorThreshold: 0.900000</span>
+<span class="go"> convergenceThreshold: 0.000000</span>
+<span class="go"> maxSupersteps: 10</span>
+<span class="go"> bidirectionalCheck: false</span>
+
+<span class="go"> ======Learning Progress======</span>
+<span class="go"> superstep = 1\tcost = 0.008692</span>
+<span class="go"> superstep = 2\tcost = 0.008155</span>
+<span class="go"> superstep = 3\tcost = 0.007809</span>
+<span class="go"> superstep = 4\tcost = 0.007544</span>
+<span class="go"> superstep = 5\tcost = 0.007328</span>
+<span class="go"> superstep = 6\tcost = 0.007142</span>
+<span class="go"> superstep = 7\tcost = 0.006979</span>
+<span class="go"> superstep = 8\tcost = 0.006833</span>
+<span class="go"> superstep = 9\tcost = 0.006701</span>
+<span class="go"> superstep = 10\tcost = 0.006580</span>
+<span class="go">&lt;/skip&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -298,7 +332,7 @@ r[&#8216;report&#8217;]</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 23, 2015.
+      Last updated on Oct 26, 2015.
       </li>
     </ul>
     </div>

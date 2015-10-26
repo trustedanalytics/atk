@@ -185,42 +185,7 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>script</p>
-<p>ta.connect()
-dataset = &#8220;/datasets/movie_data_with_names.csv&#8221;</p>
-<dl class="docutils">
-<dt>schema = [(&#8220;user_id&#8221;, str),(&#8220;movie_id&#8221;, str), (&#8220;rating&#8221;, atk.int32),</dt>
-<dd>(&#8220;timestamp&#8221;, atk.int32), (&#8220;movie_name&#8221;,str), (&#8220;release_date&#8221;, str), (&#8220;splits&#8221;, str)]</dd>
-</dl>
-<p>csv = atk.CsvFile(dataset, schema, skip_header_lines = 0)
-frame = atk.Frame(csv, movie_frame_name)
-cgd_cf_model = atk.CollaborativeFilteringModel(cgd_name)
-cgd_cf_model_train = cgd_cf_model.train(frame, &#8220;user_id&#8221;, &#8220;movie_name&#8221;, &#8220;rating&#8221;, &#8220;cgd&#8221;,</p>
-<blockquote>
-<div>max_value = 19, regularization=0.65, min_value=1, bias_on=False)</div></blockquote>
-<p>cgd_cf_model_recommend = cgd_cf_model.recommend (uid, 10)</p>
-<p>The expected output for ALS is like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">u&#39;value&#39;</span><span class="p">:</span> <span class="s">u&#39;======Graph Statistics======</span><span class="se">\n</span><span class="s">Number of vertices: 10070 (left: 9569, right: 501)</span><span class="se">\n</span><span class="s">Number of edges: 302008 (train: 145182, validate: 96640, test: 60186)</span><span class="se">\n\n</span><span class="s">======ALS Configuration======</span><span class="se">\n</span><span class="s">maxSupersteps: 20</span><span class="se">\n</span><span class="s">featureDimension: 3</span><span class="se">\n</span><span class="s">lambda: 0.065000</span><span class="se">\n</span><span class="s">biasOn: False</span><span class="se">\n</span><span class="s">convergenceThreshold: 0.000000</span><span class="se">\n</span><span class="s">maxVal: 5.000000</span><span class="se">\n</span><span class="s">minVal: 1.000000</span><span class="se">\n</span><span class="s">learningCurveOutputInterval: 1</span><span class="se">\n\n</span><span class="s">======Learning Progress======</span><span class="se">\n</span><span class="s">superstep = 2</span><span class="se">\t</span><span class="s">cost(train) = 838.720244</span><span class="se">\t</span><span class="s">rmse(validate) = 1.220795</span><span class="se">\t</span><span class="s">rmse(test) = 1.226830</span><span class="se">\n</span><span class="s">superstep = 4</span><span class="se">\t</span><span class="s">cost(train) = 608.088979</span><span class="se">\t</span><span class="s">rmse(validate) = 1.174247</span><span class="se">\t</span><span class="s">rmse(test) = 1.180558</span><span class="se">\n</span><span class="s">superstep = 6</span><span class="se">\t</span><span class="s">cost(train) = 540.071050</span><span class="se">\t</span><span class="s">rmse(validate) = 1.166471</span><span class="se">\t</span><span class="s">rmse(test) = 1.172131</span><span class="se">\n</span><span class="s">superstep = 8</span><span class="se">\t</span><span class="s">cost(train) = 499.134869</span><span class="se">\t</span><span class="s">rmse(validate) = 1.164236</span><span class="se">\t</span><span class="s">rmse(test) = 1.169805</span><span class="se">\n</span><span class="s">superstep = 10</span><span class="se">\t</span><span class="s">cost(train) = 471.318913</span><span class="se">\t</span><span class="s">rmse(validate) = 1.163796</span><span class="se">\t</span><span class="s">rmse(test) = 1.169215</span><span class="se">\n</span><span class="s">superstep = 12</span><span class="se">\t</span><span class="s">cost(train) = 450.420300</span><span class="se">\t</span><span class="s">rmse(validate) = 1.163993</span><span class="se">\t</span><span class="s">rmse(test) = 1.169224</span><span class="se">\n</span><span class="s">superstep = 14</span><span class="se">\t</span><span class="s">cost(train) = 433.511180</span><span class="se">\t</span><span class="s">rmse(validate) = 1.164485</span><span class="se">\t</span><span class="s">rmse(test) = 1.169393</span><span class="se">\n</span><span class="s">superstep = 16</span><span class="se">\t</span><span class="s">cost(train) = 419.403410</span><span class="se">\t</span><span class="s">rmse(validate) = 1.165008</span><span class="se">\t</span><span class="s">rmse(test) = 1.169507</span><span class="se">\n</span><span class="s">superstep = 18</span><span class="se">\t</span><span class="s">cost(train) = 407.212140</span><span class="se">\t</span><span class="s">rmse(validate) = 1.165425</span><span class="se">\t</span><span class="s">rmse(test) = 1.169503</span><span class="se">\n</span><span class="s">superstep = 20</span><span class="se">\t</span><span class="s">cost(train) = 396.281966</span><span class="se">\t</span><span class="s">rmse(validate) = 1.165723</span><span class="se">\t</span><span class="s">rmse(test) = 1.169451&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Report may show zero edges and/or vertices if parameters were supplied wrong,
-or if the graph was not the expected input:</p>
-<div class="code highlight-python"><div class="highlight"><pre>======Graph Statistics======
-Number of vertices: 12673 (left: 12673, right: 0)
-Number of edges: 0 (train: 0, validate: 0, test: 0)
-</pre></div>
-</div>
-<p>The expected output for CGD is like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">u&#39;value&#39;</span><span class="p">:</span> <span class="s">u&#39;======Graph Statistics======</span><span class="se">\n</span><span class="s">Number of vertices: 20140 (left: 10070, right: 10070)</span><span class="se">\n</span><span class="s">Number of edges: 604016 (train: 554592, validate: 49416, test: 8)</span><span class="se">\n\n</span><span class="s">======CGD Configuration======</span><span class="se">\n</span><span class="s">maxSupersteps: 20</span><span class="se">\n</span><span class="s">featureDimension: 3</span><span class="se">\n</span><span class="s">lambda: 0.065000</span><span class="se">\n</span><span class="s">biasOn: false</span><span class="se">\n</span><span class="s">convergenceThreshold: 0.000000</span><span class="se">\n</span><span class="s">numCGDIters: 3</span><span class="se">\n</span><span class="s">maxVal: Infinity</span><span class="se">\n</span><span class="s">minVal: -Infinity</span><span class="se">\n</span><span class="s">learningCurveOutputInterval: 1</span><span class="se">\n\n</span><span class="s">======Learning Progress======</span><span class="se">\n</span><span class="s">superstep = 2</span><span class="se">\t</span><span class="s">cost(train) = 21828.395401</span><span class="se">\t</span><span class="s">rmse(validate) = 1.317799</span><span class="se">\t</span><span class="s">rmse(test) = 3.663107</span><span class="se">\n</span><span class="s">superstep = 4</span><span class="se">\t</span><span class="s">cost(train) = 18126.623261</span><span class="se">\t</span><span class="s">rmse(validate) = 1.247019</span><span class="se">\t</span><span class="s">rmse(test) = 3.565567</span><span class="se">\n</span><span class="s">superstep = 6</span><span class="se">\t</span><span class="s">cost(train) = 15902.042769</span><span class="se">\t</span><span class="s">rmse(validate) = 1.209014</span><span class="se">\t</span><span class="s">rmse(test) = 3.677774</span><span class="se">\n</span><span class="s">superstep = 8</span><span class="se">\t</span><span class="s">cost(train) = 14274.718100</span><span class="se">\t</span><span class="s">rmse(validate) = 1.196888</span><span class="se">\t</span><span class="s">rmse(test) = 3.656467</span><span class="se">\n</span><span class="s">superstep = 10</span><span class="se">\t</span><span class="s">cost(train) = 13226.419606</span><span class="se">\t</span><span class="s">rmse(validate) = 1.189605</span><span class="se">\t</span><span class="s">rmse(test) = 3.699198</span><span class="se">\n</span><span class="s">superstep = 12</span><span class="se">\t</span><span class="s">cost(train) = 12438.789925</span><span class="se">\t</span><span class="s">rmse(validate) = 1.187416</span><span class="se">\t</span><span class="s">rmse(test) = 3.653920</span><span class="se">\n</span><span class="s">superstep = 14</span><span class="se">\t</span><span class="s">cost(train) = 11791.454643</span><span class="se">\t</span><span class="s">rmse(validate) = 1.188480</span><span class="se">\t</span><span class="s">rmse(test) = 3.670579</span><span class="se">\n</span><span class="s">superstep = 16</span><span class="se">\t</span><span class="s">cost(train) = 11256.035422</span><span class="se">\t</span><span class="s">rmse(validate) = 1.187924</span><span class="se">\t</span><span class="s">rmse(test) = 3.742146</span><span class="se">\n</span><span class="s">superstep = 18</span><span class="se">\t</span><span class="s">cost(train) = 10758.691712</span><span class="se">\t</span><span class="s">rmse(validate) = 1.189491</span><span class="se">\t</span><span class="s">rmse(test) = 3.658956</span><span class="se">\n</span><span class="s">superstep = 20</span><span class="se">\t</span><span class="s">cost(train) = 10331.742207</span><span class="se">\t</span><span class="s">rmse(validate) = 1.191606</span><span class="se">\t</span><span class="s">rmse(test) = 3.757683&#39;</span><span class="p">}</span>
-</pre></div>
-</div>
-<p>Report may show zero edges and/or vertices if parameters were supplied
-wrong, or if the graph was not the expected input:</p>
-<div class="code highlight-python"><div class="highlight"><pre>======Graph Statistics======
-Number of vertices: 12673 (left: 12673, right: 0)
-Number of edges: 0 (train: 0, validate: 0, test: 0)
-</pre></div>
-</div>
+<p>See :doc: &#8216;here &lt;new&gt;&#8217; for examples.</p>
 </dd></dl>
 
 </div>
@@ -246,7 +211,7 @@ Number of edges: 0 (train: 0, validate: 0, test: 0)
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 23, 2015.
+      Last updated on Oct 26, 2015.
       </li>
     </ul>
     </div>

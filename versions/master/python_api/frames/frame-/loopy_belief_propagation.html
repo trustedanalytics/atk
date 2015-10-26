@@ -356,22 +356,89 @@ If this condition is not met, the algorithm will continue up to the maximum
 number of <a class="reference internal" href="../../../glossary.html#term-supersteps"><span class="xref std std-term">supersteps</span></a>.</p>
 <p>See: <a class="reference external" href="http://en.wikipedia.org/wiki/Belief_propagation">http://en.wikipedia.org/wiki/Belief_propagation</a>.</p>
 <p class="rubric">Examples</p>
-<p>input frame (lbp.csv)
-&#8220;a&#8221;        &#8220;b&#8221;        &#8220;c&#8221;        &#8220;d&#8221;
-1,         2,         0.5,       &#8220;0.5,0.5&#8221;
-2,         3,         0.4,       &#8220;-1,-1&#8221;
-3,         1,         0.1,       &#8220;0.8,0.2&#8221;</p>
-<p>script</p>
-<p>ta.connect()
-s = [(&#8220;a&#8221;, ta.int32), (&#8220;b&#8221;, ta.int32), (&#8220;c&#8221;, ta.float32), (&#8220;d&#8221;, ta.vector(2))]
-d = &#8220;lbp.csv&#8221;
-c = ta.CsvFile(d,s)
-f = ta.Frame(c)
-r = f.loopy_belief_propagation(&#8220;a&#8221;, &#8220;b&#8221;, &#8220;c&#8221;, &#8220;d&#8221;, &#8220;results&#8221;)
-r[&#8216;frame&#8217;].inspect()
-r[&#8216;report&#8217;]</p>
-<p>The expected output is like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">u&#39;value&#39;</span><span class="p">:</span> <span class="s">u&#39;======Graph Statistics======</span><span class="se">\n</span><span class="s">Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)</span><span class="se">\n</span><span class="s">Number of edges: 318400</span><span class="se">\n\n</span><span class="s">======LBP Configuration======</span><span class="se">\n</span><span class="s">maxSupersteps: 10</span><span class="se">\n</span><span class="s">convergenceThreshold: 0.000000</span><span class="se">\n</span><span class="s">anchorThreshold: 0.900000</span><span class="se">\n</span><span class="s">smoothing: 2.000000</span><span class="se">\n</span><span class="s">bidirectionalCheck: false</span><span class="se">\n</span><span class="s">ignoreVertexType: false</span><span class="se">\n</span><span class="s">maxProduct: false</span><span class="se">\n</span><span class="s">power: 0.000000</span><span class="se">\n\n</span><span class="s">======Learning Progress======</span><span class="se">\n</span><span class="s">superstep = 1</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.594534</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.542366</span><span class="se">\t</span><span class="s">avgTestDelta = 0.542801</span><span class="se">\n</span><span class="s">superstep = 2</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.322596</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.373647</span><span class="se">\t</span><span class="s">avgTestDelta = 0.371556</span><span class="se">\n</span><span class="s">superstep = 3</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.180468</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.194503</span><span class="se">\t</span><span class="s">avgTestDelta = 0.198478</span><span class="se">\n</span><span class="s">superstep = 4</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.113280</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.117436</span><span class="se">\t</span><span class="s">avgTestDelta = 0.122555</span><span class="se">\n</span><span class="s">superstep = 5</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.076510</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.074419</span><span class="se">\t</span><span class="s">avgTestDelta = 0.077451</span><span class="se">\n</span><span class="s">superstep = 6</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.051452</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.051683</span><span class="se">\t</span><span class="s">avgTestDelta = 0.052538</span><span class="se">\n</span><span class="s">superstep = 7</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.038257</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.033629</span><span class="se">\t</span><span class="s">avgTestDelta = 0.034017</span><span class="se">\n</span><span class="s">superstep = 8</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.027924</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.026722</span><span class="se">\t</span><span class="s">avgTestDelta = 0.025877</span><span class="se">\n</span><span class="s">superstep = 9</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.022886</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.019267</span><span class="se">\t</span><span class="s">avgTestDelta = 0.018190</span><span class="se">\n</span><span class="s">superstep = 10</span><span class="se">\t</span><span class="s">avgTrainDelta = 0.018271</span><span class="se">\t</span><span class="s">avgValidateDelta = 0.015924</span><span class="se">\t</span><span class="s">avgTestDelta = 0.015377&#39;</span><span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">vector</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rows</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span><span class="s">&quot;0.5,0.5&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="s">&quot;0.8,0.2&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s">&quot;0.8,0.2&quot;</span><span class="p">]</span> <span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span> <span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">s</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]    a   b  c    d</span>
+<span class="go">============================</span>
+<span class="go">[0]    1   2  0.5  [0.5,0.5]</span>
+<span class="go">[1]    2   3  0.4  [0.8,0.2]</span>
+<span class="go">[2]    3   1  0.1  [0.8,0.2]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">loopy_belief_propagation</span><span class="p">(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="s">&quot;d&quot;</span><span class="p">,</span> <span class="s">&quot;results&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s">&#39;frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]    features</span>
+<span class="go">===============</span>
+<span class="go">[1]   [0.5,0.5]</span>
+<span class="go">[2]   [0.6,0.4]</span>
+<span class="go">[3]   [0.8,0.2]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">[</span><span class="s">&#39;report&#39;</span><span class="p">]</span>
+<span class="go">======Graph Statistics======</span>
+<span class="go">Number of vertices: 80000 (train: 56123, validate: 15930, test: 7947)</span>
+<span class="go">Number of edges: 318400</span>
+
+<span class="go">======LBP Configuration======</span>
+<span class="go">     maxSupersteps: 10</span>
+<span class="go">     convergenceThreshold: 0.000000</span>
+<span class="go">     anchorThreshold: 0.900000</span>
+<span class="go">     smoothing: 2.000000</span>
+<span class="go">     bidirectionalCheck: false</span>
+<span class="go">     ignoreVertexType: false</span>
+<span class="go">     maxProduct: false</span>
+<span class="go">     power: 0.000000</span>
+
+<span class="go">======Learning Progress======</span>
+<span class="go">     superstep = 1</span>
+<span class="go">         avgTrainDelta = 0.594534</span>
+<span class="go">         avgValidateDelta = 0.542366</span>
+<span class="go">         avgTestDelta = 0.542801</span>
+<span class="go">     superstep = 2</span>
+<span class="go">         avgTrainDelta = 0.322596</span>
+<span class="go">         avgValidateDelta = 0.373647</span>
+<span class="go">         avgTestDelta = 0.371556</span>
+<span class="go">     superstep = 3</span>
+<span class="go">         avgTrainDelta = 0.180468</span>
+<span class="go">         avgValidateDelta = 0.194503</span>
+<span class="go">         avgTestDelta = 0.198478</span>
+<span class="go">     superstep = 4</span>
+<span class="go">         avgTrainDelta = 0.113280</span>
+<span class="go">         avgValidateDelta = 0.117436</span>
+<span class="go">         avgTestDelta = 0.122555</span>
+<span class="go">     superstep = 5</span>
+<span class="go">         avgTrainDelta = 0.076510</span>
+<span class="go">         avgValidateDelta = 0.074419</span>
+<span class="go">         avgTestDelta = 0.077451</span>
+<span class="go">     superstep = 6</span>
+<span class="go">        avgTrainDelta = 0.051452</span>
+<span class="go">         avgValidateDelta = 0.051683</span>
+<span class="go">         avgTestDelta = 0.052538</span>
+<span class="go">     superstep = 7</span>
+<span class="go">         avgTrainDelta = 0.038257</span>
+<span class="go">         avgValidateDelta = 0.033629</span>
+<span class="go">         avgTestDelta = 0.034017</span>
+<span class="go">     superstep = 8</span>
+<span class="go">         avgTrainDelta = 0.027924</span>
+<span class="go">         avgValidateDelta = 0.026722</span>
+<span class="go">         avgTestDelta = 0.025877</span>
+<span class="go">     superstep = 9</span>
+<span class="go">         avgTrainDelta = 0.022886</span>
+<span class="go">         avgValidateDelta = 0.019267</span>
+<span class="go">         avgTestDelta = 0.018190</span>
+<span class="go">     superstep = 10</span>
+<span class="go">         avgTrainDelta = 0.018271</span>
+<span class="go">         avgValidateDelta = 0.015924</span>
+<span class="go">         avgTestDelta = 0.015377</span>
+<span class="go">&lt;/skip&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -399,7 +466,7 @@ r[&#8216;report&#8217;]</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 23, 2015.
+      Last updated on Oct 26, 2015.
       </li>
     </ul>
     </div>

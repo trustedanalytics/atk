@@ -145,36 +145,35 @@ negative percentages).</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em> accessing a frame that contains a single
 column named <em>obs</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  obs:int32</span>
-<span class="go">/-----------/</span>
-<span class="go">     0</span>
-<span class="go">     1</span>
-<span class="go">     2</span>
-<span class="go">     0</span>
-<span class="go">     1</span>
-<span class="go">     2</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  obs</span>
+<span class="go">========</span>
+<span class="go">[0]    0</span>
+<span class="go">[1]    1</span>
+<span class="go">[2]    2</span>
+<span class="go">[3]    0</span>
+<span class="go">[4]    1</span>
+<span class="go">[5]    2</span>
 </pre></div>
 </div>
 <p>The cumulative percent sum for column <em>obs</em> is obtained by:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_percent</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>The Frame <em>my_frame</em> now contains two columns <em>obs</em> and
 <em>obsCumulativePercentSum</em>.
 They contain the original data and the cumulative percent sum,
 respectively:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  obs:int32   obs_cumulative_percent:float64</span>
-<span class="go">/--------------------------------------------/</span>
-<span class="go">     0                             0.0</span>
-<span class="go">     1                             0.16666666</span>
-<span class="go">     2                             0.5</span>
-<span class="go">     0                             0.5</span>
-<span class="go">     1                             0.66666666</span>
-<span class="go">     2                             1.0</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  obs  obs_cumulative_percent</span>
+<span class="go">================================</span>
+<span class="go">[0]    0                     0.0</span>
+<span class="go">[1]    1          0.166666666667</span>
+<span class="go">[2]    2                     0.5</span>
+<span class="go">[3]    0                     0.5</span>
+<span class="go">[4]    1          0.666666666667</span>
+<span class="go">[5]    2                     1.0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -202,7 +201,7 @@ respectively:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 23, 2015.
+      Last updated on Oct 26, 2015.
       </li>
     </ul>
     </div>

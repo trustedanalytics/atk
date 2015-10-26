@@ -42,3 +42,7 @@
             <python_api/models/model-collaborative_filtering/train>` for more information.
     See :ref:`Collaborative Filtering Train
     <python_api/models/model-collaborative_filtering/train>` for more information.
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.
