@@ -32,7 +32,8 @@ cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarball
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
-jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
+
+jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar"
 
 #popd
 
