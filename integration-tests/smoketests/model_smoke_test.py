@@ -37,18 +37,11 @@ class ModelSmokeTest(unittest.TestCase):
     - Tests should be short and isolated.
     """
     def test_model(self):
-        print "Initialize KMeansModel object with name"
-        k1 = ta.KMeansModel(name='smoke_kmeans_model')
-        name = k1.name
-
         print "Initialize KMeansModel object"
-        k2 = ta.KMeansModel()
-
-        print "Initialize LogisticRegressionModel object with name"
-        l1= ta.LogisticRegressionModel(name='myLogisticRegressionModel1')
+        k = ta.KMeansModel()
 
         print "Initialize LogisticRegressionModel object"
-        l2 = ta.LogisticRegressionModel()
+        l = ta.LogisticRegressionModel()
 
         print "Initialize NaiveBayesModel object"
         n = ta.NaiveBayesModel()
