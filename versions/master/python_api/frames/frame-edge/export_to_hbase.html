@@ -171,6 +171,16 @@ save frame1 into base as table1 (overwrite with initial + appended data)</p>
 </dl>
 </li>
 </ol>
+<p>Vector scenarios (see below):</p>
+<p>Vectors are not directly supported by HBase (which represents data as byte arrays) or the plugin.
+While is true that a vector can be saved because of the byte array conversion for hbase, the following
+is actually the recommended practice:</p>
+<ol class="arabic simple">
+<li>Convert the vector to csv (in python, outside ATK)</li>
+<li>save the csv as string in the database (using ATK export_to_hbase)</li>
+<li>read the cell as string (using ATK, read from hbase</li>
+<li>convert the csv to vector (in python, outside ATK)</li>
+</ol>
 </dd></dl>
 
 </div>
@@ -196,7 +206,7 @@ save frame1 into base as table1 (overwrite with initial + appended data)</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Oct 26, 2015.
+      Last updated on Oct 27, 2015.
       </li>
     </ul>
     </div>
