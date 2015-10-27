@@ -52,14 +52,6 @@ echo $jarPath
 #enable this to copy the regular launcher.jar to the correct place
 cp -v $jarPath package/tarballs/$package/launcher.jar
 
-# DAAL jar and dynamic libraries
-cp -v engine-plugins/daal-plugins/lib/daal.jar package/tarballs/$package/lib/
-cp -v engine-plugins/daal-plugins/lib/libAtkDaalJavaAPI.so package/tarballs/$package/lib/
-cp -v engine-plugins/daal-plugins/lib/libiomp5.so package/tarballs/$package/lib/
-cp -v engine-plugins/daal-plugins/lib/libJavaAPI.so package/tarballs/$package/lib/
-cp -v engine-plugins/daal-plugins/lib/libtbb.so.2 package/tarballs/$package/lib/
-
-
 mkdir -p package/tarballs/$package/client
 ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
 cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz package/tarballs/$package/client

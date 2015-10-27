@@ -39,13 +39,6 @@ cp -v ../conf/examples/application.conf.tpl ${BUILD_DIR}/etc/trustedanalytics/re
 cp -v ../conf/examples/parcel.conf.tpl      ${BUILD_DIR}/etc/trustedanalytics/rest-server
 cp -v ../conf/examples/application.conf.single-system.tpl ${BUILD_DIR}/etc/trustedanalytics/rest-server
 
-# DAAL jar and dynamic libraries
-cp -v ../engine-plugins/daal-plugins/lib/daal.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-cp -v ../engine-plugins/daal-plugins/lib/libAtkDaalJavaAPI.so ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-cp -v ../engine-plugins/daal-plugins/lib/libiomp5.so ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-cp -v ../engine-plugins/daal-plugins/lib/libJavaAPI.so ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-cp -v ../engine-plugins/daal-plugins/lib/libtbb.so.2 ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-
 pushd $SCRIPTPATH
     cp -Rv assets/* ${BUILD_DIR}
 popd
