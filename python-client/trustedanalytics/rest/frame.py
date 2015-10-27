@@ -618,18 +618,6 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         target._label = source._label
         target._graph = source._graph
 
-    def flatten_column(self, frame, column=None, delimiter=None):
-        arguments = {'frame': frame.uri,
-                     'columns': [column],
-                     'delimiters': None if delimiter is None else [delimiter]}
-        executor.execute('frame/flatten_columns', self, arguments)
-
-    def unflatten_column(self, frame, columns=None, delimiter=None):
-        arguments = {'frame': frame.uri,
-             'columns': columns if isinstance(columns, list) else [columns],
-             'delimiter': None if delimiter is None else [delimiter]}
-        executor.execute('frame/unflatten_columns', self, arguments)
-
 class FrameInfo(object):
     """
     JSON-based Server description of a Frame

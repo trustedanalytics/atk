@@ -18,7 +18,6 @@
 Frame entity types
 """
 
-import types
 import logging
 logger = logging.getLogger(__name__)
 
@@ -161,9 +160,8 @@ def __drop(*items):
     flat_item_list = []
 
     for item in items:
-        if isinstance(item, types.ListType):
-            for list_item in item:
-                flat_item_list.append(list_item)
+        if isinstance(item, list):
+            flat_item_list.extend(item)
         else:
             flat_item_list.append(item)
 
@@ -1350,7 +1348,10 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         The original row is deleted.
         """
 
-        self._backend.flatten_column(self, column, delimiter)
+        if delimiter is None:
+            delimiter = [","]
+
+        self.flatten_columns(column, delimiter)
 
     @api
     @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
@@ -1368,7 +1369,10 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         The column datatypes are changed to string.
         """
 
-        self._backend.unflatten_column(self, columns, delimiter)
+        if delimiter is None:
+            delimiter = [","]
+
+        self.unflatten_columns(columns, delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):

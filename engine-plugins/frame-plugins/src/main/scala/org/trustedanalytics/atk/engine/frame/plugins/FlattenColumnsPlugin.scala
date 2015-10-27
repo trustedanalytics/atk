@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import java.util.regex.Pattern
@@ -65,31 +66,37 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
     val frame: SparkFrame = arguments.frame
     var schema = frame.schema
     var flattener: RDD[Row] => RDD[Row] = null
-    val columnIndexes = arguments.columns.map(c => schema.columnIndex(c))
+    val columnIndices = arguments.columns.map(c => schema.columnIndex(c))
     val columnDataTypes = arguments.columns.map(c => schema.columnDataType(c))
 
     // If delimiters were provided, use them, otherwise use the default commas
-    var delimiters = if (arguments.delimiters.isDefined) arguments.delimiters.get else arguments.columns.map(c => ",")
+    var delimiters = Array.fill(arguments.columns.size) { if (arguments.delimiters != null && arguments.delimiters.size == 1) arguments.delimiters(0) else "," }
 
-    // If just one delimiter was provided, just use the same one for all columns
-    if (delimiters.size == 1) {
-      delimiters = arguments.columns.map(c => delimiters(0))
-    }
-
-    // If the number of delimiters provided does not match the number of columns specified, throw an exception
-    if (delimiters.size != arguments.columns.size) {
-      throw new IllegalArgumentException(s"The number of delimiters provided does not match the number of columns provided.")
-    }
+    var stringDelimiterCount = 0
 
     for (i <- arguments.columns.indices) {
       columnDataTypes(i) match {
         case DataTypes.vector(length) =>
           schema = schema.convertType(arguments.columns(i), DataTypes.float64)
+        case DataTypes.string =>
+          if (arguments.delimiters.size > 1) {
+            if (arguments.delimiters.size > stringDelimiterCount) {
+              delimiters(i) = arguments.delimiters(stringDelimiterCount)
+              stringDelimiterCount += 1
+            }
+            else
+              throw new IllegalArgumentException(s"The number of delimiters provided is less than the number of string columns being flattened.")
+          }
         case _ =>
+          val illegalDataType = columnDataTypes(i).toString
+          throw new IllegalArgumentException(s"Invalid column ('${arguments.columns(i)}') data type provided: ${illegalDataType}. Only string or vector columns can be flattened.")
       }
     }
 
-    flattener = FlattenColumnFunctions.flattenRddByColumnIndexes(columnIndexes, columnDataTypes, delimiters)
+    if (stringDelimiterCount > 0 && stringDelimiterCount < arguments.delimiters.size)
+      throw new IllegalArgumentException(s"The number of delimiters provided is more than the number of string columns being flattened.")
+
+    flattener = FlattenColumnFunctions.flattenRddByColumnIndices(columnIndices, columnDataTypes, delimiters.toList)
 
     // run the operation
     val flattenedRDD = flattener(frame.rdd)
@@ -117,8 +124,8 @@ object FlattenColumnFunctions extends Serializable {
    * @param rdd RDD for flattening
    * @return new RDD with columns flattened
    */
-  def flattenRddByColumnIndexes(indices: List[Int],
-                                dataTypes: List[org.trustedanalytics.atk.domain.schema.DataTypes.DataType],
+  def flattenRddByColumnIndices(indices: List[Int],
+                                dataTypes: List[DataType],
                                 delimiters: List[String] = null)(rdd: RDD[Row]): RDD[Row] = {
     val flattener = flattenRowByColumnIndices(indices, dataTypes, delimiters)_
     rdd.flatMap(row => flattener(row))
@@ -133,7 +140,7 @@ object FlattenColumnFunctions extends Serializable {
    * @return flattened out row/rows
    */
   private[frame] def flattenRowByColumnIndices(indices: List[Int],
-                                               dataTypes: List[org.trustedanalytics.atk.domain.schema.DataTypes.DataType],
+                                               dataTypes: List[DataType],
                                                delimiters: List[String])(row: Row): Array[Row] = {
     val rowBuffer = new scala.collection.mutable.ArrayBuffer[Row]()
     for (i <- indices.indices) {
@@ -158,7 +165,7 @@ object FlattenColumnFunctions extends Serializable {
                     if (dataTypes(tempColIndex) == DataTypes.string)
                       r(indices(tempColIndex)) = ""
                     else
-                      r(indices(tempColIndex)) = ""
+                      r(indices(tempColIndex)) = 0.0
                   }
                 }
 
@@ -193,7 +200,7 @@ object FlattenColumnFunctions extends Serializable {
                   if (dataTypes(tempColIndex) == DataTypes.string)
                     r(indices(tempColIndex)) = ""
                   else
-                    r(indices(tempColIndex)) = ""
+                    r(indices(tempColIndex)) = 0.0
                 }
               }
               // Add new row to the rowBuffer
