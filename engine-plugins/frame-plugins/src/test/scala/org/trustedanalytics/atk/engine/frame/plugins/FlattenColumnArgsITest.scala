@@ -216,6 +216,6 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
     result(12) shouldBe Row("k", 22)
     result(13) shouldBe Row("l", 2)
     result(14) shouldBe Row("m", 10)
-    result(15) shouldBe Row("n", "")
+    result(15) shouldBe Row("n", 0)
   }
 }
