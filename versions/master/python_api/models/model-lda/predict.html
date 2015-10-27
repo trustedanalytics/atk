@@ -154,37 +154,7 @@ The data returned is composed of multiple keys:</p>
 <p>Predicts conditional probabilities of topics given document using trained Latent Dirichlet Allocation model.
 The input document is represented as a list of strings</p>
 <p class="rubric">Examples</p>
-<p>Inspect the input frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">doc_id:unicode   word_id:unicode   word_count:int64</span>
-<span class="go">\-------------------------------------------------------\</span>
-<span class="go">  nytimes          harry                            3</span>
-<span class="go">  nytimes          economy                         35</span>
-<span class="go">  nytimes          jobs                            40</span>
-<span class="go">  nytimes          magic                            1</span>
-<span class="go">  nytimes          realestate                      15</span>
-<span class="go">  nytimes          movies                           6</span>
-<span class="go">  economist        economy                         50</span>
-<span class="go">  economist        jobs                            35</span>
-<span class="go">  economist        realestate                      20</span>
-<span class="go">  economist        movies                           1</span>
-</pre></div>
-</div>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;secrets&#39;</span><span class="p">,</span> <span class="s">&#39;magic&#39;</span><span class="p">,</span> <span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;chamber&#39;</span> <span class="s">&#39;test&#39;</span><span class="p">])</span>
-</pre></div>
-</div>
-<p>The variable <em>prediction</em> is a dictionary with three keys:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_words_percentage</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">new_words_count</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s">&#39;new_words_count&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">prediction</span><span class="p">)</span>
-
-<span class="go">{u&#39;topics_given_doc&#39;: [0.04150190747884333, 0.7584980925211566], u&#39;new_words_percentage&#39;: 20.0, u&#39;new_words_count&#39;: 1}</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=773303930</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_classes=2</em>, <em>num_trees=1</em>, <em>impurity='gini'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=1490584304</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build Random Forests Classifier model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -154,7 +154,7 @@ Build Random Forests Classifier model.</p>
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=773303930)</p>
+<p><strong>seed</strong> : int32 (default=1490584304)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -190,26 +190,7 @@ If &#8220;auto&#8221; is set, this is based on num_trees: if num_trees == 1, set
 </table>
 <p>Creating a Random Forests Classifier Model using the observation columns and label column.</p>
 <p class="rubric">Examples</p>
-<p>Train Random Forest Model as a classifier.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestClassifierModel</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span><span class="s">&#39;Class&#39;</span><span class="p">,[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">],</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span>
-<span class="go">{u&#39;feature_subset_category&#39;: u&#39;all&#39;,</span>
-<span class="go"> u&#39;impurity&#39;: u&#39;gini&#39;,</span>
-<span class="go"> u&#39;label_column&#39;: u&#39;Class&#39;,</span>
-<span class="go"> u&#39;max_bins&#39;: 100,</span>
-<span class="go"> u&#39;max_depth&#39;: 4,</span>
-<span class="go"> u&#39;num_classes&#39;: 2,</span>
-<span class="go"> u&#39;num_nodes&#39;: 11,</span>
-<span class="go"> u&#39;num_trees&#39;: 1,</span>
-<span class="go"> u&#39;observation_columns&#39;: [u&#39;Dim_1&#39;, u&#39;Dim_2&#39;],</span>
-<span class="go"> u&#39;seed&#39;: -579418825}</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_classifier_output</span><span class="p">[</span><span class="s">&#39;num_nodes&#39;</span><span class="p">]</span>
-<span class="go">11</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

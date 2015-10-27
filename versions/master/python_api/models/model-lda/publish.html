@@ -137,13 +137,7 @@ Creates a tar file that will used as input to the scoring engine</p>
 <dd>The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.</dd>
 </dl>
 <p class="rubric">Examples</p>
-<p>Publish a trained Lda Model for scoring</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;MyLdaModel&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
-<span class="go">&lt;Path in HDFS to model&#39;s tar file&gt;</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

@@ -136,13 +136,7 @@ Creates a tar file that will be used as input to the scoring engine</p>
 on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
 This model can then be used to predict the target value of an observation.</p>
 <p class="rubric">Examples</p>
-<p>Publish a trained Random Forest Regressor model for scoring</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestRegressorModel</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span><span class="s">&#39;Class&#39;</span><span class="p">,[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
-<span class="go">&lt;Path in HDFS to model&#39;s tar file&gt;</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

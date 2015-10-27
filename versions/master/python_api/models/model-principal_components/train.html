@@ -163,23 +163,7 @@ Default is the number of observation columns</p>
 </table>
 <p>Creating a PrincipalComponents Model using the observation columns.</p>
 <p class="rubric">Examples</p>
-<p>Train a Principal Components Model</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PrincipalComponentsModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;principalcomponentsmodel&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,[</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="s">&quot;2&quot;</span><span class="p">,</span><span class="s">&quot;3&quot;</span><span class="p">],</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
-<span class="go">{u&#39;column_means&#39;: [3.0, 1.5699999999999998, 0.30000000000000004],</span>
-<span class="go"> u&#39;k&#39;: 3,</span>
-<span class="go"> u&#39;mean_centered&#39;: True,</span>
-<span class="go"> u&#39;observation_columns&#39;: [u&#39;1&#39;, u&#39;2&#39;, u&#39;3&#39;],</span>
-<span class="go"> u&#39;right_singular_vectors&#39;: [[-0.9880604079662845, 0.1524554460423363,0.022225372472291664],</span>
-<span class="go">   [-0.1475177133741632, -0.9777763055278146, 0.1489698647016758],</span>
-<span class="go">   [0.044442709754897426, 0.14391258916581845, 0.9885919341311823]],</span>
-<span class="go"> u&#39;singular_values&#39;: [1.9528500871335064,1.258951004642986,0.3498841309506238]}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">right_singular_vectors</span> <span class="o">=</span> <span class="n">output</span><span class="p">[</span><span class="s">&#39;right_singular_vectors&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">right_singular_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="go"> [-0.9880604079662845, 0.1524554460423363, 0.022225372472291664]</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

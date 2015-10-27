@@ -163,19 +163,7 @@ Predict using principal components model.</p>
 </table>
 <p>Predicting on a dataframe&#8217;s columns using a PrincipalComponents Model.</p>
 <p class="rubric">Examples</p>
-<p>Predict using a Principal Components Model</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PrincipalComponentsModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;principalcomponentsmodel&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,[</span><span class="s">&quot;1&quot;</span><span class="p">,</span><span class="s">&quot;2&quot;</span><span class="p">,</span><span class="s">&quot;3&quot;</span><span class="p">],</span><span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="n">mean_centered</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">t_square_index</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;predictedFrame&#39;</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="go">    1:float64   2:float64   3:float64   4:float64   5:float64   6:float64   7:float64   8:float64   9:float64   10:float64   11:float64      p_1:float64       p_2:float64        p_3:float64       t_squared_index:float64</span>
-<span class="go">    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="go">            2.6         1.7         0.3         1.5         0.8         0.7         0.7         1.5         0.7          0.6          0.6   0.376046860448     -0.188093098136     0.0104759334223    0.0602987596369</span>
-<span class="go">            3.3         1.8         0.4         0.7         0.9         0.8         0.3         1.7         0.5          0.4          0.3   -0.32590292549     -0.164760657542     0.139789874036     0.204603929413</span>
-<span class="go">            3.5         1.7         0.3         1.7         0.6         0.4         0.6         1.3         0.4          0.5          0.1   -0.513207506722    -0.0508831966974    0.0304787686474    0.0782853147235</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

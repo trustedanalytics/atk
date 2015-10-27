@@ -148,20 +148,7 @@ a new column with predicted label for each observation.</p>
 <p>Predict the labels for a test frame using trained Random Forest Classifier model,
 and create a new frame revision with existing columns and a new predicted label&#8217;s column.</p>
 <p class="rubric">Examples</p>
-<p>Predict using a Random Forest Classifier Model.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestClassifierModel</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span><span class="s">&#39;Class&#39;</span><span class="p">,[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">],</span><span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_classifier_output</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">train_frame</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predict_classifier_output</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="go">  Class:int32   Dim_1:float64   Dim_2:float64   predicted_class:int32</span>
-<span class="go">-----------------------------------------------------------------------</span>
-<span class="go">    1           16.8973559126    2.6933495054                1</span>
-<span class="go">    1            5.5548729596    2.7777687995                1</span>
-<span class="go">    0           46.1810010826    3.1611961917                0</span>
-<span class="go">    0           44.3117586448    3.3458963222                0</span>
-<span class="go">    0           34.6334526911    3.6429838715                0</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>

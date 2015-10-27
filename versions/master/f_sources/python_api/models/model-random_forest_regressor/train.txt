@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=-1519576932, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=1392554283, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Regressor model.
@@ -71,7 +71,7 @@
 
 
 
-        **seed** : int32 (default=-1519576932)
+        **seed** : int32 (default=1392554283)
 
         ..
 
@@ -119,47 +119,4 @@
 
     Examples
     --------
-    Train Random Forest Model as a regressor.
-
-    .. only:: html
-
-        .. code::
-
-            >>> my_model = ta.RandomForestRegressorModel()
-            >>> train_regressor_output = my_model.train(train_frame, 'Class', ['Dim_1','Dim_2'])
-
-            >>> train_regressor_output
-            {u'feature_subset_category': u'all',
-             u'impurity': u'variance',
-             u'label_column': u'Class',
-             u'max_bins': 100,
-             u'max_depth': 4,
-             u'num_nodes': 11,
-             u'num_trees': 1,
-             u'observation_columns': [u'Dim_1', u'Dim_2'],
-             u'seed': 1622798860}
-
-            >>> train_regressor_output['impurity']
-            'variance'
-
-    .. only:: latex
-
-        .. code::
-
-            >>> my_model = ta.RandomForestRegressorModel()
-            >>> train_regressor_output = my_model.train(train_frame, 'Class', ['Dim_1','Dim_2'])
-
-            >>> train_regressor_output
-            {u'feature_subset_category': u'all',
-             u'impurity': u'variance',
-             u'label_column': u'Class',
-             u'max_bins': 100,
-             u'max_depth': 4,
-             u'num_nodes': 11,
-             u'num_trees': 1,
-             u'observation_columns': [u'Dim_1', u'Dim_2'],
-             u'seed': 1622798860}
-
-            >>> train_regressor_output['impurity']
-            'variance'
-
+    See :doc:`here <new>` for examples.
