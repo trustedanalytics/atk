@@ -149,9 +149,9 @@ class FrameFlattenColumnTest(unittest.TestCase):
             [1,"a","biscuits"],
             [1,"","gravy"],
             [2,"a","ham"],
-            [2,"a","cheese"],
+            [2,"","cheese"],
             [3,"a","grilled"],
-            [3,"a","tuna"],
+            [3,"","tuna"],
             [4,"a","mac"],
             [4,"b","cheese"],
             [4,"c",""],
@@ -164,7 +164,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
             [8,"","big"],
             [8,"","mac"],
             [9,"c","fries"],
-            [9,"d","fries"],
+            [9,"d",""],
             [10,"e",""]
         ]
 
