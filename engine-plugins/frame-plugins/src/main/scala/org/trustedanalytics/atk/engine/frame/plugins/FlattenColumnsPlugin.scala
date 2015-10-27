@@ -77,7 +77,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
         case DataTypes.vector(length) =>
           schema = schema.convertType(arguments.columns(i), DataTypes.float64)
         case DataTypes.string =>
-          if (arguments.delimiters.get.size > 1) {
+          if (arguments.delimiters.isDefined && arguments.delimiters.get.size > 1) {
             if (arguments.delimiters.get.size > stringDelimiterCount) {
               delimiters(i) = arguments.delimiters.get(stringDelimiterCount)
               stringDelimiterCount += 1
