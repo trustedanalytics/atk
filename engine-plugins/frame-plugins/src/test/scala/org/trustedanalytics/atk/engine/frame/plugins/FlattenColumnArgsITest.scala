@@ -25,7 +25,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
   "flattenRddByStringColumnIndex" should "create separate rows when flattening entries" in {
     val carOwnerShips = List(Row("Bob", "Mustang,Camry"), Row("Josh", "Neon,CLK"), Row("Alice", "PT Cruiser,Avalon,F-150"), Row("Tim", "Beatle"), Row("Becky", ""))
     val rdd = sparkContext.parallelize(carOwnerShips)
-    val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(1), List(DataTypes.string), List(","))(rdd)
+    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(1), List(DataTypes.string), List(","))(rdd)
     val result = flattened.take(9)
     println(result.toList)
     result(0) shouldBe Row("Bob", "Mustang")
@@ -51,7 +51,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       val rdd = sparkContext.parallelize(rows)
       // Flatten column 1
       var startTime = System.nanoTime()
-      val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(1), List(DataTypes.string), List(","))(rdd)
+      val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(1), List(DataTypes.string), List(","))(rdd)
       var endTime = System.nanoTime()
       assertResult(19) {
         flattened.count()
@@ -60,7 +60,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       count += 1
       // Flatten column 0
       startTime = System.nanoTime()
-      FlattenColumnFunctions.flattenRddByColumnIndexes(List(0), List(DataTypes.string), List(","))(rdd)
+      FlattenColumnFunctions.flattenRddByColumnIndices(List(0), List(DataTypes.string), List(","))(rdd)
       endTime = System.nanoTime()
       elapsedTime(count) = endTime - startTime
       count += 1
@@ -88,7 +88,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       val rdd = sparkContext.parallelize(rows)
       // Flatten columns 0 and 1
       val startTime = System.nanoTime()
-      val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(0, 1), List(DataTypes.string, DataTypes.string), List(",", ","))(rdd)
+      val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(0, 1), List(DataTypes.string, DataTypes.string), List(",", ","))(rdd)
       val endTime = System.nanoTime()
       assertResult(23) {
         flattened.count()
@@ -121,7 +121,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       val rdd = sparkContext.parallelize(rows)
       // Flatten columns 0 and 1
       val startTime = System.nanoTime()
-      val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(0, 1), List(DataTypes.string, DataTypes.vector(3)), List(",", ""))(rdd)
+      val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(0, 1), List(DataTypes.string, DataTypes.vector(3)), List(",", ""))(rdd)
       val endTime = System.nanoTime()
       assertResult(12) {
         flattened.count()
@@ -147,7 +147,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     val rows = List(Row("a,b,c", "10,18,20"), Row("d,e", "7,8"), Row("f,g,h", "17,2"), Row("i,j", "37,6,8"))
     val rdd = sparkContext.parallelize(rows)
     // Flatten columns and check row count
-    val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(columnIndexes, List(DataTypes.string, DataTypes.string), delimiters)(rdd)
+    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(columnIndexes, List(DataTypes.string, DataTypes.string), delimiters)(rdd)
     assertResult(11) {
       flattened.count()
     }
@@ -173,7 +173,7 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       Row("pi", Vector[Double](3.14, 6.28, 9.42)),
       Row("neg", Vector[Double](-1.0, -5.5, 8)))
     val rdd = sparkContext.parallelize(vectorShips)
-    val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(1), List(DataTypes.vector(3)))(rdd)
+    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(1), List(DataTypes.vector(3)))(rdd)
     val result = flattened.take(9)
     result(0) shouldBe Row("counting", 1.2)
     result(1) shouldBe Row("counting", 3.4)
@@ -195,7 +195,7 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       Row("k,l,m,n", Vector[Double](22, 2, 10)))
     val rdd = sparkContext.parallelize(rows)
     // Flatten columns and check row count
-    val flattened = FlattenColumnFunctions.flattenRddByColumnIndexes(List(0, 1), List(DataTypes.string, DataTypes.vector(3)), List(",", ""))(rdd)
+    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(0, 1), List(DataTypes.string, DataTypes.vector(3)), List(",", ""))(rdd)
     assertResult(16) {
       flattened.count()
     }
