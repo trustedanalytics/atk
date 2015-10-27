@@ -68,20 +68,18 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
     var flattener: RDD[Row] => RDD[Row] = null
     val columnIndices = arguments.columns.map(c => schema.columnIndex(c))
     val columnDataTypes = arguments.columns.map(c => schema.columnDataType(c))
+    var delimiters = arguments.defaultDelimiters
 
-    // If delimiters were provided, use them, otherwise use the default commas
-    var delimiters = Array.fill(arguments.columns.size) { if (arguments.delimiters != null && arguments.delimiters.size == 1) arguments.delimiters(0) else "," }
-
-    var stringDelimiterCount = 0
+    var stringDelimiterCount = 0 // counter used to track delimiters for string columns
 
     for (i <- arguments.columns.indices) {
       columnDataTypes(i) match {
         case DataTypes.vector(length) =>
           schema = schema.convertType(arguments.columns(i), DataTypes.float64)
         case DataTypes.string =>
-          if (arguments.delimiters.size > 1) {
-            if (arguments.delimiters.size > stringDelimiterCount) {
-              delimiters(i) = arguments.delimiters(stringDelimiterCount)
+          if (arguments.delimiters.get.size > 1) {
+            if (arguments.delimiters.get.size > stringDelimiterCount) {
+              delimiters(i) = arguments.delimiters.get(stringDelimiterCount)
               stringDelimiterCount += 1
             }
             else
@@ -93,7 +91,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
       }
     }
 
-    if (stringDelimiterCount > 0 && stringDelimiterCount < arguments.delimiters.size)
+    if (stringDelimiterCount > 0 && stringDelimiterCount < arguments.delimiters.get.size)
       throw new IllegalArgumentException(s"The number of delimiters provided is more than the number of string columns being flattened.")
 
     flattener = FlattenColumnFunctions.flattenRddByColumnIndices(columnIndices, columnDataTypes, delimiters.toList)

@@ -25,7 +25,10 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 case class FlattenColumnArgs(frame: FrameReference,
                              @ArgDoc("""The columns to be flattened.""") columns: List[String],
                              @ArgDoc("""The list of delimiter strings for each column.
-Default is comma (,).""") delimiters: List[String] = null) {
+Default is comma (,).""") delimiters: Option[List[String]] = None) {
   require(frame != null, "frame is required")
   require(columns != null && columns.nonEmpty, "column list is required")
+
+  // If just one delimiter is defined, use the same delimiter for all columns.  Otherwise, use the default.
+  def defaultDelimiters = Array.fill(columns.size) { if (delimiters.isDefined && delimiters.get.size == 1) delimiters.get(0) else "," }
 }

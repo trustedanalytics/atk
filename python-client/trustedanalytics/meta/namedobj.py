@@ -213,14 +213,22 @@ class _NamedObjectsFunctionFactory(object):
                     except:
                         pass    #  Don't fail if item with the specified name was not found
                 elif isinstance(item, obj_class):
-                    if item.status == "ACTIVE":
-                        victim_uris[item.name] = item.uri
+                    try:
+                        if item.status == "ACTIVE":
+                            victim_uris[item.name] = item.uri
+                    except:
+                        pass
                 else:
                     raise TypeError("Excepted argument of type {term} or else the {term}'s name".format(term=obj_term))
             for name, uri in victim_uris.items():
                 module_logger.info("Drop %s %s", obj_term, name)
-                http.delete(uri)
-                num_items_deleted += 1
+                try:
+                    http.delete(uri)
+                    num_items_deleted += 1
+                except RuntimeError as e:
+                    module_logger.warn("RuntimeError when attempting to drop item with uri: {uri}. ({message})".format(uri=uri, message=e.message))
+                except:
+                    module_logger.warn("Error when attempting to drop item with uri: {uri}".format(uri=uri))
             return num_items_deleted
         set_entity_collection(drop_objects, entity_type_to_collection_name(self._term))  # so meta knows where it goes
         drop_objects.__name__ = drop_objects_name

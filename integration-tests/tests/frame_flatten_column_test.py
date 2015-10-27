@@ -222,7 +222,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
         schema = [('a', ta.int32), ('b', ta.vector(2))]
         test_frame = ta.Frame(ta.UploadRows(data,schema))
 
-        test_frame.flatten_columns('b', [])
+        test_frame.flatten_columns('b')
 
         # expected data after flattening
         expected_data = [
@@ -244,7 +244,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
         schema = [('a', ta.int32), ('b', ta.vector(2)), ('c', ta.vector(2))]
         test_frame = ta.Frame(ta.UploadRows(data,schema))
 
-        test_frame.flatten_columns(['b','c'], [])
+        test_frame.flatten_columns(['b','c'])
 
         # expected data after flattening
         expected_data = [
@@ -267,7 +267,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
         schema = [('a', ta.int32), ('b', ta.vector(3)), ('c', ta.vector(2))]
         test_frame = ta.Frame(ta.UploadRows(data,schema))
 
-        test_frame.flatten_columns(['b','c'], [])
+        test_frame.flatten_columns(['b','c'])
 
         # expected data after flattening
         expected_data = [
@@ -289,26 +289,76 @@ class FrameFlattenColumnTest(unittest.TestCase):
         self.assertEqual(test_frame.take(test_frame.row_count), expected_data)
 
     def test_flatten_columns_with_strings_and_vectors(self):
-        data = [[1,[1,2],"a|b"],[2,[3,4],"c|d"],[3,[5,6],"e|f"],[4,[7,8],"g|h"]]
-        schema = [('a', ta.int32), ('b', ta.vector(2)), ('c', str)]
+        data = [[1,"1:2",[1,2],"a|b"],[2,"3:4",[3,4],"c|d"],[3,"5:6",[5,6],"e|f"],[4,"7:8",[7,8],"g|h"]]
+        schema = [('a', ta.int32),('b', str), ('c', ta.vector(2)), ('d', str)]
         test_frame = ta.Frame(ta.UploadRows(data,schema))
 
-        test_frame.flatten_columns(['b', 'c'], ['|'])
+        test_frame.flatten_columns(['b', 'c', 'd'], [':','|'])
 
         # expected data after flattening
         expected_data = [
-            [1,1.0,"a"],
-            [1,2.0,"b"],
-            [2,3.0,"c"],
-            [2,4.0,"d"],
-            [3,5.0,"e"],
-            [3,6.0,"f"],
-            [4,7.0,"g"],
-            [4,8.0,"h"]
+            [1,"1",1.0,"a"],
+            [1,"2",2.0,"b"],
+            [2,"3",3.0,"c"],
+            [2,"4",4.0,"d"],
+            [3,"5",5.0,"e"],
+            [3,"6",6.0,"f"],
+            [4,"7",7.0,"g"],
+            [4,"8",8.0,"h"]
         ]
 
         self.assertEqual(test_frame.row_count, 8)
         self.assertEqual(test_frame.take(test_frame.row_count), expected_data)
+
+    def test_flatten_columns_with_strings_and_vectors_with_one_delimiter(self):
+        data = [[1,"1:2",[1,2],"a:b"],[2,"3:4",[3,4],"c:d"],[3,"5:6",[5,6],"e:f"],[4,"7:8",[7,8],"g:h"]]
+        schema = [('a', ta.int32),('b', str), ('c', ta.vector(2)), ('d', str)]
+        test_frame = ta.Frame(ta.UploadRows(data,schema))
+
+        test_frame.flatten_columns(['b', 'c', 'd'], ':')
+
+        # expected data after flattening
+        expected_data = [
+            [1,"1",1.0,"a"],
+            [1,"2",2.0,"b"],
+            [2,"3",3.0,"c"],
+            [2,"4",4.0,"d"],
+            [3,"5",5.0,"e"],
+            [3,"6",6.0,"f"],
+            [4,"7",7.0,"g"],
+            [4,"8",8.0,"h"]
+        ]
+
+        self.assertEqual(test_frame.row_count, 8)
+        self.assertEqual(test_frame.take(test_frame.row_count), expected_data)
+
+    def test_flatten_columns_with_strings_and_vectors_with_default_delimiter(self):
+        data = [[1,"1,2",[1,2],"a,b"],[2,"3,4",[3,4],"c,d"],[3,"5,6",[5,6],"e,f"],[4,"7,8",[7,8],"g,h"]]
+        schema = [('a', ta.int32),('b', str), ('c', ta.vector(2)), ('d', str)]
+        test_frame = ta.Frame(ta.UploadRows(data,schema))
+
+        # there are only 2 string columns.  giving 3 delimiters should give an exception.
+        with self.assertRaises(Exception):
+            test_frame.flatten_columns(['b', 'c', 'd'], [',',',',','])
+
+        test_frame.flatten_columns(['b', 'c', 'd'])
+
+        # expected data after flattening
+        expected_data = [
+            [1,"1",1.0,"a"],
+            [1,"2",2.0,"b"],
+            [2,"3",3.0,"c"],
+            [2,"4",4.0,"d"],
+            [3,"5",5.0,"e"],
+            [3,"6",6.0,"f"],
+            [4,"7",7.0,"g"],
+            [4,"8",8.0,"h"]
+        ]
+
+        self.assertEqual(test_frame.row_count, 8)
+        self.assertEqual(test_frame.take(test_frame.row_count), expected_data)
+
+
 
 if __name__ == "__main__":
     unittest.main()
