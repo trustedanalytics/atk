@@ -1370,7 +1370,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         """
 
         if delimiter is None:
-            delimiter = [","]
+            delimiter = ","
 
         self.unflatten_columns(columns, delimiter)
 
