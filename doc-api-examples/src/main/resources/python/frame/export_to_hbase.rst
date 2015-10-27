@@ -19,3 +19,16 @@ Overwrite/append scenarios (see below):
        let frame1 = frame1 + frame2 (concatenate frame2 into frame1)
        save frame1 into base as table1 (overwrite with initial + appended data)
 
+
+Vector scenarios (see below):
+
+Vectors are not directly supported by HBase (which represents data as byte arrays) or the plugin.
+While is true that a vector can be saved because of the byte array conversion for hbase, the following
+is actually the recommended practice:
+
+1. Convert the vector to csv (in python, outside ATK)
+2. save the csv as string in the database (using ATK export_to_hbase)
+3. read the cell as string (using ATK, read from hbase
+4. convert the csv to vector (in python, outside ATK)
+
+
