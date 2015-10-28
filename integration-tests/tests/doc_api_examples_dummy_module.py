@@ -33,22 +33,22 @@ __test__ = {}
 # todo: repair all of the following .rst files to run correctly as doctests and shrink this set to length 0
 
 exemptions = set("""
-model-principal_components/train.rst
-model-principal_components/predict.rst
-model-principal_components/publish.rst
+(FIXED)model-principal_components/train.rst
+(FIXED)model-principal_components/predict.rst
+(FIXED)model-principal_components/publish.rst
 model-libsvm/train.rst
 model-libsvm/predict.rst
 model-libsvm/test.rst
 model-libsvm/score.rst
 model/rename.rst
-model-random_forest_classifier/predict.rst
-model-random_forest_classifier/publish.rst
-model-random_forest_classifier/test.rst
-model-random_forest_classifier/train.rst
-model-random_forest_regressor/predict.rst
-model-random_forest_regressor/publish.rst
-model-random_forest_regressor/test.rst
-model-random_forest_regressor/train.rst
+(FIXED)model-random_forest_classifier/predict.rst
+(FIXED)model-random_forest_classifier/publish.rst
+(FIXED)model-random_forest_classifier/test.rst
+(FIXED)model-random_forest_classifier/train.rst
+(FIXED)model-random_forest_regressor/predict.rst
+(FIXED)model-random_forest_regressor/publish.rst
+(FIXED)model-random_forest_regressor/test.rst
+(FIXED)model-random_forest_regressor/train.rst
 frame-vertex/drop_duplicates.rst
 frame-vertex/add_vertices.rst
 graph-/vertex_count.rst
@@ -59,9 +59,9 @@ graph-/define_edge_type.rst
 graph-/define_vertex_type.rst
 graph-/ml/kclique_percolation.rst
 model-collaborative_filtering/train.rst
-model-lda/train.rst
-model-lda/predict.rst
-model-lda/publish.rst
+(FIXED)model-lda/train.rst
+(FIXED)model-lda/predict.rst
+(FIXED)model-lda/publish.rst
 model-giraph_lda/train.rst
 model-giraph_lda/predict.rst
 model-giraph_lda/publish.rst
@@ -97,9 +97,9 @@ graph/clustering_coefficient.rst
 graph/annotate_weighted_degrees.rst
 graph/ml/kclique_percolation.rst
 graph/ml/belief_propagation.rst
-model-k_means/train.rst
-model-k_means/predict.rst
-model-k_means/publish.rst
+(FIXED)model-k_means/train.rst
+(FIXED)model-k_means/predict.rst
+(FIXED)model-k_means/publish.rst
 model-naive_bayes/train.rst
 model-naive_bayes/predict.rst
 (FIXED)frame/ecdf.rst
