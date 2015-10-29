@@ -33,6 +33,16 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     <inceptionYear>2013</inceptionYear>
 
     <repositories>
+    	<repository>
+            <id>atk</id>
+            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
         <repository>
             <id>cloudera cdh</id>
             <!--<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>-->
@@ -66,16 +76,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>atk</id>
-            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
