@@ -58,7 +58,8 @@ Note that the delimiters parameter is optional, and if no delimiter is specified
 is a comma (,).  So, in the above example, the delimiter parameter could be omitted.  Also, if
 the delimiters are different for each column being flattened, a list of delimiters can be
 provided.  If a single delimiter is provided, it's assumed that we are using the same delimiter
-for all columns that are being flattened.
+for all columns that are being flattened.  If more than one delimiter is provided, the number of
+delimiters must match the number of string columns being flattened.
 
 Check again:
 
