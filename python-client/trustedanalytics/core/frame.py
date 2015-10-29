@@ -139,7 +139,6 @@ def __drop(*items):
         .. code::
 
             >>> ta.drop(my_frame, my_model, my_graph)
-            -etc-
             3
 
     Alternatively, we can pass the object's string name to drop() like:
