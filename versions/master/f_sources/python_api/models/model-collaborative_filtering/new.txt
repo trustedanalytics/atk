@@ -101,6 +101,5 @@
             cost(train) = 396.281966
             rmse(validate) = 1.165723
             rmse(test) = 1.169451
-        </skip>
 
 

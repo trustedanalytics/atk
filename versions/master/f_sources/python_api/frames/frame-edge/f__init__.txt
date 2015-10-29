@@ -115,5 +115,4 @@
 
         >>> my_new_frame = my_new_edge_frame.copy()
 
-    </skip>
         

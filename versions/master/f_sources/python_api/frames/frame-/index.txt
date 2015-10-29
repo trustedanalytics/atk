@@ -210,5 +210,4 @@
 
     A frame has been created and Frame *your_frame* is its proxy.
     It has no data yet, but it does have the name *yourframe*.
-    </skip>
 

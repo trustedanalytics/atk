@@ -31,4 +31,3 @@
         >>> frame.last_read_date
         datetime.datetime(2015, 10, 8, 15, 48, 8, 791000, tzinfo=tzoffset(None, -25200))
 
-    </skip>

@@ -62,7 +62,6 @@
 
         >>> frame2 = frame.copy()  # full copy of the frame
         [===Job Progress===]
-        </skip>
 
         >>> frame3 = frame.copy(['name', 'age'])  # copy only two columns
         [===Job Progress===]

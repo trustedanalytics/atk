@@ -51,4 +51,3 @@
 
     More information on |UDF| can be found at :doc:`/ds_apir`
 
-    </skip>

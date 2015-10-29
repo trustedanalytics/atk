@@ -240,5 +240,4 @@
     .. code::
 
         >>> new_Frame = my_vertex_frame.vertices["label"].copy()
-    </skip>
         

@@ -112,7 +112,6 @@
        [1]  human     Ursula    6   495.0
        [2]  ape       Ape      41   400.0
        [3]  elephant  Shep      5  8630.0
-    </skip>
 
     # For other examples, see :ref:`example_frame.inspect`.
 
