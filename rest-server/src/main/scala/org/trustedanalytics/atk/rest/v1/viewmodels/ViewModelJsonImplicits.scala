@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.rest.v1.viewmodels
 
 import org.trustedanalytics.atk.domain.command.CommandDefinition
 import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.rest.v1.decorators.GetGraphComponent
 import spray.httpx.SprayJsonSupport
 import spray.json._
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
@@ -35,8 +36,9 @@ object ViewModelJsonImplicits extends AtkDefaultJsonProtocol with SprayJsonSuppo
   implicit val getCommandFormat = jsonFormat9(GetCommand)
   implicit val getFramesFormat = jsonFormat4(GetFrames)
   implicit val getFrameFormat = jsonFormat9(GetFrame)
+  implicit val jsonGetGraphComponent = jsonFormat3(GetGraphComponent)
   implicit val getGraphsFormat = jsonFormat4(GetGraphs)
-  implicit val getGraphFormat = jsonFormat6(GetGraph)
+  implicit val getGraphFormat = jsonFormat8(GetGraph)
   implicit val getModelFormat = jsonFormat6(GetModel)
   implicit val getModelsFormat = jsonFormat4(GetModels)
   implicit val getQueryPageFormat = jsonFormat4(GetQueryPage)
