@@ -23,13 +23,11 @@ mkdir -p  tarballs/$package/bin
 mkdir -p  tarballs/$package/conf
 mkdir -p  tarballs/$package/lib
 
-cp -v  config/$package/logback.xml tarballs/$package/conf
-
 cp -v config/$package/scoring-server.sh tarballs/$package/bin/
 cp -v config/$package/application.conf tarballs/$package/conf
+cp -v config/$package/jq tarballs/$package/
 
-
-jars="scoring-engine.jar scoring-interfaces.jar scoring-models.jar"
+jars="scoring-engine.jar scoring-interfaces.jar"
 
 #popd
 

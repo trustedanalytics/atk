@@ -13,9 +13,9 @@ You also need to add trustedanalytics.org certificate to your java keystore to d
 wget https://s3-us-west-2.amazonaws.com/analytics-tool-kit/public.crt -O `pwd`/public.crt &&\
 sudo keytool -importcert -trustcacerts -storepass changeit -file `pwd`/public.crt \
 -alias trustedanalytics.org -noprompt \
--keystore `find $JAVA_HOME -name cacerts`
+-keystore `find -L $JAVA_HOME -name cacerts`
 ```
-
+If you don't want to trust our public certificate you can change the all repository urls in parent [pom](pom.xml) from https://maven.trustedanalytics.org to http://maven.trustedanalytics.org 
 
 
 #Building

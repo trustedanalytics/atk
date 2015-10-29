@@ -41,7 +41,7 @@ class LoadFromHBasePlugin extends SparkCommandPlugin[HBaseArgs, FrameReference] 
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/loadhbase"
+  override def name: String = "frame/_loadhbase"
 
   /**
    * Number of Spark jobs that get created by running this command
