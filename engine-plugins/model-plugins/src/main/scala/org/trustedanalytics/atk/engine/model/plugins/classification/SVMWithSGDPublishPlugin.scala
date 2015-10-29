@@ -79,6 +79,6 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
     val svmModel = svmData.svmModel
     val jsvalue: JsValue = svmModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDModelReaderPlugin"))
   }
 }
