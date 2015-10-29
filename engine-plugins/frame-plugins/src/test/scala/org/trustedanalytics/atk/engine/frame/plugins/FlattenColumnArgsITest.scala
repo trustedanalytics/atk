@@ -150,7 +150,7 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       Row("neg", Vector[Double](-1.0, -5.5, 8)))
     val rdd = sparkContext.parallelize(vectorShips)
     val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(1), List(DataTypes.vector(3)))(rdd)
-    assertResult(8) {
+    assertResult(9) {
       flattened.count()
     }
     // Check values
