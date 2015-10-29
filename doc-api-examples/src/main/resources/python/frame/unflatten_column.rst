@@ -1,4 +1,4 @@
 Examples
 --------
 
-Note that unflatten_column has been deprecated.  Use :doc:`unflatten_columns <unflatten_columns>` instead.
+unflatten_column is deprecated.  Use :doc:`unflatten_columns <unflatten_columns>` instead.
