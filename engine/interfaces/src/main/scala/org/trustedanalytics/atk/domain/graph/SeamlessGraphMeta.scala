@@ -37,12 +37,12 @@ case class SeamlessGraphMeta(graphEntity: GraphEntity, frameEntities: List[Frame
   frameEntities.foreach(frame => require(frame.graphId.get == graphEntity.id, "frame should be owned by the graph, graphId did not match"))
 
   /** Labels to frames */
-  @transient private lazy val edgeFramesMap = frameEntities.filter(frame => frame.isEdgeFrame)
+  @transient lazy val edgeFramesMap = frameEntities.filter(frame => frame.isEdgeFrame)
     .map(frame => (frame.label.get, frame))
     .toMap[String, FrameEntity]
 
   /** Labels to frames */
-  @transient private lazy val vertexFramesMap = frameEntities.filter(frame => frame.isVertexFrame)
+  @transient lazy val vertexFramesMap = frameEntities.filter(frame => frame.isVertexFrame)
     .map(frame => (frame.label.get, frame))
     .toMap[String, FrameEntity]
 

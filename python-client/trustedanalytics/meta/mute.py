@@ -20,6 +20,9 @@ Mute definitions from the server
 
 # straightforward approach for now
 muted_commands = ['frame/load',
+                  'frame/_loadhbase',
+                  'frame/_loadjdbc',
+                  'frame/_loadhive',
                   'frame/count_where',
                   'frame:/load',
                   'frame:vertex/load',
