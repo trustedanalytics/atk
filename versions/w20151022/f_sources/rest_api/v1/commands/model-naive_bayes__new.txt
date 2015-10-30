@@ -1,0 +1,125 @@
+.. _rest_api/v1/commands/model-naive_bayes__new:
+
+
+
+---------------------------------------------
+:doc:`Commands <index>` model:naive_bayes/new
+---------------------------------------------
+
+Create a 'new' instance of a Naive Bayes model
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:naive_bayes/new
+
+:arguments:
+
+
+    **dummy_model_ref** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Naive Bayes [1]_ is a probabilistic classifier with strong
+independence assumptions between features.
+It computes the conditional probability distribution of each feature given label,
+and then applies Bayes' theorem to compute the conditional probability
+distribution of a label given an observation, and use it for prediction.
+The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
+to predict the value of the dependent variable given the independent
+observations of a frame.
+This model runs the MLLib implementation of Naive Bayes [2]_.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
+             
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Model``
+
+        A new instance of NaiveBayesModel
+
+

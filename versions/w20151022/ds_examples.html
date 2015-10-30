@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Python examples &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="f_static/jquery.js"></script>
+    <script type="text/javascript" src="f_static/underscore.js"></script>
+    <script type="text/javascript" src="f_static/doctools.js"></script>
+    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="python-examples">
+<span id="ds-examples"></span><h1>Python examples<a class="headerlink" href="#python-examples" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#introduction" id="id1">Introduction</a></li>
+<li><a class="reference internal" href="#requirements" id="id2">Requirements</a></li>
+<li><a class="reference internal" href="#datasets" id="id3">Datasets</a></li>
+<li><a class="reference internal" href="#finding-the-examples" id="id4">Finding the examples</a></li>
+<li><a class="reference internal" href="#running-examples" id="id5">Running Examples</a></li>
+<li><a class="reference internal" href="#frame" id="id6">Frame</a></li>
+<li><a class="reference internal" href="#movie-graph-small" id="id7">Movie Graph Small</a></li>
+<li><a class="reference internal" href="#page-rank" id="id8">Page Rank</a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>At this point you have a running ATK server and you have installed and configured the ATK python client and are wondering what you can do with the platform luckily the ATK python client ships with sample datasets and examples. While the examples are by no means comprehensive they do serve as an introduction.</p>
+</div>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div>Before we start you will need</div></blockquote>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/ATK-deployment-procedure-using-app-launching-service-broker-and-buildpack">Configured Trusted Analytics ATK rest server</a></li>
+<li><a class="reference external" href="https://github.com/trustedanalytics/atk/wiki/python-client">Configured Trusted Analytics ATK python client</a></li>
+<li><a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/Using-Data-Catalog-to-download-files-from-S3">Access to the Trusted Analytics data catalog</a></li>
+</ul>
+</div>
+<div class="section" id="datasets">
+<h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
+<p>For convenience all the datasets used in the examples ship with the client and are also available publicly in <a class="reference external" href="https://analytics-tool-kit.s3-us-west-2.amazonaws.com/index.html?prefix=public/production/v0.4.0/datasets/">aws</a>.</p>
+<ul class="simple">
+<li><a class="reference external" href="https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.4.0/datasets/movie_data_random.csv">movie_data_random.csv</a></li>
+<li><a class="reference external" href="https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.4.0/datasets/cities.csv">cities.csv</a></li>
+</ul>
+<p><a class="reference external" href="https://github.com/trustedanalytics/atk/tree/master/python-client/trustedanalytics/examples/datasets">or the github repository</a></p>
+<ul class="simple">
+<li><a class="reference external" href="https://raw.githubusercontent.com/trustedanalytics/atk/master/python-client/trustedanalytics/examples/datasets/movie_data_random.csv">movie_data_random.csv</a></li>
+<li><a class="reference external" href="https://raw.githubusercontent.com/trustedanalytics/atk/master/python-client/trustedanalytics/examples/datasets/cities.csv">cities.csv</a></li>
+</ul>
+<p>Since the examples will be running in a distributed fashion they will need to be uploaded to HDFS for them to be usable by the examples.</p>
+<p>You will need to upload the data sets through the <a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/Using-Data-Catalog-to-download-files-from-S3">data catalog</a> to make them available in HDFS. Alternatively you can upload them to HDFS directly if you have shell access to the cluster.</p>
+<p>Upload the sample data sets to the <a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/Using-Data-Catalog-to-download-files-from-S3">data catalog</a> with the public URLs. Once the transfers are complete take note of the full HDFS path as you will need it to run the examples.</p>
+<p><a class="reference external" href="https://github.com/trustedanalytics/platform-wiki/wiki/Using-Data-Catalog-to-download-files-from-S3">If you need help navigating the data catalog the instructions can be found here.</a></p>
+</div>
+<div class="section" id="finding-the-examples">
+<h2>Finding the examples<a class="headerlink" href="#finding-the-examples" title="Permalink to this headline">¶</a></h2>
+<p>The easiest way to view all the available examples would be to look at them in the <a class="reference external" href="https://github.com/trustedanalytics/atk/tree/master/python-client/trustedanalytics/examples">ATK repo</a>.</p>
+<p>They are also available locally once the ATK python client is installed.</p>
+<p>To access any of the examples import them like you would any other python module.</p>
+<p><strong>import trustedanalytics.examples.[frame|movie_graph_small|pr] as EXAMPLE_NAME</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+&gt;&gt;&gt; import trustedanalytics.examples.frame as frame
+</pre></div>
+</div>
+</div>
+<div class="section" id="running-examples">
+<h2>Running Examples<a class="headerlink" href="#running-examples" title="Permalink to this headline">¶</a></h2>
+<p>Once the example is imported execute the run method. The only thing you need to provide is the full HDFS path to the corresponding data set.</p>
+</div>
+<div class="section" id="frame">
+<h2>Frame<a class="headerlink" href="#frame" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Uses the cities.csv</li>
+<li>exercises frame operations</li>
+</ul>
+<p>frame example:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+&gt;&gt;&gt; import trustedanalytics.examples.frame as frame
+#after importing the example execute it&#39;s run method with the HDFS path from the data catalog
+&gt;&gt;&gt; frame.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="movie-graph-small">
+<h2>Movie Graph Small<a class="headerlink" href="#movie-graph-small" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Uses the movie_data_random.csv</li>
+<li>creates a graph from filtered frame data</li>
+</ul>
+<p>movie graph example:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+&gt;&gt;&gt; import trustedanalytics.examples.movie_data_small as movie
+#after importing the example execute it&#39;s run method with the HDFS path from the data catalog
+&gt;&gt;&gt; movie.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
+</pre></div>
+</div>
+</div>
+<div class="section" id="page-rank">
+<h2>Page Rank<a class="headerlink" href="#page-rank" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Uses movie_data_random.csv</li>
+<li>creates a graph and runs the page rank algorithm</li>
+</ul>
+<p>page rank example:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ python[2.7]
+&gt;&gt;&gt; import trustedanalytics.examples.pr as pr
+#after importing the example execute it&#39;s run method with the HDFS path from the data catalog
+&gt;&gt;&gt; pr.run(&quot;hdfs://FULL_HDFS_PATH&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 30, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

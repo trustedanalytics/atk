@@ -1,0 +1,45 @@
+.. _python_api/frames/frame-/drop_rows:
+
+
+:doc:`Frame <index>`  drop_rows
+*******************************
+
+------
+
+
+.. function:: drop_rows(self, predicate)
+
+    Erase any row in the current frame which qualifies.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row to a boolean; rows that answer True are dropped from the Frame
+
+
+    Examples
+    --------
+
+    .. code::
+
+
+        >>> frame.inspect()
+        [#]  name      age  tenure  phone
+        ====================================
+        [0]  Fred       39      16  555-1234
+        [1]  Susan      33       3  555-0202
+        [2]  Thurston   65      26  555-4510
+        [3]  Judy       44      14  555-2183
+        >>> frame.drop_rows(lambda row: row.name[-1] == 'n')  # drop people whose name ends in 'n'
+        [===Job Progress===]
+        >>> frame.inspect()
+        [#]  name  age  tenure  phone
+        ================================
+        [0]  Fred   39      16  555-1234
+        [1]  Judy   44      14  555-2183
+
+    More information on a |UDF| can be found at :doc:`/ds_apir`.

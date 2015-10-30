@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Entities Get Frame Data &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API Entities" href="index.html" >
+    <link rel="next" title="REST API Info" href="../info.html" >
+    <link rel="prev" title="Entities Get Named Entities" href="get_named_entities.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Entities</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="get_named_entities.html" title="Entities Get Named Entities"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="../info.html" title="REST API Info"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">REST API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands/index.html">Commands</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../info.html">Info</a></li>
+</ul>
+</li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="entities-get-frame-data">
+<span id="rest-api-v1-entities-get-frame-data"></span><h1><a class="reference internal" href="index.html"><em>Entities</em></a>  Get Frame Data<a class="headerlink" href="#entities-get-frame-data" title="Permalink to this headline">¶</a></h1>
+<p>Gets data from a frame by rows.</p>
+<div class="section" id="get-v1-frames-id-data-offset-offset-count-count">
+<h2>GET /v1/frames/:id/data?offset=:offset&amp;count=:count<a class="headerlink" href="#get-v1-frames-id-data-offset-offset-count-count" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>GET /v1/frames/7/data?offset=0&amp;count=10
+</pre></div>
+</div>
+<p><strong>Parameters</strong></p>
+<p>offset: index of the starting row</p>
+<p>count: number of rows to retrieve</p>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+Accept: application/json,text/plain
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns rows of data</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="24%" />
+<col width="76%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>name</td>
+<td>name of the operation &#8220;getRows&#8221;</td>
+</tr>
+<tr class="row-odd"><td>complete</td>
+<td>boolean indicating completion of data fetch</td>
+</tr>
+<tr class="row-even"><td rowspan="2">result</td>
+<td>data: list of rows of data</td>
+</tr>
+<tr class="row-odd"><td>schema: row structure (column names and data types)</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre> {
+   &quot;name&quot;: &quot;getRows&quot;,
+   &quot;complete&quot;: true,
+   &quot;result&quot;: {
+     &quot;data&quot;: [[1, 2, &quot;validate&quot;, 0], [2, 4, &quot;validate&quot;, 0], [3, 6, &quot;validate&quot;, 1], [2, 4, &quot;validate&quot;, 0], [3, 6, &quot;validate&quot;, 1], [1, 2, &quot;validate&quot;, 0]],
+     &quot;schema&quot;: {
+       &quot;columns&quot;: [{
+         &quot;name&quot;: &quot;c&quot;,
+         &quot;data_type&quot;: &quot;int32&quot;,
+         &quot;index&quot;: 0
+       }, {
+         &quot;name&quot;: &quot;twice&quot;,
+         &quot;data_type&quot;: &quot;int32&quot;,
+         &quot;index&quot;: 1
+       }, {
+         &quot;name&quot;: &quot;sample_bin&quot;,
+         &quot;data_type&quot;: &quot;string&quot;,
+         &quot;index&quot;: 2
+       }, {
+         &quot;name&quot;: &quot;c_binned&quot;,
+         &quot;data_type&quot;: &quot;int32&quot;,
+         &quot;index&quot;: 3
+       }]
+     }
+   },
+}
+</pre></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Content-Length: 753
+Content-Type: application/json; charset=UTF-8
+Date: Thu, 14 May 2015 23:42:27 GMT
+</pre></div>
+</div>
+<p><strong>Notes</strong></p>
+<p>The data is considered &#8216;unstructured&#8217;, therefore taking a certain
+number of rows, the rows obtained may be different every time the
+command is executed, even if the parameters do not change.</p>
+<p>[Need a note in here about performance and recommended usage]</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Oct 30, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

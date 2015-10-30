@@ -1,0 +1,160 @@
+.. _python_api/frames/frame-edge/inspect:
+
+
+:doc:`EdgeFrame <index>`  inspect
+*********************************
+
+------
+
+
+.. function:: inspect(self, n=10, offset=0, columns=None, wrap='inspect_settings', truncate='inspect_settings', round='inspect_settings', width='inspect_settings', margin='inspect_settings', with_types='inspect_settings')
+
+    Pretty-print of the frame data
+
+
+    :Parameters:
+
+        **n** : int (default=10)
+
+        ..
+
+            The number of rows to print.
+
+
+
+        **offset** : int (default=0)
+
+        ..
+
+            The number of rows to skip before printing.
+
+
+
+        **columns** : int (default=None)
+
+        ..
+
+            Filter columns to be included.  By default, all columns are included
+
+
+
+        **wrap** : int or 'stripes' (default=inspect_settings)
+
+        ..
+
+            If set to 'stripes' then inspect prints rows in stripes; if set to an integer N, rows will be printed in clumps of N columns, where the columns are wrapped
+
+
+
+        **truncate** : int (default=inspect_settings)
+
+        ..
+
+            If set to integer N, all strings will be truncated to length N, including a tagged ellipses
+
+
+
+        **round** : int (default=inspect_settings)
+
+        ..
+
+            If set to integer N, all floating point numbers will be rounded and truncated to N digits
+
+
+
+        **width** : int (default=inspect_settings)
+
+        ..
+
+            If set to integer N, the print out will try to honor a max line width of N
+
+
+
+        **margin** : int (default=inspect_settings)
+
+        ..
+
+            ('stripes' mode only) If set to integer N, the margin for printing names in a stripe will be limited to N characters
+
+
+
+        **with_types** : bool (default=inspect_settings)
+
+        ..
+
+            If set to True, header will include the data_type of each column
+
+
+
+
+    :Returns:
+
+        : RowsInspection
+
+        ..
+
+            An object which naturally converts to a pretty-print string
+    Essentially returns a string, but technically returns a RowInspection object which renders a string.
+    The RowInspection object naturally converts to a str when needed, like when printed or when displayed
+    by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
+    to be printed, then it must be explicitly printed, then `print frame.inspect()`
+
+    Examples
+    --------
+    To look at the first 4 rows of data in a frame:
+
+    .. code::
+
+        >>> frame.inspect(4)
+       [#]  animal    name    age  weight
+       ==================================
+       [0]  human     George    8   542.5
+       [1]  human     Ursula    6   495.0
+       [2]  ape       Ape      41   400.0
+       [3]  elephant  Shep      5  8630.0
+    </skip>
+
+    # For other examples, see :ref:`example_frame.inspect`.
+
+    **Global Settings**
+
+    If not specified, the arguments that control formatting receive default values from
+    'trustedanalytics.inspect_settings'.  Make changes there to affect all calls to inspect.
+
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.inspect_settings
+        wrap             20
+        truncate       None
+        round          None
+        width            80
+        margin         None
+        with_types    False
+        >>> ta.inspect_settings.width = 120  # changes inspect to use 120 width globally
+        >>> ta.inspect_settings.truncate = 16  # changes inspect to always truncate strings to 16 chars
+        >>> ta.inspect_settings
+        wrap             20
+        truncate         16
+        round          None
+        width           120
+        margin         None
+        with_types    False
+        >>> ta.inspect_settings.width = None  # return value back to default
+        >>> ta.inspect_settings
+        wrap             20
+        truncate         16
+        round          None
+        width            80
+        margin         None
+        with_types    False
+        >>> ta.inspect_settings.reset()  # set everything back to default
+        >>> ta.inspect_settings
+        wrap             20
+        truncate       None
+        round          None
+        width            80
+        margin         None
+        with_types    False
+
+    ..

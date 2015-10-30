@@ -1,0 +1,22 @@
+.. _python_api/models/get_model_names:
+
+
+:doc:`trustedanalytics <index>`  get_model_names
+************************************************
+
+------
+
+
+.. function:: get_model_names()
+
+    Retrieve names for all the model objects on the server.
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            List of names

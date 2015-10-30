@@ -1,0 +1,113 @@
+.. _python_api/models/model-naive_bayes/test:
+
+
+:doc:`NaiveBayesModel <index>`  test
+************************************
+
+------
+
+
+.. function:: test(self, frame, label_column, observation_columns=None)
+
+    |ALPHA|
+    Predict test frame labels and return metrics.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the actual
+            label for each observation.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the
+            observations whose labels are to be predicted.
+            By default, we predict the labels over columns the NaiveBayesModel
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A dictionary with binary classification metrics.
+            The data returned is composed of the following keys\:
+
+                          |  'accuracy' : double
+                          |  The proportion of predictions that are correctly identified
+                          |  'confusion_matrix' : dictionary
+                          |  A table used to describe the performance of a classification model
+                          |  'f_measure' : double
+                          |  The harmonic mean of precision and recall
+                          |  'precision' : double
+                          |  The proportion of predicted positive instances that are correctly identified
+                          |  'recall' : double
+                          |  The proportion of positive instances that are correctly identified.
+    Predict the labels for a test frame and run classification metrics on predicted
+    and target labels.
+
+    Examples
+    --------
+    Consider the following model trained and tested on the sample data set in *frame* 'frame'.
+
+    Consider the following frame containing four columns.
+
+    >>> frame.inspect()
+    [#]  Class  Dim_1  Dim_2  Dim_3
+    ===============================
+    [0]      0      1      0      0
+    [1]      2      0      0      0
+    [2]      1      0      1      0
+    [3]      1      0      2      0
+    [4]      2      0      0      1
+    [5]      2      0      0      2
+    >>> model = ta.NaiveBayesModel()
+    [===Job Progress===]
+    >>> model.train(frame, 'Class',['Dim_1','Dim_2','Dim_3'])
+    [===Job Progress===]
+    >>> test_metrics = model.test(frame, 'Class', ['Dim_1','Dim_2','Dim_3'])
+    [===Job Progress===]
+    >>> test_metrics['f_measure']
+    1.0
+    >>> test_metrics['recall']
+    1.0
+    >>> test_metrics['accuracy']
+    1.0
+    >>> test_metrics['precision']
+    1.0
+    >>> test_metrics['confusion_matrix']
+    {u'row_labels': [u'pos', u'neg'], u'column_labels': [u'pos', u'neg'], u'matrix': [[2, 0], [0, 4]]}
+    >>> predicted_frame = model.predict(frame, ['Dim_1','Dim_2','Dim_3'])
+    [===Job Progress===]
+    >>> predicted_frame.inspect()
+    [#]  Class  Dim_1  Dim_2  Dim_3  predicted_class
+    ================================================
+    [0]      0      1      0      0              0.0
+    [1]      2      0      0      0              2.0
+    [2]      1      0      1      0              1.0
+    [3]      1      0      2      0              1.0
+    [4]      2      0      0      1              2.0
+    [5]      2      0      0      2              2.0
+

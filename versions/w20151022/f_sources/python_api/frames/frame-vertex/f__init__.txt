@@ -1,0 +1,90 @@
+.. _python_api/frames/frame-vertex/__init__:
+
+
+:doc:`VertexFrame <index>`  __init__
+************************************
+
+------
+
+
+.. function:: __init__(self, source=None, graph=None, label=None)
+
+    Examples
+
+
+    :Parameters:
+
+        **source** :  (default=None)
+
+        ..
+
+
+
+
+
+        **graph** :  (default=None)
+
+        ..
+
+
+
+
+
+        **label** :  (default=None)
+
+        ..
+
+
+
+
+    --------
+    Given a data file, create a frame, move the data to graph and then define a
+    new VertexFrame and add data to it:
+
+    .. only:: html
+
+        .. code::
+
+            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32), ('user_name', str), ('movie_id', int32), ('movie_title', str), ('rating', str)])
+            >>> my_frame = ta.Frame(csv)
+            >>> my_graph = ta.Graph()
+            >>> my_graph.define_vertex_type('users')
+            >>> my_vertex_frame = my_graph.vertices['users']
+            >>> my_vertex_frame.add_vertices(my_frame, 'user_id', ['user_name', 'age'])
+
+    .. only:: html
+
+        .. code::
+
+            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32),
+            ...                                     ('user_name', str),
+            ...                                     ('movie_id', int32),
+            ...                                     ('movie_title', str),
+            ...                                     ('rating', str)])
+            >>> my_frame = ta.Frame(csv)
+            >>> my_graph = ta.Graph()
+            >>> my_graph.define_vertex_type('users')
+            >>> my_vertex_frame = my_graph.vertices['users']
+            >>> my_vertex_frame.add_vertices(my_frame, 'user_id',
+            ... ['user_name', 'age'])
+
+    Retrieve a previously defined graph and retrieve a VertexFrame from it:
+
+    .. code::
+
+        >>> my_graph = ta.get_graph("your_graph")
+        >>> my_vertex_frame = my_graph.vertices["your_label"]
+
+    Calling methods on a VertexFrame:
+
+    .. code::
+
+        >>> my_vertex_frame.vertices["your_label"].inspect(20)
+
+    Convert a VertexFrame to a frame:
+
+    .. code::
+
+        >>> new_Frame = my_vertex_frame.vertices["label"].copy()
+    </skip>
+        

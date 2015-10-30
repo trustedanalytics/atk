@@ -1,0 +1,44 @@
+.. _python_api/models/model-collaborative_filtering/recommend:
+
+
+:doc:`CollaborativeFilteringModel <index>`  recommend
+*****************************************************
+
+------
+
+
+.. function:: recommend(self, name, top_k)
+
+    |BETA|
+    Collaborative Filtering Recommend (ALS/CGD) model.
+
+
+    :Parameters:
+
+        **name** : unicode
+
+        ..
+
+            An entity name from the first column of the input frame
+
+
+
+        **top_k** : int32
+
+        ..
+
+            positive integer representing the top recommendations for the name
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            See :ref:`Collaborative Filtering Train
+            <python_api/models/model-collaborative_filtering/train>` for more information.
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.
