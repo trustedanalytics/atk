@@ -9,6 +9,7 @@ pwd
 
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
+export DAAL_LIB_DIR="$DIR/../daal/"
 
 # NOTE: Add this parameter to Java for connecting to a debugger
 # -agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005

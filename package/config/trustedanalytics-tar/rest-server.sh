@@ -109,7 +109,14 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar daal-plugins.jar"
+jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
+
+if [ -f "daal.tar.gz" ]; then
+ tar -xvzf daal.tar.gz
+ export DAAL_LIB_DIR="$DIR/../daal/"
+ jars="$jars daal-plugins.jar"
+fi
+
 echo "Creating jar links"
 for jar in $jars
 do
