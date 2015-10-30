@@ -1,3 +1,5 @@
+# vim: set encoding=utf-8
+
 #
 #  Copyright (c) 2015 Intel Corporation 
 #
