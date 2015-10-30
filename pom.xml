@@ -62,7 +62,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <enabled>true</enabled>
             </releases>
         </repository>
-
         <repository>
             <id>apache</id>
             <url>https://repository.apache.org/content/groups/public/</url>
@@ -76,16 +75,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>atk</id>
-            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
