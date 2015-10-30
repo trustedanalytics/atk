@@ -95,8 +95,8 @@ object ModelPublishFormat {
     var ModelBytesFileName: String = null
     var archiveName: String = null
     var urls = Array.empty[URL]
-    val tmpPath = "/tmp/"
     var byteArray: Array[Byte] = null
+    var file: File = null
 
     try {
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
@@ -109,7 +109,9 @@ object ModelPublishFormat {
         tarFile.read(content, 0, content.length)
 
         if (individualFile.contains(".jar")) {
-          val file = new File(tmpPath + individualFile)
+          var fileName = individualFile.substring(individualFile.lastIndexOf("/") + 1)
+          fileName = fileName.substring(0, fileName.length - 4)
+          file = File.createTempFile(fileName, ".jar")
           outputFile = new FileOutputStream(file)
           IOUtils.write(content, outputFile)
 
@@ -134,6 +136,7 @@ object ModelPublishFormat {
     finally {
       IOUtils.closeQuietly(outputFile)
       IOUtils.closeQuietly(tarFile)
+      FileUtils.deleteQuietly(file)
     }
 
   }

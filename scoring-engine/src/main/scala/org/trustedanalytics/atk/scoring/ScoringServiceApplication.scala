@@ -82,7 +82,6 @@ class ScoringServiceApplication(archiveDefinition: ArchiveDefinition, classLoade
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
         tarFilePath = tempTarFile.getAbsolutePath
       }
-      println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>about to read the model")
       ModelPublishFormat.read(new File(tarFilePath), classLoader.getParent)
     }
     finally {
