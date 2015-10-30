@@ -244,29 +244,7 @@ The Hessian matrix is the second-order partial derivatives of the model&#8217;s 
 <p>Creating a Logistic Regression Model using the observation column and
 label column of the train frame.</p>
 <p class="rubric">Examples</p>
-<p>Train a Logistic Regression Model using Limited-memory-BFGS.</p>
-<p>In the example below, the flag for computing the covariance matrix is enabled.
-When the covariance matrix is enabled, the summary table contains additional
-statistics about the quality of the trained model.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;LogReg&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;obs1&#39;</span><span class="p">,</span> <span class="s">&#39;obs2&#39;</span><span class="p">],</span> <span class="s">&#39;frequency_column&#39;</span><span class="p">,</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s">&#39;LBFGS&#39;</span><span class="p">,</span> <span class="n">compute_covariance</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">num_features</span>
-<span class="go">2</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">num_classes</span>
-<span class="go">2</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">summary_table</span>
-
-<span class="go">            coefficients  degrees_freedom  standard_errors  wald_statistic   p_value</span>
-<span class="go">intercept      0.924574                1         0.013052       70.836965    0.000000e+00</span>
-<span class="go">obs1           0.405374                1         0.005793       69.973643    1.110223e-16</span>
-<span class="go">obs2           0.707372                1         0.006709      105.439358    0.000000e+00</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>
