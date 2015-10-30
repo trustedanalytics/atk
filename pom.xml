@@ -1521,6 +1521,4 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-
 </project>
