@@ -54,7 +54,6 @@
     join
     label_propagation
     last_read_date
-    loopy_belief_propagation
     name
     quantiles
     rename_columns
@@ -132,7 +131,6 @@
     :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
     :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
     :doc:`label_propagation <label_propagation>`\ (self, src_col_name, dest_col_name, ...[, ...])         Label Propagation on Gaussian Random Fields.
-    :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, src_col_name, ...[, ...])          Message passing to infer state probabilities.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns
     :doc:`sort <sort>`\ (self, columns[, ascending])                                                      |BETA| Sort the data in a frame.

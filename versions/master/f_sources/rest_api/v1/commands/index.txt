@@ -20,7 +20,6 @@
     frame-__join
     frame-__label_propagation
     frame-__load
-    frame-__loopy_belief_propagation
     frame-__rename_columns
     frame-edge__add_edges
     frame-edge__rename_columns
@@ -195,7 +194,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame:/join <frame-__join>`                                                             |BETA| Join two data frames (similar to SQL JOIN).
 :doc:`frame:/label_propagation <frame-__label_propagation>`                                   Label Propagation on Gaussian Random Fields.
 :doc:`frame:/load <frame-__load>`                                                             Append data from a CSV/XML into an existing (possibly empty) frame
-:doc:`frame:/loopy_belief_propagation <frame-__loopy_belief_propagation>`                     Message passing to infer state probabilities.
 :doc:`frame:/rename_columns <frame-__rename_columns>`                                         Rename columns
 :doc:`frame:edge/add_edges <frame-edge__add_edges>`                                           Add edges to a graph.
 :doc:`frame:edge/rename_columns <frame-edge__rename_columns>`                                 Rename columns for edge frame.
