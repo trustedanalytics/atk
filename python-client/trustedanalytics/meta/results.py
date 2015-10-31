@@ -118,12 +118,6 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/loopy_belief_propagation')
-def return_loopy_belief_propagation(json_result):
-    from trustedanalytics import get_frame
-    frame = get_frame(json_result['output_frame']['uri'])
-    return { 'frame': frame, 'report': json_result['report'] }
-
 @postprocessor('frame:/collaborative_filtering')
 def return_collaborative_filtering(json_result):
     from trustedanalytics import get_frame
