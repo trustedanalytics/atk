@@ -54,18 +54,14 @@ end
 """
 
         expected_doctest = """
-<hide>
 >>> import trustedanalytics as ta  # invisible set up code
 >>> ta.connect()
 -etc-
-</hide>
 
 Blah Blah
-<hide>
 More mysteries
 <and>
 Disguises
- </hide>
 
 end
 """

@@ -38,7 +38,7 @@ class LoadFromHivePlugin extends SparkCommandPlugin[HiveArgs, FrameEntity] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/loadhive"
+  override def name: String = "frame/_loadhive"
 
   /**
    * Number of Spark jobs that get created by running this command

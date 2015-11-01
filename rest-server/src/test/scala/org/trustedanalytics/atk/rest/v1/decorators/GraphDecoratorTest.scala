@@ -25,20 +25,29 @@ class GraphDecoratorTest extends FlatSpec with Matchers {
 
   val uri = "http://www.example.com/graphs"
   val relLinks = Seq(RelLink("foo", uri, "GET"))
-  val graph = new GraphEntity(1, Some("name"), None, "storage", 1L, "hbase/titan", new DateTime, new DateTime)
+  val graph = new GraphEntity(1, Some("name"), None, "storage", 1L, "atk/frame", new DateTime, new DateTime)
+  val vertex1 = GetGraphComponent("v1", 532, List("pA", "pB"))
+  val vertex2 = GetGraphComponent("v2", 95, Nil)
+  val edge1 = GetGraphComponent("e1", 844, List("pC"))
+  val decorateReadyGraph = DecorateReadyGraphEntity(graph, List(vertex1, vertex2), List(edge1))
 
   "GraphDecorator" should "be able to decorate a graph" in {
-    val decoratedGraph = GraphDecorator.decorateEntity(null, relLinks, graph)
+    val decoratedGraph = GraphDecorator.decorateEntity(null, relLinks, decorateReadyGraph)
     decoratedGraph.uri should be("graphs/1")
     decoratedGraph.name should be(Some("name"))
-    decoratedGraph.entityType should be("graph:titan")
+    decoratedGraph.entityType should be("graph:")
     decoratedGraph.links.head.uri should be("http://www.example.com/graphs")
+    decoratedGraph.vertices.size should be(2)
+    decoratedGraph.vertices(0) should be(vertex1)
+    decoratedGraph.vertices(1) should be(vertex2)
+    decoratedGraph.edges.size should be(1)
+    decoratedGraph.edges(0) should be(edge1)
   }
 
   it should "set the correct URL in decorating a list of graphs" in {
-    val graphHeaders = GraphDecorator.decorateForIndex(uri, Seq(graph))
+    val graphHeaders = GraphDecorator.decorateForIndex(uri, Seq(decorateReadyGraph))
     val graphHeader = graphHeaders.toList.head
     graphHeader.url should be("http://www.example.com/graphs/1")
-    graphHeader.entityType should be("graph:titan")
+    graphHeader.entityType should be("graph:")
   }
 }

@@ -48,7 +48,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 109
+  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = arguments.numIterations + 9
   /**
    * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
    *
