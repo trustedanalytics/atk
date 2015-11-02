@@ -15,6 +15,7 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -26,7 +27,7 @@ import ScoringJsonReaderWriters._
  */
 class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
-  override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
     data.foreach { document =>
       {

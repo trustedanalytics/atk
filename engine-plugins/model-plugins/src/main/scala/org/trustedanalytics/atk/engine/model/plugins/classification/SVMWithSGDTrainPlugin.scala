@@ -34,8 +34,9 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Train SVM model.",
-  extended = """Creating a SVM Model using the observation column and label column of the train frame.""")
+@PluginDoc(oneLine = "Build SVM with SGD model",
+  extended = """Creating a SVM Model using the observation column and label column of the train frame.""",
+  returns = """A trained SVMWithSGD model""")
 class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -52,6 +53,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 103
+
   /**
    * Run MLLib's SVMWithSGD() on the training frame and create a Model for it.
    *
@@ -69,18 +71,21 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
     val labeledTrainRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
 
     //Running MLLib
-    val svm = initializeSVMModel(arguments)
+    val svm = SVMWithSGDTrainPlugin.initializeSVMModel(arguments)
     val svmModel = svm.run(labeledTrainRDD)
 
     val jsonModel = new SVMData(svmModel, arguments.observationColumns)
     model.data = jsonModel.toJson.asJsObject
   }
+}
 
-  private def initializeSVMModel(arguments: ClassificationWithSGDTrainArgs): SVMWithSGD = {
+object SVMWithSGDTrainPlugin {
+
+  def initializeSVMModel(arguments: ClassificationWithSGDTrainArgs): SVMWithSGD = {
     val svm = new SVMWithSGD()
-    svm.optimizer.setNumIterations(arguments.getNumIterations)
-    svm.optimizer.setStepSize(arguments.getStepSize)
-    svm.optimizer.setRegParam(arguments.getRegParam)
+    svm.optimizer.setNumIterations(arguments.numIterations)
+    svm.optimizer.setStepSize(arguments.stepSize)
+    svm.optimizer.setRegParam(arguments.regParam)
 
     if (arguments.regType.isDefined) {
       svm.optimizer.setUpdater(arguments.regType.get match {
@@ -88,7 +93,8 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
         case other => new SquaredL2Updater()
       })
     }
-    svm.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    svm.setIntercept(arguments.getIntercept)
+    svm.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    svm.setIntercept(arguments.intercept)
   }
 }
+

@@ -31,7 +31,8 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 import spray.json._
 
 @PluginDoc(oneLine = "Build linear regression model.",
-  extended = "Creating a Linear Regression Model using the observation column and label column of the train frame.")
+  extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
+  returns = "Trained linear regression model")
 class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
   /**
    * The name of the command.
@@ -47,7 +48,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 109
+  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = arguments.numIterations + 9
   /**
    * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
    *
@@ -64,22 +65,24 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
 
     //Running MLLib
-    val linReg = initializeLinearRegressionModel(arguments)
+    val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.run(labeledTrainRdd)
     val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
   }
+}
+object LinearRegressionWithSGDTrainPlugin {
 
-  private def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
+  def initializeLinearRegressionModel(arguments: ClassificationWithSGDTrainArgs): LinearRegressionWithSGD = {
     val linReg = new LinearRegressionWithSGD()
-    linReg.optimizer.setNumIterations(arguments.getNumIterations)
-    linReg.optimizer.setStepSize(arguments.getStepSize)
+    linReg.optimizer.setNumIterations(arguments.numIterations)
+    linReg.optimizer.setStepSize(arguments.stepSize)
 
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
-    linReg.optimizer.setRegParam(arguments.getRegParam)
+    linReg.optimizer.setRegParam(arguments.regParam)
 
     if (arguments.regType.isDefined) {
       linReg.optimizer.setUpdater(arguments.regType.get match {
@@ -87,8 +90,10 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
         case other => new SquaredL2Updater()
       })
     }
-    linReg.optimizer.setMiniBatchFraction(arguments.getMiniBatchFraction)
-    linReg.setIntercept(arguments.getIntercept)
+    linReg.optimizer.setMiniBatchFraction(arguments.miniBatchFraction)
+    linReg.setIntercept(arguments.intercept)
 
   }
+
 }
+

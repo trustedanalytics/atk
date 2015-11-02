@@ -15,14 +15,10 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import java.io._
-
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
-import org.apache.spark.mllib.classification._
+import org.apache.spark.mllib.ScoringJsonReaderWriters._
+import org.apache.spark.mllib.classification.{ NaiveBayesModel, NaiveBayesScoringModel }
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-
 import spray.json._
-import DefaultJsonProtocol._
 
 class NaiveBayesReaderPlugin() extends ModelLoader {
 

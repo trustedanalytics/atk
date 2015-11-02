@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
+import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
@@ -31,10 +32,11 @@ import ModelPublishJsonProtocol._
 /**
  * Publish a Random Forest Classifier Model for scoring
  */
-@PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = """Creates a tar file with the trained Random Forest Classifier Model
-The tar file is used as input to the scoring engine to predict the class of an observation.""",
-  returns = """The HDFS path to the tar file.""")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended = """The publish method exports the RandomForestClassifierModel and its implementation into a tar file. 
+  The tar file is then published on HDFS and this method returns the path to the tar file. 
+  The tar file serves as input to the scoring engine. This model can then be used to predict the cluster assignment of an observation.""",
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -77,6 +79,6 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
   }
 }

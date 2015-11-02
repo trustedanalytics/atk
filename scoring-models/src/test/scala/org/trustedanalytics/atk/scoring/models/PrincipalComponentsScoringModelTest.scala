@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.apache.spark.mllib.linalg.{ Matrices, DenseMatrix, Vectors }
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.{ Matchers, WordSpec }

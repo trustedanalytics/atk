@@ -18,8 +18,9 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.io.IOException
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
+import ScoringJsonReaderWriters._
 import spray.json._
 
 /* Reader plugin for Principal Components */

@@ -17,33 +17,54 @@
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, ClassificationMetricValue }
+import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
+case class NaiveBayesTestArgs(model: ModelReference,
+                              @ArgDoc("""A frame whose labels are to be predicted.
+By default, predict is run on the same columns over which the model is
+trained.""") frame: FrameReference,
+                              @ArgDoc("""Column containing the actual
+label for each observation.""") labelColumn: String,
+                              @ArgDoc("""Column(s) containing the
+observations whose labels are to be predicted.
+By default, we predict the labels over columns the NaiveBayesModel
+was trained on.""") observationColumns: Option[List[String]]) {
+  require(model != null, "model is required")
+  require(frame != null, "frame is required")
+
+}
+
 /* Run the NaiveBayes model on the test frame*/
 
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted
 and target labels.""",
-  returns = """An object with binary classification metrics.
-The data returned is composed of multiple components\:
+  returns = """A dictionary with binary classification metrics.
+The data returned is composed of the following keys\:
 
-              |  **double** : *accuracy*
-              |  **table** : *confusion_matrix*
-              |  **double** : *f_measure*
-              |  **double** : *precision*
-              |  **double** : *recall*""")
-class NaiveBayesTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestArgs, ClassificationMetricValue] {
+              |  'accuracy' : double
+              |  The proportion of predictions that are correctly identified
+              |  'confusion_matrix' : dictionary
+              |  A table used to describe the performance of a classification model
+              |  'f_measure' : double
+              |  The harmonic mean of precision and recall
+              |  'precision' : double
+              |  The proportion of predicted positive instances that are correctly identified
+              |  'recall' : double
+              |  The proportion of positive instances that are correctly identified.""")
+class NaiveBayesTestPlugin extends SparkCommandPlugin[NaiveBayesTestArgs, ClassificationMetricValue] {
   /**
    * The name of the command.
    *
@@ -59,7 +80,7 @@ class NaiveBayesTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation) = 9
+  override def numberOfJobs(arguments: NaiveBayesTestArgs)(implicit invocation: Invocation) = 9
   /**
    * Get the predictions for observations in a test frame
    *
@@ -69,7 +90,7 @@ class NaiveBayesTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation): ClassificationMetricValue = {
+  override def execute(arguments: NaiveBayesTestArgs)(implicit invocation: Invocation): ClassificationMetricValue = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 

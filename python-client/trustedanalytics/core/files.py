@@ -734,7 +734,24 @@ class HiveQuery(DataFile):
 
 class HBaseTable(object):
     """
-    Define the object to retrieve the data from an hBase table.
+    Define the object to retrieve the data from an hBase table. A note on how
+    we support various overwrite/append scenarios (see below):
+
+    1. create a simple hbase table from csv
+       load csv into a frame using existing frame api
+       save the frame into hbase (it creates a table - lets call it table1)
+
+    2. overwrite existing table with new data
+       do scenario 1 and create table1
+       load the second csv into a frame
+       save the frame into table1 (old data is gone)
+
+    3. append data to the existing table 1
+       do scenario 1 and create table1
+       load table1 into frame1
+       load csv into frame2
+       let frame1 = frame1 + frame2 (concatenate frame2 into frame1)
+       save frame1 into base as table1 (overwrite with initial + appended data)
 
     """
 
@@ -799,7 +816,7 @@ class JdbcTable(object):
     Define the object to retrieve the data from an jdbc table.
     """
 
-    def __init__(self, table_name, connector_type = None, url = None, driver_name = None, query = None):
+    def __init__(self, table_name, connector_type = None, url = None, driver_name = None):
         """
         Define the object to retrieve the data from an jdbc table.
 
@@ -813,7 +830,6 @@ class JdbcTable(object):
             Jdbc connection string (as url)
         driver_name : str
             An optional driver name
-        query : initial query (for data filtering / processing)
 
         Returns
         -------
@@ -841,7 +857,7 @@ class JdbcTable(object):
         self.connector_type = connector_type
         self.url = url
         self.driver_name = driver_name
-        self.query = query
+        self.query = None
 
     def to_json(self):
         return {"url": self.url,

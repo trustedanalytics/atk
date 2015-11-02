@@ -42,7 +42,8 @@ the true labels using built-in binary Classification Metrics.
 
 .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
 .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
-.. [3] https://en.wikipedia.org/wiki/LIBSVM""")
+.. [3] https://en.wikipedia.org/wiki/LIBSVM""",
+  returns = """A new instance of LibsvmModel""")
 class LibSvmNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

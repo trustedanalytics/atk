@@ -1,28 +1,73 @@
 #!/bin/bash
-echo "Starting Simple Scoring Engine startup script"
+echo "Starting ATK startup script"
 
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
+export KEYTAB=$DIR/../atk.keytab
+export KRB5_CONFIG=$DIR/../krb5.conf
+export ATK_CONF_DIR="$DIR/../conf"
+export YARN_CONF_DIR=$ATK_CONF_DIR
 
-#export ATK_CONF_DIR="$DIR/../conf"
 echo $DIR
 
 LAUNCHER=$DIR/../launcher.jar
 LAUNCHER=$DIR/../conf/logback.xml:$LAUNCHER
+LAUNCHER=$DIR/../conf:$LAUNCHER
 echo "Downloading jquery exectuable to parse environment variables"
+
 jq=$DIR/../jq
-wget http://stedolan.github.io/jq/download/linux64/jq -O $jq
+echo "make jq executable"
 chmod +x $jq
+
 
 echo "Setting environment variables"
 export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
 export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
-export CC_URI=$(echo $VCAP_APPLICATION | $jq  '.application_uris[0]' | sed -e "s/$APP_NAME\.apps/api.run/g" | tr -d '"')
-export UAA_URI=$(echo $VCAP_APPLICATION | $jq  '.application_uris[0]' | sed -e "s/$APP_NAME\.apps/uaa.run/g" | tr -d '"')
+export USE_HTTP=true
 
-export FS_ROOT=$(echo $VCAP_SERVICES |  $jq '.cdh | .[0].credentials.hdfs_root' | tr -d '"')
+export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
+export PRINCIPAL=$(echo $VCAP_SERVICES | $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["dfs.datanode.kerberos.principal"]')
 
 env
+
+pushd $ATK_CONF_DIR
+
+configurationStart="<configuration>"
+configurationEnd="</configuration>"
+propertyStart="<property>"
+propertyEnd="</property>"
+nameStart="<name>"
+nameEnd="</name>"
+valueStart="<value>"
+valueEnd="</value>"
+tab="    "
+
+hdfs_file="hdfs-site.xml"
+hdfs_json="hdfs.json"
+
+echo $VCAP_SERVICES |  $jq -c '.hdfs[0].credentials.HADOOP_CONFIG_KEY' > $hdfs_json
+
+function buildSvcBrokerConfig {
+(echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+ echo $configurationStart
+) >> $1
+key_count=$(cat $2 | $jq -c 'keys' | $jq 'length' )
+keys=$(cat $2 | $jq -c 'keys')
+count=0
+while [ $count -lt $key_count ]
+do
+	key=$( echo $keys | $jq -c -r ".[$count]")
+	value=$( cat $2 | $jq -c  ".[\"$key\"]" | sed -e "s|\"||g" )
+	count=$((count+1))
+	echo $tab$propertyStart$nameStart${key}$nameEnd$valueStart${value}$valueEnd$propertyEnd >> $1
+done
+echo $configurationEnd >> $1
+rm $2
+}
+
+buildSvcBrokerConfig $hdfs_file $hdfs_json
+
+popd
 
 pushd $DIR/..
 pwd
@@ -31,7 +76,12 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-echo java $@ -XX:MaxPermSize=256m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
-java $@ -XX:MaxPermSize=256m -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
+if [ -f ${KRB5_CONFIG} ]; then
+ export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+fi
+
+echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
+java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
 
 popd
+

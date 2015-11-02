@@ -87,5 +87,7 @@ Below is a sample python script to connect to the scoring engine::
     ...            'Accept': 'application/json,text/plain'}
     >>> r = requests.post('http://localhost:9099/v1/models/testjson?data=2', headers=headers)
 
+where data is passed the observation to be scored by the trained model.
 
+However, the PrincipalComponentsModel requires the observation and the number of principal components also to be passed.
 

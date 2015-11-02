@@ -40,9 +40,11 @@ import scala.RuntimeException
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict using principal components model.",
-  extended = """Predicting on a dataframe's columns using a Principal Components Model.""",
-  returns = """A frame with existing columns and 'c' additional columns containing
-the projections of V on the frame and an additional column storing the t-square-index value if requested.""")
+  extended = """Predicting on a dataframe's columns using a PrincipalComponents Model.""",
+  returns =
+    """A frame with existing columns and following additional columns\:
+      'c' additional columns: containing the projections of V on the the frame
+      't_squared_index': column storing the t-square-index value, if requested""")
 class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalComponentsPredictArgs, FrameEntity] {
 
   /**
@@ -91,6 +93,8 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
 
     val eigenVectors = principalComponentData.vFactor
     val y = indexedRowMatrix.multiply(eigenVectors)
+    val cComponentsOfY = new IndexedRowMatrix(y.rows.map(r => r.copy(vector = Vectors.dense(r.vector.toArray.take(c)))))
+
     var columnNames = new ListBuffer[String]()
     var columnTypes = new ListBuffer[DataType]()
     for (i <- 1 to c) {
@@ -98,9 +102,9 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
       columnNames += colName
       columnTypes += DataTypes.float64
     }
-    val yNew = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, y, columnNames, columnTypes)
+    val components = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, c, cComponentsOfY, columnNames, columnTypes)
 
-    val resultFrameRdd = yNew.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
+    val resultFrameRdd = components.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
       .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
 
     val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
@@ -143,11 +147,12 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * @param columnTypes ListBuffer storing the column type(s) of the output frame
    * @return IndexedRowMatrix
    */
-  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData,
+  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData, c: Int,
                             y: IndexedRowMatrix, columnNames: ListBuffer[String], columnTypes: ListBuffer[DataType]): IndexedRowMatrix = {
     tSquaredIndex match {
       case true => {
-        val t = computeTSquaredIndex(y, principalComponentData.singularValues, principalComponentData.k)
+        val t = computeTSquaredIndex(y, principalComponentData.singularValues, c)
+
         columnNames += "t_squared_index"
         columnTypes += DataTypes.float64
         t
@@ -178,19 +183,19 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * Compute the t-squared index for an IndexedRowMatrix created from the input frame
    * @param y IndexedRowMatrix storing the projection into k dimensional space
    * @param E Singular Values
-   * @param k Number of dimensions
+   * @param c Number of dimensions
    * @return IndexedRowMatrix with existing elements in the RDD and computed t-squared index
    */
-  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, k: Int): IndexedRowMatrix = {
+  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, c: Int): IndexedRowMatrix = {
     val matrix = y.rows.map(row => {
       val rowVectorToArray = row.vector.toArray
       var t = 0.0
-      for (i <- 0 until k) {
+      var flag = false
+      for (i <- 0 until c) {
         if (E(i) > 0)
           t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
       }
       new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+ t))
-
     })
     new IndexedRowMatrix(matrix)
 

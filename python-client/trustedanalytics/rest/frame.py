@@ -36,7 +36,8 @@ from trustedanalytics.core.ui import RowsInspection
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.atktypes import get_data_type_from_rest_str, get_rest_str_from_data_type
 from trustedanalytics.rest.command import CommandRequest, executor
-from trustedanalytics.rest.spark import get_udf_arg, get_add_one_column_function, get_add_many_columns_function
+from trustedanalytics.rest.spark import get_add_one_column_function, get_add_many_columns_function
+from trustedanalytics.rest.spark_helper import get_udf_arg
 
 TakeResult = namedtuple("TakeResult", ['data', 'schema'])
 """
@@ -329,21 +330,21 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         if isinstance(source, HBaseTable):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadhbase", arguments, frame)
+             result = execute_update_frame_command("frame/_loadhbase", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(source, JdbcTable):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadjdbc", arguments, frame)
+             result = execute_update_frame_command("frame/_loadjdbc", arguments, frame)
              self._handle_error(result)
              return
 
         if isinstance(source, HiveQuery):
              arguments = source.to_json()
              arguments['destination'] = frame.uri
-             result = execute_update_frame_command("frame/loadhive", arguments, frame)
+             result = execute_update_frame_command("frame/_loadhive", arguments, frame)
              self._handle_error(result)
              return
 
@@ -460,7 +461,7 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 column_names = columns.keys()
             else:
                 column_names = columns
-            from trustedanalytics.rest.spark import get_udf_arg_for_copy_columns
+            from trustedanalytics.rest.spark_helper import get_udf_arg_for_copy_columns
             where = get_udf_arg_for_copy_columns(frame, where, column_names)
         else:
             where = None

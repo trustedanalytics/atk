@@ -17,7 +17,8 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.io._
 
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import ScoringJsonReaderWriters._
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._

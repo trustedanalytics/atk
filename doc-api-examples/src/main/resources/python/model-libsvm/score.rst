@@ -1,5 +1,6 @@
 Examples
 --------
+Score using a Libsvm Model
 
 .. only:: html
 

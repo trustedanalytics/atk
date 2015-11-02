@@ -1,5 +1,7 @@
 #!/bin/bash
-package="trustedanalytics-tar"
+package=$1
+BUILD_NUMBER=$2
+VERSION=$3
 workDir=$(pwd)
 baseDir=${workDir##*/}
 gitRoot="."
@@ -31,7 +33,7 @@ cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 
 
-jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
+jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar"
 
 #popd
 
@@ -51,12 +53,19 @@ echo $jarPath
 cp -v $jarPath package/tarballs/$package/launcher.jar
 
 
+mkdir -p package/tarballs/$package/client
+ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
+cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz package/tarballs/$package/client
+ls -l python-client/target
+cp -v python-client/target/trustedanalytics.zip package/tarballs/$package/lib/
+
 popd
 
 
 pushd tarballs/$package
     tar -pczf ../../trustedanalytics.tar.gz .
 popd
+
 
 
 rm -rf tarballs

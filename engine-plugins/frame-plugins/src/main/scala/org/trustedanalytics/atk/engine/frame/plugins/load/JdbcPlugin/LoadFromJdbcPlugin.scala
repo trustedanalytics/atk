@@ -40,7 +40,7 @@ class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/loadjdbc"
+  override def name: String = "frame/_loadjdbc"
 
   /**
    * Number of Spark jobs that get created by running this command

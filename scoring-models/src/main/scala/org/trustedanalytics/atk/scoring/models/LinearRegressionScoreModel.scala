@@ -24,7 +24,7 @@ import scala.concurrent._
 
 class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
 
-  override def score(data: Seq[Array[String]]): Future[Seq[Any]] = future {
+  override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
     var value: Int = 2
     data.foreach { row =>

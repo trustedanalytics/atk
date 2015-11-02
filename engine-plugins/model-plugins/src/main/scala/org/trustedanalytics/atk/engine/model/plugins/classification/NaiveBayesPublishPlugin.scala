@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
+import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
@@ -77,6 +78,6 @@ class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
     val naiveBayesModel = naiveBayesData.naiveBayesModel
     val jsvalue: JsValue = naiveBayesModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString(), "scoring-models", "org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin"))
+    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin"))
   }
 }

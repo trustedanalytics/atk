@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
+import com.google.common.base.Charsets
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
@@ -30,11 +31,12 @@ import spray.json._
 /**
  * Publish a Principal Components Model for scoring
  */
-@PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = """Creates a tar file with the trained Principal Components Model.
-The tar file is used as input to the scoring engine to compute the principal components and
-t-squared index of the observation.""",
-  returns = """The HDFS path to the tar file.""")
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the PrincipalComponentsModel and its implementation into a tar file. The tar file is then published
+on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
+then be used to compute the principal components and t-squared index(if requested) of an observation.""",
+  returns = """Returns the HDFS path to the trained model's tar file""")
 class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
 
   /**
@@ -60,7 +62,7 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, S
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString(),
+    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
       "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin"))
   }

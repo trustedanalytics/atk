@@ -46,7 +46,7 @@ class SortedKITest extends TestingSparkContextFlatSpec with Matchers {
       val rdd = sparkContext.parallelize(inputRows)
       val frameRdd = new FrameRdd(inputSchema, rdd)
       val sortColumns = List(("col_0", true), ("col_1", true))
-      val results = SortedKFunctions.takeOrdered(frameRdd, -1, sortColumns).collect()
+      SortedKFunctions.takeOrdered(frameRdd, -1, sortColumns).collect()
     }
   }
 

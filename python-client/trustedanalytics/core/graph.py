@@ -140,183 +140,212 @@ Default is None.""")
     The first step is to bring in some data to create a frame as the source
     for a graph:
 
-    .. only:: html
+    <hide>
+    >>> import trustedanalytics as ta
+    >>> ta.connect()
+    -etc-
 
-        .. code::
+    </hide>
+    >>> schema = [('viewer', str), ('profile', ta.int32), ('movie', str), ('rating', ta.int32)]
+    >>> data1 = [['fred',0,'Croods',5],
+    ...          ['fred',0,'Jurassic Park',5],
+    ...          ['fred',0,'2001',2],
+    ...          ['fred',0,'Ice Age',4],
+    ...          ['wilma',0,'Jurassic Park',3],
+    ...          ['wilma',0,'2001',5],
+    ...          ['wilma',0,'Ice Age',4],
+    ...          ['pebbles',1,'Croods',4],
+    ...          ['pebbles',1,'Land Before Time',3],
+    ...          ['pebbles',1,'Ice Age',5]]
+    >>> data2 = [['betty',0,'Croods',5],
+    ...          ['betty',0,'Jurassic Park',3],
+    ...          ['betty',0,'Land Before Time',4],
+    ...          ['betty',0,'Ice Age',3],
+    ...          ['barney',0,'Croods',5],
+    ...          ['barney',0,'Jurassic Park',5],
+    ...          ['barney',0,'Land Before Time',3],
+    ...          ['barney',0,'Ice Age',5],
+    ...          ['bamm bamm',1,'Croods',5],
+    ...          ['bamm bamm',1,'Land Before Time',3]]
+    >>> frame = ta.Frame(ta.UploadRows(data1, schema))
+    <progress>
 
-            >>> my_schema = [('user_id', ta.int32), ('user_name', str), ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
-            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
-            >>> my_frame = ta.Frame(my_csv)
+    >>> frame2 = ta.Frame(ta.UploadRows(data2, schema))
+    <progress>
 
-    .. only:: latex
+    >>> frame.inspect()
+    [#]  viewer   profile  movie             rating
+    ===============================================
+    [0]  fred           0  Croods                 5
+    [1]  fred           0  Jurassic Park          5
+    [2]  fred           0  2001                   2
+    [3]  fred           0  Ice Age                4
+    [4]  wilma          0  Jurassic Park          3
+    [5]  wilma          0  2001                   5
+    [6]  wilma          0  Ice Age                4
+    [7]  pebbles        1  Croods                 4
+    [8]  pebbles        1  Land Before Time       3
+    [9]  pebbles        1  Ice Age                5
 
-        .. code::
 
-            >>> my_schema = [('user_id', ta.int32), ('user_name', str),
-            ... ('movie_id', ta.int32), ('movie_title', str), ('rating', str)]
-            >>> my_csv = ta.CsvFile("/movie.csv", my_schema)
-            >>> my_frame = ta.Frame(my_csv)
-
-    Now, make an empty graph:
-
-    .. code::
-
-        >>> my_graph = ta.Graph()
+    Now, make an empty graph object:
+    >>> graph = ta.Graph()
 
     Then, define the types of vertices and edges this graph will be made of:
 
-    .. code::
-
-        >>> my_graph.define_vertex_type('users')
-        >>> my_graph.define_vertex_type('movies')
-        >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
+    >>> graph.define_vertex_type('viewer')
+    <progress>
+    >>> graph.define_vertex_type('film')
+    <progress>
+    >>> graph.define_edge_type('rating', 'viewer', 'film')
+    <progress>
 
     And finally, add the data to the graph:
 
-    .. only:: latex
+    >>> graph.vertices['viewer'].add_vertices(frame, 'viewer', ['profile'])
+    <progress>
+    >>> graph.vertices['viewer'].inspect()
+    [#]  _vid  _label  viewer   profile
+    ===================================
+    [0]     1  viewer  fred           0
+    [1]     8  viewer  pebbles        1
+    [2]     5  viewer  wilma          0
 
-        .. code::
+    >>> graph.vertices['film'].add_vertices(frame, 'movie')
+    <progress>
+    >>> graph.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    19  film    Land Before Time
+    [1]    14  film    Ice Age
+    [2]    12  film    Jurassic Park
+    [3]    11  film    Croods
+    [4]    13  film    2001
 
-            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
-            >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
-            >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id', 'movie_id', ['rating']
+    >>> graph.vertex_count
+    <progress>
+    8
 
-    .. only:: html
+    >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
+    <progress>
+    >>> graph.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  rating
+    ==============================================
+    [0]    24         1         14  rating       4
+    [1]    22         1         12  rating       5
+    [2]    21         1         11  rating       5
+    [3]    23         1         13  rating       2
+    [4]    29         8         19  rating       3
+    [5]    30         8         14  rating       5
+    [6]    28         8         11  rating       4
+    [7]    27         5         14  rating       4
+    [8]    25         5         12  rating       3
+    [9]    26         5         13  rating       5
 
-        .. code::
+    >>> graph.edge_count
+    <progress>
+    10
 
-            >>> my_graph.vertices['users'].add_vertices(my_frame, 'user_id', ['user_name'])
-            >>> my_graph.vertices['movies'].add_vertices(my_frame, 'movie_id', ['movie_title'])
-            >>> my_graph.edges['ratings'].add_edges(my_frame, 'user_id',
-            ... 'movie_id', ['rating'])
 
-    |
+    >>> graph
+    Graph <unnamed>
+    status = ACTIVE  (last_read_date = -etc-)
+    vertices =
+      viewer : [viewer, profile], count = 3
+      film : [movie], count = 5
+    edges =
+      rating : [rating], count = 10
+
+    >>> graph.vertices
+    viewer : [viewer, profile], count = 3
+    film : [movie], count = 5
+
+    >>> graph.edges
+    rating : [rating], count = 10
 
     Adding additional data to the graph from another frame (my_frame2),
     is simply adding vertices (and edges) in row formation.
 
-    .. code::
+    <skip>
+    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
+    <progress>
 
-        >>> my_graph.vertices['users'].add_vertices(my_frame2, 'user_id', ['user_name'])
+    </skip>
+    >>> graph.vertices['viewer'].add_vertices(frame2, 'viewer', ['profile'])
+    <progress>
+    >>> graph.vertices['viewer'].inspect()
+    [#]  _vid  _label  viewer     profile
+    =====================================
+    [0]     5  viewer  wilma            0
+    [1]     1  viewer  fred             0
+    [2]    31  viewer  betty            0
+    [3]    35  viewer  barney           0
+    [4]     8  viewer  pebbles          1
+    [5]    39  viewer  bamm bamm        1
 
-    Getting basic information about the graph:
+    >>> graph.vertices['film'].add_vertices(frame2, 'movie')
+    <progress>
+    >>> graph.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    44  film    Ice Age
+    [2]    41  film    Croods
+    [3]    43  film    Land Before Time
+    [4]    42  film    Jurassic Park
 
-    .. code::
+    >>> graph.vertex_count
+    <progress>
+    11
 
-        >>> my_graph.vertex_count
-        >>> my_graph.edge_count
-        >>> my_graph.vertices['users'].inspect(20)
+    >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
+    <progress>
 
-    |
+    <skip>  # todo: fix bug DPAT-926
+    >>> graph.edges['rating'].inspect(20)
+    [##]  _eid  _src_vid  _dest_vid  _label  rating
+    ===============================================
+    [0]     24         1         14  rating       4
+    [1]     22         1         12  rating       5
+    [2]     21         1         11  rating       5
+    [3]     23         1         13  rating       2
+    [4]     29         8         19  rating       3
+    [5]     30         8         14  rating       5
+    [6]     28         8         11  rating       4
+    [7]     27         5         14  rating       4
+    [8]     25         5         12  rating       3
+    [9]     26         5         13  rating       5
+    [10]    60        39         43  rating       3
+    [11]    59        39         41  rating       5
+    [12]    53        31         43  rating       4
+    [13]    54        31         44  rating       3
+    [14]    52        31         42  rating       3
+    [15]    51        31         41  rating       5
+    [16]    57        35         43  rating       3
+    [17]    58        35         44  rating       5
+    [18]    56        35         42  rating       5
+    [19]    55        35         41  rating       5
 
-    This example uses multiple source data frames and creates a graph of
-    'user' and 'movie' vertices connected by 'rating' edges.
+    </skip>
+    >>> graph.edge_count
+    <progress>
+    20
 
-    Create a frame as the source for a graph:
+    Now we'll copy the graph and then change it.
 
-    .. code::
+    >>> graph2 = graph.copy()
+    <progress>
 
-        >>> user_schema = [('user_id', ta.int32), ('user_name', str), ('age', ta.int32)]))
-        >>> user_frame = ta.Frame(ta.CsvFile("/users.csv", userSchema)
+    >>> graph2
+    Graph <unnamed>
+    status = ACTIVE  (last_read_date = -etc-)
+    vertices =
+      viewer : [viewer, profile], count = 6
+      film : [movie], count = 5
+    edges =
+      rating : [rating], count = 20
 
-        >>> movie_schema = [('movie_id', ta.int32), ('movie_title', str), ('year', str)]))
-        >>> movie_frame = ta.Frame(ta.CsvFile("/movie.csv", movie_schema)
-
-        >>> ratings_schema = [('ser_id', ta.int32), ('movie_id', ta.int32), ('rating', str)]))
-        >>> ratings_frame = ta.Frame(ta.CsvFile("/ratings.csv", ratings_schema)
-
-    Create a graph:
-
-    .. code::
-
-        >>> my_graph = ta.Graph()
-
-    Define the types of vertices and edges this graph will be made of:
-
-    .. code::
-
-        >>> my_graph.define_vertex_type('users')
-        >>> my_graph.define_vertex_type('movies')
-        >>> my_graph.define_edge_type('ratings','users','movies',directed=True)
-
-    Add data to the graph:
-
-    .. only:: html
-
-        .. code::
-
-            >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id', ['user_name', 'age'])
-            >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id') # all columns automatically added as properties
-            >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id', 'movie_id', ['rating'])
-
-    .. only:: latex
-
-        .. code::
-
-            >>> my_graph.vertices['users'].add_vertices(user_frame, 'user_id',
-            ... ['user_name', 'age'])
-            >>> my_graph.vertices['movies'].add_vertices(movie_frame, 'movie_id')
-            ... # all columns automatically added as properties
-            >>> my_graph.edges['ratings'].add_edges(ratings_frame, 'user_id',
-            ... 'movie_id', ['rating'])
-
-    |
-
-    This example shows edges between vertices of the same type.
-    Specifically, "employees work under other employees".
-
-    Create a frame to use as the source for the graph data:
-
-    .. only:: html
-
-        .. code::
-
-            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv", schema = [('Employee', str), ('Manager', str), ('Title', str), ('Years', ta.int64)], skip_header_lines=1), 'employees_frame')
-
-    .. only:: latex
-
-        .. code::
-
-            >>> employees_frame = ta.Frame(ta.CsvFile("employees.csv",
-            ... schema = [('Employee', str), ('Manager', str),
-            ... ('Title', str), ('Years', ta.int64)], skip_header_lines=1),
-            ... 'employees_frame')
-
-    Define a graph:
-
-    .. code::
-
-        >>> my_graph = ta.Graph()
-        >>> my_graph.define_vertex_type('Employee')
-        >>> my_graph.define_edge_type('worksunder', 'Employee', 'Employee', directed=True)
-
-    Add data:
-
-    .. only:: html
-
-        .. code::
-
-            >>> my_graph.vertices['Employee'].add_vertices(employees_frame, 'Employee', ['Title'])
-            >>> my_graph.edges['worksunder'].add_edges(employees_frame, 'Employee', 'Manager', ['Years'], create_missing_vertices = True)
-
-    .. only:: latex
-
-        .. code::
-
-            >>> my_graph.vertices['Employee'].add_vertices(employees_frame,
-            ... 'Employee', ['Title'])
-            >>> my_graph.edges['worksunder'].add_edges(employees_frame,
-            ... 'Employee', 'Manager', ['Years'],
-            ... create_missing_vertices = True)
-
-    Inspect the graph:
-
-    .. code::
-
-        >>> my_graph.vertex_count
-        >>> my_graph.edge_count
-        >>> my_graph.vertices['Employee'].inspect(20)
-        >>> my_graph.edges['worksunder'].inspect(20)
+    <skip>
 
         """
         if not hasattr(self, '_backend'):
@@ -329,8 +358,8 @@ Default is None.""")
         else:
             self.uri = self._backend.create(self, name, 'atk/frame', _info)
 
-        self._vertices = GraphFrameCollection(self._get_vertex_frame, self._get_vertex_frames)
-        self._edges = GraphFrameCollection(self._get_edge_frame, self._get_edge_frames)
+        self._vertices = GraphFrameCollection(self, "vertices", self._get_vertex_frame, self._get_vertex_frames)
+        self._edges = GraphFrameCollection(self, "edges", self._get_edge_frame, self._get_edge_frames)
 
         _BaseGraph.__init__(self)
 
@@ -437,12 +466,6 @@ Default is None.""")
         Get the total number of edges in the graph.
 
 
-        Returns
-        -------
-        int32
-            The number of edges in the graph.
-
-
         Examples
         --------
         .. code::
@@ -465,35 +488,47 @@ class GraphFrameCollection(object):
     or vertex types of a graph.
     """
 
-    def __init__(self, get_frame_func, get_frames_func):
+    def __init__(self, graph, type_str, get_frame_func, get_frames_func):
         """
         :param get_frame_func: method to call to return a single frame in
             the collection
         :param get_frames_func: method to call to return all of the frames
             in the collection
         """
-        self.get_frame_func = get_frame_func
-        self.get_frames_func = get_frames_func
+        self._graph = graph
+        if type_str not in ["vertices", "edges"]:
+            raise ValueError("Bad type_str %s in graph collection" % type_str)
+        self._type_str = type_str
+        self._get_frame_func = get_frame_func
+        self._get_frames_func = get_frames_func
 
     def __getitem__(self, item):
         """
         Retrieve a single frame from the collection
         :param item:
         """
-        return self.get_frame_func(item)
+        return self._get_frame_func(item)
 
     def __iter__(self):
         """
         iterator for all of the frames in the collection. will call the server
         """
-        for frame in self.get_frames_func():
+        for frame in self._get_frames_func():
             yield frame
+
+    def __get_props_str(self, info):
+        return "[%s]" % ", ".join(info['properties'])
 
     def __repr__(self):
         """
         printable representation of object
         """
-        return repr(self.get_frames_func())
+        graph_info = self._graph._backend._get_graph_info(self._graph)
+        if self._type_str == "vertices":
+            return "\n".join(["%s : %s, count = %d" % (v['label'], self.__get_props_str(v), v['count']) for v in graph_info.vertices])
+        if self._type_str == "edges":
+            return "\n".join(["%s : %s, count = %d" % (e['label'], self.__get_props_str(e), e['count']) for e in graph_info.edges])
+        return ""
 
 
 @api
@@ -514,6 +549,8 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
 
         >>> graph = ta.get_graph("my_graph")
         >>> titan_graph = graph.export_to_titan("titan_graph")
+
+</skip>
     """
         try:
             self.uri = None
