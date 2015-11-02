@@ -138,7 +138,7 @@ class DocExamplesPreprocessor(object):
                     raise DocExamplesException("unexpected tag %s found" % self.hide_stop_tag)
                 self.state = self.keep
                 return ''
-            elif stripped.startswith(self.skip_start_tag) or line.startswith(self.skip_stop_tag):
+            elif stripped.startswith(self.skip_start_tag) or stripped.startswith(self.skip_stop_tag):
                 return ''
             if self.state == self.keep:
                 for keyword, replacement in self.doc_replacements:
@@ -159,6 +159,8 @@ class DocExamplesPreprocessor(object):
                 if self.state == self.keep:
                     raise DocExamplesException("unexpected tag %s found" % self.skip_stop_tag)
                 self.state = self.keep
+                return ''
+            elif stripped.startswith(self.hide_start_tag) or stripped.startswith(self.hide_stop_tag):
                 return ''
             if self.state == self.keep:
                 for keyword, replacement in self.doctest_replacements:

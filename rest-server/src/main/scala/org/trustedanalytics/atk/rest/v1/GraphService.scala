@@ -17,17 +17,19 @@
 package org.trustedanalytics.atk.rest.v1
 
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
 import spray.http.{ StatusCodes, Uri }
 import org.trustedanalytics.atk.engine.Engine
 import scala.concurrent._
+import scala.concurrent.duration.Duration
 import scala.util._
 import org.trustedanalytics.atk.rest.v1.viewmodels.GetGraph
-import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity }
+import org.trustedanalytics.atk.domain.graph.{ SeamlessGraphMeta, GraphTemplate, GraphEntity }
 import org.trustedanalytics.atk.rest.CommonDirectives
 import spray.routing.Directives
-import org.trustedanalytics.atk.rest.v1.decorators.{ FrameDecorator, GraphDecorator }
+import org.trustedanalytics.atk.rest.v1.decorators.{ GetGraphComponent, DecorateReadyGraphEntity, FrameDecorator, GraphDecorator }
 
 import org.trustedanalytics.atk.rest.v1.viewmodels.ViewModelJsonImplicits
 import org.trustedanalytics.atk.rest.v1.viewmodels.Rel
@@ -48,10 +50,29 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
    * The spray routes defining the Graph service.
    */
   def graphRoutes() = {
-    //import ViewModelJsonImplicits._
     val prefix = "graphs"
     val verticesPrefix = "vertices"
     val edgesPrefix = "edges"
+
+    /**
+     * Creates an graph object ready for decoration
+     * @param graph the graph entity
+     * @param invocation implicit context
+     * @return
+     */
+    def getDecorateReadyGraphEntity(graph: GraphEntity)(implicit invocation: Invocation): DecorateReadyGraphEntity = {
+      if (graph.isSeamless) {
+        val vertices: List[FrameEntity] = Await.result(engine.getVertices(graph.id), Duration.Inf).toList
+        val edges: List[FrameEntity] = Await.result(engine.getEdges(graph.id), Duration.Inf).toList
+        val seamless = SeamlessGraphMeta(graph, vertices ++ edges)
+        val vertexComponents = seamless.vertexFramesMap.map { case (label: String, frame: FrameEntity) => GetGraphComponent(label, frame.rowCount.getOrElse(0), frame.schema.columnNames.filter(name => !name.startsWith("_"))) }.toList
+        val edgeComponents = seamless.edgeFramesMap.map { case (label: String, frame: FrameEntity) => GetGraphComponent(label, frame.rowCount.getOrElse(0), frame.schema.columnNames.filter(name => !name.startsWith("_"))) }.toList
+        DecorateReadyGraphEntity(graph, vertexComponents, edgeComponents)
+      }
+      else {
+        DecorateReadyGraphEntity(graph, Nil, Nil)
+      }
+    }
 
     /**
      * Creates "decorated graph" for return on HTTP protocol
@@ -59,10 +80,11 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
      * @param graph graph metadata
      * @return Decorated graph for HTTP protocol return
      */
-    def decorate(uri: Uri, graph: GraphEntity): GetGraph = {
+    def decorate(uri: Uri, graph: GraphEntity)(implicit invocation: Invocation): GetGraph = {
       //TODO: add other relevant links
       val links = List(Rel.self(uri.toString))
-      GraphDecorator.decorateEntity(uri.toString, links, graph)
+      val meta = getDecorateReadyGraphEntity(graph)
+      GraphDecorator.decorateEntity(uri.toString, links, meta)
     }
 
     //TODO: none of these are yet asynchronous - they communicate with the engine
@@ -86,7 +108,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                       onComplete(engine.getGraphByName(name)) {
                         case Success(Some(graph)) => {
                           val links = List(Rel.self(uri.toString))
-                          complete(GraphDecorator.decorateEntity(uri.toString(), links, graph))
+                          complete(GraphDecorator.decorateEntity(uri.toString(), links, getDecorateReadyGraphEntity(graph)))
                         }
                         case Success(None) => complete(StatusCodes.NotFound, s"Graph with name '$name' was not found.")
                         case Failure(ex) => throw ex
@@ -98,7 +120,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                         case Success(graphs) =>
                           import AtkDefaultJsonProtocol._
                           implicit val indexFormat = ViewModelJsonImplicits.getGraphsFormat
-                          complete(GraphDecorator.decorateForIndex(uri.toString(), graphs))
+                          complete(GraphDecorator.decorateForIndex(uri.toString(), graphs.map(getDecorateReadyGraphEntity(_))))
                         case Failure(ex) => throw ex
                       }
                   }
