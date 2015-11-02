@@ -1090,15 +1090,20 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         >>> j = codes.join(colors, 'numbers')
         <progress>
 
+        <skip>
         >>> j.inspect()
-        [#]  numbers  numbers_R  color
-        ===============================
-        [0]        1          1  red
-        [1]        3          3  green
-        [2]        1          1  red
-        [3]        2          2  yellow
-        [4]        1          1  red
-        [5]        3          3  green
+        </skip>
+        <hide>
+        >>> j.inspect(columns=['numbers', 'color'])
+        </hide>
+        [#]  numbers  color
+        ====================
+        [0]        1  red
+        [1]        3  green
+        [2]        1  red
+        [3]        2  yellow
+        [4]        1  red
+        [5]        3  green
 
         (The join adds an extra column *_R which is the join column from the right frame; it may be disregarded)
 
@@ -1107,36 +1112,45 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         >>> j_left = codes.join(colors, 'numbers', how='left')
         <progress>
 
+        <skip>
         >>> j_left.inspect()
-        [#]  numbers  numbers_R  color
-        ===============================
-        [0]        1          1  red
-        [1]        3          3  green
-        [2]        1          1  red
-        [3]        0  None       None
-        [4]        2          2  yellow
-        [5]        1          1  red
-        [6]        5  None       None
-        [7]        3          3  green
+        </skip>
+        <hide>
+        >>> j_left.inspect(columns=['numbers', 'color'])
+        </hide>
+        [#]  numbers  color
+        ====================
+        [0]        1  red
+        [1]        3  green
+        [2]        1  red
+        [3]        0  None
+        [4]        2  yellow
+        [5]        1  red
+        [6]        5  None
+        [7]        3  green
 
         And an outer join:
 
-        <skip>  # todo: remove <skip></skip>  see DPAT-900
         >>> j_outer = codes.join(colors, 'numbers', how='outer')
         <progress>
 
+        <skip>
         >>> j_outer.inspect()
-        [#]  numbers  numbers_R  color
-        ===============================
-        [0]        0  None       None
-        [1]        1          1  red
-        [2]        1          1  red
-        [3]        1          1  red
-        [4]        2          2  yellow
-        [5]        3          3  green
-        [6]        3          3  green
-        [7]        4  None       None
         </skip>
+        <hide>
+        >>> j_outer.inspect(columns=['numbers', 'color'])
+        </hide>
+        [#]  numbers  color
+        ====================
+        [0]        0  None
+        [1]        1  red
+        [2]        1  red
+        [3]        1  red
+        [4]        2  yellow
+        [5]        3  green
+        [6]        3  green
+        [7]        4  blue
+        [8]        5  None
 
         More examples can be found in the :ref:`user manual
         <example_frame.join>`.
