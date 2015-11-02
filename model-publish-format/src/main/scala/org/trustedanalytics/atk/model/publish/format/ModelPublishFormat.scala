@@ -48,8 +48,7 @@ object ModelPublishFormat {
 
     try {
       classLoaderFiles.foreach((file: File) => {
-        require(file.exists(), s"file did not exist $file")
-        if (!file.isDirectory) {
+        if (!file.isDirectory && file.exists()) {
           val fileEntry = new TarArchiveEntry(file, file.getName)
           tarBall.putArchiveEntry(fileEntry)
           IOUtils.copy(new FileInputStream(file), tarBall)
