@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.plugins.query
 
 import javax.script.Bindings
 
+import com.typesafe.config.ConfigFactory
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation, PluginDoc }
@@ -111,7 +112,8 @@ class GremlinQueryPlugin extends CommandPlugin[QueryArgs, QueryResult] {
 
     invocation.updateProgress(5f)
     val start = System.currentTimeMillis()
-    val graphSONMode = GremlinUtils.getGraphSONMode(EngineConfig.config.getString("org.trustedanalytics.atk.plugins.gremlin-query.graphson-mode"))
+    val config = ConfigFactory.load(this.getClass.getClassLoader)
+    val graphSONMode = GremlinUtils.getGraphSONMode(config.getString("org.trustedanalytics.atk.plugins.gremlin-query.graphson-mode"))
 
     // TODO: cast to SparkGraphStorage shouldn't be needed
     val titanGraph = engine.graphs.asInstanceOf[SparkGraphStorage].titanGraph(arguments.graph)
