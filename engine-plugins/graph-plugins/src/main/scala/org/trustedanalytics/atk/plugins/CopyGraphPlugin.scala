@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.domain.graph.{ CopyGraphArgs, GraphEntity }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, Invocation, PluginDoc }
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Make a copy of the current graph.",
   extended = "",
   returns = "A copy of the original graph.")
-class CopyGraphPlugin extends CommandPlugin[CopyGraphArgs, GraphEntity] {
+class CopyGraphPlugin extends SparkCommandPlugin[CopyGraphArgs, GraphEntity] {
 
   /**
    * The name of the command, e.g. graph/vertex_sample
