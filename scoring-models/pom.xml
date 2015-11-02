@@ -113,11 +113,6 @@
             <artifactId>scala-reflect</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>scoring-interfaces</artifactId>
-            <version>master-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.spray</groupId>
             <artifactId>spray-json_${scala.short.version}</artifactId>
         </dependency>
