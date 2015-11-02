@@ -91,7 +91,7 @@ for a more in-depth discussion of |BP| and |LBP|.""",
   returns = "Progress report for belief propagation in the format of a multiple-line string.")
 class LoopyBeliefPropagationPlugin extends SparkCommandPlugin[LoopyBeliefPropagationArgs, LoopyBeliefPropagationResult] {
 
-  override def name: String = "graph/ml/belief_propagation"
+  override def name: String = "graph:/loopy_belief_propagation"
 
   //TODO remove when we move to the next version of spark
   override def kryoRegistrator: Option[String] = None
