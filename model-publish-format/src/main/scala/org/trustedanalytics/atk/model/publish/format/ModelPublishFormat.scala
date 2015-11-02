@@ -45,36 +45,33 @@ object ModelPublishFormat {
 
   def write(classLoaderFiles: List[File], modelLoaderClass: String, modelData: Array[Byte], outputStream: FileOutputStream): Unit = {
     val tarBall = new TarArchiveOutputStream(new BufferedOutputStream(outputStream))
-    var modelDataFile: File = null
-    var modelLoaderFile: File = null
-
-    def writeEntry(file: File): Unit =
-      {
-        val fileEntry = new TarArchiveEntry(file)
-        tarBall.putArchiveEntry(fileEntry)
-        IOUtils.copy(new FileInputStream(file), tarBall)
-        tarBall.closeArchiveEntry()
-      }
 
     try {
       classLoaderFiles.foreach((file: File) => {
-        writeEntry(file)
+        require(file.exists(), s"file did not exist $file")
+        if (!file.isDirectory) {
+          val fileEntry = new TarArchiveEntry(file, file.getName)
+          tarBall.putArchiveEntry(fileEntry)
+          IOUtils.copy(new FileInputStream(file), tarBall)
+          tarBall.closeArchiveEntry()
+        }
       })
 
-      modelDataFile = File.createTempFile(modelDataString, ".txt")
-      FileUtils.writeByteArrayToFile(modelDataFile, modelData)
-      writeEntry(modelDataFile)
+      val modelDataEntry = new TarArchiveEntry(modelDataString + ".txt")
+      modelDataEntry.setSize(modelData.length)
+      tarBall.putArchiveEntry(modelDataEntry)
+      IOUtils.copy(new ByteArrayInputStream(modelData), tarBall)
+      tarBall.closeArchiveEntry()
 
-      modelLoaderFile = File.createTempFile(modelReaderString, ".txt")
-      FileUtils.writeStringToFile(modelLoaderFile, modelLoaderClass)
-      writeEntry(modelLoaderFile)
+      val modelLoaderEntry = new TarArchiveEntry(modelReaderString + ".txt")
+      modelLoaderEntry.setSize(modelLoaderClass.length)
+      tarBall.putArchiveEntry(modelLoaderEntry)
+      IOUtils.copy(new ByteArrayInputStream(modelLoaderClass.getBytes("utf-8")), tarBall)
+      tarBall.closeArchiveEntry()
     }
     finally {
       tarBall.finish()
       IOUtils.closeQuietly(tarBall)
-      FileUtils.deleteQuietly(modelLoaderFile)
-      outputStream.close()
-      FileUtils.deleteQuietly(modelDataFile)
     }
   }
 

@@ -51,9 +51,7 @@ object ModelPublish {
     var tarOutput: FileOutputStream = null
 
     try {
-      //val jarFile = new File(Archive.getJar(scoringModelJar).toString.substring(5))
-      //val fileList = jarFile :: Nil
-      val fileList = Module.allLibs("scoring-models").map(jarUrl => new File(jarUrl.getProtocol)).toList
+      val fileList = Module.allLibs("scoring-models").map(jarUrl => new File(jarUrl.getPath)).toList
 
       tarFile = File.createTempFile("modelTar", ".tar")
       tarOutput = new FileOutputStream(tarFile)
@@ -70,6 +68,7 @@ object ModelPublish {
     }
     finally {
       FileUtils.deleteQuietly(tarFile)
+      IOUtils.closeQuietly(tarOutput)
     }
   }
 }

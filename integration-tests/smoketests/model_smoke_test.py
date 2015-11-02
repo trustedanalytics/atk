@@ -46,5 +46,14 @@ class ModelSmokeTest(unittest.TestCase):
         print "Initialize NaiveBayesModel object"
         n = ta.NaiveBayesModel()
 
+    def test_kmeans_train_publish(self):
+
+        frame = ta.Frame(ta.UploadRows([[2,"ab"],[1,"cd"],[7,"ef"],[1,"gh"],[9,"ij"],[2,"kl"],[0,"mn"],[6,"op"],[5,"qr"]],
+                                       [("data", ta.float64),("name", str)]))
+        model = ta.KMeansModel()
+        train_output = model.train(frame, ["data"], [1], 3)
+        self.assertTrue(train_output.has_key('within_set_sum_of_squared_error'))
+        model.publish()
+
 if __name__ == "__main__":
     unittest.main()

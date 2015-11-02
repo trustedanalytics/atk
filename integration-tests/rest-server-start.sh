@@ -62,9 +62,10 @@ echo "$NAME copying datasets to target"
 cp -rp $DIR/datasets $FS_ROOT
 
 echo "$NAME fs.root is $FS_ROOT"
+echo "$NAME SEARCH_PATH=$SEARCH_PATH"
 echo "$NAME Api Server logging going to $LOG"
 
-echo "starting, CP=$CP"
+echo "$NAME starting, CP=$CP"
 java $@ -XX:MaxPermSize=256m -Xss10m $SEARCH_PATH -cp "$CONF:$CP" \
     -Dconfig.resource=integration-test.conf \
     -Dtrustedanalytics.atk.engine.fs.root=file:$FS_ROOT \
