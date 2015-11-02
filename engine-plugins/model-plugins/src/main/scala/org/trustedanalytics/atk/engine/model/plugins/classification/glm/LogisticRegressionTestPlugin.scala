@@ -91,8 +91,14 @@ class LogisticRegressionTestPlugin extends SparkCommandPlugin[ClassificationWith
       ScoreAndLabel(score, labeledPoint.label)
     })
 
-    //Run Binary classification metrics
-    val posLabel: Double = 1.0d
-    ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
+    //Run classification metrics
+    logRegModel.numClasses match {
+      case 2 => {
+        val posLabel: Double = 1.0d
+        ClassificationMetrics.binaryClassificationMetrics(scoreAndLabelRdd, posLabel)
+      }
+      case _ => ClassificationMetrics.multiclassClassificationMetrics(scoreAndLabelRdd)
+    }
+
   }
 }

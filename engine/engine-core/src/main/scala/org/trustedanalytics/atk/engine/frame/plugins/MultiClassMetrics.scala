@@ -37,6 +37,8 @@ class MultiClassMetrics[T: ClassTag](labelPredictRdd: RDD[ScoreAndLabel[T]],
     this(frameRdd.toScoreAndLabelRdd[T](labelColumn, predictColumn, frequencyColumn), beta)
   }
 
+  labelPredictRdd.cache()
+
   lazy val countsByLabel = labelPredictRdd.map(scoreAndLabel => {
     (scoreAndLabel.label, scoreAndLabel.frequency)
   }).reduceByKey(_ + _).collectAsMap()
