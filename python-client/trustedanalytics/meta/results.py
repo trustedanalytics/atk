@@ -62,7 +62,7 @@ def return_graph(json_result):
     return get_graph(json_result['uri'])
 
 @postprocessor('frame/classification_metrics', 'model:logistic_regression/test', 'model:svm/test',
-               'model:random_forest_classifier/test', "model:libsvm/test")
+               'model:random_forest_classifier/test', "model:libsvm/test", "model:naive_bayes/test")
 def return_metrics(json_result):
      from trustedanalytics.core.classifymetrics import ClassificationMetricsResult
      return ClassificationMetricsResult(json_result)
@@ -114,12 +114,6 @@ def return_logistic_regression_train(json_result):
 
 @postprocessor('frame:/label_propagation')
 def return_label_propagation(json_result):
-    from trustedanalytics import get_frame
-    frame = get_frame(json_result['output_frame']['uri'])
-    return { 'frame': frame, 'report': json_result['report'] }
-
-@postprocessor('frame:/loopy_belief_propagation')
-def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }

@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
 import org.joda.time.DateTime
+import org.trustedanalytics.atk.rest.v1.decorators.GetGraphComponent
 
 /**
  * The REST service response for single graph in "GET ../graphs/id"
@@ -25,6 +26,8 @@ import org.joda.time.DateTime
  * @param name name assigned by user
  * @param links links to related URIs
  * @param entityType type of entity, in this case probably "graph"
+ * @param vertices the vertex types
+ * @param edges the egde types
  * @param status status of the entity, like Active or Dropped...
  * @param lastReadDate the last time data from this graph was accessed
  */
@@ -32,6 +35,8 @@ case class GetGraph(uri: String,
                     name: Option[String],
                     links: List[RelLink],
                     entityType: String,
+                    vertices: List[GetGraphComponent],
+                    edges: List[GetGraphComponent],
                     status: String,
                     lastReadDate: DateTime) {
   require(uri != null, "uri must not be null")
