@@ -210,6 +210,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'graphx_connected_components',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
+                                     'loopy_belief_propagation',
                                      'ml',
                                      'name',
                                      'status',
@@ -231,9 +232,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'query',
                                      'status',
                                      'vertex_sample'], ta.TitanGraph)
-
-    def test_expected_methods_exist_on_titangraphml(self):
-        self.assert_methods_defined(['belief_propagation'], ta.core.api.TitanGraphMl)
 
     def test_expected_methods_exist_on_kmeans_model(self):
         self.assert_methods_defined(["name",

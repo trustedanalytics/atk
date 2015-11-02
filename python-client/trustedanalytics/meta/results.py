@@ -140,8 +140,8 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph/ml/belief_propagation','graph:/ml/kclique_percolation')
-def return_belief_propagation(json_result):
+@postprocessor('graph/loopy_belief_propagation','graph:/ml/kclique_percolation')
+def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
