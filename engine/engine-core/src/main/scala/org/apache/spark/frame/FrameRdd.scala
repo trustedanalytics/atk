@@ -88,7 +88,21 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     // Work-around for kyro serialization bug in GenericRowWithSchema
     // https://issues.apache.org/jira/browse/SPARK-6465
     // This issue is affecting dataframe operations with shuffles like sort and join
-    val rowRdd: RDD[Row] = this.map(row => new GenericRow(row.toSeq.toArray))
+    val rowRdd: RDD[Row] = this.map(row => {
+      val rowArray = row.toSeq.toArray
+
+      for (i <- rowArray.indices) {
+        if (rowArray(i).isInstanceOf[Option[Int]]) {
+          val optionInt = rowArray(i).asInstanceOf[Option[Int]]
+          if (optionInt.isDefined)
+            rowArray(i) = optionInt.get
+          else
+            rowArray(i) = null
+        }
+      }
+
+      new GenericRow(rowArray)
+    })
     new SQLContext(this.sparkContext).createDataFrame(rowRdd, sparkSchema)
   }
 
@@ -628,6 +642,7 @@ object FrameRdd {
           case x if x.equals(DataTypes.int64) => LongType
           case x if x.equals(DataTypes.float32) => FloatType
           case x if x.equals(DataTypes.float64) => DoubleType
+          case x if x.equals(DataTypes.int32option) => IntegerType
           case x if x.equals(DataTypes.string) => StringType
           case x if x.equals(DataTypes.datetime) => StringType
           case x if x.isVector => VectorType

@@ -20,7 +20,7 @@ trusted_analytics definitions for Data Types
 
 # TODO - consider server providing types, similar to commands
 
-__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit', 'datetime']
+__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit', 'datetime','int32option']
 
 import numpy as np
 import json
@@ -108,6 +108,15 @@ class _Unknown(object):
     pass
 
 unknown = _Unknown
+
+class _Int32Option(object):
+    def __init__(self):
+        self.is_complex_type = True
+
+    def __repr__(self):
+        return "int32option"
+
+int32option = _Int32Option()
 
 
 # map types to their string identifier
@@ -245,9 +254,12 @@ class _DataTypes(object):
                 return _primitive_alias_str_to_type_table[data_type_str]
             except KeyError:
                 try:
-                   return vector.get_from_string(data_type_str)
+                    return vector.get_from_string(data_type_str)
                 except:
-                   raise ValueError("Unsupported type string '%s' " % data_type_str)
+                    if data_type_str == "int32option":
+                        return _Int32Option
+                    else:
+                        raise ValueError("Unsupported type string '%s' " % data_type_str)
 
     @staticmethod
     def is_primitive_type(data_type):

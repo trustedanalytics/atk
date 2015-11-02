@@ -193,6 +193,45 @@ object DataTypes extends EventLogging {
   }
 
   /**
+   * 32 bit int option
+   */
+  case object int32option extends DataType {
+    override type ScalaType = Option[Int]
+
+    override def parse(raw: Any) = Try {
+      if (raw != null && raw != "")
+        Some(toInt(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Int]
+    }
+
+    override def scalaType = classOf[Option[Int]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Int].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Int].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = true
+  }
+
+  /**
    * Strings
    */
   case object string extends DataType {
@@ -509,6 +548,7 @@ object DataTypes extends EventLogging {
     s match {
       case vectorPattern(length) => vector(length.toLong)
       case "vector" => DataTypes.string
+      case "int32option" => DataTypes.int32option
       case _ => throw new IllegalArgumentException(s"Invalid datatype: '$s'")
     }
   }
@@ -544,7 +584,7 @@ object DataTypes extends EventLogging {
           case _ =>
             val colType = lifted(i).get
             val value = colType.parse(s)
-            value.get
+            value.getOrElse(null)
         }
     }
   }
