@@ -133,7 +133,7 @@ trustedanalytics.atk {
         # shrink_only - re-partition during frame creation, and when the number partitions is less than existing partitions. Uses less-expensive Spark merge
         # shrink_or_grow - during frame creation, and either increase or decrease the number of partitions using more-expensive Spark shuffle
         #                  Using this option will also change the ordering of the frame during the shuffle
-        strategy = "disabled"
+        strategy = "frame_create_only"
 
         # percentage change in number of partitions that triggers re-partition
         threshold-percent = 80
