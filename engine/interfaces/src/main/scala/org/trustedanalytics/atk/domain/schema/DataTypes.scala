@@ -63,6 +63,9 @@ object DataTypes extends EventLogging {
 
     def isVector: Boolean = false
 
+    /** True if data type is an Option data type (e.g. Option[Int32], Option[Int64], etc). */
+    def isOption: Boolean = false
+
     /**
      * Looser type equality than strict object equals, to enable things like vector.equalsDataType(vector(4)) returns true
      */
@@ -229,6 +232,128 @@ object DataTypes extends EventLogging {
     override def isNumerical = true
 
     override def isInteger = true
+
+    override def isOption = true
+  }
+
+  /**
+   * 64 bit int option
+   */
+  case object int64option extends DataType {
+    override type ScalaType = Option[Long]
+
+    override def parse(raw: Any) = Try {
+      if (raw != null && raw != "")
+        Some(toLong(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Long]
+    }
+
+    override def scalaType = classOf[Option[Long]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Long].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Long].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = true
+
+    override def isOption = true
+  }
+
+  /**
+   * 32 bit float option
+   */
+  case object float32option extends DataType {
+    override type ScalaType = Option[Float]
+
+    override def parse(raw: Any) = Try {
+      if (raw != null && raw != "")
+        Some(toFloat(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Float]
+    }
+
+    override def scalaType = classOf[Option[Float]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Float].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Float].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = false
+
+    override def isOption = true
+  }
+
+  /**
+   * 64 bit float option
+   */
+  case object float64option extends DataType {
+    override type ScalaType = Option[Double]
+
+    override def parse(raw: Any) = Try {
+      toOptionDouble(raw)
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Double]
+    }
+
+    override def scalaType = classOf[Option[Double]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Double].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Double].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = false
+
+    override def isOption = true
   }
 
   /**
@@ -549,6 +674,9 @@ object DataTypes extends EventLogging {
       case vectorPattern(length) => vector(length.toLong)
       case "vector" => DataTypes.string
       case "int32option" => DataTypes.int32option
+      case "int64option" => DataTypes.int64option
+      case "float32option" => DataTypes.float32option
+      case "float64option" => DataTypes.float64option
       case _ => throw new IllegalArgumentException(s"Invalid datatype: '$s'")
     }
   }
@@ -651,6 +779,26 @@ object DataTypes extends EventLogging {
       case bd: BigDecimal => bd.toDouble
       case s: String => s.trim().toDouble
       case v: vector.ScalaType => vector.asDouble(v)
+      case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
+    }
+  }
+
+  /**
+   * Attempt to cast Any type to Option[Double]
+   *
+   * @param value input Any type to be cast
+   * @return value cast as Option[Double], if possible
+   */
+  def toOptionDouble(value: Any): Option[Double] = {
+    value match {
+      case null => None
+      case i: Int => Some(i.toDouble)
+      case l: Long => Some(l.toDouble)
+      case f: Float => Some(f.toDouble)
+      case d: Double => Some(d)
+      case bd: BigDecimal => Some(bd.toDouble)
+      case s: String => if (s.trim().length > 0) Some(s.trim().toDouble) else None
+      case v: vector.ScalaType => Some(vector.asDouble(v))
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
   }

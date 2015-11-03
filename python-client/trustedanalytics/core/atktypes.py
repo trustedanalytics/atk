@@ -20,7 +20,7 @@ trusted_analytics definitions for Data Types
 
 # TODO - consider server providing types, similar to commands
 
-__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit', 'datetime','int32option']
+__all__ = ['valid_data_types', 'ignore', 'unknown', 'float32', 'float64', 'int32', 'int64', 'vector', 'unit', 'datetime','int32option','int64option','float32option','float64option']
 
 import numpy as np
 import json
@@ -118,6 +118,32 @@ class _Int32Option(object):
 
 int32option = _Int32Option()
 
+class _Int64Option(object):
+    def __init__(self):
+        self.is_complex_type = True
+
+    def __repr__(self):
+        return "int64option"
+
+int64option = _Int64Option()
+
+class _Float32Option(object):
+    def __init__(self):
+        self.is_complex_type = True
+
+    def __repr__(self):
+        return "float32option"
+
+float32option = _Float32Option()
+
+class _Float64Option(object):
+    def __init__(self):
+        self.is_complex_type = True
+
+    def __repr__(self):
+        return "float64option"
+
+float64option = _Float64Option()
 
 # map types to their string identifier
 _primitive_type_to_str_table = {
@@ -185,7 +211,7 @@ class _DataTypes(object):
 
     def __repr__(self):
         aliases = "\n(and aliases: %s)" % (", ".join(sorted(["%s->%s" % (alias.__name__, self.to_string(data_type)) for alias, data_type in _primitive_alias_type_to_type_table.iteritems()])))
-        return ", ".join(sorted(_primitive_str_to_type_table.keys() + ["vector(n)"])) + aliases
+        return ", ".join(sorted(_primitive_str_to_type_table.keys() + ["vector(n)", "int32option", "int64option", "float32option", "float64option"])) + aliases
 
     @staticmethod
     def value_is_string(value):
@@ -257,7 +283,13 @@ class _DataTypes(object):
                     return vector.get_from_string(data_type_str)
                 except:
                     if data_type_str == "int32option":
-                        return _Int32Option
+                        return int32option
+                    elif data_type_str == "int64option":
+                        return int64option
+                    elif data_type_str == "float32option":
+                        return float32option
+                    elif data_type_str == "float64option":
+                        return float64option
                     else:
                         raise ValueError("Unsupported type string '%s' " % data_type_str)
 

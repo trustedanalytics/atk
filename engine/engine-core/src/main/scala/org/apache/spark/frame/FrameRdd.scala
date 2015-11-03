@@ -92,13 +92,22 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
       val rowArray = row.toSeq.toArray
 
       for (i <- rowArray.indices) {
+        rowArray(i) = rowArray(i) match {
+          case optionField: Option[_] => if (optionField.isDefined) optionField.get else null
+          case _ => rowArray(i)
+        }
+        /*
+          case i32: Option[Int] => if (i32.isDefined) i32.get else null
+          case i64: Option[Long] => if (i64.isDefined) i64.get else null
+          case f32: Option[Float] => if (f32.isDefined) f32.get else null
+
         if (rowArray(i).isInstanceOf[Option[Int]]) {
           val optionInt = rowArray(i).asInstanceOf[Option[Int]]
           if (optionInt.isDefined)
             rowArray(i) = optionInt.get
           else
             rowArray(i) = null
-        }
+        }*/
       }
 
       new GenericRow(rowArray)
