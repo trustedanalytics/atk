@@ -26,7 +26,6 @@
     graphx_pagerank
     graphx_triangle_count
     last_read_date
-    ml/belief_propagation
     name
     query/gremlin
     status
@@ -59,7 +58,6 @@
     :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
-    :doc:`ml.belief_propagation <ml/belief_propagation>`\ (self, prior_property, posterior_property)      Classification on sparse data using Belief Propagation.
     :doc:`query.gremlin <query/gremlin>`\ (self, gremlin)                                                 Executes a Gremlin query.
     :doc:`vertex_sample <vertex_sample>`\ (self, size, sample_type[, seed])                               Make subgraph from vertex sampling.
     ====================================================================================================  ====================================================================================================

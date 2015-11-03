@@ -79,6 +79,7 @@
     graph-__define_vertex_type
     graph-__edge_count
     graph-__export_to_titan
+    graph-__loopy_belief_propagation
     graph-__ml__kclique_percolation
     graph-__vertex_count
     graph-titan__export_to_graph
@@ -92,7 +93,6 @@
     graph__graphx_connected_components
     graph__graphx_pagerank
     graph__graphx_triangle_count
-    graph__ml__belief_propagation
     graph__rename
     model-collaborative_filtering__new
     model-collaborative_filtering__recommend
@@ -208,12 +208,12 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`graph/graphx_connected_components <graph__graphx_connected_components>`                 Implements the connected components computation on a graph by invoking graphx api.
 :doc:`graph/graphx_pagerank <graph__graphx_pagerank>`                                         Determine which vertices are the most important.
 :doc:`graph/graphx_triangle_count <graph__graphx_triangle_count>`                             Number of triangles among vertices of current graph.
-:doc:`graph/ml/belief_propagation <graph__ml__belief_propagation>`                            Classification on sparse data using Belief Propagation.
 :doc:`graph/rename <graph__rename>`                                                           Rename a graph in the database.
 :doc:`graph:/define_edge_type <graph-__define_edge_type>`                                     Define an edge type.
 :doc:`graph:/define_vertex_type <graph-__define_vertex_type>`                                 Define a vertex type by label.
 :doc:`graph:/edge_count <graph-__edge_count>`                                                 Get the total number of edges in the graph.
 :doc:`graph:/export_to_titan <graph-__export_to_titan>`                                       Convert current graph to TitanGraph.
+:doc:`graph:/loopy_belief_propagation <graph-__loopy_belief_propagation>`                     Classification on sparse data using Belief Propagation.
 :doc:`graph:/ml/kclique_percolation <graph-__ml__kclique_percolation>`                        |ALPHA| Find groups of vertices with similar attributes.
 :doc:`graph:/vertex_count <graph-__vertex_count>`                                             Get the total number of vertices in the graph.
 :doc:`graph:titan/export_to_graph <graph-titan__export_to_graph>`                             Export from TitanGraph to Graph.
