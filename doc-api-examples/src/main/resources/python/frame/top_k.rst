@@ -38,7 +38,6 @@ Consider the following frame containing four columns.
         ======================
         [0]  Washington    4.0
         [1]  Clackamas     3.0
- 
 
 
 
