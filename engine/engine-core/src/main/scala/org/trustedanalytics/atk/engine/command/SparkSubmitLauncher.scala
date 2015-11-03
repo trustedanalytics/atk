@@ -56,8 +56,8 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
         val jobName = Array(s"--name", s"${command.getJobName}")
         val pluginExecutionDriverClass = Array("--class", "org.trustedanalytics.atk.engine.command.SparkCommandJob")
 
-        val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName))
-        val pluginDependencyJars = Array("--jars", hdfsJars.filter(_.endsWith(".jar")).mkString(","))
+        val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName)).filter(_.endsWith(".jar"))
+        val pluginDependencyJars = Array("--jars", hdfsJars.mkString(","))
 
         val pythonDependencyPath = plugin.executesPythonUdf match {
           case true => "," + PythonRddStorage.pythonDepZip
@@ -70,15 +70,23 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
         val executionParams = Array(
           "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
 
+        // TODO: not sure why we need to include Hive libraries this way
+
         val executorClassPathString = "spark.executor.extraClassPath"
         val executorClassPathTuple = (executorClassPathString,
           s"${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
           s"${EngineConfig.hiveConf}" +
           s":${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
 
+        val driverClassPathString = "spark.driver.extraClassPath"
+        val driverClassPathTuple = (driverClassPathString,
+          s"${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
+          s"${EngineConfig.hiveConf}" +
+          s":${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, "")}")
+
         val executionConfigs = {
           for {
-            (config, value) <- EngineConfig.sparkConfProperties + executorClassPathTuple
+            (config, value) <- EngineConfig.sparkConfProperties + executorClassPathTuple + driverClassPathTuple
           } yield List("--conf", s"$config=$value")
         }.flatMap(identity).toArray
 
