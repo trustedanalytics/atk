@@ -930,8 +930,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       // special query which avoids pulling the data field, which can be large!
       (for {
         m <- models; if m.name.isNotNull && m.statusId === Status.Active.id
-      } yield (m.id, m.name, m.modelType)).list.map {
-        case (id, name, modelType) => ModelEntity(
+      } yield (m.id, m.name, m.modelType, m.lastReadDate)).list.map {
+        case (id, name, modelType, lastReadDate) => ModelEntity(
           id = id,
           name = name,
           modelType = modelType,
@@ -939,7 +939,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
           statusId = Status.Active,
           data = None,
           createdOn = null,
-          modifiedOn = null)
+          modifiedOn = null,
+          lastReadDate = lastReadDate)
       }
     }
 
@@ -957,8 +958,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     override def lookupNoData(id: Long)(implicit session: Session): Option[ModelEntity] = {
       // special query which avoids pulling the data field, which can be large!
       (for { m <- models; if m.id === id }
-        yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn)).list.headOption match {
-        case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn)) => Some(ModelEntity(
+        yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn, m.lastReadDate)).list.headOption match {
+        case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn, lastReadDate)) => Some(ModelEntity(
           id = zid,
           name = name,
           modelType = modelType,
@@ -966,7 +967,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
           statusId = statusId,
           data = None,
           createdOn = createdOn,
-          modifiedOn = modifiedOn))
+          modifiedOn = modifiedOn,
+          lastReadDate = lastReadDate))
         case None => None
       }
     }
@@ -975,8 +977,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       name match {
         case Some(n) =>
           (for { m <- models; if m.name === n }
-            yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn)).list.headOption match {
-            case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn)) => Some(ModelEntity(
+            yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn, m.lastReadDate)).list.headOption match {
+            case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn, lastReadDate)) => Some(ModelEntity(
               id = zid,
               name = name,
               modelType = modelType,
@@ -984,7 +986,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
               statusId = statusId,
               data = None,
               createdOn = createdOn,
-              modifiedOn = modifiedOn))
+              modifiedOn = modifiedOn,
+              lastReadDate = lastReadDate))
             case None => None
           }
         case _ => None

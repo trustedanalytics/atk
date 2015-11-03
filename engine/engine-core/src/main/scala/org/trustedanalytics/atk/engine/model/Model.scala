@@ -67,7 +67,7 @@ object Model {
 
 class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit invocation: Invocation) extends Model {
 
-  override def entity: ModelEntity = modelStorage.expectModel(modelRef)
+  override def entity: ModelEntity = modelStorage.expectModel(modelRef, noData = true)
 
   /** name assigned by user for this model instance */
   override def name: Option[String] = entity.name
@@ -91,8 +91,9 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
   override def data_=(updatedData: JsObject): Unit = modelStorage.updateModel(modelRef, updatedData)
 
   override def dataOption: Option[JsObject] = {
-    modelStorage.updateLastReadDate(entity)
-    entity.data
+    val entityWithData: ModelEntity = modelStorage.expectModel(modelRef)
+    modelStorage.updateLastReadDate(entityWithData)
+    entityWithData.data
   }
 
 }
