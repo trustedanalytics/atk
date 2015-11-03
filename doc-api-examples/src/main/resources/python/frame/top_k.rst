@@ -31,14 +31,14 @@ Consider the following frame containing four columns.
     [7]    16  Oregon City            34622            31859  8.67%   Clackamas
     [8]    17  McMinnville            33131            32187  2.93%   Yamhill
     [9]    18  Redmond                27427            26215  4.62%   Deschutes
->>> top_frame = frame.top_k("county", 3)
+>>> top_frame = frame.top_k("county", 2)
 <progress>
 >>> top_frame.inspect()
     [#]  county      count
         ======================
         [0]  Washington    4.0
         [1]  Clackamas     3.0
-        [2]  Lane          2.0
+ 
 
 
 
