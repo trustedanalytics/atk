@@ -1,6 +1,6 @@
 <!--
 /*
-// Copyright (c) 2015 Intel Corporation 
+// Copyright (c) ${currentYear} Intel Corporation 
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     <name>TrustedAnalytics Parent</name>
     <description>TrustedAnalytics : Large Scale Graph Analytics</description>
     <inceptionYear>2013</inceptionYear>
+
 
     <repositories>
     	<repository>
@@ -452,6 +453,43 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </configuration>
                 </plugin>
 
+		<!-- Update and correct open source license block comments -->
+		<plugin>
+		    <groupId>com.mycila</groupId>
+		    <artifactId>license-maven-plugin</artifactId>
+		    <version>2.3</version>
+		    <configuration>
+			<header>package/license-header.txt</header>
+			<properties>
+			    <currentYear>2015</currentYear>
+			</properties>
+			<excludes>
+			    <exclude>engine-plugins/giraph-plugins/src/main/assembly/compile.xml</exclude>
+			    <exclude>findbugs-exclude.xml</exclude>
+			    <exclude>scalastyle-config.xml</exclude>
+			    <exclude>checkstyle.xml</exclude>
+			    <exclude>**/pom.xml</exclude>
+			    <exclude>doc/**/*.*</exclude>
+			    <exclude>conf/**/*.*</exclude>
+			    <exclude>**/*.txt</exclude>
+			    <exclude>**/*.csv</exclude>
+			    <exclude>**/*.rst</exclude>
+			    <exclude>**/*.tpl</exclude>
+			    <exclude>**/*.inc</exclude>
+			    <exclude>**/*.conf</exclude>
+					<exclude>**/*.sql</exclude>
+			</excludes>
+		    </configuration>
+		    <executions>
+			<execution>
+			    <goals>
+				<goal>check</goal>
+				<goal>format</goal>
+			    </goals>
+			</execution>
+		    </executions>
+		</plugin>
+		
                 <!--Create our jars-->
                 <plugin>
                     <inherited>true</inherited>
