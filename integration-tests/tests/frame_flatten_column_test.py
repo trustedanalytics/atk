@@ -23,8 +23,8 @@ import trustedanalytics as ta
 ta.errors.show_details = True
 ta.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 9099:
-    ta.server.port = 9099
+if ta.server.port != 19099:
+    ta.server.port = 19099
 ta.connect()
 
 
@@ -41,7 +41,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
 
     def setUp(self):
         print "define csv file"
-        csv = ta.CsvFile("flattenable.csv", schema= [('number', ta.int32),
+        csv = ta.CsvFile("/datasets/flattenable.csv", schema= [('number', ta.int32),
                                                              ('abc', str),
                                                              ('food', str)], delimiter=',')
 
