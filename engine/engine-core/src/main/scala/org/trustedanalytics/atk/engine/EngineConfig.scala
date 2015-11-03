@@ -84,6 +84,9 @@ trait EngineConfig extends EventLogging {
   val hiveConf: String = config.getString(hiveConfigKey + ".conf")
   val jdbcLib: String = config.getString(jdbcConfigKey + ".lib")
 
+  /** Path to hbase conf, e.g. /etc/hbase/conf */
+  val hbaseConf: String = config.getString(engineConfigKey + ".hbase.configuration.path")
+
   /**
    * true to re-use a SparkContext, this can be helpful for automated integration tests, not for customers.
    * NOTE: true should break the progress bar.
