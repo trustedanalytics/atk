@@ -55,6 +55,11 @@ if [ \$? -eq 1 ]; then
 	su -c \"hadoop fs -chown \$restUser:\$restUser /user/\$restUser\" hdfs
 	su -c \"hadoop fs -chmod 755 /user/\$restUser\" hdfs
 fi
+
+if [ -d /usr/lib/trustedanalytics/rest-server/lib/ ]; then
+   rm -rf /usr/lib/trustedanalytics/rest-server/lib/
+ fi
+
 "
 
 POST="
