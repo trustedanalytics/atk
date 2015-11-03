@@ -45,7 +45,7 @@
 #         graph.define_edge_type("edge","nodes","nodes",directed= False)
 #         graph.edges["edge"].add_edges(lbp_frame,"id1","id2")
 #
-#         result = graph.ml.belief_propagation(prior_property="prior",posterior_property="lbp_output",max_iterations=1)
+#         result = graph.loopy_belief_propagation(prior_property="prior",posterior_property="lbp_output",max_iterations=1)
 #
 #         frame_result = result['vertex_dictionary']
 #         self.assertTrue(dict(frame_result['nodes'].schema).has_key('lbp_output'))

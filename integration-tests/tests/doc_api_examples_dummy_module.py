@@ -77,7 +77,6 @@ model-svm/test.rst
 graph-titan/graph_clustering.rst
 graph-titan/query/gremlin.rst
 graph-titan/query/recommend.rst
-graph-titan/ml/belief_propagation.rst
 graph-titan/sampling/assign_sample.rst
 graph-titan/sampling/vertex_sample.rst
 frame-/load.rst
@@ -96,7 +95,7 @@ graph/copy.rst
 graph/clustering_coefficient.rst
 graph/annotate_weighted_degrees.rst
 graph/ml/kclique_percolation.rst
-graph/ml/belief_propagation.rst
+graph/loopy_belief_propagation.rst
 (FIXED)model-k_means/train.rst
 (FIXED)model-k_means/predict.rst
 (FIXED)model-k_means/publish.rst
