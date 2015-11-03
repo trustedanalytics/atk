@@ -93,7 +93,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
 
     val expectedRows = List(Row("a", "10"), Row("b", "18"), Row("c", "20"),
       Row("d", "7"), Row("e", "8"),
-      Row("f", "17"), Row("g", "2"), Row("h", ""))
+      Row("f", "17"), Row("g", "2"), Row("h", null))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
@@ -121,7 +121,7 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
 
   }
 
-  it should "flatten multiple columns with empty strings when the number of items in each column do not match" in {
+  it should "flatten multiple columns with nulls when the number of items in each column do not match" in {
     val columnIndexes = List(0, 1)
     val delimiters = List(",", ",")
     val rows = List(Row("a,b,c", "10,18,20"), Row("d,e", "7,8"), Row("f,g,h", "17,2"), Row("i,j", "37,6,8"))
@@ -134,8 +134,8 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     // Check values
     val expectedRows = List(Row("a", "10"), Row("b", "18"), Row("c", "20"),
       Row("d", "7"), Row("e", "8"),
-      Row("f", "17"), Row("g", "2"), Row("h", ""),
-      Row("i", "37"), Row("j", "6"), Row("", "8"))
+      Row("f", "17"), Row("g", "2"), Row("h", null),
+      Row("i", "37"), Row("j", "6"), Row(null, "8"))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
@@ -176,9 +176,9 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
     }
     // Check values
     val expectedRows = List(Row("a", 10), Row("b", 18), Row("c", 20),
-      Row("d", 7), Row("e", 8), Row("", 0),
+      Row("d", 7), Row("e", 8), Row(null, 0),
       Row("f", 17), Row("g", 2), Row("h", 9),
-      Row("i", 37), Row("j", 6), Row("", 8),
+      Row("i", 37), Row("j", 6), Row(null, 8),
       Row("k", 22), Row("l", 2), Row("m", 10), Row("n", 0))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
