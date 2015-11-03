@@ -53,7 +53,7 @@ Consider the following frame containing four columns.
 0.9411764705882353
 >>> test_obj.recall
 0.8888888888888888
->>> predictedscore = model.score([3,4])
+>>> score = model.score([3,4])
 <progress>
 >>> score
 -1.0
