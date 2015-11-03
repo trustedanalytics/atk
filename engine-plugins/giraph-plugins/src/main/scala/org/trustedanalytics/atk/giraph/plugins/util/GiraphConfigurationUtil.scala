@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.plugins.util
 
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator

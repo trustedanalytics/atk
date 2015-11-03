@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.domain.graph.{ CopyGraphArgs, GraphEntity }

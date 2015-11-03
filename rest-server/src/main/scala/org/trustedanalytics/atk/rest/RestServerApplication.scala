@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest
 
 import org.trustedanalytics.atk.engine.plugin.{ Call, Invocation }

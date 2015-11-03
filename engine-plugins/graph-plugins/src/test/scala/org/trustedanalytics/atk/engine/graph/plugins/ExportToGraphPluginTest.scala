@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.graph.plugins
 
 import org.scalatest.{ Matchers, FlatSpec }

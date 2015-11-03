@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 
 import org.trustedanalytics.atk.UnitReturn

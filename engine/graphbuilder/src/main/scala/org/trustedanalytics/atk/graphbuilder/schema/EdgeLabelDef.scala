@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.schema
 
 // TODO: we can add support for: isDirected, isManyToOne, sortKey, signature, etc

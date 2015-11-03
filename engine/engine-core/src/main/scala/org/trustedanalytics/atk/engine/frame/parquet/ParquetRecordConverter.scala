@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.parquet
 
 import parquet.io.api.{ GroupConverter, PrimitiveConverter }

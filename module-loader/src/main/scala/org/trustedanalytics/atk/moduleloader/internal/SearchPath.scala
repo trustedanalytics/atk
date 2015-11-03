@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.moduleloader.internal
 
 import java.io.{ IOException, File, FileInputStream }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.util
 
 import java.lang.reflect.{ Array, Modifier }

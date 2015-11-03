@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.user
 
 import org.trustedanalytics.atk.repository.SlickMetaStoreComponent

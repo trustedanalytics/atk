@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.plugins.model.cf
 
 import org.apache.spark.frame.FrameRdd
