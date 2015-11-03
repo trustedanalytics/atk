@@ -54,8 +54,8 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     }
 
     // Verify that we have the rows expected after flattening column 1
-    val expectedRows1 = List(Row("a,b,c", "10"),Row("a,b,c", "18"),Row("a,b,c", "20"),
-      Row("d,e", "7"),Row("d,e", "8"),Row("f,g,h", "17"),Row("f,g,h", "2"))
+    val expectedRows1 = List(Row("a,b,c", "10"), Row("a,b,c", "18"), Row("a,b,c", "20"),
+      Row("d,e", "7"), Row("d,e", "8"), Row("f,g,h", "17"), Row("f,g,h", "2"))
     assertResult(expectedRows1) {
       flattened.take(flattened.count().toInt).toList
     }
@@ -68,13 +68,13 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     }
 
     // Verify that we have the rows expected after flattening column 0
-    val expectedRows0 = List(Row("a", "10"),Row("b", "10"),Row("c", "10"),
-      Row("a", "18"),Row("b", "18"),Row("c", "18"),
-      Row("a", "20"),Row("b", "20"),Row("c", "20"),
-      Row("d", "7"),Row("e", "7"),
-      Row("d", "8"),Row("e", "8"),
-      Row("f", "17"),Row("g", "17"),Row("h", "17"),
-      Row("f", "2"),Row("g", "2"),Row("h", "2"))
+    val expectedRows0 = List(Row("a", "10"), Row("b", "10"), Row("c", "10"),
+      Row("a", "18"), Row("b", "18"), Row("c", "18"),
+      Row("a", "20"), Row("b", "20"), Row("c", "20"),
+      Row("d", "7"), Row("e", "7"),
+      Row("d", "8"), Row("e", "8"),
+      Row("f", "17"), Row("g", "17"), Row("h", "17"),
+      Row("f", "2"), Row("g", "2"), Row("h", "2"))
     assertResult(expectedRows0) {
       flattened.take(flattened.count().toInt).toList
     }
@@ -86,14 +86,14 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
     val rdd = sparkContext.parallelize(rows)
 
     // Flatten column 0 and 1
-    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(0,1), List(DataTypes.string, DataTypes.string), List(",",","))(rdd)
+    val flattened = FlattenColumnFunctions.flattenRddByColumnIndices(List(0, 1), List(DataTypes.string, DataTypes.string), List(",", ","))(rdd)
     assertResult(8) {
       flattened.count()
     }
 
-    val expectedRows = List(Row("a", "10"),Row("b", "18"),Row("c", "20"),
-      Row("d", "7"),Row("e", "8"),
-      Row("f", "17"),Row("g", "2"),Row("h", ""))
+    val expectedRows = List(Row("a", "10"), Row("b", "18"), Row("c", "20"),
+      Row("d", "7"), Row("e", "8"),
+      Row("f", "17"), Row("g", "2"), Row("h", ""))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
@@ -107,7 +107,6 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       Row("d,e", Vector[Double](7, 8, 5)),
       Row("f,g,h", Vector[Double](17, 2, 26)))
 
-
     val rdd = sparkContext.parallelize(rows)
 
     // Flatten columns 0 and 1
@@ -116,9 +115,9 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       flattened.count()
     }
 
-    val expectedRows = List(Row("a", 10),Row("b", 18),Row("c", 20),
-      Row("d", 7),Row("e", 8),Row("", 5),
-      Row("f", 17),Row("g", 2),Row("h", 26))
+    val expectedRows = List(Row("a", 10), Row("b", 18), Row("c", 20),
+      Row("d", 7), Row("e", 8), Row("", 5),
+      Row("f", 17), Row("g", 2), Row("h", 26))
 
   }
 
@@ -133,11 +132,11 @@ class FlattenColumnArgsITest extends FlatSpec with Matchers with BeforeAndAfterE
       flattened.count()
     }
     // Check values
-    val expectedRows = List(Row("a", "10"),Row("b", "18"),Row("c","20"),
+    val expectedRows = List(Row("a", "10"), Row("b", "18"), Row("c", "20"),
       Row("d", "7"), Row("e", "8"),
-      Row("f", "17"), Row("g","2"), Row("h", ""),
-      Row("i", "37"), Row("j", "6"), Row("","8"))
-    assertResult(expectedRows){
+      Row("f", "17"), Row("g", "2"), Row("h", ""),
+      Row("i", "37"), Row("j", "6"), Row("", "8"))
+    assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
   }
@@ -154,10 +153,10 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       flattened.count()
     }
     // Check values
-    val expectedRows = List(Row("counting", 1.2), Row("counting", 3.4),Row("counting", 5.6),
-      Row("pi", 3.14),Row("pi", 6.28),Row("pi", 9.42),
-      Row("neg", -1.0),Row("neg", -5.5),Row("neg", 8))
-    assertResult(expectedRows){
+    val expectedRows = List(Row("counting", 1.2), Row("counting", 3.4), Row("counting", 5.6),
+      Row("pi", 3.14), Row("pi", 6.28), Row("pi", 9.42),
+      Row("neg", -1.0), Row("neg", -5.5), Row("neg", 8))
+    assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
   }
@@ -176,11 +175,11 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       flattened.count()
     }
     // Check values
-    val expectedRows = List(Row("a", 10),Row("b", 18),Row("c", 20),
-      Row("d", 7),Row("e", 8),Row("", 0),
-      Row("f", 17), Row("g", 2),Row("h", 9),
-      Row("i", 37),Row("j", 6), Row("", 8),
-      Row("k", 22),Row("l", 2),Row("m", 10),Row("n", 0))
+    val expectedRows = List(Row("a", 10), Row("b", 18), Row("c", 20),
+      Row("d", 7), Row("e", 8), Row("", 0),
+      Row("f", 17), Row("g", 2), Row("h", 9),
+      Row("i", 37), Row("j", 6), Row("", 8),
+      Row("k", 22), Row("l", 2), Row("m", 10), Row("n", 0))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }
