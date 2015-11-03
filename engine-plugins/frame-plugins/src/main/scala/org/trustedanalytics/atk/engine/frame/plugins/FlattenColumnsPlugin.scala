@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.trustedanalytics.atk.UnitReturn
@@ -131,6 +130,24 @@ object FlattenColumnFunctions extends Serializable {
   }
 
   /**
+   * When flattening multiple columns, there could be a case where one field has more values after
+   * the flattening than another field in the same row.  We needs to fill the extra spots in the
+   * column that has less values.  This is a helper function to return the value that we're filling
+   * in the extra spots, depending on the column's data type.  The columns should be either strings
+   * or vectors, since those are the types of columns that current support flattening.
+   * @param dataType column data type
+   * @return missing value
+   */
+  private def getMissingValue(dataType: DataType): Any = {
+    if (dataType == DataTypes.string) {
+      null
+    }
+    else {
+      0.0
+    }
+  }
+
+  /**
    * flatten a row by the column with specified column indices.  Columns must be a string or vector.
    * @param indices column indices
    * @param dataTypes column data types
@@ -161,10 +178,7 @@ object FlattenColumnFunctions extends Serializable {
               if (isNewRow) {
                 for (tempColIndex <- indices.indices) {
                   if (tempColIndex != i) {
-                    if (dataTypes(tempColIndex) == DataTypes.string)
-                      r(indices(tempColIndex)) = ""
-                    else
-                      r(indices(tempColIndex)) = 0.0
+                    r(indices(tempColIndex)) = getMissingValue(dataTypes(tempColIndex))
                   }
                 }
 
@@ -196,10 +210,7 @@ object FlattenColumnFunctions extends Serializable {
               // Empty out other columns that are being flattened in the new row
               for (tempColIndex <- indices.indices) {
                 if (tempColIndex != i) {
-                  if (dataTypes(tempColIndex) == DataTypes.string)
-                    r(indices(tempColIndex)) = ""
-                  else
-                    r(indices(tempColIndex)) = 0.0
+                  r(indices(tempColIndex)) = getMissingValue(dataTypes(tempColIndex))
                 }
               }
               // Add new row to the rowBuffer

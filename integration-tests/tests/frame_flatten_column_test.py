@@ -23,8 +23,8 @@ import trustedanalytics as ta
 ta.errors.show_details = True
 ta.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 19099:
-    ta.server.port = 19099
+if ta.server.port != 9099:
+    ta.server.port = 9099
 ta.connect()
 
 
@@ -41,7 +41,7 @@ class FrameFlattenColumnTest(unittest.TestCase):
 
     def setUp(self):
         print "define csv file"
-        csv = ta.CsvFile("/datasets/flattenable.csv", schema= [('number', ta.int32),
+        csv = ta.CsvFile("flattenable.csv", schema= [('number', ta.int32),
                                                              ('abc', str),
                                                              ('food', str)], delimiter=',')
 
@@ -149,24 +149,24 @@ class FrameFlattenColumnTest(unittest.TestCase):
         # expected data after flattening
         expected_data = [
             [1,"a","biscuits"],
-            [1,"","gravy"],
+            [1,None,"gravy"],
             [2,"a","ham"],
-            [2,"","cheese"],
+            [2,None,"cheese"],
             [3,"a","grilled"],
-            [3,"","tuna"],
+            [3,None,"tuna"],
             [4,"a","mac"],
             [4,"b","cheese"],
-            [4,"c",""],
+            [4,"c",None],
             [5,"a","salad"],
-            [5,"e",""],
+            [5,"e",None],
             [6,"d","coke"],
             [7,"a","spinach"],
             [7,"b","artichoke"],
             [7,"d","dip"],
             [8,"","big"],
-            [8,"","mac"],
+            [8,None,"mac"],
             [9,"c","fries"],
-            [9,"d",""],
+            [9,"d",None],
             [10,"e",""]
         ]
 
