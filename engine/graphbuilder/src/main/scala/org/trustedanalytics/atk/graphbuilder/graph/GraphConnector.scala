@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.graph
 
 import com.tinkerpop.blueprints.TransactionalGraph

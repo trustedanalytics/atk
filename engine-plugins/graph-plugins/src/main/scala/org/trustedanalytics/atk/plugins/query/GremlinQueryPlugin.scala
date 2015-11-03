@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.query
 
 import javax.script.Bindings

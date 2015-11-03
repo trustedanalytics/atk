@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.write.titan
 
 import org.trustedanalytics.atk.graphbuilder.elements.GbIdToPhysicalId

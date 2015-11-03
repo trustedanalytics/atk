@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.sql.parquet.atk.giraph.frame.lp
 
 import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.scoring
 
 import java.io.{ FileOutputStream, File, FileInputStream }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.write
 
 import org.mockito.Mockito._

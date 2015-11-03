@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.schema
 
 import org.trustedanalytics.atk.graphbuilder.elements.GBEdge

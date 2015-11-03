@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.frame
 
 import org.trustedanalytics.atk.domain.{ StorageFormats, Status, HasId }

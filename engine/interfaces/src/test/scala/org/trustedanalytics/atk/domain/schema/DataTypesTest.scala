@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.schema
 
 import org.joda.time.DateTime

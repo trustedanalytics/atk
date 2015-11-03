@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.apidoc
 
 import org.scalatest.{ FlatSpec, Matchers }

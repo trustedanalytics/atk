@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.command
 
 import org.trustedanalytics.atk.apidoc.CommandDocText
