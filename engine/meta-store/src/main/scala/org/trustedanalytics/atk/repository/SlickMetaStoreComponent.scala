@@ -954,6 +954,43 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       }
     }
 
+    override def lookupNoData(id: Long)(implicit session: Session): Option[ModelEntity] = {
+      // special query which avoids pulling the data field, which can be large!
+      (for { m <- models; if m.id === id }
+        yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn)).list.headOption match {
+        case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn)) => Some(ModelEntity(
+          id = zid,
+          name = name,
+          modelType = modelType,
+          description = description,
+          statusId = statusId,
+          data = None,
+          createdOn = createdOn,
+          modifiedOn = modifiedOn))
+        case None => None
+      }
+    }
+
+    override def lookupByNameNoData(name: Option[String])(implicit session: Session): Option[ModelEntity] = {
+      name match {
+        case Some(n) =>
+          (for { m <- models; if m.name === n }
+            yield (m.id, m.name, m.modelType, m.description, m.statusId, m.createdOn, m.modifiedOn)).list.headOption match {
+            case Some((zid, name, modelType, description, statusId, createdOn, modifiedOn)) => Some(ModelEntity(
+              id = zid,
+              name = name,
+              modelType = modelType,
+              description = description,
+              statusId = statusId,
+              data = None,
+              createdOn = createdOn,
+              modifiedOn = modifiedOn))
+            case None => None
+          }
+        case _ => None
+      }
+    }
+
     /** execute DDL to create the underlying table */
     def createTable(implicit session: Session) = {
       models.ddl.create

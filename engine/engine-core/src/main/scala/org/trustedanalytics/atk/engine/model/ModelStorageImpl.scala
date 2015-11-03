@@ -41,11 +41,16 @@ class ModelStorageImpl(metaStore: MetaStore)
     with ClassLoaderAware {
 
   /** Lookup a Model, Throw an Exception if not found */
-  override def expectModel(modelRef: ModelReference): ModelEntity = {
+  override def expectModel(modelRef: ModelReference, noData: Boolean = false): ModelEntity = {
     metaStore.withSession("spark.modelstorage.lookup") {
       implicit session =>
         {
-          metaStore.modelRepo.lookup(modelRef.id)
+          if (noData) {
+            metaStore.modelRepo.lookupNoData(modelRef.id)
+          }
+          else {
+            metaStore.modelRepo.lookup(modelRef.id)
+          }
         }
     }.getOrElse(throw new NotFoundException("model", modelRef.id))
   }
@@ -102,11 +107,16 @@ class ModelStorageImpl(metaStore: MetaStore)
     }
   }
 
-  override def getModelByName(name: Option[String]): Option[ModelEntity] = {
+  override def getModelByName(name: Option[String], noData: Boolean = false): Option[ModelEntity] = {
     metaStore.withSession("spark.modelstorage.getModelByName") {
       implicit session =>
         {
-          metaStore.modelRepo.lookupByName(name)
+          if (noData) {
+            metaStore.modelRepo.lookupByNameNoData(name)
+          }
+          else {
+            metaStore.modelRepo.lookupByName(name)
+          }
         }
     }
   }

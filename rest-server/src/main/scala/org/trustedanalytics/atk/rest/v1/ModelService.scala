@@ -72,7 +72,7 @@ class ModelService(commonDirectives: CommonDirectives, engine: Engine) extends D
                   implicit val indexFormat = ViewModelJsonImplicits.getModelFormat
                   (name) => name match {
                     case Some(name) => {
-                      onComplete(engine.getModelByName(name)) {
+                      onComplete(engine.getModelByName(name, noData = true)) {
                         case Success(Some(model)) => {
                           val links = List(Rel.self(uri.toString))
                           complete(ModelDecorator.decorateEntity(uri.toString(), links, model))
@@ -115,7 +115,7 @@ class ModelService(commonDirectives: CommonDirectives, engine: Engine) extends D
                 requestUri {
                   uri =>
                     get {
-                      onComplete(engine.getModel(id)) {
+                      onComplete(engine.getModel(id, noData = true)) {
                         case Success(model) => {
                           val decorated = decorate(uri, model)
                           complete {

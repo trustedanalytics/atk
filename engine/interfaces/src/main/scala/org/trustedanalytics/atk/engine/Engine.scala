@@ -95,11 +95,11 @@ trait Engine {
 
   def createModel(arguments: CreateEntityArgs)(implicit invocation: Invocation): Future[ModelEntity]
 
-  def getModel(id: Identifier)(implicit invocation: Invocation): Future[ModelEntity]
+  def getModel(id: Identifier, noData: Boolean = false)(implicit invocation: Invocation): Future[ModelEntity]
 
   def getModels()(implicit invocation: Invocation): Future[Seq[ModelEntity]]
 
-  def getModelByName(name: String)(implicit invocation: Invocation): Future[Option[ModelEntity]]
+  def getModelByName(name: String, noData: Boolean = false)(implicit invocation: Invocation): Future[Option[ModelEntity]]
 
   def dropModel(id: Identifier)(implicit invocation: Invocation): Future[Unit]
 

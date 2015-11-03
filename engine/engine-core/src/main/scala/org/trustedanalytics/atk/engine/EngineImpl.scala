@@ -232,17 +232,16 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * @param id Unique identifier for the model provided by the metastore.
    * @return A future of the model metadata entry.
    */
-  def getModel(id: Identifier)(implicit invocation: Invocation): Future[ModelEntity] = {
+  def getModel(id: Identifier, noData: Boolean = false)(implicit invocation: Invocation): Future[ModelEntity] = {
     future {
-      models.expectModel(ModelReference(id))
+      models.expectModel(ModelReference(id), noData = noData)
     }
   }
 
-  def getModelByName(name: String)(implicit invocation: Invocation): Future[Option[ModelEntity]] =
+  def getModelByName(name: String, noData: Boolean = false)(implicit invocation: Invocation): Future[Option[ModelEntity]] =
     withContext("se.getModelByName") {
       future {
-        val model = models.getModelByName(Some(name))
-        model
+        models.getModelByName(Some(name), noData = noData)
       }
     }
 
