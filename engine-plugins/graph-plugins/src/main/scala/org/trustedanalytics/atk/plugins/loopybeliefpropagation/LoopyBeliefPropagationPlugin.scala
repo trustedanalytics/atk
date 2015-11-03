@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.plugins.loopybeliefpropagation
 
@@ -91,7 +92,7 @@ for a more in-depth discussion of |BP| and |LBP|.""",
   returns = "Progress report for belief propagation in the format of a multiple-line string.")
 class LoopyBeliefPropagationPlugin extends SparkCommandPlugin[LoopyBeliefPropagationArgs, LoopyBeliefPropagationResult] {
 
-  override def name: String = "graph/ml/belief_propagation"
+  override def name: String = "graph:/loopy_belief_propagation"
 
   //TODO remove when we move to the next version of spark
   override def kryoRegistrator: Option[String] = None
