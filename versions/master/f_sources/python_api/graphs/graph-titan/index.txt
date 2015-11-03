@@ -13,8 +13,6 @@
 
     __init__
 
-
-    ml
     query
     annotate_degrees
     annotate_weighted_degrees
@@ -47,7 +45,6 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <TitanGraph__init__>`\ (self[, name, _info])                                           Initialize the graph.
-    :ref:`__init__ <TitanGraphMl__init__>`\ (self, entity)                                                <Missing Doc>
     :ref:`__init__ <TitanGraphQuery__init__>`\ (self, entity)                                             <Missing Doc>
     :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
     :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.

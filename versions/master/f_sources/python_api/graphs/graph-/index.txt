@@ -12,8 +12,6 @@
     :hidden:
 
     __init__
-
-    ml
     annotate_degrees
     annotate_weighted_degrees
     clustering_coefficient
@@ -26,9 +24,9 @@
     graphx_connected_components
     graphx_pagerank
     graphx_triangle_count
+    kclique_percolation
     last_read_date
     loopy_belief_propagation
-    ml/kclique_percolation
     name
     status
     vertex_count
@@ -63,7 +61,6 @@
 
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <Graph__init__>`\ (self[, name, _info])                                                Initialize the graph.
-    :ref:`__init__ <GraphMl__init__>`\ (self, entity)                                                     <Missing Doc>
     :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
     :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
     :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
@@ -74,8 +71,8 @@
     :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
+    :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.
     :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, prior_property, ...[, ...])        Classification on sparse data using Belief Propagation.
-    :doc:`ml.kclique_percolation <ml/kclique_percolation>`\ (self, clique_size, ...)                      |ALPHA| Find groups of vertices with similar attributes.
     ====================================================================================================  ====================================================================================================
 
 .. _Graph__init__:
