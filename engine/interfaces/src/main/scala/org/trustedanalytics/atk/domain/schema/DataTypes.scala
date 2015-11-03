@@ -712,7 +712,7 @@ object DataTypes extends EventLogging {
           case _ =>
             val colType = lifted(i).get
             val value = colType.parse(s)
-            value.getOrElse(null)
+            value.get
         }
     }
   }
