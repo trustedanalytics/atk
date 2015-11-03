@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.dotproduct
 
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }

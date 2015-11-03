@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.graphx.lib.atk.plugins
 
 import org.apache.spark.graphx._

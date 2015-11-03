@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /* This script is to generate a bipartite graph using spark-shell in distributed mode */
 /* Invoke this script as spark-shell -i bipartite-graph-generator.scala -Xnojline */
 Thread.sleep(5000)

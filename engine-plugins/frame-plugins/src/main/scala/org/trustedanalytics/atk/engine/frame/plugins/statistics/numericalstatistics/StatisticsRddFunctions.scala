@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.numericalstatistics
 
 import org.apache.spark.rdd.RDD

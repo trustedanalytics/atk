@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.engine.command._

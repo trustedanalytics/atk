@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest.v1
 
 import org.trustedanalytics.atk.DuplicateNameException

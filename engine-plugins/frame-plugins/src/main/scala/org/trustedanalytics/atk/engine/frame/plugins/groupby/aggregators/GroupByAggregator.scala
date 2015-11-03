@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.groupby.aggregators
 
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType

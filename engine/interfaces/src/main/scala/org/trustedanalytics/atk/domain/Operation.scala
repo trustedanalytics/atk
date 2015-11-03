@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain
 
 case class Operation(name: String, definition: Option[Definition])

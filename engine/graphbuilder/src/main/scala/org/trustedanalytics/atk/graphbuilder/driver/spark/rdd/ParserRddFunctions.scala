@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.driver.spark.rdd
 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GraphElement, GBEdge, GBVertex }
