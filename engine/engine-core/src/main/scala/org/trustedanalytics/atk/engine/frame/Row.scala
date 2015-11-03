@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame
 
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex

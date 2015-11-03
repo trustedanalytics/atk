@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain
 
 case class Definition(language: String, serialization: String, data: String)

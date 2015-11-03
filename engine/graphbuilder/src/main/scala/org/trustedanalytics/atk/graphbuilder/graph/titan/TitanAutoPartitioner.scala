@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.graph.titan
 
 import com.google.common.annotations.VisibleForTesting

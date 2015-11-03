@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.sql.parquet.atk.giraph.frame.cf
 
 import java.util

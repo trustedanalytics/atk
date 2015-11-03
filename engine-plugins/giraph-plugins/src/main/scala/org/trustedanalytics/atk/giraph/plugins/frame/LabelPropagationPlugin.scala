@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.plugins.frame
 
 import org.apache.spark.sql.parquet.atk.giraph.frame.lp.{ LabelPropagationEdgeInputFormat, LabelPropagationVertexOutputFormat, LabelPropagationVertexInputFormat }

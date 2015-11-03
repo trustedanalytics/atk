@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.graph.seamless
 
 import org.trustedanalytics.atk.domain.schema._

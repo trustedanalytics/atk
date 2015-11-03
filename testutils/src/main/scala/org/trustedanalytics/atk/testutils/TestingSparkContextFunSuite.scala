@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.testutils
 
 import org.apache.spark.SparkContext

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol

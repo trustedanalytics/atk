@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.correlation
 
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes }
