@@ -502,6 +502,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 			    <exclude>**/*.tpl</exclude>
 			    <exclude>**/*.inc</exclude>
 			    <exclude>**/*.conf</exclude>
+					<exclude>**/*.sql</exclude>
 			</excludes>
 		    </configuration>
 		    <executions>
