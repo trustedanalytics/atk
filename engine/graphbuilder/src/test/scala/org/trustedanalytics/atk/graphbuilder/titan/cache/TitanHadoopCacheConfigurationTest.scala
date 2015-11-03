@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.titan.cache
 
 import com.thinkaurelius.titan.hadoop.config.ModifiableHadoopConfiguration

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.pagerank
 
 import org.trustedanalytics.atk.plugins.graphconversions.GraphConversions

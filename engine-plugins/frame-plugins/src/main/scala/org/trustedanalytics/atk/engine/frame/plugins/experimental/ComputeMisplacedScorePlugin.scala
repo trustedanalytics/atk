@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.experimental
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 

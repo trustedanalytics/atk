@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.query
 
 import com.tinkerpop.blueprints.util.io.graphson.GraphSONMode

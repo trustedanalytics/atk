@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.gc
 
 // "admin" plugins to manually run garbage collection

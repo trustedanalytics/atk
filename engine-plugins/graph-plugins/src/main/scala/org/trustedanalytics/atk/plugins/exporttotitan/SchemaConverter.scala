@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.exporttotitan
 
 import org.trustedanalytics.atk.domain.schema._

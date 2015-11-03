@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest.threading
 
 import org.trustedanalytics.atk.rest.RestServerConfig

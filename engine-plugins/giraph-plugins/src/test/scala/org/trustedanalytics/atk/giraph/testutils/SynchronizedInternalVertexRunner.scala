@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.testutils
 
 import org.apache.giraph.conf.GiraphConfiguration

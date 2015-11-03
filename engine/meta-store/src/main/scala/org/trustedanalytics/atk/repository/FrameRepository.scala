@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.repository
 
 import org.trustedanalytics.atk.domain.UserPrincipal

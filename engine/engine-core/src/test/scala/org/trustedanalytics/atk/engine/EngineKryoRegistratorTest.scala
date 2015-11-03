@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine
 
 import com.esotericsoftware.kryo.Kryo

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.driver.spark.titan.reader
 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GraphElement, Property, GBVertex }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.atk.graph
 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property => GBProperty, GBVertex }

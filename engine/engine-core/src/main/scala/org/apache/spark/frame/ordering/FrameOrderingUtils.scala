@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.frame.ordering
 
 import org.apache.spark.rdd.RDD

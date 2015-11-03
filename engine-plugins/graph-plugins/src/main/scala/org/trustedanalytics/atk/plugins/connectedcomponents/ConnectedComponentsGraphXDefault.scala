@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.connectedcomponents
 
 import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }

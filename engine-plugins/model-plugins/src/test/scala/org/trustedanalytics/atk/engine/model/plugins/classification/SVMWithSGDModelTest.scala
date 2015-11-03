@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import org.apache.spark.mllib.classification.{ SVMModel, SVMWithSGD }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.command
 import org.scalatest.{ FlatSpec, Matchers }
 import org.scalatest.PrivateMethodTester._

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.sampling
 
 import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
