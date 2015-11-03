@@ -34,10 +34,14 @@ class ValidDataTypes(unittest.TestCase):
         self.assertTrue(ignore in valid_data_types)
         self.assertFalse(unknown in valid_data_types)
         self.assertTrue(datetime in valid_data_types)
+        self.assertTrue(int32option in valid_data_types)
+        self.assertTrue(int64option in valid_data_types)
+        self.assertTrue(float32option in valid_data_types)
+        self.assertTrue(float64option in valid_data_types)
 
     def test_repr(self):
         r = valid_data_types.__repr__()
-        self.assertEqual("""datetime, float32, float64, ignore, int32, int64, unicode, vector(n)
+        self.assertEqual("""datetime, float32, float32option, float64, float64option, ignore, int32, int32option, int64, int64option, unicode, vector(n)
 (and aliases: float->float64, int->int32, long->int64, str->unicode)""", r)
 
     def test_get_from_string(self):
@@ -45,6 +49,10 @@ class ValidDataTypes(unittest.TestCase):
         self.assertEqual(int32, valid_data_types.get_from_string("int32"))
         self.assertEqual(unicode, valid_data_types.get_from_string("str"))
         self.assertEqual(datetime, valid_data_types.get_from_string("datetime"))
+        self.assertEqual(int32option, valid_data_types.get_from_string("int32option"))
+        self.assertEqual(int64option, valid_data_types.get_from_string("int64option"))
+        self.assertEqual(float32option, valid_data_types.get_from_string("float32option"))
+        self.assertEqual(float64option, valid_data_types.get_from_string("float64option"))
         for bad_str in ["string"]:
             try:
                 valid_data_types.get_from_string(bad_str)
@@ -58,12 +66,20 @@ class ValidDataTypes(unittest.TestCase):
         self.assertEqual(float64, valid_data_types.get_from_type(float))
         self.assertEqual(ignore, valid_data_types.get_from_type(ignore))
         self.assertEqual(datetime, valid_data_types.get_from_type(datetime))
+        self.assertEqual(int32option, valid_data_types.get_from_type(int32option))
+        self.assertEqual(int64option, valid_data_types.get_from_type(int64option))
+        self.assertEqual(float32option, valid_data_types.get_from_type(float32option))
+        self.assertEqual(float64option, valid_data_types.get_from_type(float64option))
 
     def test_validate(self):
         valid_data_types.validate(float64)
         valid_data_types.validate(int)
         valid_data_types.validate(ignore)
         valid_data_types.validate(datetime)
+        valid_data_types.validate(int32option)
+        valid_data_types.validate(int64option)
+        valid_data_types.validate(float32option)
+        valid_data_types.validate(float64option)
 
     def test_to_string(self):
         self.assertEqual('int32', valid_data_types.to_string(int32))
@@ -71,6 +87,10 @@ class ValidDataTypes(unittest.TestCase):
         self.assertEqual('unicode', valid_data_types.to_string(str))
         self.assertEqual('ignore', valid_data_types.to_string(ignore))
         self.assertEqual('datetime', valid_data_types.to_string(datetime))
+        self.assertEqual('int32option', valid_data_types.to_string(int32option))
+        self.assertEqual('int64option', valid_data_types.to_string(int64option))
+        self.assertEqual('float32option', valid_data_types.to_string(float32option))
+        self.assertEqual('float64option', valid_data_types.to_string(float64option))
 
     def test_cast(self):
         self.assertEqual(float32(1.0), valid_data_types.cast(1.0, float32))
