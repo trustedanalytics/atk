@@ -69,7 +69,7 @@ object DiscretizationFunctions extends Serializable {
     rdd.map { row: Row =>
       val element = DataTypes.toDouble(row(index))
       //if lower than first cutoff
-      val binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
+      val binIndex = binElement(Some(element), cutoffs, lowerInclusive, strictBinning)
       new GenericRow(row.toSeq.toArray :+ binIndex)
     }
   }
@@ -88,7 +88,7 @@ object DiscretizationFunctions extends Serializable {
     rdd.map { row: Row =>
       val element = DataTypes.toOptionDouble(row(index))
       //if lower than first cutoff
-      val binIndex = binOptionElement(element, cutoffs, lowerInclusive, strictBinning)
+      val binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
       new GenericRow(row.toSeq.toArray :+ binIndex)
     }
   }
@@ -102,43 +102,7 @@ object DiscretizationFunctions extends Serializable {
    *                      if false smaller vales will be in the first bin and larger values will be in the last
    * @return bin index
    */
-  def binElement(element: Double, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
-    val min: Int = 0
-    val max: Int = cutoffs.length - 2
-
-    val binIndex: Int =
-      // if lower than first cutoff
-      if (element.get < cutoffs.head)
-        if (strictBinning) -1 else min
-      // if larger than last cutoff
-      else if (cutoffs.last < element.get)
-        if (strictBinning) -1 else max
-      else if (lowerInclusive) {
-        if ((element.get - cutoffs.last).abs < 0.00001d)
-          max
-        else
-          bSearchRangeLowerInclusive(element.get, cutoffs, min, max)
-      }
-      else {
-        if ((element.get - cutoffs.head).abs < 0.00001d)
-          min
-        else
-          bSearchRangeUpperInclusive(element.get, cutoffs, min, max)
-      }
-
-    binIndex
-  }
-
-  /**
-   * Bin option element using list of cutoff values.  If element is not defined, it will be binned to -1.
-   * @param element Element to bin
-   * @param cutoffs Array containing the cutoff for each bin must be monotonically increasing
-   * @param lowerInclusive if true the lowerbound of the bin will be inclusive while the upperbound is exclusive if false it is the opposite
-   * @param strictBinning if true values smaller than the first bin or larger than the last bin will not be given a bin.
-   *                      if false smaller vales will be in the first bin and larger values will be in the last
-   * @return bin index
-   */
-  def binOptionElement(element: Option[Double], cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
+  def binElement(element: Option[Double], cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
     val min: Int = 0
     val max: Int = cutoffs.length - 2
 
@@ -163,8 +127,8 @@ object DiscretizationFunctions extends Serializable {
             bSearchRangeUpperInclusive(element.get, cutoffs, min, max)
         }
       }
-      else {
-        // element is not defined
+    else {
+        // element is not defined, bin to -1
         -1
       }
 
