@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.parser
 
 import org.apache.commons.lang3.StringUtils

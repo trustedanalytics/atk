@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.moduleloader
 
 import com.typesafe.config.ConfigFactory

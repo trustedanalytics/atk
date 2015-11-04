@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.config.lp
 
 import org.trustedanalytics.atk.domain.schema.Schema

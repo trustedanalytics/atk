@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.mllib.clustering.{ AtkLdaModel, AtkLdaModel$ }

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin
 
 import org.apache.spark.frame.FrameRdd

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.parser.rule
 
 import org.trustedanalytics.atk.graphbuilder.parser.InputRow

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.graph
 
 case class GetAllGraphFrames(graphRef: GraphReference)

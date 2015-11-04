@@ -42,7 +42,7 @@ class KcliqueTest(unittest.TestCase):
         graph.define_edge_type("edge", "source", "source", False)
         graph.edges["edge"].add_edges(noun_words_frame,"source","target")
 
-        output = graph.ml.kclique_percolation(clique_size = 3, community_property_label = "community")
+        output = graph.kclique_percolation(clique_size = 3, community_property_label = "community")
         output_dictionary = output['vertex_dictionary']
 
         self.assertTrue('source' in output_dictionary)

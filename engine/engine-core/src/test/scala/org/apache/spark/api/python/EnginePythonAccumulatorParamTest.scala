@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.api.python
 
 import org.scalatest.WordSpec

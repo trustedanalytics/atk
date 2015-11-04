@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.graphstatistics
 
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }

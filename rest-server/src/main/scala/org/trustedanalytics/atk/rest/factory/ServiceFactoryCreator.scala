@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest.factory
 
 // Standard abstract factory pattern to create a service factory based on arguments

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
 import org.trustedanalytics.atk.engine.plugin._
@@ -154,9 +153,9 @@ result is written out.
 class KCliquePercolationPlugin extends SparkCommandPlugin[KCliqueArgs, KCliqueResult] {
 
   /**
-   * The name of the command, e.g. graphs/ml/kclique_percolation
+   * The name of the command, e.g. graphs/kclique_percolation
    */
-  override def name: String = "graph:/ml/kclique_percolation"
+  override def name: String = "graph:/kclique_percolation"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 

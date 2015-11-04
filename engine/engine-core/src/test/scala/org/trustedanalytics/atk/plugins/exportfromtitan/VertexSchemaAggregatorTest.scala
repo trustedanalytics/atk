@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.exportfromtitan
 
 import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.VertexSchemaAggregator

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.frame
 
 case class DataFrameTemplate(name: Option[String], description: Option[String] = None) {

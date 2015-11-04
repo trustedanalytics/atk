@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
 import org.trustedanalytics.atk.plugins.communitydetection.kclique.datatypes.{ CliqueExtension, VertexSet, Edge }

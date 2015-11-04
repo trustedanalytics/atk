@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.engine
 
 import org.trustedanalytics.atk.event.EventLogging
