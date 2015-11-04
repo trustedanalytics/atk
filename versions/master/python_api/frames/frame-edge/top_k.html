@@ -152,39 +152,28 @@ All data elements of weight &lt;= 0 are excluded from the calculation, as are
 all data elements whose weight is NaN or infinite.
 If there are no data elements of finite weight &gt; 0, then topK is empty.</p>
 <p class="rubric">Examples</p>
-<p>For this example, we calculate the top 5 movie genres in a data frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">top5</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">top5</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  genre:str   count:float64</span>
-<span class="go">/---------------------------/</span>
-<span class="go">  Drama        738278</span>
-<span class="go">  Comedy       671398</span>
-<span class="go">  Short        455728</span>
-<span class="go">  Documentary  323150</span>
-<span class="go">  Talk-Show    265180</span>
-</pre></div>
-</div>
-<p>This example calculates the top 3 movies weighted by rating:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">top3</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">weights_column</span><span class="o">=</span><span class="s">&#39;rating&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">top3</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  movie:str      count:float64</span>
-<span class="go">/------------------------------/</span>
-<span class="go">  The Godfather         7689.0</span>
-<span class="go">  Shawshank Redemption  6358.0</span>
-<span class="go">  The Dark Knight       5426.0</span>
-</pre></div>
-</div>
-<p>This example calculates the bottom 3 movie genres in a data frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bottom3</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&#39;genre&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bottom3</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  genre:str   count:float64</span>
-<span class="go">/---------------------------/</span>
-<span class="go">  Musical       26</span>
-<span class="go">  War           47</span>
-<span class="go">  Film-Noir    595</span>
+<p>For this example, we calculate the top 5 movie genres in a data frame:
+Consider the following frame containing four columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  rank  city         population_2013  population_2010  change  county</span>
+<span class="go">    ============================================================================</span>
+<span class="go">    [0]     1  Portland              609456           583776  4.40%   Multnomah</span>
+<span class="go">    [1]     2  Salem                 160614           154637  3.87%   Marion</span>
+<span class="go">    [2]     3  Eugene                159190           156185  1.92%   Lane</span>
+<span class="go">    [3]     4  Gresham               109397           105594  3.60%   Multnomah</span>
+<span class="go">    [4]     5  Hillsboro              97368            91611  6.28%   Washington</span>
+<span class="go">    [5]     6  Beaverton              93542            89803  4.16%   Washington</span>
+<span class="go">    [6]    15  Grants Pass            35076            34533  1.57%   Josephine</span>
+<span class="go">    [7]    16  Oregon City            34622            31859  8.67%   Clackamas</span>
+<span class="go">    [8]    17  McMinnville            33131            32187  2.93%   Yamhill</span>
+<span class="go">    [9]    18  Redmond                27427            26215  4.62%   Deschutes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  county      count</span>
+<span class="go">        ======================</span>
+<span class="go">        [0]  Washington    4.0</span>
+<span class="go">        [1]  Clackamas     3.0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -212,7 +201,7 @@ If there are no data elements of finite weight &gt; 0, then topK is empty.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 03, 2015.
+      Last updated on Nov 04, 2015.
       </li>
     </ul>
     </div>

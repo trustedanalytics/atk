@@ -88,3 +88,65 @@
     .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
     .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
     .. [3] https://en.wikipedia.org/wiki/LIBSVM
+
+    Examples
+    --------
+    Consider the following model trained and tested on the sample data set in *frame* 'frame'.
+
+    Consider the following frame containing four columns.
+
+    >>> frame.inspect()
+        [#]  idNum  tr_row  tr_col  pos_one
+        ===================================
+        [0]    1.0    -1.0    -1.0      1.0
+        [1]    2.0    -1.0     0.0      1.0
+        [2]    3.0    -1.0     1.0      1.0
+        [3]    4.0     0.0    -1.0      1.0
+        [4]    5.0     0.0     0.0      1.0
+        [5]    6.0     0.0     1.0      1.0
+        [6]    7.0     1.0    -1.0      1.0
+        [7]    8.0     1.0     0.0      1.0
+        [8]    9.0     1.0     1.0      1.0
+    >>> model = ta.LibsvmModel()
+    [===Job Progress===]
+    >>> train_output = model.train(frame, "idNum", ["tr_row", "tr_col"],svm_type=2,epsilon=10e-3,gamma=1.0/2,nu=0.1,p=0.1)
+    [===Job Progress===]
+    >>> predicted_frame = model.predict(frame)
+    [===Job Progress===]
+    >>> predicted_frame.inspect()
+        [#]  idNum  tr_row  tr_col  pos_one  predicted_label
+        ====================================================
+        [0]    1.0    -1.0    -1.0      1.0              1.0
+        [1]    2.0    -1.0     0.0      1.0              1.0
+        [2]    3.0    -1.0     1.0      1.0             -1.0
+        [3]    4.0     0.0    -1.0      1.0              1.0
+        [4]    5.0     0.0     0.0      1.0              1.0
+        [5]    6.0     0.0     1.0      1.0              1.0
+        [6]    7.0     1.0    -1.0      1.0              1.0
+        [7]    8.0     1.0     0.0      1.0              1.0
+        [8]    9.0     1.0     1.0      1.0              1.0
+    >>> test_obj = model.test(frame, "pos_one",["tr_row", "tr_col"])
+    [===Job Progress===]
+    >>> test_obj.accuracy
+    0.8888888888888888
+    >>> test_obj.precision
+    1.0
+    >>> test_obj.f_measure
+    0.9411764705882353
+    >>> test_obj.recall
+    0.8888888888888888
+    >>> score = model.score([3,4])
+    [===Job Progress===]
+    >>> score
+    -1.0
+    >>> model.publish()
+    [===Job Progress===]
+
+
+
+
+
+
+
+
+
