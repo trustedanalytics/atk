@@ -42,4 +42,10 @@ trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelE
    * @param session current session
    */
   def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity]
+
+  /** get ModelEntity by name without data (extra to the normal entity repo) */
+  def lookupByNameNoData(name: Option[String])(implicit session: Session): Option[ModelEntity]
+
+  /** get ModelEntity without data (extra to the normal entity repo) */
+  def lookupNoData(id: Long)(implicit session: Session): Option[ModelEntity]
 }

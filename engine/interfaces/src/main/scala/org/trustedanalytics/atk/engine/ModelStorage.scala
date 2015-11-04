@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
 
 trait ModelStorage {
 
-  def expectModel(modelRef: ModelReference): ModelEntity
+  def expectModel(modelRef: ModelReference, noData: Boolean = false): ModelEntity
 
   def createModel(model: CreateEntityArgs)(implicit invocation: Invocation): ModelEntity
 
@@ -31,7 +31,7 @@ trait ModelStorage {
 
   def getModels()(implicit invocation: Invocation): Seq[ModelEntity]
 
-  def getModelByName(name: Option[String]): Option[ModelEntity]
+  def getModelByName(name: Option[String], noData: Boolean = false): Option[ModelEntity]
 
   def updateModel(modelReference: ModelReference, newData: JsObject)(implicit invocation: Invocation): ModelEntity
 
