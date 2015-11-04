@@ -20,22 +20,6 @@ import org.scalatest.PrivateMethodTester._
 
 class CommandDocLoaderTest extends FlatSpec with Matchers {
 
-  "createCommandDoc" should "split text into two pieces" in {
-    val createCommandDoc = PrivateMethod[Option[CommandDoc]]('createCommandDoc)
-    val doc = CommandDocLoader invokePrivate createCommandDoc(
-      Some("""    One-liner.
-
-    Line 3
-    Line 4"""))
-    doc should not be None
-    doc.get.oneLineSummary should be("One-liner.")
-    doc.get.extendedSummary.get should be("""
-
-    Line 3
-    Line 4""")
-    println(doc)
-  }
-
   "getPath" should "replace special chars" in {
     val getPath = PrivateMethod[String]('getPath)
     CommandDocLoader invokePrivate getPath("frame:vertex/count") should be("frame-vertex/count")
