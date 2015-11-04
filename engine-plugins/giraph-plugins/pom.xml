@@ -175,11 +175,6 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>1.8.9</version>
-        </dependency>
-        <dependency>
             <groupId>com.thinkaurelius.titan</groupId>
             <artifactId>titan-hadoop-2</artifactId>
             <exclusions>
