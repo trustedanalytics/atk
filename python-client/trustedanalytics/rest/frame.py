@@ -620,8 +620,6 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         target._label = source._label
         target._graph = source._graph
 
-
-
 class FrameInfo(object):
     """
     JSON-based Server description of a Frame

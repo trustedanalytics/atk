@@ -149,7 +149,7 @@ def beta(item):
 
 
 def deprecated(item):
-    def wrapper(*args, **kwargs):
+    def wrapper(item, *args, **kwargs):
         raise_deprecation_warning(item.__name__)
         return item(*args, **kwargs)
     function = decorator(wrapper, item)
