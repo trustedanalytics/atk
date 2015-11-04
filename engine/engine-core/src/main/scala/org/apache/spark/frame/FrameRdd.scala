@@ -96,18 +96,6 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
           case optionField: Option[_] => if (optionField.isDefined) optionField.get else null
           case _ => rowArray(i)
         }
-        /*
-          case i32: Option[Int] => if (i32.isDefined) i32.get else null
-          case i64: Option[Long] => if (i64.isDefined) i64.get else null
-          case f32: Option[Float] => if (f32.isDefined) f32.get else null
-
-        if (rowArray(i).isInstanceOf[Option[Int]]) {
-          val optionInt = rowArray(i).asInstanceOf[Option[Int]]
-          if (optionInt.isDefined)
-            rowArray(i) = optionInt.get
-          else
-            rowArray(i) = null
-        }*/
       }
 
       new GenericRow(rowArray)
@@ -652,6 +640,9 @@ object FrameRdd {
           case x if x.equals(DataTypes.float32) => FloatType
           case x if x.equals(DataTypes.float64) => DoubleType
           case x if x.equals(DataTypes.int32option) => IntegerType
+          case x if x.equals(DataTypes.int64option) => LongType
+          case x if x.equals(DataTypes.float32option) => FloatType
+          case x if x.equals(DataTypes.float64option) => DoubleType
           case x if x.equals(DataTypes.string) => StringType
           case x if x.equals(DataTypes.datetime) => StringType
           case x if x.isVector => VectorType
