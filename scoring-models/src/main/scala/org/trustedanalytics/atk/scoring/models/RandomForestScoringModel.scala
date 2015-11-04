@@ -18,9 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import org.apache.spark.mllib.tree.model.RandomForestModel
-import org.apache.spark.mllib.linalg.{ Vectors }
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
+import org.apache.spark.mllib.linalg.Vectors
 
 /**
  * Scoring model for MLLib's RandomForest

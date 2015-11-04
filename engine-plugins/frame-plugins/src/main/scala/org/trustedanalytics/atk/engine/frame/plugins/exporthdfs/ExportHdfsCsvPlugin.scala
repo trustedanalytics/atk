@@ -23,7 +23,7 @@ import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.ExportHdfsCsvArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.hadoop.fs.Path
@@ -62,7 +62,7 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, UnitRetu
    */
   override def execute(arguments: ExportHdfsCsvArgs)(implicit invocation: Invocation): UnitReturn = {
 
-    val fileStorage = new HdfsFileStorage
+    val fileStorage = new FileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD
