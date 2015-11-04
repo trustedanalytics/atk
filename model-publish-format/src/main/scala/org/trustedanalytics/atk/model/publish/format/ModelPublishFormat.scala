@@ -20,6 +20,7 @@ import java.io
 import java.io._
 import java.net.{ URL, URLClassLoader }
 import javax.crypto.KeyGenerator
+import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
 import org.apache.commons.compress.archivers.tar.{ TarArchiveInputStream, TarArchiveOutputStream, TarArchiveEntry }
 import org.apache.commons.io.IOUtils
@@ -29,21 +30,19 @@ import org.apache.commons.io.FileUtils
  * Read/write for publishing models
  */
 
-object ModelPublishFormat {
-
-  /**
-   *  Write a Model to a our special format that can be read later by a Scoring Engine.
-   *   
-   *  @param outputStream location to store published model
-   *  @param classLoaderFiles list of jars and other files for ClassLoader
-   *  @param modelLoaderClass class that implements the ModelLoader trait for instantiating the model during read()
-   *  @param modelData the trained model data
-   *   
-   */
+object ModelPublishFormat extends EventLogging {
 
   val modelDataString = "modelData"
   val modelReaderString = "modelReader"
 
+  /**
+   * Write a Model to a our special format that can be read later by a Scoring Engine.
+   *   
+   * @param classLoaderFiles list of jars and other files for ClassLoader
+   * @param modelLoaderClass class that implements the ModelLoader trait for instantiating the model during read()
+   * @param modelData the trained model data
+   * @param outputStream location to store published model
+   */
   def write(classLoaderFiles: List[File], modelLoaderClass: String, modelData: Array[Byte], outputStream: FileOutputStream): Unit = {
     val tarBall = new TarArchiveOutputStream(new BufferedOutputStream(outputStream))
 
@@ -69,6 +68,11 @@ object ModelPublishFormat {
       IOUtils.copy(new ByteArrayInputStream(modelLoaderClass.getBytes("utf-8")), tarBall)
       tarBall.closeArchiveEntry()
     }
+    catch {
+      case e: Exception =>
+        error("writing model failed", exception = e)
+        throw e
+    }
     finally {
       tarBall.finish()
       IOUtils.closeQuietly(tarBall)
@@ -89,8 +93,6 @@ object ModelPublishFormat {
     var outputFile: FileOutputStream = null
     var tarFile: TarArchiveInputStream = null
     var modelName: String = null
-    var ModelBytesFileName: String = null
-    var archiveName: String = null
     var urls = Array.empty[URL]
     var byteArray: Array[Byte] = null
     var file: File = null
@@ -129,6 +131,11 @@ object ModelPublishFormat {
       val modelLoader = classLoader.loadClass(modelName).newInstance()
 
       modelLoader.asInstanceOf[ModelLoader].load(byteArray)
+    }
+    catch {
+      case e: Exception =>
+        error("reading model failed", exception = e)
+        throw e
     }
     finally {
       IOUtils.closeQuietly(outputFile)
