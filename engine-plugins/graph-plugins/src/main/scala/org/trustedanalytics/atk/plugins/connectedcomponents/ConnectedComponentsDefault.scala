@@ -31,7 +31,7 @@ import org.apache.spark.SparkContext._
  * algorithm in GraphX.
  */
 
-object ConnectedComponentsGraphXDefault {
+object ConnectedComponentsDefault {
 
   def run(vertexList: RDD[Long], edgeList: RDD[(Long, Long)]): RDD[(Long, Long)] = {
 
