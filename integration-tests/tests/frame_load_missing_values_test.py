@@ -175,6 +175,23 @@ class FrameLoadMissingValuesTest(unittest.TestCase):
         with self.assertRaises(Exception):
             ta.Frame(csv)
 
+    def test_missing_values_join(self):
+        data1 = [[None, "None"],[0, "Zero"],[1, "One"], [2, "Two"], [3, "Three"], [4, "Four"]]
+        schema1 = [('option_key', ta.int64option), ('option_value', str)]
+        data2 = [[3455, None],[9803, None],[1320, 4],[8121, 2],[2027, 1],[5980,None],[3704,3]]
+        schema2 = [('a', ta.int32), ('option_key', ta.int32option)]
+
+        frame1 = ta.Frame(ta.UploadRows(data1, schema1))
+        frame2 = ta.Frame(ta.UploadRows(data2, schema2))
+
+        joined = frame2.join(frame1, 'option_key', how='left')
+        self.assertEqual(frame2.row_count, joined.row_count)
+
+        expected_values = ["None", "None", "Four", "Two", "One", "None", "Three"]
+        actual_values = joined.take(joined.row_count)
+        column_index = 3
+        for i in range(0, joined.row_count):
+            self.assertEqual(expected_values[i], actual_values[i][column_index])
 
 if __name__ == "__main__":
     unittest.main()

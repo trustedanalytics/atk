@@ -720,6 +720,10 @@ object FrameRdd {
           case x if x.equals(DataTypes.float64) => "double"
           case x if x.equals(DataTypes.string) => "string"
           case x if x.equals(DataTypes.datetime) => "string"
+          case x if x.equals(DataTypes.int32option) => "int32"
+          case x if x.equals(DataTypes.int64option) => "long"
+          case x if x.equals(DataTypes.float32option) => "double"
+          case x if x.equals(DataTypes.float64option) => "double"
           case x => throw new IllegalArgumentException(s"unsupported export type ${x.toString}")
         })
     }

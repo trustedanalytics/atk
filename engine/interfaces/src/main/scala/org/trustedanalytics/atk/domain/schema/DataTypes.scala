@@ -572,9 +572,11 @@ object DataTypes extends EventLogging {
   def isCompatibleDataType(dataType1: DataType, dataType2: DataType): Boolean = {
     dataType1 match {
       case t if dataType1.equalsDataType(dataType2) => true
-      case i if dataType1.isInteger && dataType2.isInteger => true
+      case i if dataType1.isInteger && dataType2.isInteger && (dataType1.isOption == dataType2.isOption) => true
       case d if dataType1.equalsDataType(DataTypes.float32) || dataType1.equalsDataType(DataTypes.float64) =>
-        dataType2.equalsDataType(DataTypes.float32) || dataType2.equalsDataType(DataTypes.float64)
+        (dataType2.equalsDataType(DataTypes.float32) || dataType2.equalsDataType(DataTypes.float64))
+      case doption if dataType1.equalsDataType(DataTypes.float32option) || dataType1.equalsDataType(DataTypes.float64option) =>
+        (dataType2.equalsDataType(DataTypes.float32option) || dataType2.equalsDataType(DataTypes.float64option))
       case _ => false
     }
   }
@@ -652,6 +654,12 @@ object DataTypes extends EventLogging {
       case x if Set[DataType](int64, float32).subsetOf(x) => float64
       case x if Set[DataType](int32, float32).subsetOf(x) => float32
       case x if Set[DataType](int32, int64).subsetOf(x) => int64
+      case x if x.subsetOf(Set[DataType](int32, int32option)) => int32option
+      case x if x.subsetOf(Set[DataType](int32, int32option, int64, int64option)) => int64option
+      case x if x.subsetOf(Set[DataType](int32, int32option, float32, float32option)) => float32option
+      case x if x.subsetOf(Set[DataType](int32, int32option, int64, int64option,
+        float32, float32option, float64, float64option)) => float64option
+
       case _ => string
     }
   }
