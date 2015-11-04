@@ -16,10 +16,8 @@
 
 package org.trustedanalytics.atk.model.publish.format
 
-import java.io
 import java.io._
 import java.net.{ URL, URLClassLoader }
-import javax.crypto.KeyGenerator
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
 import org.apache.commons.compress.archivers.tar.{ TarArchiveInputStream, TarArchiveOutputStream, TarArchiveEntry }
