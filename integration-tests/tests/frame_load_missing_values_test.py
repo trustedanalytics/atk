@@ -23,8 +23,8 @@ import trustedanalytics as ta
 ta.errors.show_details = True
 ta.loggers.set_api()
 # TODO: port setup should move to a super class
-if ta.server.port != 9099:
-    ta.server.port = 9099
+if ta.server.port != 19099:
+    ta.server.port = 19099
 ta.connect()
 
 class FrameLoadMissingValuesTest(unittest.TestCase):
@@ -52,7 +52,7 @@ class FrameLoadMissingValuesTest(unittest.TestCase):
     _multiprocess_can_split_ = True
 
     def setUp(self):
-        self.csv_path = "missing_values_test.csv"
+        self.csv_path = "/datasets/missing_values_test.csv"
 
     def test_missing_values_using_int32option_datatype(self):
         # Tests loading a csv file with missing values to a frame using the int32option datatype
