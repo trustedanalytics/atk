@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>graphbuilder</artifactId>
     <packaging>jar</packaging>
-    
+
     <name>graphbuilder</name>
     <description>
         Library for bulk graph I/O.
@@ -88,7 +88,7 @@
         <!-- END BDA dependencies to our modules -->
 
         <!-- START Titan dependencies -->
-		<dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
