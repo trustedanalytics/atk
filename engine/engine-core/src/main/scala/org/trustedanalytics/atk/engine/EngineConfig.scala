@@ -31,7 +31,7 @@ import org.apache.hadoop.hbase.client.HBaseAdmin
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import scala.concurrent.duration._
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Configuration Settings for the SparkEngine,

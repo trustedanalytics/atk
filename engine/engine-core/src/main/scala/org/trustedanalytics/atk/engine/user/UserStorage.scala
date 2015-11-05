@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.user
 
 import org.trustedanalytics.atk.repository.SlickMetaStoreComponent
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.domain.{ UserPrincipal, UserTemplate, User }
 import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Try, Failure, Success }
