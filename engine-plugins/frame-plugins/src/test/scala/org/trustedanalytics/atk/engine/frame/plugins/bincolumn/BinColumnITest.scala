@@ -322,7 +322,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = false, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, false, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = false, rdd)
     val result = binnedRdd.collect()
 
     // Validate
@@ -354,7 +354,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = true, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, false, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = true, rdd)
     val result = binnedRdd.collect()
 
     // Validate
@@ -386,7 +386,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, false, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, rdd)
     val result = binnedRdd.collect()
 
     // Validate
