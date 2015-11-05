@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>LdaModel __init__ &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models LdaModel" href="index.html" >
+    <link rel="next" title="LdaModel last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="Models LdaModel" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Models</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Models</span></code> LdaModel</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Models LdaModel"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="last_read_date.html" title="LdaModel last_read_date"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="ldamodel-init">
+<span id="python-api-models-model-lda-new"></span><h1><a class="reference internal" href="index.html"><em>LdaModel</em></a>  __init__<a class="headerlink" href="#ldamodel-init" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates Latent Dirichlet Allocation model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of LdaModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p><abbr title="Latent Dirichlet Allocation">LDA</abbr> is a commonly-used algorithm for topic modeling, but,
+more broadly, is considered a dimensionality reduction technique.
+For more detail see <a class="reference internal" href="../../../LdaNewPlugin_Summary.html#ldanewplugin-summary"><span>LDA</span></a>.</p>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
+<p>Consider the following frame containing three columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  doc_id     word_id     word_count</span>
+<span class="go">======================================</span>
+<span class="go">[0]  nytimes    harry                3</span>
+<span class="go">[1]  nytimes    economy             35</span>
+<span class="go">[2]  nytimes    jobs                40</span>
+<span class="go">[3]  nytimes    magic                1</span>
+<span class="go">[4]  nytimes    realestate          15</span>
+<span class="go">[5]  nytimes    movies               6</span>
+<span class="go">[6]  economist  economy             50</span>
+<span class="go">[7]  economist  jobs                35</span>
+<span class="go">[8]  economist  realestate          20</span>
+<span class="go">[9]  economist  movies               1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{&#39;topics_given_word&#39;: Frame  &lt;unnamed&gt;</span>
+<span class="go">row_count = 8</span>
+<span class="go">schema = [word_id:unicode, topic_probabilities:vector(2)]</span>
+<span class="go">status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.556000-07:00), &#39;topics_given_doc&#39;: Frame  &lt;unnamed&gt;</span>
+<span class="go">row_count = 3</span>
+<span class="go">schema = [doc_id:unicode, topic_probabilities:vector(2)]</span>
+<span class="go">status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.369000-07:00), &#39;report&#39;: u&#39;======Graph Statistics======\nNumber of vertices: 11} (doc: 3, word: 8})\nNumber of edges: 16\n\n======LDA Configuration======\nnumTopics: 2\nalpha: 1.100000023841858\nbeta: 1.100000023841858\nmaxIterations: 3\n&#39;, &#39;word_given_topics&#39;: Frame  &lt;unnamed&gt;</span>
+<span class="go">row_count = 8</span>
+<span class="go">schema = [word_id:unicode, topic_probabilities:vector(2)]</span>
+<span class="go">status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.465000-07:00)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  doc_id       topic_probabilities</span>
+<span class="go">===========================================================</span>
+<span class="go">[0]  harrypotter  [0.06417509902256538, 0.9358249009774346]</span>
+<span class="go">[1]  economist    [0.8065841283073141, 0.19341587169268581]</span>
+<span class="go">[2]  nytimes      [0.855316939742769, 0.14468306025723088]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span><span class="o">.</span><span class="n">column_names</span>
+<span class="go">[u&#39;doc_id&#39;, u&#39;topic_probabilities&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;word_given_topics&#39;</span><span class="p">]</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  word_id     topic_probabilities</span>
+<span class="go">=============================================================</span>
+<span class="go">[0]  harry       [0.005015572372943657, 0.2916109787103347]</span>
+<span class="go">[1]  realestate  [0.167941871746252, 0.032187084858186256]</span>
+<span class="go">[2]  secrets     [0.026543839878055035, 0.17103864163730945]</span>
+<span class="go">[3]  movies      [0.03704750433384287, 0.003294403360133419]</span>
+<span class="go">[4]  magic       [0.016497495727347045, 0.19676900962555072]</span>
+<span class="go">[5]  economy     [0.3805836266747442, 0.10952481503975171]</span>
+<span class="go">[6]  chamber     [0.0035944004256137523, 0.13168123398523954]</span>
+<span class="go">[7]  jobs        [0.36277568884120137, 0.06389383278349432]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span><span class="o">.</span><span class="n">column_names</span>
+<span class="go">[u&#39;word_id&#39;, u&#39;topic_probabilities&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;topics_given_word&#39;</span><span class="p">]</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  word_id     topic_probabilities</span>
+<span class="go">===========================================================</span>
+<span class="go">[0]  harry       [0.018375903962878668, 0.9816240960371213]</span>
+<span class="go">[1]  realestate  [0.8663322126823493, 0.13366778731765067]</span>
+<span class="go">[2]  secrets     [0.15694172611285945, 0.8430582738871405]</span>
+<span class="go">[3]  movies      [0.9444179131148587, 0.055582086885141324]</span>
+<span class="go">[4]  magic       [0.09026309091077593, 0.9097369090892241]</span>
+<span class="go">[5]  economy     [0.8098866029287505, 0.19011339707124958]</span>
+<span class="go">[6]  chamber     [0.0275551649439219, 0.9724448350560781]</span>
+<span class="go">[7]  jobs        [0.8748608515169193, 0.12513914848308066]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span><span class="o">.</span><span class="n">column_names</span>
+<span class="go">[u&#39;word_id&#39;, u&#39;topic_probabilities&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;secrets&#39;</span><span class="p">,</span> <span class="s">&#39;magic&#39;</span><span class="p">,</span> <span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;chamber&#39;</span> <span class="s">&#39;test&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span>
+<span class="go">{u&#39;topics_given_doc&#39;: [0.3149285399451628, 0.48507146005483726], u&#39;new_words_percentage&#39;: 20.0, u&#39;new_words_count&#39;: 1}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
+<span class="go">[0.3149285399451628, 0.48507146005483726]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">]</span>
+<span class="go">20.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;new_words_count&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;new_words_count&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Nov 05, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

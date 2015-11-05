@@ -1,0 +1,38 @@
+.. _python_api/frames/frame-vertex/status:
+
+
+:doc:`VertexFrame <index>`  status
+**********************************
+
+------
+
+
+.. attribute:: status
+
+    Current frame life cycle status.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : str
+
+        ..
+
+            Status of the frame
+    One of three statuses: ACTIVE, DROPPED, FINALIZED
+       ACTIVE:    Entity is available for use
+       DROPPED:   Entity has been dropped by user or by garbage collection which found it stale
+       FINALIZED: Entity's data has been deleted
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> frame.status
+        u'ACTIVE'
+

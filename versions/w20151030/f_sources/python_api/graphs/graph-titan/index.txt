@@ -1,0 +1,92 @@
+.. _python_api/graphs/graph-titan/index:
+
+
+:doc:`Graphs<../index>` TitanGraph
+**********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+
+
+    ml
+    query
+    annotate_degrees
+    annotate_weighted_degrees
+    clustering_coefficient
+    copy
+    export_to_graph
+    graph_clustering
+    graphx_connected_components
+    graphx_pagerank
+    graphx_triangle_count
+    last_read_date
+    ml/belief_propagation
+    name
+    query/gremlin
+    status
+    vertex_sample
+
+.. class:: TitanGraph
+
+    Proxy to a graph in Titan, supports Gremlin query.
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the graph object.
+    :doc:`status <status>`\                                                                               Current graph life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <TitanGraph__init__>`\ (self[, name, _info])                                           Initialize the graph.
+    :ref:`__init__ <TitanGraphMl__init__>`\ (self, entity)                                                <Missing Doc>
+    :ref:`__init__ <TitanGraphQuery__init__>`\ (self, entity)                                             <Missing Doc>
+    :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
+    :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+    :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
+    :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
+    :doc:`export_to_graph <export_to_graph>`\ (self)                                                      Export from TitanGraph to Graph.
+    :doc:`graph_clustering <graph_clustering>`\ (self, edge_distance)                                     Performs graph clustering over an initial titan graph.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
+    :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
+    :doc:`ml.belief_propagation <ml/belief_propagation>`\ (self, prior_property, posterior_property)      Classification on sparse data using Belief Propagation.
+    :doc:`query.gremlin <query/gremlin>`\ (self, gremlin)                                                 Executes a Gremlin query.
+    :doc:`vertex_sample <vertex_sample>`\ (self, size, sample_type[, seed])                               Make subgraph from vertex sampling.
+    ====================================================================================================  ====================================================================================================
+
+.. _TitanGraph__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Initialize the graph.
+
+
+    :Parameters:
+
+        **name** :  (default=None)
+
+        ..
+
+
+
+
+    Examples
+    --------
+    Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
+
+    .. code::
+
+        >>> graph = ta.get_graph("my_graph")
+        >>> titan_graph = graph.export_to_titan("titan_graph")
+

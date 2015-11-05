@@ -1,0 +1,55 @@
+.. _python_api/models/model-k_means/predict:
+
+
+:doc:`KMeansModel <index>`  predict
+***********************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |BETA|
+    Predict the cluster assignments for the data points.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose clusters are to be predicted.
+            Default is to predict the clusters over columns the KMeans model was trained on.
+            The columns are scaled using the same values used when training the
+            model.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            Frame
+                A new frame consisting of the existing columns of the frame and the following new columns:
+                'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
+                predicted_cluster column: The cluster assignment for the observation
+    Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along 
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

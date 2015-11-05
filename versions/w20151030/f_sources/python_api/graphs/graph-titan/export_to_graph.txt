@@ -1,0 +1,25 @@
+.. _python_api/graphs/graph-titan/export_to_graph:
+
+
+:doc:`TitanGraph <index>`  export_to_graph
+******************************************
+
+------
+
+
+.. function:: export_to_graph(self)
+
+    Export from TitanGraph to Graph.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

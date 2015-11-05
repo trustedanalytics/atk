@@ -1,0 +1,33 @@
+.. _python_api/models/model-principal_components/publish:
+
+
+:doc:`PrincipalComponentsModel <index>`  publish
+************************************************
+
+------
+
+
+.. function:: publish(self)
+
+    |BETA|
+    Creates a tar file that will be used as input to the scoring engine
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Returns the HDFS path to the trained model's tar file
+    The publish method exports the PrincipalComponentsModel and its implementation into a tar file. The tar file is then published
+    on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
+    then be used to compute the principal components and t-squared index(if requested) of an observation.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

@@ -1,0 +1,22 @@
+.. _python_api/frames/get_frame_names:
+
+
+:doc:`trustedanalytics <index>`  get_frame_names
+************************************************
+
+------
+
+
+.. function:: get_frame_names()
+
+    Retrieve names for all the frame objects on the server.
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            List of names
