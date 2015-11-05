@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.domain.frame
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Command to unflatten a frame and store the result to a new data frame.

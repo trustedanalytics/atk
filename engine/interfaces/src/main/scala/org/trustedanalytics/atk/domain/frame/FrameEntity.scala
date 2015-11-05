@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.domain.frame
 
 import org.trustedanalytics.atk.domain.{ StorageFormats, Status, HasId }
 import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema, FrameSchema, Schema }
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.joda.time.DateTime
 
 /**
