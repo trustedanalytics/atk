@@ -796,6 +796,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <version>${dep.aurelius.version}</version>
                 <exclusions>
                     <exclusion>
+                        <groupId>com.tinkerpop.blueprints</groupId>
+                        <artifactId>blueprints-sail-graph</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-core</artifactId>
                     </exclusion>
