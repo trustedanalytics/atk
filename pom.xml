@@ -34,16 +34,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
 
     <repositories>
-    	<repository>
-            <id>atk</id>
-            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
         <repository>
             <id>cloudera cdh</id>
             <!--<url>https://repository.cloudera.com/artifactory/cloudera-repos</url>-->
@@ -84,6 +74,26 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <enabled>true</enabled>
             </releases>
         </repository>
+        <repository>
+            <id>atk</id>
+            <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>gaomaven</id>
+            <url>http://gaomaven.jf.intel.com:8081/nexus/content/repositories/releases</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <distributionManagement>
@@ -123,6 +133,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.typesafe-config.version>1.2.1</dep.typesafe-config.version>
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
         <dev.spark.hive.version>1.3.0-${dep.cdh.version}</dev.spark.hive.version>
+        <dep.daal.version>2016.0.109</dep.daal.version>
         <!--START GAO MAVEN -->
 
         <dep.giraph-core.version>1.1.0-hadoop2</dep.giraph-core.version>
@@ -680,6 +691,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
 
     <dependencyManagement>
         <dependencies>
+            <!-- START Intel DAAL dependencies -->
+            <dependency>
+                <groupId>com.intel.daal</groupId>
+                <artifactId>daal-core</artifactId>
+                <version>${dep.daal.version}</version>
+            </dependency>
+            <!-- END Intel DAAL dependencies -->
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event-api</artifactId>
@@ -713,6 +731,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>model-plugins</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>daal-plugins</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -1559,4 +1582,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
 </project>

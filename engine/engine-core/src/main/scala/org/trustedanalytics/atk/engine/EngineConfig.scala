@@ -315,9 +315,14 @@ trait EngineConfig extends EventLogging {
   val sparkAppJarsLocal: Boolean = config.getBoolean(sparkConfigKey + ".app-jars-local")
 
   /**
-   * Represents a ":" separated set of fully qualified strings (jars) needed by the application.
+   * Represents a "," separated set of fully qualified strings (jars) needed by the application.
    */
   val extraJarsForSparkSubmit: String = config.getString(sparkConfigKey + ".extra-jars-for-spark-submit")
+
+  /**
+   * Represents a "," separated set of fully qualified strings (files, e.g., dynamic libraries) needed by the application.
+   */
+  val extraFilesForSparkSubmit: String = config.getString(sparkConfigKey + ".extra-files-for-spark-submit")
 
   /**
    * Fully qualified hostname for current system.

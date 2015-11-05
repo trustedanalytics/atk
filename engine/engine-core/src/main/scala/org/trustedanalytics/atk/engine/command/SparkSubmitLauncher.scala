@@ -84,7 +84,7 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
             case false => ""
           }
 
-          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile$pythonDependencyPath",
+          val pluginDependencyFiles = Array("--files", s"$tempConfFileName#application.conf$kerbFile$pythonDependencyPath,${EngineConfig.extraFilesForSparkSubmit}",
             "--conf", s"config.resource=application.conf")
           val executionParams = Array(
             "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
