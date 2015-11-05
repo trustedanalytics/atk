@@ -71,7 +71,7 @@ object DiscretizationFunctions extends Serializable {
     rdd.map { row: Row =>
       val element = if (isOptionColumn) DataTypes.toOptionDouble(row(index)) else Some(DataTypes.toDouble(row(index)))
       //if lower than first cutoff
-      val binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
+      val binIndex = binOptionElement(element, cutoffs, lowerInclusive, strictBinning)
       new GenericRow(row.toSeq.toArray :+ binIndex)
     }
   }
@@ -86,7 +86,7 @@ object DiscretizationFunctions extends Serializable {
    * @return bin index
    */
   def binElement(element: Double, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
-    binElement(Some(element), cutoffs, lowerInclusive, strictBinning)
+    binOptionElement(Some(element), cutoffs, lowerInclusive, strictBinning)
   }
 
   /**
@@ -98,7 +98,7 @@ object DiscretizationFunctions extends Serializable {
    *                      if false smaller vales will be in the first bin and larger values will be in the last
    * @return bin index
    */
-  def binElement(element: Option[Double], cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
+  def binOptionElement(element: Option[Double], cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean): Int = {
     val min: Int = 0
     val max: Int = cutoffs.length - 2
 
