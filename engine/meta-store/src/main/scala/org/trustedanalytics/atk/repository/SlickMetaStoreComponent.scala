@@ -886,7 +886,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
       def lastReadDate = column[DateTime]("last_read_date")
 
-      def storageLocation = column[Option[String]]("storageLocation")
+      def storageLocation = column[Option[String]]("storage_uri")
 
       /** projection to/from the database */
       override def * = (id, name, modelType, description, statusId, data, createdOn, modifiedOn, createdByUserId, modifiedByUserId, lastReadDate, storageLocation) <> (ModelEntity.tupled, ModelEntity.unapply)
