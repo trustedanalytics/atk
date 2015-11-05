@@ -34,7 +34,7 @@ class EngineApplicationImpl extends AbstractEngineComponent with EngineApplicati
   // Some of the Engine initialization we can do in a background thread.
   BackgroundInit.initFunction = () => {
     new HdfsLibSync(fileStorage).syncLibs()
-    GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+    GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage, modelFileStorage)
   }
 
   BackgroundInit.start

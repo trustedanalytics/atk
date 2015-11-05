@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Call
 import org.trustedanalytics.atk.engine.frame.{ SparkFrameStorage, FrameFileStorage }
 import org.trustedanalytics.atk.engine.graph.{ SparkGraphStorage, HBaseAdminFactory, SparkGraphHBaseBackend }
-import org.trustedanalytics.atk.engine.model.ModelStorageImpl
+import org.trustedanalytics.atk.engine.model.{ ModelFileStorage, ModelStorageImpl }
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitioner
 import org.trustedanalytics.atk.engine.user.UserStorage
 import org.trustedanalytics.atk.engine.command._
@@ -58,7 +58,9 @@ abstract class AbstractEngineComponent extends DbProfileComponent
   protected val backendGraphStorage: SparkGraphHBaseBackend = new SparkGraphHBaseBackend(hbaseAdminFactory = new HBaseAdminFactory)
   val graphStorage: SparkGraphStorage = new SparkGraphStorage(metaStore, backendGraphStorage, frameStorage)
 
-  val modelStorage: ModelStorageImpl = new ModelStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
+  val modelFileStorage = new ModelFileStorage(EngineConfig.fsRoot, fileStorage)
+
+  val modelStorage: ModelStorageImpl = new ModelStorageImpl(metaStore.asInstanceOf[SlickMetaStore], modelFileStorage)
 
   val userStorage = new UserStorage(metaStore.asInstanceOf[SlickMetaStore])
 
