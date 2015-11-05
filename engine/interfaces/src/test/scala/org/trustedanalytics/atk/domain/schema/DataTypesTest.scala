@@ -336,4 +336,15 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.isCompatibleDataType(DataTypes.int32option, DataTypes.float32option) shouldBe false
     DataTypes.isCompatibleDataType(DataTypes.float32option, DataTypes.float64option) shouldBe true
   }
+
+  "DataTypes.isMissingValue" should "return true for missing values or 'None' strings" in {
+    DataTypes.isMissingNumber("") shouldBe true
+    DataTypes.isMissingNumber(null) shouldBe true
+    DataTypes.isMissingNumber("none") shouldBe true
+    DataTypes.isMissingNumber("None") shouldBe true
+    DataTypes.isMissingNumber("TEST") shouldBe false
+    DataTypes.isMissingNumber(" ") shouldBe false
+    DataTypes.isMissingNumber(1) shouldBe false
+    DataTypes.isMissingNumber("1") shouldBe false
+  }
 }

@@ -202,7 +202,7 @@ object DataTypes extends EventLogging {
     override type ScalaType = Option[Int]
 
     override def parse(raw: Any) = Try {
-      if (raw != null && raw != "")
+      if (isMissingNumber(raw) == false)
         Some(toInt(raw))
       else
         None
@@ -243,7 +243,7 @@ object DataTypes extends EventLogging {
     override type ScalaType = Option[Long]
 
     override def parse(raw: Any) = Try {
-      if (raw != null && raw != "")
+      if (isMissingNumber(raw) == false)
         Some(toLong(raw))
       else
         None
@@ -284,7 +284,7 @@ object DataTypes extends EventLogging {
     override type ScalaType = Option[Float]
 
     override def parse(raw: Any) = Try {
-      if (raw != null && raw != "")
+      if (isMissingNumber(raw) == false)
         Some(toFloat(raw))
       else
         None
@@ -805,7 +805,7 @@ object DataTypes extends EventLogging {
       case f: Float => Some(f.toDouble)
       case d: Double => Some(d)
       case bd: BigDecimal => Some(bd.toDouble)
-      case s: String => if (s.trim().length > 0) Some(s.trim().toDouble) else None
+      case s: String => if (isMissingNumber(s)) None else Some(s.trim().toDouble)
       case v: vector.ScalaType => Some(vector.asDouble(v))
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
@@ -929,6 +929,19 @@ object DataTypes extends EventLogging {
       })
       case _ => throw new IllegalArgumentException(s"The following value is not an array of doubles: $value")
     }
+  }
+
+  /**
+   * Checks the specified numberical value to determine if it should be considered missing in an option
+   * data type.
+   * @param value Value to check
+   * @return True if the value is considered to be missing
+   */
+  def isMissingNumber(value:Any): Boolean = {
+    if (value == null || value == "" || value.toString.toLowerCase == "none")
+      return true
+    else
+      return false
   }
 
   /**
