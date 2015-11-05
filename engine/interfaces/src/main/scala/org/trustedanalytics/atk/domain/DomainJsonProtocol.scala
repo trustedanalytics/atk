@@ -413,7 +413,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   }
   implicit val modelTemplateFormat = jsonFormat2(ModelTemplate)
   implicit val modelRenameFormat = jsonFormat2(RenameModelArgs)
-  implicit val modelFormat = jsonFormat11(ModelEntity)
+  implicit val modelFormat = jsonFormat12(ModelEntity)
   implicit val genericNewModelArgsFormat = jsonFormat2(GenericNewModelArgs)
 
   // kmeans formats

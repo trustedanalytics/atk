@@ -86,7 +86,7 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
     val jsonModel = new RandomForestClassifierData(randomForestModel, arguments.observationColumns, arguments.numClasses)
 
-    model.data = jsonModel.toJson.asJsObject
+    model.writeToStorage(jsonModel.toJson.asJsObject)
     new RandomForestClassifierTrainReturn(arguments.observationColumns, arguments.labelColumn, arguments.numClasses,
       randomForestModel.numTrees, randomForestModel.totalNumNodes, arguments.getFeatureSubsetCategory, arguments.impurity,
       arguments.maxDepth, arguments.maxBins, arguments.seed)

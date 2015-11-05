@@ -83,7 +83,7 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
 
     // Loading model
     val naiveBayesJsObject = model.dataOption.getOrElse(
-      throw new RuntimeException("This model has not be trained yet. Please train before trying to predict")
+      throw new RuntimeException("This model has not been trained yet. Please train before trying to predict")
     )
     val naiveBayesData = naiveBayesJsObject.convertTo[NaiveBayesData]
     val naiveBayesModel = naiveBayesData.naiveBayesModel

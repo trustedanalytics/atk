@@ -96,7 +96,7 @@ class RandomForestClassifierTestPlugin extends SparkCommandPlugin[RandomForestCl
     val frame: SparkFrame = arguments.frame
 
     //Extracting the model and data to run on
-    val rfData = model.data.convertTo[RandomForestClassifierData]
+    val rfData = model.readFromStorage().convertTo[RandomForestClassifierData]
     val rfModel = rfData.randomForestModel
     if (arguments.observationColumns.isDefined) {
       require(rfData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and test should be same")

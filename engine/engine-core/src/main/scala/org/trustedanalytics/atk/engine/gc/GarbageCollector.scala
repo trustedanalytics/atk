@@ -22,6 +22,7 @@ import java.util.concurrent.{ Executors, TimeUnit, ScheduledFuture }
 
 import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.model.ModelEntity
+import org.trustedanalytics.atk.engine.model.ModelFileStorage
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntryTemplate, GarbageCollectionEntry, GarbageCollectionTemplate, GarbageCollection }
@@ -37,7 +38,7 @@ import org.joda.time.DateTime
  * @param frameFileStorage storage class for accessing frame file storage
  * @param graphBackendStorage storage class for accessing graph backend storage
  */
-class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFileStorage, val graphBackendStorage: GraphBackendStorage) extends Runnable with EventLogging {
+class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFileStorage, val graphBackendStorage: GraphBackendStorage, val modelFileStorage: ModelFileStorage) extends Runnable with EventLogging {
 
   val start = new DateTime()
   val gcRepo = metaStore.gcRepo
@@ -301,6 +302,7 @@ class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFile
       val gcEntry: GarbageCollectionEntry = gcEntryRepo.insert(
         new GarbageCollectionEntryTemplate(gc.id, description, new DateTime)).get
       info(description)
+      modelFileStorage.deleteModelData(model)
       metaStore.modelRepo.finalizeEntity(model)
       gcEntryRepo.updateEndTime(gcEntry)
     }
@@ -320,10 +322,10 @@ object GarbageCollector {
    * @param frameStorage storage class for accessing frame storage
    * @param graphBackendStorage storage class for accessing graph backend storage
    */
-  def startup(metaStore: MetaStore, frameStorage: FrameFileStorage, graphBackendStorage: GraphBackendStorage): Unit = {
+  def startup(metaStore: MetaStore, frameStorage: FrameFileStorage, graphBackendStorage: GraphBackendStorage, modelStorage: ModelFileStorage): Unit = {
     this.synchronized {
       if (garbageCollector == null)
-        garbageCollector = new GarbageCollector(metaStore, frameStorage, graphBackendStorage)
+        garbageCollector = new GarbageCollector(metaStore, frameStorage, graphBackendStorage, modelStorage)
       if (gcScheduler == null) {
         gcScheduler = Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(garbageCollector, EngineConfig.gcInterval, EngineConfig.gcInterval, TimeUnit.MILLISECONDS)
       }
