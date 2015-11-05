@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.Status
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.rest.v1.viewmodels.{ Rel, RelLink, GetFrame, GetFrames }
 import spray.http.Uri
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import spray.json.JsString
 
 /**

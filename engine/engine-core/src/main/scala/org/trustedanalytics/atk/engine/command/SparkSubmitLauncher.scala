@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.event.EventLogging
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Our wrapper for calling SparkSubmit to run a plugin.

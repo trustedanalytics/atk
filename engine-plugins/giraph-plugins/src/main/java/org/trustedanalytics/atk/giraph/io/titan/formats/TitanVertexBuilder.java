@@ -23,7 +23,7 @@ import com.thinkaurelius.titan.core.TitanEdge;
 import com.thinkaurelius.titan.core.TitanProperty;
 import com.thinkaurelius.titan.hadoop.FaunusVertex;
 import com.tinkerpop.blueprints.Direction;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.giraph.conf.StrConfOption;
 import org.apache.giraph.edge.Edge;
 import org.apache.giraph.edge.EdgeFactory;

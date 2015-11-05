@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.domain.frame
 
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
