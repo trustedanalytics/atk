@@ -857,6 +857,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy</artifactId>
                     </exclusion>-->
+                    <exclusion>
+                        <groupId>org.apache.ivy</groupId>
+                        <artifactId>ivy</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <!--org.scala-->
@@ -999,26 +1003,30 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>spark-core_${scala.short.version}</artifactId>
                 <version>${dep.spark.version}</version>
                 <exclusions>
-										<exclusion>
-												<groupId>org.slf4j</groupId>
-												<artifactId>slf4j-log4j12</artifactId>
-										</exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                           <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.objenesis</groupId>
                         <artifactId>objenesis</artifactId>
                     </exclusion>
-										<!--<exclusion>
+                    <!--<exclusion>
                         <groupId>org.spark-project.akka</groupId>
                         <artifactId>akka-remote_${scala.short.version}</artifactId>
                     </exclusion>
-										<exclusion>
+                    <exclusion>
                         <groupId>org.spark-project.akka</groupId>
                         <artifactId>akka-actor_${scala.short.version}</artifactId>
                     </exclusion>
-										<exclusion>
+                    <exclusion>
                         <groupId>org.spark-project.akka</groupId>
                         <artifactId>akka-slf4j_${scala.short.version}</artifactId>
                     </exclusion>-->
+                    <exclusion>
+                        <groupId>org.apache.ivy</groupId>
+                        <artifactId>ivy</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
