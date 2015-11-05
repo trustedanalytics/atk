@@ -8,7 +8,7 @@
     <name>REST server</name>
 
     <description>
-        Thin REST layer above the Engine.  Converts HTTP requests to AKKA messages that are sent to the Engine.
+        Thin REST layer above the Engine. Converts HTTP requests to AKKA messages that are sent to the Engine.
         (Currently this module also instantiates the Engine but later the Engine might be running in its own JVM).
 
         Very little business logic should exist here.
