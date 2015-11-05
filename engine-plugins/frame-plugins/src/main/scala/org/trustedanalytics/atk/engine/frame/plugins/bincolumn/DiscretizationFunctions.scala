@@ -51,13 +51,15 @@ object DiscretizationFunctions extends Serializable {
     val cutoffs: Array[Double] = getBinEqualWidthCutoffs(index, numBins, rdd)
 
     // map each data element to its bin id, using cutoffs index as bin id
-    val binnedColumnRdd = binColumns(index, cutoffs.toList, lowerInclusive = true, strictBinning = false, rdd)
+    // TODO: Update bin_column_equal_width to support option columns
+    val binnedColumnRdd = binColumns(index, false, cutoffs.toList, lowerInclusive = true, strictBinning = false, rdd)
     new RddWithCutoffs(cutoffs, binnedColumnRdd)
   }
 
   /**
    * Bin column at index using list of cutoff values
    * @param index column index
+   * @param isOptionColumn if true, the column is on option (could have a null value)
    * @param cutoffs Array containing the cutoff for each bin must be monotonically increasing
    * @param lowerInclusive if true the lowerbound of the bin will be inclusive while the upperbound is exclusive if false it is the opposite
    * @param strictBinning if true values smaller than the first bin or larger than the last bin will not be given a bin.
@@ -65,28 +67,9 @@ object DiscretizationFunctions extends Serializable {
    * @param rdd RDD that contains the column for binning
    * @return new RDD with binned column appended
    */
-  def binColumns(index: Int, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, rdd: RDD[Row]): RDD[Row] = {
+  def binColumns(index: Int, isOptionColumn: Boolean, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, rdd: RDD[Row]): RDD[Row] = {
     rdd.map { row: Row =>
-      val element = DataTypes.toDouble(row(index))
-      //if lower than first cutoff
-      val binIndex = binElement(Some(element), cutoffs, lowerInclusive, strictBinning)
-      new GenericRow(row.toSeq.toArray :+ binIndex)
-    }
-  }
-
-  /**
-   * Bin option column at index using list of cutoff values
-   * @param index column index
-   * @param cutoffs Array containing the cutoff for each bin must be monotonically increasing
-   * @param lowerInclusive if true the lowerbound of the bin will be inclusive while the upperbound is exclusive if false it is the opposite
-   * @param strictBinning if true values smaller than the first bin or larger than the last bin will not be given a bin.
-   *                      if false smaller vales will be in the first bin and larger values will be in the last
-   * @param rdd RDD that contains the column for binning
-   * @return new RDD with binned column appended
-   */
-  def binOptionColumns(index: Int, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, rdd: RDD[Row]): RDD[Row] = {
-    rdd.map { row: Row =>
-      val element = DataTypes.toOptionDouble(row(index))
+      val element = if (isOptionColumn) DataTypes.toOptionDouble(row(index)) else Some(DataTypes.toDouble(row(index)))
       //if lower than first cutoff
       val binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
       new GenericRow(row.toSeq.toArray :+ binIndex)
