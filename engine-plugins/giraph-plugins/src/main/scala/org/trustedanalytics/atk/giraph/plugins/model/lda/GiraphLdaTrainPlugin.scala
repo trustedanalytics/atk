@@ -17,6 +17,8 @@
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
 import org.trustedanalytics.atk.domain.frame.FrameEntity
+import com.typesafe.config.ConfigFactory
+import org.trustedanalytics.atk.domain.frame.{ CovarianceMatrixArgs, FrameEntity }
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
@@ -70,7 +72,6 @@ class GiraphLdaTrainPlugin
   override def execute(arguments: GiraphLdaTrainArgs)(implicit invocation: Invocation): GiraphLdaTrainResult = {
 
     val frames = engine.frames
-    val config = configuration
 
     // validate arguments
     val edgeFrame: SparkFrame = arguments.frame
@@ -134,8 +135,9 @@ class GiraphLdaTrainPlugin
     giraphConf.setComputationClass(classOf[GiraphLdaComputation])
     giraphConf.setAggregatorWriterClass(classOf[GiraphLdaAggregatorWriter])
 
+    val config = ConfigFactory.load(this.getClass.getClassLoader)
     //Enable only if serialized edges for single vertex exceed 1GB
-    if (config.getBoolean("useBigDataEdges")) {
+    if (config.getBoolean("trustedanalytics.atk.lda-model-train.useBigDataEdges")) {
       giraphConf.setOutEdgesClass(classOf[BigDataEdges[LdaVertexId, LdaEdgeData]])
     }
 

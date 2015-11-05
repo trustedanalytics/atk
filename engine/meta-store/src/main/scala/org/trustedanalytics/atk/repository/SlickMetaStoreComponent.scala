@@ -138,6 +138,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
             info("Running migrations to create/update schema as needed, jdbcUrl: " + profile.connectionString +
               ", user: " + profile.username)
             val flyway = new Flyway()
+            flyway.setClassLoader(this.getClass.getClassLoader)
             flyway.setDataSource(profile.connectionString, profile.username, profile.password)
             flyway.migrate()
             info("Migration completed")
