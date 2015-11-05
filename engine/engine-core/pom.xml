@@ -197,8 +197,8 @@
 
 
         <!--<dependency>-->
-            <!--<groupId>com.typesafe.akka</groupId>-->
-            <!--<artifactId>akka-actor_${scala.short.version}</artifactId>-->
+        <!--<groupId>com.typesafe.akka</groupId>-->
+        <!--<artifactId>akka-actor_${scala.short.version}</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>com.typesafe</groupId>
