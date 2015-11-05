@@ -16,7 +16,7 @@
         <relativePath>../pom.xml</relativePath>
         <version>master-SNAPSHOT</version>
     </parent>
-    
+
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
         <plugins>
