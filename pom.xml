@@ -1,6 +1,6 @@
 <!--
 /*
-// Copyright (c) 2015 Intel Corporation 
+// Copyright (c) ${currentYear} Intel Corporation 
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -32,8 +32,9 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
     <description>TrustedAnalytics : Large Scale Graph Analytics</description>
     <inceptionYear>2013</inceptionYear>
 
+
     <repositories>
-    	<repository>
+        <repository>
             <id>atk</id>
             <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
@@ -452,6 +453,43 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </configuration>
                 </plugin>
 
+                <!-- Update and correct open source license block comments -->
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>2.3</version>
+                    <configuration>
+                        <header>package/license-header.txt</header>
+                        <properties>
+                            <currentYear>2015</currentYear>
+                        </properties>
+                        <excludes>
+                            <exclude>engine-plugins/giraph-plugins/src/main/assembly/compile.xml</exclude>
+                            <exclude>findbugs-exclude.xml</exclude>
+                            <exclude>scalastyle-config.xml</exclude>
+                            <exclude>checkstyle.xml</exclude>
+                            <exclude>**/pom.xml</exclude>
+                            <exclude>doc/**/*.*</exclude>
+                            <exclude>conf/**/*.*</exclude>
+                            <exclude>**/*.txt</exclude>
+                            <exclude>**/*.csv</exclude>
+                            <exclude>**/*.rst</exclude>
+                            <exclude>**/*.tpl</exclude>
+                            <exclude>**/*.inc</exclude>
+                            <exclude>**/*.conf</exclude>
+                            <exclude>**/*.sql</exclude>
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <!--Create our jars-->
                 <plugin>
                     <inherited>true</inherited>
@@ -758,6 +796,10 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <version>${dep.aurelius.version}</version>
                 <exclusions>
                     <exclusion>
+                        <groupId>com.tinkerpop.blueprints</groupId>
+                        <artifactId>blueprints-sail-graph</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-core</artifactId>
                     </exclusion>
@@ -957,26 +999,26 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>spark-core_${scala.short.version}</artifactId>
                 <version>${dep.spark.version}</version>
                 <exclusions>
-										<exclusion>
-												<groupId>org.slf4j</groupId>
-												<artifactId>slf4j-log4j12</artifactId>
-										</exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
                     <exclusion>
                         <groupId>org.objenesis</groupId>
                         <artifactId>objenesis</artifactId>
                     </exclusion>
-										<!--<exclusion>
-                        <groupId>org.spark-project.akka</groupId>
-                        <artifactId>akka-remote_${scala.short.version}</artifactId>
-                    </exclusion>
-										<exclusion>
-                        <groupId>org.spark-project.akka</groupId>
-                        <artifactId>akka-actor_${scala.short.version}</artifactId>
-                    </exclusion>
-										<exclusion>
-                        <groupId>org.spark-project.akka</groupId>
-                        <artifactId>akka-slf4j_${scala.short.version}</artifactId>
-                    </exclusion>-->
+                    <!--<exclusion>
+    <groupId>org.spark-project.akka</groupId>
+    <artifactId>akka-remote_${scala.short.version}</artifactId>
+</exclusion>
+                    <exclusion>
+    <groupId>org.spark-project.akka</groupId>
+    <artifactId>akka-actor_${scala.short.version}</artifactId>
+</exclusion>
+                    <exclusion>
+    <groupId>org.spark-project.akka</groupId>
+    <artifactId>akka-slf4j_${scala.short.version}</artifactId>
+</exclusion>-->
                 </exclusions>
             </dependency>
             <dependency>
@@ -1007,6 +1049,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <exclusion>
                         <groupId>org.apache.solr</groupId>
                         <artifactId>solr-commons-csv</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.lucene</groupId>
+                        <artifactId>lucene-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.lucene</groupId>
+                        <artifactId>lucene-analyzers-common</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1119,7 +1169,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.mortbay.jetty</groupId>
                         <artifactId>jsp-api-2.1</artifactId>
                     </exclusion>
-										<exclusion>
+                    <exclusion>
                         <groupId>com.google.protobuf</groupId>
                         <artifactId>protobuf-java</artifactId>
                     </exclusion>
@@ -1258,7 +1308,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>spray-routing_${scala.short.version}</artifactId>
                 <version>1.3.1</version>
             </dependency>
-             <dependency>
+            <dependency>
                 <groupId>io.spray</groupId>
                 <artifactId>spray-client</artifactId>
                 <version>1.3.1</version>
