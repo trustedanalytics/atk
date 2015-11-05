@@ -26,10 +26,11 @@ export YARN_CONF_DIR=$ATK_CONF_DIR
 
 echo $DIR
 
-LAUNCHER=$DIR/../launcher.jar
-LAUNCHER=$DIR/../conf/logback.xml:$LAUNCHER
-LAUNCHER=$DIR/../conf:$LAUNCHER
+CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
+CP=$DIR/../conf/logback.xml:$DIR/../conf:$CP
 echo "Downloading jquery exectuable to parse environment variables"
+
+export SEARCH_PATH="-Datk.module-loader.search-path=$DIR/../lib/"
 
 jq=$DIR/../jq
 echo "make jq executable"
@@ -96,8 +97,8 @@ if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 fi
 
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot scoring-engine
+echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
+java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module scoring-engine org.trustedanalytics.atk.scoring.ScoringServiceApplication
 
 popd
 
