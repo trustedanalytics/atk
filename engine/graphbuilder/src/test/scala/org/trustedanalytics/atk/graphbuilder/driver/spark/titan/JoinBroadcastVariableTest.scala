@@ -35,8 +35,7 @@ class JoinBroadcastVariableTest extends TestingSparkContextFlatSpec with Matcher
 
     val broadcastVariable = JoinBroadcastVariable(personRdd)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMaps(0).value.size should equal(5)
+    broadcastVariable.broadcastMap.value.size should equal(5)
     personIds.map { case (property, id) => broadcastVariable.get(property) should equal(Some(id)) }
     broadcastVariable.get(Property("not defined", new java.lang.Long(1))).isDefined should equal(false)
   }
@@ -45,8 +44,7 @@ class JoinBroadcastVariableTest extends TestingSparkContextFlatSpec with Matcher
 
     val broadcastVariable = JoinBroadcastVariable(emptyList)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMaps(0).value.isEmpty should equal(true)
+    broadcastVariable.broadcastMap.value.isEmpty should equal(true)
   }
   "JoinBroadcastVariable" should "throw an IllegalArgumentException if join parameter is null" in {
     intercept[IllegalArgumentException] {

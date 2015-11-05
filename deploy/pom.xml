@@ -147,6 +147,11 @@
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>model-plugins</artifactId>
         </dependency>
+        <!-- Needed to support large broadcast variables in Spark -->
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>spark-broadcast</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-protocol</artifactId>
