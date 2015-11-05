@@ -29,5 +29,5 @@ class EngineComponent extends AbstractEngineComponent {
   JvmVersionReporter.check()
   metaStore.initializeSchema()
   fileStorage.syncLibs()
-  GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage)
+  GarbageCollector.startup(metaStore, frameFileStorage, backendGraphStorage, modelFileStorage)
 }

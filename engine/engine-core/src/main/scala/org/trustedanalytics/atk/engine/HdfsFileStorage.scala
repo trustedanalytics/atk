@@ -233,3 +233,25 @@ class HdfsFileStorage extends EventLogging {
   }
 
 }
+
+object EntityRev {
+  // The implemented mutable strategy increments a subdirectory for a given
+  // frame path.  The given path is the source and path+1 is the destination.
+  val revPattern = """.*r(\d+)$""".r
+
+  /**
+   * Gets the next revision's folder name
+   * @param currentLocation current rev location path
+   * @return folder name (not absolute)
+   */
+  def getNextRevFolderName(currentLocation: Option[String]): String = {
+    val r = currentLocation match {
+      case Some(path) => path match {
+        case revPattern(number) => number.toInt + 1
+      }
+      case None => 0
+    }
+    s"r$r"
+  }
+
+}
