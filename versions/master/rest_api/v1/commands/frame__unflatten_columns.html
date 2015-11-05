@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands graph:/_info &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    <title>Commands frame/unflatten_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -27,8 +27,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands graph:/define_edge_type" href="graph-__define_edge_type.html" >
-    <link rel="prev" title="Commands frame/unflatten_columns" href="frame__unflatten_columns.html" > 
+    <link rel="next" title="Commands graph:/_info" href="graph-___info.html" >
+    <link rel="prev" title="Commands frame/top_k" href="frame__top_k.html" > 
   </head>
   <body>
 
@@ -56,11 +56,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="frame__unflatten_columns.html" title="Commands frame/unflatten_columns"
+        <a href="frame__top_k.html" title="Commands frame/top_k"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="graph-__define_edge_type.html" title="Commands graph:/define_edge_type"
+        <a href="graph-___info.html" title="Commands graph:/_info"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -109,9 +109,9 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="commands-graph-info">
-<span id="rest-api-v1-commands-graph-info"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> graph:/_info<a class="headerlink" href="#commands-graph-info" title="Permalink to this headline">¶</a></h1>
-<p>Get debug info about a graph.</p>
+  <div class="section" id="commands-frame-unflatten-columns">
+<span id="rest-api-v1-commands-frame-unflatten-columns"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/unflatten_columns<a class="headerlink" href="#commands-frame-unflatten-columns" title="Permalink to this headline">¶</a></h1>
+<p>Compacts data from multiple rows based on cell data.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -128,12 +128,22 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">graph:/_info</p>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">frame/unflatten_columns</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
-<blockquote class="last">
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
+<blockquote>
 <div><p>&lt;Missing Description&gt;</p>
+</div></blockquote>
+<p><strong>columns</strong> : list</p>
+<blockquote>
+<div><p>Name of the column(s) to be used as keys
+for unflattening.</p>
+</div></blockquote>
+<p><strong>delimiter</strong> : unicode (default=None)</p>
+<blockquote class="last">
+<div><p>Separator for the data in the result columns.
+Default is comma (,).</p>
 </div></blockquote>
 </td>
 </tr>
@@ -151,6 +161,10 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
+<p>Groups together cells in all columns (less the composite key) using &#8221;,&#8221; as string delimiter.
+The original rows are deleted.
+The grouping takes place based on a composite key created from cell values.
+The column datatypes are changed to string.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -191,7 +205,7 @@ Content-type: application/json
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<p><code class="docutils literal"><span class="pre">_Unit</span></code></p>
 </div>
 </div>
 </div>

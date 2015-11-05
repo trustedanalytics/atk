@@ -144,34 +144,33 @@
 <p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
 column <em>final_sale_price</em>:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  final_sale_price:int32</span>
-<span class="go">/------------------------/</span>
-<span class="go">            100</span>
-<span class="go">            250</span>
-<span class="go">             95</span>
-<span class="go">            179</span>
-<span class="go">            315</span>
-<span class="go">            660</span>
-<span class="go">            540</span>
-<span class="go">            420</span>
-<span class="go">            250</span>
-<span class="go">            335</span>
+<span class="go">[#]  final_sale_price</span>
+<span class="go">=====================</span>
+<span class="go">[0]               100</span>
+<span class="go">[1]               250</span>
+<span class="go">[2]                95</span>
+<span class="go">[3]               179</span>
+<span class="go">[4]               315</span>
+<span class="go">[5]               660</span>
+<span class="go">[6]               540</span>
+<span class="go">[7]               420</span>
+<span class="go">[8]               250</span>
+<span class="go">[9]               335</span>
 </pre></div>
 </div>
 <p>To calculate 10th, 50th, and 100th quantile:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">quantiles</span><span class="p">(</span><span class="s">&#39;final_sale_price&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>A new Frame containing the requested Quantiles and their respective values
 will be returned :</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">quantiles_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  Quantiles:float64   final_sale_price_QuantileValue:float64</span>
-<span class="go">/------------------------------------------------------------/</span>
-<span class="go">         10.0                                     95.0</span>
-<span class="go">         50.0                                    250.0</span>
-<span class="go">        100.0                                    660.0</span>
+<span class="go">[#]  Quantiles  final_sale_price_QuantileValue</span>
+<span class="go">==============================================</span>
+<span class="go">[0]       10.0                            95.0</span>
+<span class="go">[1]       50.0                           250.0</span>
+<span class="go">[2]      100.0                           660.0</span>
 </pre></div>
 </div>
 </dd></dl>

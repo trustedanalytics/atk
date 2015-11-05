@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
-    <link rel="next" title="VertexFrame get_error_frame" href="get_error_frame.html" >
+    <link rel="next" title="VertexFrame flatten_columns" href="flatten_columns.html" >
     <link rel="prev" title="VertexFrame filter" href="filter.html" > 
   </head>
   <body>
@@ -61,7 +61,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="get_error_frame.html" title="VertexFrame get_error_frame"
+        <a href="flatten_columns.html" title="VertexFrame flatten_columns"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -116,68 +116,30 @@
 <dl class="function">
 <dt id="flatten_column">
 <code class="descname">flatten_column</code><span class="sig-paren">(</span><em>self</em>, <em>column</em>, <em>delimiter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#flatten_column" title="Permalink to this definition">¶</a></dt>
-<dd><p>Spread data to multiple rows based on cell data.</p>
+<dd><p><abbr title="This is a function or feature which is no longer supported. It is recommended that an alternate solution be found. This function may be removed in future releases.">[DEPRECATED]</abbr>
+Note that flatten_column() has been deprecated.  Use flatten_columns() instead.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column</strong> : unicode</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column</strong> : str</p>
 <blockquote>
-<div><p>The column to be flattened.</p>
+<div><p>The name of the column to be flattened.</p>
 </div></blockquote>
-<p><strong>delimiter</strong> : unicode (default=None)</p>
-<blockquote>
-<div><p>The delimiter string.
-Default is comma (,).</p>
+<p><strong>delimiter</strong> : str (default=None)</p>
+<blockquote class="last">
+<div><p>The delimiter string for the column to flatten. The default is to use a &#8216;,&#8217; delimiter.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: _Unit</p>
 </td>
 </tr>
 </tbody>
 </table>
+<p>Spread data to multiple rows based on cell data.</p>
 <p>Splits cells in the specified column into multiple rows according to a string
 delimiter.
 New rows are a full copy of the original row, but the specified column only
 contains one value.
 The original row is deleted.</p>
-<p class="rubric">Examples</p>
-<p>Given a data file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="s">&quot;solo,mono,single&quot;</span>
-<span class="mi">2</span><span class="o">-</span><span class="s">&quot;duo,double&quot;</span>
-</pre></div>
-</div>
-<p>The commands to bring the data into a frame, where it can be worked on:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Looking at it:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:int32   b:str</span>
-<span class="go">/-------------------------------/</span>
-<span class="go">    1       solo, mono, single</span>
-<span class="go">    2       duo, double</span>
-</pre></div>
-</div>
-<p>Now, spread out those sub-strings in column <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">flatten_column</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Check again:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:int32   b:str</span>
-<span class="go">/------------------/</span>
-<span class="go">    1       solo</span>
-<span class="go">    1       mono</span>
-<span class="go">    1       single</span>
-<span class="go">    2       duo</span>
-<span class="go">    2       double</span>
-</pre></div>
-</div>
 </dd></dl>
 
 </div>

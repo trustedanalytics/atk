@@ -134,10 +134,39 @@
 </tr>
 </tbody>
 </table>
-<p>It accepts a list of items, which can contain strings (the name of the frame, graph, or model)
-or proxy objects (the frame, graph, or model object itself).  If the item provided is a string
-and no frame, graph, or model is found with the specified name, no action is taken.</p>
+<p>It accepts multiple parameters, which can contain strings (the name of the frame, graph, or model),
+proxy objects (the frame, graph, or model object itself), or a list of strings and/or proxy objects.
+If the item provided is a string and no frame, graph, or model is found with the specified name,
+no action is taken.</p>
 <p>If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.</p>
+<p class="rubric">Examples</p>
+<p>Given a frame, model, and graph like:</p>
+<blockquote>
+<div><div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">KMeansModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<span class="go">-etc-</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>The drop() command can be used to delete the frame, model, and graph from the server.  It returns the number
+of items that have been deleted.</p>
+<blockquote>
+<div><div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="n">my_model</span><span class="p">,</span> <span class="n">my_graph</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Alternatively, we can pass the object&#8217;s string name to drop() like:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;example_frame&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s">&#39;example_frame&#39;</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

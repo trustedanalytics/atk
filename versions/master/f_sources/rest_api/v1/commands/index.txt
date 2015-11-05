@@ -63,7 +63,7 @@
     frame__export_to_hive
     frame__export_to_jdbc
     frame__export_to_json
-    frame__flatten_column
+    frame__flatten_columns
     frame__group_by
     frame__histogram
     frame__quantiles
@@ -73,7 +73,7 @@
     frame__tally
     frame__tally_percent
     frame__top_k
-    frame__unflatten_column
+    frame__unflatten_columns
     graph-___info
     graph-__define_edge_type
     graph-__define_vertex_type
@@ -179,7 +179,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/export_to_hive <frame__export_to_hive>`                                           Write current frame to Hive table.
 :doc:`frame/export_to_jdbc <frame__export_to_jdbc>`                                           Write current frame to JDBC table.
 :doc:`frame/export_to_json <frame__export_to_json>`                                           Write current frame to HDFS in JSON format.
-:doc:`frame/flatten_column <frame__flatten_column>`                                           Spread data to multiple rows based on cell data.
+:doc:`frame/flatten_columns <frame__flatten_columns>`                                         Spread data to multiple rows based on cell data.
 :doc:`frame/group_by <frame__group_by>`                                                       |BETA| Summarized Frame with Aggregations.
 :doc:`frame/histogram <frame__histogram>`                                                     |BETA| Compute the histogram for a column in a frame.
 :doc:`frame/quantiles <frame__quantiles>`                                                     New frame with Quantiles and their values.
@@ -189,7 +189,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/tally <frame__tally>`                                                             |BETA| Count number of times a value is seen.
 :doc:`frame/tally_percent <frame__tally_percent>`                                             |BETA| Compute a cumulative percent count.
 :doc:`frame/top_k <frame__top_k>`                                                             Most or least frequent column values.
-:doc:`frame/unflatten_column <frame__unflatten_column>`                                       Compacts data from multiple rows based on cell data.
+:doc:`frame/unflatten_columns <frame__unflatten_columns>`                                     Compacts data from multiple rows based on cell data.
 :doc:`frame:/filter <frame-__filter>`                                                         Select all rows which satisfy a predicate.
 :doc:`frame:/join <frame-__join>`                                                             |BETA| Join two data frames (similar to SQL JOIN).
 :doc:`frame:/label_propagation <frame-__label_propagation>`                                   Label Propagation on Gaussian Random Fields.
