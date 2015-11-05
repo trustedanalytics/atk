@@ -381,10 +381,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.assembla.scala-incubator</groupId>
-            <artifactId>graph-core_${scala.short.version}</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.chuusai</groupId>
             <artifactId>shapeless_${scala.long.version}</artifactId>
         </dependency>
