@@ -24,7 +24,6 @@
     column_mode
     column_names
     column_summary_statistics
-    compute_misplaced_score
     copy
     correlation
     correlation_matrix
@@ -116,7 +115,6 @@
     :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
     :doc:`column_mode <column_mode>`\ (self, data_column[, weights_column, max_modes_returned])           Evaluate the weights assigned to rows.
     :doc:`column_summary_statistics <column_summary_statistics>`\ (self, data_column[, ...])              Calculate multiple statistics for a column.
-    :doc:`compute_misplaced_score <compute_misplaced_score>`\ (self, gravity)                             
     :doc:`copy <copy>`\ (self[, columns, where, name])                                                    Create new frame from current frame.
     :doc:`correlation <correlation>`\ (self, data_column_names)                                           Calculate correlation for two columns of current frame.
     :doc:`correlation_matrix <correlation_matrix>`\ (self, data_column_names[, matrix_name])              Calculate correlation matrix for two or more columns.

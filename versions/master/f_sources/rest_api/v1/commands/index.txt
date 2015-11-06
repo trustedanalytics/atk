@@ -44,7 +44,6 @@
     frame__column_median
     frame__column_mode
     frame__column_summary_statistics
-    frame__compute_misplaced_score
     frame__copy
     frame__correlation
     frame__correlation_matrix
@@ -161,7 +160,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/column_median <frame__column_median>`                                             Calculate the (weighted) median of a column.
 :doc:`frame/column_mode <frame__column_mode>`                                                 Evaluate the weights assigned to rows.
 :doc:`frame/column_summary_statistics <frame__column_summary_statistics>`                     Calculate multiple statistics for a column.
-:doc:`frame/compute_misplaced_score <frame__compute_misplaced_score>`                         
 :doc:`frame/copy <frame__copy>`                                                               New frame with copied columns.
 :doc:`frame/correlation <frame__correlation>`                                                 Calculate correlation for two columns of current frame.
 :doc:`frame/correlation_matrix <frame__correlation_matrix>`                                   Calculate correlation matrix for two or more columns.
