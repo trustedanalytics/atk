@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.connectedcomponents
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
@@ -33,12 +34,10 @@ import DomainJsonProtocol._
  * Variables for executing connected components.
  */
 case class ConnectedComponentsArgs(graph: GraphReference,
-                                   @ArgDoc("""The name of the column containing the connected component value.""") outputVertexPropertyName: Option[String] = None) {
+                                   @ArgDoc("""The name of the column containing the connected component value.""") outputVertexPropertyName: String = "connectedComponentId") {
   require(graph != null, "graph is required")
+  require(StringUtils.isNotBlank(outputVertexPropertyName), "output property name must not be empty")
 
-  def getVertexPropertyName: String = {
-    outputVertexPropertyName.getOrElse("connectedComponentId")
-  }
 }
 
 case class ConnectedComponentsReturn(frameDictionaryOutput: Map[String, FrameReference])

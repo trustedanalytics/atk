@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.labelpropagation
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag.ApiMaturityTag
 import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag._
@@ -33,18 +34,12 @@ import DomainJsonProtocol._
  * Variables for executing label propagation.
  */
 case class LabelPropagationArgs(graph: GraphReference,
-                                @ArgDoc("""Number of super-steps before the algorithm terminates. Default = 10""") maxSteps: Option[Int] = None,
-                                @ArgDoc("""The name of the column containing the propagated label value.""") outputVertexPropertyName: Option[String] = None) {
+                                @ArgDoc("""Number of super-steps before the algorithm terminates. Default = 10""") maxSteps: Int = 10,
+                                @ArgDoc("""The name of the column containing the propagated label value.""") outputVertexPropertyName: String = "propagatedLabel") {
   require(graph != null, "graph is required")
+  require(maxSteps > 1, "min steps must be a positive integer")
+  require(StringUtils.isNotBlank(outputVertexPropertyName), "output property name must not be empty")
 
-  def getVertexPropertyName: String = {
-    outputVertexPropertyName.getOrElse("propagatedLabel")
-  }
-
-  def getMaxSteps: Int = {
-    val value = maxSteps.getOrElse(10)
-    if (value < 1) 10 else value
-  }
 }
 
 case class LabelPropagationReturn(frameDictionaryOutput: Map[String, FrameReference])
@@ -77,9 +72,9 @@ class LabelPropagationPlugin extends SparkCommandPlugin[LabelPropagationArgs, La
     val inputVertices: RDD[Long] = gbVertices.map(vertex => vertex.physicalId.asInstanceOf[Long])
     val inputEdges = gbEdges.map(edge => (edge.tailPhysicalId.asInstanceOf[Long], edge.headPhysicalId.asInstanceOf[Long]))
 
-    val labeledGraph = LabelPropagationDefault.run(inputVertices, inputEdges, arguments.getMaxSteps)
+    val labeledGraph = LabelPropagationDefault.run(inputVertices, inputEdges, arguments.maxSteps)
     val labeledRdd = labeledGraph.map({
-      case (vertexId, calculatedLabel) => (vertexId, Property(arguments.getVertexPropertyName, calculatedLabel))
+      case (vertexId, calculatedLabel) => (vertexId, Property(arguments.outputVertexPropertyName, calculatedLabel))
     })
 
     val resultsGraph = LabelPropagationDefault.mergeResults(labeledRdd, gbVertices)
