@@ -17,17 +17,17 @@
 package org.trustedanalytics.atk.domain.frame
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 /**
  * Command to unflatten a frame and store the result to a new data frame.
  */
 case class UnflattenColumnArgs(frame: FrameReference,
                                @ArgDoc("""Name of the column(s) to be used as keys
-for unflattening.""") compositeKeyColumnNames: List[String],
+for unflattening.""") columns: List[String],
                                @ArgDoc("""Separator for the data in the result columns.
 Default is comma (,).""") delimiter: Option[String] = None) {
   require(frame != null, "frame is required")
-  require(compositeKeyColumnNames != null && compositeKeyColumnNames.nonEmpty, "column list is required for key")
-  compositeKeyColumnNames.foreach(x => require(StringUtils.isNotBlank(x), "non empty column names required for composite key"))
+  require(columns != null && columns.nonEmpty, "column list is required for key")
+  columns.foreach(x => require(StringUtils.isNotBlank(x), "non empty column names required for composite key"))
 }

@@ -120,7 +120,7 @@ class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRe
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
     val jsonModel = new RandomForestRegressorData(randomForestModel, arguments.observationColumns)
 
-    model.data = jsonModel.toJson.asJsObject
+    model.writeToStorage(jsonModel.toJson.asJsObject)
     new RandomForestRegressorTrainReturn(arguments.observationColumns, arguments.labelColumn, randomForestModel.numTrees, randomForestModel.totalNumNodes,
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
   }
