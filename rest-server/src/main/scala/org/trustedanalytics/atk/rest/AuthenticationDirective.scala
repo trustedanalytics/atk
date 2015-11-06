@@ -30,7 +30,7 @@ import spray.http.HttpHeader
 import scala.PartialFunction._
 import scala.concurrent._
 import spray.routing._
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.Engine
 import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Failure, Success, Try }
