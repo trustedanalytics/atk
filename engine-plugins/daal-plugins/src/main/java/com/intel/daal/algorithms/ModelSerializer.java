@@ -31,8 +31,7 @@ import java.nio.ByteBuffer;
 
 public final class ModelSerializer {
     static {
-        System.load("/home/spkavuly/git/atk/engine-plugins/daal-plugins/src/main/c++/libAtkDaalJavaAPI.so");
-        //System.loadLibrary("AtkDaalJavaAPI");
+        System.loadLibrary("AtkDaalJavaAPI");
     }
     private ModelSerializer() {
     }
