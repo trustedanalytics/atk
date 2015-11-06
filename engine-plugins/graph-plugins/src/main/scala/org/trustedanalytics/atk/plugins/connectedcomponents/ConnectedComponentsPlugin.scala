@@ -99,7 +99,7 @@ class ConnectedComponentsPlugin extends SparkCommandPlugin[ConnectedComponentsAr
     // Start ConnectedComponents computation on RDDs
     val intermediateVertices = ConnectedComponentsDefault.run(inputVertices, inputEdges)
     val connectedComponentRDD = intermediateVertices.map({
-      case (vertexId, componentId) => (vertexId, Property(arguments.getVertexPropertyName, componentId))
+      case (vertexId, componentId) => (vertexId, Property(arguments.outputVertexPropertyName, componentId))
     })
 
     val outVertices = ConnectedComponentsDefault.mergeConnectedComponentResult(connectedComponentRDD, gbVertices)
