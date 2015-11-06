@@ -174,6 +174,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- Needed to support large broadcast variables in Spark -->
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>spark-broadcast</artifactId>
+            <version>${spark.broadcast.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.short.version}</artifactId>

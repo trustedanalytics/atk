@@ -110,12 +110,6 @@
             <artifactId>testutils</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Needed to support large broadcast variables in Spark -->
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>spark-broadcast</artifactId>
-            <version>${spark.broadcast.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-graphx_${scala.short.version}</artifactId>

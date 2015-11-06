@@ -85,12 +85,6 @@
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>event</artifactId>
         </dependency>
-        <!-- Needed to support large broadcast variables in Spark -->
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>spark-broadcast</artifactId>
-            <version>${spark.broadcast.version}</version>
-        </dependency>
         <!-- END BDA dependencies to our modules -->
 
         <!-- START Titan dependencies -->
