@@ -42,20 +42,4 @@ object LabelPropagationDefault {
     out
   }
 
-  type GBVertexPropertyPair = (GBVertex, Property)
-
-  def mergeResults(resultRDD: RDD[(Long, Property)], gbVertexRDD: RDD[GBVertex]): RDD[GBVertex] = {
-    gbVertexRDD
-      .map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], gbVertex))
-      .join(resultRDD)
-      .map(vertex => generateGBVertex(vertex))
-  }
-
-  private def generateGBVertex(joinValuePair: (Long, GBVertexPropertyPair)): GBVertex = {
-    val (gbVertex, labelProperty) = joinValuePair._2 match {
-      case value: GBVertexPropertyPair => (value._1, value._2)
-    }
-    gbVertex.copy(properties = gbVertex.properties + labelProperty)
-  }
-
 }

@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._
 
@@ -102,7 +103,7 @@ class ConnectedComponentsPlugin extends SparkCommandPlugin[ConnectedComponentsAr
       case (vertexId, componentId) => (vertexId, Property(arguments.outputVertexPropertyName, componentId))
     })
 
-    val outVertices = ConnectedComponentsDefault.mergeConnectedComponentResult(connectedComponentRDD, gbVertices)
+    val outVertices = GBVertexUtils.mergeResults(connectedComponentRDD, gbVertices)
 
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 

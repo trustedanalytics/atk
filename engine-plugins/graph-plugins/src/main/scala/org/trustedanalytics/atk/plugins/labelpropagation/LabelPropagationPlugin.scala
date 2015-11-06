@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._
 
@@ -77,7 +78,7 @@ class LabelPropagationPlugin extends SparkCommandPlugin[LabelPropagationArgs, La
       case (vertexId, calculatedLabel) => (vertexId, Property(arguments.outputVertexPropertyName, calculatedLabel))
     })
 
-    val resultsGraph = LabelPropagationDefault.mergeResults(labeledRdd, gbVertices)
+    val resultsGraph = GBVertexUtils.mergeResults(labeledRdd, gbVertices)
     val resultsFrameRdd = FrameRdd.toFrameRddMap(resultsGraph)
 
     new LabelPropagationReturn(resultsFrameRdd.keys.map(label => {
