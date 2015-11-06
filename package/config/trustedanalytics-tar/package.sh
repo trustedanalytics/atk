@@ -47,6 +47,7 @@ cp -v  config/$package/logback.xml tarballs/$package/conf
 cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarballs/$package/conf
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
+cp -v  config/$package/manifest.yml.tpl tarballs/$package/
 
 
 jars="rest-server.jar  engine-core.jar  interfaces.jar  deploy.jar scoring-models.jar"
