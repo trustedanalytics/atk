@@ -197,8 +197,8 @@
 
 
         <!--<dependency>-->
-            <!--<groupId>com.typesafe.akka</groupId>-->
-            <!--<artifactId>akka-actor_${scala.short.version}</artifactId>-->
+        <!--<groupId>com.typesafe.akka</groupId>-->
+        <!--<artifactId>akka-actor_${scala.short.version}</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>com.typesafe</groupId>
@@ -354,8 +354,8 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.hbase</groupId>
@@ -379,10 +379,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.assembla.scala-incubator</groupId>
-            <artifactId>graph-core_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>com.chuusai</groupId>

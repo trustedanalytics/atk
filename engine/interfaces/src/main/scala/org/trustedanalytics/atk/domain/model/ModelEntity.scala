@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.domain.model
 
@@ -45,7 +45,8 @@ case class ModelEntity(id: Long,
                        modifiedOn: DateTime,
                        createdByUserId: Option[Long] = None,
                        modifiedByUserId: Option[Long] = None,
-                       lastReadDate: DateTime = new DateTime) extends HasId {
+                       lastReadDate: DateTime = new DateTime,
+                       storageLocation: Option[String] = None) extends HasId {
   require(id >= 0, "id must be zero or greater")
   require(name != null, "name must not be null")
   require(name match {
@@ -55,11 +56,11 @@ case class ModelEntity(id: Long,
     "if name is set it must not be empty or whitespace")
   require(modelType != null, "modelType must not be null")
   require(!modelType.isEmpty, "modelType must not be empty")
-  //require(modelType.startsWith("model:"), "modelType must start with 'model:'")
   require(description != null, "description must not be null")
   require(data != null, "data must not be null")
   require(createdByUserId != null, "createdByUserId must not be null")
   require(modifiedByUserId != null, "modifiedByUserId must not be null")
+  require(storageLocation != null, "storageLocation must not be null")
 
   def entityType: String = {
     modelType
