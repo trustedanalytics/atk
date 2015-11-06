@@ -100,7 +100,7 @@ class SparkSubmitLauncher extends EventLogging with EventLoggingImplicits with C
               dbLib + s"${getPluginJarPath(pluginJarsList, ":")}" +
               executorSparkConf)
             case false => (executorClassPathString,
-              dbLib + executorSparkConf)
+              ".:engine-core.jar:" + dbLib + executorSparkConf)
           }
 
           val driverClassPathString = "spark.driver.extraClassPath"
