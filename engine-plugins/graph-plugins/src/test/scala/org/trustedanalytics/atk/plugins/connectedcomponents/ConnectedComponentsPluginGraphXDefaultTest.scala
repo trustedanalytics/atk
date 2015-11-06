@@ -36,7 +36,7 @@ class ConnectedComponentsPluginGraphXDefaultTest extends FlatSpec with Matchers 
     "allocate component IDs according to connectivity equivalence classes" in new ConnectedComponentsTest {
 
       val rddOfComponentLabeledVertices: RDD[(Long, Long)] =
-        ConnectedComponentsGraphXDefault.run(sparkContext.parallelize(vertexList), sparkContext.parallelize(edgeList))
+        ConnectedComponentsDefault.run(sparkContext.parallelize(vertexList), sparkContext.parallelize(edgeList))
 
       val vertexIdToComponentMap = rddOfComponentLabeledVertices.collect().toMap
 
