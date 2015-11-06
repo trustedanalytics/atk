@@ -40,7 +40,7 @@ Request
 
 
 
-    **output_property** : unicode
+    **output_vertex_property_name** : unicode (default=connectedComponentId)
 
     ..
 

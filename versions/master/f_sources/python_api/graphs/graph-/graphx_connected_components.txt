@@ -7,14 +7,14 @@
 ------
 
 
-.. function:: graphx_connected_components(self, output_property)
+.. function:: graphx_connected_components(self, output_vertex_property_name='connectedComponentId')
 
     Implements the connected components computation on a graph by invoking graphx api.
 
 
     :Parameters:
 
-        **output_property** : unicode
+        **output_vertex_property_name** : unicode (default=connectedComponentId)
 
         ..
 

@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
-    <link rel="next" title="Graph graphx_pagerank" href="graphx_pagerank.html" >
+    <link rel="next" title="Graph graphx_label_propagation" href="graphx_label_propagation.html" >
     <link rel="prev" title="Graph export_to_titan" href="export_to_titan.html" > 
   </head>
   <body>
@@ -61,7 +61,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="graphx_pagerank.html" title="Graph graphx_pagerank"
+        <a href="graphx_label_propagation.html" title="Graph graphx_label_propagation"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -115,13 +115,13 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="graphx_connected_components">
-<code class="descname">graphx_connected_components</code><span class="sig-paren">(</span><em>self</em>, <em>output_property</em><span class="sig-paren">)</span><a class="headerlink" href="#graphx_connected_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">graphx_connected_components</code><span class="sig-paren">(</span><em>self</em>, <em>output_vertex_property_name='connectedComponentId'</em><span class="sig-paren">)</span><a class="headerlink" href="#graphx_connected_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements the connected components computation on a graph by invoking graphx api.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_property</strong> : unicode</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>output_vertex_property_name</strong> : unicode (default=connectedComponentId)</p>
 <blockquote>
 <div><p>The name of the column containing the connected component value.</p>
 </div></blockquote>

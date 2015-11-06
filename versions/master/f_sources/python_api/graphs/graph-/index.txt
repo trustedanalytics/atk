@@ -22,6 +22,7 @@
     edges
     export_to_titan
     graphx_connected_components
+    graphx_label_propagation
     graphx_pagerank
     graphx_triangle_count
     kclique_percolation
@@ -68,7 +69,8 @@
     :doc:`define_edge_type <define_edge_type>`\ (self, label, src_vertex_label, dest_vertex_label)        Define an edge type.
     :doc:`define_vertex_type <define_vertex_type>`\ (self, label)                                         Define a vertex type by label.
     :doc:`export_to_titan <export_to_titan>`\ (self[, new_graph_name])                                    Convert current graph to TitanGraph.
-    :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self[, ...])                       Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_label_propagation <graphx_label_propagation>`\ (self[, max_steps, ...])                  |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
     :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.

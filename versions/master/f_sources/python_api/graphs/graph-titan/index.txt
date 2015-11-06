@@ -21,6 +21,7 @@
     export_to_graph
     graph_clustering
     graphx_connected_components
+    graphx_label_propagation
     graphx_pagerank
     graphx_triangle_count
     last_read_date
@@ -52,7 +53,8 @@
     :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
     :doc:`export_to_graph <export_to_graph>`\ (self)                                                      Export from TitanGraph to Graph.
     :doc:`graph_clustering <graph_clustering>`\ (self, edge_distance)                                     Performs graph clustering over an initial titan graph.
-    :doc:`graphx_connected_components <graphx_connected_components>`\ (self, output_property)             Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self[, ...])                       Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_label_propagation <graphx_label_propagation>`\ (self[, max_steps, ...])                  |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
     :doc:`query.gremlin <query/gremlin>`\ (self, gremlin)                                                 Executes a Gremlin query.

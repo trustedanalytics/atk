@@ -91,6 +91,7 @@
     graph__clustering_coefficient
     graph__copy
     graph__graphx_connected_components
+    graph__graphx_label_propagation
     graph__graphx_pagerank
     graph__graphx_triangle_count
     graph__rename
@@ -206,6 +207,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`graph/clustering_coefficient <graph__clustering_coefficient>`                           Coefficient of graph with respect to labels.
 :doc:`graph/copy <graph__copy>`                                                               Make a copy of the current graph.
 :doc:`graph/graphx_connected_components <graph__graphx_connected_components>`                 Implements the connected components computation on a graph by invoking graphx api.
+:doc:`graph/graphx_label_propagation <graph__graphx_label_propagation>`                       |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
 :doc:`graph/graphx_pagerank <graph__graphx_pagerank>`                                         Determine which vertices are the most important.
 :doc:`graph/graphx_triangle_count <graph__graphx_triangle_count>`                             Number of triangles among vertices of current graph.
 :doc:`graph/rename <graph__rename>`                                                           Rename a graph in the database.
