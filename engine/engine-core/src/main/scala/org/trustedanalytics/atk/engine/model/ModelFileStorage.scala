@@ -59,7 +59,7 @@ class ModelFileStorage(fsRoot: String,
    */
   def deleteModelData(model: ModelEntity): Unit = {
     getModelFolder(model) match {
-      case Some(path) => deletePath(path)
+      case Some(path) => if (hdfs.exists(path)) { deletePath(path) }
       case _ =>
     }
   }
