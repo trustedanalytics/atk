@@ -1,0 +1,98 @@
+.. _python_api/frames/frame-edge/top_k:
+
+
+:doc:`EdgeFrame <index>`  top_k
+*******************************
+
+------
+
+
+.. function:: top_k(self, column_name, k, weights_column=None)
+
+    Most or least frequent column values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column whose top (or bottom) K distinct values are
+            to be calculated.
+
+
+
+        **k** : int32
+
+        ..
+
+            Number of entries to return (If k is negative, return bottom k).
+
+
+
+        **weights_column** : unicode (default=None)
+
+        ..
+
+            The column that provides weights (frequencies) for the topK calculation.
+            Must contain numerical data.
+            Default is 1 for all items.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            An object with access to the frame of data.
+    Calculate the top (or bottom) K distinct values by count of a column.
+    The column can be weighted.
+    All data elements of weight <= 0 are excluded from the calculation, as are
+    all data elements whose weight is NaN or infinite.
+    If there are no data elements of finite weight > 0, then topK is empty.
+
+    Examples
+    --------
+    For this example, we calculate the top 5 movie genres in a data frame:
+    Consider the following frame containing four columns.
+
+    >>> frame.inspect()
+        [#]  rank  city         population_2013  population_2010  change  county
+        ============================================================================
+        [0]     1  Portland              609456           583776  4.40%   Multnomah
+        [1]     2  Salem                 160614           154637  3.87%   Marion
+        [2]     3  Eugene                159190           156185  1.92%   Lane
+        [3]     4  Gresham               109397           105594  3.60%   Multnomah
+        [4]     5  Hillsboro              97368            91611  6.28%   Washington
+        [5]     6  Beaverton              93542            89803  4.16%   Washington
+        [6]    15  Grants Pass            35076            34533  1.57%   Josephine
+        [7]    16  Oregon City            34622            31859  8.67%   Clackamas
+        [8]    17  McMinnville            33131            32187  2.93%   Yamhill
+        [9]    18  Redmond                27427            26215  4.62%   Deschutes
+    >>> top_frame = frame.top_k("county", 2)
+    [===Job Progress===]
+    >>> top_frame.inspect()
+        [#]  county      count
+            ======================
+            [0]  Washington    4.0
+            [1]  Clackamas     3.0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

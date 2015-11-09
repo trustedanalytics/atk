@@ -1,0 +1,84 @@
+.. _python_api/frames/frame-vertex/copy:
+
+
+:doc:`VertexFrame <index>`  copy
+********************************
+
+------
+
+
+.. function:: copy(self, columns=None, where=None, name=None)
+
+    Create new frame from current frame.
+
+
+    :Parameters:
+
+        **columns** : str | list of str | dict (default=None)
+
+        ..
+
+            If not None, the copy will only include the columns specified. If dict, the string pairs represent a column renaming, {source_column_name: destination_column_name}
+
+
+
+        **where** : function (default=None)
+
+        ..
+
+            If not None, only those rows for which the UDF evaluates to True will be copied.
+
+
+
+        **name** : str (default=None)
+
+        ..
+
+            Name of the copied frame
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new Frame of the copied data.
+    Copy frame or certain frame columns entirely or filtered.
+    Useful for frame query.
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> frame
+        Frame "example_frame"
+        row_count = 4
+        schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]
+        status = ACTIVE  (last_read_date = -etc-)
+
+        >>> frame2 = frame.copy()  # full copy of the frame
+        [===Job Progress===]
+
+        >>> frame3 = frame.copy(['name', 'age'])  # copy only two columns
+        [===Job Progress===]
+        >>> frame3
+        Frame  <unnamed>
+        row_count = 4
+        schema = [name:unicode, age:int32]
+        status = ACTIVE  (last_read_date = -etc-)
+
+    .. code::
+
+        >>> frame4 = frame.copy({'name': 'name', 'age': 'age', 'tenure': 'years'},
+        ...                     where=lambda row: row.age > 40)
+        [===Job Progress===]
+        >>> frame4.inspect()
+        [#]  name      age  years
+        =========================
+        [0]  Thurston   65     26
+        [1]  Judy       44     14
+

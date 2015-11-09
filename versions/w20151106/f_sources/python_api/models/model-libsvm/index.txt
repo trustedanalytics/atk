@@ -1,0 +1,152 @@
+.. _python_api/models/model-libsvm/index:
+
+
+:doc:`Models<../index>` LibsvmModel
+***********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    publish
+    score
+    status
+    test
+    train
+
+.. class:: LibsvmModel
+
+    Entity LibsvmModel
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LibsvmModel__init__>`\ (self[, name, _info])                                          |ALPHA| Create a 'new' instance of a Support Vector Machine model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| New frame with new predicted label column.
+    :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
+    :doc:`score <score>`\ (self, vector)                                                                  |ALPHA| Calculate the prediction label for a single observation.
+    :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, svm_type, ...])               |ALPHA| Train a Lib Svm model
+    ====================================================================================================  ====================================================================================================
+
+.. _LibsvmModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    Create a 'new' instance of a Support Vector Machine model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            A new instance of LibsvmModel
+    Support Vector Machine [1]_ is a supervised algorithm used to
+    perform binary classification.
+    A support vector machine constructs a high dimensional hyperplane which is
+    said to achieve a good separation when a hyperplane has the largest distance to
+    the nearest training-data point of any class. This model runs the
+    LIBSVM [2]_ [3]_ implementation of SVM.
+    The LIBSVM model is initialized, trained on columns of a frame, used to
+    predict the labels of observations in a frame and used to test the predicted
+    labels against the true labels.
+    During testing, labels of the observations are predicted and tested against
+    the true labels using built-in binary Classification Metrics.
+
+    .. rubric: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
+    .. [2] https://www.csie.ntu.edu.tw/~cjlin/libsvm/
+    .. [3] https://en.wikipedia.org/wiki/LIBSVM
+
+    Examples
+    --------
+    Consider the following model trained and tested on the sample data set in *frame* 'frame'.
+
+    Consider the following frame containing four columns.
+
+    >>> frame.inspect()
+        [#]  idNum  tr_row  tr_col  pos_one
+        ===================================
+        [0]    1.0    -1.0    -1.0      1.0
+        [1]    2.0    -1.0     0.0      1.0
+        [2]    3.0    -1.0     1.0      1.0
+        [3]    4.0     0.0    -1.0      1.0
+        [4]    5.0     0.0     0.0      1.0
+        [5]    6.0     0.0     1.0      1.0
+        [6]    7.0     1.0    -1.0      1.0
+        [7]    8.0     1.0     0.0      1.0
+        [8]    9.0     1.0     1.0      1.0
+    >>> model = ta.LibsvmModel()
+    [===Job Progress===]
+    >>> train_output = model.train(frame, "idNum", ["tr_row", "tr_col"],svm_type=2,epsilon=10e-3,gamma=1.0/2,nu=0.1,p=0.1)
+    [===Job Progress===]
+    >>> predicted_frame = model.predict(frame)
+    [===Job Progress===]
+    >>> predicted_frame.inspect()
+        [#]  idNum  tr_row  tr_col  pos_one  predicted_label
+        ====================================================
+        [0]    1.0    -1.0    -1.0      1.0              1.0
+        [1]    2.0    -1.0     0.0      1.0              1.0
+        [2]    3.0    -1.0     1.0      1.0             -1.0
+        [3]    4.0     0.0    -1.0      1.0              1.0
+        [4]    5.0     0.0     0.0      1.0              1.0
+        [5]    6.0     0.0     1.0      1.0              1.0
+        [6]    7.0     1.0    -1.0      1.0              1.0
+        [7]    8.0     1.0     0.0      1.0              1.0
+        [8]    9.0     1.0     1.0      1.0              1.0
+    >>> test_obj = model.test(frame, "pos_one",["tr_row", "tr_col"])
+    [===Job Progress===]
+    >>> test_obj.accuracy
+    0.8888888888888888
+    >>> test_obj.precision
+    1.0
+    >>> test_obj.f_measure
+    0.9411764705882353
+    >>> test_obj.recall
+    0.8888888888888888
+    >>> score = model.score([3,4])
+    [===Job Progress===]
+    >>> score
+    -1.0
+    >>> model.publish()
+    [===Job Progress===]
+
+
+
+
+
+
+
+
+

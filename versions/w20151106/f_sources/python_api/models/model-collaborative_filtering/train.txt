@@ -1,0 +1,141 @@
+.. _python_api/models/model-collaborative_filtering/train:
+
+
+:doc:`CollaborativeFilteringModel <index>`  train
+*************************************************
+
+------
+
+
+.. function:: train(self, frame, user_col_name, item_col_name, rating_col_name, evaluation_function=None, num_factors=None, max_iterations=None, convergence_threshold=None, regularization=None, bias_on=None, min_value=None, max_value=None, learning_curve_interval=None, cgd_iterations=None)
+
+    Collaborative filtering (ALS/CGD) model
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+
+
+
+
+        **user_col_name** : unicode
+
+        ..
+
+            Name of the user column from input data
+
+
+
+        **item_col_name** : unicode
+
+        ..
+
+            Name of the item column from input data
+
+
+
+        **rating_col_name** : unicode
+
+        ..
+
+            Name of the rating column from input data
+
+
+
+        **evaluation_function** : unicode (default=None)
+
+        ..
+
+            ALS/CGD
+
+
+
+        **num_factors** : int32 (default=None)
+
+        ..
+
+            Size of the desired factors (default is 3)
+
+
+
+        **max_iterations** : int32 (default=None)
+
+        ..
+
+            Max number of iterations for Giraph
+
+
+
+        **convergence_threshold** : float64 (default=None)
+
+        ..
+
+            float value between 0 .. 1
+
+
+
+        **regularization** : float32 (default=None)
+
+        ..
+
+            float value between 0 .. 1 
+
+
+
+        **bias_on** : bool (default=None)
+
+        ..
+
+            bias on/off switch 
+
+
+
+        **min_value** : float32 (default=None)
+
+        ..
+
+            minimum edge weight value
+
+
+
+        **max_value** : float32 (default=None)
+
+        ..
+
+            minimum edge weight value
+
+
+
+        **learning_curve_interval** : int32 (default=None)
+
+        ..
+
+            iteration interval to output learning curve
+
+
+
+        **cgd_iterations** : int32 (default=None)
+
+        ..
+
+            custom argument for CGD learning curve output interval (default: every iteration)
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Execution result summary for Giraph
+
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.

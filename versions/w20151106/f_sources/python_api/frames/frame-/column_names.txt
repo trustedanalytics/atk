@@ -1,0 +1,36 @@
+.. _python_api/frames/frame-/column_names:
+
+
+:doc:`Frame <index>`  column_names
+**********************************
+
+------
+
+
+.. attribute:: column_names
+
+    Column identifications in the current frame.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            list of names of all the frame's columns
+    Returns the names of the columns of the current frame.
+
+    Examples
+    --------
+
+    .. code::
+
+
+        >>> frame.column_names
+        [u'name', u'age', u'tenure', u'phone']
+

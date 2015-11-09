@@ -1,0 +1,53 @@
+.. _python_api/frames/frame-/append:
+
+
+:doc:`Frame <index>`  append
+****************************
+
+------
+
+
+.. function:: append(self, data)
+
+    Adds more data to the current frame.
+
+
+    :Parameters:
+
+        **data** : Data source
+
+        ..
+
+            Data source, see :doc:`Data Sources </python_api/datasources/index>`
+
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> animals = ta.Frame(ta.UploadRows([['dog', 'snoopy'],
+        ...                                    ['cat', 'tom'],
+        ...                                    ['bear', 'yogi'],
+        ...                                    ['mouse', 'jerry']],
+        ...                                    [('animal', str), ('name', str)]))
+        [===Job Progress===]
+        >>> animals.append(ta.UploadRows([['donkey'],
+        ...                                ['elephant'],
+        ...                                ['ostrich']],
+        ...                                [('animal', str)]))
+        [===Job Progress===]
+
+        >>> animals.inspect()
+        [#]  animal    name
+        =====================
+        [0]  dog       snoopy
+        [1]  cat       tom
+        [2]  bear      yogi
+        [3]  mouse     jerry
+        [4]  donkey    None
+        [5]  elephant  None
+        [6]  ostrich   None
+
+
+    The data we added didn't have names, so None values were inserted for the new rows.

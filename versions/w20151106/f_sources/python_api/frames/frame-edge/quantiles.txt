@@ -1,0 +1,82 @@
+.. _python_api/frames/frame-edge/quantiles:
+
+
+:doc:`EdgeFrame <index>`  quantiles
+***********************************
+
+------
+
+
+.. function:: quantiles(self, column_name, quantiles)
+
+    New frame with Quantiles and their values.
+
+
+    :Parameters:
+
+        **column_name** : unicode
+
+        ..
+
+            The column to calculate quantiles.
+
+
+
+        **quantiles** : list
+
+        ..
+
+            What is being requested.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            A new frame with two columns (float64): requested Quantiles and their respective values.
+    Calculate quantiles on the given column.
+
+    Examples
+    --------
+    Consider Frame *my_frame*, which accesses a frame that contains a single
+    column *final_sale_price*:
+
+    .. code::
+
+        >>> my_frame.inspect()
+        [#]  final_sale_price
+        =====================
+        [0]               100
+        [1]               250
+        [2]                95
+        [3]               179
+        [4]               315
+        [5]               660
+        [6]               540
+        [7]               420
+        [8]               250
+        [9]               335
+
+    To calculate 10th, 50th, and 100th quantile:
+
+    .. code::
+
+        >>> quantiles_frame = my_frame.quantiles('final_sale_price', [10, 50, 100])
+        [===Job Progress===]
+
+    A new Frame containing the requested Quantiles and their respective values
+    will be returned :
+
+    .. code::
+
+       >>> quantiles_frame.inspect()
+       [#]  Quantiles  final_sale_price_QuantileValue
+       ==============================================
+       [0]       10.0                            95.0
+       [1]       50.0                           250.0
+       [2]      100.0                           660.0
+

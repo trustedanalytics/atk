@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Models LogisticRegressionModel &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Models" href="../index.html" >
+    <link rel="next" title="LogisticRegressionModel __init__" href="new.html" >
+    <link rel="prev" title="LdaModel train" href="../model-lda/train.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" accesskey="U">Models</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="../model-lda/train.html" title="LdaModel train"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="new.html" title="LogisticRegressionModel __init__"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">Python API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../connect.html">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../graphs/index.html">Graphs</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="models-logisticregressionmodel">
+<span id="python-api-models-model-logistic-regression-index"></span><h1><a class="reference internal" href="../index.html"><em>Models</em></a> LogisticRegressionModel<a class="headerlink" href="#models-logisticregressionmodel" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<div class="toctree-wrapper compound">
+</div>
+<dl class="class">
+<dt id="LogisticRegressionModel">
+<em class="property">class </em><code class="descname">LogisticRegressionModel</code><a class="headerlink" href="#LogisticRegressionModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entity LogisticRegressionModel</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="last_read_date.html"><em>last_read_date</em></a></td>
+<td>Last time this frame&#8217;s data was accessed.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="name.html"><em>name</em></a></td>
+<td>Set or get the name of the model object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="status.html"><em>status</em></a></td>
+<td>Current model life cycle status.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#logisticregressionmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
+<td>Create a &#8216;new&#8217; instance of logistic regression model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict labels for data points using trained logistic regression model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, label_column[, observation_columns])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, frequency_column, ...])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build logistic regression model.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<span class="target" id="logisticregressionmodel-init"></span><dl class="function">
+<dt id="__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a &#8216;new&#8217; instance of logistic regression model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>User supplied name.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Model</p>
+<blockquote class="last">
+<div><p>A new instance of LogisticRegressionModel</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Logistic Regression <a class="reference internal" href="#r19" id="id1">[R19]</a> is a widely used supervised binary and multi-class classification algorithm.
+The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
+of observations, and tests the predicted labels against the true labels.
+This model runs the MLLib implementation of Logistic Regression <a class="reference internal" href="#r20" id="id2">[R20]</a>, with enhanced features —
+trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
+of the train and test observations.
+Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
+It also allows the user to select the optimizer to be used - L-BFGS <a class="reference internal" href="#r21" id="id3">[R21]</a> or SGD <a class="reference internal" href="#r22" id="id4">[R22]</a>.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_regression">https://en.wikipedia.org/wiki/Logistic_regression</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R20]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression">https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r21" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[R21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Limited-memory_BFGS">https://en.wikipedia.org/wiki/Limited-memory_BFGS</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r22" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[R22]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
+<p>Consider the following frame containing three columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  Sepal_Length  Petal_Length  Class</span>
+<span class="go">======================================</span>
+<span class="go">[0]           4.9           1.4      0</span>
+<span class="go">[1]           4.7           1.3      0</span>
+<span class="go">[2]           4.6           1.5      0</span>
+<span class="go">[3]           6.3           4.9      1</span>
+<span class="go">[4]           6.1           4.7      1</span>
+<span class="go">[5]           6.4           4.3      1</span>
+<span class="go">[6]           6.6           4.4      1</span>
+<span class="go">[7]           7.2           6.0      2</span>
+<span class="go">[8]           7.2           5.8      2</span>
+<span class="go">[9]           7.4           6.1      2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Sepal_Length&#39;</span><span class="p">,</span> <span class="s">&#39;Petal_Length&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s">&#39;LBFGS&#39;</span><span class="p">,</span> <span class="n">compute_covariance</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">summary_table</span>
+<span class="go">                coefficients  degrees_freedom  standard_errors  \</span>
+<span class="go">intercept_0        -0.780153                1              NaN</span>
+<span class="go">Sepal_Length_1   -120.442165                1  28497036.888425</span>
+<span class="go">Sepal_Length_0    -63.683819                1  28504715.870243</span>
+<span class="go">intercept_1       -90.484405                1              NaN</span>
+<span class="go">Petal_Length_0    117.979824                1  36178481.415888</span>
+<span class="go">Petal_Length_1    206.339649                1  36172481.900910</span>
+</pre></div>
+</div>
+<blockquote>
+<div>wald_statistic   p_value</div></blockquote>
+<p>intercept_0                NaN       NaN
+Sepal_Length_1       -0.000004  1.000000
+Sepal_Length_0       -0.000002  1.000000
+intercept_1                NaN       NaN
+Petal_Length_0        0.000003  0.998559
+Petal_Length_1        0.000006  0.998094</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  Sepal_Length_0      Petal_Length_0      intercept_0</span>
+<span class="go">===============================================================</span>
+<span class="go">[0]   8.12518826843e+14   -1050552809704907   5.66008788624e+14</span>
+<span class="go">[1]  -1.05055305606e+15   1.30888251756e+15   -3.5175956714e+14</span>
+<span class="go">[2]   5.66010683868e+14  -3.51761845892e+14  -2.52746479908e+15</span>
+<span class="go">[3]   8.12299962335e+14  -1.05039425964e+15   5.66614798332e+14</span>
+<span class="go">[4]  -1.05027789037e+15    1308665462990595    -352436215869081</span>
+<span class="go">[5]     566011198950063  -3.51665950639e+14   -2527929411221601</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Nov 09, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

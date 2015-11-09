@@ -1,0 +1,126 @@
+.. _python_api/models/model-svm/test:
+
+
+:doc:`SvmModel <index>`  test
+*****************************
+
+------
+
+
+.. function:: test(self, frame, label_column, observation_columns=None)
+
+    |ALPHA|
+    Predict test frame labels and return metrics.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            Frame whose labels are to be
+            predicted.
+
+
+
+        **label_column** : unicode
+
+        ..
+
+            Column containing the actual
+            label for each observation.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose labels are to be predicted and tested.
+            Default is to test over the columns the SVM model
+            was trained on.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A dictionary with binary classification metrics.
+            The data returned is composed of the following keys\:
+
+                          |  'accuracy' : double
+                          |  The proportion of predictions that are correctly identified
+                          |  'confusion_matrix' : dictionary
+                          |  A table used to describe the performance of a classification model
+                          |  'f_measure' : double
+                          |  The harmonic mean of precision and recall
+                          |  'precision' : double
+                          |  The proportion of predicted positive instances that are correctly identified
+                          |  'recall' : double
+                          |  The proportion of positive instances that are correctly identified.
+    Predict the labels for a test frame and run classification metrics on predicted
+    and target labels.
+
+    Examples
+    --------
+    Test the performance of a trained Svm Model
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_model = ta.SvmModel(name='mySVM')
+            >>> my_model.train(train_frame, 'name_of_label_column',['List_of_observation_column/s'])
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column',['List_of_observation_column/s'])
+
+            >>> metrics['f_measure']
+            0.66666666666666663
+
+            >>> metrics['recall']
+            0.5
+
+            >>> metrics['accuracy']
+            0.75
+
+            >>> metrics['precision']
+            1.0
+
+            >>> metrics['confusion_matrix']
+            {u'column_labels': [u'pos', u'neg'],
+             u'matrix': [[2, 0], [0, 3]],
+             u'row_labels': [u'pos', u'neg']}
+
+
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_model = ta.SvmModel(name='mySVM')
+            >>> my_model.train(train_frame, 'name_of_label_column',
+            ... ['List_of_observation_column/s'])
+            >>> metrics = my_model.test(test_frame, 'name_of_label_column',
+            ... ['List_of_observation_column/s'])
+
+            >>> metrics['f_measure']
+            0.66666666666666663
+
+            >>> metrics['recall']
+            0.5
+
+            >>> metrics['accuracy']
+            0.75
+
+            >>> metrics['precision']
+            1.0
+
+            >>> metrics['confusion_matrix']
+            {u'column_labels': [u'pos', u'neg'],
+             u'matrix': [[2, 0], [0, 3]],
+             u'row_labels': [u'pos', u'neg']}
