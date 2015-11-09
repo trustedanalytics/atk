@@ -25,16 +25,16 @@
 <progress>
 >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
 <progress>
->>> result = graph.graphx_triangle_count(output_property = "triangle_count")
+>>> result = graph.graphx_label_propagation()
 <progress>
 >>> result['source'].inspect()
-    [#]  _vid  _label  source  label  triangle_count
-    ================================================
-    [0]     5  source       5    5.0               0
-    [1]     1  source       1    1.0               1
-    [2]     2  source       2    1.0               1
-    [3]     3  source       3    5.0               1
-    [4]     4  source       4    5.0               0
+    [#]  _vid  _label  source  label  propagatedLabel
+    =================================================
+    [0]     5  source       5    5.0                5
+    [1]     1  source       1    1.0                1
+    [2]     2  source       2    1.0                2
+    [3]     3  source       3    5.0                2
+    [4]     4  source       4    5.0                4
 
 >>> graph.edges['edges'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  weight
@@ -44,5 +44,3 @@
     [2]     9         1          4  edges        1
     [3]     8         2          3  edges        1
     [4]    10         4          5  edges        1
-
-

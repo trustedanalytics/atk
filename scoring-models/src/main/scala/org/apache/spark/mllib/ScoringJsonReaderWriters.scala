@@ -14,18 +14,19 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.apache.spark.mllib
 
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
 import org.apache.spark.mllib.regression.LinearRegressionModel
-import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
+import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
 import org.apache.spark.mllib.tree.model._
-import spray.json._
+import org.trustedanalytics.atk.scoring.models.{ LdaModel, LdaModelPredictReturn, PrincipalComponentsData }
 import spray.json.DefaultJsonProtocol._
+import spray.json._
 
 import scala.collection.immutable.Map
 
@@ -190,7 +191,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: KMeansModel): JsValue = {
       val centers = obj.clusterCenters.map(vector => VectorFormat.write(vector))
-      JsObject("clusterCenters" -> JsArray(centers.toList))
+      JsObject("cluster_centers" -> JsArray(centers.toList))
     }
 
     /**
@@ -202,7 +203,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansModel = {
       val fields = json.asJsObject.fields
 
-      val centers = fields.get("clusterCenters").get.asInstanceOf[JsArray].elements.map(vector => {
+      val centers = fields.get("cluster_centers").get.asInstanceOf[JsArray].elements.map(vector => {
         VectorFormat.read(vector)
       })
 
@@ -567,6 +568,26 @@ object ScoringJsonReaderWriters {
       val trees = getOrInvalid(fields, "trees").asInstanceOf[JsArray].elements.map(i => DecisionTreeModelFormat.read(i)).toArray
       new RandomForestModel(algo, trees)
     }
+  }
+
+  implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
+
+    override def write(obj: NaiveBayesModel): JsValue = {
+      JsObject(
+        "labels" -> obj.labels.toJson,
+        "pi" -> obj.pi.toJson,
+        "theta" -> obj.theta.toJson
+      )
+    }
+
+    override def read(json: JsValue): NaiveBayesModel = {
+      val fields = json.asJsObject.fields
+      val labels = getOrInvalid(fields, "labels").convertTo[Array[Double]]
+      val pi = getOrInvalid(fields, "pi").convertTo[Array[Double]]
+      val theta = getOrInvalid(fields, "theta").convertTo[Array[Array[Double]]]
+      new NaiveBayesModel(labels, pi, theta)
+    }
+
   }
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {

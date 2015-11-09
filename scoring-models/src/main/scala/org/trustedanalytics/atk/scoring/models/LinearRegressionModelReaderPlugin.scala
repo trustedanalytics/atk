@@ -17,7 +17,8 @@
 package org.trustedanalytics.atk.scoring.models
 
 import java.io._
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters.LinearRegressionModelFormat
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import ScoringJsonReaderWriters.LinearRegressionModelFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import spray.json._

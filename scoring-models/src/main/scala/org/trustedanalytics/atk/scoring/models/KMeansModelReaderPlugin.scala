@@ -17,7 +17,8 @@
 package org.trustedanalytics.atk.scoring.models
 
 import java.io._
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters.KmeansModelFormat
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import ScoringJsonReaderWriters.KmeansModelFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, Vector }
