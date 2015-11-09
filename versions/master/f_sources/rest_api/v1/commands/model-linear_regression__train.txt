@@ -174,8 +174,8 @@ Response
 **Body**
 
 
-``_Unit``
+``dict``
 
-
+        Trained linear regression model
 
 

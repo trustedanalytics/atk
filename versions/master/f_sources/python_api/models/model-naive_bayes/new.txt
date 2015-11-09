@@ -37,7 +37,7 @@
     distribution of a label given an observation, and use it for prediction.
     The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
     to predict the value of the dependent variable given the independent
-    observations of a frame.
+    observations of a frame and test the performance of the classification on test data.
     This model runs the MLLib implementation of Naive Bayes [2]_.
 
     .. rubric:: footnotes
@@ -89,4 +89,5 @@
                 Predicted_Pos  Predicted_Neg
     Actual_Pos              2              1
     Actual_Neg              0              3
-
+    >>> model.publish()
+    [===Job Progress===]

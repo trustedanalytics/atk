@@ -95,11 +95,11 @@
 
     :Returns:
 
-        : _Unit
+        : dict
 
         ..
 
-
+            Trained linear regression model
     Creating a LinearRegression Model using the observation column and target column of the train frame
 
     Examples

@@ -7,7 +7,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=-1289140647, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_trees=1, impurity='variance', max_depth=4, max_bins=100, seed=2089485295, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Regressor model.
@@ -71,7 +71,7 @@
 
 
 
-        **seed** : int32 (default=-1289140647)
+        **seed** : int32 (default=2089485295)
 
         ..
 

@@ -15,6 +15,7 @@
     last_read_date
     name
     predict
+    publish
     status
     test
     train
@@ -36,6 +37,7 @@
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <NaiveBayesModel__init__>`\ (self[, name, _info])                                      Create a 'new' instance of a Naive Bayes model
     :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict labels for data points using trained Naive Bayes model.
+    :doc:`publish <publish>`\ (self)                                                                      |ALPHA| Creates a scoring engine tar file.
     :doc:`test <test>`\ (self, frame, label_column[, observation_columns])                                |ALPHA| Predict test frame labels and return metrics.
     :doc:`train <train>`\ (self, frame, label_column, observation_columns[, lambda_parameter])            |ALPHA| Build a naive bayes model.
     ====================================================================================================  ====================================================================================================
@@ -73,7 +75,7 @@
     distribution of a label given an observation, and use it for prediction.
     The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
     to predict the value of the dependent variable given the independent
-    observations of a frame.
+    observations of a frame and test the performance of the classification on test data.
     This model runs the MLLib implementation of Naive Bayes [2]_.
 
     .. rubric:: footnotes
@@ -125,4 +127,5 @@
                 Predicted_Pos  Predicted_Neg
     Actual_Pos              2              1
     Actual_Neg              0              3
-
+    >>> model.publish()
+    [===Job Progress===]

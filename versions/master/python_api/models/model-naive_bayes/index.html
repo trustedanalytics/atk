@@ -157,10 +157,13 @@
 <tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict labels for data points using trained Naive Bayes model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, label_column[, observation_columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates a scoring engine tar file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, label_column[, observation_columns])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, lambda_parameter])</td>
+<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, lambda_parameter])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build a naive bayes model.</td>
 </tr>
 </tbody>
@@ -196,7 +199,7 @@ and then applies Bayes&#8217; theorem to compute the conditional probability
 distribution of a label given an observation, and use it for prediction.
 The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
 to predict the value of the dependent variable given the independent
-observations of a frame.
+observations of a frame and test the performance of the classification on test data.
 This model runs the MLLib implementation of Naive Bayes <a class="reference internal" href="#r28" id="id2">[R28]</a>.</p>
 <p class="rubric">footnotes</p>
 <table class="docutils citation" frame="void" id="r27" rules="none">
@@ -253,6 +256,8 @@ This model runs the MLLib implementation of Naive Bayes <a class="reference inte
 <span class="go">            Predicted_Pos  Predicted_Neg</span>
 <span class="go">Actual_Pos              2              1</span>
 <span class="go">Actual_Neg              0              3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 </dd></dl>

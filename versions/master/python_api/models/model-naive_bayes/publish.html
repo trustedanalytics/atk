@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>NaiveBayesModel status &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    <title>NaiveBayesModel publish &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
@@ -27,8 +27,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models NaiveBayesModel" href="index.html" >
-    <link rel="next" title="NaiveBayesModel test" href="test.html" >
-    <link rel="prev" title="NaiveBayesModel publish" href="publish.html" > 
+    <link rel="next" title="NaiveBayesModel status" href="status.html" >
+    <link rel="prev" title="NaiveBayesModel predict" href="predict.html" > 
   </head>
   <body>
 
@@ -57,11 +57,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="publish.html" title="NaiveBayesModel publish"
+        <a href="predict.html" title="NaiveBayesModel predict"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="test.html" title="NaiveBayesModel test"
+        <a href="status.html" title="NaiveBayesModel status"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -110,33 +110,30 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="naivebayesmodel-status">
-<span id="python-api-models-model-naive-bayes-status"></span><h1><a class="reference internal" href="index.html"><em>NaiveBayesModel</em></a>  status<a class="headerlink" href="#naivebayesmodel-status" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="naivebayesmodel-publish">
+<span id="python-api-models-model-naive-bayes-publish"></span><h1><a class="reference internal" href="index.html"><em>NaiveBayesModel</em></a>  publish<a class="headerlink" href="#naivebayesmodel-publish" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
-<dl class="attribute">
-<dt id="status">
-<code class="descname">status</code><a class="headerlink" href="#status" title="Permalink to this definition">¶</a></dt>
-<dd><p>Current model life cycle status.</p>
+<dl class="function">
+<dt id="publish">
+<code class="descname">publish</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#publish" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
+Creates a scoring engine tar file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"></td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: str</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><p>Status of the model</p>
+<div><p>The HDFS path to the tar file.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<dl class="docutils">
-<dt>One of three statuses: Active, Dropped, Finalized</dt>
-<dd>Active:    Entity is available for use
-Dropped:   Entity has been dropped by user or by garbage collection which found it stale
-Finalized: Entity&#8217;s data has been deleted</dd>
-</dl>
+<p>Creates a tar file with the trained Naive Bayes Model
+The tar file is used as input to the scoring engine to predict the class of an observation.</p>
 </dd></dl>
 
 </div>

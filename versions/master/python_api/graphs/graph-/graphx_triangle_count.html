@@ -151,46 +151,37 @@ If an edge is marked bidirectional, the implementation opts for canonical
 orientation of edges hence counting it only once (similar to an
 undirected graph).</p>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">graphx_triangle_count</span><span class="p">(</span><span class="n">output_property</span> <span class="o">=</span> <span class="s">&quot;triangle_count&quot;</span><span class="p">,</span> <span class="n">output_graph_name</span> <span class="o">=</span> <span class="s">&quot;tc_graph&quot;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The expected output is like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>{u&#39;label1&#39;: Frame &quot;None&quot;
-row_count = 110
-schema =
-  _vid:int64
-  _label:unicode
-  max_k:int64
-  cc:int64
-  TC:int32
-  node:unicode,
-u&#39;label2&#39;: Frame &quot;None&quot;
-row_count = 430
-schema =
-  _vid:int64
-  _label:unicode
-  max_k:int64
-  cc:int64
-  TC:int32
-  node:unicode}
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;edges&#39;</span><span class="p">,</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;weight&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">graphx_triangle_count</span><span class="p">(</span><span class="n">output_property</span> <span class="o">=</span> <span class="s">&quot;triangle_count&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  _vid  _label  source  label  triangle_count</span>
+<span class="go">    ================================================</span>
+<span class="go">    [0]     5  source       5    5.0               0</span>
+<span class="go">    [1]     1  source       1    1.0               1</span>
+<span class="go">    [2]     2  source       2    1.0               1</span>
+<span class="go">    [3]     3  source       3    5.0               1</span>
+<span class="go">    [4]     4  source       4    5.0               0</span>
 </pre></div>
 </div>
-<p>To query:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame_for_label1</span> <span class="o">=</span> <span class="n">f</span><span class="p">[</span><span class="s">&#39;label1&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame_for_label1</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-
-<span class="go">  _vid:int64   _label:unicode   max_k:int64   cc:int64   TC:int32   node:unicode</span>
-<span class="go">/--------------------------------------------------------------------------------/</span>
-<span class="go">      106656   label1                     2         12          0   node158</span>
-<span class="go">      129504   label1                     3         23          1   node2116</span>
-<span class="go">       86640   label1                     7         17         15   node183</span>
-<span class="go">       20424   label1                     7         47         15   node4248</span>
-<span class="go">      164184   label1                     2         72          0   node7388</span>
-<span class="go">       23232   label1                     9         39         28   node3210</span>
-<span class="go">       93840   label1                     3         83          1   node8446</span>
-<span class="go">      114480   label1                     8         58         21   node5311</span>
-<span class="go">       48480   label1                    10         30         36   node2166</span>
-<span class="go">       31152   label1                     6         96         10   node9516</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  _eid  _src_vid  _dest_vid  _label  weight</span>
+<span class="go">    ==============================================</span>
+<span class="go">    [0]     6         1          2  edges        1</span>
+<span class="go">    [1]     7         1          3  edges        1</span>
+<span class="go">    [2]     9         1          4  edges        1</span>
+<span class="go">    [3]     8         2          3  edges        1</span>
+<span class="go">    [4]    10         4          5  edges        1</span>
 </pre></div>
 </div>
 </dd></dl>

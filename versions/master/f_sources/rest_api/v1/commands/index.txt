@@ -120,6 +120,7 @@
     model-logistic_regression__train
     model-naive_bayes__new
     model-naive_bayes__predict
+    model-naive_bayes__publish
     model-naive_bayes__test
     model-naive_bayes__train
     model-principal_components__new
@@ -247,6 +248,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:logistic_regression/train <model-logistic_regression__train>`                     |ALPHA| Build logistic regression model.
 :doc:`model:naive_bayes/new <model-naive_bayes__new>`                                         Create a 'new' instance of a Naive Bayes model
 :doc:`model:naive_bayes/predict <model-naive_bayes__predict>`                                 |ALPHA| Predict labels for data points using trained Naive Bayes model.
+:doc:`model:naive_bayes/publish <model-naive_bayes__publish>`                                 |ALPHA| Creates a scoring engine tar file.
 :doc:`model:naive_bayes/test <model-naive_bayes__test>`                                       |ALPHA| Predict test frame labels and return metrics.
 :doc:`model:naive_bayes/train <model-naive_bayes__train>`                                     |ALPHA| Build a naive bayes model.
 :doc:`model:principal_components/new <model-principal_components__new>`                       Create a 'new' instance of a Principal Components model.
