@@ -32,20 +32,12 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) e
       {
         val x: Array[Double] = new Array[Double](row.length)
         row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = atof(value)
+          case (value: Any, index: Int) => x(index) = value.toDouble
         }
-        score = score :+ (predict(Vectors.dense(x)) + 1)
+        score = score :+ (predict(Vectors.dense(x)))
       }
     }
     score
-  }
-
-  def atof(s: String): Double = {
-    s.toDouble
-  }
-
-  def atoi(s: String): Int = {
-    Integer.parseInt(s)
   }
 
 }
