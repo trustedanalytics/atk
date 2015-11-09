@@ -1287,7 +1287,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>1.7.5</version>
             </dependency>
-            <!--io.spray-->
+
             <dependency>
                 <groupId>io.spray</groupId>
                 <artifactId>spray-json_${scala.short.version}</artifactId>
@@ -1295,7 +1295,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>io.spray</groupId>
-                <artifactId>spray-can</artifactId>
+                <artifactId>spray-can_${scala.short.version}</artifactId>
                 <version>1.3.1</version>
             </dependency>
             <dependency>
@@ -1305,7 +1305,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>io.spray</groupId>
-                <artifactId>spray-client</artifactId>
+                <artifactId>spray-client_${scala.short.version}</artifactId>
                 <version>1.3.1</version>
             </dependency>
             <dependency>

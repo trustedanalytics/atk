@@ -31,7 +31,7 @@ import org.apache.spark.SparkContext._
  * algorithm in GraphX.
  */
 
-object ConnectedComponentsGraphXDefault {
+object ConnectedComponentsDefault {
 
   def run(vertexList: RDD[Long], edgeList: RDD[(Long, Long)]): RDD[(Long, Long)] = {
 
@@ -48,23 +48,6 @@ object ConnectedComponentsGraphXDefault {
     })
 
     out
-  }
-
-  type GBVertexPropertyPair = (GBVertex, Property)
-
-  def mergeConnectedComponentResult(resultRDD: RDD[(Long, Property)], gbVertexRDD: RDD[GBVertex]): RDD[GBVertex] = {
-    gbVertexRDD
-      .map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], gbVertex))
-      .join(resultRDD)
-      .map(vertex => generateGBVertex(vertex))
-  }
-
-  // generates GBVertex from value pair obtained as a result of join and appends the pagerank property to the GBVertex
-  private def generateGBVertex(joinValuePair: (Long, GBVertexPropertyPair)): GBVertex = {
-    val (gbVertex, pagerankProperty) = joinValuePair._2 match {
-      case value: GBVertexPropertyPair => (value._1, value._2)
-    }
-    gbVertex.copy(properties = gbVertex.properties + pagerankProperty)
   }
 
 }
