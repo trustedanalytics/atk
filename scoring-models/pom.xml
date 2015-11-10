@@ -25,7 +25,7 @@
                 <inherited>true</inherited>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                   <executions>
+                <executions>
                     <execution>
                         <id>compile</id>
                         <goals>
