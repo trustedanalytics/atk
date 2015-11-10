@@ -23,24 +23,22 @@ Consider Frame *my_frame*, which contains the data
     [4]      4  5.0  0.0  2.0  -1.0
 
 
-my_frame.correlation_matrix computes the common correlation coefficient (Pearson's) on each pair
-of columns in the user-provided list.
-In this example, the *idnum* and most of the columns have trivial correlations: -1, 0, or +1.
-Column *x3* provides a contrasting coefficient of 3 / sqrt(3) = 0.948683298051
+my_frame.covariance_matrix computes the covariance on each pair of columns in the user-provided list.
 
-    >>> corr_matrix = my_frame.correlation_matrix(my_frame.column_names)
+    >>> cov_matrix = my_frame.covariance_matrix(my_frame.column_names)
     <progress>
 
     The resulting table (specifying all columns) is:
 
-    >>> corr_matrix.inspect()
-    [#]  idnum           x1              x2               x3               x4
-    ==========================================================================
-    [0]             1.0             1.0             -1.0   0.948683298051  0.0
-    [1]             1.0             1.0             -1.0   0.948683298051  0.0
-    [2]            -1.0            -1.0              1.0  -0.948683298051  0.0
-    [3]  0.948683298051  0.948683298051  -0.948683298051              1.0  0.0
-    [4]             0.0             0.0              0.0              0.0  1.0
+    >>> cov_matrix.inspect()
+    [#]  idnum  x1    x2    x3    x4
+    =================================
+    [0]    2.5   2.5  -2.5   1.5  0.0
+    [1]    2.5   2.5  -2.5   1.5  0.0
+    [2]   -2.5  -2.5   2.5  -1.5  0.0
+    [3]    1.5   1.5  -1.5   1.0  0.0
+    [4]    0.0   0.0   0.0   0.0  0.0
+
 
 
 
