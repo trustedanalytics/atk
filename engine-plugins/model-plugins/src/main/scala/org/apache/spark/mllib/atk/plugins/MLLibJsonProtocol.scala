@@ -603,6 +603,7 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainFormat = jsonFormat11(RandomForestRegressorTrainArgs)
   implicit val randomForestRegressorPredictFormat = jsonFormat3(RandomForestRegressorPredictArgs)
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
+  implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

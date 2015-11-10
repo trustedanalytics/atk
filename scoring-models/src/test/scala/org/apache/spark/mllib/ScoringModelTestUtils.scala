@@ -14,11 +14,12 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.apache.spark.mllib
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
-import scala.util.Random
 import org.scalatest.Assertions._
+import org.trustedanalytics.atk.scoring.interfaces.Model
+
+import scala.util.Random
 
 object ScoringModelTestUtils {
   // Calls model.score() with null data and verifies that we get a NullPointerException
