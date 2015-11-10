@@ -46,6 +46,7 @@ cp -v  config/$package/logback.xml tarballs/$package/conf
 cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarballs/$package/conf
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
+cp -v  config/$package/manifest.yml.tpl tarballs/$package/
 
 echo "copy jar dependencies"
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
