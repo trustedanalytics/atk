@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.model
 
 import java.io.{ OutputStream, InputStream }
 
+import org.apache.commons.io.IOUtils
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.model.ModelEntity
@@ -58,7 +59,7 @@ class ModelFileStorage(fsRoot: String,
    */
   def deleteModelData(model: ModelEntity): Unit = {
     getModelFolder(model) match {
-      case Some(path) => deletePath(path)
+      case Some(path) => if (hdfs.exists(path)) { deletePath(path) }
       case _ =>
     }
   }
@@ -72,24 +73,24 @@ class ModelFileStorage(fsRoot: String,
   }
 
   def readJsObject(path: Path): JsObject = {
-    var in = None: Option[InputStream]
+    var in: InputStream = null
     try {
-      in = Some(hdfs.read(path))
-      readJsObject(in.get)
+      in = hdfs.read(path)
+      readJsObject(in)
     }
     finally {
-      if (in.isDefined) { in.get.close() }
+      IOUtils.closeQuietly(in)
     }
   }
 
   def writeJsObject(path: Path, jsObject: JsObject): Unit = {
-    var out = None: Option[OutputStream]
+    var out: OutputStream = null
     try {
-      out = Some(hdfs.write(path, append = false))
-      writeJsObject(out.get, jsObject)
+      out = hdfs.write(path, append = false)
+      writeJsObject(out, jsObject)
     }
     finally {
-      if (out.isDefined) { out.get.close() }
+      IOUtils.closeQuietly(out)
     }
   }
 
@@ -134,21 +135,16 @@ class ModelFileStorage(fsRoot: String,
   }
 
   /**
-   * (helper) gets the model folder, creates it if does not exist
-   */
-  private def prepareModelFolder(model: ModelEntity): Path = {
-    val targetParentFolderPath = calculateModelPath(model)
-    hdfs.createDirectory(targetParentFolderPath)
-    targetParentFolderPath
-  }
-
-  /**
    * (helper) creates a fresh folder for the model's next rev
    * @return path of the new model rev folder
    */
   private def prepareModelRevFolderForNextRev(model: ModelEntity): Path = {
-    val modelFolder = prepareModelFolder(model)
+    val modelFolder = calculateModelPath(model)
     val revFolder = getModelRevFolder(model)
+    if (revFolder.isEmpty && hdfs.exists(modelFolder)) {
+      deletePath(modelFolder) // delete the full folder to remove any pre-existing old data
+    }
+    hdfs.createDirectory(modelFolder)
     val nextRevFolder = new Path(modelFolder, EntityRev.getNextRevFolderName(revFolder.map(_.toString)))
     deletePath(nextRevFolder) // delete incomplete data on disk if it exists
     nextRevFolder
