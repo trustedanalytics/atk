@@ -1599,7 +1599,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
     @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
     def __drop_vertices(self, predicate):
         """
-        Delete rows that qualify.
+        Delete rows in this vertex frame that qualify.
 
         Parameters
         ----------
@@ -1609,30 +1609,10 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         Examples
         --------
-        Given VertexFrame object *my_vertex_frame* accessing a graph with lots
-        of data for the attributes of ``lions``, ``tigers``, and ``ligers``.
-        Get rid of the ``lions`` and ``tigers``:
+        See inside this :doc:`graph example <../../graphs/graph-/__init__>` for
+        usage of `filter` and `drop_duplicates`.  This method works just like
+        `filter` except it drops matching rows rather than keeping them.
 
-        <skip>
-        .. only:: html
-
-            .. code::
-
-                >>> my_vertex_frame.drop_vertices(lambda row: row.animal_type == "lion" or row.animal_type == "tiger")
-
-        .. only:: latex
-
-            .. code::
-
-                >>> my_vertex_frame.drop_vertices(lambda row:
-                ...     row.animal_type == "lion" or
-                ...     row.animal_type == "tiger")
-
-        Now the frame only has information about ``ligers``.
-
-        More information on |UDF| can be found at :doc:`/ds_apir`
-
-        </skip>
         """
         self._backend.filter_vertices(self, predicate, keep_matching_vertices=False)
 

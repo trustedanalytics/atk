@@ -95,7 +95,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     @returns(data_type=str, description="Status of the model")
     def __status(self):
         """
-        Current model life cycle status.
+        Read-only property - Current model life cycle status.
 
         One of three statuses: Active, Dropped, Finalized
            Active:    Entity is available for use
@@ -112,7 +112,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     @returns(data_type=str, description="Date string of the last time this model's data was accessed")
     def __last_read_date(self):
         """
-        Last time this frame's data was accessed.
+        Read-only property - Last time this model's data was accessed.
         """
         try:
             return self._get_model_info().last_read_date
