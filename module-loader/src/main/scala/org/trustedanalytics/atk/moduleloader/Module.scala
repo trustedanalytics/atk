@@ -38,7 +38,7 @@ class Module private[moduleloader] (val name: String,
     classLoaderUrls.map(url => {
       val file = url.getFile
       file.substring(file.lastIndexOf("/") + 1)
-    })
+    }).filter(_.endsWith(".jar"))
   }
 
   lazy val classLoaderUrls: Seq[URL] = classLoader.getURLs

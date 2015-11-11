@@ -56,7 +56,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
         val jobName = Array(s"--name", s"${command.getJobName}")
         val pluginExecutionDriverClass = Array("--class", "org.trustedanalytics.atk.engine.command.SparkCommandJob")
 
-        val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName)).filter(_.endsWith(".jar"))
+        val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName))
         val pluginDependencyJars = Array("--jars", hdfsJars.mkString(","))
 
         val pythonDependencyPath = plugin.executesPythonUdf match {
