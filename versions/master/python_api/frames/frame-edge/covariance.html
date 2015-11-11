@@ -138,12 +138,38 @@ to compute the covariance.</p>
 </table>
 <p>This method applies only to columns containing numerical data.</p>
 <p class="rubric">Examples</p>
-<p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
-column named <em>obs</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">covariance</span><span class="p">([</span><span class="s">&#39;col_0&#39;</span><span class="p">,</span> <span class="s">&#39;col_1&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span>
+<p>Consider Frame <em>my_frame</em>, which contains the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  idnum  x1   x2   x3   x4</span>
+<span class="go">===============================</span>
+<span class="go">[0]      0  1.0  4.0  0.0  -1.0</span>
+<span class="go">[1]      1  2.0  3.0  0.0  -1.0</span>
+<span class="go">[2]      2  3.0  2.0  1.0  -1.0</span>
+<span class="go">[3]      3  4.0  1.0  2.0  -1.0</span>
+<span class="go">[4]      4  5.0  0.0  2.0  -1.0</span>
 </pre></div>
 </div>
+<p>my_frame.covariance computes the covariance on the pair of columns provided.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">covariance</span><span class="p">([</span><span class="s">&quot;x1&quot;</span><span class="p">,</span> <span class="s">&quot;x2&quot;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<blockquote>
+<div>-2.5</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">covariance</span><span class="p">([</span><span class="s">&quot;x1&quot;</span><span class="p">,</span> <span class="s">&quot;x4&quot;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<blockquote>
+<div>0.0</div></blockquote>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">covariance</span><span class="p">([</span><span class="s">&quot;x2&quot;</span><span class="p">,</span> <span class="s">&quot;x3&quot;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<blockquote>
+<div>-1.5</div></blockquote>
+</div></blockquote>
 </dd></dl>
 
 </div>
@@ -169,7 +195,7 @@ column named <em>obs</em>:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 10, 2015.
+      Last updated on Nov 11, 2015.
       </li>
     </ul>
     </div>

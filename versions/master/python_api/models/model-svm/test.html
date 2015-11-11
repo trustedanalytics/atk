@@ -167,29 +167,7 @@ The data returned is composed of the following keys:</p>
 <p>Predict the labels for a test frame and run classification metrics on predicted
 and target labels.</p>
 <p class="rubric">Examples</p>
-<p>Test the performance of a trained Svm Model</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">SvmModel</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">&#39;mySVM&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">train_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">my_model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">test_frame</span><span class="p">,</span> <span class="s">&#39;name_of_label_column&#39;</span><span class="p">,[</span><span class="s">&#39;List_of_observation_column/s&#39;</span><span class="p">])</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;f_measure&#39;</span><span class="p">]</span>
-<span class="go">0.66666666666666663</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;recall&#39;</span><span class="p">]</span>
-<span class="go">0.5</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;accuracy&#39;</span><span class="p">]</span>
-<span class="go">0.75</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;precision&#39;</span><span class="p">]</span>
-<span class="go">1.0</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span><span class="p">[</span><span class="s">&#39;confusion_matrix&#39;</span><span class="p">]</span>
-<span class="go">{u&#39;column_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;],</span>
-<span class="go"> u&#39;matrix&#39;: [[2, 0], [0, 3]],</span>
-<span class="go"> u&#39;row_labels&#39;: [u&#39;pos&#39;, u&#39;neg&#39;]}</span>
-</pre></div>
-</div>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -215,7 +193,7 @@ and target labels.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 10, 2015.
+      Last updated on Nov 11, 2015.
       </li>
     </ul>
     </div>

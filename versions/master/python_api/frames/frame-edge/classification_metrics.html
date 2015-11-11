@@ -222,43 +222,40 @@ binary classifier model, formatted for human readability.</p>
 <p class="rubric">Notes</p>
 <p>The <strong>confusion_matrix</strong> is not yet implemented for multi-class classifiers.</p>
 <p class="rubric">Examples</p>
-<p>Consider the following sample data set in <em>frame</em> with actual data
-labels specified in the <em>labels</em> column and the predicted labels in the
-<em>predictions</em> column:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  a:unicode   b:int32   labels:int32  predictions:int32</span>
-<span class="go">/-------------------------------------------------------/</span>
-<span class="go">    red         1              0                  0</span>
-<span class="go">    blue        3              1                  0</span>
-<span class="go">    blue        1              0                  0</span>
-<span class="go">    green       0              1                  1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">classification_metrics</span><span class="p">(</span><span class="n">label_column</span><span class="o">=</span><span class="s">&#39;labels&#39;</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">pred_column</span><span class="o">=</span><span class="s">&#39;predictions&#39;</span><span class="p">,</span> <span class="n">pos_label</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">f_measure</span>
-
-<span class="go">0.66666666666666663</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">recall</span>
-
+<p>Consider Frame <em>my_frame</em>, which contains the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a      b  labels  predictions</span>
+<span class="go">==================================</span>
+<span class="go">[0]  red    1       0            0</span>
+<span class="go">[1]  blue   3       1            0</span>
+<span class="go">[2]  green  1       0            0</span>
+<span class="go">[3]  green  0       1            1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">classification_metrics</span><span class="p">(</span><span class="s">&#39;labels&#39;</span><span class="p">,</span> <span class="s">&#39;predictions&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">f_measure</span>
+<span class="go">0.6666666666666666</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">recall</span>
 <span class="go">0.5</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">accuracy</span>
-
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">accuracy</span>
 <span class="go">0.75</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">precision</span>
-
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">precision</span>
 <span class="go">1.0</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">confusion_matrix</span>
-
-<span class="go">              Predicted</span>
-<span class="go">             _pos_ _neg__</span>
-<span class="go">Actual  pos |  1     1</span>
-<span class="go">        neg |  0     2</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cm</span><span class="o">.</span><span class="n">confusion_matrix</span>
+<span class="go">            Predicted_Pos  Predicted_Neg</span>
+<span class="go">Actual_Pos              1              1</span>
+<span class="go">Actual_Neg              0              2</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -286,7 +283,7 @@ labels specified in the <em>labels</em> column and the predicted labels in the
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 10, 2015.
+      Last updated on Nov 11, 2015.
       </li>
     </ul>
     </div>

@@ -143,45 +143,37 @@
 
     Examples
     --------
-    Consider the following sample data set in *frame* with actual data
-    labels specified in the *labels* column and the predicted labels in the
-    *predictions* column:
+    Consider Frame *my_frame*, which contains the data
 
-    .. code::
+        >>> my_frame.inspect()
+        [#]  a      b  labels  predictions
+        ==================================
+        [0]  red    1       0            0
+        [1]  blue   3       1            0
+        [2]  green  1       0            0
+        [3]  green  0       1            1
 
-        >>> frame.inspect()
 
-          a:unicode   b:int32   labels:int32  predictions:int32
-        /-------------------------------------------------------/
-            red         1              0                  0
-            blue        3              1                  0
-            blue        1              0                  0
-            green       0              1                  1
-
-        >>> cm = frame.classification_metrics(label_column='labels',
-        ... pred_column='predictions', pos_label=1, beta=1)
+        >>> cm = my_frame.classification_metrics('labels', 'predictions', 1, 1)
+        [===Job Progress===]
 
         >>> cm.f_measure
-
-        0.66666666666666663
+        0.6666666666666666
 
         >>> cm.recall
-
         0.5
 
         >>> cm.accuracy
-
         0.75
 
         >>> cm.precision
-
         1.0
 
         >>> cm.confusion_matrix
+                    Predicted_Pos  Predicted_Neg
+        Actual_Pos              1              1
+        Actual_Neg              0              2
 
-                      Predicted
-                     _pos_ _neg__
-        Actual  pos |  1     1
-                neg |  0     2
+
 
 

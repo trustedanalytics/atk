@@ -144,48 +144,35 @@ matrix.</p>
 </table>
 <p>This function applies only to columns containing numerical data.</p>
 <p class="rubric">Examples</p>
-<p>Consider Frame <em>my_frame1</em>, which computes the covariance matrix for three
-numeric columns:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  col_0:int64    col_1:int64   col_3:float64</span>
-<span class="go">\--------------------------------------------\</span>
-<span class="go">    1            4             33.4</span>
-<span class="go">    2            5             43.7</span>
-<span class="go">    3            6             20.1</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame1</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">([</span><span class="s">&#39;col_0&#39;</span><span class="p">,</span> <span class="s">&#39;col_1&#39;</span><span class="p">,</span> <span class="s">&#39;col_2&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  col_0:float64    col_1:float64   col_3:float64</span>
-<span class="go">\------------------------------------------------\</span>
-<span class="go">     1.00             1.00            -6.65</span>
-<span class="go">     1.00             1.00            -6.65</span>
-<span class="go">     -6.65           -6.65            139.99</span>
+<p>Consider Frame <em>my_frame</em>, which contains the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go"> [#]  idnum  x1   x2   x3   x4</span>
+<span class="go">===============================</span>
+<span class="go">[0]      0  1.0  4.0  0.0  -1.0</span>
+<span class="go">[1]      1  2.0  3.0  0.0  -1.0</span>
+<span class="go">[2]      2  3.0  2.0  1.0  -1.0</span>
+<span class="go">[3]      3  4.0  1.0  2.0  -1.0</span>
+<span class="go">[4]      4  5.0  0.0  2.0  -1.0</span>
 </pre></div>
 </div>
-<p>Consider Frame <em>my_frame2</em>, which computes the covariance matrix for a single
-vector column:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  State:unicode             Population_HISTOGRAM:vector</span>
-<span class="go">\-------------------------------------------------------\</span>
-<span class="go">    Louisiana               [0.0, 1.0, 0.0, 0.0]</span>
-<span class="go">    Georgia                 [0.0, 1.0, 0.0, 0.0]</span>
-<span class="go">    Texas                   [0.0, 0.54, 0.46, 0.0]</span>
-<span class="go">    Florida                 [0.0, 0.83, 0.17, 0.0]</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame2</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">([</span><span class="s">&#39;Population_HISTOGRAM&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">  Population_HISTOGRAM:vector</span>
-<span class="go">\-------------------------------------\</span>
-<span class="go">  [0,  0.00000000,  0.00000000,    0]</span>
-<span class="go">  [0,  0.04709167, -0.04709167,    0]</span>
-<span class="go">  [0, -0.04709167,  0.04709167,    0]</span>
-<span class="go">  [0,  0.00000000,  0.00000000,    0]</span>
+<p>my_frame.covariance_matrix computes the covariance on each pair of columns in the user-provided list.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
+<p>The resulting table (specifying all columns) is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  idnum  x1    x2    x3    x4</span>
+<span class="go">=================================</span>
+<span class="go">[0]    2.5   2.5  -2.5   1.5  0.0</span>
+<span class="go">[1]    2.5   2.5  -2.5   1.5  0.0</span>
+<span class="go">[2]   -2.5  -2.5   2.5  -1.5  0.0</span>
+<span class="go">[3]    1.5   1.5  -1.5   1.0  0.0</span>
+<span class="go">[4]    0.0   0.0   0.0   0.0  0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
 </dd></dl>
 
 </div>
@@ -211,7 +198,7 @@ vector column:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 10, 2015.
+      Last updated on Nov 11, 2015.
       </li>
     </ul>
     </div>

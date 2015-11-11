@@ -220,6 +220,62 @@ the true labels using built-in binary Classification Metrics.</p>
 <tr><td class="label"><a class="fn-backref" href="#id3">[R47]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
 </tbody>
 </table>
+<p class="rubric">Examples</p>
+<p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
+<p>Consider the following frame containing three columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data   label</span>
+<span class="go">=================</span>
+<span class="go">[0]  -48.0  1</span>
+<span class="go">[1]  -75.0  1</span>
+<span class="go">[2]  -63.0  1</span>
+<span class="go">[3]  -57.0  1</span>
+<span class="go">[4]   73.0  0</span>
+<span class="go">[5]  -33.0  1</span>
+<span class="go">[6]  100.0  0</span>
+<span class="go">[7]  -54.0  1</span>
+<span class="go">[8]   78.0  0</span>
+<span class="go">[9]   48.0  0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">SvmModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data   label  predicted_label</span>
+<span class="go">==================================</span>
+<span class="go">[0]  -48.0  1                    1</span>
+<span class="go">[1]  -75.0  1                    1</span>
+<span class="go">[2]  -63.0  1                    1</span>
+<span class="go">[3]  -57.0  1                    1</span>
+<span class="go">[4]   73.0  0                    0</span>
+<span class="go">[5]  -33.0  1                    1</span>
+<span class="go">[6]  100.0  0                    0</span>
+<span class="go">[7]  -54.0  1                    1</span>
+<span class="go">[8]   78.0  0                    0</span>
+<span class="go">[9]   48.0  0                    0</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">predicted_frame</span><span class="p">,</span> <span class="s">&#39;predicted_label&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span>
+<span class="go">Precision: 1.0</span>
+<span class="go">Recall: 1.0</span>
+<span class="go">Accuracy: 1.0</span>
+<span class="go">FMeasure: 1.0</span>
+<span class="go">Confusion Matrix:</span>
+<span class="go">            Predicted_Pos  Predicted_Neg</span>
+<span class="go">Actual_Pos              7              0</span>
+<span class="go">Actual_Neg              0              7</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -245,7 +301,7 @@ the true labels using built-in binary Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 10, 2015.
+      Last updated on Nov 11, 2015.
       </li>
     </ul>
     </div>

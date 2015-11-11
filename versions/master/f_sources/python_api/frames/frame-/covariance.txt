@@ -37,12 +37,32 @@
 
     Examples
     --------
-    Consider Frame *my_frame*, which accesses a frame that contains a single
-    column named *obs*:
+    Consider Frame *my_frame*, which contains the data
 
-    .. code::
+        >>> my_frame.inspect()
+        [#]  idnum  x1   x2   x3   x4
+        ===============================
+        [0]      0  1.0  4.0  0.0  -1.0
+        [1]      1  2.0  3.0  0.0  -1.0
+        [2]      2  3.0  2.0  1.0  -1.0
+        [3]      3  4.0  1.0  2.0  -1.0
+        [4]      4  5.0  0.0  2.0  -1.0
 
-        >>> cov = my_frame.covariance(['col_0', 'col_1'])
-        >>> print(cov)
+
+    my_frame.covariance computes the covariance on the pair of columns provided.
+
+        >>> my_frame.covariance(["x1", "x2"])
+        [===Job Progress===]
+
+            -2.5
+        >>> my_frame.covariance(["x1", "x4"])
+        [===Job Progress===]
+
+            0.0
+        >>> my_frame.covariance(["x2", "x3"])
+        [===Job Progress===]
+
+            -1.5
+
 
 
