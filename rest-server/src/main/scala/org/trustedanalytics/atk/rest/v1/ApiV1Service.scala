@@ -25,8 +25,8 @@ class ApiV1Service(val dataFrameService: FrameService,
                    val commandService: CommandService,
                    val graphService: GraphService,
                    val modelService: ModelService,
-                   val catalogService: CatalogService) extends Directives {
+                   val dataCatalogService: DataCatalogService) extends Directives {
   def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ catalogService.catalogRoutes() ~ catalogService.dataCatalogRoutes()
+    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ dataCatalogService.dataCatalogRoutes()
   }
 }

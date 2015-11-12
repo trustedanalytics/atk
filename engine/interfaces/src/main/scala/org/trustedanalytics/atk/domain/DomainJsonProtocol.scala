@@ -17,9 +17,8 @@
 package org.trustedanalytics.atk.domain
 
 import java.net.URI
-import java.util
+import java.util.ArrayList
 
-import org.trustedanalytics.atk.domain.catalog.GenericCatalogResponse
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, CommandDefinition }
 import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf }
@@ -233,7 +232,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
       case JsArray(elements) =>
         val collection = typeOf[E] match {
           case t if t =:= typeOf[java.util.Set[T]] => new java.util.HashSet[T]()
-          case t if t =:= typeOf[java.util.List[T]] => new util.ArrayList[T]()
+          case t if t =:= typeOf[java.util.List[T]] => new java.util.ArrayList[T]()
           case x => deserializationError(s"Unable to deserialize Java collections of type $x")
         }
         val javaCollection = elements.map(_.convertTo[T]).asJavaCollection
@@ -600,7 +599,5 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val jdbcArgsFormat = jsonFormat6(JdbcArgs)
 
   implicit val hiveArgsFormat = jsonFormat2(HiveArgs)
-
-  implicit val datacatalogResponseFormat = jsonFormat3(GenericCatalogResponse)
 
 }

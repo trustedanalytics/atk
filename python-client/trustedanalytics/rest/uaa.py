@@ -43,14 +43,14 @@ def get_oauth_credentials(uri, user_name, user_password):
             'refresh_token': refresh_token}
 
 
-def get_refreshed_oauth_token(uaa_uri, refresh_token):
+def get_refreshed_oauth_token(atk_uri, refresh_token):
     """
     Connect to the cloudfoundry uaa server and acquire access token using a refresh token
     """
     # Authenticate to UAA as client (this client)
     # Tell UAA to grant us (the client) a token using a refresh token
     data = {'grant_type': 'refresh_token', 'refresh_token': refresh_token }
-    return _get_token(_get_oauth_server_info(uaa_uri), data)
+    return _get_token(_get_oauth_server_info(atk_uri), data)
 
 
 # supporting objects and functions....

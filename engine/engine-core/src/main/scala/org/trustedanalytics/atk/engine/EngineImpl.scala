@@ -17,13 +17,11 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.component.ClassLoaderAware
-import org.trustedanalytics.atk.domain.catalog.CatalogResponse
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
-import org.trustedanalytics.atk.engine.catalog.SimpleCatalogFactory
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.command.CommandExecutor
 import org.trustedanalytics.atk.engine.frame._
@@ -327,14 +325,6 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     future {
       val seamless = graphs.expectSeamless(graphId)
       seamless.edgeFrames
-    }
-  }
-
-  override def listCatalog(catalogType: String)(implicit invocation: Invocation): Future[List[CatalogResponse]] = {
-    future {
-      withMyClassLoader {
-        SimpleCatalogFactory.getCatalogInstance(catalogType).list(this)
-      }
     }
   }
 }

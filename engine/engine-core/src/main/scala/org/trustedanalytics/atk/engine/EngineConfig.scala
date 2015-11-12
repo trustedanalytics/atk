@@ -371,7 +371,4 @@ trait EngineConfig extends EventLogging {
   val enableKerberos: Boolean = config.getBoolean(engineConfigKey + ".hadoop.kerberos.enabled")
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.principal-name")) else None
   val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.keytab-file")) else None
-
-  val dataCatalogUri = config.getString("trustedanalytics.atk.engine.catalog.data-catalog-uri")
-  val oauthToken = config.getString("trustedanalytics.atk.engine.catalog.oauth-token")
 }

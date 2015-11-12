@@ -96,4 +96,7 @@ object RestServerConfig {
 
   /** Password for the keystore file */
   val keyStorePassword: String = config.getString("trustedanalytics.atk.component.archives.rest-server.key-store-password")
+
+  /** Data Catalog URI */
+  val dataCatalogUri = config.getString("trustedanalytics.atk.component.archives.rest-server.dataCatalogUri")
 }
