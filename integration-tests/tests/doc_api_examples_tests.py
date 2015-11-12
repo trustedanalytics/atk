@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -36,6 +38,7 @@ and that module is submitted to doctest.
 """
 
 import unittest
+import time
 
 import trustedanalytics as ta
 if ta.server.port != 19099:
@@ -115,10 +118,15 @@ class ExampleDocTests(unittest.TestCase):
 
     def test_doc_examples(self):
         """test all .rst files with doctest"""
+        start = time.time()
         files = get_all_example_rst_file_paths()
+        filtered_files = []
         filtered_files = filter_exemptions(files)
-        filtered_files.extend([os.path.join(path_to_core, "frame.py")])  # todo: add graph.py, maybe others
+        filtered_files.extend([os.path.join(path_to_core, "frame.py")])
+        filtered_files.extend([os.path.join(path_to_core, "graph.py")])  # todo: add model.py, maybe others
         results = _run_files_as_doctests(filtered_files, verbose=doctest_verbose)
+        print
+        print "doctest elapsed time: %0.3f seconds." % (time.time() - start)
         self.assertEqual(0, results.failed, "Tests in the example documentation failed.")
 
 

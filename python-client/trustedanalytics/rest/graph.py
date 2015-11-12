@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -26,6 +28,7 @@ logger = logging.getLogger(__name__)
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.core.frame import VertexFrame, EdgeFrame
 from trustedanalytics.rest.command import executor
+from trustedanalytics.meta.names import indent
 from trustedanalytics import valid_data_types
 
 
@@ -67,9 +70,16 @@ class GraphBackendRest(object):
 
     def get_repr(self, graph):
         graph_info = self._get_graph_info(graph)
-        return "\n".join(['%s "%s"' % (graph.__class__.__name__, graph_info.name),
-                          'status = %s  (last_read_date = %s)' % (graph_info.status,
-                                                                  graph_info.last_read_date.isoformat())])
+        graph_name = '"%s"' % graph_info.name if graph_info.name is not None else '<unnamed>'
+        r = ['%s %s' % (graph.__class__.__name__, graph_name),
+             'status = %s  (last_read_date = %s)' % (graph_info.status,
+                                                     graph_info.last_read_date.isoformat())]
+
+        if hasattr(graph, 'vertices'):
+            r.extend(['vertices = ', indent(repr(graph.vertices) or "(None)", 2)])
+        if hasattr(graph, 'edges'):
+            r.extend(['edges = ', indent(repr(graph.edges) or "(None)", 2)])
+        return "\n".join(r)
 
     def get_status(self, graph):
         graph_info = self._get_graph_info(graph)
@@ -114,7 +124,6 @@ class GraphInfo(object):
     JSON based Server description of a Graph
     """
     def __init__(self, graph_json_payload):
-        print "payload=%s" % json.dumps(graph_json_payload)
         self._payload = graph_json_payload
 
     def __repr__(self):
@@ -146,6 +155,14 @@ class GraphInfo(object):
     @property
     def last_read_date(self):
         return valid_data_types.datetime_from_iso(self._payload['last_read_date'])
+
+    @property
+    def vertices(self):
+        return self._payload['vertices']
+
+    @property
+    def edges(self):
+        return self._payload['edges']
 
     def update(self,payload):
         if self._payload and self.uri != payload['uri']:

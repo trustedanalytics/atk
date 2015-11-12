@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 import unittest
@@ -78,14 +80,13 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
                                       'inspect',
                                       'join',
-                                      'label_propagation', 
-                                      'loopy_belief_propagation', 
+                                      'label_propagation',
                                       'name',
                                       'quantiles',
                                       'rename_columns',
@@ -130,7 +131,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
@@ -179,7 +180,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
@@ -209,9 +210,10 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'edges',
                                      'export_to_titan',
                                      'graphx_connected_components',
+                                     'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
-                                     'ml',
+                                     'loopy_belief_propagation',
                                      'name',
                                      'status',
                                      'vertex_count',
@@ -224,17 +226,14 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'copy',
                                      'export_to_graph',
                                      'graphx_connected_components',
+                                     'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
                                      'graph_clustering',
-                                     'ml',
                                      'name',
                                      'query',
                                      'status',
                                      'vertex_sample'], ta.TitanGraph)
-
-    def test_expected_methods_exist_on_titangraphml(self):
-        self.assert_methods_defined(['belief_propagation'], ta.core.api.TitanGraphMl)
 
     def test_expected_methods_exist_on_kmeans_model(self):
         self.assert_methods_defined(["name",

@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -167,36 +169,27 @@ class Polling(object):
         if not CommandInfo.is_valid_command_uri(uri):
             raise ValueError('Cannot poll ' + uri + ' - a /commands/{number} uri is required')
         interval_secs = start_interval_secs
-
-        command_info = Polling._get_command_info(uri)
-
         printer = ProgressPrinter()
-        if not predicate(command_info):
-            last_progress = []
+        command_info = None
+        last_progress = []
+        start_time = time.time()
+        while True:
+            command_info = Polling._get_command_info(uri)
+            finish = predicate(command_info)
+            progress = command_info.progress
+            printer.print_progress(progress, finish)
 
-            next_poll_time = time.time()
-            start_time = time.time()
-            while True:
-                if time.time() < next_poll_time:
-                    time.sleep(start_interval_secs)
-                    continue
+            if finish:
+                break
 
-                command_info = Polling._get_command_info(command_info.uri)
-                finish = predicate(command_info)
+            if len(last_progress) == len(progress) and interval_secs < max_interval_secs:
+                interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
 
-                next_poll_time = time.time() + interval_secs
-                progress = command_info.progress
-                printer.print_progress(progress, finish)
+            last_progress = progress
+            uri = command_info.uri
+            time.sleep(interval_secs)
 
-                if finish:
-                    break
-
-                if last_progress == progress and interval_secs < max_interval_secs:
-                    interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
-
-                last_progress = progress
-            end_time = time.time()
-            logger.info("polling %s completed after %0.2f seconds" % (uri, end_time - start_time))
+        logger.info("polling %s completed after %0.3f seconds" % (uri, time.time() - start_time))
         return command_info
 
     @staticmethod
@@ -271,7 +264,6 @@ class Executor(object):
         try:
             if not command_info.complete:
                 command_info = Polling.poll(command_info.uri)
-                # Polling.print_progress(command_info.progress)
 
         except KeyboardInterrupt:
             self.cancel(command_info.id_number)

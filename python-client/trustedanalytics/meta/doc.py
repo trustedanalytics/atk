@@ -1,19 +1,22 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
+import datetime
 
 def parse_for_doc(text):
     return str(DocExamplesPreprocessor(text, mode='doc'))
@@ -93,10 +96,12 @@ class DocExamplesPreprocessor(object):
     # replacement tags
     doc_replacements = [('<progress>', '[===Job Progress===]'),
                         ('<connect>', 'Connected ...'),
+                        ('<datetime.datetime>', repr(datetime.datetime.now())),
                         ('<blankline>', '<BLANKLINE>')]   # sphinx will ignore this for us
 
     doctest_replacements = [('<progress>', doctest_ellipsis),
                             ('<connect>', doctest_ellipsis),
+                            ('<datetime.datetime>', doctest_ellipsis),
                             ('<blankline>', '<BLANKLINE>')]
 
     # this is a simple 2-state fsm:  Keep, Drop
@@ -138,7 +143,7 @@ class DocExamplesPreprocessor(object):
                     raise DocExamplesException("unexpected tag %s found" % self.hide_stop_tag)
                 self.state = self.keep
                 return ''
-            elif stripped.startswith(self.skip_start_tag) or line.startswith(self.skip_stop_tag):
+            elif stripped.startswith(self.skip_start_tag) or stripped.startswith(self.skip_stop_tag):
                 return ''
             if self.state == self.keep:
                 for keyword, replacement in self.doc_replacements:
@@ -159,6 +164,8 @@ class DocExamplesPreprocessor(object):
                 if self.state == self.keep:
                     raise DocExamplesException("unexpected tag %s found" % self.skip_stop_tag)
                 self.state = self.keep
+                return ''
+            elif stripped.startswith(self.hide_start_tag) or stripped.startswith(self.hide_stop_tag):
                 return ''
             if self.state == self.keep:
                 for keyword, replacement in self.doctest_replacements:

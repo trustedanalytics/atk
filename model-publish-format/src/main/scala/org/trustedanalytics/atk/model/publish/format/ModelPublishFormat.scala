@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io
@@ -95,8 +96,8 @@ object ModelPublishFormat {
     var ModelBytesFileName: String = null
     var archiveName: String = null
     var urls = Array.empty[URL]
-    val tmpPath = "/tmp/"
     var byteArray: Array[Byte] = null
+    var file: File = null
 
     try {
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
@@ -109,7 +110,9 @@ object ModelPublishFormat {
         tarFile.read(content, 0, content.length)
 
         if (individualFile.contains(".jar")) {
-          val file = new File(tmpPath + individualFile)
+          var fileName = individualFile.substring(individualFile.lastIndexOf("/") + 1)
+          fileName = fileName.substring(0, fileName.length - 4)
+          file = File.createTempFile(fileName, ".jar")
           outputFile = new FileOutputStream(file)
           IOUtils.write(content, outputFile)
 
@@ -134,6 +137,7 @@ object ModelPublishFormat {
     finally {
       IOUtils.closeQuietly(outputFile)
       IOUtils.closeQuietly(tarFile)
+      FileUtils.deleteQuietly(file)
     }
 
   }

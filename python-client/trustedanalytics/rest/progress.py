@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -42,8 +44,6 @@ class ProgressPrinter(object):
         finished : bool
             Indicate whether the command is finished
         """
-        if progress == False:
-            return
 
         total_job_count = len(progress)
         new_added_job_count = total_job_count - self.job_count
@@ -99,8 +99,9 @@ class ProgressPrinter(object):
             num_dot = total_bar_length - num_star
             number = "%3.2f" % p
 
-            time_string = datetime.timedelta(seconds = int(time.time() - start_times[index]))
-            progress_summary.append("\r[%s%s] %6s%% %s Time %s" % ('=' * num_star, '.' * num_dot, number, message, time_string))
+            time_delta = datetime.timedelta(seconds = int(time.time() - start_times[index]))
+            progress_line = "\r[%s%s] %6s%% %s Time %s" % ('=' * num_star, '.' * num_dot, number, message, time_delta)
+            progress_summary.append(progress_line)
 
         for i in range(0, number_of_new_lines):
             # calculate the index for fetch from the list from the end

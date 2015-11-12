@@ -1,22 +1,23 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
 import org.joda.time.DateTime
+import org.trustedanalytics.atk.rest.v1.decorators.GetGraphComponent
 
 /**
  * The REST service response for single graph in "GET ../graphs/id"
@@ -25,6 +26,8 @@ import org.joda.time.DateTime
  * @param name name assigned by user
  * @param links links to related URIs
  * @param entityType type of entity, in this case probably "graph"
+ * @param vertices the vertex types
+ * @param edges the egde types
  * @param status status of the entity, like Active or Dropped...
  * @param lastReadDate the last time data from this graph was accessed
  */
@@ -32,6 +35,8 @@ case class GetGraph(uri: String,
                     name: Option[String],
                     links: List[RelLink],
                     entityType: String,
+                    vertices: List[GetGraphComponent],
+                    edges: List[GetGraphComponent],
                     status: String,
                     lastReadDate: DateTime) {
   require(uri != null, "uri must not be null")

@@ -110,11 +110,11 @@
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
-            <artifactId>spray-can</artifactId>
+            <artifactId>spray-can_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
-            <artifactId>spray-client</artifactId>
+            <artifactId>spray-client_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
@@ -156,8 +156,8 @@
             <artifactId>slick_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -181,9 +181,9 @@
             <artifactId>commons-io</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.apache.hadoop</groupId>-->
-            <!--<artifactId> hadoop-core</artifactId>-->
-            <!--<version>2.6.0-mr1-cdh5.4.4</version>-->
+        <!--<groupId>org.apache.hadoop</groupId>-->
+        <!--<artifactId> hadoop-core</artifactId>-->
+        <!--<version>2.6.0-mr1-cdh5.4.4</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -192,7 +192,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId> hadoop-hdfs</artifactId>
+            <artifactId>hadoop-hdfs</artifactId>
             <version>${dep.hadoop2.version}</version>
         </dependency>
     </dependencies>
