@@ -131,26 +131,7 @@
 criteria match.
 Edges that were connected to removed vertices are also automatically dropped.</p>
 <p class="rubric">Examples</p>
-<p>Remove any rows that have the same data in column <em>b</em> as a previously
-checked row:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>The result is a frame with unique values in column <em>b</em>.</p>
-<p>Remove any rows that have the same data in columns <em>a</em> and <em>b</em> as a
-previously checked row:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span> <span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;b&quot;</span><span class="p">]</span> <span class="p">)</span>
-</pre></div>
-</div>
-<p>The result is a frame with unique values for the combination of columns
-<em>a</em> and <em>b</em>.</p>
-<p>Remove any rows that have the whole row identical:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>The result is a frame where something is different in every row from every
-other row.
-Each row is unique.</p>
+<p>See <a class="reference internal" href="../../graphs/graph-/f__init__.html"><em>here</em></a> for example usage</p>
 </dd></dl>
 
 </div>
@@ -176,7 +157,7 @@ Each row is unique.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 11, 2015.
+      Last updated on Nov 12, 2015.
       </li>
     </ul>
     </div>

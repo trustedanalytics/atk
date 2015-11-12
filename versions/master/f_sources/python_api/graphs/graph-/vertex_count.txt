@@ -22,14 +22,4 @@
 
     Examples
     --------
-
-    .. code::
-
-        >>> my_graph.vertex_count
-
-    The result given is:
-
-    .. code::
-
-        1194
-
+    See :doc:`here <__init__>` for example usage in graph construction.

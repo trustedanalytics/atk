@@ -25,13 +25,4 @@
             Total number of edges in the graph
     Examples
     --------
-    .. code::
-
-        >>> my_graph.edge_count
-
-    The result given is:
-
-    .. code::
-
-        1194
-
+    See :doc:`here <__init__>` for example usage in graph construction.

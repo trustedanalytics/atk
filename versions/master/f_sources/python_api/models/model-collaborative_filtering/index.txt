@@ -25,9 +25,9 @@
     .. rubric:: Attributes
 
     ====================================================================================================  ====================================================================================================
-    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`last_read_date <last_read_date>`\                                                               Read-only property - Last time this model's data was accessed.
     :doc:`name <name>`\                                                                                   Set or get the name of the model object.
-    :doc:`status <status>`\                                                                               Current model life cycle status.
+    :doc:`status <status>`\                                                                               Read-only property - Current model life cycle status.
     ====================================================================================================  ====================================================================================================
 
     .. rubric:: Methods

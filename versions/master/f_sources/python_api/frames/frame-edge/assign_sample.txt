@@ -84,47 +84,67 @@
 
     Examples
     --------
-    Given a frame accessed via Frame *my_frame*:
 
-    .. code::
+    Consider this simple frame.
 
-        >>> my_frame.inspect()
-          col_nc:str  col_wk:str
-        /------------------------/
-          abc         zzz
-          def         yyy
-          ghi         xxx
-          jkl         www
-          mno         vvv
-          pqr         uuu
-          stu         ttt
-          vwx         sss
-          yza         rrr
-          bcd         qqq
+    >>> frame.inspect()
+    [#]  blip  id
+    =============
+    [0]  abc    0
+    [1]  def    1
+    [2]  ghi    2
+    [3]  jkl    3
+    [4]  mno    4
+    [5]  pqr    5
+    [6]  stu    6
+    [7]  vwx    7
+    [8]  yza    8
+    [9]  bcd    9
 
-    To append a new column *sample_bin* to the frame and assign the value in the
-    new column to "train", "test", or "validate":
+    We'll assign labels to each row according to a rough 40-30-30 split, for
+    "train", "test", and "validate".
 
-    .. code::
+    >>> frame.assign_sample([0.4, 0.3, 0.3])
+    [===Job Progress===]
 
-        >>> my_frame.assign_sample([0.3, 0.3, 0.4], ["train", "test", "validate"])
-        >>> my_frame.inspect()
-          col_nc:str  col_wk:str  sample_bin:str
-        /----------------------------------------/
-          abc         zzz         validate
-          def         yyy         test
-          ghi         xxx         test
-          jkl         www         test
-          mno         vvv         train
-          pqr         uuu         validate
-          stu         ttt         validate
-          vwx         sss         train
-          yza         rrr         validate
-          bcd         qqq         train
+    >>> frame.inspect()
+    [#]  blip  id  sample_bin
+    =========================
+    [0]  abc    0  VA
+    [1]  def    1  TR
+    [2]  ghi    2  TE
+    [3]  jkl    3  TE
+    [4]  mno    4  TE
+    [5]  pqr    5  TR
+    [6]  stu    6  TR
+    [7]  vwx    7  VA
+    [8]  yza    8  VA
+    [9]  bcd    9  VA
 
-    Now, the frame accessed by the Frame, *my_frame*, has a new column named
-    "sample_bin" and each row contains one of the values "train", "test", or
-    "validate".
+
+    Now the frame  has a new column named "sample_bin" with a string label.
     Values in the other columns are unaffected.
+
+    Here it is again, this time specifying labels, output column and random seed
+
+    >>> frame.assign_sample([0.2, 0.2, 0.3, 0.3],
+    ...                     ["cat1", "cat2", "cat3", "cat4"],
+    ...                     output_column="cat",
+    ...                     random_seed=12)
+    [===Job Progress===]
+
+    >>> frame.inspect()
+    [#]  blip  id  sample_bin  cat
+    ===============================
+    [0]  abc    0  VA          cat4
+    [1]  def    1  TR          cat2
+    [2]  ghi    2  TE          cat3
+    [3]  jkl    3  TE          cat4
+    [4]  mno    4  TE          cat1
+    [5]  pqr    5  TR          cat3
+    [6]  stu    6  TR          cat2
+    [7]  vwx    7  VA          cat3
+    [8]  yza    8  VA          cat3
+    [9]  bcd    9  VA          cat4
 
 

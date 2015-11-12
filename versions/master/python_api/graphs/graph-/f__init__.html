@@ -179,8 +179,10 @@ for a graph:</p>
 <span class="go">[9]  pebbles        1  Ice Age                5</span>
 </pre></div>
 </div>
-<p>Now, make an empty graph object:
-&gt;&gt;&gt; graph = ta.Graph()</p>
+<p>Now, make an empty graph object:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+</pre></div>
+</div>
 <p>Then, define the types of vertices and edges this graph will be made of:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;viewer&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
@@ -213,11 +215,6 @@ for a graph:</p>
 <span class="go">[4]    13  film    2001</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_count</span>
-<span class="go">[===Job Progress===]</span>
-<span class="go">8</span>
-</pre></div>
-</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;viewer&#39;</span><span class="p">,</span> <span class="s">&#39;movie&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
@@ -235,9 +232,32 @@ for a graph:</p>
 <span class="go">[9]    26         5         13  rating       5</span>
 </pre></div>
 </div>
+<p>Explore basic graph properties:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_count</span>
+<span class="go">[===Job Progress===]</span>
+<span class="go">8</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">viewer : [viewer, profile], count = 3</span>
+<span class="go">film : [movie], count = 5</span>
+</pre></div>
+</div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edge_count</span>
 <span class="go">[===Job Progress===]</span>
 <span class="go">10</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span>
+<span class="go">rating : [rating], count = 10</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">status</span>
+<span class="go">u&#39;ACTIVE&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">last_read_date</span>
+<span class="go">datetime.datetime(2015, 11, 12, 6, 15, 5, 811817)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span>
@@ -250,17 +270,8 @@ for a graph:</p>
 <span class="go">  rating : [rating], count = 10</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span>
-<span class="go">viewer : [viewer, profile], count = 3</span>
-<span class="go">film : [movie], count = 5</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span>
-<span class="go">rating : [rating], count = 10</span>
-</pre></div>
-</div>
-<p>Adding additional data to the graph from another frame (my_frame2),
-is simply adding vertices (and edges) in row formation.</p>
+<p>Data from other frames can be added to the graph by making more calls
+to <cite>add_vertices</cite> and <cite>add_edges</cite>.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame2</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/datasets/extra-movie-data.csv&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
@@ -344,6 +355,62 @@ is simply adding vertices (and edges) in row formation.</p>
 <span class="go">  rating : [rating], count = 20</span>
 </pre></div>
 </div>
+<p>We can rename the columns in the frames representing the vertices and edges,
+similar to regular frame operations.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;viewer&#39;</span><span class="p">:</span> <span class="s">&#39;person&#39;</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span>
+<span class="go">viewer : [person, profile], count = 6</span>
+<span class="go">film : [movie], count = 5</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;rating&#39;</span><span class="p">:</span> <span class="s">&#39;score&#39;</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span>
+<span class="go">rating : [score], count = 20</span>
+</pre></div>
+</div>
+<p>We can apply filter and drop functions to the vertex and edge frames.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="n">v</span><span class="o">.</span><span class="n">person</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  person     profile</span>
+<span class="go">=====================================</span>
+<span class="go">[0]    31  viewer  betty            0</span>
+<span class="go">[1]    35  viewer  barney           0</span>
+<span class="go">[2]    39  viewer  bamm bamm        1</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s">&quot;profile&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  person     profile</span>
+<span class="go">=====================================</span>
+<span class="go">[0]    31  viewer  betty            0</span>
+<span class="go">[1]    39  viewer  bamm bamm        1</span>
+</pre></div>
+</div>
+<p>Now check our edges to see that they have also be filtered.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _eid  _src_vid  _dest_vid  _label  score</span>
+<span class="go">=============================================</span>
+<span class="go">[0]    60        39         43  rating      3</span>
+<span class="go">[1]    59        39         41  rating      5</span>
+<span class="go">[2]    53        31         43  rating      4</span>
+<span class="go">[3]    54        31         44  rating      3</span>
+<span class="go">[4]    52        31         42  rating      3</span>
+<span class="go">[5]    51        31         41  rating      5</span>
+</pre></div>
+</div>
+<p>Only source vertices 31 and 39 remain.</p>
 </dd></dl>
 
 </div>
@@ -369,7 +436,7 @@ is simply adding vertices (and edges) in row formation.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 11, 2015.
+      Last updated on Nov 12, 2015.
       </li>
     </ul>
     </div>

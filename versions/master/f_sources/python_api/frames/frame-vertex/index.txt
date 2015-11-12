@@ -132,7 +132,7 @@
     :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
     :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Remove duplicate vertex rows.
     :doc:`drop_rows <drop_rows>`\ (self, predicate)                                                       Erase any row in the current frame which qualifies.
-    :doc:`drop_vertices <drop_vertices>`\ (self, predicate)                                               Delete rows that qualify.
+    :doc:`drop_vertices <drop_vertices>`\ (self, predicate)                                               Delete rows in this vertex frame that qualify.
     :doc:`ecdf <ecdf>`\ (self, column[, result_frame_name])                                               Builds new frame with columns for data and distribution.
     :doc:`entropy <entropy>`\ (self, data_column[, weights_column])                                       Calculate the Shannon entropy of a column.
     :doc:`export_to_csv <export_to_csv>`\ (self, folder_name[, separator, count, offset])                 Write current frame to HDFS in csv format.

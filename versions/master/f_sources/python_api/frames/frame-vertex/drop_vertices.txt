@@ -9,7 +9,7 @@
 
 .. function:: drop_vertices(self, predicate)
 
-    Delete rows that qualify.
+    Delete rows in this vertex frame that qualify.
 
 
     :Parameters:
@@ -29,25 +29,7 @@
 
     Examples
     --------
-    Given VertexFrame object *my_vertex_frame* accessing a graph with lots
-    of data for the attributes of ``lions``, ``tigers``, and ``ligers``.
-    Get rid of the ``lions`` and ``tigers``:
-
-    .. only:: html
-
-        .. code::
-
-            >>> my_vertex_frame.drop_vertices(lambda row: row.animal_type == "lion" or row.animal_type == "tiger")
-
-    .. only:: latex
-
-        .. code::
-
-            >>> my_vertex_frame.drop_vertices(lambda row:
-            ...     row.animal_type == "lion" or
-            ...     row.animal_type == "tiger")
-
-    Now the frame only has information about ``ligers``.
-
-    More information on |UDF| can be found at :doc:`/ds_apir`
+    See inside this :doc:`graph example <../../graphs/graph-/__init__>` for
+    usage of `filter` and `drop_duplicates`.  This method works just like
+    `filter` except it drops matching rows rather than keeping them.
 

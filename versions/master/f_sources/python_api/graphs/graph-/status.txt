@@ -9,7 +9,7 @@
 
 .. attribute:: status
 
-    Current graph life cycle status.
+    Read-only property - Current graph life cycle status.
 
 
     :Parameters:

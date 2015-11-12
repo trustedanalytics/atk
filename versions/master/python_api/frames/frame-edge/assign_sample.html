@@ -170,44 +170,68 @@ range.</li>
 valid label with probability one.</li>
 </ol>
 <p class="rubric">Examples</p>
-<p>Given a frame accessed via Frame <em>my_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">  col_nc:str  col_wk:str</span>
-<span class="go">/------------------------/</span>
-<span class="go">  abc         zzz</span>
-<span class="go">  def         yyy</span>
-<span class="go">  ghi         xxx</span>
-<span class="go">  jkl         www</span>
-<span class="go">  mno         vvv</span>
-<span class="go">  pqr         uuu</span>
-<span class="go">  stu         ttt</span>
-<span class="go">  vwx         sss</span>
-<span class="go">  yza         rrr</span>
-<span class="go">  bcd         qqq</span>
+<p>Consider this simple frame.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id</span>
+<span class="go">=============</span>
+<span class="go">[0]  abc    0</span>
+<span class="go">[1]  def    1</span>
+<span class="go">[2]  ghi    2</span>
+<span class="go">[3]  jkl    3</span>
+<span class="go">[4]  mno    4</span>
+<span class="go">[5]  pqr    5</span>
+<span class="go">[6]  stu    6</span>
+<span class="go">[7]  vwx    7</span>
+<span class="go">[8]  yza    8</span>
+<span class="go">[9]  bcd    9</span>
 </pre></div>
 </div>
-<p>To append a new column <em>sample_bin</em> to the frame and assign the value in the
-new column to &#8220;train&#8221;, &#8220;test&#8221;, or &#8220;validate&#8221;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span> <span class="p">[</span><span class="s">&quot;train&quot;</span><span class="p">,</span> <span class="s">&quot;test&quot;</span><span class="p">,</span> <span class="s">&quot;validate&quot;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">  col_nc:str  col_wk:str  sample_bin:str</span>
-<span class="go">/----------------------------------------/</span>
-<span class="go">  abc         zzz         validate</span>
-<span class="go">  def         yyy         test</span>
-<span class="go">  ghi         xxx         test</span>
-<span class="go">  jkl         www         test</span>
-<span class="go">  mno         vvv         train</span>
-<span class="go">  pqr         uuu         validate</span>
-<span class="go">  stu         ttt         validate</span>
-<span class="go">  vwx         sss         train</span>
-<span class="go">  yza         rrr         validate</span>
-<span class="go">  bcd         qqq         train</span>
+<p>We&#8217;ll assign labels to each row according to a rough 40-30-30 split, for
+&#8220;train&#8221;, &#8220;test&#8221;, and &#8220;validate&#8221;.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
-<p>Now, the frame accessed by the Frame, <em>my_frame</em>, has a new column named
-&#8220;sample_bin&#8221; and each row contains one of the values &#8220;train&#8221;, &#8220;test&#8221;, or
-&#8220;validate&#8221;.
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id  sample_bin</span>
+<span class="go">=========================</span>
+<span class="go">[0]  abc    0  VA</span>
+<span class="go">[1]  def    1  TR</span>
+<span class="go">[2]  ghi    2  TE</span>
+<span class="go">[3]  jkl    3  TE</span>
+<span class="go">[4]  mno    4  TE</span>
+<span class="go">[5]  pqr    5  TR</span>
+<span class="go">[6]  stu    6  TR</span>
+<span class="go">[7]  vwx    7  VA</span>
+<span class="go">[8]  yza    8  VA</span>
+<span class="go">[9]  bcd    9  VA</span>
+</pre></div>
+</div>
+<p>Now the frame  has a new column named &#8220;sample_bin&#8221; with a string label.
 Values in the other columns are unaffected.</p>
+<p>Here it is again, this time specifying labels, output column and random seed</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">assign_sample</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="p">[</span><span class="s">&quot;cat1&quot;</span><span class="p">,</span> <span class="s">&quot;cat2&quot;</span><span class="p">,</span> <span class="s">&quot;cat3&quot;</span><span class="p">,</span> <span class="s">&quot;cat4&quot;</span><span class="p">],</span>
+<span class="gp">... </span>                    <span class="n">output_column</span><span class="o">=</span><span class="s">&quot;cat&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="n">random_seed</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  blip  id  sample_bin  cat</span>
+<span class="go">===============================</span>
+<span class="go">[0]  abc    0  VA          cat4</span>
+<span class="go">[1]  def    1  TR          cat2</span>
+<span class="go">[2]  ghi    2  TE          cat3</span>
+<span class="go">[3]  jkl    3  TE          cat4</span>
+<span class="go">[4]  mno    4  TE          cat1</span>
+<span class="go">[5]  pqr    5  TR          cat3</span>
+<span class="go">[6]  stu    6  TR          cat2</span>
+<span class="go">[7]  vwx    7  VA          cat3</span>
+<span class="go">[8]  yza    8  VA          cat3</span>
+<span class="go">[9]  bcd    9  VA          cat4</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -233,7 +257,7 @@ Values in the other columns are unaffected.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 11, 2015.
+      Last updated on Nov 12, 2015.
       </li>
     </ul>
     </div>

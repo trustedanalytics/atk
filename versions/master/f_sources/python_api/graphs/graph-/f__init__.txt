@@ -73,6 +73,7 @@
 
 
     Now, make an empty graph object:
+
     >>> graph = ta.Graph()
 
     Then, define the types of vertices and edges this graph will be made of:
@@ -106,10 +107,6 @@
     [3]    11  film    Croods
     [4]    13  film    2001
 
-    >>> graph.vertex_count
-    [===Job Progress===]
-    8
-
     >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
     [===Job Progress===]
     >>> graph.edges['rating'].inspect()
@@ -126,10 +123,28 @@
     [8]    25         5         12  rating       3
     [9]    26         5         13  rating       5
 
+    Explore basic graph properties:
+
+    >>> graph.vertex_count
+    [===Job Progress===]
+    8
+
+    >>> graph.vertices
+    viewer : [viewer, profile], count = 3
+    film : [movie], count = 5
+
     >>> graph.edge_count
     [===Job Progress===]
     10
 
+    >>> graph.edges
+    rating : [rating], count = 10
+
+    >>> graph.status
+    u'ACTIVE'
+
+    >>> graph.last_read_date
+    datetime.datetime(2015, 11, 12, 6, 15, 5, 811817)
 
     >>> graph
     Graph <unnamed>
@@ -140,15 +155,8 @@
     edges =
       rating : [rating], count = 10
 
-    >>> graph.vertices
-    viewer : [viewer, profile], count = 3
-    film : [movie], count = 5
-
-    >>> graph.edges
-    rating : [rating], count = 10
-
-    Adding additional data to the graph from another frame (my_frame2),
-    is simply adding vertices (and edges) in row formation.
+    Data from other frames can be added to the graph by making more calls
+    to `add_vertices` and `add_edges`.
 
     >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
     [===Job Progress===]
@@ -225,5 +233,55 @@
     edges =
       rating : [rating], count = 20
 
+    We can rename the columns in the frames representing the vertices and edges,
+    similar to regular frame operations.
+
+    >>> graph2.vertices['viewer'].rename_columns({'viewer': 'person'})
+    [===Job Progress===]
+
+    >>> graph2.vertices
+    viewer : [person, profile], count = 6
+    film : [movie], count = 5
+
+    >>> graph2.edges['rating'].rename_columns({'rating': 'score'})
+    [===Job Progress===]
+
+    >>> graph2.edges
+    rating : [score], count = 20
+
+    We can apply filter and drop functions to the vertex and edge frames.
+
+    >>> graph2.vertices['viewer'].filter(lambda v: v.person.startswith("b"))
+    [===Job Progress===]
+
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    35  viewer  barney           0
+    [2]    39  viewer  bamm bamm        1
+
+    >>> graph2.vertices['viewer'].drop_duplicates("profile")
+    [===Job Progress===]
+
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    39  viewer  bamm bamm        1
+
+    Now check our edges to see that they have also be filtered.
+
+    >>> graph2.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  score
+    =============================================
+    [0]    60        39         43  rating      3
+    [1]    59        39         41  rating      5
+    [2]    53        31         43  rating      4
+    [3]    54        31         44  rating      3
+    [4]    52        31         42  rating      3
+    [5]    51        31         41  rating      5
+
+    Only source vertices 31 and 39 remain.
 
         

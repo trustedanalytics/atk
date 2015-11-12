@@ -25,10 +25,9 @@
     .. code::
 
         >>> my_model.name
+        "abc"
 
-        "csv_data"
-
-        >>> my_model.name = "cleaned_data"
+        >>> my_model.name = "xyz"
         >>> my_model.name
+        "xyz"
 
-        "cleaned_data"

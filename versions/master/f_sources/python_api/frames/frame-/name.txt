@@ -25,10 +25,9 @@
     .. code::
 
         >>> my_frame.name
+        "abc"
 
-        "csv_data"
-
-        >>> my_frame.name = "cleaned_data"
+        >>> my_frame.name = "xyz"
         >>> my_frame.name
+        "xyz"
 
-        "cleaned_data"

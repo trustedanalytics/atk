@@ -9,7 +9,7 @@
 
 .. attribute:: status
 
-    Current model life cycle status.
+    Read-only property - Current model life cycle status.
 
 
     :Parameters:

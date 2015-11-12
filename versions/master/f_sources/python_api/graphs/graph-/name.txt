@@ -25,10 +25,9 @@
     .. code::
 
         >>> my_graph.name
+        "abc"
 
-        "csv_data"
-
-        >>> my_graph.name = "cleaned_data"
+        >>> my_graph.name = "xyz"
         >>> my_graph.name
+        "xyz"
 
-        "cleaned_data"

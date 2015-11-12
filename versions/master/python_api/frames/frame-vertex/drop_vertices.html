@@ -116,7 +116,7 @@
 <dl class="function">
 <dt id="drop_vertices">
 <code class="descname">drop_vertices</code><span class="sig-paren">(</span><em>self</em>, <em>predicate</em><span class="sig-paren">)</span><a class="headerlink" href="#drop_vertices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete rows that qualify.</p>
+<dd><p>Delete rows in this vertex frame that qualify.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -137,14 +137,9 @@ to a boolean value.</p>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>Given VertexFrame object <em>my_vertex_frame</em> accessing a graph with lots
-of data for the attributes of <code class="docutils literal"><span class="pre">lions</span></code>, <code class="docutils literal"><span class="pre">tigers</span></code>, and <code class="docutils literal"><span class="pre">ligers</span></code>.
-Get rid of the <code class="docutils literal"><span class="pre">lions</span></code> and <code class="docutils literal"><span class="pre">tigers</span></code>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_vertex_frame</span><span class="o">.</span><span class="n">drop_vertices</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">animal_type</span> <span class="o">==</span> <span class="s">&quot;lion&quot;</span> <span class="ow">or</span> <span class="n">row</span><span class="o">.</span><span class="n">animal_type</span> <span class="o">==</span> <span class="s">&quot;tiger&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Now the frame only has information about <code class="docutils literal"><span class="pre">ligers</span></code>.</p>
-<p>More information on <abbr title="Python User-defined Function">UDF</abbr> can be found at <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a></p>
+<p>See inside this <a class="reference internal" href="../../graphs/graph-/f__init__.html"><em>graph example</em></a> for
+usage of <cite>filter</cite> and <cite>drop_duplicates</cite>.  This method works just like
+<cite>filter</cite> except it drops matching rows rather than keeping them.</p>
 </dd></dl>
 
 </div>
@@ -170,7 +165,7 @@ Get rid of the <code class="docutils literal"><span class="pre">lions</span></co
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 11, 2015.
+      Last updated on Nov 12, 2015.
       </li>
     </ul>
     </div>

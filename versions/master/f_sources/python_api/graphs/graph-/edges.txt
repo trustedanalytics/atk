@@ -16,9 +16,4 @@
 
     Examples
     --------
-    Inspect edges with the supplied label:
-
-    .. code::
-
-        >>> my_graph.edges['label'].inspect()
-
+    See :doc:`here <__init__>` for example usage in graph construction.

@@ -9,7 +9,7 @@
 
 .. attribute:: last_read_date
 
-    Last time this frame's data was accessed.
+    Read-only property - Last time this model's data was accessed.
 
 
     :Parameters:
