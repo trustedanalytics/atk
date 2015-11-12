@@ -1,21 +1,32 @@
 Examples
 --------
-Start with a frame with columns *Wrong* and *Wong*.
+Start with a frame with columns *Black* and *White*.
 
-.. code::
+
+    <hide>
+
+    >>> import trustedanalytics as ta
+    >>> ta.connect()
+
+    -etc-
+
+    >>> s = [('Black', str), ('White', str)]
+
+    >>> rows = [["glass", "clear"],["paper","unclear"]]
+
+    >>> my_frame = ta.Frame(ta.UploadRows (rows, s))
+
+    -etc-
+
+    </hide>
 
     >>> print my_frame.schema
-    [('Wrong', str), ('Wong', str)]
+    [(u'Black', <type 'unicode'>), (u'White', <type 'unicode'>)]
 
-Rename the columns to *Right* and *Wite*:
+Rename the columns to *Mercury* and *Venus*:
 
-.. code::
-
-    >>> my_frame.rename_columns({"Wrong": "Right, "Wong": "Wite"})
-
-Now, what was *Wrong* is now *Right* and what was *Wong* is now *Wite*.
-
-.. code::
+    >>> my_frame.rename_columns({"Black": "Mercury", "White": "Venus"})
 
     >>> print my_frame.schema
-    [('Right', str), ('Wite', str)]
+    [(u'Mercury', <type 'unicode'>), (u'Venus', <type 'unicode'>)]
+
