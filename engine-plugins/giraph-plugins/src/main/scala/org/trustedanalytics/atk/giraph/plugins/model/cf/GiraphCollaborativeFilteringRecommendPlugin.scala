@@ -35,10 +35,10 @@ import CollaborativeFilteringJsonFormat._
  */
 @PluginDoc(oneLine = "Collaborative Filtering Recommend (ALS/CGD) model.",
   extended = """See :ref:`Collaborative Filtering Train
-<python_api/models/model-collaborative_filtering/train>` for more information.""",
+<python_api/models/model-giraph_collaborative_filtering/train>` for more information.""",
   returns = """See :ref:`Collaborative Filtering Train
-<python_api/models/model-collaborative_filtering/train>` for more information.""")
-class CollaborativeFilteringRecommendPlugin
+<python_api/models/model-giraph_collaborative_filtering/train>` for more information.""")
+class GiraphCollaborativeFilteringRecommendPlugin
     extends SparkCommandPlugin[CollaborativeFilteringRecommendArgs, FrameReference] {
 
   /**
@@ -47,7 +47,7 @@ class CollaborativeFilteringRecommendPlugin
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:collaborative_filtering/recommend"
+  override def name: String = "model:giraph_collaborative_filtering/recommend"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 

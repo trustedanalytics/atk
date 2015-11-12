@@ -1,0 +1,22 @@
+
+  The algorithm follows the next steps:
+    At initial condition, nodes carry a label that denotes the community they
+belong. Belonging to a community changes, based on the labels that the
+neighboring nodes possess. This change is subject to the maximum number of
+labels within one degree of the nodes. Every node is initialized with a unique
+label then the labels diffuse through the network. Consequently, densely
+connected groups reach a common label quickly. When many such dense
+(consensus) groups are created throughout the network, they continue to expand
+outwards until it is possible to do so.[1]
+    The process in 5 steps:[1]
+     1. Initialize the labels at all nodes in the network. For a given node x,
+Cx (0) = x.
+     2. Set t = 1.
+     3. Arrange the nodes in the network in a random order and set it to X.
+     4. For each x in X chosen in that specific order, let Cx(t) = f(Cxi1(t),
+...,Cxim(t),Cxi(m+1) (t − 1), ...,Cxik (t − 1)). f here returns the label
+occurring with the highest frequency among neighbours.
+     5. If every node has a label that the maximum number of their neighbours
+have, then stop the algorithm. Else, set t = t + 1 and go to (3).
+
+     for more information see: http://arxiv.org/abs/0709.2938

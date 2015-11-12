@@ -60,7 +60,7 @@ graph-/edge_count.rst
 graph-/define_edge_type.rst
 graph-/define_vertex_type.rst
 graph-/ml/kclique_percolation.rst
-model-collaborative_filtering/train.rst
+model-giraph_collaborative_filtering/train.rst
 (FIXED)model-lda/train.rst
 (FIXED)model-lda/predict.rst
 (FIXED)model-lda/publish.rst
@@ -83,7 +83,6 @@ graph-titan/sampling/assign_sample.rst
 graph-titan/sampling/vertex_sample.rst
 frame-/load.rst
 frame-/rename_columns.rst
-frame-/collaborative_filtering.rst
 frame-/loopy_belief_propagation.rst
 frame-/filter.rst
 (DELETED)frame-/join.rst

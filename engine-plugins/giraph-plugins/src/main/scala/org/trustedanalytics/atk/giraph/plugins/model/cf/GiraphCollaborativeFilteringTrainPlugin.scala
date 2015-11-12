@@ -37,7 +37,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Collaborative filtering (ALS/CGD) model",
   extended = "",
   returns = "Execution result summary for Giraph")
-class CollaborativeFilteringTrainPlugin
+class GiraphCollaborativeFilteringTrainPlugin
     extends CommandPlugin[CollaborativeFilteringTrainArgs, StringValue] {
 
   /**
@@ -46,7 +46,7 @@ class CollaborativeFilteringTrainPlugin
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:collaborative_filtering/train"
+  override def name: String = "model:giraph_collaborative_filtering/train"
 
   override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit context: Invocation): StringValue = {
 

@@ -120,7 +120,7 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/collaborative_filtering')
+@postprocessor('frame:/giraph_collaborative_filtering')
 def return_collaborative_filtering(json_result):
     from trustedanalytics import get_frame
     user_frame = get_frame(json_result['user_frame']['uri'])
