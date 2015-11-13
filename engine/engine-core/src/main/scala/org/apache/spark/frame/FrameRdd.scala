@@ -160,7 +160,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     )
   }
 
-  def toSourceDestinationDistance(srcColumnName: String, destColumnName: String, edgeDistance: String): RDD[(Long, Long, Double)] = {
+  def toSourceDestinationDistanceRDD(srcColumnName: String, destColumnName: String, edgeDistance: String): RDD[(Long, Long, Double)] = {
     this.mapRows(row => {
       val src: Long = row.longValue(srcColumnName)
       val dest: Long = row.longValue(destColumnName)

@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringModelTestUtils
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.DenseVector
 import org.scalatest.WordSpec

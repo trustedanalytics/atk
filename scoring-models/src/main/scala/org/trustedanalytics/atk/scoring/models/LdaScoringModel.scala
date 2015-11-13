@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
