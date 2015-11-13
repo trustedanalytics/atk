@@ -27,6 +27,7 @@ Consider the following frame containing three columns denoting the source vertex
 <progress>
 >>> predict_output = model.predict(frame, 'Source', 'Destination', 'Similarity', k=3)
 <progress>
+<skip>
 >>> predict_output['predicted_frame'].inspect()
 [#]  id  cluster
 ================
@@ -42,3 +43,4 @@ Consider the following frame containing three columns denoting the source vertex
 {u'Cluster:1': 4, u'Cluster:2': 1, u'Cluster:3': 2}
 >>> predict_output['number_of_clusters']
 3
+</skip>
