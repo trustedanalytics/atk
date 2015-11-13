@@ -15,12 +15,10 @@
 */
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
+import org.apache.spark.mllib.ScoringJsonReaderWriters._
 import java.io._
 import org.apache.spark.mllib.classification.SVMModel
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters.LinearRegressionModelFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 

@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringModelTestUtils
 import org.apache.spark.mllib.classification.SVMModel
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.regression.LinearRegressionModel
