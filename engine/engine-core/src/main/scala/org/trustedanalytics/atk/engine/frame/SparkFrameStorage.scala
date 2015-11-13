@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.frame
 
@@ -145,25 +145,6 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       postSave(frame, saveInfo, frameRdd.frameSchema)
     }
 
-  // The implemented mutable strategy increments a subdirectory for a given
-  // frame path.  The given path is the source and path+1 is the destination.
-  val revPattern = """.*r(\d+)$""".r
-
-  /**
-   * Gets the next revision's folder name
-   * @param frame entity to be saved
-   * @return folder name (not absolute)
-   */
-  private def getNextRevFolderName(frame: FrameEntity): String = {
-    val r = frame.storageLocation match {
-      case Some(path) => path match {
-        case revPattern(number) => number.toInt + 1
-      }
-      case None => 0
-    }
-    s"r$r"
-  }
-
   /**
    * Prepare save path, return info about the save
    *
@@ -174,7 +155,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    */
   def prepareForSave(frame: FrameReference, forceStorageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo = {
     val frameEntity = expectFrame(frame)
-    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), getNextRevFolderName(frameEntity))
+    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), EntityRev.getNextRevFolderName(frameEntity.storageLocation))
     // delete incomplete data on disk if it exists
     frameFileStorage.deletePath(targetPath)
     val storageFormat = forceStorageFormat.getOrElse(frameEntity.storageFormat.getOrElse(defaultStorageFormat))

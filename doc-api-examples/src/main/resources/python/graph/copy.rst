@@ -1,7 +1,6 @@
-Examples
---------
-For this example, graph object *my_graph* accesses a graph:
+<skip>
+>>> copied_graph = graph.copy('my_graph2')  # create a copy named 'my_graph2'
+</skip>
 
-.. code::
-
-    >>> copied_graph = my_graph.copy('my_graph2')
+See also usage in
+the :doc:`graph construction examples <../../graphs/graph-/__init__>`.

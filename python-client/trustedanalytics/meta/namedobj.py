@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -107,13 +109,12 @@ class _NamedObjectsFunctionFactory(object):
         .. code::
 
             >>> my_{term}.name
+            "abc"
 
-            "csv_data"
-
-            >>> my_{term}.name = "cleaned_data"
+            >>> my_{term}.name = "xyz"
             >>> my_{term}.name
+            "xyz"
 
-            "cleaned_data"
         """.format(term=self._term)
         get_name.__doc__ = doc
 
@@ -213,13 +214,22 @@ class _NamedObjectsFunctionFactory(object):
                     except:
                         pass    #  Don't fail if item with the specified name was not found
                 elif isinstance(item, obj_class):
-                    victim_uris[item.name] = item.uri
+                    try:
+                        if item.status == "ACTIVE":
+                            victim_uris[item.name] = item.uri
+                    except:
+                        pass
                 else:
                     raise TypeError("Excepted argument of type {term} or else the {term}'s name".format(term=obj_term))
             for name, uri in victim_uris.items():
                 module_logger.info("Drop %s %s", obj_term, name)
-                http.delete(uri)
-                num_items_deleted += 1
+                try:
+                    http.delete(uri)
+                    num_items_deleted += 1
+                except RuntimeError as e:
+                    module_logger.warn("RuntimeError when attempting to drop item with uri: {uri}. ({message})".format(uri=uri, message=e.message))
+                except:
+                    module_logger.warn("Error when attempting to drop item with uri: {uri}".format(uri=uri))
             return num_items_deleted
         set_entity_collection(drop_objects, entity_type_to_collection_name(self._term))  # so meta knows where it goes
         drop_objects.__name__ = drop_objects_name

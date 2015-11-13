@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 from trustedanalytics.core.errorhandle import IaError
@@ -87,7 +89,7 @@ class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
     @returns(data_type=str, description="Status of the graph.")
     def __status(self):
         """
-        Current graph life cycle status.
+        Read-only property - Current graph life cycle status.
 
         One of three statuses: Active, Dropped, Finalized
         -   Active:    Entity is available for use
@@ -104,7 +106,7 @@ class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
     @returns(data_type=str, description="Date string of the last time this frame's data was accessed")
     def __last_read_date(self):
         """
-        Last time this frame's data was accessed.
+        Read-only property - Last time this frame's data was accessed.
         """
         try:
             return self._backend.get_last_read_date(self)
@@ -189,6 +191,7 @@ Default is None.""")
 
 
     Now, make an empty graph object:
+
     >>> graph = ta.Graph()
 
     Then, define the types of vertices and edges this graph will be made of:
@@ -222,10 +225,6 @@ Default is None.""")
     [3]    11  film    Croods
     [4]    13  film    2001
 
-    >>> graph.vertex_count
-    <progress>
-    8
-
     >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
     <progress>
     >>> graph.edges['rating'].inspect()
@@ -242,10 +241,28 @@ Default is None.""")
     [8]    25         5         12  rating       3
     [9]    26         5         13  rating       5
 
+    Explore basic graph properties:
+
+    >>> graph.vertex_count
+    <progress>
+    8
+
+    >>> graph.vertices
+    viewer : [viewer, profile], count = 3
+    film : [movie], count = 5
+
     >>> graph.edge_count
     <progress>
     10
 
+    >>> graph.edges
+    rating : [rating], count = 10
+
+    >>> graph.status
+    u'ACTIVE'
+
+    >>> graph.last_read_date
+    <datetime.datetime>
 
     >>> graph
     Graph <unnamed>
@@ -256,15 +273,8 @@ Default is None.""")
     edges =
       rating : [rating], count = 10
 
-    >>> graph.vertices
-    viewer : [viewer, profile], count = 3
-    film : [movie], count = 5
-
-    >>> graph.edges
-    rating : [rating], count = 10
-
-    Adding additional data to the graph from another frame (my_frame2),
-    is simply adding vertices (and edges) in row formation.
+    Data from other frames can be added to the graph by making more calls
+    to `add_vertices` and `add_edges`.
 
     <skip>
     >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
@@ -345,7 +355,61 @@ Default is None.""")
     edges =
       rating : [rating], count = 20
 
-    <skip>
+    We can rename the columns in the frames representing the vertices and edges,
+    similar to regular frame operations.
+
+    >>> graph2.vertices['viewer'].rename_columns({'viewer': 'person'})
+    <progress>
+
+    >>> graph2.vertices
+    viewer : [person, profile], count = 6
+    film : [movie], count = 5
+
+    >>> graph2.edges['rating'].rename_columns({'rating': 'score'})
+    <progress>
+
+    >>> graph2.edges
+    rating : [score], count = 20
+
+    We can apply filter and drop functions to the vertex and edge frames.
+
+    >>> graph2.vertices['viewer'].filter(lambda v: v.person.startswith("b"))
+    <progress>
+
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    35  viewer  barney           0
+    [2]    39  viewer  bamm bamm        1
+
+    >>> graph2.vertices['viewer'].drop_duplicates("profile")
+    <progress>
+
+    <hide>
+    >>> graph2.vertices['viewer'].sort('_vid')  # sort to ensure final inspect matches
+    <progress>
+
+    </hide>
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    39  viewer  bamm bamm        1
+
+    Now check our edges to see that they have also be filtered.
+
+    >>> graph2.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  score
+    =============================================
+    [0]    60        39         43  rating      3
+    [1]    59        39         41  rating      5
+    [2]    53        31         43  rating      4
+    [3]    54        31         44  rating      3
+    [4]    52        31         42  rating      3
+    [5]    51        31         41  rating      5
+
+    Only source vertices 31 and 39 remain.
 
         """
         if not hasattr(self, '_backend'):
@@ -402,12 +466,7 @@ Default is None.""")
 
         Examples
         --------
-        Inspect vertices with the supplied label:
-
-        .. code::
-
-            >>> my_graph.vertices['label'].inspect()
-
+        See :doc:`here <__init__>` for example usage in graph construction.
         """
         return self._vertices
 
@@ -420,12 +479,7 @@ Default is None.""")
 
         Examples
         --------
-        Inspect edges with the supplied label:
-
-        .. code::
-
-            >>> my_graph.edges['label'].inspect()
-
+        See :doc:`here <__init__>` for example usage in graph construction.
         """
         return self._edges
 
@@ -444,17 +498,7 @@ Default is None.""")
 
         Examples
         --------
-
-        .. code::
-
-            >>> my_graph.vertex_count
-
-        The result given is:
-
-        .. code::
-
-            1194
-
+        See :doc:`here <__init__>` for example usage in graph construction.
         """
         return self._backend.get_vertex_count(self)
 
@@ -468,16 +512,7 @@ Default is None.""")
 
         Examples
         --------
-        .. code::
-
-            >>> my_graph.edge_count
-
-        The result given is:
-
-        .. code::
-
-            1194
-
+        See :doc:`here <__init__>` for example usage in graph construction.
         """
         return self._backend.get_edge_count(self)
 
@@ -545,12 +580,13 @@ class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
     --------
     Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
 
+    <skip>
     .. code::
 
         >>> graph = ta.get_graph("my_graph")
         >>> titan_graph = graph.export_to_titan("titan_graph")
 
-</skip>
+    </skip>
     """
         try:
             self.uri = None
