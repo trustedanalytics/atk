@@ -23,7 +23,7 @@ import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
 import ScoringJsonReaderWriters._
 
-class PrincipalComponentsScoringModelTest extends WordSpec with Matchers with ScalaFutures {
+class PrincipalComponentsScoreModelTest extends WordSpec with Matchers with ScalaFutures {
 
   "computePrincipalComponents" should {
     "compute the princ" in {
@@ -32,7 +32,7 @@ class PrincipalComponentsScoringModelTest extends WordSpec with Matchers with Sc
       val vFactor = Matrices.dense(3, 3, Array(-0.98806, -0.14751, 0.04444, 0.152455, -0.9777, 0.14391, 0.02222, 0.14896, 0.98859))
 
       val pcaDataModel = PrincipalComponentsData(3, List("1", "2", "3"), true, columnMeans, singularValues, vFactor)
-      val scoringModel = new PrincipalComponentsScoringModel(pcaDataModel)
+      val scoringModel = new PrincipalComponentsScoreModel(pcaDataModel)
       val principalComponents = scoringModel.computePrincipalComponents(Array(2.6, 1.7, 0.3))
       principalComponents.values(0) should equal(0.3760462248999999)
       principalComponents.values(1) should equal(-0.18809277699999993)
@@ -48,12 +48,12 @@ class PrincipalComponentsScoringModelTest extends WordSpec with Matchers with Sc
       val columnMeans = Vectors.dense(Array(3.0, 1.56999, 0.3))
       val vFactor = Matrices.dense(3, 3, Array(-0.98806, -0.14751, 0.04444, 0.152455, -0.9777, 0.14391, 0.02222, 0.14896, 0.98859))
       val pcaDataModelMeanCentered = PrincipalComponentsData(3, List("1", "2", "3"), true, columnMeans, singularValues, vFactor)
-      val scoringModelMeanCentered = new PrincipalComponentsScoringModel(pcaDataModelMeanCentered)
+      val scoringModelMeanCentered = new PrincipalComponentsScoreModel(pcaDataModelMeanCentered)
       val tSquaredIndexMeanCentered = scoringModelMeanCentered.computeTSquaredIndex(y, singularValues, 3)
       tSquaredIndexMeanCentered should equal(0.06029846700647545)
 
       val pcaDataModel = PrincipalComponentsData(3, List("1", "2", "3"), false, columnMeans, singularValues, vFactor)
-      val scoringModel = new PrincipalComponentsScoringModel(pcaDataModel)
+      val scoringModel = new PrincipalComponentsScoreModel(pcaDataModel)
       val y1: Array[Double] = Array(-2.806404, -1.222661, 0.607612)
       val tSquaredIndex = scoringModel.computeTSquaredIndex(y1, singularValues, 3)
       tSquaredIndex should equal(6.024266305651189)

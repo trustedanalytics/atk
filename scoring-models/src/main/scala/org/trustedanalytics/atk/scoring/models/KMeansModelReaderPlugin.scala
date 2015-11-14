@@ -29,15 +29,11 @@ class KMeansModelReaderPlugin() extends ModelLoader {
   private var myKMeansModel: KMeansScoreModel = _
 
   override def load(bytes: Array[Byte]): Model = {
-    try {
-      val str = new String(bytes)
-      val json: JsValue = str.parseJson
-      val libKMeansModel = json.convertTo[KMeansModel]
-      myKMeansModel = new KMeansScoreModel(libKMeansModel)
-      myKMeansModel.asInstanceOf[Model]
-    }
-    catch {
-      case e: IOException => throw e
-    }
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val kMeansModel = json.convertTo[KMeansModel]
+    myKMeansModel = new KMeansScoreModel(kMeansModel)
+    myKMeansModel.asInstanceOf[Model]
+
   }
 }
