@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.cf
 
-import org.apache.spark.sql.parquet.atk.giraph.frame.cf.{ CollaborativeFilteringEdgeInputFormat, CollaborativeFilteringVertexOutputFormat }
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.cf.{CollaborativeFilteringVertexOutputFormat, CollaborativeFilteringEdgeInputFormat}
 import org.trustedanalytics.atk.domain.{ StringValue, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.FrameName
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }

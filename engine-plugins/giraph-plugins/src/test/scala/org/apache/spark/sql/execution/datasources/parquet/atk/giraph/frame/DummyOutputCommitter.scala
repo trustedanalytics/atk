@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
 import org.apache.hadoop.mapreduce.{ JobContext, OutputCommitter, TaskAttemptContext }
 

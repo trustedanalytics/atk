@@ -113,8 +113,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.reflections>0.9.9-RC1</dep.reflections>
         <!-- END TITAN -->
         <dep.cdh.version>cdh5.4.2</dep.cdh.version>
-        <dep.spark.version>1.3.0-${dep.cdh.version}</dep.spark.version>
-        <dep.spark.yarn.version>1.3.0-${dep.cdh.version}</dep.spark.yarn.version>
+        <dep.spark.version>1.5.1</dep.spark.version>
+        <dep.spark.yarn.version>1.5.1</dep.spark.yarn.version>
         <dep.mahout.version>0.9</dep.mahout.version>
         <dep.parquet.version>1.5.0-${dep.cdh.version}</dep.parquet.version>
         <dep.hbase.version>1.0.0-${dep.cdh.version}</dep.hbase.version>
@@ -122,7 +122,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.zookeeper.version>3.4.5-${dep.cdh.version}</dep.zookeeper.version>
         <dep.typesafe-config.version>1.2.1</dep.typesafe-config.version>
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
-        <dev.spark.hive.version>1.3.0-${dep.cdh.version}</dev.spark.hive.version>
+        <dev.spark.hive.version>1.5.1</dev.spark.hive.version>
         <!--START GAO MAVEN -->
 
         <dep.giraph-core.version>1.1.0-hadoop2</dep.giraph-core.version>

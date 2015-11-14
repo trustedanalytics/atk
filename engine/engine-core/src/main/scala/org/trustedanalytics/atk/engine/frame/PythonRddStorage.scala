@@ -137,6 +137,7 @@ object PythonRddStorage {
 
     val accumulator = rdd.sparkContext.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
+    val pythonVersion = "2.7"
 
     var pyIncludes = new JArrayList[String]()
 
@@ -154,6 +155,7 @@ object PythonRddStorage {
       baseRdd, predicateInBytes, environment,
       pyIncludes, preservePartitioning = true,
       pythonExec = pythonExec,
+      pythonVer = pythonVersion,
       broadcastVars, accumulator)
     pyRdd
   }

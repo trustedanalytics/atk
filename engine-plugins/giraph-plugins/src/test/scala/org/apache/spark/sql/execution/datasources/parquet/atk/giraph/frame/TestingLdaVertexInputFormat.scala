@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.giraph.io.formats.{ TextVertexValueInputFormat, TextEdgeInputFormat }

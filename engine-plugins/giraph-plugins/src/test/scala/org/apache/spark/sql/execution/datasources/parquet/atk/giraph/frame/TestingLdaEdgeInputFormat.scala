@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
 import org.trustedanalytics.atk.giraph.io.{ LdaEdgeData, LdaVertexId }
 import org.apache.commons.lang3.StringUtils

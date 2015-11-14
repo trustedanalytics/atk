@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda.{LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat, LdaVertexValueInputFormat}
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -28,7 +29,6 @@ import org.trustedanalytics.atk.giraph.plugins.util.{ GiraphConfigurationUtil, G
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ Schema, DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.engine.plugin._
-import org.apache.spark.sql.parquet.atk.giraph.frame.lda.{ LdaVertexValueInputFormat, LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row

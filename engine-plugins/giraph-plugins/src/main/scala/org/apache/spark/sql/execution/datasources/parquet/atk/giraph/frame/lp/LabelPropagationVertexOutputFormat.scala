@@ -1,33 +1,35 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame.lp
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp
 
-import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
-import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
+import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
 import org.apache.giraph.graph.Vertex
-import org.apache.giraph.io.{ VertexOutputFormat, VertexWriter }
+import org.apache.giraph.io.{VertexOutputFormat, VertexWriter}
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.LongWritable
 import org.apache.hadoop.mapreduce._
+import org.apache.parquet.hadoop.ParquetOutputFormat
 import org.apache.spark.mllib.atk.plugins.VectorUtils
-import org.apache.spark.sql.catalyst.expressions.{ GenericRow, Row }
-import org.apache.spark.sql.parquet.RowWriteSupport
+import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
+import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
 import org.apache.spark.sql.types._
-import parquet.hadoop.ParquetOutputFormat
+import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
+import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
 
 object LabelPropagationOutputFormat {
 
@@ -36,12 +38,13 @@ object LabelPropagationOutputFormat {
     StructField("id", LongType, nullable = false) ::
       StructField("result", ArrayType(DoubleType), nullable = true) :: Nil).json
 }
+
 /**
  * OutputFormat for parquet frame
  */
 class LabelPropagationVertexOutputFormat extends VertexOutputFormat[LongWritable, VertexData4LPWritable, Nothing] {
 
-  private val resultsOutputFormat = new ParquetOutputFormat[Row](new RowWriteSupport)
+  private val resultsOutputFormat = new ParquetOutputFormat[InternalRow]()
 
   /**
    * Creates a parquet vertex writer
@@ -58,6 +61,12 @@ class LabelPropagationVertexOutputFormat extends VertexOutputFormat[LongWritable
    */
   override def checkOutputSpecs(context: JobContext): Unit = {
     new LabelPropagationConfiguration(context.getConfiguration).validate()
+  }
+
+
+  override def setConf(conf: ImmutableClassesGiraphConfiguration[LongWritable, VertexData4LPWritable, Nothing]): Unit = {
+    super.setConf(conf)
+    conf.set(ParquetOutputFormat.WRITE_SUPPORT_CLASS, classOf[RowWriteSupport].getName)
   }
 
   /**
@@ -79,11 +88,11 @@ class LabelPropagationVertexOutputFormat extends VertexOutputFormat[LongWritable
  * @param resultsOutputFormat output format for parquet
  */
 class LabelPropagationVertexWriter(conf: LabelPropagationConfiguration,
-                                   resultsOutputFormat: ParquetOutputFormat[Row])
-    extends VertexWriter[LongWritable, VertexData4LPWritable, Nothing] {
+                                   resultsOutputFormat: ParquetOutputFormat[InternalRow])
+  extends VertexWriter[LongWritable, VertexData4LPWritable, Nothing] {
 
   private val outputFormatConfig = conf.getConfig.outputFormatConfig
-  private var resultsWriter: RecordWriter[Void, Row] = null
+  private var resultsWriter: RecordWriter[Void, InternalRow] = null
 
   /**
    * initialize the writer
@@ -92,6 +101,7 @@ class LabelPropagationVertexWriter(conf: LabelPropagationConfiguration,
   override def initialize(context: TaskAttemptContext): Unit = {
     // TODO: this looks like it will be needed in future version
     //context.getConfiguration.setBoolean(ParquetOutputFormat.ENABLE_JOB_SUMMARY, true)
+    context.getConfiguration.set(ParquetOutputFormat.WRITE_SUPPORT_CLASS, classOf[RowWriteSupport].getName)
     context.getConfiguration.set(RowWriteSupport.SPARK_ROW_SCHEMA, LabelPropagationOutputFormat.OutputRowSchema)
 
     val fileName = s"/part-${context.getTaskAttemptID.getTaskID.getId}.parquet"
@@ -115,10 +125,10 @@ class LabelPropagationVertexWriter(conf: LabelPropagationConfiguration,
     resultsWriter.write(null, giraphVertexToRow(vertex))
   }
 
-  private def giraphVertexToRow(vertex: Vertex[LongWritable, VertexData4LPWritable, Nothing]): Row = {
+  private def giraphVertexToRow(vertex: Vertex[LongWritable, VertexData4LPWritable, Nothing]): InternalRow = {
     val content = new Array[Any](2)
     content(0) = vertex.getId.get()
     content(1) = VectorUtils.toScalaVector(vertex.getValue.getPosteriorVector())
-    new GenericRow(content)
+    new GenericMutableRow(content)
   }
 }

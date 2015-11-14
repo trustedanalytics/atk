@@ -14,10 +14,10 @@
  *  limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
-import org.apache.spark.sql.parquet.ParquetTypesConverter
-import org.apache.spark.sql.parquet.atk.giraph.frame.lda.LdaOutputFormat
+import org.apache.spark.sql.execution.datasources.parquet.ParquetTypesConverter
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda.LdaOutputFormat
 import org.scalatest.WordSpec
 
 class LdaOutputFormatTest extends WordSpec {

@@ -1,41 +1,40 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame.lp
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp
 
-import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
-import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
-import org.trustedanalytics.atk.engine.frame.RowWrapper
-import org.apache.giraph.io.{ VertexValueReader, VertexValueInputFormat }
+import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
+import org.apache.giraph.io.{VertexValueInputFormat, VertexValueReader}
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.io.LongWritable
-import org.apache.hadoop.mapreduce.{ TaskAttemptContext, InputSplit, JobContext }
+import org.apache.hadoop.io.{Writable, LongWritable}
+import org.apache.hadoop.mapreduce.{InputSplit, JobContext, TaskAttemptContext}
 import org.apache.mahout.math.DenseVector
-import org.apache.spark.sql.catalyst.expressions.Row
-import org.apache.spark.sql.parquet.RowReadSupport
-import parquet.hadoop.{ ParquetRecordReader, ParquetInputFormat }
-
-import scala.collection.JavaConverters._
+import org.apache.parquet.hadoop.{ParquetRecordReader, ParquetInputFormat}
+import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.execution.datasources.parquet.CatalystReadSupport
+import org.trustedanalytics.atk.engine.frame.RowWrapper
+import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
+import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
 
 /**
  * Vertex input format class.
  */
 class LabelPropagationVertexInputFormat extends VertexValueInputFormat[LongWritable, VertexData4LPWritable] {
 
-  private val parquetInputFormat = new ParquetInputFormat[Row](classOf[RowReadSupport])
+  private val parquetInputFormat = new ParquetInputFormat[InternalRow]()
 
   /**
    * Validate the input parameters
@@ -43,6 +42,12 @@ class LabelPropagationVertexInputFormat extends VertexValueInputFormat[LongWrita
    */
   override def checkInputSpecs(conf: Configuration): Unit = {
     new LabelPropagationConfiguration(conf).validate()
+  }
+
+
+  override def setConf(conf: ImmutableClassesGiraphConfiguration[LongWritable, VertexData4LPWritable, Writable]): Unit = {
+    super.setConf(conf)
+    conf.set(ParquetInputFormat.READ_SUPPORT_CLASS, classOf[CatalystReadSupport].getName)
   }
 
   /**
@@ -65,11 +70,11 @@ class LabelPropagationVertexInputFormat extends VertexValueInputFormat[LongWrita
  * @param conf reader configuration
  * @param vertexInputFormat format for vertex reader
  */
-class LabelPropagationVertexReader(conf: LabelPropagationConfiguration, vertexInputFormat: ParquetInputFormat[Row])
-    extends VertexValueReader[LongWritable, VertexData4LPWritable] {
+class LabelPropagationVertexReader(conf: LabelPropagationConfiguration, vertexInputFormat: ParquetInputFormat[InternalRow])
+  extends VertexValueReader[LongWritable, VertexData4LPWritable] {
 
   private val config = conf.getConfig
-  private val reader = new ParquetRecordReader[Row](new RowReadSupport)
+  private val reader = new ParquetRecordReader[InternalRow](new CatalystReadSupport())
   private val row = new RowWrapper(config.inputFormatConfig.frameSchema)
   private var currentVertexId: LongWritable = null
   private var currentVertexValue: VertexData4LPWritable = null
@@ -80,6 +85,7 @@ class LabelPropagationVertexReader(conf: LabelPropagationConfiguration, vertexIn
    * @param context execution context
    */
   override def initialize(split: InputSplit, context: TaskAttemptContext): Unit = {
+    context.getConfiguration.set(ParquetInputFormat.READ_SUPPORT_CLASS, classOf[CatalystReadSupport].getName)
     reader.initialize(split, context)
   }
 

@@ -1,31 +1,33 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame.lda
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda
 
+import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
 import org.apache.giraph.graph.Vertex
-import org.apache.giraph.io.{ VertexOutputFormat, VertexWriter }
+import org.apache.giraph.io.{VertexOutputFormat, VertexWriter}
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.mapreduce._
-import org.apache.spark.sql.catalyst.expressions.{ GenericRow, Row }
-import org.apache.spark.sql.parquet.RowWriteSupport
-import org.apache.spark.sql.parquet.atk.giraph.frame.MultiOutputCommitter
+import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.catalyst.expressions.{GenericMutableRow, GenericRow}
+import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.MultiOutputCommitter
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
-import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
+import org.trustedanalytics.atk.giraph.io.{LdaVertexData, LdaVertexId}
 import parquet.hadoop.ParquetOutputFormat
 
 /**
@@ -33,9 +35,9 @@ import parquet.hadoop.ParquetOutputFormat
  */
 class LdaParquetFrameVertexOutputFormat extends VertexOutputFormat[LdaVertexId, LdaVertexData, Nothing] {
 
-  private val docResultsOutputFormat = new ParquetOutputFormat[Row](new RowWriteSupport)
-  private val wordResultsOutputFormat = new ParquetOutputFormat[Row](new RowWriteSupport)
-  private val topicResultsOutputFormat = new ParquetOutputFormat[Row](new RowWriteSupport)
+  private val docResultsOutputFormat = new ParquetOutputFormat[InternalRow]()
+  private val wordResultsOutputFormat = new ParquetOutputFormat[InternalRow]()
+  private val topicResultsOutputFormat = new ParquetOutputFormat[InternalRow]()
 
   override def createVertexWriter(context: TaskAttemptContext): LdaParquetFrameVertexWriter = {
     new LdaParquetFrameVertexWriter(
@@ -48,6 +50,11 @@ class LdaParquetFrameVertexOutputFormat extends VertexOutputFormat[LdaVertexId, 
 
   override def checkOutputSpecs(context: JobContext): Unit = {
     new GiraphLdaConfiguration(context.getConfiguration).validate()
+  }
+
+  override def setConf(conf: ImmutableClassesGiraphConfiguration[LdaVertexId, LdaVertexData, Nothing]): Unit = {
+    super.setConf(conf)
+    conf.set(ParquetOutputFormat.WRITE_SUPPORT_CLASS, classOf[RowWriteSupport].getName)
   }
 
   override def getOutputCommitter(context: TaskAttemptContext): OutputCommitter = {
@@ -79,20 +86,21 @@ object LdaOutputFormat {
 }
 
 class LdaParquetFrameVertexWriter(conf: GiraphLdaConfiguration,
-                                  docResultsOutputFormat: ParquetOutputFormat[Row],
-                                  wordResultsOutputFormat: ParquetOutputFormat[Row],
-                                  topicResultsOutputFormat: ParquetOutputFormat[Row]) extends VertexWriter[LdaVertexId, LdaVertexData, Nothing] {
+                                  docResultsOutputFormat: ParquetOutputFormat[InternalRow],
+                                  wordResultsOutputFormat: ParquetOutputFormat[InternalRow],
+                                  topicResultsOutputFormat: ParquetOutputFormat[InternalRow]) extends VertexWriter[LdaVertexId, LdaVertexData, Nothing] {
 
   private val outputFormatConfig = conf.ldaConfig.outputFormatConfig
 
-  private var documentResultsWriter: RecordWriter[Void, Row] = null
-  private var wordResultsWriter: RecordWriter[Void, Row] = null
-  private var topicResultsWriter: RecordWriter[Void, Row] = null
+  private var documentResultsWriter: RecordWriter[Void, InternalRow] = null
+  private var wordResultsWriter: RecordWriter[Void, InternalRow] = null
+  private var topicResultsWriter: RecordWriter[Void, InternalRow] = null
 
   override def initialize(context: TaskAttemptContext): Unit = {
     // TODO: this looks like it will be needed in future version
     //context.getConfiguration.setBoolean(ParquetOutputFormat.ENABLE_JOB_SUMMARY, true)
     val fileName = s"/part-${context.getTaskAttemptID.getTaskID.getId}.parquet"
+    context.getConfiguration.set(ParquetOutputFormat.WRITE_SUPPORT_CLASS, classOf[RowWriteSupport].getName)
     context.getConfiguration.set(RowWriteSupport.SPARK_ROW_SCHEMA, LdaOutputFormat.LdaOutputRowSchema)
 
     documentResultsWriter = docResultsOutputFormat.getRecordWriter(context,
@@ -120,17 +128,17 @@ class LdaParquetFrameVertexWriter(conf: GiraphLdaConfiguration,
     }
   }
 
-  private def giraphLdaResultToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): Row = {
+  private def giraphLdaResultToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): InternalRow = {
     val content = new Array[Any](2)
     content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getLdaResultAsDoubleArray.toSeq
-    new GenericRow(content)
+    new GenericMutableRow(content)
   }
 
-  private def giraphTopicGivenWordToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): Row = {
+  private def giraphTopicGivenWordToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): InternalRow = {
     val content = new Array[Any](2)
     content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getTopicGivenWordAsDoubleArray.toSeq
-    new GenericRow(content)
+    new GenericMutableRow(content)
   }
 }

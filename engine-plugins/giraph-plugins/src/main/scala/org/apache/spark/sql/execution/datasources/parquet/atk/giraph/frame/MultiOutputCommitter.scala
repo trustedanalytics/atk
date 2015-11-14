@@ -14,9 +14,8 @@
  *  limitations under the License.
  */
 
-package org.apache.spark.sql.parquet.atk.giraph.frame
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
-import org.apache.hadoop.mapreduce.JobStatus.State
 import org.apache.hadoop.mapreduce.{ JobContext, TaskAttemptContext, OutputCommitter }
 
 /**
@@ -26,12 +25,12 @@ import org.apache.hadoop.mapreduce.{ JobContext, TaskAttemptContext, OutputCommi
  */
 class MultiOutputCommitter(val committers: List[OutputCommitter]) extends OutputCommitter {
 
-  override def needsTaskCommit(taskAttemptContext: TaskAttemptContext): Boolean = {
-    committers.exists(committer => committer.needsTaskCommit(taskAttemptContext))
-  }
-
   override def setupJob(jobContext: JobContext): Unit = {
     committers.foreach(_.setupJob(jobContext))
+  }
+
+  override def needsTaskCommit(taskAttemptContext: TaskAttemptContext): Boolean = {
+    committers.exists(committer => committer.needsTaskCommit(taskAttemptContext))
   }
 
   override def setupTask(taskAttemptContext: TaskAttemptContext): Unit = {
@@ -46,20 +45,8 @@ class MultiOutputCommitter(val committers: List[OutputCommitter]) extends Output
     committers.foreach(_.abortTask(taskAttemptContext))
   }
 
-  override def isRecoverySupported(jobContext: JobContext): Boolean = super.isRecoverySupported(jobContext)
-
-  override def abortJob(jobContext: JobContext, state: State): Unit = {
-    super.abortJob(jobContext, state)
-    committers.foreach(_.abortJob(jobContext, state))
-  }
-
   override def commitJob(jobContext: JobContext): Unit = {
     super.commitJob(jobContext)
     committers.foreach(_.commitJob(jobContext))
-  }
-
-  override def recoverTask(taskContext: TaskAttemptContext): Unit = {
-    super.recoverTask(taskContext)
-    committers.foreach(_.recoverTask(taskContext))
   }
 }

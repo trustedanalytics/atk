@@ -272,10 +272,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
           case Nil => new GenericRow(keyRow.toArray)
           case _ => {
             //merge and re-order entries to match schema
-            val row = new GenericMutableRow(numColumns)
-            for (i <- keyRow.indices) row.update(columnIndices(i), keyRow(i))
-            for (i <- valueRow.indices) row.update(otherColumnIndices(i), valueRow(i))
-            row
+            val rowArray = new Array[Any](numColumns)
+            for (i <- keyRow.indices) rowArray(columnIndices(i)) = keyRow(i)
+            for (i <- valueRow.indices) rowArray(otherColumnIndices(i)) = valueRow(i)
+            new GenericRow(rowArray)
           }
         }
     }
@@ -460,42 +460,42 @@ object FrameRdd {
    * @return a frame rdd
    */
   def toFrameRdd(rdd: DataFrame): FrameRdd = {
-    val array: Seq[StructField] = rdd.schema.fields
+    val fields: Seq[StructField] = rdd.schema.fields
     val list = new ListBuffer[Column]
-    for (field <- array) {
+    for (field <- fields) {
       list += new Column(field.name, sparkDataTypeToSchemaDataType(field.dataType))
     }
     val schema = new FrameSchema(list.toList)
     val convertedRdd: RDD[org.apache.spark.sql.Row] = rdd.map(row => {
-      val mutableRow = new GenericMutableRow(row.length)
+      val rowArray = new Array[Any](row.length)
       row.toSeq.zipWithIndex.foreach {
         case (o, i) =>
           if (o == null) {
-            mutableRow(i) = null
+            rowArray(i) = null
           }
-          else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
-            mutableRow(i) = o.toString
+          else if (fields(i).dataType.getClass == TimestampType.getClass || fields(i).dataType.getClass == DateType.getClass) {
+            rowArray(i) = o.toString
             // todo - add conversion to datetime object
-            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
+            // rowArray(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
-          else if (array(i).dataType.getClass == ShortType.getClass) {
-            mutableRow(i) = row.getShort(i).toInt
+          else if (fields(i).dataType.getClass == ShortType.getClass) {
+            rowArray(i) = row.getShort(i).toInt
           }
-          else if (array(i).dataType.getClass == BooleanType.getClass) {
-            mutableRow(i) = row.getBoolean(i).compareTo(false)
+          else if (fields(i).dataType.getClass == BooleanType.getClass) {
+            rowArray(i) = row.getBoolean(i).compareTo(false)
           }
-          else if (array(i).dataType.getClass == ByteType.getClass) {
-            mutableRow(i) = row.getByte(i).toInt
+          else if (fields(i).dataType.getClass == ByteType.getClass) {
+            rowArray(i) = row.getByte(i).toInt
           }
-          else if (array(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
-            mutableRow(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
+          else if (fields(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
+            rowArray(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
           }
           else {
             val colType = schema.columns(i).dataType
-            mutableRow(i) = o.asInstanceOf[colType.ScalaType]
+            rowArray(i) = o.asInstanceOf[colType.ScalaType]
           }
       }
-      mutableRow
+      new GenericRow(rowArray)
     }
     )
     new FrameRdd(schema, convertedRdd)
@@ -559,18 +559,18 @@ object FrameRdd {
    */
   def toRowRDD(schema: Schema, rows: RDD[Array[Any]]): RDD[org.apache.spark.sql.Row] = {
     val rowRDD: RDD[org.apache.spark.sql.Row] = rows.map(row => {
-      val mutableRow = new GenericMutableRow(row.length)
+      val rowArray = new Array[Any](row.length)
       row.zipWithIndex.map {
         case (o, i) =>
           o match {
             case null => null
             case _ =>
               val colType = schema.column(i).dataType
-              mutableRow(i) = o.asInstanceOf[colType.ScalaType]
+              rowArray(i) = o.asInstanceOf[colType.ScalaType]
 
           }
       }
-      mutableRow
+      new GenericRow(rowArray)
     })
     rowRDD
   }
