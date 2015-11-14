@@ -25,7 +25,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
- * Create a 'new' instance of a k-means model
+ * Create a 'new' instance of a power iteration clustering model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a PowerIterationClustering model.",
   extended = """Power Iteration Clustering [1]_ is a scalable and efficient algorithm for clustering vertices of a graph given pairwise similarities as edge properties.

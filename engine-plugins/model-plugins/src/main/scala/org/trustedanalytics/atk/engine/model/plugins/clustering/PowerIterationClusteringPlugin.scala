@@ -93,7 +93,7 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
 
     val trainFrameRdd = frame.rdd
     trainFrameRdd.cache()
-    val similaritiesRdd = trainFrameRdd.toSourceDestinationDistanceRDD(arguments.sourceColumn, arguments.destinationColumn, arguments.similarityColumn)
+    val similaritiesRdd = trainFrameRdd.toSourceDestinationSimilarityRDD(arguments.sourceColumn, arguments.destinationColumn, arguments.similarityColumn)
     val powerIterationClustering = PowerIterationClusteringPlugin.initializePIC(arguments)
 
     val output = powerIterationClustering.run(similaritiesRdd)
