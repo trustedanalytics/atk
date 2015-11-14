@@ -17,17 +17,17 @@
 package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
-import org.apache.giraph.io.{VertexValueInputFormat, VertexValueReader}
+import org.apache.giraph.io.{ VertexValueInputFormat, VertexValueReader }
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.io.{Writable, LongWritable}
-import org.apache.hadoop.mapreduce.{InputSplit, JobContext, TaskAttemptContext}
+import org.apache.hadoop.io.{ Writable, LongWritable }
+import org.apache.hadoop.mapreduce.{ InputSplit, JobContext, TaskAttemptContext }
 import org.apache.mahout.math.DenseVector
-import org.apache.parquet.hadoop.{ParquetRecordReader, ParquetInputFormat}
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.execution.datasources.parquet.CatalystReadSupport
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
 import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
+import parquet.hadoop.{ ParquetRecordReader, ParquetInputFormat }
 
 /**
  * Vertex input format class.
@@ -43,7 +43,6 @@ class LabelPropagationVertexInputFormat extends VertexValueInputFormat[LongWrita
   override def checkInputSpecs(conf: Configuration): Unit = {
     new LabelPropagationConfiguration(conf).validate()
   }
-
 
   override def setConf(conf: ImmutableClassesGiraphConfiguration[LongWritable, VertexData4LPWritable, Writable]): Unit = {
     super.setConf(conf)
@@ -71,7 +70,7 @@ class LabelPropagationVertexInputFormat extends VertexValueInputFormat[LongWrita
  * @param vertexInputFormat format for vertex reader
  */
 class LabelPropagationVertexReader(conf: LabelPropagationConfiguration, vertexInputFormat: ParquetInputFormat[InternalRow])
-  extends VertexValueReader[LongWritable, VertexData4LPWritable] {
+    extends VertexValueReader[LongWritable, VertexData4LPWritable] {
 
   private val config = conf.getConfig
   private val reader = new ParquetRecordReader[InternalRow](new CatalystReadSupport())

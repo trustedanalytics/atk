@@ -17,25 +17,25 @@
 package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
-import org.apache.giraph.io.{VertexValueInputFormat, VertexValueReader}
+import org.apache.giraph.io.{ VertexValueInputFormat, VertexValueReader }
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.io.Writable
-import org.apache.hadoop.mapreduce.{InputSplit, JobContext, TaskAttemptContext}
-import org.apache.parquet.hadoop.{ParquetInputFormat, ParquetRecordReader}
+import org.apache.hadoop.mapreduce.{ InputSplit, JobContext, TaskAttemptContext }
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.execution.datasources.parquet.CatalystReadSupport
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
-import org.trustedanalytics.atk.giraph.io.{LdaVertexData, LdaVertexId}
+import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
 import org.trustedanalytics.atk.giraph.plugins.util.GiraphConfigurationUtil
 import java.util
+
+import parquet.hadoop.{ ParquetRecordReader, ParquetInputFormat }
 
 /**
  * Input format for LDA vertex data reads from Parquet Frame
  */
 class LdaVertexValueInputFormat extends VertexValueInputFormat[LdaVertexId, LdaVertexData] {
   private val parquetInputFormat = new ParquetInputFormat[InternalRow]()
-
 
   override def checkInputSpecs(conf: Configuration): Unit = {
     new GiraphLdaConfiguration(conf).validate()

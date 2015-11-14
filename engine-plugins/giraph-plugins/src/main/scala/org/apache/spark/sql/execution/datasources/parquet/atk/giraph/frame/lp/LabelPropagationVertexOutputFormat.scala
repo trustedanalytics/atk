@@ -18,11 +18,10 @@ package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
 import org.apache.giraph.graph.Vertex
-import org.apache.giraph.io.{VertexOutputFormat, VertexWriter}
+import org.apache.giraph.io.{ VertexOutputFormat, VertexWriter }
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.io.LongWritable
 import org.apache.hadoop.mapreduce._
-import org.apache.parquet.hadoop.ParquetOutputFormat
 import org.apache.spark.mllib.atk.plugins.VectorUtils
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
@@ -30,6 +29,7 @@ import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
 import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
+import parquet.hadoop.ParquetOutputFormat
 
 object LabelPropagationOutputFormat {
 
@@ -63,7 +63,6 @@ class LabelPropagationVertexOutputFormat extends VertexOutputFormat[LongWritable
     new LabelPropagationConfiguration(context.getConfiguration).validate()
   }
 
-
   override def setConf(conf: ImmutableClassesGiraphConfiguration[LongWritable, VertexData4LPWritable, Nothing]): Unit = {
     super.setConf(conf)
     conf.set(ParquetOutputFormat.WRITE_SUPPORT_CLASS, classOf[RowWriteSupport].getName)
@@ -89,7 +88,7 @@ class LabelPropagationVertexOutputFormat extends VertexOutputFormat[LongWritable
  */
 class LabelPropagationVertexWriter(conf: LabelPropagationConfiguration,
                                    resultsOutputFormat: ParquetOutputFormat[InternalRow])
-  extends VertexWriter[LongWritable, VertexData4LPWritable, Nothing] {
+    extends VertexWriter[LongWritable, VertexData4LPWritable, Nothing] {
 
   private val outputFormatConfig = conf.getConfig.outputFormatConfig
   private var resultsWriter: RecordWriter[Void, InternalRow] = null

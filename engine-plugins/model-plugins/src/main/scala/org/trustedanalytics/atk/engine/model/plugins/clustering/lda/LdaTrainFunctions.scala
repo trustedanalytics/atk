@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.clustering.{LDAModel, AtkLdaModel, DistributedLDAModel, LDA}
+import org.apache.spark.mllib.clustering.{ LDAModel, AtkLdaModel, DistributedLDAModel, LDA }
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 
@@ -77,7 +77,7 @@ object LdaTrainFunctions extends Serializable {
     val ldaCorpus = corpus.map { case ((documentId, (document, wordVector))) => (documentId, wordVector) }
     val ldaModel = initializeLdaRunner(args).run(ldaCorpus)
     ldaModel match {
-      case m : DistributedLDAModel => m
+      case m: DistributedLDAModel => m
       case _ => throw new RuntimeException("Local LDA models are not supported.")
     }
   }

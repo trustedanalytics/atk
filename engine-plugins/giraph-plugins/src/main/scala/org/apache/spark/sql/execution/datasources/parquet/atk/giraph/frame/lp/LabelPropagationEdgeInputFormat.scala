@@ -17,16 +17,16 @@
 package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
-import org.apache.giraph.edge.{DefaultEdge, Edge}
+import org.apache.giraph.edge.{ DefaultEdge, Edge }
 import org.apache.giraph.io._
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.io.{Writable, DoubleWritable, LongWritable}
-import org.apache.hadoop.mapreduce.{InputSplit, JobContext, TaskAttemptContext}
-import org.apache.parquet.hadoop.{ParquetRecordReader, ParquetInputFormat}
+import org.apache.hadoop.io.{ Writable, DoubleWritable, LongWritable }
+import org.apache.hadoop.mapreduce.{ InputSplit, JobContext, TaskAttemptContext }
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.execution.datasources.parquet.CatalystReadSupport
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
+import parquet.hadoop.{ ParquetRecordReader, ParquetInputFormat }
 
 /**
  * InputFormat for Label propagation reads edges from Parquet Frame
@@ -38,7 +38,6 @@ class LabelPropagationEdgeInputFormat extends EdgeInputFormat[LongWritable, Doub
   override def checkInputSpecs(conf: Configuration): Unit = {
     new LabelPropagationConfiguration(conf).validate()
   }
-
 
   override def setConf(conf: ImmutableClassesGiraphConfiguration[LongWritable, Writable, DoubleWritable]): Unit = {
     super.setConf(conf)
@@ -73,7 +72,7 @@ class LabelPropagationEdgeInputFormat extends EdgeInputFormat[LongWritable, Doub
  * @param config configuration data
  */
 class LabelPropagationEdgeReader(config: LabelPropagationConfiguration)
-  extends EdgeReader[LongWritable, DoubleWritable] {
+    extends EdgeReader[LongWritable, DoubleWritable] {
 
   private val conf = config.getConfig
   private val reader = new ParquetRecordReader[InternalRow](new CatalystReadSupport())

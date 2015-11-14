@@ -19,17 +19,17 @@ package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda
 import java.util
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
-import org.apache.giraph.edge.{DefaultEdge, Edge}
+import org.apache.giraph.edge.{ DefaultEdge, Edge }
 import org.apache.giraph.io._
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.io.Writable
-import org.apache.hadoop.mapreduce.{InputSplit, JobContext, TaskAttemptContext}
-import org.apache.parquet.hadoop.{ParquetRecordReader, ParquetInputFormat}
+import org.apache.hadoop.mapreduce.{ InputSplit, JobContext, TaskAttemptContext }
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.execution.datasources.parquet.CatalystReadSupport
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
-import org.trustedanalytics.atk.giraph.io.{LdaEdgeData, LdaVertexId}
+import org.trustedanalytics.atk.giraph.io.{ LdaEdgeData, LdaVertexId }
+import parquet.hadoop.{ ParquetRecordReader, ParquetInputFormat }
 
 /**
  * InputFormat for LDA reads edges from Parquet Frame

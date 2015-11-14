@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.giraph.plugins.model.lda
 
-import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda.{LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat, LdaVertexValueInputFormat}
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda.{ LdaParquetFrameVertexOutputFormat, LdaParquetFrameEdgeInputFormat, LdaVertexValueInputFormat }
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame.SparkFrame

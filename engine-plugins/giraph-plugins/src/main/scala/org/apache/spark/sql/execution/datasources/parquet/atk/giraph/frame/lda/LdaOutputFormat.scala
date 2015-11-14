@@ -18,16 +18,16 @@ package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lda
 
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration
 import org.apache.giraph.graph.Vertex
-import org.apache.giraph.io.{VertexOutputFormat, VertexWriter}
+import org.apache.giraph.io.{ VertexOutputFormat, VertexWriter }
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.mapreduce._
 import org.apache.spark.sql.catalyst.InternalRow
-import org.apache.spark.sql.catalyst.expressions.{GenericMutableRow, GenericRow}
+import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
 import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.MultiOutputCommitter
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
-import org.trustedanalytics.atk.giraph.io.{LdaVertexData, LdaVertexId}
+import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
 import parquet.hadoop.ParquetOutputFormat
 
 /**

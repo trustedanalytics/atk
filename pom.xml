@@ -112,17 +112,17 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
         <dep.reflections>0.9.9-RC1</dep.reflections>
         <!-- END TITAN -->
-        <dep.cdh.version>cdh5.4.2</dep.cdh.version>
-        <dep.spark.version>1.5.1</dep.spark.version>
-        <dep.spark.yarn.version>1.5.1</dep.spark.yarn.version>
-        <dep.mahout.version>0.9</dep.mahout.version>
+        <dep.cdh.version>cdh5.5.1-SNAPSHOT</dep.cdh.version>
+        <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
+        <dep.spark.yarn.version>1.5.0-${dep.cdh.version}</dep.spark.yarn.version>
+        <dep.mahout.version>0.9-${dep.cdh.version}</dep.mahout.version>
         <dep.parquet.version>1.5.0-${dep.cdh.version}</dep.parquet.version>
         <dep.hbase.version>1.0.0-${dep.cdh.version}</dep.hbase.version>
         <dep.hadoop2.version>2.6.0-${dep.cdh.version}</dep.hadoop2.version>
         <dep.zookeeper.version>3.4.5-${dep.cdh.version}</dep.zookeeper.version>
         <dep.typesafe-config.version>1.2.1</dep.typesafe-config.version>
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
-        <dev.spark.hive.version>1.5.1</dev.spark.hive.version>
+        <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
         <!--START GAO MAVEN -->
 
         <dep.giraph-core.version>1.1.0-hadoop2</dep.giraph-core.version>
@@ -132,13 +132,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <scala.short.version>2.10</scala.short.version>
         <scalatest.version>2.1.6</scalatest.version>
 
-        <akka.version>2.3.2</akka.version>
+        <akka.version>2.3.11</akka.version>
 
         <scoverage-plugin.version>1.0.4</scoverage-plugin.version>
 
         <event.version>0.4.2</event.version>
+        <commons-lang3.version>3.3.2</commons-lang3.version>
 
-        <mavenVersion>3.1.1</mavenVersion>
+        <mavenVersion>3.3.3</mavenVersion>
         <javaVersion>1.8</javaVersion>
     </properties>
     <modules>
@@ -259,7 +260,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                             <inherited>true</inherited>
                             <groupId>net.alchim31.maven</groupId>
                             <artifactId>scala-maven-plugin</artifactId>
-                            <version>3.1.6</version>
+                            <version>3.2.2</version>
                             <executions>
                                 <execution>
                                     <id>compile</id>
@@ -1208,7 +1209,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.3.1</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -1258,7 +1259,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>1.7</version>
+                <version>1.10</version>
             </dependency>
             <dependency>
                 <groupId>commons-net</groupId>
@@ -1280,12 +1281,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.5</version>
+                <version>1.7.10</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.5</version>
+                <version>1.7.10</version>
             </dependency>
 
             <dependency>
@@ -1365,12 +1366,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>joda-time</groupId>
                 <artifactId>joda-time</artifactId>
-                <version>2.3</version>
+                <version>2.5</version>
             </dependency>
             <dependency>
                 <groupId>org.joda</groupId>
                 <artifactId>joda-convert</artifactId>
-                <version>1.2</version>
+                <version>1.7</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
@@ -1514,13 +1515,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>2.2.2</version>
+                <version>2.4.4</version>
             </dependency>
             <!--test scope-->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-all</artifactId>
-                <version>1.8.5</version>
+                <version>1.9.5</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -1532,7 +1533,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.8.1</version>
+                <version>4.10</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -1556,7 +1557,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>com.novocode</groupId>
                 <artifactId>junit-interface</artifactId>
-                <version>0.9</version>
+                <version>0.10</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.giraph.plugins.frame
 
-import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp.{LabelPropagationEdgeInputFormat, LabelPropagationVertexOutputFormat, LabelPropagationVertexInputFormat}
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.lp.{ LabelPropagationEdgeInputFormat, LabelPropagationVertexOutputFormat, LabelPropagationVertexInputFormat }
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.giraph.algorithms.lp.LabelPropagationComputation
 import org.trustedanalytics.atk.giraph.algorithms.lp.LabelPropagationComputation.{ LabelPropagationAggregatorWriter, LabelPropagationMasterCompute }
