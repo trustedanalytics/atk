@@ -26,7 +26,7 @@
         Example:  "frame/add_columns" plugin should have a file
 
         doc-api-examples/src/main/resources/python/frame/add_columns.rst
-        
+
         test/entity/function.rst is used by unittests, and serves as an example
     </description>
     <parent>
