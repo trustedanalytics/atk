@@ -22,7 +22,7 @@ import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.Path
-import org.trustedanalytics.atk.moduleloader.Component
+import org.trustedanalytics.atk.moduleloader.{ ClassLoaderAware, Component }
 import spray.can.Http
 import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
 import akka.pattern.ask
@@ -40,7 +40,7 @@ import org.apache.commons.io.FileUtils
  *
  * See the 'scoring_server.sh' to see how the launcher starts the application.
  */
-class ScoringServiceApplication extends Component with EventLogging {
+class ScoringServiceApplication extends Component with EventLogging with ClassLoaderAware {
 
   val config = ConfigFactory.load(this.getClass.getClassLoader)
 
@@ -68,7 +68,7 @@ class ScoringServiceApplication extends Component with EventLogging {
   override def stop(): Unit = {
   }
 
-  private def getModel: Model = {
+  private def getModel: Model = withMyClassLoader {
 
     var tempTarFile: File = null
 
