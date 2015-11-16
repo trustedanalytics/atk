@@ -64,9 +64,6 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://invalid-fsroot-host/user/atkuser"
 
-    # Absolute local paths where jars are copied from to hdfs-lib
-    //local-libs = [ "file:/usr/lib/trustedanalytics/rest-server/lib" ]
-
     # The (comma separated, no spaces) Zookeeper hosts that
     # Comma separated list of host names with zookeeper role assigned
     titan.load.storage.hostname = "invalid-titan-host"
@@ -88,6 +85,13 @@ trustedanalytics.atk {
       # These class paths need to be uncommented and be present on YARN nodes
       // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
       // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+
+      # Preferably spark.yarn.jar is installed in HDFS
+      # In Cloudera Manager,
+      #   1) Make sure the SPARK setting "spark_jar_hdfs_path" is set to this value
+      #   2) Use "Actions" -> "Upload Spark Jar" to install jar in HDFS, if it is not already there
+      //spark.yarn.jar = "hdfs://invalid-hdfs-host/user/spark/share/lib/spark-assembly.jar"
+      //spark.yarn.jar = "/opt/cloudera/parcels/CDH-5.4.2-1.cdh5.4.2.p0.2/lib/spark/assembly/lib/spark-assembly-1.3.0-cdh5.4.2-hadoop2.6.0-cdh5.4.2.jar"
     }
 
     #Kerberos authentication configuration. if enabled is set to true will authenticate to kerberos
