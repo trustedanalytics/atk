@@ -29,7 +29,7 @@ import scala.concurrent._
 /**
  * Scoring model for Principal Components
  */
-class PrincipalComponentsScoringModel(pcaModel: PrincipalComponentsData) extends PrincipalComponentsData(pcaModel.k, pcaModel.observationColumns,
+class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends PrincipalComponentsData(pcaModel.k, pcaModel.observationColumns,
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
   override def score(data: Seq[Array[String]]): Seq[Any] = {
