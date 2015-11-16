@@ -200,7 +200,7 @@ class ModuleConfigTest extends WordSpec {
     }
 
     "be able to load a ModuleConfig from a file with other values" in {
-      val moduleFile = new File("src/test/resources/valid-member-of/module-a")
+      val moduleFile = new File("src/test/resources/valid-member-of/module-a.jar")
       val moduleConfig = ModuleConfig.loadModuleConfig(moduleFile)
       assert(moduleConfig.name == "module-a")
       assert(moduleConfig.parentName.isEmpty)

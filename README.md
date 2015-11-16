@@ -87,7 +87,6 @@ This is an overview. Additional details and instructions are in the user documen
 # Folders Overview
 * bin/ - scripts for starting REST server and scoring engine, etc.
 * conf/ - configuration templates for setting up a system, put your application.conf here for running out of source code
-* deploy/ - a module for creating an uber jar needed for deployment on Analytics PaaS.
 * doc/ - end user docs for the system (except doc for specific plugins goes in the plugins themselves)
 * doc-api-examples/ - examples of api usage for plugins
 * engine/
@@ -102,8 +101,7 @@ This is an overview. Additional details and instructions are in the user documen
   * giraph-plugins/ - a few algorithms that run on Giraph
 * integration-tests/ - developer written, build time integration tests in python, these run against a minimal version of our product
 * misc/ - miscellaneous items that aren't really part of our product
-  * launcher/ - starts up our application, launches parts of our app
-* module-loader/ - future replacement for launcher, starts application and sets up ClassLoaders appropriately.
+* module-loader/ - starts application and sets up ClassLoaders appropriately.
 * package/ - packaging for VM's, RPM's
 * python-client/ - python client code (talks with rest-server)
   * examples/ - example code for users of how to use the API
