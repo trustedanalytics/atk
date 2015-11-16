@@ -169,7 +169,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <modules>
                 <module>doc-api-examples</module>
                 <module>testutils</module>
-                <module>misc</module>
                 <module>module-loader</module>
                 <module>scoring-interfaces</module>
                 <module>model-publish-format</module>
