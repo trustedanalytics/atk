@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.partitioners
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy.{ ShrinkOnly, ShrinkOrGrow }
+import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy.{ Disabled, ShrinkOnly, ShrinkOrGrow }
 import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.apache.spark.frame.FrameRdd
 
