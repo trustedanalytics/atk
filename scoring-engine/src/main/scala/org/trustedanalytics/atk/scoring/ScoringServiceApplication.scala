@@ -59,7 +59,9 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
   override def start() = {
     val model = getModel
     val service = new ScoringService(model)
-    createActorSystemAndBindToHttp(service)
+    withMyClassLoader {
+      createActorSystemAndBindToHttp(service)
+    }
   }
 
   /**
