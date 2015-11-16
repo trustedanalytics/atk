@@ -29,17 +29,17 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Create a new Collaborative Filtering Recommend model.",
   extended = """For details about Collaborative Filter Recommend modelling,
 see :ref:`Collaborative Filter <CollaborativeFilteringNewPlugin_Summary>`.""")
-class CollaborativeFilteringNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
+class GiraphCollaborativeFilteringNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:collaborative_filtering/new"
+  override def name: String = "model:giraph_collaborative_filtering/new"
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     val models = engine.models
-    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:collaborativefiltering_new")))
+    models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:giraphcollaborativefiltering/new")))
   }
 }
