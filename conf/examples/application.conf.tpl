@@ -113,7 +113,8 @@ trustedanalytics.atk {
   engine {
     auto-partitioner {
       # auto-partitioning spark based on the file size
-      file-size-to-partition-size = [{upper-bound = "1MB", partitions = 15}
+      file-size-to-partition-size = [
+        {upper-bound = "1MB", partitions = 15},
         {upper-bound = "1GB", partitions = 45},
         {upper-bound = "5GB", partitions = 100},
         {upper-bound = "10GB", partitions = 200},
@@ -124,16 +125,17 @@ trustedanalytics.atk {
         {upper-bound = "200GB", partitions = 1500},
         {upper-bound = "300GB", partitions = 2000},
         {upper-bound = "400GB", partitions = 2500},
-        {upper-bound = "600GB", partitions = 3750}]
+        {upper-bound = "600GB", partitions = 3750}
+      ]
 
       # max-partitions is used if value is above the max upper-bound
       max-partitions = 10000
 
       repartition {
-        # re-partitioning strategies:
         # disabled - disable re-partitioning
-        # shrink_only - re-partition only when the number partitions is less than existing partitions. Uses less-expensive Spark merge
-        # shrink_or_grow - re-partition can either increase or decrease the number of partitions using more-expensive Spark shuffle
+        # frame_create_only - re-partition only during frame creation
+        # shrink_only - re-partition during frame creation, and when the number partitions is less than existing partitions. Uses less-expensive Spark merge
+        # shrink_or_grow - during frame creation, and either increase or decrease the number of partitions using more-expensive Spark shuffle
         #                  Using this option will also change the ordering of the frame during the shuffle
         strategy = "disabled"
 

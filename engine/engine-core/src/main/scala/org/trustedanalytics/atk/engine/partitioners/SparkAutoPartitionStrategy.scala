@@ -34,29 +34,36 @@ object SparkAutoPartitionStrategy {
   }
 
   /**
-   * Disable repartitioning of Spark RDDs.
+   * Disable partitioning of Spark RDDs.
    */
   case object Disabled extends PartitionStrategy("DISABLED")
 
   /**
-   * Repartition RDDs only when the requested number of partitions is less than the current partitions.
+   * Repartition frame only during initial frame creation
+   */
+  case object FrameCreateOnly extends PartitionStrategy("FRAME_CREATE_ONLY")
+
+  /**
+   * Repartition RDDs when the requested number of partitions is less than the current partitions.
    *
    * Shrinking RDD partitions is less expensive and does not involve a shuffle operation.
+   * This strategy also re-partitions frames during initial frame creation.
    *
    * @see org.apache.spark.rdd.RDD#coalesce(Int, Boolean)
    */
   case object ShrinkOnly extends PartitionStrategy("SHRINK_ONLY")
 
   /**
-   * Repartition RDDs only when the requested number of partitions is less or greater than the current partitions.
+   * Repartition RDDs when the requested number of partitions is less or greater than the current partitions.
    *
    * Uses more-expensive Spark shuffle operation to shrink or grow partitions.
+   * This strategy also re-partitions frames during initial frame creation.
    *
    * @see org.apache.spark.rdd.RDD#coalesce(Int, Boolean)
    */
   case object ShrinkOrGrow extends PartitionStrategy("SHRINK_OR_GROW")
 
-  val partitionStrategies: Seq[PartitionStrategy] = Seq(Disabled, ShrinkOnly, ShrinkOrGrow)
+  val partitionStrategies: Seq[PartitionStrategy] = Seq(Disabled, FrameCreateOnly, ShrinkOnly, ShrinkOrGrow)
 
   /**
    * Find mode by name
