@@ -24,7 +24,7 @@ import org.apache.spark.mllib.linalg.Vectors
  * Scoring model for MLLib's RandomForest
  * @param randomForestClassifierModel RandomForestModel(val algo: Algo.Algo, override val trees: Array[DecisionTreeModel])
  */
-class RandomForestScoringModel(randomForestClassifierModel: RandomForestModel) extends RandomForestModel(randomForestClassifierModel.algo, randomForestClassifierModel.trees) with Model {
+class RandomForestScoreModel(randomForestClassifierModel: RandomForestModel) extends RandomForestModel(randomForestClassifierModel.algo, randomForestClassifierModel.trees) with Model {
 
   override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()

@@ -26,7 +26,7 @@ import ScoringJsonReaderWriters._
 /**
  * Scoring model for Latent Dirichlet Allocation
  */
-class LdaScoringModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
+class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
   override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
