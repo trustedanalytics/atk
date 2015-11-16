@@ -116,6 +116,19 @@ buildSvcBrokerConfig $hbase_file $hbase_json
 buildSvcBrokerConfig $hdfs_file $hdfs_json
 buildSvcBrokerConfig $yarn_file $yarn_json
 
+## This next 2 blocks are temporary fixes for incorrect VCAP parameters passed through brokers and ublock new module-loader
+yarn_application_classpath="<property><name>yarn.application.classpath</name><value>,,/*,/lib/*,/*,/lib/*,/*,/lib/*</value></property>"
+safe_yarn_application_classpath=$(printf '%s\n' "$yarn_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+correct_yarn_application_classpath="<property><name>yarn.application.classpath</name><value>\$HADOOP_CONF_DIR,\$HADOOP_COMMON_HOME/*,\$HADOOP_COMMON_HOME/lib/*,\$HADOOP_HDFS_HOME/*,\$HADOOP_HDFS_HOME/lib/*,\$HADOOP_YARN_HOME/*,\$HADOOP_YARN_HOME/lib/*</value></property>"
+safe_correct_yarn_application_classpath=$(printf '%s\n' "$correct_yarn_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+sed -i s/$safe_yarn_application_classpath/$safe_correct_yarn_application_classpath/g yarn-site.xml
+
+mapreduce_application_classpath="<property><name>mapreduce.application.classpath</name><value>/*,/lib/*,</value></property>"
+safe_mapreduce_application_classpath=$(printf '%s\n' "$mapreduce_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+new_mapreduce_application_classpath="<property><name>mapreduce.application.classpath</name><value>\$HADOOP_MAPRED_HOME/*,\$HADOOP_MAPRED_HOME/lib/*,\$MR2_CLASSPATH</value></property>"
+safe_correct_mapreduce_application_classpath=$(printf '%s\n' "$new_mapreduce_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+sed -i s/$safe_mapreduce_application_classpath/$safe_correct_mapreduce_application_classpath/g yarn-site.xml
+
 popd
 
 pushd $DIR/..
