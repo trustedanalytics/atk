@@ -25,7 +25,7 @@ import org.apache.spark.mllib.atk.plugins.VectorUtils
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
-import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.MultiOutputCommitter
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.{ RowUtils, MultiOutputCommitter }
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.giraph.config.cf.CollaborativeFilteringConfiguration
 import org.trustedanalytics.atk.giraph.io.{ CFVertexId, VertexData4CFWritable }
@@ -115,7 +115,6 @@ class CollaborativeFilteringVertexWriter[T <: VertexData4CFWritable](conf: Colla
     val content = new Array[Any](2)
     content(0) = vertex.getId.getValue
     content(1) = VectorUtils.toDoubleArray(vertex.getValue.getVector).toSeq
-
-    new GenericMutableRow(content)
+    RowUtils.convertToCatalystRow(content)
   }
 }

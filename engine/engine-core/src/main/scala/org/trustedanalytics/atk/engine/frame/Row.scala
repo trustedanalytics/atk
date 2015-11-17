@@ -21,7 +21,6 @@ import org.apache.spark.sql.catalyst.InternalRow
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema._
-import org.apache.hadoop.io._
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 

@@ -21,11 +21,12 @@ import org.apache.giraph.graph.Vertex
 import org.apache.giraph.io.{ VertexOutputFormat, VertexWriter }
 import org.apache.hadoop.fs.Path
 import org.apache.hadoop.mapreduce._
-import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.catalyst.{ CatalystTypeConverters, InternalRow }
 import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
 import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
-import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.MultiOutputCommitter
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.{ RowUtils, MultiOutputCommitter }
 import org.apache.spark.sql.types._
+import org.apache.spark.unsafe.types.UTF8String
 import org.trustedanalytics.atk.giraph.config.lda.GiraphLdaConfiguration
 import org.trustedanalytics.atk.giraph.io.{ LdaVertexData, LdaVertexId }
 import parquet.hadoop.ParquetOutputFormat
@@ -132,13 +133,13 @@ class LdaParquetFrameVertexWriter(conf: GiraphLdaConfiguration,
     val content = new Array[Any](2)
     content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getLdaResultAsDoubleArray.toSeq
-    new GenericMutableRow(content)
+    RowUtils.convertToCatalystRow(content)
   }
 
   private def giraphTopicGivenWordToRow(vertex: Vertex[LdaVertexId, LdaVertexData, Nothing]): InternalRow = {
     val content = new Array[Any](2)
     content(0) = vertex.getValue.getOriginalId
     content(1) = vertex.getValue.getTopicGivenWordAsDoubleArray.toSeq
-    new GenericMutableRow(content)
+    RowUtils.convertToCatalystRow(content)
   }
 }

@@ -16,15 +16,10 @@
 
 package org.trustedanalytics.atk.giraph.plugins.util
 
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanAutoPartitioner
-import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.engine.graph.GraphBuilderConfigFactory
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import com.typesafe.config.{ ConfigValue, ConfigObject, Config }
 import org.apache.hadoop.conf.Configuration
 import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
-import scala.util.Try
 
 object GiraphConfigurationUtil {
 
@@ -57,6 +52,10 @@ object GiraphConfigurationUtil {
       println(s"Setting ${kv._1} to ${kv._2}")
       hConf.set(kv._1, kv._2)
     }
+
+    hConf.set("spark.sql.parquet.binaryAsString", "false")
+    hConf.set("spark.sql.parquet.int96AsTimestamp", "true")
+    hConf.set("spark.sql.parquet.followParquetFormatSpec", "true")
     hConf
   }
 

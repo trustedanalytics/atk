@@ -26,6 +26,7 @@ import org.apache.spark.mllib.atk.plugins.VectorUtils
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.apache.spark.sql.execution.datasources.parquet.RowWriteSupport
+import org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame.RowUtils
 import org.apache.spark.sql.types._
 import org.trustedanalytics.atk.giraph.config.lp.LabelPropagationConfiguration
 import org.trustedanalytics.atk.giraph.io.VertexData4LPWritable
@@ -128,6 +129,6 @@ class LabelPropagationVertexWriter(conf: LabelPropagationConfiguration,
     val content = new Array[Any](2)
     content(0) = vertex.getId.get()
     content(1) = VectorUtils.toScalaVector(vertex.getValue.getPosteriorVector())
-    new GenericMutableRow(content)
+    RowUtils.convertToCatalystRow(content)
   }
 }
