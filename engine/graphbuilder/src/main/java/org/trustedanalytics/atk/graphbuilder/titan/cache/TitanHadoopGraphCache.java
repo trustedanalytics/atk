@@ -83,7 +83,7 @@ public class TitanHadoopGraphCache extends AbstractTitanGraphCache<TitanHadoopCa
             public void onRemoval(RemovalNotification<TitanHadoopCacheConfiguration, TitanHadoopSetup> removal) {
                 TitanHadoopSetup titanGraph = removal.getValue();
                 if (titanGraph != null) {
-                    LOG.info("Evicting a Titan/Hadoop graph from the cache: " + cache.stats());
+                    LOG.info("Evicting a Titan/Hadoop graph from the cache");
                     titanGraph.close();
                 }
             }

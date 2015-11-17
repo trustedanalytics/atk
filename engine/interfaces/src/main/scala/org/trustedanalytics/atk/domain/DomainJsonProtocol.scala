@@ -363,8 +363,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val categoricalSummaryArgsFormat = jsonFormat2(CategoricalSummaryArgs)
   implicit val categoricalSummaryReturnFormat = jsonFormat1(CategoricalSummaryReturn)
 
-  implicit val computeMisplacedScoreInput = jsonFormat2(ComputeMisplacedScoreArgs)
-
   implicit val columnModeFormat = jsonFormat4(ColumnModeArgs)
   implicit val columnModeReturnFormat = jsonFormat4(ColumnModeReturn)
 

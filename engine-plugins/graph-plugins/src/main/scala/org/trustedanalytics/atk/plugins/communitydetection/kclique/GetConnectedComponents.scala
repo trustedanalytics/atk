@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
 import org.trustedanalytics.atk.plugins.communitydetection.kclique.datatypes.VertexSet
-import org.trustedanalytics.atk.plugins.connectedcomponents.ConnectedComponentsGraphXDefault
+import org.trustedanalytics.atk.plugins.connectedcomponents.ConnectedComponentsDefault
 import org.trustedanalytics.atk.plugins.idassigner.GraphIDAssigner
 import org.trustedanalytics.atk.plugins.idassigner._
 import org.apache.spark.SparkContext._
@@ -56,7 +56,7 @@ object GetConnectedComponents extends Serializable {
 
     // Run the connected components of the new k-clique graph
     val cliqueIdToCommunityId: RDD[(Long, Long)] =
-      ConnectedComponentsGraphXDefault.run(renamedVerticesOfCliqueGraph, renamedEdgesOfCliqueGraph)
+      ConnectedComponentsDefault.run(renamedVerticesOfCliqueGraph, renamedEdgesOfCliqueGraph)
 
     val cliqueToCommunityID: RDD[(VertexSet, Long)] = cliqueIDsToCliques.join(cliqueIdToCommunityId).map(_._2)
 

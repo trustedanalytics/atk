@@ -37,21 +37,6 @@ object CommandDocLoader {
     }
   }
 
-  /**
-   * Creates a CommandDoc from RST text
-   * @param text RST text of Command API doc
-   * @return  CommandDoc, returns None if None given
-   */
-  private def createCommandDoc(text: Option[String]): Option[CommandDoc] = {
-    text match {
-      case Some(t) =>
-        val oneLineSummary = t.lines.next()
-        val extendedSummary = t.drop(oneLineSummary.size)
-        Some(CommandDoc(oneLineSummary.trim, Some(extendedSummary)))
-      case None => None
-    }
-  }
-
   private def getPath(commandName: String): String = {
     commandName.replace(':', '-') // e.g.  "frame:vertex/count" is "frame-vertex/count" in the dir structure
   }

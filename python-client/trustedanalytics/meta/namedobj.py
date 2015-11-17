@@ -109,13 +109,12 @@ class _NamedObjectsFunctionFactory(object):
         .. code::
 
             >>> my_{term}.name
+            "abc"
 
-            "csv_data"
-
-            >>> my_{term}.name = "cleaned_data"
+            >>> my_{term}.name = "xyz"
             >>> my_{term}.name
+            "xyz"
 
-            "cleaned_data"
         """.format(term=self._term)
         get_name.__doc__ = doc
 
