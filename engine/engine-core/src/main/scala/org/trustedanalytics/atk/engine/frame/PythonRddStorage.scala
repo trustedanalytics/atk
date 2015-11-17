@@ -139,7 +139,7 @@ object PythonRddStorage {
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
     val pythonVersion = "2.7"
 
-    var pyIncludes = new JArrayList[String]()
+    val pyIncludes = new JArrayList[String]()
 
     val pythonDefaultDependency = SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
       .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution"))
