@@ -21,6 +21,7 @@ import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, Call }
 import org.trustedanalytics.atk.engine._
 import com.typesafe.config.ConfigFactory
+import org.trustedanalytics.atk.moduleloader.Component
 import org.apache.commons.lang3.exception.ExceptionUtils
 import scala.reflect.io.Directory
 
@@ -32,6 +33,8 @@ import scala.reflect.io.Directory
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
 class SparkCommandJob extends AbstractEngineComponent {
+
+  override lazy val commandLoader = new CommandLoader(loadFromModules = false)
 
   /**
    * Execute Command
@@ -64,7 +67,10 @@ class SparkCommandJob extends AbstractEngineComponent {
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-object SparkCommandJob extends EventLogging {
+object SparkCommandJob {
+
+  println(s"Java Class Path is: ${System.getProperty("java.class.path")}")
+  println(s"Current PWD is ${Directory.Current.get.toString()}")
 
   /**
    * Usage string if this was being executed from the command line
@@ -93,9 +99,6 @@ object SparkCommandJob extends EventLogging {
         val config = ConfigFactory.load()
         EventLogging.raw = if (config.hasPath("trustedanalytics.atk.engine.logging.raw")) config.getBoolean("trustedanalytics.atk.engine.logging.raw") else true
       } // else rest-server already installed an SLF4j adapter
-
-      println(s"Java Class Path is: ${System.getProperty("java.class.path")}")
-      println(s"Current PWD is ${Directory.Current.get.toString()}")
 
       try {
         /* Set to true as for some reason in yarn cluster mode, this doesn't seem to be set on remote driver container */

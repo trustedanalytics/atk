@@ -22,7 +22,7 @@ import org.apache.commons.io.IOUtils
 import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.model.ModelEntity
-import org.trustedanalytics.atk.engine.{ EntityRev, SaveInfo, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.{ EntityRev, SaveInfo, FileStorage }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.event.EventLogging
 import spray.json.{ JsonParser, JsObject }
@@ -34,7 +34,7 @@ import spray.json.{ JsonParser, JsObject }
  * @param hdfs methods for interacting with underlying storage (e.g. HDFS)
  */
 class ModelFileStorage(fsRoot: String,
-                       val hdfs: HdfsFileStorage)(implicit startupInvocation: Invocation)
+                       val hdfs: FileStorage)(implicit startupInvocation: Invocation)
     extends EventLogging with EventLoggingImplicits {
 
   private val modelsBaseDirectory = new Path(fsRoot + "/trustedanalytics/models")
