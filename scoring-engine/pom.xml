@@ -41,7 +41,6 @@
 
     <dependencies>
 
-        <!--START BDA dependencies to our modules-->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>module-loader</artifactId>
@@ -59,7 +58,10 @@
             <artifactId>model-publish-format</artifactId>
         </dependency>
 
-        <!--END BDA dependencies to our modules-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.typesafe.akka</groupId>
@@ -137,11 +139,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.apache.hadoop</groupId>-->
-        <!--<artifactId> hadoop-core</artifactId>-->
-        <!--<version>2.6.0-mr1-cdh5.4.4</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
