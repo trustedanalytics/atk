@@ -937,7 +937,7 @@ object DataTypes extends EventLogging {
    * @param value Value to check
    * @return True if the value is considered to be missing
    */
-  def isMissingNumber(value:Any): Boolean = {
+  def isMissingNumber(value: Any): Boolean = {
     if (value == null || value == "" || value.toString.toLowerCase == "none")
       return true
     else
