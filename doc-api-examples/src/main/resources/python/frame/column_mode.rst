@@ -73,7 +73,7 @@ Inspect my_frame
    [6]  30   0.10000000149
    
 
-Compute and return middle number of values in column 'a' with weights 'w':
+Compute and return dictionary containing summary statistics of column 'a' with weights 'w':
 
 .. code::
 
