@@ -112,6 +112,7 @@ object PythonRddStorage {
         obj.put("array", x.toSeq.toArray.map {
           case y: ArrayBuffer[_] => iterableToBsonList(y)
           case y: Vector[_] => iterableToBsonList(y)
+          case y: scala.collection.mutable.Seq[_] => iterableToBsonList(y)
           case value => value
         })
         BSON.encode(obj)

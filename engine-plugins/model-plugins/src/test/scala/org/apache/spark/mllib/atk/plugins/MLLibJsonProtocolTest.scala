@@ -62,15 +62,15 @@ class MLLibJsonProtocolTest extends WordSpec {
   "SparseVectorFormat" should {
 
     "be able to serialize" in {
-      val sv = new SparseVector(2, Array(1, 2, 3), Array(1.5, 2.5, 3.5))
-      assert(sv.toJson.compactPrint == "{\"size\":2,\"indices\":[1,2,3],\"values\":[1.5,2.5,3.5]}")
+      val sv = new SparseVector(3, Array(1, 2, 3), Array(1.5, 2.5, 3.5))
+      assert(sv.toJson.compactPrint == "{\"size\":3,\"indices\":[1,2,3],\"values\":[1.5,2.5,3.5]}")
     }
 
     "parse json" in {
       val string =
         """
         |{
-        |   "size": 3,
+        |   "size": 4,
         |   "indices": [1,2,3,4],
         |   "values": [1.5,2.5,3.5,4.5]
         |
@@ -80,7 +80,7 @@ class MLLibJsonProtocolTest extends WordSpec {
           stripMargin
       val json = JsonParser(string).asJsObject
       val sv = json.convertTo[SparseVector]
-      assert(sv.size == 3)
+      assert(sv.size == 4)
       assert(sv.indices.length == 4)
       assert(sv.values.length == 4)
     }

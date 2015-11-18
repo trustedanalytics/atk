@@ -84,12 +84,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return Dataframe representing the FrameRdd
    */
   def toDataFrame: DataFrame = {
-    //TODO: Delete work-around for kyro serialization bug (SPARK-6465) once we upgrade to Spark1.4
-    // Work-around for kyro serialization bug in GenericRowWithSchema
-    // https://issues.apache.org/jira/browse/SPARK-6465
-    // This issue is affecting dataframe operations with shuffles like sort and join
-    val rowRdd: RDD[Row] = this.map(row => new GenericRow(row.toSeq.toArray))
-    new SQLContext(this.sparkContext).createDataFrame(rowRdd, sparkSchema)
+    new SQLContext(this.sparkContext).createDataFrame(this, sparkSchema)
   }
 
   def toDataFrameUsingHiveContext = new org.apache.spark.sql.hive.HiveContext(this.sparkContext).createDataFrame(this, sparkSchema)

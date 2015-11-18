@@ -28,11 +28,12 @@ echo "$NAME DIR=$DIR"
 CONFDIR=$DIR/conf
 
 # was needed for Python UDF tests to pass locally
-if [ -d "/usr/lib/spark/spark-cdh5.4.2-release/" ]
+# TODO: Replace CDH-5.5.1-1.cdh5.5.1.p0.72 with CDH once CDH-5.5 officially released
+if [ -d "/usr/lib/spark/spark-cdh5.5.1-release/" ]
 then
-    export SPARK_HOME=/usr/lib/spark/spark-cdh5.4.2-release/
+    export SPARK_HOME=/usr/lib/spark/spark-cdh5.5.1-release/
 else
-    export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark/
+    export SPARK_HOME=/opt/cloudera/parcels/CDH-5.5.1-1.cdh5.5.1.p0.72/lib/spark
 fi
 
 echo "$NAME SPARK_HOME=$SPARK_HOME"
