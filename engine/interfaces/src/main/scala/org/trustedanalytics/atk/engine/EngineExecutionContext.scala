@@ -23,7 +23,7 @@ import scala.concurrent.forkjoin.ForkJoinPool
 
 object EngineExecutionContext {
 
-  val config = ConfigFactory.load()
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
 
   val maxThreadsPerExecutionContext: Int = {
     config.getInt("trustedanalytics.atk.engine.spark.max-threads-per-execution-Context")

@@ -1,10 +1,3 @@
-# Archive declaration
-trustedanalytics.atk.component.archives {
-  scoring-engine {
-    parent = "scoring-interfaces"
-    class = "org.trustedanalytics.atk.scoring.ScoringServiceApplication"
-   }
-}
 
 trustedanalytics.scoring-engine {
 #name of the tar file that contains the model implementation, model class name and model bytes

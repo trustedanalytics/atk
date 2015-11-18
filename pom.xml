@@ -86,6 +86,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>atk</id>
+            <url>http://maven.trustedanalytics.org/content/repositories/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+
     <distributionManagement>
         <repository>
             <id>atk</id>
@@ -137,7 +150,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <scoverage-plugin.version>1.0.4</scoverage-plugin.version>
 
         <event.version>0.4.2</event.version>
-        <spark.broadcast.version>master-SNAPSHOT</spark.broadcast.version>
+        <spark.broadcast.version>1.3</spark.broadcast.version>
         <mavenVersion>3.1.1</mavenVersion>
         <javaVersion>1.8</javaVersion>
     </properties>
@@ -166,7 +179,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-models</module>
                 <module>rest-server</module>
                 <module>python-client</module>
-                <module>deploy</module>
                 <module>package</module>
             </modules>
         </profile>
@@ -231,6 +243,19 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <scalaVersion>${scala.long.version}</scalaVersion>
                                 <checkMultipleScalaVersions>false</checkMultipleScalaVersions>
                             </configuration>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.trustedanalytics</groupId>
+                            <artifactId>atk-maven-plugin</artifactId>
+                            <version>1.0-SNAPSHOT</version>
+                            <executions>
+                                <execution>
+                                    <id>compile</id>
+                                    <goals>
+                                        <goal>generate-conf</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
                         </plugin>
                         <!--END DO NOT TOUCH-->
                     </plugins>
@@ -689,6 +714,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event</artifactId>
                 <version>${event.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -723,9 +754,8 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>launcher</artifactId>
+                <artifactId>module-loader</artifactId>
                 <version>${project.version}</version>
-                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
@@ -805,8 +835,64 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <artifactId>blueprints-sail-graph</artifactId>
                     </exclusion>
                     <exclusion>
+                        <groupId>org.jboss.netty</groupId>
+                        <artifactId>netty</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.thinkaurelius.titan</groupId>
+                        <artifactId>titan-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.thinkaurelius.titan</groupId>
+                        <artifactId>titan-cassandra</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.thinkaurelius.titan</groupId>
+                        <artifactId>titan-hbase</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>com.thinkaurelius.titan</groupId>
+                        <artifactId>titan-es</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.mrunit</groupId>
+                        <artifactId>mrunit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hbase</groupId>
+                        <artifactId>hbase-client</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hbase</groupId>
+                        <artifactId>hbase-server</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-client</artifactId>
+                    </exclusion>
+                    <exclusion>
                         <groupId>org.apache.hadoop</groupId>
                         <artifactId>hadoop-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.hadoop</groupId>
+                        <artifactId>hadoop-common</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet.jsp</groupId>
+                        <artifactId>jsp-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>servlet-api-2.5</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -1063,12 +1149,26 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.apache.lucene</groupId>
                         <artifactId>lucene-analyzers-common</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-math3</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.mahout</groupId>
                 <artifactId>mahout-math</artifactId>
                 <version>${dep.mahout.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>commons-math3</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--org.apache.giraph-->
             <dependency>
@@ -1088,7 +1188,18 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>com.google.code.findbugs</groupId>
                         <artifactId>annotations</artifactId>
                     </exclusion>
-
+                    <exclusion>
+                        <groupId>com.thoughtworks.paranamer</groupId>
+                        <artifactId>paranamer</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>io.netty</groupId>
+                        <artifactId>netty-all</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.codehaus.jackson</groupId>
+                        <artifactId>jackson-mapper-asl</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -1292,7 +1403,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>1.7.5</version>
             </dependency>
-            <!--io.spray-->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.5</version>
+            </dependency>
+
             <dependency>
                 <groupId>io.spray</groupId>
                 <artifactId>spray-json_${scala.short.version}</artifactId>
@@ -1300,7 +1416,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>io.spray</groupId>
-                <artifactId>spray-can</artifactId>
+                <artifactId>spray-can_${scala.short.version}</artifactId>
                 <version>1.3.1</version>
             </dependency>
             <dependency>
@@ -1310,7 +1426,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>io.spray</groupId>
-                <artifactId>spray-client</artifactId>
+                <artifactId>spray-client_${scala.short.version}</artifactId>
                 <version>1.3.1</version>
             </dependency>
             <dependency>

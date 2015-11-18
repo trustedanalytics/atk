@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.connectedcomponents
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
@@ -26,6 +27,7 @@ import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._
 
@@ -33,8 +35,10 @@ import DomainJsonProtocol._
  * Variables for executing connected components.
  */
 case class ConnectedComponentsArgs(graph: GraphReference,
-                                   @ArgDoc("""The name of the column containing the connected component value.""") outputProperty: String) {
-  require(!outputProperty.isEmpty, "Output property label must be provided")
+                                   @ArgDoc("""The name of the column containing the connected component value.""") outputVertexPropertyName: String = "connectedComponentId") {
+  require(graph != null, "graph is required")
+  require(StringUtils.isNotBlank(outputVertexPropertyName), "output property name must not be empty")
+
 }
 
 case class ConnectedComponentsReturn(frameDictionaryOutput: Map[String, FrameReference])
@@ -90,16 +94,16 @@ class ConnectedComponentsPlugin extends SparkCommandPlugin[ConnectedComponentsAr
     val graph: SparkGraph = arguments.graph
     val (gbVertices, gbEdges) = graph.gbRdds
 
-    val inputVertices: RDD[Long] = gbVertices.map(gbvertex => gbvertex.physicalId.asInstanceOf[Long])
-    val inputEdges = gbEdges.map(gbedge => (gbedge.tailPhysicalId.asInstanceOf[Long], gbedge.headPhysicalId.asInstanceOf[Long]))
+    val inputVertices: RDD[Long] = gbVertices.map(gbVertex => gbVertex.physicalId.asInstanceOf[Long])
+    val inputEdges = gbEdges.map(gbEdge => (gbEdge.tailPhysicalId.asInstanceOf[Long], gbEdge.headPhysicalId.asInstanceOf[Long]))
 
-    // Call ConnectedComponentsGraphXDefault to kick off ConnectedComponents computation on RDDs
-    val intermediateVertices = ConnectedComponentsGraphXDefault.run(inputVertices, inputEdges)
+    // Start ConnectedComponents computation on RDDs
+    val intermediateVertices = ConnectedComponentsDefault.run(inputVertices, inputEdges)
     val connectedComponentRDD = intermediateVertices.map({
-      case (vertexId, componentId) => (vertexId, Property(arguments.outputProperty, componentId))
+      case (vertexId, componentId) => (vertexId, Property(arguments.outputVertexPropertyName, componentId))
     })
 
-    val outVertices = ConnectedComponentsGraphXDefault.mergeConnectedComponentResult(connectedComponentRDD, gbVertices)
+    val outVertices = GBVertexUtils.mergeResults(connectedComponentRDD, gbVertices)
 
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
 

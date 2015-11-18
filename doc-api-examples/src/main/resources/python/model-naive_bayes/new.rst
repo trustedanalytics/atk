@@ -50,3 +50,5 @@ Confusion Matrix:
             Predicted_Pos  Predicted_Neg
 Actual_Pos              2              1
 Actual_Neg              0              3
+>>> model.publish()
+<progress>
