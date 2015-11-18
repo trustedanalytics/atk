@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
 import org.trustedanalytics.atk.domain.frame._
@@ -52,8 +51,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  users: UserStorage,
                  val sparkAutoPartitioner: SparkAutoPartitioner) extends Engine
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   type Data = FrameRdd
   type Context = SparkContext
@@ -143,11 +141,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * @return A QueryResult describing the data and schema of this take
    */
   def getRows(arguments: RowQueryArgs[Identifier])(implicit invocation: Invocation): QueryResult = {
-    withMyClassLoader {
-      val frame = frames.lookup(arguments.id).getOrElse(throw new IllegalArgumentException("Requested frame does not exist"))
-      val rows = frames.getRows(frame, arguments.offset, arguments.count)
-      QueryResult(rows, Some(frame.schema))
-    }
+    val frame = frames.lookup(arguments.id).getOrElse(throw new IllegalArgumentException("Requested frame does not exist"))
+    val rows = frames.getRows(frame, arguments.offset, arguments.count)
+    QueryResult(rows, Some(frame.schema))
   }
 
   def getFrame(id: Identifier)(implicit invocation: Invocation): Future[Option[FrameEntity]] =
@@ -165,9 +161,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
   @deprecated("use engine.graphs.createGraph()")
   def createGraph(graph: GraphTemplate)(implicit invocation: Invocation) = {
     future {
-      withMyClassLoader {
-        graphs.createGraph(graph)
-      }
+      graphs.createGraph(graph)
     }
   }
 
@@ -222,9 +216,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    */
   def createModel(createArgs: CreateEntityArgs)(implicit invocation: Invocation) = {
     future {
-      withMyClassLoader {
-        models.createModel(createArgs)
-      }
+      models.createModel(createArgs)
     }
   }
   /**

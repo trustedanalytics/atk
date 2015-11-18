@@ -81,7 +81,7 @@ class RandomForestClassifierPredictPlugin extends SparkCommandPlugin[RandomFores
     val frame: SparkFrame = arguments.frame
 
     //Running MLLib
-    val rfData = model.data.convertTo[RandomForestClassifierData]
+    val rfData = model.readFromStorage().convertTo[RandomForestClassifierData]
     val rfModel = rfData.randomForestModel
     if (arguments.observationColumns.isDefined) {
       require(rfData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")

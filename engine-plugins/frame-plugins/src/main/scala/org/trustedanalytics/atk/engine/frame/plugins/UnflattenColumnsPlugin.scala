@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.schema.{ Schema, DataTypes, Column }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame, RowWrapper }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row

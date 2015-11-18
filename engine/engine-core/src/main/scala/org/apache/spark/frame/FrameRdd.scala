@@ -300,7 +300,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return New frame with updated rows
    */
   def update(newRows: RDD[Row]): Self = {
-    (new FrameRdd(this.frameSchema, newRows)).asInstanceOf[Self]
+    new FrameRdd(this.frameSchema, newRows).asInstanceOf[Self]
   }
 
   /**

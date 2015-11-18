@@ -16,6 +16,7 @@
 #  limitations under the License.
 #
 
+import datetime
 
 def parse_for_doc(text):
     return str(DocExamplesPreprocessor(text, mode='doc'))
@@ -95,10 +96,12 @@ class DocExamplesPreprocessor(object):
     # replacement tags
     doc_replacements = [('<progress>', '[===Job Progress===]'),
                         ('<connect>', 'Connected ...'),
+                        ('<datetime.datetime>', repr(datetime.datetime.now())),
                         ('<blankline>', '<BLANKLINE>')]   # sphinx will ignore this for us
 
     doctest_replacements = [('<progress>', doctest_ellipsis),
                             ('<connect>', doctest_ellipsis),
+                            ('<datetime.datetime>', doctest_ellipsis),
                             ('<blankline>', '<BLANKLINE>')]
 
     # this is a simple 2-state fsm:  Keep, Drop

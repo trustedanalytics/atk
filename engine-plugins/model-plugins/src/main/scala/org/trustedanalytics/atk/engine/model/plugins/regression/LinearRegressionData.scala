@@ -27,3 +27,12 @@ case class LinearRegressionData(linRegModel: LinearRegressionModel, observationC
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
   require(linRegModel != null, "linRegModel must not be null")
 }
+
+/**
+ * Results of Linear Regression Train plugin
+ * @param observationColumns List of column names on which the model was trained
+ * @param labelColumn Column name containing the true value of the observation
+ * @param weightsVector An array of weights of the trained model
+ * @param intercept Intercept value of the trained model
+ */
+case class LinearRegressionTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)

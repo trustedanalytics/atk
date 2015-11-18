@@ -30,7 +30,7 @@ import org.trustedanalytics.atk.engine.frame.{ RowWrapper, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 import org.apache.hadoop.hbase.client.{ HBaseAdmin, Put }
 import org.trustedanalytics.atk.domain.schema.Schema
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 
 // Implicits needed for JSON conversion 
 import spray.json._

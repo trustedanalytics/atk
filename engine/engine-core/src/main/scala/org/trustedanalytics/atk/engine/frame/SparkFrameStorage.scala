@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.engine.frame
 import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.domain._
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, DataFrameTemplate, FrameEntity }
 import org.trustedanalytics.atk.engine.FrameStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -45,8 +44,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
                         sparkAutoPartitioner: SparkAutoPartitioner)
     extends FrameStorage
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   override type Context = SparkContext
   override type Data = FrameRdd
@@ -145,25 +143,6 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       postSave(frame, saveInfo, frameRdd.frameSchema)
     }
 
-  // The implemented mutable strategy increments a subdirectory for a given
-  // frame path.  The given path is the source and path+1 is the destination.
-  val revPattern = """.*r(\d+)$""".r
-
-  /**
-   * Gets the next revision's folder name
-   * @param frame entity to be saved
-   * @return folder name (not absolute)
-   */
-  private def getNextRevFolderName(frame: FrameEntity): String = {
-    val r = frame.storageLocation match {
-      case Some(path) => path match {
-        case revPattern(number) => number.toInt + 1
-      }
-      case None => 0
-    }
-    s"r$r"
-  }
-
   /**
    * Prepare save path, return info about the save
    *
@@ -174,7 +153,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
    */
   def prepareForSave(frame: FrameReference, forceStorageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo = {
     val frameEntity = expectFrame(frame)
-    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), getNextRevFolderName(frameEntity))
+    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), EntityRev.getNextRevFolderName(frameEntity.storageLocation))
     // delete incomplete data on disk if it exists
     frameFileStorage.deletePath(targetPath)
     val storageFormat = forceStorageFormat.getOrElse(frameEntity.storageFormat.getOrElse(defaultStorageFormat))
@@ -236,12 +215,10 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       require(frame != null, "frame is required")
       require(offset >= 0, "offset must be zero or greater")
       require(count > 0, "count must be zero or greater")
-      withMyClassLoader {
-        val reader = getReader(frame)
-        val rows = reader.take(count, offset, Some(maxRows))
-        updateLastReadDate(frame)
-        rows
-      }
+      val reader = getReader(frame)
+      val rows = reader.take(count, offset, Some(maxRows))
+      updateLastReadDate(frame)
+      rows
     }
 
   /**
@@ -252,13 +229,11 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]] =
     withContext("frame.getAllRows") {
       require(frame != null, "frame is required")
-      withMyClassLoader {
-        val reader = getReader(frame)
-        val numRows = getRowCount(frame)
-        val rows = reader.take(numRows, 0, None)
-        updateLastReadDate(frame)
-        rows
-      }
+      val reader = getReader(frame)
+      val numRows = getRowCount(frame)
+      val rows = reader.take(numRows, 0, None)
+      updateLastReadDate(frame)
+      rows
     }
 
   /**
@@ -297,10 +272,8 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   def getReader(frame: FrameEntity)(implicit invocation: Invocation): ParquetReader = {
     withContext("frame.getReader") {
       require(frame != null, "frame is required")
-      withMyClassLoader {
-        val absPath: Path = new Path(frame.getStorageLocation)
-        new ParquetReader(absPath, frameFileStorage.hdfs)
-      }
+      val absPath: Path = new Path(frame.getStorageLocation)
+      new ParquetReader(absPath, frameFileStorage.hdfs)
     }
   }
 

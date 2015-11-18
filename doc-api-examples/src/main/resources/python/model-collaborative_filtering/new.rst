@@ -7,7 +7,7 @@ Examples
     >>>          ("timestamp", atk.int32), ("movie_name",str), ("release_date", str), ("splits", str)]
     >>> csv = atk.CsvFile(dataset, schema, skip_header_lines = 0)
     >>> frame = atk.Frame(csv, movie_frame_name)
-    >>> cgd_cf_model = atk.CollaborativeFilteringModel(cgd_name)
+    >>> cgd_cf_model = atk.GiraphCollaborativeFilteringModel(cgd_name)
     >>> cgd_cf_model_train = cgd_cf_model.train(frame, "user_id", "movie_name", "rating", "cgd",
     >>>                                         max_value = 19, regularization=0.65, min_value=1, bias_on=False)
     >>> cgd_cf_model_recommend = cgd_cf_model.recommend (uid, 10)
