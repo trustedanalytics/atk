@@ -114,7 +114,6 @@ This is an overview. Additional details and instructions are in the user documen
 
 
 # Developer Todo
-* Most items under misc should move to separate repos
 * Enable lazy execution and delayed execution. We have a plan where SparkContexts can be re-used and only shutdown when needed.
 * Properly support directed and undirected graphs (get rid of "bi-directional")
 * Data types in graphs/frames needs to be extended greatly
@@ -136,6 +135,3 @@ This is an overview. Additional details and instructions are in the user documen
 * Break up CommandExecutor
 * Move args classes out of interfaces next to their associated plugin (possibly get rid of args classes all together)
 * Auto-conversion of return types
-* Frames should go back to mutable and immutability should be re-implemented but where frames can keep stable ids
-* Launcher code needs simplification and tests (it doesn't seem to setup classloaders all of the way how we want)
-
