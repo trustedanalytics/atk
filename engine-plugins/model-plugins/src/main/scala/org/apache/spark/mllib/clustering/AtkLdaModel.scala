@@ -168,8 +168,9 @@ case class AtkLdaModel(numTopics: Int) {
                        outputDocumentColumnName: String,
                        outputTopicVectorColumnName: String): Unit = {
     val topicDist = distLdaModel.topicDistributions
-    val topicsGivenDocs: RDD[Row] = corpus.map{case (documentId, (document, wordVector)) =>
-      (documentId, document) //reducing size of corpus due to shuffle failures in Spark 1.3.0
+    val topicsGivenDocs: RDD[Row] = corpus.map {
+      case (documentId, (document, wordVector)) =>
+        (documentId, document) //reducing size of corpus due to shuffle failures in Spark 1.3.0
     }.join(topicDist).map {
       case (documentId, (document, topicVector)) =>
         new GenericRow(Array[Any](document, topicVector.toArray.toVector))
