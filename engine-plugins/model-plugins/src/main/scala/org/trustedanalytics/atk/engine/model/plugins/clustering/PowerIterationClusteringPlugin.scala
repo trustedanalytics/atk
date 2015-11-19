@@ -77,7 +77,7 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: PowerIterationClusteringArgs)(implicit invocation: Invocation) = 9
+  override def numberOfJobs(arguments: PowerIterationClusteringArgs)(implicit invocation: Invocation) = 25
   /**
    * Get the predictions for observations in a test frame
    *

@@ -326,7 +326,7 @@ object MLLibJsonProtocol {
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
     /**
      * The write methods converts from PrincipalComponentsData to JsValue
-     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     * @param obj PrincipalComponentsData. Where PrincipalComponentData's format is
      *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
      *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
      *            vFactor: org.apache.spark.mllib.linalg.Matrix)
@@ -397,7 +397,7 @@ object MLLibJsonProtocol {
     }
 
     /**
-     * The read method coneverts from JsValue to MLLib's FeatureType
+     * The read method converts from JsValue to MLLib's FeatureType
      * @param json JsValue
      * @return FeatureType
      */
@@ -575,7 +575,7 @@ object MLLibJsonProtocol {
   }
 
   implicit val logRegDataFormat = jsonFormat2(LogisticRegressionData)
-  implicit val classficationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
+  implicit val classificationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
   implicit val classificationWithSGDPredictFormat = jsonFormat3(ClassificationWithSGDPredictArgs)
   implicit val classificationWithSGDTestFormat = jsonFormat4(ClassificationWithSGDTestArgs)
   implicit val svmDataFormat = jsonFormat2(SVMData)

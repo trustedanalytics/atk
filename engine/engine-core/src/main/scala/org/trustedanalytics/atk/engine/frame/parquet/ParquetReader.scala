@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.parquet
 
 import java.nio.charset.Charset
 
-import org.trustedanalytics.atk.engine.HdfsFileStorage
+import org.trustedanalytics.atk.engine.FileStorage
 import org.apache.hadoop.fs.{ Path, FileSystem }
 import parquet.column.{ ColumnReadStore, ColumnReader, ColumnDescriptor }
 import parquet.column.page.PageReadStore
@@ -38,8 +38,8 @@ import org.trustedanalytics.atk.domain.schema.DataTypes
  * @param path path containing the parquet files
  * @param fileStorage fileStorage object containing locations for stored RDDs
  */
-class ParquetReader(val path: Path, fileStorage: HdfsFileStorage, parquetApiFactory: ParquetApiFactory) {
-  def this(path: Path, fileStorage: HdfsFileStorage) = this(path, fileStorage, new ParquetApiFactory(fileStorage.configuration))
+class ParquetReader(val path: Path, fileStorage: FileStorage, parquetApiFactory: ParquetApiFactory) {
+  def this(path: Path, fileStorage: FileStorage) = this(path, fileStorage, new ParquetApiFactory(fileStorage.configuration))
   private[parquet] val utf8 = Charset.forName("UTF-8")
   private val decoder = utf8.newDecoder()
   private val ParquetFileOrderPattern = ".*part-r-(\\d*)\\.parquet".r
@@ -212,7 +212,7 @@ class ParquetReader(val path: Path, fileStorage: HdfsFileStorage, parquetApiFact
     def fileHasRows(metaData: ParquetMetadata): Boolean = {
       getRowCountFromMetaData(metaData) > 0
     }
-    val fs: FileSystem = fileStorage.fs
+    val fs: FileSystem = fileStorage.hdfs
     if (!fs.isDirectory(path)) {
       val metadata = ParquetFileReader.readFooter(fileStorage.configuration, fs.getFileStatus(path))
       List(new Footer(path, metadata))
@@ -226,7 +226,7 @@ class ParquetReader(val path: Path, fileStorage: HdfsFileStorage, parquetApiFact
       }
 
       val metadataPath: Path = new Path(this.path, "_metadata")
-      val metaDataFileStatus = fileStorage.fs.getFileStatus(metadataPath)
+      val metaDataFileStatus = fileStorage.hdfs.getFileStatus(metadataPath)
       val summaryList = parquetApiFactory.getFooterList(metaDataFileStatus)
       val filteredList = summaryList.filter(f => fileHasRows(f.getParquetMetadata))
 

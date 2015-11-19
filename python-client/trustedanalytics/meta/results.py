@@ -92,14 +92,6 @@ def return_clustering_coefficient(json_result):
 def return_bin_result(json_result):
     return json_result["cutoffs"]
 
-@postprocessor('model:giraph_lda/train')
-def return_giraph_lda_train(json_result):
-    from trustedanalytics import get_frame
-    doc_frame = get_frame(json_result['topics_given_doc']['uri'])
-    word_frame= get_frame(json_result['word_given_topics']['uri'])
-    topic_frame= get_frame(json_result['topics_given_word']['uri'])
-    return { 'topics_given_doc': doc_frame, 'word_given_topics': word_frame, 'topics_given_word': topic_frame, 'report': json_result['report'] }
-
 @postprocessor('model:lda/train')
 def return_lda_train(json_result):
     from trustedanalytics import get_frame
@@ -119,7 +111,7 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/collaborative_filtering')
+@postprocessor('frame:/giraph_collaborative_filtering')
 def return_collaborative_filtering(json_result):
     from trustedanalytics import get_frame
     user_frame = get_frame(json_result['user_frame']['uri'])
@@ -141,7 +133,7 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph/loopy_belief_propagation','graph:/kclique_percolation')
+@postprocessor('graph:/loopy_belief_propagation','graph:/kclique_percolation')
 def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']

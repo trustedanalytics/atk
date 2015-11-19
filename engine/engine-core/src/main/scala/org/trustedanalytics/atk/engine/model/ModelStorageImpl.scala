@@ -25,7 +25,6 @@ import org.trustedanalytics.atk.engine.ModelStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.repository.MetaStore
 import spray.json.JsObject
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import scala.slick.model
 
 /**
@@ -36,8 +35,7 @@ import scala.slick.model
 class ModelStorageImpl(metaStore: MetaStore, fileStorage: ModelFileStorage)
     extends ModelStorage
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   implicit def str2Path(s: String): Path = new Path(s)
   implicit def path2Str(p: Path): String = p.toString

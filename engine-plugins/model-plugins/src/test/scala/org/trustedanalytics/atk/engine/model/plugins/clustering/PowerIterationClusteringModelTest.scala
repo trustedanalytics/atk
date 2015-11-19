@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
+import org.apache.spark.mllib.clustering.PowerIterationClustering.Assignment
 import org.apache.spark.mllib.clustering.{ PowerIterationClusteringModel, KMeansModel }
 import org.apache.spark.mllib.linalg.Vectors
 import org.scalatest.Matchers
@@ -25,57 +26,46 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class PowerIterationClusteringModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
+  val modelRef = mock[ModelReference]
+  val frameRef = mock[FrameReference]
   "PowerIterationClusteringModel" should "create a PowerIterationClusteringModel" in {
-    val modelRef = mock[ModelReference]
-    val frameRef = mock[FrameReference]
-    val edgeList: Array[(Long, Long, Double)] = Array((1.toLong, 2.toLong, 1.0), (1.toLong, 2.toLong, 0.3),
-      (2.toLong, 3.toLong, 0.3), (3.toLong, 0.toLong, 0.03), (0.toLong, 5.toLong, 0.01), (5.toLong, 4.toLong, 0.3),
-      (5.toLong, 6.toLong, 1.0), (4.toLong, 6.toLong, 0.3))
+
+    val edgeList: Array[(Long, Long, Double)] = Array((1L, 2L, 1.0), (1L, 2L, 0.3),
+      (2L, 3L, 0.3), (3L, 0L, 0.03), (0L, 5L, 0.01), (5L, 4L, 0.3), (5L, 6L, 1.0), (4L, 6L, 0.3))
     val rdd = sparkContext.parallelize(edgeList)
     val trainArgs = PowerIterationClusteringArgs(modelRef, frameRef, "Source", "Destination", "Distance", k = 3)
 
     val pic = PowerIterationClusteringPlugin.initializePIC(trainArgs)
     val model = pic.run(rdd)
+
     model shouldBe a[PowerIterationClusteringModel]
+    model.k shouldBe 3
+    val assignmentsArray = model.assignments.collect()
+    assignmentsArray(0) shouldBe a[Assignment]
+    assignmentsArray(0).id shouldBe 4L
 
   }
 
   "PowerIterationClusteringModel" should "thow an IllegalArgumentException for empty source column name during run" in {
     intercept[IllegalArgumentException] {
-
-      val modelRef = mock[ModelReference]
-      val frameRef = mock[FrameReference]
-
       PowerIterationClusteringArgs(modelRef, frameRef, sourceColumn = "", destinationColumn = "Destination", similarityColumn = "Distance", k = 3)
     }
   }
 
   "PowerIterationClusteringModel" should "thow an IllegalArgumentException for empty destination column name during run" in {
     intercept[IllegalArgumentException] {
-
-      val modelRef = mock[ModelReference]
-      val frameRef = mock[FrameReference]
-
       PowerIterationClusteringArgs(modelRef, frameRef, sourceColumn = "Source", destinationColumn = "", similarityColumn = "Distance", k = 3)
     }
   }
 
   "PowerIterationClusteringModel" should "throw an IllegalArgumentException for empty similarity columns name during run" in {
     intercept[IllegalArgumentException] {
-
-      val modelRef = mock[ModelReference]
-      val frameRef = mock[FrameReference]
-
       PowerIterationClusteringArgs(modelRef, frameRef, sourceColumn = "Source", destinationColumn = "Destination", similarityColumn = "", k = 3)
     }
   }
 
   "PowerIterationClusteringModel" should "throw an IllegalArgumentException for any incorrect value of k during run" in {
     intercept[IllegalArgumentException] {
-
-      val modelRef = mock[ModelReference]
-      val frameRef = mock[FrameReference]
-
       PowerIterationClusteringArgs(modelRef, frameRef, sourceColumn = "Source", destinationColumn = "Destination", similarityColumn = "Similarity", k = 0)
     }
   }
