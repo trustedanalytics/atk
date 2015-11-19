@@ -39,6 +39,7 @@ pig_*.log
 /python-client/trustedanalytics/connections.py*
 /python-client/trustedanalytics/core/docstubs*.py*
 /python-client/nosetests.xml
+integration-tests/tests/doc_api_examples_test.py*
 .Rhistory
 scratch.py
 sdhu.xml

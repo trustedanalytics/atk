@@ -38,6 +38,8 @@ echo "$NAME all generated files will go to target dir: $TARGET_DIR"
 echo "$NAME Shutting down old API Server if it is still running"
 $DIR/rest-server-stop.sh
 
+echo "$NAME Generating the doctest testcase file"
+$DIR/gen_doctests.sh
 
 if [ ! -d $TARGET_DIR/surefire-reports/ ]
 then
@@ -48,7 +50,7 @@ fi
 
 # define the nosetests commands here:
 NOSE_SMOKE="nosetests $DIR/smoketests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT1 --processes=10 --process-timeout=300 --with-isolation"
-NOSE="nosetests $DIR/tests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT2 --processes=10 --process-timeout=600 --with-isolation"
+NOSE="nosetests $DIR/tests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT2 --processes=10 --process-timeout=300 --with-isolation"
 NOSE_NONCONCURRENT="nosetests $DIR/nonconcurrenttests --nologcapture --with-xunitmp --xunitmp-file=$OUTPUT3 --process-timeout=300 --with-isolation"
 
 if [ "$1" = "-c" -o "$2" = "-c" ] ; then
