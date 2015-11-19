@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy.{ Disabled, ShrinkOnly, ShrinkOrGrow }
-import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
+import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.apache.spark.frame.FrameRdd
 
 /**
@@ -28,7 +28,7 @@ import org.apache.spark.frame.FrameRdd
  *
  * This number won't be perfect but should be better than using default.
  */
-class SparkAutoPartitioner(fileStorage: HdfsFileStorage) extends EventLogging with EventLoggingImplicits {
+class SparkAutoPartitioner(fileStorage: FileStorage) extends EventLogging with EventLoggingImplicits {
 
   /**
    * Calculate a best guess for the minimum number of partitions that should be used for loading this file into a Spark RDD.

@@ -71,7 +71,7 @@ public class TitanGraphCache extends AbstractTitanGraphCache<Configuration, Tita
             public void onRemoval(RemovalNotification<Configuration, TitanGraph> removal) {
                 TitanGraph titanGraph = removal.getValue();
                 if (titanGraph != null) {
-                    LOG.info("Evicting a standard Titan graph from the cache: " + cache.stats());
+                    LOG.info("Evicting a standard Titan graph from the cache");
                     titanGraph.shutdown();
                 }
             }

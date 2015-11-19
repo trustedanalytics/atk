@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine.user
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.repository.SlickMetaStoreComponent
 import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.domain.{ UserPrincipal, UserTemplate, User }
@@ -28,7 +27,7 @@ import scala.util.{ Try, Failure, Success }
  *
  * @param metaStore the database
  */
-class UserStorage(val metaStore: SlickMetaStoreComponent#SlickMetaStore) extends EventLogging with ClassLoaderAware {
+class UserStorage(val metaStore: SlickMetaStoreComponent#SlickMetaStore) extends EventLogging {
 
   def getUserPrincipal(apiKey: String): UserPrincipal = {
     metaStore.withSession("Getting user principal") {
@@ -41,7 +40,7 @@ class UserStorage(val metaStore: SlickMetaStoreComponent#SlickMetaStore) extends
           users match {
             case Nil => throw new SecurityException("User not found with apiKey:" + apiKey)
             case us if us.length > 1 => throw new SecurityException("Problem accessing user credentials")
-            case user => createUserPrincipalFromUser(users(0))
+            case user => createUserPrincipalFromUser(users.head)
           }
         }
     }
