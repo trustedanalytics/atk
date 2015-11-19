@@ -62,12 +62,6 @@ object RestServerConfig {
   /** the URI of the UAA server */
   val uaaUri = config.getString("trustedanalytics.atk.component.archives.rest-server.uaaUri")
 
-  /** the client name of this app in the UAA server */
-  val uaaClientName = config.getString("trustedanalytics.atk.component.archives.rest-server.uaaClientName")
-
-  /** the client password of this app in the UAA server */
-  val uaaClientPassword = config.getString("trustedanalytics.atk.component.archives.rest-server.uaaClientPassword")
-
   /** Scheme for Rest Service to bind with (http or https) */
   val useHttp: Boolean = config.getBoolean("trustedanalytics.atk.component.archives.rest-server.useHttp")
 

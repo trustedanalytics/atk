@@ -64,19 +64,6 @@ class UaaServer(Server):
         scheme = Server._get_value_from_config('uaa_scheme')
         headers = Server._get_value_from_config('uaa_headers')
         super(UaaServer, self).__init__(uaa_info['uri'], scheme, headers)
-        self.client_name = self._get_client_credential("client_name", uaa_info)
-        self.client_password = self._get_client_credential("client_password", uaa_info)
-
-    @staticmethod
-    def _get_client_credential(credential_name, uaa_info):
-        from trustedanalytics.rest.atkserver import server
-        try:
-            credential = getattr(server, credential_name)  # if local server object has it, use as override
-        except AttributeError:
-            credential = uaa_info.get(credential_name, None)  # else use uaa_info
-        if credential is None:
-            UaaServer.raise_bad_client_credential_error(is_missing=True)
-        return credential
 
     @staticmethod
     def raise_bad_client_credential_error(is_missing=False):
@@ -117,8 +104,7 @@ def _get_token(uaa_info, data):
     """worker to get the token tuple from the UAA server"""
     if uaa_info:
         uaa_server = UaaServer(uaa_info)
-        auth = (uaa_server.client_name, uaa_server.client_password)
-        response = http.post(uaa_server, "/oauth/token", auth=auth, data=data)
+        response = http.post(uaa_server, "/oauth/token", data=data)
         try:
             uaa_server._check_response(response)
         except Exception:
