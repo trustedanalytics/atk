@@ -1,5 +1,6 @@
 #START REQUIRED
 #this includes our config in the classpath
+/etc/trustedanalytics/rest-server/conf
 /etc/trustedanalytics/rest-server
 #logback jars
 /usr/lib/trustedanalytics/rest-server/lib/logback-*.jar

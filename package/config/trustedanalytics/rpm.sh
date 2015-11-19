@@ -39,7 +39,8 @@ LICENSE="Apache"
 SUMMARY="Trusted analytics atk rest server"
 DESCRIPTION="$SUMMARY "
 day=$(date +"%Y%m%d")
-REQUIRES=" java-1.8.0-openjdk, trustedanalytics-python-client >= ${version}-${day}${BUILD_NUMBER}, python-argparse, python-cm-api, postgresql-server"
+REQUIRES=" java-1.8.0-openjdk, trustedanalytics-python-client >= ${version}-${day}${BUILD_NUMBER}, python27-argparse, postgresql-server, python27-cluster-config, python27-pyhocon"
+
 
 PRE="
 restUser=atkuser

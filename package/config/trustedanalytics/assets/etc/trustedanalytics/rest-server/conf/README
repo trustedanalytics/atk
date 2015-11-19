@@ -1,0 +1,10 @@
+all ATK configuration are loaded from this folder
+
+atk.conf- loads all other files, order is important. The configurations in the last file will overwrite all others.
+application.conf.example- the reference configuration.
+db.conf- database configurations
+cdh.conf- CDH sourced configurations like hdfs zookeeper
+spark.conf- spark yarn configuration
+generation.conf- configurations from CDH that get auto generated
+user.conf- your configuration
+
