@@ -193,6 +193,10 @@ trustedanalytics.atk {
       # ("/usr/lib/spark","/opt/cloudera/parcels/CDH/lib/spark/", etc)
       //home = ""
 
+      # Path to jar with LargeObjectTorrentBroadcastFactory which fixes bug in Spark when broadcast variables exceed 2GB.
+      # TODO: Remove jar once fix is incorporated in Spark
+      //broadcast-factory-lib = "spark-broadcast-1.3.jar"
+
       conf {
         properties {
           # These key/value pairs will be parsed dynamically and provided to SparkConf()
