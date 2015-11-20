@@ -59,7 +59,6 @@ def add_return_none_postprocessor(command_full_name):
 @postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
                'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
 def return_graph(json_result):
-
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
 
@@ -141,3 +140,11 @@ def return_loopy_belief_propagation(json_result):
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
+
+@postprocessor('model:power_iteration_clustering/predict')
+def return_power_iteration_clustering_predict(json_result):
+    from trustedanalytics import get_frame
+    predicted_frame = get_frame(json_result['frame']['uri'])
+    number_of_clusters = json_result['k']
+    cluster_size = json_result['cluster_size']
+    return {'predicted_frame': predicted_frame , 'number_of_clusters': number_of_clusters, 'cluster_size': cluster_size}
