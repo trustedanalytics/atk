@@ -20,7 +20,7 @@ while [ $count -lt $max ];
 do
     for pid in `pstree -pn $PID | grep -o "[[:digit:]]*"`
     do
-        bound=$(netstat -tulnp | grep $pid)
+        bound=$(netstat -tuln | grep $pid)
         if [ "$bound" != "" ]; then
             echo server is up
             exit 0
