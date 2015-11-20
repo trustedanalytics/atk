@@ -13,14 +13,14 @@ nohup ../bin/rest-server.sh > out 2>&1&
 PID=$!
 
 echo "PID: " $PID
-max=10
+max=20
 count=0
 
 while [ $count -lt $max ];
 do
     for pid in `pstree -pn $PID | grep -o "[[:digit:]]*"`
     do
-        bound=$(netstat -tuln | grep $pid)
+        bound=$(netstat -tulnp | grep $pid)
         if [ "$bound" != "" ]; then
             echo server is up
             exit 0
