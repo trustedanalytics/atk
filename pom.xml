@@ -169,7 +169,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <modules>
                 <module>doc-api-examples</module>
                 <module>testutils</module>
-                <module>misc</module>
                 <module>module-loader</module>
                 <module>scoring-interfaces</module>
                 <module>model-publish-format</module>
@@ -1098,18 +1097,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <groupId>org.objenesis</groupId>
                         <artifactId>objenesis</artifactId>
                     </exclusion>
-                    <!--<exclusion>
-    <groupId>org.spark-project.akka</groupId>
-    <artifactId>akka-remote_${scala.short.version}</artifactId>
-</exclusion>
-                    <exclusion>
-    <groupId>org.spark-project.akka</groupId>
-    <artifactId>akka-actor_${scala.short.version}</artifactId>
-</exclusion>
-                    <exclusion>
-    <groupId>org.spark-project.akka</groupId>
-    <artifactId>akka-slf4j_${scala.short.version}</artifactId>
-</exclusion>-->
                 </exclusions>
             </dependency>
             <dependency>
