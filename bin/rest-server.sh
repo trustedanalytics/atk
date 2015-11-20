@@ -26,7 +26,7 @@ export BASEDIR=$DIR/..
 pushd $DIR/..
 pwd
 
-export SEARCH_PATH="-Datk.module-loader.search-path=${BASEDIR}/rest-server:${BASEDIR}/engine:${BASEDIR}/engine-plugins:${BASEDIR}/model-publish-format:${HOME}/.m2/"
+export SEARCH_PATH="-Datk.module-loader.search-path=${BASEDIR}/module-loader:${BASEDIR}/rest-server:${BASEDIR}/engine:${BASEDIR}/engine-plugins:${BASEDIR}/model-publish-format:${HOME}/.m2/"
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
 
