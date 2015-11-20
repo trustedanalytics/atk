@@ -178,6 +178,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-models</module>
                 <module>rest-server</module>
                 <module>python-client</module>
+								<module>doc</module>
                 <module>package</module>
             </modules>
         </profile>
