@@ -80,8 +80,8 @@ trim_to_atk_root_len = len(path_to_atk_root) + 1   # +1 for slash
 def _trim_test_path(path):
     return path[trim_to_atk_root_len:]
 
-test_file_name = os.path.join(here, "doc_api_examples_test.py")  # the name of generated test module
-# note: this name is also in the root .gitignore file, if changing name, change there too.
+test_file_name = os.path.join(here, "doc_api_examples_test_generated.py")  # the name of generated test module
+# note: the *_generated.py* is a pattern in the root .gitignore file as well as the pom for maven-clean-plugin
 
 
 
@@ -231,19 +231,25 @@ if __name__ == "__main__":
 '''
 
 
-def _create_test_text(test_name, test_path):
+def replace_invalid_chars(s):
+    """replaces chars unsuitable for a python name with '_' """
+    return ''.join([c if c.isalnum() or c == '_' else '_' for c in s])
+
+
+def _create_test_text(full_test_path):
     """
     returns string of python code which should execute a doctest for given test_path
 
-    :param test_name: name of the test function, must contain "test"
-    :param test_path: string indicating the location of the test source file relative to ATK root
+    :param full_test_path: string indicating the full path location of the test source file
     """
+    path_from_root = _trim_test_path(full_test_path)
+    test_name = 'test_' + replace_invalid_chars(path_from_root)
     return """
     def %s(self):
         test_path = '%s'
         results = %s(test_path)
         self.assertEqual(0, results.failed, test_path)
-""" % (test_name, test_path, run.__name__)
+""" % (test_name, path_from_root, run.__name__)
 
 
 def main():
@@ -262,10 +268,7 @@ def main():
     core_py_paths = [os.path.join(path_to_core, "frame.py"),
                      os.path.join(path_to_core, "graph.py")]  # note: nothing really interesting in model.py itself
 
-    tests = [_create_test_text(test_name="test_rst_%s" % i, test_path=_trim_test_path(p))
-             for i, p in enumerate(filtered_rst_paths)]
-    tests.extend([_create_test_text(test_name="test_core_%s" % i, test_path=_trim_test_path(p))
-                 for i, p in enumerate(core_py_paths)])
+    tests = [_create_test_text(p) for p in (filtered_rst_paths + core_py_paths)]
 
     class_count = 0
     functions_per_class = 10
