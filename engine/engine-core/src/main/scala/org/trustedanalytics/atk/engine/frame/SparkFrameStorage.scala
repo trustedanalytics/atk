@@ -215,8 +215,11 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
       require(frame != null, "frame is required")
       require(offset >= 0, "offset must be zero or greater")
       require(count > 0, "count must be zero or greater")
-      val reader = getReader(frame)
-      val rows = reader.take(count, offset, Some(maxRows))
+      val rows = if (frame.storageLocation.isDefined) { // note: will need to change for lazy
+        val reader = getReader(frame)
+        reader.take(count, offset, Some(maxRows))
+      }
+      else Nil
       updateLastReadDate(frame)
       rows
     }
@@ -229,9 +232,12 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   override def getAllRows(frame: FrameEntity)(implicit invocation: Invocation): Iterable[Array[Any]] =
     withContext("frame.getAllRows") {
       require(frame != null, "frame is required")
-      val reader = getReader(frame)
-      val numRows = getRowCount(frame)
-      val rows = reader.take(numRows, 0, None)
+      val rows = if (frame.storageLocation.isDefined) { // note: will need to change for lazy
+        val reader = getReader(frame)
+        val numRows = getRowCount(frame)
+        reader.take(numRows, 0, None)
+      }
+      else Nil
       updateLastReadDate(frame)
       rows
     }
