@@ -125,7 +125,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
         <dep.reflections>0.9.9-RC1</dep.reflections>
         <!-- END TITAN -->
-        <dep.cdh.version>cdh5.5.1-SNAPSHOT</dep.cdh.version>
+        <dep.cdh.version>cdh5.5.0</dep.cdh.version>
         <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
         <dep.spark.yarn.version>1.5.0-${dep.cdh.version}</dep.spark.yarn.version>
         <dep.mahout.version>0.9-${dep.cdh.version}</dep.mahout.version>
