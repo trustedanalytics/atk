@@ -40,3 +40,9 @@ class DataCatalog(object):
 
     def __getitem__(self, slice):
         return self.rows[slice]
+
+    @staticmethod
+    def publish(catalog_metadata):
+        uri = "datacatalog"
+        return server.post(uri, catalog_metadata).json()
+

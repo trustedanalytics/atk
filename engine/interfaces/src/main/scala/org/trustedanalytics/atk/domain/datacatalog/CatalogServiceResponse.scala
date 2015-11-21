@@ -1,4 +1,4 @@
-package org.trustedanalytics.atk.rest.datacatalog
+package org.trustedanalytics.atk.domain.datacatalog
 
 import org.trustedanalytics.atk.domain.schema.FrameSchema
 import spray.json.JsValue

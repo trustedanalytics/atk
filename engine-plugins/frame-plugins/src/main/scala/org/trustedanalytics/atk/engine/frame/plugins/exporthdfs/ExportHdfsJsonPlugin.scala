@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
 import org.trustedanalytics.atk.domain.frame.ExportHdfsJsonArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
@@ -30,13 +31,14 @@ import scala.collection.mutable.ArrayBuffer
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Export a frame to json file
  */
 @PluginDoc(oneLine = "Write current frame to HDFS in JSON format.",
   extended = "Export the frame to a file in JSON format as a Hadoop file.")
-class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitReturn] {
+class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, CatalogMetadata] {
 
   /**
    * The name of the command
@@ -57,11 +59,21 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
    * @param arguments input specification for covariance
    * @return value of type declared as the Return type
    */
-  override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): CatalogMetadata = {
     val fileStorage = new HdfsFileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
-    exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
+    val sample = exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
+
+    CatalogMetadata(frame.name.getOrElse(s"csv_${System.currentTimeMillis()}"),
+      0,
+      sample,
+      frame.rowCount.getOrElse(0),
+      false,
+      s"${fileStorage.fs.getHomeDirectory()}/${new Path(arguments.folderName).toString}",
+      "all",
+      "json",
+      s"${fileStorage.fs.getHomeDirectory()}/${new Path(arguments.folderName).toString}")
   }
 
   /**
@@ -74,7 +86,7 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
     frameRdd: FrameRdd,
     filename: String,
     count: Option[Int],
-    offset: Option[Int]) {
+    offset: Option[Int]) = {
 
     val recCount = count.getOrElse(-1)
     val recOffset = offset.getOrElse(0)
@@ -93,8 +105,9 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
           }
           value.mkString("{", ",", "}")
         }
-    }
+    }.cache()
     jsonRDD.saveAsTextFile(filename)
+    jsonRDD.first()
   }
 
 }

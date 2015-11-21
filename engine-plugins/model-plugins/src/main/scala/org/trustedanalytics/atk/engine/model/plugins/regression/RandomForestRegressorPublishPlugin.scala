@@ -28,6 +28,8 @@ import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Publish a Random Forest Regressor Model for scoring
@@ -38,7 +40,7 @@ import ModelPublishJsonProtocol._
 on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
 This model can then be used to predict the target value of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadata] {
 
   /**
    * The name of the command.
@@ -72,7 +74,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): CatalogMetadata = {
 
     val model: Model = arguments.model
 
@@ -81,6 +83,15 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    val filepath = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
+    CatalogMetadata(model.name.getOrElse("random_forest_regressor_model"),
+      0,
+      "",
+      0,
+      false,
+      filepath,
+      "model",
+      "tar",
+      filepath)
   }
 }

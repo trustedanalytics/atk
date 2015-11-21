@@ -149,3 +149,8 @@ def return_loopy_belief_propagation(json_result):
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
+@postprocessor('frame/export_to_csv','frame/export_to_json','model:libsvm/publish','model:random_forest_regressor/publish','model:random_forest_classifier/publish','model:k_means/publish')
+def return_catalog_metadata(catalog_metadata):
+    from trustedanalytics import DataCatalog
+    return DataCatalog.publish(catalog_metadata)
+
