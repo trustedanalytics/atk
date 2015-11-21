@@ -16,9 +16,11 @@
 
 package org.trustedanalytics.atk.engine
 
+import java.io.File
 import java.net.InetAddress
 import java.util.concurrent.TimeUnit
 
+import org.apache.commons.io.FileUtils
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
 import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanAutoPartitioner
@@ -46,7 +48,7 @@ object EngineConfig extends EngineConfig
 trait EngineConfig extends EventLogging {
   implicit val eventContext: EventContext = null
 
-  val config = ConfigFactory.load()
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
   val engineConfigKey = "trustedanalytics.atk.engine"
   val sparkConfigKey = engineConfigKey + ".spark"
   val hiveConfigKey = engineConfigKey + ".hive"
@@ -81,6 +83,10 @@ trait EngineConfig extends EventLogging {
   val hiveLib: String = config.getString(hiveConfigKey + ".lib")
   val hiveConf: String = config.getString(hiveConfigKey + ".conf")
   val jdbcLib: String = config.getString(jdbcConfigKey + ".lib")
+  val sparkBroadcastFactoryLib: String = config.getString(sparkConfigKey + ".broadcast-factory-lib")
+
+  /** Path to hbase conf, e.g. /etc/hbase/conf */
+  val hbaseConf: String = config.getString(engineConfigKey + ".hbase.configuration.path")
 
   /**
    * true to re-use a SparkContext, this can be helpful for automated integration tests, not for customers.
@@ -94,11 +100,6 @@ trait EngineConfig extends EventLogging {
    * point for any relative URLs e.g. "hdfs://hostname/user/atkuser"
    */
   val fsRoot: String = config.getString(engineConfigKey + ".fs.root")
-
-  /**
-   * Absolute local paths where jars are copied from
-   */
-  val localLibs: List[String] = config.getStringList(engineConfigKey + ".local-libs").asScala.toList
 
   /**
    * Path relative to fs.root where jars are copied to
@@ -118,15 +119,6 @@ trait EngineConfig extends EventLogging {
    */
   val frameLoadTestFailThresholdPercentage: Int =
     config.getInt(engineConfigKey + ".command.frames.load.config.schema-validation-fail-threshold-percentage")
-
-  /**
-   * A list of archives that will be searched for command plugins
-   */
-  val archives: List[String] = {
-    config.getStringList(engineConfigKey + ".plugin.command.archives")
-      .asScala
-      .toList
-  }
 
   /**
    * Default settings for Titan Load.
@@ -305,23 +297,7 @@ trait EngineConfig extends EventLogging {
    */
   val sparkDriverMaxPermSize = config.getString(sparkConfigKey + ".conf.properties.spark.driver.maxPermSize")
 
-  /**
-   * Determines whether SparkContex.addJars() paths get "local:" prefix or not.
-   *
-   * True if engine-core.jar, interfaces.jar and others are installed locally on each cluster node (preferred).
-   * False is useful mainly for development on a cluster.  False results in many copies of the application jars
-   * being made and copied to all of the cluster nodes.
-   */
-  val sparkAppJarsLocal: Boolean = config.getBoolean(sparkConfigKey + ".app-jars-local")
-
-  /**
-   * Represents a ":" separated set of fully qualified strings (jars) needed by the application.
-   */
-  val extraJarsForSparkSubmit: String = config.getString(sparkConfigKey + ".extra-jars-for-spark-submit")
-
-  /**
-   * Fully qualified hostname for current system.
-   */
+  /** Fully qualified Hostname for current system */
   private def hostname: String = InetAddress.getLocalHost.getCanonicalHostName
 
   // log important settings
@@ -332,12 +308,6 @@ trait EngineConfig extends EventLogging {
     info("disableKryo: " + disableKryo)
     for ((key: String, value: String) <- sparkConfProperties) {
       info(s"sparkConfProperties: $key = $value")
-    }
-    if (sparkAppJarsLocal) {
-      info("sparkAppJarsLocal: " + sparkAppJarsLocal + " (expecting application jars to be installed on all worker nodes)")
-    }
-    else {
-      info("sparkAppJarsLocal: " + sparkAppJarsLocal + " (application jars will be copied to worker nodes with every command)")
     }
   }
 
@@ -365,10 +335,34 @@ trait EngineConfig extends EventLogging {
   }
 
   //gc variables
-  val gcInterval = config.getDuration(engineConfigKey + ".gc.interval", TimeUnit.MILLISECONDS)
-  val gcStaleAge = config.getDuration(engineConfigKey + ".gc.stale-age", TimeUnit.MILLISECONDS)
+  lazy val gcInterval = config.getDuration(engineConfigKey + ".gc.interval", TimeUnit.MILLISECONDS)
+  lazy val gcStaleAge = config.getDuration(engineConfigKey + ".gc.stale-age", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean(engineConfigKey + ".hadoop.kerberos.enabled")
   val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.principal-name")) else None
   val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString(engineConfigKey + ".hadoop.kerberos.keytab-file")) else None
+
+  /**
+   * Path to effective application.conf (includes overrides passed in at runtime
+   * that will need to be sent to Yarn)
+   */
+  lazy val effectiveApplicationConf: String = {
+    val file = File.createTempFile("effective-application-conf-", ".tmp")
+    file.deleteOnExit()
+
+    // modify permissions since this file could have credentials in it
+    // first remove all permissions
+    file.setReadable(false, false)
+    file.setWritable(false, false)
+    file.setExecutable(false, false)
+
+    // then add owner permissions
+    file.setReadable(true, true)
+    file.setWritable(true, true)
+
+    FileUtils.writeStringToFile(file, config.root().render())
+
+    file.getAbsolutePath
+  }
+
 }

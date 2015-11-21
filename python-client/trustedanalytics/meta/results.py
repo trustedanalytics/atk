@@ -59,7 +59,6 @@ def add_return_none_postprocessor(command_full_name):
 @postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
                'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
 def return_graph(json_result):
-
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
 
@@ -93,14 +92,6 @@ def return_clustering_coefficient(json_result):
 def return_bin_result(json_result):
     return json_result["cutoffs"]
 
-@postprocessor('model:giraph_lda/train')
-def return_giraph_lda_train(json_result):
-    from trustedanalytics import get_frame
-    doc_frame = get_frame(json_result['topics_given_doc']['uri'])
-    word_frame= get_frame(json_result['word_given_topics']['uri'])
-    topic_frame= get_frame(json_result['topics_given_word']['uri'])
-    return { 'topics_given_doc': doc_frame, 'word_given_topics': word_frame, 'topics_given_word': topic_frame, 'report': json_result['report'] }
-
 @postprocessor('model:lda/train')
 def return_lda_train(json_result):
     from trustedanalytics import get_frame
@@ -120,7 +111,7 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/collaborative_filtering')
+@postprocessor('frame:/giraph_collaborative_filtering')
 def return_collaborative_filtering(json_result):
     from trustedanalytics import get_frame
     user_frame = get_frame(json_result['user_frame']['uri'])
@@ -142,7 +133,7 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph/loopy_belief_propagation','graph:/kclique_percolation')
+@postprocessor('graph:/loopy_belief_propagation','graph:/kclique_percolation')
 def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']
@@ -154,3 +145,10 @@ def return_catalog_metadata(catalog_metadata):
     from trustedanalytics import DataCatalog
     return DataCatalog.publish(catalog_metadata)
 
+@postprocessor('model:power_iteration_clustering/predict')
+def return_power_iteration_clustering_predict(json_result):
+    from trustedanalytics import get_frame
+    predicted_frame = get_frame(json_result['frame']['uri'])
+    number_of_clusters = json_result['k']
+    cluster_size = json_result['cluster_size']
+    return {'predicted_frame': predicted_frame , 'number_of_clusters': number_of_clusters, 'cluster_size': cluster_size}

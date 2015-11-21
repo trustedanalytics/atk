@@ -27,14 +27,13 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) e
 
   override def score(data: Seq[Array[String]]): Seq[Any] = {
     var score = Seq[Any]()
-    var value: Int = 2
     data.foreach { row =>
       {
         val x: Array[Double] = new Array[Double](row.length)
         row.zipWithIndex.foreach {
           case (value: Any, index: Int) => x(index) = value.toDouble
         }
-        score = score :+ (predict(Vectors.dense(x)))
+        score = score :+ predict(Vectors.dense(x))
       }
     }
     score

@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
 import org.trustedanalytics.atk.domain.frame.ExportHdfsJsonArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.{ EngineConfig, HdfsFileStorage }
+import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.hadoop.fs.Path
@@ -60,7 +60,7 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Catalo
    * @return value of type declared as the Return type
    */
   override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): CatalogMetadata = {
-    val fileStorage = new HdfsFileStorage
+    val fileStorage = new FileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     val sample = exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
@@ -70,10 +70,10 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Catalo
       sample,
       frame.rowCount.getOrElse(0),
       false,
-      s"${fileStorage.fs.getHomeDirectory()}/${new Path(arguments.folderName).toString}",
+      s"${fileStorage.hdfs.getHomeDirectory()}/${new Path(arguments.folderName).toString}",
       "all",
       "json",
-      s"${fileStorage.fs.getHomeDirectory()}/${new Path(arguments.folderName).toString}")
+      s"${fileStorage.hdfs.getHomeDirectory()}/${new Path(arguments.folderName).toString}")
   }
 
   /**
