@@ -83,6 +83,7 @@ trait EngineConfig extends EventLogging {
   val hiveLib: String = config.getString(hiveConfigKey + ".lib")
   val hiveConf: String = config.getString(hiveConfigKey + ".conf")
   val jdbcLib: String = config.getString(jdbcConfigKey + ".lib")
+  val sparkBroadcastFactoryLib: String = config.getString(sparkConfigKey + ".broadcast-factory-lib")
 
   /** Path to hbase conf, e.g. /etc/hbase/conf */
   val hbaseConf: String = config.getString(engineConfigKey + ".hbase.configuration.path")

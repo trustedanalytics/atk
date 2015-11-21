@@ -98,6 +98,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <!-- Needed to support large broadcast variables in Spark -->
+            <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>spark-broadcast</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.short.version}</artifactId>
             <!--not sure if this is going to work for imllib but the parent version is 0.9.1 and this was 0.9-incubating-->
