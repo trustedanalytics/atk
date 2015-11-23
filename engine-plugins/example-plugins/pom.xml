@@ -35,7 +35,7 @@
 
 
         <properties>
-            <dep.cdh.version>cdh5.5.1</dep.cdh.version>
+            <dep.cdh.version>cdh5.5.0</dep.cdh.version>
             <scala.long.version>2.10.4</scala.long.version>
             <scala.short.version>2.10</scala.short.version>
             <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
