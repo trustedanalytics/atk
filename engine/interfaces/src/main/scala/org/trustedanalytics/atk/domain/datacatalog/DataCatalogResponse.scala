@@ -14,19 +14,9 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.rest.v1
+package org.trustedanalytics.atk.domain.datacatalog
 
-import spray.routing._
-
-/**
- * Single entry point for classes that implement the Trusted Analytics V1 REST API
- */
-class ApiV1Service(val dataFrameService: FrameService,
-                   val commandService: CommandService,
-                   val graphService: GraphService,
-                   val modelService: ModelService,
-                   val dataCatalogService: DataCatalogService) extends Directives {
-  def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ dataCatalogService.dataCatalogRoutes()
-  }
-}
+case class DataCatalogResponse(total: Int,
+                               hits: List[IndexedMetadataEntryWithID],
+                               formats: List[String],
+                               categories: List[String])

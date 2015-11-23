@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.rest.v1
 import org.trustedanalytics.atk.DuplicateNameException
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ RowQueryArgs, QueryResult }
+import org.trustedanalytics.atk.domain.util.DataToJson
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
 import spray.json._
@@ -133,7 +134,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                         complete(GetQuery(id = None, error = None,
                           name = "getRows", arguments = None, complete = true,
                           result = Some(GetQueryPage(
-                            Some(dataToJson(r.data)), None, None, r.schema)),
+                            Some(DataToJson(r.data)), None, None, r.schema)),
                           links = List(Rel.self(uri.toString))))
                       }
                       case Failure(ex) => throw ex
@@ -146,16 +147,4 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
     }
   }
 
-  /**
-   * Convert an Iterable of Any to a List of JsValue. Required due to how spray-json handles AnyVals
-   * @param data iterable to return in response
-   * @return JSON friendly version of data
-   */
-  def dataToJson(data: Iterable[Array[Any]]): List[JsValue] = {
-    import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-    data.map(row => row.map {
-      case null => JsNull
-      case a => a.toJson
-    }.toJson).toList
-  }
 }

@@ -344,7 +344,5 @@
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-math</artifactId>
         </dependency>
-
-
     </dependencies>
 </project>
