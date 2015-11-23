@@ -193,6 +193,10 @@ trustedanalytics.atk {
       # ("/usr/lib/spark","/opt/cloudera/parcels/CDH/lib/spark/", etc)
       //home = ""
 
+      # Path to jar with LargeObjectTorrentBroadcastFactory which fixes bug in Spark when broadcast variables exceed 2GB.
+      # TODO: Remove jar once fix is incorporated in Spark
+      //broadcast-factory-lib = "spark-broadcast-1.3.jar"
+
       conf {
         properties {
           # These key/value pairs will be parsed dynamically and provided to SparkConf()
@@ -204,6 +208,9 @@ trustedanalytics.atk {
           # Increased Akka frame size from default of 10MB to 100MB to allow tasks to send large results to Spark driver
           # (e.g., using collect() on large datasets)
           //spark.akka.frameSize=100
+
+          # Use large object torrent broadcast to support broadcast variables larger than 2GB
+          //spark.broadcast.factory= "org.apache.spark.broadcast.LargeObjectTorrentBroadcastFactory"
 
           # Limit of total size of serialized results of all partitions for each Spark action (e.g. collect).
           # Should be at least 1M, or 0 for unlimited. Jobs will be aborted if the total size is above this limit.
