@@ -5,7 +5,7 @@ The various steps required to generate the sphinx’s based documentation are ru
 
 To generate only the documentation run
 ```
-mvn package –pl doc –p doc
+mvn package –pl doc –P doc
 ```
 This will generate and run only the documentation module.
 
