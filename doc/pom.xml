@@ -94,13 +94,10 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>sphinx-build</executable>
+                                    <executable>bash</executable>
                                     <workingDirectory>${basedir}/</workingDirectory>
                                     <arguments>
-                                        <argument>-b</argument>
-                                        <argument>html</argument>
-                                        <argument>source</argument>
-                                        <argument>build/html</argument>
+                                        <argument>sphinx.sh</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -135,7 +132,39 @@
                         </executions>
                     </plugin>
                 </plugins>
+
             </build>
+            <dependencies>
+                <!--Add deps to make sure doc runs after them-->
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>module-loader</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>rest-server</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>engine-core</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>giraph-plugins</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>frame-plugins</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>graph-plugins</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.trustedanalytics.atk</groupId>
+                    <artifactId>model-plugins</artifactId>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 </project>
