@@ -1597,7 +1597,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
-    def __drop_vertices(self, predicate):
+    def __drop_rows(self, predicate):
         """
         Delete rows in this vertex frame that qualify.
 
@@ -1615,6 +1615,28 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         """
         self._backend.filter_vertices(self, predicate, keep_matching_vertices=False)
+
+    @api
+    @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
+    @deprecated
+    def __drop_vertices(self, predicate):
+        """
+        Delete rows in this vertex frame that qualify.
+
+        Parameters
+        ----------
+        predicate : |UDF|
+            |UDF| or :term:`lambda` which takes a row argument and evaluates
+            to a boolean value.
+
+        Examples
+        --------
+        See inside this :doc:`graph example <../../graphs/graph-/__init__>` for
+        usage of `filter` and `drop_duplicates`.  This method works just like
+        `filter` except it drops matching rows rather than keeping them.
+
+        """
+        self.drop_rows(predicate)
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row to a boolean; vertices that answer False are dropped from the Frame")
