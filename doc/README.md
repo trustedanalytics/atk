@@ -16,7 +16,7 @@ mvn install -P doc -DskipTests
 
 
 Doc generation currently requires 7 steps
-  1. Copies [local mode configuration](../conf/examples/applicatiion.conf.build) to conf/
+  1. Copies [local mode configuration](../conf/examples/application.conf.build) to conf/
   2. start rest server
   3. Compile trustedanalytics python client
   4. run [build_docs.py](../python-client/trustedanalytics/doc/build_docs.py)
