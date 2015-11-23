@@ -74,13 +74,15 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
 
         val executorClassPathString = "spark.executor.extraClassPath"
         val executorClassPathTuple = (executorClassPathString,
-          s"${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
+          s":${EngineConfig.sparkBroadcastFactoryLib}" +
+          s":${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
           s":${EngineConfig.hiveConf}:" + EngineConfig.hbaseConf +
           s":${EngineConfig.sparkConfProperties.getOrElse(executorClassPathString, "")}")
 
         val driverClassPathString = "spark.driver.extraClassPath"
         val driverClassPathTuple = (driverClassPathString,
-          s"${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
+          s":${EngineConfig.sparkBroadcastFactoryLib}" +
+          s":${EngineConfig.hiveLib}:" + EngineConfig.jdbcLib +
           s":${EngineConfig.hiveConf}:" + EngineConfig.hbaseConf +
           s":${EngineConfig.sparkConfProperties.getOrElse(driverClassPathString, "")}")
 

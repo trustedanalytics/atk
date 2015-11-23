@@ -150,7 +150,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <scoverage-plugin.version>1.0.4</scoverage-plugin.version>
 
         <event.version>0.4.2</event.version>
-
+        <spark.broadcast.version>1.3</spark.broadcast.version>
         <mavenVersion>3.1.1</mavenVersion>
         <javaVersion>1.8</javaVersion>
     </properties>
@@ -635,6 +635,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <include>python-coverage.zip</include>
                             </includes>
                         </fileset>
+                        <fileset>
+                            <directory>integration-tests/tests</directory>
+                            <includes>
+                                <include>**/*_generated.py*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
                     </filesets>
                 </configuration>
             </plugin>
@@ -802,7 +809,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>scoring-models</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <!-- Needed to support large broadcast variables in Spark - do not delete-->
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>spark-broadcast</artifactId>
+                <version>${spark.broadcast.version}</version>
+            </dependency>
             <!--STARTititan-->
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>

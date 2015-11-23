@@ -43,7 +43,7 @@ Trying:
 Expecting:
     5
 **********************************************************************
-File "/dev/atk/integration-tests/tests/doc_api_examples_dummy_module.py", line ?, in doc_api_examples_dummy_module.__test__./dev/atk/integration-tests/tests/example_doctest.txt
+File "/dev/atk/integration-tests/tests/doc_api_examples_test.py"
 Failed example:
     2 + 2
 Expected:
@@ -71,7 +71,7 @@ Expecting:
     6
     This line of text comes too soon!
 **********************************************************************
-File "/dev/atk/integration-tests/tests/doc_api_examples_dummy_module.py", line ?, in doc_api_examples_dummy_module.__test__./dev/atk/integration-tests/tests/example_doctest.txt
+File "/dev/atk/integration-tests/tests/doc_api_examples_test.py"
 Failed example:
     3 + 3
 Expected:
@@ -81,14 +81,14 @@ Got:
     6
 **********************************************************************
 1 items had failures:
-   2 of   6 in doc_api_examples_dummy_module.__test__./dev/atk/integration-tests/tests/example_doctest.txt
+   2 of   6 in doc_api_examples_test.py
 6 tests in 1 items.
 4 passed and 2 failed.
 ***Test Failed*** 2 failures.
 
 Failure
 Traceback (most recent call last):
-  File "/dev/atk/integration-tests/tests/doc_api_examples_tests.py", line 123, in test_doc_examples
+  File "/dev/atk/integration-tests/tests/doc_api_examples_test.py", line 123, in test_doc_examples
     self.assertEqual(0, results.failed, "Tests in the example documentation failed.")
 AssertionError: Tests in the example documentation failed.
 
@@ -171,3 +171,10 @@ There are 2 source areas for the documentation examples:
 ![Image of doc generation flow with doctest](atk_doctest.png) 
 
 
+### Scripts
+
+* `gen_doctests.sh` - script which call python script `tests/gendoct.py` to generate a test file for the doctests; called by `run_tests.sh` during full execution
+
+* `tests/gendoct.py` - python script which collects the paths of all the files for doctest execution and creates a file in the `tests/` which contains the necessary testcases.  It also acts as a library module for this generated test file.
+
+* `run_doctest.sh` - script which executes doctest on a single file; used for dev/debug; integration-tests rest-server must be running
