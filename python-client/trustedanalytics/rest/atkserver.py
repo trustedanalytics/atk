@@ -167,7 +167,7 @@ class AtkServer(Server):
             self.headers['Authorization'] = self.user
 
     def refresh_oauth_token(self):
-        token_type, self.oauth_token, self.oauth_refresh_token = get_refreshed_oauth_token(self.oauth_uri, self.oauth_refresh_token)
+        token_type, self.oauth_token, self.oauth_refresh_token = get_refreshed_oauth_token(self.uri, self.oauth_refresh_token)
 
     def _get_base_uri(self):
         """Returns the base uri used by client as currently configured to talk to the server"""
@@ -175,7 +175,7 @@ class AtkServer(Server):
 
     def _check_response(self, response):
         """override base check response to check for an invalid token error"""
-        if response.status_code == 400 and "CF-InvalidAuthToken" in response.text:
+        if (response.status_code == 400 and "CF-InvalidAuthToken" in response.text) or (response.status_code == 401):
             raise InvalidAuthTokenError(response.text)
         super(AtkServer, self)._check_response(response)
 

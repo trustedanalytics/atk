@@ -29,6 +29,8 @@ import LibSvmJsonProtocol._
 import libsvm.svm
 import java.io.File
 import org.apache.commons.io.FileUtils
+import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Publish a Libsvm Model for scoring
@@ -40,7 +42,7 @@ HDFS and this method returns the path to the tar file. The tar file serves as in
 This model can then be used to predict the class of an observation.
     """,
   returns = """Returns the HDFS path to the trained model's tar file""")
-class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadata] {
 
   /**
    * The name of the command.
@@ -74,7 +76,7 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): CatalogMetadata = {
 
     val model: Model = arguments.model
 
@@ -88,7 +90,16 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
       svm.svm_save_model(file.getAbsolutePath, libsvmModel)
       val modelValues = FileUtils.readFileToByteArray(file)
 
-      StringValue(ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin"))
+      val filepath = ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin")
+      CatalogMetadata(model.name.getOrElse("libsvm_model"),
+        0,
+        "",
+        0,
+        false,
+        filepath,
+        "model",
+        "tar",
+        filepath)
     }
     catch { case ex: Exception => throw new RuntimeException(s"Unable to Publish the LibSvm Model\n" + ex.toString) }
     finally {
