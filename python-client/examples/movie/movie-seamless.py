@@ -44,11 +44,7 @@ print("server ping")
 ta.server.ping()
 
 print("define csv file")
-csv = ta.CsvFile("/movie.csv", schema= [('user', ta.int32),
-                                              ('vertexType', str),
-                                              ('movie', ta.int32),
-                                              ('rating', ta.int32),
-                                              ('splits', str)])
+csv = ta.CsvFile("/movie.csv", schema= [('user', ta.int32),('vertexType', str),('movie', ta.int32),('rating', ta.int32),('splits', str)])
 
 print("create frame")
 frame = ta.Frame(csv)

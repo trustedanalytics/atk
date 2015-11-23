@@ -67,9 +67,6 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://invalid-fsroot-host/user/atkuser"
 
-    # Absolute local paths where jars are copied from to hdfs-lib
-    //local-libs = [ "file:/usr/lib/trustedanalytics/rest-server/lib" ]
-
     # The (comma separated, no spaces) Zookeeper hosts that
     # Comma separated list of host names with zookeeper role assigned
     titan.load.storage.hostname = "invalid-titan-host"
@@ -91,6 +88,13 @@ trustedanalytics.atk {
       # These class paths need to be uncommented and be present on YARN nodes
       // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
       // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+
+      # Preferably spark.yarn.jar is installed in HDFS
+      # In Cloudera Manager,
+      #   1) Make sure the SPARK setting "spark_jar_hdfs_path" is set to this value
+      #   2) Use "Actions" -> "Upload Spark Jar" to install jar in HDFS, if it is not already there
+      //spark.yarn.jar = "hdfs://invalid-hdfs-host/user/spark/share/lib/spark-assembly.jar"
+      //spark.yarn.jar = "/opt/cloudera/parcels/CDH-5.4.2-1.cdh5.4.2.p0.2/lib/spark/assembly/lib/spark-assembly-1.3.0-cdh5.4.2-hadoop2.6.0-cdh5.4.2.jar"
     }
 
     #Kerberos authentication configuration. if enabled is set to true will authenticate to kerberos
@@ -112,7 +116,8 @@ trustedanalytics.atk {
   engine {
     auto-partitioner {
       # auto-partitioning spark based on the file size
-      file-size-to-partition-size = [{upper-bound = "1MB", partitions = 15}
+      file-size-to-partition-size = [
+        {upper-bound = "1MB", partitions = 15},
         {upper-bound = "1GB", partitions = 45},
         {upper-bound = "5GB", partitions = 100},
         {upper-bound = "10GB", partitions = 200},
@@ -123,16 +128,17 @@ trustedanalytics.atk {
         {upper-bound = "200GB", partitions = 1500},
         {upper-bound = "300GB", partitions = 2000},
         {upper-bound = "400GB", partitions = 2500},
-        {upper-bound = "600GB", partitions = 3750}]
+        {upper-bound = "600GB", partitions = 3750}
+      ]
 
       # max-partitions is used if value is above the max upper-bound
       max-partitions = 10000
 
       repartition {
-        # re-partitioning strategies:
         # disabled - disable re-partitioning
-        # shrink_only - re-partition only when the number partitions is less than existing partitions. Uses less-expensive Spark merge
-        # shrink_or_grow - re-partition can either increase or decrease the number of partitions using more-expensive Spark shuffle
+        # frame_create_only - re-partition only during frame creation
+        # shrink_only - re-partition during frame creation, and when the number partitions is less than existing partitions. Uses less-expensive Spark merge
+        # shrink_or_grow - during frame creation, and either increase or decrease the number of partitions using more-expensive Spark shuffle
         #                  Using this option will also change the ordering of the frame during the shuffle
         strategy = "disabled"
 
@@ -190,6 +196,10 @@ trustedanalytics.atk {
       # ("/usr/lib/spark","/opt/cloudera/parcels/CDH/lib/spark/", etc)
       //home = ""
 
+      # Path to jar with LargeObjectTorrentBroadcastFactory which fixes bug in Spark when broadcast variables exceed 2GB.
+      # TODO: Remove jar once fix is incorporated in Spark
+      //broadcast-factory-lib = "spark-broadcast-1.3.jar"
+
       conf {
         properties {
           # These key/value pairs will be parsed dynamically and provided to SparkConf()
@@ -201,6 +211,9 @@ trustedanalytics.atk {
           # Increased Akka frame size from default of 10MB to 100MB to allow tasks to send large results to Spark driver
           # (e.g., using collect() on large datasets)
           //spark.akka.frameSize=100
+
+          # Use large object torrent broadcast to support broadcast variables larger than 2GB
+          //spark.broadcast.factory= "org.apache.spark.broadcast.LargeObjectTorrentBroadcastFactory"
 
           # Limit of total size of serialized results of all partitions for each Spark action (e.g. collect).
           # Should be at least 1M, or 0 for unlimited. Jobs will be aborted if the total size is above this limit.

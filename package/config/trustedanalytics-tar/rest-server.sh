@@ -26,9 +26,12 @@ export YARN_CONF_DIR=$ATK_CONF_DIR
 
 echo $DIR
 
-LAUNCHER=$DIR/../launcher.jar
-LAUNCHER=$DIR/../conf/logback.xml:$LAUNCHER
-LAUNCHER=$DIR/../conf:$LAUNCHER
+CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
+CP=$DIR/../conf/logback.xml:$CP
+CP=$DIR/../conf:$CP
+
+export SEARCH_PATH="-Datk.module-loader.search-path=$DIR/../lib/"
+
 echo "Downloading jquery exectuable to parse environment variables"
 
 jq=$DIR/../jq
@@ -116,6 +119,19 @@ buildSvcBrokerConfig $hbase_file $hbase_json
 buildSvcBrokerConfig $hdfs_file $hdfs_json
 buildSvcBrokerConfig $yarn_file $yarn_json
 
+## This next 2 blocks are temporary fixes for incorrect VCAP parameters passed through brokers and ublock new module-loader
+yarn_application_classpath="<property><name>yarn.application.classpath</name><value>,,/*,/lib/*,/*,/lib/*,/*,/lib/*</value></property>"
+safe_yarn_application_classpath=$(printf '%s\n' "$yarn_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+correct_yarn_application_classpath="<property><name>yarn.application.classpath</name><value>\$HADOOP_CONF_DIR,\$HADOOP_COMMON_HOME/*,\$HADOOP_COMMON_HOME/lib/*,\$HADOOP_HDFS_HOME/*,\$HADOOP_HDFS_HOME/lib/*,\$HADOOP_YARN_HOME/*,\$HADOOP_YARN_HOME/lib/*</value></property>"
+safe_correct_yarn_application_classpath=$(printf '%s\n' "$correct_yarn_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+sed -i s/$safe_yarn_application_classpath/$safe_correct_yarn_application_classpath/g yarn-site.xml
+
+mapreduce_application_classpath="<property><name>mapreduce.application.classpath</name><value>/*,/lib/*,</value></property>"
+safe_mapreduce_application_classpath=$(printf '%s\n' "$mapreduce_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+new_mapreduce_application_classpath="<property><name>mapreduce.application.classpath</name><value>\$HADOOP_MAPRED_HOME/*,\$HADOOP_MAPRED_HOME/lib/*,\$MR2_CLASSPATH</value></property>"
+safe_correct_mapreduce_application_classpath=$(printf '%s\n' "$new_mapreduce_application_classpath" | sed 's/[[\.*^$(){}?+|/]/\\&/g')
+sed -i s/$safe_mapreduce_application_classpath/$safe_correct_mapreduce_application_classpath/g yarn-site.xml
+
 popd
 
 pushd $DIR/..
@@ -125,14 +141,13 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
-
 if [ -f "daal.tar.gz" ]; then
+ echo "Installing DAAL libraries"
  tar -xvzf daal.tar.gz
  export DAAL_LIB_DIR="$DIR/../daal/"
  jars="$jars daal-plugins.jar"
 fi
-
+jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
 echo "Creating jar links"
 for jar in $jars
 do
@@ -147,8 +162,8 @@ if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 fi
 
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+echo java $@ -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 

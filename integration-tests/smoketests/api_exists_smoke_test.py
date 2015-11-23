@@ -80,7 +80,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
@@ -131,7 +131,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
@@ -180,7 +180,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'export_to_csv',
                                       'export_to_json',
                                       'filter',
-                                      'flatten_column',
+                                      'flatten_columns',
                                       'get_error_frame',
                                       'group_by',
                                       'histogram',
@@ -210,6 +210,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'edges',
                                      'export_to_titan',
                                      'graphx_connected_components',
+                                     'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
                                      'loopy_belief_propagation',
@@ -225,6 +226,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'copy',
                                      'export_to_graph',
                                      'graphx_connected_components',
+                                     'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
                                      'graph_clustering',
@@ -243,7 +245,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
     def test_expected_methods_exist_on_collaborative_filtering_model(self):
         self.assert_methods_defined(["name",
                                     "train",
-                                    "recommend"], ta.CollaborativeFilteringModel)
+                                    "recommend"], ta.GiraphCollaborativeFilteringModel)
 
     def test_expected_methods_exist_on_libsvm_model(self):
         self.assert_methods_defined(["name",

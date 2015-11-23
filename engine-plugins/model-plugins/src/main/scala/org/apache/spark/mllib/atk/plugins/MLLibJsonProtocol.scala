@@ -31,12 +31,11 @@ import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomForestClassifierData, RandomForestClassifierTrainReturn, RandomForestClassifierPredictArgs, RandomForestClassifierTestArgs, RandomForestClassifierTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.regression._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
-import org.trustedanalytics.atk.engine.model.plugins.clustering.{ KMeansData, KMeansPredictArgs, KMeansTrainArgs, KMeansTrainReturn }
+import org.trustedanalytics.atk.engine.model.plugins.clustering._
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
-import org.trustedanalytics.atk.engine.model.plugins.clustering.{ KMeansData, KMeansPredictArgs, KMeansTrainArgs, KMeansTrainReturn }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionData
 import spray.json._
@@ -327,7 +326,7 @@ object MLLibJsonProtocol {
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
     /**
      * The write methods converts from PrincipalComponentsData to JsValue
-     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     * @param obj PrincipalComponentsData. Where PrincipalComponentData's format is
      *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
      *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
      *            vFactor: org.apache.spark.mllib.linalg.Matrix)
@@ -398,7 +397,7 @@ object MLLibJsonProtocol {
     }
 
     /**
-     * The read method coneverts from JsValue to MLLib's FeatureType
+     * The read method converts from JsValue to MLLib's FeatureType
      * @param json JsValue
      * @return FeatureType
      */
@@ -576,7 +575,7 @@ object MLLibJsonProtocol {
   }
 
   implicit val logRegDataFormat = jsonFormat2(LogisticRegressionData)
-  implicit val classficationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
+  implicit val classificationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
   implicit val classificationWithSGDPredictFormat = jsonFormat3(ClassificationWithSGDPredictArgs)
   implicit val classificationWithSGDTestFormat = jsonFormat4(ClassificationWithSGDTestArgs)
   implicit val svmDataFormat = jsonFormat2(SVMData)
@@ -603,6 +602,9 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainFormat = jsonFormat11(RandomForestRegressorTrainArgs)
   implicit val randomForestRegressorPredictFormat = jsonFormat3(RandomForestRegressorPredictArgs)
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
+  implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
+  implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
+  implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
