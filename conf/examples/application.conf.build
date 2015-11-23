@@ -148,6 +148,9 @@ trustedanalytics.atk {
 
           #Examples of other useful properties to edit for performance tuning:
 
+          # Use large object torrent broadcast to support broadcast variables larger than 2GB
+          //spark.broadcast.factory= "org.apache.spark.broadcast.LargeObjectTorrentBroadcastFactory"
+
           # Increased Akka frame size from default of 10MB to 100MB to allow tasks to send large results to Spark driver
           # (e.g., using collect() on large datasets)
           //spark.akka.frameSize=100
