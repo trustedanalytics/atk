@@ -69,6 +69,10 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>scoring-models</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>testutils</artifactId>
             <scope>test</scope>
         </dependency>
