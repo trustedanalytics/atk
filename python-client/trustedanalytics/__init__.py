@@ -65,6 +65,12 @@ def _get_api_info():
     return ApiInfo(sys.modules[__name__])
 
 
+def _get_server_api_raw():
+    """Gets the raw metadata from the server concerning the command API"""
+    from trustedanalytics.meta.installapi import ServerApiRaw
+    return ServerApiRaw(server)
+
+
 def _walk_api(cls_function, attr_function, include_init=False):
     """Walks the installed API and runs the given functions for class and attributes in the API"""
     from trustedanalytics.meta.installapi import walk_api
