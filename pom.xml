@@ -39,10 +39,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <url>https://maven.trustedanalytics.org/content/repositories/public/</url>
             <snapshots>
                 <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
             </releases>
+            <layout>default</layout>
         </repository>
         <repository>
             <id>cloudera cdh</id>

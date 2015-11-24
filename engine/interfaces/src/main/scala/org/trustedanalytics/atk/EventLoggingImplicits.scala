@@ -32,4 +32,9 @@ trait EventLoggingImplicits {
 
   implicit def user[T](implicit inv: Invocation): UserPrincipal = inv.user
 
+  /*get build to trigger based on changes*/
+  var test1 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test2 = "test11231231"
 }

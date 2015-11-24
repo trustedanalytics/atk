@@ -25,6 +25,12 @@ import org.trustedanalytics.atk.engine.plugin.Invocation
  */
 trait GraphStorage {
 
+  /*get build to trigger based on changes*/
+  var test5 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test6 = "test11231231"
+
   /** Lookup a Graph, throw an Exception if not found */
   def expectGraph(graphRef: GraphReference)(implicit invocation: Invocation): GraphEntity
 
@@ -48,4 +54,28 @@ trait GraphStorage {
   def defineVertexType(graphRef: GraphReference, vertexSchema: VertexSchema)(implicit invocation: Invocation): SeamlessGraphMeta
 
   def defineEdgeType(graphRef: GraphReference, edgeSchema: EdgeSchema)(implicit invocation: Invocation): SeamlessGraphMeta
+
+  /*get build to trigger based on changes*/
+  var test = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var t1est = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var t11est = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test0 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test1 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test2 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test3 = "test11231231"
+
+  /*get build to trigger based on changes*/
+  var test4 = "test11231231"
 }
