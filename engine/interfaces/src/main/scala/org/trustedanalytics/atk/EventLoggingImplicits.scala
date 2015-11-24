@@ -33,4 +33,5 @@ trait EventLoggingImplicits {
   implicit def user[T](implicit inv: Invocation): UserPrincipal = inv.user
 
   var test0 = "test0"
+  var test1 = "test1"
 }
