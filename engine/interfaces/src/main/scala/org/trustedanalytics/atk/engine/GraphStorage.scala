@@ -52,6 +52,4 @@ trait GraphStorage {
   /*get build to trigger based on changes*/
   var test = "test"
 
-  /*get build to trigger based on changes*/
-  var test = "test"
 }
