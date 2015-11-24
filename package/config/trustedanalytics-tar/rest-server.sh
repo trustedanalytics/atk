@@ -26,9 +26,12 @@ export YARN_CONF_DIR=$ATK_CONF_DIR
 
 echo $DIR
 
-LAUNCHER=$DIR/../launcher.jar
-LAUNCHER=$DIR/../conf/logback.xml:$LAUNCHER
-LAUNCHER=$DIR/../conf:$LAUNCHER
+CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
+CP=$DIR/../conf/logback.xml:$CP
+CP=$DIR/../conf:$CP
+
+export SEARCH_PATH="-Datk.module-loader.search-path=$DIR/../lib/"
+
 echo "Downloading jquery exectuable to parse environment variables"
 
 jq=$DIR/../jq
@@ -138,23 +141,12 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
-echo "Creating jar links"
-for jar in $jars
-do
-if [ -f $DIR/../lib/$jar ]; then
-   rm $DIR/../lib/$jar
- fi
-
- ln -s $DIR/../lib/deploy.jar $DIR/../lib/$jar
-done
-
 if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 fi
 
-echo java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
-java $@ -XX:MaxPermSize=384m $JAVA_KRB_CONF -cp "$LAUNCHER" org.trustedanalytics.atk.component.Boot rest-server
+echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 

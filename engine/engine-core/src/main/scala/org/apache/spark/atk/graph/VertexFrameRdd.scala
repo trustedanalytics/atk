@@ -66,7 +66,7 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
    * @return New vertex frame with updated rows
    */
   override def update(newRows: RDD[Row]): Self = {
-    (new VertexFrameRdd(this.schema, newRows)).asInstanceOf[Self]
+    new VertexFrameRdd(this.schema, newRows).asInstanceOf[Self]
 
   }
 

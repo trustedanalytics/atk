@@ -45,8 +45,7 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMultiMaps(0).value.size should equal(5)
+    broadcastVariable.broadcastMultiMap.value.size should equal(5)
     broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
     broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
     broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
@@ -62,14 +61,13 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(2)
-    broadcastVariable.broadcastMultiMaps(0).value.size + broadcastVariable.broadcastMultiMaps(1).value.size should equal(5)
     broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
     broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
     broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
     broadcastVariable.get(4).get should contain theSameElementsAs Set(idCountryNames(4))
     broadcastVariable.get(6).get should contain theSameElementsAs Set(idCountryNames(5))
     broadcastVariable.get(8).isDefined should equal(false)
+
   }
   "JoinBroadcastVariable" should "create an empty broadcast variable" in {
     val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(List.empty[Row]))
@@ -78,8 +76,7 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMultiMaps(0).value.isEmpty should equal(true)
+    broadcastVariable.broadcastMultiMap.value.isEmpty should equal(true)
   }
   "JoinBroadcastVariable" should "throw an IllegalArgumentException if join parameter is null" in {
     intercept[IllegalArgumentException] {

@@ -19,23 +19,26 @@ package org.apache.spark.mllib.atk.plugins
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
 import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
+import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomForestClassifierData, RandomForestClassifierTrainReturn, RandomForestClassifierPredictArgs, RandomForestClassifierTestArgs, RandomForestClassifierTrainArgs }
-import org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering.CollaborativeFilteringData
 import org.trustedanalytics.atk.engine.model.plugins.regression._
+import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
+import org.trustedanalytics.atk.engine.model.plugins.clustering._
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
-import org.trustedanalytics.atk.engine.model.plugins.clustering.{ KMeansData, KMeansPredictArgs, KMeansTrainArgs, KMeansTrainReturn }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionData
-
 import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Implicit conversions for Logistic Regression objects to/from JSON
@@ -93,61 +96,6 @@ object MLLibJsonProtocol {
       val fields = json.asJsObject.fields
       val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new DenseVector(values)
-    }
-  }
-
-  implicit object DenseMatrixFormat extends JsonFormat[DenseMatrix] {
-    override def write(obj: DenseMatrix): JsValue = {
-      JsObject(
-        "num_rows" -> JsNumber(obj.numRows),
-        "num_cols" -> JsNumber(obj.numCols),
-        "values" -> new JsArray(obj.values.map(d => JsNumber(d)).toList),
-        "is_transposed" -> JsBoolean(obj.isTransposed)
-      )
-    }
-
-    override def read(json: JsValue): DenseMatrix = {
-      val fields = json.asJsObject.fields
-
-      val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
-      val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
-      val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
-
-      new DenseMatrix(numRows, numCols, values, isTransposed)
-    }
-  }
-
-  implicit object VectorFormat extends JsonFormat[Vector] {
-    override def write(obj: Vector): JsValue = {
-      obj match {
-        case sv: SparseVector => SparseVectorFormat.write(sv)
-        case dv: DenseVector => DenseVectorFormat.write(dv)
-        case _ => throw new IllegalArgumentException("Object does not confirm to Vector format.")
-      }
-    }
-
-    override def read(json: JsValue): Vector = {
-      if (json.asJsObject.fields.get("size").isDefined) {
-        SparseVectorFormat.read(json)
-      }
-      else {
-        DenseVectorFormat.read(json)
-      }
-    }
-  }
-
-  implicit object MatrixFormat extends JsonFormat[Matrix] {
-    override def write(obj: Matrix): JsValue = {
-      obj match {
-
-        case dm: DenseMatrix => DenseMatrixFormat.write(dm)
-        case _ => throw new IllegalArgumentException("Objects doe not confirm to DenseMatrix format")
-      }
-    }
-
-    override def read(json: JsValue): Matrix = {
-      DenseMatrixFormat.read(json)
     }
   }
 
@@ -232,6 +180,61 @@ object MLLibJsonProtocol {
 
   }
 
+  implicit object VectorFormat extends JsonFormat[Vector] {
+    override def write(obj: Vector): JsValue = {
+      obj match {
+        case sv: SparseVector => SparseVectorFormat.write(sv)
+        case dv: DenseVector => DenseVectorFormat.write(dv)
+        case _ => throw new IllegalArgumentException("Object does not confirm to Vector format.")
+      }
+    }
+
+    override def read(json: JsValue): Vector = {
+      if (json.asJsObject.fields.get("size").isDefined) {
+        SparseVectorFormat.read(json)
+      }
+      else {
+        DenseVectorFormat.read(json)
+      }
+    }
+  }
+
+  implicit object DenseMatrixFormat extends JsonFormat[DenseMatrix] {
+    override def write(obj: DenseMatrix): JsValue = {
+      JsObject(
+        "num_rows" -> JsNumber(obj.numRows),
+        "num_cols" -> JsNumber(obj.numCols),
+        "values" -> new JsArray(obj.values.map(d => JsNumber(d)).toList),
+        "is_transposed" -> JsBoolean(obj.isTransposed)
+      )
+    }
+
+    override def read(json: JsValue): DenseMatrix = {
+      val fields = json.asJsObject.fields
+
+      val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
+      val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
+      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
+
+      new DenseMatrix(numRows, numCols, values, isTransposed)
+    }
+  }
+
+  implicit object MatrixFormat extends JsonFormat[Matrix] {
+    override def write(obj: Matrix): JsValue = {
+      obj match {
+
+        case dm: DenseMatrix => DenseMatrixFormat.write(dm)
+        case _ => throw new IllegalArgumentException("Objects doe not confirm to DenseMatrix format")
+      }
+    }
+
+    override def read(json: JsValue): Matrix = {
+      DenseMatrixFormat.read(json)
+    }
+  }
+
   implicit object KmeansModelFormat extends JsonFormat[KMeansModel] {
     /**
      * The write methods converts from KMeans to JsValue
@@ -302,12 +305,6 @@ object MLLibJsonProtocol {
 
   implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
 
-    /**
-     * The write methods converts from NaiveBayesData to JsValue
-     * @param obj NaiveBayesData. Where NaiveBayesData's format is
-     *            NaiveBayesData(val labels: Array[Double], val pi: Array[Double], theta: Array[Double])
-     * @return JsValue
-     */
     override def write(obj: NaiveBayesModel): JsValue = {
       JsObject(
         "labels" -> obj.labels.toJson,
@@ -316,11 +313,6 @@ object MLLibJsonProtocol {
       )
     }
 
-    /**
-     * The read methods converts from JsValue to NaiveBayesData
-     * @param json JsValue
-     * @return NaiveBayesData(val labels: Array[Double], val pi: Array[Double], theta: Array[Double])
-     */
     override def read(json: JsValue): NaiveBayesModel = {
       val fields = json.asJsObject.fields
       val labels = getOrInvalid(fields, "labels").convertTo[Array[Double]]
@@ -334,7 +326,7 @@ object MLLibJsonProtocol {
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
     /**
      * The write methods converts from PrincipalComponentsData to JsValue
-     * @param obj PrincipalComponentsData. Where PrinicipalComponentData's format is
+     * @param obj PrincipalComponentsData. Where PrincipalComponentData's format is
      *            PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
      *            meanVector:org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
      *            vFactor: org.apache.spark.mllib.linalg.Matrix)
@@ -354,7 +346,7 @@ object MLLibJsonProtocol {
     }
 
     /**
-     * The read methods converts from JsValue to PrincipalComponentsData
+     * The read methods converts from PrincipalComponentsData to JsValue
      * @param json JsValue
      * @return PrincipalComponentsData(val k: Int, val observationColumns: List[String], meanCentered: Boolean,
      *            meanVector: org.apache.spark.mllib.linalg.Vector, singularValues: org.apache.spark.mllib.linalg.Vector,
@@ -554,11 +546,6 @@ object MLLibJsonProtocol {
         "algo" -> AlgoFormat.write(obj.algo))
     }
 
-    /**
-     * The read method converts from JsValue to DecisionTreeModel
-     * @param json JsValue
-     * @return DecisionTreeModel(val topNode: Node, val algo: Algo)
-     */
     override def read(json: JsValue): DecisionTreeModel = {
       val fields = json.asJsObject.fields
       val topNode = NodeFormat.read(getOrInvalid(fields, "top_node"))
@@ -568,21 +555,12 @@ object MLLibJsonProtocol {
   }
 
   implicit object RandomForestModelFormat extends JsonFormat[RandomForestModel] {
-    /**
-     * The write method converts from MLLib's RandomForestModel to JsValue
-     * @param obj RandomForestModel(val algo: Algo, val trees: Array[DecisionTreeModel])
-     * @return JsValue
-     */
+
     override def write(obj: RandomForestModel): JsValue = {
       JsObject("algo" -> AlgoFormat.write(obj.algo),
         "trees" -> new JsArray(obj.trees.map(t => DecisionTreeModelFormat.write(t)).toList))
     }
 
-    /**
-     * The read method converts from JsValue to RandomForestModel
-     * @param json JsValue
-     * @return RandomForestModel(val algo: Algo, val trees: Array[DecisionTreeModel])
-     */
     override def read(json: JsValue): RandomForestModel = {
       val fields = json.asJsObject.fields
       val algo = AlgoFormat.read(getOrInvalid(fields, "algo"))
@@ -597,7 +575,7 @@ object MLLibJsonProtocol {
   }
 
   implicit val logRegDataFormat = jsonFormat2(LogisticRegressionData)
-  implicit val classficationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
+  implicit val classificationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
   implicit val classificationWithSGDPredictFormat = jsonFormat3(ClassificationWithSGDPredictArgs)
   implicit val classificationWithSGDTestFormat = jsonFormat4(ClassificationWithSGDTestArgs)
   implicit val svmDataFormat = jsonFormat2(SVMData)
@@ -624,6 +602,8 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainFormat = jsonFormat11(RandomForestRegressorTrainArgs)
   implicit val randomForestRegressorPredictFormat = jsonFormat3(RandomForestRegressorPredictArgs)
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
+  implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
+  implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
   implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
 }
 
