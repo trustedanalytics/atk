@@ -80,7 +80,7 @@ def get(server, uri_path, **kwargs):
     with httpSession(server.scheme) as session:
         response = session.get(uri, headers=headers, timeout=timeout, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Get Response] %s\nheaders=%s", response.text, response.headers)
+        logger.debug("[HTTP Get Response %s] %s\nheaders=%s", response.status_code, response.text, response.headers)
     return response
 
 
@@ -91,7 +91,7 @@ def delete(server, uri_path, **kwargs):
     with httpSession(server.scheme) as session:
         response = session.delete(uri, headers=headers, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Delete Response] %s", response.text)
+        logger.debug("[HTTP Delete Response %s] %s", response.status_code, response.text)
     return response
 
 
@@ -107,5 +107,5 @@ def post(server, uri_path, data, **kwargs):
     with httpSession(server.scheme) as session:
             response = session.post(uri, headers=headers, data=data, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Post Response] %s", response.text)
+        logger.debug("[HTTP Post Response %s] %s", response.status_code, response.text)
     return response
