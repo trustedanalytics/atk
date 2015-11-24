@@ -36,6 +36,12 @@ class SparkCommandJob extends AbstractEngineComponent {
 
   override lazy val commandLoader = new CommandLoader(loadFromModules = false)
 
+  var webserver: YarnWebServer = null
+  if (EngineConfig.keepYarnAlive) {
+    webserver = YarnWebServer.init(engine)
+    println("webserver lisening port: " + webserver.getListeningPort)
+  }
+
   /**
    * Execute Command
    * @param commandId id of command to execute
@@ -58,6 +64,16 @@ class SparkCommandJob extends AbstractEngineComponent {
         commandExecutor.executeCommand(command)(invocation)
     }
   }
+
+  /**
+   * Shutdown the driver
+   */
+  def stop(): Unit = {
+    println("shutting down the driver")
+    if (webserver != null) {
+      webserver.stop()
+    }
+  }
 }
 
 /**
@@ -78,15 +94,6 @@ object SparkCommandJob {
   def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <command_id>")
 
   /**
-   * Instantiate an instance of the driver and then executing the requested command.
-   * @param commandId the id of the Command to execute
-   */
-  def executeCommand(commandId: Long): Unit = {
-    val driver = new SparkCommandJob
-    driver.execute(commandId)
-  }
-
-  /**
    * Entry point of SparkCommandJob for use by SparkSubmit.
    * @param args command line arguments. Requires command id
    */
@@ -100,17 +107,24 @@ object SparkCommandJob {
         EventLogging.raw = if (config.hasPath("trustedanalytics.atk.engine.logging.raw")) config.getBoolean("trustedanalytics.atk.engine.logging.raw") else true
       } // else rest-server already installed an SLF4j adapter
 
+      var driver: SparkCommandJob = null
       try {
         /* Set to true as for some reason in yarn cluster mode, this doesn't seem to be set on remote driver container */
         sys.props += Tuple2("SPARK_SUBMIT", "true")
         val commandId = args(0).toLong
-        executeCommand(commandId)
+
+        driver = new SparkCommandJob
+        driver.execute(commandId)
+
       }
       catch {
         case t: Throwable => error(s"Error captured in SparkCommandJob to prevent percolating up to ApplicationMaster + ${ExceptionUtils.getStackTrace(t)}")
       }
       finally {
         sys.props -= "SPARK_SUBMIT"
+        if (driver != null) {
+          driver.stop()
+        }
       }
     }
   }
