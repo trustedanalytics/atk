@@ -48,4 +48,7 @@ trait GraphStorage {
   def defineVertexType(graphRef: GraphReference, vertexSchema: VertexSchema)(implicit invocation: Invocation): SeamlessGraphMeta
 
   def defineEdgeType(graphRef: GraphReference, edgeSchema: EdgeSchema)(implicit invocation: Invocation): SeamlessGraphMeta
+
+  /*get build to trigger based on changes*/
+  var test = "test"
 }
