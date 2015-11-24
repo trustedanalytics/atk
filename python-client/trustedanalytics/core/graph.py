@@ -277,7 +277,7 @@ Default is None.""")
     to `add_vertices` and `add_edges`.
 
     <skip>
-    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
+    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema))
     <progress>
 
     </skip>
@@ -410,6 +410,39 @@ Default is None.""")
     [5]    51        31         41  rating      5
 
     Only source vertices 31 and 39 remain.
+
+    Drop row for the movie 'Croods' (vid 41) from the film VertexFrame.
+
+    >>> graph2.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    44  film    Ice Age
+    [2]    41  film    Croods
+    [3]    43  film    Land Before Time
+    [4]    42  film    Jurassic Park
+
+    >>> graph2.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
+    <progress>
+
+    >>> graph2.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    44  film    Ice Age
+    [2]    43  film    Land Before Time
+    [3]    42  film    Jurassic Park
+
+    Dangling edges (edges that correspond to the movie 'Croods', vid 41) were also removed:
+
+    >>> graph2.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  score
+    =============================================
+    [0]    54        31         44  rating      3
+    [1]    52        31         42  rating      3
+    [2]    60        39         43  rating      3
+    [3]    53        31         43  rating      4
+
 
         """
         if not hasattr(self, '_backend'):
