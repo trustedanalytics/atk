@@ -104,7 +104,7 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
           catch {
             case ex =>
               error(ex.getMessage)
-              throw new AuthenticationException(ex.getMessage, ex.getCause)
+              throw new AuthenticationException("CF-InvalidAuthToken", ex.getCause)
           }
           val userPrincipal: UserPrincipal = Try {
             engine.getUserPrincipal(userId)
