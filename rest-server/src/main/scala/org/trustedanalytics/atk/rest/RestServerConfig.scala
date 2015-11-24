@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest
 
 import java.util.concurrent.TimeUnit
@@ -29,7 +28,7 @@ import com.typesafe.config.ConfigFactory
  */
 object RestServerConfig {
 
-  val config = ConfigFactory.load()
+  val config = ConfigFactory.load(this.getClass.getClassLoader)
 
   // val's are not lazy because failing early is better
 

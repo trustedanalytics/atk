@@ -14,10 +14,8 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.moduleloader.internal
 
-import com.typesafe.config.ConfigFactory
 import org.scalatest.WordSpec
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -96,10 +94,7 @@ class ModuleLoaderTest extends WordSpec with MockitoSugar {
     }
 
     "allow valid parent references" in {
-      val moduleLoader = new ModuleLoader(new SearchPath(ConfigFactory.parseString(
-        """
-          atk.module-loader.search-path = [ "src/test/resources/valid-parent-modules", "src/main/resources" ]
-        """)))
+      val moduleLoader = new ModuleLoader(new SearchPath("src/test/resources/valid-parent-modules:src/test/resources/fake-module-loader"))
 
       val modules = moduleLoader.load()
       assert(modules.values.size == 4)
@@ -115,10 +110,7 @@ class ModuleLoaderTest extends WordSpec with MockitoSugar {
     }
 
     "catch circular parent references" in {
-      val moduleLoader = new ModuleLoader(new SearchPath(ConfigFactory.parseString(
-        """
-        atk.module-loader.search-path = [ "src/test/resources/circular-parent-modules" ]
-        """)))
+      val moduleLoader = new ModuleLoader(new SearchPath("src/test/resources/circular-parent-modules"))
 
       intercept[IllegalArgumentException] {
         moduleLoader.load()
@@ -126,10 +118,7 @@ class ModuleLoaderTest extends WordSpec with MockitoSugar {
     }
 
     "catch multi-level member-of references" in {
-      val moduleLoader = new ModuleLoader(new SearchPath(ConfigFactory.parseString(
-        """
-        atk.module-loader.search-path = [ "src/test/resources/multi-level-member-of" ]
-        """)))
+      val moduleLoader = new ModuleLoader(new SearchPath("src/test/resources/multi-level-member-of"))
 
       intercept[IllegalArgumentException] {
         moduleLoader.load()
@@ -137,10 +126,7 @@ class ModuleLoaderTest extends WordSpec with MockitoSugar {
     }
 
     "allow valid member-of" in {
-      val moduleLoader = new ModuleLoader(new SearchPath(ConfigFactory.parseString(
-        """
-          atk.module-loader.search-path = [ "src/test/resources/valid-member-of", "src/main/resources", "src/test/resources/fake-lib" ]
-        """)))
+      val moduleLoader = new ModuleLoader(new SearchPath("src/test/resources/valid-member-of:src/test/resources/fake-module-loader:src/test/resources/fake-lib"))
 
       val modules = moduleLoader.load()
       assert(modules.values.size == 2)
@@ -151,17 +137,15 @@ class ModuleLoaderTest extends WordSpec with MockitoSugar {
       assert(modules("module-c").jarNames.contains("b.jar"), "b.jar not found")
     }
 
-    "combines member-of configs correctly" in {
-      val moduleLoader = new ModuleLoader(new SearchPath(ConfigFactory.parseString(
-        """
-          atk.module-loader.search-path = [ "src/test/resources/valid-member-of", "src/main/resources" ]
-        """)))
+    "combine member-of configs correctly" in {
+      val moduleLoader = new ModuleLoader(new SearchPath("src/test/resources/valid-member-of:src/test/resources/fake-module-loader"))
 
       val moduleConfigs = moduleLoader.loadModuleConfigs()
       assert(moduleConfigs.size == 2)
-      assert(moduleConfigs.head.jarNames.contains("c.jar"), "c.jar not found")
-      assert(moduleConfigs.head.jarNames.contains("a.jar"), "a.jar not found")
-      assert(moduleConfigs.head.jarNames.contains("b.jar"), "b.jar not found")
+      val moduleC = moduleConfigs.filter(_.name == "module-c").head
+      assert(moduleC.jarNames.contains("c.jar"), s"c.jar not found in ${moduleConfigs.head.jarNames}")
+      assert(moduleC.jarNames.contains("a.jar"), s"a.jar not found in ${moduleConfigs.head.jarNames}")
+      assert(moduleC.jarNames.contains("b.jar"), s"b.jar not found in ${moduleConfigs.head.jarNames}")
     }
   }
 }

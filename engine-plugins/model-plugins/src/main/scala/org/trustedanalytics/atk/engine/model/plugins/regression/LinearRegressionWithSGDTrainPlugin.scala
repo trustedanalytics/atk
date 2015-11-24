@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.optimization.{ L1Updater, SquaredL2Updater }
@@ -34,7 +33,7 @@ import spray.json._
 @PluginDoc(oneLine = "Build linear regression model.",
   extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
   returns = "Trained linear regression model")
-class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, UnitReturn] {
+class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, LinearRegressionTrainReturn] {
   /**
    * The name of the command.
    *
@@ -59,7 +58,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation): LinearRegressionTrainReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
@@ -71,6 +70,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
+    new LinearRegressionTrainReturn(arguments.observationColumns, arguments.labelColumn, linRegModel.weights.toArray, linRegModel.intercept)
   }
 }
 object LinearRegressionWithSGDTrainPlugin {

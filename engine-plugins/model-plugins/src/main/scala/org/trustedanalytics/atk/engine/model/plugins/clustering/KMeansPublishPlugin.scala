@@ -14,13 +14,12 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
-import org.trustedanalytics.atk.engine.{ HdfsFileStorage, EngineConfig }
+import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin._

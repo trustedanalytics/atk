@@ -20,7 +20,6 @@
 Frame entity types
 """
 
-
 import logging
 logger = logging.getLogger(__name__)
 
@@ -114,17 +113,60 @@ def __drop(*items):
     """
     drop() serves as an alias to drop_frames, drop_graphs, and drop_models.
 
-    It accepts a list of items, which can contain strings (the name of the frame, graph, or model)
-    or proxy objects (the frame, graph, or model object itself).  If the item provided is a string
-    and no frame, graph, or model is found with the specified name, no action is taken.
+    It accepts multiple parameters, which can contain strings (the name of the frame, graph, or model),
+    proxy objects (the frame, graph, or model object itself), or a list of strings and/or proxy objects.
+    If the item provided is a string and no frame, graph, or model is found with the specified name,
+    no action is taken.
 
     If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
+
+    Examples
+    --------
+
+    Given a frame, model, and graph like:
+
+        .. code::
+
+            >>> my_frame = ta.Frame()
+
+            >>> my_model = ta.KMeansModel()
+            <progress>
+
+            >>> my_graph = ta.Graph()
+            -etc-
+
+    The drop() command can be used to delete the frame, model, and graph from the server.  It returns the number
+    of items that have been deleted.
+
+        .. code::
+
+            >>> ta.drop(my_frame, my_model, my_graph)
+            3
+
+    Alternatively, we can pass the object's string name to drop() like:
+
+    .. code::
+
+            >>> my_frame = ta.Frame(name='example_frame')
+
+            >>> ta.drop('example_frame')
+            1
+
     """
     from trustedanalytics import drop_frames, drop_graphs, drop_models, _BaseGraph, _BaseModel, get_frame_names, get_graph_names, get_model_names
 
     num_deleted = 0     # track the number of items we delete to return
 
+    # Flatten out the items (break out lists)
+    flat_item_list = []
+
     for item in items:
+        if isinstance(item, list):
+            flat_item_list.extend(item)
+        else:
+            flat_item_list.append(item)
+
+    for item in flat_item_list:
         if item is not None:
             if isinstance(item, basestring):
                 # If the item is a string, try calling drop_* functions, until we're successful.
@@ -1304,6 +1346,48 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         result = self._backend.take(self, n, offset, columns)
         return result.data
 
+    @api
+    @arg('column', 'str', "The name of the column to be flattened.")
+    @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
+    @deprecated
+    def __flatten_column(self, column, delimiter=None):
+        """
+        Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
+
+        Spread data to multiple rows based on cell data.
+
+        Splits cells in the specified column into multiple rows according to a string
+        delimiter.
+        New rows are a full copy of the original row, but the specified column only
+        contains one value.
+        The original row is deleted.
+        """
+
+        if delimiter is None:
+            delimiter = [","]
+
+        self.flatten_columns(column, delimiter)
+
+    @api
+    @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
+    @arg('delimiter', 'str', "Separator for the data in the result columns. Default is comma (,).")
+    @deprecated
+    def __unflatten_column(self, columns, delimiter=None):
+        """
+        Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
+
+        Compacts data from multiple rows based on cell data.
+
+        Groups together cells in all columns (less the composite key) using "," as string delimiter.
+        The original rows are deleted.
+        The grouping takes place based on a composite key created from cell values.
+        The column datatypes are changed to string.
+        """
+
+        if delimiter is None:
+            delimiter = ","
+
+        self.unflatten_columns(columns, delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):
@@ -1515,7 +1599,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
     @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
     def __drop_vertices(self, predicate):
         """
-        Delete rows that qualify.
+        Delete rows in this vertex frame that qualify.
 
         Parameters
         ----------
@@ -1525,30 +1609,10 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         Examples
         --------
-        Given VertexFrame object *my_vertex_frame* accessing a graph with lots
-        of data for the attributes of ``lions``, ``tigers``, and ``ligers``.
-        Get rid of the ``lions`` and ``tigers``:
+        See inside this :doc:`graph example <../../graphs/graph-/__init__>` for
+        usage of `filter` and `drop_duplicates`.  This method works just like
+        `filter` except it drops matching rows rather than keeping them.
 
-        <skip>
-        .. only:: html
-
-            .. code::
-
-                >>> my_vertex_frame.drop_vertices(lambda row: row.animal_type == "lion" or row.animal_type == "tiger")
-
-        .. only:: latex
-
-            .. code::
-
-                >>> my_vertex_frame.drop_vertices(lambda row:
-                ...     row.animal_type == "lion" or
-                ...     row.animal_type == "tiger")
-
-        Now the frame only has information about ``ligers``.
-
-        More information on |UDF| can be found at :doc:`/ds_apir`
-
-        </skip>
         """
         self._backend.filter_vertices(self, predicate, keep_matching_vertices=False)
 

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.frame
 
 import breeze.linalg.DenseVector
@@ -161,6 +160,22 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     )
   }
 
+  /**
+   * Convert FrameRdd to RDD[(Long, Long, Double)]
+   * @param sourceColumnName Name of the frame's column storing the source id of the edge
+   * @param destinationColumnName Name of the frame's column storing the destination id of the edge
+   * @param edgeSimilarityColumnName Name of the frame's column storing the similarity between the source and destination
+   * @return RDD[(Long, Long, Double)]
+   */
+  def toSourceDestinationSimilarityRDD(sourceColumnName: String, destinationColumnName: String, edgeSimilarityColumnName: String): RDD[(Long, Long, Double)] = {
+    this.mapRows(row => {
+      val source: Long = row.longValue(sourceColumnName)
+      val destination: Long = row.longValue(destinationColumnName)
+      val similarity: Double = row.doubleValue(edgeSimilarityColumnName)
+      (source, destination, similarity)
+    })
+  }
+
   def toVectorRDD(featureColumnNames: List[String]) = {
     this mapRows (row => {
       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
@@ -290,7 +305,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return New frame with updated rows
    */
   def update(newRows: RDD[Row]): Self = {
-    (new FrameRdd(this.frameSchema, newRows)).asInstanceOf[Self]
+    new FrameRdd(this.frameSchema, newRows).asInstanceOf[Self]
   }
 
   /**

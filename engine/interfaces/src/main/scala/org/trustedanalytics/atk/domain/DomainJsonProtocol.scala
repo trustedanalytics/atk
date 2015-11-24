@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain
 
 import java.net.URI
@@ -364,8 +363,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val categoricalSummaryArgsFormat = jsonFormat2(CategoricalSummaryArgs)
   implicit val categoricalSummaryReturnFormat = jsonFormat1(CategoricalSummaryReturn)
 
-  implicit val computeMisplacedScoreInput = jsonFormat2(ComputeMisplacedScoreArgs)
-
   implicit val columnModeFormat = jsonFormat4(ColumnModeArgs)
   implicit val columnModeReturnFormat = jsonFormat4(ColumnModeReturn)
 
@@ -414,7 +411,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   }
   implicit val modelTemplateFormat = jsonFormat2(ModelTemplate)
   implicit val modelRenameFormat = jsonFormat2(RenameModelArgs)
-  implicit val modelFormat = jsonFormat11(ModelEntity)
+  implicit val modelFormat = jsonFormat12(ModelEntity)
   implicit val genericNewModelArgsFormat = jsonFormat2(GenericNewModelArgs)
 
   // kmeans formats

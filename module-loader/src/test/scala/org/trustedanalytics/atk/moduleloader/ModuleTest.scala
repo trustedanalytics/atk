@@ -14,8 +14,9 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.moduleloader
+
+import java.net.URLClassLoader
 
 import org.scalatest.WordSpec
 import org.mockito.Mockito._
@@ -26,9 +27,9 @@ class ModuleTest extends WordSpec with MockitoSugar {
   "Module" should {
     "use its classloader" in {
       val className = "MyClass"
-      val classLoader = mock[ClassLoader]
+      val classLoader = mock[URLClassLoader]
       when(classLoader.loadClass(className)).thenReturn(null)
-      val module = new Module("myname", parentName = None, jarNames = Nil, commandPlugins = Nil, classLoader)
+      val module = new Module("myname", parentName = None, classLoader)
       val result = module.loadClass(className)
       assert(result == null)
       verify(classLoader, times(1)).loadClass(className)

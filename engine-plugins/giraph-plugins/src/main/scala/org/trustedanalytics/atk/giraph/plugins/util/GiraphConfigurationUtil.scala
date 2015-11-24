@@ -14,18 +14,12 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.giraph.plugins.util
 
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanAutoPartitioner
-import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.engine.graph.GraphBuilderConfigFactory
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import com.typesafe.config.{ ConfigValue, ConfigObject, Config }
 import org.apache.hadoop.conf.Configuration
 import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
-import scala.util.Try
 
 object GiraphConfigurationUtil {
 

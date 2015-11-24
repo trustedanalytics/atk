@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.domain.model.{ ModelReference, ModelTemplate, ModelEntity }
@@ -39,4 +38,8 @@ trait ModelStorage {
   def updateLastReadDate(model: ModelEntity)(implicit invocation: Invocation): ModelEntity
 
   def dropModel(model: ModelEntity)(implicit invocation: Invocation): Unit
+
+  def writeToStorage(model: ModelEntity, newData: JsObject)(implicit invocation: Invocation): ModelEntity
+
+  def readFromStorage(model: ModelEntity)(implicit invocation: Invocation): Option[JsObject]
 }

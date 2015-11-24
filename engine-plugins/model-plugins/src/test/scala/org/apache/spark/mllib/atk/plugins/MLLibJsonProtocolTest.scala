@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.apache.spark.mllib.atk.plugins
 
 import org.apache.spark.mllib.tree.configuration.Algo

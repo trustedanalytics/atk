@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import com.google.common.base.Charsets

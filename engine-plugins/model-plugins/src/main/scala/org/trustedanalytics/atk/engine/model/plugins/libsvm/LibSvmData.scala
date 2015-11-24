@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import libsvm.{ svm_node, svm_parameter, svm_model }

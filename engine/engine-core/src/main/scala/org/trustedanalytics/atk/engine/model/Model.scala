@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model
 
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
@@ -56,6 +55,12 @@ trait Model {
    * the JsObject containing the trained model
    */
   def dataOption: Option[JsObject]
+
+  def writeToStorage(updateData: JsObject): Unit
+
+  def readFromStorage(): JsObject
+
+  def readFromStorageOption(): Option[JsObject]
 }
 
 object Model {
@@ -96,4 +101,9 @@ class ModelImpl(modelRef: ModelReference, modelStorage: ModelStorage)(implicit i
     entity.data
   }
 
+  override def writeToStorage(updateData: JsObject): Unit = modelStorage.writeToStorage(entity, updateData)
+
+  override def readFromStorage(): JsObject = readFromStorageOption().getOrElse(throw new RuntimeException("Model has not yet been trained"))
+
+  override def readFromStorageOption(): Option[JsObject] = modelStorage.readFromStorage(entity)
 }

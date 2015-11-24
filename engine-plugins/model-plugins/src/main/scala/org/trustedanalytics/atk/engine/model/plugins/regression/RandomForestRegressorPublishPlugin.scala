@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import com.google.common.base.Charsets
@@ -78,7 +77,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
     val model: Model = arguments.model
 
     //Extracting the RandomForestRegressorModel from the stored JsObject
-    val randomForestData = model.data.convertTo[RandomForestRegressorData]
+    val randomForestData = model.readFromStorage().convertTo[RandomForestRegressorData]
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 

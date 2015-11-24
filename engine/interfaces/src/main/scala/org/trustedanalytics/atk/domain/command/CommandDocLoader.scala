@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.command
 
 import org.trustedanalytics.atk.apidoc.CommandDocText
@@ -34,21 +33,6 @@ object CommandDocLoader {
     // todo: scrape resources for folders besides 'python'.  We're just hardcoding python now
     CommandDocText.getText(path, "python") match {
       case Some(text) => Some(Map("python" -> text))
-      case None => None
-    }
-  }
-
-  /**
-   * Creates a CommandDoc from RST text
-   * @param text RST text of Command API doc
-   * @return  CommandDoc, returns None if None given
-   */
-  private def createCommandDoc(text: Option[String]): Option[CommandDoc] = {
-    text match {
-      case Some(t) =>
-        val oneLineSummary = t.lines.next()
-        val extendedSummary = t.drop(oneLineSummary.size)
-        Some(CommandDoc(oneLineSummary.trim, Some(extendedSummary)))
       case None => None
     }
   }

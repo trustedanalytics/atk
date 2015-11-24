@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.frame
 
 case class Udf(function: String, dependencies: List[UdfDependency]) {

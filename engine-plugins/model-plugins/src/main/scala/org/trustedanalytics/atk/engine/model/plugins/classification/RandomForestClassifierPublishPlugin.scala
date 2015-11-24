@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins.classification
 
 import com.google.common.base.Charsets
@@ -76,7 +75,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
 
     val model: Model = arguments.model
     //Extracting the RandomForestClassifierModel from the stored JsObject
-    val randomForestData = model.data.convertTo[RandomForestClassifierData]
+    val randomForestData = model.readFromStorage().convertTo[RandomForestClassifierData]
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 

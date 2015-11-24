@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.pregel
 
 import org.apache.spark.rdd.RDD

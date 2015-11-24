@@ -16,19 +16,20 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.trustedanalytics.atk.scoring.models.ScoringJsonReaderWriters._
+import ScoringJsonReaderWriters._
 import spray.json._
 
 class LdaModelReaderPlugin() extends ModelLoader {
 
-  private var scoringModel: LdaScoringModel = _
+  private var scoringModel: LdaScoreModel = _
 
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
     val json: JsValue = str.parseJson
     val ldaModel = json.convertTo[LdaModel]
-    scoringModel = new LdaScoringModel(ldaModel)
+    scoringModel = new LdaScoreModel(ldaModel)
     scoringModel
   }
 }

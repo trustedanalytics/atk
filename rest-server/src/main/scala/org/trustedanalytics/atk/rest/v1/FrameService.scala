@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest.v1
 
 import org.trustedanalytics.atk.DuplicateNameException
@@ -30,7 +29,7 @@ import scala.concurrent._
 import scala.util._
 import org.trustedanalytics.atk.rest.CommonDirectives
 import spray.routing.Directives
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import org.trustedanalytics.atk.rest.v1.decorators.FrameDecorator
 

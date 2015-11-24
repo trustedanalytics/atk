@@ -14,10 +14,7 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.graphbuilder.driver.spark.titan
-
-import java.util.Random
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
@@ -26,9 +23,6 @@ import scala.collection.mutable.Map
 
 /**
  * Broadcast variable for graph builder joins
- *
- * The broadcast variable is represented as a sequence of maps to allows us to support broadcast variables
- * larger than 2GB (current limit in Spark 1.2).
  *
  * @param rdd Pair RDD to broadcast
  *
@@ -39,7 +33,7 @@ case class JoinBroadcastVariable[K, V](rdd: RDD[(K, V)]) {
   require(rdd != null, "RDD should not be null")
 
   // Represented as a sequence of multi-maps to support broadcast variables larger than 2GB
-  val broadcastMaps: Seq[Broadcast[Map[K, V]]] = createBroadcastMaps(rdd)
+  val broadcastMap: Broadcast[Map[K, V]] = createBroadcastMap(rdd)
 
   /**
    * Get matching value from broadcast join variable using key
@@ -48,16 +42,7 @@ case class JoinBroadcastVariable[K, V](rdd: RDD[(K, V)]) {
    * @return Optional matching value
    */
   def get(key: K): Option[V] = {
-    var rowOption: Option[V] = None
-    var i = 0
-    val numMaps = length()
-
-    do {
-      rowOption = broadcastMaps(i).value.get(key)
-      i = i + 1
-    } while (i < numMaps && rowOption.isEmpty)
-
-    rowOption
+    broadcastMap.value.get(key)
   }
 
   /**
@@ -70,39 +55,22 @@ case class JoinBroadcastVariable[K, V](rdd: RDD[(K, V)]) {
    */
   def apply(key: K): V = get(key).getOrElse(throw new IllegalArgumentException(s"Could not retrieve key ${key}"))
 
-  /**
-   * Get length of broadcast variable
-   *
-   * @return length of sequence of broadcast multi-maps
-   */
-  def length(): Int = broadcastMaps.size
-
   // Create the broadcast variable for the join
-  private def createBroadcastMaps(rdd: RDD[(K, V)]): Seq[Broadcast[Map[K, V]]] = {
-    val rddSize = getRddSize(rdd)
+  private def createBroadcastMap(rdd: RDD[(K, V)]): Broadcast[Map[K, V]] = {
     val broadcastList = rdd.collect().toList
 
-    val numBroadcastVars = if (!broadcastList.isEmpty && rddSize > Int.MaxValue) {
-      Math.ceil(rddSize.toDouble / Int.MaxValue).toInt // Limit size of each broadcast var to 2G (MaxInt)
-    }
-    else 1
-
-    val broadcastMaps = listToMaps(broadcastList, numBroadcastVars)
-    broadcastMaps.map(map => rdd.sparkContext.broadcast(map))
+    val map = listToMap(broadcastList)
+    rdd.sparkContext.broadcast(map)
   }
 
   //Converts list to sequence of maps by randomly assigning list elements to maps.
-  private def listToMaps[K, V](list: List[(K, V)], numMaps: Int): Seq[Map[K, V]] = {
-    require(numMaps > 0, "Size of maps should exceed zero")
-    val random = new Random(0) //Using seed to get deterministic results
-    val maps = (0 until numMaps).map(_ => Map[K, V]()).toSeq
-
-    list.foldLeft(maps) {
-      case (maps, (key, value)) =>
-        val i = random.nextInt(numMaps) //randomly split into multiple maps
-        maps(i) += (key -> value)
-        maps
+  private def listToMap[K, V](list: List[(K, V)]): Map[K, V] = {
+    val map = Map[K, V]()
+    list.foreach {
+      case (key, value) =>
+        map += (key -> value)
     }
+    map
   }
 }
 

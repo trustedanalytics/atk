@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain
 
 import org.trustedanalytics.atk.domain.schema.Column

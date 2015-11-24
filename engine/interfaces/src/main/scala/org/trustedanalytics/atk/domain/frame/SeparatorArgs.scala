@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.frame
 
 //TODO: Many of these classes will go away in the future, replaced with something more generic.

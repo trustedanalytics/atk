@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.spray.json
 
 import org.scalatest.{ FlatSpec, Matchers }

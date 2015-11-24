@@ -14,11 +14,10 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.domain.graph.{ CopyGraphArgs, GraphEntity }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, Invocation, PluginDoc }
 
 // Implicits needed for JSON conversion
 import spray.json._

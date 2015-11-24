@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.repository
 
 import org.apache.commons.dbcp.BasicDataSource
@@ -139,6 +138,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
             info("Running migrations to create/update schema as needed, jdbcUrl: " + profile.connectionString +
               ", user: " + profile.username)
             val flyway = new Flyway()
+            flyway.setClassLoader(this.getClass.getClassLoader)
             flyway.setDataSource(profile.connectionString, profile.username, profile.password)
             flyway.migrate()
             info("Migration completed")
@@ -887,8 +887,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
       def lastReadDate = column[DateTime]("last_read_date")
 
+      def storageLocation = column[Option[String]]("storage_uri")
+
       /** projection to/from the database */
-      override def * = (id, name, modelType, description, statusId, data, createdOn, modifiedOn, createdByUserId, modifiedByUserId, lastReadDate) <> (ModelEntity.tupled, ModelEntity.unapply)
+      override def * = (id, name, modelType, description, statusId, data, createdOn, modifiedOn, createdByUserId, modifiedByUserId, lastReadDate, storageLocation) <> (ModelEntity.tupled, ModelEntity.unapply)
 
     }
 
@@ -921,27 +923,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def scanAll()(implicit session: Session): Seq[ModelEntity] = {
       models.list
-    }
-
-    /**
-     * Return list of model entities (without data) for all Active model entities with a name
-     * @param session current session
-     */
-    override def scanNamedActiveModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
-      // special query which avoids pulling the data field, which can be large!
-      (for {
-        m <- models; if m.name.isNotNull && m.statusId === Status.Active.id
-      } yield (m.id, m.name, m.modelType)).list.map {
-        case (id, name, modelType) => ModelEntity(
-          id = id,
-          name = name,
-          modelType = modelType,
-          description = None,
-          statusId = Status.Active,
-          data = None,
-          createdOn = null,
-          modifiedOn = null)
-      }
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[ModelEntity] = {
@@ -985,6 +966,33 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     def droppedModels(implicit session: Session) = {
       models.where(_.statusId === (Status.Dropped: Long)).list
+    }
+
+    /** Return seq of model entities for all Active model entities with a name */
+    override def activeNamedModels()(implicit session: Session): Seq[ModelEntity] = {
+      models.where(_.statusId === Status.Active.id).filter(_.name.isNotNull).list
+    }
+
+    /**
+     * Return list of model entities (without data) for all Active model entities with a name
+     * @param session current session
+     */
+    override def activeNamedModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
+      // special query which avoids pulling the data field, which can be large.  (there may be a better way to do this!)
+      (for {
+        m <- models; if m.name.isNotNull && m.statusId === Status.Active.id
+      } yield (m.id, m.name, m.modelType, m.storageLocation)).list.map {
+        case (id, name, modelType, storageLocation) => ModelEntity(
+          id = id,
+          name = name,
+          modelType = modelType,
+          description = None,
+          statusId = Status.Active,
+          data = None,
+          createdOn = null,
+          modifiedOn = null,
+          storageLocation = storageLocation)
+      }
     }
 
     def updateLastReadDate(model: ModelEntity)(implicit session: Session): Try[ModelEntity] = Try {

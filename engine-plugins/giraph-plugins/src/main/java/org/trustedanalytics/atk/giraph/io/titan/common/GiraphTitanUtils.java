@@ -20,7 +20,7 @@ package org.trustedanalytics.atk.giraph.io.titan.common;
 import org.trustedanalytics.atk.giraph.io.titan.TitanGraphWriter;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.schema.TitanManagement;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.giraph.conf.ImmutableClassesGiraphConfiguration;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.log4j.Logger;

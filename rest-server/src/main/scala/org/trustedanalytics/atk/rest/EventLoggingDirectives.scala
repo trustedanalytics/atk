@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.rest
 
 import spray.routing.directives.BasicDirectives

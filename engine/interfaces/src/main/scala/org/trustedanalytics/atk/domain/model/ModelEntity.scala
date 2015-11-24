@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.domain.model
 
 import org.trustedanalytics.atk.domain.{ Status, Naming, HasId }
@@ -46,7 +45,8 @@ case class ModelEntity(id: Long,
                        modifiedOn: DateTime,
                        createdByUserId: Option[Long] = None,
                        modifiedByUserId: Option[Long] = None,
-                       lastReadDate: DateTime = new DateTime) extends HasId {
+                       lastReadDate: DateTime = new DateTime,
+                       storageLocation: Option[String] = None) extends HasId {
   require(id >= 0, "id must be zero or greater")
   require(name != null, "name must not be null")
   require(name match {
@@ -56,11 +56,11 @@ case class ModelEntity(id: Long,
     "if name is set it must not be empty or whitespace")
   require(modelType != null, "modelType must not be null")
   require(!modelType.isEmpty, "modelType must not be empty")
-  //require(modelType.startsWith("model:"), "modelType must start with 'model:'")
   require(description != null, "description must not be null")
   require(data != null, "data must not be null")
   require(createdByUserId != null, "createdByUserId must not be null")
   require(modifiedByUserId != null, "modifiedByUserId must not be null")
+  require(storageLocation != null, "storageLocation must not be null")
 
   def entityType: String = {
     modelType

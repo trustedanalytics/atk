@@ -14,11 +14,10 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.partitioners
 
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes, Schema }
-import org.trustedanalytics.atk.engine.HdfsFileStorage
+import org.trustedanalytics.atk.engine.FileStorage
 import org.apache.spark.frame.FrameRdd
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
@@ -45,7 +44,7 @@ class SparkAutoPartitionerTest extends TestingSparkContextFlatSpec with MockitoS
 
   "repartitionFromFileSize" should "decrease the number of partitions" in {
     val fiveHundredKb = 50000 // Re-partitioner multiplies this size by frame-compression-ratio
-    val mockHdfs = mock[HdfsFileStorage]
+    val mockHdfs = mock[FileStorage]
     when(mockHdfs.size("testpath")).thenReturn(fiveHundredKb)
 
     val repartitioner = new SparkAutoPartitioner(mockHdfs)
@@ -60,7 +59,7 @@ class SparkAutoPartitionerTest extends TestingSparkContextFlatSpec with MockitoS
 
   "repartitionFromFileSize" should "increase the number of partitions when shuffle is true" in {
     val tenMb = 10000000 // Re-partitioner multiplies this size by frame-compression-ratio
-    val mockHdfs = mock[HdfsFileStorage]
+    val mockHdfs = mock[FileStorage]
     when(mockHdfs.size("testpath")).thenReturn(tenMb)
 
     val repartitioner = new SparkAutoPartitioner(mockHdfs)
@@ -72,7 +71,7 @@ class SparkAutoPartitionerTest extends TestingSparkContextFlatSpec with MockitoS
 
   "repartitionFromFileSize" should "not increase the number of partitions when shuffle is false" in {
     val tenMb = 10000000 // Re-partitioner multiplies this size by frame-compression-ratio
-    val mockHdfs = mock[HdfsFileStorage]
+    val mockHdfs = mock[FileStorage]
     when(mockHdfs.size("testpath")).thenReturn(tenMb)
 
     val repartitioner = new SparkAutoPartitioner(mockHdfs)
@@ -84,7 +83,7 @@ class SparkAutoPartitionerTest extends TestingSparkContextFlatSpec with MockitoS
 
   "repartitionFromFileSize" should "not re-partition if the percentage change is less than threshold" in {
     val tenMb = 10000000 // Re-partitioner multiplies this size by frame-compression-ratio
-    val mockHdfs = mock[HdfsFileStorage]
+    val mockHdfs = mock[FileStorage]
     when(mockHdfs.size("testpath")).thenReturn(tenMb)
 
     val repartitioner = new SparkAutoPartitioner(mockHdfs)

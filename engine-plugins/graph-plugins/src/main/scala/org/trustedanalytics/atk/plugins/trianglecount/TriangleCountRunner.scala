@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.plugins.trianglecount
 
 import org.trustedanalytics.atk.plugins.graphconversions.GraphConversions

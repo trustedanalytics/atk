@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.model.plugins
 
 import org.trustedanalytics.atk.domain.model.{ ModelReference, RenameModelArgs }

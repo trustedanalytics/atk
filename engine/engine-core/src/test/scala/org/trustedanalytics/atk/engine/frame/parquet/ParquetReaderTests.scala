@@ -14,12 +14,11 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.frame.parquet
 
 import java.io.File
 
-import org.trustedanalytics.atk.engine.HdfsFileStorage
+import org.trustedanalytics.atk.engine.FileStorage
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{ FileSystem, Path }
@@ -126,12 +125,12 @@ class ParquetReaderTests extends WordSpec with Matchers with MockitoSugar with B
    */
   def createTestParquetReader(): ParquetReader = {
     val mockFactory = createMockParquetFileReaderFactory()
-    val fs = mock[HdfsFileStorage]
+    val fs = mock[FileStorage]
     val conf: Configuration = new Configuration()
     val fileSystem = mock[FileSystem]
     when(fileSystem.isDirectory(anyObject())).thenReturn(true)
     when(fs.configuration).thenReturn(conf)
-    when(fs.fs).thenReturn(fileSystem)
+    when(fs.hdfs).thenReturn(fileSystem)
 
     new ParquetReader(new Path("TestPath"), fs, mockFactory)
   }

@@ -7,7 +7,7 @@
 
     <name>Python Client</name>
     <description>
-        The Python Client talks to the Engine via a REST server.  The client code is partly written
+        The Python Client talks to the Engine via a REST server. The client code is partly written
         in Python and partly generated via meta-programming at runtime.
     </description>
 
@@ -67,6 +67,7 @@
             </build>
         </profile>
     </profiles>
+
 
     <build>
         <plugins>

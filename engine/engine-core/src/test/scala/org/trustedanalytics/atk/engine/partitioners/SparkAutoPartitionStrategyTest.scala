@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.partitioners
 
 import org.trustedanalytics.atk.engine.partitioners.SparkAutoPartitionStrategy._
@@ -25,10 +24,12 @@ class SparkAutoPartitionStrategyTest extends FlatSpec with Matchers {
   "getPartitionStrategy" should "return the Spark auto-partitioning strategy" in {
 
     SparkAutoPartitionStrategy.getRepartitionStrategy("disabled") should equal(Disabled)
+    SparkAutoPartitionStrategy.getRepartitionStrategy("frame_create_only") should equal(FrameCreateOnly)
     SparkAutoPartitionStrategy.getRepartitionStrategy("shrink_only") should equal(ShrinkOnly)
     SparkAutoPartitionStrategy.getRepartitionStrategy("shrink_or_grow") should equal(ShrinkOrGrow)
 
     SparkAutoPartitionStrategy.getRepartitionStrategy("DISABLED") should equal(Disabled)
+    SparkAutoPartitionStrategy.getRepartitionStrategy("FRAME_CREATE_ONLY") should equal(FrameCreateOnly)
     SparkAutoPartitionStrategy.getRepartitionStrategy("SHRINK_ONLY") should equal(ShrinkOnly)
     SparkAutoPartitionStrategy.getRepartitionStrategy("SHRINK_OR_GROW") should equal(ShrinkOrGrow)
   }
