@@ -55,4 +55,6 @@ trait GraphStorage {
   /*get build to trigger based on changes*/
   var t1est = "test11231231"
 
+  /*get build to trigger based on changes*/
+  var t11est = "test11231231"
 }
