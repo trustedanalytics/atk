@@ -31,7 +31,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""max number of super-steps (max iterations) before the algorithm terminates. Default = 10""") maxSteps: Int = 10,
                                            @ArgDoc("""the name of the column containing the propagated label value.""") outputUserVertexPropertyName: String = "preferenceVector",
                                            @ArgDoc("""the name of the column containing the propagated label value.""") outputItemVertexPropertyName: String = "featureVector",
-                                           @ArgDoc("""float value between 0 .. 1 """) regularization: Float = 0f,
+                                           @ArgDoc("""float value between 0 .. 1 """) regularization: Float = 0.5f,
                                            @ArgDoc("""double value between 0 .. 1 """) alpha: Double = 0.5f,
                                            @ArgDoc("""number of the desired factors (rank)""") numFactors: Int = 3,
                                            @ArgDoc("""use implicit preference""") useImplicit: Boolean = false,
@@ -42,7 +42,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
   require(graph != null, "input graph is required")
   require(maxSteps > 1, "min steps must be a positive integer")
   require(regularization > 0, "regularization must be a positive value")
-  require(alpha > 0, "regularization must be a positive value")
+  require(alpha > 0, "alpha must be a positive value")
   require(numFactors > 0, "number of factors must be a positive integer")
   require(numUserBlocks > 0, "number of user blocks must be a positive integer")
   require(numItemBlock > 0, "number of item blocks must be a positive integer")

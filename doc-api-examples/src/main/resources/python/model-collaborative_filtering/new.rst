@@ -8,7 +8,7 @@
 >>> edge_schema = [('source', ta.int32), ('dest', ta.int32), ('weight', ta.int32)]
 
 >>> vertex_rows = [ [1, .1], [2, .1], [3, .5], [4, .5], [5, .5] ]
->>> edge_rows = [ [1, 3, .1], [1, 4, .1], [1, 5, .1], [2, 5, .1] ]
+>>> edge_rows = [ [1, 3, .5], [1, 4, .6], [1, 5, .7], [2, 5, .1] ]
 >>> vertex_frame = ta.Frame(ta.UploadRows (vertex_rows, vertex_schema))
 <progress>
 >>> edge_frame = ta.Frame(ta.UploadRows (edge_rows, edge_schema))
@@ -27,7 +27,19 @@
 <progress>
 >>> model = ta.CollaborativeFilteringModel()
 <progress>
->>> train_output = model.train(graph)
+>>> model.train(graph)
 <progress>
->>> train_output.inspect()
->>> predicted_frame = model.predict(1,5)
+<skip>
+>>> model.predict(1,5)
+<progress>
+</skip>
+<hide>
+>>> x = model.predict(1,5)
+<progress>
+>>> round (x, 2)
+0.5
+>>> x = model.predict(2,5)
+<progress>
+>>> round (x, 2)
+0.5
+</hide>

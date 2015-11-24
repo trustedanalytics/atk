@@ -21,6 +21,8 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.recommendation.{ MatrixFactorizationModel, ALS, Rating }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.{ StringValue, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
@@ -35,7 +37,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = "",
   returns = "Execution result summary for ALS collaborative filtering")
 class CollaborativeFilteringTrainPlugin
-    extends SparkCommandPlugin[CollaborativeFilteringTrainArgs, StringValue] {
+    extends SparkCommandPlugin[CollaborativeFilteringTrainArgs, UnitReturn] {
 
   /**
    * The name of the command, e.g. frame:/label_propagation
@@ -45,12 +47,20 @@ class CollaborativeFilteringTrainPlugin
    */
   override def name: String = "model:collaborative_filtering/train"
 
-  override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit invocation: Invocation): UnitReturn = {
 
     val graph: SparkGraph = arguments.graph
     val (gbVertices, gbEdges) = graph.gbRdds
 
-    val alsInput = gbEdges.map(edge => Rating(edge.tailPhysicalId.asInstanceOf[Int], edge.headPhysicalId.asInstanceOf[Int], 1.0f))
+    val alsInput = gbEdges.map(edge =>
+      {
+        val sourceId = edge.headPhysicalId.asInstanceOf[Long]
+        val destId = edge.tailPhysicalId.asInstanceOf[Long]
+        if ((sourceId > Int.MaxValue) || (destId > Int.MaxValue)) {
+          throw new RuntimeException("User or product Id must not exceed Int.MaxInt")
+        }
+        Rating(sourceId.toInt, destId.toInt, 1.0f)
+      })
     val als = new ALS()
       .setRank(arguments.numFactors)
       .setIterations(arguments.maxSteps)
@@ -68,13 +78,12 @@ class CollaborativeFilteringTrainPlugin
       userFrameEntity,
       productFrameEntity).toJson.asJsObject
 
-    StringValue(StringUtils.EMPTY)
   }
 
   private def toFrameEntity(alsRddSchema: FrameSchema,
                             modelRdd: RDD[(Int, Array[Double])])(implicit invocation: Invocation): FrameEntity = {
     val rowRdd = modelRdd.map {
-      case (id, features) => Row(id.toInt, features)
+      case (id, features) => Row(id.toInt, DataTypes.toVector(features.length)(features))
     }
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS train operation"))) { frame: FrameEntity =>
       frame.save(new FrameRdd(alsRddSchema, rowRdd))
