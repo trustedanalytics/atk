@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -65,10 +66,10 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage) extends EventLogging wit
         }
 
         // the pound symbol '#' is used to rename a file during upload e.g. "/some/path/oldname#newname"
-        val pluginDependencyFiles = Array("--files", s"${EngineConfig.effectiveApplicationConf}#application.conf$kerbFile$pythonDependencyPath",
-          "--conf", s"config.resource=application.conf")
+        val confFile = EngineConfig.effectiveApplicationConf
+        val pluginDependencyFiles = Array("--files", s"$confFile$kerbFile$pythonDependencyPath")
         val executionParams = Array(
-          "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions")
+          "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions -Dconfig.resource=${EngineConfig.effectiveApplicationConfFileName}")
 
         // TODO: not sure why we need to include Hive libraries this way
 
