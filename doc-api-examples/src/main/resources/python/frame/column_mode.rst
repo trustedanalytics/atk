@@ -4,7 +4,6 @@ Given a frame with column 'a' accessed by a Frame object 'my_frame':
 
 .. code::
 
-   <hide>
    >>> import trustedanalytics as ta
    >>> ta.connect()
    <connect>
@@ -12,7 +11,6 @@ Given a frame with column 'a' accessed by a Frame object 'my_frame':
    >>> schema = [('a', ta.int32)]
    >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
    <progress>
-   </hide>
 
 Inspect my_frame
 
@@ -34,28 +32,19 @@ Compute and return a dictionary containing summary statistics of column *a*:
 
 .. code::
 
-   <hide>
    >>> mode = my_frame.column_mode('a')
    <progress>
-   >>> print sorted(mode.keys())
-   [u'mode_count', u'modes', u'total_weight', u'weight_of_mode']
-   >>> print  sorted(mode.values())
-   >>> [1, 2.0, 7.0, [3]]
-   </hide>
+   >>> print sorted(mode.items())
+   [(u'mode_count', 1), (u'modes', [3]), (u'total_weight', 7.0), (u'weight_of_mode', 2.0)]
 
 Given a frame with column 'a' and column 'w' as weights accessed by a Frame object 'my_frame':
 
 .. code::
 
-   <hide>
-   >>> import trustedanalytics as ta
-   >>> ta.connect()
-   <connect>
    >>> data = [[2,1.7],[3,0.5],[3,1.2],[5,0.8],[7,1.1],[10,0.8],[30,0.1]]
    >>> schema = [('a', ta.int32), ('w', ta.float32)]
    >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
    <progress>
-   </hide>
 
 Inspect my_frame
 
@@ -77,11 +66,8 @@ Compute and return dictionary containing summary statistics of column 'a' with w
 
 .. code::
 
-   <hide>
    >>> mode = my_frame.column_mode('a', weights_column='w')
    <progress>
-   </hide>
-   >>> print sorted(mode.keys())
-   [u'mode_count', u'modes', u'total_weight', u'weight_of_mode']
-   >>> print sorted(mode.values())
-   [1.7000000476837158, 2, 6.200000144541264, [2]]
+   >>> print sorted(mode.items())
+   [(u'mode_count', 2), (u'modes', [2]), (u'total_weight', 6.200000144541264), (u'weight_of_mode', 1.7000000476837158)]
+

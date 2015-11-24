@@ -4,7 +4,6 @@ Given a frame with column 'a' accessed by a Frame object 'my_frame':
 
 .. code::
 
-   <hide>
    >>> import trustedanalytics as ta
    >>> ta.connect()
    <connect>
@@ -12,7 +11,6 @@ Given a frame with column 'a' accessed by a Frame object 'my_frame':
    >>> schema = [('a', ta.int32)]
    >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
    <progress>
-   </hide>
 
 Inspect my_frame
 
@@ -33,26 +31,19 @@ Compute and return middle number of values in column *a*:
 
 .. code::
 
-   <hide>
    >>> median = my_frame.column_median('a')
    <progress>
    >>> print median
    5
-   </hide>
 
 Given a frame with column 'a' and column 'w' as weights accessed by a Frame object 'my_frame':
 
 .. code::
 
-   <hide>
-   >>> import trustedanalytics as ta
-   >>> ta.connect()
-   <connect>
    >>> data = [[2,1.7],[3,0.5],[3,1.2],[5,0.8],[7,1.1],[10,0.8],[30,0.1]]
    >>> schema = [('a', ta.int32), ('w', ta.float32)]
    >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
    <progress>
-   </hide>
 
 Inspect my_frame
 
@@ -74,9 +65,7 @@ Compute and return middle number of values in column 'a' with weights 'w':
 
 .. code::
 
-   <hide>
    >>> median = my_frame.column_median('a', weights_column='w')
    <progress>
-   </hide>
    >>> print median
    3
