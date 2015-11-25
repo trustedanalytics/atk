@@ -33,8 +33,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Collaborative Filtering Predict (ALS).",
   extended = """See :ref:`Collaborative Filtering Train
 <python_api/models/model-collaborative_filtering/train>` for more information.""",
-  returns = """See :ref:`Collaborative Filtering Train
-<python_api/models/model-collaborative_filtering/train>` for more information.""")
+  returns = """Returns a double representing the probability if the user(i) to like product (j)""")
 class CollaborativeFilteringPredictPlugin
     extends SparkCommandPlugin[CollaborativeFilteringPredictArgs, DoubleValue] {
 
