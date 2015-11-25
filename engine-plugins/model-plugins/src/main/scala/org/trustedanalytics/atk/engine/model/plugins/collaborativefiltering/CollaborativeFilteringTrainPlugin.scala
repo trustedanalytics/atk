@@ -16,12 +16,10 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
-import org.apache.commons.lang3.StringUtils
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.recommendation.{ MatrixFactorizationModel, ALS, Rating }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
-import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.{ StringValue, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
@@ -59,7 +57,7 @@ class CollaborativeFilteringTrainPlugin
         if ((sourceId > Int.MaxValue) || (destId > Int.MaxValue)) {
           throw new RuntimeException("User or product Id must not exceed Int.MaxInt")
         }
-        Rating(sourceId.toInt, destId.toInt, 1.0f)
+        Rating(sourceId.toInt, destId.toInt, DataTypes.toDouble(edge.getProperty(arguments.weightColumnName).get.value))
       })
     val als = new ALS()
       .setRank(arguments.numFactors)

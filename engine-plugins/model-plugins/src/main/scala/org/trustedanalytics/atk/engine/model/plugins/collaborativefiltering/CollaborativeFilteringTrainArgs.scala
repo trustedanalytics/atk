@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.model.ModelReference
@@ -28,6 +29,7 @@ import DomainJsonProtocol._
  */
 case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            graph: GraphReference,
+                                           @ArgDoc("""weight column name.""") weightColumnName: String,
                                            @ArgDoc("""max number of super-steps (max iterations) before the algorithm terminates. Default = 10""") maxSteps: Int = 10,
                                            @ArgDoc("""the name of the column containing the propagated label value.""") outputUserVertexPropertyName: String = "preferenceVector",
                                            @ArgDoc("""the name of the column containing the propagated label value.""") outputItemVertexPropertyName: String = "featureVector",
@@ -40,6 +42,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""target RMSE""") targetRMSE: Double = 0.05) {
 
   require(graph != null, "input graph is required")
+  require(StringUtils.isNotEmpty(weightColumnName), "weight column name is required")
   require(maxSteps > 1, "min steps must be a positive integer")
   require(regularization > 0, "regularization must be a positive value")
   require(alpha > 0, "alpha must be a positive value")

@@ -16,15 +16,17 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
-import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc }
 
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
- * Arguments to the collaborative filtering predict plugin - see user docs for more on the parameters
+ * Arguments to the collaborative filtering score plugin - see user docs for more on the parameters
  */
-case class CollaborativeFilteringPredictArgs(model: ModelReference,
-                                             graph: GraphReference) {
+case class CollaborativeFilteringScoreArgs(model: ModelReference,
+                                           @ArgDoc("""A user id from the first column of the input frame""") userId: Int,
+                                           @ArgDoc("""An item id from the first column of the input frame""") itemId: Int) {
 
   require(model != null, "model is required")
-  require(graph != null, "batch data as a graph is required")
 }
