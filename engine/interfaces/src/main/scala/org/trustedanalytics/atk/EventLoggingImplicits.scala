@@ -39,4 +39,5 @@ trait EventLoggingImplicits {
   var test4 = "test1"
   var test5 = "test1"
   var test6 = "test1"
+  var test7 = "test1"
 }
