@@ -16,6 +16,9 @@
 
 package org.trustedanalytics.atk.domain.datacatalog
 
+/**
+ * Response class for the data catalog entries
+ */
 case class IndexedMetadataEntryWithID(id: String,
                                       size: Int,
                                       title: String,
@@ -28,7 +31,10 @@ case class IndexedMetadataEntryWithID(id: String,
                                       format: String,
                                       creationTime: String,
                                       sourceUri: String)
-
+/*
+ * Catalog Metadata class being returned by plugins. If any plugin returns an object of type CatalogMetadata,
+ * python client will send a publish request to add the entry to data catalog
+ */
 case class CatalogMetadata(title: String,
                            size: Int,
                            dataSample: String,
@@ -39,6 +45,10 @@ case class CatalogMetadata(title: String,
                            format: String,
                            sourceUri: String)
 
+
+/*
+ * Request class to add an entry to data catalog
+ */
 case class InputMetadataEntry(title: String,
                               category: String,
                               recordCount: Int,
@@ -50,6 +60,9 @@ case class InputMetadataEntry(title: String,
                               dataSample: String,
                               isPublic: Boolean)
 
+/*
+ Converts a catalog metadata object (which is handled by ATK) to an input metadata entry for the data catalog service
+ */
 object ConvertCatalogMetadataToInputMetadataEntry {
   def convert(c: CatalogMetadata, orgUUID: String) = {
     InputMetadataEntry(c.title, c.category, c.recordCount.toInt, c.sourceUri, c.size, orgUUID,
