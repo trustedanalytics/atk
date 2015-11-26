@@ -37,7 +37,7 @@ import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.graph.construction._
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference, GraphTemplate }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema, Column }
 import org.joda.time.{ Duration, DateTime }
 import org.trustedanalytics.atk.engine._
 
@@ -85,7 +85,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
   }
 
-  implicit val columnFormat: RootJsonFormat[Column] = jsonFormat3(Column)
+  implicit val columnFormat: RootJsonFormat[Column] = jsonFormat3(Column.apply)
   implicit val frameSchemaFormat: RootJsonFormat[FrameSchema] = jsonFormat(FrameSchema, "columns")
   implicit val vertexSchemaFormat: RootJsonFormat[VertexSchema] = jsonFormat(VertexSchema, "columns", "label", "id_column_name")
   implicit val edgeSchemaFormat: RootJsonFormat[EdgeSchema] = jsonFormat(EdgeSchema, "columns", "label", "src_vertex_label", "dest_vertex_label", "directed")

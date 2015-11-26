@@ -19,9 +19,10 @@ package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 import java.nio.file.FileSystem
 
 import org.apache.commons.csv.{ CSVPrinter, CSVFormat }
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.datacatalog.{ CatalogMetadata, IndexedMetadataEntryWithID }
+import org.trustedanalytics.atk.domain.datacatalog.{ ExportMetadata, TapDataCatalogResponse }
 import org.trustedanalytics.atk.domain.frame.ExportHdfsCsvArgs
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
@@ -41,7 +42,7 @@ import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonPr
  */
 @PluginDoc(oneLine = "Write current frame to HDFS in csv format.",
   extended = "Export the frame to a file in csv format as a Hadoop file.")
-class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, CatalogMetadata] {
+class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMetadata] {
 
   /**
    * The name of the command
@@ -62,7 +63,7 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, CatalogM
    * @param arguments input specification for covariance
    * @return value of type declared as the Return type
    */
-  override def execute(arguments: ExportHdfsCsvArgs)(implicit invocation: Invocation): CatalogMetadata = {
+  override def execute(arguments: ExportHdfsCsvArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val fileStorage = new FileStorage
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
@@ -70,15 +71,9 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, CatalogM
     // load frame as RDD
     val sample = exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
 
-    CatalogMetadata(frame.name.getOrElse(s"csv_${System.currentTimeMillis()}"),
-      0,
-      sample,
-      frame.rowCount.getOrElse(0),
-      false,
-      s"${fileStorage.hdfs.getHomeDirectory()}/${new Path(arguments.folderName).toString}",
-      "all",
-      "csv",
-      s"${fileStorage.hdfs.getHomeDirectory()}/${new Path(arguments.folderName).toString}")
+    val artifactPath = new Path(s"${fileStorage.hdfs.getHomeDirectory()}/${arguments.folderName}")
+    ExportMetadata(artifactPath.toString, "all", "csv", frame.rowCount, sample,
+      fileStorage.size(artifactPath.toString), Some(arguments.folderName))
   }
 
   /**
@@ -118,6 +113,6 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, CatalogM
 
     val addHeaders = frameRdd.sparkContext.parallelize(List(headers)) ++ csvRdd
     addHeaders.saveAsTextFile(filename)
-    csvRdd.first()
+    if (csvRdd.isEmpty()) StringUtils.EMPTY else csvRdd.first()
   }
 }

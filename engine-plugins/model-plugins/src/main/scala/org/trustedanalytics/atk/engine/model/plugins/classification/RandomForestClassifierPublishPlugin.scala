@@ -28,7 +28,7 @@ import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
-import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
@@ -39,7 +39,7 @@ import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonPr
   The tar file is then published on HDFS and this method returns the path to the tar file. 
   The tar file serves as input to the scoring engine. This model can then be used to predict the cluster assignment of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadata] {
+class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -73,7 +73,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): CatalogMetadata = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
     //Extracting the RandomForestClassifierModel from the stored JsObject
@@ -81,15 +81,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    val filepath = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
-    CatalogMetadata(model.name.getOrElse("random_forest_classifier_model"),
-      0,
-      "",
-      0,
-      false,
-      filepath,
-      "model",
-      "tar",
-      filepath)
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("random_forest_classifier_model"))
   }
 }

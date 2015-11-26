@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.rest.datacatalog
 import akka.actor.ActorSystem
 import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.domain.datacatalog._
-import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes, Column }
+import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column }
 import org.trustedanalytics.atk.domain.util.DataToJson
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.event.EventLogging
@@ -31,6 +31,7 @@ import scala.util._
 import spray.client.pipelining._
 import scala.concurrent.Future
 import DataCatalogRestResponseJsonProtocol._
+import java.net.URLEncoder
 
 object TrustedAnalyticsDataCatalog extends EventLogging {
 
@@ -40,23 +41,6 @@ object TrustedAnalyticsDataCatalog extends EventLogging {
   def getCaseClassParameters[T: TypeTag] = typeOf[T].members.collect {
     case m: MethodSymbol if m.isCaseAccessor => m
   }.toList.map(elem => (elem.name.toString, elem.returnType)).reverse
-
-  /**
-   * Create Column given column name and scala type
-   * @param name Column name
-   * @param dtype runtime type (using scala reflection)
-   * @return Column
-   */
-  def getColumn(name: String, dtype: reflect.runtime.universe.Type) = {
-    val columnDataType = dtype match {
-      case t if t <:< definitions.IntTpe => DataTypes.int32
-      case t if t <:< definitions.LongTpe => DataTypes.int64
-      case t if t <:< definitions.FloatTpe => DataTypes.float32
-      case t if t <:< definitions.DoubleTpe => DataTypes.float64
-      case _ => DataTypes.string
-    }
-    Column(name, columnDataType)
-  }
 
   // Case Boolean columns to String as booleans are not yet supported in Schema
   def maskBooleanColumnsToString(array: Array[Any]) = {
@@ -72,18 +56,31 @@ object TrustedAnalyticsDataCatalog extends EventLogging {
       "Server does not point to a valid data catalog")
   }
 
-  // QUery Datacatalog and create a list response
+  /**
+   * List Datacatalog and create a list response
+   * @param invocation Invocation object which holds the user information and other credentials
+   * @return CatalogServiceResponse: JSON Serialized Catalog entry with schema which can be sent back to client
+   */
   def list(implicit invocation: Invocation): Future[CatalogServiceResponse] = {
     import scala.concurrent.ExecutionContext.Implicits.global
     future {
       validateDataCatalogDependency()
       val oauthToken = invocation.user.token.getOrElse(throw new RuntimeException("User has no OAuth token defined"))
 
-      val metadata = getCaseClassParameters[IndexedMetadataEntryWithID]
-      val schema = FrameSchema(for { (name, dtype) <- metadata } yield getColumn(name, dtype))
+      val metadata = getCaseClassParameters[TapDataCatalogResponse]
+      val schema = FrameSchema(for { (name, dtype) <- metadata } yield Column(name, dtype))
 
       val headers = List(("Authorization", s"Bearer $oauthToken"))
-      val res = CfRequests.httpsGetQuery(RestServerConfig.dataCatalogUri, s"/rest/datasets", headers)
+
+      val numEntriesResponse = CfRequests.httpsGetQuery(RestServerConfig.dataCatalogUri, s"/rest/datasets/count", headers)
+      val numEntries = numEntriesResponse.convertTo[Int]
+
+      info(s"Datasets count in Data Catalog $numEntries")
+
+      val queryString = s"""{\"from\":0,\"size\":$numEntries}"""
+      val encodedQueryString = URLEncoder.encode(queryString, "UTF-8")
+
+      val res = CfRequests.httpsGetQuery(RestServerConfig.dataCatalogUri, s"/rest/datasets?query=$encodedQueryString", headers)
 
       import org.trustedanalytics.atk.domain.datacatalog.DataCatalogResponseJsonProtocol._
       val dataCatalogResponse = res.asJsObject.convertTo[DataCatalogResponse]
@@ -94,8 +91,15 @@ object TrustedAnalyticsDataCatalog extends EventLogging {
     }
   }
 
-  // Publish to data catalog given the catalog metadata
-  def publishToDataCatalog(catalogMetadata: CatalogMetadata)(implicit invocation: Invocation): StringValue = {
+  /**
+   * Publish to data catalog given the catalog metadata
+   * In case this method fails or data catalog has not been configured for this environment, return the published file
+   * path back to the client
+   * @param exportMetadata Metadata entry which has been exported by plugins and needs to be published to data catalog
+   * @param invocation Invocation object which holds the user information and other credentials
+   * @return File path to final datacatalog entry (target URI)
+   */
+  def publishToDataCatalog(exportMetadata: ExportMetadata)(implicit invocation: Invocation): StringValue = {
 
     try {
       validateDataCatalogDependency()
@@ -121,7 +125,7 @@ object TrustedAnalyticsDataCatalog extends EventLogging {
       info(s"Seding request to URI $uri")
 
       val response = pipeline {
-        Put(uri, ConvertCatalogMetadataToInputMetadataEntry.convert(catalogMetadata, orgUUID))
+        Put(uri, ConvertExportMetadataToInputMetadataEntry.convert(exportMetadata, orgUUID))
       }
 
       response.onComplete {
@@ -133,13 +137,12 @@ object TrustedAnalyticsDataCatalog extends EventLogging {
           error(ex.getMessage)
           throw ex
       }
-      StringValue(catalogMetadata.targetUri)
     }
     catch {
       case ex: Throwable =>
         error(s"Invalid Datacatalog dependency or error adding to data catalog ${ex.getMessage}")
-        StringValue(catalogMetadata.targetUri)
     }
+    StringValue(exportMetadata.targetUri)
   }
 
 }

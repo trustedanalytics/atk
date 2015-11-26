@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.rest.v1
 
-import org.trustedanalytics.atk.domain.datacatalog.{ DataCatalogRestImplicits, DataCatalogRestResponseJsonProtocol, CatalogMetadata }
+import org.trustedanalytics.atk.domain.datacatalog.{ DataCatalogRestImplicits, DataCatalogRestResponseJsonProtocol, ExportMetadata }
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogResponseJsonProtocol._
 import org.trustedanalytics.atk.engine.Engine
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -53,7 +53,7 @@ class DataCatalogService(commonDirectives: CommonDirectives, engine: Engine) ext
                   complete(StatusCodes.Unauthorized, ex.getMessage)
               }
             } ~ post {
-              entity(as[CatalogMetadata]) {
+              entity(as[ExportMetadata]) {
                 catalogmetadata =>
                   complete(TrustedAnalyticsDataCatalog.publishToDataCatalog(catalogmetadata))
               }

@@ -17,6 +17,6 @@
 package org.trustedanalytics.atk.domain.datacatalog
 
 case class DataCatalogResponse(total: Int,
-                               hits: List[IndexedMetadataEntryWithID],
+                               hits: List[TapDataCatalogResponse],
                                formats: List[String],
                                categories: List[String])

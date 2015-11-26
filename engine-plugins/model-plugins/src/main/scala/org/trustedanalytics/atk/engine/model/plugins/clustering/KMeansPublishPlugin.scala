@@ -29,7 +29,7 @@ import org.apache.hadoop.fs.Path
 import spray.json._
 import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.domain.datacatalog.CatalogMetadata
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
@@ -41,7 +41,7 @@ import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonPr
 on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. 
 This model can then be used to predict the cluster assignment of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadata] {
+class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -75,7 +75,7 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadat
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): CatalogMetadata = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
 
@@ -84,15 +84,8 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, CatalogMetadat
     val kmeansModel = kmeansData.kMeansModel
     val jsvalue: JsValue = kmeansModel.toJson
 
-    val filepath = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin")
-    CatalogMetadata(model.name.getOrElse("kmeans_model"),
-      0,
-      "",
-      0,
-      false,
-      filepath,
-      "model",
-      "tar",
-      filepath)
+    val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin")
+
+    ExportMetadata(modelartifacts.filePath, "model", "tar", modelartifacts.fileSize, model.name.getOrElse("kmeans_model"))
   }
 }

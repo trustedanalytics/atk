@@ -16,4 +16,10 @@
 
 package org.trustedanalytics.atk.rest
 
+/**
+ * Exception class to be thrown in case of Invalid Authentication. CommonDirectives class checks for this exception
+ * to respond back to client with a 401 Error response code (StatusCode.Unauthorized)
+ * @param message Authentication Exception message
+ * @param cause Cause of Authentication Exception
+ */
 class AuthenticationException(message: String = null, cause: Throwable = null) extends Exception(message, cause)

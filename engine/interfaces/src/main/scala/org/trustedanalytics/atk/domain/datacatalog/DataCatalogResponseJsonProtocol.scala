@@ -20,6 +20,6 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import spray.json._
 
 object DataCatalogResponseJsonProtocol extends DefaultJsonProtocol {
-  implicit val indexedMetadataEntryFormat = jsonFormat12(IndexedMetadataEntryWithID)
+  implicit val indexedMetadataEntryFormat = jsonFormat12(TapDataCatalogResponse)
   implicit val datacatalogResponseFormat = jsonFormat4(DataCatalogResponse)
 }

@@ -6,8 +6,8 @@ import DomainJsonProtocol._
 
 trait DataCatalogRestImplicits extends DefaultJsonProtocol {
   implicit val catalogServiceResponseFormat = jsonFormat2(CatalogServiceResponse)
-  implicit val catalogmetadataFormat = jsonFormat9(CatalogMetadata)
-  implicit val inputMetadataFormat = jsonFormat10(InputMetadataEntry)
+  implicit val catalogmetadataFormat = jsonFormat9(ExportMetadata.apply)
+  implicit val inputMetadataFormat = jsonFormat10(TapDataCatalogPutRequest)
 }
 
 object DataCatalogRestResponseJsonProtocol extends DataCatalogRestImplicits
