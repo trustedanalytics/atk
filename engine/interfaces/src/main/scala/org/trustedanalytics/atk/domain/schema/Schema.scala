@@ -46,14 +46,21 @@ object Column {
    * @param dtype runtime type (using scala reflection)
    * @return Column
    */
-  def apply(name: String, dtype: reflect.runtime.universe.Type): Column = Column(name,
-    dtype match {
-      case t if t <:< definitions.IntTpe => DataTypes.int32
-      case t if t <:< definitions.LongTpe => DataTypes.int64
-      case t if t <:< definitions.FloatTpe => DataTypes.float32
-      case t if t <:< definitions.DoubleTpe => DataTypes.float64
-      case _ => DataTypes.string
-    })
+  def apply(name: String, dtype: reflect.runtime.universe.Type): Column = {
+    require(name != null, "column name is required")
+    require(dtype != null, "column data type is required")
+    require(name != "", "column name can't be empty")
+    require(StringUtils.isAlphanumericUnderscore(name), "column name must be alpha-numeric with underscores")
+
+    Column(name,
+      dtype match {
+        case t if t <:< definitions.IntTpe => DataTypes.int32
+        case t if t <:< definitions.LongTpe => DataTypes.int64
+        case t if t <:< definitions.FloatTpe => DataTypes.float32
+        case t if t <:< definitions.DoubleTpe => DataTypes.float64
+        case _ => DataTypes.string
+      })
+  }
 }
 
 /**
