@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.frame
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.types.GenericArrayData
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema._
@@ -144,8 +145,12 @@ trait AbstractRow {
    * @return property value
    */
   def vectorValue(columnName: String): Vector[Double] = {
-    DataTypes.toVector()(row(schema.columnIndex(columnName)))
+    row(schema.columnIndex(columnName)) match {
+      case ga: GenericArrayData => ga.toDoubleArray().toVector
+      case value => DataTypes.toVector()(value)
+    }
   }
+
   /**
    * True if value for this column is null.
    *
