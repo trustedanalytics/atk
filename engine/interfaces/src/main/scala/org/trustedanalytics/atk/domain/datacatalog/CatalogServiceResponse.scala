@@ -14,19 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.rest.v1
+package org.trustedanalytics.atk.domain.datacatalog
 
-import spray.routing._
+import org.trustedanalytics.atk.domain.schema.FrameSchema
+import spray.json.JsValue
 
 /**
- * Single entry point for classes that implement the Trusted Analytics V1 REST API
+ * Response class to hold the metadata schema and the catalog data. Data has been serialized into JsValue by the caller
+ * @param metadata schema (metadata) of the catalog
+ * @param data serialized catalog data
  */
-class ApiV1Service(val dataFrameService: FrameService,
-                   val commandService: CommandService,
-                   val graphService: GraphService,
-                   val modelService: ModelService,
-                   val dataCatalogService: DataCatalogService) extends Directives {
-  def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ dataCatalogService.dataCatalogRoutes()
-  }
-}
+case class CatalogServiceResponse(metadata: FrameSchema, data: List[JsValue])

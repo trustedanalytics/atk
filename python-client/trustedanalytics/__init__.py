@@ -75,4 +75,6 @@ def _walk_api(cls_function, attr_function, include_init=False):
 from trustedanalytics.core.api import api_status
 from trustedanalytics.rest.atkserver import create_credentials_file
 
+from trustedanalytics.core.datacatalog import data_catalog
+
 version = None  # This client build ID value is auto-filled during packaging.  Set to None to disable check with server

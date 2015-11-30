@@ -319,5 +319,4 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       seamless.edgeFrames
     }
   }
-
 }
