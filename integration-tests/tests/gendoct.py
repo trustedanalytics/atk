@@ -107,17 +107,13 @@ frame-/rename_columns.rst
 frame-/label_propagation.rst
 graph/graphx_connected_components.rst
 graph/graphx_triangle_count.rst
-graph/annotate_degrees.rst
 graph/graphx_pagerank.rst
-graph/clustering_coefficient.rst
-graph/annotate_weighted_degrees.rst
 graph/ml/kclique_percolation.rst
 graph/loopy_belief_propagation.rst
 frame/column_median.rst
 frame/column_mode.rst
 frame/column_summary_statistics.rst
 frame/drop_columns.rst
-frame/entropy.rst
 frame/export_to_csv.rst
 frame/export_to_hbase.rst
 frame/export_to_hive.rst
