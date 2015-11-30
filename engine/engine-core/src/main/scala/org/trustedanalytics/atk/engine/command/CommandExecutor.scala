@@ -84,7 +84,6 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
       validatePluginExists(cmd)
       val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
 
-      // Stores the (intermediate) results, don't mark the command complete yet as it will be marked complete by rest server
       commands.complete(context.command.id, Try {
         executeCommandContext(context)
       })
