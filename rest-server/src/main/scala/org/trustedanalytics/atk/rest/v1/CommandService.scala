@@ -31,7 +31,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.rest.v1.viewmodels._
 import org.trustedanalytics.atk.rest.v1.viewmodels.ViewModelJsonImplicits._
-import org.trustedanalytics.atk.domain.command.{ CommandPost, Execution, CommandTemplate, Command }
+import org.trustedanalytics.atk.domain.command.{ CommandPost, CommandTemplate, Command }
 import org.trustedanalytics.atk.rest.{ RestServerConfig, CommonDirectives }
 import org.trustedanalytics.atk.rest.v1.decorators.CommandDecorator
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
@@ -126,7 +126,7 @@ class CommandService(commonDirectives: CommonDirectives, engine: Engine) extends
                           val template = CommandTemplate(name = xform.name, arguments = xform.arguments)
                           info(s"Received command template for execution: $template")
                           onComplete(Future { engine.execute(template) }) {
-                            case Success(Execution(command, futureResult)) => complete(decorate(uri + "/" + command.id, command))
+                            case Success(command) => complete(decorate(uri + "/" + command.id, command))
                             case Failure(e: DeserializationException) =>
                               val message = s"Incorrectly formatted JSON found while parsing command '${xform.name}':" +
                                 s" ${e.getMessage}"
