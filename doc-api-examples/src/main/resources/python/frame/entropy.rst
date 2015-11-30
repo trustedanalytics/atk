@@ -21,14 +21,15 @@ Given a frame of coin flips, half heads and half tails, the entropy is simply ln
 >>> entropy = frame.entropy("data", "weight")
 <progress>
 
->>> "%0.11f" % entropy
-'1.13691659183'
+>>> "%0.8f" % entropy
+'1.13691659'
 
 
 
 If we have more choices and weights, the computation is not as simple.
 An on-line search for "Shannon Entropy" will provide more detail.
 
+<hide>
 >>> frame = ta.Frame(ta.UploadRows([["H"], ["T"], ["H"], ["T"], ["H"], ["T"], ["H"], ["T"], ["H"], ["T"]], [('data', str)]))
 -etc-
 
@@ -50,6 +51,6 @@ Given a frame of coin flips, half heads and half tails, the entropy is simply ln
 [9]  T
 >>> entropy = frame.entropy("data")
 <progress>
->>> "%0.11f" % entropy
-'0.69314718056'
+>>> "%0.8f" % entropy
+'0.69314718'
 
