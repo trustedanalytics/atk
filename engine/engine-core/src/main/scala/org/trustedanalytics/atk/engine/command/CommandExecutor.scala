@@ -27,7 +27,7 @@ import scala.concurrent._
 import scala.reflect.runtime.{ universe => ru }
 import ru._
 import scala.util.Try
-import org.trustedanalytics.atk.domain.command.{ CommandDefinition, CommandTemplate, Execution, Command }
+import org.trustedanalytics.atk.domain.command.{ CommandDefinition, CommandTemplate, Command }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import EngineExecutionContext.global
@@ -79,15 +79,16 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * This overload requires that the command already is registered in the plugin registry using registerCommand.
    *
    * @param commandTemplate the CommandTemplate from which to extract the command name and the arguments
-   * @return an Execution object that can be used to track the command's execution
+   * @return a Command record that can be used to track the command's execution
    */
-  def execute[A <: Product, R <: Product](commandTemplate: CommandTemplate)(implicit invocation: Invocation): Execution = {
+  def execute[A <: Product, R <: Product](commandTemplate: CommandTemplate)(implicit invocation: Invocation): Command = {
     withMyClassLoader {
       withContext("ce.execute(ct)") {
         val cmd = commands.create(commandTemplate.copy(createdBy = if (invocation.user != null) Some(invocation.user.user.id) else None))
         validatePluginExists(cmd)
         val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
-        Execution(cmd, executeCommandContextInFuture(context))
+        executeCommandContextInFuture(context)
+        cmd
       }
     }
   }
