@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
-import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
+import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
@@ -94,9 +94,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * Stores the results of the command execution back in the persistent command object.
    *
    * @param command the command to run, including name and arguments
-   * @return an Execution that can be used to track the completion of the command
+   * @return a Command record that can be used to track the completion of the command
    */
-  def execute(command: CommandTemplate)(implicit invocation: Invocation): Execution = {
+  def execute(command: CommandTemplate)(implicit invocation: Invocation): Command = {
     commands.execute(command)
   }
 
