@@ -34,8 +34,6 @@ import scala.reflect.ClassTag
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import java.net.URI
 import org.apache.commons.io.FileUtils
-import org.trustedanalytics.atk.moduleloader.Component
-import org.trustedanalytics.atk.moduleloader.Module
 
 /**
  * Scoring Service Application - a REST application used by client layer to communicate with the Model.
