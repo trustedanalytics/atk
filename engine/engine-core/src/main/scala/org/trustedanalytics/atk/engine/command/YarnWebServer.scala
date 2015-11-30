@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.Engine
  * Lightweight webserver for running in Yarn so that we can communicate
  * from the rest-server to a long-running Yarn job.
  */
-class YarnWebServer(engine: Engine) extends NanoHTTPD(0 /* zero binds us to random port */ ) {
+class YarnWebServer(engine: Engine) extends NanoHTTPD(YarnWebServer.Port) {
 
   override def serve(session: IHTTPSession): Response = {
     NanoHTTPD.newFixedLengthResponse("YarnWebServer: " + new Date)
@@ -36,6 +36,8 @@ class YarnWebServer(engine: Engine) extends NanoHTTPD(0 /* zero binds us to rand
 
 object YarnWebServer {
 
+  /** zero binds us to random port */
+  val Port = 0
   val Timeout = 10000
 
   /**
