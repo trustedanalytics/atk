@@ -125,6 +125,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
         val updatedCommand = commands.expectCommand(commandContext.command.id)
         if (updatedCommand.error.isDefined) {
+          error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
           throw new scala.Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
         }
         if (updatedCommand.result.isDefined) {
