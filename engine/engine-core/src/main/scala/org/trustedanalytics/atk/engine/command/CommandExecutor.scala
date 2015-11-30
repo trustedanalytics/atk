@@ -41,22 +41,7 @@ case class CommandContext(
 }
 
 /**
- * CommandExecutor manages a registry of CommandPlugins and executes them on request.
- *
- * The plugin registry is based on configuration - all Archives listed in the configuration
- * file under trustedanalytics.atk.engine.archives will be queried for the "command" key, and
- * any plugins they provide will be added to the plugin registry.
- *
- * Plugins can also be added programmatically using the registerCommand method.
- *
- * Plugins can be executed in three ways:
- *
- * 1. A CommandPlugin can be passed directly to the execute method. The command need not be in
- * the registry
- * 2. A command can be called by name. This requires that the command be in the registry.
- * 3. A command can be called with a CommandTemplate. This requires that the command named by
- * the command template be in the registry, and that the arguments provided in the CommandTemplate
- * can be parsed by the command.
+ * CommandExecutor uses a registry of CommandPlugins and executes them on request.
  *
  * @param engine an Engine instance that will be passed to command plugins during execution
  * @param commands a command storage that the executor can use for audit logging command execution
@@ -126,14 +111,14 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         val updatedCommand = commands.expectCommand(commandContext.command.id)
         if (updatedCommand.error.isDefined) {
           error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
-          throw new scala.Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
+          throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
         }
         if (updatedCommand.result.isDefined) {
           updatedCommand.result.get
         }
         else {
           error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
-          throw new scala.Exception(s"Error submitting command to yarn-cluster.")
+          throw new Exception(s"Error submitting command to yarn-cluster.")
         }
       case _ =>
         // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
