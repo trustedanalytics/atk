@@ -977,6 +977,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
         to be printed, then it must be explicitly printed, then `print frame.inspect()`
 
+
         Examples
         --------
         To look at the first 4 rows of data in a frame:
@@ -985,15 +986,26 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         <skip>
             >>> frame.inspect(4)
-           [#]  animal    name    age  weight
-           ==================================
-           [0]  human     George    8   542.5
-           [1]  human     Ursula    6   495.0
-           [2]  ape       Ape      41   400.0
-           [3]  elephant  Shep      5  8630.0
+            [#]  animal    name    age  weight
+            ==================================
+            [0]  human     George    8   542.5
+            [1]  human     Ursula    6   495.0
+            [2]  ape       Ape      41   400.0
+            [3]  elephant  Shep      5  8630.0
         </skip>
 
         # For other examples, see :ref:`example_frame.inspect`.
+
+        Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
+        running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
+        this problem, explicitly print the unicode of the returned object:
+
+        .. code::
+
+        <skip>
+            >>> print unicode(frame.inspect())
+        </skip>
+
 
         **Global Settings**
 
