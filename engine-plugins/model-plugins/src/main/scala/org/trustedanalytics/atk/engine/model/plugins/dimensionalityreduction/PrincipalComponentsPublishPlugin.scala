@@ -20,6 +20,7 @@ import com.google.common.base.Charsets
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, CommandPlugin, ApiMaturityTag, Invocation }
@@ -28,6 +29,8 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, CommandPlugin, ApiMat
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 import spray.json._
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
+
 /**
  * Publish a Principal Components Model for scoring
  */
@@ -37,7 +40,7 @@ import spray.json._
 on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine. This model can
 then be used to compute the principal components and t-squared index(if requested) of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -58,13 +61,14 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, S
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
+    val modelArtifact = ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin"))
+      "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin")
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("principal_components_model"))
   }
 }
 

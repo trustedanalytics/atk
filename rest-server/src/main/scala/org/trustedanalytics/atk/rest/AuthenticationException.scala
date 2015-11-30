@@ -14,19 +14,12 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.rest.v1
-
-import spray.routing._
+package org.trustedanalytics.atk.rest
 
 /**
- * Single entry point for classes that implement the Trusted Analytics V1 REST API
+ * Exception class to be thrown in case of Invalid Authentication. CommonDirectives class checks for this exception
+ * to respond back to client with a 401 Error response code (StatusCode.Unauthorized)
+ * @param message Authentication Exception message
+ * @param cause Cause of Authentication Exception
  */
-class ApiV1Service(val dataFrameService: FrameService,
-                   val commandService: CommandService,
-                   val graphService: GraphService,
-                   val modelService: ModelService,
-                   val dataCatalogService: DataCatalogService) extends Directives {
-  def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ dataCatalogService.dataCatalogRoutes()
-  }
-}
+class AuthenticationException(message: String = null, cause: Throwable = null) extends Exception(message, cause)
