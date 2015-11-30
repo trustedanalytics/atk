@@ -37,7 +37,7 @@ class SparkCommandJob extends AbstractEngineComponent {
   override lazy val commandLoader = new CommandLoader(loadFromModules = false)
 
   var webserver: YarnWebServer = null
-  if (EngineConfig.keepYarnAlive) {
+  if (EngineConfig.keepYarnJobAlive) {
     webserver = YarnWebServer.init(engine)
     println("webserver lisening port: " + webserver.getListeningPort)
   }

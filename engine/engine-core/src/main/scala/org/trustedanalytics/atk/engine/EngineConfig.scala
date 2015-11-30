@@ -94,7 +94,7 @@ trait EngineConfig extends EventLogging {
    * This is a feature flag so we can begin adding code to the master branch without breaking
    * current application or needing long-lived feature branches
    */
-  val keepYarnAlive: Boolean = config.getBoolean(engineConfigKey + ".keep-yarn-alive")
+  val keepYarnJobAlive: Boolean = config.getBoolean(engineConfigKey + ".keep-yarn-job-alive")
 
   /**
    * true to re-use a SparkContext, this can be helpful for automated integration tests, not for customers.
