@@ -21,6 +21,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.StringValue
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
@@ -28,6 +29,7 @@ import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Publish a SVM Model for scoring
@@ -37,7 +39,7 @@ import ModelPublishJsonProtocol._
   The tar file is then published on HDFS and this method returns the path to the tar file.
   The tar file serves as input to the scoring engine. This model can then be used to predict the class of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -71,7 +73,7 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
     //Extracting the SVMModel from the stored JsObject
@@ -79,6 +81,7 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
     val svmModel = svmData.svmModel
     val jsvalue: JsValue = svmModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDModelReaderPlugin"))
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDModelReaderPlugin")
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("svm_with_sgd_model"))
   }
 }

@@ -21,6 +21,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.StringValue
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
@@ -28,6 +29,7 @@ import org.trustedanalytics.atk.engine.plugin._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Publish a Random Forest Classifier Model for scoring
@@ -36,7 +38,7 @@ import ModelPublishJsonProtocol._
   extended = """Creates a tar file with the trained Naive Bayes Model
 The tar file is used as input to the scoring engine to predict the class of an observation.""",
   returns = """The HDFS path to the tar file.""")
-class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -70,7 +72,7 @@ class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
     //Extracting the NaiveBayesModel from the stored JsObject
@@ -78,6 +80,7 @@ class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValu
     val naiveBayesModel = naiveBayesData.naiveBayesModel
     val jsvalue: JsValue = naiveBayesModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin"))
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin")
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("naive_bayes_model"))
   }
 }
