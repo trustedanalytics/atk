@@ -81,42 +81,28 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @param commandTemplate the CommandTemplate from which to extract the command name and the arguments
    * @return a Command record that can be used to track the command's execution
    */
-  def execute[A <: Product, R <: Product](commandTemplate: CommandTemplate)(implicit invocation: Invocation): Command = {
+  def executeInBackground(commandTemplate: CommandTemplate)(implicit invocation: Invocation): Command = {
     withMyClassLoader {
       withContext("ce.execute(ct)") {
         val cmd = commands.create(commandTemplate.copy(createdBy = if (invocation.user != null) Some(invocation.user.user.id) else None))
         validatePluginExists(cmd)
-        val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
-        executeCommandContextInFuture(context)
+        future {
+          executeInForeground(cmd)
+        }
         cmd
       }
     }
   }
 
-  def executeCommand[A <: Product, R <: Product](cmd: Command)(implicit invocation: Invocation): Unit =
-    withContext(s"ce.executeCommand.${cmd.name}") {
+  def executeInForeground(cmd: Command)(implicit invocation: Invocation): Unit = {
+    withContext(s"ce.executeInForeground.${cmd.name}") {
       validatePluginExists(cmd)
       val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
 
       // Stores the (intermediate) results, don't mark the command complete yet as it will be marked complete by rest server
-      commands.storeResult(context.command.id, Try { executeCommandContext(context) })
-    }
-
-  /**
-   * Execute the command in the future with correct classloader, context, etc.,
-   * On complete - mark progress as 100% or failed
-   */
-  private def executeCommandContextInFuture[T](commandContext: CommandContext)(implicit invocation: Invocation): Future[Command] = {
-    withContext(commandContext.command.name) {
-      // run the command in a future so that we don't make the client wait for initial response
-      val cmdFuture = future {
-        commands.complete(commandContext.command.id, Try {
-          executeCommandContext(commandContext)
-        })
-        // get the latest command progress from DB when command is done executing
-        commands.expectCommand(commandContext.command.id)
-      }
-      cmdFuture
+      commands.complete(context.command.id, Try {
+        executeCommandContext(context)
+      })
     }
   }
 
@@ -149,6 +135,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
           throw new scala.Exception(s"Error submitting command to yarn-cluster.")
         }
       case _ =>
+        // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
         val commandInvocation = new SimpleInvocation(engine, commands, commandContext)
         val arguments = plugin.parseArguments(commandContext.command.arguments.get)
         info(s"Invoking command ${commandContext.command.name}")
