@@ -34,6 +34,8 @@ import scala.reflect.ClassTag
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import java.net.URI
 import org.apache.commons.io.FileUtils
+import org.trustedanalytics.atk.moduleloader.Component
+import org.trustedanalytics.atk.moduleloader.Module
 
 /**
  * Scoring Service Application - a REST application used by client layer to communicate with the Model.
@@ -76,7 +78,9 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
 
     try {
       var tarFilePath = config.getString("trustedanalytics.scoring-engine.archive-tar")
-      if (tarFilePath.startsWith("hdfs://")) {
+      if (tarFilePath.startsWith("hdfs:/")) {
+        val relativePath = tarFilePath.substring(tarFilePath.indexOf("nameservice1"))
+        tarFilePath = "hdfs://" + relativePath
         val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
         tempTarFile = File.createTempFile("modelTar", ".tar")
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
