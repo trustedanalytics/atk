@@ -63,10 +63,6 @@ trait EngineConfig extends EventLogging {
     }
   }
 
-  val isLocalMaster: Boolean = {
-    (sparkMaster.startsWith("local[") && sparkMaster.endsWith("]")) || sparkMaster.equals("local")
-  }
-
   val isSparkOnYarn: Boolean = {
     "yarn-cluster".equalsIgnoreCase(sparkMaster) || "yarn-client".equalsIgnoreCase(sparkMaster)
   }
@@ -86,7 +82,6 @@ trait EngineConfig extends EventLogging {
    * NOTE: true should break the progress bar.
    */
   val reuseSparkContext: Boolean = config.getBoolean("trustedanalytics.atk.engine.spark.reuse-context")
-  val defaultTimeout: FiniteDuration = config.getInt("trustedanalytics.atk.engine.default-timeout").seconds
 
   /**
    * The hdfs URL where the 'trustedanalytics' folder will be created and which will be used as the starting

@@ -252,7 +252,6 @@ sections to be pulled in so they're available to the plugin.
                     vertex_sample {
                         class = "com.trustedanalytics.spark.graphon.sampling.VertexSample"
                         config {
-                            default-timeout = ${trustedanalytics.atk.engine.default-timeout}
                             titan = ${trustedanalytics.atk.engine.titan}
                         }
                     }
