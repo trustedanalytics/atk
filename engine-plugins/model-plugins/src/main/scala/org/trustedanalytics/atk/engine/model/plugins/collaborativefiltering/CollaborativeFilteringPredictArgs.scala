@@ -18,12 +18,17 @@ package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.ArgDocAnnotation
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
  * Arguments to the collaborative filtering predict plugin - see user docs for more on the parameters
  */
 case class CollaborativeFilteringPredictArgs(model: ModelReference,
-                                             graph: GraphReference) {
+                                             graph: GraphReference,
+                                             @ArgDoc("""A user column name for the output frame""") userColumnName: String = "user",
+                                             @ArgDoc("""A product  column name for the output frame""") productColumnName: String = "product",
+                                             @ArgDoc("""A rating column name for the output frame""") ratingColumnName: String = "rating") {
 
   require(model != null, "model is required")
   require(graph != null, "batch data as a graph is required")

@@ -72,7 +72,7 @@ class CollaborativeFilteringPredictPlugin
     val productFrame = frames.loadFrameData(sc, data.productFrame)
     val alsModel = new MatrixFactorizationModel(data.rank, toAlsRdd(userFrame, data), toAlsRdd(productFrame, data))
 
-    toFrameEntity(alsModel.predict(alsPredictInput))
+    toFrameEntity(alsModel.predict(alsPredictInput), arguments)
   }
 
   private def toAlsRdd(userFrame: FrameRdd, data: CollaborativeFilteringData): RDD[(Int, Array[Double])] = {
@@ -83,10 +83,12 @@ class CollaborativeFilteringPredictPlugin
       DataTypes.vector.parse(row.value(featuresColName)).get.toArray))
   }
 
-  private def toFrameEntity(modelRdd: RDD[Rating])(implicit invocation: Invocation): FrameEntity = {
-    val schema = FrameSchema(List(Column("user", DataTypes.int),
-      Column("product", DataTypes.int),
-      Column("rating", DataTypes.float32)))
+  private def toFrameEntity(modelRdd: RDD[Rating],
+                            arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+    val schema = FrameSchema(List(
+      Column(arguments.userColumnName, DataTypes.int),
+      Column(arguments.productColumnName, DataTypes.int),
+      Column(arguments.ratingColumnName, DataTypes.float32)))
     val rowRdd = modelRdd.map {
       case alsRating => Row(alsRating.user, alsRating.product, DataTypes.toFloat(alsRating.rating))
     }
