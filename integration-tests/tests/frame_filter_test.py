@@ -58,6 +58,7 @@ class FrameFilterTest(unittest.TestCase):
     def test_frame_filter(self):
         rows = self.frame.take(self.frame.row_count)
         original_edge_count = self.graph.edges['rank'].row_count
+        original_vertex_frame_row_count = self.graph.vertices['population_2013'].row_count
         count = 0
 
         # Count number of rows with a population_2013 > 100,000
@@ -79,6 +80,9 @@ class FrameFilterTest(unittest.TestCase):
 
         # Edge count shouldn't have changed
         self.assertEqual(original_edge_count, self.graph.edges['rank'].row_count)
+
+        # Vertex frame row count should not have changed
+        self.assertEqual(original_vertex_frame_row_count, self.graph.vertices['population_2013'].row_count)
 
     # Tests the VertexFrame's filter operation by verifying that only specified rows remain after applying
     # a filter, and that dangling edges have also been removed.

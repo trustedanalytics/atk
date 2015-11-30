@@ -111,40 +111,6 @@ class FrameDropRowsTest(unittest.TestCase):
             source_vertex_id = edge_row[1]
             self.assertFalse(source_vertex_id in vertex_ids)
 
-    # drop_vertices should do the same thing as drop_rows on the VertexFrame (but it's deprecated)
-    def test_vertex_frame_drop_vertices(self):
-        original_row_count = self.vertex_frame.row_count
-        original_edge_count = self.graph.edges['rank'].row_count
-        rows = self.vertex_frame.take(self.vertex_frame.row_count)
-        count = 0
-        vertex_ids = [None] * self.vertex_frame.row_count
-
-        # Count number of rows where the city starts with 'B'
-        for row in rows:
-            if row[2][0]=='B':
-                vertex_ids[count] = row[0]
-                count += 1
-
-        vertex_ids = vertex_ids[:count]
-
-        # Drop rows that start with 'B' from the VertexFrame
-        self.vertex_frame.drop_vertices(lambda  row: row['city'][0] == 'B')
-
-        # Check row count
-        new_row_count = self.vertex_frame.row_count
-        self.assertEqual(original_row_count - count, new_row_count)
-
-        # Verify vertex frame to ensure that it does not have any cities that start with 'B'
-        rows = self.vertex_frame.take(self.vertex_frame.row_count)
-        for row in rows:
-            self.assertTrue(row[2][0]!='B')
-
-        # Check edges
-        self.assertEqual(original_edge_count - count, self.graph.edges['rank'].row_count)
-        for edge_row in self.graph.edges['rank'].take(self.graph.edges['rank'].row_count):
-            source_vertex_id = edge_row[1]
-            self.assertFalse(source_vertex_id in vertex_ids)
-
 
 if __name__ == "__main__":
     unittest.main()
