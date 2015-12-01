@@ -6,10 +6,10 @@
     
     <title>RandomForestRegressorModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,14 +20,14 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestRegressorModel" href="index.html" >
-    <link rel="next" title="trustedanalytics get_model" href="../get_model.html" >
+    <link rel="next" title="Models PowerIterationClusteringModel" href="../model-power_iteration_clustering/index.html" >
     <link rel="prev" title="RandomForestRegressorModel status" href="status.html" > 
   </head>
   <body>
@@ -61,7 +61,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="../get_model.html" title="trustedanalytics get_model"
+        <a href="../model-power_iteration_clustering/index.html" title="Models PowerIterationClusteringModel"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -111,11 +111,11 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="randomforestregressormodel-train">
-<span id="python-api-models-model-random-forest-regressor-train"></span><h1><a class="reference internal" href="index.html"><em>RandomForestRegressorModel</em></a>  train<a class="headerlink" href="#randomforestregressormodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>RandomForestRegressorModel</em></a>  train<a class="headerlink" href="#randomforestregressormodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-2015178022</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=788012249</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build Random Forests Regressor model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -150,7 +150,7 @@ Build Random Forests Regressor model.</p>
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=-2015178022)</p>
+<p><strong>seed</strong> : int32 (default=788012249)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -211,7 +211,7 @@ If &#8220;auto&#8221; is set, this is based on numTrees: if numTrees == 1, set t
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

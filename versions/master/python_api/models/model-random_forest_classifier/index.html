@@ -6,10 +6,10 @@
     
     <title>Models RandomForestClassifierModel &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
@@ -118,7 +118,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-randomforestclassifiermodel">
-<span id="python-api-models-model-random-forest-classifier-index"></span><h1><a class="reference internal" href="../index.html"><em>Models</em></a> RandomForestClassifierModel<a class="headerlink" href="#models-randomforestclassifiermodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><em>Models</em></a> RandomForestClassifierModel<a class="headerlink" href="#models-randomforestclassifiermodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -192,28 +192,28 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r37" id="id1">[R37]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="#r41" id="id1">[R41]</a> is a supervised ensemble learning algorithm
 which can be used to perform binary and multi-class classification.
 The Random Forest Classifier model is initialized, trained on columns of a
 frame, used to predict the labels of observations in a frame, and tests the
 predicted labels against the true labels.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r38" id="id2">[R38]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r42" id="id2">[R42]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, each tree&#8217;s prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes.
 During testing, labels of the observations are predicted and tested against the true labels
 using built-in binary and multi-class Classification Metrics.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r37" rules="none">
+<table class="docutils citation" frame="void" id="r41" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R37]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R41]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r38" rules="none">
+<table class="docutils citation" frame="void" id="r42" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R38]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-ensembles.html">https://spark.apache.org/docs/1.3.0/mllib-ensembles.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R42]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.3.0/mllib-ensembles.html">https://spark.apache.org/docs/1.3.0/mllib-ensembles.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -289,7 +289,7 @@ using built-in binary and multi-class Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

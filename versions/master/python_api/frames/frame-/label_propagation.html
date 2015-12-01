@@ -6,10 +6,10 @@
     
     <title>Frame label_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
@@ -111,7 +111,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-label-propagation">
-<span id="python-api-frames-frame-label-propagation"></span><h1><a class="reference internal" href="index.html"><em>Frame</em></a>  label_propagation<a class="headerlink" href="#frame-label-propagation" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  label_propagation<a class="headerlink" href="#frame-label-propagation" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="label_propagation">
@@ -216,17 +216,17 @@ messages vertices pass to their neighbors are simply their prior beliefs.
 If certain observations have states that are known deterministically, they can
 be given a prior probability of 100% for their true state and 0% for all others.
 Unknown observations should be given uninformative priors.</p>
-<p>Each node, <img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>, receives messages from its <img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> neighbors and
+<p>Each node, <img class="math" src="../../../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>, receives messages from its <img class="math" src="../../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> neighbors and
 updates its beliefs by taking a weighted average of its current beliefs
 and a weighted average of the messages received from its neighbors.</p>
-<p>The updated beliefs for node <img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> are:</p>
+<p>The updated beliefs for node <img class="math" src="../../../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> are:</p>
 <div class="math">
-<p><img src="../../../f_images/math/696ac5e38177f5ade4b1c5baa0f6c50730ed2792.png" alt="updated\ beliefs_{i} = \lambda * (prior\ belief_{i} ) + (1 - \lambda ) \
+<p><img src="../../../_images/math/696ac5e38177f5ade4b1c5baa0f6c50730ed2792.png" alt="updated\ beliefs_{i} = \lambda * (prior\ belief_{i} ) + (1 - \lambda ) \
 * \sum_k w_{i,k} * previous\ belief_{k}"/></p>
-</div><p>where <img class="math" src="../../../f_images/math/bd30308635bf8a8531ab318c0126d9a731210694.png" alt="w_{i,k}"/> is the normalized weight between nodes <img class="math" src="../../../f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> and
-<img class="math" src="../../../f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>, normalized such that the sum of all weights to neighbors is 1.</p>
-<p><img class="math" src="../../../f_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is a leaning parameter.
-If <img class="math" src="../../../f_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is greater than zero, updated probabilities will be anchored
+</div><p>where <img class="math" src="../../../_images/math/bd30308635bf8a8531ab318c0126d9a731210694.png" alt="w_{i,k}"/> is the normalized weight between nodes <img class="math" src="../../../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> and
+<img class="math" src="../../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>, normalized such that the sum of all weights to neighbors is 1.</p>
+<p><img class="math" src="../../../_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is a leaning parameter.
+If <img class="math" src="../../../_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is greater than zero, updated probabilities will be anchored
 in the direction of prior beliefs.</p>
 <p>The final distribution of state probabilities will also tend to be biased in
 the direction of the distribution of initial beliefs.
@@ -245,7 +245,7 @@ A node is said to converge if the total change in its cost function is below
 the convergence threshold.
 The cost function for a node is given by:</p>
 <div class="math">
-<p><img src="../../../f_images/math/19f9dc4663d219c106d75f8bf8fd4dc12e4f5e8d.png" alt="cost =&amp; \sum_k w_{i,k} * \Big[ \big( 1 - \lambda \big) * \big[ previous\ \
+<p><img src="../../../_images/math/19f9dc4663d219c106d75f8bf8fd4dc12e4f5e8d.png" alt="cost =&amp; \sum_k w_{i,k} * \Big[ \big( 1 - \lambda \big) * \big[ previous\ \
 belief_{i}^{2} - w_{i,k} * previous\ belief_{i} * \\
 &amp; previous\ belief_{k} \big] + 0.5 * \lambda * \big( previous\ belief_{i} \
 - prior_{i} \big) ^{2} \Big]"/></p>
@@ -331,7 +331,7 @@ number of <a class="reference internal" href="../../../glossary.html#term-supers
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

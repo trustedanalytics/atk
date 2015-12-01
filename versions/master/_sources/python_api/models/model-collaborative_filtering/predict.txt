@@ -1,0 +1,90 @@
+
+:doc:`CollaborativeFilteringModel <index>`  predict
+***************************************************
+
+------
+
+
+.. function:: predict(self, graph, user_column_name='user', product_column_name='product', rating_column_name='rating')
+
+    |BETA|
+    Collaborative Filtering Predict (ALS).
+
+
+    :Parameters:
+
+        **graph** : Graph
+
+        ..
+
+
+
+
+
+        **user_column_name** : unicode (default=user)
+
+        ..
+
+            A user column name for the output frame
+
+
+
+        **product_column_name** : unicode (default=product)
+
+        ..
+
+            A product  column name for the output frame
+
+
+
+        **rating_column_name** : unicode (default=rating)
+
+        ..
+
+            A rating column name for the output frame
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            Returns a double representing the probability if the user(i) to like product (j)
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.
+
+    Examples
+    --------
+    >>> graph = ta.Graph()
+
+    >>> graph.define_vertex_type('source')
+    [===Job Progress===]
+    >>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
+    [===Job Progress===]
+    >>> graph.define_edge_type('edges','source', 'source', directed=False)
+    [===Job Progress===]
+    >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', 'weight')
+    [===Job Progress===]
+    >>> model = ta.CollaborativeFilteringModel()
+    [===Job Progress===]
+    >>> model.train(graph, 'weight')
+    [===Job Progress===]
+
+    >>> graph_predict = ta.Graph()
+
+    >>> graph_predict.define_vertex_type('source')
+    [===Job Progress===]
+    >>> graph_predict.vertices['source'].add_vertices(vertex_frame_predict, 'source', 'label')
+    [===Job Progress===]
+    >>> graph_predict.define_edge_type('edges','source', 'source', directed=False)
+    [===Job Progress===]
+    >>> graph_predict.edges['edges'].add_edges(edge_frame_predict, 'source', 'dest', 'weight')
+    [===Job Progress===]
+    >>> result = model.predict(graph_predict)
+    [===Job Progress===]
+    >>> result.inspect()
+    [===Job Progress===]
+

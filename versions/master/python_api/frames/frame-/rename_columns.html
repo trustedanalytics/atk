@@ -6,10 +6,10 @@
     
     <title>Frame rename_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames Frame" href="index.html" >
@@ -111,7 +111,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="frame-rename-columns">
-<span id="python-api-frames-frame-rename-columns"></span><h1><a class="reference internal" href="index.html"><em>Frame</em></a>  rename_columns<a class="headerlink" href="#frame-rename-columns" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>Frame</em></a>  rename_columns<a class="headerlink" href="#frame-rename-columns" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="rename_columns">
@@ -128,18 +128,17 @@
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<p>Start with a frame with columns <em>Wrong</em> and <em>Wong</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
-<span class="go">[(&#39;Wrong&#39;, str), (&#39;Wong&#39;, str)]</span>
+<p>Start with a frame with columns <em>Black</em> and <em>White</em>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(u&#39;Black&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;White&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
 </div>
-<p>Rename the columns to <em>Right</em> and <em>Wite</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&quot;Wrong&quot;</span><span class="p">:</span> <span class="s">&quot;Right, &quot;</span><span class="n">Wong</span><span class="s">&quot;: &quot;</span><span class="n">Wite</span><span class="s">&quot;})</span>
+<p>Rename the columns to <em>Mercury</em> and <em>Venus</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&quot;Black&quot;</span><span class="p">:</span> <span class="s">&quot;Mercury&quot;</span><span class="p">,</span> <span class="s">&quot;White&quot;</span><span class="p">:</span> <span class="s">&quot;Venus&quot;</span><span class="p">})</span>
 </pre></div>
 </div>
-<p>Now, what was <em>Wrong</em> is now <em>Right</em> and what was <em>Wong</em> is now <em>Wite</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
-<span class="go">[(&#39;Right&#39;, str), (&#39;Wite&#39;, str)]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(u&#39;Mercury&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;Venus&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -167,7 +166,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

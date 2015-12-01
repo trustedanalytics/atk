@@ -6,10 +6,10 @@
     
     <title>CollaborativeFilteringModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models CollaborativeFilteringModel" href="index.html" >
@@ -111,75 +111,56 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="collaborativefilteringmodel-train">
-<span id="python-api-models-model-collaborative-filtering-train"></span><h1><a class="reference internal" href="index.html"><em>CollaborativeFilteringModel</em></a>  train<a class="headerlink" href="#collaborativefilteringmodel-train" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>CollaborativeFilteringModel</em></a>  train<a class="headerlink" href="#collaborativefilteringmodel-train" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>user_col_name</em>, <em>item_col_name</em>, <em>rating_col_name</em>, <em>evaluation_function=None</em>, <em>num_factors=None</em>, <em>max_iterations=None</em>, <em>convergence_threshold=None</em>, <em>regularization=None</em>, <em>bias_on=None</em>, <em>min_value=None</em>, <em>max_value=None</em>, <em>learning_curve_interval=None</em>, <em>cgd_iterations=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
-<dd><p>Collaborative filtering (ALS/CGD) model</p>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>graph</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collaborative filtering (ALS) model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
-<p><strong>user_col_name</strong> : unicode</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
+<p><strong>weight_column_name</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the user column from input data</p>
+<div><p>weight column name.</p>
 </div></blockquote>
-<p><strong>item_col_name</strong> : unicode</p>
+<p><strong>max_steps</strong> : int32 (default=10)</p>
 <blockquote>
-<div><p>Name of the item column from input data</p>
+<div><p>max number of super-steps (max iterations) before the algorithm terminates. Default = 10</p>
 </div></blockquote>
-<p><strong>rating_col_name</strong> : unicode</p>
-<blockquote>
-<div><p>Name of the rating column from input data</p>
-</div></blockquote>
-<p><strong>evaluation_function</strong> : unicode (default=None)</p>
-<blockquote>
-<div><p>ALS/CGD</p>
-</div></blockquote>
-<p><strong>num_factors</strong> : int32 (default=None)</p>
-<blockquote>
-<div><p>Size of the desired factors (default is 3)</p>
-</div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=None)</p>
-<blockquote>
-<div><p>Max number of iterations for Giraph</p>
-</div></blockquote>
-<p><strong>convergence_threshold</strong> : float64 (default=None)</p>
+<p><strong>regularization</strong> : float32 (default=0.5)</p>
 <blockquote>
 <div><p>float value between 0 .. 1</p>
 </div></blockquote>
-<p><strong>regularization</strong> : float32 (default=None)</p>
+<p><strong>alpha</strong> : float64 (default=0.5)</p>
 <blockquote>
-<div><p>float value between 0 .. 1</p>
+<div><p>double value between 0 .. 1</p>
 </div></blockquote>
-<p><strong>bias_on</strong> : bool (default=None)</p>
+<p><strong>num_factors</strong> : int32 (default=3)</p>
 <blockquote>
-<div><p>bias on/off switch</p>
+<div><p>number of the desired factors (rank)</p>
 </div></blockquote>
-<p><strong>min_value</strong> : float32 (default=None)</p>
+<p><strong>use_implicit</strong> : bool (default=False)</p>
 <blockquote>
-<div><p>minimum edge weight value</p>
+<div><p>use implicit preference</p>
 </div></blockquote>
-<p><strong>max_value</strong> : float32 (default=None)</p>
+<p><strong>num_user_blocks</strong> : int32 (default=2)</p>
 <blockquote>
-<div><p>minimum edge weight value</p>
+<div><p>number of user blocks</p>
 </div></blockquote>
-<p><strong>learning_curve_interval</strong> : int32 (default=None)</p>
+<p><strong>num_item_block</strong> : int32 (default=3)</p>
 <blockquote>
-<div><p>iteration interval to output learning curve</p>
+<div><p>number of item blocks</p>
 </div></blockquote>
-<p><strong>cgd_iterations</strong> : int32 (default=None)</p>
+<p><strong>target_rmse</strong> : float64 (default=0.05)</p>
 <blockquote>
-<div><p>custom argument for CGD learning curve output interval (default: every iteration)</p>
+<div><p>target RMSE</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
-<blockquote class="last">
-<div><p>Execution result summary for Giraph</p>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: _Unit</p>
 </td>
 </tr>
 </tbody>
@@ -211,7 +192,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

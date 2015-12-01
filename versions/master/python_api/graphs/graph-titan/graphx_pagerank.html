@@ -6,10 +6,10 @@
     
     <title>TitanGraph graphx_pagerank &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs TitanGraph" href="index.html" >
@@ -111,7 +111,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="titangraph-graphx-pagerank">
-<span id="python-api-graphs-graph-titan-graphx-pagerank"></span><h1><a class="reference internal" href="index.html"><em>TitanGraph</em></a>  graphx_pagerank<a class="headerlink" href="#titangraph-graphx-pagerank" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>TitanGraph</em></a>  graphx_pagerank<a class="headerlink" href="#titangraph-graphx-pagerank" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="graphx_pagerank">
@@ -199,19 +199,19 @@ analyzing predator-prey food webs to predict extinctions.</p>
 </ul>
 <p><strong>Mathematical Details of PageRank Implementation</strong></p>
 <p>The Trusted Analytics Platform implementation of <em>PageRank</em> satisfies the following equation
-at each vertex <img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> of the graph:</p>
+at each vertex <img class="math" src="../../../_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> of the graph:</p>
 <div class="math">
-<p><img src="../../../f_images/math/fc9164648b5a91c1b09ae8af18e3b618286d39ad.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
+<p><img src="../../../_images/math/fc9164648b5a91c1b09ae8af18e3b618286d39ad.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
 \frac {PR(u)}{L(u)} \right)"/></p>
 </div><dl class="docutils">
 <dt>Where:</dt>
 <dd><div class="first last line-block">
-<div class="line"><img class="math" src="../../../f_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> — a vertex</div>
-<div class="line"><img class="math" src="../../../f_images/math/1d30d1b165056b1a222ff4e2b76ada68c35b8145.png" alt="L(v)"/> — outbound degree of the vertex v</div>
-<div class="line"><img class="math" src="../../../f_images/math/caf98a87c9c974e4d964d153c5d59ab90ad7ebb5.png" alt="PR(v)"/> — <em>PageRank</em> score of the vertex v</div>
-<div class="line"><img class="math" src="../../../f_images/math/f27930a9cd2e383f6c235e32c3ee002e327ba2ea.png" alt="InSet(v)"/> — set of vertices pointing to the vertex v</div>
-<div class="line"><img class="math" src="../../../f_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> — total number of vertices in the graph</div>
-<div class="line"><img class="math" src="../../../f_images/math/f574498915fa9e02eeb5141c24835d077eba3e75.png" alt="\rho"/> — user specified damping factor (also known as reset
+<div class="line"><img class="math" src="../../../_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> — a vertex</div>
+<div class="line"><img class="math" src="../../../_images/math/1d30d1b165056b1a222ff4e2b76ada68c35b8145.png" alt="L(v)"/> — outbound degree of the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/caf98a87c9c974e4d964d153c5d59ab90ad7ebb5.png" alt="PR(v)"/> — <em>PageRank</em> score of the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/f27930a9cd2e383f6c235e32c3ee002e327ba2ea.png" alt="InSet(v)"/> — set of vertices pointing to the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> — total number of vertices in the graph</div>
+<div class="line"><img class="math" src="../../../_images/math/f574498915fa9e02eeb5141c24835d077eba3e75.png" alt="\rho"/> — user specified damping factor (also known as reset
 probability)</div>
 </div>
 </dd>
@@ -278,7 +278,7 @@ algorithm will terminate.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

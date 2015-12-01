@@ -6,10 +6,10 @@
     
     <title>VertexFrame drop_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames VertexFrame" href="index.html" >
@@ -111,7 +111,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="vertexframe-drop-columns">
-<span id="python-api-frames-frame-vertex-drop-columns"></span><h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  drop_columns<a class="headerlink" href="#vertexframe-drop-columns" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  drop_columns<a class="headerlink" href="#vertexframe-drop-columns" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="drop_columns">
@@ -138,16 +138,16 @@
 At least one column needs to remain.
 If it is necessary to delete all columns, then delete the frame.</p>
 <p class="rubric">Examples</p>
-<p>For this example, Frame object <em>my_frame</em> accesses a frame with
-columns <em>column_a</em>, <em>column_b</em>, <em>column_c</em> and <em>column_d</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
-<span class="go">[(&quot;column_a&quot;, str), (&quot;column_b&quot;, ta.int32), (&quot;column_c&quot;, str), (&quot;column_d&quot;, ta.int32)]</span>
+<p>For this example, the Frame object <em>my_frame</em> accesses a frame with 4 columns
+columns <em>column_a</em>, <em>column_b</em>, <em>column_c</em> and <em>column_d</em> and drops 2 columns <em>column_b</em> and <em>column_d</em> using drop columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<span class="go">[(u&#39;column_a&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_b&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;column_c&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_d&#39;, &lt;type &#39;numpy.int32&#39;&gt;)]</span>
 </pre></div>
 </div>
 <p>Eliminate columns <em>column_b</em> and <em>column_d</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&quot;column_b&quot;</span><span class="p">,</span> <span class="s">&quot;column_d&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&quot;column_b&quot;</span><span class="p">,</span> <span class="s">&quot;column_d&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
-<span class="go">[(&quot;column_a&quot;, str), (&quot;column_c&quot;, str)]</span>
+<span class="go">[(u&#39;column_a&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_c&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
 </div>
 <p>Now the frame only has the columns <em>column_a</em> and <em>column_c</em>.
@@ -177,7 +177,7 @@ For further examples, see: ref:<cite>example_frame.drop_columns</cite>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

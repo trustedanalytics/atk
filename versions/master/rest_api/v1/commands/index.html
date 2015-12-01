@@ -6,10 +6,10 @@
     
     <title>REST API Commands &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API" href="../index.html" >
@@ -114,7 +114,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="rest-api-commands">
-<span id="rest-api-v1-commands-index"></span><h1><a class="reference internal" href="../index.html"><em>REST API</em></a> Commands<a class="headerlink" href="#rest-api-commands" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><em>REST API</em></a> Commands<a class="headerlink" href="#rest-api-commands" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="issue_command.html">Issue Command</a></li>
@@ -128,8 +128,8 @@
 <h2>Command List<a class="headerlink" href="#command-list" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="50%" />
-<col width="50%" />
+<col width="54%" />
+<col width="46%" />
 </colgroup>
 <thead valign="bottom">
 <tr class="row-odd"><th class="head">Command Name  (explained <a class="reference internal" href="about_command_names.html"><em>here</em></a>)</th>
@@ -257,62 +257,74 @@
 <tr class="row-odd"><td><a class="reference internal" href="frame-__filter.html"><em>frame:/filter</em></a></td>
 <td>Select all rows which satisfy a predicate.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="frame-__join.html"><em>frame:/join</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-__helloworld.html"><em>frame:/helloworld</em></a></td>
+<td>This is a Hello World Plugin for Frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="frame-__join.html"><em>frame:/join</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Join two data frames (similar to SQL JOIN).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="frame-__label_propagation.html"><em>frame:/label_propagation</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-__label_propagation.html"><em>frame:/label_propagation</em></a></td>
 <td>Label Propagation on Gaussian Random Fields.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="frame-__load.html"><em>frame:/load</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="frame-__load.html"><em>frame:/load</em></a></td>
 <td>Append data from a CSV/XML into an existing (possibly empty) frame</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="frame-__mapreducewordcount.html"><em>frame:/mapreducewordcount</em></a></td>
+<td>Counts and reports the top 10 words across all columns with string data in a frame.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="frame-__rename_columns.html"><em>frame:/rename_columns</em></a></td>
 <td>Rename columns</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="frame-edge__add_edges.html"><em>frame:edge/add_edges</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-__wordcount.html"><em>frame:/wordcount</em></a></td>
+<td>Counts and reports the top 10 words across all columns with string data in a frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="frame-edge__add_edges.html"><em>frame:edge/add_edges</em></a></td>
 <td>Add edges to a graph.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="frame-edge__rename_columns.html"><em>frame:edge/rename_columns</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-edge__rename_columns.html"><em>frame:edge/rename_columns</em></a></td>
 <td>Rename columns for edge frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="frame-vertex__add_vertices.html"><em>frame:vertex/add_vertices</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="frame-vertex__add_vertices.html"><em>frame:vertex/add_vertices</em></a></td>
 <td>Add vertices to a graph.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="frame-vertex__drop_duplicates.html"><em>frame:vertex/drop_duplicates</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-vertex__drop_duplicates.html"><em>frame:vertex/drop_duplicates</em></a></td>
 <td>Remove duplicate vertex rows.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="frame-vertex__filter.html"><em>frame:vertex/filter</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="frame-vertex__filter.html"><em>frame:vertex/filter</em></a></td>
 <td>&nbsp;</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="frame-vertex__rename_columns.html"><em>frame:vertex/rename_columns</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="frame-vertex__rename_columns.html"><em>frame:vertex/rename_columns</em></a></td>
 <td>Rename columns for vertex frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graph__annotate_degrees.html"><em>graph/annotate_degrees</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="graph__annotate_degrees.html"><em>graph/annotate_degrees</em></a></td>
 <td>Make new graph with degrees.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graph__annotate_weighted_degrees.html"><em>graph/annotate_weighted_degrees</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="graph__annotate_weighted_degrees.html"><em>graph/annotate_weighted_degrees</em></a></td>
 <td>Calculates the weighted degree of each vertex with respect to an (optional) set of labels.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graph__clustering_coefficient.html"><em>graph/clustering_coefficient</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="graph__clustering_coefficient.html"><em>graph/clustering_coefficient</em></a></td>
 <td>Coefficient of graph with respect to labels.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graph__copy.html"><em>graph/copy</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="graph__copy.html"><em>graph/copy</em></a></td>
 <td>Make a copy of the current graph.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graph__graphx_connected_components.html"><em>graph/graphx_connected_components</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="graph__graphx_connected_components.html"><em>graph/graphx_connected_components</em></a></td>
 <td>Implements the connected components computation on a graph by invoking graphx api.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graph__graphx_label_propagation.html"><em>graph/graphx_label_propagation</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="graph__graphx_label_propagation.html"><em>graph/graphx_label_propagation</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Implements the label propagation computation on a graph by invoking graphx api.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graph__graphx_pagerank.html"><em>graph/graphx_pagerank</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="graph__graphx_pagerank.html"><em>graph/graphx_pagerank</em></a></td>
 <td>Determine which vertices are the most important.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graph__graphx_triangle_count.html"><em>graph/graphx_triangle_count</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="graph__graphx_triangle_count.html"><em>graph/graphx_triangle_count</em></a></td>
 <td>Number of triangles among vertices of current graph.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graph__rename.html"><em>graph/rename</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="graph__rename.html"><em>graph/rename</em></a></td>
 <td>Rename a graph in the database.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="graph__vertex_outdegree.html"><em>graph/vertex_outdegree</em></a></td>
+<td>Counts the out-degree of vertices in a graph.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="graph-__define_edge_type.html"><em>graph:/define_edge_type</em></a></td>
 <td>Define an edge type.</td>
@@ -351,12 +363,24 @@
 <td>Rename a model.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="model-collaborative_filtering__new.html"><em>model:collaborative_filtering/new</em></a></td>
+<td>Create a new Collaborative Filtering (ALS) model.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="model-collaborative_filtering__predict.html"><em>model:collaborative_filtering/predict</em></a></td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="model-collaborative_filtering__score.html"><em>model:collaborative_filtering/score</em></a></td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="model-collaborative_filtering__train.html"><em>model:collaborative_filtering/train</em></a></td>
+<td>Collaborative filtering (ALS) model</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="model-giraph_collaborative_filtering__new.html"><em>model:giraph_collaborative_filtering/new</em></a></td>
 <td>Create a new Collaborative Filtering Recommend model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-collaborative_filtering__recommend.html"><em>model:collaborative_filtering/recommend</em></a></td>
+<tr class="row-even"><td><a class="reference internal" href="model-giraph_collaborative_filtering__recommend.html"><em>model:giraph_collaborative_filtering/recommend</em></a></td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Recommend (ALS/CGD) model.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-collaborative_filtering__train.html"><em>model:collaborative_filtering/train</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-giraph_collaborative_filtering__train.html"><em>model:giraph_collaborative_filtering/train</em></a></td>
 <td>Collaborative filtering (ALS/CGD) model</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="model-k_means__new.html"><em>model:k_means/new</em></a></td>
@@ -437,6 +461,12 @@
 <tr class="row-odd"><td><a class="reference internal" href="model-naive_bayes__train.html"><em>model:naive_bayes/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build a naive bayes model.</td>
 </tr>
+<tr class="row-even"><td><a class="reference internal" href="model-power_iteration_clustering__new.html"><em>model:power_iteration_clustering/new</em></a></td>
+<td>Create a &#8216;new&#8217; instance of a PowerIterationClustering model.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="model-power_iteration_clustering__predict.html"><em>model:power_iteration_clustering/predict</em></a></td>
+<td>Predict the clusters to which the nodes belong to</td>
+</tr>
 <tr class="row-even"><td><a class="reference internal" href="model-principal_components__new.html"><em>model:principal_components/new</em></a></td>
 <td>Create a &#8216;new&#8217; instance of a Principal Components model.</td>
 </tr>
@@ -482,10 +512,13 @@
 <tr class="row-even"><td><a class="reference internal" href="model-svm__predict.html"><em>model:svm/predict</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the labels for the data points</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="model-svm__test.html"><em>model:svm/test</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-svm__publish.html"><em>model:svm/publish</em></a></td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="model-svm__test.html"><em>model:svm/test</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict test frame labels and return metrics.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="model-svm__train.html"><em>model:svm/train</em></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="model-svm__train.html"><em>model:svm/train</em></a></td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build SVM with SGD model</td>
 </tr>
 </tbody>
@@ -514,7 +547,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

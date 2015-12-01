@@ -6,10 +6,10 @@
     
     <title>Collaborative Filtering &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="f_static/jquery.js"></script>
-    <script type="text/javascript" src="f_static/underscore.js"></script>
-    <script type="text/javascript" src="f_static/doctools.js"></script>
-    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="Process Flow Examples" href="ds_dflw.html" >
@@ -133,23 +133,23 @@ the rating a user provided to an item.
 To support training, validation and test, a common practice in machine
 learning, each edge is also annotated by &#8220;TR&#8221;, &#8220;VA&#8221; or &#8220;TE&#8221;.</p>
 <div class="figure align-center" id="id1">
-<a class="reference internal image-reference" href="f_images/ds_mlal_cf_1.png"><img alt="f_images/ds_mlal_cf_1.png" src="f_images/ds_mlal_cf_1.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="_images/ds_mlal_cf_1.png"><img alt="_images/ds_mlal_cf_1.png" src="_images/ds_mlal_cf_1.png" style="width: 80%;" /></a>
 <p class="caption"><span class="caption-text">A typical representation of the preference matrix P</span></p>
 </div>
 <p>Each node in the graph will be associated with a vector
-<img class="math" src="f_images/math/93575a4d950e6453ad8b53b7481971d5e6453ab2.png" alt="\textstyle \overrightarrow {f_x}"/> of length <img class="math" src="f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>, where <img class="math" src="f_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>
-is the feature dimension specified by the user, and a bias term <img class="math" src="f_images/math/ee1b42748cba6b15902ba65f2f2d51834b7254fb.png" alt="b_x"/>.
-The predictions for item <img class="math" src="f_images/math/52824eea6fecfe5c51900c2cccf0fdfa617dd5dc.png" alt="m_{j}"/>, from user <img class="math" src="f_images/math/6998bb57f6af36a0ac188d683da16738d6c24131.png" alt="u_{i}"/> care given by
+<img class="math" src="_images/math/93575a4d950e6453ad8b53b7481971d5e6453ab2.png" alt="\textstyle \overrightarrow {f_x}"/> of length <img class="math" src="_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>, where <img class="math" src="_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>
+is the feature dimension specified by the user, and a bias term <img class="math" src="_images/math/ee1b42748cba6b15902ba65f2f2d51834b7254fb.png" alt="b_x"/>.
+The predictions for item <img class="math" src="_images/math/52824eea6fecfe5c51900c2cccf0fdfa617dd5dc.png" alt="m_{j}"/>, from user <img class="math" src="_images/math/6998bb57f6af36a0ac188d683da16738d6c24131.png" alt="u_{i}"/> care given by
 dot product of the feature vector and the user vector, plus the item and user
 bias terms:
 /home/work/atk/engine-plugins/giraph-plugins/src/main/scala/org/trustedanalytics/atk/giraph/plugins/model/cf/CollaborativeFilteringNewPlugin.scala</p>
 <div class="math">
-<p><img src="f_images/math/5b347b3f38e831ff7d91429a54decf0351986662.png" alt="r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
+<p><img src="_images/math/5b347b3f38e831ff7d91429a54decf0351986662.png" alt="r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
 + b_{mj}"/></p>
 </div><p>The parameters of the above equation are chosen to minimize the regularized
 mean squared error between known and predicted ratings:</p>
 <div class="math">
-<p><img src="f_images/math/1181dc689de8d395d1bcbca304de2fca23ba2b52.png" alt="cost = \frac {\sum error^2} {n} + \lambda * \left( bias^2 + \sum f_k^2 \
+<p><img src="_images/math/1181dc689de8d395d1bcbca304de2fca23ba2b52.png" alt="cost = \frac {\sum error^2} {n} + \lambda * \left( bias^2 + \sum f_k^2 \
 \right)"/></p>
 </div><p>How this optimization is accomplished depends on whether the use uses the ALS
 or CGD functions respectively.
@@ -159,41 +159,41 @@ The CGD method uses less memory than ALS, but it returns an approximate
 solution to the objective function and should only be used in cases when
 memory required for ALS is prohibitively high.</p>
 <p><strong>Using ALS Optimization to Solve the Collaborative Filtering Problem</strong></p>
-<p>ALS optimizes the vector <img class="math" src="f_images/math/7c1fb8ead0f64fa9efd46cb5083349f35f6a117c.png" alt="\overrightarrow f_{*}"/> and the bias
-<img class="math" src="f_images/math/c15d5cd6fbe29422a247d0885e3703344ceeeb7f.png" alt="b_{*}"/> alternatively between user profiles using least squares on users
+<p>ALS optimizes the vector <img class="math" src="_images/math/7c1fb8ead0f64fa9efd46cb5083349f35f6a117c.png" alt="\overrightarrow f_{*}"/> and the bias
+<img class="math" src="_images/math/c15d5cd6fbe29422a247d0885e3703344ceeeb7f.png" alt="b_{*}"/> alternatively between user profiles using least squares on users
 and items.
 On the first iteration, the first feature of each item is set to its average
 rating, while the others are set to small random numbers.
-The algorithm then treats the <img class="math" src="f_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> &#8216;s as constant and optimizes
-<img class="math" src="f_images/math/e7b9a64dddbb23a42ffe1ddce009ae01535e5cb2.png" alt="u_{i}^{1},...,u_{i}^{k}"/> for each user, <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>.
+The algorithm then treats the <img class="math" src="_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> &#8216;s as constant and optimizes
+<img class="math" src="_images/math/e7b9a64dddbb23a42ffe1ddce009ae01535e5cb2.png" alt="u_{i}^{1},...,u_{i}^{k}"/> for each user, <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>.
 For an individual user, this is a simple ordinary least squares optimization
 over the items that user has ranked.
-Next, the algorithm takes the <img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/> &#8216;s as constant and optimizes the
-<img class="math" src="f_images/math/d8172349035c30b680a29680913adabbd7ec0bad.png" alt="m_{j}^{1},...,m_{j}^{k}"/> for each item, <img class="math" src="f_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>.
+Next, the algorithm takes the <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/> &#8216;s as constant and optimizes the
+<img class="math" src="_images/math/d8172349035c30b680a29680913adabbd7ec0bad.png" alt="m_{j}^{1},...,m_{j}^{k}"/> for each item, <img class="math" src="_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>.
 This is again an ordinary least squares optimization predicting the user
-rating of person that has ranked item <img class="math" src="f_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>.</p>
+rating of person that has ranked item <img class="math" src="_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>.</p>
 <p>At each step, the bias is computed for either items of users and the objective
 function, shown below, is evaluated.
 The bias term for an item or user, computed for use in the next iteration is
 given by:</p>
 <div class="math">
-<p><img src="f_images/math/9b60dd2a4e416becc36ef9065cdade434c4d3dca.png" alt="b = \frac{\sum error}{(1+\lambda)*n}"/></p>
+<p><img src="_images/math/9b60dd2a4e416becc36ef9065cdade434c4d3dca.png" alt="b = \frac{\sum error}{(1+\lambda)*n}"/></p>
 </div><p>The optimization is said to converge if the change in the objective function
 is less than the convergence_threshold parameter or the algorithm hits the
 maximum number of <a class="reference internal" href="glossary.html#term-supersteps"><span class="xref std std-term">supersteps</span></a>.</p>
 <div class="math">
-<p><img src="f_images/math/e400a815345484e467f59bc6b8621d7a0075aca6.png" alt="cost = \frac {\sum error^{2}}{n}+\lambda*\left(bias^{2}+\sum f_{k}^{2} \
+<p><img src="_images/math/e400a815345484e467f59bc6b8621d7a0075aca6.png" alt="cost = \frac {\sum error^{2}}{n}+\lambda*\left(bias^{2}+\sum f_{k}^{2} \
 \right)"/></p>
 </div><p>Note that the equations above omit user and item subscripts for generality.
-The <img class="math" src="f_images/math/74ba80b12448019d7d7e404258d2dc8d0d218e3e.png" alt="l_{2}"/> regularization term, lambda, tries to avoid over-fitting by
-penalizing the magnitudes of the parameters, and <img class="math" src="f_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is a trade-off
+The <img class="math" src="_images/math/74ba80b12448019d7d7e404258d2dc8d0d218e3e.png" alt="l_{2}"/> regularization term, lambda, tries to avoid over-fitting by
+penalizing the magnitudes of the parameters, and <img class="math" src="_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is a trade-off
 parameter that balances the two terms and is usually determined by cross
 validation (CV).</p>
-<p>After the parameters <img class="math" src="f_images/math/7c1fb8ead0f64fa9efd46cb5083349f35f6a117c.png" alt="\overrightarrow f_{*}"/> and <img class="math" src="f_images/math/c15d5cd6fbe29422a247d0885e3703344ceeeb7f.png" alt="b_{*}"/> are
-determined, given an item <img class="math" src="f_images/math/52824eea6fecfe5c51900c2cccf0fdfa617dd5dc.png" alt="m_{j}"/> the rating from user <img class="math" src="f_images/math/6998bb57f6af36a0ac188d683da16738d6c24131.png" alt="u_{i}"/> can
+<p>After the parameters <img class="math" src="_images/math/7c1fb8ead0f64fa9efd46cb5083349f35f6a117c.png" alt="\overrightarrow f_{*}"/> and <img class="math" src="_images/math/c15d5cd6fbe29422a247d0885e3703344ceeeb7f.png" alt="b_{*}"/> are
+determined, given an item <img class="math" src="_images/math/52824eea6fecfe5c51900c2cccf0fdfa617dd5dc.png" alt="m_{j}"/> the rating from user <img class="math" src="_images/math/6998bb57f6af36a0ac188d683da16738d6c24131.png" alt="u_{i}"/> can
 be predicted by the simple linear model:</p>
 <div class="math">
-<p><img src="f_images/math/5b347b3f38e831ff7d91429a54decf0351986662.png" alt="r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
+<p><img src="_images/math/5b347b3f38e831ff7d91429a54decf0351986662.png" alt="r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
 + b_{mj}"/></p>
 </div><div class="line-block">
 <div class="line"><br /></div>
@@ -222,33 +222,33 @@ For more on conjugate gradient descent in general, see:
 <p><strong>The Mathematics of Matrix Factorization via CGD</strong></p>
 <p>Matrix factorization by conjugate gradient descent produces ratings by using
 the (limited) space of observed rankings to infer a user-factors vector
-<img class="math" src="f_images/math/d369e06e2e85476bdf7909acafcd0c05132bb1ed.png" alt="p_{u}"/> for each user  <img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/>, and an item-factors vector
-<img class="math" src="f_images/math/59fa2a3d293bb76c78cac477a1dfa5abb61546c0.png" alt="q_{i}"/> for each item <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>, and then producing a ranking by user
-<img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/> of item <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by the dot-product <img class="math" src="f_images/math/527189a0e01c3bf70f50ca5d9519f9aaa4bd2e43.png" alt="b_{ui} + p_{u}^{T}q_{i}"/>
-where <img class="math" src="f_images/math/3ea2f1035270b8b8b548b0166b73653585f3f7ed.png" alt="b_{ui}"/> is a baseline ranking calculated as <img class="math" src="f_images/math/ffbbc0fcc85fb12bc5ffa677b4d34a629e73a258.png" alt="b_{ui} = \mu +
+<img class="math" src="_images/math/d369e06e2e85476bdf7909acafcd0c05132bb1ed.png" alt="p_{u}"/> for each user  <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/>, and an item-factors vector
+<img class="math" src="_images/math/59fa2a3d293bb76c78cac477a1dfa5abb61546c0.png" alt="q_{i}"/> for each item <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>, and then producing a ranking by user
+<img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/> of item <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by the dot-product <img class="math" src="_images/math/527189a0e01c3bf70f50ca5d9519f9aaa4bd2e43.png" alt="b_{ui} + p_{u}^{T}q_{i}"/>
+where <img class="math" src="_images/math/3ea2f1035270b8b8b548b0166b73653585f3f7ed.png" alt="b_{ui}"/> is a baseline ranking calculated as <img class="math" src="_images/math/ffbbc0fcc85fb12bc5ffa677b4d34a629e73a258.png" alt="b_{ui} = \mu +
 b_{u} + b_{i}"/>.</p>
 <p>The optimum model is chosen to minimum the following sum, which penalizes
 square distance of the prediction from observed rankings and complexity of the
 model (through the regularization term):</p>
 <div class="math">
-<p><img src="f_images/math/985acba21aa7b6f593cceedb2f8f321d19c68908.png" alt="\sum_{(u,i) \in {\mathcal{K}}} (r_{ui} - \mu - b_{u} - b_{i} - \
+<p><img src="_images/math/985acba21aa7b6f593cceedb2f8f321d19c68908.png" alt="\sum_{(u,i) \in {\mathcal{K}}} (r_{ui} - \mu - b_{u} - b_{i} - \
 p_{u}^{T}q_{i})^{2} + \lambda_{3}(||p_{u}||^{2} + ||q_{i}||^{2} + \
 b_{u}^{2} + b_{i}^{2})"/></p>
 </div><p>Where:</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line"><img class="math" src="f_images/math/4f38e6a7a2961a333be13278f57df633049554f9.png" alt="r_{ui}"/> — Observed ranking of item <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by user <img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/></div>
-<div class="line"><img class="math" src="f_images/math/3c3f82017295b24c8595d5925016a20a24a4fce9.png" alt="{\mathcal{K}}"/> — Set of pairs <img class="math" src="f_images/math/7092db36c59ddc02ccec57d1658b010b5ba1c9b3.png" alt="(u,i)"/> for each observed
-ranking of item <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by user <img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/></div>
-<div class="line"><img class="math" src="f_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> — The average rating over all ratings of all items by all
+<div class="line"><img class="math" src="_images/math/4f38e6a7a2961a333be13278f57df633049554f9.png" alt="r_{ui}"/> — Observed ranking of item <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by user <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/></div>
+<div class="line"><img class="math" src="_images/math/3c3f82017295b24c8595d5925016a20a24a4fce9.png" alt="{\mathcal{K}}"/> — Set of pairs <img class="math" src="_images/math/7092db36c59ddc02ccec57d1658b010b5ba1c9b3.png" alt="(u,i)"/> for each observed
+ranking of item <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> by user <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/></div>
+<div class="line"><img class="math" src="_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> — The average rating over all ratings of all items by all
 users.</div>
-<div class="line"><img class="math" src="f_images/math/bea714d7e21de291cb80b26c04185074e6546d00.png" alt="b_{u}"/> —  How much user <img class="math" src="f_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/>&#8216;s average rating differs from
-<img class="math" src="f_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/>.</div>
-<div class="line"><img class="math" src="f_images/math/61054babcfe66504db8061c3b435131e28d4cb5c.png" alt="b_{i}"/> —   How much item <img class="math" src="f_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>&#8216;s average rating differs from
-<img class="math" src="f_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/></div>
-<div class="line"><img class="math" src="f_images/math/d369e06e2e85476bdf7909acafcd0c05132bb1ed.png" alt="p_{u}"/> —  User-factors vector.</div>
-<div class="line"><img class="math" src="f_images/math/59fa2a3d293bb76c78cac477a1dfa5abb61546c0.png" alt="q_{i}"/> — Item-factors vector.</div>
-<div class="line"><img class="math" src="f_images/math/a23661a5e6ab31677cafdc3db349c930de9bce28.png" alt="\lambda_{3}"/> — A regularization parameter specified by the user.</div>
+<div class="line"><img class="math" src="_images/math/bea714d7e21de291cb80b26c04185074e6546d00.png" alt="b_{u}"/> —  How much user <img class="math" src="_images/math/e5fc41b391867da81606413e3389c7efc73abaf0.png" alt="u"/>&#8216;s average rating differs from
+<img class="math" src="_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/>.</div>
+<div class="line"><img class="math" src="_images/math/61054babcfe66504db8061c3b435131e28d4cb5c.png" alt="b_{i}"/> —   How much item <img class="math" src="_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>&#8216;s average rating differs from
+<img class="math" src="_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/></div>
+<div class="line"><img class="math" src="_images/math/d369e06e2e85476bdf7909acafcd0c05132bb1ed.png" alt="p_{u}"/> —  User-factors vector.</div>
+<div class="line"><img class="math" src="_images/math/59fa2a3d293bb76c78cac477a1dfa5abb61546c0.png" alt="q_{i}"/> — Item-factors vector.</div>
+<div class="line"><img class="math" src="_images/math/a23661a5e6ab31677cafdc3db349c930de9bce28.png" alt="\lambda_{3}"/> — A regularization parameter specified by the user.</div>
 </div>
 </div></blockquote>
 <p>This optimization problem is solved by the conjugate gradient descent method.
@@ -313,7 +313,7 @@ its item vertex in the specified vertex property name.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

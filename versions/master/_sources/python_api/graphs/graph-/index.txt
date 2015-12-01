@@ -1,0 +1,360 @@
+
+:doc:`Graphs<../index>` Graph
+*****************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+    annotate_degrees
+    annotate_weighted_degrees
+    clustering_coefficient
+    copy
+    define_edge_type
+    define_vertex_type
+    edge_count
+    edges
+    export_to_titan
+    graphx_connected_components
+    graphx_label_propagation
+    graphx_pagerank
+    graphx_triangle_count
+    kclique_percolation
+    last_read_date
+    loopy_belief_propagation
+    name
+    status
+    vertex_count
+    vertex_outdegree
+    vertices
+
+.. class:: Graph
+
+    Creates a seamless property graph.
+
+    A seamless graph is a collection of vertex and edge lists stored as frames.
+    This allows frame-like operations against graph data.
+    Many frame methods are available to work with vertices and edges.
+    Vertex and edge properties are stored as columns.
+
+    A seamless graph is better suited for bulk :term:`OLAP`-type operations
+    whereas a Titan graph is better suited to :term:`OLTP`.
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`edge_count <edge_count>`\                                                                       Get the total number of edges in the graph.
+    :doc:`edges <edges>`\                                                                                 Edge frame collection
+    :doc:`last_read_date <last_read_date>`\                                                               Read-only property - Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the graph object.
+    :doc:`status <status>`\                                                                               Read-only property - Current graph life cycle status.
+    :doc:`vertex_count <vertex_count>`\                                                                   Get the total number of vertices in the graph.
+    :doc:`vertices <vertices>`\                                                                           Vertex frame collection
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <Graph__init__>`\ (self[, name, _info])                                                Initialize the graph.
+    :doc:`annotate_degrees <annotate_degrees>`\ (self, output_property_name[, degree_option, ...])        Make new graph with degrees.
+    :doc:`annotate_weighted_degrees <annotate_weighted_degrees>`\ (self, output_property_name[, ...])     Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+    :doc:`clustering_coefficient <clustering_coefficient>`\ (self[, output_property_name, ...])           Coefficient of graph with respect to labels.
+    :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
+    :doc:`define_edge_type <define_edge_type>`\ (self, label, src_vertex_label, dest_vertex_label)        Define an edge type.
+    :doc:`define_vertex_type <define_vertex_type>`\ (self, label)                                         Define a vertex type by label.
+    :doc:`export_to_titan <export_to_titan>`\ (self[, new_graph_name])                                    Convert current graph to TitanGraph.
+    :doc:`graphx_connected_components <graphx_connected_components>`\ (self[, ...])                       Implements the connected components computation on a graph by invoking graphx api.
+    :doc:`graphx_label_propagation <graphx_label_propagation>`\ (self[, max_steps, ...])                  |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
+    :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
+    :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
+    :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.
+    :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, prior_property, ...[, ...])        Classification on sparse data using Belief Propagation.
+    :doc:`vertex_outdegree <vertex_outdegree>`\ (self)                                                    Counts the out-degree of vertices in a graph.
+    ====================================================================================================  ====================================================================================================
+
+.. _Graph__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Initialize the graph.
+
+
+    :Parameters:
+
+        **name** : str (default=None)
+
+        ..
+
+            Name for the new graph.
+            Default is None.
+
+
+    Examples
+    --------
+    This example uses a single source data frame and creates a graph of 'user'
+    and 'movie' vertices connected by 'rating' edges.
+
+    The first step is to bring in some data to create a frame as the source
+    for a graph:
+
+    >>> schema = [('viewer', str), ('profile', ta.int32), ('movie', str), ('rating', ta.int32)]
+    >>> data1 = [['fred',0,'Croods',5],
+    ...          ['fred',0,'Jurassic Park',5],
+    ...          ['fred',0,'2001',2],
+    ...          ['fred',0,'Ice Age',4],
+    ...          ['wilma',0,'Jurassic Park',3],
+    ...          ['wilma',0,'2001',5],
+    ...          ['wilma',0,'Ice Age',4],
+    ...          ['pebbles',1,'Croods',4],
+    ...          ['pebbles',1,'Land Before Time',3],
+    ...          ['pebbles',1,'Ice Age',5]]
+    >>> data2 = [['betty',0,'Croods',5],
+    ...          ['betty',0,'Jurassic Park',3],
+    ...          ['betty',0,'Land Before Time',4],
+    ...          ['betty',0,'Ice Age',3],
+    ...          ['barney',0,'Croods',5],
+    ...          ['barney',0,'Jurassic Park',5],
+    ...          ['barney',0,'Land Before Time',3],
+    ...          ['barney',0,'Ice Age',5],
+    ...          ['bamm bamm',1,'Croods',5],
+    ...          ['bamm bamm',1,'Land Before Time',3]]
+    >>> frame = ta.Frame(ta.UploadRows(data1, schema))
+    [===Job Progress===]
+
+    >>> frame2 = ta.Frame(ta.UploadRows(data2, schema))
+    [===Job Progress===]
+
+    >>> frame.inspect()
+    [#]  viewer   profile  movie             rating
+    ===============================================
+    [0]  fred           0  Croods                 5
+    [1]  fred           0  Jurassic Park          5
+    [2]  fred           0  2001                   2
+    [3]  fred           0  Ice Age                4
+    [4]  wilma          0  Jurassic Park          3
+    [5]  wilma          0  2001                   5
+    [6]  wilma          0  Ice Age                4
+    [7]  pebbles        1  Croods                 4
+    [8]  pebbles        1  Land Before Time       3
+    [9]  pebbles        1  Ice Age                5
+
+
+    Now, make an empty graph object:
+
+    >>> graph = ta.Graph()
+
+    Then, define the types of vertices and edges this graph will be made of:
+
+    >>> graph.define_vertex_type('viewer')
+    [===Job Progress===]
+    >>> graph.define_vertex_type('film')
+    [===Job Progress===]
+    >>> graph.define_edge_type('rating', 'viewer', 'film')
+    [===Job Progress===]
+
+    And finally, add the data to the graph:
+
+    >>> graph.vertices['viewer'].add_vertices(frame, 'viewer', ['profile'])
+    [===Job Progress===]
+    >>> graph.vertices['viewer'].inspect()
+    [#]  _vid  _label  viewer   profile
+    ===================================
+    [0]     1  viewer  fred           0
+    [1]     8  viewer  pebbles        1
+    [2]     5  viewer  wilma          0
+
+    >>> graph.vertices['film'].add_vertices(frame, 'movie')
+    [===Job Progress===]
+    >>> graph.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    19  film    Land Before Time
+    [1]    14  film    Ice Age
+    [2]    12  film    Jurassic Park
+    [3]    11  film    Croods
+    [4]    13  film    2001
+
+    >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
+    [===Job Progress===]
+    >>> graph.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  rating
+    ==============================================
+    [0]    24         1         14  rating       4
+    [1]    22         1         12  rating       5
+    [2]    21         1         11  rating       5
+    [3]    23         1         13  rating       2
+    [4]    29         8         19  rating       3
+    [5]    30         8         14  rating       5
+    [6]    28         8         11  rating       4
+    [7]    27         5         14  rating       4
+    [8]    25         5         12  rating       3
+    [9]    26         5         13  rating       5
+
+    Explore basic graph properties:
+
+    >>> graph.vertex_count
+    [===Job Progress===]
+    8
+
+    >>> graph.vertices
+    viewer : [viewer, profile], count = 3
+    film : [movie], count = 5
+
+    >>> graph.edge_count
+    [===Job Progress===]
+    10
+
+    >>> graph.edges
+    rating : [rating], count = 10
+
+    >>> graph.status
+    u'ACTIVE'
+
+    >>> graph.last_read_date
+    datetime.datetime(2015, 12, 1, 18, 1, 13, 394222)
+
+    >>> graph
+    Graph <unnamed>
+    status = ACTIVE  (last_read_date = -etc-)
+    vertices =
+      viewer : [viewer, profile], count = 3
+      film : [movie], count = 5
+    edges =
+      rating : [rating], count = 10
+
+    Data from other frames can be added to the graph by making more calls
+    to `add_vertices` and `add_edges`.
+
+    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
+    [===Job Progress===]
+
+    >>> graph.vertices['viewer'].add_vertices(frame2, 'viewer', ['profile'])
+    [===Job Progress===]
+    >>> graph.vertices['viewer'].inspect()
+    [#]  _vid  _label  viewer     profile
+    =====================================
+    [0]     5  viewer  wilma            0
+    [1]     1  viewer  fred             0
+    [2]    31  viewer  betty            0
+    [3]    35  viewer  barney           0
+    [4]     8  viewer  pebbles          1
+    [5]    39  viewer  bamm bamm        1
+
+    >>> graph.vertices['film'].add_vertices(frame2, 'movie')
+    [===Job Progress===]
+    >>> graph.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    44  film    Ice Age
+    [2]    41  film    Croods
+    [3]    43  film    Land Before Time
+    [4]    42  film    Jurassic Park
+
+    >>> graph.vertex_count
+    [===Job Progress===]
+    11
+
+    >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
+    [===Job Progress===]
+
+    >>> graph.edges['rating'].inspect(20)
+    [##]  _eid  _src_vid  _dest_vid  _label  rating
+    ===============================================
+    [0]     24         1         14  rating       4
+    [1]     22         1         12  rating       5
+    [2]     21         1         11  rating       5
+    [3]     23         1         13  rating       2
+    [4]     29         8         19  rating       3
+    [5]     30         8         14  rating       5
+    [6]     28         8         11  rating       4
+    [7]     27         5         14  rating       4
+    [8]     25         5         12  rating       3
+    [9]     26         5         13  rating       5
+    [10]    60        39         43  rating       3
+    [11]    59        39         41  rating       5
+    [12]    53        31         43  rating       4
+    [13]    54        31         44  rating       3
+    [14]    52        31         42  rating       3
+    [15]    51        31         41  rating       5
+    [16]    57        35         43  rating       3
+    [17]    58        35         44  rating       5
+    [18]    56        35         42  rating       5
+    [19]    55        35         41  rating       5
+
+    >>> graph.edge_count
+    [===Job Progress===]
+    20
+
+    Now we'll copy the graph and then change it.
+
+    >>> graph2 = graph.copy()
+    [===Job Progress===]
+
+    >>> graph2
+    Graph <unnamed>
+    status = ACTIVE  (last_read_date = -etc-)
+    vertices =
+      viewer : [viewer, profile], count = 6
+      film : [movie], count = 5
+    edges =
+      rating : [rating], count = 20
+
+    We can rename the columns in the frames representing the vertices and edges,
+    similar to regular frame operations.
+
+    >>> graph2.vertices['viewer'].rename_columns({'viewer': 'person'})
+    [===Job Progress===]
+
+    >>> graph2.vertices
+    viewer : [person, profile], count = 6
+    film : [movie], count = 5
+
+    >>> graph2.edges['rating'].rename_columns({'rating': 'score'})
+    [===Job Progress===]
+
+    >>> graph2.edges
+    rating : [score], count = 20
+
+    We can apply filter and drop functions to the vertex and edge frames.
+
+    >>> graph2.vertices['viewer'].filter(lambda v: v.person.startswith("b"))
+    [===Job Progress===]
+
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    35  viewer  barney           0
+    [2]    39  viewer  bamm bamm        1
+
+    >>> graph2.vertices['viewer'].drop_duplicates("profile")
+    [===Job Progress===]
+
+    >>> graph2.vertices['viewer'].inspect()
+    [#]  _vid  _label  person     profile
+    =====================================
+    [0]    31  viewer  betty            0
+    [1]    39  viewer  bamm bamm        1
+
+    Now check our edges to see that they have also be filtered.
+
+    >>> graph2.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  score
+    =============================================
+    [0]    60        39         43  rating      3
+    [1]    59        39         41  rating      5
+    [2]    53        31         43  rating      4
+    [3]    54        31         44  rating      3
+    [4]    52        31         42  rating      3
+    [5]    51        31         41  rating      5
+
+    Only source vertices 31 and 39 remain.
+
+        

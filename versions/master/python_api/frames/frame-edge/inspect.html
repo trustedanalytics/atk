@@ -6,10 +6,10 @@
     
     <title>EdgeFrame inspect &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
@@ -111,7 +111,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="edgeframe-inspect">
-<span id="python-api-frames-frame-edge-inspect"></span><h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  inspect<a class="headerlink" href="#edgeframe-inspect" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  inspect<a class="headerlink" href="#edgeframe-inspect" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="inspect">
@@ -173,16 +173,22 @@ by python REPL (i.e. using the object&#8217;s __repr__).  If running in a script
 to be printed, then it must be explicitly printed, then <cite>print frame.inspect()</cite></p>
 <p class="rubric">Examples</p>
 <p>To look at the first 4 rows of data in a frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre> &gt;&gt;&gt; frame.inspect(4)
-[#]  animal    name    age  weight
-==================================
-[0]  human     George    8   542.5
-[1]  human     Ursula    6   495.0
-[2]  ape       Ape      41   400.0
-[3]  elephant  Shep      5  8630.0
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="go">[#]  animal    name    age  weight</span>
+<span class="go">==================================</span>
+<span class="go">[0]  human     George    8   542.5</span>
+<span class="go">[1]  human     Ursula    6   495.0</span>
+<span class="go">[2]  ape       Ape      41   400.0</span>
+<span class="go">[3]  elephant  Shep      5  8630.0</span>
 </pre></div>
 </div>
 <p># For other examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-inspect"><span>Inspect the Data</span></a>.</p>
+<p>Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
+running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
+this problem, explicitly print the unicode of the returned object:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
+</pre></div>
+</div>
 <p><strong>Global Settings</strong></p>
 <p>If not specified, the arguments that control formatting receive default values from
 &#8216;trustedanalytics.inspect_settings&#8217;.  Make changes there to affect all calls to inspect.</p>
@@ -246,7 +252,7 @@ to be printed, then it must be explicitly printed, then <cite>print frame.inspec
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

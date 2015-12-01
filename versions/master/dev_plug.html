@@ -6,10 +6,10 @@
     
     <title>Plugin Authoring Guide &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="f_static/jquery.js"></script>
-    <script type="text/javascript" src="f_static/underscore.js"></script>
-    <script type="text/javascript" src="f_static/doctools.js"></script>
-    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="Extending Trusted Analytics Platform" href="dev_over.html" >
@@ -132,10 +132,8 @@
 <li><a class="reference internal" href="#single-value-results" id="id12">Single Value Results</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#creating-an-archive" id="id13">Creating an Archive</a></li>
+<li><a class="reference internal" href="#creating-a-jar-with-plugins" id="id13">Creating a Jar with Plugins</a></li>
 <li><a class="reference internal" href="#deployment" id="id14">Deployment</a></li>
-<li><a class="reference internal" href="#archive-declaration" id="id15">Archive Declaration</a></li>
-<li><a class="reference internal" href="#enabling-the-archive" id="id16">Enabling the Archive</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -184,7 +182,7 @@ For example, the Loopy Belief Propagation plugin gets its configuration from
 </div>
 <div class="section" id="execution-flow">
 <h3>Execution Flow<a class="headerlink" href="#execution-flow" title="Permalink to this headline">¶</a></h3>
-<a class="reference internal image-reference" href="f_images/dev_plug_1.png"><img alt="f_images/dev_plug_1.png" class="align-center" src="f_images/dev_plug_1.png" style="width: 80%;" /></a>
+<a class="reference internal image-reference" href="_images/dev_plug_1.png"><img alt="_images/dev_plug_1.png" class="align-center" src="_images/dev_plug_1.png" style="width: 80%;" /></a>
 </div>
 </div>
 <div class="section" id="creating-a-commandplugin">
@@ -246,126 +244,24 @@ When the client receives such a result, it should extract and return the single
 value.</p>
 </div>
 </div>
-<div class="section" id="creating-an-archive">
-<h2>Creating an Archive<a class="headerlink" href="#creating-an-archive" title="Permalink to this headline">¶</a></h2>
-<p>Plugins are deployed in Archives – jar files that contain the plugin class,
-its argument and result classes, and any supporting classes it needs, along
-with a class that implements the Archive trait.
-The Archive trait provides the system with a directory of available services
-that the archive provides.
-On application start up, the application will query all the jar files it knows
-about (see below) to see what plugins they provide.</p>
+<div class="section" id="creating-a-jar-with-plugins">
+<h2>Creating a Jar with Plugins<a class="headerlink" href="#creating-a-jar-with-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Plugins are deployed in jar files that contain the plugin class,
+its argument and result classes, and any supporting classes it needs.</p>
+<p>On application start up, the application will query all the plugin jar files
+it knows about to see what plugins they provide.</p>
+<p>See the module-loader documentation and the example-plugins module for to learn
+more about creating plugin modules.</p>
 </div>
 <div class="section" id="deployment">
 <h2>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
 <p>Plug-Ins should be installed in the system using jar files.
 Jars that are found in the server&#8217;s lib directory will be available to be
 loaded based on configuration.
-The plug-ins that will be installed must be listed in the application.conf
-file.
-Each command or query advertises the location at which it would prefer to be
-installed in the URL structure, and if no further directives
-appear in configuration, they will be installed according to their request.
-However, using the configuration file, it is also possible to remap a plug-in
-to a different location or an additional location in the URL structure.</p>
+The plug-ins that will be installed must be listed in the atk-plugin.conf
+file.</p>
 <p>In the future, plugin discovery may be further automated, and it may also be
 possible to add a plugin without restarting the server.</p>
-</div>
-<div class="section" id="archive-declaration">
-<h2>Archive Declaration<a class="headerlink" href="#archive-declaration" title="Permalink to this headline">¶</a></h2>
-<p>Each archive should have a reference.conf file stored as a resource in its jar
-file.
-For example, in a typical Maven-based project, this file might reside in the
-src/main/resources folder.
-The Typesafe Config library automatically finds resources named
-&#8220;reference.conf&#8221;, so this is how the configuration file will be discovered.</p>
-<p>The first section of the reference.conf should be the declaration of how the
-archive should be activated.
-This configuration should look like the following:</p>
-<div class="highlight-python"><div class="highlight"><pre>trustedanalytics.atk.component.archives {
-    &lt;archive-name&gt; {
-        class = &quot;&lt;archive-class&gt;&quot;
-        parent = &quot;&lt;parent-archive&gt;&quot;
-        config-path = &quot;&lt;path&gt;&quot;
-    }
-}
-</pre></div>
-</div>
-<p>The &lt;archive-name&gt; is required.
-It should be replaced with the actual name of the archive (without the .jar
-suffix).
-For example, for graphon.jar, just use the word graphon by itself.</p>
-<p><code class="docutils literal"><span class="pre">&lt;archive-class&gt;</span></code> is optional.
-If provided, it must be the name of a class that can be found in the jar file
-or in its parent class loader.
-This class must implement the Archive trait, which makes it the archive
-manager.
-The archive manager is the service that the system uses to discover plugins in
-the archive.
-If omitted, this defaults to DefaultArchive, which uses the Config system for
-plugin registration and publishing.</p>
-<p><code class="docutils literal"><span class="pre">&lt;parent&gt;</span></code> is also optional.
-If provided, this archive is treated as dependent on whatever archive is
-specified here.
-For example, SparkCommand plugins should use &#8220;engine&#8221; for this entry, so
-that they have access to the same version of Spark the engine is using, as well
-as the SparkInvocation class.</p>
-<p><code class="docutils literal"><span class="pre">&lt;config-path&gt;</span></code> is also optional.
-It specifies the config path where the configuration for plugins for this
-archive can be found.
-If omitted, configuration is assumed to be included in the archive declaration
-block.
-It can be convenient to provide a value for the config path because it leads to
-less nested config files.</p>
-<p>Here is a sample config file for an archive that provides a single plugin.
-Note that it relies on the engine archive, and re-maps its configuration
-to &#8220;trustedanalytics.graphon&#8221; rather than including the configuration in the
-trustedanalytics.atk.component.archives.graphon section.</p>
-<p>Also note the $-substitutions that allow configuration options from other
-sections to be pulled in so they&#8217;re available to the plugin.</p>
-<div class="highlight-python"><div class="highlight"><pre>trustedanalytics.atk.component.archives {
-    graphon {
-        parent = &quot;engine-core&quot;
-        config-path = &quot;trustedanalytics.graphon&quot;
-    }
-}
-
-trustedanalytics.graphon {
-    command {
-        available = [&quot;graphs.sampling.vertex_sample&quot;]
-        graphs {
-            sampling {
-                vertex_sample {
-                    class = &quot;com.trustedanalytics.spark.graphon.sampling.VertexSample&quot;
-                    config {
-                        default-timeout = ${trustedanalytics.atk.engine.default-timeout}
-                        titan = ${trustedanalytics.atk.engine.titan}
-                    }
-                }
-            }
-        }
-    }
-}
-
-#included so that conf file can be read during unit tests,
-#these will not be used when the application is actually running
-trustedanalytics.atk.engine {
-    default-timeout = 30s
-    titan {}
-}
-</pre></div>
-</div>
-</div>
-<div class="section" id="enabling-the-archive">
-<h2>Enabling the Archive<a class="headerlink" href="#enabling-the-archive" title="Permalink to this headline">¶</a></h2>
-<p>The command executor uses the config key
-&#8220;trustedanalytics.atk.engine.plugin.command.archives&#8221; to determine which archives it
-should check for command plugins.
-This setting is built into the reference.conf that is embedded in the engine
-archive (at the time of writing).
-For your installation, you can control this list using the application.conf
-file.</p>
-<p>Once this setting has been updated, restart the server to activate the changes.</p>
 </div>
 </div>
 
@@ -390,7 +286,7 @@ file.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

@@ -1,0 +1,158 @@
+
+
+----------------------------------------------------------------
+:doc:`Commands <index>` model:power_iteration_clustering/predict
+----------------------------------------------------------------
+
+Predict the clusters to which the nodes belong to
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:power_iteration_clustering/predict
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        Handle of the model to be used
+
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame storing the graph to be clustered
+
+
+
+    **source_column** : unicode
+
+    ..
+
+        Name of the column containing the source node
+
+
+
+    **destination_column** : unicode
+
+    ..
+
+        Name of the column containing the destination node
+
+
+
+    **similarity_column** : unicode
+
+    ..
+
+        Name of the column containing the similarity
+
+
+
+    **k** : int32 (default=2)
+
+    ..
+
+        Number of clusters to cluster the graph into. Default is 2
+
+
+
+    **max_iterations** : int32 (default=100)
+
+    ..
+
+        Maximum number of iterations of the power iteration loop. Default is 100
+
+
+
+    **initialization_mode** : unicode (default=random)
+
+    ..
+
+        Initialization mode of power iteration clustering. This can be either "random" to use a
+        random vector as vertex properties, or "degree" to use normalized sum similarities. Default is "random".
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predict the cluster assignments for the nodes of the graph and create a new frame with a column storing node id and a column with corresponding cluster assignment
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        A new frame with a column storing node id and a column with corresponding cluster assignment
+
+

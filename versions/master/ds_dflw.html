@@ -6,10 +6,10 @@
     
     <title>Process Flow Examples &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="f_static/jquery.js"></script>
-    <script type="text/javascript" src="f_static/underscore.js"></script>
-    <script type="text/javascript" src="f_static/doctools.js"></script>
-    <script type="text/javascript" src="f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
@@ -207,7 +207,7 @@ integers, and floats) that can be organized as a collection of rows and
 columns, similar to a table or spreadsheet.
 Each row corresponds to the data associated with one observation, and each
 column corresponds to a variable being observed.
-See the Python API <a class="reference internal" href="python_api/datatypes/index.html#python-api-datatypes-index"><span>Data Types</span></a> for
+See the Python API <span class="xref std std-ref">Data Types</span> for
 a current list of data types supported.</p>
 <p>To see the data types supported:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">valid_data_types</span>
@@ -229,7 +229,7 @@ should treat the values as None.</p>
 </div>
 <span class="target" id="importing-data"></span><div class="section" id="ingesting-the-raw-data">
 <span id="index-3"></span><h3>Ingesting the Raw Data<a class="headerlink" href="#ingesting-the-raw-data" title="Permalink to this headline">¶</a></h3>
-<p>See the API section <a class="reference internal" href="python_api/datasources/index.html#python-api-datasources-index"><span>Data Sources</span></a>
+<p>See the API section <span class="xref std std-ref">Data Sources</span>
 for the various methods of ingesting data.</p>
 <div class="section" id="importing-a-csv-file">
 <span id="example-files-csvfile"></span><h4>Importing a <abbr title="Character-Separated Variables">CSV</abbr> file.<a class="headerlink" href="#importing-a-csv-file" title="Permalink to this headline">¶</a></h4>
@@ -322,7 +322,7 @@ designed to work with data spread over multiple machines.</p>
 <li>As a return value from a Frame-based method; this is part of the
 <a class="reference internal" href="glossary.html#term-extract-transform-and-load"><span class="xref std std-term">ETL</span></a> data flow.</li>
 </ol>
-<p>See the Python API <a class="reference internal" href="python_api/frames/index.html#python-api-frames-index"><span>Frames section</span></a> for more information.</p>
+<p>See the Python API <span class="xref std std-ref">Frames section</span> for more information.</p>
 <div class="section" id="examples">
 <h4>Examples:<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
 <p>Create an empty frame:</p>
@@ -365,14 +365,14 @@ proxy pointing to the same data.</p>
 </div>
 <div class="section" id="append">
 <span id="example-frame-append"></span><span id="index-4"></span><h4>Append:<a class="headerlink" href="#append" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference internal" href="python_api/frames/frame-/append.html#python-api-frames-frame-append"><span>append</span></a> method adds rows and columns of data to a frame.
+<p>The <span class="xref std std-ref">append</span> method adds rows and columns of data to a frame.
 Columns and rows are added to the database structure, and data is imported
 as appropriate.
 If columns are the same in both name and data type, the appended data will
 go into the existing column.</p>
 <p>As an example, let&#8217;s start with a frame containing two columns <em>a</em> and <em>b</em>.
 The frame can be accessed by Frame <em>my_frame1</em>.
-We can look at the data and structure of the database by using the <a class="reference internal" href="python_api/frames/frame-/inspect.html#python-api-frames-frame-inspect"><span>inspect</span></a> method:</p>
+We can look at the data and structure of the database by using the <span class="xref std std-ref">inspect</span> method:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str   b:ta.int64</span>
@@ -391,7 +391,7 @@ We can look at the data and structure of the database by using the <a class="ref
 <span class="go">  cat</span>
 </pre></div>
 </div>
-<p>With <a class="reference internal" href="python_api/frames/frame-/append.html#python-api-frames-frame-append"><span>append</span></a>:</p>
+<p>With <span class="xref std std-ref">append</span>:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">my_frame2</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -419,17 +419,17 @@ It would still be accessed by Frame <em>my_frame1</em>:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>See also the <a class="reference internal" href="python_api/frames/frame-/join.html#python-api-frames-frame-join"><span>join</span></a> method in the
+<p>See also the <span class="xref std std-ref">join</span> method in the
 <a class="reference internal" href="python_api/index.html"><em>API</em></a> section.</p>
 </div>
 </div>
 <div class="section" id="inspect-the-data">
 <span id="example-frame-inspect"></span><h3>Inspect the Data<a class="headerlink" href="#inspect-the-data" title="Permalink to this headline">¶</a></h3>
 <p>Trusted Analytics Platform provides several methods that allow you to inspect your data,
-including <a class="reference internal" href="python_api/frames/frame-/inspect.html#python-api-frames-frame-inspect"><span>inspect</span></a> and
-<a class="reference internal" href="python_api/frames/frame-/take.html#python-api-frames-frame-take"><span>take</span></a>.
+including <span class="xref std std-ref">inspect</span> and
+<span class="xref std std-ref">take</span>.
 The Frame class also contains frame information like
-<a class="reference internal" href="python_api/frames/frame-/row_count.html#python-api-frames-frame-row-count"><span>row_count</span></a>.</p>
+<span class="xref std std-ref">row_count</span>.</p>
 <div class="section" id="id1">
 <h4>Examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <p>To see the number of rows:</p>
@@ -530,7 +530,7 @@ For details about row selection based upon its data see <a class="reference inte
 </div>
 <div class="section" id="drop-rows">
 <span id="example-frame-drop-rows"></span><span id="index-5"></span><h4>Drop Rows:<a class="headerlink" href="#drop-rows" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference internal" href="python_api/frames/frame-/drop_rows.html#python-api-frames-frame-drop-rows"><span>drop_rows</span></a>
+<p>The <span class="xref std std-ref">drop_rows</span>
 method takes a predicate function and removes all rows for
 which the predicate evaluates to <code class="docutils literal"><span class="pre">True</span></code>.</p>
 <div class="section" id="id2">
@@ -552,8 +552,8 @@ negative:</p>
 </div>
 <div class="section" id="filter-rows">
 <span id="example-frame-filter"></span><span id="index-6"></span><h4>Filter Rows:<a class="headerlink" href="#filter-rows" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference internal" href="python_api/frames/frame-/filter.html#python-api-frames-frame-filter"><span>filter</span></a> method is like
-<a class="reference internal" href="python_api/frames/frame-/drop_rows.html#python-api-frames-frame-drop-rows"><span>drop_rows</span></a>, except it removes all rows
+<p>The <span class="xref std std-ref">filter</span> method is like
+<span class="xref std std-ref">drop_rows</span>, except it removes all rows
 for which the predicate evaluates to False.</p>
 <div class="section" id="id3">
 <h5>Examples:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
@@ -565,7 +565,7 @@ for which the predicate evaluates to False.</p>
 </div>
 <div class="section" id="drop-duplicates">
 <span id="example-frame-drop-duplicates"></span><span id="index-7"></span><h4>Drop Duplicates:<a class="headerlink" href="#drop-duplicates" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference internal" href="python_api/frames/frame-/drop_duplicates.html#python-api-frames-frame-drop-duplicates"><span>drop_duplicates</span></a>
+<p>The <span class="xref std std-ref">drop_duplicates</span>
 method performs a row uniqueness comparison across the whole table.</p>
 <div class="section" id="id4">
 <h5>Examples:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
@@ -692,7 +692,7 @@ values for the new frame columns:</p>
 <div class="section" id="examining-the-data">
 <span id="index-11"></span><h3>Examining the Data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h3>
 <p>To get standard descriptive statistics information about my_frame, use the
-frame function <a class="reference internal" href="python_api/frames/frame-/column_summary_statistics.html#python-api-frames-frame-column-summary-statistics"><span>column_summary_statistics</span></a>:</p>
+frame function <span class="xref std std-ref">column_summary_statistics</span>:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -781,7 +781,7 @@ this time.</p>
 </div>
 <div class="section" id="join">
 <span id="example-frame-join"></span><span id="index-13"></span><h4>Join:<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h4>
-<p>Create a <strong>new</strong> frame from a <a class="reference internal" href="python_api/frames/frame-/join.html#python-api-frames-frame-join"><span>join</span></a>
+<p>Create a <strong>new</strong> frame from a <span class="xref std std-ref">join</span>
 operation with another frame.</p>
 <p>Given two frames <em>my_frame</em> (columns <em>a</em>, <em>b</em>, <em>c</em>) and <em>your_frame</em> (columns
 <em>b</em>, <em>c</em>, <em>d</em>).
@@ -878,7 +878,7 @@ in <em>my_frame</em> which has a value in <em>b</em> that matches a value in
 </div>
 <div class="section" id="flatten-column">
 <span id="example-frame-flatten-column"></span><span id="index-14"></span><h4>Flatten Column:<a class="headerlink" href="#flatten-column" title="Permalink to this headline">¶</a></h4>
-<p>The function <a class="reference internal" href="python_api/frames/frame-/flatten_column.html#python-api-frames-frame-flatten-column"><span>flatten_column</span></a>
+<p>The function <span class="xref std std-ref">flatten_column</span>
 creates a <strong>new</strong> frame by splitting a
 particular column and returns a Frame object.
 The column is searched for rows where there is more than one value,
@@ -928,7 +928,7 @@ The &#8220;original_data&#8221;:</p>
 <div class="section" id="seamless-graph">
 <span id="ds-dflw-building-a-graph"></span><h2>Seamless Graph<a class="headerlink" href="#seamless-graph" title="Permalink to this headline">¶</a></h2>
 <p>For the examples below, we will use a Frame <em>my_frame</em>, which accesses an
-arbitrary frame of data consisting of the <a class="reference download internal" href="f_downloads/employees.csv"><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
+arbitrary frame of data consisting of the <a class="reference download internal" href="_downloads/employees.csv"><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
@@ -1032,7 +1032,7 @@ data, based upon which order the records are delivered to the function.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>For further information, see the API section on <a class="reference internal" href="python_api/graphs/index.html#python-api-graphs-index"><span>Graphs</span></a>.</p>
+<p>For further information, see the API section on <span class="xref std std-ref">Graphs</span>.</p>
 <p id="export-to-titan">Export the graph to a TitanGraph:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_titan_graph</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">export_to_titan</span><span class="p">(</span><span class="s">&quot;titan_graph&quot;</span><span class="p">)</span>
 </pre></div>
@@ -1053,18 +1053,18 @@ data, based upon which order the records are delivered to the function.</p>
 <h3>Graph Creation<a class="headerlink" href="#graph-creation" title="Permalink to this headline">¶</a></h3>
 <p>A Titan graph is created by exporting it from a seamless graph.
 For further information, as well as Titan graph attributes and methods, see the
-API section on <a class="reference internal" href="python_api/graphs/graph-titan/index.html#python-api-graphs-graph-titan-index"><span>Titan Graph</span></a>.</p>
+API section on <span class="xref std std-ref">Titan Graph</span>.</p>
 <span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound" id="index-15">
 </div>
 </div>
 </div>
 <div class="section" id="models">
 <h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
-<p>See the <a class="reference internal" href="python_api/models/model-collaborative_filtering/index.html#python-api-models-model-collaborative-filtering-index"><span>models section of the API</span></a> for details.</p>
+<p>See the <span class="xref std std-ref">models section of the API</span> for details.</p>
 <p>Graphical models find more insights from structured noisy data.
-See <a class="reference internal" href="python_api/graphs/index.html#python-api-graphs-index"><span>graph API</span></a> for details of the
+See <span class="xref std std-ref">graph API</span> for details of the
 <a class="reference internal" href="glossary.html#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a> (LP) and <a class="reference internal" href="glossary.html#term-loopy-belief-propagation"><span class="xref std std-term">Loopy Belief Propagation</span></a> (LBP).</p>
-<p>For Topic Modeling, see the <a class="reference internal" href="python_api/models/model-lda/index.html#python-api-models-model-lda-index"><span>LDA Model section of the API</span></a> and
+<p>For Topic Modeling, see the <span class="xref std std-ref">LDA Model section of the API</span> and
 <a class="reference external" href="http://en.wikipedia.org/wiki/Topic_model">http://en.wikipedia.org/wiki/Topic_model</a></p>
 </div>
 </div>
@@ -1090,7 +1090,7 @@ See <a class="reference internal" href="python_api/graphs/index.html#python-api-
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

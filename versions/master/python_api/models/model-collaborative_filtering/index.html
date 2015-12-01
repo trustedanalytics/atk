@@ -6,10 +6,10 @@
     
     <title>Models CollaborativeFilteringModel &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
@@ -118,7 +118,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="models-collaborativefilteringmodel">
-<span id="python-api-models-model-collaborative-filtering-index"></span><h1><a class="reference internal" href="../index.html"><em>Models</em></a> CollaborativeFilteringModel<a class="headerlink" href="#models-collaborativefilteringmodel" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="../index.html"><em>Models</em></a> CollaborativeFilteringModel<a class="headerlink" href="#models-collaborativefilteringmodel" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <div class="toctree-wrapper compound">
 </div>
@@ -152,13 +152,16 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#collaborativefilteringmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
-<td>Create a new Collaborative Filtering Recommend model.</td>
+<td>Create a new Collaborative Filtering (ALS) model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="recommend.html"><em>recommend</em></a>(self, name, top_k)</td>
-<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Recommend (ALS/CGD) model.</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, graph[, user_column_name, product_column_name, ...])</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, user_col_name, item_col_name, rating_col_name[, ...])</td>
-<td>Collaborative filtering (ALS/CGD) model</td>
+<tr class="row-odd"><td><a class="reference internal" href="score.html"><em>score</em></a>(self, user_id, item_id)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, graph, weight_column_name[, max_steps, regularization, alpha, ...])</td>
+<td>Collaborative filtering (ALS) model</td>
 </tr>
 </tbody>
 </table>
@@ -167,7 +170,7 @@
 <span class="target" id="collaborativefilteringmodel-init"></span><dl class="function">
 <dt id="__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>self</em>, <em>name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new Collaborative Filtering Recommend model.</p>
+<dd><p>Create a new Collaborative Filtering (ALS) model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -183,75 +186,26 @@
 </tr>
 </tbody>
 </table>
-<p>For details about Collaborative Filter Recommend modelling,
+<p>For details about Collaborative Filter (ALS) modelling,
 see <a class="reference internal" href="../../../CollaborativeFilteringNewPlugin_Summary.html#collaborativefilteringnewplugin-summary"><span>Collaborative Filter</span></a>.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dataset</span> <span class="o">=</span> <span class="s">&quot;/datasets/movie_data_with_names.csv&quot;</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;user_id&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),(</span><span class="s">&quot;movie_id&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;rating&quot;</span><span class="p">,</span> <span class="n">atk</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-<span class="gp">&gt;&gt;&gt; </span>         <span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">atk</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;movie_name&quot;</span><span class="p">,</span><span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;release_date&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;splits&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">csv</span> <span class="o">=</span> <span class="n">atk</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">schema</span><span class="p">,</span> <span class="n">skip_header_lines</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">atk</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="n">movie_frame_name</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cgd_cf_model</span> <span class="o">=</span> <span class="n">atk</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">(</span><span class="n">cgd_name</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cgd_cf_model_train</span> <span class="o">=</span> <span class="n">cgd_cf_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&quot;user_id&quot;</span><span class="p">,</span> <span class="s">&quot;movie_name&quot;</span><span class="p">,</span> <span class="s">&quot;rating&quot;</span><span class="p">,</span> <span class="s">&quot;cgd&quot;</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                                        <span class="n">max_value</span> <span class="o">=</span> <span class="mi">19</span><span class="p">,</span> <span class="n">regularization</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span> <span class="n">min_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bias_on</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">cgd_cf_model_recommend</span> <span class="o">=</span> <span class="n">cgd_cf_model</span><span class="o">.</span><span class="n">recommend</span> <span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">cgd_cf_model_recommend</span>
-<span class="go">======Graph Statistics======</span>
-<span class="go">Number of vertices: 10070 (left: 9569, right: 501)</span>
-<span class="go">Number of edges: 302008 (train: 145182, validate: 96640, test: 60186)</span>
-
-<span class="go">======ALS Configuration======</span>
-<span class="go">maxSupersteps: 20</span>
-<span class="go">featureDimension: 3</span>
-<span class="go">lambda: 0.065000</span>
-<span class="go">biasOn: False</span>
-<span class="go">convergenceThreshold: 0.000000</span>
-<span class="go">maxVal: 5.000000</span>
-<span class="go">minVal: 1.000000</span>
-<span class="go">learningCurveOutputInterval: 1</span>
-
-<span class="go">======Learning Progress======</span>
-<span class="go">superstep = 2</span>
-<span class="go">    cost(train) = 838.72024</span>
-<span class="go">    rmse(validate) = 1.220795</span>
-<span class="go">    rmse(test) = 1.226830</span>
-<span class="go">superstep = 4</span>
-<span class="go">    cost(train) = 608.088979</span>
-<span class="go">    rmse(validate) = 1.174247</span>
-<span class="go">    rmse(test) = 1.180558</span>
-<span class="go">superstep = 6</span>
-<span class="go">    cost(train) = 540.071050</span>
-<span class="go">    rmse(validate) = 1.166471</span>
-<span class="go">    rmse(test) = 1.172131</span>
-<span class="go">superstep = 8</span>
-<span class="go">    cost(train) = 499.134869</span>
-<span class="go">    rmse(validate) = 1.164236</span>
-<span class="go">    rmse(test) = 1.169805</span>
-<span class="go">superstep = 10</span>
-<span class="go">    cost(train) = 471.318913</span>
-<span class="go">    rmse(validate) = 1.163796</span>
-<span class="go">    rmse(test) = 1.169215</span>
-<span class="go">superstep = 12</span>
-<span class="go">    cost(train) = 450.420300</span>
-<span class="go">    rmse(validate) = 1.163993</span>
-<span class="go">    rmse(test) = 1.169224</span>
-<span class="go">superstep = 14</span>
-<span class="go">    cost(train) = 433.511180</span>
-<span class="go">    rmse(validate) = 1.164485</span>
-<span class="go">    rmse(test) = 1.169393</span>
-<span class="go">superstep = 16</span>
-<span class="go">    cost(train) = 419.403410</span>
-<span class="go">    rmse(validate) = 1.165008</span>
-<span class="go">    rmse(test) = 1.169507</span>
-<span class="go">superstep = 18</span>
-<span class="go">    cost(train) = 407.212140</span>
-<span class="go">    rmse(validate) = 1.165425</span>
-<span class="go">    rmse(test) = 1.169503</span>
-<span class="go">superstep = 20</span>
-<span class="go">    cost(train) = 396.281966</span>
-<span class="go">    rmse(validate) = 1.165723</span>
-<span class="go">    rmse(test) = 1.169451</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;edges&#39;</span><span class="p">,</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">()</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -279,7 +233,7 @@ see <a class="reference internal" href="../../../CollaborativeFilteringNewPlugin
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>

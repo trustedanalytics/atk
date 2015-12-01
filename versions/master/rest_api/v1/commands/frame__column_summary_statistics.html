@@ -6,10 +6,10 @@
     
     <title>Commands frame/column_summary_statistics &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
@@ -110,7 +110,7 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-frame-column-summary-statistics">
-<span id="rest-api-v1-commands-frame-column-summary-statistics"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/column_summary_statistics<a class="headerlink" href="#commands-frame-column-summary-statistics" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/column_summary_statistics<a class="headerlink" href="#commands-frame-column-summary-statistics" title="Permalink to this headline">¶</a></h1>
 <p>Calculate multiple statistics for a column.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
@@ -178,18 +178,18 @@ Content-type: application/json
 <dt>Sample Variance</dt>
 <dd><p class="first">Sample Variance is computed by the following formula:</p>
 <div class="math">
-<p><img src="../../../f_images/math/7e856f4a76cf7335af8494ff0e1c04a62b719bc0.png" alt="\left( \frac{1}{W - 1} \right) * sum_{i} \
+<p><img src="../../../_images/math/7e856f4a76cf7335af8494ff0e1c04a62b719bc0.png" alt="\left( \frac{1}{W - 1} \right) * sum_{i} \
 \left(x_{i} - M \right) ^{2}"/></p>
-</div><p class="last">where <img class="math" src="../../../f_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
-weight, and <img class="math" src="../../../f_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
+</div><p class="last">where <img class="math" src="../../../_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
+weight, and <img class="math" src="../../../_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
 </dd>
 <dt>Population Variance</dt>
 <dd><p class="first">Population Variance is computed by the following formula:</p>
 <div class="math">
-<p><img src="../../../f_images/math/06ac37cf6834622a410bea2c3dc59574f32472b4.png" alt="\left( \frac{1}{W} \right) * sum_{i} \
+<p><img src="../../../_images/math/06ac37cf6834622a410bea2c3dc59574f32472b4.png" alt="\left( \frac{1}{W} \right) * sum_{i} \
 \left(x_{i} - M \right) ^{2}"/></p>
-</div><p class="last">where <img class="math" src="../../../f_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
-weight, and <img class="math" src="../../../f_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
+</div><p class="last">where <img class="math" src="../../../_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> is sum of weights over valid elements of positive
+weight, and <img class="math" src="../../../_images/math/2de38926392ba23abeac75effc66c37a5f5be5fd.png" alt="M"/> is the weighted mean.</p>
 </dd>
 <dt>Standard Deviation</dt>
 <dd>The square root of the variance.</dd>
@@ -341,7 +341,7 @@ The data returned is composed of multiple components:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 01, 2015.
       </li>
     </ul>
     </div>
