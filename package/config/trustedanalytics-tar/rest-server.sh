@@ -59,6 +59,7 @@ export PG_PASS=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentia
 export PG_DB=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.dbname')
 export PG_URL=$(echo $VCAP_SERVICES | $jq -c -r '.postgresql93 | .[0].credentials.uri')
 
+export DATA_CATALOG_URI=$(echo $VCAP_SERVICES | $jq '.["user-provided"] | select(.[].name == "datacatalog") | .[0].credentials.host' | tr -d '"')
 export POSTGRES_HOST=$PG_HOST
 export POSTGRES_PORT=$PG_PORT
 export POSTGRES_USER=$PG_USER

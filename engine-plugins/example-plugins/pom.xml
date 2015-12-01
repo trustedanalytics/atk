@@ -98,7 +98,6 @@
     </build>
 
     <dependencies>
-        <!--START GAO dependencies-->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>interfaces</artifactId>
@@ -119,9 +118,6 @@
             <groupId>io.spray</groupId>
             <artifactId>spray-json_2.10</artifactId>
         </dependency>
-        <!--END GAO dependencies-->
-
-        <!-- Spark Dependencies -->
 
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -133,9 +129,6 @@
             <artifactId>spark-sql_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
         </dependency>
-
-
-        <!-- Hadoop Depedencies -->
 
         <dependency>
             <groupId>org.apache.hadoop</groupId>

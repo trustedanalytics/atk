@@ -100,7 +100,6 @@ case "$1" in
 
     if [ ! -z "$ATK_DEFAULT_TIMEOUT" ];then
         echo "trustedanalytics.atk.api.default-timeout=${ATK_DEFAULT_TIMEOUT}s" >> $ATK_TEMP/application.conf
-        echo "trustedanalytics.atk.engine.default-timeout=${ATK_DEFAULT_TIMEOUT}" >> $ATK_TEMP/application.conf
         #minus one
         requestTimeout=$((ATK_DEFAULT_TIMEOUT - 1))
         echo "trustedanalytics.atk.api.request-timeout=${requestTimeout}s" >> $ATK_TEMP/application.conf
