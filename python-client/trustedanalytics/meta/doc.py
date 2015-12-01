@@ -81,10 +81,6 @@ class DocExamplesPreprocessor(object):
     Processes text (intended for Documentation Examples) and applies ATK doc markup, mostly to enable doctest testing
     """
 
-    valid_modes = ['doc',        # process for human-consumable documentation
-                   'doctest',    # process for doctest execution
-                  ]
-
     doctest_ellipsis = '-etc-'  # override for the doctest ELLIPSIS_MARKER
 
     # multi-line tags
@@ -104,7 +100,7 @@ class DocExamplesPreprocessor(object):
                             ('<datetime.datetime>', doctest_ellipsis),
                             ('<blankline>', '<BLANKLINE>')]
 
-    # this is a simple 2-state fsm:  Keep, Drop
+    # Two simple fsms, each with 2 states:  Keep, Drop
     keep = 0
     drop = 1
 
@@ -114,64 +110,73 @@ class DocExamplesPreprocessor(object):
         :param mode:  preprocess mode, like 'doc' or 'doctest'
         :return: object whose __str__ is the processed example text
         """
-        if mode not in self.valid_modes:
+        if mode == 'doc':
+            # process for human-consumable documentation
+            self.replacements = self.doc_replacements
+            self.is_state_keep = self._is_hide_state_keep
+        elif mode == 'doctest':
+            # process for doctest execution
+            self.replacements = self.doctest_replacements
+            self.is_state_keep = self._is_skip_state_keep
+        else:
             raise DocExamplesException('Invalid mode "%s" given to %s.  Must be in %s' %
-                                       (mode, self.__class__, ", ".join(self.valid_modes)))
-
-        self.state = self.keep
+                                       (mode, self.__class__, ", ".join(['doc', 'doctest'])))
+        self.skip_state = self.keep
+        self.hide_state = self.keep
         self.processed = ''
 
         if text:
-
-            process = self.process_for_doc if mode == 'doc' else self.process_for_doctest
             lines = text.splitlines(True)
-            self.processed = ''.join(process(line) for line in lines)
-            if self.state != self.keep:
+            self.processed = ''.join(self._process_line(line) for line in lines)
+            if self.hide_state != self.keep:
                 raise DocExamplesException("unclosed tag %s found" % self.hide_start_tag)
+            if self.skip_state != self.keep:
+                raise DocExamplesException("unclosed tag %s found" % self.skip_start_tag)
 
-    def process_for_doc(self, line):
-        """process line specifically for documentation"""
+    def _is_skip_state_keep(self):
+        return self.skip_state == self.keep
+
+    def _is_hide_state_keep(self):
+        return self.hide_state == self.keep
+
+    def _process_line(self, line):
+        """processes line and advances fsms as necessary, returns processed line text"""
         stripped = line.lstrip()
         if stripped and stripped[0] == '<':
-            if stripped.startswith(self.hide_start_tag):
-               if self.state == self.drop:
-                   raise DocExamplesException("nested tag %s found" % self.hide_start_tag)
-               self.state = self.drop
-               return ''
-            elif stripped.startswith(self.hide_stop_tag):
-                if self.state == self.keep:
-                    raise DocExamplesException("unexpected tag %s found" % self.hide_stop_tag)
-                self.state = self.keep
-                return ''
-            elif stripped.startswith(self.skip_start_tag) or stripped.startswith(self.skip_stop_tag):
-                return ''
-            if self.state == self.keep:
-                for keyword, replacement in self.doc_replacements:
-                    if stripped.startswith(keyword):
-                        return line.replace(keyword, replacement, 1)
-        return line if self.state == self.keep else ''
+            if self._process_if_tag_pair_tag(stripped):
+                return ''  # return empty string, as tag-pari markup should disappear
 
-    def process_for_doctest(self, line):
-        """process line specifically for doctest execution"""
-        stripped = line.lstrip()
-        if stripped and stripped[0] == '<':
-            if stripped.startswith(self.skip_start_tag):
-               if self.state == self.drop:
-                   raise DocExamplesException("nested tag %s found" % self.skip_start_tag)
-               self.state = self.drop
-               return ''
-            elif stripped.startswith(self.skip_stop_tag):
-                if self.state == self.keep:
-                    raise DocExamplesException("unexpected tag %s found" % self.skip_stop_tag)
-                self.state = self.keep
-                return ''
-            elif stripped.startswith(self.hide_start_tag) or stripped.startswith(self.hide_stop_tag):
-                return ''
-            if self.state == self.keep:
-                for keyword, replacement in self.doctest_replacements:
-                    if stripped.startswith(keyword):
-                        return line.replace(keyword, replacement, 1)
-        return line if self.state == self.keep else ''
+            # check for keyword replacement
+            for keyword, replacement in self.replacements:
+                if stripped.startswith(keyword):
+                    line = line.replace(keyword, replacement, 1)
+                    break
+
+        return line if self.is_state_keep() else ''
+
+    def _process_if_tag_pair_tag(self, stripped):
+        """determines if the stripped line is a tag pair start or stop, advances fsms accordingly"""
+        if stripped.startswith(self.skip_start_tag):
+            if self.skip_state == self.drop:
+                raise DocExamplesException("nested tag %s found" % self.skip_start_tag)
+            self.skip_state = self.drop
+            return True
+        elif stripped.startswith(self.skip_stop_tag):
+            if self.skip_state == self.keep:
+                raise DocExamplesException("unexpected tag %s found" % self.skip_stop_tag)
+            self.skip_state = self.keep
+            return True
+        elif stripped.startswith(self.hide_start_tag):
+            if self.hide_state == self.drop:
+                raise DocExamplesException("nested tag %s found" % self.hide_start_tag)
+            self.hide_state = self.drop
+            return True
+        elif stripped.startswith(self.hide_stop_tag):
+            if self.hide_state == self.keep:
+                raise DocExamplesException("unexpected tag %s found" % self.hide_stop_tag)
+            self.hide_state = self.keep
+            return True
+        return False
 
     def __str__(self):
         return self.processed
