@@ -139,7 +139,7 @@ object CfRequests extends EventLogging with EventLoggingImplicits {
    * @param headers headers for GET request such as OAuth Authorization etc.
    * @return Parsed Json Response
    */
-  private def httpsGetQuery(host: String, queryString: String, headers: List[(String, String)]): JsValue = withContext("httpsGetQuery") {
+  def httpsGetQuery(host: String, queryString: String, headers: List[(String, String)]): JsValue = withContext("httpsGetQuery") {
 
     // TODO: This method uses Apache HttpComponents HttpClient as spray-http library does not support proxy over https
     val scheme = if (RestServerConfig.useHttp) new String(HttpURL.DEFAULT_SCHEME) else new String(HttpsURL.DEFAULT_SCHEME)
@@ -177,7 +177,8 @@ object CfRequests extends EventLogging with EventLoggingImplicits {
       catch {
         case ex: Throwable =>
           error(s"Error executing request ${ex.getMessage}")
-          throw new RuntimeException(s"Error connecting to $host")
+          // We need this exception to be thrown as this is a generic http request method and let caller handle.
+          throw ex
       }
       finally {
         if (response.isDefined)

@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.domain._
-import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
+import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate }
 import org.trustedanalytics.atk.domain.model.ModelEntity
@@ -42,9 +42,9 @@ trait Engine {
    * Stores the results of the command execution back in the persistent command object.
    *
    * @param command the command to run, including name and arguments
-   * @return an Execution that can be used to track the completion of the command
+   * @return a Command record that can be used to track the completion of the command
    */
-  def execute(command: CommandTemplate)(implicit invocation: Invocation): Execution
+  def execute(command: CommandTemplate)(implicit invocation: Invocation): Command
 
   /**
    * All the command definitions available

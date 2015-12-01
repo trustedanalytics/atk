@@ -1,71 +1,52 @@
-Examples
---------
-    <skip>
-    >>> dataset = "/datasets/movie_data_with_names.csv"
-    >>> 
-    >>> schema = [("user_id", str),("movie_id", str), ("rating", atk.int32),
-    >>>          ("timestamp", atk.int32), ("movie_name",str), ("release_date", str), ("splits", str)]
-    >>> csv = atk.CsvFile(dataset, schema, skip_header_lines = 0)
-    >>> frame = atk.Frame(csv, movie_frame_name)
-    >>> cgd_cf_model = atk.GiraphCollaborativeFilteringModel(cgd_name)
-    >>> cgd_cf_model_train = cgd_cf_model.train(frame, "user_id", "movie_name", "rating", "cgd",
-    >>>                                         max_value = 19, regularization=0.65, min_value=1, bias_on=False)
-    >>> cgd_cf_model_recommend = cgd_cf_model.recommend (uid, 10)
-    >>> print cgd_cf_model_recommend
-    ======Graph Statistics======
-    Number of vertices: 10070 (left: 9569, right: 501)
-    Number of edges: 302008 (train: 145182, validate: 96640, test: 60186)
-    <blankline>
-    ======ALS Configuration======
-    maxSupersteps: 20
-    featureDimension: 3
-    lambda: 0.065000
-    biasOn: False
-    convergenceThreshold: 0.000000
-    maxVal: 5.000000
-    minVal: 1.000000
-    learningCurveOutputInterval: 1
-    <blankline>
-    ======Learning Progress======
-    superstep = 2
-        cost(train) = 838.72024
-        rmse(validate) = 1.220795
-        rmse(test) = 1.226830
-    superstep = 4
-        cost(train) = 608.088979
-        rmse(validate) = 1.174247
-        rmse(test) = 1.180558
-    superstep = 6
-        cost(train) = 540.071050
-        rmse(validate) = 1.166471
-        rmse(test) = 1.172131
-    superstep = 8
-        cost(train) = 499.134869
-        rmse(validate) = 1.164236
-        rmse(test) = 1.169805
-    superstep = 10
-        cost(train) = 471.318913
-        rmse(validate) = 1.163796
-        rmse(test) = 1.169215
-    superstep = 12
-        cost(train) = 450.420300
-        rmse(validate) = 1.163993
-        rmse(test) = 1.169224
-    superstep = 14
-        cost(train) = 433.511180
-        rmse(validate) = 1.164485
-        rmse(test) = 1.169393
-    superstep = 16
-        cost(train) = 419.403410
-        rmse(validate) = 1.165008
-        rmse(test) = 1.169507
-    superstep = 18
-        cost(train) = 407.212140
-        rmse(validate) = 1.165425
-        rmse(test) = 1.169503
-    superstep = 20
-        cost(train) = 396.281966
-        rmse(validate) = 1.165723
-        rmse(test) = 1.169451
-    </skip>
+<hide>
+>>> import trustedanalytics as ta
 
+>>> ta.connect()
+-etc-
+
+>>> vertex_schema = [('source', ta.int32), ('label', ta.float32)]
+>>> edge_schema = [('source', ta.int32), ('dest', ta.int32), ('weight', ta.float32)]
+
+>>> vertex_rows = [ [1, .1], [2, .1], [3, .5], [4, .5], [5, .5] ]
+>>> edge_rows = [ [1, 3, .5], [1, 4, .6], [1, 5, .7], [2, 5, .1] ]
+>>> vertex_frame = ta.Frame(ta.UploadRows (vertex_rows, vertex_schema))
+<progress>
+>>> edge_frame = ta.Frame(ta.UploadRows (edge_rows, edge_schema))
+<progress>
+>>> edge_frame.inspect()
+    [#]  source  dest  weight
+    =================================
+    [0]       1     3             0.5
+    [1]       1     4  0.600000023842
+    [2]       1     5  0.699999988079
+    [3]       2     5   0.10000000149
+
+</hide>
+>>> graph = ta.Graph()
+
+>>> graph.define_vertex_type('source')
+<progress>
+>>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
+<progress>
+>>> graph.define_edge_type('edges','source', 'source', directed=False)
+<progress>
+>>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', 'weight')
+<progress>
+>>> model = ta.CollaborativeFilteringModel()
+<progress>
+>>> model.train(graph, 'weight')
+<progress>
+<skip>
+>>> model.score(1,5)
+<progress>
+</skip>
+<hide>
+>>> x = model.score(1,5)
+<progress>
+>>> "%.2f" % x
+'0.03'
+>>> x = model.score(2,5)
+<progress>
+>>> "%.2f" % x
+'0.00'
+</hide>

@@ -14,12 +14,23 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.domain.command
+package org.trustedanalytics.atk.domain.util
 
-import scala.concurrent.Future
+import spray.json._
 
-/**
- * Encapsulates a Command in two states - one snapshot that is taken just before running the command,
- * and a future that will contain the eventual finished state of the command.
- */
-case class Execution(start: Command, end: Future[Command])
+object DataToJson {
+
+  /**
+   * Convert an Iterable of Any to a List of JsValue. Required due to how spray-json handles AnyVals
+   * @param data iterable to return in response
+   * @return JSON friendly version of data
+   */
+  def apply(data: Iterable[Array[Any]]): List[JsValue] = {
+    import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+    data.map(row => row.map {
+      case null => JsNull
+      case a => a.toJson
+    }.toJson).toList
+  }
+
+}
