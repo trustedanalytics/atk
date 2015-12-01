@@ -97,7 +97,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * @return a Command record that can be used to track the completion of the command
    */
   def execute(command: CommandTemplate)(implicit invocation: Invocation): Command = {
-    commands.execute(command)
+    commands.executeInBackground(command)
   }
 
   /**
