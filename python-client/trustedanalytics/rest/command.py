@@ -213,10 +213,27 @@ class CommandServerError(Exception):
         self.command_info = command_info
         try:
             message = command_info.error['message']
+            message = message + self.parse_stack_trace(command_info)
         except KeyError:
             message = "(Server response insufficient to provide details)"
         message = message + (" (command: %s, corId: %s)" % (command_info.id_number, command_info.correlation_id))
         Exception.__init__(self, message)
+
+    @staticmethod
+    def parse_stack_trace(command_info):
+        """
+        Get detailed error message from stack trace
+        """
+        try:
+            match = re.search(r'IaPyWorkerError:\s*(.*)\n', command_info.error['stack_trace'])
+            if match:
+                detailed_msg = " " + match.group(1)
+            else:
+                detailed_msg = ""
+        except KeyError:
+            detailed_msg = ""
+        return  detailed_msg
+
 
 QueryResult = namedtuple("QueryResult", ['data', 'schema'])
 """

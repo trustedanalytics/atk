@@ -84,14 +84,19 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, UnitRe
     val jsonRDD = filterRdd.map {
       row =>
         {
-          val value = row.toSeq.zip(headers).map {
-            case (k, v) => new String("\"" + v.toString + "\":" + (if (k == null) "null"
-            else if (k.isInstanceOf[String]) { "\"" + k.toString + "\"" }
-            else if (k.isInstanceOf[ArrayBuffer[_]]) { k.asInstanceOf[ArrayBuffer[Double]].mkString("[", ",", "]") }
-            else k.toString)
-            )
+          val strArray = row.toSeq.zip(headers).map {
+            case (value, header) =>
+              val str = value match {
+                case null => "null"
+                case s: String => "\"" + s + "\""
+                case arr: ArrayBuffer[Double] => arr.mkString("[", ",", "]")
+                case seq: Seq[Double] => seq.mkString("[", ",", "]")
+                case x => x.toString
+              }
+              new String("\"" + header + "\":" + str)
           }
-          value.mkString("{", ",", "}")
+
+          strArray.mkString("{", ",", "}")
         }
     }
     jsonRDD.saveAsTextFile(filename)
