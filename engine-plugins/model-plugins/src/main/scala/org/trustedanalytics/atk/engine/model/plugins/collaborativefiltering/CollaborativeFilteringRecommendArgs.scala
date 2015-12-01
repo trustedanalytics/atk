@@ -16,19 +16,22 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
-import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
 /**
- * Arguments to the collaborative filtering predict plugin - see user docs for more on the parameters
+ * Arguments to the collaborative filtering recommend plugin - see user docs for more on the parameters
  */
-case class CollaborativeFilteringPredictArgs(model: ModelReference,
-                                             graph: GraphReference,
-                                             @ArgDoc("""A user column name for the output frame""") userColumnName: String = "user",
-                                             @ArgDoc("""A product  column name for the output frame""") productColumnName: String = "product",
-                                             @ArgDoc("""A rating column name for the output frame""") ratingColumnName: String = "rating") {
+case class CollaborativeFilteringRecommendArgs(model: ModelReference,
+                                               @ArgDoc("""A user/product id""") entityId: Int,
+                                               @ArgDoc("""Number of recommendations""") numberOfRecommendations: Int = 1,
+                                               @ArgDoc("""True - products for user; false - users for the product""") recommendProducts: Boolean = true) {
 
   require(model != null, "model is required")
-  require(graph != null, "batch data as a graph is required")
 }
+
+case class CollaborativeFilteringRecommendReturn(value: List[String])
+
