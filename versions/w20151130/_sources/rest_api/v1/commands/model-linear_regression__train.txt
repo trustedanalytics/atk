@@ -1,0 +1,179 @@
+
+
+-----------------------------------------------------
+:doc:`Commands <index>` model:linear_regression/train
+-----------------------------------------------------
+
+|ALPHA|
+Build linear regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:linear_regression/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column name containing the label
+        for each observation.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        List of column(s) containing the
+        observations.
+
+
+
+    **intercept** : bool (default=True)
+
+    ..
+
+        Flag indicating if the algorithm adds an intercept.
+        Default is true.
+
+
+
+    **num_iterations** : int32 (default=100)
+
+    ..
+
+        Number of iterations for SGD. Default is 100.
+
+
+
+    **step_size** : int32 (default=1)
+
+    ..
+
+        Initial step size for SGD optimizer for the first step.
+        Default is 1.0.
+
+
+
+    **reg_type** : unicode (default=None)
+
+    ..
+
+        Regularization "L1" or "L2".
+        Default is "L2".
+
+
+
+    **reg_param** : float64 (default=0.01)
+
+    ..
+
+        Regularization parameter. Default is 0.01.
+
+
+
+    **mini_batch_fraction** : float64 (default=1.0)
+
+    ..
+
+        Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a LinearRegression Model using the observation column and target column of the train frame
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Trained linear regression model
+
+
