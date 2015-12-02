@@ -1572,8 +1572,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
             >>> my_graph = ta.Graph()
             >>> my_graph.define_vertex_type('users')
             >>> my_vertex_frame = my_graph.vertices['users']
-            >>> my_vertex_frame.add_vertices(my_frame, 'user_id',
-            ... ['user_name', 'age'])
+            >>> my_vertex_frame.add_vertices(my_frame, 'user_id', ['user_name', 'age'])
 
     Retrieve a previously defined graph and retrieve a VertexFrame from it:
 
@@ -1670,9 +1669,9 @@ A VertexFrame is similar to a Frame but with a few important differences:
             >>> graph.vertices['viewer'].inspect()
             [#]  _vid  _label  viewer   profile
             ===================================
-            [0]     1  viewer  fred           0
+            [0]     4  viewer  fred           0
             [1]     8  viewer  pebbles        1
-            [2]     5  viewer  wilma          0
+            [2]     7  viewer  wilma          0
 
             >>> graph.vertices['film'].add_vertices(frame, 'movie')
             <progress>
@@ -1681,7 +1680,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
             [#]  _vid  _label  movie
             ===================================
             [0]    19  film    Land Before Time
-            [1]    14  film    Ice Age
+            [1]    20  film    Ice Age
             [2]    12  film    Jurassic Park
             [3]    11  film    Croods
             [4]    13  film    2001
@@ -1692,14 +1691,14 @@ A VertexFrame is similar to a Frame but with a few important differences:
             >>> graph.edges['rating'].inspect()
             [#]  _eid  _src_vid  _dest_vid  _label  rating
             ==============================================
-            [0]    24         1         14  rating       4
-            [1]    22         1         12  rating       5
-            [2]    21         1         11  rating       5
-            [3]    23         1         13  rating       2
+            [0]    24         4         20  rating       4
+            [1]    22         4         12  rating       5
+            [2]    21         4         11  rating       5
+            [3]    23         4         13  rating       2
             [4]    29         8         19  rating       3
-            [5]    30         8         14  rating       5
+            [5]    30         8         20  rating       5
             [6]    28         8         11  rating       4
-            [7]    27         5         14  rating       4
+            [7]    27         5         20  rating       4
             [8]    25         5         12  rating       3
             [9]    26         5         13  rating       5
 
@@ -1715,20 +1714,20 @@ A VertexFrame is similar to a Frame but with a few important differences:
             [#]  _vid  _label  movie
             ===================================
             [0]    19  film    Land Before Time
-            [1]    14  film    Ice Age
+            [1]    20  film    Ice Age
             [2]    12  film    Jurassic Park
             [3]    13  film    2001
 
             >>> graph.edges['rating'].inspect()
             [#]  _eid  _src_vid  _dest_vid  _label  rating
             ==============================================
-            [0]    22         1         12  rating       5
-            [1]    25         5         12  rating       3
-            [2]    23         1         13  rating       2
-            [3]    26         5         13  rating       5
-            [4]    24         1         14  rating       4
-            [5]    30         8         14  rating       5
-            [6]    27         5         14  rating       4
+            [0]    24         4         20  rating       4
+            [1]    30         8         20  rating       5
+            [2]    27         7         20  rating       4
+            [3]    22         4         12  rating       5
+            [4]    25         7         12  rating       3
+            [5]    23         4         13  rating       2
+            [6]    26         7         13  rating       5
             [7]    29         8         19  rating       3
 
         """

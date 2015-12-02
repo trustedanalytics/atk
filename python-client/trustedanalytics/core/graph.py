@@ -311,7 +311,6 @@ Default is None.""")
     >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
     <progress>
 
-    <skip>  # todo: fix bug DPAT-926
     >>> graph.edges['rating'].inspect(20)
     [##]  _eid  _src_vid  _dest_vid  _label  rating
     ===============================================
@@ -336,7 +335,6 @@ Default is None.""")
     [18]    56        35         42  rating       5
     [19]    55        35         41  rating       5
 
-    </skip>
     >>> graph.edge_count
     <progress>
     20
