@@ -19,6 +19,7 @@ package org.apache.spark.atk.graph
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, Schema, VertexSchema }
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
@@ -118,37 +119,56 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
   def append(other: FrameRdd, preferNewVertexData: Boolean = true): VertexFrameRdd = {
     val unionedSchema = schema.union(other.frameSchema).reorderColumns(GraphSchema.vertexSystemColumnNames).asInstanceOf[VertexSchema]
 
-    val part2 = new VertexFrameRdd(other.convertToNewSchema(unionedSchema)).mapVertices(vertex => (vertex.idValue, (vertex.data, preferNewVertexData)))
+    val part2 = new VertexFrameRdd(other.convertToNewSchema(unionedSchema)).mapVertices(vertex => (vertex.idValue, (vertex.data, false, preferNewVertexData)))
 
     // TODO: better way to check for empty?
     val appended = if (take(1).length > 0) {
-      val part1 = convertToNewSchema(unionedSchema).mapVertices(vertex => (vertex.idValue, (vertex.data, !preferNewVertexData)))
-      dropDuplicates(part1.union(part2))
+      val part1 = convertToNewSchema(unionedSchema).mapVertices(vertex => (vertex.idValue, (vertex.data, true, !preferNewVertexData)))
+      dropDuplicates(part1.union(part2), unionedSchema)
     }
     else {
-      dropDuplicates(part2)
+      dropDuplicates(part2, unionedSchema)
     }
     new VertexFrameRdd(unionedSchema, appended).assignLabelToRows()
   }
 
   /**
    * Drop duplicates
-   * @param vertexPairRDD a pair RDD of the format (uniqueId: Any, (row: Row, preferred: Boolean))
+   * @param vertexPairRDD a pair RDD of the format (uniqueId: Any, (row: Row, vidPreferred: Boolean, dataPreferred: Boolean))
    * @return rows without duplicates
    */
-  private def dropDuplicates(vertexPairRDD: RDD[(Any, (Row, Boolean))]): RDD[Row] = {
+  private def dropDuplicates(vertexPairRDD: RDD[(Any, (Row, Boolean, Boolean))], vertexSchema: VertexSchema): RDD[Row] = {
+
+    val vidIndex = vertexSchema.columnIndex(GraphSchema.vidProperty)
 
     // TODO: do we care about merging?
     vertexPairRDD.reduceByKey {
-      case ((row1: Row, row1Preferred: Boolean), (row2: Row, row2Preferred: Boolean)) =>
+      case ((row1: Row, vid1Preferred: Boolean, row1Preferred: Boolean), (row2: Row, vid2Preferred: Boolean, row2Preferred: Boolean)) =>
         if (row1Preferred) {
           // prefer newer data
-          (row1, row1Preferred)
+          if (vid1Preferred) {
+            (row1, false, false)
+          }
+          else {
+            // here we are keeping old vids but updating all other fields
+            val values = row1.toSeq.toArray
+            values(vidIndex) = row2.get(vidIndex)
+            (new GenericRow(values), false, false)
+          }
+
         }
         else {
-          (row2, row2Preferred)
+          if (vid2Preferred) {
+            (row2, false, false)
+          }
+          else {
+            // here we are keeping old vids but updating all other fields
+            val values = row2.toSeq.toArray
+            values(vidIndex) = row1.get(vidIndex)
+            (new GenericRow(values), false, false)
+          }
         }
-    }.values.map { case (row: Row, rowNew: Boolean) => row }
+    }.values.map { case (row: Row, vidPreferred: Boolean, rowNew: Boolean) => row }
   }
 
   /**
