@@ -65,17 +65,6 @@ def _get_backend():
     from trustedanalytics.meta.config import get_frame_backend
     return get_frame_backend()
 
-
-# BaseFrame
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubs_BaseFrame
-    doc_stubs_import.success(logger, "_DocStubsBaseFrame")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsBaseFrame", e)
-    class _DocStubs_BaseFrame(object): pass
-
-
 # Frame
 try:
     # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
@@ -199,7 +188,7 @@ def __drop(*items):
 
 @api
 @name_support('frame')
-class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
+class _BaseFrame(CommandLoadable):
     _entity_type = 'frame'
 
     def __init__(self):

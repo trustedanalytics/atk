@@ -285,3 +285,30 @@ class ApiLogFormat(object):
     @staticmethod
     def _format_entity(entity):
         return "<%s:%s>" % (type(entity).__name__, hex(id(entity))[2:])
+
+
+# Logging backdoor
+#
+# If env variable is set, we will call loggers.set immediately, so the loggers
+# can run during the rest of the trustedanalytics package import
+#
+# The value of this env var is a JSON list containing map, each of which
+# represents a call to loggers.set.  The map holds the **kwargs for the
+# call to loggers.set
+#
+# Example:  This sets the module logger to debug for core/frame.py
+#
+# $ export TRUSTEDANALYTICS_LOGGERS='[{"logger_name": "trustedanalytics.core.frame", "level": "debug"}]'
+#
+import os
+loggers_set_env_name = "TRUSTEDANALYTICS_LOGGERS"
+loggers_set_env = os.getenv(loggers_set_env_name)
+if loggers_set_env:
+    try:
+        import json
+        for entry in json.loads(loggers_set_env):
+            loggers.set(**entry)
+    except Exception as e:
+        import sys
+        sys.stderr.write("!! Error trying to ingest logging env variable $%s\n" % loggers_set_env_name)
+        raise

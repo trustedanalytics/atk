@@ -41,15 +41,6 @@ def _get_backend():
     from trustedanalytics.meta.config import get_graph_backend
     return get_graph_backend()
 
-# _BaseGraph
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubsBaseGraph
-    doc_stubs_import.success(logger, "_DocStubsBaseGraph")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsBaseGraph", e)
-    class _DocStubsBaseGraph(object): pass
-
 
 # TitanGraph
 try:
@@ -73,7 +64,7 @@ except Exception as e:
 
 @api
 @name_support('graph')
-class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
+class _BaseGraph(CommandLoadable):
     _entity_type = 'graph'
     def __init__(self):
         CommandLoadable.__init__(self)
