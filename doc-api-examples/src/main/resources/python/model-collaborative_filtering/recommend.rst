@@ -3,6 +3,7 @@
 
 >>> ta.connect()
 -etc-
+</hide>
 
 >>> vertex_schema = [('source', ta.int32), ('label', ta.float32)]
 >>> edge_schema = [('source', ta.int32), ('dest', ta.int32), ('weight', ta.float32)]
@@ -21,7 +22,6 @@
     [2]       1     5  0.699999988079
     [3]       2     5   0.10000000149
 
-</hide>
 >>> graph = ta.Graph()
 
 >>> graph.define_vertex_type('source')
