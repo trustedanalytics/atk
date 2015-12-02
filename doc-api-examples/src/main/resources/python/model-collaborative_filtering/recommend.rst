@@ -37,14 +37,26 @@
 >>> model.train(graph, 'weight')
 <progress>
 <skip>
->>> model.recommend(1,3,True)
+>>> recommendations = model.recommend(1, 3, True)
 <progress>
->>> model.recommend(3,2,False)
+>>> recommendations
+[[1.0, 4.0, 0.04852067923086065], [1.0, 3.0, 0.040433898068959945], [1.0, 5.0, 0.03004276419366994]]
+>>> recommendations = model.recommend(3, 2, False)
 <progress>
+>>> recommendations
+[[1.0, 3.0, 0.040433898068959945], [2.0, 3.0, 0.00534539621613791]]
 </skip>
 <hide>
 >>> recommendations = model.recommend(1, 3, True)
 <progress>
+>>> "%.2f" % recommendations[0][2]
+'0.05'
+>>> "%.2f" % recommendations[1][2]
+'0.04'
+>>> "%.2f" % recommendations[2][2]
+'0.03'
 >>> recommendations = model.recommend(3, 2, False)
 <progress>
+>>> "%.2f" % recommendations[0][2]
+'0.04'
 </hide>

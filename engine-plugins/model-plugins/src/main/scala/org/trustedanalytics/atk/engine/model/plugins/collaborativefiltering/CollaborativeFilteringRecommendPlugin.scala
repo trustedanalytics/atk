@@ -81,14 +81,14 @@ class CollaborativeFilteringRecommendPlugin
     }
   }
 
-  private def formatReturn(alsRecommendations: Array[Rating]): List[String] = {
+  private def formatReturn(alsRecommendations: Array[Rating]): List[List[Any]] = {
     val recommendationAsList =
       for {
         recommendation <- alsRecommendations
         entityId = recommendation.user.asInstanceOf[Int]
         recommendationId = recommendation.product.asInstanceOf[Int]
         rating = recommendation.rating.asInstanceOf[Double]
-      } yield entityId.toString + "," + recommendationId.toString + "," + rating.toString
+      } yield List(entityId, recommendationId, rating)
 
     recommendationAsList.toList
   }

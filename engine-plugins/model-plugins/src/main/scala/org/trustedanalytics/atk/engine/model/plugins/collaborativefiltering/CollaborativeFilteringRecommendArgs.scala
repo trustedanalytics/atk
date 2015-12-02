@@ -34,7 +34,7 @@ case class CollaborativeFilteringRecommendArgs(model: ModelReference,
 }
 
 /**
- * This is the return case class for the recommender. Each string in the list is a csv of 3 values (entityId, recommendationId, rating)
+ * This is the return case class for the recommender. Each list consists of 3 values (entityId, recommendationId, rating)
  */
-case class CollaborativeFilteringRecommendReturn(value: List[String])
+case class CollaborativeFilteringRecommendReturn(value: List[List[Any]])
 
