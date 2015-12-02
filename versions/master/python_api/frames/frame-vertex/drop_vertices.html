@@ -116,18 +116,26 @@
 <dl class="function">
 <dt id="drop_vertices">
 <code class="descname">drop_vertices</code><span class="sig-paren">(</span><em>self</em>, <em>predicate</em><span class="sig-paren">)</span><a class="headerlink" href="#drop_vertices" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete rows in this vertex frame that qualify.</p>
+<dd><p><abbr title="This is a function or feature which is no longer supported. It is recommended that an alternate solution be found. This function may be removed in future releases.">[DEPRECATED]</abbr>
+drop_vertices has been deprecated.  Use drop_rows instead.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>predicate</strong> : function</p>
-<blockquote>
+<blockquote class="last">
 <div><p><abbr title="Python User-defined Function">UDF</abbr> which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>predicate</strong> : <abbr title="Python User-defined Function">UDF</abbr></p>
+</tbody>
+</table>
+<p>Delete rows in this vertex frame that qualify.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>predicate</strong> : <abbr title="Python User-defined Function">UDF</abbr></p>
 <blockquote class="last">
 <div><p><abbr title="Python User-defined Function">UDF</abbr> or <a class="reference internal" href="../../../glossary.html#term-lambda"><span class="xref std std-term">lambda</span></a> which takes a row argument and evaluates
 to a boolean value.</p>
@@ -136,10 +144,6 @@ to a boolean value.</p>
 </tr>
 </tbody>
 </table>
-<p class="rubric">Examples</p>
-<p>See inside this <a class="reference internal" href="../../graphs/graph-/__init__.html"><em>graph example</em></a> for
-usage of <cite>filter</cite> and <cite>drop_duplicates</cite>.  This method works just like
-<cite>filter</cite> except it drops matching rows rather than keeping them.</p>
 </dd></dl>
 
 </div>
@@ -165,7 +169,7 @@ usage of <cite>filter</cite> and <cite>drop_duplicates</cite>.  This method work
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 01, 2015.
+      Last updated on Dec 02, 2015.
       </li>
     </ul>
     </div>

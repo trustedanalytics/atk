@@ -7,7 +7,8 @@
 
 .. function:: drop_vertices(self, predicate)
 
-    Delete rows in this vertex frame that qualify.
+    |DEPRECATED|
+    drop_vertices has been deprecated.  Use drop_rows instead.
 
 
     :Parameters:
@@ -19,15 +20,11 @@
             |UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame
 
 
+    Delete rows in this vertex frame that qualify.
+
     Parameters
     ----------
     predicate : |UDF|
         |UDF| or :term:`lambda` which takes a row argument and evaluates
         to a boolean value.
-
-    Examples
-    --------
-    See inside this :doc:`graph example <../../graphs/graph-/__init__>` for
-    usage of `filter` and `drop_duplicates`.  This method works just like
-    `filter` except it drops matching rows rather than keeping them.
 

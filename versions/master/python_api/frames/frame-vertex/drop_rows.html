@@ -116,37 +116,133 @@
 <dl class="function">
 <dt id="drop_rows">
 <code class="descname">drop_rows</code><span class="sig-paren">(</span><em>self</em>, <em>predicate</em><span class="sig-paren">)</span><a class="headerlink" href="#drop_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Erase any row in the current frame which qualifies.</p>
+<dd><p>Delete rows in this vertex frame that qualify.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>predicate</strong> : function</p>
+<blockquote>
+<div><p><abbr title="Python User-defined Function">UDF</abbr> which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>predicate</strong> : <abbr title="Python User-defined Function">UDF</abbr></p>
 <blockquote class="last">
-<div><p><abbr title="Python User-defined Function">UDF</abbr> which evaluates a row to a boolean; rows that answer True are dropped from the Frame</p>
+<div><p><abbr title="Python User-defined Function">UDF</abbr> or <a class="reference internal" href="../../../glossary.html#term-lambda"><span class="xref std std-term">lambda</span></a> which takes a row argument and evaluates
+to a boolean value.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">[#]  name      age  tenure  phone</span>
-<span class="go">====================================</span>
-<span class="go">[0]  Fred       39      16  555-1234</span>
-<span class="go">[1]  Susan      33       3  555-0202</span>
-<span class="go">[2]  Thurston   65      26  555-4510</span>
-<span class="go">[3]  Judy       44      14  555-2183</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;n&#39;</span><span class="p">)</span>  <span class="c"># drop people whose name ends in &#39;n&#39;</span>
+<p>Create a frame, move the data to graph and then define a new VertexFrame and add data to it:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;viewer&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;profile&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;movie&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&#39;fred&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;Croods&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;fred&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;Jurassic Park&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;fred&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;2001&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;fred&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;Ice Age&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;wilma&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;Jurassic Park&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;wilma&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;2001&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;wilma&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s">&#39;Ice Age&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;pebbles&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;Croods&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;pebbles&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;Land Before Time&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span>
+<span class="gp">... </span>         <span class="p">[</span><span class="s">&#39;pebbles&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;Ice Age&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 <span class="go">[===Job Progress===]</span>
+
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">[#]  name  age  tenure  phone</span>
-<span class="go">================================</span>
-<span class="go">[0]  Fred   39      16  555-1234</span>
-<span class="go">[1]  Judy   44      14  555-2183</span>
+<span class="go">[#]  viewer   profile  movie             rating</span>
+<span class="go">===============================================</span>
+<span class="go">[0]  fred           0  Croods                 5</span>
+<span class="go">[1]  fred           0  Jurassic Park          5</span>
+<span class="go">[2]  fred           0  2001                   2</span>
+<span class="go">[3]  fred           0  Ice Age                4</span>
+<span class="go">[4]  wilma          0  Jurassic Park          3</span>
+<span class="go">[5]  wilma          0  2001                   5</span>
+<span class="go">[6]  wilma          0  Ice Age                4</span>
+<span class="go">[7]  pebbles        1  Croods                 4</span>
+<span class="go">[8]  pebbles        1  Land Before Time       3</span>
+<span class="go">[9]  pebbles        1  Ice Age                5</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;viewer&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;film&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="s">&#39;viewer&#39;</span><span class="p">,</span> <span class="s">&#39;film&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;viewer&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;profile&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;viewer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  viewer   profile</span>
+<span class="go">===================================</span>
+<span class="go">[0]     1  viewer  fred           0</span>
+<span class="go">[1]     8  viewer  pebbles        1</span>
+<span class="go">[2]     5  viewer  wilma          0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;film&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;movie&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;film&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  movie</span>
+<span class="go">===================================</span>
+<span class="go">[0]    19  film    Land Before Time</span>
+<span class="go">[1]    14  film    Ice Age</span>
+<span class="go">[2]    12  film    Jurassic Park</span>
+<span class="go">[3]    11  film    Croods</span>
+<span class="go">[4]    13  film    2001</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;viewer&#39;</span><span class="p">,</span> <span class="s">&#39;movie&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _eid  _src_vid  _dest_vid  _label  rating</span>
+<span class="go">==============================================</span>
+<span class="go">[0]    24         1         14  rating       4</span>
+<span class="go">[1]    22         1         12  rating       5</span>
+<span class="go">[2]    21         1         11  rating       5</span>
+<span class="go">[3]    23         1         13  rating       2</span>
+<span class="go">[4]    29         8         19  rating       3</span>
+<span class="go">[5]    30         8         14  rating       5</span>
+<span class="go">[6]    28         8         11  rating       4</span>
+<span class="go">[7]    27         5         14  rating       4</span>
+<span class="go">[8]    25         5         12  rating       3</span>
+<span class="go">[9]    26         5         13  rating       5</span>
 </pre></div>
 </div>
-<p>More information on a <abbr title="Python User-defined Function">UDF</abbr> can be found at <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a>.</p>
+<p>Call drop_rows() on the film VertexFrame to remove the row for the movie &#8216;Croods&#8217; (vid = 11).
+Dangling edges (edges corresponding to &#8216;Croods, vid = 11) are also removed.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;film&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">movie</span><span class="o">==</span><span class="s">&#39;Croods&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;film&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _vid  _label  movie</span>
+<span class="go">===================================</span>
+<span class="go">[0]    19  film    Land Before Time</span>
+<span class="go">[1]    14  film    Ice Age</span>
+<span class="go">[2]    12  film    Jurassic Park</span>
+<span class="go">[3]    13  film    2001</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  _eid  _src_vid  _dest_vid  _label  rating</span>
+<span class="go">==============================================</span>
+<span class="go">[0]    22         1         12  rating       5</span>
+<span class="go">[1]    25         5         12  rating       3</span>
+<span class="go">[2]    23         1         13  rating       2</span>
+<span class="go">[3]    26         5         13  rating       5</span>
+<span class="go">[4]    24         1         14  rating       4</span>
+<span class="go">[5]    30         8         14  rating       5</span>
+<span class="go">[6]    27         5         14  rating       4</span>
+<span class="go">[7]    29         8         19  rating       3</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
@@ -172,7 +268,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 01, 2015.
+      Last updated on Dec 02, 2015.
       </li>
     </ul>
     </div>
