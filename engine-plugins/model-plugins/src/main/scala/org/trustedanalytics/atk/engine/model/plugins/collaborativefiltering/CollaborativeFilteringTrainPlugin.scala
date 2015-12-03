@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.{ StringValue, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity }
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
-import org.trustedanalytics.atk.engine.graph.SparkGraph
+import org.trustedanalytics.atk.engine.frame.{ SparkFrame, SparkFrameStorage }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, Invocation, PluginDoc }
 import CollaborativeFilteringJsonFormat._
@@ -46,18 +46,19 @@ class CollaborativeFilteringTrainPlugin
   override def name: String = "model:collaborative_filtering/train"
 
   override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit invocation: Invocation): UnitReturn = {
+    val frames = engine.frames
+    val edgeFrame: SparkFrame = arguments.frame
+    val schema = edgeFrame.schema
 
-    val graph: SparkGraph = arguments.graph
-    val (gbVertices, gbEdges) = graph.gbRdds
+    schema.requireColumnIsType(arguments.sourceColumnName, DataTypes.int)
+    schema.requireColumnIsType(arguments.destColumnName, DataTypes.int)
+    require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
-    val alsInput = gbEdges.map(edge =>
+    val alsInput = edgeFrame.rdd.map(edge =>
       {
-        val sourceId = edge.headPhysicalId.asInstanceOf[Long]
-        val destId = edge.tailPhysicalId.asInstanceOf[Long]
-        if ((sourceId > Int.MaxValue) || (destId > Int.MaxValue)) {
-          throw new RuntimeException("User or product Id must not exceed Int.MaxInt")
-        }
-        Rating(sourceId.toInt, destId.toInt, DataTypes.toDouble(edge.getProperty(arguments.weightColumnName).get.value))
+        Rating(edge.getInt(schema.columnIndex(arguments.sourceColumnName)),
+          edge.getInt(schema.columnIndex(arguments.destColumnName)),
+          edge.getFloat(schema.columnIndex(arguments.weightColumnName)).toDouble)
       })
     val als = new ALS()
       .setRank(arguments.numFactors)
@@ -68,9 +69,9 @@ class CollaborativeFilteringTrainPlugin
     val alsTrainedModel: MatrixFactorizationModel = als.run(alsInput)
 
     val model: Model = arguments.model
-    val schema = FrameSchema(List(Column("id", DataTypes.int), Column("features", DataTypes.vector(arguments.numFactors))))
-    val userFrameEntity = toFrameEntity(schema, alsTrainedModel.userFeatures)
-    val productFrameEntity = toFrameEntity(schema, alsTrainedModel.productFeatures)
+    val outputSchema = FrameSchema(List(Column("id", DataTypes.int), Column("features", DataTypes.vector(arguments.numFactors))))
+    val userFrameEntity = toFrameEntity(frames, outputSchema, alsTrainedModel.userFeatures)
+    val productFrameEntity = toFrameEntity(frames, outputSchema, alsTrainedModel.productFeatures)
 
     model.data = CollaborativeFilteringData(alsTrainedModel.rank,
       userFrameEntity,
@@ -78,13 +79,15 @@ class CollaborativeFilteringTrainPlugin
 
   }
 
-  private def toFrameEntity(alsRddSchema: FrameSchema,
+  private def toFrameEntity(frames: SparkFrameStorage,
+                            alsRddSchema: FrameSchema,
                             modelRdd: RDD[(Int, Array[Double])])(implicit invocation: Invocation): FrameEntity = {
     val rowRdd = modelRdd.map {
       case (id, features) => Row(id.toInt, DataTypes.toVector(features.length)(features))
     }
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS train operation"))) { frame: FrameEntity =>
-      frame.save(new FrameRdd(alsRddSchema, rowRdd))
+    frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS train operation"))) {
+      frame: FrameEntity =>
+        frame.save(new FrameRdd(alsRddSchema, rowRdd))
     }
 
   }
