@@ -25,7 +25,14 @@
 <skip>
 >>> model.score(1,5)
 <progress>
+>>> recommendations = model.recommend(1, 3, True)
+<progress>
+>>> recommendations
+[{u'rating': 0.04854799984010311, u'product': 4, u'user': 1}, {u'rating': 0.04045666535703035, u'product': 3, u'user': 1}, {u'rating': 0.030060528471388848, u'product': 5, u'user': 1}]
+>>> recommendations = model.recommend(5, 2, False)
+<progress>
 </skip>
+
 <hide>
 >>> x = model.score(1,5)
 <progress>
@@ -35,4 +42,16 @@
 <progress>
 >>> "%.2f" % x
 '0.00'
+>>> recommendations = model.recommend(1, 3, True)
+<progress>
+>>> "%.2f" % recommendations[0]['rating']
+'0.05'
+>>> "%.2f" % recommendations[1]['rating']
+'0.04'
+>>> "%.2f" % recommendations[2]['rating']
+'0.03'
+>>> recommendations = model.recommend(3, 2, False)
+<progress>
+>>> "%.2f" % recommendations[0]['rating']
+'0.04'
 </hide>

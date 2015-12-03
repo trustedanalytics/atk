@@ -10,6 +10,7 @@ object CollaborativeFilteringJsonFormat {
   implicit val cfScoreArgs = jsonFormat3(CollaborativeFilteringScoreArgs)
   implicit val cfPredictArgs = jsonFormat7(CollaborativeFilteringPredictArgs)
   implicit val cfRecommendArgs = jsonFormat4(CollaborativeFilteringRecommendArgs)
-  implicit val cfReturnListString = jsonFormat1(CollaborativeFilteringRecommendReturn)
+  implicit val cfRecommendSingleReturn = jsonFormat3(CollaborativeFilteringSingleRecommendReturn)
+  implicit val cfRecommendReturn = jsonFormat1(CollaborativeFilteringRecommendReturn)
   implicit val cfFilterArgs = jsonFormat3(CollaborativeFilteringData)
 }

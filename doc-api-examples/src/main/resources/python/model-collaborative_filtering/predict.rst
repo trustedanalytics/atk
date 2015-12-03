@@ -23,6 +23,13 @@
 >>> result = model.predict(edge_frame_predict, 'source', 'dest', 'weight')
 <progress>
 >>> result.inspect()
+    [#]  weight  product  rating
+    ======================================
+    [0]       1        4   0.0485362410545
+    [1]       1        5   0.0300528816879
+    [2]       2        5  0.00397309847176
+    [3]       1        3   0.0404468663037
+
 <progress>
 </skip>
 <hide>

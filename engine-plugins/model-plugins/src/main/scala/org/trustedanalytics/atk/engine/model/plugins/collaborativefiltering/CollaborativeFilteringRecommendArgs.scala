@@ -34,7 +34,12 @@ case class CollaborativeFilteringRecommendArgs(model: ModelReference,
 }
 
 /**
- * This is the return case class for the recommender. Each list consists of 3 values (entityId, recommendationId, rating)
+ * This is the return case class for the recommender.
  */
-case class CollaborativeFilteringRecommendReturn(value: List[List[Any]])
+case class CollaborativeFilteringRecommendReturn(value: List[CollaborativeFilteringSingleRecommendReturn])
+
+/**
+ * This is the return case class for single recommendation. Each list consists of 3 values (entityId, recommendationId, rating)
+ */
+case class CollaborativeFilteringSingleRecommendReturn(user: Int, product: Int, rating: Double)
 

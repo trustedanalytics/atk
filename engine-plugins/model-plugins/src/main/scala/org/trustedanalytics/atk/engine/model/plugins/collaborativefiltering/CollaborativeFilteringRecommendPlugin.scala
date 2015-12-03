@@ -16,10 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.recommendation.{ MatrixFactorizationModel, Rating }
-import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering.CollaborativeFilteringJsonFormat._
 import org.trustedanalytics.atk.engine.plugin._
@@ -75,14 +72,14 @@ class CollaborativeFilteringRecommendPlugin
     }
   }
 
-  private def formatReturn(alsRecommendations: Array[Rating]): List[List[Any]] = {
+  private def formatReturn(alsRecommendations: Array[Rating]): List[CollaborativeFilteringSingleRecommendReturn] = {
     val recommendationAsList =
       for {
         recommendation <- alsRecommendations
         entityId = recommendation.user.asInstanceOf[Int]
         recommendationId = recommendation.product.asInstanceOf[Int]
         rating = recommendation.rating.asInstanceOf[Double]
-      } yield List(entityId, recommendationId, rating)
+      } yield CollaborativeFilteringSingleRecommendReturn(entityId, recommendationId, rating)
 
     recommendationAsList.toList
   }
