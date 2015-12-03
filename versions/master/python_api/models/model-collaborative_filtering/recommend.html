@@ -6,10 +6,10 @@
     
     <title>CollaborativeFilteringModel recommend &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,15 +20,15 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models CollaborativeFilteringModel" href="index.html" >
-    <link rel="next" title="CollaborativeFilteringModel status" href="status.html" >
-    <link rel="prev" title="CollaborativeFilteringModel name" href="name.html" > 
+    <link rel="next" title="CollaborativeFilteringModel score" href="score.html" >
+    <link rel="prev" title="CollaborativeFilteringModel predict" href="predict.html" > 
   </head>
   <body>
 
@@ -57,11 +57,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="name.html" title="CollaborativeFilteringModel name"
+        <a href="predict.html" title="CollaborativeFilteringModel predict"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="status.html" title="CollaborativeFilteringModel status"
+        <a href="score.html" title="CollaborativeFilteringModel score"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -111,36 +111,40 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="collaborativefilteringmodel-recommend">
-<span id="python-api-models-model-collaborative-filtering-recommend"></span><h1><a class="reference internal" href="index.html"><em>CollaborativeFilteringModel</em></a>  recommend<a class="headerlink" href="#collaborativefilteringmodel-recommend" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>CollaborativeFilteringModel</em></a>  recommend<a class="headerlink" href="#collaborativefilteringmodel-recommend" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
 <dt id="recommend">
-<code class="descname">recommend</code><span class="sig-paren">(</span><em>self</em>, <em>name</em>, <em>top_k</em><span class="sig-paren">)</span><a class="headerlink" href="#recommend" title="Permalink to this definition">¶</a></dt>
+<code class="descname">recommend</code><span class="sig-paren">(</span><em>self</em>, <em>entity_id</em>, <em>number_of_recommendations=1</em>, <em>recommend_products=True</em><span class="sig-paren">)</span><a class="headerlink" href="#recommend" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Collaborative Filtering Recommend (ALS/CGD) model.</p>
+Collaborative Filtering Predict (ALS).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : unicode</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>entity_id</strong> : int32</p>
 <blockquote>
-<div><p>An entity name from the first column of the input frame</p>
+<div><p>A user/product id</p>
 </div></blockquote>
-<p><strong>top_k</strong> : int32</p>
+<p><strong>number_of_recommendations</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>positive integer representing the top recommendations for the name</p>
+<div><p>Number of recommendations</p>
+</div></blockquote>
+<p><strong>recommend_products</strong> : bool (default=True)</p>
+<blockquote>
+<div><p>True - products for user; false - users for the product</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><p>See <a class="reference internal" href="train.html#python-api-models-model-collaborative-filtering-train"><span>Collaborative Filtering Train</span></a> for more information.</p>
+<div><p>Returns an array of recommendations (as array of csv-strings)</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>See <a class="reference internal" href="train.html#python-api-models-model-collaborative-filtering-train"><span>Collaborative Filtering Train</span></a> for more information.</p>
+<p>See <span class="xref std std-ref">Collaborative Filtering Train</span> for more information.</p>
 <p class="rubric">Examples</p>
 <p>See :doc: &#8216;here &lt;new&gt;&#8217; for examples.</p>
 </dd></dl>
@@ -168,7 +172,7 @@ Collaborative Filtering Recommend (ALS/CGD) model.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 03, 2015.
       </li>
     </ul>
     </div>

@@ -154,13 +154,16 @@
 <tr class="row-odd"><td><a class="reference internal" href="#collaborativefilteringmodel-init"><span>__init__</span></a>(self[, name, _info])</td>
 <td>Create a new Collaborative Filtering (ALS) model.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, graph[, user_column_name, product_column_name, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame, input_source_column_name, input_dest_column_name[, ...])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="score.html"><em>score</em></a>(self, user_id, item_id)</td>
+<tr class="row-odd"><td><a class="reference internal" href="recommend.html"><em>recommend</em></a>(self, entity_id[, number_of_recommendations, recommend_products])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, graph, weight_column_name[, max_steps, regularization, alpha, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="score.html"><em>score</em></a>(self, user_id, item_id)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Collaborative Filtering Predict (ALS).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, source_column_name, dest_column_name, weight_column_name)</td>
 <td>Collaborative filtering (ALS) model</td>
 </tr>
 </tbody>
@@ -189,22 +192,17 @@
 <p>For details about Collaborative Filter (ALS) modelling,
 see <a class="reference internal" href="../../../CollaborativeFilteringNewPlugin_Summary.html#collaborativefilteringnewplugin-summary"><span>Collaborative Filter</span></a>.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-</pre></div>
-</div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;source&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;source&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">vertex_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;label&#39;</span><span class="p">)</span>
-<span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;edges&#39;</span><span class="p">,</span><span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;edges&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
-<span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CollaborativeFilteringModel</span><span class="p">()</span>
-<span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">edge_frame</span><span class="p">,</span> <span class="s">&#39;source&#39;</span><span class="p">,</span> <span class="s">&#39;dest&#39;</span><span class="p">,</span> <span class="s">&#39;weight&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span>
+<span class="go">[{u&#39;rating&#39;: 0.04854799984010311, u&#39;product&#39;: 4, u&#39;user&#39;: 1}, {u&#39;rating&#39;: 0.04045666535703035, u&#39;product&#39;: 3, u&#39;user&#39;: 1}, {u&#39;rating&#39;: 0.030060528471388848, u&#39;product&#39;: 5, u&#39;user&#39;: 1}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">recommendations</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">recommend</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>

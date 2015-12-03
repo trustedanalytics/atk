@@ -38,11 +38,27 @@ Request
 
 
 
-    **graph** : Graph
+    **frame** : Frame
 
     ..
 
         <Missing Description>
+
+
+
+    **source_column_name** : unicode
+
+    ..
+
+        source column name.
+
+
+
+    **dest_column_name** : unicode
+
+    ..
+
+        destination column name.
 
 
 

@@ -6,10 +6,10 @@
     
     <title>Commands model:collaborative_filtering/recommend &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../f_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../f_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../f_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,15 +20,15 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../f_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../f_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../f_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../f_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands model:collaborative_filtering/train" href="model-collaborative_filtering__train.html" >
-    <link rel="prev" title="Commands model:collaborative_filtering/new" href="model-collaborative_filtering__new.html" > 
+    <link rel="next" title="Commands model:collaborative_filtering/score" href="model-collaborative_filtering__score.html" >
+    <link rel="prev" title="Commands model:collaborative_filtering/predict" href="model-collaborative_filtering__predict.html" > 
   </head>
   <body>
 
@@ -56,11 +56,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="model-collaborative_filtering__new.html" title="Commands model:collaborative_filtering/new"
+        <a href="model-collaborative_filtering__predict.html" title="Commands model:collaborative_filtering/predict"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="model-collaborative_filtering__train.html" title="Commands model:collaborative_filtering/train"
+        <a href="model-collaborative_filtering__score.html" title="Commands model:collaborative_filtering/score"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -110,9 +110,9 @@
           <div class="body" id="spc-section-body">
             
   <div class="section" id="commands-model-collaborative-filtering-recommend">
-<span id="rest-api-v1-commands-model-collaborative-filtering-recommend"></span><h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:collaborative_filtering/recommend<a class="headerlink" href="#commands-model-collaborative-filtering-recommend" title="Permalink to this headline">¶</a></h1>
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:collaborative_filtering/recommend<a class="headerlink" href="#commands-model-collaborative-filtering-recommend" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
-Collaborative Filtering Recommend (ALS/CGD) model.</p>
+Collaborative Filtering Predict (ALS).</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -136,13 +136,17 @@ Collaborative Filtering Recommend (ALS/CGD) model.</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>name</strong> : unicode</p>
+<p><strong>entity_id</strong> : int32</p>
 <blockquote>
-<div><p>An entity name from the first column of the input frame</p>
+<div><p>A user/product id</p>
 </div></blockquote>
-<p><strong>top_k</strong> : int32</p>
+<p><strong>number_of_recommendations</strong> : int32 (default=1)</p>
+<blockquote>
+<div><p>Number of recommendations</p>
+</div></blockquote>
+<p><strong>recommend_products</strong> : bool (default=True)</p>
 <blockquote class="last">
-<div><p>positive integer representing the top recommendations for the name</p>
+<div><p>True - products for user; false - users for the product</p>
 </div></blockquote>
 </td>
 </tr>
@@ -160,7 +164,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>See <a class="reference internal" href="../../../python_api/models/model-collaborative_filtering/train.html#python-api-models-model-collaborative-filtering-train"><span>Collaborative Filtering Train</span></a> for more information.</p>
+<p>See <span class="xref std std-ref">Collaborative Filtering Train</span> for more information.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -201,9 +205,9 @@ Content-type: application/json
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<p><code class="docutils literal"><span class="pre">Frame</span></code></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div>See <a class="reference internal" href="../../../python_api/models/model-collaborative_filtering/train.html#python-api-models-model-collaborative-filtering-train"><span>Collaborative Filtering Train</span></a> for more information.</div></blockquote>
+<div>Returns an array of recommendations (as array of csv-strings)</div></blockquote>
 </div>
 </div>
 </div>
@@ -229,7 +233,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Nov 12, 2015.
+      Last updated on Dec 03, 2015.
       </li>
     </ul>
     </div>

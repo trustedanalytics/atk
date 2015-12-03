@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands model:collaborative_filtering/score" href="model-collaborative_filtering__score.html" >
+    <link rel="next" title="Commands model:collaborative_filtering/recommend" href="model-collaborative_filtering__recommend.html" >
     <link rel="prev" title="Commands model:collaborative_filtering/new" href="model-collaborative_filtering__new.html" > 
   </head>
   <body>
@@ -60,7 +60,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="model-collaborative_filtering__score.html" title="Commands model:collaborative_filtering/score"
+        <a href="model-collaborative_filtering__recommend.html" title="Commands model:collaborative_filtering/recommend"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -136,19 +136,27 @@ Collaborative Filtering Predict (ALS).</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>graph</strong> : Graph</p>
+<p><strong>frame</strong> : Frame</p>
 <blockquote>
 <div><p>&lt;Missing Description&gt;</p>
 </div></blockquote>
-<p><strong>user_column_name</strong> : unicode (default=user)</p>
+<p><strong>input_source_column_name</strong> : unicode</p>
+<blockquote>
+<div><p>source column name.</p>
+</div></blockquote>
+<p><strong>input_dest_column_name</strong> : unicode</p>
+<blockquote>
+<div><p>destination column name.</p>
+</div></blockquote>
+<p><strong>output_user_column_name</strong> : unicode (default=user)</p>
 <blockquote>
 <div><p>A user column name for the output frame</p>
 </div></blockquote>
-<p><strong>product_column_name</strong> : unicode (default=product)</p>
+<p><strong>output_product_column_name</strong> : unicode (default=product)</p>
 <blockquote>
 <div><p>A product  column name for the output frame</p>
 </div></blockquote>
-<p><strong>rating_column_name</strong> : unicode (default=rating)</p>
+<p><strong>output_rating_column_name</strong> : unicode (default=rating)</p>
 <blockquote class="last">
 <div><p>A rating column name for the output frame</p>
 </div></blockquote>

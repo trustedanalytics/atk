@@ -115,13 +115,21 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>graph</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>source_column_name</em>, <em>dest_column_name</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collaborative filtering (ALS) model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
+<p><strong>source_column_name</strong> : unicode</p>
+<blockquote>
+<div><p>source column name.</p>
+</div></blockquote>
+<p><strong>dest_column_name</strong> : unicode</p>
+<blockquote>
+<div><p>destination column name.</p>
+</div></blockquote>
 <p><strong>weight_column_name</strong> : unicode</p>
 <blockquote>
 <div><p>weight column name.</p>

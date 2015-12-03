@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: predict(self, graph, user_column_name='user', product_column_name='product', rating_column_name='rating')
+.. function:: predict(self, frame, input_source_column_name, input_dest_column_name, output_user_column_name='user', output_product_column_name='product', output_rating_column_name='rating')
 
     |BETA|
     Collaborative Filtering Predict (ALS).
@@ -13,7 +13,7 @@
 
     :Parameters:
 
-        **graph** : Graph
+        **frame** : Frame
 
         ..
 
@@ -21,7 +21,23 @@
 
 
 
-        **user_column_name** : unicode (default=user)
+        **input_source_column_name** : unicode
+
+        ..
+
+            source column name.
+
+
+
+        **input_dest_column_name** : unicode
+
+        ..
+
+            destination column name.
+
+
+
+        **output_user_column_name** : unicode (default=user)
 
         ..
 
@@ -29,7 +45,7 @@
 
 
 
-        **product_column_name** : unicode (default=product)
+        **output_product_column_name** : unicode (default=product)
 
         ..
 
@@ -37,7 +53,7 @@
 
 
 
-        **rating_column_name** : unicode (default=rating)
+        **output_rating_column_name** : unicode (default=rating)
 
         ..
 
@@ -58,33 +74,21 @@
 
     Examples
     --------
-    >>> graph = ta.Graph()
-
-    >>> graph.define_vertex_type('source')
-    [===Job Progress===]
-    >>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
-    [===Job Progress===]
-    >>> graph.define_edge_type('edges','source', 'source', directed=False)
-    [===Job Progress===]
-    >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', 'weight')
-    [===Job Progress===]
     >>> model = ta.CollaborativeFilteringModel()
     [===Job Progress===]
-    >>> model.train(graph, 'weight')
+    >>> model.train(edge_frame, 'source', 'dest', 'weight')
     [===Job Progress===]
 
-    >>> graph_predict = ta.Graph()
-
-    >>> graph_predict.define_vertex_type('source')
-    [===Job Progress===]
-    >>> graph_predict.vertices['source'].add_vertices(vertex_frame_predict, 'source', 'label')
-    [===Job Progress===]
-    >>> graph_predict.define_edge_type('edges','source', 'source', directed=False)
-    [===Job Progress===]
-    >>> graph_predict.edges['edges'].add_edges(edge_frame_predict, 'source', 'dest', 'weight')
-    [===Job Progress===]
-    >>> result = model.predict(graph_predict)
+    >>> result = model.predict(edge_frame_predict, 'source', 'dest')
     [===Job Progress===]
     >>> result.inspect()
+        [#]  user  product  rating
+        ====================================
+        [0]     1        4   0.0485403053463
+        [1]     1        5   0.0300555229187
+        [2]     2        5  0.00397346867248
+        [3]     1        3   0.0404502525926
+
+
     [===Job Progress===]
 

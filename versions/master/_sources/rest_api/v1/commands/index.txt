@@ -98,6 +98,7 @@
     graph__vertex_outdegree
     model-collaborative_filtering__new
     model-collaborative_filtering__predict
+    model-collaborative_filtering__recommend
     model-collaborative_filtering__score
     model-collaborative_filtering__train
     model-giraph_collaborative_filtering__new
@@ -237,6 +238,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model/rename <model__rename>`                                                                         Rename a model.
 :doc:`model:collaborative_filtering/new <model-collaborative_filtering__new>`                               Create a new Collaborative Filtering (ALS) model.
 :doc:`model:collaborative_filtering/predict <model-collaborative_filtering__predict>`                       |BETA| Collaborative Filtering Predict (ALS).
+:doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`                   |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/score <model-collaborative_filtering__score>`                           |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/train <model-collaborative_filtering__train>`                           Collaborative filtering (ALS) model
 :doc:`model:giraph_collaborative_filtering/new <model-giraph_collaborative_filtering__new>`                 Create a new Collaborative Filtering Recommend model.

@@ -1,8 +1,8 @@
 
 
--------------------------------------------------------------
-:doc:`Commands <index>` model:collaborative_filtering/predict
--------------------------------------------------------------
+---------------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/recommend
+---------------------------------------------------------------
 
 |BETA|
 Collaborative Filtering Predict (ALS).
@@ -26,7 +26,7 @@ Request
 
 :name:
 
-    model:collaborative_filtering/predict
+    model:collaborative_filtering/recommend
 
 :arguments:
 
@@ -39,51 +39,27 @@ Request
 
 
 
-    **frame** : Frame
+    **entity_id** : int32
 
     ..
 
-        <Missing Description>
+        A user/product id
 
 
 
-    **input_source_column_name** : unicode
-
-    ..
-
-        source column name.
-
-
-
-    **input_dest_column_name** : unicode
+    **number_of_recommendations** : int32 (default=1)
 
     ..
 
-        destination column name.
+        Number of recommendations
 
 
 
-    **output_user_column_name** : unicode (default=user)
-
-    ..
-
-        A user column name for the output frame
-
-
-
-    **output_product_column_name** : unicode (default=product)
+    **recommend_products** : bool (default=True)
 
     ..
 
-        A product  column name for the output frame
-
-
-
-    **output_rating_column_name** : unicode (default=rating)
-
-    ..
-
-        A rating column name for the output frame
+        True - products for user; false - users for the product
 
 
 
@@ -144,8 +120,8 @@ Response
 **Body**
 
 
-``Frame``
+``dict``
 
-        Returns a double representing the probability if the user(i) to like product (j)
+        Returns an array of recommendations (as array of csv-strings)
 
 
