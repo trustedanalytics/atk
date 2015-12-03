@@ -206,7 +206,8 @@ class Loggers(object):
     def _turn_logger_off(self, logger_name):
         logger = logging.getLogger(logger_name)
         logger.level = logging.CRITICAL
-        for h in logger.handlers:
+        victim_handlers = [x for x in logger.handlers]
+        for h in victim_handlers:
             logger.removeHandler(h)
         try:
             self._user_logger_names.remove(logger_name)
@@ -243,8 +244,13 @@ class ApiLogFormat(object):
 
     @staticmethod
     def format_call(location, function, *args, **kwargs):
+        try:
+            full_name = function.command.full_name
+        except:
+            full_name = function.__name__
+
         if not ApiLogFormat.verbose:
-            return function.__name__
+            return full_name
         try:
             param_names = function.func_code.co_varnames[0:function.func_code.co_argcount]
             named_args = zip(param_names, args)
@@ -260,7 +266,7 @@ class ApiLogFormat(object):
             is_constructor = function.__name__ == '__init__' or function.__name__ == 'new'
             formatted_self = ApiLogFormat.format_self(self) if not is_constructor else (ApiLogFormat._format_entity(self) + '.') if self is not None else '<None?>.'
 
-            return "%s %s%s%s" % (location, formatted_self, ApiLogFormat.format_function(function), formatted_args)
+            return "%s %s %s%s%s" % (location, full_name, formatted_self, ApiLogFormat.format_function(function), formatted_args)
         except Exception as e:
             return str(e)
 
