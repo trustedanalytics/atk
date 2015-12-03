@@ -44,12 +44,13 @@ import scala.util.{ Failure, Success, Try }
  */
 class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  commands: CommandExecutor,
-                 commandStorage: CommandStorage,
+                 val commandStorage: CommandStorage,
                  val frames: SparkFrameStorage,
                  val graphs: SparkGraphStorage,
                  val models: ModelStorageImpl,
                  users: UserStorage,
-                 val sparkAutoPartitioner: SparkAutoPartitioner) extends Engine
+                 val sparkAutoPartitioner: SparkAutoPartitioner,
+                 val jobContextStorage: JobContextStorage) extends Engine
     with EventLogging
     with EventLoggingImplicits {
 

@@ -16,15 +16,19 @@
 
 package org.trustedanalytics.atk.engine.command
 
+import java.util
+import org.apache.hadoop.yarn.api.records.YarnApplicationState
 import org.trustedanalytics.atk.event.EventLogging
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.yarn.client.api.YarnClient
 import org.apache.hadoop.yarn.conf.YarnConfiguration
+import org.apache.hadoop.yarn.api.records.YarnApplicationState
 
 import scala.collection.JavaConversions._
 
 object YarnUtils extends EventLogging {
 
+  /* Kill Yarn Application given job name */
   def killYarnJob(jobName: String): Unit = {
     val yarnClient = YarnClient.createYarnClient
     val yarnConf = new YarnConfiguration(new Configuration())
@@ -39,5 +43,22 @@ object YarnUtils extends EventLogging {
       throw new Exception(s"Could not cancel command $jobName as application could not be found on yarn")
     }
     yarnClient.stop()
+  }
+
+  /* Get Yarn Application Id given job name */
+  def getYarnJobId(jobName: String): String = {
+    val yarnClient = YarnClient.createYarnClient
+    val yarnConf = new YarnConfiguration(new Configuration())
+    yarnClient.init(yarnConf)
+    yarnClient.start()
+
+    val allStates = java.util.EnumSet.copyOf(YarnApplicationState.values().toSeq)
+    val app = yarnClient.getApplications(allStates).find(ap => ap.getName == jobName)
+    try {
+      app.get.getApplicationId.toString
+    }
+    finally {
+      yarnClient.stop()
+    }
   }
 }
