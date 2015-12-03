@@ -1689,18 +1689,18 @@ A VertexFrame is similar to a Frame but with a few important differences:
             <progress>
 
             >>> graph.edges['rating'].inspect()
-            [#]  _eid  _src_vid  _dest_vid  _label  rating
-            ==============================================
-            [0]    24         4         20  rating       4
-            [1]    22         4         12  rating       5
-            [2]    21         4         11  rating       5
-            [3]    23         4         13  rating       2
-            [4]    29         8         19  rating       3
-            [5]    30         8         20  rating       5
-            [6]    28         8         11  rating       4
-            [7]    27         5         20  rating       4
-            [8]    25         5         12  rating       3
-            [9]    26         5         13  rating       5
+                [#]  _eid  _src_vid  _dest_vid  _label  rating
+                ==============================================
+                [0]    24         4         20  rating       4
+                [1]    22         4         12  rating       5
+                [2]    21         4         11  rating       5
+                [3]    23         4         13  rating       2
+                [4]    29         8         19  rating       3
+                [5]    30         8         20  rating       5
+                [6]    28         8         11  rating       4
+                [7]    27         7         20  rating       4
+                [8]    25         7         12  rating       3
+                [9]    26         7         13  rating       5
 
         Call drop_rows() on the film VertexFrame to remove the row for the movie 'Croods' (vid = 11).
         Dangling edges (edges corresponding to 'Croods, vid = 11) are also removed.
