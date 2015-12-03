@@ -25,6 +25,6 @@ package object domain {
       case null | "" => t.getClass.getName
       case s => s
     }
-    Error(message, code = None, details = None, additional = None, stackTrace = Some(ExceptionUtils.getStackTrace(t)))
+    Error(message, stackTrace = Some(ExceptionUtils.getStackTrace(t)))
   }
 }

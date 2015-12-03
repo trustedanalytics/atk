@@ -34,7 +34,6 @@ import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.Engine
 import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Failure, Success, Try }
-import org.trustedanalytics.atk.rest.CfRequests.TokenUserInfo
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext.global
 
 import scala.util.parsing.json.JSON
@@ -88,33 +87,44 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
         throw new SecurityException("Api key was not provided")
       }
       future {
-        val tokenUserInfo = if (apiKey.equals(shortCircuitApiKey)) {
-          TokenUserInfo(userId = shortCircuitApiKey, userName = shortCircuitApiKey)
+        if (apiKey.equals(shortCircuitApiKey)) {
+          val userPrincipal = engine.getUserPrincipal(shortCircuitApiKey)
+          info("authenticated " + userPrincipal)
+          userPrincipal
         }
         else {
-          CfRequests.getTokenUserInfo(apiKey)
-        }
+          val tokenUserInfo = CfRequests.getTokenUserInfo(apiKey)
 
-        // todo - add mapping support from userId to userName for humans
-        val userKey = tokenUserInfo.userId
-        val userPrincipal: UserPrincipal = Try { engine.getUserPrincipal(userKey) } match {
-          case Success(found) => found
-          case Failure(missing) =>
-            // Don't know about this user id.  See if the user meets requirements to be added to the metastore
-            // 1. The userId must belong to the same organization as this server instance
-            val userOrganizationIds = CfRequests.getOrganizationsForUserId(apiKey, tokenUserInfo.userId)
-            val appOrganizationId = CfRequests.getOrganizationForSpaceId(apiKey, RestServerConfig.appSpace)
-            if (userOrganizationIds.contains(appOrganizationId)) {
-              engine.addUserPrincipal(userKey)
-            }
-            else {
-              throw new RuntimeException(s"User ${tokenUserInfo.userId} (${tokenUserInfo.userName}) is not a member of this server's organization")
-            }
+          // todo - add mapping support from userId to userName for humans
+          val userId = tokenUserInfo.userId
+          val userName = tokenUserInfo.userName
+          val appOrganizationId = try {
+            CfRequests.getOrganizationForSpaceId(apiKey, RestServerConfig.appSpace)
+          }
+          catch {
+            case ex =>
+              error(ex.getMessage)
+              throw new AuthenticationException("CF-InvalidAuthToken", ex.getCause)
+          }
+          val userPrincipal: UserPrincipal = Try {
+            engine.getUserPrincipal(userId)
+          } match {
+            case Success(found) => found
+            case Failure(missing) =>
+              // Don't know about this user id.  See if the user meets requirements to be added to the metastore
+              // 1. The userId must belong to the same organization as this server instance
+              val userOrganizationIds = CfRequests.getOrganizationsForUserId(apiKey, userId)
+              if (userOrganizationIds.contains(appOrganizationId)) {
+                engine.addUserPrincipal(userId)
+              }
+              else {
+                throw new RuntimeException(s"User $userId ($userName) is not a member of this server's organization")
+              }
+          }
+          info("authenticated " + userPrincipal)
+          userPrincipal.copy(token = Some(apiKey), appOrgId = Some(appOrganizationId))
         }
-        info("authenticated " + userPrincipal)
-        userPrincipal
       }
     }
   }
-
 }

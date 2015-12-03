@@ -28,23 +28,13 @@ api = get_api_decorator(logger)
 
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
-from trustedanalytics.meta.docstub import doc_stubs_import
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics import valid_data_types
-
-# _BaseModel
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubs_BaseModel
-    doc_stubs_import.success(logger, "_DocStubs_BaseModel")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubs_BaseModel", e)
-    class _DocStubs_BaseModel(object): pass
 
 
 @api
 @name_support('model')
-class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
+class _BaseModel(CommandLoadable):
     """
     Class with information about a model.
     Has information needed to modify data and table structure.

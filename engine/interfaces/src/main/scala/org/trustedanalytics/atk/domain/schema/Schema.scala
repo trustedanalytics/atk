@@ -16,8 +16,11 @@
 
 package org.trustedanalytics.atk.domain.schema
 
+import javax.swing.plaf.ColorUIResource
+
 import org.trustedanalytics.atk.StringUtils
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
+import scala.reflect.runtime.universe._
 
 /**
  * Column - this is a nicer wrapper for columns than just tuples
@@ -34,6 +37,30 @@ case class Column(name: String, dataType: DataType,
   require(dataType != null, "column data type is required")
   require(name != "", "column name can't be empty")
   require(StringUtils.isAlphanumericUnderscore(name), "column name must be alpha-numeric with underscores")
+}
+
+object Column {
+  /**
+   * Create Column given column name and scala type
+   * @param name Column name
+   * @param dtype runtime type (using scala reflection)
+   * @return Column
+   */
+  def apply(name: String, dtype: reflect.runtime.universe.Type): Column = {
+    require(name != null, "column name is required")
+    require(dtype != null, "column data type is required")
+    require(name != "", "column name can't be empty")
+    require(StringUtils.isAlphanumericUnderscore(name), "column name must be alpha-numeric with underscores")
+
+    Column(name,
+      dtype match {
+        case t if t <:< definitions.IntTpe => DataTypes.int32
+        case t if t <:< definitions.LongTpe => DataTypes.int64
+        case t if t <:< definitions.FloatTpe => DataTypes.float32
+        case t if t <:< definitions.DoubleTpe => DataTypes.float64
+        case _ => DataTypes.string
+      })
+  }
 }
 
 /**

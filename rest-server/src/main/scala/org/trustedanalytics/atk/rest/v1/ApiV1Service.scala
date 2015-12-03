@@ -24,8 +24,9 @@ import spray.routing._
 class ApiV1Service(val dataFrameService: FrameService,
                    val commandService: CommandService,
                    val graphService: GraphService,
-                   val modelService: ModelService) extends Directives {
+                   val modelService: ModelService,
+                   val dataCatalogService: DataCatalogService) extends Directives {
   def route: Route = {
-    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes()
+    dataFrameService.frameRoutes() ~ commandService.commandRoutes() ~ graphService.graphRoutes() ~ modelService.modelRoutes() ~ dataCatalogService.dataCatalogRoutes()
   }
 }

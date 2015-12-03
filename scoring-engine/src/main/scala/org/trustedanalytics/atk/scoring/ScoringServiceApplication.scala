@@ -76,7 +76,11 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
 
     try {
       var tarFilePath = config.getString("trustedanalytics.scoring-engine.archive-tar")
-      if (tarFilePath.startsWith("hdfs://")) {
+      if (tarFilePath.startsWith("hdfs:/")) {
+        if (!tarFilePath.startsWith("hdfs://")) {
+          val relativePath = tarFilePath.substring(tarFilePath.indexOf("hdfs:") + 6)
+          tarFilePath = "hdfs://" + relativePath
+        }
         val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
         tempTarFile = File.createTempFile("modelTar", ".tar")
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))

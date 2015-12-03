@@ -1,61 +1,46 @@
-Examples
---------
-Given a directed graph with three nodes and two edges like this:
+<hide>
+>>> import trustedanalytics as ta
+>>> ta.connect()
+-etc-
 
-.. only:: html
+>>> vertex_schema = [('source', ta.int32), ('label', ta.float32)]
+>>> edge_schema = [('source', ta.int32), ('dest', ta.int32), ('weight', ta.int32)]
 
-    .. code::
+>>> vertex_rows = [ [1, 1], [2, 1], [3, 5], [4, 5], [5, 5] ]
+>>> edge_rows = [ [1, 2, 1], [1, 3, 1], [2, 3, 1], [1, 4, 1], [4, 5, 1] ]
+>>> vertex_frame = ta.Frame(ta.UploadRows (vertex_rows, vertex_schema))
+<progress>
+>>> edge_frame = ta.Frame(ta.UploadRows (edge_rows, edge_schema))
+-etc-
 
-        >>> g.query.gremlin('g.V')
-        Out[23]: {u'results': [{u'_id': 28304, u'_label': u'vertex', u'_type': u'vertex', u'_vid': 4, u'source': 2}, {u'_id': 21152, u'_label': u'vertex', u'_type': u'vertex', u'_vid': 1, u'source': 1}, {u'_id': 28064, u'_label': u'vertex', u'_type': u'vertex', u'_vid': 3, u'source': 3}], u'run_time_seconds': 1.245}
+</hide>
+>>> graph = ta.Graph()
 
-        >>> g.query.gremlin('g.E')
-        Out[24]: {u'results': [{u'_eid': 3, u'_id': u'34k-gbk-bth-lnk', u'_inV': 28064, u'_label': u'edge', u'_outV': 21152, u'_type': u'edge', u'weight': 0.01}, {u'_eid': 4, u'_id': u'1xw-gbk-bth-lu8', u'_inV': 28304, u'_label': u'edge', u'_outV': 21152, u'_type': u'edge', u'weight': 0.1}], u'run_time_seconds': 1.359}
-
-        >>> h = g.annotate_weighted_degrees('weight',  edge_weight_property = 'weight')
-
-.. only:: latex
-
-    .. code::
-
-        >>> g.query.gremlin('g.V')
-        Out[23]:
-        {u'results': [{u'_id': 28304,
-         u'_label': u'vertex',
-         u'_type': u'vertex',
-         u'_vid': 4,
-         u'source': 2},
-        {u'_id': 21152,
-         u'_label': u'vertex',
-         u'_type': u'vertex',
-         u'_vid': 1,
-         u'source': 1},
-        {u'_id': 28064,
-         u'_label': u'vertex',
-         u'_type': u'vertex',
-         u'_vid': 3,
-         u'source': 3}],
-         u'run_time_seconds': 1.245}
-
-        >>> g.query.gremlin('g.E')
-        Out[24]:
-        {u'results': [{u'_eid': 3,
-         u'_id': u'34k-gbk-bth-lnk',
-         u'_inV': 28064,
-         u'_label': u'edge',
-         u'_outV': 21152,
-         u'_type': u'edge',
-         u'weight': 0.01},
-        {u'_eid': 4,
-         u'_id': u'1xw-gbk-bth-lu8',
-         u'_inV': 28304,
-         u'_label': u'edge',
-         u'_outV': 21152,
-         u'_type': u'edge',
-         u'weight': 0.1}],
-         u'run_time_seconds': 1.359}
-
-        >>> h = g.annotate_weighted_degrees(
-        ...        'weight',
-        ...        edge_weight_property = 'weight')
-
+>>> graph.define_vertex_type('source')
+<progress>
+>>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
+<progress>
+>>> graph.define_edge_type('edges','source', 'source', directed=False)
+<progress>
+>>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
+<progress>
+>>> result = graph.annotate_weighted_degrees("outEdgesCount",edge_weight_property="weight", degree_option="out")
+<progress>
+>>> result['source'].inspect()
+[#]  _vid  _label  source  label  outEdgesCount
+===============================================
+[0]     1  source       1    1.0            3.0
+[1]     2  source       2    1.0            2.0
+[2]     3  source       3    5.0            2.0
+[3]     4  source       4    5.0            2.0
+[4]     5  source       5    5.0            1.0
+>>> result = graph.annotate_weighted_degrees("inEdgesCount",edge_weight_property="weight", degree_option="in")
+<progress>
+>>> result['source'].inspect()
+[#]  _vid  _label  source  label  inEdgesCount
+==============================================
+[0]     1  source       1    1.0           3.0
+[1]     2  source       2    1.0           2.0
+[2]     3  source       3    5.0           2.0
+[3]     4  source       4    5.0           2.0
+[4]     5  source       5    5.0           1.0

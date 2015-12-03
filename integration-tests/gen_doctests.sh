@@ -23,7 +23,18 @@ NAME="[`basename $0`]"
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 
 echo "$NAME DIR=$DIR"
+export PYTHONPATH=$DIR/../python-client:$PYTHONPATH:$PYTHON_DIR
+
 
 pushd $DIR/tests
 python2.7 gendoct.py
+
+SUCCESS=$?
+if [[ $SUCCESS != 0 ]]
+then
+    echo "gendoct.py failed"
+    exit 1
+fi
+
 popd
+
