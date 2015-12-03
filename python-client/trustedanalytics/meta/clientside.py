@@ -263,6 +263,8 @@ def get_api_decorator(logger, parent_class_name=None):
             member = property(fget=function, fset=item.fset) if is_property else function
             command_def = ClientCommandDefinition(class_name, member, is_property)
 
+        attr.command = command_def
+
         client_commands.append((class_name, command_def))
 
         return get_clientside_api_stub(command_def.full_name)

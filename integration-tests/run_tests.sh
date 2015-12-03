@@ -40,6 +40,14 @@ $DIR/rest-server-stop.sh
 
 echo "$NAME Generating the doctest testcase file"
 $DIR/gen_doctests.sh
+GEN_DOCTESTS_SUCCESS=$?
+if [[ $GEN_DOCTESTS_SUCCESS != 0 ]]
+then
+    echo "$NAME Generating doctests failed"
+    exit 10
+fi
+
+
 
 if [ ! -d $TARGET_DIR/surefire-reports/ ]
 then

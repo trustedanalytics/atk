@@ -102,10 +102,8 @@ class DocStubsImport(object):
 
     @staticmethod
     def failure(module_logger, class_names_str, e):
-        msg = "Unable to inherit doc stubs from docstubs.py for %s: %s" % (class_names_str, e)
-        module_logger.warn(msg)
-        # import warnings
-        # warnings.warn(msg, RuntimeWarning)
+        msg = "Could not import docstub file for interactive API usage help before connecting (%s): %s" % (class_names_str, e)
+        module_logger.info(msg)
         return CommandInstallable
 
 
