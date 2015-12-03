@@ -30,6 +30,14 @@ export SEARCH_PATH="-Datk.module-loader.search-path=${BASEDIR}/module-loader:${B
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
 
+# needed for Python UDFs to work locally
+if [ -z "$SPARK_HOME" ]
+then
+    export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark/
+fi
+
+echo "$NAME SPARK_HOME=$SPARK_HOME"
+
 # NOTE: Add this parameter to Java for connecting to a debugger
 # -agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005
 
