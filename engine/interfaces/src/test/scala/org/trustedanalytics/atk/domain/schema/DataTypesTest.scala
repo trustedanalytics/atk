@@ -33,6 +33,11 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.mergeTypes(DataTypes.int32 :: DataTypes.int64 :: Nil) should be(DataTypes.int64)
     DataTypes.mergeTypes(DataTypes.int32 :: DataTypes.float32 :: Nil) should be(DataTypes.float32)
     DataTypes.mergeTypes(DataTypes.int32 :: DataTypes.int32 :: Nil) should be(DataTypes.int32)
+    DataTypes.mergeTypes(DataTypes.int32 :: DataTypes.int32option :: Nil) should be(DataTypes.int32option)
+    DataTypes.mergeTypes(DataTypes.int32option :: DataTypes.int64option :: Nil) should be(DataTypes.int64option)
+    DataTypes.mergeTypes(DataTypes.float32 :: DataTypes.int32option :: Nil) should be(DataTypes.float32option)
+    DataTypes.mergeTypes(DataTypes.float32 :: DataTypes.int64option :: Nil) should be(DataTypes.float64option)
+    DataTypes.mergeTypes(DataTypes.string :: DataTypes.float32 :: DataTypes.int64option :: Nil) should be(DataTypes.string)
   }
 
   "toBigDecimal" should "convert int value" in {
@@ -214,5 +219,132 @@ class DataTypesTest extends FlatSpec with Matchers {
 
     DataTypes.isCompatibleDataType(DataTypes.vector(2), DataTypes.vector(3)) shouldBe false
 
+  }
+
+  "int32option" should "be able to 32-bit parse integers and missing values" in {
+    DataTypes.int32option.isOption shouldBe true
+    DataTypes.int32option.isInteger shouldBe true
+    DataTypes.int32option.isNumerical shouldBe true
+
+    DataTypes.int32option.parse("").get shouldBe None
+    DataTypes.int32option.parse(null).get shouldBe None
+
+    DataTypes.int32option.parse("4").get shouldBe Some(4)
+    DataTypes.int32option.parse(Int.MaxValue.toString).get shouldBe Some(Int.MaxValue)
+    DataTypes.int32option.parse(Int.MinValue.toString).get shouldBe Some(Int.MinValue)
+
+    intercept[NumberFormatException] {
+      DataTypes.int32option.parse(Long.MaxValue.toString).get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int32option.parse(Long.MinValue.toString).get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int32option.parse("invalid").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int32option.parse("3.5").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int32option.parse("*").get
+    }
+  }
+
+  "int64option" should "be able to parse 64-bit integers and missing values" in {
+    DataTypes.int64option.isOption shouldBe true
+    DataTypes.int64option.isInteger shouldBe true
+    DataTypes.int64option.isNumerical shouldBe true
+
+    DataTypes.int64option.parse("").get shouldBe None
+    DataTypes.int64option.parse(null).get shouldBe None
+
+    DataTypes.int64option.parse("4").get shouldBe Some(4)
+    DataTypes.int64option.parse(Long.MaxValue.toString).get shouldBe Some(Long.MaxValue)
+    DataTypes.int64option.parse(Long.MinValue.toString).get shouldBe Some(Long.MinValue)
+
+    intercept[NumberFormatException] {
+      DataTypes.int64option.parse("invalid").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int64option.parse("3.5").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.int64option.parse("*").get
+    }
+  }
+
+  "float32option" should "be able to parse 32-bit floats and missing values" in {
+    DataTypes.float32option.isOption shouldBe true
+    DataTypes.float32option.isInteger shouldBe false
+    DataTypes.float32option.isNumerical shouldBe true
+
+    DataTypes.float32option.parse("").get shouldBe None
+    DataTypes.float32option.parse(null).get shouldBe None
+
+    DataTypes.float32option.parse("4.5").get shouldBe Some(4.5)
+    DataTypes.float32option.parse("-265427").get shouldBe Some(-265427)
+    DataTypes.float32option.parse(Float.MaxValue.toString).get shouldBe Some(Float.MaxValue)
+    DataTypes.float32option.parse(Float.MinValue.toString).get shouldBe Some(Float.MinValue)
+
+    intercept[NumberFormatException] {
+      DataTypes.float32option.parse("invalid").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.float32option.parse("*").get
+    }
+  }
+
+  "float64option" should "be able to parse 64-bit floats and missing values" in {
+    DataTypes.float64option.isOption shouldBe true
+    DataTypes.float64option.isInteger shouldBe false
+    DataTypes.float64option.isNumerical shouldBe true
+
+    DataTypes.float64option.parse("").get shouldBe None
+    DataTypes.float64option.parse(null).get shouldBe None
+
+    DataTypes.float64option.parse("4.5").get shouldBe Some(4.5)
+    DataTypes.float64option.parse("27").get shouldBe Some(27)
+    DataTypes.float64option.parse(Double.MaxValue.toString).get shouldBe Some(Double.MaxValue)
+    DataTypes.float64option.parse(Double.MinValue.toString).get shouldBe Some(Double.MinValue)
+    DataTypes.float64option.parse(Int.MaxValue.toString).get shouldBe Some(Int.MaxValue)
+
+    intercept[NumberFormatException] {
+      DataTypes.float64option.parse("invalid").get
+    }
+    intercept[NumberFormatException] {
+      DataTypes.float64option.parse("*").get
+    }
+  }
+
+  "DataTypes.isCompatibleDataType" should "return true if both types match" in {
+    // Exact matches should be true
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int32) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int64, DataTypes.int64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float32, DataTypes.float32) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float64, DataTypes.float64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int32option, DataTypes.int32option) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int64option, DataTypes.int64option) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float32option, DataTypes.float32option) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float64option, DataTypes.float64option) shouldBe true
+
+    // Check compatibility of different types
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.float32, DataTypes.float64) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int32option) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int32, DataTypes.int64option) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.int32option, DataTypes.int64option) shouldBe true
+    DataTypes.isCompatibleDataType(DataTypes.int32option, DataTypes.float32option) shouldBe false
+    DataTypes.isCompatibleDataType(DataTypes.float32option, DataTypes.float64option) shouldBe true
+  }
+
+  "DataTypes.isMissingValue" should "return true for missing values or 'None' strings" in {
+    DataTypes.isMissingNumber("") shouldBe true
+    DataTypes.isMissingNumber(null) shouldBe true
+    DataTypes.isMissingNumber("none") shouldBe true
+    DataTypes.isMissingNumber("None") shouldBe true
+    DataTypes.isMissingNumber("TEST") shouldBe false
+    DataTypes.isMissingNumber(" ") shouldBe false
+    DataTypes.isMissingNumber(1) shouldBe false
+    DataTypes.isMissingNumber("1") shouldBe false
   }
 }

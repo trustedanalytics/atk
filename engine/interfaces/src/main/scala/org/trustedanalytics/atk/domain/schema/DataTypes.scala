@@ -63,6 +63,9 @@ object DataTypes extends EventLogging {
 
     def isVector: Boolean = false
 
+    /** True if data type is an Option data type (e.g. Option[Int32], Option[Int64], etc). */
+    def isOption: Boolean = false
+
     /**
      * Looser type equality than strict object equals, to enable things like vector.equalsDataType(vector(4)) returns true
      */
@@ -190,6 +193,167 @@ object DataTypes extends EventLogging {
     override def isNumerical = true
 
     override def isInteger = false
+  }
+
+  /**
+   * 32 bit int option
+   */
+  case object int32option extends DataType {
+    override type ScalaType = Option[Int]
+
+    override def parse(raw: Any) = Try {
+      if (isMissingNumber(raw) == false)
+        Some(toInt(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Int]
+    }
+
+    override def scalaType = classOf[Option[Int]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Int].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Int].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = true
+
+    override def isOption = true
+  }
+
+  /**
+   * 64 bit int option
+   */
+  case object int64option extends DataType {
+    override type ScalaType = Option[Long]
+
+    override def parse(raw: Any) = Try {
+      if (isMissingNumber(raw) == false)
+        Some(toLong(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Long]
+    }
+
+    override def scalaType = classOf[Option[Long]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Long].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Long].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = true
+
+    override def isOption = true
+  }
+
+  /**
+   * 32 bit float option
+   */
+  case object float32option extends DataType {
+    override type ScalaType = Option[Float]
+
+    override def parse(raw: Any) = Try {
+      if (isMissingNumber(raw) == false)
+        Some(toFloat(raw))
+      else
+        None
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Float]
+    }
+
+    override def scalaType = classOf[Option[Float]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Float].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Float].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = false
+
+    override def isOption = true
+  }
+
+  /**
+   * 64 bit float option
+   */
+  case object float64option extends DataType {
+    override type ScalaType = Option[Double]
+
+    override def parse(raw: Any) = Try {
+      toOptionDouble(raw)
+    }
+
+    override def isType(raw: Any): Boolean = {
+      raw == null || raw.isInstanceOf[Double]
+    }
+
+    override def scalaType = classOf[Option[Double]]
+
+    override def typedJson(raw: Any) = {
+      raw.asInstanceOf[Double].toJson
+    }
+
+    override def asDouble(raw: Any): Double = {
+      raw.asInstanceOf[Double].toDouble
+    }
+
+    override def asString(raw: Any): String = {
+      if (raw == null)
+        return ""
+      else
+        raw.toString
+    }
+
+    override def isNumerical = true
+
+    override def isInteger = false
+
+    override def isOption = true
   }
 
   /**
@@ -408,9 +572,11 @@ object DataTypes extends EventLogging {
   def isCompatibleDataType(dataType1: DataType, dataType2: DataType): Boolean = {
     dataType1 match {
       case t if dataType1.equalsDataType(dataType2) => true
-      case i if dataType1.isInteger && dataType2.isInteger => true
+      case i if dataType1.isInteger && dataType2.isInteger && (dataType1.isOption == dataType2.isOption) => true
       case d if dataType1.equalsDataType(DataTypes.float32) || dataType1.equalsDataType(DataTypes.float64) =>
-        dataType2.equalsDataType(DataTypes.float32) || dataType2.equalsDataType(DataTypes.float64)
+        (dataType2.equalsDataType(DataTypes.float32) || dataType2.equalsDataType(DataTypes.float64))
+      case doption if dataType1.equalsDataType(DataTypes.float32option) || dataType1.equalsDataType(DataTypes.float64option) =>
+        (dataType2.equalsDataType(DataTypes.float32option) || dataType2.equalsDataType(DataTypes.float64option))
       case _ => false
     }
   }
@@ -488,6 +654,12 @@ object DataTypes extends EventLogging {
       case x if Set[DataType](int64, float32).subsetOf(x) => float64
       case x if Set[DataType](int32, float32).subsetOf(x) => float32
       case x if Set[DataType](int32, int64).subsetOf(x) => int64
+      case x if x.subsetOf(Set[DataType](int32, int32option)) => int32option
+      case x if x.subsetOf(Set[DataType](int32, int32option, int64, int64option)) => int64option
+      case x if x.subsetOf(Set[DataType](int32, int32option, float32, float32option)) => float32option
+      case x if x.subsetOf(Set[DataType](int32, int32option, int64, int64option,
+        float32, float32option, float64, float64option)) => float64option
+
       case _ => string
     }
   }
@@ -509,6 +681,10 @@ object DataTypes extends EventLogging {
     s match {
       case vectorPattern(length) => vector(length.toLong)
       case "vector" => DataTypes.string
+      case "int32option" => DataTypes.int32option
+      case "int64option" => DataTypes.int64option
+      case "float32option" => DataTypes.float32option
+      case "float64option" => DataTypes.float64option
       case _ => throw new IllegalArgumentException(s"Invalid datatype: '$s'")
     }
   }
@@ -611,6 +787,26 @@ object DataTypes extends EventLogging {
       case bd: BigDecimal => bd.toDouble
       case s: String => s.trim().toDouble
       case v: vector.ScalaType => vector.asDouble(v)
+      case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
+    }
+  }
+
+  /**
+   * Attempt to cast Any type to Option[Double]
+   *
+   * @param value input Any type to be cast
+   * @return value cast as Option[Double], if possible
+   */
+  def toOptionDouble(value: Any): Option[Double] = {
+    value match {
+      case null => None
+      case i: Int => Some(i.toDouble)
+      case l: Long => Some(l.toDouble)
+      case f: Float => Some(f.toDouble)
+      case d: Double => Some(d)
+      case bd: BigDecimal => Some(bd.toDouble)
+      case s: String => if (isMissingNumber(s)) None else Some(s.trim().toDouble)
+      case v: vector.ScalaType => Some(vector.asDouble(v))
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
   }
@@ -733,6 +929,19 @@ object DataTypes extends EventLogging {
       })
       case _ => throw new IllegalArgumentException(s"The following value is not an array of doubles: $value")
     }
+  }
+
+  /**
+   * Checks the specified numberical value to determine if it should be considered missing in an option
+   * data type.
+   * @param value Value to check
+   * @return True if the value is considered to be missing
+   */
+  def isMissingNumber(value: Any): Boolean = {
+    if (value == null || value == "" || value.toString.toLowerCase == "none")
+      return true
+    else
+      return false
   }
 
   /**

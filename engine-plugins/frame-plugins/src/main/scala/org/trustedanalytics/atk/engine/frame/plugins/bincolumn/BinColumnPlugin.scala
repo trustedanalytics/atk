@@ -88,8 +88,8 @@ class BinColumnPlugin extends SparkCommandPlugin[BinColumnArgs, UnitReturn] {
 
     // run the operation and save results
     val updatedSchema = frame.schema.addColumn(binColumnName, DataTypes.int32)
-    val binnedRdd = DiscretizationFunctions.binColumns(columnIndex, arguments.cutoffs,
-      arguments.includeLowest.getOrElse(true), arguments.strictBinning.getOrElse(false), frame.rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(columnIndex, frame.schema.columnDataType(arguments.columnName).isOption,
+      arguments.cutoffs, arguments.includeLowest.getOrElse(true), arguments.strictBinning.getOrElse(false), frame.rdd)
 
     frame.save(new FrameRdd(updatedSchema, binnedRdd))
   }
