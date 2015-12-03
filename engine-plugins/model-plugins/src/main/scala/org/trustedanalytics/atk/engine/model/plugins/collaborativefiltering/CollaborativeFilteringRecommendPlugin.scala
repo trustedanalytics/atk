@@ -55,17 +55,11 @@ class CollaborativeFilteringRecommendPlugin
 
     val userFrame = frames.loadFrameData(sc, data.userFrame)
     val productFrame = frames.loadFrameData(sc, data.productFrame)
-    val alsModel = new MatrixFactorizationModel(data.rank, toAlsRdd(userFrame, data), toAlsRdd(productFrame, data))
+    val alsModel = new MatrixFactorizationModel(data.rank,
+      CollaborativeFilteringHelper.toAlsRdd(userFrame, data),
+      CollaborativeFilteringHelper.toAlsRdd(productFrame, data))
 
     CollaborativeFilteringRecommendReturn(formatReturn(recommend(alsModel, arguments)))
-  }
-
-  private def toAlsRdd(userFrame: FrameRdd, data: CollaborativeFilteringData): RDD[(Int, Array[Double])] = {
-    val idColName = data.userFrame.schema.column(0).name
-    val featuresColName = data.userFrame.schema.column(1).name
-
-    userFrame.mapRows(row => (row.intValue(idColName),
-      DataTypes.vector.parse(row.value(featuresColName)).get.toArray))
   }
 
   private def recommend(alsModel: MatrixFactorizationModel,

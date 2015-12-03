@@ -23,6 +23,7 @@ import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes }
+import org.trustedanalytics.atk.engine.frame.{ SparkFrame, SparkFrameStorage }
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering.CollaborativeFilteringJsonFormat._
@@ -52,49 +53,44 @@ class CollaborativeFilteringPredictPlugin
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameReference = {
-    val graph: SparkGraph = arguments.graph
-    val (gbVertices, gbEdges) = graph.gbRdds
-    val alsPredictInput = gbEdges.map(edge =>
-      {
-        val sourceId = edge.headPhysicalId.asInstanceOf[Long]
-        val destId = edge.tailPhysicalId.asInstanceOf[Long]
-        if ((sourceId > Int.MaxValue) || (destId > Int.MaxValue)) {
-          throw new RuntimeException("User or product Id must not exceed Int.MaxInt")
-        }
-        (sourceId.toInt, destId.toInt)
-      })
-
+    val frames = engine.frames
+    val edgeFrame: SparkFrame = arguments.frame
+    val schema = edgeFrame.schema
     val model: Model = arguments.model
     val data = model.data.convertTo[CollaborativeFilteringData]
-    val frames = engine.frames
+
+    schema.requireColumnIsType(arguments.inputSourceColumnName, DataTypes.int)
+    schema.requireColumnIsType(arguments.inputDestColumnName, DataTypes.int)
+    require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
+
+    val alsPredictInput = edgeFrame.rdd.map(edge => {
+      (edge.getInt(schema.columnIndex(arguments.inputSourceColumnName)),
+        edge.getInt(schema.columnIndex(arguments.inputDestColumnName))
+      )
+    })
 
     val userFrame = frames.loadFrameData(sc, data.userFrame)
     val productFrame = frames.loadFrameData(sc, data.productFrame)
-    val alsModel = new MatrixFactorizationModel(data.rank, toAlsRdd(userFrame, data), toAlsRdd(productFrame, data))
+    val alsModel = new MatrixFactorizationModel(data.rank,
+      CollaborativeFilteringHelper.toAlsRdd(userFrame, data),
+      CollaborativeFilteringHelper.toAlsRdd(productFrame, data))
 
-    toFrameEntity(alsModel.predict(alsPredictInput), arguments)
+    frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS publish operation"))) {
+      frame: FrameEntity =>
+        frame.save(toFrameRdd(alsModel.predict(alsPredictInput), arguments))
+    }
   }
 
-  private def toAlsRdd(userFrame: FrameRdd, data: CollaborativeFilteringData): RDD[(Int, Array[Double])] = {
-    val idColName = data.userFrame.schema.column(0).name
-    val featuresColName = data.userFrame.schema.column(1).name
-
-    userFrame.mapRows(row => (row.intValue(idColName),
-      DataTypes.vector.parse(row.value(featuresColName)).get.toArray))
-  }
-
-  private def toFrameEntity(modelRdd: RDD[Rating],
-                            arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameEntity = {
+  private def toFrameRdd(modelRdd: RDD[Rating],
+                         arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameRdd = {
     val schema = FrameSchema(List(
-      Column(arguments.userColumnName, DataTypes.int),
-      Column(arguments.productColumnName, DataTypes.int),
-      Column(arguments.ratingColumnName, DataTypes.float32)))
+      Column(arguments.outputUserColumnName, DataTypes.int),
+      Column(arguments.outputProductColumnName, DataTypes.int),
+      Column(arguments.outputRatingColumnName, DataTypes.float32)))
     val rowRdd = modelRdd.map {
       case alsRating => Row(alsRating.user, alsRating.product, DataTypes.toFloat(alsRating.rating))
     }
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS publish operation"))) { frame: FrameEntity =>
-      frame.save(new FrameRdd(schema, rowRdd))
-    }
-
+    new FrameRdd(schema, rowRdd)
   }
+
 }
