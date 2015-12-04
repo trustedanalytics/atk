@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
 import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
-import org.trustedanalytics.atk.domain.graph.GraphReference
+import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
@@ -28,7 +28,9 @@ import DomainJsonProtocol._
  * Arguments to the plugin - see user docs for more on the parameters
  */
 case class CollaborativeFilteringTrainArgs(model: ModelReference,
-                                           graph: GraphReference,
+                                           frame: FrameReference,
+                                           @ArgDoc("""source column name.""") sourceColumnName: String,
+                                           @ArgDoc("""destination column name.""") destColumnName: String,
                                            @ArgDoc("""weight column name.""") weightColumnName: String,
                                            @ArgDoc("""max number of super-steps (max iterations) before the algorithm terminates. Default = 10""") maxSteps: Int = 10,
                                            @ArgDoc("""float value between 0 .. 1 """) regularization: Float = 0.5f,
@@ -39,7 +41,9 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""number of item blocks""") numItemBlock: Int = 3,
                                            @ArgDoc("""target RMSE""") targetRMSE: Double = 0.05) {
 
-  require(graph != null, "input graph is required")
+  require(frame != null, "input frame is required")
+  require(StringUtils.isNotEmpty(sourceColumnName), "source column name is required")
+  require(StringUtils.isNotEmpty(destColumnName), "destination column name is required")
   require(StringUtils.isNotEmpty(weightColumnName), "weight column name is required")
   require(maxSteps > 1, "min steps must be a positive integer")
   require(regularization > 0, "regularization must be a positive value")
