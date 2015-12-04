@@ -99,15 +99,26 @@
 
     Examples
     --------
-    .. code::
+    >>> graph = ta.Graph()
 
-        >>> results = g.clustering_coefficient('ccgraph', 'local_clustering_coefficient')
-
-        >>> results
-            Out[8]:
-            ClusteringCoefficient:
-            global_clustering_coefficient: 0.0853107962708,
-            frame: Frame
-
-        >>> results.frame.inspect()
+    >>> graph.define_vertex_type('source')
+    [===Job Progress===]
+    >>> graph.vertices['source'].add_vertices(vertex_frame, 'source', 'label')
+    [===Job Progress===]
+    >>> graph.define_edge_type('edges','source', 'source', directed=False)
+    [===Job Progress===]
+    >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
+    [===Job Progress===]
+    >>> results = graph.clustering_coefficient('ccgraph')
+    [===Job Progress===]
+    >>> results.global_clustering_coefficient
+    0.5
+    >>> results.frame.inspect()
+    [#]  _label  source  label  ccgraph
+    ==========================================
+    [0]  source       5    5.0             0.0
+    [1]  source       1    1.0  0.333333333333
+    [2]  source       2    1.0             1.0
+    [3]  source       3    5.0             1.0
+    [4]  source       4    5.0             0.0
 

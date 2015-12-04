@@ -135,25 +135,7 @@ predicted label for each instance.</p>
 <p><strong>beta</strong> : float64 (default=None)</p>
 <blockquote>
 <div><p>This is the beta value to use for
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta}</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
- restricted \write18 enabled.
-entering extended mode
-(./math.tex
-LaTeX2e &lt;2011/06/27&gt;
-Babel &lt;3.9h&gt; and hyphenation patterns for 78 languages loaded.
-)
-! Emergency stop.
-&lt;*&gt; math.tex
-            
-No pages of output.
-Transcript written on math.log.
-</p>
-</div>
- measure (default F1 measure is computed); must be greater than zero.
+<img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure (default F1 measure is computed); must be greater than zero.
 Defaults is 1.</p>
 </div></blockquote>
 <p><strong>frequency_column</strong> : unicode (default=None)</p>
@@ -230,7 +212,19 @@ predictions that are correctly identified.
 If we let <img class="math" src="../../../_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives,
 <img class="math" src="../../../_images/math/5a919304e203d46d38918eee30dc7eacb0b325b3.png" alt="T_{N}"/> denote the number of true negatives, and <img class="math" src="../../../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> denote
 the total number of classified instances, then the model accuracy is
-given by: <img class="math" src="../../../_images/math/cd19688e8d357e7c88ff82e833f43d925bafba95.png" alt="\frac{T_{P} + T_{N}}{K}"/>.</p>
+given by: <div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\frac{T_{P} + T_{N}}{K}</tt>)</p>
+<p>dvipng exited with error
+[stderr]
+
+dvipng: Fatal error, DVI file ends prematurely
+
+
+[stdout]
+This is dvipng 1.14 Copyright 2002-2010 Jan-Ake Larsson
+</p>
+</div>
+.</p>
 <p>This measure applies to binary and multi-class classifiers.</p>
 </li>
 <li><p class="first">The <strong>confusion_matrix</strong> result is a confusion matrix for a
@@ -301,7 +295,7 @@ binary classifier model, formatted for human readability.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 03, 2015.
+      Last updated on Dec 04, 2015.
       </li>
     </ul>
     </div>

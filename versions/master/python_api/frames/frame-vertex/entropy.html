@@ -147,41 +147,43 @@ all data elements whose weight is NaN or infinite.
 If there are no data elements with a finite weight greater than 0,
 the entropy is zero.</p>
 <p class="rubric">Examples</p>
-<p>Given a frame of coin flips, half heads and half tails, the entropy is simply ln(2):
-.. code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-
-<span class="go">          data:unicode</span>
-<span class="go">        /----------------/</span>
-<span class="go">          H</span>
-<span class="go">          T</span>
-<span class="go">          H</span>
-<span class="go">          T</span>
-<span class="go">          H</span>
-<span class="go">          T</span>
-<span class="go">          H</span>
-<span class="go">          T</span>
-<span class="go">          H</span>
-<span class="go">          T</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Computed entropy:&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">)</span>
-
-<span class="go">        Computed entropy: 0.69314718056</span>
+<p>Consider the following sample data set in <em>frame</em> &#8216;frame&#8217; containing several numbers.</p>
+<p>Given a frame of coin flips, half heads and half tails, the entropy is simply ln(2):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data  weight</span>
+<span class="go">=================</span>
+<span class="go">[0]     0       1</span>
+<span class="go">[1]     1       2</span>
+<span class="go">[2]     2       4</span>
+<span class="go">[3]     4       8</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;weight&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;</span><span class="si">%0.8f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
+<span class="go">&#39;1.13691659&#39;</span>
 </pre></div>
 </div>
 <p>If we have more choices and weights, the computation is not as simple.
 An on-line search for &#8220;Shannon Entropy&#8221; will provide more detail.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">           data:int32   weight:int32</span>
-<span class="go">         -----------------------------</span>
-<span class="go">                    0              1</span>
-<span class="go">                    1              2</span>
-<span class="go">                    2              4</span>
-<span class="go">                    4              8</span>
-
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="s">&quot;Computed entropy:&quot;</span><span class="p">,</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">,</span> <span class="s">&quot;weight&quot;</span><span class="p">)</span>
-
-<span class="go">         Computed entropy: 1.13691659183</span>
+<p>Given a frame of coin flips, half heads and half tails, the entropy is simply ln(2):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  data</span>
+<span class="go">=========</span>
+<span class="go">[0]  H</span>
+<span class="go">[1]  T</span>
+<span class="go">[2]  H</span>
+<span class="go">[3]  T</span>
+<span class="go">[4]  H</span>
+<span class="go">[5]  T</span>
+<span class="go">[6]  H</span>
+<span class="go">[7]  T</span>
+<span class="go">[8]  H</span>
+<span class="go">[9]  T</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entropy</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="s">&quot;data&quot;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&quot;</span><span class="si">%0.8f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">entropy</span>
+<span class="go">&#39;0.69314718&#39;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -209,7 +211,7 @@ An on-line search for &#8220;Shannon Entropy&#8221; will provide more detail.</p
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 03, 2015.
+      Last updated on Dec 04, 2015.
       </li>
     </ul>
     </div>
