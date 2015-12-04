@@ -191,7 +191,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: KMeansModel): JsValue = {
       val centers = obj.clusterCenters.map(vector => VectorFormat.write(vector))
-      JsObject("cluster_centers" -> JsArray(centers.toList))
+      JsObject("clusterCenters" -> JsArray(centers.toList))
     }
 
     /**
@@ -203,7 +203,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansModel = {
       val fields = json.asJsObject.fields
 
-      val centers = fields.get("cluster_centers").get.asInstanceOf[JsArray].elements.map(vector => {
+      val centers = fields.get("clusterCenters").get.asInstanceOf[JsArray].elements.map(vector => {
         VectorFormat.read(vector)
       })
 
