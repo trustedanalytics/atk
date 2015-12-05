@@ -14,35 +14,35 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel.core
 
-import org.trustedanalytics.atk.plugins.VectorMath
+import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
-import org.apache.spark.graphx.{ PartitionStrategy, Graph, Edge }
 import org.trustedanalytics.atk._
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
+import org.trustedanalytics.atk.plugins.VectorMath
 
 /**
  * Arguments for the BeliefPropagationRunner
  * @param posteriorProperty Name of the property to which the posteriors will be written.
  * @param priorProperty Name of the property containing the priors.
- * @param maxIterations Maximum number of iteratiosn to execute BP message passing.
+ * @param maxIterations Maximum number of iterations to execute BP message passing.
  * @param stringOutput When true, the output is a comma-delimited string, when false (default) the output is a vector.
  * @param convergenceThreshold Optional Double. BP will terminate when average change in posterior beliefs between
  *                             supersteps is less than or equal to this threshold. Defaults to 0.
  * @param edgeWeightProperty Optional. Property containing edge weights.
  */
-case class LoopyBeliefPropagationRunnerArgs(posteriorProperty: String,
-                                            priorProperty: String,
-                                            maxIterations: Option[Int],
-                                            stringOutput: Option[Boolean],
-                                            convergenceThreshold: Option[Double],
-                                            edgeWeightProperty: Option[String])
+case class PregelArgs(posteriorProperty: String,
+                      priorProperty: String,
+                      maxIterations: Int,
+                      stringOutput: Boolean,
+                      convergenceThreshold: Double,
+                      edgeWeightProperty: String)
 /**
  * Provides a method for running belief propagation on a graph. The result is a new graph with the belief-propagation
  * posterior beliefs placed in a new vertex property on each vertex.
  */
-object LoopyBeliefPropagationRunner extends Serializable {
+object PregelAlgorithm extends Serializable {
 
   val separators: Array[Char] = Array(' ', ',', '\t')
 
@@ -54,13 +54,13 @@ object LoopyBeliefPropagationRunner extends Serializable {
    * @return Vertex and edge list for the output graph and a logging string reporting on the execution of the belief
    *         propagation run.
    */
-  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: LoopyBeliefPropagationRunnerArgs): (RDD[GBVertex], RDD[GBEdge], String) = {
+  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: PregelArgs)(vertexProgram: (VertexId, VertexState, Map[Long, Vector[Double]]) => VertexState): (RDD[GBVertex], RDD[GBEdge], String) = {
 
     val outputPropertyLabel = args.posteriorProperty
     val inputPropertyName: String = args.priorProperty
-    val maxIterations: Int = args.maxIterations.getOrElse(LoopyBeliefPropagationDefaults.maxIterationsDefault)
-    val beliefsAsStrings = args.stringOutput.getOrElse(LoopyBeliefPropagationDefaults.stringOutputDefault)
-    val convergenceThreshold = args.convergenceThreshold.getOrElse(LoopyBeliefPropagationDefaults.convergenceThreshold)
+    val maxIterations = args.maxIterations
+    val beliefsAsStrings = args.stringOutput
+    val convergenceThreshold = args.convergenceThreshold
 
     val firstVertexOption: Option[GBVertex] = try {
       Some(inVertices.first())
@@ -88,21 +88,19 @@ object LoopyBeliefPropagationRunner extends Serializable {
           case s: String => s.split(separators).filter(_.nonEmpty).map(_.toDouble).toVector.length
         }
 
-        val defaultEdgeWeight = LoopyBeliefPropagationDefaults.edgeWeightDefault
-        val power = LoopyBeliefPropagationDefaults.powerDefault
-        val smoothing = LoopyBeliefPropagationDefaults.smoothingDefault
-
         // convert to graphX vertices
         val graphXVertices: RDD[(Long, VertexState)] =
           inVertices.map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], bpVertexStateFromVertex(gbVertex, inputPropertyName, stateSpaceSize)))
 
-        val graphXEdges = inEdges.map(edge => bpEdgeStateFromEdge(edge, args.edgeWeightProperty, defaultEdgeWeight))
-
+        val graphXEdges = inEdges.map(edge => bpEdgeStateFromEdge(edge, args.edgeWeightProperty, DefaultValues.edgeWeightDefault))
         val graph = Graph[VertexState, Double](graphXVertices, graphXEdges)
           .partitionBy(PartitionStrategy.RandomVertexCut)
 
-        val graphXLBPRunner = new PregelBeliefPropagation(maxIterations, power, smoothing, convergenceThreshold)
-        val (newGraph, log) = graphXLBPRunner.run(graph)
+        val runner = new PregelWrapper(maxIterations,
+          DefaultValues.powerDefault,
+          DefaultValues.smoothingDefault,
+          convergenceThreshold)
+        val (newGraph, log) = runner.run(graph)(vertexProgram)
 
         val outVertices = newGraph.vertices.map({
           case (vid, vertexState) =>
@@ -117,28 +115,25 @@ object LoopyBeliefPropagationRunner extends Serializable {
   /**
    * converts incoming edge to the form consumed by the belief propagation computation
    */
-  private def bpEdgeStateFromEdge(gbEdge: GBEdge, edgeWeightPropertyNameOption: Option[String], defaultEdgeWeight: Double) = {
+  private def bpEdgeStateFromEdge(gbEdge: GBEdge, edgeWeightPropertyNameOption: String, defaultEdgeWeight: Double) = {
 
     val weight: Double = if (edgeWeightPropertyNameOption.nonEmpty) {
-
-      val edgeWeightPropertyName = edgeWeightPropertyNameOption.get
-
+      val edgeWeightPropertyName = edgeWeightPropertyNameOption
       val property = gbEdge.getProperty(edgeWeightPropertyName)
-
       if (property.isEmpty) {
-        throw new NotFoundException("Edge Property", edgeWeightPropertyName, edgeErrorInfo(gbEdge))
+        throw new NotFoundException("Edge Property ", edgeWeightPropertyName, edgeErrorInfo(gbEdge))
       }
       else {
-        gbEdge.getProperty(edgeWeightPropertyNameOption.get).get.asInstanceOf[Double]
+        gbEdge.getProperty(edgeWeightPropertyNameOption).get.asInstanceOf[Double]
       }
     }
     else {
       defaultEdgeWeight
     }
-    val srcId = gbEdge.tailPhysicalId.asInstanceOf[Long]
-    val destId = gbEdge.headPhysicalId.asInstanceOf[Long]
 
-    new Edge[Double](srcId, destId, weight)
+    new Edge[Double](gbEdge.tailPhysicalId.asInstanceOf[Long],
+      gbEdge.headPhysicalId.asInstanceOf[Long],
+      weight)
   }
 
   /**
@@ -150,7 +145,7 @@ object LoopyBeliefPropagationRunner extends Serializable {
     val property = gbVertex.getProperty(inputPropertyName)
 
     val prior: Vector[Double] = if (property.isEmpty) {
-      throw new NotFoundException("Vertex Property", inputPropertyName, vertexErrorInfo(gbVertex))
+      throw new NotFoundException("Vertex Property ", inputPropertyName, vertexErrorInfo(gbVertex))
     }
     else {
       property.get.value match {
@@ -160,8 +155,10 @@ object LoopyBeliefPropagationRunner extends Serializable {
     }
 
     if (prior.length != stateSpaceSize) {
-      throw new IllegalArgumentException("Length of prior does not match state space size\n" +
-        vertexErrorInfo(gbVertex) + "\n" +
+      throw new IllegalArgumentException("Length of prior does not match state space size" +
+        System.lineSeparator() +
+        vertexErrorInfo(gbVertex) +
+        System.lineSeparator() +
         "Property name == " + inputPropertyName + "    Expected state space size " + stateSpaceSize)
     }
     val posterior = VectorMath.l1Normalize(prior)
@@ -194,7 +191,7 @@ object LoopyBeliefPropagationRunner extends Serializable {
    * @return a formatted string
    */
   private def vertexErrorInfo(gbVertex: GBVertex): String = {
-    "Vertex ID ==" + gbVertex.gbId.value.toString +
+    "Vertex ID == " + gbVertex.gbId.value.toString +
       "    Physical ID == " + gbVertex.physicalId
   }
 
@@ -204,8 +201,8 @@ object LoopyBeliefPropagationRunner extends Serializable {
    * @return a formatted string
    */
   private def edgeErrorInfo(gbEdge: GBEdge): String = {
-    "Edge ID == " + gbEdge.id + "\n" +
-      "Source Vertex == " + gbEdge.tailVertexGbId.value + "\n" +
+    "Edge ID == " + gbEdge.id + System.lineSeparator() +
+      "Source Vertex == " + gbEdge.tailVertexGbId.value + System.lineSeparator() +
       "Destination Vertex == " + gbEdge.headVertexGbId.value
   }
 }

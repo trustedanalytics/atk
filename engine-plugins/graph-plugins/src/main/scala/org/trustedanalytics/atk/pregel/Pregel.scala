@@ -64,7 +64,6 @@ object Pregel {
                                                                          maxIterations: Int = Int.MaxValue,
                                                                          activeDirection: EdgeDirection = EdgeDirection.Either)(vprog: (VertexId, VertexData, Message) => VertexData,
                                                                                                                                 sendMsg: EdgeTriplet[VertexData, EdgeData] => Iterator[(VertexId, Message)],
-
                                                                                                                                 mergeMsg: (Message, Message) => Message): (Graph[VertexData, EdgeData], String) = {
 
     val vdataRDD: RDD[VertexData] = graph.vertices.map({ case (vid, vdata) => vdata })
