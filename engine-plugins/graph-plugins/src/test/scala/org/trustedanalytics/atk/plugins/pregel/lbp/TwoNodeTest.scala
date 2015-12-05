@@ -82,7 +82,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
@@ -129,7 +129,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send
     )
 
     val testVertices = verticesOut.collect().toSet
@@ -180,7 +180,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send
     )
 
     val testVertices = verticesOut.collect().toSet
@@ -245,7 +245,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send
     )
 
     val testVertices = verticesOut.collect().toSet

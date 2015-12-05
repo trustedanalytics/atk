@@ -77,7 +77,7 @@ class LoopyBeliefPropagationPlugin extends SparkCommandPlugin[PluginArgs, Return
       arguments.convergenceThreshold,
       arguments.edgeWeightProperty)
 
-    val (outVertices, outEdges, log) = PregelAlgorithm.run(gbVertices, gbEdges, runnerArgs)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (outVertices, outEdges, log) = PregelAlgorithm.run(gbVertices, gbEdges, runnerArgs)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
     val frameMap = frameRddMap.keys.map(label => {

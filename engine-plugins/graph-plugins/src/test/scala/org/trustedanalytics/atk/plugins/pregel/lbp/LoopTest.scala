@@ -78,7 +78,7 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
 
@@ -122,7 +122,7 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
 

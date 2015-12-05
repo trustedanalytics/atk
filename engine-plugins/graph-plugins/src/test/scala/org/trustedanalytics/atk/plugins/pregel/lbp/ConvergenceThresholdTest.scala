@@ -77,7 +77,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = 1d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     log should include("Total number of iterations: 1")
   }
@@ -92,7 +92,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = 0.2d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     log should include("Total number of iterations: 2")
   }
@@ -107,7 +107,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     log should include("Total number of iterations: 2")
   }
@@ -124,7 +124,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
 
     log should include("Total number of iterations: 2")
   }

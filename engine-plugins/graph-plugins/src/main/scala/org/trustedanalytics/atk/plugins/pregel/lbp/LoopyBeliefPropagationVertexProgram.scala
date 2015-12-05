@@ -12,7 +12,7 @@ object LoopyBeliefPropagationVertexProgram {
    * @param messages A map of the (neighbor, message-from-neighbor) pairs for the most recent round of message passing.
    * @return New state of the vertex.
    */
-  def loopyBeliefPropagation(id: VertexId, vertexState: VertexState, messages: Map[VertexId, Vector[Double]]): VertexState = {
+  def pregelVertexProgram(id: VertexId, vertexState: VertexState, messages: Map[VertexId, Vector[Double]]): VertexState = {
 
     val prior = vertexState.prior
     val messageValues: List[Vector[Double]] = messages.toList.map({ case (k, v) => v })
