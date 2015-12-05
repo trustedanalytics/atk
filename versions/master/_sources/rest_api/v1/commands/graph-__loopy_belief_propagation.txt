@@ -42,8 +42,7 @@ Request
 
     ..
 
-        Name of the vertex property which contains the prior belief
-        for the vertex.
+        Name of the vertex property which contains the prior belief for the vertex.
 
 
 
@@ -51,13 +50,11 @@ Request
 
     ..
 
-        Name of the vertex property which
-        will contain the posterior belief for each
-        vertex.
+        Name of the vertex property which will contain the posterior belief for each vertex.
 
 
 
-    **edge_weight_property** : unicode (default=None)
+    **edge_weight_property** : unicode (default=)
 
     ..
 
@@ -65,22 +62,19 @@ Request
 
 
 
-    **convergence_threshold** : float64 (default=None)
+    **convergence_threshold** : float64 (default=0.0)
 
     ..
 
-        Belief propagation will terminate
-        when the average change in posterior beliefs between supersteps is
-        less than or equal to this threshold.
+        Belief propagation will terminate when the average change in posterior beliefs between supersteps is less than or equal to this threshold.
 
 
 
-    **max_iterations** : int32 (default=None)
+    **max_iterations** : int32 (default=20)
 
     ..
 
-        The maximum number of supersteps that the algorithm will execute.
-        The valid range is all positive int.
+        The maximum number of supersteps that the algorithm will execute.The valid range is all positive int.
 
 
 

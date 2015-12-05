@@ -137,29 +137,23 @@
 </div></blockquote>
 <p><strong>prior_property</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the vertex property which contains the prior belief
-for the vertex.</p>
+<div><p>Name of the vertex property which contains the prior belief for the vertex.</p>
 </div></blockquote>
 <p><strong>posterior_property</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the vertex property which
-will contain the posterior belief for each
-vertex.</p>
+<div><p>Name of the vertex property which will contain the posterior belief for each vertex.</p>
 </div></blockquote>
-<p><strong>edge_weight_property</strong> : unicode (default=None)</p>
+<p><strong>edge_weight_property</strong> : unicode (default=)</p>
 <blockquote>
 <div><p>Name of the edge property that contains the edge weight for each edge.</p>
 </div></blockquote>
-<p><strong>convergence_threshold</strong> : float64 (default=None)</p>
+<p><strong>convergence_threshold</strong> : float64 (default=0.0)</p>
 <blockquote>
-<div><p>Belief propagation will terminate
-when the average change in posterior beliefs between supersteps is
-less than or equal to this threshold.</p>
+<div><p>Belief propagation will terminate when the average change in posterior beliefs between supersteps is less than or equal to this threshold.</p>
 </div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=None)</p>
+<p><strong>max_iterations</strong> : int32 (default=20)</p>
 <blockquote class="last">
-<div><p>The maximum number of supersteps that the algorithm will execute.
-The valid range is all positive int.</p>
+<div><p>The maximum number of supersteps that the algorithm will execute.The valid range is all positive int.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -251,7 +245,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 04, 2015.
+      Last updated on Dec 05, 2015.
       </li>
     </ul>
     </div>

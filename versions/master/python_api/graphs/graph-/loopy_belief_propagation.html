@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="loopy_belief_propagation">
-<code class="descname">loopy_belief_propagation</code><span class="sig-paren">(</span><em>self</em>, <em>prior_property</em>, <em>posterior_property</em>, <em>edge_weight_property=None</em>, <em>convergence_threshold=None</em>, <em>max_iterations=None</em><span class="sig-paren">)</span><a class="headerlink" href="#loopy_belief_propagation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">loopy_belief_propagation</code><span class="sig-paren">(</span><em>self</em>, <em>prior_property</em>, <em>posterior_property</em>, <em>edge_weight_property=''</em>, <em>convergence_threshold=0.0</em>, <em>max_iterations=20</em><span class="sig-paren">)</span><a class="headerlink" href="#loopy_belief_propagation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classification on sparse data using Belief Propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -123,29 +123,23 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prior_property</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the vertex property which contains the prior belief
-for the vertex.</p>
+<div><p>Name of the vertex property which contains the prior belief for the vertex.</p>
 </div></blockquote>
 <p><strong>posterior_property</strong> : unicode</p>
 <blockquote>
-<div><p>Name of the vertex property which
-will contain the posterior belief for each
-vertex.</p>
+<div><p>Name of the vertex property which will contain the posterior belief for each vertex.</p>
 </div></blockquote>
-<p><strong>edge_weight_property</strong> : unicode (default=None)</p>
+<p><strong>edge_weight_property</strong> : unicode (default=)</p>
 <blockquote>
 <div><p>Name of the edge property that contains the edge weight for each edge.</p>
 </div></blockquote>
-<p><strong>convergence_threshold</strong> : float64 (default=None)</p>
+<p><strong>convergence_threshold</strong> : float64 (default=0.0)</p>
 <blockquote>
-<div><p>Belief propagation will terminate
-when the average change in posterior beliefs between supersteps is
-less than or equal to this threshold.</p>
+<div><p>Belief propagation will terminate when the average change in posterior beliefs between supersteps is less than or equal to this threshold.</p>
 </div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=None)</p>
+<p><strong>max_iterations</strong> : int32 (default=20)</p>
 <blockquote>
-<div><p>The maximum number of supersteps that the algorithm will execute.
-The valid range is all positive int.</p>
+<div><p>The maximum number of supersteps that the algorithm will execute.The valid range is all positive int.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -188,7 +182,7 @@ for a more in-depth discussion of <abbr title="Belief Propagation">BP</abbr> and
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 04, 2015.
+      Last updated on Dec 05, 2015.
       </li>
     </ul>
     </div>
