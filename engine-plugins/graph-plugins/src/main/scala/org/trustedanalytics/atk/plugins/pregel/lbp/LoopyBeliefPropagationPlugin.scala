@@ -14,21 +14,17 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.pregel
+package org.trustedanalytics.atk.plugins.pregel.lbp
 
-import org.apache.spark.graphx._
+import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs }
-import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.trustedanalytics.atk.plugins.VectorMath
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 import org.trustedanalytics.atk.plugins.pregel.core._
 
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol
-import JsonFormat._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.plugins.pregel.core.JsonFormat._
 
 /**
  * Launches loopy belief propagation.
@@ -81,7 +77,7 @@ class LoopyBeliefPropagationPlugin extends SparkCommandPlugin[PluginArgs, Return
       arguments.convergenceThreshold,
       arguments.edgeWeightProperty)
 
-    val (outVertices, outEdges, log) = PregelAlgorithm.run(gbVertices, gbEdges, runnerArgs)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (outVertices, outEdges, log) = PregelAlgorithm.run(gbVertices, gbEdges, runnerArgs)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
 
     val frameRddMap = FrameRdd.toFrameRddMap(outVertices)
     val frameMap = frameRddMap.keys.map(label => {

@@ -54,7 +54,8 @@ object PregelAlgorithm extends Serializable {
    * @return Vertex and edge list for the output graph and a logging string reporting on the execution of the belief
    *         propagation run.
    */
-  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: PregelArgs)(vertexProgram: (VertexId, VertexState, Map[Long, Vector[Double]]) => VertexState): (RDD[GBVertex], RDD[GBEdge], String) = {
+  def run(inVertices: RDD[GBVertex], inEdges: RDD[GBEdge], args: PregelArgs)(vertexProgram: (VertexId, VertexState, Map[Long, Vector[Double]]) => VertexState,
+                                                                             msgSender: (EdgeTriplet[VertexState, Double]) => Iterator[(VertexId, Map[Long, Vector[Double]])]): (RDD[GBVertex], RDD[GBEdge], String) = {
 
     val outputPropertyLabel = args.posteriorProperty
     val inputPropertyName: String = args.priorProperty
@@ -90,21 +91,18 @@ object PregelAlgorithm extends Serializable {
 
         // convert to graphX vertices
         val graphXVertices: RDD[(Long, VertexState)] =
-          inVertices.map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], bpVertexStateFromVertex(gbVertex, inputPropertyName, stateSpaceSize)))
+          inVertices.map(gbVertex => (gbVertex.physicalId.asInstanceOf[Long], vertexStateFromVertex(gbVertex, inputPropertyName, stateSpaceSize)))
 
-        val graphXEdges = inEdges.map(edge => bpEdgeStateFromEdge(edge, args.edgeWeightProperty, DefaultValues.edgeWeightDefault))
+        val graphXEdges = inEdges.map(edge => edgeStateFromEdge(edge, args.edgeWeightProperty, DefaultValues.edgeWeightDefault))
         val graph = Graph[VertexState, Double](graphXVertices, graphXEdges)
           .partitionBy(PartitionStrategy.RandomVertexCut)
 
-        val runner = new PregelWrapper(maxIterations,
-          DefaultValues.powerDefault,
-          DefaultValues.smoothingDefault,
-          convergenceThreshold)
-        val (newGraph, log) = runner.run(graph)(vertexProgram)
+        val runner = new PregelWrapper(maxIterations, convergenceThreshold)
+        val (newGraph, log) = runner.run(graph)(vertexProgram, msgSender)
 
         val outVertices = newGraph.vertices.map({
           case (vid, vertexState) =>
-            vertexFromBPVertexState(vertexState, outputPropertyLabel, beliefsAsStrings)
+            vertexFromVertexState(vertexState, outputPropertyLabel, beliefsAsStrings)
         })
 
         (outVertices, inEdges, log)
@@ -113,9 +111,36 @@ object PregelAlgorithm extends Serializable {
   }
 
   /**
+   * The edge potential function provides an estimate of how compatible the states are between two joined vertices.
+   * This is the one inspired by the Boltzmann distribution.
+   * @param state1 State of the first vertex.
+   * @param state2 State of the second vertex.
+   * @param weight Edge weight.
+   * @return Compatibility estimate for the two states..
+   */
+  def edgePotential(state1: Int, state2: Int, weight: Double) = {
+
+    val compatibilityFactor =
+      if (DefaultValues.powerDefault == 0d) {
+        if (state1 == state2)
+          0d
+        else
+          1d
+      }
+      else {
+        val delta = Math.abs(state1 - state2)
+        Math.pow(delta, DefaultValues.powerDefault)
+      }
+
+    -1.0d * compatibilityFactor * weight * DefaultValues.smoothingDefault
+  }
+
+  /**
    * converts incoming edge to the form consumed by the belief propagation computation
    */
-  private def bpEdgeStateFromEdge(gbEdge: GBEdge, edgeWeightPropertyNameOption: String, defaultEdgeWeight: Double) = {
+  private def edgeStateFromEdge(gbEdge: GBEdge,
+                                edgeWeightPropertyNameOption: String,
+                                defaultEdgeWeight: Double) = {
 
     val weight: Double = if (edgeWeightPropertyNameOption.nonEmpty) {
       val edgeWeightPropertyName = edgeWeightPropertyNameOption
@@ -139,8 +164,9 @@ object PregelAlgorithm extends Serializable {
   /**
    * Converts incoming vertex to the form consumed by the belief propagation computation
    */
-  private def bpVertexStateFromVertex(gbVertex: GBVertex,
-                                      inputPropertyName: String, stateSpaceSize: Int): VertexState = {
+  private def vertexStateFromVertex(gbVertex: GBVertex,
+                                    inputPropertyName: String,
+                                    stateSpaceSize: Int): VertexState = {
 
     val property = gbVertex.getProperty(inputPropertyName)
 
@@ -170,7 +196,9 @@ object PregelAlgorithm extends Serializable {
   /**
    * converts vertex in belief propagation output into the common graph representation for output
    */
-  private def vertexFromBPVertexState(vertexState: VertexState, outputPropertyLabel: String, beliefsAsStrings: Boolean) = {
+  private def vertexFromVertexState(vertexState: VertexState,
+                                    outputPropertyLabel: String,
+                                    beliefsAsStrings: Boolean) = {
     val oldGBVertex = vertexState.gbVertex
 
     val posteriorProperty: Property = if (beliefsAsStrings) {

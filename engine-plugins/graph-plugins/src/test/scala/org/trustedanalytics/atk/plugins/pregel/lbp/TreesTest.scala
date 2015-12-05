@@ -21,7 +21,6 @@ import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
 import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
@@ -150,7 +149,7 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation, LoopyBeliefPropagationMessage.send)
 
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet

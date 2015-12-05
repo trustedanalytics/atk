@@ -1,4 +1,4 @@
-package org.trustedanalytics.atk.plugins.pregel
+package org.trustedanalytics.atk.plugins.pregel.lbp
 
 import org.apache.spark.graphx._
 import org.trustedanalytics.atk.plugins.VectorMath
