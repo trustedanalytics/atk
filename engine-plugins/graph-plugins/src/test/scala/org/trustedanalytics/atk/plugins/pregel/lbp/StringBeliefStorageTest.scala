@@ -14,12 +14,13 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.pregel
+package org.trustedanalytics.atk.plugins.pregel.lbp
 
 import org.apache.commons.lang3.StringUtils
-import org.scalatest.{ Matchers, FlatSpec }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.apache.spark.rdd.RDD
+import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
+import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
 import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
