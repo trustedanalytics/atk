@@ -48,9 +48,9 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
         repo.lookup(id)
     }
 
-  override def lookupByName(yarnAppName: String): Option[JobContext] = metaStore.withSession("se.command.lookup") {
+  override def lookupByName(appName: String): Option[JobContext] = metaStore.withSession("se.jobcontext.lookup") {
     implicit session =>
-      repo.lookupByName(Some(yarnAppName))
+      repo.lookupByName(Some(appName))
   }
 
   override def create(createReq: JobContextTemplate): JobContext =

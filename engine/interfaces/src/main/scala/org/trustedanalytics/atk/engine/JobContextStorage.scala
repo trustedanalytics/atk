@@ -27,7 +27,7 @@ trait JobContextStorage {
    */
   def lookup(id: Long): Option[JobContext]
 
-  def lookupByName(yarnAppName: String): Option[JobContext]
+  def lookupByName(appName: String): Option[JobContext]
 
   /** Look-up a Command expecting it exists, throw Exception otherwise */
   def expectCommand(id: Long): JobContext = {

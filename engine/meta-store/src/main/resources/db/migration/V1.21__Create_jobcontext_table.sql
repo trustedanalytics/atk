@@ -15,7 +15,7 @@ CREATE TABLE jobcontext (
   user_id bigint REFERENCES users (user_id),
   yarn_app_name character varying(254) UNIQUE,
   yarn_app_id character varying(254) UNIQUE,
-  repl_id character varying(254) NOT NULL,
+  client_id character varying(254) NOT NULL,
   created_on timestamp without time zone NOT NULL,
   modified_on timestamp without time zone NOT NULL,
   progress text,

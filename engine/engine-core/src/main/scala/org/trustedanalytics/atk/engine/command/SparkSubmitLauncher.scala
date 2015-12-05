@@ -167,7 +167,6 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
           engineImpl.jobContextStorage.create(newJobContextTemplate)
         }
         engineImpl.commandStorage.updateJobContextId(command.id, result.id)
-        result
       }
     }
   }

@@ -1197,7 +1197,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
       def yarnAppId = column[String]("yarn_app_id")
 
-      def replId = column[String]("repl_id")
+      def clientId = column[String]("client_id")
 
       def createdOn = column[DateTime]("created_on")
 
@@ -1208,7 +1208,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       def jobServerUri = column[Option[String]]("job_server_uri")
 
       /** projection to/from the database */
-      override def * = (id, userId, yarnAppName, yarnAppId, replId,
+      override def * = (id, userId, yarnAppName, yarnAppId, clientId,
         createdOn, modifiedOn, progress, jobServerUri) <> (JobContext.tupled, JobContext.unapply)
 
     }

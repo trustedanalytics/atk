@@ -28,37 +28,42 @@ import scala.collection.JavaConversions._
 
 object YarnUtils extends EventLogging {
 
-  /* Kill Yarn Application given job name */
-  def killYarnJob(jobName: String): Unit = {
+  def using[A <: { def close(): Unit }, B](resource: A)(f: A => B): B =
+    try {
+      f(resource)
+    }
+    finally {
+      resource.close()
+    }
+
+  def initYarnClient(): YarnClient = {
     val yarnClient = YarnClient.createYarnClient
     val yarnConf = new YarnConfiguration(new Configuration())
     yarnClient.init(yarnConf)
-    yarnClient.start()
-    val app = yarnClient.getApplications.find(ap => ap.getName == jobName)
-    if (app.isDefined) {
-      info(s"Killing yarn application ${app.get.getApplicationId} which corresponds to command $jobName")
-      yarnClient.killApplication(app.get.getApplicationId)
+    yarnClient
+  }
+
+  /* Kill Yarn Application given job name */
+  def killYarnJob(jobName: String): Unit = {
+    val yarnClient = initYarnClient()
+    using[YarnClient, Unit](yarnClient) {
+      yarnClient =>
+        val app = yarnClient.getApplications.find(ap => ap.getName == jobName)
+        if (app.isDefined) {
+          info(s"Killing yarn application ${app.get.getApplicationId} which corresponds to command $jobName")
+          yarnClient.killApplication(app.get.getApplicationId)
+        }
     }
-    else {
-      throw new Exception(s"Could not cancel command $jobName as application could not be found on yarn")
-    }
-    yarnClient.stop()
   }
 
   /* Get Yarn Application Id given job name */
   def getYarnJobId(jobName: String): String = {
-    val yarnClient = YarnClient.createYarnClient
-    val yarnConf = new YarnConfiguration(new Configuration())
-    yarnClient.init(yarnConf)
-    yarnClient.start()
-
+    val yarnClient = initYarnClient()
     val allStates = java.util.EnumSet.copyOf(YarnApplicationState.values().toSeq)
-    val app = yarnClient.getApplications(allStates).find(ap => ap.getName == jobName)
-    try {
-      app.get.getApplicationId.toString
-    }
-    finally {
-      yarnClient.stop()
+    using[YarnClient, String](yarnClient) {
+      yarnClient =>
+        val app = yarnClient.getApplications(allStates).find(ap => ap.getName == jobName)
+        app.get.getApplicationId.toString
     }
   }
 }

@@ -19,6 +19,13 @@ import org.trustedanalytics.atk.domain.HasId
 import org.joda.time.DateTime
 import spray.json.JsObject
 
-case class JobContext(id: Long, userId: Long, yarnAppName: String, yarnAppId: String, replId: String,
-                      createdOn: DateTime, modifiedOn: DateTime, progress: Option[String] = None,
+// JobContext class to store the yarn job & application master details
+case class JobContext(id: Long,
+                      userId: Long,
+                      yarnAppName: String,
+                      yarnAppId: String,
+                      clientId: String,
+                      createdOn: DateTime,
+                      modifiedOn: DateTime,
+                      progress: Option[String] = None,
                       jobServerUri: Option[String] = None) extends HasId
