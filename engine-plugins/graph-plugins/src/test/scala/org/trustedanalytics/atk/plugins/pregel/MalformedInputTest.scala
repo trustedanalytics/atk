@@ -14,12 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel
 
+import org.apache.commons.lang3.StringUtils
 import org.scalatest.{ Matchers, FlatSpec }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.SparkException
+import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
@@ -39,12 +41,12 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = None,
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
   }
@@ -52,34 +54,35 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
   "BP Runner" should "throw an illegal argument exception when vertices have different prior state space sizes " in new BPTest {
 
     val vertexSet: Set[Long] = Set(1, 2)
-
     val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d), 2.toLong -> Vector(0.5d, 0.5d))
 
     //  directed edge list is made bidirectional with a flatmap
-
     val edgeSet: Set[(Long, Long)] = Set()
-
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, pdfValues.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x,
+      Property(vertexIdPropertyName, x),
+      Set(Property(inputPropertyName, pdfValues.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst,
+            Property(srcIdPropertyName, src),
+            Property(dstIdPropertyName, dst),
+            edgeLabel, Set.empty[Property]
+          )
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
         GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, pdfValues.get(vid).get),
           Property(propertyForLBPOutput, pdfValues.get(vid).get))))
-
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
-
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[SparkException] {
-      val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+      val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
     }
 
     exception.asInstanceOf[SparkException].getMessage should include("IllegalArgumentException")
@@ -89,15 +92,11 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
   "BP Runner" should "throw a NotFoundException when the vertex does provide the request property" in new BPTest {
 
     val vertexSet: Set[Long] = Set(1)
-
     val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d))
 
     //  directed edge list is made bidirectional with a flatmap
-
     val edgeSet: Set[(Long, Long)] = Set()
-
     val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property("hahawrongname", pdfValues.get(x).get))))
-
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
@@ -110,13 +109,12 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
           Property(propertyForLBPOutput, pdfValues.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
-
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[Exception] {
-      LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+      PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
     }
 
     exception.asInstanceOf[Exception].getMessage should include("not be found")

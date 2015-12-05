@@ -14,9 +14,11 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.plugins.VectorMath
+import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ Matchers, FlatSpec }
@@ -42,12 +44,12 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = None,
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
   }
@@ -147,7 +149,7 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet

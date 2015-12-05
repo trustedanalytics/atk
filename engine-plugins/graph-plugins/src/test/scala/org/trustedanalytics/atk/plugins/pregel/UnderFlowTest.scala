@@ -14,11 +14,13 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel
 
+import org.apache.commons.lang3.StringUtils
 import org.scalatest.{ Matchers, FlatSpec }
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
+import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
@@ -38,12 +40,12 @@ class UnderFlowTest extends FlatSpec with Matchers with TestingSparkContextFlatS
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = None,
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
   }
@@ -70,14 +72,15 @@ class UnderFlowTest extends FlatSpec with Matchers with TestingSparkContextFlatS
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     val testVertices = verticesOut.collect().toSet
-
-    def vectorStrictlyPositive(v: Vector[Double]) = v.forall(x => x >= 0d) && v.exists(x => x > 0d)
-
     val test = testVertices.forall(v => vectorStrictlyPositive(v.getProperty(propertyForLBPOutput).get.value.asInstanceOf[Vector[Double]]))
 
     test shouldBe true
+  }
+
+  private def vectorStrictlyPositive(v: Vector[Double]) = {
+    v.forall(x => x >= 0d) && v.exists(x => x > 0d)
   }
 }
