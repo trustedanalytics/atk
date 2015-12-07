@@ -17,7 +17,6 @@ Models
     LinearRegressionModel <model-linear_regression/index.rst>
     RandomForestRegressorModel <model-random_forest_regressor/index.rst>
     PowerIterationClusteringModel <model-power_iteration_clustering/index.rst>
-    GiraphCollaborativeFilteringModel <model-giraph_collaborative_filtering/index.rst>
 
 .. toctree::
     :hidden:
