@@ -90,27 +90,6 @@ def request_server_command_defs(server):
         raise IaError(logger)
 
 
-def dump_server_command_defs(server, where=None, select=None):
-    """Gets command defs from server and returns raw JSON"""
-    response = request_server_command_defs(server)
-    if not where:
-        def w(command):
-            return True
-        where = w
-    if not select:
-        def s(command):
-            return command
-        select = s
-    return [select(c) for c in response.json() if where(c)]
-
-
-def dump_server_command_defs_to_file(server, file_name, where=None, select=None):
-    """Gets command defs from server and dumps them to a file, as raw JSON"""
-    commands = dump_server_command_defs(server, where, select)
-    with open(file_name, "w") as f:
-        json.dump(commands, f, indent=2)
-
-
 def download_server_details(server):
     """Ask server for details about itself: the build ID and the API command defs"""
     logger.info("Requesting available commands from server")
@@ -391,3 +370,92 @@ class ApiInfo(object):
 
     def __repr__(self):
         return "\n".join([str(t) for t in self.get_big_tuples()])
+
+
+class ServerApiRaw(object):
+    """Object to hold raw metadata JSON from the server concerning the commands API"""
+
+    def __init__(self, server):
+        """Fetches API command metadata from the given server"""
+        self.server = server
+        self.raw = request_server_command_defs(self.server).json()
+
+    @property
+    def count(self):
+        """number of API commands presented by the server"""
+        return len(self.raw)
+
+    def get_command_meta_keys(self):
+        """Gets all the keys in the json object which describes a command"""
+        if len(self.raw) > 0:
+            return self.raw[0].keys()
+        raise RuntimeError("There are no commands from which to extract the keys.")
+
+    def get_command_names(self, search=None):
+        """Lists all the command names from the server, with option search string with wildcard"""
+        if search:
+            import re
+            pattern = re.compile(search.replace("*", ".*?"))  # change to regex non-greedy wildcard
+            return [x['name'] for x in self.get_command_meta(select="name") if pattern.search(x['name'])]
+
+        return [x['name'] for x in self.get_command_meta(select="name")]
+
+    def get_command_meta(self, command_name=None, where=None, select=None):
+        """presents the command meta data as json, with optional filters"""
+        if command_name is not None:
+            if where is not None:
+                raise ValueError("cannot set both 'command_name' and 'where'; use only 'where' in this situation.")
+
+            if "*" in command_name:
+                import re
+                pattern = re.compile(command_name.replace("*", ".*?"))  # change to regex non-greedy wildcard
+
+                def command_name_wild_where(command):
+                    return pattern.search(command["name"])
+                where = command_name_wild_where
+
+            else:
+                name = command_name
+
+                def command_name_where(command):
+                    return command["name"] == name
+                where = command_name_where
+
+        if isinstance(select, list) or isinstance(select, basestring):
+            if isinstance(select, basestring):
+                select = [select]
+            keys = select
+            if "name" not in keys:
+                keys.append("name")
+
+            def select_keys(command):
+                try:
+                    return dict([(key, command[key]) for key in keys])
+                except KeyError as e:
+                    try:
+                        msg = e.message + "\n" + str(get_command_meta_keys())
+                    except:
+                        msg = e.message
+                    raise KeyError(msg)
+            select = select_keys
+
+        return self._filter_raw(where=where, select=select)
+
+    def dump_command_meta_to_file(self, file_name, command_name=None, where=None, select=None):
+        """Gets command defs from server and dumps them to a file, as raw JSON"""
+        commands = self.get_command_meta(command_name, where, select)
+        with open(file_name, "w") as f:
+            json.dump(commands, f, indent=2)
+
+    def _filter_raw(self, where=None, select=None):
+        """helper method to filter the raw json"""
+        if not where:
+            def w(command):
+                return True
+            where = w
+        if not select:
+            def s(command):
+                return command
+            select = s
+        return [select(c) for c in self.raw if where(c)]
+
