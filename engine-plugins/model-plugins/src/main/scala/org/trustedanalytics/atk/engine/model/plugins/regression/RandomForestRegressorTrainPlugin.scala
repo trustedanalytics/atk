@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.spray.json.JsonMaps
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -40,7 +41,7 @@ case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be u
                                           @ArgDoc("""Maxium depth of the tree. Default is 4.""") maxDepth: Int = 4,
                                           @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
                                           @ArgDoc("""Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.""") seed: Int = scala.util.Random.nextInt(),
-                                          @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
+                                          @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}""") categoricalFeaturesInfo: Option[Map[String, Int]] = None,
                                           @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird".
 If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
@@ -51,7 +52,8 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   require(maxDepth >= 0, "maxDepth must be non negative")
 
   def getCategoricalFeaturesInfo: Map[Int, Int] = {
-    categoricalFeaturesInfo.getOrElse(Map[Int, Int]())
+    // to get around spray-json limitation
+    JsonMaps.convertMapKeyToInt[Int](categoricalFeaturesInfo, Map[Int, Int]())
   }
 
   def getFeatureSubsetCategory: String = {

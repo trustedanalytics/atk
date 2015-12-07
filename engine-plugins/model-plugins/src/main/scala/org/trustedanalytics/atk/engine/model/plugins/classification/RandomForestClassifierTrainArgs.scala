@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.spray.json.JsonMaps
 
 case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                            @ArgDoc("""A frame to train the model on""") frame: FrameReference,
@@ -57,15 +58,8 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
   }
 
   def getCategoricalFeaturesInfo: Map[Int, Int] = {
-    if (categoricalFeaturesInfo.isEmpty) {
-      Map[Int, Int]()
-    }
-    else {
-      // This arg is a Map[String,Int] because JSON spec requires String keys and spray-json can't handle
-      // the conversion; the inconvenience is deemed better here, since adding an explicit implicit conversion
-      // for Map[Int, Int] in DomainJsonProtocol didn't seem to take
-      categoricalFeaturesInfo.get.map { case (k, v) => (k.toInt, v) }
-    }
+    // to get around spray-json limitation
+    JsonMaps.convertMapKeyToInt[Int](categoricalFeaturesInfo, Map[Int, Int]())
   }
 
 }
