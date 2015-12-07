@@ -38,11 +38,11 @@ Request
 
 
 
-    **names** : None
+    **names** : dict
 
     ..
 
-        <Missing Description>
+        Dictionary of old names to new names.
 
 
 

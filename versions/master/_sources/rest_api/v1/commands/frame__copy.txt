@@ -44,11 +44,11 @@ Request
 
 
 
-    **columns** : None (default=None)
+    **columns** : dict (default=None)
 
     ..
 
-        <Missing Description>
+        dictionary of column names to include in the copy and target names
 
 
 

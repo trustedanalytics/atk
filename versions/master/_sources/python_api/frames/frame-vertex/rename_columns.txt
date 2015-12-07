@@ -12,11 +12,11 @@
 
     :Parameters:
 
-        **names** : None
+        **names** : dict
 
         ..
 
-
+            Dictionary of old names to new names.
 
 
 

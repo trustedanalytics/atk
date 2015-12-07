@@ -103,7 +103,7 @@ Request
 
 
 
-    **seed** : int32 (default=-472218063)
+    **seed** : int32 (default=2136496343)
 
     ..
 
@@ -111,11 +111,11 @@ Request
 
 
 
-    **categorical_features_info** : None (default=None)
+    **categorical_features_info** : dict (default=None)
 
     ..
 
-        <Missing Description>
+        Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}.
 
 
 
@@ -123,8 +123,7 @@ Request
 
     ..
 
-        Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird.
-        If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"
+        Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird".  If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"
 
 
 
