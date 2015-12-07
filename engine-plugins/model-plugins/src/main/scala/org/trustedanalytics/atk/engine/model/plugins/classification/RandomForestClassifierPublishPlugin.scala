@@ -30,6 +30,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.RandomForestModelReaderPlugin
 
 /**
  * Publish a Random Forest Classifier Model for scoring
@@ -81,7 +82,7 @@ class RandomForestClassifierPublishPlugin extends CommandPlugin[ModelPublishArgs
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin")
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[RandomForestModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("random_forest_classifier_model"))
   }
 }
