@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 import unittest
@@ -68,6 +70,20 @@ class FrameDropTest(unittest.TestCase):
 
         # expect no exception
 
+    # Tests drop_frames() and checks drop count with multiple of the same items
+    def test_generic_drop_duplicate_items(self):
+        frame_name = str(uuid.uuid1()).replace('-','_')
+        frame = ta.Frame(name=frame_name)
+
+        # Check that the frame we just created now exists
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frame names")
+
+        # drop_frames() with multiple of the same item
+        self.assertEqual(1, ta.drop_frames([frame, frame, frame_name]), "drop_frames() should have deleted 1 item")
+
+        # Check that the frame no longer exists
+        self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not be in the list of frame names")
+
     # Tests the generic ta.drop() using the frame proxy object
     def test_generic_drop_by_object(self):
         frame_name = str(uuid.uuid1()).replace('-','_')
@@ -114,6 +130,40 @@ class FrameDropTest(unittest.TestCase):
         # Call drop() with the test object
         with self.assertRaises(AttributeError):
             ta.drop(test_object)
+
+    # Tests the generic drop() with a list of frames/names
+    def test_generic_drop_with_list(self):
+        frame_name1 = str(uuid.uuid1()).replace('-','_')
+        frame1 = ta.Frame(name=frame_name1)
+        frame_name2 = str(uuid.uuid1()).replace('-','_')
+        ta.Frame(name=frame_name2)
+
+        # Create list with frame proxy object and frame name
+        frameList = [frame1, frame_name2]
+
+        # Check that the frames we just created now exist
+        self.assertTrue(frame_name1 in ta.get_frame_names(), frame_name1 + " should exist in the list of frame names")
+        self.assertTrue(frame_name2 in ta.get_frame_names(), frame_name2 + " should exist in the list of frame names")
+
+        self.assertEqual(2, ta.drop(frameList), "drop() should have deleted the 2 items from the list")
+
+        # Check that the frames no longer exist
+        self.assertFalse(frame_name1 in ta.get_frame_names(), frame_name1 + " should not be in the list of frame names")
+        self.assertFalse(frame_name2 in ta.get_frame_names(), frame_name2 + " should not be in the list of frame names")
+
+    # Tests the generic drop() and checks drop count with multiple of the same items
+    def test_generic_drop_duplicate_items(self):
+        frame_name = str(uuid.uuid1()).replace('-','_')
+        frame = ta.Frame(name=frame_name)
+
+        # Check that the frame we just created now exists
+        self.assertTrue(frame_name in ta.get_frame_names(), frame_name + " should exist in the list of frame names")
+
+        self.assertEqual(1, ta.drop(frame, frame, frame_name), "drop() should have deleted 1 item")
+
+        # Check that the frame no longer exists
+        self.assertFalse(frame_name in ta.get_frame_names(), frame_name + " should not be in the list of frame names")
+
 
 if __name__ == "__main__":
     unittest.main()

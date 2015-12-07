@@ -1,23 +1,23 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
-import com.google.common.base.Charsets
+import java.nio.charset.Charset
 import org.apache.commons.compress.archivers.tar.{ TarArchiveOutputStream, TarArchiveEntry, TarArchiveInputStream }
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
@@ -41,7 +41,7 @@ class ModelPublishFormatTest extends WordSpec {
       try {
         tarFile = File.createTempFile("TestTar", ".tar")
         tarOutput = new FileOutputStream(tarFile)
-        ModelPublishFormat.write(fileList, modelReader, model.getBytes(Charsets.UTF_8), tarOutput)
+        ModelPublishFormat.write(fileList, modelReader, model.getBytes(Charset.forName("utf-8")), tarOutput)
 
         myTarFileStream = new TarArchiveInputStream(new FileInputStream(new File(tarFile.getAbsolutePath)))
 
@@ -53,15 +53,13 @@ class ModelPublishFormatTest extends WordSpec {
           myTarFileStream.read(content, 0, content.length)
 
           if (individualFile.contains(".jar")) {
-            val fileName = filePath.substring(filePath.indexOf("/") + 1)
-            assert(individualFile.equals(fileName))
             counter = counter + 1
           }
           else if (individualFile.contains("modelReader")) {
             assert(new String(content).equals(modelReader))
           }
           else {
-            assert(content.length == model.getBytes(Charsets.UTF_8).length)
+            assert(content.length == model.getBytes(Charset.forName("utf-8")).length)
           }
           entry = myTarFileStream.getNextTarEntry
         }
@@ -97,7 +95,7 @@ class ModelPublishFormatTest extends WordSpec {
       IOUtils.copy(new FileInputStream(testJar), testTarBall)
       testTarBall.closeArchiveEntry()
 
-      FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes(Charsets.UTF_8))
+      FileUtils.writeByteArrayToFile(modelDataFile, "This is a test model data".getBytes(Charset.forName("utf-8")))
       writeEntry(modelDataFile)
 
       FileUtils.writeStringToFile(modelLoaderFile, "org.trustedanalytics.atk.model.publish.format.TestModelReaderPlugin")

@@ -1,23 +1,23 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.domain
 
 import java.net.URI
-import java.util
+import java.util.ArrayList
 
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, CommandDefinition }
@@ -37,7 +37,7 @@ import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.graph.construction._
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference, GraphTemplate }
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema, Column }
 import org.joda.time.{ Duration, DateTime }
 import org.trustedanalytics.atk.engine._
 
@@ -85,7 +85,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     }
   }
 
-  implicit val columnFormat: RootJsonFormat[Column] = jsonFormat3(Column)
+  implicit val columnFormat: RootJsonFormat[Column] = jsonFormat3(Column.apply)
   implicit val frameSchemaFormat: RootJsonFormat[FrameSchema] = jsonFormat(FrameSchema, "columns")
   implicit val vertexSchemaFormat: RootJsonFormat[VertexSchema] = jsonFormat(VertexSchema, "columns", "label", "id_column_name")
   implicit val edgeSchemaFormat: RootJsonFormat[EdgeSchema] = jsonFormat(EdgeSchema, "columns", "label", "src_vertex_label", "dest_vertex_label", "directed")
@@ -232,7 +232,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
       case JsArray(elements) =>
         val collection = typeOf[E] match {
           case t if t =:= typeOf[java.util.Set[T]] => new java.util.HashSet[T]()
-          case t if t =:= typeOf[java.util.List[T]] => new util.ArrayList[T]()
+          case t if t =:= typeOf[java.util.List[T]] => new java.util.ArrayList[T]()
           case x => deserializationError(s"Unable to deserialize Java collections of type $x")
         }
         val javaCollection = elements.map(_.convertTo[T]).asJavaCollection
@@ -342,7 +342,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val groupByColumnFormat = jsonFormat3(GroupByArgs)
   implicit val copyWhereFormat = jsonFormat2(CountWhereArgs)
 
-  implicit val errorFormat = jsonFormat5(Error)
+  implicit val errorFormat = jsonFormat2(Error)
   implicit val flattenColumnLongFormat = jsonFormat3(FlattenColumnArgs)
   implicit val unflattenColumnLongFormat = jsonFormat3(UnflattenColumnArgs)
   implicit val dropDuplicatesFormat = jsonFormat2(DropDuplicatesArgs)
@@ -362,8 +362,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val categoricalColumnOutput = jsonFormat2(CategoricalSummaryOutput)
   implicit val categoricalSummaryArgsFormat = jsonFormat2(CategoricalSummaryArgs)
   implicit val categoricalSummaryReturnFormat = jsonFormat1(CategoricalSummaryReturn)
-
-  implicit val computeMisplacedScoreInput = jsonFormat2(ComputeMisplacedScoreArgs)
 
   implicit val columnModeFormat = jsonFormat4(ColumnModeArgs)
   implicit val columnModeReturnFormat = jsonFormat4(ColumnModeReturn)
@@ -413,7 +411,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   }
   implicit val modelTemplateFormat = jsonFormat2(ModelTemplate)
   implicit val modelRenameFormat = jsonFormat2(RenameModelArgs)
-  implicit val modelFormat = jsonFormat11(ModelEntity)
+  implicit val modelFormat = jsonFormat12(ModelEntity)
   implicit val genericNewModelArgsFormat = jsonFormat2(GenericNewModelArgs)
 
   // kmeans formats

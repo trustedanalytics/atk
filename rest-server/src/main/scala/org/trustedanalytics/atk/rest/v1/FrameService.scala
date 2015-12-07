@@ -1,24 +1,25 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.rest.v1
 
 import org.trustedanalytics.atk.DuplicateNameException
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ RowQueryArgs, QueryResult }
+import org.trustedanalytics.atk.domain.util.DataToJson
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.rest.threading.SprayExecutionContext
 import spray.json._
@@ -29,7 +30,7 @@ import scala.concurrent._
 import scala.util._
 import org.trustedanalytics.atk.rest.CommonDirectives
 import spray.routing.Directives
-import org.apache.commons.lang.StringUtils
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import org.trustedanalytics.atk.rest.v1.decorators.FrameDecorator
 
@@ -133,7 +134,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                         complete(GetQuery(id = None, error = None,
                           name = "getRows", arguments = None, complete = true,
                           result = Some(GetQueryPage(
-                            Some(dataToJson(r.data)), None, None, r.schema)),
+                            Some(DataToJson(r.data)), None, None, r.schema)),
                           links = List(Rel.self(uri.toString))))
                       }
                       case Failure(ex) => throw ex
@@ -146,16 +147,4 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
     }
   }
 
-  /**
-   * Convert an Iterable of Any to a List of JsValue. Required due to how spray-json handles AnyVals
-   * @param data iterable to return in response
-   * @return JSON friendly version of data
-   */
-  def dataToJson(data: Iterable[Array[Any]]): List[JsValue] = {
-    import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-    data.map(row => row.map {
-      case null => JsNull
-      case a => a.toJson
-    }.toJson).toList
-  }
 }

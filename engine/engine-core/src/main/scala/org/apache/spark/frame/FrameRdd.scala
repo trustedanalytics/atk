@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.apache.spark.frame
 
@@ -160,6 +160,22 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     )
   }
 
+  /**
+   * Convert FrameRdd to RDD[(Long, Long, Double)]
+   * @param sourceColumnName Name of the frame's column storing the source id of the edge
+   * @param destinationColumnName Name of the frame's column storing the destination id of the edge
+   * @param edgeSimilarityColumnName Name of the frame's column storing the similarity between the source and destination
+   * @return RDD[(Long, Long, Double)]
+   */
+  def toSourceDestinationSimilarityRDD(sourceColumnName: String, destinationColumnName: String, edgeSimilarityColumnName: String): RDD[(Long, Long, Double)] = {
+    this.mapRows(row => {
+      val source: Long = row.longValue(sourceColumnName)
+      val destination: Long = row.longValue(destinationColumnName)
+      val similarity: Double = row.doubleValue(edgeSimilarityColumnName)
+      (source, destination, similarity)
+    })
+  }
+
   def toVectorRDD(featureColumnNames: List[String]) = {
     this mapRows (row => {
       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
@@ -289,7 +305,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return New frame with updated rows
    */
   def update(newRows: RDD[Row]): Self = {
-    (new FrameRdd(this.frameSchema, newRows)).asInstanceOf[Self]
+    new FrameRdd(this.frameSchema, newRows).asInstanceOf[Self]
   }
 
   /**

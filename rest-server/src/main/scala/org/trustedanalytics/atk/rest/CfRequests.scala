@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.rest
 
@@ -139,7 +139,7 @@ object CfRequests extends EventLogging with EventLoggingImplicits {
    * @param headers headers for GET request such as OAuth Authorization etc.
    * @return Parsed Json Response
    */
-  private def httpsGetQuery(host: String, queryString: String, headers: List[(String, String)]): JsValue = withContext("httpsGetQuery") {
+  def httpsGetQuery(host: String, queryString: String, headers: List[(String, String)]): JsValue = withContext("httpsGetQuery") {
 
     // TODO: This method uses Apache HttpComponents HttpClient as spray-http library does not support proxy over https
     val scheme = if (RestServerConfig.useHttp) new String(HttpURL.DEFAULT_SCHEME) else new String(HttpsURL.DEFAULT_SCHEME)
@@ -177,7 +177,8 @@ object CfRequests extends EventLogging with EventLoggingImplicits {
       catch {
         case ex: Throwable =>
           error(s"Error executing request ${ex.getMessage}")
-          throw new RuntimeException(s"Error connecting to $host")
+          // We need this exception to be thrown as this is a generic http request method and let caller handle.
+          throw ex
       }
       finally {
         if (response.isDefined)

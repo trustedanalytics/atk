@@ -1,19 +1,45 @@
 #!/bin/bash
 #
+#  Copyright (c) 2015 Intel Corporation 
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
+#
 # This is a special version of the REST Server start-up script for integration testing on a build machine
 #
 
 NAME="[`basename $0`]"
 DIR="$( cd "$( dirname "$0" )" && pwd )"
+export TARGET_DIR=$DIR/target
 
 echo "$NAME DIR=$DIR"
 
 CONFDIR=$DIR/conf
 
-if [[ -f $DIR/../misc/launcher/target/launcher.jar ]]; then
-	LAUNCHER=$DIR/../misc/launcher/target/launcher.jar
+# needed for Python UDFs to work locally
+if [ -z "$SPARK_HOME" ]
+then
+    export SPARK_HOME=/opt/cloudera/parcels/CDH/lib/spark/
 fi
 
+echo "$NAME SPARK_HOME=$SPARK_HOME"
+
+export MAVEN_REPO=~/.m2/repository
+export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar:`ls $TARGET_DIR/dependencies/*.jar | tr '\n' ':' `
+
+
+export SEARCH_PATH="-Datk.module-loader.search-path=${DIR}/..:${HOME}/.m2/"
 
 # EXTRA_CLASSPATH is not used in this script
 CONF="$CONFDIR"
@@ -34,7 +60,7 @@ else
     echo "$NAME Port $PORT is free"
 fi
 
-export TARGET_DIR=$DIR/target
+
 export FS_ROOT=$TARGET_DIR/fs-root
 LOG=$TARGET_DIR/rest-server.log
 
@@ -50,15 +76,16 @@ echo "$NAME copying datasets to target"
 cp -rp $DIR/datasets $FS_ROOT
 
 echo "$NAME fs.root is $FS_ROOT"
+echo "$NAME SEARCH_PATH=$SEARCH_PATH"
 echo "$NAME Api Server logging going to $LOG"
 
-echo "starting"
-java $@ -XX:MaxPermSize=256m -Xss10m -cp "$CONF:$LAUNCHER" \
+echo "$NAME starting, CP=$CP"
+java $@ -XX:MaxPermSize=256m -Xss10m $SEARCH_PATH -cp "$CONF:$CP" \
     -Dconfig.resource=integration-test.conf \
     -Dtrustedanalytics.atk.engine.fs.root=file:$FS_ROOT \
     -Dtrustedanalytics.atk.engine.spark.conf.properties.spark.sql.parquet.useDataSourceApi=false \
     -Dtrustedanalytics.atk.engine.spark.conf.properties.spark.eventLog.dir=file:$SPARK_EVENTS_DIR\
-    org.trustedanalytics.atk.component.Boot rest-server org.trustedanalytics.atk.rest.RestServerApplication > $LOG 2>&1 &
+     org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication > $LOG 2>&1 &
 
 API_SERVER_PID=$!
 

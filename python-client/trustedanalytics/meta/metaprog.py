@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -524,14 +526,13 @@ def _compile_function(func_name, func_text, dependencies):
 def create_function(loadable_class, command_def, execute_command_function=None):
     """Creates the function which will appropriately call execute_command for this command"""
     execute_command = create_execute_command_function(command_def, execute_command_function)
-    api_decorator = get_api_context_decorator(logging.getLogger(loadable_class.__module__))
     if command_def.is_constructor:
-        func_text = get_function_text(command_def, body_text=_get_init_body_text(command_def), decorator_text='@api')
-        #print "func_text for %s = %s" % (command_def.full_name, func_text)
-        dependencies = {'api': api_decorator, 'base_class': _installable_classes_store.get(entity_type_to_baseclass_name(command_def.install_path.full), CommandInstallable), EXECUTE_COMMAND_FUNCTION_NAME: execute_command}
+        func_text = get_function_text(command_def, body_text=_get_init_body_text(command_def))
+        # print "func_text for %s = %s" % (command_def.full_name, func_text)
+        dependencies = {'base_class': _installable_classes_store.get(entity_type_to_baseclass_name(command_def.install_path.full), CommandInstallable), EXECUTE_COMMAND_FUNCTION_NAME: execute_command}
     else:
-        func_text = get_function_text(command_def, body_text='return ' + get_call_execute_command_text(command_def), decorator_text='@api')
-        dependencies = {'api': api_decorator,  EXECUTE_COMMAND_FUNCTION_NAME: execute_command}
+        func_text = get_function_text(command_def, body_text='return ' + get_call_execute_command_text(command_def))
+        dependencies = {EXECUTE_COMMAND_FUNCTION_NAME: execute_command}
     try:
         function = _compile_function(command_def.name, func_text, dependencies)
     except:
@@ -540,4 +541,6 @@ def create_function(loadable_class, command_def, execute_command_function=None):
         raise
     function.command = command_def
     function.__doc__ = get_spa_docstring(command_def)
-    return function
+
+    api_decorator = get_api_context_decorator(logging.getLogger(loadable_class.__module__))
+    return api_decorator(function)

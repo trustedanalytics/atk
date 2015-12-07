@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.graphbuilder.titan.cache;
 
@@ -56,7 +57,6 @@ public abstract class AbstractTitanGraphCache<K, V> implements Serializable {
         LoadingCache<K, V> cache = CacheBuilder
                 .newBuilder()
                 .weakValues()
-                .recordStats()
                 .removalListener(removalListener)
                 .build(cacheLoader);
         return (cache);
@@ -72,7 +72,7 @@ public abstract class AbstractTitanGraphCache<K, V> implements Serializable {
         if ( null == config) throw new IllegalArgumentException("Configuration must not be null");
 
         V titanGraph = cache.getUnchecked(config);
-        LOG.info("Getting Titan graph from cache: " + cache.stats());
+        LOG.info("Getting Titan graph from cache");
         return (titanGraph);
     }
 
@@ -81,7 +81,7 @@ public abstract class AbstractTitanGraphCache<K, V> implements Serializable {
      */
     public void invalidateAllCacheEntries() {
         cache.invalidateAll();
-        LOG.info("Invalidating Titan graph cache: " + cache.stats());
+        LOG.info("Invalidating Titan graph cache");
     }
 
 }

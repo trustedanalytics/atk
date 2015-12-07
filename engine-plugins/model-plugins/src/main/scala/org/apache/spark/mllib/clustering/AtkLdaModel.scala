@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package org.apache.spark.mllib.clustering
 
 import org.apache.spark.SparkContext
@@ -133,21 +134,25 @@ case class AtkLdaModel(numTopics: Int) {
     require(distLdaModel != null, "Trained LDA model must not be null")
 
     val topicsMatrix = distLdaModel.topicsMatrix
-    val broadcastTopicsMap = broadcastTopicsMatrix(uniqueWordsFrame.sparkContext, topicsMatrix)
+    val topicMatrixRdd = parallelizeTopicsMatrix(uniqueWordsFrame.sparkContext,
+      topicsMatrix, uniqueWordsFrame.partitions.length)
     val globalTopicCounts = getGlobalTopicCounts //Nk in Asuncion 2009 paper
     val eta1 = getTopicConcentration - 1
     val scaledVocabSize = distLdaModel.vocabSize * eta1
 
-    val wordTopicsRdd = uniqueWordsFrame.mapRows(row => {
+    val wordCountRdd = uniqueWordsFrame.mapRows(row => {
       val wordId = row.longValue(inputWordIdColumnName)
       val word = row.stringValue(inputWordColumnName)
       val wordCount = row.longValue(inputWordCountColumnName)
-      val topicVector = broadcastTopicsMap.value(wordId)
-
-      val wordGivenTopics = calcWordGivenTopicProb(topicVector, globalTopicCounts, scaledVocabSize, eta1)
-      val topicsGivenWord = calcTopicsGivenWord(topicVector, wordCount)
-      (word, (wordGivenTopics, topicsGivenWord))
+      (wordId, (word, wordCount))
     })
+
+    val wordTopicsRdd = wordCountRdd.join(topicMatrixRdd).map {
+      case (wordId, ((word, wordCount), topicVector)) =>
+        val wordGivenTopics = calcWordGivenTopicProb(topicVector, globalTopicCounts, scaledVocabSize, eta1)
+        val topicsGivenWord = calcTopicsGivenWord(topicVector, wordCount)
+        (word, (wordGivenTopics, topicsGivenWord))
+    }
 
     setWordGivenTopicsFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
     setTopicsGivenWordFrame(wordTopicsRdd, outputWordColumnName, outputTopicVectorColumnName)
@@ -167,8 +172,11 @@ case class AtkLdaModel(numTopics: Int) {
                        outputDocumentColumnName: String,
                        outputTopicVectorColumnName: String): Unit = {
     val topicDist = distLdaModel.topicDistributions
-    val topicsGivenDocs: RDD[Row] = corpus.join(topicDist).map {
-      case (documentId, ((document, wordVector), topicVector)) =>
+    val topicsGivenDocs: RDD[Row] = corpus.map {
+      case (documentId, (document, wordVector)) =>
+        (documentId, document) //reducing size of corpus due to shuffle failures in Spark 1.3.0
+    }.join(topicDist).map {
+      case (documentId, (document, topicVector)) =>
         new GenericRow(Array[Any](document, topicVector.toArray.toVector))
     }
 
@@ -324,15 +332,16 @@ case class AtkLdaModel(numTopics: Int) {
   }
 
   /**
-   * Create broadcast variable from topics matrix
+   * Create RDD from topics matrix
    *
    * @param sparkContext Spark context
    * @param topicsMatrix Topic matrix
    *
-   * @return Broadcast variable with map of word Ids and topic vectors
+   * @return RDD of word Ids and topic vectors
    */
-  private[clustering] def broadcastTopicsMatrix(sparkContext: SparkContext,
-                                                topicsMatrix: Matrix): Broadcast[Map[Long, MlVector]] = {
+  private[clustering] def parallelizeTopicsMatrix(sparkContext: SparkContext,
+                                                  topicsMatrix: Matrix,
+                                                  numPartitions: Int = 2): RDD[(Long, MlVector)] = {
     val topicsMatrix = distLdaModel.topicsMatrix
     var topicsMap = Map[Long, MlVector]()
 
@@ -343,7 +352,8 @@ case class AtkLdaModel(numTopics: Int) {
       }
       topicsMap += w.toLong -> new MlDenseVector(topicArr)
     }
-    sparkContext.broadcast(topicsMap)
+
+    sparkContext.parallelize(topicsMap.toSeq, numPartitions)
   }
 
   /**

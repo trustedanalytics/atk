@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -78,7 +80,7 @@ def get(server, uri_path, **kwargs):
     with httpSession(server.scheme) as session:
         response = session.get(uri, headers=headers, timeout=timeout, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Get Response] %s\nheaders=%s", response.text, response.headers)
+        logger.debug("[HTTP Get Response %s] %s\nheaders=%s", response.status_code, response.text, response.headers)
     return response
 
 
@@ -89,7 +91,7 @@ def delete(server, uri_path, **kwargs):
     with httpSession(server.scheme) as session:
         response = session.delete(uri, headers=headers, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Delete Response] %s", response.text)
+        logger.debug("[HTTP Delete Response %s] %s", response.status_code, response.text)
     return response
 
 
@@ -105,5 +107,5 @@ def post(server, uri_path, data, **kwargs):
     with httpSession(server.scheme) as session:
             response = session.post(uri, headers=headers, data=data, verify=False, **kwargs)
     if logger.level <= logging.DEBUG:
-        logger.debug("[HTTP Post Response] %s", response.text)
+        logger.debug("[HTTP Post Response %s] %s", response.status_code, response.text)
     return response

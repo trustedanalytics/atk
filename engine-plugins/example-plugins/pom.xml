@@ -91,62 +91,20 @@
                 </configuration>
             </plugin>
             <plugin>
-                <inherited>true</inherited>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadeTestJar>true</shadeTestJar>
-                            <finalName>${project.artifactId}</finalName>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <shadedClassifierName>${project.artifactId}</shadedClassifierName>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.apache.maven:*</exclude>
-                                    <exclude>org.apache.hadoop:hadoop-core:jar:*mr1*</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>*.html</exclude>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>reference.conf</resource>
-                                </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.trustedanalytics</groupId>
+                <artifactId>atk-maven-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 
     <dependencies>
-        <!--START GAO dependencies-->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>interfaces</artifactId>
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>launcher</artifactId>
+            <artifactId>module-loader</artifactId>
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
@@ -160,9 +118,6 @@
             <groupId>io.spray</groupId>
             <artifactId>spray-json_2.10</artifactId>
         </dependency>
-        <!--END GAO dependencies-->
-
-        <!-- Spark Dependencies -->
 
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -174,9 +129,6 @@
             <artifactId>spark-sql_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
         </dependency>
-
-
-        <!-- Hadoop Depedencies -->
 
         <dependency>
             <groupId>org.apache.hadoop</groupId>

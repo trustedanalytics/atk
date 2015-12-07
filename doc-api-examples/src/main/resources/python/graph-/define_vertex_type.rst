@@ -1,7 +1,2 @@
-Examples
---------
-.. code::
-
-    >>> graph = ta.Graph()
-    >>> graph.define_vertex_type('users')
-
+See :doc:`here <../../graphs/graph-/__init__>` for example usage in
+graph construction.

@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.command
 
@@ -57,19 +57,9 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
   /**
    * On complete - mark progress as 100% or failed
    */
-  override def complete(id: Long, result: Try[JsObject]): Unit = {
-    require(id > 0, "invalid ID")
+  override def complete(commandId: Long, result: Try[JsObject]): Unit = {
+    require(commandId > 0, s"invalid command id $commandId")
     require(result != null, "result must not be null")
-    updateResult(id, result, markComplete = true)
-  }
-
-  override def storeResult(id: Long, result: Try[JsObject]): Unit = {
-    require(id > 0, "invalid ID")
-    require(result != null, "result must not be null")
-    updateResult(id, result, markComplete = false)
-  }
-
-  private def updateResult(commandId: Long, result: Try[JsObject], markComplete: Boolean): Unit = {
     metaStore.withSession("se.command.updateResult") {
       implicit session =>
         val command = repo.lookup(commandId).getOrElse(throw new IllegalArgumentException(s"Command $commandId not found"))
@@ -81,7 +71,7 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
         val changed = result match {
           case Failure(ex) =>
             error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
-            command.copy(complete = markComplete,
+            command.copy(complete = true,
               error = Some(throwableToError(ex)),
               correlationId = corId)
           case Success(r) =>
@@ -94,7 +84,7 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
             else {
               List(ProgressInfo(100f, None))
             }
-            command.copy(complete = markComplete,
+            command.copy(complete = true,
               progress = progress,
               result = Some(r),
               error = None,

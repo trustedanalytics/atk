@@ -1,4 +1,20 @@
 #!/bin/bash
+#
+#  Copyright (c) 2015 Intel Corporation 
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
 
 echo "" > $ATK_TEMP/application.conf
 
@@ -84,7 +100,6 @@ case "$1" in
 
     if [ ! -z "$ATK_DEFAULT_TIMEOUT" ];then
         echo "trustedanalytics.atk.api.default-timeout=${ATK_DEFAULT_TIMEOUT}s" >> $ATK_TEMP/application.conf
-        echo "trustedanalytics.atk.engine.default-timeout=${ATK_DEFAULT_TIMEOUT}" >> $ATK_TEMP/application.conf
         #minus one
         requestTimeout=$((ATK_DEFAULT_TIMEOUT - 1))
         echo "trustedanalytics.atk.api.request-timeout=${requestTimeout}s" >> $ATK_TEMP/application.conf
@@ -98,8 +113,8 @@ case "$1" in
     log "start trustedanalytics start"
     pushd $ATK_LAUNCHER_DIR
     log `pwd`
-    echo  java -XX:MaxPermSize=$ATK_MAX_HEAPSIZE $ATK_ADD_JVM_OPT -cp $ATK_TEMP:$ATK_CLASSPATH:$ATK_CLASSPATH_ADD org.trustedanalytics.atk.component.Boot rest-server org.trustedanalytics.atk.rest.RestServerApplication
-    exec  java -XX:MaxPermSize=$ATK_MAX_HEAPSIZE $ATK_ADD_JVM_OPT -cp $ATK_TEMP:$ATK_CLASSPATH:$ATK_CLASSPATH_ADD org.trustedanalytics.atk.component.Boot rest-server org.trustedanalytics.atk.rest.RestServerApplication
+    echo  java -XX:MaxPermSize=$ATK_MAX_HEAPSIZE $ATK_ADD_JVM_OPT -Datk.module-loader.search-path=$ATK_LIB_DIR -cp $ATK_TEMP:$ATK_CLASSPATH:$ATK_CLASSPATH_ADD org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+    exec  java -XX:MaxPermSize=$ATK_MAX_HEAPSIZE $ATK_ADD_JVM_OPT -Datk.module-loader.search-path=$ATK_LIB_DIR -cp $ATK_TEMP:$ATK_CLASSPATH:$ATK_CLASSPATH_ADD org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
     popd
     log "startted trustedanalytics start"
 	;;

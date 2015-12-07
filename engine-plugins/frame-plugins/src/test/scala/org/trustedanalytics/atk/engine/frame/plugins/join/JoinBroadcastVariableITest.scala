@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.frame.plugins.join
 
@@ -45,8 +45,7 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMultiMaps(0).value.size should equal(5)
+    broadcastVariable.broadcastMultiMap.value.size should equal(5)
     broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
     broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
     broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
@@ -62,14 +61,13 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(2)
-    broadcastVariable.broadcastMultiMaps(0).value.size + broadcastVariable.broadcastMultiMaps(1).value.size should equal(5)
     broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
     broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
     broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
     broadcastVariable.get(4).get should contain theSameElementsAs Set(idCountryNames(4))
     broadcastVariable.get(6).get should contain theSameElementsAs Set(idCountryNames(5))
     broadcastVariable.get(8).isDefined should equal(false)
+
   }
   "JoinBroadcastVariable" should "create an empty broadcast variable" in {
     val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(List.empty[Row]))
@@ -78,8 +76,7 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.length() should equal(1)
-    broadcastVariable.broadcastMultiMaps(0).value.isEmpty should equal(true)
+    broadcastVariable.broadcastMultiMap.value.isEmpty should equal(true)
   }
   "JoinBroadcastVariable" should "throw an IllegalArgumentException if join parameter is null" in {
     intercept[IllegalArgumentException] {

@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.command
 
@@ -21,7 +21,8 @@ import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, Call }
 import org.trustedanalytics.atk.engine._
 import com.typesafe.config.ConfigFactory
-import org.apache.commons.lang.exception.ExceptionUtils
+import org.trustedanalytics.atk.moduleloader.Component
+import org.apache.commons.lang3.exception.ExceptionUtils
 import scala.reflect.io.Directory
 
 /**
@@ -32,6 +33,14 @@ import scala.reflect.io.Directory
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
 class SparkCommandJob extends AbstractEngineComponent {
+
+  override lazy val commandLoader = new CommandLoader(loadFromModules = false)
+
+  var webserver: YarnWebServer = null
+  if (EngineConfig.keepYarnJobAlive) {
+    webserver = YarnWebServer.init(engine)
+    println("webserver lisening port: " + webserver.getListeningPort)
+  }
 
   /**
    * Execute Command
@@ -52,7 +61,17 @@ class SparkCommandJob extends AbstractEngineComponent {
           case Some(u) => userStorage.createUserPrincipalFromUser(u)
           case _ => null
         }, EngineExecutionContext.global)
-        commandExecutor.executeCommand(command)(invocation)
+        commandExecutor.executeInForeground(command)(invocation)
+    }
+  }
+
+  /**
+   * Shutdown the driver
+   */
+  def stop(): Unit = {
+    println("shutting down the driver")
+    if (webserver != null) {
+      webserver.stop()
     }
   }
 }
@@ -64,21 +83,15 @@ class SparkCommandJob extends AbstractEngineComponent {
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-object SparkCommandJob extends EventLogging {
+object SparkCommandJob {
+
+  println(s"Java Class Path is: ${System.getProperty("java.class.path")}")
+  println(s"Current PWD is ${Directory.Current.get.toString()}")
 
   /**
    * Usage string if this was being executed from the command line
    */
   def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <command_id>")
-
-  /**
-   * Instantiate an instance of the driver and then executing the requested command.
-   * @param commandId the id of the Command to execute
-   */
-  def executeCommand(commandId: Long): Unit = {
-    val driver = new SparkCommandJob
-    driver.execute(commandId)
-  }
 
   /**
    * Entry point of SparkCommandJob for use by SparkSubmit.
@@ -94,20 +107,24 @@ object SparkCommandJob extends EventLogging {
         EventLogging.raw = if (config.hasPath("trustedanalytics.atk.engine.logging.raw")) config.getBoolean("trustedanalytics.atk.engine.logging.raw") else true
       } // else rest-server already installed an SLF4j adapter
 
-      println(s"Java Class Path is: ${System.getProperty("java.class.path")}")
-      println(s"Current PWD is ${Directory.Current.get.toString()}")
-
+      var driver: SparkCommandJob = null
       try {
         /* Set to true as for some reason in yarn cluster mode, this doesn't seem to be set on remote driver container */
         sys.props += Tuple2("SPARK_SUBMIT", "true")
         val commandId = args(0).toLong
-        executeCommand(commandId)
+
+        driver = new SparkCommandJob
+        driver.execute(commandId)
+
       }
       catch {
         case t: Throwable => error(s"Error captured in SparkCommandJob to prevent percolating up to ApplicationMaster + ${ExceptionUtils.getStackTrace(t)}")
       }
       finally {
         sys.props -= "SPARK_SUBMIT"
+        if (driver != null) {
+          driver.stop()
+        }
       }
     }
   }

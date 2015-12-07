@@ -1,44 +1,44 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.model
 
+import org.apache.hadoop.fs.Path
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.{ DuplicateNameException, EventLoggingImplicits, NotFoundException }
 import org.trustedanalytics.atk.domain.model._
-import org.trustedanalytics.atk.domain.{ Status, CreateEntityArgs }
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.engine.ModelStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.repository.MetaStore
-import spray.json.{ JsValue, JsObject }
-import org.trustedanalytics.atk.component.ClassLoaderAware
+import spray.json.JsObject
 import scala.slick.model
-
-import scala.util.Try
 
 /**
  * Front end for Spark to create and manage models.
  * @param metaStore Repository for model meta data.
  */
 
-class ModelStorageImpl(metaStore: MetaStore)
+class ModelStorageImpl(metaStore: MetaStore, fileStorage: ModelFileStorage)
     extends ModelStorage
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
+
+  implicit def str2Path(s: String): Path = new Path(s)
+  implicit def path2Str(p: Path): String = p.toString
 
   /** Lookup a Model, Throw an Exception if not found */
   override def expectModel(modelRef: ModelReference): ModelEntity = {
@@ -119,7 +119,7 @@ class ModelStorageImpl(metaStore: MetaStore)
     metaStore.withSession("spark.modelstorage.getModels") {
       implicit session =>
         {
-          metaStore.modelRepo.scanNamedActiveModelsNoData()
+          metaStore.modelRepo.activeNamedModelsNoData()
         }
     }
   }
@@ -166,6 +166,50 @@ class ModelStorageImpl(metaStore: MetaStore)
         {
           info(s"marking model entity (id=${model.id}, name=${model.name}) as dropped")
           metaStore.modelRepo.dropModel(model)
+        }
+    }
+  }
+
+  /** Reads model data from storage */
+  def readFromStorage(model: ModelEntity)(implicit invocation: Invocation): Option[JsObject] = {
+    val data = model.storageLocation match {
+      case Some(location) => Some(fileStorage.readJsObject(location))
+      case None => None
+    }
+    updateLastReadDate(model)
+    data
+  }
+
+  /**
+   * Writes data to model's storage area
+   *
+   * Creates a new model revision folder and puts the new data there.  Deletes
+   * previous revision folder if exists
+   *
+   * @return updated entity
+   */
+  def writeToStorage(model: ModelEntity, newData: JsObject)(implicit invocation: Invocation): ModelEntity = {
+    metaStore.withSession("spark.modelstorage.writeToStorage") {
+      implicit session =>
+        {
+          val victimStorageLocation = fileStorage.getModelRevFolder(model)
+          val newStorageLocation = fileStorage.prepareStorageLocationForNextRev(model)
+
+          fileStorage.writeJsObject(newStorageLocation, newData)
+
+          metaStore.withSession("frame.writeModelStorage") {
+            implicit session =>
+              {
+                val modelWithNewData = model.copy(storageLocation = Some(newStorageLocation))
+                metaStore.modelRepo.update(modelWithNewData)
+                updateLastReadDate(modelWithNewData)
+
+                if (victimStorageLocation.isDefined) {
+                  fileStorage.deletePath(victimStorageLocation.get)
+                }
+                modelWithNewData
+              }
+          }
         }
     }
   }

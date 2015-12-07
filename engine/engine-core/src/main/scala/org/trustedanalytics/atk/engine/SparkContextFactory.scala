@@ -1,23 +1,22 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.component.Archive
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.EventLogging
@@ -63,50 +62,9 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
 
     info("SparkConf settings: " + sparkConf.toDebugString)
 
-    val sparkContext = new SparkContext(sparkConf)
-    if (!EngineConfig.isSparkOnYarn) {
-      // TODO: plugin jars should be added based on the jar the plugin is coming from instead of all of them like this
-      val paths = List(jarPath("engine-core"), jarPath("frame-plugins"), jarPath("graph-plugins"), jarPath("model-plugins"))
-      info(s"addJar() paths=$paths")
-      paths.foreach(sparkContext.addJar)
-    }
-
-    sparkContext
+    new SparkContext(sparkConf)
   }
 
-  /**
-   * Path for jars adding local: prefix or not depending on configuration for use in SparkContext
-   *
-   * "local:/some/path" means the jar is installed on every worker node.
-   *
-   * @param archive e.g. "engine-core"
-   * @return "local:/usr/lib/trustedanalytics/lib/engine-core.jar" or similar
-   */
-  def jarPath(archive: String): String = {
-    if (EngineConfig.sparkAppJarsLocal) {
-      "local:" + StringUtils.removeStart(Archive.getJar(archive).getPath, "file:")
-    }
-    else {
-      Archive.getJar(archive).toString
-    }
-  }
-
-  def getResourcePath(resourceName: String, additionalPaths: Option[Seq[String]] = None): Option[String] = {
-    val currentDirectory = Directory.Current.getOrElse(
-      throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
-    val searchableDirectories = additionalPaths.isDefined match {
-      case false => Array(currentDirectory)
-      case true => Array(currentDirectory) ++ (for { path <- additionalPaths.get } yield Directory(path))
-    }
-
-    val result = for {
-      directory <- searchableDirectories
-      file <- directory.deepFiles.toList.map(_.toString)
-      if (file.endsWith(resourceName))
-    } yield (file)
-
-    result.headOption
-  }
 }
 
 object SparkContextFactory extends SparkContextFactory {
@@ -126,4 +84,5 @@ object SparkContextFactory extends SparkContextFactory {
     }
     sc
   }
+
 }

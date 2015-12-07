@@ -1,24 +1,23 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
-import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
+import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
@@ -52,8 +51,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  users: UserStorage,
                  val sparkAutoPartitioner: SparkAutoPartitioner) extends Engine
     with EventLogging
-    with EventLoggingImplicits
-    with ClassLoaderAware {
+    with EventLoggingImplicits {
 
   type Data = FrameRdd
   type Context = SparkContext
@@ -96,10 +94,10 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * Stores the results of the command execution back in the persistent command object.
    *
    * @param command the command to run, including name and arguments
-   * @return an Execution that can be used to track the completion of the command
+   * @return a Command record that can be used to track the completion of the command
    */
-  def execute(command: CommandTemplate)(implicit invocation: Invocation): Execution = {
-    commands.execute(command)
+  def execute(command: CommandTemplate)(implicit invocation: Invocation): Command = {
+    commands.executeInBackground(command)
   }
 
   /**
@@ -143,11 +141,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * @return A QueryResult describing the data and schema of this take
    */
   def getRows(arguments: RowQueryArgs[Identifier])(implicit invocation: Invocation): QueryResult = {
-    withMyClassLoader {
-      val frame = frames.lookup(arguments.id).getOrElse(throw new IllegalArgumentException("Requested frame does not exist"))
-      val rows = frames.getRows(frame, arguments.offset, arguments.count)
-      QueryResult(rows, Some(frame.schema))
-    }
+    val frame = frames.lookup(arguments.id).getOrElse(throw new IllegalArgumentException("Requested frame does not exist"))
+    val rows = frames.getRows(frame, arguments.offset, arguments.count)
+    QueryResult(rows, Some(frame.schema))
   }
 
   def getFrame(id: Identifier)(implicit invocation: Invocation): Future[Option[FrameEntity]] =
@@ -165,9 +161,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
   @deprecated("use engine.graphs.createGraph()")
   def createGraph(graph: GraphTemplate)(implicit invocation: Invocation) = {
     future {
-      withMyClassLoader {
-        graphs.createGraph(graph)
-      }
+      graphs.createGraph(graph)
     }
   }
 
@@ -222,9 +216,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    */
   def createModel(createArgs: CreateEntityArgs)(implicit invocation: Invocation) = {
     future {
-      withMyClassLoader {
-        models.createModel(createArgs)
-      }
+      models.createModel(createArgs)
     }
   }
   /**
@@ -327,5 +319,4 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       seamless.edgeFrames
     }
   }
-
 }

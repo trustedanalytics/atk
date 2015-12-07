@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -204,7 +206,8 @@ class Loggers(object):
     def _turn_logger_off(self, logger_name):
         logger = logging.getLogger(logger_name)
         logger.level = logging.CRITICAL
-        for h in logger.handlers:
+        victim_handlers = [x for x in logger.handlers]
+        for h in victim_handlers:
             logger.removeHandler(h)
         try:
             self._user_logger_names.remove(logger_name)
@@ -241,8 +244,13 @@ class ApiLogFormat(object):
 
     @staticmethod
     def format_call(location, function, *args, **kwargs):
+        try:
+            full_name = function.command.full_name
+        except:
+            full_name = function.__name__
+
         if not ApiLogFormat.verbose:
-            return function.__name__
+            return full_name
         try:
             param_names = function.func_code.co_varnames[0:function.func_code.co_argcount]
             named_args = zip(param_names, args)
@@ -258,7 +266,7 @@ class ApiLogFormat(object):
             is_constructor = function.__name__ == '__init__' or function.__name__ == 'new'
             formatted_self = ApiLogFormat.format_self(self) if not is_constructor else (ApiLogFormat._format_entity(self) + '.') if self is not None else '<None?>.'
 
-            return "%s %s%s%s" % (location, formatted_self, ApiLogFormat.format_function(function), formatted_args)
+            return "%s %s %s%s%s" % (location, full_name, formatted_self, ApiLogFormat.format_function(function), formatted_args)
         except Exception as e:
             return str(e)
 
@@ -283,3 +291,30 @@ class ApiLogFormat(object):
     @staticmethod
     def _format_entity(entity):
         return "<%s:%s>" % (type(entity).__name__, hex(id(entity))[2:])
+
+
+# Logging backdoor
+#
+# If env variable is set, we will call loggers.set immediately, so the loggers
+# can run during the rest of the trustedanalytics package import
+#
+# The value of this env var is a JSON list containing map, each of which
+# represents a call to loggers.set.  The map holds the **kwargs for the
+# call to loggers.set
+#
+# Example:  This sets the module logger to debug for core/frame.py
+#
+# $ export TRUSTEDANALYTICS_LOGGERS='[{"logger_name": "trustedanalytics.core.frame", "level": "debug"}]'
+#
+import os
+loggers_set_env_name = "TRUSTEDANALYTICS_LOGGERS"
+loggers_set_env = os.getenv(loggers_set_env_name)
+if loggers_set_env:
+    try:
+        import json
+        for entry in json.loads(loggers_set_env):
+            loggers.set(**entry)
+    except Exception as e:
+        import sys
+        sys.stderr.write("!! Error trying to ingest logging env variable $%s\n" % loggers_set_env_name)
+        raise

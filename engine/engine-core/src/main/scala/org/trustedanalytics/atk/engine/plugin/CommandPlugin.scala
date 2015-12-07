@@ -1,22 +1,21 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.plugin
 
-import org.trustedanalytics.atk.component._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference }
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
@@ -24,6 +23,7 @@ import org.trustedanalytics.atk.engine.frame.{ FrameImpl, Frame }
 import org.trustedanalytics.atk.engine.graph.{ SparkGraphStorage, Graph, GraphImpl }
 import org.trustedanalytics.atk.engine.model.{ ModelImpl, Model }
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import spray.json.{ JsObject, _ }
 
 import scala.reflect.runtime.{ universe => ru }
@@ -41,8 +41,7 @@ import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag.ApiMaturityTag
  * @tparam Return the type of the data that this plugin will return when invoked.
  */
 abstract class CommandPlugin[Arguments <: Product: JsonFormat: ClassManifest: TypeTag, Return <: Product: JsonFormat: ClassManifest: TypeTag]
-    extends Component
-    with EventLogging
+    extends EventLogging
     with ClassLoaderAware {
 
   // Implicit conversions for plugin authors
@@ -92,6 +91,7 @@ abstract class CommandPlugin[Arguments <: Product: JsonFormat: ClassManifest: Ty
       debug("Result was:\n" + result)
       result
     }
+
   })(simpleInvocation)
 
   /**

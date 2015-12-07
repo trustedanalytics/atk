@@ -32,62 +32,18 @@
                 <groupId>org.scoverage</groupId>
                 <artifactId>maven-scoverage-plugin</artifactId>
             </plugin>
-
             <plugin>
-                <inherited>true</inherited>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadeTestJar>true</shadeTestJar>
-                            <finalName>${project.artifactId}</finalName>
-                            <shadedArtifactAttached>false</shadedArtifactAttached>
-                            <shadedClassifierName>${project.artifactId}</shadedClassifierName>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>org.apache.maven:*</exclude>
-                                    <exclude>org.apache.hadoop:hadoop-core:jar:*mr1*</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>*.html</exclude>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                                    <resource>reference.conf</resource>
-                                </transformer>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.trustedanalytics</groupId>
+                <artifactId>atk-maven-plugin</artifactId>
             </plugin>
-
         </plugins>
     </build>
 
     <dependencies>
 
-        <!--START BDA dependencies to our modules-->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>launcher</artifactId>
+            <artifactId>module-loader</artifactId>
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
@@ -102,7 +58,10 @@
             <artifactId>model-publish-format</artifactId>
         </dependency>
 
-        <!--END BDA dependencies to our modules-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.typesafe.akka</groupId>
@@ -110,11 +69,11 @@
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
-            <artifactId>spray-can</artifactId>
+            <artifactId>spray-can_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
-            <artifactId>spray-client</artifactId>
+            <artifactId>spray-client_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>
@@ -156,8 +115,8 @@
             <artifactId>slick_${scala.short.version}</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
@@ -180,11 +139,6 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.hadoop</groupId>-->
-            <!--<artifactId> hadoop-core</artifactId>-->
-            <!--<version>2.6.0-mr1-cdh5.4.4</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
@@ -192,7 +146,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId> hadoop-hdfs</artifactId>
+            <artifactId>hadoop-hdfs</artifactId>
             <version>${dep.hadoop2.version}</version>
         </dependency>
     </dependencies>

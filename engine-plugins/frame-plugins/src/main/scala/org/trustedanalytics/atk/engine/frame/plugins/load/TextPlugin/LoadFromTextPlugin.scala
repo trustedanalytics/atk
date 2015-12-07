@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin
 
@@ -72,9 +72,9 @@ class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
     }
     else if (arguments.source.isSinglelineFile || arguments.source.isMultilineFile) {
       val filePath = getAbsolutePath(arguments.source.uri)
-      val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
+      val minPartitions = sparkAutoPartitioner.partitionsForFile(filePath)
       val parseResult = LoadRddFunctions.loadAndParseLines(sc, filePath,
-        null, partitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
+        null, minPartitions, arguments.source.startTag, arguments.source.endTag, arguments.source.sourceType.contains("xml"))
       LoadRddFunctions.unionAndSave(destinationFrame, parseResult.parsedLines)
 
     }
@@ -82,8 +82,8 @@ class LoadFromTextPlugin extends SparkCommandPlugin[LoadFrameArgs, UnitReturn] {
       val parser = arguments.source.parser.get
       val filePath = getAbsolutePath(arguments.source.uri)
       val parseResult = if (arguments.source.isFieldDelimited) {
-        val partitions = sparkAutoPartitioner.partitionsForFile(filePath)
-        LoadRddFunctions.loadAndParseLines(sc, filePath, parser, partitions)
+        val minPartitions = sparkAutoPartitioner.partitionsForFile(filePath)
+        LoadRddFunctions.loadAndParseLines(sc, filePath, parser, minPartitions)
       }
       else {
         val data = arguments.source.data.get

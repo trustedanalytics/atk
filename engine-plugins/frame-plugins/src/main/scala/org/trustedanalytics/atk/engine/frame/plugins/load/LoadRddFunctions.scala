@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.frame.plugins.load
 
@@ -51,12 +51,16 @@ object LoadRddFunctions extends Serializable {
    * @param sc SparkContext used for textFile reading
    * @param fileName name of file to parse
    * @param parser the parser
-   * @return  RDD of Row objects
+   * @param minPartitions minimum number of partitions for text file.
+   * @param startTag Start tag for XML or JSON parsers
+   * @param endTag Start tag for XML or JSON parsers
+   * @param isXml True for XML input files
+   * @return RDD of Row objects
    */
   def loadAndParseLines(sc: SparkContext,
                         fileName: String,
                         parser: LineParser,
-                        partitions: Int,
+                        minPartitions: Option[Int] = None,
                         startTag: Option[List[String]] = None,
                         endTag: Option[List[String]] = None,
                         isXml: Boolean = false): ParseResultRddWrapper = {
@@ -71,7 +75,12 @@ object LoadRddFunctions extends Serializable {
           conf.setBoolean(MultiLineTaggedInputFormat.IS_XML_KEY, isXml)
           sc.newAPIHadoopFile[LongWritable, Text, MultiLineTaggedInputFormat](fileName, classOf[MultiLineTaggedInputFormat], classOf[LongWritable], classOf[Text], conf)
             .map(row => row._2.toString).filter(_.trim() != "")
-        case None => sc.textFile(fileName, partitions).filter(_.trim() != "")
+        case None =>
+          val rdd = minPartitions match {
+            case Some(partitions) => sc.textFile(fileName, partitions)
+            case _ => sc.textFile(fileName)
+          }
+          rdd.filter(_.trim() != "")
       }
 
     if (parser != null) {

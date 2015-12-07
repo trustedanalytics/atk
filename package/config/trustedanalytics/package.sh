@@ -1,4 +1,20 @@
 #!/bin/bash
+#
+#  Copyright (c) 2015 Intel Corporation 
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+
 workDir=$(pwd)
 baseDir=${workDir##*/}
 gitRoot="."
@@ -44,30 +60,16 @@ pushd $SCRIPTPATH
     cp -Rv assets/* ${BUILD_DIR}
 popd
 
-#excluded jars are now combined in deploy.jar
-# giraph-plugins.jar graphon.jar
-jars=" rest-server.jar interfaces.jar engine-core.jar deploy.jar scoring-models.jar scoring-engine.jar scoring-interfaces.jar"
-
-pushd ..
-for jar in $jars
-do
-	jarPath=$(find .  -path ./package -prune -o -name $jar -print )
-	echo $jarPath
-	cp -v $jarPath ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
-
-done
-
-jarPath=$(find .  -path ./package -prune -o -name launcher.jar -print)
-
-echo $jarPath
-#enable this to copy the regular launcher.jar to the correct place
-cp -v $jarPath ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/launcher.jar
+echo "copy jar dependencies"
+cp -v rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
+# this is weird but for now the scoring engine is running out of the same lib dir as the rest server
+cp -v scoring-engine-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
-ls -l package/config/trustedanalytics-python-client/trustedanalytics/dist
-cp -v package/config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
-ls -l python-client/target
-cp -v python-client/target/trustedanalytics.zip ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
+ls -l config/trustedanalytics-python-client/trustedanalytics/dist
+cp -v config/trustedanalytics-python-client/trustedanalytics/dist/trustedanalytics*.tar.gz ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
+ls -l ../python-client/target
+cp -v ../python-client/target/trustedanalytics.zip ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
 
 popd
 

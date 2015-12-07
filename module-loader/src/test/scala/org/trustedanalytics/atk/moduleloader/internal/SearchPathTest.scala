@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.moduleloader.internal
 
@@ -21,37 +21,18 @@ import org.scalatest.WordSpec
 
 class SearchPathTest extends WordSpec {
 
-  val searchPathWithOne = new SearchPath(ConfigFactory.parseString(
-    """
-        atk.module-loader.search-path = [ "src/test/resources/test-module" ]
-      """))
+  val searchPathWithOne = new SearchPath("src/test/resources/test-module")
 
-  val searchPathWithNone = new SearchPath(ConfigFactory.parseString(
-    """
-        atk.module-loader.search-path = [ "src/test/resources/does-not-exist" ]
-      """))
+  val searchPathWithNone = new SearchPath("src/test/resources/does-not-exist")
 
-  val searchPathWithTwo = new SearchPath(ConfigFactory.parseString(
-    """
-        atk.module-loader.search-path = [ "src/test/resources/test-module",
-                                          "src/main/resources",
-                                          "src/test/resources/does-not-exist" ]
-      """))
+  val searchPathWithTwo = new SearchPath("src/test/resources/test-module:src/test/resources/fake-module-loader:src/test/resources/does-not-exist")
 
-  val searchPathWithThree = new SearchPath(ConfigFactory.parseString(
-    """
-        atk.module-loader.search-path = [ "src/test/resources/does-not-exist",
-                                          "src/test/resources/valid-parent-modules",
-                                          "src/test/resources/fake-lib" ]
-    """))
+  val searchPathWithThree = new SearchPath("src/test/resources/does-not-exist:src/test/resources/valid-parent-modules:src/test/resources/fake-lib")
 
-  val searchPathWithFour = new SearchPath(ConfigFactory.parseString(
-    """
-        atk.module-loader.search-path = [ "src/test/resources/does-not-exist",
-                                          "src/test/resources/valid-parent-modules",
-                                          "src/test/resources/fake-lib",
-                                          "src/test/resources/test-module/test-module.jar" ]
-    """))
+  val searchPathWithFour = new SearchPath("src/test/resources/does-not-exist"
+    + ":src/test/resources/valid-parent-modules"
+    + ":src/test/resources/fake-lib"
+    + ":src/test/resources/test-module")
 
   "SearchPath" should {
 
@@ -90,16 +71,12 @@ class SearchPathTest extends WordSpec {
       assert(jars(3).getFile.endsWith("b.jar"), s"not expected file ${jars(3)}")
     }
 
-    "error when jar is missing" in {
-      intercept[RuntimeException] {
-        searchPathWithOne.findJars(Seq("does-not-exist.jar"))
-      }
+    "not error when jar is missing" in {
+      assert(searchPathWithOne.findJars(Seq("does-not-exist.jar")).length == 0)
     }
 
-    "error when one of two jars is missing" in {
-      intercept[RuntimeException] {
-        searchPathWithOne.findJars(Seq("test-module.jar", "does-not-exist.jar"))
-      }
+    "not error when one of two jars is missing" in {
+      assert(searchPathWithOne.findJars(Seq("test-module.jar", "does-not-exist.jar")).length == 1)
     }
 
     "not mind if path does not exist" in {
@@ -108,12 +85,6 @@ class SearchPathTest extends WordSpec {
 
     "be able to find modules under different paths" in {
       assert(searchPathWithTwo.findModules().length == 2)
-    }
-
-    "throw error when search-path config is missing" in {
-      intercept[ConfigException] {
-        new SearchPath(ConfigFactory.empty())
-      }
     }
   }
 

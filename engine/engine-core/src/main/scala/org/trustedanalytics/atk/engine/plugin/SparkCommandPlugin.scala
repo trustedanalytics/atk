@@ -1,18 +1,18 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.plugin
 
@@ -26,8 +26,7 @@ import org.trustedanalytics.atk.engine.util.ConfigUtils
 
 import scala.collection.JavaConversions._
 
-import org.trustedanalytics.atk.component.Archive
-import com.typesafe.config.{ ConfigList, ConfigValue }
+import com.typesafe.config.{ ConfigFactory, ConfigList, ConfigValue }
 import org.apache.spark.SparkContext
 import org.apache.spark.engine.{ ProgressPrinter, SparkProgressListener }
 import org.trustedanalytics.atk.event.EventLogging
@@ -110,79 +109,6 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
   override def cleanup(invocation: Invocation) = {
     val sparkInvocation = invocation.asInstanceOf[SparkInvocation]
     SparkCommandPlugin.stop(sparkInvocation.commandId)
-  }
-
-  /**
-   * Serializes the plugin configuration to a path given the archive name the plugin belongs to.
-   * Returns the jars and extra classpath needed to run this plugin by looking into its configuration and
-   * and archive's parent's configuration
-   * @param archiveName name of archive to serialize
-   * @param path path to serialize
-   * @return tuple of 2 lists corresponding to jars and extraClassPath needed to run this archive externally
-   */
-  def serializePluginConfiguration(archiveName: String, path: String): (List[String], List[String]) = withMyClassLoader {
-
-    info(s"Serializing Plugin Configuration for archive $archiveName to path $path")
-    val currentConfig = try {
-      Archive.getAugmentedConfig(archiveName, Thread.currentThread().getContextClassLoader)
-    }
-    catch {
-      case _: Throwable => EngineConfig.config
-    }
-
-    val allEntries = ConfigUtils.toMap(currentConfig)
-
-    def getParentForArchive(archive: String, configMap: Map[String, ConfigValue]): Option[String] = {
-      val parent = for {
-        (k, v) <- configMap
-        if k.contains(s"$archive.parent")
-      } yield v
-      if (parent.iterator.hasNext)
-        Some(parent.head.render.replace("\"", ""))
-      else None
-    }
-
-    /* Get the plugin hirearchy by adding the plugin and its parents */
-    val jars = scala.collection.mutable.MutableList[String](archiveName)
-    var nextArchiveName = Option[String](archiveName)
-    while (nextArchiveName.isDefined) {
-      nextArchiveName = getParentForArchive(nextArchiveName.get, allEntries)
-      if (nextArchiveName.isDefined)
-        jars += nextArchiveName.get
-    }
-
-    /* Get extraClassPath for plugin including its parents' extra classpath */
-    val extraClassPath = scala.collection.mutable.MutableList[String]()
-    for (i <- jars) {
-      val configPathKey = s"trustedanalytics.atk.component.archives.$i.config-path"
-      val key = allEntries.get(configPathKey)
-      if (key.isDefined) {
-        val configPath = key.get.unwrapped().toString
-        val extraClassPathKey = s"$configPath.extra-classpath"
-        if (allEntries.contains(extraClassPathKey)) {
-          extraClassPath ++= allEntries.get(extraClassPathKey).get.asInstanceOf[ConfigList].unwrapped().map(_.toString)
-        }
-      }
-    }
-
-    /* Convert all configs to strings; override the archives entry with current plugin's archive name */
-    /* We always need engine as in Engine.scala we add plugins via
-    registerCommand api which need engine to be there in system archives list always */
-    val configEntriesInString = for {
-      (configKey, configValue) <- allEntries
-    } yield {
-      if (configKey == "trustedanalytics.atk.engine.plugin.command.archives")
-        s"""$configKey=[\"$archiveName\"]"""
-      else
-        s"$configKey=${configValue.render}"
-    }
-
-    Files.write(Paths.get(path), configEntriesInString.mkString("\n").getBytes(StandardCharsets.UTF_8))
-    (jars.toList, extraClassPath.distinct.toList)
-  }
-
-  def archiveName: String = withMyClassLoader {
-    Archive.system.lookupArchiveNameByLoader(Thread.currentThread().getContextClassLoader)
   }
 
   /* plugins which execute python UDF will override this to true; by default this is false .

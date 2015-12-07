@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -57,7 +59,6 @@ def add_return_none_postprocessor(command_full_name):
 @postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
                'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
 def return_graph(json_result):
-
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
 
@@ -91,14 +92,6 @@ def return_clustering_coefficient(json_result):
 def return_bin_result(json_result):
     return json_result["cutoffs"]
 
-@postprocessor('model:giraph_lda/train')
-def return_giraph_lda_train(json_result):
-    from trustedanalytics import get_frame
-    doc_frame = get_frame(json_result['topics_given_doc']['uri'])
-    word_frame= get_frame(json_result['word_given_topics']['uri'])
-    topic_frame= get_frame(json_result['topics_given_word']['uri'])
-    return { 'topics_given_doc': doc_frame, 'word_given_topics': word_frame, 'topics_given_word': topic_frame, 'report': json_result['report'] }
-
 @postprocessor('model:lda/train')
 def return_lda_train(json_result):
     from trustedanalytics import get_frame
@@ -118,14 +111,14 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/collaborative_filtering')
+@postprocessor('frame:/giraph_collaborative_filtering')
 def return_collaborative_filtering(json_result):
     from trustedanalytics import get_frame
     user_frame = get_frame(json_result['user_frame']['uri'])
     item_frame= get_frame(json_result['item_frame']['uri'])
     return { 'user_frame': user_frame, 'item_frame': item_frame, 'report': json_result['report'] }
 
-@postprocessor('graph/graphx_connected_components','graph/annotate_weighted_degrees','graph/annotate_degrees','graph/graphx_triangle_count')
+@postprocessor('graph/graphx_connected_components','graph/graphx_label_propagation', 'graph/annotate_weighted_degrees','graph/annotate_degrees','graph/graphx_triangle_count')
 def return_connected_components(json_result):
     from trustedanalytics import get_frame
     dictionary = json_result["frame_dictionary_output"]
@@ -140,10 +133,25 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph/ml/belief_propagation','graph:/ml/kclique_percolation')
-def return_belief_propagation(json_result):
+@postprocessor('graph:/loopy_belief_propagation','graph:/kclique_percolation')
+def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
+@postprocessor('frame/export_to_csv','frame/export_to_json','model:libsvm/publish',
+               'model:random_forest_regressor/publish','model:random_forest_classifier/publish',
+               'model:k_means/publish', 'model:lda/publish', 'model:naive_bayes/publish',
+               'model:linear_regression/publish', 'model:principal_components/publish', 'model:svm/publish')
+def return_export_metadata(export_metadata):
+    from trustedanalytics import data_catalog
+    return data_catalog.publish(export_metadata)['value']
+
+@postprocessor('model:power_iteration_clustering/predict')
+def return_power_iteration_clustering_predict(json_result):
+    from trustedanalytics import get_frame
+    predicted_frame = get_frame(json_result['frame']['uri'])
+    number_of_clusters = json_result['k']
+    cluster_size = json_result['cluster_size']
+    return {'predicted_frame': predicted_frame , 'number_of_clusters': number_of_clusters, 'cluster_size': cluster_size}

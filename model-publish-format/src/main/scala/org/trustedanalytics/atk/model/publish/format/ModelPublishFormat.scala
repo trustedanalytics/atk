@@ -1,24 +1,24 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 package org.trustedanalytics.atk.model.publish.format
 
-import java.io
 import java.io._
 import java.net.{ URL, URLClassLoader }
-import javax.crypto.KeyGenerator
+import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
 import org.apache.commons.compress.archivers.tar.{ TarArchiveInputStream, TarArchiveOutputStream, TarArchiveEntry }
 import org.apache.commons.io.IOUtils
@@ -28,53 +28,52 @@ import org.apache.commons.io.FileUtils
  * Read/write for publishing models
  */
 
-object ModelPublishFormat {
-
-  /**
-   *  Write a Model to a our special format that can be read later by a Scoring Engine.
-   *   
-   *  @param outputStream location to store published model
-   *  @param classLoaderFiles list of jars and other files for ClassLoader
-   *  @param modelLoaderClass class that implements the ModelLoader trait for instantiating the model during read()
-   *  @param modelData the trained model data
-   *   
-   */
+object ModelPublishFormat extends EventLogging {
 
   val modelDataString = "modelData"
   val modelReaderString = "modelReader"
 
+  /**
+   * Write a Model to a our special format that can be read later by a Scoring Engine.
+   *   
+   * @param classLoaderFiles list of jars and other files for ClassLoader
+   * @param modelLoaderClass class that implements the ModelLoader trait for instantiating the model during read()
+   * @param modelData the trained model data
+   * @param outputStream location to store published model
+   */
   def write(classLoaderFiles: List[File], modelLoaderClass: String, modelData: Array[Byte], outputStream: FileOutputStream): Unit = {
     val tarBall = new TarArchiveOutputStream(new BufferedOutputStream(outputStream))
-    var modelDataFile: File = null
-    var modelLoaderFile: File = null
-
-    def writeEntry(file: File): Unit =
-      {
-        val fileEntry = new TarArchiveEntry(file)
-        tarBall.putArchiveEntry(fileEntry)
-        IOUtils.copy(new FileInputStream(file), tarBall)
-        tarBall.closeArchiveEntry()
-      }
 
     try {
       classLoaderFiles.foreach((file: File) => {
-        writeEntry(file)
+        if (!file.isDirectory && file.exists()) {
+          val fileEntry = new TarArchiveEntry(file, file.getName)
+          tarBall.putArchiveEntry(fileEntry)
+          IOUtils.copy(new FileInputStream(file), tarBall)
+          tarBall.closeArchiveEntry()
+        }
       })
 
-      modelDataFile = File.createTempFile(modelDataString, ".txt")
-      FileUtils.writeByteArrayToFile(modelDataFile, modelData)
-      writeEntry(modelDataFile)
+      val modelDataEntry = new TarArchiveEntry(modelDataString + ".txt")
+      modelDataEntry.setSize(modelData.length)
+      tarBall.putArchiveEntry(modelDataEntry)
+      IOUtils.copy(new ByteArrayInputStream(modelData), tarBall)
+      tarBall.closeArchiveEntry()
 
-      modelLoaderFile = File.createTempFile(modelReaderString, ".txt")
-      FileUtils.writeStringToFile(modelLoaderFile, modelLoaderClass)
-      writeEntry(modelLoaderFile)
+      val modelLoaderEntry = new TarArchiveEntry(modelReaderString + ".txt")
+      modelLoaderEntry.setSize(modelLoaderClass.length)
+      tarBall.putArchiveEntry(modelLoaderEntry)
+      IOUtils.copy(new ByteArrayInputStream(modelLoaderClass.getBytes("utf-8")), tarBall)
+      tarBall.closeArchiveEntry()
+    }
+    catch {
+      case e: Exception =>
+        error("writing model failed", exception = e)
+        throw e
     }
     finally {
       tarBall.finish()
       IOUtils.closeQuietly(tarBall)
-      FileUtils.deleteQuietly(modelLoaderFile)
-      outputStream.close()
-      FileUtils.deleteQuietly(modelDataFile)
     }
   }
 
@@ -92,8 +91,6 @@ object ModelPublishFormat {
     var outputFile: FileOutputStream = null
     var tarFile: TarArchiveInputStream = null
     var modelName: String = null
-    var ModelBytesFileName: String = null
-    var archiveName: String = null
     var urls = Array.empty[URL]
     var byteArray: Array[Byte] = null
     var file: File = null
@@ -132,6 +129,11 @@ object ModelPublishFormat {
       val modelLoader = classLoader.loadClass(modelName).newInstance()
 
       modelLoader.asInstanceOf[ModelLoader].load(byteArray)
+    }
+    catch {
+      case e: Exception =>
+        error("reading model failed", exception = e)
+        throw e
     }
     finally {
       IOUtils.closeQuietly(outputFile)

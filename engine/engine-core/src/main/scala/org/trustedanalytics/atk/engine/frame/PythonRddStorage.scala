@@ -1,25 +1,25 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 
 package org.trustedanalytics.atk.engine.frame
 
 import java.io.File
 import java.util
 
-import org.trustedanalytics.atk.component.ClassLoaderAware
+import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.Udf
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
@@ -138,11 +138,9 @@ object PythonRddStorage {
     val accumulator = rdd.sparkContext.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
 
-    var pyIncludes = new JArrayList[String]()
+    val pyIncludes = new JArrayList[String]()
 
-    val pythonDefaultDependency = SparkContextFactory.getResourcePath("trustedanalytics.zip", Some(EngineConfig.pythonDefaultDependencySearchDirectories))
-      .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution"))
-    sc.addFile(s"file://$pythonDefaultDependency")
+    sc.addFile(s"file://$pythonDepZip")
     pyIncludes.add("trustedanalytics.zip")
 
     if (udf.dependencies != null) {
@@ -156,6 +154,27 @@ object PythonRddStorage {
       pythonExec = pythonExec,
       broadcastVars, accumulator)
     pyRdd
+  }
+
+  /** Path to trustedanalytics.zip (our python code) */
+  lazy val pythonDepZip: String = {
+    getResourcePath("trustedanalytics.zip", EngineConfig.pythonDefaultDependencySearchDirectories)
+      .getOrElse(throw new RuntimeException("Python dependencies were not packaged for UDF execution (searched: " + EngineConfig.pythonDefaultDependencySearchDirectories.mkString(", ") + ")"))
+  }
+
+  // TODO: this recursive searching is quite slow, there must be a better way to do this
+  private def getResourcePath(resourceName: String, additionalPaths: Seq[String]): Option[String] = {
+    val currentDirectory = Directory.Current.getOrElse(
+      throw new RuntimeException(s"Error encountered while looking up $resourceName in current directory"))
+    val searchableDirectories = Array(currentDirectory) ++ (for { path <- additionalPaths } yield Directory(path))
+
+    val result = for {
+      directory <- searchableDirectories
+      file <- directory.deepFiles.toList.map(_.toString())
+      if file.endsWith(resourceName)
+    } yield file
+
+    result.headOption
   }
 
   def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null): RDD[Array[Any]] = {

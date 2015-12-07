@@ -1,17 +1,19 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
@@ -26,23 +28,13 @@ api = get_api_decorator(logger)
 
 from trustedanalytics.meta.namedobj import name_support
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
-from trustedanalytics.meta.docstub import doc_stubs_import
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics import valid_data_types
-
-# _BaseModel
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubs_BaseModel
-    doc_stubs_import.success(logger, "_DocStubs_BaseModel")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubs_BaseModel", e)
-    class _DocStubs_BaseModel(object): pass
 
 
 @api
 @name_support('model')
-class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
+class _BaseModel(CommandLoadable):
     """
     Class with information about a model.
     Has information needed to modify data and table structure.
@@ -93,7 +85,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     @returns(data_type=str, description="Status of the model")
     def __status(self):
         """
-        Current model life cycle status.
+        Read-only property - Current model life cycle status.
 
         One of three statuses: Active, Dropped, Finalized
            Active:    Entity is available for use
@@ -110,7 +102,7 @@ class _BaseModel(_DocStubs_BaseModel, CommandLoadable):
     @returns(data_type=str, description="Date string of the last time this model's data was accessed")
     def __last_read_date(self):
         """
-        Last time this frame's data was accessed.
+        Read-only property - Last time this model's data was accessed.
         """
         try:
             return self._get_model_info().last_read_date

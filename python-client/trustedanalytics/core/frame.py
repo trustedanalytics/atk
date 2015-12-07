@@ -1,23 +1,24 @@
+# vim: set encoding=utf-8
+
 #
-# Copyright (c) 2015 Intel Corporation 
+#  Copyright (c) 2015 Intel Corporation 
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#       http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 #
 
 """
 Frame entity types
 """
-
 
 import logging
 logger = logging.getLogger(__name__)
@@ -64,17 +65,6 @@ def _get_backend():
     from trustedanalytics.meta.config import get_frame_backend
     return get_frame_backend()
 
-
-# BaseFrame
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubs_BaseFrame
-    doc_stubs_import.success(logger, "_DocStubsBaseFrame")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsBaseFrame", e)
-    class _DocStubs_BaseFrame(object): pass
-
-
 # Frame
 try:
     # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
@@ -112,17 +102,60 @@ def __drop(*items):
     """
     drop() serves as an alias to drop_frames, drop_graphs, and drop_models.
 
-    It accepts a list of items, which can contain strings (the name of the frame, graph, or model)
-    or proxy objects (the frame, graph, or model object itself).  If the item provided is a string
-    and no frame, graph, or model is found with the specified name, no action is taken.
+    It accepts multiple parameters, which can contain strings (the name of the frame, graph, or model),
+    proxy objects (the frame, graph, or model object itself), or a list of strings and/or proxy objects.
+    If the item provided is a string and no frame, graph, or model is found with the specified name,
+    no action is taken.
 
     If the item type is not recognized (not a string, frame, graph, or model) an ArgumentError is raised.
+
+    Examples
+    --------
+
+    Given a frame, model, and graph like:
+
+        .. code::
+
+            >>> my_frame = ta.Frame()
+
+            >>> my_model = ta.KMeansModel()
+            <progress>
+
+            >>> my_graph = ta.Graph()
+            -etc-
+
+    The drop() command can be used to delete the frame, model, and graph from the server.  It returns the number
+    of items that have been deleted.
+
+        .. code::
+
+            >>> ta.drop(my_frame, my_model, my_graph)
+            3
+
+    Alternatively, we can pass the object's string name to drop() like:
+
+    .. code::
+
+            >>> my_frame = ta.Frame(name='example_frame')
+
+            >>> ta.drop('example_frame')
+            1
+
     """
     from trustedanalytics import drop_frames, drop_graphs, drop_models, _BaseGraph, _BaseModel, get_frame_names, get_graph_names, get_model_names
 
     num_deleted = 0     # track the number of items we delete to return
 
+    # Flatten out the items (break out lists)
+    flat_item_list = []
+
     for item in items:
+        if isinstance(item, list):
+            flat_item_list.extend(item)
+        else:
+            flat_item_list.append(item)
+
+    for item in flat_item_list:
         if item is not None:
             if isinstance(item, basestring):
                 # If the item is a string, try calling drop_* functions, until we're successful.
@@ -155,7 +188,7 @@ def __drop(*items):
 
 @api
 @name_support('frame')
-class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
+class _BaseFrame(CommandLoadable):
     _entity_type = 'frame'
 
     def __init__(self):
@@ -933,6 +966,7 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         by python REPL (i.e. using the object's __repr__).  If running in a script and want the inspect output
         to be printed, then it must be explicitly printed, then `print frame.inspect()`
 
+
         Examples
         --------
         To look at the first 4 rows of data in a frame:
@@ -941,15 +975,26 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
 
         <skip>
             >>> frame.inspect(4)
-           [#]  animal    name    age  weight
-           ==================================
-           [0]  human     George    8   542.5
-           [1]  human     Ursula    6   495.0
-           [2]  ape       Ape      41   400.0
-           [3]  elephant  Shep      5  8630.0
+            [#]  animal    name    age  weight
+            ==================================
+            [0]  human     George    8   542.5
+            [1]  human     Ursula    6   495.0
+            [2]  ape       Ape      41   400.0
+            [3]  elephant  Shep      5  8630.0
         </skip>
 
         # For other examples, see :ref:`example_frame.inspect`.
+
+        Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
+        running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
+        this problem, explicitly print the unicode of the returned object:
+
+        .. code::
+
+        <skip>
+            >>> print unicode(frame.inspect())
+        </skip>
+
 
         **Global Settings**
 
@@ -1302,6 +1347,48 @@ class _BaseFrame(_DocStubs_BaseFrame, CommandLoadable):
         result = self._backend.take(self, n, offset, columns)
         return result.data
 
+    @api
+    @arg('column', 'str', "The name of the column to be flattened.")
+    @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
+    @deprecated
+    def __flatten_column(self, column, delimiter=None):
+        """
+        Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
+
+        Spread data to multiple rows based on cell data.
+
+        Splits cells in the specified column into multiple rows according to a string
+        delimiter.
+        New rows are a full copy of the original row, but the specified column only
+        contains one value.
+        The original row is deleted.
+        """
+
+        if delimiter is None:
+            delimiter = [","]
+
+        self.flatten_columns(column, delimiter)
+
+    @api
+    @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
+    @arg('delimiter', 'str', "Separator for the data in the result columns. Default is comma (,).")
+    @deprecated
+    def __unflatten_column(self, columns, delimiter=None):
+        """
+        Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
+
+        Compacts data from multiple rows based on cell data.
+
+        Groups together cells in all columns (less the composite key) using "," as string delimiter.
+        The original rows are deleted.
+        The grouping takes place based on a composite key created from cell values.
+        The column datatypes are changed to string.
+        """
+
+        if delimiter is None:
+            delimiter = ","
+
+        self.unflatten_columns(columns, delimiter)
 
 @api
 class Frame(_DocStubsFrame, _BaseFrame):
@@ -1511,9 +1598,9 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
-    def __drop_vertices(self, predicate):
+    def __drop_rows(self, predicate):
         """
-        Delete rows that qualify.
+        Delete rows in this vertex frame that qualify.
 
         Parameters
         ----------
@@ -1523,32 +1610,137 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
         Examples
         --------
-        Given VertexFrame object *my_vertex_frame* accessing a graph with lots
-        of data for the attributes of ``lions``, ``tigers``, and ``ligers``.
-        Get rid of the ``lions`` and ``tigers``:
+        Create a frame, move the data to graph and then define a new VertexFrame and add data to it:
 
-        <skip>
-        .. only:: html
+        .. code::
 
-            .. code::
+            >>> schema = [('viewer', str), ('profile', ta.int32), ('movie', str), ('rating', ta.int32)]
+            >>> data = [['fred',0,'Croods',5],
+            ...          ['fred',0,'Jurassic Park',5],
+            ...          ['fred',0,'2001',2],
+            ...          ['fred',0,'Ice Age',4],
+            ...          ['wilma',0,'Jurassic Park',3],
+            ...          ['wilma',0,'2001',5],
+            ...          ['wilma',0,'Ice Age',4],
+            ...          ['pebbles',1,'Croods',4],
+            ...          ['pebbles',1,'Land Before Time',3],
+            ...          ['pebbles',1,'Ice Age',5]]
+            >>> frame = ta.Frame(ta.UploadRows(data, schema))
+            <progress>
 
-                >>> my_vertex_frame.drop_vertices(lambda row: row.animal_type == "lion" or row.animal_type == "tiger")
+            >>> frame.inspect()
+            [#]  viewer   profile  movie             rating
+            ===============================================
+            [0]  fred           0  Croods                 5
+            [1]  fred           0  Jurassic Park          5
+            [2]  fred           0  2001                   2
+            [3]  fred           0  Ice Age                4
+            [4]  wilma          0  Jurassic Park          3
+            [5]  wilma          0  2001                   5
+            [6]  wilma          0  Ice Age                4
+            [7]  pebbles        1  Croods                 4
+            [8]  pebbles        1  Land Before Time       3
+            [9]  pebbles        1  Ice Age                5
 
-        .. only:: latex
+            >>> graph = ta.Graph()
 
-            .. code::
+            >>> graph.define_vertex_type('viewer')
+            <progress>
 
-                >>> my_vertex_frame.drop_vertices(lambda row:
-                ...     row.animal_type == "lion" or
-                ...     row.animal_type == "tiger")
+            >>> graph.define_vertex_type('film')
+            <progress>
 
-        Now the frame only has information about ``ligers``.
+            >>> graph.define_edge_type('rating', 'viewer', 'film')
+            <progress>
 
-        More information on |UDF| can be found at :doc:`/ds_apir`
+            >>> graph.vertices['viewer'].add_vertices(frame, 'viewer', ['profile'])
+            <progress>
 
-        </skip>
+            >>> graph.vertices['viewer'].inspect()
+            [#]  _vid  _label  viewer   profile
+            ===================================
+            [0]     1  viewer  fred           0
+            [1]     8  viewer  pebbles        1
+            [2]     5  viewer  wilma          0
+
+            >>> graph.vertices['film'].add_vertices(frame, 'movie')
+            <progress>
+
+            >>> graph.vertices['film'].inspect()
+            [#]  _vid  _label  movie
+            ===================================
+            [0]    19  film    Land Before Time
+            [1]    14  film    Ice Age
+            [2]    12  film    Jurassic Park
+            [3]    11  film    Croods
+            [4]    13  film    2001
+
+            >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
+            <progress>
+
+            >>> graph.edges['rating'].inspect()
+            [#]  _eid  _src_vid  _dest_vid  _label  rating
+            ==============================================
+            [0]    24         1         14  rating       4
+            [1]    22         1         12  rating       5
+            [2]    21         1         11  rating       5
+            [3]    23         1         13  rating       2
+            [4]    29         8         19  rating       3
+            [5]    30         8         14  rating       5
+            [6]    28         8         11  rating       4
+            [7]    27         5         14  rating       4
+            [8]    25         5         12  rating       3
+            [9]    26         5         13  rating       5
+
+        Call drop_rows() on the film VertexFrame to remove the row for the movie 'Croods' (vid = 11).
+        Dangling edges (edges corresponding to 'Croods, vid = 11) are also removed.
+
+        .. code::
+
+            >>> graph.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
+            <progress>
+
+            >>> graph.vertices['film'].inspect()
+            [#]  _vid  _label  movie
+            ===================================
+            [0]    19  film    Land Before Time
+            [1]    14  film    Ice Age
+            [2]    12  film    Jurassic Park
+            [3]    13  film    2001
+
+            >>> graph.edges['rating'].inspect()
+            [#]  _eid  _src_vid  _dest_vid  _label  rating
+            ==============================================
+            [0]    22         1         12  rating       5
+            [1]    25         5         12  rating       3
+            [2]    23         1         13  rating       2
+            [3]    26         5         13  rating       5
+            [4]    24         1         14  rating       4
+            [5]    30         8         14  rating       5
+            [6]    27         5         14  rating       4
+            [7]    29         8         19  rating       3
+
         """
+
         self._backend.filter_vertices(self, predicate, keep_matching_vertices=False)
+
+    @api
+    @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
+    @deprecated
+    def __drop_vertices(self, predicate):
+        """
+        drop_vertices has been deprecated.  Use drop_rows instead.
+
+        Delete rows in this vertex frame that qualify.
+
+        Parameters
+        ----------
+        predicate : |UDF|
+            |UDF| or :term:`lambda` which takes a row argument and evaluates
+            to a boolean value.
+
+        """
+        self.drop_rows(predicate)
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row to a boolean; vertices that answer False are dropped from the Frame")

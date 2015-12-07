@@ -148,10 +148,6 @@
             <artifactId>model-plugins</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>daal-plugins</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-protocol</artifactId>
             <exclusions>
