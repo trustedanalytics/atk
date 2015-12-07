@@ -28,6 +28,7 @@ import spray.json._
 import spray.routing.Directives
 import org.trustedanalytics.atk.event.EventLogging
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
@@ -55,7 +56,12 @@ class DataCatalogService(commonDirectives: CommonDirectives, engine: Engine) ext
             } ~ post {
               entity(as[ExportMetadata]) {
                 catalogmetadata =>
-                  complete(TrustedAnalyticsDataCatalog.publishToDataCatalog(catalogmetadata))
+                  onComplete(Future {
+                    TrustedAnalyticsDataCatalog.publishToDataCatalog(catalogmetadata)
+                  }) {
+                    case Success(path) => complete(path)
+                    case Failure(ex) => complete(StatusCodes.Unauthorized, ex.getMessage)
+                  }
               }
             }
           }
