@@ -32,13 +32,6 @@ trait GraphElement {
   def getProperty(key: String): Option[Property]
 
   /**
-   * Get a property value as String if this key exists
-   * @param key Property key
-   * @return Matching property value, or empty string if no such property
-   */
-  def getPropertyValueAsString(key: String): String
-
-  /**
    * Get property values to a array in the order specified.
    * @param columns specifed columns to retrieve property values
    * @param properties properties

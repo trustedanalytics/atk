@@ -16,14 +16,11 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering
 
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
-import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.DoubleValue
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.apache.spark.mllib.recommendation.{ MatrixFactorizationModel, Rating }
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.collaborativefiltering.CollaborativeFilteringJsonFormat._
 import org.trustedanalytics.atk.engine.plugin._
-import CollaborativeFilteringJsonFormat._
+
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
@@ -33,9 +30,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 @PluginDoc(oneLine = "Collaborative Filtering Predict (ALS).",
   extended = """See :ref:`Collaborative Filtering Train
 <python_api/models/model-collaborative_filtering/train>` for more information.""",
-  returns = """Returns a double representing the probability if the user(i) to like product (j)""")
-class CollaborativeFilteringScorePlugin
-    extends SparkCommandPlugin[CollaborativeFilteringScoreArgs, DoubleValue] {
+  returns = """Returns an array of recommendations (as array of csv-strings)""")
+class CollaborativeFilteringRecommendPlugin
+    extends SparkCommandPlugin[CollaborativeFilteringRecommendArgs, CollaborativeFilteringRecommendReturn] {
 
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -43,11 +40,11 @@ class CollaborativeFilteringScorePlugin
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:collaborative_filtering/score"
+  override def name: String = "model:collaborative_filtering/recommend"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
-  override def execute(arguments: CollaborativeFilteringScoreArgs)(implicit invocation: Invocation): DoubleValue = {
+  override def execute(arguments: CollaborativeFilteringRecommendArgs)(implicit invocation: Invocation): CollaborativeFilteringRecommendReturn = {
 
     val model: Model = arguments.model
     val data = model.data.convertTo[CollaborativeFilteringData]
@@ -59,7 +56,31 @@ class CollaborativeFilteringScorePlugin
       CollaborativeFilteringHelper.toAlsRdd(userFrame, data),
       CollaborativeFilteringHelper.toAlsRdd(productFrame, data))
 
-    DoubleValue(alsModel.predict(arguments.userId, arguments.itemId))
+    CollaborativeFilteringRecommendReturn(formatReturn(recommend(alsModel, arguments)))
   }
 
+  private def recommend(alsModel: MatrixFactorizationModel,
+                        arguments: CollaborativeFilteringRecommendArgs): Array[Rating] = {
+    val entityId = arguments.entityId
+    val numberOfRecommendations = arguments.numberOfRecommendations
+
+    if (arguments.recommendProducts) {
+      alsModel.recommendProducts(entityId, numberOfRecommendations)
+    }
+    else {
+      alsModel.recommendUsers(entityId, numberOfRecommendations)
+    }
+  }
+
+  private def formatReturn(alsRecommendations: Array[Rating]): List[CollaborativeFilteringSingleRecommendReturn] = {
+    val recommendationAsList =
+      for {
+        recommendation <- alsRecommendations
+        entityId = recommendation.user.asInstanceOf[Int]
+        recommendationId = recommendation.product.asInstanceOf[Int]
+        rating = recommendation.rating.asInstanceOf[Double]
+      } yield CollaborativeFilteringSingleRecommendReturn(entityId, recommendationId, rating)
+
+    recommendationAsList.toList
+  }
 }
