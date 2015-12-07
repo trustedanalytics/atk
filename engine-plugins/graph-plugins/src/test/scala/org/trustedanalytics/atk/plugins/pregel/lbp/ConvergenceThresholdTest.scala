@@ -14,13 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel.lbp
 
-import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
-import org.scalatest.{ Matchers, FlatSpec }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
+import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
+import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
+import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
@@ -69,45 +70,45 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   "BP Runner" should "run for one iteration when convergence threshold is 1.0" in new CTTest {
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = Some(1d),
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 1d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     log should include("Total number of iterations: 1")
   }
 
   "BP Runner" should "run for two iterations when convergence threshold is 0.2" in new CTTest {
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = Some(0.2d),
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0.2d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     log should include("Total number of iterations: 2")
   }
 
   "BP Runner" should "run for two iterations when  convergence threshold is 0" in new CTTest {
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = Some(0d),
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     log should include("Total number of iterations: 2")
   }
@@ -116,15 +117,15 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   "BP Runner" should "run for two iterations when no convergence threshold given" in new CTTest {
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = None,
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
 
     log should include("Total number of iterations: 2")
   }

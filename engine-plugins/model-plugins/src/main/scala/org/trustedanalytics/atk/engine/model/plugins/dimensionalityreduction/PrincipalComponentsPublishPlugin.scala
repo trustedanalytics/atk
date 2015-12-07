@@ -24,6 +24,7 @@ import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, CommandPlugin, ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.scoring.models.PrincipalComponentsModelReaderPlugin
 
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -67,7 +68,7 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, E
 
     val modelArtifact = ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.PrincipalComponentsReaderPlugin")
+      classOf[PrincipalComponentsModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("principal_components_model"))
   }
 }

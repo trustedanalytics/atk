@@ -14,12 +14,15 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.loopybeliefpropagation
+package org.trustedanalytics.atk.plugins.pregel.lbp
 
-import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
-import org.scalatest.{ Matchers, FlatSpec }
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
+import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
+import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
+import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
+import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
@@ -38,19 +41,18 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
     val floatingPointEqualityThreshold: Double = 0.000000001d
 
-    val args = LoopyBeliefPropagationRunnerArgs(
+    val args = PregelArgs(
       priorProperty = inputPropertyName,
-      edgeWeightProperty = None,
-      maxIterations = Some(10),
-      stringOutput = None,
-      convergenceThreshold = None,
+      edgeWeightProperty = StringUtils.EMPTY,
+      maxIterations = 10,
+      stringOutput = false,
+      convergenceThreshold = 0d,
       posteriorProperty = propertyForLBPOutput)
 
   }
   "BP Runner" should "work with a triangle with uniform probabilities" in new BPTest {
 
     val vertexSet: Set[Long] = Set(1, 2, 3)
-
     val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
       2.toLong -> Vector(0.5d, 0.5d), 3.toLong -> Vector(0.5d, 0.5d))
 
@@ -58,13 +60,15 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
     val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong), (1.toLong, 3.toLong), (2.toLong, 3.toLong))
       .flatMap({ case (x, y) => Set((x, y), (y, x)) })
-
     val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, pdfValues.get(x).get))))
-
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst,
+            Property(srcIdPropertyName, src),
+            Property(dstIdPropertyName, dst),
+            edgeLabel, Set.empty[Property]
+          )
       })
 
     val expectedVerticesOut =
@@ -73,12 +77,9 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
           Property(propertyForLBPOutput, pdfValues.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
-
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
-
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
-
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
 
@@ -95,21 +96,23 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
   "BP Runner" should "work with a four-cycle with uniform probabilities" in new BPTest {
 
     val vertexSet: Set[Long] = Set(1, 2, 3, 4)
-
     val pdfValues: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
       2.toLong -> Vector(0.5d, 0.5d), 3.toLong -> Vector(0.5d, 0.5d), 4.toLong -> Vector(0.5d, 0.5d))
 
     //  directed edge list is made bidirectional with a flatmap
-
     val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong), (2.toLong, 3.toLong),
       (3.toLong, 4.toLong), (4.toLong, 1.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
-
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, pdfValues.get(x).get))))
-
+    val gbVertexSet = vertexSet.map(x => GBVertex(x,
+      Property(vertexIdPropertyName, x),
+      Set(Property(inputPropertyName, pdfValues.get(x).get))))
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst,
+            Property(srcIdPropertyName, src),
+            Property(dstIdPropertyName, dst),
+            edgeLabel, Set.empty[Property]
+          )
       })
 
     val expectedVerticesOut =
@@ -118,12 +121,9 @@ class LoopTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
           Property(propertyForLBPOutput, pdfValues.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
-
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
-
-    val (verticesOut, edgesOut, log) = LoopyBeliefPropagationRunner.run(verticesIn, edgesIn, args)
-
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
 
