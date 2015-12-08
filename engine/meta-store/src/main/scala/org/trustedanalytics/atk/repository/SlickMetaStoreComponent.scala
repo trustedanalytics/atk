@@ -20,6 +20,7 @@ import org.apache.commons.dbcp.BasicDataSource
 import com.github.tototoshi.slick.GenericJodaSupport
 
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntryTemplate, GarbageCollectionEntry, GarbageCollection, GarbageCollectionTemplate }
+import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.joda.time.DateTime
 import scala.slick.driver.JdbcDriver
@@ -124,6 +125,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
             frameRepo.asInstanceOf[SlickFrameRepository].createTable // depends on user, status
             gcRepo.asInstanceOf[SlickGarbageCollectionRepository].createTable
             gcEntryRepo.asInstanceOf[SlickGarbageCollectionEntryRepository].createTable //depends on gc
+            jobContextRepo.asInstanceOf[SlickJobContextRepository].createTable
 
             info("Schema creation completed")
 
@@ -162,6 +164,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
             modelRepo.asInstanceOf[SlickModelRepository].dropTable
             gcEntryRepo.asInstanceOf[SlickGarbageCollectionEntryRepository].dropTable //depends on gc
             gcRepo.asInstanceOf[SlickGarbageCollectionRepository].dropTable
+            jobContextRepo.asInstanceOf[SlickJobContextRepository].dropTable
             info("tables dropped")
           }
           else {
@@ -187,6 +190,8 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     /** Repository for CRUD on 'user' table */
     override lazy val userRepo: Repository[Session, UserTemplate, User] with Queryable[Session, User] = new SlickUserRepository
+
+    override lazy val jobContextRepo: JobContextRepository[Session] = new SlickJobContextRepository
 
     override def withSession[T](name: String)(f: (Session) => T)(implicit evc: EventContext = EventContext.getCurrent()): T = {
       withContext(name) {
@@ -627,8 +632,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     def createdById = column[Option[Long]]("created_by")
 
+    def jobContextId = column[Option[Long]]("jobcontext_id", O.Default(None))
+
     /** projection to/from the database */
-    def * = (id, name, arguments, correlationId, error, progress, complete, result, createdOn, modifiedOn, createdById) <>
+    def * = (id, name, arguments, correlationId, error, progress, complete, result, createdOn, modifiedOn, createdById, jobContextId) <>
       (Command.tupled, Command.unapply)
 
     def createdBy = foreignKey("command_created_by", createdById, users)(_.id)
@@ -651,7 +658,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def insert(command: CommandTemplate)(implicit session: Session): Try[Command] = Try {
       // TODO: add createdBy user id
-      val c = Command(0, command.name, command.arguments, "", None, List(), complete = false, None, new DateTime(), new DateTime(), command.createdBy)
+      val c = Command(0, command.name, command.arguments, "", None, List(), complete = false, None, new DateTime(), new DateTime(), command.createdBy, None)
       commandsAutoInc.insert(c)
     }
 
@@ -714,6 +721,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       val q = for { c <- commandTable if c.id === id && c.complete === false } yield c.progress
       q.update(progress)
     }
+
   }
 
   class GraphTable(tag: Tag) extends Table[GraphEntity](tag, "graph") {
@@ -1174,6 +1182,87 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
         .update((Some(new DateTime), new DateTime))
       garbageCollectionEntries.where(_.id === entity.id).firstOption.get
     }
+  }
+
+  class SlickJobContextRepository extends JobContextRepository[Session]
+      with EventLogging {
+    this: Repository[Session, JobContextTemplate, JobContext] =>
+
+    class JobContextTable(tag: Tag) extends Table[JobContext](tag, "jobcontext") {
+      def id = column[Long]("jobcontext_id", O.PrimaryKey, O.AutoInc)
+
+      def userId = column[Long]("user_id")
+
+      def yarnAppName = column[String]("yarn_app_name")
+
+      def yarnAppId = column[String]("yarn_app_id")
+
+      def clientId = column[String]("client_id")
+
+      def createdOn = column[DateTime]("created_on")
+
+      def modifiedOn = column[DateTime]("modified_on")
+
+      def progress = column[Option[String]]("progress")
+
+      def jobServerUri = column[Option[String]]("job_server_uri")
+
+      /** projection to/from the database */
+      override def * = (id, userId, yarnAppName, yarnAppId, clientId,
+        createdOn, modifiedOn, progress, jobServerUri) <> (JobContext.tupled, JobContext.unapply)
+
+    }
+
+    val jobContexts = TableQuery[JobContextTable]
+
+    protected val jobContextAutoInc = jobContexts returning jobContexts.map(_.id) into {
+      case (jobContext, id) => jobContext.copy(id = id)
+    }
+
+    override def insert(jobContext: JobContextTemplate)(implicit session: Session): Try[JobContext] = Try {
+      val m = JobContext(1, jobContext.userId, jobContext.yarnAppName, jobContext.yarnAppId, jobContext.replId, new DateTime(), new DateTime(), None, None)
+      jobContextAutoInc.insert(m)
+    }
+
+    override def delete(id: Long)(implicit session: Session): Try[Unit] = Try {
+      jobContexts.where(_.id === id).mutate(f => f.delete())
+    }
+
+    override def update(jobContext: JobContext)(implicit session: Session): Try[JobContext] = Try {
+      val updatedJobContext = jobContext.copy(modifiedOn = new DateTime)
+      jobContexts.where(_.id === jobContext.id).update(updatedJobContext)
+      updatedJobContext
+    }
+
+    override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {
+      jobContexts.drop(offset).take(count).list
+    }
+
+    def scanAll()(implicit session: Session): Seq[JobContext] = {
+      jobContexts.list
+    }
+
+    override def lookup(id: Long)(implicit session: Session): Option[JobContext] = {
+      jobContexts.where(_.id === id).firstOption
+    }
+
+    override def lookupByName(name: Option[String])(implicit session: Session): Option[JobContext] = {
+      name match {
+        case Some(n) => jobContexts.where(_.yarnAppName === n).firstOption
+        case _ => None
+      }
+    }
+
+    /** execute DDL to create the underlying table */
+    def createTable(implicit session: Session) = {
+      jobContexts.ddl.create
+    }
+
+    /** execute DDL to drop the underlying table - for unit testing */
+    def dropTable()(implicit session: Session) = {
+      jobContexts.ddl.drop
+    }
+
   }
 
 }

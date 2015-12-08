@@ -13,13 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.trustedanalytics.atk.domain.jobcontext
 
-package org.trustedanalytics.atk.domain
-
-/**
- * Principal representing an authenticated API user
- * @param user user DB entity representing the API user
- * @param roles roles of the authenticated user
- */
-case class UserPrincipal(user: User, roles: List[String], token: Option[String] = None, appOrgId: Option[String] = None,
-                         clientId: Option[String] = None)
+/* Template for creating a new JobContext */
+case class JobContextTemplate(userId: Long, yarnAppName: String, yarnAppId: String, replId: String)
