@@ -67,9 +67,13 @@ object DiscretizationFunctions extends Serializable {
    */
   def binColumns(index: Int, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, rdd: RDD[Row]): RDD[Row] = {
     rdd.map { row: Row =>
-      val element = DataTypes.toDouble(row(index))
-      //if lower than first cutoff
-      val binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
+      var binIndex = -1
+
+      if (row(index) != null) {
+        val element = DataTypes.toDouble(row(index))
+        //if lower than first cutoff
+        binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
+      }
       new GenericRow(row.toSeq.toArray :+ binIndex)
     }
   }

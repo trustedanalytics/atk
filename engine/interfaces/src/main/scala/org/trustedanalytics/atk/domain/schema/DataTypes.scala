@@ -543,8 +543,16 @@ object DataTypes extends EventLogging {
           case null => null
           case _ =>
             val colType = lifted(i).get
-            val value = colType.parse(s)
-            value.get
+
+            try {
+              val value = colType.parse(s)
+              value.get
+            }
+            catch {
+              case e: NumberFormatException =>
+                null
+            }
+
         }
     }
   }
