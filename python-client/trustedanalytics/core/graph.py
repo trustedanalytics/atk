@@ -201,9 +201,9 @@ Default is None.""")
     >>> graph.vertices['viewer'].inspect()
     [#]  _vid  _label  viewer   profile
     ===================================
-    [0]     1  viewer  fred           0
+    [0]     4  viewer  fred           0
     [1]     8  viewer  pebbles        1
-    [2]     5  viewer  wilma          0
+    [2]     7  viewer  wilma          0
 
     >>> graph.vertices['film'].add_vertices(frame, 'movie')
     <progress>
@@ -211,7 +211,7 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    19  film    Land Before Time
-    [1]    14  film    Ice Age
+    [1]    20  film    Ice Age
     [2]    12  film    Jurassic Park
     [3]    11  film    Croods
     [4]    13  film    2001
@@ -221,16 +221,16 @@ Default is None.""")
     >>> graph.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  rating
     ==============================================
-    [0]    24         1         14  rating       4
-    [1]    22         1         12  rating       5
-    [2]    21         1         11  rating       5
-    [3]    23         1         13  rating       2
+    [0]    24         4         20  rating       4
+    [1]    22         4         12  rating       5
+    [2]    21         4         11  rating       5
+    [3]    23         4         13  rating       2
     [4]    29         8         19  rating       3
-    [5]    30         8         14  rating       5
+    [5]    30         8         20  rating       5
     [6]    28         8         11  rating       4
-    [7]    27         5         14  rating       4
-    [8]    25         5         12  rating       3
-    [9]    26         5         13  rating       5
+    [7]    27         7         20  rating       4
+    [8]    25         7         12  rating       3
+    [9]    26         7         13  rating       5
 
     Explore basic graph properties:
 
@@ -277,10 +277,10 @@ Default is None.""")
     >>> graph.vertices['viewer'].inspect()
     [#]  _vid  _label  viewer     profile
     =====================================
-    [0]     5  viewer  wilma            0
-    [1]     1  viewer  fred             0
-    [2]    31  viewer  betty            0
-    [3]    35  viewer  barney           0
+    [0]     7  viewer  wilma            0
+    [1]     4  viewer  fred             0
+    [2]    34  viewer  betty            0
+    [3]    38  viewer  barney           0
     [4]     8  viewer  pebbles          1
     [5]    39  viewer  bamm bamm        1
 
@@ -290,10 +290,10 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    41  film    Croods
-    [3]    43  film    Land Before Time
-    [4]    42  film    Jurassic Park
+    [1]    48  film    Ice Age
+    [2]    49  film    Croods
+    [3]    50  film    Land Before Time
+    [4]    46  film    Jurassic Park
 
     >>> graph.vertex_count
     <progress>
@@ -302,32 +302,30 @@ Default is None.""")
     >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
     <progress>
 
-    <skip>  # todo: fix bug DPAT-926
     >>> graph.edges['rating'].inspect(20)
     [##]  _eid  _src_vid  _dest_vid  _label  rating
     ===============================================
-    [0]     24         1         14  rating       4
-    [1]     22         1         12  rating       5
-    [2]     21         1         11  rating       5
-    [3]     23         1         13  rating       2
+    [0]     24         4         20  rating       4
+    [1]     22         4         12  rating       5
+    [2]     21         4         11  rating       5
+    [3]     23         4         13  rating       2
     [4]     29         8         19  rating       3
-    [5]     30         8         14  rating       5
+    [5]     30         8         20  rating       5
     [6]     28         8         11  rating       4
-    [7]     27         5         14  rating       4
-    [8]     25         5         12  rating       3
-    [9]     26         5         13  rating       5
-    [10]    60        39         43  rating       3
-    [11]    59        39         41  rating       5
-    [12]    53        31         43  rating       4
-    [13]    54        31         44  rating       3
-    [14]    52        31         42  rating       3
-    [15]    51        31         41  rating       5
-    [16]    57        35         43  rating       3
-    [17]    58        35         44  rating       5
-    [18]    56        35         42  rating       5
-    [19]    55        35         41  rating       5
+    [7]     27         7         20  rating       4
+    [8]     25         7         12  rating       3
+    [9]     26         7         13  rating       5
+    [10]    60        39         50  rating       3
+    [11]    59        39         49  rating       5
+    [12]    53        34         50  rating       4
+    [13]    54        34         48  rating       3
+    [14]    52        34         46  rating       3
+    [15]    51        34         49  rating       5
+    [16]    57        38         50  rating       3
+    [17]    58        38         48  rating       5
+    [18]    56        38         46  rating       5
+    [19]    55        38         49  rating       5
 
-    </skip>
     >>> graph.edge_count
     <progress>
     20
@@ -370,8 +368,8 @@ Default is None.""")
     >>> graph2.vertices['viewer'].inspect()
     [#]  _vid  _label  person     profile
     =====================================
-    [0]    31  viewer  betty            0
-    [1]    35  viewer  barney           0
+    [0]    34  viewer  betty            0
+    [1]    38  viewer  barney           0
     [2]    39  viewer  bamm bamm        1
 
     >>> graph2.vertices['viewer'].drop_duplicates("profile")
@@ -385,7 +383,7 @@ Default is None.""")
     >>> graph2.vertices['viewer'].inspect()
     [#]  _vid  _label  person     profile
     =====================================
-    [0]    31  viewer  betty            0
+    [0]    34  viewer  betty            0
     [1]    39  viewer  bamm bamm        1
 
     Now check our edges to see that they have also be filtered.
@@ -393,12 +391,12 @@ Default is None.""")
     >>> graph2.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  score
     =============================================
-    [0]    60        39         43  rating      3
-    [1]    59        39         41  rating      5
-    [2]    53        31         43  rating      4
-    [3]    54        31         44  rating      3
-    [4]    52        31         42  rating      3
-    [5]    51        31         41  rating      5
+    [0]    60        39         50  rating      3
+    [1]    59        39         49  rating      5
+    [2]    53        34         50  rating      4
+    [3]    54        34         48  rating      3
+    [4]    52        34         46  rating      3
+    [5]    51        34         49  rating      5
 
     Only source vertices 31 and 39 remain.
 
@@ -408,10 +406,10 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    41  film    Croods
-    [3]    43  film    Land Before Time
-    [4]    42  film    Jurassic Park
+    [1]    48  film    Ice Age
+    [2]    49  film    Croods
+    [3]    50  film    Land Before Time
+    [4]    46  film    Jurassic Park
 
     >>> graph2.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
     <progress>
@@ -420,19 +418,19 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    43  film    Land Before Time
-    [3]    42  film    Jurassic Park
+    [1]    48  film    Ice Age
+    [2]    50  film    Land Before Time
+    [3]    46  film    Jurassic Park
 
     Dangling edges (edges that correspond to the movie 'Croods', vid 41) were also removed:
 
     >>> graph2.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  score
     =============================================
-    [0]    54        31         44  rating      3
-    [1]    52        31         42  rating      3
-    [2]    60        39         43  rating      3
-    [3]    53        31         43  rating      4
+    [0]    54        34         48  rating      3
+    [1]    52        34         46  rating      3
+    [2]    60        39         50  rating      3
+    [3]    53        34         50  rating      4
 
 
         """
