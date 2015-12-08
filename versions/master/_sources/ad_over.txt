@@ -10,7 +10,7 @@ Administration
 .. toctree::
     :maxdepth: 2
 
-    ad_dp2
+    ad_tap
     ad_reqs
     ad_inst_ta1
     ad_scoring_engine
