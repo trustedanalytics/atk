@@ -150,10 +150,10 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
             // here we are keeping old vids but updating all other fields
             val values = row1.toSeq.toArray
             values(vidIndex) = row2.get(vidIndex)
-            (new GenericRow(values), false, false)
+            (new GenericRow(values), vid2Preferred, row1Preferred)
           }
           else {
-            (row1, false, false)
+            (row1, vid1Preferred, row1Preferred)
           }
         }
         else {
@@ -161,10 +161,10 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
             // here we are keeping old vids but updating all other fields
             val values = row2.toSeq.toArray
             values(vidIndex) = row1.get(vidIndex)
-            (new GenericRow(values), false, false)
+            (new GenericRow(values), vid1Preferred, row2Preferred)
           }
           else {
-            (row2, false, false)
+            (row2, vid2Preferred, row2Preferred)
           }
         }
     }.values.map { case (row: Row, vidPreferred: Boolean, rowNew: Boolean) => row }
