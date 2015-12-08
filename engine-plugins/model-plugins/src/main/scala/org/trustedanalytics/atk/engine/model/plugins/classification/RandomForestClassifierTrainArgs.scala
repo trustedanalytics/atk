@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.ArgDocAnnotation
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.spray.json.JsonMaps
 
 case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                            @ArgDoc("""A frame to train the model on""") frame: FrameReference,
@@ -31,11 +32,8 @@ case class RandomForestClassifierTrainArgs(@ArgDoc("""Handle to the model to be 
                                            @ArgDoc("""Maximum depth of the tree. Default is 4.""") maxDepth: Int = 4,
                                            @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
                                            @ArgDoc("""Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.""") seed: Int = scala.util.Random.nextInt(),
-                                           @ArgDoc(
-                                             """Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}.""") categoricalFeaturesInfo: Option[Map[Int, Int]] = None,
-                                           @ArgDoc(
-                                             """Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird.
-If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"""") featureSubsetCategory: Option[String] = None) {
+                                           @ArgDoc("""Arity of categorical features. Entry (n-> k) indicates that feature 'n' is categorical with 'k' categories indexed from 0:{0,1,...,k-1}.""") categoricalFeaturesInfo: Option[Map[String, Int]] = None,
+                                           @ArgDoc("""Number of features to consider for splits at each node. Supported values "auto","all","sqrt","log2","onethird".  If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; if num_trees > 1, set to "sqrt"""") featureSubsetCategory: Option[String] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
@@ -60,7 +58,8 @@ If "auto" is set, this is based on num_trees: if num_trees == 1, set to "all" ; 
   }
 
   def getCategoricalFeaturesInfo: Map[Int, Int] = {
-    categoricalFeaturesInfo.getOrElse(Map[Int, Int]())
+    // to get around spray-json limitation
+    JsonMaps.convertMapKeyToInt[Int](categoricalFeaturesInfo, Map[Int, Int]())
   }
 
 }

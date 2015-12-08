@@ -100,7 +100,7 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Export
           }
           value.mkString("{", ",", "}")
         }
-    }.cache()
+    }
     jsonRDD.saveAsTextFile(filename)
     if (jsonRDD.isEmpty()) StringUtils.EMPTY else jsonRDD.first()
   }

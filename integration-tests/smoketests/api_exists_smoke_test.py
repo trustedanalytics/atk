@@ -242,11 +242,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
     def test_expected_methods_exist_on_lda_model(self):
         self.assert_methods_defined(["name",
                                     "train"], ta.LdaModel)
-    def test_expected_methods_exist_on_collaborative_filtering_model(self):
-        self.assert_methods_defined(["name",
-                                    "train",
-                                    "recommend"], ta.GiraphCollaborativeFilteringModel)
-
     def test_expected_methods_exist_on_libsvm_model(self):
         self.assert_methods_defined(["name",
                                      "predict",

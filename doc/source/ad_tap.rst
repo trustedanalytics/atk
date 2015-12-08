@@ -1,7 +1,7 @@
-.. _ad_dp2:
+.. _ad_tap:
 
 ===============================
-Deploy and Run |ATK| App on DP2
+Deploy and Run |ATK| App on TAP
 ===============================
 
 ----------------------------
@@ -125,7 +125,7 @@ In order to do so, do the following:
 #)  CD to "package" directory and from there run this script:
     "config/trustedanalytics-rest-server-tar/package.sh".
     This creates a tar file like "atk.tar.gz" in the current directory.
-#)  Deploy ATK to DP2 (Ireland instance):
+#)  Deploy ATK to TAP (Ireland instance):
     Create a directory anywhere on your system, for example at "~/vcap/app" and
     unpack your "trustedanalytics.tar.gz" inside that directory.
 #)  CD to "~/vcap/app" and create a file "manifest.yml" with this content:
