@@ -61,12 +61,14 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Export
    * @return value of type declared as the Return type
    */
   override def execute(arguments: ExportHdfsJsonArgs)(implicit invocation: Invocation): ExportMetadata = {
+    def getAbsolutePath(s: String): String = engine.frames.frameFileStorage.hdfs.absolutePath(s).toString
+
     val fileStorage = new FileStorage
-    require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
+    val artifactPath = new Path(getAbsolutePath(arguments.folderName))
+    require(!fileStorage.exists(artifactPath), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     val sample = exportToHdfsJson(frame.rdd, arguments.folderName, arguments.count, arguments.offset)
 
-    val artifactPath = new Path(s"${fileStorage.hdfs.getHomeDirectory()}/${arguments.folderName}")
     ExportMetadata(artifactPath.toString, "all", "json", frame.rowCount, sample,
       fileStorage.size(artifactPath.toString), Some(arguments.folderName))
   }
