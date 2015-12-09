@@ -290,10 +290,10 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    41  film    Croods
-    [3]    43  film    Land Before Time
-    [4]    42  film    Jurassic Park
+    [1]    14  film    Ice Age
+    [2]    11  film    Croods
+    [3]    19  film    Land Before Time
+    [4]    12  film    Jurassic Park
 
     >>> graph.vertex_count
     <progress>
@@ -302,7 +302,6 @@ Default is None.""")
     >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
     <progress>
 
-    <skip>  # todo: fix bug DPAT-926
     >>> graph.edges['rating'].inspect(20)
     [##]  _eid  _src_vid  _dest_vid  _label  rating
     ===============================================
@@ -327,7 +326,6 @@ Default is None.""")
     [18]    56        35         42  rating       5
     [19]    55        35         41  rating       5
 
-    </skip>
     >>> graph.edge_count
     <progress>
     20
@@ -393,12 +391,12 @@ Default is None.""")
     >>> graph2.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  score
     =============================================
-    [0]    60        39         43  rating      3
-    [1]    59        39         41  rating      5
-    [2]    53        31         43  rating      4
-    [3]    54        31         44  rating      3
-    [4]    52        31         42  rating      3
-    [5]    51        31         41  rating      5
+    [0]    60        39         19  rating      3
+    [1]    59        39         11  rating      5
+    [2]    53        31         19  rating      4
+    [3]    54        31         14  rating      3
+    [4]    52        31         12  rating      3
+    [5]    51        31         11  rating      5
 
     Only source vertices 31 and 39 remain.
 
@@ -408,10 +406,10 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    41  film    Croods
-    [3]    43  film    Land Before Time
-    [4]    42  film    Jurassic Park
+    [1]    14  film    Ice Age
+    [2]    11  film    Croods
+    [3]    19  film    Land Before Time
+    [4]    12  film    Jurassic Park
 
     >>> graph2.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
     <progress>
@@ -420,19 +418,19 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    43  film    Land Before Time
-    [3]    42  film    Jurassic Park
+    [1]    14  film    Ice Age
+    [2]    19  film    Land Before Time
+    [3]    12  film    Jurassic Park
 
     Dangling edges (edges that correspond to the movie 'Croods', vid 41) were also removed:
 
     >>> graph2.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  score
     =============================================
-    [0]    54        31         44  rating      3
-    [1]    52        31         42  rating      3
-    [2]    60        39         43  rating      3
-    [3]    53        31         43  rating      4
+    [0]    52        31         12  rating      3
+    [1]    54        31         14  rating      3
+    [2]    60        39         19  rating      3
+    [3]    53        31         19  rating      4
 
 
         """
