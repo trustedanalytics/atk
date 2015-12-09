@@ -58,6 +58,9 @@ trustedanalytics.atk {
     //connection-sqlserver.url = "invalid-sqlserver-url"
   }
 
+  # uncomment the next line in order to enable Intel Data Analytics Acceleration Library (Intel DAAL)
+  engine.spark.extra-files-for-spark-submit=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/libtbb.so.2"
+
   engine {
 
     # The hdfs URL where the trustedanalytics folder will be created

@@ -40,6 +40,7 @@ pwd
 
 mkdir -p  ${BUILD_DIR}/etc/trustedanalytics/rest-server
 mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
+mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/daal
 
 #copy example scripts
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
