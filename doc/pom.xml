@@ -102,6 +102,20 @@
                                 </configuration>
                             </execution>
                             <execution>
+                                <id>f-forgithub</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${basedir}/</workingDirectory>
+                                    <arguments>
+                                        <argument>./f-forgithub.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>stop-server</id>
                                 <phase>package</phase>
                                 <goals>
