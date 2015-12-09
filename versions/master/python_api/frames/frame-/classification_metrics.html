@@ -175,11 +175,21 @@ If we let:</p>
 <li><img class="math" src="../../../_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denotes the number of false negatives</li>
 </ul>
 <p>then:</p>
-<div class="math">
-<p><img src="../../../_images/math/e462dbf448b4a4ab78b92edf47b97dc5ea49d849.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
 \frac{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
-F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}"/></p>
-</div><p>The <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
+F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}</tt>)</p>
+<p>dvipng exited with error
+[stderr]
+
+dvipng: Fatal error, DVI file ends prematurely
+
+
+[stdout]
+This is dvipng 1.14 Copyright 2002-2010 Jan-Ake Larsson
+</p>
+</div>
+<p>The <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
 computed as the weighted average of the <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for
 each label, where the weight is the number of instances of each label.
 The determination of binary vs. multi-class is automatically inferred
