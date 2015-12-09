@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, intercept=True, num_iterations=100, step_size=1, reg_type=None, reg_param=0.01, mini_batch_fraction=1.0)
+.. function:: train(self, frame, label_column, observation_columns, intercept=True, num_iterations=100, step_size=1.0, reg_type=None, reg_param=0.01, mini_batch_fraction=1.0)
 
     |ALPHA|
     Build linear regression model.
@@ -56,7 +56,7 @@
 
 
 
-        **step_size** : int32 (default=1)
+        **step_size** : float64 (default=1.0)
 
         ..
 

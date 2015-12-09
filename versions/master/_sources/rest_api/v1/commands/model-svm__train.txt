@@ -82,7 +82,7 @@ Request
 
 
 
-    **step_size** : int32 (default=1)
+    **step_size** : float64 (default=1.0)
 
     ..
 

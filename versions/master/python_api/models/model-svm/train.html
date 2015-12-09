@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>intercept=True</em>, <em>num_iterations=100</em>, <em>step_size=1</em>, <em>reg_type=None</em>, <em>reg_param=0.01</em>, <em>mini_batch_fraction=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>intercept=True</em>, <em>num_iterations=100</em>, <em>step_size=1.0</em>, <em>reg_type=None</em>, <em>reg_param=0.01</em>, <em>mini_batch_fraction=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build SVM with SGD model</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -145,7 +145,7 @@ Default is true.</p>
 <blockquote>
 <div><p>Number of iterations for SGD. Default is 100.</p>
 </div></blockquote>
-<p><strong>step_size</strong> : int32 (default=1)</p>
+<p><strong>step_size</strong> : float64 (default=1.0)</p>
 <blockquote>
 <div><p>Initial step size for SGD optimizer for the first step.
 Default is 1.0.</p>
