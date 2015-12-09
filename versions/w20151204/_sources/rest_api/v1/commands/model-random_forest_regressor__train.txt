@@ -1,0 +1,194 @@
+
+
+-----------------------------------------------------------
+:doc:`Commands <index>` model:random_forest_regressor/train
+-----------------------------------------------------------
+
+|ALPHA|
+Build Random Forests Regressor model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:random_forest_regressor/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        Handle to the model to be used.
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on
+
+
+
+    **label_column** : unicode
+
+    ..
+
+        Column name containing the label for each observation
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Column(s) containing the observations
+
+
+
+    **num_trees** : int32 (default=1)
+
+    ..
+
+        Number of tress in the random forest. Default is 1.
+
+
+
+    **impurity** : unicode (default=variance)
+
+    ..
+
+        Criterion used for information gain calculation. Default supported value is "variance".
+
+
+
+    **max_depth** : int32 (default=4)
+
+    ..
+
+        Maxium depth of the tree. Default is 4.
+
+
+
+    **max_bins** : int32 (default=100)
+
+    ..
+
+        Maximum number of bins used for splitting features. Default is 100.
+
+
+
+    **seed** : int32 (default=1577544967)
+
+    ..
+
+        Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.
+
+
+
+    **categorical_features_info** : None (default=None)
+
+    ..
+
+        <Missing Description>
+
+
+
+    **feature_subset_category** : unicode (default=None)
+
+    ..
+
+        Number of features to consider for splits at each node. Supported values "auto", "all", "sqrt","log2", "onethird".
+        If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if numTrees > 1, set to "onethird".
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a Random Forests Regressor Model using the observation columns and target column.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dictionary
+              |A dictionary with trained Random Forest Regressor model with the following keys\:
+              |'observation_columns': the list of observation columns on which the model was trained
+              |'label_columns': the column name containing the labels of the observations
+              |'num_trees': the number of decision trees in the random forest
+              |'num_nodes': the number of nodes in the random forest
+              |'categorical_features_info': the map storing arity of categorical features
+              |'impurity': the criterion used for information gain calculation
+              |'max_depth': the maximum depth of the tree
+              |'max_bins': the maximum number of bins used for splitting features
+              |'seed': the random seed used for bootstrapping and choosing featur subset
+            
+
+

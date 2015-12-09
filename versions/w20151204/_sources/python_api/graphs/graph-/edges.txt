@@ -1,0 +1,17 @@
+
+:doc:`Graph <index>`  edges
+***************************
+
+------
+
+
+.. attribute:: edges
+
+    Edge frame collection
+
+
+    :Parameters:
+
+    Examples
+    --------
+    See :doc:`here <__init__>` for example usage in graph construction.
