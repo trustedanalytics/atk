@@ -315,16 +315,16 @@ Default is None.""")
     [7]     27         5         14  rating       4
     [8]     25         5         12  rating       3
     [9]     26         5         13  rating       5
-    [10]    60        39         43  rating       3
-    [11]    59        39         41  rating       5
-    [12]    53        31         43  rating       4
-    [13]    54        31         44  rating       3
-    [14]    52        31         42  rating       3
-    [15]    51        31         41  rating       5
-    [16]    57        35         43  rating       3
-    [17]    58        35         44  rating       5
-    [18]    56        35         42  rating       5
-    [19]    55        35         41  rating       5
+    [10]    60        39         19  rating       3
+    [11]    59        39         11  rating       5
+    [12]    53        31         19  rating       4
+    [13]    54        31         14  rating       3
+    [14]    52        31         12  rating       3
+    [15]    51        31         11  rating       5
+    [16]    57        35         19  rating       3
+    [17]    58        35         14  rating       5
+    [18]    56        35         12  rating       5
+    [19]    55        35         11  rating       5
 
     >>> graph.edge_count
     <progress>
