@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import org.apache.spark.mllib.optimization.{ L1Updater, SquaredL2Updater }
 import org.apache.spark.mllib.regression.{ LabeledPoint, LinearRegressionWithSGD }
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
