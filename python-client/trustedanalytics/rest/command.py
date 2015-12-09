@@ -33,7 +33,7 @@ import trustedanalytics.rest.config as config
 from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.progress import ProgressPrinter
 from collections import namedtuple
-
+from spark import IaPyWorkerError
 
 def execute_command(command_name, selfish, **arguments):
     """Executes command and returns the output."""
@@ -213,7 +213,7 @@ class CommandServerError(Exception):
         self.command_info = command_info
         try:
             message = command_info.error['message']
-            message = message + self.parse_stack_trace(command_info)
+            message = message + " " + self.parse_stack_trace(command_info)
         except KeyError:
             message = "(Server response insufficient to provide details)"
         message = message + (" (command: %s, corId: %s)" % (command_info.id_number, command_info.correlation_id))
@@ -225,14 +225,9 @@ class CommandServerError(Exception):
         Get detailed error message from stack trace
         """
         try:
-            match = re.search(r'IaPyWorkerError:\s*(.*)\n', command_info.error['stack_trace'])
-            if match:
-                detailed_msg = " " + match.group(1)
-            else:
-                detailed_msg = ""
-        except KeyError:
-            detailed_msg = ""
-        return  detailed_msg
+            return re.search(r'%s:\s*(.*)\n' % IaPyWorkerError.__name__, command_info.error['stack_trace']).group(1)
+        except:
+            return ""
 
 
 QueryResult = namedtuple("QueryResult", ['data', 'schema'])
