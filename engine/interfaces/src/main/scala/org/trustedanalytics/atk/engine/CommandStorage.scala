@@ -52,4 +52,11 @@ trait CommandStorage {
    * @param progressInfo list of progress for the jobs initiated by this command
    */
   def updateProgress(id: Long, progressInfo: List[ProgressInfo]): Unit
+
+  /**
+   * update job context for the command
+   * @param id command id
+   * @param jobContextId job context id
+   */
+  def updateJobContextId(id: Long, jobContextId: Long): Unit
 }

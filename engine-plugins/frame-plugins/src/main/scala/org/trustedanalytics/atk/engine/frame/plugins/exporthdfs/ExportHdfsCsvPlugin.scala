@@ -108,10 +108,11 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
         })
       for (i <- array) printer.print(i)
       stringBuilder.toString
-    }).cache()
+    })
 
+    val dataSample = if (csvRdd.isEmpty()) StringUtils.EMPTY else csvRdd.first()
     val addHeaders = frameRdd.sparkContext.parallelize(List(headers)) ++ csvRdd
     addHeaders.saveAsTextFile(filename)
-    if (csvRdd.isEmpty()) StringUtils.EMPTY else csvRdd.first()
+    dataSample
   }
 }
