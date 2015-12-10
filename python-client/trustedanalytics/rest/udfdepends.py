@@ -28,7 +28,7 @@ class udf(object):
 
     """
     @staticmethod
-    @deprecated
+    @deprecated("Use udf_dependencies list.")
     def install(dependencies):
         """
         (deprecated) pls. see ta.udf_dependencies
@@ -39,7 +39,7 @@ class udf(object):
             raise ValueError ("The dependencies list to be installed on the cluster cannot be empty")
 
     @staticmethod
-    @deprecated
+    @deprecated("Use udf_dependencies list.")
     def list():
         """
         (deprecated) pls. see ta.udf_dependencies
