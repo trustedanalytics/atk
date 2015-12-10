@@ -362,7 +362,7 @@ for a graph:</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">last_read_date</span>
-<span class="go">datetime.datetime(2015, 12, 10, 5, 56, 42, 932040)</span>
+<span class="go">datetime.datetime(2015, 12, 10, 14, 55, 47, 245028)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span>
@@ -400,10 +400,10 @@ to <cite>add_vertices</cite> and <cite>add_edges</cite>.</p>
 <span class="go">[#]  _vid  _label  movie</span>
 <span class="go">===================================</span>
 <span class="go">[0]    13  film    2001</span>
-<span class="go">[1]    44  film    Ice Age</span>
-<span class="go">[2]    41  film    Croods</span>
-<span class="go">[3]    43  film    Land Before Time</span>
-<span class="go">[4]    42  film    Jurassic Park</span>
+<span class="go">[1]    14  film    Ice Age</span>
+<span class="go">[2]    11  film    Croods</span>
+<span class="go">[3]    19  film    Land Before Time</span>
+<span class="go">[4]    12  film    Jurassic Park</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">vertex_count</span>
@@ -428,16 +428,16 @@ to <cite>add_vertices</cite> and <cite>add_edges</cite>.</p>
 <span class="go">[7]     27         5         14  rating       4</span>
 <span class="go">[8]     25         5         12  rating       3</span>
 <span class="go">[9]     26         5         13  rating       5</span>
-<span class="go">[10]    60        39         43  rating       3</span>
-<span class="go">[11]    59        39         41  rating       5</span>
-<span class="go">[12]    53        31         43  rating       4</span>
-<span class="go">[13]    54        31         44  rating       3</span>
-<span class="go">[14]    52        31         42  rating       3</span>
-<span class="go">[15]    51        31         41  rating       5</span>
-<span class="go">[16]    57        35         43  rating       3</span>
-<span class="go">[17]    58        35         44  rating       5</span>
-<span class="go">[18]    56        35         42  rating       5</span>
-<span class="go">[19]    55        35         41  rating       5</span>
+<span class="go">[10]    60        39         19  rating       3</span>
+<span class="go">[11]    59        39         11  rating       5</span>
+<span class="go">[12]    53        31         19  rating       4</span>
+<span class="go">[13]    54        31         14  rating       3</span>
+<span class="go">[14]    52        31         12  rating       3</span>
+<span class="go">[15]    51        31         11  rating       5</span>
+<span class="go">[16]    57        35         19  rating       3</span>
+<span class="go">[17]    58        35         14  rating       5</span>
+<span class="go">[18]    56        35         12  rating       5</span>
+<span class="go">[19]    55        35         11  rating       5</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">edge_count</span>
@@ -507,12 +507,12 @@ similar to regular frame operations.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  _eid  _src_vid  _dest_vid  _label  score</span>
 <span class="go">=============================================</span>
-<span class="go">[0]    60        39         43  rating      3</span>
-<span class="go">[1]    59        39         41  rating      5</span>
-<span class="go">[2]    53        31         43  rating      4</span>
-<span class="go">[3]    54        31         44  rating      3</span>
-<span class="go">[4]    52        31         42  rating      3</span>
-<span class="go">[5]    51        31         41  rating      5</span>
+<span class="go">[0]    60        39         19  rating      3</span>
+<span class="go">[1]    59        39         11  rating      5</span>
+<span class="go">[2]    53        31         19  rating      4</span>
+<span class="go">[3]    54        31         14  rating      3</span>
+<span class="go">[4]    52        31         12  rating      3</span>
+<span class="go">[5]    51        31         11  rating      5</span>
 </pre></div>
 </div>
 <p>Only source vertices 31 and 39 remain.</p>
@@ -521,10 +521,10 @@ similar to regular frame operations.</p>
 <span class="go">[#]  _vid  _label  movie</span>
 <span class="go">===================================</span>
 <span class="go">[0]    13  film    2001</span>
-<span class="go">[1]    44  film    Ice Age</span>
-<span class="go">[2]    41  film    Croods</span>
-<span class="go">[3]    43  film    Land Before Time</span>
-<span class="go">[4]    42  film    Jurassic Park</span>
+<span class="go">[1]    14  film    Ice Age</span>
+<span class="go">[2]    11  film    Croods</span>
+<span class="go">[3]    19  film    Land Before Time</span>
+<span class="go">[4]    12  film    Jurassic Park</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;film&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">movie</span><span class="o">==</span><span class="s">&#39;Croods&#39;</span><span class="p">)</span>
@@ -535,19 +535,19 @@ similar to regular frame operations.</p>
 <span class="go">[#]  _vid  _label  movie</span>
 <span class="go">===================================</span>
 <span class="go">[0]    13  film    2001</span>
-<span class="go">[1]    44  film    Ice Age</span>
-<span class="go">[2]    43  film    Land Before Time</span>
-<span class="go">[3]    42  film    Jurassic Park</span>
+<span class="go">[1]    14  film    Ice Age</span>
+<span class="go">[2]    19  film    Land Before Time</span>
+<span class="go">[3]    12  film    Jurassic Park</span>
 </pre></div>
 </div>
 <p>Dangling edges (edges that correspond to the movie &#8216;Croods&#8217;, vid 41) were also removed:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph2</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  _eid  _src_vid  _dest_vid  _label  score</span>
 <span class="go">=============================================</span>
-<span class="go">[0]    54        31         44  rating      3</span>
-<span class="go">[1]    52        31         42  rating      3</span>
-<span class="go">[2]    60        39         43  rating      3</span>
-<span class="go">[3]    53        31         43  rating      4</span>
+<span class="go">[0]    52        31         12  rating      3</span>
+<span class="go">[1]    54        31         14  rating      3</span>
+<span class="go">[2]    60        39         19  rating      3</span>
+<span class="go">[3]    53        31         19  rating      4</span>
 </pre></div>
 </div>
 </dd></dl>
