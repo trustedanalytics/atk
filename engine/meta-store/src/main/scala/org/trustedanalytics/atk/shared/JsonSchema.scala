@@ -245,7 +245,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
       case t if t =:= typeTag[Double].tpe => JsonSchema.double(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[DateTime].tpe => JsonSchema.dateTime(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[UnitReturn].tpe => JsonSchema.unit
-      case t if t <:< typeTag[Map[_, _]].tpe => ObjectSchema(description = description, defaultValue = defaultValue)
+      case t if t <:< typeTag[Map[_, _]].tpe => ObjectSchema(description = description, defaultValue = defaultValue) // <:< operator means 'has subtype relationship'
       case t if t =:= typeTag[FrameReference].tpe =>
         val s = JsonSchema.frame(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {
