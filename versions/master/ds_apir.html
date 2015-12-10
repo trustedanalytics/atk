@@ -221,12 +221,18 @@ See the <code class="docutils literal"><span class="pre">row_sum</span></code> f
 <code class="docutils literal"><span class="pre">try:</span> <span class="pre">except:</span></code> block and produced a -1 for rows which caused errors.</p>
 </li>
 <li><p class="first">Dependencies:
-All dependencies used in the <abbr title="Python User-defined Function">UDF</abbr> must be available in <strong>the same Python
-code file</strong> as the <abbr title="Python User-defined Function">UDF</abbr> or available in the server&#8217;s installed Python
-libraries.
-The serialization technique to get the code distributed throughout the
-cluster will serialize dependencies only in the same Python module (in
-other words, file.)</p>
+All dependencies used in the <abbr title="Python User-defined Function">UDF</abbr> must fit into one of the following:</p>
+<ol class="upperalpha simple">
+<li>Be available in <strong>the same Python code file</strong> (or REPL) as the <abbr title="Python User-defined Function">UDF</abbr></li>
+<li>Be available in the server&#8217;s installed Python libraries.</li>
+<li>Be specified in the <code class="docutils literal"><span class="pre">udf_dependencies</span></code> list.  This is a list of
+files and folders which will be sent along with the UDF to the server
+when it is invoked.  This causes overhead, so use judiciously.</li>
+</ol>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">udf_dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;helper_script.py&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </li>
 <li><p class="first">Simplicity:
 Stay within the intended simple context of the given command, like a row
