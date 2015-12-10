@@ -30,7 +30,7 @@ from trustedanalytics.core.aggregation import agg
 from trustedanalytics.core.errorhandle import errors
 from trustedanalytics.core.files import CsvFile, LineFile, JsonFile, MultiLineFile, XmlFile, HiveQuery, HBaseTable, JdbcTable, UploadRows
 from trustedanalytics.core.atkpandas import Pandas
-from trustedanalytics.rest.udfdepends import udf
+from trustedanalytics.rest.udfdepends import udf # todo: deprecated, pls. remove
 from trustedanalytics.core.frame import Frame, VertexFrame
 from trustedanalytics.core.graph import Graph, TitanGraph
 from trustedanalytics.core.model import _BaseModel
@@ -82,5 +82,11 @@ from trustedanalytics.core.api import api_status
 from trustedanalytics.rest.atkserver import create_credentials_file
 
 from trustedanalytics.core.datacatalog import data_catalog
+
+
+from trustedanalytics.rest.udfzip import UdfDependencies
+udf_dependencies = UdfDependencies([])
+del UdfDependencies
+
 
 version = None  # This client build ID value is auto-filled during packaging.  Set to None to disable check with server
