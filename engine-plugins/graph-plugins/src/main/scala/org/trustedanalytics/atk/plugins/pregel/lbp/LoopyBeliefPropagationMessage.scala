@@ -10,7 +10,7 @@ object LoopyBeliefPropagationMessage {
    * @param edgeTriplet Contains state of source, destination and edge.
    * @return Iterator over messages to send.
    */
-  def send(edgeTriplet: EdgeTriplet[VertexState, Double]): Iterator[(VertexId, Map[Long, Vector[Double]])] = {
+  def msgSender(edgeTriplet: EdgeTriplet[VertexState, Double]): Iterator[(VertexId, Map[Long, Vector[Double]])] = {
 
     Iterator((edgeTriplet.dstId, calculate(edgeTriplet.srcId, edgeTriplet.dstId, edgeTriplet.srcAttr, edgeTriplet.attr)))
   }
@@ -34,11 +34,8 @@ object LoopyBeliefPropagationMessage {
     val nStates = prior.length
     val stateRange = (0 to nStates - 1).toVector
 
-    val messagesNotFromDestination = messages - destination
-    val messagesNotFromDestinationValues: List[Vector[Double]] =
-      messagesNotFromDestination.map({ case (k, v) => v }).toList
-
-    val reducedMessages = VectorMath.overflowProtectedProduct(prior :: messagesNotFromDestinationValues).get
+    val values: List[Vector[Double]] = (messages - destination).map({ case (id, values) => values }).toList
+    val reducedMessages = VectorMath.overflowProtectedProduct(prior :: values).get
     val statesUnPosteriors = stateRange.zip(reducedMessages)
     val unnormalizedMessage = stateRange.map(i => statesUnPosteriors.map({
       case (j, x: Double) =>

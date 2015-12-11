@@ -47,7 +47,8 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = 2)
 
   }
 
@@ -82,7 +83,11 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[SparkException] {
-      val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
+      val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+        LoopyBeliefPropagationMessage.msgSender,
+        LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+        LoopyBeliefPropagationMessage.msgSender
+      )
     }
 
     exception.asInstanceOf[SparkException].getMessage should include("IllegalArgumentException")
@@ -114,7 +119,11 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[Exception] {
-      PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
+      PregelAlgorithm.run(verticesIn, edgesIn, args)(
+        LoopyBeliefPropagationMessage.msgSender,
+        LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+        LoopyBeliefPropagationMessage.msgSender
+      )
     }
 
     exception.asInstanceOf[Exception].getMessage should include("not be found")

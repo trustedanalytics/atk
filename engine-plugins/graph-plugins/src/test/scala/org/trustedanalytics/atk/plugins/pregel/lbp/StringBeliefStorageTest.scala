@@ -47,7 +47,8 @@ class StringBeliefStorageTest extends FlatSpec with Matchers with TestingSparkCo
       maxIterations = 10,
       stringOutput = true,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = 2)
 
   }
 
@@ -72,7 +73,11 @@ class StringBeliefStorageTest extends FlatSpec with Matchers with TestingSparkCo
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
     val testVertices = verticesOut.collect().toSet
     val testEdges = edgesOut.collect().toSet
 

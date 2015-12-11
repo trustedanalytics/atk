@@ -46,7 +46,8 @@ class UnderFlowTest extends FlatSpec with Matchers with TestingSparkContextFlatS
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = 2)
 
   }
 
@@ -72,7 +73,11 @@ class UnderFlowTest extends FlatSpec with Matchers with TestingSparkContextFlatS
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
     val edgesIn: RDD[GBEdge] = sparkContext.parallelize(gbEdgeSet.toList)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.pregelVertexProgram, LoopyBeliefPropagationMessage.send)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
 
     val testVertices = verticesOut.collect().toSet
     val test = testVertices.forall(v => vectorStrictlyPositive(v.getProperty(propertyForLBPOutput).get.value.asInstanceOf[Vector[Double]]))

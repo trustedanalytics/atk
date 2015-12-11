@@ -2,7 +2,7 @@ package org.trustedanalytics.atk.plugins.pregel.lbp
 
 import org.apache.spark.graphx._
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.plugins.pregel.core.VertexState
+import org.trustedanalytics.atk.plugins.pregel.core.{ VertexState }
 
 object LoopyBeliefPropagationVertexProgram {
   /**
@@ -15,7 +15,7 @@ object LoopyBeliefPropagationVertexProgram {
   def pregelVertexProgram(id: VertexId, vertexState: VertexState, messages: Map[VertexId, Vector[Double]]): VertexState = {
 
     val prior = vertexState.prior
-    val messageValues: List[Vector[Double]] = messages.toList.map({ case (k, v) => v })
+    val messageValues: List[Vector[Double]] = messages.map({ case (id, values) => values }).toList
     val productOfPriorAndMessages = VectorMath.overflowProtectedProduct(prior :: messageValues).get
     val posterior = VectorMath.l1Normalize(productOfPriorAndMessages)
 
