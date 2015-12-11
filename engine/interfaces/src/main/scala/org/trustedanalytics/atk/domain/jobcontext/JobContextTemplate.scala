@@ -13,9 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.trustedanalytics.atk.domain.jobcontext
 
-
-/**
- * Package of configuration constants for data transmission between Titan and Giraph.
- */
-package org.trustedanalytics.atk.giraph.io.titan.common;
+/* Template for creating a new JobContext */
+case class JobContextTemplate(userId: Long, yarnAppName: String, yarnAppId: String, replId: String)

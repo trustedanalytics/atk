@@ -311,7 +311,10 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
-        case unk => serializationError("Cannot serialize " + unk.getClass.getName)
+        // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
+        case unk =>
+          val name: String = if (unk != null) { unk.getClass.getName } else { "null" }
+          serializationError("Cannot serialize " + name)
       }
     }
 

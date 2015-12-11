@@ -106,4 +106,17 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
     }
   }
 
+  /**
+   * update job context for the command
+   * @param id command id
+   * @param jobContextId job context id
+   */
+  override def updateJobContextId(id: Long, jobContextId: Long): Unit = {
+    metaStore.withSession("se.command.updateJobContext") {
+      implicit session =>
+        val command = repo.lookup(id)
+        repo.update(command.get.copy(jobContextId = Some(jobContextId)))
+    }
+  }
+
 }

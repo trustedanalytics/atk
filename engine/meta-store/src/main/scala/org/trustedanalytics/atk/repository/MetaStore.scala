@@ -54,6 +54,9 @@ trait MetaStore {
   /** Repository for CRUD on 'gc_entry' table */
   def gcEntryRepo: GarbageCollectionEntryRepository[Session]
 
+  /** Repository for Job Context */
+  def jobContextRepo: JobContextRepository[Session]
+
   /** Create the underlying tables */
   def initializeSchema(): Unit
 
