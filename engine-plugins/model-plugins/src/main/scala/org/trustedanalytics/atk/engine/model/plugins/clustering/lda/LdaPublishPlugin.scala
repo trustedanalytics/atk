@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.trustedanalytics.atk.domain.StringValue
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
@@ -24,6 +25,7 @@ import com.google.common.base.Charsets
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 import spray.json._
 import LdaJsonFormat._
@@ -35,7 +37,7 @@ import LdaJsonFormat._
   extended = """Creates a tar file with the trained Latent Dirichlet Allocation model. The tar file is then published on HDFS and this method returns the path to the tar file.
               The tar file is used as input to the scoring engine to predict the conditional topic probabilities for a document.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -63,12 +65,13 @@ class LdaPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
 
-    StringValue(ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
+    val modelArtifact = ModelPublish.createTarForScoringEngine(model.data.toString().getBytes(Charsets.UTF_8),
       "scoring-models",
-      "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin"))
+      "org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin")
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("lda_model"))
   }
 }

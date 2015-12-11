@@ -16,7 +16,4 @@
 
 package org.trustedanalytics.atk.domain
 
-import spray.json.JsObject
-
-case class Error(message: String, stackTrace: Option[String], code: Option[Int],
-                 details: Option[String], additional: Option[JsObject])
+case class Error(message: String, stackTrace: Option[String])

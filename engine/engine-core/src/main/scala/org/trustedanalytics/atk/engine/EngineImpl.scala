@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
-import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate, Execution }
+import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
@@ -44,12 +44,13 @@ import scala.util.{ Failure, Success, Try }
  */
 class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  commands: CommandExecutor,
-                 commandStorage: CommandStorage,
+                 val commandStorage: CommandStorage,
                  val frames: SparkFrameStorage,
                  val graphs: SparkGraphStorage,
                  val models: ModelStorageImpl,
                  users: UserStorage,
-                 val sparkAutoPartitioner: SparkAutoPartitioner) extends Engine
+                 val sparkAutoPartitioner: SparkAutoPartitioner,
+                 val jobContextStorage: JobContextStorage) extends Engine
     with EventLogging
     with EventLoggingImplicits {
 
@@ -94,10 +95,10 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * Stores the results of the command execution back in the persistent command object.
    *
    * @param command the command to run, including name and arguments
-   * @return an Execution that can be used to track the completion of the command
+   * @return a Command record that can be used to track the completion of the command
    */
-  def execute(command: CommandTemplate)(implicit invocation: Invocation): Execution = {
-    commands.execute(command)
+  def execute(command: CommandTemplate)(implicit invocation: Invocation): Command = {
+    commands.executeInBackground(command)
   }
 
   /**
@@ -319,5 +320,4 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       seamless.edgeFrames
     }
   }
-
 }

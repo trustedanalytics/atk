@@ -48,6 +48,12 @@ private[trustedanalytics] class ProductFormatsAccessor extends CustomProductForm
 }
 
 /**
+ * Sentinel for indicating a default value was not found for a method arg, as opposed
+ * to using null or Option which could be valid.
+ */
+case object NoDefaultValueFound
+
+/**
  * Generates `JsonSchema` objects to represent case classes
  */
 private[trustedanalytics] object JsonSchemaExtractor {
@@ -108,7 +114,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
 
         val tryDefaultValue: Option[Any] = defaultValues.lift(i) match { // see if default value is available
           case None => None
-          case Some(null) => None
+          case Some(NoDefaultValueFound) => None
           case Some(x) => Some(x)
         }
         val optional = tryDefaultValue.isDefined // capture the fact that value was or wasn't available
@@ -197,7 +203,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
     def valueFor(p: Symbol, i: Int): Any = {
       val defaultValueMethodName = s"$methodName$$default$$${i + 1}"
       ts.member(newTermName(defaultValueMethodName)) match {
-        case NoSymbol => null
+        case NoSymbol => NoDefaultValueFound
         case defaultValueSymbol => im.reflectMethod(defaultValueSymbol.asMethod)()
       }
     }
@@ -239,6 +245,7 @@ private[trustedanalytics] object JsonSchemaExtractor {
       case t if t =:= typeTag[Double].tpe => JsonSchema.double(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[DateTime].tpe => JsonSchema.dateTime(description = description, defaultValue = defaultValue)
       case t if t =:= typeTag[UnitReturn].tpe => JsonSchema.unit
+      case t if t <:< typeTag[Map[_, _]].tpe => ObjectSchema(description = description, defaultValue = defaultValue) // <:< operator means 'has subtype relationship'
       case t if t =:= typeTag[FrameReference].tpe =>
         val s = JsonSchema.frame(description, defaultValue)
         if (fieldPosition.getOrElse(-1) == 0) {

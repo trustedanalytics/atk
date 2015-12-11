@@ -179,6 +179,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-models</module>
                 <module>rest-server</module>
                 <module>python-client</module>
+								<module>doc</module>
                 <module>package</module>
             </modules>
         </profile>
@@ -659,6 +660,13 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 <include>nosetests.xml</include>
                                 <include>python-coverage.zip</include>
                             </includes>
+                        </fileset>
+                        <fileset>
+                            <directory>integration-tests/tests</directory>
+                            <includes>
+                                <include>**/*_generated.py*</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
                         </fileset>
                     </filesets>
                 </configuration>
