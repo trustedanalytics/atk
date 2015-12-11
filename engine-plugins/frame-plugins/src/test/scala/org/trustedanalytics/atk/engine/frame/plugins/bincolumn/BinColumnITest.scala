@@ -22,6 +22,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
+import org.trustedanalytics.atk.domain.frame.Missings
 
 class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
 
@@ -322,7 +323,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = false, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = false, missings = Missings("ignore"), rdd)
     val result = binnedRdd.collect()
 
     // Validate
@@ -354,7 +355,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = true, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = true, strictBinning = true, missings = Missings("ignore"), rdd)
     val result = binnedRdd.collect()
 
     // Validate
@@ -386,7 +387,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results
-    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, rdd)
+    val binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, missings = Missings("ignore"), rdd)
     val result = binnedRdd.collect()
 
     // Validate
@@ -398,6 +399,56 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     result.apply(4) shouldBe Row("E", 5, 1)
     result.apply(5) shouldBe Row("F", 6, 1)
     result.apply(6) shouldBe Row("G", 7, 2)
+    result.apply(7) shouldBe Row("H", 8, 2)
+    result.apply(8) shouldBe Row("I", 9, 2)
+    result.apply(9) shouldBe Row("J", 10, 2)
+  }
+
+  "binColumn" should "handle missing values based on the missings parameter" in {
+    // Input data
+    val inputList = List(
+      Array[Any]("A", 1),
+      Array[Any]("B", 2),
+      Array[Any]("C", null),
+      Array[Any]("D", 4),
+      Array[Any]("E", 5),
+      Array[Any]("F", 6),
+      Array[Any]("G", null),
+      Array[Any]("H", 8),
+      Array[Any]("I", 9),
+      Array[Any]("J", 10))
+    val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
+
+    // Get binned results where we treat missing values as 3
+    var binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, missings = Missings(3), rdd)
+    var result = binnedRdd.collect()
+
+    // Validate
+    result.length shouldBe 10
+    result.apply(0) shouldBe Row("A", 1, 0)
+    result.apply(1) shouldBe Row("B", 2, 0)
+    result.apply(2) shouldBe Row("C", null, 0)
+    result.apply(3) shouldBe Row("D", 4, 0)
+    result.apply(4) shouldBe Row("E", 5, 1)
+    result.apply(5) shouldBe Row("F", 6, 1)
+    result.apply(6) shouldBe Row("G", null, 0)
+    result.apply(7) shouldBe Row("H", 8, 2)
+    result.apply(8) shouldBe Row("I", 9, 2)
+    result.apply(9) shouldBe Row("J", 10, 2)
+
+    // Get binned results where we ignore missing values
+    binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, missings = Missings("ignore"), rdd)
+    result = binnedRdd.collect()
+
+    // Validate
+    result.length shouldBe 10
+    result.apply(0) shouldBe Row("A", 1, 0)
+    result.apply(1) shouldBe Row("B", 2, 0)
+    result.apply(2) shouldBe Row("C", null, -1)
+    result.apply(3) shouldBe Row("D", 4, 0)
+    result.apply(4) shouldBe Row("E", 5, 1)
+    result.apply(5) shouldBe Row("F", 6, 1)
+    result.apply(6) shouldBe Row("G", null, -1)
     result.apply(7) shouldBe Row("H", 8, 2)
     result.apply(8) shouldBe Row("I", 9, 2)
     result.apply(9) shouldBe Row("J", 10, 2)

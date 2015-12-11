@@ -21,7 +21,7 @@ import java.util.ArrayList
 
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, CommandDefinition }
-import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf }
+import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf, Missings }
 import org.trustedanalytics.atk.domain.frame.load.{ LoadFrameArgs, LineParser, LoadSource, LineParserArguments }
 import org.trustedanalytics.atk.domain.frame.partitioning.{ RepartitionArgs, CoalesceArgs }
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntry, GarbageCollection }
@@ -210,6 +210,27 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val udfDependenciesFormat = jsonFormat2(UdfDependency)
   implicit val udfFormat = jsonFormat2(Udf)
 
+  implicit object missingsFormat extends JsonFormat[Missings] {
+    override def write(obj: Missings): JsValue = JsString(obj.missings.toString)
+
+    override def read(json: JsValue): Missings = json match {
+      case JsString(s) => Missings(s)
+      case JsNumber(n) => Missings(n)
+      case x => deserializationError(s"Expected 'missings' option keyword or immediate value but, but received $x")
+    }
+  }
+
+  implicit object missingsOptionFormat extends JsonFormat[Option[Missings]] {
+    override def write(obj: Option[Missings]): JsValue = JsString(obj.get.toString)
+
+    override def read(json: JsValue): Option[Missings] = json match {
+      case JsString(s) => Some(Missings(s))
+      case JsNumber(n) => Some(Missings(n))
+      case JsNull => None
+      case x => deserializationError(s"Expected 'missings' option keyword or immediate value, but received $x")
+    }
+  }
+
   implicit object ApiMaturityTagFormat extends JsonFormat[ApiMaturityTag] {
     override def read(json: JsValue): ApiMaturityTag = json match {
       case JsString(value) => ApiMaturityTag.withName(value)
@@ -349,7 +370,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val dropDuplicatesFormat = jsonFormat2(DropDuplicatesArgs)
   implicit val taskInfoFormat = jsonFormat1(TaskProgressInfo)
   implicit val progressInfoFormat = jsonFormat2(ProgressInfo)
-  implicit val binColumnFormat = jsonFormat6(BinColumnArgs)
+  implicit val binColumnFormat = jsonFormat7(BinColumnArgs)
   implicit val computedBinColumnFormat = jsonFormat4(ComputedBinColumnArgs)
   implicit val sortByColumnsFormat = jsonFormat2(SortByColumnsArgs)
 
