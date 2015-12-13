@@ -149,20 +149,30 @@ def beta(item):
 
 
 def deprecated(item):
-    def wrapper(item, *args, **kwargs):
-        raise_deprecation_warning(item.__name__)
-        return item(*args, **kwargs)
-    function = decorator(wrapper, item)
-    function.maturity = 'deprecated'
-    return function
+    """decorator for deprecation; if item is a string, then it is used as a message"""
+    if isinstance(item, basestring):
+        message = item
+    else:
+        message = ''
+
+    def deprecated_item(it):
+        def wrapper(x, *args, **kwargs):
+            raise_deprecation_warning(x.__name__, message)
+            return x(*args, **kwargs)
+        function = decorator(wrapper, it)
+        function.maturity = 'deprecated'
+        return function
+
+    return deprecated_item if message else deprecated_item(item)
 
 
-def raise_deprecation_warning(function_name):
+def raise_deprecation_warning(function_name, message=''):
     with warnings.catch_warnings():
         warnings.simplefilter('default')  # make it so Python 2.7 will still report this warning
-        warnings.warn("Call to deprecated function %s." % function_name,
-                      DeprecationWarning,
-                      stacklevel=2)
+        m = "Call to deprecated function %s." % function_name
+        if message:
+            m += "  %s" % message
+        warnings.warn(m, DeprecationWarning, stacklevel=2)
 
 
 def arg(name, data_type, description):

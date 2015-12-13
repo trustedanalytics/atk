@@ -86,7 +86,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'histogram',
                                       'inspect',
                                       'join',
-                                      'label_propagation',
                                       'name',
                                       'quantiles',
                                       'rename_columns',
@@ -98,7 +97,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.Frame)
+                                      'unflatten_columns'], ta.Frame)
 
     def test_expected_methods_exist_on_vertexframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -148,7 +147,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.VertexFrame)
+                                      'unflatten_columns'], ta.VertexFrame)
 
     def test_expected_methods_exist_on_edgeframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -197,7 +196,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.EdgeFrame)
+                                      'unflatten_columns'], ta.EdgeFrame)
 
     def test_expected_methods_exist_on_graph(self):
         self.assert_methods_defined(['annotate_degrees',

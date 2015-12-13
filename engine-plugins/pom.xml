@@ -20,23 +20,7 @@
         <module>frame-plugins</module>
         <module>graph-plugins</module>
         <module>model-plugins</module>
-        <module>giraph-plugins</module>
         <module>example-plugins</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <id>modules-java</id>
-            <!--
-                This profile is here so that we can capture code-coverage for the Java modules only.
-            -->
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <modules>
-                <!--<module>giraph-plugins</module>-->
-            </modules>
-        </profile>
-    </profiles>
 
 </project>

@@ -138,9 +138,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
         <!--START GAO MAVEN -->
 
-        <dep.giraph-core.version>1.1.0-hadoop2</dep.giraph-core.version>
-        <dep.giraph-hbase.version>1.1.0-hadoop2</dep.giraph-hbase.version>
-
         <scala.long.version>2.10.4</scala.long.version>
         <scala.short.version>2.10</scala.short.version>
         <scalatest.version>2.1.6</scalatest.version>
@@ -490,7 +487,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                             <currentYear>2015</currentYear>
                         </properties>
                         <excludes>
-                            <exclude>engine-plugins/giraph-plugins/src/main/assembly/compile.xml</exclude>
                             <exclude>findbugs-exclude.xml</exclude>
                             <exclude>scalastyle-config.xml</exclude>
                             <exclude>checkstyle.xml</exclude>
@@ -783,11 +779,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>engine-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>giraph-plugins</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -1165,65 +1156,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                         <artifactId>commons-math3</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <!--org.apache.giraph-->
-            <dependency>
-                <groupId>org.apache.giraph</groupId>
-                <artifactId>giraph-core</artifactId>
-                <version>${dep.giraph-core.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.python</groupId>
-                        <artifactId>jython</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.code.findbugs</groupId>
-                        <artifactId>annotations</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.thoughtworks.paranamer</groupId>
-                        <artifactId>paranamer</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>io.netty</groupId>
-                        <artifactId>netty-all</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.codehaus.jackson</groupId>
-                        <artifactId>jackson-mapper-asl</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.giraph</groupId>
-                <artifactId>giraph-core</artifactId>
-                <version>${dep.giraph-core.version}</version>
-                <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.giraph</groupId>
-                <artifactId>giraph-hbase</artifactId>
-                <version>${dep.giraph-hbase.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.python</groupId>
-                        <artifactId>jython</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.giraph</groupId>
-                <artifactId>giraph-hbase</artifactId>
-                <version>${dep.giraph-hbase.version}</version>
-                <type>test-jar</type>
             </dependency>
             <!--org.apache.hbase-->
             <dependency>
