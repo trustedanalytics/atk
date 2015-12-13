@@ -17,7 +17,6 @@
     frame-__filter
     frame-__helloworld
     frame-__join
-    frame-__label_propagation
     frame-__load
     frame-__mapreducewordcount
     frame-__rename_columns
@@ -200,7 +199,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame:/filter <frame-__filter>`                                                           Select all rows which satisfy a predicate.
 :doc:`frame:/helloworld <frame-__helloworld>`                                                   This is a Hello World Plugin for Frame.
 :doc:`frame:/join <frame-__join>`                                                               |BETA| Join two data frames (similar to SQL JOIN).
-:doc:`frame:/label_propagation <frame-__label_propagation>`                                     Label Propagation on Gaussian Random Fields.
 :doc:`frame:/load <frame-__load>`                                                               Append data from a CSV/XML into an existing (possibly empty) frame
 :doc:`frame:/mapreducewordcount <frame-__mapreducewordcount>`                                   Counts and reports the top 10 words across all columns with string data in a frame.
 :doc:`frame:/rename_columns <frame-__rename_columns>`                                           Rename columns

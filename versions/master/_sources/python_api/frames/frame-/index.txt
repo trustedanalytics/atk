@@ -51,7 +51,6 @@
     histogram
     inspect
     join
-    label_propagation
     last_read_date
     mapreducewordcount
     name
@@ -133,7 +132,6 @@
     :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
     :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
     :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
-    :doc:`label_propagation <label_propagation>`\ (self, src_col_name, dest_col_name, ...[, ...])         Label Propagation on Gaussian Random Fields.
     :doc:`mapreducewordcount <mapreducewordcount>`\ (self, input_dir, output_dir)                         Counts and reports the top 10 words across all columns with string data in a frame.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns
