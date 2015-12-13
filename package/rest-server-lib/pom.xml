@@ -53,10 +53,6 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>giraph-plugins</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>frame-plugins</artifactId>
         </dependency>
         <dependency>

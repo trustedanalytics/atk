@@ -86,7 +86,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'histogram',
                                       'inspect',
                                       'join',
-                                      'label_propagation',
                                       'name',
                                       'quantiles',
                                       'rename_columns',
