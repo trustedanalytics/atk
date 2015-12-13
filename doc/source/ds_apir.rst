@@ -127,12 +127,21 @@ Here are some guidelines to follow when writing a |UDF|:
     ``try: except:`` block and produced a -1 for rows which caused errors.
 
 #.  Dependencies:
-    All dependencies used in the |UDF| must be available in **the same Python
-    code file** as the |UDF| or available in the server's installed Python
-    libraries.
-    The serialization technique to get the code distributed throughout the
-    cluster will serialize dependencies only in the same Python module (in
-    other words, file.)
+    All dependencies used in the |UDF| must fit into one of the following:
+
+    A. Be available in **the same Python code file** (or REPL) as the |UDF|
+    B. Be available in the server's installed Python libraries.
+    C. Be specified in the ``udf_dependencies`` list.  This is a list of
+       files and folders which will be sent along with the UDF to the server
+       when it is invoked.  This causes overhead, so use judiciously.
+
+
+    .. code::
+
+        >>> import trustedanalytics as ta
+        >>> ta.udf_dependencies.append("helper_script.py")
+
+
 #.  Simplicity:
     Stay within the intended simple context of the given command, like a row
     operation.
