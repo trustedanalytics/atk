@@ -66,11 +66,11 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
   override def execute(arguments: ExportHdfsCsvArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val fileStorage = new FileStorage
-    val artifactPath = engine.frames.frameFileStorage.hdfs.absolutePath(arguments.folderName, fileStorage.hdfs.getHomeDirectory())
+    val artifactPath = engine.frames.frameFileStorage.hdfs.absolutePath(arguments.folderName, fileStorage.hdfs.getHomeDirectory().toString)
     require(!fileStorage.exists(artifactPath), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD
-    val sample = exportToHdfsCsv(frame.rdd, artifactPath, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
+    val sample = exportToHdfsCsv(frame.rdd, artifactPath.toString, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
 
     ExportMetadata(artifactPath.toString, "all", "csv", frame.rowCount, sample,
       fileStorage.size(artifactPath.toString), Some(arguments.folderName))
