@@ -50,7 +50,8 @@ case class Command(id: Long,
                    result: Option[JsObject] = None,
                    createdOn: DateTime,
                    modifiedOn: DateTime,
-                   createdById: Option[Long] = None) extends HasId {
+                   createdById: Option[Long] = None,
+                   jobContextId: Option[Long] = None) extends HasId {
 
   /**
    * Convenience method for getting the args as a String for logging/debugging

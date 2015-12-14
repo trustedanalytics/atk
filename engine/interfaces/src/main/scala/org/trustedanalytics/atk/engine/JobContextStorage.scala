@@ -17,46 +17,38 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.NotFoundException
-import org.trustedanalytics.atk.domain.command.{ CommandTemplate, Command }
-import scala.util.Try
-import spray.json.JsObject
+import org.trustedanalytics.atk.domain.jobcontext.{ JobContextTemplate, JobContext }
 
-trait CommandStorage {
+trait JobContextStorage {
 
   /**
    * Generally it is better to call expectCommand() since commands don't get deleted,
    * so if you have an id it should be valid
    */
-  def lookup(id: Long): Option[Command]
+  def lookup(id: Long): Option[JobContext]
+
+  def lookupByName(appName: String): Option[JobContext]
 
   /** Look-up a Command expecting it exists, throw Exception otherwise */
-  def expectCommand(id: Long): Command = {
-    lookup(id).getOrElse(throw new NotFoundException("Command", id))
+  def expectCommand(id: Long): JobContext = {
+    lookup(id).getOrElse(throw new NotFoundException("JobContext", id))
   }
 
   /**
    * Add a new command to the meta store
    */
-  def create(commandTemplate: CommandTemplate): Command
+  def create(commandTemplate: JobContextTemplate): JobContext
 
-  def scan(offset: Int, count: Int): Seq[Command]
-
-  /**
-   * On complete - mark progress as 100% or failed
-   */
-  def complete(id: Long, result: Try[JsObject]): Unit
+  def scan(offset: Int, count: Int): Seq[JobContext]
 
   /**
    * update command info regarding progress of jobs initiated by this command
    * @param id command id
    * @param progressInfo list of progress for the jobs initiated by this command
    */
-  def updateProgress(id: Long, progressInfo: List[ProgressInfo]): Unit
+  def updateProgress(id: Long, progressInfo: String): Unit
 
-  /**
-   * update job context for the command
-   * @param id command id
-   * @param jobContextId job context id
-   */
-  def updateJobContextId(id: Long, jobContextId: Long): Unit
+  def updateJobServerUri(id: Long, jobServerUri: String): Unit
+
 }
+

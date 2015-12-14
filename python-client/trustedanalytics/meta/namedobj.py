@@ -206,23 +206,23 @@ class _NamedObjectsFunctionFactory(object):
             num_items_deleted = 0
             if not isinstance(items, list) and not isinstance(items, tuple):
                 items = [items]
-            victim_uris = {}
+            victim_uris = set()
             for item in items:
                 if isinstance(item, basestring):
                     try:
-                        victim_uris[item] = self.get_entity_uri_from_name(item)
+                        victim_uris.add(self.get_entity_uri_from_name(item))
                     except:
                         pass    #  Don't fail if item with the specified name was not found
                 elif isinstance(item, obj_class):
                     try:
                         if item.status == "ACTIVE":
-                            victim_uris[item.name] = item.uri
+                            victim_uris.add(item.uri)
                     except:
                         pass
                 else:
                     raise TypeError("Excepted argument of type {term} or else the {term}'s name".format(term=obj_term))
-            for name, uri in victim_uris.items():
-                module_logger.info("Drop %s %s", obj_term, name)
+            for uri in victim_uris:
+                module_logger.info("Drop %s %s", obj_term, uri)
                 try:
                     http.delete(uri)
                     num_items_deleted += 1

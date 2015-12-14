@@ -1350,7 +1350,7 @@ class _BaseFrame(CommandLoadable):
     @api
     @arg('column', 'str', "The name of the column to be flattened.")
     @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
-    @deprecated
+    @deprecated("Use flatten_columns")
     def __flatten_column(self, column, delimiter=None):
         """
         Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
@@ -1372,7 +1372,7 @@ class _BaseFrame(CommandLoadable):
     @api
     @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
     @arg('delimiter', 'str', "Separator for the data in the result columns. Default is comma (,).")
-    @deprecated
+    @deprecated("Use unflatten_columns")
     def __unflatten_column(self, columns, delimiter=None):
         """
         Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
@@ -1726,7 +1726,7 @@ A VertexFrame is similar to a Frame but with a few important differences:
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
-    @deprecated
+    @deprecated("Use drop_rows")
     def __drop_vertices(self, predicate):
         """
         drop_vertices has been deprecated.  Use drop_rows instead.

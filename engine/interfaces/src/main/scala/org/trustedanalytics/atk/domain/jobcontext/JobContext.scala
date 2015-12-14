@@ -13,9 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.trustedanalytics.atk.domain.jobcontext
 
+import org.trustedanalytics.atk.domain.HasId
+import org.joda.time.DateTime
+import spray.json.JsObject
 
-/**
- * Package of Giraph io formats.
- */
-package org.trustedanalytics.atk.giraph.io.formats;
+// JobContext class to store the yarn job & application master details
+case class JobContext(id: Long,
+                      userId: Long,
+                      yarnAppName: String,
+                      yarnAppId: String,
+                      clientId: String,
+                      createdOn: DateTime,
+                      modifiedOn: DateTime,
+                      progress: Option[String] = None,
+                      jobServerUri: Option[String] = None) extends HasId
