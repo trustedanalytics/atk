@@ -91,7 +91,7 @@ trustedanalytics.atk {
       #   1) Make sure the SPARK setting "spark_jar_hdfs_path" is set to this value
       #   2) Use "Actions" -> "Upload Spark Jar" to install jar in HDFS, if it is not already there
       //spark.yarn.jar = "hdfs://invalid-hdfs-host/user/spark/share/lib/spark-assembly.jar"
-      //spark.yarn.jar = "/opt/cloudera/parcels/CDH/lib/spark/assembly/lib/spark-assembly-1.5.0-cdh5.5.0-hadoop2.6.0-cdh5.5.0.jar"
+      //spark.yarn.jar = "/opt/cloudera/parcels/CDH-5.4.2-1.cdh5.4.2.p0.2/lib/spark/assembly/lib/spark-assembly-1.3.0-cdh5.4.2-hadoop2.6.0-cdh5.4.2.jar"
     }
 
     #Kerberos authentication configuration. if enabled is set to true will authenticate to kerberos

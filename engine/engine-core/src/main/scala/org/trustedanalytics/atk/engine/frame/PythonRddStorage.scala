@@ -112,7 +112,6 @@ object PythonRddStorage {
         obj.put("array", x.toSeq.toArray.map {
           case y: ArrayBuffer[_] => iterableToBsonList(y)
           case y: Vector[_] => iterableToBsonList(y)
-          case y: scala.collection.mutable.Seq[_] => iterableToBsonList(y)
           case value => value
         })
         BSON.encode(obj)
@@ -138,7 +137,6 @@ object PythonRddStorage {
 
     val accumulator = rdd.sparkContext.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
-    val pythonVersion = "2.7"
 
     val pyIncludes = new JArrayList[String]()
 
@@ -154,7 +152,6 @@ object PythonRddStorage {
       baseRdd, predicateInBytes, environment,
       pyIncludes, preservePartitioning = true,
       pythonExec = pythonExec,
-      pythonVer = pythonVersion,
       broadcastVars, accumulator)
     pyRdd
   }

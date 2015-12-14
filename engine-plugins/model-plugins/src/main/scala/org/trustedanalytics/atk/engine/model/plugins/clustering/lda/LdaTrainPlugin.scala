@@ -58,7 +58,7 @@ class LdaTrainPlugin
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: LdaTrainArgs)(implicit invocation: Invocation) = arguments.maxIterations + 14
+  override def numberOfJobs(arguments: LdaTrainArgs)(implicit invocation: Invocation) = arguments.maxIterations + 11
 
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 

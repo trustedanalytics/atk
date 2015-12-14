@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
-import org.apache.spark.mllib.clustering.AtkLdaModel
+import org.apache.spark.mllib.clustering.{ AtkLdaModel, AtkLdaModel$ }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc

@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.join
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
-import org.apache.spark.sql.catalyst.expressions.{ GenericRow, GenericMutableRow }
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Schema }
 import org.trustedanalytics.atk.engine.frame.plugins.join.JoinRddImplicits._
 
@@ -228,9 +228,9 @@ object JoinRddFunctions extends Serializable {
       val rightKey = row.get(rightJoinIndex)
       val newLeftKey = if (leftKey == null) rightKey else leftKey
 
-      val rowArray = row.toSeq.toArray
-      rowArray(leftJoinIndex) = newLeftKey
-      new GenericRow(rowArray)
+      val mutableRow = new GenericMutableRow(row.toSeq.toArray)
+      mutableRow.update(leftJoinIndex, newLeftKey)
+      mutableRow
     })
   }
 

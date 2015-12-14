@@ -84,7 +84,12 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
    * @return Dataframe representing the FrameRdd
    */
   def toDataFrame: DataFrame = {
-    new SQLContext(this.sparkContext).createDataFrame(this, sparkSchema)
+    //TODO: Delete work-around for kyro serialization bug (SPARK-6465) once we upgrade to Spark1.4
+    // Work-around for kyro serialization bug in GenericRowWithSchema
+    // https://issues.apache.org/jira/browse/SPARK-6465
+    // This issue is affecting dataframe operations with shuffles like sort and join
+    val rowRdd: RDD[Row] = this.map(row => new GenericRow(row.toSeq.toArray))
+    new SQLContext(this.sparkContext).createDataFrame(rowRdd, sparkSchema)
   }
 
   def toDataFrameUsingHiveContext = new org.apache.spark.sql.hive.HiveContext(this.sparkContext).createDataFrame(this, sparkSchema)
@@ -283,10 +288,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
           case Nil => new GenericRow(keyRow.toArray)
           case _ => {
             //merge and re-order entries to match schema
-            val rowArray = new Array[Any](numColumns)
-            for (i <- keyRow.indices) rowArray(columnIndices(i)) = keyRow(i)
-            for (i <- valueRow.indices) rowArray(otherColumnIndices(i)) = valueRow(i)
-            new GenericRow(rowArray)
+            val row = new GenericMutableRow(numColumns)
+            for (i <- keyRow.indices) row.update(columnIndices(i), keyRow(i))
+            for (i <- valueRow.indices) row.update(otherColumnIndices(i), valueRow(i))
+            row
           }
         }
     }
@@ -471,42 +476,42 @@ object FrameRdd {
    * @return a frame rdd
    */
   def toFrameRdd(rdd: DataFrame): FrameRdd = {
-    val fields: Seq[StructField] = rdd.schema.fields
+    val array: Seq[StructField] = rdd.schema.fields
     val list = new ListBuffer[Column]
-    for (field <- fields) {
+    for (field <- array) {
       list += new Column(field.name, sparkDataTypeToSchemaDataType(field.dataType))
     }
     val schema = new FrameSchema(list.toList)
     val convertedRdd: RDD[org.apache.spark.sql.Row] = rdd.map(row => {
-      val rowArray = new Array[Any](row.length)
+      val mutableRow = new GenericMutableRow(row.length)
       row.toSeq.zipWithIndex.foreach {
         case (o, i) =>
           if (o == null) {
-            rowArray(i) = null
+            mutableRow(i) = null
           }
-          else if (fields(i).dataType.getClass == TimestampType.getClass || fields(i).dataType.getClass == DateType.getClass) {
-            rowArray(i) = o.toString
+          else if (array(i).dataType.getClass == TimestampType.getClass || array(i).dataType.getClass == DateType.getClass) {
+            mutableRow(i) = o.toString
             // todo - add conversion to datetime object
-            // rowArray(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
+            // mutableRow(i) = org.trustedanalytics.atk.domain.schema.DataTypes.toDateTime(o.toString).toString
           }
-          else if (fields(i).dataType.getClass == ShortType.getClass) {
-            rowArray(i) = row.getShort(i).toInt
+          else if (array(i).dataType.getClass == ShortType.getClass) {
+            mutableRow(i) = row.getShort(i).toInt
           }
-          else if (fields(i).dataType.getClass == BooleanType.getClass) {
-            rowArray(i) = row.getBoolean(i).compareTo(false)
+          else if (array(i).dataType.getClass == BooleanType.getClass) {
+            mutableRow(i) = row.getBoolean(i).compareTo(false)
           }
-          else if (fields(i).dataType.getClass == ByteType.getClass) {
-            rowArray(i) = row.getByte(i).toInt
+          else if (array(i).dataType.getClass == ByteType.getClass) {
+            mutableRow(i) = row.getByte(i).toInt
           }
-          else if (fields(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
-            rowArray(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
+          else if (array(i).dataType.getClass == classOf[DecimalType]) { // DecimalType.getClass return value (DecimalType$) differs from expected DecimalType
+            mutableRow(i) = row.getAs[java.math.BigDecimal](i).doubleValue()
           }
           else {
             val colType = schema.columns(i).dataType
-            rowArray(i) = o.asInstanceOf[colType.ScalaType]
+            mutableRow(i) = o.asInstanceOf[colType.ScalaType]
           }
       }
-      new GenericRow(rowArray)
+      mutableRow
     }
     )
     new FrameRdd(schema, convertedRdd)
@@ -570,18 +575,18 @@ object FrameRdd {
    */
   def toRowRDD(schema: Schema, rows: RDD[Array[Any]]): RDD[org.apache.spark.sql.Row] = {
     val rowRDD: RDD[org.apache.spark.sql.Row] = rows.map(row => {
-      val rowArray = new Array[Any](row.length)
+      val mutableRow = new GenericMutableRow(row.length)
       row.zipWithIndex.map {
         case (o, i) =>
           o match {
             case null => null
             case _ =>
               val colType = schema.column(i).dataType
-              rowArray(i) = o.asInstanceOf[colType.ScalaType]
+              mutableRow(i) = o.asInstanceOf[colType.ScalaType]
 
           }
       }
-      new GenericRow(rowArray)
+      mutableRow
     })
     rowRDD
   }

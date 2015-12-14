@@ -49,7 +49,6 @@ Default is "k-means||".""") initializationMode: String = "k-means||") {
   require(k > 0, "k must be at least 1")
   require(maxIterations > 0, "maxIterations must be a positive value")
   require(epsilon > 0.0, "epsilon must be a positive value")
-  require(initializationMode == "random" || initializationMode == "k-means||", "initialization mode must be 'random' or 'k-means||'")
 
 }
 

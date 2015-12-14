@@ -674,15 +674,15 @@ object DataTypes extends EventLogging {
   def toStr(value: Any): String = {
     value match {
       case null => null
+      case i: Int => i.toString
+      case l: Long => l.toString
+      case f: Float => f.toString
+      case d: Double => d.toString
+      case bd: BigDecimal => bd.toString()
       case s: String => s
       case v: vector.ScalaType => vector.asString(v)
-      case value =>
-        try {
-          value.toString
-        }
-        catch {
-          case e: Exception => throw new RuntimeException(s"${value.getClass.getName} toStr is not implemented")
-        }
+      case dt: DateTime => dt.toString
+      case _ => throw new RuntimeException(s"${value.getClass.getName} toStr is not implemented")
     }
   }
 

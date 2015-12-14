@@ -102,8 +102,7 @@ class LdaTrainTest extends TestingSparkContextWordSpec with Matchers {
     "compute topic probabilities" in {
       val rows = sparkContext.parallelize(edgeData)
       val edgeFrame = new FrameRdd(edgeSchema, rows)
-      val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count",
-        numTopics = 2, maxIterations = 10, randomSeed = Some(25))
+      val trainArgs = LdaTrainArgs(model, frame, "document", "word", "word_count", numTopics = 2, maxIterations = 10)
       val ldaModel = LdaTrainFunctions.trainLdaModel(edgeFrame, trainArgs)
 
       val topicsGivenDoc = ldaModel.getTopicsGivenDocFrame.map(row => {

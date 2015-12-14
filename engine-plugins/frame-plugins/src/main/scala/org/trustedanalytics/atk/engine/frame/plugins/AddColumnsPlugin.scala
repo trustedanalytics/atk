@@ -55,12 +55,6 @@ class AddColumnsPlugin extends SparkCommandPlugin[AddColumnsArgs, UnitReturn] {
   override def executesPythonUdf = true
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: AddColumnsArgs)(implicit invocation: Invocation) = 2
-
-  /**
    * Adds one or more new columns to the frame by evaluating the given func on each row.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
