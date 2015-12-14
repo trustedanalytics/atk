@@ -44,7 +44,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
   val codeSchema = FrameSchema(List(
     Column("col_0", DataTypes.int32),
-    Column("col_1", DataTypes.str)
+    Column("col_1", DataTypes.int32)
   ))
 
   val countrySchema = FrameSchema(List(
@@ -63,7 +63,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -92,7 +92,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -119,7 +119,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -150,7 +150,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -178,7 +178,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0_L", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -209,7 +209,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0_L", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -237,7 +237,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -267,7 +267,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))
@@ -295,7 +295,7 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.str, 1),
+      Column("col_1_L", DataTypes.int32, 1),
       Column("col_0_R", DataTypes.int32, 2),
       Column("col_1_R", DataTypes.str, 3)
     ))

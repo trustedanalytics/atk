@@ -105,8 +105,8 @@ case class AtkLdaModel(numTopics: Int) {
     buf ++= s"Number of edges: ${numEdges}\n\n"
     buf ++= "======LDA Configuration======\n"
     buf ++= s"numTopics: ${distLdaModel.k}\n"
-    buf ++= s"alpha: ${getDocConcentration}\n"
-    buf ++= s"beta: ${getTopicConcentration}\n"
+    buf ++= s"alpha: ${getAlpha}\n"
+    buf ++= s"beta: ${distLdaModel.topicConcentration}\n"
     buf ++= s"maxIterations: ${maxIterations}\n"
     buf.toString()
   }
@@ -136,8 +136,8 @@ case class AtkLdaModel(numTopics: Int) {
     val topicsMatrix = distLdaModel.topicsMatrix
     val topicMatrixRdd = parallelizeTopicsMatrix(uniqueWordsFrame.sparkContext,
       topicsMatrix, uniqueWordsFrame.partitions.length)
-    val globalTopicCounts = getGlobalTopicCounts //Nk in Asuncion 2009 paper
-    val eta1 = getTopicConcentration - 1
+    val globalTopicCounts = distLdaModel.globalTopicTotals //Nk in Asuncion 2009 paper
+    val eta1 = distLdaModel.topicConcentration - 1
     val scaledVocabSize = distLdaModel.vocabSize * eta1
 
     val wordCountRdd = uniqueWordsFrame.mapRows(row => {
@@ -357,39 +357,12 @@ case class AtkLdaModel(numTopics: Int) {
   }
 
   /**
-   * Get global topic counts (N_k in Asuncion et al. (2009) paper)
-   */
-  private[clustering] def getGlobalTopicCounts: TopicCounts = {
-    //TODO: Delete reflection once these private variables are accessible in Spark1.4.+
-    val privateField = classOf[DistributedLDAModel].getDeclaredField("globalTopicTotals")
-    Try(privateField.setAccessible(true)).orElse(
-      throw new SecurityException("Cannot access global topic counts in distributed LDA model.")
-    )
-    privateField.get(distLdaModel).asInstanceOf[TopicCounts]
-  }
-
-  /**
    * Get document concentration (alpha)
    */
-  private[clustering] def getDocConcentration: Double = {
-    //TODO: Delete reflection once these private variables are accessible in Spark1.4.+
-    val privateField = classOf[DistributedLDAModel].getDeclaredField("docConcentration")
-    Try(privateField.setAccessible(true)).orElse(
-      throw new SecurityException("Cannot access document concentration in distributed LDA model.")
+  private[clustering] def getAlpha: Double = {
+    Try(distLdaModel.docConcentration(0)).getOrElse(
+      throw new RuntimeException("Cannot get alpha from distributed LDA model.")
     )
-    privateField.get(distLdaModel).asInstanceOf[Double]
-  }
-
-  /**
-   * Get topic concentration (beta)
-   */
-  private[clustering] def getTopicConcentration: Double = {
-    //TODO: Delete reflection once these private variables are accessible in Spark1.4.+
-    val privateField = classOf[DistributedLDAModel].getDeclaredField("topicConcentration")
-    Try(privateField.setAccessible(true)).orElse(
-      throw new SecurityException("Cannot access topic concentration in distributed LDA model.")
-    )
-    privateField.get(distLdaModel).asInstanceOf[Double]
   }
 }
 

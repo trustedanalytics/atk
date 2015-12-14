@@ -16,10 +16,12 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.apache.spark.frame.FrameRdd
+import org.apache.spark.sql.catalyst.InternalRow
+import org.apache.spark.sql.types.GenericArrayData
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema._
-import org.apache.hadoop.io._
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 
@@ -36,6 +38,8 @@ import scala.collection.mutable.ArrayBuffer
 class RowWrapper(override val schema: Schema) extends AbstractRow with Serializable {
   require(schema != null, "schema is required")
 
+  private lazy val structType = FrameRdd.schemaToStructType(schema)
+
   @transient override var row: Row = null
 
   /**
@@ -48,6 +52,10 @@ class RowWrapper(override val schema: Schema) extends AbstractRow with Serializa
     this
   }
 
+  def apply(internalRow: InternalRow) = {
+    this.row = new GenericRow(internalRow.toSeq(structType).toArray)
+    this
+  }
 }
 
 /**
@@ -137,8 +145,12 @@ trait AbstractRow {
    * @return property value
    */
   def vectorValue(columnName: String): Vector[Double] = {
-    DataTypes.toVector()(row(schema.columnIndex(columnName)))
+    row(schema.columnIndex(columnName)) match {
+      case ga: GenericArrayData => ga.toDoubleArray().toVector
+      case value => DataTypes.toVector()(value)
+    }
   }
+
   /**
    * True if value for this column is null.
    *
