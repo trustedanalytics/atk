@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Commands graph/graphx_pagerank &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="REST API Commands" href="index.html" >
+    <link rel="next" title="Commands graph/graphx_triangle_count" href="graph__graphx_triangle_count.html" >
+    <link rel="prev" title="Commands graph/graphx_label_propagation" href="graph__graphx_label_propagation.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Commands</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="graph__graphx_label_propagation.html" title="Commands graph/graphx_label_propagation"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="graph__graphx_triangle_count.html" title="Commands graph/graphx_triangle_count"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="commands-graph-graphx-pagerank">
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> graph/graphx_pagerank<a class="headerlink" href="#commands-graph-graphx-pagerank" title="Permalink to this headline">¶</a></h1>
+<p>Determine which vertices are the most important.</p>
+<div class="section" id="post-v1-commands">
+<h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="get-v1-commands-id">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>POST /v1/commands/
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">graph/graphx_pagerank</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
+<blockquote>
+<div><p>&lt;Missing Description&gt;</p>
+</div></blockquote>
+<p><strong>output_property</strong> : unicode</p>
+<blockquote>
+<div><p>Name of the property to which PageRank
+value will be stored on vertex and edge.</p>
+</div></blockquote>
+<p><strong>input_edge_labels</strong> : list (default=None)</p>
+<blockquote>
+<div><p>List of edge labels to consider for PageRank computation.
+Default is all edges are considered.</p>
+</div></blockquote>
+<p><strong>max_iterations</strong> : int32 (default=None)</p>
+<blockquote>
+<div><p>The maximum number of iterations that will be invoked.
+The valid range is all positive int.
+Invalid value will terminate with vertex page rank set to reset_probability.
+Default is 20.</p>
+</div></blockquote>
+<p><strong>reset_probability</strong> : float64 (default=None)</p>
+<blockquote>
+<div><p>The probability that the random walk of a page is reset.
+Default is 0.15.</p>
+</div></blockquote>
+<p><strong>convergence_tolerance</strong> : float64 (default=None)</p>
+<blockquote class="last">
+<div><p>The amount of change in cost function that will be tolerated at
+convergence.
+If this parameter is specified, max_iterations is not considered as a stopping condition.
+If the change is less than this threshold, the algorithm exits earlier.
+The valid value range is all float and zero.
+Default is 0.001.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Description</strong></p>
+<p>Pulls graph from underlying store, sends it off to the
+PageRankRunner, and then writes the output graph back to the underlying store.</p>
+<p>This method (currently) only supports Titan for graph storage.</p>
+<p>** Experimental Feature **</p>
+<p><strong>Basics and Background</strong></p>
+<p><em>PageRank</em> is a method for determining which vertices in a directed graph are
+the most central or important.
+<em>PageRank</em> gives each vertex a score which can be interpreted as the
+probability that a person randomly walking along the edges of the graph will
+visit that vertex.</p>
+<p>The calculation of <em>PageRank</em> is based on the supposition that if a vertex has
+many vertices pointing to it, then it is &#8220;important&#8221;,
+and that a vertex grows in importance as more important vertices point to it.
+The calculation is based only on the network structure of the graph and makes
+no use of any side data, properties, user-provided scores or similar
+non-topological information.</p>
+<p><em>PageRank</em> was most famously used as the core of the Google search engine for
+many years, but as a general measure of <a class="reference internal" href="../../../glossary.html#term-centrality"><span class="xref std std-term">centrality</span></a> in a graph, it has
+other uses to other problems, such as <a class="reference internal" href="../../../glossary.html#term-recommendation-systems"><span class="xref std std-term">recommendation systems</span></a> and
+analyzing predator-prey food webs to predict extinctions.</p>
+<p><strong>Background references</strong></p>
+<ul class="simple">
+<li>Basic description and principles: <a class="reference external" href="http://en.wikipedia.org/wiki/PageRank">Wikipedia: PageRank</a></li>
+<li>Applications to food web analysis: <a class="reference external" href="http://web.stanford.edu/class/msande233/handouts/lecture8.pdf">Stanford: Applications of PageRank</a></li>
+<li>Applications to recommendation systems: <a class="reference external" href="http://www.ploscompbiol.org/article/fetchObject.action?uri=info%3Adoi%2F10.1371%2Fjournal.pcbi.1000494&amp;representation=PDF">PLoS: Computational Biology</a></li>
+</ul>
+<p><strong>Mathematical Details of PageRank Implementation</strong></p>
+<p>The Trusted Analytics Platform implementation of <em>PageRank</em> satisfies the following equation
+at each vertex <img class="math" src="../../../_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> of the graph:</p>
+<div class="math">
+<p><img src="../../../_images/math/fc9164648b5a91c1b09ae8af18e3b618286d39ad.png" alt="PR(v) = \frac {\rho}{n} + \rho \left( \sum_{u\in InSet(v)} \
+\frac {PR(u)}{L(u)} \right)"/></p>
+</div><dl class="docutils">
+<dt>Where:</dt>
+<dd><div class="first last line-block">
+<div class="line"><img class="math" src="../../../_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> — a vertex</div>
+<div class="line"><img class="math" src="../../../_images/math/1d30d1b165056b1a222ff4e2b76ada68c35b8145.png" alt="L(v)"/> — outbound degree of the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/caf98a87c9c974e4d964d153c5d59ab90ad7ebb5.png" alt="PR(v)"/> — <em>PageRank</em> score of the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/f27930a9cd2e383f6c235e32c3ee002e327ba2ea.png" alt="InSet(v)"/> — set of vertices pointing to the vertex v</div>
+<div class="line"><img class="math" src="../../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> — total number of vertices in the graph</div>
+<div class="line"><img class="math" src="../../../_images/math/f574498915fa9e02eeb5141c24835d077eba3e75.png" alt="\rho"/> — user specified damping factor (also known as reset
+probability)</div>
+</div>
+</dd>
+</dl>
+<p>Termination is guaranteed by two mechanisms.</p>
+<ul class="simple">
+<li>The user can specify a convergence threshold so that the algorithm will
+terminate when, at every vertex, the difference between successive
+approximations to the <em>PageRank</em> score falls below the convergence
+threshold.</li>
+<li>The user can specify a maximum number of iterations after which the
+algorithm will terminate.</li>
+</ul>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<blockquote>
+<div><p>dict((vertex_dictionary, (label, Frame)), (edge_dictionary,(label,Frame))).</p>
+<p>Dictionary containing dictionaries of labeled vertices and labeled edges.</p>
+<p>For the <em>vertex_dictionary</em> the vertex type is the key and the corresponding
+vertex&#8217;s frame with a new column storing the page rank value for the vertex.
+Call vertex_dictionary[&#8216;label&#8217;] to get the handle to frame whose vertex
+type is label.</p>
+<p>For the <em>edge_dictionary</em> the edge type is the key and the corresponding
+edge&#8217;s frame with a new column storing the page rank value for the edge.
+Call edge_dictionary[&#8216;label&#8217;] to get the handle to frame whose edge type
+is label.</p>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Dec 14, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>HBase Performance Tuning &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
+    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Best Known Methods (Admin)" href="ad_bkm.html" >
+    <link rel="next" title="Windows Python Setup" href="ad_other.html" >
+    <link rel="prev" title="Giraph Performance Tuning and Benchmarking" href="ad_gitune.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_bkm.html" accesskey="U">Best Known Methods (Admin)</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_gitune.html" title="Giraph Performance Tuning and Benchmarking"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_other.html" title="Windows Python Setup"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ad-hbtune"></span><div class="section" id="hbase-performance-tuning">
+<span id="index-0"></span><h1>HBase Performance Tuning<a class="headerlink" href="#hbase-performance-tuning" title="Permalink to this headline">¶</a></h1>
+<p>Two comprehensive sources for performance tuning in HBase are:</p>
+<ul class="simple">
+<li><a class="reference external" href="http://hbase.apache.org/book.html#important_configurations">HBase reference guide</a></li>
+<li><a class="reference external" href="http://library.intel.com/Catalog/CatalogItemDetails.aspx?id=225983">The HBase Administration Cookbook</a></li>
+</ul>
+<p>Some of the recommendations for production clusters are detailed below.
+Remember to sync these changes to all servers in the cluster.</p>
+<ol class="arabic">
+<li><p class="first">Increase ulimit settings.
+The default Linux setting for maximum number of file descriptors for a user
+is 1024 which is too low.
+The number of file descriptors (nofile) and open processes for the user
+running the Hadoop/HBase daemons should be set to a minimum of 32768,
+otherwise the system will experience problems under heavy load.
+Instructions for changing <em>/etc/security/limits.conf</em> are available here:
+<a class="reference external" href="http://hbase.apache.org/book.html#ulimit">http://hbase.apache.org/book.html#ulimit</a></p>
+</li>
+<li><p class="first">Garbage collection.
+Pauses due to garbage collection can impact performance.
+For latency-sensitive applications, Cloudera recommends
+<strong>-XX:+UseParNewGC</strong> and <strong>-XX:+UseConcMarkSweepGC</strong> in <em>hbase-env.sh</em>.
+The MemStore-Local Allocation buffers (MSLAB) which reduce heap
+fragmentation under heavy write-load are enabled by default in HBase.
+The MSLAB setting is <strong>hbase.hregion.memstore.mslab.enabled</strong> in
+<em>hbase-site.xml</em>.
+<a class="reference external" href="http://blog.cloudera.com/blog/2011/02/avoiding-full-gcs-in-hbase-with-memstore-local-allocation-buffers-part-1">http://blog.cloudera.com/blog/2011/02/avoiding-full-gcs-in-hbase-with-memstore-local-allocation-buffers-part-1</a></p>
+</li>
+<li><p class="first">Enable column family compression.
+Compression boosts performance by reducing the size of store files thereby
+reducing I/O <a class="reference external" href="http://hbase.apache.org/book.html#compression">http://hbase.apache.org/book.html#compression</a>.
+The Snappy library from Google is faster than LZO and easier to install.
+Instructions for installing Snappy are available at:
+<a class="reference external" href="http://hbase.apache.org/book.html#d0e24641">http://hbase.apache.org/book.html#d0e24641</a>
+Once installed, turn on column family compression when creating the table,
+for example:</p>
+<div class="highlight-python"><div class="highlight"><pre>create &#39;mytable&#39;, {NAME =&gt; &#39;mycolumnfamily1&#39;, COMPRESSION =&gt; &#39;SNAPPY&#39;}
+</pre></div>
+</div>
+</li>
+<li><p class="first">Avoid update blocking for write-heavy workloads.
+If the cluster has enough memory, increase
+<strong>hbase.hregion.memstore.block.multiplier</strong> and
+<strong>hbase.hstore.blockingStoreFiles</strong> in <em>hbase-site.xml</em> to avoid blocking
+in write-heavy workloads.
+This setting needs to be tuned carefully because it increases the number of
+files to compact.
+See <a class="reference external" href="http://library.intel.com/Catalog/CatalogItemDetails.aspx?id=225983">The HBase Administration Cookbook</a> (Chapter 9)</p>
+</li>
+<li><p class="first">Increase region server handler count.
+If the workload has many concurrent clients, increasing the number of
+handlers can improve performance.
+However, too many handlers will lead to out of memory errors.
+See <a class="reference external" href="http://library.intel.com/Catalog/CatalogItemDetails.aspx?id=225983">The HBase Administration Cookbook</a> (Chapter 9)</p>
+</li>
+</ol>
+<p>Other recommendations include turning off automatic compactions and doing it
+manually: <a class="reference external" href="http://hbase.apache.org/book.html#managed.compactions">http://hbase.apache.org/book.html#managed.compactions</a>.</p>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Dec 14, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

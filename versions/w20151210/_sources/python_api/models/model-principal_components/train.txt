@@ -1,0 +1,71 @@
+
+:doc:`PrincipalComponentsModel <index>`  train
+**********************************************
+
+------
+
+
+.. function:: train(self, frame, observation_columns, mean_centered=True, k=None)
+
+    Build principal components model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model
+            on.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing
+            the observations.
+
+
+
+        **mean_centered** : bool (default=True)
+
+        ..
+
+            Option to mean center the
+            columns
+
+
+
+        **k** : int32 (default=None)
+
+        ..
+
+            Principal component count.
+            Default is the number of observation columns
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dictionary
+                |A dictionary with trained Principal Components Model with the following keys\:
+                |'column_means': the list of the means of each observation column
+                |'k': number of principal components used to train the model
+                |'mean_centered': Flag indicating if the model was mean centered during training
+                |'observation_columns': the list of observation columns on which the model was trained,
+                |'right_singular_vectors': list of a list storing the right singular vectors of the specified columns of the input frame
+                |'singular_values': list storing the singular values of the specified columns of the input frame
+              
+    Creating a PrincipalComponents Model using the observation columns.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

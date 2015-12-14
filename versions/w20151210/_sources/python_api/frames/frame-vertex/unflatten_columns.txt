@@ -1,0 +1,112 @@
+
+:doc:`VertexFrame <index>`  unflatten_columns
+*********************************************
+
+------
+
+
+.. function:: unflatten_columns(self, columns, delimiter=None)
+
+    Compacts data from multiple rows based on cell data.
+
+
+    :Parameters:
+
+        **columns** : list
+
+        ..
+
+            Name of the column(s) to be used as keys
+            for unflattening.
+
+
+
+        **delimiter** : unicode (default=None)
+
+        ..
+
+            Separator for the data in the result columns.
+            Default is comma (,).
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    Groups together cells in all columns (less the composite key) using "," as string delimiter.
+    The original rows are deleted.
+    The grouping takes place based on a composite key created from cell values.
+    The column datatypes are changed to string.
+
+    Examples
+    --------
+    Given a data file::
+
+        user1 1/1/2015 1 70
+        user1 1/1/2015 2 60
+        user2 1/1/2015 1 65
+
+    The commands to bring the data into a frame, where it can be worked on:
+
+    .. only:: html
+
+        .. code::
+
+            >>> my_csv = ta.CsvFile("original_data.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32)])
+            >>> frame = ta.Frame(source=my_csv)
+
+    .. only:: latex
+
+        .. code::
+
+            >>> my_csv = ta.CsvFile("unflatten_column.csv", schema=[('a', str), ('b', str),('c', int32) ,('d', int32)])
+            >>> frame = ta.Frame(source=my_csv)
+
+    Looking at it:
+
+    .. code::
+
+        >>> frame.inspect()
+        [#]  a      b         c  d
+        ===========================
+        [0]  user1  1/1/2015  1  70
+        [1]  user1  1/1/2015  2  60
+        [2]  user2  1/1/2015  1  65
+
+
+    Unflatten the data using columns a & b:
+
+    .. code::
+
+        >>> frame.unflatten_columns(['a','b'])
+        [===Job Progress===]
+
+    Check again:
+
+    .. code::
+
+        >>> frame.inspect()
+        [#]  a      b         c    d
+        ================================
+        [0]  user2  1/1/2015  1    65
+        [1]  user1  1/1/2015  1,2  70,60
+
+    Alternatively, unflatten_columns() also accepts a single column like:
+
+
+    .. code::
+
+        >>> frame.unflatten_columns('a')
+        [===Job Progress===]
+
+        >>> frame.inspect()
+        [#]  a      b                  c    d
+        =========================================
+        [0]  user1  1/1/2015,1/1/2015  1,2  70,60
+        [1]  user2  1/1/2015           1    65
+
