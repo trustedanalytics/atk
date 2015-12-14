@@ -26,6 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.classification.SVMWithSGD
 import org.apache.spark.mllib.optimization.{ SquaredL2Updater, L1Updater }
 import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.SparkException
 import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
 
@@ -72,10 +73,16 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
 
     //Running MLLib
     val svm = SVMWithSGDTrainPlugin.initializeSVMModel(arguments)
-    val svmModel = svm.run(labeledTrainRDD)
+    //Sparks SVM input validation gives a generic response
+    try {
+      val svmModel = svm.run(labeledTrainRDD)
+      val jsonModel = new SVMData(svmModel, arguments.observationColumns)
+      model.data = jsonModel.toJson.asJsObject
+    }
+    catch {
+      case invalid: SparkException => throw new IllegalArgumentException("Classification labels should be 0 or 1.")
+    }
 
-    val jsonModel = new SVMData(svmModel, arguments.observationColumns)
-    model.data = jsonModel.toJson.asJsObject
   }
 }
 
