@@ -16,17 +16,26 @@
 
 package org.apache.spark.engine
 
-import org.apache.spark.TaskContext
-import org.apache.spark.scheduler._
-import org.joda.time.DateTime
-import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
-import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.command.Command
-import org.trustedanalytics.atk.engine.{ CommandProgressUpdater, ProgressInfo, TaskProgressInfo }
+import org.joda.time.DateTime
+import org.scalatest.{ Matchers, WordSpec }
+
+import org.apache.spark.scheduler._
+import org.mockito.Mockito._
+import org.apache.spark.scheduler.SparkListenerStageSubmitted
+import org.apache.spark.scheduler.SparkListenerStageCompleted
+import org.apache.spark.scheduler.SparkListenerJobStart
+import org.apache.spark.TaskContext
+import org.trustedanalytics.atk.engine.CommandProgressUpdater
+import org.trustedanalytics.atk.engine.{ ProgressInfo, TaskProgressInfo }
+import org.scalatest.mock.MockitoSugar
 
 class ProgressListenerTest extends WordSpec with Matchers with MockitoSugar {
-  /*
+
+  class FakeTask(stageId: Int) extends Task[Int](stageId, 0) {
+    override def runTask(context: TaskContext): Int = ???
+  }
+
   class TestProgressUpdater extends CommandProgressUpdater {
 
     val commandProgress = scala.collection.mutable.Map[Long, List[Float]]()
@@ -42,15 +51,15 @@ class ProgressListenerTest extends WordSpec with Matchers with MockitoSugar {
     val command = new Command(commandId, "mock", createdOn = new DateTime, modifiedOn = new DateTime)
     val listener = new SparkProgressListener(new TestProgressUpdater(), command, 1)
 
-    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), Seq(), "one")
-    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), Seq(), "two")
-    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), Seq(), "three")
+    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), "one")
+    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), "two")
+    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), "three")
 
     val stageIds = Seq(stageOne, stageTwo, stageThree)
 
     val job = mock[ActiveJob]
     when(job.jobId).thenReturn(1)
-    val finalStage1 = mock[ResultStage]
+    val finalStage1 = mock[Stage]
     when(finalStage1.id).thenReturn(3)
     val parent1 = mock[Stage]
     when(parent1.id).thenReturn(1)
@@ -71,13 +80,13 @@ class ProgressListenerTest extends WordSpec with Matchers with MockitoSugar {
   def createListener_two_jobs(commandId: Long, expectedJobs: Int = 2): SparkProgressListener = {
     val command = new Command(commandId, "mock", createdOn = new DateTime, modifiedOn = new DateTime)
     val listener = new SparkProgressListener(new TestProgressUpdater(), command, expectedJobs)
-    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), Seq(), "one")
-    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), Seq(), "two")
-    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), Seq(), "three")
-    val stagefour = new StageInfo(4, 4, "four", 4, Seq(), Seq(), "four")
-    val stagefive = new StageInfo(5, 5, "five", 5, Seq(), Seq(), "five")
-    val stagesix = new StageInfo(6, 6, "six", 6, Seq(), Seq(), "six")
-    val stageseven = new StageInfo(7, 7, "seven", 7, Seq(), Seq(), "seven")
+    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), "one")
+    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), "two")
+    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), "three")
+    val stagefour = new StageInfo(4, 4, "four", 4, Seq(), "four")
+    val stagefive = new StageInfo(5, 5, "five", 5, Seq(), "five")
+    val stagesix = new StageInfo(6, 6, "six", 6, Seq(), "six")
+    val stageseven = new StageInfo(7, 7, "seven", 7, Seq(), "seven")
 
     val stageIds = Seq(stageOne, stageTwo, stageThree)
 
@@ -118,11 +127,11 @@ class ProgressListenerTest extends WordSpec with Matchers with MockitoSugar {
   "get all stages" in {
     val command = new Command(1, "mock", createdOn = new DateTime, modifiedOn = new DateTime)
     val listener = new SparkProgressListener(new TestProgressUpdater(), command, 1)
-    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), Seq(), "one")
-    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), Seq(), "two")
-    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), Seq(), "three")
-    val stageFour = new StageInfo(4, 4, "four", 4, Seq(), Seq(), "four")
-    val stageFive = new StageInfo(5, 5, "five", 5, Seq(), Seq(), "five")
+    val stageOne = new StageInfo(1, 1, "one", 1, Seq(), "one")
+    val stageTwo = new StageInfo(2, 2, "two", 2, Seq(), "two")
+    val stageThree = new StageInfo(3, 3, "three", 3, Seq(), "three")
+    val stageFour = new StageInfo(4, 4, "four", 4, Seq(), "four")
+    val stageFive = new StageInfo(5, 5, "five", 5, Seq(), "five")
     val job = mock[ActiveJob]
     when(job.jobId).thenReturn(1)
 
@@ -315,5 +324,5 @@ class ProgressListenerTest extends WordSpec with Matchers with MockitoSugar {
     sendStageCompletedToListener(listener, 3)
 
     listener.getCommandProgress() shouldEqual List(ProgressInfo(100f, Some(TaskProgressInfo(0))), ProgressInfo(2.5f, Some(TaskProgressInfo(1))))
-  }  */
+  }
 }

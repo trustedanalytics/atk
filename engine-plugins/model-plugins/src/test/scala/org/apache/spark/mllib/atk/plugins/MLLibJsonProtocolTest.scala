@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.engine.model.plugins.classification.glm.Logistic
 import org.trustedanalytics.atk.engine.model.plugins.classification.SVMData
 import org.trustedanalytics.atk.engine.model.plugins.clustering.KMeansData
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
-import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, DenseMatrix, Vector }
+import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, DenseMatrix }
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.regression.LinearRegressionModel
@@ -62,15 +62,15 @@ class MLLibJsonProtocolTest extends WordSpec {
   "SparseVectorFormat" should {
 
     "be able to serialize" in {
-      val sv = new SparseVector(3, Array(1, 2, 3), Array(1.5, 2.5, 3.5))
-      assert(sv.toJson.compactPrint == "{\"size\":3,\"indices\":[1,2,3],\"values\":[1.5,2.5,3.5]}")
+      val sv = new SparseVector(2, Array(1, 2, 3), Array(1.5, 2.5, 3.5))
+      assert(sv.toJson.compactPrint == "{\"size\":2,\"indices\":[1,2,3],\"values\":[1.5,2.5,3.5]}")
     }
 
     "parse json" in {
       val string =
         """
         |{
-        |   "size": 4,
+        |   "size": 3,
         |   "indices": [1,2,3,4],
         |   "values": [1.5,2.5,3.5,4.5]
         |
@@ -80,7 +80,7 @@ class MLLibJsonProtocolTest extends WordSpec {
           stripMargin
       val json = JsonParser(string).asJsObject
       val sv = json.convertTo[SparseVector]
-      assert(sv.size == 4)
+      assert(sv.size == 3)
       assert(sv.indices.length == 4)
       assert(sv.values.length == 4)
     }
@@ -89,7 +89,7 @@ class MLLibJsonProtocolTest extends WordSpec {
   "KmeansModelFormat" should {
 
     "be able to serialize" in {
-      val v = new KMeansModel(Array[Vector](new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
+      val v = new KMeansModel(Array(new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
       assert(v.toJson.compactPrint == "{\"clusterCenters\":[{\"values\":[1.2,2.1]},{\"values\":[3.4,4.3]}]}")
     }
 
@@ -104,7 +104,7 @@ class MLLibJsonProtocolTest extends WordSpec {
   "KMeansDataFormat" should {
 
     "be able to serialize" in {
-      val d = new KMeansData(new KMeansModel(Array[Vector](new DenseVector(Array(1.2, 2.1)),
+      val d = new KMeansData(new KMeansModel(Array(new DenseVector(Array(1.2, 2.1)),
         new DenseVector(Array(3.4, 4.3)))), List("column1", "column2"), List(1.0, 2.0))
       assert(d.toJson.compactPrint == "{\"k_means_model\":{\"clusterCenters\":[{\"values\":[1.2,2.1]},{\"values\":[3.4,4.3]}]},\"observation_columns\":[\"column1\",\"column2\"],\"column_scalings\":[1.0,2.0]}")
     }

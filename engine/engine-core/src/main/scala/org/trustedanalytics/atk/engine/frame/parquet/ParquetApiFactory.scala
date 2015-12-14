@@ -32,8 +32,6 @@ import scala.collection.JavaConverters._
  * @param configuration Hadoop Configuration object
  */
 class ParquetApiFactory(val configuration: Configuration) {
-  private val createdBy = "parquet-hadoop version 1.5.0"
-
   /**
    * Encapsulates the third party ParquetFileReader constructor
    * @param filePath Path to Parquet Hadoop file
@@ -53,7 +51,7 @@ class ParquetApiFactory(val configuration: Configuration) {
    * @return
    */
   def newColumnReadStore(pageReadStore: PageReadStore, schema: MessageType): ColumnReadStore = {
-    new ColumnReadStoreImpl(pageReadStore, new ParquetRecordGroupConverter(), schema, createdBy)
+    new ColumnReadStoreImpl(pageReadStore, new ParquetRecordGroupConverter(), schema)
   }
 
   /**

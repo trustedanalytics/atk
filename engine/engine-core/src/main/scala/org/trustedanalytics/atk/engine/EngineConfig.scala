@@ -343,7 +343,7 @@ trait EngineConfig extends EventLogging {
    * that will need to be sent to Yarn)
    */
   lazy val effectiveApplicationConf: String = {
-    val file = File.createTempFile("effective-application-conf-", ".tmp.conf")
+    val file = File.createTempFile("effective-application-conf-", ".tmp")
     file.deleteOnExit()
 
     // modify permissions since this file could have credentials in it
@@ -359,11 +359,6 @@ trait EngineConfig extends EventLogging {
     FileUtils.writeStringToFile(file, config.root().render())
 
     file.getAbsolutePath
-  }
-
-  /** The file name without path */
-  lazy val effectiveApplicationConfFileName: String = {
-    StringUtils.substringAfterLast(effectiveApplicationConf, File.separator)
   }
 
 }
