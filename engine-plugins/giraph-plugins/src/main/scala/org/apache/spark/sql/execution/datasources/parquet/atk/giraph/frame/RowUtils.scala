@@ -13,9 +13,21 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.apache.spark.sql.execution.datasources.parquet.atk.giraph.frame
 
+import org.apache.spark.sql.catalyst.{ CatalystTypeConverters, InternalRow }
+import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
 
-/**
- * Package of Giraph io.
- */
-package org.trustedanalytics.atk.giraph.io;
+object RowUtils extends Serializable {
+
+  /**
+   * Convert array to Catalyst internal row format
+   *
+   * @param array Input array
+   * @return Catalyst row
+   */
+  def convertToCatalystRow(array: Array[Any]): InternalRow = {
+    val catalystArr = array.map(x => CatalystTypeConverters.convertToCatalyst(x))
+    new GenericMutableRow(catalystArr)
+  }
+}

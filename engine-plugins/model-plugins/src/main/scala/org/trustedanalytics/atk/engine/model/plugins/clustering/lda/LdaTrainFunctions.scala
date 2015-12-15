@@ -76,6 +76,9 @@ object LdaTrainFunctions extends Serializable {
   private[clustering] def runLda(corpus: RDD[(Long, (String, Vector))], args: LdaTrainArgs): DistributedLDAModel = {
     val ldaCorpus = corpus.map { case ((documentId, (document, wordVector))) => (documentId, wordVector) }
     val ldaModel = initializeLdaRunner(args).run(ldaCorpus)
-    ldaModel
+    ldaModel match {
+      case m: DistributedLDAModel => m
+      case _ => throw new RuntimeException("Local LDA models are not supported.")
+    }
   }
 }

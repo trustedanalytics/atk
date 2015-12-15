@@ -64,7 +64,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>python</executable>
+                                    <executable>python2.7</executable>
                                     <workingDirectory>${basedir}/../python-client/trustedanalytics</workingDirectory>
                                     <arguments>
                                         <argument>-m</argument>
@@ -80,7 +80,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>python</executable>
+                                    <executable>python2.7</executable>
                                     <workingDirectory>${basedir}/../python-client/trustedanalytics/doc</workingDirectory>
                                     <arguments>
                                         <argument>build_docs.py</argument>
@@ -98,6 +98,20 @@
                                     <workingDirectory>${basedir}/</workingDirectory>
                                     <arguments>
                                         <argument>sphinx.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>f-forgithub</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${basedir}/</workingDirectory>
+                                    <arguments>
+                                        <argument>./f-forgithub.sh</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -147,10 +161,6 @@
                 <dependency>
                     <groupId>org.trustedanalytics.atk</groupId>
                     <artifactId>engine-core</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>org.trustedanalytics.atk</groupId>
-                    <artifactId>giraph-plugins</artifactId>
                 </dependency>
                 <dependency>
                     <groupId>org.trustedanalytics.atk</groupId>
