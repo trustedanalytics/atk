@@ -22,7 +22,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
-import org.trustedanalytics.atk.domain.frame.MissingIgnore
+import org.trustedanalytics.atk.domain.frame.{MissingImmediate, MissingIgnore}
 
 class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
 
@@ -420,7 +420,7 @@ class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
     val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
 
     // Get binned results where we treat missing values as 3
-    var binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, missing = MissingIgnore(), rdd)
+    var binnedRdd = DiscretizationFunctions.binColumns(1, List(2, 4, 6, 9), lowerInclusive = false, strictBinning = false, missing = MissingImmediate(3), rdd)
     var result = binnedRdd.collect()
 
     // Validate
