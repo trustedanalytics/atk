@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.frame.plugins.bincolumn
 
 import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.domain.frame.Missings
+import org.trustedanalytics.atk.domain.frame.Missing
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.catalyst.expressions.GenericRow
@@ -44,15 +44,17 @@ object DiscretizationFunctions extends Serializable {
    *
    * @param index column index
    * @param numBins requested number of bins
+   * @param missing specifies the behavior of missing values in the bin column.  Either ignore missing values
+   *                 (and bin them to -1), or specify a value to use when binning elements with a missing value.
    * @param rdd RDD that contains the column for binning
    * @return new RDD with binned column appended
    */
-  def binEqualWidth(index: Int, numBins: Int, rdd: RDD[Row]): RddWithCutoffs = {
+  def binEqualWidth(index: Int, numBins: Int, missing: Missing[Any], rdd: RDD[Row]): RddWithCutoffs = {
     require(numBins >= 1, "number of bins must be 1 or greater")
     val cutoffs: Array[Double] = getBinEqualWidthCutoffs(index, numBins, rdd)
 
     // map each data element to its bin id, using cutoffs index as bin id
-    val binnedColumnRdd = binColumns(index, cutoffs.toList, lowerInclusive = true, strictBinning = false, missings = Missings("ignore"), rdd)
+    val binnedColumnRdd = binColumns(index, cutoffs.toList, lowerInclusive = true, strictBinning = false, missing = missing, rdd)
     new RddWithCutoffs(cutoffs, binnedColumnRdd)
   }
 
@@ -63,19 +65,19 @@ object DiscretizationFunctions extends Serializable {
    * @param lowerInclusive if true the lowerbound of the bin will be inclusive while the upperbound is exclusive if false it is the opposite
    * @param strictBinning if true values smaller than the first bin or larger than the last bin will not be given a bin.
    *                      if false smaller vales will be in the first bin and larger values will be in the last
-   * @param missings specifies the behavior of missing values in the bin column.  Either ignore missing values
+   * @param missing specifies the behavior of missing values in the bin column.  Either ignore missing values
    *                 (and bin them to -1), or specify a value to use when binning elements with a missing value.
    * @param rdd RDD that contains the column for binning
    * @return new RDD with binned column appended
    */
-  def binColumns(index: Int, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, missings: Missings, rdd: RDD[Row]): RDD[Row] = {
+  def binColumns(index: Int, cutoffs: List[Double], lowerInclusive: Boolean, strictBinning: Boolean, missing: Missing[Any], rdd: RDD[Row]): RDD[Row] = {
     rdd.map { row: Row =>
       var binIndex = -1
 
-      val element = missings.evaluateValueAsDouble(row(index))
+      val element = missing.evaluate(row(index))
 
-      if (!element.isNaN()) {
-        binIndex = binElement(element, cutoffs, lowerInclusive, strictBinning)
+      if (element != null) {
+        binIndex = binElement(DataTypes.toDouble(element.toString), cutoffs, lowerInclusive, strictBinning)
       }
 
       new GenericRow(row.toSeq.toArray :+ binIndex)

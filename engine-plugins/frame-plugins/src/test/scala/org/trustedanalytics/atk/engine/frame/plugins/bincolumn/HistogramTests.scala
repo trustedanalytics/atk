@@ -20,6 +20,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
+import org.trustedanalytics.atk.domain.frame.{ MissingIgnore, Missing }
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
 class HistogramTests extends TestingSparkContextWordSpec with Matchers {
@@ -34,7 +35,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("E", 5, .5))
       val rdd: RDD[Row] = sparkContext.parallelize(data).map(row => new GenericRow(row))
       val numBins = 2
-      val hist = plugin.computeHistogram(rdd, 1, Some(2), numBins)
+      val hist = plugin.computeHistogram(rdd, 1, Some(2), numBins, MissingIgnore())
       hist.cutoffs should be(Array(1, 3, 5))
       hist.hist should be(Array(5.0, 2.0))
       hist.density should be(Array(5 / 7.0, 2 / 7.0))
@@ -49,7 +50,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("E", 5, .5))
       val rdd: RDD[Row] = sparkContext.parallelize(data).map(row => new GenericRow(row))
       val numBins = 2
-      val hist = plugin.computeHistogram(rdd, 1, None, numBins)
+      val hist = plugin.computeHistogram(rdd, 1, None, numBins, MissingIgnore())
       hist.cutoffs should be(Array(1, 3, 5))
       hist.hist should be(Array(2.0, 3.0))
       hist.density should be(Array(2 / 5.0, 3 / 5.0))
@@ -64,7 +65,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("E", 5, .5))
       val rdd: RDD[Row] = sparkContext.parallelize(data).map(row => new GenericRow(row))
       val numBins = 2
-      val hist = plugin.computeHistogram(rdd, 1, Some(2), numBins)
+      val hist = plugin.computeHistogram(rdd, 1, Some(2), numBins, MissingIgnore())
       hist.cutoffs should be(Array(1, 3, 5))
       hist.hist should be(Array(5.0, 1.0))
       hist.density should be(Array(5 / 6.0, 1 / 6.0))
@@ -79,7 +80,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("D", 7),
         Array[Any]("E", 9))
       val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
-      val hist = plugin.computeHistogram(rdd, 1, None, 2, equalWidth = false)
+      val hist = plugin.computeHistogram(rdd, 1, None, 2, MissingIgnore(), equalWidth = false)
       hist.cutoffs should be(Array(1, 5, 9))
       hist.hist should be(Array(2, 3))
       hist.density should be(Array(2 / 5.0, 3 / 5.0))
@@ -103,7 +104,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("E", 9, 5),
         Array[Any]("E", 9, 5))
       val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
-      val hist = plugin.computeHistogram(rdd, 1, None, 2, equalWidth = false)
+      val hist = plugin.computeHistogram(rdd, 1, None, 2, MissingIgnore(), equalWidth = false)
       hist.cutoffs should be(Array(1.0, 7.0, 9.0))
       hist.hist should be(Array(6, 8))
       hist.density should be(Array(6 / 14.0, 8 / 14.0))
@@ -118,7 +119,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("D", 7, 3),
         Array[Any]("E", 9, 5))
       val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
-      val hist = plugin.computeHistogram(rdd, 1, Some(2), 2, equalWidth = false)
+      val hist = plugin.computeHistogram(rdd, 1, Some(2), 2, MissingIgnore(), equalWidth = false)
       hist.cutoffs should be(Array(1.0, 7.0, 9.0))
       hist.hist should be(Array(6, 8))
       hist.density should be(Array(6 / 14.0, 8 / 14.0))
@@ -133,7 +134,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("D", 7, 0),
         Array[Any]("E", 9, 5))
       val rdd: RDD[Row] = sparkContext.parallelize(inputList, 2).map(row => new GenericRow(row))
-      val hist = plugin.computeHistogram(rdd, 1, Some(2), 2, equalWidth = false)
+      val hist = plugin.computeHistogram(rdd, 1, Some(2), 2, MissingIgnore(), equalWidth = false)
       hist.cutoffs should be(Array(1.0, 7.0, 9.0))
       hist.hist should be(Array(3, 5))
       hist.density should be(Array(3 / 8.0, 5 / 8.0))
@@ -148,7 +149,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("E", 10))
       val rdd: RDD[Row] = sparkContext.parallelize(data).map(row => new GenericRow(row))
       val numBins = 3
-      val hist = plugin.computeHistogram(rdd, 1, None, numBins)
+      val hist = plugin.computeHistogram(rdd, 1, None, numBins, MissingIgnore())
       hist.cutoffs should be(Array(1, 4, 7, 10))
       hist.hist should be(Array(3.0, 0.0, 2.0))
       hist.density should be(Array(3 / 5.0, 0, 2 / 5.0))
@@ -162,7 +163,7 @@ class HistogramTests extends TestingSparkContextWordSpec with Matchers {
         Array[Any]("D", 10.00001))
       val rdd: RDD[Row] = sparkContext.parallelize(data).map(row => new GenericRow(row))
       val numBins = 2
-      val hist = plugin.computeHistogram(rdd, 1, None, numBins)
+      val hist = plugin.computeHistogram(rdd, 1, None, numBins, MissingIgnore())
       hist.cutoffs(0) should be(1.000001)
       hist.cutoffs.last should be(10.00001)
       hist.hist should be(Array(3.0, 1.0))

@@ -29,7 +29,11 @@ Default is Square-root choice will be used
                          @ArgDoc("""Name of column containing weights.
 Default is all observations are weighted equally.""") weightColumnName: Option[String],
                          @ArgDoc("""The type of binning algorithm to use: ["equalwidth"|"equaldepth"]
-Defaults is "equalwidth".""") binType: Option[String] = Some("equalwidth")) {
+Defaults is "equalwidth".""") binType: Option[String] = Some("equalwidth"),
+                         @ArgDoc(
+                           """Specify the behavior of missing values.  Either ignore missing values,
+and they will get binned to -1, or specify an immediate value to use when binning a record with a missing
+value in the column being used to bin.  Default is to ``ignore`` missing values.""") missing: Option[Missing[Any]] = Some(MissingIgnore())) {
   require(binType.isEmpty || binType == Some("equalwidth") || binType == Some("equaldepth"), "bin type must be 'equalwidth' or 'equaldepth', not " + binType)
   if (numBins.isDefined)
     require(numBins.get > 0, "the number of bins must be greater than 0")

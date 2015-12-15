@@ -68,7 +68,7 @@ abstract class ComputedBinColumnPlugin extends SparkCommandPlugin[ComputedBinCol
 
     // run the operation and save results
     val columnIndex = frame.schema.columnIndex(arguments.columnName)
-    val binnedResults = executeBinColumn(columnIndex, numBins, frame.rdd)
+    val binnedResults = executeBinColumn(columnIndex, numBins, arguments.missing.getOrElse(MissingIgnore()), frame.rdd)
     val updatedSchema = frame.schema.addColumn(binColumnName, DataTypes.int32)
     val result = frame.save(new FrameRdd(updatedSchema, binnedResults.rdd))
 
@@ -79,9 +79,11 @@ abstract class ComputedBinColumnPlugin extends SparkCommandPlugin[ComputedBinCol
    * Discretize a variable into a finite number of bins
    * @param columnIndex index of column to bin
    * @param numBins number of bins to use
+   * @param missing specifies the behavior of missing values in the bin column.  Either ignore missing values
+   *                 (and bin them to -1), or specify a value to use when binning elements with a missing value.
    * @param rdd rdd to bin against
    * @return a result object containing the binned rdd and the list of computed cutoffs
    */
-  def executeBinColumn(columnIndex: Int, numBins: Int, rdd: FrameRdd): RddWithCutoffs
+  def executeBinColumn(columnIndex: Int, numBins: Int, missing: Missing[Any], rdd: FrameRdd): RddWithCutoffs
 
 }

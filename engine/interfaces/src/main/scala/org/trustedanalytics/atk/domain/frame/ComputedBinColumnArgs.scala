@@ -27,7 +27,11 @@ case class ComputedBinColumnArgs(@ArgDoc("""Identifier for the input dataframe."
 Default is the Square-root choice
 :math:`\lfloor \sqrt{m} \rfloor`, where :math:`m` is the number of rows.""") numBins: Option[Int],
                                  @ArgDoc("""The name for the new column holding the grouping labels.
-Default is ``<column_name>_binned``.""") binColumnName: Option[String]) {
+Default is ``<column_name>_binned``.""") binColumnName: Option[String],
+                                 @ArgDoc(
+                                   """Specify the behavior of missing values.  Either ignore missing values,
+and they will get binned to -1, or specify an immediate value to use when binning a record with a missing
+value in the column being used to bin.  Default is to ``ignore`` missing values.""") missing: Option[Missing[Any]] = Some(MissingIgnore())) {
   require(frame != null, "frame is required")
   require(columnName != null, "column name is required")
   require(numBins.isEmpty || numBins.getOrElse(-1) > 0, "at least one bin is required")

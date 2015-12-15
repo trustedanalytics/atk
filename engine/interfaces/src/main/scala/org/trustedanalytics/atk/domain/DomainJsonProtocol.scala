@@ -21,7 +21,7 @@ import java.util.ArrayList
 
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.command.{ CommandDoc, CommandPost, CommandDefinition }
-import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf, Missings }
+import org.trustedanalytics.atk.domain.frame.{ UdfDependency, Udf }
 import org.trustedanalytics.atk.domain.frame.load.{ LoadFrameArgs, LineParser, LoadSource, LineParserArguments }
 import org.trustedanalytics.atk.domain.frame.partitioning.{ RepartitionArgs, CoalesceArgs }
 import org.trustedanalytics.atk.domain.gc.{ GarbageCollectionEntry, GarbageCollection }
@@ -210,24 +210,52 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val udfDependenciesFormat = jsonFormat2(UdfDependency)
   implicit val udfFormat = jsonFormat2(Udf)
 
-  implicit object missingsFormat extends JsonFormat[Missings] {
-    override def write(obj: Missings): JsValue = JsString(obj.missings.toString)
+  implicit def missingFormat[T: JsonFormat] = new JsonFormat[Missing[T]] {
+    override def write(obj: Missing[T]): JsValue = JsString(obj.setting())
 
-    override def read(json: JsValue): Missings = json match {
-      case JsString(s) => Missings(s)
-      case JsNumber(n) => Missings(n)
-      case x => deserializationError(s"Expected 'missings' option keyword or immediate value but, but received $x")
+    override def read(json: JsValue): Missing[T] = json match {
+      case JsObject(o) => {
+        val fields = json.asJsObject.fields
+
+        val optionType = getOrInvalid(fields, "missing").convertTo[String]
+
+        optionType match {
+          case "ignore" => MissingIgnore[T]()
+          case "imm" => {
+            val immediateValue = getOrInvalid(fields, "value").convertTo[String]
+            MissingImmediate[T](immediateValue.asInstanceOf[T])
+          }
+          case default => deserializationError(s"Unsupported missing option type: $default")
+        }
+      }
+      case x => deserializationError(s"Expected missing object type, but received $x.")
     }
   }
 
-  implicit object missingsOptionFormat extends JsonFormat[Option[Missings]] {
-    override def write(obj: Option[Missings]): JsValue = JsString(obj.get.toString)
+  implicit def missingOptionFormat[T: JsonFormat] = new JsonFormat[Option[Missing[T]]] {
+    override def write(obj: Option[Missing[T]]): JsValue = JsString(obj.getOrElse(MissingIgnore[T]()).setting())
+    override def read(json: JsValue): Option[Missing[T]] = json match {
+      case JsObject(o) => {
+        val fields = json.asJsObject.fields
 
-    override def read(json: JsValue): Option[Missings] = json match {
-      case JsString(s) => Some(Missings(s))
-      case JsNumber(n) => Some(Missings(n))
-      case JsNull => None
-      case x => deserializationError(s"Expected 'missings' option keyword or immediate value, but received $x")
+        val optionType = getOrInvalid(fields, "missing").convertTo[String]
+
+        optionType match {
+          case "ignore" => Some(MissingIgnore[T]())
+          case "imm" => {
+            val immediateValue = getOrInvalid(fields, "value")
+
+            immediateValue match {
+              case JsNumber(n) => Some(MissingImmediate[T](immediateValue.convertTo[Double].asInstanceOf[T]))
+              case JsString(s) => Some(MissingImmediate[T](immediateValue.convertTo[String].asInstanceOf[T]))
+              case default => deserializationError(s"Unsupported immediate value type: $default")
+            }
+          }
+          case default => deserializationError(s"Unsupported missing option type: $default")
+        }
+      }
+      case JsNull => Some(MissingIgnore[T]())
+      case x => deserializationError(s"Expected 'missing' object type, but received $x")
     }
   }
 
@@ -374,7 +402,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val taskInfoFormat = jsonFormat1(TaskProgressInfo)
   implicit val progressInfoFormat = jsonFormat2(ProgressInfo)
   implicit val binColumnFormat = jsonFormat7(BinColumnArgs)
-  implicit val computedBinColumnFormat = jsonFormat4(ComputedBinColumnArgs)
+  implicit val computedBinColumnFormat = jsonFormat5(ComputedBinColumnArgs)
   implicit val sortByColumnsFormat = jsonFormat2(SortByColumnsArgs)
 
   implicit val columnSummaryStatisticsFormat = jsonFormat4(ColumnSummaryStatisticsArgs)
@@ -420,7 +448,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val exportHdfsJdbcPlugin = jsonFormat6(ExportHdfsJdbcArgs)
 
   //histogram formats
-  implicit val histogramArgsFormat = jsonFormat5(HistogramArgs)
+  implicit val histogramArgsFormat = jsonFormat6(HistogramArgs)
   implicit val histogramResultFormat = jsonFormat3(Histogram)
 
   // model performance formats

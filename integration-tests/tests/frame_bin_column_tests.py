@@ -119,8 +119,24 @@ class FrameBinColumnTest(unittest.TestCase):
         cutoffs = self.frame.bin_column_equal_width('number')
         self.assertEqual(len(cutoffs) - 1, math.floor(math.sqrt(self.frame.row_count)))
 
+    def test_bin_with_missing_values(self):
+        data = [[2],[3],[12],[15],[None],[17],[7],[1],[None]]
+        schema = [('a', ta.int32)]
+        frame_w_missings = ta.Frame(ta.UploadRows(data, schema))
 
+        # Call bin column without specifying what to do with missings - this should ignore missings
+        frame_w_missings.bin_column('a', [0,10,20], bin_column_name='default_bin')
+        self.assertEqual([[0], [0], [1], [1], [-1], [1], [0], [0], [-1]], frame_w_missings.take(frame_w_missings.row_count, columns=['default_bin']))
 
+        # Specify to ignore missings (should do the same thing as the default behavior)
+        frame_w_missings.bin_column('a', [0,10,20], bin_column_name='ignore_missing', missing=ta.missing.ignore)
+        self.assertEqual([[0], [0], [1], [1], [-1], [1], [0], [0], [-1]], frame_w_missings.take(frame_w_missings.row_count, columns=['ignore_missing']))
+
+        # Treat missing values as 19
+        frame_w_missings.bin_column('a', [0,10,20], bin_column_name='missing_is_19', missing=ta.missing.imm(19))
+        self.assertEqual([[0], [0], [1], [1], [1], [1], [0], [0], [1]], frame_w_missings.take(frame_w_missings.row_count, columns=['missing_is_19']))
+
+        frame_w_missings.bin_column('a', [0,10,20], bin_column_name='bin_missing_is_25', missing=ta.missing.imm(25))
 
 if __name__ == "__main__":
     unittest.main()

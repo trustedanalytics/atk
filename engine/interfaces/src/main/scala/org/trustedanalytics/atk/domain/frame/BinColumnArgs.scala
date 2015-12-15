@@ -42,7 +42,7 @@ Default is ``<column_name>_binned``.""") binColumnName: Option[String],
                          @ArgDoc(
                            """Specify the behavior of missing values.  Either ignore missing values,
 and they will get binned to -1, or specify an immediate value to use when binning a record with a missing
-value in the column being used to bin.  Default is to ``ignore`` missing values.""") missings: Option[Missings]) {
+value in the column being used to bin.  Default is to ``ignore`` missing values.""") missing: Option[Missing[Any]] = Some(MissingIgnore())) {
   require(frame != null, "frame is required")
   require(columnName != null, "column name is required")
   require(cutoffs.size >= 2, "at least one bin is required")

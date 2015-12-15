@@ -16,20 +16,44 @@
 
 package org.trustedanalytics.atk.domain.frame
 
-import org.trustedanalytics.atk.domain.schema.DataTypes
-import scala.util.control.Exception.allCatch
+trait Missing[T] {
+  def setting(): String
 
-/**
- * Class defines an argument used to specify how missing values are treated.  The behavior is either specified
- * as a keyword, such as "ignore", or as an immediate value.
- */
+  def evaluate(value: Any): T = {
+    if (value != null)
+      return value.asInstanceOf[T]
+    else
+      return null.asInstanceOf[T]
+  }
+}
+
+case class MissingIgnore[T]() extends Missing[T] {
+  override def setting(): String = {
+    "ignore"
+  }
+}
+
+case class MissingImmediate[T](imm: T) extends Missing[T] {
+  override def setting(): String = {
+    imm.toString
+  }
+
+  override def evaluate(value: Any): T = {
+    if (value != null)
+      return value.asInstanceOf[T]
+    else
+      return imm
+  }
+}
+
+/*
 case class Missings(missings: Any) {
   val missingKeywordOptions = Array("ignore")
   var missingImmediateValue = 0.0
 
   if (missings != null && missingKeywordOptions.contains(missings.toString) == false) {
     // If the parameter is not one of our keywords, ensure that it's a numerical value
-    require((allCatch opt missings.toString.toDouble).isDefined, "The \"missings\" value must be a valid keyword (i.e. " + missingKeywordOptions.mkString(", ") + ") or a numerical value.")
+    require((allCatch opt missings.toString.toDouble).isDefined, "The \"missing\" value must be a valid keyword (i.e. " + missingKeywordOptions.mkString(", ") + ") or a numerical value.")
 
     missingImmediateValue = missings.toString.toDouble
   }
@@ -37,10 +61,10 @@ case class Missings(missings: Any) {
   /**
    * Evaluates the specified value based on behavior specified for replacing missing values.  If the specified value
    * is not missing, the original value is returned.  If the specified value is missing, the value returned is
-   * determined by the missings setting.
+   * determined by the missing setting.
    *
    * @param value Specify the value to evaluate.
-   * @return Evaluated value, as a double.  If the value is null, and missings is set to "ignore", NaN is returned.
+   * @return Evaluated value, as a double.  If the value is null, and missing is set to "ignore", NaN is returned.
    */
   def evaluateValueAsDouble(value: Any): Double = {
     var retVal = Double.NaN
@@ -54,3 +78,4 @@ case class Missings(missings: Any) {
     return retVal
   }
 }
+*/ 
