@@ -16,15 +16,11 @@
 
 package org.trustedanalytics.atk.plugins.graphclustering
 
-import java.io.Serializable
-
 import org.trustedanalytics.atk.graphbuilder.schema.{ PropertyType, PropertyDef, EdgeLabelDef, GraphSchema }
-import org.trustedanalytics.atk.graphbuilder.write.titan.TitanSchemaWriter
 import org.trustedanalytics.atk.domain.schema.GraphSchema
-import com.thinkaurelius.titan.core.TitanGraph
 import com.tinkerpop.blueprints.{ Edge, Vertex }
 
-case class GraphClusteringStorage(titanStorage: TitanGraph)
+case class GraphClusteringStorage(storage: Any)
     extends GraphClusteringStorageInterface {
 
   override def addSchema(): Unit = {
@@ -36,9 +32,7 @@ case class GraphClusteringStorage(titanStorage: TitanGraph)
         PropertyDef(PropertyType.Vertex, GraphClusteringConstants.VertexNodeNameProperty, classOf[String]),
         PropertyDef(PropertyType.Vertex, GraphClusteringConstants.VertexIterationProperty, classOf[Int]))
     )
-    val schemaWriter = new TitanSchemaWriter(titanStorage)
-
-    schemaWriter.write(schema)
+    // TODO: write to a graph database
   }
 
   override def addVertexAndEdges(src: Long, dest: Long, count: Long, name: String, iteration: Int): Long = {
@@ -51,28 +45,17 @@ case class GraphClusteringStorage(titanStorage: TitanGraph)
   }
 
   override def commit(): Unit = {
-    titanStorage.commit()
   }
 
   override def shutdown(): Unit = {
-    titanStorage.shutdown()
   }
 
   private def addVertex(vertexCount: Long, vertexName: String, iteration: Int): Vertex = {
-
-    val vertex = titanStorage.addVertex(null)
-    vertex.setProperty(GraphSchema.labelProperty, GraphClusteringConstants.LabelPropertyValue)
-    vertex.setProperty(GraphSchema.labelProperty, vertexCount)
-
-    // TODO: this is testing only, remove later.
-    vertex.setProperty(GraphClusteringConstants.VertexNodeNameProperty, vertexName)
-    vertex.setProperty(GraphClusteringConstants.VertexIterationProperty, iteration)
-
-    vertex
+    null
   }
 
   private def addEdge(src: Vertex, dest: Long): Edge = {
-    titanStorage.addEdge(null, src, titanStorage.getVertex(dest), GraphClusteringConstants.LabelPropertyValue)
+    null
   }
 
 }

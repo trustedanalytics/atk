@@ -79,7 +79,6 @@ class EdgeDAO(graph: Graph, vertexDAO: VertexDAO) extends Serializable {
         new util.ArrayList[com.tinkerpop.blueprints.Edge]().iterator()
       )
 
-    // iterating over all of the edges seems dumb but I wasn't able to find a better way on Titan forums
     while (edgeIterator.hasNext) {
       val blueprintsEdge = edgeIterator.next()
       if (blueprintsEdge.getVertex(Direction.IN) == headVertex) {
@@ -116,7 +115,7 @@ class EdgeDAO(graph: Graph, vertexDAO: VertexDAO) extends Serializable {
         blueprintsEdge.setProperty(property.key, property.value)
       }
       else {
-        // null values aren't supprted by bluesprints, so you remove the property
+        // null values aren't supported by bluesprints, so you remove the property
         blueprintsEdge.removeProperty(property.key)
       }
 

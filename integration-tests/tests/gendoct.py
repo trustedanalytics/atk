@@ -91,16 +91,10 @@ test_file_name = os.path.join(here, "doc_api_examples_test_generated.py")  # the
 exemptions = set("""
 model/rename.rst
 frame-vertex/drop_duplicates.rst
-graph-/export_to_titan.rst
 graph-/ml/kclique_percolation.rst
 model-giraph_lda/train.rst
 model-giraph_lda/predict.rst
 model-giraph_lda/publish.rst
-graph-titan/graph_clustering.rst
-graph-titan/query/gremlin.rst
-graph-titan/query/recommend.rst
-graph-titan/sampling/assign_sample.rst
-graph-titan/sampling/vertex_sample.rst
 frame-/collaborative_filtering.rst
 frame-/loopy_belief_propagation.rst
 frame-/rename_columns.rst

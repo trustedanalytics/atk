@@ -35,9 +35,9 @@ class SparkGraphHBaseBackend(hbaseAdminFactory: HBaseAdminFactory)
     with EventLoggingImplicits {
 
   /**
-   * makes a copy of the titan graph's underlying table in the HBase
+   * makes a copy of the graph's underlying table in the HBase
    *
-   * @param graphName Name of the titan graph that is to copied
+   * @param graphName Name of the graph that is to copied
    * @param newName Name provided for the copy
    * @return
    */

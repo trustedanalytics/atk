@@ -16,11 +16,7 @@
 
 package org.trustedanalytics.atk.graphbuilder.driver.spark.titan
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GbIdToPhysicalId, GBEdge }
-import org.trustedanalytics.atk.graphbuilder.graph.GraphConnector
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.graphbuilder.parser.CombinedParser
-import org.trustedanalytics.atk.graphbuilder.parser.rule._
 import org.trustedanalytics.atk.graphbuilder.schema.{ SchemaAccumulableParam, InferSchemaFromData }
 import com.thinkaurelius.titan.hadoop.FaunusVertex
 import org.apache.hadoop.io.NullWritable
@@ -28,7 +24,6 @@ import org.apache.spark.serializer.KryoRegistrator
 import com.esotericsoftware.kryo.Kryo
 import org.trustedanalytics.atk.graphbuilder.elements._
 import org.trustedanalytics.atk.graphbuilder.graph.GraphConnector
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.graphbuilder.parser._
 import org.trustedanalytics.atk.graphbuilder.parser.rule._
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
@@ -38,7 +33,6 @@ import org.trustedanalytics.atk.graphbuilder.parser.rule.ParsedValue
 import org.trustedanalytics.atk.graphbuilder.parser.rule.SingleEdgeRuleParser
 import org.trustedanalytics.atk.graphbuilder.schema.EdgeLabelDef
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 import org.trustedanalytics.atk.graphbuilder.parser.rule.PropertyRuleParser
 import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 import org.trustedanalytics.atk.graphbuilder.parser.rule.SinglePropertyRuleParser
@@ -80,7 +74,6 @@ class GraphBuilderKryoRegistrator extends KryoRegistrator {
     kryo.register(classOf[GBVertex])
 
     // graph package
-    kryo.register(classOf[TitanGraphConnector])
     kryo.register(classOf[GraphConnector])
 
     // parser.rule package
@@ -117,9 +110,6 @@ class GraphBuilderKryoRegistrator extends KryoRegistrator {
     kryo.register(classOf[GraphSchema])
     kryo.register(classOf[InferSchemaFromData])
     kryo.register(classOf[SchemaAccumulableParam])
-    kryo.register(classOf[FaunusVertex], new FaunusVertexSerializer())
     kryo.register(classOf[NullWritable])
-    // avoid Spark top(n) issue with Kryo serializer:
-    //    kryo.register(classOf[org.apache.spark.util.BoundedPriorityQueue[(Double, Vertex)]])
   }
 }

@@ -18,14 +18,6 @@ package org.trustedanalytics.atk.plugins.graphclustering
 
 import java.io.Serializable
 
-import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
-import org.trustedanalytics.atk.graphbuilder.schema.{ EdgeLabelDef, GraphSchema, PropertyDef, PropertyType }
-import org.trustedanalytics.atk.graphbuilder.write.titan.TitanSchemaWriter
-import org.trustedanalytics.atk.domain.schema.GraphSchema
-import com.thinkaurelius.titan.core.TitanGraph
-import com.tinkerpop.blueprints.{ Edge, Vertex }
-
 trait GraphClusteringStorageInterface extends Serializable {
 
   def addSchema(): Unit

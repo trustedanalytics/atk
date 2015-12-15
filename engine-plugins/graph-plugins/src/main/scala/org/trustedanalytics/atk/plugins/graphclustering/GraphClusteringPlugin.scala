@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.plugins.graphclustering
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.graph.{ SparkGraph, GraphBuilderConfigFactory }
+import org.trustedanalytics.atk.engine.graph.{ SparkGraph }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 
@@ -41,19 +41,18 @@ import GraphClusteringFormat._
 /**
  * GraphClusteringPlugin implements the graph clustering algorithm on a graph.
  */
-@PluginDoc(oneLine = "Performs graph clustering over an initial titan graph.",
-  extended = "Performs graph clustering over an initial titan graph using a distributed edge collapse algorithm.",
-  returns = "A set of titan vertices and edges representing the internal clustering of the graph.")
+@PluginDoc(oneLine = "Performs graph clustering over an initial graph.",
+  extended = "Performs graph clustering over an initial graph using a distributed edge collapse algorithm.",
+  returns = "A set of vertices and edges representing the internal clustering of the graph.")
 class GraphClusteringPlugin extends SparkCommandPlugin[GraphClusteringArgs, UnitReturn] {
 
-  override def name: String = "graph:titan/graph_clustering"
+  override def name: String = "graph/graph_clustering"
   override def kryoRegistrator: Option[String] = None
 
   override def execute(arguments: GraphClusteringArgs)(implicit invocation: Invocation): UnitReturn = {
     val graph: SparkGraph = arguments.graph
     val (vertices, edges) = graph.gbRdds
-    val titanConfig = GraphBuilderConfigFactory.getTitanConfiguration(graph)
 
-    new GraphClusteringWorker(titanConfig).execute(vertices, edges, arguments.edgeDistance)
+    new GraphClusteringWorker(null).execute(vertices, edges, arguments.edgeDistance)
   }
 }

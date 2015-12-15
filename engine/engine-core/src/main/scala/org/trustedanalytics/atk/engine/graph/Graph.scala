@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine.graph
 
-import org.trustedanalytics.atk.domain.StorageFormats
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference }
 import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -34,8 +33,6 @@ trait Graph {
   def entity: GraphEntity
 
   def isSeamless: Boolean
-
-  def isTitan: Boolean
 
   def nextId: Long
 
@@ -74,8 +71,6 @@ trait SparkGraph extends Graph {
 
   def edgeRdd(label: String): EdgeFrameRdd
 
-  // TODO: writeToTitan()
-
 }
 
 object SparkGraph {
@@ -94,8 +89,6 @@ class GraphImpl(graph: GraphReference, sparkGraphStorage: SparkGraphStorage)(imp
   }
 
   override def isSeamless: Boolean = entity.isSeamless
-
-  override def isTitan: Boolean = entity.isTitan
 
   override def nextId: Long = entity.nextId()
 

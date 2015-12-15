@@ -17,7 +17,6 @@
 package org.trustedanalytics.atk.plugins.graphclustering
 
 import java.io.Serializable
-import com.thinkaurelius.titan.core.TitanGraph
 
 /**
  * This is the edge manager class.

@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.graphbuilder.write
 
-import org.trustedanalytics.atk.graphbuilder.write.dao.EdgeDAO
 import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.graphbuilder.write.dao.EdgeDAO
 import org.trustedanalytics.atk.graphbuilder.elements.GBEdge

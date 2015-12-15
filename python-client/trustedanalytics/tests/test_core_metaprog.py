@@ -121,7 +121,6 @@ class TestDocStubs(unittest.TestCase):
             ('frame:vertex', "VertexFrame"),
             ('graph', "_BaseGraph"),
             ('graph:', "Graph"),
-            ('graph:titan', "TitanGraph"),
             ('model', "_BaseModel"),
             ]
         for entity_type, expected in cases:

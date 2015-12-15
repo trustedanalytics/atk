@@ -272,9 +272,7 @@ class GarbageCollector(val metaStore: MetaStore, val frameFileStorage: FrameFile
       info(description)
       metaStore.frameRepo.lookupByGraphId(graph.id).foreach(frame => finalizeFrame(gc, frame))
       metaStore.graphRepo.finalizeEntity(graph)
-      if (graph.isTitan) {
-        graphBackendStorage.deleteUnderlyingTable(graph.storage, quiet = true)(invocation = new BackendInvocation(EngineExecutionContext.global))
-      }
+
       gcEntryRepo.updateEndTime(gcEntry)
     }
     catch {

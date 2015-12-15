@@ -17,14 +17,11 @@
 package org.trustedanalytics.atk.plugins.graphclustering
 
 import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
 
 case class GraphClusteringStorageFactory(dbConnectionConfig: SerializableBaseConfiguration)
     extends GraphClusteringStorageFactoryInterface {
 
   override def newStorage(): GraphClusteringStorage = {
-    val titanConnector = new TitanGraphConnector(dbConnectionConfig)
-    val titanGraph = titanConnector.connect()
-    new GraphClusteringStorage(titanGraph)
+    new GraphClusteringStorage(null)
   }
 }

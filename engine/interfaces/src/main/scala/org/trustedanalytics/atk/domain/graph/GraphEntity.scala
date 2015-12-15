@@ -26,7 +26,7 @@ import org.joda.time.DateTime
  * @param description description of the graph (a good default might say what frames it came from)
  * @param storage name used in physical data store, the HBase table name
  * @param statusId lifecycle status. For example, INIT (building), ACTIVE, DELETED (un-delete possible), DELETE_FINAL (no un-delete), INCOMPLETE (failed construction)
- * @param storageFormat e.g. "atk/frame", "cassandra/titan", "hbase/titan"
+ * @param storageFormat e.g. "atk/frame"
  * @param createdOn date/time this record was created
  * @param modifiedOn date/time this record was last modified
  * @param createdByUserId user who created this row
@@ -51,8 +51,6 @@ case class GraphEntity(id: Long,
     case Some(n) => n.trim.length > 0
     case _ => true
   }, "if name is set it must not be empty or whitespace")
-  // if it is not titan pass this require. if it is titan the name must be defined.
-  //require(!isTitan || name.isDefined, "Titan graphs require a name")
 
   def uri: String = GraphReference(id).uri
 
@@ -62,13 +60,8 @@ case class GraphEntity(id: Long,
     StorageFormats.isSeamlessGraph(storageFormat)
   }
 
-  def isTitan: Boolean = {
-    !StorageFormats.isSeamlessGraph(storageFormat)
-  }
-
   def entityType: String = {
-    if (isTitan) "graph:titan"
-    else if (isSeamless) "graph:"
+    if (isSeamless) "graph:"
     else throw new RuntimeException("New graph type is not yet implemented!")
   }
 
