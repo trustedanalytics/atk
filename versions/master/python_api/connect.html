@@ -184,14 +184,14 @@ The credentials file is normally obtained through the environment.</p>
 </div>
 <div class="section" id="connections-requiring-oauth">
 <h2>Connections requiring OAuth<a class="headerlink" href="#connections-requiring-oauth" title="Permalink to this headline">¶</a></h2>
-<p>To connect to a DP2 instance of Trusted Analytics Platform, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
+<p>To connect to a TAP instance of Trusted Analytics Platform, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
 The user must have a credentials file which holds an OAuth access token and a refresh token.</p>
 <p>The user can create a credentials file using Trusted Analytics Platform client running in an interactive python session.  Call <cite>create_credentials_file(&#8216;filename_of_your_choice&#8217;)</cite> and interactively provide answers to its prompt.</p>
 <div class="code highlight-python"><div class="highlight"><pre>$ python2.7
 
 &gt;&gt;&gt; import trustedanalytics as ta
 &gt;&gt;&gt; ta.create_connect_file(&#39;~/.ta/demo.creds&#39;)
-OAuth server URI: uaa.my-dp2-domain.com
+OAuth server URI: uaa.my-tap-domain.com
 user name: dscientist9
 Password: **********
 
@@ -200,7 +200,7 @@ Credentials created at &#39;/home/dscientist9/.ta/demo.creds&#39;
 </div>
 <p>The credentials file can be specified when calling <code class="docutils literal"><span class="pre">connect</span></code> or set as an environmental variable $TA_CREDS.</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;~/.ta/demo.creds&#39;</span><span class="p">)</span>
-<span class="go">Connected.  This client instance connected to server http://my-ta-instance.my-dp2-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.</span>
+<span class="go">Connected.  This client instance connected to server http://my-ta-instance.my-tap-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.</span>
 </pre></div>
 </div>
 <p>The credentials file path must be relative to how python was launched.
@@ -239,7 +239,7 @@ It may still be overridden as shown above in the session or script.</p>
 <span class="go">        &quot;Content-type&quot;: &quot;application/json&quot;</span>
 <span class="go">    },</span>
 <span class="go">    &quot;scheme&quot;: &quot;http&quot;,</span>
-<span class="go">    &quot;oauth_uri&quot;: &quot;uaa.my-dp2-domain.comdemo-gotapaas.com&quot;,</span>
+<span class="go">    &quot;oauth_uri&quot;: &quot;uaa.my-tap-domain.comdemo-gotapaas.com&quot;,</span>
 <span class="go">    &quot;user&quot;: &quot;dscientist9&quot;</span>
 <span class="go">}</span>
 </pre></div>
