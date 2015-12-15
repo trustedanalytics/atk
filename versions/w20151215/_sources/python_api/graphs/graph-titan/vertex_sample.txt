@@ -1,0 +1,55 @@
+
+:doc:`TitanGraph <index>`  vertex_sample
+****************************************
+
+------
+
+
+.. function:: vertex_sample(self, size, sample_type, seed=None)
+
+    Make subgraph from vertex sampling.
+
+
+    :Parameters:
+
+        **size** : int32
+
+        ..
+
+            The number of vertices to sample from the graph.
+
+
+
+        **sample_type** : unicode
+
+        ..
+
+            The type of vertex sample among: ['uniform', 'degree', 'degreedist'].
+
+
+
+        **seed** : int64 (default=None)
+
+        ..
+
+            Random seed value.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A new Graph object representing the vertex induced subgraph.
+    Create a vertex induced subgraph obtained by vertex sampling.
+    Three types of vertex sampling are provided: 'uniform', 'degree', and
+    'degreedist'.
+    A 'uniform' vertex sample is obtained by sampling vertices uniformly at random.
+    For 'degree' vertex sampling, each vertex is weighted by its out-degree.
+    For 'degreedist' vertex sampling, each vertex is weighted by the total
+    number of vertices that have the same out-degree as it.
+    That is, the weight applied to each vertex for 'degreedist' vertex sampling
+    is given by the out-degree histogram bin size.

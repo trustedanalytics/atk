@@ -1,0 +1,30 @@
+
+:doc:`Graph <index>`  vertex_outdegree
+**************************************
+
+------
+
+
+.. function:: vertex_outdegree(self)
+
+    Counts the out-degree of vertices in a graph.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+
+                    frame
+                    Frame with vertex out-degree
+                
+    Extended Summary
+            ----------------
+            Extended Summary for Plugin goes here ...
+        
