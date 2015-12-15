@@ -28,7 +28,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands graph:/vertex_count" href="graph-__vertex_count.html" >
-    <link rel="prev" title="Commands graph:/kclique_percolation" href="graph-__kclique_percolation.html" > 
+    <link rel="prev" title="Commands graph:/label_propagation" href="graph-__label_propagation.html" > 
   </head>
   <body>
 
@@ -56,7 +56,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="graph-__kclique_percolation.html" title="Commands graph:/kclique_percolation"
+        <a href="graph-__label_propagation.html" title="Commands graph:/label_propagation"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -143,6 +143,10 @@
 <blockquote>
 <div><p>Name of the vertex property which will contain the posterior belief for each vertex.</p>
 </div></blockquote>
+<p><strong>state_space_size</strong> : int32</p>
+<blockquote>
+<div><p>Number of features</p>
+</div></blockquote>
 <p><strong>edge_weight_property</strong> : unicode (default=)</p>
 <blockquote>
 <div><p>Name of the edge property that contains the edge weight for each edge.</p>
@@ -152,8 +156,18 @@
 <div><p>Belief propagation will terminate when the average change in posterior beliefs between supersteps is less than or equal to this threshold.</p>
 </div></blockquote>
 <p><strong>max_iterations</strong> : int32 (default=20)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>The maximum number of supersteps that the algorithm will execute.The valid range is all positive int.</p>
+</div></blockquote>
+<p><strong>was_labeled_property_name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>(LP only) - Represents the column/property name for the was labeled field</p>
+</div></blockquote>
+<p><strong>alpha</strong> : float32 (default=None)</p>
+<blockquote class="last">
+<div><p>(LP only) - Represents the tradeoff parameter that controls how much influence an external classifier&#8217;s prediction contributes to the final prediction.
+This is for the case where an external classifier is available that can produce initial probabilistic classification on unlabeled examples, and
+the option allows incorporating external classifier&#8217;s prediction into the LP training process.The valid value range is [0.0,1.0].Default is 0.1</p>
 </div></blockquote>
 </td>
 </tr>

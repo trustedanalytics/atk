@@ -208,10 +208,13 @@ whereas a Titan graph is better suited to <a class="reference internal" href="..
 <tr class="row-odd"><td><a class="reference internal" href="kclique_percolation.html"><em>kclique_percolation</em></a>(self, clique_size, community_property_label)</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Find groups of vertices with similar attributes.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="loopy_belief_propagation.html"><em>loopy_belief_propagation</em></a>(self, prior_property, ...[, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="label_propagation.html"><em>label_propagation</em></a>(self, prior_property, posterior_property, ...)</td>
 <td>Classification on sparse data using Belief Propagation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="vertex_outdegree.html"><em>vertex_outdegree</em></a>(self)</td>
+<tr class="row-odd"><td><a class="reference internal" href="loopy_belief_propagation.html"><em>loopy_belief_propagation</em></a>(self, prior_property, ...[, ...])</td>
+<td>Classification on sparse data using Belief Propagation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="vertex_outdegree.html"><em>vertex_outdegree</em></a>(self)</td>
 <td>Counts the out-degree of vertices in a graph.</td>
 </tr>
 </tbody>
@@ -362,7 +365,7 @@ for a graph:</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">last_read_date</span>
-<span class="go">datetime.datetime(2015, 12, 15, 17, 40, 56, 635423)</span>
+<span class="go">datetime.datetime(2015, 12, 15, 21, 6, 22, 339993)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span>

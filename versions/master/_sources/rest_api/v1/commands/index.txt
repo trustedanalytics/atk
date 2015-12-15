@@ -79,6 +79,7 @@
     graph-__edge_count
     graph-__export_to_titan
     graph-__kclique_percolation
+    graph-__label_propagation
     graph-__loopy_belief_propagation
     graph-__vertex_count
     graph-titan__export_to_graph
@@ -224,6 +225,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`graph:/edge_count <graph-__edge_count>`                                                   Get the total number of edges in the graph.
 :doc:`graph:/export_to_titan <graph-__export_to_titan>`                                         Convert current graph to TitanGraph.
 :doc:`graph:/kclique_percolation <graph-__kclique_percolation>`                                 |ALPHA| Find groups of vertices with similar attributes.
+:doc:`graph:/label_propagation <graph-__label_propagation>`                                     Classification on sparse data using Belief Propagation.
 :doc:`graph:/loopy_belief_propagation <graph-__loopy_belief_propagation>`                       Classification on sparse data using Belief Propagation.
 :doc:`graph:/vertex_count <graph-__vertex_count>`                                               Get the total number of vertices in the graph.
 :doc:`graph:titan/export_to_graph <graph-titan__export_to_graph>`                               Export from TitanGraph to Graph.

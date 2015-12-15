@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Graph loopy_belief_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    <title>Commands graph:/label_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
@@ -26,9 +26,9 @@
     <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
-    <link rel="up" title="Graphs Graph" href="index.html" >
-    <link rel="next" title="Graph name" href="name.html" >
-    <link rel="prev" title="Graph last_read_date" href="last_read_date.html" > 
+    <link rel="up" title="REST API Commands" href="index.html" >
+    <link rel="next" title="Commands graph:/loopy_belief_propagation" href="graph-__loopy_belief_propagation.html" >
+    <link rel="prev" title="Commands graph:/kclique_percolation" href="graph-__kclique_percolation.html" > 
   </head>
   <body>
 
@@ -49,19 +49,18 @@
 	
         <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
 	
-          <li class="active"><a href="../../index.html" >Python API</a></li>
-          <li class="active"><a href="../index.html" >Graphs</a></li>
-          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Graphs</span></code> Graph</a></li> 
+          <li class="active"><a href="../index.html" >REST API</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">REST</span> <span class="pre">API</span></code> Commands</a></li> 
     </ul>
               
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="last_read_date.html" title="Graph last_read_date"
+        <a href="graph-__kclique_percolation.html" title="Commands graph:/kclique_percolation"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="name.html" title="Graph name"
+        <a href="graph-__loopy_belief_propagation.html" title="Commands graph:/loopy_belief_propagation"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -97,8 +96,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">REST API</a></li>
 </ul>
 <ul class="simple">
 </ul>
@@ -110,18 +109,33 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="graph-loopy-belief-propagation">
-<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  loopy_belief_propagation<a class="headerlink" href="#graph-loopy-belief-propagation" title="Permalink to this headline">¶</a></h1>
-<hr class="docutils" />
-<dl class="function">
-<dt id="loopy_belief_propagation">
-<code class="descname">loopy_belief_propagation</code><span class="sig-paren">(</span><em>self</em>, <em>prior_property</em>, <em>posterior_property</em>, <em>state_space_size</em>, <em>edge_weight_property=''</em>, <em>convergence_threshold=0.0</em>, <em>max_iterations=20</em>, <em>was_labeled_property_name=None</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="headerlink" href="#loopy_belief_propagation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Classification on sparse data using Belief Propagation.</p>
+  <div class="section" id="commands-graph-label-propagation">
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> graph:/label_propagation<a class="headerlink" href="#commands-graph-label-propagation" title="Permalink to this headline">¶</a></h1>
+<p>Classification on sparse data using Belief Propagation.</p>
+<div class="section" id="post-v1-commands">
+<h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="get-v1-commands-id">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#get-v1-commands-id" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="request">
+<h3>Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>POST /v1/commands/
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prior_property</strong> : unicode</p>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">graph:/label_propagation</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>graph</strong> : Graph</p>
+<blockquote>
+<div><p>&lt;Missing Description&gt;</p>
+</div></blockquote>
+<p><strong>prior_property</strong> : unicode</p>
 <blockquote>
 <div><p>Name of the vertex property which contains the prior belief for the vertex.</p>
 </div></blockquote>
@@ -150,29 +164,81 @@
 <div><p>(LP only) - Represents the column/property name for the was labeled field</p>
 </div></blockquote>
 <p><strong>alpha</strong> : float32 (default=None)</p>
-<blockquote>
+<blockquote class="last">
 <div><p>(LP only) - Represents the tradeoff parameter that controls how much influence an external classifier&#8217;s prediction contributes to the final prediction.
 This is for the case where an external classifier is available that can produce initial probabilistic classification on unlabeled examples, and
 the option allows incorporating external classifier&#8217;s prediction into the LP training process.The valid value range is [0.0,1.0].Default is 0.1</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
-<blockquote class="last">
-<div><p>Progress report for belief propagation in the format of a multiple-line string.</p>
-</div></blockquote>
-</td>
-</tr>
 </tbody>
 </table>
-<p>Belief propagation by the sum-product algorithm.
-This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><strong>Description</strong></p>
+<dl class="docutils">
+<dt>Belief propagation by the sum-product algorithm.</dt>
+<dd><p class="first">This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
 The priors are read from a property in the graph, the posteriors are written to another property in the graph.
 This is the GraphX-based implementation of belief propagation.</p>
-<p>See <span class="xref std std-ref">Loopy Belief Propagation</span>
+<p class="last">See <span class="xref std std-ref">Loopy Belief Propagation</span>
 for a more in-depth discussion of <abbr title="Belief Propagation">BP</abbr> and <abbr title="Loopy Belief Propagation">LBP</abbr>.</p>
-</dd></dl>
-
+</dd>
+</dl>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="response">
+<h3>Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
+</div>
+</div>
+<div class="section" id="id1">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p><strong>Route</strong></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p>(None)</p>
+<p><strong>Headers</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>Authorization: test_api_key_1
+Content-type: application/json
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+</div>
+<div class="section" id="id3">
+<h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p><strong>Status</strong></p>
+<div class="highlight-python"><div class="highlight"><pre>200 OK
+</pre></div>
+</div>
+<p><strong>Body</strong></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<blockquote>
+<div>Progress report for belief propagation in the format of a multiple-line string.</div></blockquote>
+</div>
+</div>
 </div>
 
 

@@ -24,6 +24,7 @@
     graphx_pagerank
     graphx_triangle_count
     kclique_percolation
+    label_propagation
     last_read_date
     loopy_belief_propagation
     name
@@ -73,6 +74,7 @@
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
     :doc:`graphx_triangle_count <graphx_triangle_count>`\ (self, output_property[, input_edge_labels])    Number of triangles among vertices of current graph.
     :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.
+    :doc:`label_propagation <label_propagation>`\ (self, prior_property, posterior_property, ...)         Classification on sparse data using Belief Propagation.
     :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, prior_property, ...[, ...])        Classification on sparse data using Belief Propagation.
     :doc:`vertex_outdegree <vertex_outdegree>`\ (self)                                                    Counts the out-degree of vertices in a graph.
     ====================================================================================================  ====================================================================================================
@@ -217,7 +219,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2015, 12, 15, 17, 40, 56, 635423)
+    datetime.datetime(2015, 12, 15, 21, 6, 22, 339993)
 
     >>> graph
     Graph <unnamed>

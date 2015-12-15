@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Graph loopy_belief_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    <title>Graph label_propagation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
@@ -27,8 +27,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
-    <link rel="next" title="Graph name" href="name.html" >
-    <link rel="prev" title="Graph last_read_date" href="last_read_date.html" > 
+    <link rel="next" title="Graph last_read_date" href="last_read_date.html" >
+    <link rel="prev" title="Graph kclique_percolation" href="kclique_percolation.html" > 
   </head>
   <body>
 
@@ -57,11 +57,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="last_read_date.html" title="Graph last_read_date"
+        <a href="kclique_percolation.html" title="Graph kclique_percolation"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="name.html" title="Graph name"
+        <a href="last_read_date.html" title="Graph last_read_date"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -110,12 +110,12 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="graph-loopy-belief-propagation">
-<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  loopy_belief_propagation<a class="headerlink" href="#graph-loopy-belief-propagation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="graph-label-propagation">
+<h1><a class="reference internal" href="index.html"><em>Graph</em></a>  label_propagation<a class="headerlink" href="#graph-label-propagation" title="Permalink to this headline">¶</a></h1>
 <hr class="docutils" />
 <dl class="function">
-<dt id="loopy_belief_propagation">
-<code class="descname">loopy_belief_propagation</code><span class="sig-paren">(</span><em>self</em>, <em>prior_property</em>, <em>posterior_property</em>, <em>state_space_size</em>, <em>edge_weight_property=''</em>, <em>convergence_threshold=0.0</em>, <em>max_iterations=20</em>, <em>was_labeled_property_name=None</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="headerlink" href="#loopy_belief_propagation" title="Permalink to this definition">¶</a></dt>
+<dt id="label_propagation">
+<code class="descname">label_propagation</code><span class="sig-paren">(</span><em>self</em>, <em>prior_property</em>, <em>posterior_property</em>, <em>state_space_size</em>, <em>edge_weight_property=''</em>, <em>convergence_threshold=0.0</em>, <em>max_iterations=20</em>, <em>was_labeled_property_name=None</em>, <em>alpha=None</em><span class="sig-paren">)</span><a class="headerlink" href="#label_propagation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Classification on sparse data using Belief Propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -165,12 +165,15 @@ the option allows incorporating external classifier&#8217;s prediction into the 
 </tr>
 </tbody>
 </table>
-<p>Belief propagation by the sum-product algorithm.
-This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
+<dl class="docutils">
+<dt>Belief propagation by the sum-product algorithm.</dt>
+<dd><p class="first">This algorithm analyzes a graphical model with prior beliefs using sum product message passing.
 The priors are read from a property in the graph, the posteriors are written to another property in the graph.
 This is the GraphX-based implementation of belief propagation.</p>
-<p>See <span class="xref std std-ref">Loopy Belief Propagation</span>
+<p class="last">See <span class="xref std std-ref">Loopy Belief Propagation</span>
 for a more in-depth discussion of <abbr title="Belief Propagation">BP</abbr> and <abbr title="Loopy Belief Propagation">LBP</abbr>.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
