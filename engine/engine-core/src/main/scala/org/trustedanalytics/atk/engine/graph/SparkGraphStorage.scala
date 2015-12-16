@@ -284,8 +284,7 @@ class SparkGraphStorage(metaStore: MetaStore,
       graphEntity.vertexFrames.map(frame => loadGbVerticesForFrame(sc, frame.toReference)).reduce(_.union(_))
     }
     else {
-      // TODO: throw exception?
-      null
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
   }
 
@@ -296,8 +295,7 @@ class SparkGraphStorage(metaStore: MetaStore,
       graphMeta.edgeFrames.map(frame => loadGbEdgesForFrame(sc, frame.toReference)).reduce(_.union(_))
     }
     else {
-      // TODO: throw exception?
-      null
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
   }
 
@@ -310,10 +308,7 @@ class SparkGraphStorage(metaStore: MetaStore,
       (vertexRDD, edgeRDD)
     }
     else {
-      //Prevents us from scanning the NoSQL table twice when loading vertices and edges
-      //Scanning NoSQL tables is a very expensive operation.
-      // TODO throw an exception?
-      null
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
   }
 
