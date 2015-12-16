@@ -11,10 +11,6 @@
 # Memory should be same or lower than what is listed as available in Cloudera Manager.
 # Values should generally be in gigabytes, e.g. "8g"
 trustedanalytics.atk.engine.spark.conf.properties.spark.executor.memory = "2g"
-trustedanalytics.atk.giraph.mapreduce.map {
-  memory.mb = 2048
-  java.opts = "-Xmx2g"
-}
 
 # In a single machine configuration, all services are on the same host.
 # This configuration uses the HOSTNAME environment variable (which is preconfigured
