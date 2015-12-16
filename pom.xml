@@ -1279,30 +1279,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <version>1.9.13</version>
             </dependency>
             <dependency>
-                <groupId>com.tinkerpop.blueprints</groupId>
-                <artifactId>blueprints-core</artifactId>
-                <version>${dep.tinkerpop.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-json-org</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.tinkerpop</groupId>
-                <artifactId>frames</artifactId>
-                <version>${dep.tinkerpop.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.codahale.metrics</groupId>
                 <artifactId>metrics-core</artifactId>
                 <version>3.0.1</version>

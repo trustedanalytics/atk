@@ -42,14 +42,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.tinkerpop.blueprints</groupId>
-            <artifactId>blueprints-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-        </dependency>
-        <dependency>
             <groupId>io.spray</groupId>
             <artifactId>spray-json_${scala.short.version}</artifactId>
         </dependency>

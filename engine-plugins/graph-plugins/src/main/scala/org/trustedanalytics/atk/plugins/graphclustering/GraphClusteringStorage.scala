@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.plugins.graphclustering
 
 import org.trustedanalytics.atk.graphbuilder.schema.{ PropertyType, PropertyDef, EdgeLabelDef, GraphSchema }
 import org.trustedanalytics.atk.domain.schema.GraphSchema
-import com.tinkerpop.blueprints.{ Edge, Vertex }
 
 case class GraphClusteringStorage(storage: Any)
     extends GraphClusteringStorageInterface {
@@ -36,26 +35,13 @@ case class GraphClusteringStorage(storage: Any)
   }
 
   override def addVertexAndEdges(src: Long, dest: Long, count: Long, name: String, iteration: Int): Long = {
-
-    val metaNodeVertex = addVertex(count, name, iteration)
-    addEdge(metaNodeVertex, src)
-    addEdge(metaNodeVertex, dest)
-
-    metaNodeVertex.getId.asInstanceOf[Long]
+    0
   }
 
   override def commit(): Unit = {
   }
 
   override def shutdown(): Unit = {
-  }
-
-  private def addVertex(vertexCount: Long, vertexName: String, iteration: Int): Vertex = {
-    null
-  }
-
-  private def addEdge(src: Vertex, dest: Long): Edge = {
-    null
   }
 
 }

@@ -51,9 +51,6 @@ class GraphBuilderKryoRegistrator extends KryoRegistrator {
     kryo.register(classOf[Property])
     kryo.register(classOf[GBVertex])
 
-    // graph package
-    kryo.register(classOf[GraphConnector])
-
     // parser.rule package
     kryo.register(classOf[DataTypeResolver])
     kryo.register(classOf[EdgeRuleParser])
