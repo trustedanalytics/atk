@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark.titan
+package org.trustedanalytics.atk.graphbuilder.graph
 
 import org.apache.spark.broadcast.Broadcast
 import org.apache.spark.rdd.RDD
@@ -28,7 +28,6 @@ import scala.collection.mutable.Map
  *
  */
 case class JoinBroadcastVariable[K, V](rdd: RDD[(K, V)]) {
-  import JoinBroadcastVariable._
   //TODO: Create a base class for broadcast join variables to avoid code duplication once we move graphbuilder module to engine
   require(rdd != null, "RDD should not be null")
 

@@ -99,14 +99,13 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
     val csvRdd = filterRdd.map(row => {
       val stringBuilder = new java.lang.StringBuilder
       val printer = new CSVPrinter(stringBuilder, csvFormat)
-      val array = row.toSeq.map(col => if (col == null) "" else {
-        if (col.isInstanceOf[ArrayBuffer[_]]) {
-          col.asInstanceOf[ArrayBuffer[Double]].mkString(",")
-        }
-        else {
-          col.toString
-        }
-      })
+      val array = row.toSeq.map(col =>
+        col match {
+          case null => ""
+          case seq: Seq[Double] => seq.mkString(",")
+          case arr: ArrayBuffer[Double] => arr.mkString(",")
+          case x => x.toString
+        })
       for (i <- array) printer.print(i)
       stringBuilder.toString
     })

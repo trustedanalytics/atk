@@ -211,6 +211,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
+                                     'label_propagation',
                                      'loopy_belief_propagation',
                                      'name',
                                      'status',

@@ -91,19 +91,11 @@ test_file_name = os.path.join(here, "doc_api_examples_test_generated.py")  # the
 exemptions = set("""
 model/rename.rst
 frame-vertex/drop_duplicates.rst
-graph-/ml/kclique_percolation.rst
-model-giraph_lda/train.rst
-model-giraph_lda/predict.rst
-model-giraph_lda/publish.rst
-frame-/collaborative_filtering.rst
-frame-/loopy_belief_propagation.rst
 frame-/rename_columns.rst
 frame-/label_propagation.rst
 graph/graphx_connected_components.rst
 graph/graphx_triangle_count.rst
 graph/graphx_pagerank.rst
-graph/ml/kclique_percolation.rst
-graph/loopy_belief_propagation.rst
 frame/column_median.rst
 frame/column_mode.rst
 frame/column_summary_statistics.rst

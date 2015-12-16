@@ -20,8 +20,8 @@ import com.esotericsoftware.kryo.Kryo
 import org.mockito.Mockito._
 import org.scalatest.mock.MockitoSugar
 import org.scalatest.{ Matchers, WordSpec }
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderKryoRegistrator
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, GbIdToPhysicalId, Property }
+import org.trustedanalytics.atk.graphbuilder.graph.GraphBuilderKryoRegistrator
 import org.trustedanalytics.atk.graphbuilder.parser.ColumnDef
 import org.trustedanalytics.atk.graphbuilder.parser.rule.{ ConstantValue, EdgeRule, ParsedValue, Value }
 

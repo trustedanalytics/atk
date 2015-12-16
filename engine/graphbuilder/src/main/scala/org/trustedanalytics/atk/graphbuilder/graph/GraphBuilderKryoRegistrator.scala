@@ -14,39 +14,17 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark.titan
+package org.trustedanalytics.atk.graphbuilder.graph
 
-import org.trustedanalytics.atk.graphbuilder.parser.CombinedParser
-import org.trustedanalytics.atk.graphbuilder.schema.{ SchemaAccumulableParam, InferSchemaFromData }
-import com.thinkaurelius.titan.hadoop.FaunusVertex
+import com.esotericsoftware.kryo.Kryo
+import org.apache.hadoop.hbase.client.Result
+import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.io.NullWritable
 import org.apache.spark.serializer.KryoRegistrator
-import com.esotericsoftware.kryo.Kryo
-import org.trustedanalytics.atk.graphbuilder.elements._
-import org.trustedanalytics.atk.graphbuilder.graph.GraphConnector
-import org.trustedanalytics.atk.graphbuilder.parser._
-import org.trustedanalytics.atk.graphbuilder.parser.rule._
-import org.apache.hadoop.hbase.io.ImmutableBytesWritable
-import org.apache.hadoop.hbase.client.Result
-import org.trustedanalytics.atk.graphbuilder.schema._
-import org.trustedanalytics.atk.graphbuilder.parser.rule.ParsedValue
-import org.trustedanalytics.atk.graphbuilder.parser.rule.SingleEdgeRuleParser
-import org.trustedanalytics.atk.graphbuilder.schema.EdgeLabelDef
-import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
-import org.trustedanalytics.atk.graphbuilder.parser.rule.PropertyRuleParser
-import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
-import org.trustedanalytics.atk.graphbuilder.parser.rule.SinglePropertyRuleParser
-import org.trustedanalytics.atk.graphbuilder.parser.rule.SingleVertexRuleParser
-import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.graphbuilder.schema.PropertyDef
-import org.trustedanalytics.atk.graphbuilder.parser.rule.VertexRuleParser
-import org.trustedanalytics.atk.graphbuilder.elements.GbIdToPhysicalId
-import org.trustedanalytics.atk.graphbuilder.parser.rule.EdgeRuleParser
-import org.trustedanalytics.atk.graphbuilder.parser.rule.CompoundValue
-import org.trustedanalytics.atk.graphbuilder.parser.rule.ConstantValue
-import org.trustedanalytics.atk.graphbuilder.parser.rule.EdgeRule
-import org.trustedanalytics.atk.graphbuilder.parser.ColumnDef
-import org.trustedanalytics.atk.graphbuilder.parser.rule.VertexRule
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, GbIdToPhysicalId, _ }
+import org.trustedanalytics.atk.graphbuilder.parser.rule.{ CompoundValue, ConstantValue, EdgeRule, EdgeRuleParser, ParsedValue, PropertyRuleParser, SingleEdgeRuleParser, SinglePropertyRuleParser, SingleVertexRuleParser, VertexRule, VertexRuleParser, _ }
+import org.trustedanalytics.atk.graphbuilder.parser.{ ColumnDef, CombinedParser, InputSchema, _ }
+import org.trustedanalytics.atk.graphbuilder.schema.{ EdgeLabelDef, InferSchemaFromData, PropertyDef, SchemaAccumulableParam, _ }
 
 /**
  * Register GraphBuilder classes that are going to be serialized by Kryo.
@@ -59,7 +37,7 @@ import org.trustedanalytics.atk.graphbuilder.parser.rule.VertexRule
  * <p>
  *  Usage:
  *   conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
- *   conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderKryoRegistrator")
+ *   conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.graph.GraphBuilderKryoRegistrator")
  * </p>
  */
 class GraphBuilderKryoRegistrator extends KryoRegistrator {

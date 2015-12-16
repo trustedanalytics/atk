@@ -18,8 +18,8 @@ package org.trustedanalytics.atk.graphbuilder.driver.spark
 
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.JoinBroadcastVariable
 import org.trustedanalytics.atk.graphbuilder.elements.Property
+import org.trustedanalytics.atk.graphbuilder.graph.JoinBroadcastVariable
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class JoinBroadcastVariableTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
