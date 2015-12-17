@@ -22,7 +22,7 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
-import org.trustedanalytics.atk.domain.frame.{MissingImmediate, MissingIgnore}
+import org.trustedanalytics.atk.domain.frame.{ MissingImmediate, MissingIgnore }
 
 class BinColumnITest extends TestingSparkContextFlatSpec with Matchers {
 
