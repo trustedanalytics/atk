@@ -1,0 +1,49 @@
+
+:doc:`Frame <index>`  rename_columns
+************************************
+
+------
+
+
+.. function:: rename_columns(self, names)
+
+    Rename columns
+
+
+    :Parameters:
+
+        **names** : dict
+
+        ..
+
+            Dictionary of old names to new names.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+
+
+    Examples
+    --------
+    Start with a frame with columns *Black* and *White*.
+
+
+
+        >>> print my_frame.schema
+        [(u'Black', <type 'unicode'>), (u'White', <type 'unicode'>)]
+
+    Rename the columns to *Mercury* and *Venus*:
+
+        >>> my_frame.rename_columns({"Black": "Mercury", "White": "Venus"})
+
+        >>> print my_frame.schema
+        [(u'Mercury', <type 'unicode'>), (u'Venus', <type 'unicode'>)]
+
+

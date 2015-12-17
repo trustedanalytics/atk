@@ -13,10 +13,6 @@
    "type": "Production", 
    "version": "v0.4.1"
   }, 
-  "w20150918": {
-   "type": "Weekly", 
-   "version": "w20150918"
-  }, 
   "w20150921": {
    "type": "Weekly", 
    "version": "w20150921"
@@ -36,6 +32,10 @@
   "w20151215": {
    "type": "Weekly", 
    "version": "w20151215"
+  }, 
+  "w20151217": {
+   "type": "Weekly", 
+   "version": "w20151217"
   }
  }
 }

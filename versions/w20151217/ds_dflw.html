@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Process Flow Examples &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="User Manual" href="ds_over.html" >
+    <link rel="next" title="Python User Functions" href="ds_apir.html" >
+    <link rel="prev" title="Getting Started" href="ds_strt.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ds_over.html" accesskey="U">User Manual</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ds_strt.html" title="Getting Started"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_apir.html" title="Python User Functions"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_ml.html">Machine Learning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ds-dflw"></span><div class="section" id="process-flow-examples">
+<span id="index-0"></span><h1>Process Flow Examples<a class="headerlink" href="#process-flow-examples" title="Permalink to this headline">¶</a></h1>
+<p>The information in this section displays the general path taken to build
+using <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> with Python.</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#python-path-setup" id="id5">Python Path Setup</a></li>
+<li><a class="reference internal" href="#raw-data" id="id6">Raw Data</a><ul>
+<li><a class="reference internal" href="#ingesting-the-raw-data" id="id7">Ingesting the Raw Data</a><ul>
+<li><a class="reference internal" href="#importing-a-csv-file" id="id8">Importing a <abbr title="Character-Separated Variables">CSV</abbr> file.</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#frames" id="id9">Frames</a><ul>
+<li><a class="reference internal" href="#create-a-frame" id="id10">Create a Frame</a><ul>
+<li><a class="reference internal" href="#examples" id="id11">Examples:</a></li>
+<li><a class="reference internal" href="#append" id="id12">Append:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspect-the-data" id="id13">Inspect the Data</a><ul>
+<li><a class="reference internal" href="#id1" id="id14">Examples</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#clean-the-data" id="id15">Clean the Data</a><ul>
+<li><a class="reference internal" href="#drop-rows" id="id16">Drop Rows:</a><ul>
+<li><a class="reference internal" href="#id2" id="id17">Examples:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#filter-rows" id="id18">Filter Rows:</a><ul>
+<li><a class="reference internal" href="#id3" id="id19">Examples:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#drop-duplicates" id="id20">Drop Duplicates:</a><ul>
+<li><a class="reference internal" href="#id4" id="id21">Examples:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#drop-columns" id="id22">Drop Columns:</a></li>
+<li><a class="reference internal" href="#rename-columns" id="id23">Rename Columns:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transform-the-data" id="id24">Transform the Data</a><ul>
+<li><a class="reference internal" href="#add-columns" id="id25">Add Columns:</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#examining-the-data" id="id26">Examining the Data</a><ul>
+<li><a class="reference internal" href="#group-by-and-aggregate" id="id27">Group by (and aggregate):</a></li>
+<li><a class="reference internal" href="#join" id="id28">Join:</a></li>
+<li><a class="reference internal" href="#flatten-column" id="id29">Flatten Column:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#seamless-graph" id="id30">Seamless Graph</a><ul>
+<li><a class="reference internal" href="#build-the-graph" id="id31">Build the Graph</a></li>
+<li><a class="reference internal" href="#other-graph-options" id="id32">Other Graph Options</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#titan-graph" id="id33">Titan Graph</a><ul>
+<li><a class="reference internal" href="#graph-creation" id="id34">Graph Creation</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#models" id="id35">Models</a></li>
+</ul>
+</div>
+<div class="section" id="python-path-setup">
+<span id="index-1"></span><h2>Python Path Setup<a class="headerlink" href="#python-path-setup" title="Permalink to this headline">¶</a></h2>
+<p id="pythonpath">The location of the &#8216;trustedanalytics&#8217; directory should be added
+to the PYTHONPATH environmental variable prior to starting Python.
+This can be done from a shell script, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>export PYTHONPATH=$PYTHONPATH:/usr/lib/ # appends path where trustedanalytics directory exists to
+                                        # any existing path
+                                        # this could also be added to .bashrc or other profile script
+python  # starts python CLI
+</pre></div>
+</div>
+<p>This way, from inside Python, it is easier to load and connect to the
+REST server:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="raw-data">
+<span id="valid-data-types"></span><span id="index-2"></span><h2>Raw Data<a class="headerlink" href="#raw-data" title="Permalink to this headline">¶</a></h2>
+<p>Data is made up of variables of heterogeneous types (for example: strings,
+integers, and floats) that can be organized as a collection of rows and
+columns, similar to a table or spreadsheet.
+Each row corresponds to the data associated with one observation, and each
+column corresponds to a variable being observed.
+See the Python API <span class="xref std std-ref">Data Types</span> for
+a current list of data types supported.</p>
+<p>To see the data types supported:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">ta</span><span class="o">.</span><span class="n">valid_data_types</span>
+</pre></div>
+</div>
+<p>You should see a list of variable types similar to this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>float32, float64, int32, int64, unicode
+(and aliases: float-&gt;float64, int-&gt;int32, long-&gt;int64, str-&gt;unicode)
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Although Trusted Analytics Platform utilizes the NumPy package, NumPy values of positive
+infinity (np.inf), negative infinity (-np.inf) or nan (np.nan) are treated
+as None.
+Results of any user-defined functions which deal with such values are
+automatically converted to None, so any further usage of those data points
+should treat the values as None.</p>
+</div>
+<span class="target" id="importing-data"></span><div class="section" id="ingesting-the-raw-data">
+<span id="index-3"></span><h3>Ingesting the Raw Data<a class="headerlink" href="#ingesting-the-raw-data" title="Permalink to this headline">¶</a></h3>
+<p>See the API section <span class="xref std std-ref">Data Sources</span>
+for the various methods of ingesting data.</p>
+<div class="section" id="importing-a-csv-file">
+<span id="example-files-csvfile"></span><h4>Importing a <abbr title="Character-Separated Variables">CSV</abbr> file.<a class="headerlink" href="#importing-a-csv-file" title="Permalink to this headline">¶</a></h4>
+<p>These are some rows from a <abbr title="Character-Separated Variables">CSV</abbr> file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;string&quot;</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="s">&quot;again&quot;</span><span class="p">,</span><span class="mf">25.125</span>
+<span class="s">&quot;next&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s">&quot;or not&quot;</span><span class="p">,</span><span class="mf">1.0</span>
+<span class="s">&quot;fail&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;again?&quot;</span><span class="p">,</span><span class="mf">11.11</span>
+</pre></div>
+</div>
+<p><abbr title="Character-Separated Variables">CSV</abbr> files contain rows of information separated by new-line characters.
+Within each row, the data fields are separated from each other by some standard
+character.
+In the above example, the separating character is a comma (,).</p>
+<p>To import data, you must tell the system how the input file is formatted.
+This is done by defining a <a class="reference internal" href="glossary.html#term-schema"><span class="xref std std-term">schema</span></a>.
+Schemas are constructed as a list of tuples, each of which contains an
+<a class="reference internal" href="glossary.html#term-ascii"><span class="xref std std-term">ASCII</span></a>-character name and the item&#8217;s <a class="reference internal" href="#valid-data-types"><span>data type</span></a>,
+ordered according to the order of columns in the input file.</p>
+<p>Given a file <em>datasets/small_songs.csv</em> whose contents look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Easy on My Mind&quot;</span>
+<span class="mi">2</span><span class="p">,</span><span class="s">&quot;No Rest For The Wicked&quot;</span>
+<span class="mi">3</span><span class="p">,</span><span class="s">&quot;Does Your Chewing Gum&quot;</span>
+<span class="mi">4</span><span class="p">,</span><span class="s">&quot;Gypsies, Tramps, and Thieves&quot;</span>
+<span class="mi">5</span><span class="p">,</span><span class="s">&quot;Symphony No. 5&quot;</span>
+</pre></div>
+</div>
+<p>Create a variable to hold the file name (for easier reuse):</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_data_file</span> <span class="o">=</span> <span class="s">&quot;datasets/small_songs.csv&quot;</span>
+</pre></div>
+</div>
+<p>Create the schema <em>my_schema</em> with two columns: <em>id</em> (int32), and <em>title</em>
+(str):</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>The schema and file name are used in the CsvFile() command to describe the file
+format:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The data fields are separated by a character delimiter.
+The default delimiter to separate column data is a comma.
+It can be changed with the parameter <em>delimiter</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This can be helpful if the delimiter is something other than a comma, for
+example, <code class="docutils literal"><span class="pre">\t</span></code> for tab-delimited records.</p>
+<p>Occasionally, there are header lines in the data file.
+For example, these lines may describe the source or format of the data.
+If there are lines at the beginning of the file, they should be skipped by
+the import mechanism.
+The number of lines to skip is specified by the <em>skip_header_lines</em>
+parameter:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">,</span> <span class="n">skip_header_lines</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">See <a class="reference internal" href="errata.html#errata"><span>Errata</span></a> for an issue skipping header lines.</p>
+</div>
+<p>Now we use the schema and the file name to create CsvFile objects, which define
+the data layouts:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csv1</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&quot;data1.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema_ab</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csv2</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s">&quot;more_data.txt&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">schema_ab</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">raw_csv_data_file</span> <span class="o">=</span> <span class="s">&quot;datasets/my_data.csv&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">column_schema_list</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;z&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csv4</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="n">raw_csv_data_file</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">column_schema_list</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;|&#39;</span><span class="p">,</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="frames">
+<span id="example-frame-frame"></span><h2>Frames<a class="headerlink" href="#frames" title="Permalink to this headline">¶</a></h2>
+<p>A Frame is a class of objects capable of accessing and controlling &#8220;big data&#8221;.
+The data can be visualized as a two-dimensional table structure of rows and
+columns.
+Trusted Analytics Platform can handle frames with large volumes of data, because it is
+designed to work with data spread over multiple machines.</p>
+<div class="section" id="create-a-frame">
+<h3>Create a Frame<a class="headerlink" href="#create-a-frame" title="Permalink to this headline">¶</a></h3>
+<p>There are several ways to create frames:</p>
+<ol class="arabic simple">
+<li>As &#8220;empty&#8221;, with no schema or data</li>
+<li>With a schema and data</li>
+<li>By copying (all or a part of) another frame</li>
+<li>As a return value from a Frame-based method; this is part of the
+<a class="reference internal" href="glossary.html#term-extract-transform-and-load"><span class="xref std std-term">ETL</span></a> data flow.</li>
+</ol>
+<p>See the Python API <span class="xref std std-ref">Frames section</span> for more information.</p>
+<div class="section" id="examples">
+<h4>Examples:<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h4>
+<p>Create an empty frame:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The Frame <em>my_frame</em> is now a Python object which references an empty frame
+that has been created on the server.</p>
+<p>To create a frame defined by the schema <em>my_csv</em> (see
+<a class="reference internal" href="#example-files-csvfile"><span>Importing a CSV file.</span></a>), import the data, give the frame the name
+<em>myframe</em>, and create a Frame object, <em>my_frame</em>, to access it:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;myframe&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To copy the frame <em>myframe</em>, create a Frame <em>my_frame2</em> to access it, and give
+it a new name, because the name must always be unique:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy_of_myframe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To create a new frame with only columns <em>x</em> and <em>z</em> from the original frame
+<em>myframe</em>, and save the Frame object as <em>my_frame3</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame3</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy2_of_myframe&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To create a frame copy of the original columns <em>x</em> and <em>z</em>, but only those
+rows where <em>z</em> is TRUE:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame4</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">Harry</span> <span class="n">Potter</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
+<span class="gp">... </span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy_of_myframe_true&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Frames are handled by reference.
+Commands such as <code class="code docutils literal"><span class="pre">f4</span> <span class="pre">=</span> <span class="pre">my_frame</span></code> will only give you a copy of the Frame
+proxy pointing to the same data.</p>
+<p>Let&#8217;s create a Frame and examine its contents:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;small_songs&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">get_error_frame</span><span class="p">()</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="append">
+<span id="example-frame-append"></span><span id="index-4"></span><h4>Append:<a class="headerlink" href="#append" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="xref std std-ref">append</span> method adds rows and columns of data to a frame.
+Columns and rows are added to the database structure, and data is imported
+as appropriate.
+If columns are the same in both name and data type, the appended data will
+go into the existing column.</p>
+<p>As an example, let&#8217;s start with a frame containing two columns <em>a</em> and <em>b</em>.
+The frame can be accessed by Frame <em>my_frame1</em>.
+We can look at the data and structure of the database by using the <span class="xref std std-ref">inspect</span> method:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str   b:ta.int64</span>
+<span class="go">/--------------------/</span>
+<span class="go">  apple          182</span>
+<span class="go">  bear            71</span>
+<span class="go">  car           2048</span>
+</pre></div>
+</div>
+<p>Given another frame, accessed by Frame <em>my_frame2</em> with one column <em>c</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  c:str</span>
+<span class="go">/-------/</span>
+<span class="go">  dog</span>
+<span class="go">  cat</span>
+</pre></div>
+</div>
+<p>With <span class="xref std std-ref">append</span>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">my_frame2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is that the first frame would have the data from both frames.
+It would still be accessed by Frame <em>my_frame1</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str     b:ta.int64     c:str</span>
+<span class="go">/--------------------------------/</span>
+<span class="go">  apple        182         None</span>
+<span class="go">  bear          71         None</span>
+<span class="go">  car         2048         None</span>
+<span class="go">  None        None         dog</span>
+<span class="go">  None        None         cat</span>
+</pre></div>
+</div>
+<p>Try this example with data files <em>objects1.csv</em> and <em>objects2.csv</em>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/objects1.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;Object&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Count&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;objects1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects2</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/objects2.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;Thing&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;objects2&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">objects2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>See also the <span class="xref std std-ref">join</span> method in the
+<a class="reference internal" href="python_api/index.html"><em>API</em></a> section.</p>
+</div>
+</div>
+<div class="section" id="inspect-the-data">
+<span id="example-frame-inspect"></span><h3>Inspect the Data<a class="headerlink" href="#inspect-the-data" title="Permalink to this headline">¶</a></h3>
+<p>Trusted Analytics Platform provides several methods that allow you to inspect your data,
+including <span class="xref std std-ref">inspect</span> and
+<span class="xref std std-ref">take</span>.
+The Frame class also contains frame information like
+<span class="xref std std-ref">row_count</span>.</p>
+<div class="section" id="id1">
+<h4>Examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<p>To see the number of rows:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">row_count</span>
+</pre></div>
+</div>
+<p>To see the number of columns:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">objects1</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To see the Frame pointer:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span>
+</pre></div>
+</div>
+<p>To see two rows of data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Gives you something like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre>  a:ta.float64  b:ta.int64
+/--------------------------/
+    12.3000            500
+   195.1230         183954
+</pre></div>
+</div>
+<p>The take() method makes a list of lists of frame data.
+Each list has the data from a row in the frame accessed by the Frame,
+in this case, 3 rows beginning from row 2.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">subset_of_objects1</span> <span class="o">=</span> <span class="n">objects1</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">subset_of_objects1</span>
+</pre></div>
+</div>
+<p>Gives you something like this:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="p">[[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mf">195.123</span><span class="p">,</span> <span class="mi">183954</span><span class="p">],</span> <span class="p">[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">]]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The row sequence of the data is NOT guaranteed to match the sequence of the
+input file.
+When the data is spread out over multiple clusters, the original sequence
+of rows from the raw data is lost.
+Also, the sequence order of the columns is changed (from original data)
+by some commands.</p>
+</div>
+<p>Some more examples to try:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/animals.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Float1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Float2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;animals&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="n">animals</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">freq</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;int1&#39;</span><span class="p">,</span> <span class="s">&#39;int2&#39;</span><span class="p">,</span> <span class="s">&#39;Float1&#39;</span><span class="p">,</span> <span class="s">&#39;Float2&#39;</span><span class="p">]:</span>
+<span class="gp">... </span>    <span class="n">summary</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">pprint</span><span class="p">(</span><span class="n">summary</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="clean-the-data">
+<h3>Clean the Data<a class="headerlink" href="#clean-the-data" title="Permalink to this headline">¶</a></h3>
+<p>The process of &#8220;data cleaning&#8221; encompasses the identification and removal or
+repair of incomplete, incorrect, or malformed information in a data set.
+The Trusted Analytics Platform Python API provides much of the functionality necessary for these
+tasks.
+It is important to keep in mind that it was designed for data scalability.
+Thus, using external Python packages for these tasks, while possible, may
+not provide the same level of efficiency.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Unless stated otherwise, cleaning functions use the Frame proxy to
+operate directly on the data, so they change the data in the frame,
+rather than return a new frame with the changed data.
+Copying the data to a new frame on a regular
+basis and work on the new frame,
+provides a fallback if something does not work as expected:</p>
+<div class="code last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">next_frame</span> <span class="o">=</span> <span class="n">current_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<p>In general, the following functions select rows of data based upon the data
+in the row.
+For details about row selection based upon its data see <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
+<p>Example of data cleaning:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">clean_animals</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;basset hound&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s">&#39;dog&#39;</span>
+<span class="gp">... </span>    <span class="k">elif</span> <span class="s">&#39;guinea pig&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s">&#39;cavy&#39;</span>
+<span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">clean_animals</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;animals_cleaned&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;animals_cleaned&#39;</span> <span class="p">:</span> <span class="s">&#39;animals&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<div class="section" id="drop-rows">
+<span id="example-frame-drop-rows"></span><span id="index-5"></span><h4>Drop Rows:<a class="headerlink" href="#drop-rows" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="xref std std-ref">drop_rows</span>
+method takes a predicate function and removes all rows for
+which the predicate evaluates to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<div class="section" id="id2">
+<h5>Examples:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h5>
+<p>Drop any rows in the animals frame where the value in column <em>int2</em> is
+negative:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;int2&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To drop any rows where <em>a</em> is empty:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To drop any rows where any column is empty:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">any</span><span class="p">([</span><span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="filter-rows">
+<span id="example-frame-filter"></span><span id="index-6"></span><h4>Filter Rows:<a class="headerlink" href="#filter-rows" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="xref std std-ref">filter</span> method is like
+<span class="xref std std-ref">drop_rows</span>, except it removes all rows
+for which the predicate evaluates to False.</p>
+<div class="section" id="id3">
+<h5>Examples:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h5>
+<p>To delete those rows where field <em>b</em> is outside the range of 0 to 10:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="n">AND</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="drop-duplicates">
+<span id="example-frame-drop-duplicates"></span><span id="index-7"></span><h4>Drop Duplicates:<a class="headerlink" href="#drop-duplicates" title="Permalink to this headline">¶</a></h4>
+<p>The <span class="xref std std-ref">drop_duplicates</span>
+method performs a row uniqueness comparison across the whole table.</p>
+<div class="section" id="id4">
+<h5>Examples:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h5>
+<p>To drop any rows where the data in <em>a</em> and column <em>b</em> are
+duplicates of some previously evaluated row:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>To drop all duplicate rows where the columns <em>User</em> and <em>animals</em>
+have the same values as in some previous row:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="s">&#39;animals&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="drop-columns">
+<span id="example-frame-drop-columns"></span><span id="index-8"></span><h4>Drop Columns:<a class="headerlink" href="#drop-columns" title="Permalink to this headline">¶</a></h4>
+<p>Columns can be dropped either with a string matching the column name or a
+list of strings:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="rename-columns">
+<span id="example-frame-rename-columns"></span><span id="index-9"></span><h4>Rename Columns:<a class="headerlink" href="#rename-columns" title="Permalink to this headline">¶</a></h4>
+<p>Columns can be renamed by giving the existing column name and the new name,
+in the form of a dictionary.
+Unicode characters should not be used for column names.</p>
+<p>Rename <em>a</em> to &#8220;id&#8221;:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;id&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>Rename column <em>b</em> to &#8220;author&#8221; and <em>c</em> to &#8220;publisher&#8221;:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;author&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="s">&#39;publisher&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="transform-the-data">
+<h3>Transform the Data<a class="headerlink" href="#transform-the-data" title="Permalink to this headline">¶</a></h3>
+<p>Often, you will need to create new data based upon the existing data.
+For example, you need the first name combined with the last name, or
+you need the number of times John spent more than five dollars, or
+you need the average age of students attending a college.</p>
+<div class="section" id="add-columns">
+<span id="example-frame-add-columns"></span><span id="index-10"></span><h4>Add Columns:<a class="headerlink" href="#add-columns" title="Permalink to this headline">¶</a></h4>
+<p>Columns can be added to the frame using values from other columns as their
+value.</p>
+<p>Add a column <em>int1_times_int2</em> as an ta.float64 and fill it with the contents
+of column <em>int1</em> and column <em>int2</em> multiplied together:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="o">*</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;int1xint2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Add a new column <em>all_ones</em> and fill the entire column with the value 1:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;all_ones&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Add a new column <em>float1_plus_float2</em> and fill the entire column with the
+value of column <em>float1</em> plus column <em>float2</em>, then save a summary of
+the frame statistics:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">Float1</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Float2</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add a new column <em>pwl</em>, type ta.float64, and fill the value according to
+this table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="52%" />
+<col width="48%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">value in column <em>float1_plus_float2</em></th>
+<th class="head">value for column <em>pwl</em></th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>None</td>
+<td>None</td>
+</tr>
+<tr class="row-odd"><td>Less than 50</td>
+<td><em>float1_plus_float2</em>
+times 0.0046 plus 0.4168</td>
+</tr>
+<tr class="row-even"><td>At least 50 and less than 81</td>
+<td><em>float1_plus_float2</em>
+times 0.0071 plus 0.3429</td>
+</tr>
+<tr class="row-odd"><td>At least 81</td>
+<td><em>float1_plus_float2</em>
+times 0.0032 plus 0.4025</td>
+</tr>
+<tr class="row-even"><td>None of the above</td>
+<td>None</td>
+</tr>
+</tbody>
+</table>
+<p>An example of Piecewise Linear Transformation:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">piecewise_linear_transformation</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">float1_plus_float2</span>
+<span class="gp">... </span>   <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="k">return</span> <span class="bp">None</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0046</span><span class="p">,</span> <span class="mf">0.4168</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="mi">50</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="n">AND</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">81</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0071</span><span class="p">,</span> <span class="mf">0.3429</span>
+<span class="gp">... </span>   <span class="k">elif</span> <span class="mi">81</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="n">m</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span><span class="mf">0.0032</span><span class="p">,</span> <span class="mf">0.4025</span>
+<span class="gp">... </span>   <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>       <span class="k">return</span> <span class="bp">None</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="n">m</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">c</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">piecewise_linear_transformation</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;pwl&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Create multiple columns at once by making a function return a list of
+values for the new frame columns:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">)],</span> <span class="p">[(</span><span class="s">&#39;abs_int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;abs_int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+</pre></div>
+</div>
+<span class="target" id="ds-dflw-frame-examine"></span></div>
+</div>
+<div class="section" id="examining-the-data">
+<span id="index-11"></span><h3>Examining the Data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h3>
+<p>To get standard descriptive statistics information about my_frame, use the
+frame function <span class="xref std std-ref">column_summary_statistics</span>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="section" id="group-by-and-aggregate">
+<span id="example-frame-group-by"></span><span id="index-12"></span><h4>Group by (and aggregate):<a class="headerlink" href="#group-by-and-aggregate" title="Permalink to this headline">¶</a></h4>
+<p>Rows can be grouped together based on matching column values, after which an
+aggregation function can be applied on each group, producing a new frame.</p>
+<p>Example process of using aggregation based on columns:</p>
+<ol class="arabic simple">
+<li>given our frame of animals</li>
+<li>create a new frame and a Frame <em>grouped_animals</em> to access it</li>
+<li>group by unique values in column <em>animals</em></li>
+<li>average the grouped values in column <em>int1</em> and save it in a
+column <em>int1_avg</em></li>
+<li>add up the grouped values in column <em>int1</em> and save it in a
+column <em>int1_sum</em></li>
+<li>get the standard deviation of the grouped values in column
+<em>int1</em> and save it in a column <em>int1_stdev</em></li>
+<li>average the grouped values in column <em>int2</em> and save it in a
+column <em>int2_avg</em></li>
+<li>add up the grouped values in column <em>int2</em> and save it in a
+column <em>int2_sum</em></li>
+</ol>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;int1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">],</span> <span class="s">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The only columns in the new frame will be the grouping column and the
+generated columns.
+In this case, regardless of the original frame size, you will get six
+columns.</p>
+</div>
+<p>Example process of using aggregation based on both column and row together:</p>
+<ol class="arabic simple">
+<li>Using our data accessed by <em>animals</em>, create a new frame and a Frame
+<em>grouped_animals2</em> to access it</li>
+<li>Group by unique values in columns <em>animals</em> and <em>int1</em></li>
+<li>Using the data in the <em>float1</em> column, calculate each group&#8217;s average,
+standard deviation, variance, minimum, and maximum</li>
+<li>Count the number of rows in each group and put that value in column
+<em>int2_count</em></li>
+<li>Count the number of distinct values in column <em>int2</em> for each group and
+put that number in column <em>int2_count_distinct</em></li>
+</ol>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="s">&#39;int1&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;Float1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">var</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">],</span> <span class="s">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count_distinct</span><span class="p">]})</span>
+</pre></div>
+</div>
+<p>Example process of using aggregation based on row:</p>
+<ol class="arabic simple">
+<li>Using our data accessed by <em>animals</em>, create a new frame and a Frame
+<em>grouped_animals2</em> to access it</li>
+<li>Group by unique values in columns <em>animals</em> and <em>int1</em></li>
+<li>Count the number of rows in each group and put that value in column
+<em>count</em></li>
+</ol>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="s">&#39;int1&#39;</span><span class="p">],</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note" id="aggregation-functions">
+<p class="first admonition-title">Note</p>
+<p class="last"><code class="code docutils literal"><span class="pre">agg.count</span></code> is the only full row aggregation function supported at
+this time.</p>
+</div>
+<p>Aggregation currently supports using the following functions:</p>
+<table class="hlist"><tr><td><ul class="simple">
+<li>avg</li>
+<li>count</li>
+</ul>
+</td><td><ul class="simple">
+<li>count_distinct</li>
+<li>max</li>
+</ul>
+</td><td><ul class="simple">
+<li>min</li>
+<li>stdev</li>
+</ul>
+</td><td><ul class="simple">
+<li>sum</li>
+</ul>
+</td><td><ul class="simple">
+<li>var (see glossary <a class="reference internal" href="glossary.html#term-bias-vs-variance"><span class="xref std std-term">Bias vs Variance</span></a>)</li>
+</ul>
+</td></tr></table>
+</div>
+<div class="section" id="join">
+<span id="example-frame-join"></span><span id="index-13"></span><h4>Join:<a class="headerlink" href="#join" title="Permalink to this headline">¶</a></h4>
+<p>Create a <strong>new</strong> frame from a <span class="xref std std-ref">join</span>
+operation with another frame.</p>
+<p>Given two frames <em>my_frame</em> (columns <em>a</em>, <em>b</em>, <em>c</em>) and <em>your_frame</em> (columns
+<em>b</em>, <em>c</em>, <em>d</em>).
+For the sake of readability, in these examples we will refer to the frames and
+the Frames by the same name, unless needed for clarity:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str       b:str       c:str</span>
+<span class="go">/-----------------------------------/</span>
+<span class="go">  alligator   bear        cat</span>
+<span class="go">  auto        bus         car</span>
+<span class="go">  apple       berry       cantaloupe</span>
+<span class="go">  mirror      frog        ball</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  b:str       c:ta.int64     d:str</span>
+<span class="go">/----------------------------------/</span>
+<span class="go">  bus             871        dog</span>
+<span class="go">  berry          5218        frog</span>
+<span class="go">  blue              0        log</span>
+</pre></div>
+</div>
+<p>Column <em>b</em> in both frames is a unique identifier used to relate the two frames.
+Following this instruction will join <em>your_frame</em> to <em>my_frame</em>, creating a new
+frame with a new Frame to access it, with all of the data from <em>my_frame</em> and
+only that data from <em>your_frame</em> which has a value in <em>b</em> that matches a value
+in <em>my_frame</em> <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The result is <em>our_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
+<span class="go">/-----------------------------------------------------------/</span>
+<span class="go">  alligator   bear        cat          None           None</span>
+<span class="go">  auto        bus         car           871           dog</span>
+<span class="go">  apple       berry       cantaloupe   5281           frog</span>
+<span class="go">  mirror      frog        ball         None           None</span>
+</pre></div>
+</div>
+<p>Doing an &#8220;inner&#8221; join this time will include only data from <em>my_frame</em> and
+<em>your_frame</em> which have matching values in <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;inner&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Result is <em>inner_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
+<span class="go">/-----------------------------------------------------------/</span>
+<span class="go">  auto        bus         car             871         dog</span>
+<span class="go">  apple       berry       cantaloupe     5218         frog</span>
+</pre></div>
+</div>
+<p>Doing an &#8220;outer&#8221; join this time will include only data from <em>my_frame</em> and
+<em>your_frame</em> which do not have matching values in <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;outer&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Result is <em>outer_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
+<span class="go">/-----------------------------------------------------------/</span>
+<span class="go">  alligator   bear        cat            None         None</span>
+<span class="go">  mirror      frog        ball           None         None</span>
+<span class="go">  None        blue        None              0         log</span>
+</pre></div>
+</div>
+<p>If column <em>b</em> in <em>my_frame</em> and column <em>d</em> in <em>your_frame</em> are the common
+column:
+Doing it again but including all data from <em>your_frame</em> and only that data
+in <em>my_frame</em> which has a value in <em>b</em> that matches a value in
+<em>your_frame</em> <em>d</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Result is <em>right_frame</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:str      b_L:str      c:str      b_R:str    c:ta.int64   d:str</span>
+<span class="go">/---------------------------------------------------------------------/</span>
+<span class="go">  None       None         None       bus         871         dog</span>
+<span class="go">  mirror     frog         ball       berry      5218         frog</span>
+<span class="go">  None       None         None       blue          0         log</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="flatten-column">
+<span id="example-frame-flatten-column"></span><span id="index-14"></span><h4>Flatten Column:<a class="headerlink" href="#flatten-column" title="Permalink to this headline">¶</a></h4>
+<p>The function <span class="xref std std-ref">flatten_column</span>
+creates a <strong>new</strong> frame by splitting a
+particular column and returns a Frame object.
+The column is searched for rows where there is more than one value,
+separated by commas.
+The row is duplicated and that column is spread across the existing and new
+rows.</p>
+<p>Given a frame accessed by Frame <em>my_frame</em> and the frame has two columns
+<em>a</em> and <em>b</em>.
+The &#8220;original_data&#8221;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="s">&quot;solo,mono,single&quot;</span>
+<span class="mi">2</span><span class="o">-</span><span class="s">&quot;duo,double&quot;</span>
+</pre></div>
+</div>
+<p>Bring the data in where it can by worked on:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Check the data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:ta.int64   b:string</span>
+<span class="go">/---------------------------------/</span>
+<span class="go">      1        solo, mono, single</span>
+<span class="go">      2        duo, double</span>
+</pre></div>
+</div>
+<p>Spread out those sub-strings in column <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">flatten_column</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now check again and the result is:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+
+<span class="go">  a:ta.int64   b:str</span>
+<span class="go">/-----------------------/</span>
+<span class="go">    1          solo</span>
+<span class="go">    1          mono</span>
+<span class="go">    1          single</span>
+<span class="go">    2          duo</span>
+<span class="go">    2          double</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="seamless-graph">
+<span id="ds-dflw-building-a-graph"></span><h2>Seamless Graph<a class="headerlink" href="#seamless-graph" title="Permalink to this headline">¶</a></h2>
+<p>For the examples below, we will use a Frame <em>my_frame</em>, which accesses an
+arbitrary frame of data consisting of the <a class="reference download internal" href="R_downloads/employees.csv"><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="20%" />
+<col width="42%" />
+<col width="16%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Employee</th>
+<th class="head">Manager</th>
+<th class="head">Title</th>
+<th class="head">Years</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Bob</td>
+<td>Steve</td>
+<td>Associate</td>
+<td>1</td>
+</tr>
+<tr class="row-odd"><td>Jane</td>
+<td>Steve</td>
+<td>Sn Associate</td>
+<td>3</td>
+</tr>
+<tr class="row-even"><td>Anup</td>
+<td>Steve</td>
+<td>Associate</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>Sue</td>
+<td>Steve</td>
+<td>Market Analyst</td>
+<td>1</td>
+</tr>
+<tr class="row-even"><td>Mohit</td>
+<td>Steve</td>
+<td>Associate</td>
+<td>2</td>
+</tr>
+<tr class="row-odd"><td>Steve</td>
+<td>David</td>
+<td>Marketing Manager</td>
+<td>5</td>
+</tr>
+<tr class="row-even"><td>Larry</td>
+<td>David</td>
+<td>Product Manager</td>
+<td>3</td>
+</tr>
+<tr class="row-odd"><td>David</td>
+<td>Rob</td>
+<td>VP of Sales</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="build-the-graph">
+<h3>Build the Graph<a class="headerlink" href="#build-the-graph" title="Permalink to this headline">¶</a></h3>
+<p>Make an empty graph and give it a name:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;personnel&quot;</span>
+</pre></div>
+</div>
+<p>Define the vertex types:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;employee&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;manager&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;title&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;years&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Define the edge type:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;worksunder&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Add the data:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Title&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Manager&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Years&#39;</span><span class="p">],</span> <span class="n">create_missing_vertices</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Improperly built graphs can give inconsistent results.
+For example, given EdgeFrames with this data:</p>
+<div class="highlight-python"><div class="highlight"><pre>Movieid, movieTitle, Rating, userId
+1, Titanic, 3, 1
+1, My Own Private Idaho, 3, 2
+</pre></div>
+</div>
+<p class="last">If the vertices are built out of this data, the vertex with Movieid of 1
+would sometimes have the Titanic data and sometimes would have the Idaho
+data, based upon which order the records are delivered to the function.</p>
+</div>
+</div>
+<div class="section" id="other-graph-options">
+<h3>Other Graph Options<a class="headerlink" href="#other-graph-options" title="Permalink to this headline">¶</a></h3>
+<p>Inspect the graph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertex_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edge_count</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For further information, see the API section on <span class="xref std std-ref">Graphs</span>.</p>
+<p id="export-to-titan">Export the graph to a TitanGraph:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_titan_graph</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">export_to_titan</span><span class="p">(</span><span class="s">&quot;titan_graph&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make a VertexFrame:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_vertex_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">(</span><span class="s">&quot;employee&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Make an EdgeFrame:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s">&quot;worksunder&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="titan-graph">
+<h2>Titan Graph<a class="headerlink" href="#titan-graph" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="graph-creation">
+<h3>Graph Creation<a class="headerlink" href="#graph-creation" title="Permalink to this headline">¶</a></h3>
+<p>A Titan graph is created by exporting it from a seamless graph.
+For further information, as well as Titan graph attributes and methods, see the
+API section on <span class="xref std std-ref">Titan Graph</span>.</p>
+<span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound" id="index-15">
+</div>
+</div>
+</div>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>See the <span class="xref std std-ref">models section of the API</span> for details.</p>
+<p>Graphical models find more insights from structured noisy data.
+See <span class="xref std std-ref">graph API</span> for details of the
+<a class="reference internal" href="glossary.html#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a> (LP) and <a class="reference internal" href="glossary.html#term-loopy-belief-propagation"><span class="xref std std-term">Loopy Belief Propagation</span></a> (LBP).</p>
+<p>For Topic Modeling, see the <span class="xref std std-ref">LDA Model section of the API</span> and
+<a class="reference external" href="http://en.wikipedia.org/wiki/Topic_model">http://en.wikipedia.org/wiki/Topic_model</a></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Dec 17, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
