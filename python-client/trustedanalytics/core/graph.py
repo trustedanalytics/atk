@@ -35,22 +35,11 @@ from trustedanalytics.core.column import Column
 
 from trustedanalytics.meta.clientside import raise_deprecation_warning
 
-__all__ = ["drop_frames", "drop_graphs", "Frame", "get_frame", "get_frame_names", "get_graph", "get_graph_names", "TitanGraph"]
+__all__ = ["drop_frames", "drop_graphs", "Frame", "get_frame", "get_frame_names", "get_graph", "get_graph_names"]
 
 def _get_backend():
     from trustedanalytics.meta.config import get_graph_backend
     return get_graph_backend()
-
-
-# TitanGraph
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubsTitanGraph
-    doc_stubs_import.success(logger, "_DocStubsTitanGraph")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsTitanGraph", e)
-    class _DocStubsTitanGraph(object): pass
-
 
 # Graph
 try:
@@ -115,7 +104,6 @@ Many frame methods are available to work with vertices and edges.
 Vertex and edge properties are stored as columns.
 
 A seamless graph is better suited for bulk :term:`OLAP`-type operations
-whereas a Titan graph is better suited to :term:`OLTP`.
     """
     _entity_type = 'graph:'
 
@@ -586,45 +574,3 @@ class GraphFrameCollection(object):
         if self._type_str == "edges":
             return "\n".join(["%s : %s, count = %d" % (e['label'], self.__get_props_str(e), e['count']) for e in graph_info.edges])
         return ""
-
-
-@api
-class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
-    """Proxy to a graph in Titan, supports Gremlin query."""
-
-    _entity_type = 'graph:titan'
-
-    @api
-    def __init__(self, name=None, _info=None):
-        """Initialize the graph.
-
-    Examples
-    --------
-    Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
-
-    <skip>
-    .. code::
-
-        >>> graph = ta.get_graph("my_graph")
-        >>> titan_graph = graph.export_to_titan("titan_graph")
-
-    </skip>
-    """
-        try:
-            self.uri = None
-            if not hasattr(self, '_backend'):
-                self._backend = _get_backend()
-            _BaseGraph.__init__(self)
-            self.uri = self._backend.create(self, name, 'hbase/titan', _info)
-            # logger.info('Created new graph "%s"', new_graph_name)
-        except:
-            raise IaError(logger)
-
-    def __repr__(self):
-        try:
-            return self._backend.get_repr(self)
-        except:
-            return super(TitanGraph,self).__repr__() + "(Unable to collect metadeta from server)"
-
-    def _get_new_graph_name(self):
-        return "graph_" + uuid.uuid4().hex

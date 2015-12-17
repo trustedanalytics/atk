@@ -31,7 +31,7 @@ import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
-import org.trustedanalytics.atk.engine.graph.plugins.exportfromtitan.{ EdgeHolder, EdgeSchemaAggregator, VertexSchemaAggregator }
+import org.trustedanalytics.atk.engine.graph.plugins.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 
 import scala.collection.mutable.ListBuffer

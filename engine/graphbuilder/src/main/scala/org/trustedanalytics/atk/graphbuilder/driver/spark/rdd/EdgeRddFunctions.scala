@@ -16,17 +16,9 @@
 
 package org.trustedanalytics.atk.graphbuilder.driver.spark.rdd
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.JoinBroadcastVariable
 import org.trustedanalytics.atk.graphbuilder.elements.{ GbIdToPhysicalId, GBEdge }
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.JoinBroadcastVariable
 import org.trustedanalytics.atk.graphbuilder.elements._
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
-import org.trustedanalytics.atk.graphbuilder.write.EdgeWriter
-import org.trustedanalytics.atk.graphbuilder.write.dao.{ EdgeDAO, VertexDAO }
-import org.apache.spark.SparkContext._
-import org.apache.spark.{ RangePartitioner, TaskContext }
-import org.apache.spark.broadcast.Broadcast
+import org.apache.spark.{ RangePartitioner }
 import org.apache.spark.rdd.RDD
 
 /**
@@ -133,74 +125,4 @@ class EdgeRddFunctions(self: RDD[GBEdge], val maxEdgesPerCommit: Long = 10000L) 
     })
   }
 
-  /**
-   * Write the Edges to Titan using the supplied connector
-   * @param append true to append to an existing graph
-   */
-  def write(titanConnector: TitanGraphConnector, append: Boolean): Unit = {
-
-    self.context.runJob(self, (context: TaskContext, iterator: Iterator[GBEdge]) => {
-
-      val graph = TitanGraphConnector.getGraphFromCache(titanConnector)
-      val edgeDAO = new EdgeDAO(graph, new VertexDAO(graph))
-      val writer = new EdgeWriter(edgeDAO, append)
-
-      try {
-        var count = 0L
-        while (iterator.hasNext) {
-          writer.write(iterator.next())
-          count += 1
-          if (count % maxEdgesPerCommit == 0) {
-            graph.commit()
-          }
-        }
-
-        println("wrote edges: " + count + " for split: " + context.partitionId)
-
-        graph.commit()
-      }
-      finally {
-        //Do not shut down graph when using cache since graph instances are automatically shutdown when
-        //no more references are held
-        //graph.shutdown()
-      }
-    })
-  }
-
-  /**
-   * Write the Edges to Titan using the supplied connector
-   * @param append true to append to an existing graph
-   * @param gbIdToPhysicalIdMap see GraphBuilderConfig.broadcastVertexIds
-   */
-  def write(titanConnector: TitanGraphConnector, gbIdToPhysicalIdMap: JoinBroadcastVariable[Property, AnyRef], append: Boolean): Unit = {
-
-    self.context.runJob(self, (context: TaskContext, iterator: Iterator[GBEdge]) => {
-      val graph = TitanGraphConnector.getGraphFromCache(titanConnector)
-      val edgeDAO = new EdgeDAO(graph, new VertexDAO(graph))
-      val writer = new EdgeWriter(edgeDAO, append)
-
-      try {
-        var count = 0L
-        while (iterator.hasNext) {
-          val edge = iterator.next()
-          edge.tailPhysicalId = gbIdToPhysicalIdMap(edge.tailVertexGbId)
-          edge.headPhysicalId = gbIdToPhysicalIdMap(edge.headVertexGbId)
-          writer.write(edge)
-          count += 1
-          if (count % maxEdgesPerCommit == 0) {
-            graph.commit()
-          }
-        }
-
-        println("wrote edges: " + count + " for split: " + context.partitionId)
-
-        graph.commit()
-      }
-      finally {
-        //Do not shut down graph when using cache since graph instances are automatically shutdown when
-        //no more references are held
-        //graph.shutdown()
-      }
-    })
-  }
 }

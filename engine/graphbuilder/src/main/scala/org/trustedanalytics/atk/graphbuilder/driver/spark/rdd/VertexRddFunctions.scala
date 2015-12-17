@@ -16,13 +16,8 @@
 
 package org.trustedanalytics.atk.graphbuilder.driver.spark.rdd
 
-import org.trustedanalytics.atk.graphbuilder.elements.GbIdToPhysicalId
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
-import org.trustedanalytics.atk.graphbuilder.util.StringUtils
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GbIdToPhysicalId, GBVertex }
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.domain.schema.GraphSchema
-import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 
 /**
@@ -67,16 +62,5 @@ class VertexRddFunctions(self: RDD[GBVertex]) {
       new GBVertex(vertex.physicalId, vertex.gbId, props)
     })
   }
-
-  /**
-   * Write to Titan and produce a mapping of GbId's to Physical Id's
-   * <p>
-   * This is an unusual transformation because it has the side effect of writing to Titan.
-   * This means extra care is needed to prevent it from being recomputed.
-   * </p>
-   * @param append true to append to an existing graph
-   */
-  def write(titanConnector: TitanGraphConnector, append: Boolean): RDD[GbIdToPhysicalId] =
-    new TitanVertexWriterRdd(self, titanConnector, append)
 
 }

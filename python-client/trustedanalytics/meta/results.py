@@ -56,8 +56,7 @@ def add_return_none_postprocessor(command_full_name):
 
 # post-processor methods --all take a json object argument
 
-@postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
-               'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
+@postprocessor('graph/copy')
 def return_graph(json_result):
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])

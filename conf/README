@@ -8,8 +8,6 @@ EXERCISE CAUTION WHEN UPDATING application.conf.tpl because you might break the 
 properties get search replaced with relevant data from Cloudera manager by
 atk/package/config/trustedanalytics/assets/etc/trustedanalytics/rest-server/config.py
     fs.root
-    titan.load.storage.hostname
-    titan.load.storage.port
     spark.master
     spark.executor.memory
 

@@ -29,10 +29,10 @@ class GBVertexRddBuilderTest extends FlatSpec with Matchers with TestingSparkCon
     val communityPropertyDefaultLabel: String = "Community"
 
     val gbVerticesList: List[GBVertex] = List(
-      new GBVertex(java.lang.Long.valueOf(10001), new Property("titanPhysicalId", 10001), Set(new Property("source", 101))),
-      new GBVertex(java.lang.Long.valueOf(10002), new Property("titanPhysicalId", 10002), Set(new Property("source", 102))),
-      new GBVertex(java.lang.Long.valueOf(10003), new Property("titanPhysicalId", 10003), Set(new Property("source", 103))),
-      new GBVertex(java.lang.Long.valueOf(10004), new Property("titanPhysicalId", 10004), Set(new Property("source", 104))))
+      new GBVertex(java.lang.Long.valueOf(10001), new Property("physicalId", 10001), Set(new Property("source", 101))),
+      new GBVertex(java.lang.Long.valueOf(10002), new Property("physicalId", 10002), Set(new Property("source", 102))),
+      new GBVertex(java.lang.Long.valueOf(10003), new Property("physicalId", 10003), Set(new Property("source", 103))),
+      new GBVertex(java.lang.Long.valueOf(10004), new Property("physicalId", 10004), Set(new Property("source", 104))))
 
     val vertexCommunitySet: List[(Long, Set[Long])] = List(
       (10001, Array(1)),
@@ -42,13 +42,13 @@ class GBVertexRddBuilderTest extends FlatSpec with Matchers with TestingSparkCon
 
     val emptySet: Set[Long] = Set()
     val newGBVertexList = List(
-      new GBVertex(java.lang.Long.valueOf(10001), new Property("titanPhysicalId", 10001),
+      new GBVertex(java.lang.Long.valueOf(10001), new Property("physicalId", 10001),
         Set(new Property(communityPropertyDefaultLabel, ScalaToJavaCollectionConverter.convertSet(Set(1.toLong))))),
-      new GBVertex(java.lang.Long.valueOf(10002), new Property("titanPhysicalId", 10002),
+      new GBVertex(java.lang.Long.valueOf(10002), new Property("physicalId", 10002),
         Set(new Property(communityPropertyDefaultLabel, ScalaToJavaCollectionConverter.convertSet(emptySet)))),
-      new GBVertex(java.lang.Long.valueOf(10003), new Property("titanPhysicalId", 10003),
+      new GBVertex(java.lang.Long.valueOf(10003), new Property("physicalId", 10003),
         Set(new Property(communityPropertyDefaultLabel, ScalaToJavaCollectionConverter.convertSet(Set(1.toLong, 2.toLong))))),
-      new GBVertex(java.lang.Long.valueOf(10004), new Property("titanPhysicalId", 10004),
+      new GBVertex(java.lang.Long.valueOf(10004), new Property("physicalId", 10004),
         Set(new Property(communityPropertyDefaultLabel, ScalaToJavaCollectionConverter.convertSet(Set(1.toLong))))))
 
   }
@@ -65,21 +65,5 @@ class GBVertexRddBuilderTest extends FlatSpec with Matchers with TestingSparkCon
       newGBVerticesAsGBVertexSetterOutput.count() shouldEqual rddOfGbVerticesList.count()
 
     }
-
-  //TODO: Uncomment when the fix for supportimng list datatypes encorpoarted in GBVertexRddBuilder's setVertex()
-  //  "The GB vertex list" should
-  //    "include empty community property, if the vertex doesn't belong to any community" in new GBVertexSetTest {
-  //
-  //      val rddOfGbVerticesList: RDD[GBVertex] = sparkContext.parallelize(gbVerticesList)
-  //      val rddOfVertexCommunitySet: RDD[(Long, Set[Long])] = sparkContext.parallelize(vertexCommunitySet)
-  //
-  //      val gbVertexSetter: GBVertexRddBuilder = new GBVertexRddBuilder(rddOfGbVerticesList, rddOfVertexCommunitySet)
-  //      val newGBVerticesAsGBVertexSetterOutput: RDD[GBVertex] = gbVertexSetter.setVertex(communityPropertyDefaultLabel)
-  //
-  //      val rddOfNewGBVertexList: RDD[GBVertex] = sparkContext.parallelize(newGBVertexList)
-  //
-  //      rddOfNewGBVertexList.collect().toSet shouldEqual newGBVerticesAsGBVertexSetterOutput.collect().toSet
-  //
-  //    }
 
 }

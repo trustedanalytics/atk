@@ -21,13 +21,11 @@ package org.trustedanalytics.atk.domain
  */
 object StorageFormats {
 
-  val CassandraTitan = "cassandra/titan"
-  val HBaseTitan = "hbase/titan"
   val SeamlessGraph = "atk/frame"
   val FileParquet = "file/parquet"
   val FileSequence = "file/sequence"
 
-  private val graphFormats = Set(SeamlessGraph, CassandraTitan, HBaseTitan)
+  private val graphFormats = Set(SeamlessGraph)
   private val frameFormats = Set(FileSequence, FileParquet)
 
   def validateGraphFormat(format: String): Unit = {

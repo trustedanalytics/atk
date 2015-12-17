@@ -783,13 +783,6 @@ def create_trusted_analytics_config( hdfs_host_name, hdfs_namenode_port, zookeep
     #set fs.root
     config_tpl_text = search_replace_config("fs.root", 'fs.root = "hdfs://' + hdfs_host_name[0] +
                                             ":" + hdfs_namenode_port + '/user/' + ATKUSER + '"', config_tpl_text)
-    #set titan zookeeper list titan.load.storage.hostname
-    config_tpl_text = search_replace_config("titan.load.storage.hostname",
-                                            'titan.load.storage.hostname = "' + ','.join(zookeeper_host_names) + '"',
-                                            config_tpl_text)
-    config_tpl_text = search_replace_config("titan.load.storage.port",
-                                            'titan.load.storage.port = "' + zookeeper_client_port  + '"',
-                                            config_tpl_text)
 
     #set spark master
     config_tpl_text = search_replace_config("spark.master", 'spark.master = ' + "\"yarn-cluster\"", config_tpl_text)
