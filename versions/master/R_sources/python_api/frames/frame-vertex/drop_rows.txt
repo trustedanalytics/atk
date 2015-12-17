@@ -1,0 +1,139 @@
+
+:doc:`VertexFrame <index>`  drop_rows
+*************************************
+
+------
+
+
+.. function:: drop_rows(self, predicate)
+
+    Delete rows in this vertex frame that qualify.
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame
+
+
+    Parameters
+    ----------
+    predicate : |UDF|
+        |UDF| or :term:`lambda` which takes a row argument and evaluates
+        to a boolean value.
+
+    Examples
+    --------
+    Create a frame, move the data to graph and then define a new VertexFrame and add data to it:
+
+    .. code::
+
+        >>> schema = [('viewer', str), ('profile', ta.int32), ('movie', str), ('rating', ta.int32)]
+        >>> data = [['fred',0,'Croods',5],
+        ...          ['fred',0,'Jurassic Park',5],
+        ...          ['fred',0,'2001',2],
+        ...          ['fred',0,'Ice Age',4],
+        ...          ['wilma',0,'Jurassic Park',3],
+        ...          ['wilma',0,'2001',5],
+        ...          ['wilma',0,'Ice Age',4],
+        ...          ['pebbles',1,'Croods',4],
+        ...          ['pebbles',1,'Land Before Time',3],
+        ...          ['pebbles',1,'Ice Age',5]]
+        >>> frame = ta.Frame(ta.UploadRows(data, schema))
+        [===Job Progress===]
+
+        >>> frame.inspect()
+        [#]  viewer   profile  movie             rating
+        ===============================================
+        [0]  fred           0  Croods                 5
+        [1]  fred           0  Jurassic Park          5
+        [2]  fred           0  2001                   2
+        [3]  fred           0  Ice Age                4
+        [4]  wilma          0  Jurassic Park          3
+        [5]  wilma          0  2001                   5
+        [6]  wilma          0  Ice Age                4
+        [7]  pebbles        1  Croods                 4
+        [8]  pebbles        1  Land Before Time       3
+        [9]  pebbles        1  Ice Age                5
+
+        >>> graph = ta.Graph()
+
+        >>> graph.define_vertex_type('viewer')
+        [===Job Progress===]
+
+        >>> graph.define_vertex_type('film')
+        [===Job Progress===]
+
+        >>> graph.define_edge_type('rating', 'viewer', 'film')
+        [===Job Progress===]
+
+        >>> graph.vertices['viewer'].add_vertices(frame, 'viewer', ['profile'])
+        [===Job Progress===]
+
+        >>> graph.vertices['viewer'].inspect()
+        [#]  _vid  _label  viewer   profile
+        ===================================
+        [0]     1  viewer  fred           0
+        [1]     8  viewer  pebbles        1
+        [2]     5  viewer  wilma          0
+
+        >>> graph.vertices['film'].add_vertices(frame, 'movie')
+        [===Job Progress===]
+
+        >>> graph.vertices['film'].inspect()
+        [#]  _vid  _label  movie
+        ===================================
+        [0]    19  film    Land Before Time
+        [1]    14  film    Ice Age
+        [2]    12  film    Jurassic Park
+        [3]    11  film    Croods
+        [4]    13  film    2001
+
+        >>> graph.edges['rating'].add_edges(frame, 'viewer', 'movie', ['rating'])
+        [===Job Progress===]
+
+        >>> graph.edges['rating'].inspect()
+        [#]  _eid  _src_vid  _dest_vid  _label  rating
+        ==============================================
+        [0]    24         1         14  rating       4
+        [1]    22         1         12  rating       5
+        [2]    21         1         11  rating       5
+        [3]    23         1         13  rating       2
+        [4]    29         8         19  rating       3
+        [5]    30         8         14  rating       5
+        [6]    28         8         11  rating       4
+        [7]    27         5         14  rating       4
+        [8]    25         5         12  rating       3
+        [9]    26         5         13  rating       5
+
+    Call drop_rows() on the film VertexFrame to remove the row for the movie 'Croods' (vid = 11).
+    Dangling edges (edges corresponding to 'Croods, vid = 11) are also removed.
+
+    .. code::
+
+        >>> graph.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
+        [===Job Progress===]
+
+        >>> graph.vertices['film'].inspect()
+        [#]  _vid  _label  movie
+        ===================================
+        [0]    19  film    Land Before Time
+        [1]    14  film    Ice Age
+        [2]    12  film    Jurassic Park
+        [3]    13  film    2001
+
+        >>> graph.edges['rating'].inspect()
+        [#]  _eid  _src_vid  _dest_vid  _label  rating
+        ==============================================
+        [0]    22         1         12  rating       5
+        [1]    25         5         12  rating       3
+        [2]    23         1         13  rating       2
+        [3]    26         5         13  rating       5
+        [4]    24         1         14  rating       4
+        [5]    30         8         14  rating       5
+        [6]    27         5         14  rating       4
+        [7]    29         8         19  rating       3
+

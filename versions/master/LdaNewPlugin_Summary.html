@@ -6,10 +6,10 @@
     
     <title>Topic Modeling with Latent Dirichlet Allocation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="_static/css/spc-extend.css">
-    <link rel="stylesheet" href="_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
     <link rel="up" title="Process Flow Examples" href="ds_dflw.html" >
@@ -268,7 +268,7 @@ and will likely depend on the characteristics of the text being analyzed.
 Typical text analytics experiments will try a variety of approaches on a small
 subset of the data to determine what works best.</p>
 <div class="figure align-center" id="id8">
-<span id="ds-mlal-lda-fig-1"></span><img alt="_images/ds_mlal_lda_1.png" src="_images/ds_mlal_lda_1.png" />
+<span id="ds-mlal-lda-fig-1"></span><img alt="R_images/ds_mlal_lda_1.png" src="R_images/ds_mlal_lda_1.png" />
 <p class="caption"><span class="caption-text">Figure 1 - Example layout of a bipartite graph for LDA.</span></p>
 <div class="legend">
 The left-hand column contains one vertex for each document in the input
@@ -280,27 +280,27 @@ The weights of the edges used in this example were not normalized.</div>
 </div>
 <p><strong>Training the Model</strong></p>
 <p>In using <abbr title="Latent Dirichlet Allocation">LDA</abbr>, we are trying to model a document collection in terms of topics
-<img class="math" src="_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, where each <img class="math" src="_images/math/69b7d1c2cbc4553d99a5e37f8078d1422285d9f9.png" alt="\beta_{K}"/> describes a distribution
+<img class="math" src="R_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, where each <img class="math" src="R_images/math/69b7d1c2cbc4553d99a5e37f8078d1422285d9f9.png" alt="\beta_{K}"/> describes a distribution
 over the set of words in the training corpus.
-Every document <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>, then, is a vector of proportions <img class="math" src="_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
-where <img class="math" src="_images/math/0b423201cc87446c0fcc3fadcb387e3972c88d0e.png" alt="\theta_{d,k}"/> is the proportion of the <img class="math" src="_images/math/85f8727408c03c41f79e3de553aeda83fce59d4c.png" alt="d^{th}"/> document for
-topic <img class="math" src="_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
-The topic assignment for document <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is <img class="math" src="_images/math/578bdc7cd948ad59d5e331724419de33d1bd554f.png" alt="z_{d}"/>, and
-<img class="math" src="_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> is the topic assignment for the <img class="math" src="_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word
-in document <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
-The words observed in document <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> are :math&#8221;<cite>w_{d}</cite>, and
-<img class="math" src="_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> is the <img class="math" src="_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word in document <img class="math" src="_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+Every document <img class="math" src="R_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>, then, is a vector of proportions <img class="math" src="R_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+where <img class="math" src="R_images/math/0b423201cc87446c0fcc3fadcb387e3972c88d0e.png" alt="\theta_{d,k}"/> is the proportion of the <img class="math" src="R_images/math/85f8727408c03c41f79e3de553aeda83fce59d4c.png" alt="d^{th}"/> document for
+topic <img class="math" src="R_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
+The topic assignment for document <img class="math" src="R_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is <img class="math" src="R_images/math/578bdc7cd948ad59d5e331724419de33d1bd554f.png" alt="z_{d}"/>, and
+<img class="math" src="R_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> is the topic assignment for the <img class="math" src="R_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word
+in document <img class="math" src="R_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+The words observed in document <img class="math" src="R_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> are :math&#8221;<cite>w_{d}</cite>, and
+<img class="math" src="R_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> is the <img class="math" src="R_images/math/e2a3d86e5a777d88623c55c60acfff4a30ff262d.png" alt="n^{th}"/> word in document <img class="math" src="R_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
 The generative process for <abbr title="Latent Dirichlet Allocation">LDA</abbr>, then, is the joint distribution of hidden and
 observed values</p>
 <div class="math">
-<p><img src="_images/math/bb0d00578db59cde3d28908f6372678c9eb103d8.png" alt="p(\beta_{1:K},\theta_{1:D},z_{1:D},w_{1:D} )=\prod_{i=1}^{K} p(\beta_i) \
+<p><img src="R_images/math/bb0d00578db59cde3d28908f6372678c9eb103d8.png" alt="p(\beta_{1:K},\theta_{1:D},z_{1:D},w_{1:D} )=\prod_{i=1}^{K} p(\beta_i) \
 \prod_{i=1}^{D} p(\theta_d) \left(\sideset{_{}^{}}{_{n=1}^N}\prod_{}^{} \
 p\left(z_{d,n} | \theta_{d} \right)p\left(w_{d,n} | \beta_{1:K},z_{d,n} \
 \right) \right)"/></p>
 </div><p>This distribution depicts several dependencies: topic assignment
-<img class="math" src="_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> depends on the topic proportions <img class="math" src="_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
-and the observed word <img class="math" src="_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> depends on topic assignment
-<img class="math" src="_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> and all the topics <img class="math" src="_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, for example.
+<img class="math" src="R_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> depends on the topic proportions <img class="math" src="R_images/math/ff94a45d114927f40dc83b74192969ff014e4305.png" alt="\theta_d"/>,
+and the observed word <img class="math" src="R_images/math/78b386c513bb6520bb26585e5570c21d56299647.png" alt="w_{d,n}"/> depends on topic assignment
+<img class="math" src="R_images/math/228f6bb401d445d6ebc5b184933b798590f549eb.png" alt="z_{d,n}"/> and all the topics <img class="math" src="R_images/math/6fc7854106dccedc657c7ab3b895f55bb035ce49.png" alt="\beta_{1:K}"/>, for example.
 Although there are no analytical solutions to learning the <abbr title="Latent Dirichlet Allocation">LDA</abbr> model, there
 are a variety of approximate solutions that are used, most of which are based
 on Gibbs Sampling (for example, Porteous et al., 2008 <a class="footnote-reference" href="#lda5" id="id5">[5]</a> ).
@@ -330,7 +330,7 @@ recommended best practice — however, such an evaluation does not assess the
 topic model in terms of how they are typically used.</p>
 <p><strong>Interpretation of results</strong></p>
 <p>After running <abbr title="Latent Dirichlet Allocation">LDA</abbr> on a document corpus, users will typically examine the top
-<img class="math" src="_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> most frequent words that can be found in each grouping.
+<img class="math" src="R_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> most frequent words that can be found in each grouping.
 With this information, one is often able to use their own domain expertise to
 think of logical names for each topic (this situation is analogous to the step
 in principal components analysis, wherein statisticians will think of logical

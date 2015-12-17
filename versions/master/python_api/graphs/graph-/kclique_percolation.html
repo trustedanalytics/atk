@@ -6,10 +6,10 @@
     
     <title>Graph kclique_percolation &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Graphs Graph" href="index.html" >
@@ -163,21 +163,21 @@ context of the k-clique percolation algorithm.</p>
 <p>A clique is a group of vertices in which every vertex is connected (via
 undirected edge) with every other vertex in the clique.
 This graphically looks like a triangle or a structure composed of triangles:</p>
-<img alt="../../../_images/k-clique_201508281155.png" src="../../../_images/k-clique_201508281155.png" />
+<img alt="../../../R_images/k-clique_201508281155.png" src="../../../R_images/k-clique_201508281155.png" />
 <p>A clique is certainly a community in the sense that its vertices are all
 connected, but, it is too restrictive for most purposes,
 since it is natural some members of a community may not interact.</p>
-<p>Mathematically, a k-clique has <img class="math" src="../../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> vertices, each with <img class="math" src="../../../_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/>
+<p>Mathematically, a k-clique has <img class="math" src="../../../R_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> vertices, each with <img class="math" src="../../../R_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/>
 common edges, each of which connects to another vertex in the k-clique.
 The k-clique percolation method forms communities by taking unions of k-cliques
-that have <img class="math" src="../../../_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/> vertices in common.</p>
+that have <img class="math" src="../../../R_images/math/23ca2c534b3fe41683cbc51a0948ba22563356d1.png" alt="k - 1"/> vertices in common.</p>
 <p><strong>K-Clique Example</strong></p>
 <p>In the graph below, the cliques are the sections defined by their triangular
 appearance and the 3-clique communities are {1, 2, 3, 4} and {4, 5, 6, 7, 8}.
 The vertices 9, 10, 11, 12 are not in 3-cliques, therefore they do not belong
 to any community.
 Vertex 4 belongs to two distinct (but overlapping) communities.</p>
-<img alt="../../../_images/ds_mlal_a1.png" src="../../../_images/ds_mlal_a1.png" />
+<img alt="../../../R_images/ds_mlal_a1.png" src="../../../R_images/ds_mlal_a1.png" />
 <p><strong>Distributed Implementation of K-Clique Community Detection</strong></p>
 <p>The implementation of k-clique community detection in Trusted Analytics Platform is a fully
 distributed implementation that follows the map-reduce

@@ -1,0 +1,60 @@
+
+:doc:`EdgeFrame <index>`  drop_columns
+**************************************
+
+------
+
+
+.. function:: drop_columns(self, columns)
+
+    Remove columns from the frame.
+
+
+    :Parameters:
+
+        **columns** : list
+
+        ..
+
+            Column name OR list of column names to be removed from the frame.
+
+
+
+
+    :Returns:
+
+        : _Unit
+
+        ..
+
+
+    The data from the columns is lost.
+
+    Notes
+    -----
+    It is not possible to delete all columns from a frame.
+    At least one column needs to remain.
+    If it is necessary to delete all columns, then delete the frame.
+
+    Examples
+    --------
+    For this example, the Frame object *my_frame* accesses a frame with 4 columns
+    columns *column_a*, *column_b*, *column_c* and *column_d* and drops 2 columns *column_b* and *column_d* using drop columns.
+
+
+
+        >>> print my_frame.schema
+        [(u'column_a', <type 'unicode'>), (u'column_b', <type 'numpy.int32'>), (u'column_c', <type 'unicode'>), (u'column_d', <type 'numpy.int32'>)]
+
+
+    Eliminate columns *column_b* and *column_d*:
+
+        >>> my_frame.drop_columns(["column_b", "column_d"])
+        >>> print my_frame.schema
+        [(u'column_a', <type 'unicode'>), (u'column_c', <type 'unicode'>)]
+
+    Now the frame only has the columns *column_a* and *column_c*.
+    For further examples, see: ref:`example_frame.drop_columns`.
+
+
+

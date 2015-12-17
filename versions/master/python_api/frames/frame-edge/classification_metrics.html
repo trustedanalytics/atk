@@ -6,10 +6,10 @@
     
     <title>EdgeFrame classification_metrics &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
     
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/spc-extend.css">
-    <link rel="stylesheet" href="../../../_static/scipy.css" type="text/css" >
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" >
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -20,10 +20,10 @@
         HAS_SOURCE:  true
       };
     </script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/js/copybutton.js"></script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
     <link rel="up" title="Frames EdgeFrame" href="index.html" >
@@ -135,7 +135,7 @@ predicted label for each instance.</p>
 <p><strong>beta</strong> : float64 (default=None)</p>
 <blockquote>
 <div><p>This is the beta value to use for
-<img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure (default F1 measure is computed); must be greater than zero.
+<img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure (default F1 measure is computed); must be greater than zero.
 Defaults is 1.</p>
 </div></blockquote>
 <p><strong>frequency_column</strong> : unicode (default=None)</p>
@@ -161,35 +161,35 @@ frequency of observations.</p>
 </tbody>
 </table>
 <p>Calculate the accuracy, precision, confusion_matrix, recall and
-<img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a classification model.</p>
+<img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a classification model.</p>
 <ul>
-<li><p class="first">The <strong>f_measure</strong> result is the <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a
+<li><p class="first">The <strong>f_measure</strong> result is the <img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a
 classification model.
-The <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure of a binary classification model is the
+The <img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure of a binary classification model is the
 harmonic mean of precision and recall.
 If we let:</p>
 <ul class="simple">
-<li>beta <img class="math" src="../../../_images/math/c021a156350bbff6870830df3fdbff3dcbae198d.png" alt="\equiv \beta"/>,</li>
-<li><img class="math" src="../../../_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denotes the number of true positives,</li>
-<li><img class="math" src="../../../_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denotes the number of false positives, and</li>
-<li><img class="math" src="../../../_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denotes the number of false negatives</li>
+<li>beta <img class="math" src="../../../R_images/math/c021a156350bbff6870830df3fdbff3dcbae198d.png" alt="\equiv \beta"/>,</li>
+<li><img class="math" src="../../../R_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denotes the number of true positives,</li>
+<li><img class="math" src="../../../R_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denotes the number of false positives, and</li>
+<li><img class="math" src="../../../R_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denotes the number of false negatives</li>
 </ul>
 <p>then:</p>
 <div class="math">
-<p><img src="../../../_images/math/e462dbf448b4a4ab78b92edf47b97dc5ea49d849.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
+<p><img src="../../../R_images/math/e462dbf448b4a4ab78b92edf47b97dc5ea49d849.png" alt="F_{ \beta} = (1 + \beta ^ 2) * \frac{ \frac{T_{P}}{T_{P} + F_{P}} * \
 \frac{T_{P}}{T_{P} + F_{N}}}{ \beta ^ 2 * \frac{T_{P}}{T_{P} + \
 F_{P}}  + \frac{T_{P}}{T_{P} + F_{N}}}"/></p>
-</div><p>The <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
-computed as the weighted average of the <img class="math" src="../../../_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for
+</div><p>The <img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for a multi-class classification model is
+computed as the weighted average of the <img class="math" src="../../../R_images/math/526ae630386a187f64e6621ced53b349cf6138c8.png" alt="F_{ \beta}"/> measure for
 each label, where the weight is the number of instances of each label.
 The determination of binary vs. multi-class is automatically inferred
 from the data.</p>
 </li>
 <li><p class="first">The <strong>recall</strong> result of a binary classification model is the proportion
 of positive instances that are correctly identified.
-If we let <img class="math" src="../../../_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
-<img class="math" src="../../../_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denote the number of false negatives, then the model
-recall is given by <img class="math" src="../../../_images/math/a7088c6f8b686e3d3207b7a88acfd124f7e255de.png" alt="\frac {T_{P}} {T_{P} + F_{N}}"/>.</p>
+If we let <img class="math" src="../../../R_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
+<img class="math" src="../../../R_images/math/d649ab6124b4866b1fb559afdf6fcb42e34958d3.png" alt="F_{N}"/> denote the number of false negatives, then the model
+recall is given by <img class="math" src="../../../R_images/math/a7088c6f8b686e3d3207b7a88acfd124f7e255de.png" alt="\frac {T_{P}} {T_{P} + F_{N}}"/>.</p>
 <p>For multi-class classification models, the recall measure is computed as
 the weighted average of the recall for each label, where the weight is
 the number of instances of each label.
@@ -198,9 +198,9 @@ from the data.</p>
 </li>
 <li><p class="first">The <strong>precision</strong> of a binary classification model is the proportion of
 predicted positive instances that are correctly identified.
-If we let <img class="math" src="../../../_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
-<img class="math" src="../../../_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denote the number of false positives, then the model
-precision is given by: <img class="math" src="../../../_images/math/7a83263eae4c163ea9df233054bee9f269c514fb.png" alt="\frac {T_{P}} {T_{P} + F_{P}}"/>.</p>
+If we let <img class="math" src="../../../R_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives and
+<img class="math" src="../../../R_images/math/3814532830101cdff70b7815076d8b2ae23e9e22.png" alt="F_{P}"/> denote the number of false positives, then the model
+precision is given by: <img class="math" src="../../../R_images/math/7a83263eae4c163ea9df233054bee9f269c514fb.png" alt="\frac {T_{P}} {T_{P} + F_{P}}"/>.</p>
 <p>For multi-class classification models, the precision measure is computed
 as the weighted average of the precision for each label, where the
 weight is the number of instances of each label.
@@ -209,10 +209,10 @@ from the data.</p>
 </li>
 <li><p class="first">The <strong>accuracy</strong> of a classification model is the proportion of
 predictions that are correctly identified.
-If we let <img class="math" src="../../../_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives,
-<img class="math" src="../../../_images/math/5a919304e203d46d38918eee30dc7eacb0b325b3.png" alt="T_{N}"/> denote the number of true negatives, and <img class="math" src="../../../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> denote
+If we let <img class="math" src="../../../R_images/math/6cc720a2c914099fbbfb6b8db3b392c4241e0570.png" alt="T_{P}"/> denote the number of true positives,
+<img class="math" src="../../../R_images/math/5a919304e203d46d38918eee30dc7eacb0b325b3.png" alt="T_{N}"/> denote the number of true negatives, and <img class="math" src="../../../R_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> denote
 the total number of classified instances, then the model accuracy is
-given by: <img class="math" src="../../../_images/math/cd19688e8d357e7c88ff82e833f43d925bafba95.png" alt="\frac{T_{P} + T_{N}}{K}"/>.</p>
+given by: <img class="math" src="../../../R_images/math/cd19688e8d357e7c88ff82e833f43d925bafba95.png" alt="\frac{T_{P} + T_{N}}{K}"/>.</p>
 <p>This measure applies to binary and multi-class classifiers.</p>
 </li>
 <li><p class="first">The <strong>confusion_matrix</strong> result is a confusion matrix for a
