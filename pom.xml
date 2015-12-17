@@ -119,12 +119,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <buildtype>test</buildtype>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- START TITAN -->
-        <dep.titan-shaded.version>0.5.4-SNAPSHOT</dep.titan-shaded.version>
-        <dep.aurelius.version>0.5.4</dep.aurelius.version>
-        <dep.tinkerpop.version>2.5.0</dep.tinkerpop.version>
-        <dep.reflections>0.9.9-RC1</dep.reflections>
-        <!-- END TITAN -->
         <dep.cdh.version>cdh5.5.0</dep.cdh.version>
         <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
         <dep.spark.yarn.version>1.5.0-${dep.cdh.version}</dep.spark.yarn.version>
@@ -807,148 +801,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>spark-broadcast</artifactId>
                 <version>${spark.broadcast.version}</version>
             </dependency>
-            <!--STARTititan-->
-            <dependency>
-                <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>titan-shaded</artifactId>
-                <version>${dep.titan-shaded.version}</version>
-                <!--<exclusions>
-                    <exclusion>
-                        <groupId>org.apache.avro</groupId>
-                        <artifactId>avro</artifactId>
-                    </exclusion>
-                </exclusions> -->
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-core</artifactId>
-                <version>${dep.aurelius.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-hadoop-2</artifactId>
-                <version>${dep.aurelius.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.tinkerpop.blueprints</groupId>
-                        <artifactId>blueprints-sail-graph</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jboss.netty</groupId>
-                        <artifactId>netty</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.thinkaurelius.titan</groupId>
-                        <artifactId>titan-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.thinkaurelius.titan</groupId>
-                        <artifactId>titan-cassandra</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.thinkaurelius.titan</groupId>
-                        <artifactId>titan-hbase</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.thinkaurelius.titan</groupId>
-                        <artifactId>titan-es</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.mrunit</groupId>
-                        <artifactId>mrunit</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hbase</groupId>
-                        <artifactId>hbase-client</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hbase</groupId>
-                        <artifactId>hbase-server</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-client</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-common</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.servlet.jsp</groupId>
-                        <artifactId>jsp-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.servlet</groupId>
-                        <artifactId>servlet-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.mortbay.jetty</groupId>
-                        <artifactId>servlet-api-2.5</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>slf4j-log4j12</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-hbase</artifactId>
-                <version>${dep.aurelius.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.hadoop</groupId>
-                        <artifactId>hadoop-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-berkeleyje</artifactId>
-                <version>${dep.aurelius.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkaurelius.titan</groupId>
-                <artifactId>titan-cassandra</artifactId>
-                <version>${dep.aurelius.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.apache.cassandra.deps</groupId>
-                        <artifactId>avro</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.apache.servicemix.bundles</groupId>
-                        <artifactId>org.apache.servicemix.bundles.commons-csv</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.reflections</groupId>
-                <artifactId>reflections</artifactId>
-                <version>${dep.reflections}</version>
-            </dependency>
-            <!--ENDititan-->
-
-            <!--gremlin-groovy -->
-            <dependency>
-                <groupId>com.tinkerpop.gremlin</groupId>
-                <artifactId>gremlin-groovy</artifactId>
-                <version>${dep.tinkerpop.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.fusesource.jansi</groupId>
-                        <artifactId>jansi</artifactId>
-                    </exclusion>
-                    <!--<exclusion>
-                        <groupId>org.codehaus.groovy</groupId>
-                        <artifactId>groovy</artifactId>
-                    </exclusion>-->
-                </exclusions>
-            </dependency>
             <!--org.scala-->
             <dependency>
                 <groupId>org.scala-lang</groupId>
@@ -1425,30 +1277,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
                 <version>1.9.13</version>
-            </dependency>
-            <dependency>
-                <groupId>com.tinkerpop.blueprints</groupId>
-                <artifactId>blueprints-core</artifactId>
-                <version>${dep.tinkerpop.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.core</groupId>
-                        <artifactId>jackson-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.fasterxml.jackson.datatype</groupId>
-                        <artifactId>jackson-datatype-json-org</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.tinkerpop</groupId>
-                <artifactId>frames</artifactId>
-                <version>${dep.tinkerpop.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.codahale.metrics</groupId>

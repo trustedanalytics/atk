@@ -16,11 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import org.trustedanalytics.atk.plugins.communitydetection.ScalaToJavaCollectionConverter
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.SparkContext._
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.reader.TitanReader
 
 /**
  * Class to set the vertex Ids as required by Graph Builder, by formatting as (physicalId, gbId, propertyList)
@@ -56,9 +53,7 @@ class GBVertexRddBuilder(gbVertices: RDD[GBVertex], vertexCommunitySet: RDD[(Lon
     val newGBVertices: RDD[GBVertex] = gbVertexIdCombinedWithEmptyCommunity.map({
       case (vertexId, communitySet) => GBVertex(
         java.lang.Long.valueOf(vertexId),
-        Property(TitanReader.TITAN_READER_DEFAULT_GB_ID, vertexId),
-        //Set(Property(communityPropertyLabel, ScalaToJavaCollectionConverter.convertSet(communitySet))))
-        //TODO: Once we support list datatypes remove mkString
+        Property("vertexId", vertexId),
         Set(Property(communityPropertyLabel, communitySet.mkString(","))))
 
     })

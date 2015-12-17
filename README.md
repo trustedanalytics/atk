@@ -92,7 +92,6 @@ This is an overview. Additional details and instructions are in the user documen
 * engine/
   * engine-core/ - loads and executes plugins and provides the basic services that plugins need.
   * interfaces/ - interfaces the Engine exposes to the REST server. (we should move plugin args/return values out of here)
-  * graphbuilder - Titan graph construction and reading
   * meta-store/ - code that interacts with the meta-store database repository including SQL scripts
 * engine-plugins/ - plugins use engine services to implement user visible operations
   * frame-plugins/ - frame related plugins, e.g. frame.add_columns()
@@ -127,7 +126,6 @@ This is an overview. Additional details and instructions are in the user documen
 * Add support for Spark's dataframes
 * Replace Slick with something simpler (even straight JDBC would be better, everyone already knows SQL and we aren't getting enough value to justify the learning curve for Slick)
 * Replace Spray DSL with something simpler (the DSL is confusing to use and our REST layer is too thin to make people learn a DSL)
-* Integration tests need support added to be able to test Giraph and Titan functions
 * testutils should probably merge into engine-core
 * Need Maven profiles to make it easier for developers to build only part of the project
 * Break up CommandExecutor

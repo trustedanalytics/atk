@@ -16,25 +16,17 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilderConfig, GraphBuilder }
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
-import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
-import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate, GraphReference }
+import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
+import org.trustedanalytics.atk.domain.graph.{ GraphReference }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
-import org.trustedanalytics.atk.engine.graph.GraphBuilderConfigFactory
 import org.trustedanalytics.atk.engine.graph._
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.apache.spark.storage.StorageLevel
-import org.apache.spark.{ SparkConf, SparkContext }
-import java.util.UUID
-import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
 
+import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
 import scala.concurrent.Await
 
 case class AnnotateDegreesArgs(graph: GraphReference,

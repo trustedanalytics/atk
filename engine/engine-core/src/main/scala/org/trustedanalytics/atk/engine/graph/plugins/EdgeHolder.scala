@@ -14,24 +14,11 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.graph
+package org.trustedanalytics.atk.engine.graph.plugins
 
-import org.trustedanalytics.atk.domain.graph.GraphEntity
+import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 
 /**
- * Utility for converting between user provided graph names and their names in the graph database.
+ * Holds an edge plus src and dest vertex labels.
  */
-object GraphBackendName {
-
-  private val iatGraphTablePrefix: String = "iat_graph_"
-
-  /**
-   * Converts the user's name for a graph into the name used by the underlying graph store.
-   */
-  def getGraphBackendName(graph: GraphEntity): String = {
-    iatGraphTablePrefix + graph.id
-  }
-
-  def getIdFromBackendName(graphName: String): Long = graphName.stripPrefix(iatGraphTablePrefix).toLong
-
-}
+case class EdgeHolder(edge: GBEdge, srcLabel: String, destLabel: String)

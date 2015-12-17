@@ -29,10 +29,10 @@
 <progress>
 >>> frame = result['vertex_dictionary']['unlabeled']
 >>> frame.inspect()
-    [#]  _vid  _label     Community
-    =========================================
-    [0]     4  unlabeled
-    [1]     5  unlabeled
-    [2]     3  unlabeled  3142088457598271489
-    [3]     2  unlabeled  3142088457598271489
-    [4]     1  unlabeled  3142088457598271489
+[#]  _vid  _label     Community
+=========================================
+[0]     5  unlabeled
+[1]     4  unlabeled
+[2]     2  unlabeled  3142088457598271489
+[3]     1  unlabeled  3142088457598271489
+[4]     3  unlabeled  3142088457598271489

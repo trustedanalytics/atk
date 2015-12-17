@@ -86,9 +86,4 @@ print "calculate vertex out-degree"
 graph_outdegree = graph.vertex_outdegree()
 graph_outdegree.inspect(20)
 
-print "calculate vertex out-degree on titan graph"
-titan_graph = graph.export_to_titan()
-titan_outdegree = titan_graph.vertex_outdegree()
-titan_outdegree.inspect(20)
-
 print "done"

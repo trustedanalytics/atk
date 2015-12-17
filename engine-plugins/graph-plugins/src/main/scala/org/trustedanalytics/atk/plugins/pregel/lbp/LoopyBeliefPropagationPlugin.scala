@@ -32,8 +32,6 @@ import org.trustedanalytics.atk.plugins.pregel.core.JsonFormat._
  * Pulls graph from underlying store, sends it off to the LBP runner, and then sends results
  * back to the underlying store.
  *
- * Right now it is using only Titan for graph storage. In time we will hopefully make this more flexible.
- *
  */
 @PluginDoc(oneLine = "Classification on sparse data using Belief Propagation.",
   extended = """Belief propagation by the sum-product algorithm.

@@ -23,9 +23,6 @@ package org.trustedanalytics.atk.graphbuilder.util
  *      classOf[scala.Long] to classOf[java.lang.Long]
  *      classOf[scala.Char] to classOf[java.lang.Char]
  *      etc.
- *
- * Titan doesn't support primitive properties so we convert them to their Object equivalents.
- *
  * Spark also has trouble de-serializing classOf[Int] because of the underlying Java classes it uses.
  */
 object PrimitiveConverter {
@@ -48,9 +45,6 @@ object PrimitiveConverter {
    *      classOf[scala.Long] to classOf[java.lang.Long]
    *      classOf[scala.Char] to classOf[java.lang.Char]
    *      etc.
-   *
-   * Titan doesn't support primitive properties so we convert them to their Object equivalents.
-   *
    * Spark also has trouble de-serializing classOf[Int] because of the underlying Java classes it uses.
    *
    * @param dataType convert primitives to Objects, e.g. classOf[Int] to classOf[java.lang.Integer].
