@@ -38,14 +38,6 @@ object LogUtils {
       "o.a.spark.scheduler.TaskSetManager", "org.eclipse.jetty", "akka"))
   }
 
-  /**
-   * Turn down logging for Titan
-   */
-  def silenceTitan() {
-    setLogLevels(Level.WARN, Seq("com.thinkaurelius"))
-    setLogLevels(Level.ERROR, Seq("com.thinkaurelius.titan.graphdb.transaction.StandardTitanTx"))
-  }
-
   private def setLogLevels(level: org.apache.log4j.Level, loggers: TraversableOnce[String]): Unit = {
     loggers.foreach(loggerName => Logger.getLogger(loggerName).setLevel(level))
   }

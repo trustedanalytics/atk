@@ -207,32 +207,16 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'define_vertex_type',
                                      'edge_count',
                                      'edges',
-                                     'export_to_titan',
                                      'graphx_connected_components',
                                      'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
+                                     'label_propagation',
                                      'loopy_belief_propagation',
                                      'name',
                                      'status',
                                      'vertex_count',
                                      'vertices'], ta.Graph)
-
-    def test_expected_methods_exist_on_titangraph(self):
-        self.assert_methods_defined(['annotate_degrees',
-                                     'annotate_weighted_degrees',
-                                     'clustering_coefficient',
-                                     'copy',
-                                     'export_to_graph',
-                                     'graphx_connected_components',
-                                     'graphx_label_propagation',
-                                     'graphx_pagerank',
-                                     'graphx_triangle_count',
-                                     'graph_clustering',
-                                     'name',
-                                     'query',
-                                     'status',
-                                     'vertex_sample'], ta.TitanGraph)
 
     def test_expected_methods_exist_on_kmeans_model(self):
         self.assert_methods_defined(["name",

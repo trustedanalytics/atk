@@ -31,11 +31,6 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://"${HOSTNAME}"/user/atkuser"
 
-    # The (comma separated, no spaces) Zookeeper hosts that
-    # Titan needs to be able to connect to HBase
-    titan.load.storage.hostname = ${HOSTNAME}
-    titan.query.storage.hostname = ${trustedanalytics.atk.engine.titan.load.storage.hostname}
-
     spark {
       # Yarn Cluster mode
       #master = "yarn-cluster"

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.graphbuilder.schema
 
 // TODO: we can add support for: isDirected, isManyToOne, sortKey, signature, etc
 
-// TODO: do we want edges with certain labels to only support certain properties, seems like Titan supports this but it wasn't that way in GB2
+// TODO: do we want edges with certain labels to only support certain properties?
 
 /**
  * Definition for an Edge Label

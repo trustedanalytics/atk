@@ -75,10 +75,6 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>titan-shaded</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>interfaces</artifactId>
         </dependency>
         <dependency>
@@ -86,95 +82,6 @@
             <artifactId>event</artifactId>
         </dependency>
         <!-- END BDA dependencies to our modules -->
-
-        <!-- START Titan dependencies -->
-
-        <dependency>
-            <groupId>com.thinkaurelius.titan</groupId>
-            <artifactId>titan-berkeleyje</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.thinkaurelius.titan</groupId>
-                    <artifactId>titan-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.thinkaurelius.titan</groupId>
-            <artifactId>titan-cassandra</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.thinkaurelius.titan</groupId>
-                    <artifactId>titan-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jboss.netty</groupId>
-                    <artifactId>netty</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>servlet-api-2.5</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.thinkaurelius.titan</groupId>
-            <artifactId>titan-hadoop-2</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.thinkaurelius.titan</groupId>
-            <artifactId>titan-hbase</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.thinkaurelius.titan</groupId>
-                    <artifactId>titan-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.zookeeper</groupId>
-                    <artifactId>zookeeper</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hbase</groupId>
-                    <artifactId>hbase-client</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.hbase</groupId>
-                    <artifactId>hbase-server</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.mortbay.jetty</groupId>
-                    <artifactId>servlet-api-2.5</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-        </dependency>
-        <!--END Titan dependencies -->
-
 
         <dependency>
             <groupId>org.apache.hbase</groupId>
@@ -267,14 +174,6 @@
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.tinkerpop.blueprints</groupId>
-            <artifactId>blueprints-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.tinkerpop</groupId>
-            <artifactId>frames</artifactId>
         </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>

@@ -103,8 +103,6 @@ case class InputSchema(columns: Seq[ColumnDef]) extends Serializable {
    *      classOf[scala.Char] to classOf[java.lang.Char]
    *      etc.
    *
-   * Titan doesn't support primitive properties so we convert them to their Object equivalents.
-   *
    * Spark also has trouble de-serializing classOf[Int] because of the underlying Java classes it uses.
    */
   def serializableCopy: InputSchema = {

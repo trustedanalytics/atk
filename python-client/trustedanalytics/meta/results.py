@@ -56,8 +56,7 @@ def add_return_none_postprocessor(command_full_name):
 
 # post-processor methods --all take a json object argument
 
-@postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
-               'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
+@postprocessor('graph/copy')
 def return_graph(json_result):
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
@@ -133,7 +132,7 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph:/loopy_belief_propagation','graph:/kclique_percolation')
+@postprocessor('graph:/loopy_belief_propagation','graph:/label_propagation','graph:/kclique_percolation')
 def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']

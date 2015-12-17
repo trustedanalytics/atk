@@ -17,8 +17,7 @@
 package org.trustedanalytics.atk.plugins.pregel.core
 
 import org.apache.spark.graphx._
-import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
-import org.trustedanalytics.atk.plugins.VectorMath
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex }
 import org.trustedanalytics.atk.pregel.{ AverageDeltaSuperStepStatusGenerator, BasicCountsInitialReport, DeltaProvider, Pregel }
 
 /**
@@ -29,22 +28,25 @@ import org.trustedanalytics.atk.pregel.{ AverageDeltaSuperStepStatusGenerator, B
  * @param posterior The current belief as informed by the latest round of message passing.
  * @param delta The difference between the new posterior belief and the last posterior belief.
  *              Used to gauge convergence.
+ * @param inWeight The sum of in-message edge weights.
+ * @param wasLabeled True if the vertex was labeled; false otherwise
+ * @param alpha The posterior bias.
  */
 case class VertexState(gbVertex: GBVertex,
                        messages: Map[VertexId, Vector[Double]],
                        prior: Vector[Double],
                        posterior: Vector[Double],
-                       delta: Double) extends DeltaProvider with Serializable
+                       delta: Double,
+                       inWeight: Option[Double] = None,
+                       wasLabeled: Boolean = true,
+                       alpha: Float = 0f,
+                       stateSpaceSize: Int = 1) extends DeltaProvider with Serializable
 
 /**
  * Provides a method to run belief propagation on a graph.
  * @param maxIterations Bound on the number of iterations.
- * @param power Exponent used in the potential function.
- * @param smoothing Smoothing parameter used in the potential function
  */
 class PregelWrapper(val maxIterations: Int,
-                    val power: Double,
-                    val smoothing: Double,
                     val convergenceThreshold: Double) extends Serializable {
 
   /**
@@ -55,93 +57,21 @@ class PregelWrapper(val maxIterations: Int,
    * @return The graph with posterior probabilities updated by belief propagation, and a logging string
    *         reporting on the execution of the algorithm.
    */
-  def run(graph: Graph[VertexState, Double])(vertexProgram: (VertexId, VertexState, Map[Long, Vector[Double]]) => VertexState): (Graph[VertexState, Double], String) = {
+  def run(graph: Graph[VertexState, Double])(initialMsgSender: (EdgeTriplet[VertexState, Double]) => Iterator[(VertexId, Map[Long, Vector[Double]])],
+                                             vertexProgram: (VertexId, VertexState, Map[Long, Vector[Double]]) => VertexState,
+                                             msgSender: (EdgeTriplet[VertexState, Double]) => Iterator[(VertexId, Map[Long, Vector[Double]])]): (Graph[VertexState, Double], String) = {
 
     // choose loggers
     val initialReporter = new BasicCountsInitialReport[VertexState, Double]
     val superStepReporter = new AverageDeltaSuperStepStatusGenerator[VertexState](convergenceThreshold)
 
     Pregel(graph,
-      Map().asInstanceOf[Map[Long, Vector[Double]]],
+      initialMsgSet,
       initialReporter,
       superStepReporter,
-      maxIterations = maxIterations,
-      activeDirection = EdgeDirection.Either)(vertexProgram, sendMessage, mergeMsg)
+      maxIterations,
+      EdgeDirection.Either)(initialMsgSender, vertexProgram, msgSender, msgCombiner)
 
-  }
-
-  /**
-   * The edge potential function provides an estimate of how compatible the states are between two joined vertices.
-   * This is the one inspired by the Boltzmann distribution.
-   * @param state1 State of the first vertex.
-   * @param state2 State of the second vertex.
-   * @param weight Edge weight.
-   * @return Compatibility estimate for the two states..
-   */
-  private def edgePotential(state1: Int, state2: Int, weight: Double) = {
-
-    val compatibilityFactor =
-      if (power == 0d) {
-        if (state1 == state2)
-          0d
-        else
-          1d
-      }
-      else {
-        val delta = Math.abs(state1 - state2)
-        Math.pow(delta, power)
-      }
-
-    -1.0d * compatibilityFactor * weight * smoothing
-  }
-
-  /**
-   * Calculates the message to be sent from one vertex to another.
-   * @param sender ID of he vertex sending the message.
-   * @param destination ID of the vertex to receive the message.
-   * @param vertexState State of the sending vertex.
-   * @param edgeWeight Weight of the edge joining the two vertices.
-   * @return A map with one entry, sender -> messageToNeighbor
-   */
-  private def calculateMessage(sender: VertexId,
-                               destination: VertexId,
-                               vertexState: VertexState,
-                               edgeWeight: Double): Map[VertexId, Vector[Double]] = {
-
-    val prior = vertexState.prior
-    val messages = vertexState.messages
-
-    val nStates = prior.length
-    val stateRange = (0 to nStates - 1).toVector
-
-    val messagesNotFromDestination = messages - destination
-    val messagesNotFromDestinationValues: List[Vector[Double]] =
-      messagesNotFromDestination.map({ case (k, v) => v }).toList
-
-    val reducedMessages = VectorMath.overflowProtectedProduct(prior :: messagesNotFromDestinationValues).get
-
-    val statesUNPosteriors = stateRange.zip(reducedMessages)
-
-    val unnormalizedMessage = stateRange.map(i => statesUNPosteriors.map({
-      case (j, x: Double) =>
-        x * Math.exp(edgePotential(i, j, edgeWeight))
-    }).sum)
-
-    val message = VectorMath.l1Normalize(unnormalizedMessage)
-
-    Map(sender -> message)
-  }
-
-  /**
-   * Pregel required method to send messages across an edge.
-   * @param edgeTriplet Contains state of source, destination and edge.
-   * @return Iterator over messages to send.
-   */
-  private def sendMessage(edgeTriplet: EdgeTriplet[VertexState, Double]): Iterator[(VertexId, Map[Long, Vector[Double]])] = {
-
-    val vertexState = edgeTriplet.srcAttr
-
-    Iterator((edgeTriplet.dstId, calculateMessage(edgeTriplet.srcId, edgeTriplet.dstId, vertexState, edgeTriplet.attr)))
   }
 
   /**
@@ -151,5 +81,14 @@ class PregelWrapper(val maxIterations: Int,
    * @param m2 Second message.
    * @return Combined message.
    */
-  private def mergeMsg(m1: Map[Long, Vector[Double]], m2: Map[Long, Vector[Double]]): Map[Long, Vector[Double]] = m1 ++ m2
+  private def msgCombiner(m1: Map[Long, Vector[Double]],
+                          m2: Map[Long, Vector[Double]]): Map[Long, Vector[Double]] = m1 ++ m2
+
+  /**
+   * Initial message for algorithm
+   * @return an empty map
+   */
+  private def initialMsgSet(): Map[Long, Vector[Double]] = {
+    Map().asInstanceOf[Map[Long, Vector[Double]]]
+  }
 }
