@@ -6,7 +6,6 @@ Graphs
 
 .. toctree::
     Graph <graph-/index.rst>
-    TitanGraph <graph-titan/index.rst>
 
 .. toctree::
     :hidden:

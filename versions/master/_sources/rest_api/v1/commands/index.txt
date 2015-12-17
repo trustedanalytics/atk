@@ -77,15 +77,10 @@
     graph-__define_edge_type
     graph-__define_vertex_type
     graph-__edge_count
-    graph-__export_to_titan
     graph-__kclique_percolation
     graph-__label_propagation
     graph-__loopy_belief_propagation
     graph-__vertex_count
-    graph-titan__export_to_graph
-    graph-titan__graph_clustering
-    graph-titan__query__gremlin
-    graph-titan__vertex_sample
     graph__annotate_degrees
     graph__annotate_weighted_degrees
     graph__clustering_coefficient
@@ -223,15 +218,10 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`graph:/define_edge_type <graph-__define_edge_type>`                                       Define an edge type.
 :doc:`graph:/define_vertex_type <graph-__define_vertex_type>`                                   Define a vertex type by label.
 :doc:`graph:/edge_count <graph-__edge_count>`                                                   Get the total number of edges in the graph.
-:doc:`graph:/export_to_titan <graph-__export_to_titan>`                                         Convert current graph to TitanGraph.
 :doc:`graph:/kclique_percolation <graph-__kclique_percolation>`                                 |ALPHA| Find groups of vertices with similar attributes.
 :doc:`graph:/label_propagation <graph-__label_propagation>`                                     Classification on sparse data using Belief Propagation.
 :doc:`graph:/loopy_belief_propagation <graph-__loopy_belief_propagation>`                       Classification on sparse data using Belief Propagation.
 :doc:`graph:/vertex_count <graph-__vertex_count>`                                               Get the total number of vertices in the graph.
-:doc:`graph:titan/export_to_graph <graph-titan__export_to_graph>`                               Export from TitanGraph to Graph.
-:doc:`graph:titan/graph_clustering <graph-titan__graph_clustering>`                             Performs graph clustering over an initial titan graph.
-:doc:`graph:titan/query/gremlin <graph-titan__query__gremlin>`                                  Executes a Gremlin query.
-:doc:`graph:titan/vertex_sample <graph-titan__vertex_sample>`                                   Make subgraph from vertex sampling.
 :doc:`model/rename <model__rename>`                                                             Rename a model.
 :doc:`model:collaborative_filtering/new <model-collaborative_filtering__new>`                   Create a new Collaborative Filtering (ALS) model.
 :doc:`model:collaborative_filtering/predict <model-collaborative_filtering__predict>`           |BETA| Collaborative Filtering Predict (ALS).
