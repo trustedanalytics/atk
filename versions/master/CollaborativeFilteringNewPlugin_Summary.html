@@ -141,12 +141,13 @@ learning, each edge is also annotated by &#8220;TR&#8221;, &#8220;VA&#8221; or &
 is the feature dimension specified by the user, and a bias term <img class="math" src="R_images/math/ee1b42748cba6b15902ba65f2f2d51834b7254fb.png" alt="b_x"/>.
 The predictions for item <img class="math" src="R_images/math/52824eea6fecfe5c51900c2cccf0fdfa617dd5dc.png" alt="m_{j}"/>, from user <img class="math" src="R_images/math/6998bb57f6af36a0ac188d683da16738d6c24131.png" alt="u_{i}"/> care given by
 dot product of the feature vector and the user vector, plus the item and user
-bias terms:
-/home/work/atk/engine-plugins/giraph-plugins/src/main/scala/org/trustedanalytics/atk/giraph/plugins/model/cf/CollaborativeFilteringNewPlugin.scala</p>
-<div class="math">
-<p><img src="R_images/math/5b347b3f38e831ff7d91429a54decf0351986662.png" alt="r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
-+ b_{mj}"/></p>
-</div><p>The parameters of the above equation are chosen to minimize the regularized
+bias terms.
+.. math:</p>
+<div class="highlight-python"><div class="highlight"><pre>r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \
++ b_{mj}
+</pre></div>
+</div>
+<p>The parameters of the above equation are chosen to minimize the regularized
 mean squared error between known and predicted ratings:</p>
 <div class="math">
 <p><img src="R_images/math/1181dc689de8d395d1bcbca304de2fca23ba2b52.png" alt="cost = \frac {\sum error^2} {n} + \lambda * \left( bias^2 + \sum f_k^2 \
