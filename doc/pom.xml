@@ -29,6 +29,21 @@
 
                         <executions>
                             <execution>
+                                <id>clean</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>rm</executable>
+                                    <workingDirectory>${basedir}</workingDirectory>
+                                    <arguments>
+                                        <argument>-rf</argument>
+                                        <argument>build/html</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>copy-conf</id>
                                 <phase>package</phase>
                                 <goals>
@@ -101,20 +116,7 @@
                                     </arguments>
                                 </configuration>
                             </execution>
-                            <execution>
-                                <id>f-forgithub</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>exec</goal>
-                                </goals>
-                                <configuration>
-                                    <executable>bash</executable>
-                                    <workingDirectory>${basedir}/</workingDirectory>
-                                    <arguments>
-                                        <argument>./f-forgithub.sh</argument>
-                                    </arguments>
-                                </configuration>
-                            </execution>
+                            
                             <execution>
                                 <id>stop-server</id>
                                 <phase>package</phase>
@@ -126,6 +128,20 @@
                                     <workingDirectory>${basedir}/</workingDirectory>
                                     <arguments>
                                         <argument>./stop-server.sh</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>rename-folders</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>bash</executable>
+                                    <workingDirectory>${basedir}/</workingDirectory>
+                                    <arguments>
+                                        <argument>./rename-underscore.sh</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
