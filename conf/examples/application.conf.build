@@ -170,17 +170,6 @@ trustedanalytics.atk {
       }
     }
 
-    giraph {
-      #Overrides of normal Hadoop settings that are used when running Giraph jobs
-      //giraph.maxWorkers = 1
-      //giraph.minWorkers = 1
-      //giraph.SplitMasterWorker = true
-      //mapreduce.map.memory.mb = 4096
-      //mapreduce.map.java.opts = "-Xmx3072m"
-      //giraph.zkIsExternal = false
-    }
-
-
     titan {
       load {
         # documentation for these settings is available on Titan website

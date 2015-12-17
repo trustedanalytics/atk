@@ -14,12 +14,7 @@ Open-Source
 
 |PACKAGE| uses standards and open-source routines from
 `Apache Hadoop <http://hadoop.apache.org/>`__ such as |HDFS|,
-:term:`MapReduce`, YARN, as well as
-`Apache Giraph <http://giraph.apache.org/>`__ for graph-based machine learning
-and graph analytics.
-The Titan graph database can be queried using the
-`Gremlin <https://github.com/tinkerpop/gremlin/wiki>`__ graph query
-language from TinkerPop.
+:term:`MapReduce`, YARN
 
 --------
 Features

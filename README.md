@@ -97,7 +97,6 @@ This is an overview. Additional details and instructions are in the user documen
   * frame-plugins/ - frame related plugins, e.g. frame.add_columns()
   * graph-plugins/ - graph related plugins that run on Spark and GraphX
   * model-plugins/ - model related plugins, e.g. LinearRegressionModel
-  * giraph-plugins/ - a few algorithms that run on Giraph
 * integration-tests/ - developer written, build time integration tests in python, these run against a minimal version of our product
 * misc/ - miscellaneous items that aren't really part of our product
 * module-loader/ - starts application and sets up ClassLoaders appropriately.
@@ -128,7 +127,6 @@ This is an overview. Additional details and instructions are in the user documen
 * Replace Slick with something simpler (even straight JDBC would be better, everyone already knows SQL and we aren't getting enough value to justify the learning curve for Slick)
 * Replace Spray DSL with something simpler (the DSL is confusing to use and our REST layer is too thin to make people learn a DSL)
 * testutils should probably merge into engine-core
-* giraph-plugins needs refactoring of packages (the current hierarchy is very poorly organized)
 * Need Maven profiles to make it easier for developers to build only part of the project
 * Break up CommandExecutor
 * Move args classes out of interfaces next to their associated plugin (possibly get rid of args classes all together)
