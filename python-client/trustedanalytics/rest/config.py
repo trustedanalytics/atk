@@ -42,6 +42,6 @@ class requests_defaults:
 
 
 class polling_defaults:
-    start_interval_secs = 1
+    start_interval_secs = 5
     max_interval_secs = 8
     backoff_factor = 1.01
