@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: categorical_summary(self, column_inputs=None)
+.. function:: categorical_summary(self, *column_inputs)
 
     |ALPHA|
     Compute a summary of the data in a column(s) for categorical or numerical data types.
@@ -13,7 +13,7 @@
 
     :Parameters:
 
-        **column_inputs** : str | tuple(str, dict) (default=None)
+        ***column_inputs** : str | tuple(str, dict)
 
         ..
 

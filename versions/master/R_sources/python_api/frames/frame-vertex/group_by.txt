@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: group_by(self, group_by_columns, aggregation_arguments=None)
+.. function:: group_by(self, group_by_columns, *aggregation_arguments)
 
     |BETA|
     Create summarized frame.
@@ -21,7 +21,7 @@
 
 
 
-        **aggregation_arguments** : dict (default=None)
+        ***aggregation_arguments** : dict
 
         ..
 

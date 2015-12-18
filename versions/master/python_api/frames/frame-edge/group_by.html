@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="group_by">
-<code class="descname">group_by</code><span class="sig-paren">(</span><em>self</em>, <em>group_by_columns</em>, <em>aggregation_arguments=None</em><span class="sig-paren">)</span><a class="headerlink" href="#group_by" title="Permalink to this definition">¶</a></dt>
+<code class="descname">group_by</code><span class="sig-paren">(</span><em>self</em>, <em>group_by_columns</em>, <em>*aggregation_arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#group_by" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
 Create summarized frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -126,7 +126,7 @@ Create summarized frame.</p>
 <blockquote>
 <div><p>Column name or list of column names</p>
 </div></blockquote>
-<p><strong>aggregation_arguments</strong> : dict (default=None)</p>
+<p><strong>*aggregation_arguments</strong> : dict</p>
 <blockquote>
 <div><p>Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.</p>
 </div></blockquote>

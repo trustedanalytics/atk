@@ -5,14 +5,14 @@
 ------
 
 
-.. function:: drop(items=None)
+.. function:: drop(*items)
 
     drop() serves as an alias to drop_frames, drop_graphs, and drop_models.
 
 
     :Parameters:
 
-        **items** : List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself). (default=None)
+        ***items** : List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself).
 
         ..
 

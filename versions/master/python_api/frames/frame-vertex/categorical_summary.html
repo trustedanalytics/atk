@@ -115,14 +115,14 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="categorical_summary">
-<code class="descname">categorical_summary</code><span class="sig-paren">(</span><em>self</em>, <em>column_inputs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#categorical_summary" title="Permalink to this definition">¶</a></dt>
+<code class="descname">categorical_summary</code><span class="sig-paren">(</span><em>self</em>, <em>*column_inputs</em><span class="sig-paren">)</span><a class="headerlink" href="#categorical_summary" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Compute a summary of the data in a column(s) for categorical or numerical data types.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_inputs</strong> : str | tuple(str, dict) (default=None)</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*column_inputs</strong> : str | tuple(str, dict)</p>
 <blockquote>
 <div><p>Comma-separated column names to summarize or tuple containing column name and dictionary of optional parameters. Optional parameters (see below for details): top_k (default = 10), threshold (default = 0.0)</p>
 </div></blockquote>
