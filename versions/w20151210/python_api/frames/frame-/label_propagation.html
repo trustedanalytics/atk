@@ -223,7 +223,50 @@ and a weighted average of the messages received from its neighbors.</p>
 <div class="math">
 <p><img src="../../../_images/math/696ac5e38177f5ade4b1c5baa0f6c50730ed2792.png" alt="updated\ beliefs_{i} = \lambda * (prior\ belief_{i} ) + (1 - \lambda ) \
 * \sum_k w_{i,k} * previous\ belief_{k}"/></p>
-</div><p>where <img class="math" src="../../../_images/math/bd30308635bf8a8531ab318c0126d9a731210694.png" alt="w_{i,k}"/> is the normalized weight between nodes <img class="math" src="../../../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> and
+</div><p>where <div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">w_{i,k}</tt>)</p>
+latex exited with error
+[stdout]
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
+ restricted \write18 enabled.
+entering extended mode
+(./math.tex
+LaTeX2e &lt;2011/06/27&gt;
+Babel &lt;3.9h&gt; and hyphenation patterns for 78 languages loaded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/utf8x.def))
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/ucs.sty
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/data/uni-global.def))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?&#8217; option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/amscls/amsthm.sty)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/bm.sty) (./math.aux)
+(/usr/share/texlive/texmf-dist/tex/latex/ucs/ucsencs.def)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd)
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd))
+Runaway argument?
+{docu\end {document} 
+! File ended while scanning use of \end.
+&lt;inserted text&gt; 
+                \par 
+&lt;*&gt; math.tex
+            
+! Emergency stop.
+&lt;*&gt; math.tex
+            
+No pages of output.
+Transcript written on math.log.
+</div>
+ is the normalized weight between nodes <img class="math" src="../../../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> and
 <img class="math" src="../../../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>, normalized such that the sum of all weights to neighbors is 1.</p>
 <p><img class="math" src="../../../_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is a leaning parameter.
 If <img class="math" src="../../../_images/math/1ab0134b6e0837594649c75a2ed83cfd85a2d03d.png" alt="\lambda"/> is greater than zero, updated probabilities will be anchored
@@ -331,7 +374,7 @@ number of <a class="reference internal" href="../../../glossary.html#term-supers
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 14, 2015.
+      Last updated on Dec 18, 2015.
       </li>
     </ul>
     </div>
