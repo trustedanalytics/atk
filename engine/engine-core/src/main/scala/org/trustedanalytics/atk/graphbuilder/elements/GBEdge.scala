@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.graphbuilder.elements
 
-import org.trustedanalytics.atk.graphbuilder.util.StringUtils
+import org.trustedanalytics.atk.graphbuilder.StringUtils
 
 /**
  * An Edge links two Vertices.

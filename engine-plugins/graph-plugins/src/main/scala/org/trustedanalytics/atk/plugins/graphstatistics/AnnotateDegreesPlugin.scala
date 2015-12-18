@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphReference }
@@ -25,8 +24,9 @@ import org.trustedanalytics.atk.engine.graph._
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.rdd.GraphBuilderRddImplicits
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
 import scala.concurrent.Await
 
 case class AnnotateDegreesArgs(graph: GraphReference,

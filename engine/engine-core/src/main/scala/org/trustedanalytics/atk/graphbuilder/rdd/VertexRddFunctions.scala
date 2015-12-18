@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark.rdd
+package org.trustedanalytics.atk.graphbuilder.rdd
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 
 /**
  * Functions that are applicable to Vertex RDD's.

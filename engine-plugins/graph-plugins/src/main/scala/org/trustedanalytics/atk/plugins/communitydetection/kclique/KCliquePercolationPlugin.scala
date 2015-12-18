@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.plugins.communitydetection.kclique
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.apache.spark.frame.FrameRdd
@@ -174,6 +173,7 @@ class KCliquePercolationPlugin extends SparkCommandPlugin[KCliqueArgs, KCliqueRe
   override def kryoRegistrator: Option[String] = None
 
   override def execute(arguments: KCliqueArgs)(implicit invocation: Invocation): KCliqueResult = {
+    import org.trustedanalytics.atk.graphbuilder.rdd.GraphBuilderRddImplicits._
 
     val start = System.currentTimeMillis()
 

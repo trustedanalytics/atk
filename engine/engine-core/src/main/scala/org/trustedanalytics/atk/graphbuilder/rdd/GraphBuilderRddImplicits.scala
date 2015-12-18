@@ -14,28 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.util
+package org.trustedanalytics.atk.graphbuilder.rdd
 
-import org.scalatest.{ Matchers, WordSpec }
+import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
-class StringUtilsTest extends WordSpec with Matchers {
+/**
+ * These implicits can be imported to add GraphBuilder related functions to RDD's
+ */
+object GraphBuilderRddImplicits {
 
-  "StringUtils.nullSafeToString()" should {
-
-    "handle null objects" in {
-      StringUtils.nullSafeToString(null) shouldBe null
-    }
-
-    "handle Strings" in {
-      StringUtils.nullSafeToString("anyString") shouldBe "anyString"
-    }
-
-    "handle Ints" in {
-      StringUtils.nullSafeToString(1) shouldBe "1"
-    }
-
-    "handle complex objects" in {
-      StringUtils.nullSafeToString(Map("my-key" -> "my-value")) shouldBe "Map(my-key -> my-value)"
-    }
-  }
+  /**
+   * Functions applicable to Vertex RDD's
+   */
+  implicit def vertexRDDToVertexRDDFunctions(rdd: RDD[GBVertex]) = new VertexRddFunctions(rdd)
 }

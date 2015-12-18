@@ -16,10 +16,10 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkException
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 
 /**
  * Object for calculating weighted degree and its generalizations: Per-vertex statistics about the net weight of

@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.pagerank
 
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.plugins.graphconversions.GraphConversions
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex, GBEdge }
 import org.apache.spark.graphx.{ Edge => GraphXEdge, PartitionStrategy, Graph }
 import org.apache.spark.graphx.lib.{ PageRank => GraphXPageRank }
 import org.apache.spark.rdd.RDD

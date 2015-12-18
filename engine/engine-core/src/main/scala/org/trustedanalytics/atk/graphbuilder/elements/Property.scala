@@ -16,20 +16,35 @@
 
 package org.trustedanalytics.atk.graphbuilder.elements
 
-import org.scalatest.{ Matchers, WordSpec }
-import org.mockito.Mockito._
-import org.scalatest.mock.MockitoSugar
+import org.trustedanalytics.atk.graphbuilder.StringUtils
 
-class GbIdToPhysicalIdTest extends WordSpec with Matchers with MockitoSugar {
+/**
+ * A property on a Vertex or Edge.
+ *
+ * @param key the name of the property
+ * @param value the value of the property
+ */
+case class Property(key: String, value: Any) {
 
-  "GbIdToPhysicalId" should {
-
-    "be able to be converted to a tuple" in {
-      val gbId = mock[Property]
-      val physicalId = new java.lang.Long(4)
-      val gbToPhysical = new GbIdToPhysicalId(gbId, physicalId)
-      gbToPhysical.toTuple._1 shouldBe gbId
-      gbToPhysical.toTuple._2 shouldBe physicalId
-    }
+  /**
+   * Convenience constructor
+   */
+  def this(key: Any, value: Any) = {
+    this(StringUtils.nullSafeToString(key), value)
   }
+}
+
+object Property {
+
+  /**
+   * Merge two set of properties so that keys appear once.
+   *
+   * Conflicts are handled arbitrarily.
+   */
+  def merge(setA: Set[Property], setB: Set[Property]): Set[Property] = {
+    val unionPotentialKeyConflicts = setA ++ setB
+    val mapWithoutDuplicates = unionPotentialKeyConflicts.map(p => (p.key, p)).toMap
+    mapWithoutDuplicates.valuesIterator.toSet
+  }
+
 }

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.util
+package org.trustedanalytics.atk.graphbuilder
 
 /**
  * Prefer org.apache.commons.lang3.StringUtils over writing your own methods below
