@@ -23,6 +23,7 @@ Library for creating pieces of rst text for the Python API, based on metaprog
 import re
 from collections import OrderedDict
 
+from trustedanalytics.core.atktypes import unit
 from trustedanalytics.meta.doc import Doc
 from trustedanalytics.meta.metaprog import get_installation, get_intermediate_class
 from trustedanalytics.meta.names import is_name_private, indent, get_type_name
@@ -53,7 +54,7 @@ def get_command_def_rst(command_def):
 
     if command_def.parameters:
         rst += indent(_get_parameters_rst(command_def))
-    if command_def.return_info:
+    if command_def.return_info and command_def.return_info.data_type is not unit:
         rst += indent(_get_returns_rst(command_def.return_info))
 
     rst += indent(extended)
