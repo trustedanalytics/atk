@@ -77,8 +77,15 @@ class ClientCommandDefinition(CommandDefinition):
                 raise ValueError("function received %d @arg decorators, expected %d for function %s." % (num_arg_docs, num_args, function.__name__))
 
             def _get_arg_doc(name):
+                arg_name = name
+
+                def name_matches(arg_doc):
+                    doc_name = arg_doc.name
+                    while doc_name.startswith('*'):
+                        doc_name = doc_name[1:]
+                    return doc_name == arg_name
                 try:
-                    arg_doc = filter(lambda  d: d.name == name, arg_docs)[0]
+                    arg_doc = filter(name_matches, arg_docs)[0]
                 except IndexError:
                     raise ValueError("Function missing @arg decorator for argument '%s' in function %s" % (name, function.__name__))
                 if not isinstance(arg_doc, ArgDoc):
