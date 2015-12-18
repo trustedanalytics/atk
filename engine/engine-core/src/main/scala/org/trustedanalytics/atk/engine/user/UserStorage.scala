@@ -39,7 +39,7 @@ class UserStorage(val metaStore: SlickMetaStoreComponent#SlickMetaStore) extends
           val users: List[User] = metaStore.userRepo.retrieveByColumnValue("api_key", apiKey)
           users match {
             case Nil => throw new SecurityException("User not found with apiKey:" + apiKey)
-            case us if us.length > 1 => throw new SecurityException("Problem accessing user credentials")
+            case us if us.length > 1 => throw new SecurityException("Metastore problem detected while accessing user credentials --multiple matching entries found for the same credentials")
             case user => createUserPrincipalFromUser(users.head)
           }
         }
