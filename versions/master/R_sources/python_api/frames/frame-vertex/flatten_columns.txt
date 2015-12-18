@@ -28,15 +28,6 @@
             Default is comma (,).
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Splits cells in the specified columns into multiple rows according to a string
     delimiter.
     New rows are a full copy of the original row, but the specified columns only

@@ -19,12 +19,3 @@
             Dictionary of old names to new names.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-

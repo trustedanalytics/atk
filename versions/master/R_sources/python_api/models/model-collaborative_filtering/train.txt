@@ -109,15 +109,6 @@
 
 
 
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
-
-
     Examples
     --------
     See :doc: 'here <new>' for examples.

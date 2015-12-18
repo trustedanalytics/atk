@@ -19,15 +19,6 @@
 
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Remove data rows which are the same as other rows.
     The entire row can be checked for duplication, or the search for duplicates
     can be limited to one or more columns.

@@ -58,15 +58,6 @@
             Defaults to False.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Includes appending to a list of existing edges.
 
     Examples

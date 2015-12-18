@@ -21,15 +21,6 @@
 
 
 
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
-
-
     Examples
     --------
     Start with a frame with columns *Black* and *White*.

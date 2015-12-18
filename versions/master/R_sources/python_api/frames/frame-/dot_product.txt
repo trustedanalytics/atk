@@ -59,15 +59,6 @@
             Default is None.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Calculate the dot product for each row in a frame using values from two
     equal-length sequences of columns.
 

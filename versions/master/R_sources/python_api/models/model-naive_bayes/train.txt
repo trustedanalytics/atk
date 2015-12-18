@@ -47,15 +47,6 @@
             Default is 1.0.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.
 
     Examples

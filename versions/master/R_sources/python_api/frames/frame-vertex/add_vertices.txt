@@ -37,15 +37,6 @@
             into properties for each vertex.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Includes appending to a list of existing vertices.
 
     Examples

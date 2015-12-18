@@ -21,15 +21,6 @@
             the cumulative sum.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     A cumulative sum is computed by sequentially stepping through the rows,
     observing the column values and keeping track of the cumulative sum for each value.
 

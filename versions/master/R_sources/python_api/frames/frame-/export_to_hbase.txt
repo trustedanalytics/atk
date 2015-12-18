@@ -35,15 +35,6 @@
             The family name of the HBase table that will contain the exported frame
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Table must exist in HBase.
     Export of Vectors is not currently supported.
 

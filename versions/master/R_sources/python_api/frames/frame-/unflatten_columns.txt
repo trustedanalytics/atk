@@ -29,15 +29,6 @@
             Default is comma (,).
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Groups together cells in all columns (less the composite key) using "," as string delimiter.
     The original rows are deleted.
     The grouping takes place based on a composite key created from cell values.

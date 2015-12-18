@@ -63,15 +63,6 @@
             Default is ``<column_name>_binned``.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Summarize rows of data based on the value in a single column by sorting them
     into bins, or groups, based on a list of bin cutoff points.
 

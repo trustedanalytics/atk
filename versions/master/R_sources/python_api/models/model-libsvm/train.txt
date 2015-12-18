@@ -178,15 +178,6 @@
             Set the epsilon in loss function of epsilon-SVR.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Creating a lib Svm Model using the observation column and label column of the
     train frame.
 

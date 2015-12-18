@@ -51,15 +51,6 @@
             (optional) query for filtering. Not supported yet.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Table will be created or appended to.
     Export of Vectors is not currently supported.
 

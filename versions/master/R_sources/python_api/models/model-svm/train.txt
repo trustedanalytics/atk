@@ -89,15 +89,6 @@
             Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.
 
 
-
-
-    :Returns:
-
-        : _Unit
-
-        ..
-
-
     Creating a SVM Model using the observation column and label column of the train frame.
 
     Examples
