@@ -142,7 +142,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2015, 12, 17, 18, 7, 46, 719177)
+    datetime.datetime(2015, 12, 18, 17, 10, 46, 647501)
 
     >>> graph
     Graph <unnamed>
