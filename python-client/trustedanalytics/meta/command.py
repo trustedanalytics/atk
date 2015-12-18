@@ -98,7 +98,7 @@ class CommandDefinition(object):
     def get_function_args_text(self):
         if self.parameters:
             return ", ".join(['self' if param.use_self else
-                              param.name if not param.optional else
+                              param.name if not param.optional or param.name.startswith('*') else
                               "%s=%s" % (param.name, default_value_to_str(param.default))
                               for param in self.parameters])
         else:

@@ -72,7 +72,7 @@ def _get_parameters_rst(command_def):
 
 def _get_parameter_rst(p):
     data_type = get_type_name(p.data_type)
-    if p.optional:
+    if p.optional and not p.name.startswith('*'):
         data_type += " (default=%s)" % (p.default if p.default is not None else "None")
     return """
 **{name}** : {data_type}
