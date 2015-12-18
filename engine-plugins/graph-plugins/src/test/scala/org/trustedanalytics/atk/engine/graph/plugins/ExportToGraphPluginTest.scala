@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.graph.plugins
 
 import org.scalatest.{ Matchers, FlatSpec }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBVertex }
 import org.scalatest.mock.MockitoSugar
 
 class ExportToGraphPluginTest extends FlatSpec with Matchers with MockitoSugar {

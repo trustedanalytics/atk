@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
 

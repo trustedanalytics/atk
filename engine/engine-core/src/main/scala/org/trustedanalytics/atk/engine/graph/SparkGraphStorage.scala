@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.graph
 
 import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.{ DuplicateNameException, NotFoundException }
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }

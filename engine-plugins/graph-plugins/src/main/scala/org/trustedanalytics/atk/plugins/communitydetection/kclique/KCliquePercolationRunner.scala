@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.plugins.communitydetection.kclique.datatypes.{ CliqueExtension, VertexSet, Edge }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.plugins.communitydetection.kclique.datatypes.Edge
 import org.apache.spark.rdd.RDD
 

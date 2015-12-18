@@ -20,13 +20,13 @@ import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag.ApiMaturityTag
 import org.trustedanalytics.atk.engine.plugin.ApiMaturityTag._
-import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.Property
 import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._

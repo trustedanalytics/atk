@@ -19,11 +19,11 @@ package org.trustedanalytics.atk.engine.frame
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.types.GenericArrayData
-import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import org.trustedanalytics.atk.domain.schema._
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBVertex
 
 import scala.collection.mutable.ArrayBuffer
 

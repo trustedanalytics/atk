@@ -23,7 +23,7 @@ import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.frame.MiscFrameFunctions
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.serializer.KryoRegistrator
-import org.trustedanalytics.atk.graphbuilder.graph.GraphBuilderKryoRegistrator
+import org.trustedanalytics.atk.graphbuilder.driver.spark.GraphBuilderKryoRegistrator
 
 /**
  * Register classes that are going to be serialized by Kryo.

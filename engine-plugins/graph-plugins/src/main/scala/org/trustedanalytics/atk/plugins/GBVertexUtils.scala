@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins
 
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBVertex }
 
 object GBVertexUtils {
 

@@ -14,11 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.graph.plugins
+package org.trustedanalytics.atk.graphbuilder.driver.spark.rdd
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBEdge
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBVertex
+import org.apache.spark.rdd.RDD
 
 /**
- * Holds an edge plus src and dest vertex labels.
+ * These implicits can be imported to add GraphBuilder related functions to RDD's
  */
-case class EdgeHolder(edge: GBEdge, srcLabel: String, destLabel: String)
+object GraphBuilderRddImplicits {
+
+  /**
+   * Functions applicable to Vertex RDD's
+   */
+  implicit def vertexRDDToVertexRDDFunctions(rdd: RDD[GBVertex]) = new VertexRddFunctions(rdd)
+}

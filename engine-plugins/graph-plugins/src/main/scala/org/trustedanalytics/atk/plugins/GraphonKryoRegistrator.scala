@@ -30,7 +30,7 @@ import org.apache.spark.graphx.GraphKryoRegistrator
  * \ * <p>
  * Usage:
  * conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
- * conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.graph.GraphBuilderKryoRegistrator")
+ * conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.driver.spark.GraphBuilderKryoRegistrator")
  * </p>
  */
 class GraphonKryoRegistrator extends EngineKryoRegistrator {

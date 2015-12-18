@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins.graphstatistics
 
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }

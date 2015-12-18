@@ -14,11 +14,20 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.graph.plugins
-
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBEdge
+package org.trustedanalytics.atk.graphbuilder.driver.spark
 
 /**
- * Holds an edge plus src and dest vertex labels.
+ * Prefer org.apache.commons.lang3.StringUtils over writing your own methods below
  */
-case class EdgeHolder(edge: GBEdge, srcLabel: String, destLabel: String)
+object StringUtils {
+
+  /**
+   * Call toString() on the supplied object, handling null safely
+   * @param any object
+   * @return null if called on null object, otherwise result of toString()
+   */
+  def nullSafeToString(any: Any): String = {
+    if (any != null) any.toString()
+    else null
+  }
+}

@@ -22,14 +22,10 @@ import java.util.concurrent.TimeUnit
 
 import org.apache.commons.io.FileUtils
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
-import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
 import org.trustedanalytics.atk.engine.partitioners.{ FileSizeToPartitionSize, SparkAutoPartitionStrategy }
-import com.typesafe.config.{ Config, ConfigFactory }
-import org.apache.hadoop.hbase.HBaseConfiguration
-import org.apache.hadoop.hbase.client.HBaseAdmin
+import com.typesafe.config.{ ConfigFactory }
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
-import scala.concurrent.duration._
 import org.apache.commons.lang3.StringUtils
 
 /**

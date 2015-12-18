@@ -20,7 +20,7 @@ import org.apache.spark.graphx._
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk._
 import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
+import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBEdge, GBVertex }
 import org.trustedanalytics.atk.plugins.VectorMath
 import org.apache.commons.lang3.StringUtils
 
