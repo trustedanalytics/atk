@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, GraphSchema, Schema 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBEdge
+import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 
 import scala.reflect.ClassTag
 

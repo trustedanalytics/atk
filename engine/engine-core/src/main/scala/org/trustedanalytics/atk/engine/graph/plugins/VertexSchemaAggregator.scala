@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.graph.plugins
 
 import org.trustedanalytics.atk.domain.schema
 import org.trustedanalytics.atk.domain.schema._
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBVertex
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 import scala.collection.immutable.Map
 

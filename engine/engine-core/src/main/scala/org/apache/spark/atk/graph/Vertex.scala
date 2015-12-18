@@ -16,11 +16,11 @@
 
 package org.apache.spark.atk.graph
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBVertex
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property => GBProperty }
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property => GBProperty }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, VertexSchema, DataTypes }
 import org.trustedanalytics.atk.engine.frame.AbstractRow
 import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
  * Vertex: self contained vertex with complete schema information included.

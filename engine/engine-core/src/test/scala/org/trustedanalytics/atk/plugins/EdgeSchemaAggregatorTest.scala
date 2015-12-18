@@ -17,9 +17,9 @@
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.engine.graph.plugins.{ EdgeSchemaAggregator, EdgeHolder }
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBEdge }
 import org.scalatest.WordSpec
 import EdgeSchemaAggregator.zeroValue
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property }
 
 class EdgeSchemaAggregatorTest extends WordSpec {
 

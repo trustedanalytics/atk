@@ -14,20 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark
+package org.trustedanalytics.atk.graphbuilder.rdd
+
+import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
- * Prefer org.apache.commons.lang3.StringUtils over writing your own methods below
+ * These implicits can be imported to add GraphBuilder related functions to RDD's
  */
-object StringUtils {
+object GraphBuilderRddImplicits {
 
   /**
-   * Call toString() on the supplied object, handling null safely
-   * @param any object
-   * @return null if called on null object, otherwise result of toString()
+   * Functions applicable to Vertex RDD's
    */
-  def nullSafeToString(any: Any): String = {
-    if (any != null) any.toString()
-    else null
-  }
+  implicit def vertexRDDToVertexRDDFunctions(rdd: RDD[GBVertex]) = new VertexRddFunctions(rdd)
 }

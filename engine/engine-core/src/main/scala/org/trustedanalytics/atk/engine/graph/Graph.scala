@@ -19,10 +19,10 @@ package org.trustedanalytics.atk.engine.graph
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphReference }
 import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
 import org.apache.spark.SparkContext
 import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 
 /**
  * Interface for working with Graphs for plugin authors

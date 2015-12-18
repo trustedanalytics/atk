@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.testutils
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 import org.trustedanalytics.atk.plugins.VectorMath
 
 /**

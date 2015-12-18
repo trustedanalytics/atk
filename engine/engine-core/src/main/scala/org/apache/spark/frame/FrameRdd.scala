@@ -32,10 +32,9 @@ import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
 import org.trustedanalytics.atk.engine.graph.plugins.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
-import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits
 
 /**
  * A Frame RDD is a SchemaRDD with our version of the associated schema.
@@ -518,7 +517,7 @@ object FrameRdd {
    * @return  keys are labels and values are FrameRdd's
    */
   def toFrameRddMap(gbVertexRDD: RDD[GBVertex]): Map[String, FrameRdd] = {
-    import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
+    import org.trustedanalytics.atk.graphbuilder.rdd.GraphBuilderRddImplicits._
 
     // make sure all of the vertices have a label
     val labeledVertices = gbVertexRDD.labelVertices(Nil)

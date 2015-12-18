@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark.elements
+package org.trustedanalytics.atk.graphbuilder.elements
 
 /**
  * Mergeable items can be combined into a new single item.

@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.Property
+import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._

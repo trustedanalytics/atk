@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBEdge, GBVertex }
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**

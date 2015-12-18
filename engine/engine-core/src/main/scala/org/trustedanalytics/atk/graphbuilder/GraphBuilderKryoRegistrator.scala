@@ -14,14 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark
+package org.trustedanalytics.atk.graphbuilder
 
 import com.esotericsoftware.kryo.Kryo
 import org.apache.hadoop.hbase.client.Result
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.io.NullWritable
 import org.apache.spark.serializer.KryoRegistrator
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GraphElement, GBVertex, Property, GBEdge }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GraphElement, GBEdge, Property, GBVertex }
 
 /**
  * Register GraphBuilder classes that are going to be serialized by Kryo.
@@ -34,7 +34,7 @@ import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GraphElemen
  * <p>
  *  Usage:
  *   conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
- *   conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.driver.spark.GraphBuilderKryoRegistrator")
+ *   conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.GraphBuilderKryoRegistrator")
  * </p>
  */
 class GraphBuilderKryoRegistrator extends KryoRegistrator {

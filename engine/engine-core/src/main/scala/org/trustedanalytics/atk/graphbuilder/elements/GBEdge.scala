@@ -14,9 +14,9 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.graphbuilder.driver.spark.elements
+package org.trustedanalytics.atk.graphbuilder.elements
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.StringUtils
+import org.trustedanalytics.atk.graphbuilder.StringUtils
 
 /**
  * An Edge links two Vertices.

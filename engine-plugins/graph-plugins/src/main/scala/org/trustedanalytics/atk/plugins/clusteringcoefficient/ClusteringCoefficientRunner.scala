@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.clusteringcoefficient
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.plugins.graphconversions.GraphConversions
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.RowWrapper

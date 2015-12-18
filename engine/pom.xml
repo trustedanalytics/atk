@@ -17,7 +17,6 @@
     </description>
 
     <modules>
-        <module>graphbuilder</module>
         <module>interfaces</module>
         <module>meta-store</module>
         <module>engine-core</module>

@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.graph.plugins
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBEdge
+import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 
 /**
  * Holds an edge plus src and dest vertex labels.

@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins.clusteringcoefficient
 
 import org.trustedanalytics.atk.domain.schema._
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.GBVertex
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
  * Convert a GBVertex to a FrameSchema

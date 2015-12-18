@@ -15,10 +15,12 @@
  */
 
 package org.apache.spark.atk.graph
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ GBEdge, Property => GBProperty }
+
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property => GBProperty }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema, DataTypes }
 import org.trustedanalytics.atk.engine.frame.{ AbstractRow }
 import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 
 /**
  * Edge: self contained edge with complete schema information included.

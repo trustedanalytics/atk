@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.plugins.trianglecount
 
-import org.trustedanalytics.atk.graphbuilder.driver.spark.elements.{ Property, GBEdge, GBVertex }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.plugins.graphconversions.GraphConversions
 import org.apache.spark.graphx.{ Edge => GraphXEdge, PartitionStrategy, Graph }
 import org.apache.spark.graphx.lib.{ TriangleCount => GraphXTriangleCount }
