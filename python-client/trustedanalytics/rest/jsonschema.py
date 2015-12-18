@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 import json
 
 from trustedanalytics.meta.command import CommandDefinition, Parameter, ReturnInfo, Doc, ApiVersion
+from trustedanalytics.meta.names import get_type_name
 from trustedanalytics.core.atktypes import *
 
 __all__ = ['get_command_def']
@@ -53,7 +54,7 @@ def get_data_type_from_json_schema_using_id(json_schema, default=_unspecified):
         return json_type_id_to_data_type[json_schema['id']]
     except:
         if default is _unspecified:
-            raise ValueError("Unsupported JSON string for data type: %s" % json_schema['id'])
+            raise ValueError("Unsupported JSON string for data type: %s" % json_schema)
         return default
 
 
@@ -64,9 +65,9 @@ def get_data_type_from_json_schema_using_id(json_schema, default=_unspecified):
 # atkschema.py - defines types to schema declaration
 # atktypes.py - defines types for ATK API, including entities and result types, list and dictionary conversion (superset of atkschema)
 #
-# Going for stopgap for now, with an AtkEntityType to handle entities specifically...
+# Going for stopgap for now, with a generic AtkReturnType to handle custom naming and constructors
 
-class AtkEntityType(object):
+class AtkReturnType(object):
     def __init__(self, name, constructor):
         self.name = name
         self.constructor = constructor
@@ -93,14 +94,30 @@ def _get_model(uri_dict):
     from trustedanalytics import get_model
     return get_model(uri_dict['uri'])
 
-entity_schema_id_to_type = {'atk:frame': AtkEntityType("Frame", _get_frame),
-                            'atk:graph': AtkEntityType("Graph", _get_graph),
-                            'atk:model': AtkEntityType("Model", _get_model)}
+entity_schema_id_to_type = {'atk:frame': AtkReturnType("Frame", _get_frame),
+                            'atk:graph': AtkReturnType("Graph", _get_graph),
+                            'atk:model': AtkReturnType("Model", _get_model)}
 
 
-    # Avoid returning actual type, unless we add this to the meta prog
+def get_parameter_data_type(json_schema):
+    """get data type from parameter json schema"""
+    return _get_data_type(json_schema)
 
-def get_data_type(json_schema):
+def get_return_data_type(json_schema):
+    """get data type from return json schema"""
+
+    # by convention, if returning dict with a single 'value' value, then we extract it
+    if 'type' in json_schema and json_schema['type'] == 'object' and 'order' in json_schema and len(json_schema['order']) == 1 and json_schema['order'][0] == 'value':
+        return_type = _get_data_type(json_schema['properties']['value'])
+        type_name = get_type_name(return_type)
+
+        def _return_single_value_from_dict(result):
+            return result['value']
+        return AtkReturnType(type_name, _return_single_value_from_dict)
+    # otherwise, use regular get_data_type
+    return _get_data_type(json_schema)
+
+def _get_data_type(json_schema):
     """
     Returns Python data type for type found in the topmost element of the json_schema
     """
@@ -109,7 +126,6 @@ def get_data_type(json_schema):
         #print "json_schema=%s" % json.dumps(json_schema, indent=2)
 
         if 'type' in json_schema and json_schema['type'] == 'string' and 'format' in json_schema and json_schema['format'] == 'uri/entity':
-            schema_id = json_schema['id']
             data_type = entity_schema_id_to_type[json_schema['id']]
         elif 'id' in json_schema:
             data_type = get_data_type_from_json_schema_using_id(json_schema, None)
@@ -127,7 +143,7 @@ def get_data_type(json_schema):
             elif t == 'array':
                 data_type = list
             elif t == 'object':
-                data_type = dict  # use dict for now, TODO - add complex type support
+                data_type = dict
             elif t == 'unit':
                 data_type = unit
 
@@ -176,7 +192,7 @@ def get_parameters(argument_schema):
     if 'order' in argument_schema:
         for name in argument_schema['order']:
             properties = argument_schema['properties'][name]
-            data_type = get_data_type(properties)
+            data_type = get_parameter_data_type(properties)
             use_self = properties.get('self', False)
             optional = name not in argument_schema['required']
             default = properties.get('default_value', None)
@@ -192,7 +208,7 @@ def get_return_info(return_schema):
     # 2. return Frame or Graph reference
     # 3. return Complex Type
     # 4. return None  (no return value)
-    data_type = get_data_type(return_schema)
+    data_type = get_return_data_type(return_schema)
     use_self = return_schema.get('self', False)
     #if use_self and data_type not in [Frame, Graph]:
     #    raise TypeError("Error loading commands: use_self is True, but data_type is %s" % data_type)
