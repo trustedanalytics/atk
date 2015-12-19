@@ -1,0 +1,50 @@
+
+:doc:`LinearRegressionModel <index>`  predict
+*********************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    Make new frame with column for label prediction.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose labels are to be predicted.
+            Default is the labels the model was trained on.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            frame\:
+                  Frame containing the original frame's columns and a column with the predicted value.
+    Predict the labels for a test frame and create a new frame revision with
+    existing columns and a new predicted value column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

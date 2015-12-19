@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame flatten_columns &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame get_error_frame" href="get_error_frame.html" >
+    <link rel="prev" title="VertexFrame flatten_column" href="flatten_column.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="flatten_column.html" title="VertexFrame flatten_column"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="get_error_frame.html" title="VertexFrame get_error_frame"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-flatten-columns">
+<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  flatten_columns<a class="headerlink" href="#vertexframe-flatten-columns" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="flatten_columns">
+<code class="descname">flatten_columns</code><span class="sig-paren">(</span><em>self</em>, <em>columns</em>, <em>delimiters=None</em><span class="sig-paren">)</span><a class="headerlink" href="#flatten_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spread data to multiple rows based on cell data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>columns</strong> : list</p>
+<blockquote>
+<div><p>The columns to be flattened.</p>
+</div></blockquote>
+<p><strong>delimiters</strong> : list (default=None)</p>
+<blockquote class="last">
+<div><p>The list of delimiter strings for each column.
+Default is comma (,).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Splits cells in the specified columns into multiple rows according to a string
+delimiter.
+New rows are a full copy of the original row, but the specified columns only
+contain one value.
+The original row is deleted.</p>
+<p class="rubric">Examples</p>
+<p>Given a data file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="n">solo</span><span class="p">,</span><span class="n">mono</span><span class="p">,</span><span class="n">single</span><span class="o">-</span><span class="n">green</span><span class="p">,</span><span class="n">yellow</span><span class="p">,</span><span class="n">red</span>
+<span class="mi">2</span><span class="o">-</span><span class="n">duo</span><span class="p">,</span><span class="n">double</span><span class="o">-</span><span class="n">orange</span><span class="p">,</span><span class="n">black</span>
+</pre></div>
+</div>
+<p>The commands to bring the data into a frame, where it can be worked on:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),(</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Looking at it:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b                 c</span>
+<span class="go">==========================================</span>
+<span class="go">[0]  1  solo,mono,single  green,yellow,red</span>
+<span class="go">[1]  2  duo,double        orange,black</span>
+</pre></div>
+</div>
+<p>Now, spread out those sub-strings in column <em>b</em> and <em>c</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">([</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="s">&#39;,&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Note that the delimiters parameter is optional, and if no delimiter is specified, the default
+is a comma (,).  So, in the above example, the delimiter parameter could be omitted.  Also, if
+the delimiters are different for each column being flattened, a list of delimiters can be
+provided.  If a single delimiter is provided, it&#8217;s assumed that we are using the same delimiter
+for all columns that are being flattened.  If more than one delimiter is provided, the number of
+delimiters must match the number of string columns being flattened.</p>
+<p>Check again:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b       c</span>
+<span class="go">======================</span>
+<span class="go">[0]  1  solo    green</span>
+<span class="go">[1]  1  mono    yellow</span>
+<span class="go">[2]  1  single  red</span>
+<span class="go">[3]  2  duo     orange</span>
+<span class="go">[4]  2  double  black</span>
+</pre></div>
+</div>
+<p>Alternatively, flatten_columns also accepts a single column name (instead of a list) if just one
+column is being flattened.  For example, we could have called flatten_column on just column <em>b</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>Check again:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b       c</span>
+<span class="go">================================</span>
+<span class="go">[0]  1  solo    green,yellow,red</span>
+<span class="go">[1]  1  mono    green,yellow,red</span>
+<span class="go">[2]  1  single  green,yellow,red</span>
+<span class="go">[3]  2  duo     orange,black</span>
+<span class="go">[4]  2  double  orange,black</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Dec 19, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
