@@ -129,25 +129,7 @@
 <blockquote>
 <div><p>The maximum number of bins.
 Default is the Square-root choice
-<div class="system-message">
-<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\lfloor \sqrt{m} \rfloor</tt>)</p>
-<p>latex exited with error
-[stdout]
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian)
- restricted \write18 enabled.
-entering extended mode
-(./math.tex
-LaTeX2e &lt;2011/06/27&gt;
-Babel &lt;3.9h&gt; and hyphenation patterns for 78 languages loaded.
-)
-! Emergency stop.
-&lt;*&gt; math.tex
-            
-No pages of output.
-Transcript written on math.log.
-</p>
-</div>
-, where <img class="math" src="../../../_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> is the number of rows.</p>
+<img class="math" src="../../../_images/math/ba432cd68613e43bf4d687471b871c16a94289d3.png" alt="\lfloor \sqrt{m} \rfloor"/>, where <img class="math" src="../../../_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/> is the number of rows.</p>
 </div></blockquote>
 <p><strong>bin_column_name</strong> : unicode (default=None)</p>
 <blockquote>
@@ -170,9 +152,18 @@ to identify grouping.</p>
 same number of elements.
 For <img class="math" src="../../../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> bins of a column <img class="math" src="../../../_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/> of length <img class="math" src="../../../_images/math/c4bb40dd65eae6c11b325989b14e0b8d35e4e3ef.png" alt="m"/>, the bin
 number is determined by:</p>
-<div class="math">
-<p><img src="../../../_images/math/43300a84d4067757d828ab860333ef7b9e537836.png" alt="\lceil n * \frac { f(C) }{ m } \rceil"/></p>
-</div><p>where <img class="math" src="../../../_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> is a tie-adjusted ranking function over values of
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">\lceil n * \frac { f(C) }{ m } \rceil</tt>)</p>
+dvipng exited with error
+[stderr]
+
+dvipng: Fatal error, DVI file ends prematurely
+
+
+[stdout]
+This is dvipng 1.14 Copyright 2002-2010 Jan-Ake Larsson
+</div>
+<p>where <img class="math" src="../../../_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/> is a tie-adjusted ranking function over values of
 <img class="math" src="../../../_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>.
 If there are multiples of the same value in <img class="math" src="../../../_images/math/2bcc65482aa8e15cd4c9e9f2542451fb4e971a91.png" alt="C"/>, then their
 tie-adjusted rank is the average of their ordered rank values.</p>
@@ -257,7 +248,7 @@ possible):</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 18, 2015.
+      Last updated on Dec 19, 2015.
       </li>
     </ul>
     </div>
