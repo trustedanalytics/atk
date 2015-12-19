@@ -40,7 +40,7 @@
 
     :Returns:
 
-        : dict
+        : list
 
         ..
 

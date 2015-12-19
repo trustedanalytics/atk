@@ -116,7 +116,7 @@ Response
 **Body**
 
 
-``dict``
+``float64``
 
         Entropy.
 

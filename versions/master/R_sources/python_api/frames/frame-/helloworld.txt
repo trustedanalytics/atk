@@ -23,7 +23,7 @@
 
     :Returns:
 
-        : dict
+        : unicode
 
         ..
 

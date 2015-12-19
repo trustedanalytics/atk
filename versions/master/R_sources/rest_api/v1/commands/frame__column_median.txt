@@ -121,7 +121,7 @@ Response
 **Body**
 
 
-``dict``
+``None``
 
         varies
             The median of the values.

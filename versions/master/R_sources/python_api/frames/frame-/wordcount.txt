@@ -16,7 +16,7 @@
 
     :Returns:
 
-        : dict
+        : list
 
         ..
 

@@ -103,7 +103,7 @@ Response
 **Body**
 
 
-``dict``
+``float64``
 
         Predicted label.
 

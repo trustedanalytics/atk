@@ -94,7 +94,7 @@ Response
 **Body**
 
 
-``dict``
+``int32``
 
 
 

@@ -112,7 +112,7 @@ Response
 **Body**
 
 
-``dict``
+``float64``
 
         Returns a double representing the probability if the user(i) to like product (j)
 

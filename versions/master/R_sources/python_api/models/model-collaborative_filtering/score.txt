@@ -32,7 +32,7 @@
 
     :Returns:
 
-        : dict
+        : float64
 
         ..
 

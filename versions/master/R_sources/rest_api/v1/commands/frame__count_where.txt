@@ -108,7 +108,7 @@ Response
 **Body**
 
 
-``dict``
+``int64``
 
         Number of rows matching qualifications.
 

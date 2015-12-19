@@ -97,7 +97,7 @@ Response
 **Body**
 
 
-``dict``
+``list``
 
 
                 dictionary

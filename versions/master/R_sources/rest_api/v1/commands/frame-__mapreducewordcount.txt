@@ -113,7 +113,7 @@ Response
 **Body**
 
 
-``dict``
+``unicode``
 
 
                 string
