@@ -39,7 +39,7 @@ object Pregel {
    * `EdgeDirection.Either`, which will run `sendMsg` on edges where either side received a message
    * in the previous round. If this is `EdgeDirection.Both`, `sendMsg` will only run on edges where
    * *both* vertices received a message.
-   * @param vprog The user-defined vertex program which runs on each
+   * @param vertexProgram The user-defined vertex program which runs on each
    * vertex and receives the inbound message and computes a new vertex
    * value. On the first iteration the vertex program is invoked on
    * all vertices and is passed the default message. On subsequent
@@ -62,54 +62,48 @@ object Pregel {
                                                                          initialReportGenerator: InitialReport[VertexData, EdgeData],
                                                                          superStepStatusGenerator: SuperStepStatusGenerator[VertexData],
                                                                          maxIterations: Int = Int.MaxValue,
-                                                                         activeDirection: EdgeDirection = EdgeDirection.Either)(vprog: (VertexId, VertexData, Message) => VertexData,
+                                                                         activeDirection: EdgeDirection = EdgeDirection.Either)(initialMsgSender: EdgeTriplet[VertexData, EdgeData] => Iterator[(VertexId, Message)],
+                                                                                                                                vertexProgram: (VertexId, VertexData, Message) => VertexData,
                                                                                                                                 sendMsg: EdgeTriplet[VertexData, EdgeData] => Iterator[(VertexId, Message)],
                                                                                                                                 mergeMsg: (Message, Message) => Message): (Graph[VertexData, EdgeData], String) = {
 
-    val vdataRDD: RDD[VertexData] = graph.vertices.map({ case (vid, vdata) => vdata })
-    val edataRDD: RDD[EdgeData] = graph.edges.map({ case e: Edge[EdgeData] => e.attr })
+    val vDataRdd: RDD[VertexData] = graph.vertices.map({ case (vId, vData) => vData })
+    val eDataRdd: RDD[EdgeData] = graph.edges.map({ case e: Edge[EdgeData] => e.attr })
 
-    val numberOfVertices = vdataRDD.count()
-
-    val initialReport = initialReportGenerator.generateInitialReport(vdataRDD, edataRDD)
-
+    val numberOfVertices = vDataRdd.count()
+    val initialReport = initialReportGenerator.generateInitialReport(vDataRdd, eDataRdd)
     var log = new StringBuilder(initialReport)
 
     if (maxIterations <= 0) {
-      log.++=("AtkPregel executed no iterations. Requested max iterations == " + maxIterations)
+      log.++=("Atk Pregel executed no iterations. Requested max iterations == " + maxIterations)
       (graph, log.toString())
     }
     else {
-
-      var g = graph.mapVertices((vid, vdata) => vprog(vid, vdata, initialMsg)).cache()
-
-      // loop
-      var i = 1
+      var previousGraph: Graph[VertexData, EdgeData] = null
+      var earlyTermination = false
+      var currentIteration = 1
+      var currentGraph = graph.mapVertices((vId, vData) => vertexProgram(vId, vData, initialMsg)).cache()
 
       // compute the messages
-      var messages = g.mapReduceTriplets(sendMsg, mergeMsg)
+      var messages = currentGraph.mapReduceTriplets(initialMsgSender, mergeMsg)
       var activeMessages = messages.count()
 
-      var prevG: Graph[VertexData, EdgeData] = null
-
-      var earlyTermination = false
-
-      while (activeMessages > 0 && i <= maxIterations && !earlyTermination) {
+      while (activeMessages > 0 && currentIteration <= maxIterations && !earlyTermination) {
 
         // Receive the messages. Vertices that didn't get any messages do not appear in newVerts.
-        val newVerts = g.vertices.innerJoin(messages)(vprog).cache()
+        val newVerts = currentGraph.vertices.innerJoin(messages)(vertexProgram).cache()
 
         // Update the graph with the new vertices.
-        prevG = g
-        g = g.outerJoinVertices(newVerts) { (vid, old, newOpt) => newOpt.getOrElse(old) }
-        g.cache()
+        previousGraph = currentGraph
+        currentGraph = currentGraph.outerJoinVertices(newVerts) { (vid, old, newOpt) => newOpt.getOrElse(old) }
+        currentGraph.cache()
 
         val oldMessages = messages
 
         // Send new messages. Vertices that didn't get any messages don't appear in newVerts, so don't
         // get to send messages. We must cache messages so it can be materialized on the next line,
         // allowing us to uncache the previous iteration.
-        messages = g.mapReduceTriplets(sendMsg, mergeMsg, Some((newVerts, activeDirection))).cache()
+        messages = currentGraph.mapReduceTriplets(sendMsg, mergeMsg, Some((newVerts, activeDirection))).cache()
 
         // The call to count() materializes `messages`, `newVerts`, and the vertices of `g`. This
         // hides oldMessages (depended on by newVerts), newVerts (depended on by messages), and the
@@ -117,23 +111,23 @@ object Pregel {
         activeMessages = messages.count()
 
         // update the status -- we use the new verts to avoid contributions from vertices that did not change
-        val status = superStepStatusGenerator.generateSuperStepStatus(i, numberOfVertices, newVerts.map({ case (vid, vdata) => vdata }))
+        val status = superStepStatusGenerator.generateSuperStepStatus(currentIteration, numberOfVertices, newVerts.map({ case (vid, vdata) => vdata }))
 
         // count the iteration and update the log
-        i += 1
+        currentIteration += 1
         log.++=(status.log)
         earlyTermination = status.earlyTermination
 
         // Unpersist the RDDs hidden by newly-materialized RDDs
         oldMessages.unpersist(blocking = false)
         newVerts.unpersist(blocking = false)
-        prevG.unpersistVertices(blocking = false)
-        prevG.edges.unpersist(blocking = false)
+        previousGraph.unpersistVertices(blocking = false)
+        previousGraph.edges.unpersist(blocking = false)
       }
 
-      log.++=("\nTotal number of iterations: " + (i - 1))
+      log.++=("\nTotal number of iterations: " + (currentIteration - 1))
 
-      (g, log.toString())
+      (currentGraph, log.toString())
     }
   }
 }

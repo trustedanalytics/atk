@@ -24,7 +24,7 @@
 echo "assuming combine.sh is being ran from source code"
 
 # list of modules we want coverage for
-scala_coverage_modules="engine/interfaces engine/meta-store engine/engine-core engine/graphbuilder engine-plugins/frame-plugins engine-plugins/graph-plugins engine-plugins/model-plugins engine-plugins/giraph-plugins rest-server misc/launcher"
+scala_coverage_modules="engine/interfaces engine/meta-store engine/engine-core engine/graphbuilder engine-plugins/frame-plugins engine-plugins/graph-plugins engine-plugins/model-plugins rest-server misc/launcher"
 
 # target directory to generate report
 report_target=misc/scala-coverage/target/scala-coverage-report

@@ -17,21 +17,8 @@
 package org.trustedanalytics.atk.engine.graph.plugins
 
 import org.scalatest.{ Matchers, FlatSpec }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
-import org.trustedanalytics.atk.domain.schema.Column
-import org.trustedanalytics.atk.domain.schema.DataTypes._
-import org.trustedanalytics.atk.graphbuilder.parser.{ ColumnDef, InputSchema }
-import org.trustedanalytics.atk.graphbuilder.parser.rule.{ EdgeRule, VertexRule }
-import org.trustedanalytics.atk.graphbuilder.parser.rule.RuleParserDSL._
-import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
-import org.trustedanalytics.atk.graphbuilder.parser.ColumnDef
-import org.trustedanalytics.atk.domain.schema.Column
-import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilder, GraphBuilderConfig }
-import com.thinkaurelius.titan.core.TitanGraph
 import org.scalatest.mock.MockitoSugar
-import org.mockito.Mockito._
-import org.trustedanalytics.atk.domain.schema.Column
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 
 class ExportToGraphPluginTest extends FlatSpec with Matchers with MockitoSugar {
 

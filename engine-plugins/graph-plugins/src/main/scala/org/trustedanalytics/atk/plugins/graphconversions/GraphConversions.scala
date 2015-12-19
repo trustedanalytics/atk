@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.graphconversions
 
-import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 import org.apache.spark.graphx.{ Edge => GraphXEdge }
+import org.trustedanalytics.atk.graphbuilder.elements.GBEdge
 
 object GraphConversions {
 

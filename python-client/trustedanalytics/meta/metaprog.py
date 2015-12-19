@@ -341,19 +341,13 @@ def _create_class_type(new_class_name, baseclass, doc, init=None):
     #     CommandsInstallable
     #            |
     #       _BaseGraph
-    #       /         \
-    #    Graph       TitanGraph
+    #            |
+    #          Graph
     #
     #
     #  We need to create:
     #
-    #     _BaseGraphMl defines "graphx_pagerank"
-    #       /         \
-    #    GraphMl       TitanGraphMl defines "pagerank"
-    #
-    # such that
-    #
-    # t = TitanGraph()
+    # t = Graph()
     # t.ml.graphx_pagerank(...)   # works
     # t.ml.pagerank(...)          # works
     # g = Graph()

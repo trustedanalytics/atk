@@ -36,7 +36,7 @@ To connect to a specific server:
 Connections requiring OAuth
 ---------------------------
 
-To connect to a DP2 instance of |PACKAGE|, the python client must have an OAuth access token (see [oauth tokens](http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html)).  
+To connect to a TAP instance of |PACKAGE|, the python client must have an OAuth access token (see [oauth tokens](http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html)).  
 The user must have a credentials file which holds an OAuth access token and a refresh token.
 
 The user can create a credentials file using |PACKAGE| client running in an interactive python session.  Call `create_credentials_file('filename_of_your_choice')` and interactively provide answers to its prompt.
@@ -55,7 +55,7 @@ The user can create a credentials file using |PACKAGE| client running in an inte
 
     >>> import trustedanalytics as ta
     >>> ta.create_connect_file('~/.ta/demo.creds')
-    OAuth server URI: uaa.my-dp2-domain.com
+    OAuth server URI: uaa.my-tap-domain.com
     user name: dscientist9
     Password: **********
 
@@ -68,7 +68,7 @@ The credentials file can be specified when calling ``connect`` or set as an envi
     .. code::
 
         >>> ta.connect('~/.ta/demo.creds')
-        Connected.  This client instance connected to server http://my-ta-instance.my-dp2-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.
+        Connected.  This client instance connected to server http://my-ta-instance.my-tap-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.
 
 .. only:: latex
 
@@ -76,7 +76,7 @@ The credentials file can be specified when calling ``connect`` or set as an envi
 
         >>> ta.connect('~/.ta/demo.creds')
         Connected.  This client instance connected to
-        server http://my-ta-instance.my-dp2-apps-domain.com/v1
+        server http://my-ta-instance.my-tap-apps-domain.com/v1
         as user dscientist9 at 2015-06-19 10:27:21.583704.
 
 The credentials file path must be relative to how python was launched.
@@ -128,7 +128,7 @@ To see the client's configuration to find the server, look at ``ta.server``:
                 "Content-type": "application/json"
             }, 
             "scheme": "http", 
-            "oauth_uri": "uaa.my-dp2-domain.comdemo-gotapaas.com", 
+            "oauth_uri": "uaa.my-tap-domain.comdemo-gotapaas.com", 
             "user": "dscientist9"
         }
 
@@ -156,7 +156,7 @@ To see the client's configuration to find the server, look at ``ta.server``:
                 "Content-type": "application/json"
             }, 
             "scheme": "http", 
-            "oauth_uri": "uaa.my-dp2-domain.comdemo-gotapaas.com", 
+            "oauth_uri": "uaa.my-tap-domain.comdemo-gotapaas.com", 
             "user": "dscientist9"
         }
 

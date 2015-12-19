@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.plugins.labelpropagation
 import org.apache.spark.graphx.lib.{ ConnectedComponents => GraphXConnectedComponents, LabelPropagation }
 import org.apache.spark.graphx.{ Edge => GraphXEdge, _ }
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
 
 /**
  *

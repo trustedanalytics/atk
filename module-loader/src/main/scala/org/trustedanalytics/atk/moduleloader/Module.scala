@@ -165,10 +165,11 @@ object Module {
 
   def allJarNames(moduleName: String): Seq[String] = {
     val module = get(moduleName)
-    module.parentName match {
+    val jarNames = module.parentName match {
       case Some(parentName) => module.jarNames ++ allJarNames(parentName)
       case None => module.jarNames
     }
+    jarNames.distinct
   }
 
   def allLibs(moduleName: String): Iterable[URL] = {

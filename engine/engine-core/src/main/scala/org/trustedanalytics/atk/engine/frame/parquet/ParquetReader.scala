@@ -42,7 +42,7 @@ class ParquetReader(val path: Path, fileStorage: FileStorage, parquetApiFactory:
   def this(path: Path, fileStorage: FileStorage) = this(path, fileStorage, new ParquetApiFactory(fileStorage.configuration))
   private[parquet] val utf8 = Charset.forName("UTF-8")
   private val decoder = utf8.newDecoder()
-  private val ParquetFileOrderPattern = ".*part-r-(\\d*)\\.parquet".r
+  private val ParquetFileOrderPattern = ".*part-r-(\\d*).*\\.parquet".r
 
   /**
    * Row count for the frame stored at this path

@@ -17,7 +17,6 @@
 package org.trustedanalytics.atk.plugins.graphstatistics
 
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, StorageFormats, DomainJsonProtocol }
 import org.trustedanalytics.atk.domain.graph.{ GraphTemplate, GraphEntity, GraphReference }
@@ -27,6 +26,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 
 case class AnnotateWeightedDegreesArgs(graph: GraphReference,
                                        @ArgDoc("property name of where to store output") outputPropertyName: String,

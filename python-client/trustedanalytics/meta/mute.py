@@ -35,11 +35,7 @@ muted_commands = ['frame/load',
                   'frame:/rename',
                   'frame:vertex/rename',
                   'frame:edge/rename',
-                  #'graph/load',  # TODO - fix ref to graph.load in TitanGraph
-                  #'graph:/load',
-                  #'graph:titan/load',
                   'graph/rename',
                   'graph:/rename',
-                  'graph:titan/rename',
                   'model/rename',
                   ]

@@ -167,8 +167,6 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
       }
     }
     else {
-      // TODO: Other plugins like Giraph etc which inherit from CommandPlugin, See TRIB-4661
-      // TODO: We need to rename all giraph jobs to use command.getJobName as yarn job name instead of hardcoded values like "iat_giraph_als"
       error(s"Cancel is NOT implemented for anything other than SparkCommandPlugins, ${command.name} is NOT a SparkCommandPlugin")
     }
   }

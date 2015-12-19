@@ -19,8 +19,7 @@ package org.trustedanalytics.atk.plugins.pregel.lbp
 import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
-import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -76,9 +75,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 1d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = firstNodePriors.length)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
 
     log should include("Total number of iterations: 1")
   }
@@ -91,9 +95,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0.2d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = firstNodePriors.length)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
 
     log should include("Total number of iterations: 2")
   }
@@ -106,9 +115,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = firstNodePriors.length)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
 
     log should include("Total number of iterations: 2")
   }
@@ -123,9 +137,14 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = firstNodePriors.length)
 
-    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+    val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+      LoopyBeliefPropagationMessage.msgSender,
+      LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+      LoopyBeliefPropagationMessage.msgSender
+    )
 
     log should include("Total number of iterations: 2")
   }

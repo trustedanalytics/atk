@@ -100,7 +100,6 @@ object UnflattenColumnFunctions extends Serializable {
     val rows = groupedByRows.toList
     val rowCount = rows.length
 
-    val keySize = compositeKeyIndex.length
     val colsInRow = rows.head.length
     val result = new Array[Any](colsInRow)
 

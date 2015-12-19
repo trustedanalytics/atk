@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ Matchers, FlatSpec }
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**

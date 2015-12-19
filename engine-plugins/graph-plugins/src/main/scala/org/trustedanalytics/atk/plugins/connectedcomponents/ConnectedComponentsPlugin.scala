@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.plugins.connectedcomponents
 
 import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
@@ -27,6 +26,7 @@ import org.trustedanalytics.atk.domain.{ CreateEntityArgs, DomainJsonProtocol }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.Property
 import org.trustedanalytics.atk.plugins.GBVertexUtils
 import spray.json._
 import DomainJsonProtocol._

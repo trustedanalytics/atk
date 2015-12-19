@@ -20,8 +20,7 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.spark.SparkException
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, Property }
-import org.trustedanalytics.atk.plugins.pregel.LoopyBeliefPropagationVertexProgram
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -48,7 +47,8 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
       maxIterations = 10,
       stringOutput = false,
       convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput)
+      posteriorProperty = propertyForLBPOutput,
+      stateSpaceSize = 2)
 
   }
 
@@ -83,7 +83,11 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[SparkException] {
-      val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+      val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
+        LoopyBeliefPropagationMessage.msgSender,
+        LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+        LoopyBeliefPropagationMessage.msgSender
+      )
     }
 
     exception.asInstanceOf[SparkException].getMessage should include("IllegalArgumentException")
@@ -115,7 +119,11 @@ class MalformedInputTest extends FlatSpec with Matchers with TestingSparkContext
 
     // This on Spark, so the IllegalArgumentException bubbles up through a SparkException
     val exception = intercept[Exception] {
-      PregelAlgorithm.run(verticesIn, edgesIn, args)(LoopyBeliefPropagationVertexProgram.loopyBeliefPropagation)
+      PregelAlgorithm.run(verticesIn, edgesIn, args)(
+        LoopyBeliefPropagationMessage.msgSender,
+        LoopyBeliefPropagationVertexProgram.pregelVertexProgram,
+        LoopyBeliefPropagationMessage.msgSender
+      )
     }
 
     exception.asInstanceOf[Exception].getMessage should include("not be found")

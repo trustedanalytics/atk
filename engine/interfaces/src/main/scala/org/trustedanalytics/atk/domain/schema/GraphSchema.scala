@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.domain.schema
 
 /**
- * Utility methods and constants used in Schemas for Seamless Graphs (not Titan)
+ * Utility methods and constants used in Schemas for Seamless Graphs
  *
  * "Seamless Graph" is a graph that provides a "seamless user experience" between graphs and frames.
  * The same data can be treated as frames one moment and as a graph the next without any import/export.

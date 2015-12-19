@@ -22,15 +22,10 @@ import java.util.concurrent.TimeUnit
 
 import org.apache.commons.io.FileUtils
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
-import org.trustedanalytics.atk.graphbuilder.util.SerializableBaseConfiguration
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanAutoPartitioner
 import org.trustedanalytics.atk.engine.partitioners.{ FileSizeToPartitionSize, SparkAutoPartitionStrategy }
-import com.typesafe.config.{ Config, ConfigFactory }
-import org.apache.hadoop.hbase.HBaseConfiguration
-import org.apache.hadoop.hbase.client.HBaseAdmin
+import com.typesafe.config.{ ConfigFactory }
 import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
-import scala.concurrent.duration._
 import org.apache.commons.lang3.StringUtils
 
 /**
@@ -115,63 +110,6 @@ trait EngineConfig extends EventLogging {
    */
   val frameLoadTestFailThresholdPercentage: Int =
     config.getInt("trustedanalytics.atk.engine.command.frames.load.config.schema-validation-fail-threshold-percentage")
-
-  /**
-   * Default settings for Titan Load.
-   *
-   * Creates a new configuration bean each time so it can be modified by the caller (like setting the table name).
-   */
-  def titanLoadConfiguration: SerializableBaseConfiguration = {
-    createTitanConfiguration(config, "trustedanalytics.atk.engine.titan.load")
-  }
-
-  /**
-   * Create new configuration for Titan using properties specified in path expression.
-   *
-   * This method can also be used by command plugins in the Spark engine which might use
-   * a different configuration object.
-   *
-   * @param commandConfig Configuration object for command.
-   * @param titanPath Dot-separated expressions with Titan config, e.g., trustedanalytics.atk.engine.titan.load
-   * @return Titan configuration
-   */
-  def createTitanConfiguration(commandConfig: Config, titanPath: String): SerializableBaseConfiguration = {
-    val titanConfiguration = new SerializableBaseConfiguration
-    val titanDefaultConfig = commandConfig.getConfig(titanPath)
-
-    //Prevents errors in Titan/HBase reader when storage.hostname is converted to list
-    titanConfiguration.setDelimiterParsingDisabled(true)
-    for (entry <- titanDefaultConfig.entrySet().asScala) {
-      titanConfiguration.addProperty(entry.getKey, titanDefaultConfig.getString(entry.getKey))
-    }
-
-    setTitanAutoPartitions(titanConfiguration)
-  }
-
-  /**
-   * Update Titan configuration with auto-generated settings.
-   *
-   * At present, auto-partitioner for graph construction only sets HBase pre-splits.
-   *
-   * @param titanConfiguration the config to be modified
-   * @return Updated Titan configuration
-   */
-  def setTitanAutoPartitions(titanConfiguration: SerializableBaseConfiguration): SerializableBaseConfiguration = {
-    val titanAutoPartitioner = TitanAutoPartitioner(titanConfiguration)
-    val storageBackend = titanConfiguration.getString("storage.backend")
-
-    storageBackend.toLowerCase match {
-      case "hbase" =>
-        val hBaseAdmin = new HBaseAdmin(HBaseConfiguration.create())
-        titanAutoPartitioner.setHBasePreSplits(hBaseAdmin)
-        info("Setting Titan/HBase pre-splits for  to: " + titanConfiguration.getProperty(TitanAutoPartitioner.TITAN_HBASE_REGION_COUNT))
-      case _ => info("No auto-configuration settings for storage backend: " + storageBackend)
-    }
-
-    titanConfiguration.setProperty("auto-partitioner.broadcast-join-threshold", broadcastJoinThreshold)
-
-    titanConfiguration
-  }
 
   /**
    * Configuration properties that will be supplied to SparkConf()
@@ -343,7 +281,7 @@ trait EngineConfig extends EventLogging {
    * that will need to be sent to Yarn)
    */
   lazy val effectiveApplicationConf: String = {
-    val file = File.createTempFile("effective-application-conf-", ".tmp")
+    val file = File.createTempFile("effective-application-conf-", ".tmp.conf")
     file.deleteOnExit()
 
     // modify permissions since this file could have credentials in it
@@ -359,6 +297,11 @@ trait EngineConfig extends EventLogging {
     FileUtils.writeStringToFile(file, config.root().render())
 
     file.getAbsolutePath
+  }
+
+  /** The file name without path */
+  lazy val effectiveApplicationConfFileName: String = {
+    StringUtils.substringAfterLast(effectiveApplicationConf, File.separator)
   }
 
 }

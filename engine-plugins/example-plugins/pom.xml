@@ -35,10 +35,10 @@
 
 
         <properties>
-            <dep.cdh.version>cdh5.4.2</dep.cdh.version>
+            <dep.cdh.version>cdh5.5.0</dep.cdh.version>
             <scala.long.version>2.10.4</scala.long.version>
             <scala.short.version>2.10</scala.short.version>
-            <dep.spark.version>1.3.0-${dep.cdh.version}</dep.spark.version>
+            <dep.spark.version>1.5.0-${dep.cdh.version}</dep.spark.version>
             <dep.hadoop2.version>2.6.0-${dep.cdh.version}</dep.hadoop2.version>
         </properties>
     -->
@@ -109,10 +109,6 @@
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>engine-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>graphbuilder</artifactId>
         </dependency>
         <dependency>
             <groupId>io.spray</groupId>

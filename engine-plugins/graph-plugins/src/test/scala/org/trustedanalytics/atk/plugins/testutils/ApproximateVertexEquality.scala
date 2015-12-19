@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.testutils
 
-import org.trustedanalytics.atk.plugins.VectorMath
 import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
+import org.trustedanalytics.atk.plugins.VectorMath
 
 /**
  * Provides methods for comparing vertices and sets of vertices when approximate equality is acceptable in a
