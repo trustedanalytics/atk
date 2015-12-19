@@ -100,10 +100,6 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
-            <artifactId>launcher</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>model-plugins</artifactId>
         </dependency>
         <dependency>
