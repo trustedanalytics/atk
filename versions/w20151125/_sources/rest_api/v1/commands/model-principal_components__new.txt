@@ -1,0 +1,128 @@
+
+
+------------------------------------------------------
+:doc:`Commands <index>` model:principal_components/new
+------------------------------------------------------
+
+Create a 'new' instance of a Principal Components model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:principal_components/new
+
+:arguments:
+
+
+    **dummy_model_ref** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Principal component analysis [1]_ is a statistical algorithm
+that converts possibly correlated features to linearly uncorrelated variables
+called principal components.
+The number of principal components is less than or equal to the number of
+original variables.
+This implementation of computing Principal Components is done by Singular
+Value Decomposition [2]_ of the data, providing the user with an option to
+mean center the data.
+The Principal Components model is initialized; trained on
+specifying the observation columns of the frame and the number of components;
+used to predict principal components.
+The MLLib Singular Value Decomposition [3]_ implementation has been used for
+this, with additional features to 1) mean center the data during train and
+predict and 2) compute the t-squared index during prediction.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+.. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
+.. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Model``
+
+        A new instance of PrincipalComponentsModel
+
+

@@ -1,0 +1,115 @@
+
+
+------------------------------------------------------------
+:doc:`Commands <index>` model:power_iteration_clustering/new
+------------------------------------------------------------
+
+Create a 'new' instance of a PowerIterationClustering model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:power_iteration_clustering/new
+
+:arguments:
+
+
+    **dummy_model_ref** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        User supplied name.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Power Iteration Clustering [1]_ is a scalable and efficient algorithm for clustering vertices of a graph given pairwise similarities as edge properties.
+A Power Iteration Clustering model is initialized and the cluster assignments of the vertices can be predicted on specifying the source column, destination column and similarity column of the given frame.
+
+.. rubric:: footnotes
+
+.. [1] http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf
+.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#power-iteration-clustering-pic
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Model``
+
+        A new instance of PowerIterationClustering Model
+
+

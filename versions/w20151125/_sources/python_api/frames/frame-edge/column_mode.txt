@@ -1,0 +1,159 @@
+
+:doc:`EdgeFrame <index>`  column_mode
+*************************************
+
+------
+
+
+.. function:: column_mode(self, data_column, weights_column=None, max_modes_returned=None)
+
+    Evaluate the weights assigned to rows.
+
+
+    :Parameters:
+
+        **data_column** : unicode
+
+        ..
+
+            Name of the column supplying the data.
+
+
+
+        **weights_column** : unicode (default=None)
+
+        ..
+
+            Name of the column supplying the weights.
+            Default is all items have weight of 1.
+
+
+
+        **max_modes_returned** : int32 (default=None)
+
+        ..
+
+            Maximum number of modes returned.
+            Default is 1.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Dictionary containing summary statistics.
+                The data returned is composed of multiple components\:
+
+            mode : A mode is a data element of maximum net weight.
+                A set of modes is returned.
+                The empty set is returned when the sum of the weights is 0.
+                If the number of modes is less than or equal to the parameter
+                max_modes_returned, then all modes of the data are
+                returned.
+                If the number of modes is greater than the max_modes_returned
+                parameter, only the first max_modes_returned many modes (per a
+                canonical ordering) are returned.
+            weight_of_mode : Weight of a mode.
+                If there are no data elements of finite weight greater than 0,
+                the weight of the mode is 0.
+                If no weights column is given, this is the number of appearances
+                of each mode.
+            total_weight : Sum of all weights in the weight column.
+                This is the row count if no weights are given.
+                If no weights column is given, this is the number of rows in
+                the table with non-zero weight.
+            mode_count : The number of distinct modes in the data.
+                In the case that the data is very multimodal, this number may
+                exceed max_modes_returned.
+
+
+    Calculate the modes of a column.
+    A mode is a data element of maximum weight.
+    All data elements of weight less than or equal to 0 are excluded from the
+    calculation, as are all data elements whose weight is NaN or infinite.
+    If there are no data elements of finite weight greater than 0,
+    no mode is returned.
+
+    Because data distributions often have multiple modes, it is possible for a
+    set of modes to be returned.
+    By default, only one is returned, but by setting the optional parameter
+    max_modes_returned, a larger number of modes can be returned.
+
+    Examples
+    --------
+    Given a frame with column 'a' accessed by a Frame object 'my_frame':
+
+    .. code::
+
+       >>> import trustedanalytics as ta
+       >>> ta.connect()
+       Connected ...
+       >>> data = [[2],[3],[3],[5],[7],[10],[30]]
+       >>> schema = [('a', ta.int32)]
+       >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
+       [===Job Progress===]
+
+    Inspect my_frame
+
+    .. code::
+
+       >>> my_frame.inspect()
+       [#]  a
+       =======
+       [0]   2
+       [1]   3
+       [2]   3
+       [3]   5
+       [4]   7
+       [5]  10
+       [6]  30
+       
+
+    Compute and return a dictionary containing summary statistics of column *a*:
+
+    .. code::
+
+       >>> mode = my_frame.column_mode('a')
+       [===Job Progress===]
+       >>> print sorted(mode.items())
+       [(u'mode_count', 1), (u'modes', [3]), (u'total_weight', 7.0), (u'weight_of_mode', 2.0)]
+
+    Given a frame with column 'a' and column 'w' as weights accessed by a Frame object 'my_frame':
+
+    .. code::
+
+       >>> data = [[2,1.7],[3,0.5],[3,1.2],[5,0.8],[7,1.1],[10,0.8],[30,0.1]]
+       >>> schema = [('a', ta.int32), ('w', ta.float32)]
+       >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
+       [===Job Progress===]
+
+    Inspect my_frame
+
+    .. code::
+
+       >>> my_frame.inspect()
+       [#]  a   w
+       =======================
+       [0]   2   1.70000004768
+       [1]   3             0.5
+       [2]   3   1.20000004768
+       [3]   5  0.800000011921
+       [4]   7   1.10000002384
+       [5]  10  0.800000011921
+       [6]  30   0.10000000149
+       
+
+    Compute and return dictionary containing summary statistics of column 'a' with weights 'w':
+
+    .. code::
+
+       >>> mode = my_frame.column_mode('a', weights_column='w')
+       [===Job Progress===]
+       >>> print sorted(mode.items())
+       [(u'mode_count', 2), (u'modes', [2]), (u'total_weight', 6.200000144541264), (u'weight_of_mode', 1.7000000476837158)]
+
+
