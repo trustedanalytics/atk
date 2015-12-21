@@ -373,6 +373,8 @@ def numpy_to_bson_friendly(obj):
         return obj.tolist()
     if isinstance(obj, datetime):
         return obj.isoformat()
+    if isinstance(obj, dict):
+        return dict([(numpy_to_bson_friendly(key), numpy_to_bson_friendly(value)) for key, value in obj.items()])
     # Let the base class default method raise the TypeError
     return obj
 

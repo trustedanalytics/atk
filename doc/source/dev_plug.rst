@@ -68,8 +68,6 @@ provided by a reference.conf in the plugin's deployment jar).
 Configuration details are discussed in the "Configuration" section below.
 Plugins have access to the configuration, but only the section of it that
 contains settings that are relevant.
-For example, the Loopy Belief Propagation plugin gets its configuration from
-'trustedanalytics.atk.giraph-plugins.command.graph.ml.loopy_belief_propagation.config'.
 
 Execution Flow
 ==============

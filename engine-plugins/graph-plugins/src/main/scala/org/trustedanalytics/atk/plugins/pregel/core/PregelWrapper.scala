@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.plugins.pregel.core
 
 import org.apache.spark.graphx._
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex }
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.pregel.{ AverageDeltaSuperStepStatusGenerator, BasicCountsInitialReport, DeltaProvider, Pregel }
 
 /**

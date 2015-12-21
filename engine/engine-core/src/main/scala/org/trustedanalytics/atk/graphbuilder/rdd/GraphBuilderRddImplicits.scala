@@ -14,28 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.clusteringcoefficient
+package org.trustedanalytics.atk.graphbuilder.rdd
 
-import org.trustedanalytics.atk.domain.schema._
+import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
- * Convert a GBVertex to a FrameSchema
+ * These implicits can be imported to add GraphBuilder related functions to RDD's
  */
-object FrameSchemaAggregator extends Serializable {
+object GraphBuilderRddImplicits {
 
-  def toSchema(vertex: GBVertex): FrameSchema = {
-    val columns = vertex.properties.map(property => Column(property.key, DataTypes.dataTypeOfValue(property.value)))
-    new FrameSchema(columns.toList)
-  }
-
-  val zeroValue: Schema = FrameSchema()
-
-  def seqOp(schema: Schema, vertex: GBVertex): Schema = {
-    schema.union(toSchema(vertex))
-  }
-
-  def combOp(schemaA: Schema, schemaB: Schema): Schema = {
-    schemaA.union(schemaB)
-  }
+  /**
+   * Functions applicable to Vertex RDD's
+   */
+  implicit def vertexRDDToVertexRDDFunctions(rdd: RDD[GBVertex]) = new VertexRddFunctions(rdd)
 }

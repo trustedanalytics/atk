@@ -23,7 +23,7 @@ import org.apache.spark.frame.ordering.FrameOrderingUtils
 import org.apache.spark.mllib.linalg.distributed.IndexedRow
 import org.apache.spark.mllib.linalg.{ Vector, Vectors }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.catalyst.expressions.{ GenericMutableRow, GenericRow }
+import org.apache.spark.sql.catalyst.expressions.{ GenericRow }
 import org.apache.spark.sql.types.{ ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType }
 import org.apache.spark.sql.{ DataFrame, Row, SQLContext }
 import org.apache.spark.{ Partition, TaskContext }
@@ -33,7 +33,6 @@ import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
 import org.trustedanalytics.atk.engine.graph.plugins.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
-
 import scala.collection.mutable.ListBuffer
 import scala.reflect.ClassTag
 
@@ -518,8 +517,7 @@ object FrameRdd {
    * @return  keys are labels and values are FrameRdd's
    */
   def toFrameRddMap(gbVertexRDD: RDD[GBVertex]): Map[String, FrameRdd] = {
-
-    import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
+    import org.trustedanalytics.atk.graphbuilder.rdd.GraphBuilderRddImplicits._
 
     // make sure all of the vertices have a label
     val labeledVertices = gbVertexRDD.labelVertices(Nil)

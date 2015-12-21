@@ -17,9 +17,9 @@
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.engine.graph.plugins.VertexSchemaAggregator
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.scalatest.WordSpec
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 
 class VertexSchemaAggregatorTest extends WordSpec {
 

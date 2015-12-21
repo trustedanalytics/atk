@@ -14,28 +14,20 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.plugins.clusteringcoefficient
-
-import org.trustedanalytics.atk.domain.schema._
-import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
+package org.trustedanalytics.atk.graphbuilder
 
 /**
- * Convert a GBVertex to a FrameSchema
+ * Prefer org.apache.commons.lang3.StringUtils over writing your own methods below
  */
-object FrameSchemaAggregator extends Serializable {
+object StringUtils {
 
-  def toSchema(vertex: GBVertex): FrameSchema = {
-    val columns = vertex.properties.map(property => Column(property.key, DataTypes.dataTypeOfValue(property.value)))
-    new FrameSchema(columns.toList)
-  }
-
-  val zeroValue: Schema = FrameSchema()
-
-  def seqOp(schema: Schema, vertex: GBVertex): Schema = {
-    schema.union(toSchema(vertex))
-  }
-
-  def combOp(schemaA: Schema, schemaB: Schema): Schema = {
-    schemaA.union(schemaB)
+  /**
+   * Call toString() on the supplied object, handling null safely
+   * @param any object
+   * @return null if called on null object, otherwise result of toString()
+   */
+  def nullSafeToString(any: Any): String = {
+    if (any != null) any.toString()
+    else null
   }
 }

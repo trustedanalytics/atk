@@ -41,9 +41,7 @@ Each node in the graph will be associated with a vector
 is the feature dimension specified by the user, and a bias term :math:`b_x`.
 The predictions for item :math:`m_{j}`, from user :math:`u_{i}` care given by
 dot product of the feature vector and the user vector, plus the item and user
-bias terms:
-/home/work/atk/engine-plugins/giraph-plugins/src/main/scala/org/trustedanalytics/atk/giraph/plugins/model/cf/CollaborativeFilteringNewPlugin.scala
-
+bias terms.
 .. math::
 
     r_{ij} = \overrightarrow {f_{ui}} \cdot \overrightarrow {f_{mj}} + b_{ui} \

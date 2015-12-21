@@ -726,11 +726,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
-                <artifactId>graphbuilder</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>frame-plugins</artifactId>
                 <version>${project.version}</version>
             </dependency>

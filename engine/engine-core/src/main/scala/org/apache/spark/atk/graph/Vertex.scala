@@ -16,10 +16,11 @@
 
 package org.apache.spark.atk.graph
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property => GBProperty }
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property => GBProperty }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, VertexSchema, DataTypes }
 import org.trustedanalytics.atk.engine.frame.AbstractRow
 import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 
 /**
  * Vertex: self contained vertex with complete schema information included.
@@ -112,26 +113,4 @@ trait AbstractVertex extends AbstractRow {
     val properties = schema.columnsExcept(List(GraphSchema.vidProperty)).map(column => GBProperty(column.name, value(column.name)))
     GBVertex(vid, GBProperty(GraphSchema.vidProperty, vid), properties.toSet)
   }
-
-  /**
-   * Merge values from other row onto this row.
-   *
-   * Values in this row are preferred, only missing values are copies from supplied row
-   */
-  // TODO: weird compile issues with this, delete or fix
-  //  def merge(otherRow: Row): Row = {
-  //    val idIndex = schema.columnIndex(schema.vertexSchema.get.idColumnName)
-  //    val labelIndex = schema.columnIndex(GraphSchema.labelProperty)
-  //    require(row(idIndex) == otherRow(idIndex), "vertices with different ids can't be merged")
-  //    require(row(labelIndex) == otherRow(labelIndex), "vertices with different labels can't be merged")
-  //    val content = row.toArray.zip(otherRow.toArray).map {
-  //      case (first: Any, second: Any) =>
-  //        first match {
-  //          case null => second
-  //          case None => second
-  //          case _ => first
-  //        }
-  //    }
-  //    new GenericRow(content)
-  //  }
 }

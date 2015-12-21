@@ -96,7 +96,7 @@ except Exception as e:
 
 
 @api
-@arg("items", "List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself).", "Deletes the specified frames, graphs, and models from the server.")
+@arg("*items", "List of strings (frame, graph, or model name) or proxy objects (the frame, graph, or model object itself).", "Deletes the specified frames, graphs, and models from the server.")
 @returns(int, 'Number of items deleted.' )
 def __drop(*items):
     """
@@ -754,7 +754,7 @@ class _BaseFrame(CommandLoadable):
     @api
     @beta
     @arg('group_by_columns', list, 'Column name or list of column names')
-    @arg('aggregation_arguments', dict, "Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.")
+    @arg('*aggregation_arguments', dict, "Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.")
     @returns('Frame', 'A new frame with the results of the group_by')
     def __group_by(self, group_by_columns, *aggregation_arguments):
         """
@@ -859,11 +859,10 @@ class _BaseFrame(CommandLoadable):
 
     @api
     @alpha
-    @arg('column_inputs', 'str | tuple(str, dict)', 'Comma-separated column names to summarize or tuple containing column name '
-                                                    'and dictionary of optional parameters. '
-                                                    'Optional parameters (see below for details): '
-                                                    'top_k (default = 10), threshold (default = 0.0)')
-
+    @arg('*column_inputs', 'str | tuple(str, dict)', 'Comma-separated column names to summarize or tuple containing column name '
+                                                     'and dictionary of optional parameters. '
+                                                     'Optional parameters (see below for details): '
+                                                     'top_k (default = 10), threshold (default = 0.0)')
     @returns(dict, 'Summary for specified column(s) consisting of levels with their frequency and percentage')
     def __categorical_summary(self, *column_inputs):
         """

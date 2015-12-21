@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.plugins.communitydetection.kclique
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBVertex, Property }
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ Property, GBVertex }
 
 /**
  * Class to set the vertex Ids as required by Graph Builder, by formatting as (physicalId, gbId, propertyList)

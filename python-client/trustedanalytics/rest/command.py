@@ -40,8 +40,6 @@ def execute_command(command_name, selfish, **arguments):
     command_request = CommandRequest(command_name, arguments)
     command_info = executor.issue(command_request)
     result = command_info.result
-    if result.has_key('value') and len(result) == 1:
-        result = command_info.result.get('value')
     return result
 
 
