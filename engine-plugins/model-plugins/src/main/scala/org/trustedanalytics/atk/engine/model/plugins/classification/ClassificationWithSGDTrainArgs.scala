@@ -34,7 +34,7 @@ observations.""") observationColumns: List[String],
 Default is true.""") intercept: Boolean = true,
                                           @ArgDoc("""Number of iterations for SGD. Default is 100.""") numIterations: Int = 100,
                                           @ArgDoc("""Initial step size for SGD optimizer for the first step.
-Default is 1.0.""") stepSize: Int = 1,
+Default is 1.0.""") stepSize: Double = 1.0,
                                           @ArgDoc("""Regularization "L1" or "L2".
 Default is "L2".""") regType: Option[String] = None,
                                           @ArgDoc("""Regularization parameter. Default is 0.01.""") regParam: Double = 0.01,

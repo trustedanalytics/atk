@@ -63,7 +63,7 @@ large values will result in excessive computing time.""") numCorrections: Int = 
                                        @ArgDoc("""Fraction of data to be used for each SGD
 iteration""") miniBatchFraction: Double = 1.0,
                                        @ArgDoc("""Initial step size for SGD.
-In subsequent steps, the step size decreases by stepSize/sqrt(t)""") stepSize: Int = 1) {
+In subsequent steps, the step size decreases by stepSize/sqrt(t)""") stepSize: Double = 1.0) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(optimizer == "LBFGS" || optimizer == "SGD", "optimizer name must be 'LBFGS' or 'SGD'")
