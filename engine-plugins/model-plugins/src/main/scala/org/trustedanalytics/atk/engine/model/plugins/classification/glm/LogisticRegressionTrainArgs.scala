@@ -61,9 +61,9 @@ Default is 10.
 Values of less than 3 are not recommended;
 large values will result in excessive computing time.""") numCorrections: Int = 10,
                                        @ArgDoc("""Fraction of data to be used for each SGD
-iteration""") miniBatchFraction: Double = 1.0,
+iteration""") miniBatchFraction: Double = 1d,
                                        @ArgDoc("""Initial step size for SGD.
-In subsequent steps, the step size decreases by stepSize/sqrt(t)""") stepSize: Int = 1) {
+In subsequent steps, the step size decreases by stepSize/sqrt(t)""") stepSize: Double = 1d) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(optimizer == "LBFGS" || optimizer == "SGD", "optimizer name must be 'LBFGS' or 'SGD'")
