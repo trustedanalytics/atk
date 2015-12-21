@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>frequency_column=None</em>, <em>num_classes=2</em>, <em>optimizer='LBFGS'</em>, <em>compute_covariance=True</em>, <em>intercept=True</em>, <em>feature_scaling=False</em>, <em>threshold=0.5</em>, <em>reg_type='L2'</em>, <em>reg_param=0.0</em>, <em>num_iterations=100</em>, <em>convergence_tolerance=0.0001</em>, <em>num_corrections=10</em>, <em>mini_batch_fraction=1.0</em>, <em>step_size=1</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>frequency_column=None</em>, <em>num_classes=2</em>, <em>optimizer='LBFGS'</em>, <em>compute_covariance=True</em>, <em>intercept=True</em>, <em>feature_scaling=False</em>, <em>threshold=0.5</em>, <em>reg_type='L2'</em>, <em>reg_param=0.0</em>, <em>num_iterations=100</em>, <em>convergence_tolerance=0.0001</em>, <em>num_corrections=10</em>, <em>mini_batch_fraction=1.0</em>, <em>step_size=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build logistic regression model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -205,7 +205,7 @@ large values will result in excessive computing time.</p>
 <div><p>Fraction of data to be used for each SGD
 iteration</p>
 </div></blockquote>
-<p><strong>step_size</strong> : int32 (default=1)</p>
+<p><strong>step_size</strong> : float64 (default=1.0)</p>
 <blockquote>
 <div><p>Initial step size for SGD.
 In subsequent steps, the step size decreases by stepSize/sqrt(t)</p>
