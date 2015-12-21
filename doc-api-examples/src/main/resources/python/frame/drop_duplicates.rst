@@ -4,6 +4,10 @@ Given a frame with data:
 .. code::
 
     <hide>
+    >>> import trustedanalytics as ta
+    >>> ta.connect()
+    -etc-
+
     >>> frame = ta.Frame(ta.UploadRows([[200, 4, 25],
     ...                                 [200, 5, 25],
     ...                                 [200, 4, 25],

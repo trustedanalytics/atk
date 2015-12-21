@@ -91,7 +91,7 @@ trustedanalytics.atk {
       #   1) Make sure the SPARK setting "spark_jar_hdfs_path" is set to this value
       #   2) Use "Actions" -> "Upload Spark Jar" to install jar in HDFS, if it is not already there
       //spark.yarn.jar = "hdfs://invalid-hdfs-host/user/spark/share/lib/spark-assembly.jar"
-      //spark.yarn.jar = "/opt/cloudera/parcels/CDH-5.4.2-1.cdh5.4.2.p0.2/lib/spark/assembly/lib/spark-assembly-1.3.0-cdh5.4.2-hadoop2.6.0-cdh5.4.2.jar"
+      //spark.yarn.jar = "/opt/cloudera/parcels/CDH/lib/spark/assembly/lib/spark-assembly-1.5.0-cdh5.5.0-hadoop2.6.0-cdh5.5.0.jar"
     }
 
     #Kerberos authentication configuration. if enabled is set to true will authenticate to kerberos
@@ -193,6 +193,10 @@ trustedanalytics.atk {
       # ("/usr/lib/spark","/opt/cloudera/parcels/CDH/lib/spark/", etc)
       //home = ""
 
+      # Path to jar with LargeObjectTorrentBroadcastFactory which fixes bug in Spark when broadcast variables exceed 2GB.
+      # TODO: Remove jar once fix is incorporated in Spark
+      //broadcast-factory-lib = "spark-broadcast-1.3.jar"
+
       conf {
         properties {
           # These key/value pairs will be parsed dynamically and provided to SparkConf()
@@ -204,6 +208,9 @@ trustedanalytics.atk {
           # Increased Akka frame size from default of 10MB to 100MB to allow tasks to send large results to Spark driver
           # (e.g., using collect() on large datasets)
           //spark.akka.frameSize=100
+
+          # Use large object torrent broadcast to support broadcast variables larger than 2GB
+          //spark.broadcast.factory= "org.apache.spark.broadcast.LargeObjectTorrentBroadcastFactory"
 
           # Limit of total size of serialized results of all partitions for each Spark action (e.g. collect).
           # Should be at least 1M, or 0 for unlimited. Jobs will be aborted if the total size is above this limit.
@@ -239,118 +246,6 @@ trustedanalytics.atk {
           // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
         }
 
-      }
-    }
-
-    giraph {
-      #Overrides of normal Hadoop settings that are used when running Giraph jobs
-      //giraph.maxWorkers = 1
-      //giraph.minWorkers = 1
-      //giraph.SplitMasterWorker = true
-      //mapreduce.map.memory.mb = 4096
-      //mapreduce.map.java.opts = "-Xmx3072m"
-      //giraph.zkIsExternal = false
-    }
-
-
-    titan {
-      load {
-        # documentation for these settings is available on Titan website
-        # http://s3.thinkaurelius.com/docs/titan/current/titan-config-ref.html
-        storage {
-
-          # Whether to enable batch loading into the storage backend. Set to true for bulk loads.
-          //batch-loading = true
-
-          # Size of the batch in which mutations are persisted
-          //buffer-size = 2048
-
-          lock {
-            #Number of milliseconds the system waits for a lock application to be acknowledged by the storage backend
-            //wait-time = 400
-
-            #Number of times the system attempts to acquire a lock before giving up and throwing an exception
-            //retries = 15
-          }
-
-          hbase {
-            # Pre-split settngs for large datasets
-            //region-count = 12
-            //compression-algorithm = "SNAPPY"
-          }
-
-          cassandra {
-            # Cassandra configuration options
-          }
-        }
-
-        ids {
-          #Globally reserve graph element IDs in chunks of this size. Setting this too low will make commits
-          #frequently block on slow reservation requests. Setting it too high will result in IDs wasted when a
-          #graph instance shuts down with reserved but mostly-unused blocks.
-          //block-size = 300000
-
-          #Number of partition block to allocate for placement of vertices
-          //num-partitions = 10
-
-          #The number of milliseconds that the Titan id pool manager will wait before giving up on allocating a new block of ids
-          //renew-timeout = 150000
-
-          #When true, vertices and edges are assigned IDs immediately upon creation. When false, IDs are assigned
-          #only when the transaction commits. Must be disabled for graph partitioning to work.
-          //flush = true
-
-          authority {
-            #This setting helps separate Titan instances sharing a single graph storage
-            #backend avoid contention when reserving ID blocks, increasing overall throughput.
-            # The options available are:
-            #NONE = Default in Titan
-            #LOCAL_MANUAL = Expert feature: user manually assigns each Titan instance a unique conflict avoidance tag in its local graph configuration
-            #GLOBAL_MANUAL = User assigns a tag to each Titan instance. The tags should be globally unique for optimal performance,
-            #                but duplicates will not compromise correctness
-            #GLOBAL_AUTO = Titan randomly selects a tag from the space of all possible tags when performing allocations.
-            //conflict-avoidance-mode = "GLOBAL_AUTO"
-
-            #The number of milliseconds the system waits for an ID block reservation to be acknowledged by the storage backend
-            //wait-time = 300
-
-            # Number of times the system attempts ID block reservations with random conflict avoidance tags
-            # before giving up and throwing an exception
-            //randomized-conflict-avoidance-retries = 10
-          }
-        }
-
-        auto-partitioner {
-          hbase {
-            # Number of regions per regionserver to set when creating Titan/HBase table
-            regions-per-server = 2
-
-            # Number of input splits for Titan reader is based on number of available cores as follows:
-            #    Number of splits = Max(input-splits-per-spark-core *available spark-cores, HBase table region count),
-            input-splits-per-spark-core = 2
-          }
-
-          enable = false
-        }
-      }
-
-      query {
-        storage {
-          # query does use the batch load settings in titan.load
-          backend = ${trustedanalytics.atk.engine.titan.load.storage.backend}
-          hostname = ${trustedanalytics.atk.engine.titan.load.storage.hostname}
-          port = ${trustedanalytics.atk.engine.titan.load.storage.port}
-        }
-        cache {
-          # Adjust cache size parameters if you experience OutOfMemory errors during Titan queries
-          # Either increase heap allocation for TrustedAnalytics Engine, or reduce db-cache-size
-          # Reducing db-cache will result in cache misses and increased reads from disk
-          //db-cache = true
-          //db-cache-clean-wait = 20
-          //db-cache-time = 180000
-          #Allocates 30% of available heap to Titan (default is 50%)
-          //db-cache-size = 0.3
-        }
       }
     }
   }

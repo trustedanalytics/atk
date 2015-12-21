@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.{ SparseVector, Vector }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{ DataFrame, Row }
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
 
@@ -81,21 +81,21 @@ case class LdaCorpus(edgeFrame: FrameRdd, args: LdaTrainArgs) {
    * @return Edge frame with word Ids
    */
   private[clustering] def addWordIdsToEdgeFrame(): FrameRdd = {
-    val edgeDataFrame = edgeFrame.toDataFrame
-    val wordDataFrame = uniqueWordsFrame.toDataFrame
+    val edgePairRdd = edgeFrame.mapRows(row => {
+      (row.value(args.wordColumnName), (row.value(args.documentColumnName), row.value(args.wordCountColumnName)))
+    })
 
-    val joinedDataFrame = edgeDataFrame.join(
-      wordDataFrame,
-      edgeDataFrame(args.wordColumnName) === wordDataFrame(wordIdAssigner.ldaWordColumnName)
-    ).select(
-        args.documentColumnName,
-        args.wordColumnName,
-        args.wordCountColumnName,
-        wordIdAssigner.ldaWordIdColumnName
-      )
+    val wordPairRdd = uniqueWordsFrame.mapRows(row => {
+      (row.value(wordIdAssigner.ldaWordColumnName), row.value(wordIdAssigner.ldaWordIdColumnName))
+    })
+
+    val joinedRdd: RDD[Row] = edgePairRdd.join(wordPairRdd).map {
+      case ((word), ((doc, wordCount), wordId)) =>
+        new GenericRow(Array[Any](doc, word, wordCount, wordId))
+    }
 
     val joinedSchema = edgeFrame.frameSchema.copySubset(List(args.documentColumnName, args.wordColumnName, args.wordCountColumnName))
-    new FrameRdd(joinedSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64)), joinedDataFrame.rdd)
+    new FrameRdd(joinedSchema.addColumn(Column(wordIdAssigner.ldaWordIdColumnName, DataTypes.int64)), joinedRdd)
   }
 
 }

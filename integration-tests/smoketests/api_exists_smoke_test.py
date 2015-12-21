@@ -86,7 +86,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'histogram',
                                       'inspect',
                                       'join',
-                                      'label_propagation',
                                       'name',
                                       'quantiles',
                                       'rename_columns',
@@ -98,7 +97,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.Frame)
+                                      'unflatten_columns'], ta.Frame)
 
     def test_expected_methods_exist_on_vertexframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -148,7 +147,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.VertexFrame)
+                                      'unflatten_columns'], ta.VertexFrame)
 
     def test_expected_methods_exist_on_edgeframe(self):
         self.assert_methods_defined([ 'add_columns',
@@ -197,7 +196,7 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'tally',
                                       'tally_percent',
                                       'top_k',
-                                      'unflatten_column'], ta.EdgeFrame)
+                                      'unflatten_columns'], ta.EdgeFrame)
 
     def test_expected_methods_exist_on_graph(self):
         self.assert_methods_defined(['annotate_degrees',
@@ -208,32 +207,16 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                      'define_vertex_type',
                                      'edge_count',
                                      'edges',
-                                     'export_to_titan',
                                      'graphx_connected_components',
                                      'graphx_label_propagation',
                                      'graphx_pagerank',
                                      'graphx_triangle_count',
+                                     'label_propagation',
                                      'loopy_belief_propagation',
                                      'name',
                                      'status',
                                      'vertex_count',
                                      'vertices'], ta.Graph)
-
-    def test_expected_methods_exist_on_titangraph(self):
-        self.assert_methods_defined(['annotate_degrees',
-                                     'annotate_weighted_degrees',
-                                     'clustering_coefficient',
-                                     'copy',
-                                     'export_to_graph',
-                                     'graphx_connected_components',
-                                     'graphx_label_propagation',
-                                     'graphx_pagerank',
-                                     'graphx_triangle_count',
-                                     'graph_clustering',
-                                     'name',
-                                     'query',
-                                     'status',
-                                     'vertex_sample'], ta.TitanGraph)
 
     def test_expected_methods_exist_on_kmeans_model(self):
         self.assert_methods_defined(["name",
@@ -242,11 +225,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
     def test_expected_methods_exist_on_lda_model(self):
         self.assert_methods_defined(["name",
                                     "train"], ta.LdaModel)
-    def test_expected_methods_exist_on_collaborative_filtering_model(self):
-        self.assert_methods_defined(["name",
-                                    "train",
-                                    "recommend"], ta.GiraphCollaborativeFilteringModel)
-
     def test_expected_methods_exist_on_libsvm_model(self):
         self.assert_methods_defined(["name",
                                      "predict",

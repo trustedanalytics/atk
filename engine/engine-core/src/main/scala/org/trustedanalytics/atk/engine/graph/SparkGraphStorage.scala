@@ -16,12 +16,9 @@
 
 package org.trustedanalytics.atk.engine.graph
 
+import org.apache.commons.lang3.StringUtils
 import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.reader.TitanReader
-import org.trustedanalytics.atk.graphbuilder.driver.spark.titan.{ GraphBuilder, GraphBuilderConfig }
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex, GraphElement }
-import org.trustedanalytics.atk.graphbuilder.graph.titan.TitanGraphConnector
-import org.trustedanalytics.atk.graphbuilder.parser.InputSchema
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.trustedanalytics.atk.{ DuplicateNameException, NotFoundException }
 import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
@@ -32,11 +29,9 @@ import org.trustedanalytics.atk.engine.frame.SparkFrameStorage
 import org.trustedanalytics.atk.engine.plugin.SparkInvocation
 import org.trustedanalytics.atk.engine.{ GraphBackendStorage, GraphStorage }
 import org.trustedanalytics.atk.repository.MetaStore
-import com.thinkaurelius.titan.core.TitanGraph
 import org.apache.spark.SparkContext
 import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.storage.StorageLevel
 import org.joda.time.DateTime
 
 /**
@@ -88,12 +83,7 @@ class SparkGraphStorage(metaStore: MetaStore,
   override def copyGraph(graph: GraphEntity, name: Option[String])(implicit invocation: Invocation): GraphEntity = {
     info(s"copying graph id:${graph.id}, name:${graph.name}, entityType:${graph.entityType}")
 
-    val copiedEntity = if (graph.isTitan) {
-      val graphCopy = createGraph(GraphTemplate(name, StorageFormats.HBaseTitan))
-      backendStorage.copyUnderlyingTable(graph.storage, graphCopy.storage)
-      graphCopy
-    }
-    else {
+    val copiedEntity = {
       val graphCopy = createGraph(GraphTemplate(name))
       val storageName = graphCopy.storage
       val graphMeta = expectSeamless(graph.toReference)
@@ -143,11 +133,8 @@ class SparkGraphStorage(metaStore: MetaStore,
           }
 
           val graphEntity = metaStore.graphRepo.insert(graph).get
-          val graphBackendName: String = if (graph.isTitan) {
-            backendStorage.deleteUnderlyingTable(GraphBackendName.getGraphBackendName(graphEntity), quiet = true)
-            GraphBackendName.getGraphBackendName(graphEntity)
-          }
-          else ""
+          val graphBackendName: String = StringUtils.EMPTY
+
           metaStore.graphRepo.update(graphEntity.copy(storage = graphBackendName)).get
         }
     }
@@ -297,11 +284,7 @@ class SparkGraphStorage(metaStore: MetaStore,
       graphEntity.vertexFrames.map(frame => loadGbVerticesForFrame(sc, frame.toReference)).reduce(_.union(_))
     }
     else {
-      // load from Titan
-      val titanReaderRdd: RDD[GraphElement] = getTitanReaderRdd(sc, graph)
-      import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
-      val gbVertices: RDD[GBVertex] = titanReaderRdd.filterVertices()
-      gbVertices
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
   }
 
@@ -312,11 +295,7 @@ class SparkGraphStorage(metaStore: MetaStore,
       graphMeta.edgeFrames.map(frame => loadGbEdgesForFrame(sc, frame.toReference)).reduce(_.union(_))
     }
     else {
-      // load from Titan
-      val titanReaderRDD: RDD[GraphElement] = getTitanReaderRdd(sc, graph)
-      import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
-      val gbEdges: RDD[GBEdge] = titanReaderRDD.filterEdges()
-      gbEdges
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
   }
 
@@ -329,69 +308,8 @@ class SparkGraphStorage(metaStore: MetaStore,
       (vertexRDD, edgeRDD)
     }
     else {
-      //Prevents us from scanning the NoSQL table twice when loading vertices and edges
-      //Scanning NoSQL tables is a very expensive operation.
-      loadFromTitan(sc, graph)
+      throw new IllegalArgumentException("Only seamless graphs are supported.")
     }
-  }
-
-  def getTitanReaderRdd(sc: SparkContext, graph: GraphEntity): RDD[GraphElement] = {
-    val titanConfig = GraphBuilderConfigFactory.getTitanConfiguration(graph)
-    val titanConnector = new TitanGraphConnector(titanConfig)
-
-    // Read the graph from Titan
-    val titanReader = new TitanReader(sc, titanConnector)
-    val titanReaderRDD = titanReader.read()
-    titanReaderRDD
-  }
-
-  /**
-   * Create a new Titan graph with the given name.
-   * @param gbVertices RDD of vertices.
-   * @param gbEdges RDD of edges
-   * @param append if true will attempt to append to an existing graph
-   */
-
-  def writeToTitan(graph: GraphEntity,
-                   gbVertices: RDD[GBVertex],
-                   gbEdges: RDD[GBEdge],
-                   append: Boolean = false)(implicit invocation: Invocation): Unit = {
-
-    val titanConfig = GraphBuilderConfigFactory.getTitanConfiguration(graph)
-    val gb =
-      new GraphBuilder(new GraphBuilderConfig(new InputSchema(Seq.empty), List.empty, List.empty, titanConfig, append = append))
-
-    gb.buildGraphWithSpark(gbVertices, gbEdges)
-  }
-
-  /**
-   * Loads vertices and edges from Titan graph database
-   * @param sc Spark context
-   * @param graph Graph metadata object
-   * @return RDDs of vertices and edges
-   */
-  def loadFromTitan(sc: SparkContext, graph: GraphEntity): (RDD[GBVertex], RDD[GBEdge]) = {
-    val titanReaderRDD: RDD[GraphElement] = getTitanReaderRdd(sc, graph)
-    import org.trustedanalytics.atk.graphbuilder.driver.spark.rdd.GraphBuilderRddImplicits._
-
-    //Cache data to prevent Titan reader from scanning HBase/Cassandra table twice to read vertices and edges
-    titanReaderRDD.persist(StorageLevel.MEMORY_ONLY)
-    val gbVertices: RDD[GBVertex] = titanReaderRDD.filterVertices()
-    val gbEdges: RDD[GBEdge] = titanReaderRDD.filterEdges()
-    titanReaderRDD.unpersist()
-
-    (gbVertices, gbEdges)
-  }
-
-  /**
-   * Get a connection to a TitanGraph
-   */
-  def titanGraph(graphReference: GraphReference)(implicit invocation: Invocation): TitanGraph = {
-    val graph = expectGraph(graphReference)
-
-    val titanConfig = GraphBuilderConfigFactory.getTitanConfiguration(graph.storage)
-    val titanConnector = new TitanGraphConnector(titanConfig)
-    titanConnector.connect()
   }
 
   def loadGbVerticesForFrame(sc: SparkContext, frameRef: FrameReference)(implicit invocation: Invocation): RDD[GBVertex] = {

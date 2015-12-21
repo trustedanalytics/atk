@@ -78,9 +78,6 @@ case "$1" in
     zookeeper_port=$(getConfig "ZOOKEEPER" "zookeeper-SERVER-BASE" "clientPort" )
     log "zookeeper port-${zookeeper_port}"
 
-    echo "trustedanalytics.atk.engine.titan.load.storage.hostname=\"${zHosts}\"" >> $ATK_TEMP/application.conf
-    echo "trustedanalytics.atk.engine.titan.load.storage.port=${zookeeper_port}" >> $ATK_TEMP/application.conf
-
     spark_master_host=$(getHostnames "SPARK" "SPARK_MASTER" )
     log "spark master host-${spark_master_host}"
 
@@ -100,7 +97,6 @@ case "$1" in
 
     if [ ! -z "$ATK_DEFAULT_TIMEOUT" ];then
         echo "trustedanalytics.atk.api.default-timeout=${ATK_DEFAULT_TIMEOUT}s" >> $ATK_TEMP/application.conf
-        echo "trustedanalytics.atk.engine.default-timeout=${ATK_DEFAULT_TIMEOUT}" >> $ATK_TEMP/application.conf
         #minus one
         requestTimeout=$((ATK_DEFAULT_TIMEOUT - 1))
         echo "trustedanalytics.atk.api.request-timeout=${requestTimeout}s" >> $ATK_TEMP/application.conf

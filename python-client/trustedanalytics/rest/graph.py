@@ -113,11 +113,11 @@ class GraphBackendRest(object):
 
     def get_vertex_count(self, graph):
         arguments = {'graph': graph.uri}
-        return executor.execute("graph:/vertex_count", graph, arguments)
+        return executor.execute("graph:/vertex_count", graph, arguments)['value']
 
     def get_edge_count(self, graph):
         arguments = {'graph': graph.uri}
-        return executor.execute("graph:/edge_count", graph, arguments)
+        return executor.execute("graph:/edge_count", graph, arguments)['value']
 
 class GraphInfo(object):
     """

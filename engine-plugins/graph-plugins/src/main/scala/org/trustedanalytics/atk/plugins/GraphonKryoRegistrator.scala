@@ -17,8 +17,8 @@
 package org.trustedanalytics.atk.plugins
 
 import org.trustedanalytics.atk.engine.EngineKryoRegistrator
+import org.trustedanalytics.atk.plugins.pregel.core.VertexState
 import org.trustedanalytics.atk.pregel.{ BasicCountsInitialReport, SuperStepNetDelta }
-import org.trustedanalytics.atk.plugins.loopybeliefpropagation.VertexState
 import org.trustedanalytics.atk.pregel._
 import com.esotericsoftware.kryo.Kryo
 import org.apache.spark.graphx.GraphKryoRegistrator
@@ -30,7 +30,7 @@ import org.apache.spark.graphx.GraphKryoRegistrator
  * \ * <p>
  * Usage:
  * conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
- * conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.driver.spark.titan.GraphBuilderKryoRegistrator")
+ * conf.set("spark.kryo.registrator", "org.trustedanalytics.atk.graphbuilder.GraphBuilderKryoRegistrator")
  * </p>
  */
 class GraphonKryoRegistrator extends EngineKryoRegistrator {

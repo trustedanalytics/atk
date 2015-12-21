@@ -103,7 +103,6 @@ abstract class CommandPlugin[Arguments <: Product: JsonFormat: ClassManifest: Ty
    * The colon ":" is used to to indicate command destination base classes, default classes or classes of a
    * specific storage type:
    *
-   * - graph:titan means command is loaded into class TitanGraph
    * - graph: means command is loaded into class Graph, our default type which will be the Parquet-backed graph
    * - graph would mean command is loaded into class _BaseGraph, which applies to all graph classes
    * - frame: and means command is loaded in class Frame.  Example: "frame:/assign_sample"

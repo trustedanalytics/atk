@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.plugin.Call
@@ -68,6 +69,8 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   lazy val commandExecutor: CommandExecutor = new CommandExecutor(engine, commands, commandPluginRegistry)
 
+  val jobContexts = new JobContextStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
+
   override lazy val profile = withContext("engine connecting to metastore") {
 
     // Initialize a Profile from settings in the config
@@ -82,5 +85,5 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   val engine = new EngineImpl(sparkContextFactory,
     commandExecutor, commands, frameStorage, graphStorage, modelStorage, userStorage,
-    sparkAutoPartitioner) {}
+    sparkAutoPartitioner, jobContexts) {}
 }

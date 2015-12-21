@@ -28,9 +28,9 @@ if ta.server.port != 19099:
 ta.connect()
 
 
-class FrameFlattenColumnTest(unittest.TestCase):
+class FrameFlattenColumnsTest(unittest.TestCase):
     """
-    Test frame.flatten_column()
+    Test frame.flatten_columns()
 
     This is a build-time test so it needs to be written to be as fast as possible:
     - Only use the absolutely smallest toy data sets, e.g 20 rows rather than 500 rows
@@ -48,61 +48,61 @@ class FrameFlattenColumnTest(unittest.TestCase):
         print "create frame"
         self.frame = ta.Frame(csv)
 
-    def test_flatten_column_abc(self):
+    def test_flatten_columns_abc(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
         # call method under test
-        self.frame.flatten_column('abc', delimiter='|')
+        self.frame.flatten_columns('abc', '|')
 
         # validate
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 16)
 
-    def test_flatten_column_food(self):
+    def test_flatten_columns_food(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
         # call method under test
-        self.frame.flatten_column('food', delimiter='+')
+        self.frame.flatten_columns('food', delimiters='+')
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 17)
 
-    def test_flatten_column_abc_and_food(self):
+    def test_flatten_columns_abc_and_food(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
         # call method under test
-        self.frame.flatten_column('abc', delimiter='|')
-        self.frame.flatten_column('food', delimiter='+')
+        self.frame.flatten_columns('abc', delimiters='|')
+        self.frame.flatten_columns('food', delimiters='+')
 
         # validate
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 29)
 
-    def test_flatten_column_does_nothing_with_wrong_delimiter(self):
+    def test_flatten_columns_does_nothing_with_wrong_delimiter(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
         # call method under test
-        self.frame.flatten_column('abc', delimiter=',')
+        self.frame.flatten_columns('abc', delimiters=',')
 
         # validate
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
-    def test_flatten_column_with_wrong_column_name(self):
+    def test_flatten_columns_with_wrong_column_name(self):
         # validate expected pre-conditions
         self.assertEqual(self.frame.column_names, ['number', 'abc', 'food'])
         self.assertEqual(self.frame.row_count, 10)
 
         # expect an exception when we call the method under test with a non-existent column name
         with self.assertRaises(Exception):
-            self.frame.flatten_column('hamburger')
+            self.frame.flatten_columns('hamburger')
 
     def test_flatten_columns_with_a_single_column(self):
         # validate expected pre-conditions

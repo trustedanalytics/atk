@@ -19,15 +19,17 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 import com.google.common.base.Charsets
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import MLLibJsonProtocol._
-import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.scoring.models.RandomForestModelReaderPlugin
+
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 
 /**
  * Publish a Random Forest Regressor Model for scoring
@@ -38,7 +40,7 @@ import ModelPublishJsonProtocol._
 on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
 This model can then be used to predict the target value of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, StringValue] {
+class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -72,7 +74,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): StringValue = {
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
 
     val model: Model = arguments.model
 
@@ -81,6 +83,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
     val randomForestModel = randomForestData.randomForestModel
     val jsvalue: JsValue = randomForestModel.toJson
 
-    StringValue(ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.RandomForestReaderPlugin"))
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[RandomForestModelReaderPlugin].getName)
+    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("random_forest_regressor_model"))
   }
 }

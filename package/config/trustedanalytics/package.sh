@@ -61,6 +61,8 @@ popd
 
 echo "copy jar dependencies"
 cp -v rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
+# this is weird but for now the scoring engine is running out of the same lib dir as the rest server
+cp -v scoring-engine-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
 ls -l config/trustedanalytics-python-client/trustedanalytics/dist

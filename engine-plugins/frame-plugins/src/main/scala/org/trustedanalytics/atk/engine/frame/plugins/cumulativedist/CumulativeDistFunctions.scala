@@ -239,7 +239,7 @@ private object CumulativeDistFunctions extends Serializable {
     rdd.map {
       case (row, valueSum) => {
         numValues match {
-          case 0 => Row.fromSeq(row.toSeq :+ 1)
+          case 0 => Row.fromSeq(row.toSeq :+ 1.0)
           case _ => Row.fromSeq(row.toSeq :+ (valueSum / numValues))
         }
       }

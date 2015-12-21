@@ -68,8 +68,6 @@ provided by a reference.conf in the plugin's deployment jar).
 Configuration details are discussed in the "Configuration" section below.
 Plugins have access to the configuration, but only the section of it that
 contains settings that are relevant.
-For example, the Loopy Belief Propagation plugin gets its configuration from
-'trustedanalytics.atk.giraph-plugins.command.graph.ml.loopy_belief_propagation.config'.
 
 Execution Flow
 ==============
@@ -145,17 +143,18 @@ return a case class with one field, which must be named "value".
 When the client receives such a result, it should extract and return the single
 value.
 
--------------------
-Creating an Archive
--------------------
+---------------------------
+Creating a Jar with Plugins
+---------------------------
 
-Plugins are deployed in Archives – jar files that contain the plugin class,
-its argument and result classes, and any supporting classes it needs, along
-with a class that implements the Archive trait.
-The Archive trait provides the system with a directory of available services
-that the archive provides.
-On application start up, the application will query all the jar files it knows
-about (see below) to see what plugins they provide.
+Plugins are deployed in jar files that contain the plugin class,
+its argument and result classes, and any supporting classes it needs.
+
+On application start up, the application will query all the plugin jar files
+it knows about to see what plugins they provide.
+
+See the module-loader documentation and the example-plugins module for to learn
+more about creating plugin modules.
 
 ----------
 Deployment
@@ -164,121 +163,10 @@ Deployment
 Plug-Ins should be installed in the system using jar files.
 Jars that are found in the server's lib directory will be available to be
 loaded based on configuration.
-The plug-ins that will be installed must be listed in the application.conf
+The plug-ins that will be installed must be listed in the atk-plugin.conf
 file.
-Each command or query advertises the location at which it would prefer to be
-installed in the URL structure, and if no further directives
-appear in configuration, they will be installed according to their request.
-However, using the configuration file, it is also possible to remap a plug-in
-to a different location or an additional location in the URL structure.
 
 In the future, plugin discovery may be further automated, and it may also be
 possible to add a plugin without restarting the server.
 
--------------------
-Archive Declaration
--------------------
-
-Each archive should have a reference.conf file stored as a resource in its jar
-file.
-For example, in a typical Maven-based project, this file might reside in the
-src/main/resources folder.
-The Typesafe Config library automatically finds resources named
-"reference.conf", so this is how the configuration file will be discovered.
-
-The first section of the reference.conf should be the declaration of how the
-archive should be activated.
-This configuration should look like the following::
-
-    trustedanalytics.atk.component.archives {
-        <archive-name> {
-            class = "<archive-class>"
-            parent = "<parent-archive>"
-            config-path = "<path>"
-        }
-    }
-
-The <archive-name> is required.
-It should be replaced with the actual name of the archive (without the .jar
-suffix).
-For example, for graphon.jar, just use the word graphon by itself.
-
-``<archive-class>`` is optional.
-If provided, it must be the name of a class that can be found in the jar file
-or in its parent class loader.
-This class must implement the Archive trait, which makes it the archive
-manager.
-The archive manager is the service that the system uses to discover plugins in
-the archive.
-If omitted, this defaults to DefaultArchive, which uses the Config system for
-plugin registration and publishing.
-
-``<parent>`` is also optional.
-If provided, this archive is treated as dependent on whatever archive is
-specified here.
-For example, SparkCommand plugins should use "engine" for this entry, so
-that they have access to the same version of Spark the engine is using, as well
-as the SparkInvocation class.
-
-``<config-path>`` is also optional.
-It specifies the config path where the configuration for plugins for this
-archive can be found.
-If omitted, configuration is assumed to be included in the archive declaration
-block.
-It can be convenient to provide a value for the config path because it leads to
-less nested config files.
-
-Here is a sample config file for an archive that provides a single plugin.
-Note that it relies on the engine archive, and re-maps its configuration
-to "trustedanalytics.graphon" rather than including the configuration in the
-trustedanalytics.atk.component.archives.graphon section.
-
-Also note the $-substitutions that allow configuration options from other
-sections to be pulled in so they're available to the plugin.
-::
-
-    trustedanalytics.atk.component.archives {
-        graphon {
-            parent = "engine-core"
-            config-path = "trustedanalytics.graphon"
-        }
-    }
-
-    trustedanalytics.graphon {
-        command {
-            available = ["graphs.sampling.vertex_sample"]
-            graphs {
-                sampling {
-                    vertex_sample {
-                        class = "com.trustedanalytics.spark.graphon.sampling.VertexSample"
-                        config {
-                            default-timeout = ${trustedanalytics.atk.engine.default-timeout}
-                            titan = ${trustedanalytics.atk.engine.titan}
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    #included so that conf file can be read during unit tests,
-    #these will not be used when the application is actually running
-    trustedanalytics.atk.engine {
-        default-timeout = 30s
-        titan {}
-    }
-
---------------------
-Enabling the Archive
---------------------
-
-The command executor uses the config key
-"trustedanalytics.atk.engine.plugin.command.archives" to determine which archives it
-should check for command plugins.
-This setting is built into the reference.conf that is embedded in the engine
-archive (at the time of writing).
-For your installation, you can control this list using the application.conf
-file.
-
-Once this setting has been updated, restart the server to activate the changes.
 

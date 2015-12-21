@@ -18,9 +18,6 @@ package org.trustedanalytics.atk.engine.graph
 
 import org.trustedanalytics.atk.domain.graph.GraphEntity
 
-//TODO: This should be replaced by a "storage" parameter on Graph and DataFrame that holds specifics like
-// Titan table name and HDFS uris, etc. for those that need them.
-
 /**
  * Utility for converting between user provided graph names and their names in the graph database.
  */

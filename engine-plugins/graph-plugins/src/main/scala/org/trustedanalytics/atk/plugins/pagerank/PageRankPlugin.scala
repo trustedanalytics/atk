@@ -75,8 +75,6 @@ import PageRankJsonFormat._
   extended = """Pulls graph from underlying store, sends it off to the
 PageRankRunner, and then writes the output graph back to the underlying store.
 
-This method (currently) only supports Titan for graph storage.
-
 ** Experimental Feature **
 
 **Basics and Background**

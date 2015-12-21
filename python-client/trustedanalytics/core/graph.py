@@ -35,31 +35,11 @@ from trustedanalytics.core.column import Column
 
 from trustedanalytics.meta.clientside import raise_deprecation_warning
 
-__all__ = ["drop_frames", "drop_graphs", "Frame", "get_frame", "get_frame_names", "get_graph", "get_graph_names", "TitanGraph"]
+__all__ = ["drop_frames", "drop_graphs", "Frame", "get_frame", "get_frame_names", "get_graph", "get_graph_names"]
 
 def _get_backend():
     from trustedanalytics.meta.config import get_graph_backend
     return get_graph_backend()
-
-# _BaseGraph
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubsBaseGraph
-    doc_stubs_import.success(logger, "_DocStubsBaseGraph")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsBaseGraph", e)
-    class _DocStubsBaseGraph(object): pass
-
-
-# TitanGraph
-try:
-    # boilerplate required here for static analysis to pick up the inheritance (the whole point of docstubs)
-    from trustedanalytics.core.docstubs1 import _DocStubsTitanGraph
-    doc_stubs_import.success(logger, "_DocStubsTitanGraph")
-except Exception as e:
-    doc_stubs_import.failure(logger, "_DocStubsTitanGraph", e)
-    class _DocStubsTitanGraph(object): pass
-
 
 # Graph
 try:
@@ -73,7 +53,7 @@ except Exception as e:
 
 @api
 @name_support('graph')
-class _BaseGraph(_DocStubsBaseGraph, CommandLoadable):
+class _BaseGraph(CommandLoadable):
     _entity_type = 'graph'
     def __init__(self):
         CommandLoadable.__init__(self)
@@ -124,7 +104,6 @@ Many frame methods are available to work with vertices and edges.
 Vertex and edge properties are stored as columns.
 
 A seamless graph is better suited for bulk :term:`OLAP`-type operations
-whereas a Titan graph is better suited to :term:`OLTP`.
     """
     _entity_type = 'graph:'
 
@@ -277,7 +256,7 @@ Default is None.""")
     to `add_vertices` and `add_edges`.
 
     <skip>
-    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema)
+    >>> frame2 = ta.Frame(ta.CsvFile("/datasets/extra-movie-data.csv", frame.schema))
     <progress>
 
     </skip>
@@ -299,10 +278,10 @@ Default is None.""")
     [#]  _vid  _label  movie
     ===================================
     [0]    13  film    2001
-    [1]    44  film    Ice Age
-    [2]    41  film    Croods
-    [3]    43  film    Land Before Time
-    [4]    42  film    Jurassic Park
+    [1]    14  film    Ice Age
+    [2]    11  film    Croods
+    [3]    19  film    Land Before Time
+    [4]    12  film    Jurassic Park
 
     >>> graph.vertex_count
     <progress>
@@ -311,7 +290,6 @@ Default is None.""")
     >>> graph.edges['rating'].add_edges(frame2, 'viewer', 'movie', ['rating'])
     <progress>
 
-    <skip>  # todo: fix bug DPAT-926
     >>> graph.edges['rating'].inspect(20)
     [##]  _eid  _src_vid  _dest_vid  _label  rating
     ===============================================
@@ -325,18 +303,17 @@ Default is None.""")
     [7]     27         5         14  rating       4
     [8]     25         5         12  rating       3
     [9]     26         5         13  rating       5
-    [10]    60        39         43  rating       3
-    [11]    59        39         41  rating       5
-    [12]    53        31         43  rating       4
-    [13]    54        31         44  rating       3
-    [14]    52        31         42  rating       3
-    [15]    51        31         41  rating       5
-    [16]    57        35         43  rating       3
-    [17]    58        35         44  rating       5
-    [18]    56        35         42  rating       5
-    [19]    55        35         41  rating       5
+    [10]    60        39         19  rating       3
+    [11]    59        39         11  rating       5
+    [12]    53        31         19  rating       4
+    [13]    54        31         14  rating       3
+    [14]    52        31         12  rating       3
+    [15]    51        31         11  rating       5
+    [16]    57        35         19  rating       3
+    [17]    58        35         14  rating       5
+    [18]    56        35         12  rating       5
+    [19]    55        35         11  rating       5
 
-    </skip>
     >>> graph.edge_count
     <progress>
     20
@@ -402,14 +379,47 @@ Default is None.""")
     >>> graph2.edges['rating'].inspect()
     [#]  _eid  _src_vid  _dest_vid  _label  score
     =============================================
-    [0]    60        39         43  rating      3
-    [1]    59        39         41  rating      5
-    [2]    53        31         43  rating      4
-    [3]    54        31         44  rating      3
-    [4]    52        31         42  rating      3
-    [5]    51        31         41  rating      5
+    [0]    60        39         19  rating      3
+    [1]    59        39         11  rating      5
+    [2]    53        31         19  rating      4
+    [3]    54        31         14  rating      3
+    [4]    52        31         12  rating      3
+    [5]    51        31         11  rating      5
 
     Only source vertices 31 and 39 remain.
+
+    Drop row for the movie 'Croods' (vid 41) from the film VertexFrame.
+
+    >>> graph2.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    14  film    Ice Age
+    [2]    11  film    Croods
+    [3]    19  film    Land Before Time
+    [4]    12  film    Jurassic Park
+
+    >>> graph2.vertices['film'].drop_rows(lambda row: row.movie=='Croods')
+    <progress>
+
+    >>> graph2.vertices['film'].inspect()
+    [#]  _vid  _label  movie
+    ===================================
+    [0]    13  film    2001
+    [1]    14  film    Ice Age
+    [2]    19  film    Land Before Time
+    [3]    12  film    Jurassic Park
+
+    Dangling edges (edges that correspond to the movie 'Croods', vid 41) were also removed:
+
+    >>> graph2.edges['rating'].inspect()
+    [#]  _eid  _src_vid  _dest_vid  _label  score
+    =============================================
+    [0]    52        31         12  rating      3
+    [1]    54        31         14  rating      3
+    [2]    60        39         19  rating      3
+    [3]    53        31         19  rating      4
+
 
         """
         if not hasattr(self, '_backend'):
@@ -564,45 +574,3 @@ class GraphFrameCollection(object):
         if self._type_str == "edges":
             return "\n".join(["%s : %s, count = %d" % (e['label'], self.__get_props_str(e), e['count']) for e in graph_info.edges])
         return ""
-
-
-@api
-class TitanGraph(_DocStubsTitanGraph, _BaseGraph):
-    """Proxy to a graph in Titan, supports Gremlin query."""
-
-    _entity_type = 'graph:titan'
-
-    @api
-    def __init__(self, name=None, _info=None):
-        """Initialize the graph.
-
-    Examples
-    --------
-    Starting with a ta.Graph you can export to Titan to take advantage of Gremlin query.
-
-    <skip>
-    .. code::
-
-        >>> graph = ta.get_graph("my_graph")
-        >>> titan_graph = graph.export_to_titan("titan_graph")
-
-    </skip>
-    """
-        try:
-            self.uri = None
-            if not hasattr(self, '_backend'):
-                self._backend = _get_backend()
-            _BaseGraph.__init__(self)
-            self.uri = self._backend.create(self, name, 'hbase/titan', _info)
-            # logger.info('Created new graph "%s"', new_graph_name)
-        except:
-            raise IaError(logger)
-
-    def __repr__(self):
-        try:
-            return self._backend.get_repr(self)
-        except:
-            return super(TitanGraph,self).__repr__() + "(Unable to collect metadeta from server)"
-
-    def _get_new_graph_name(self):
-        return "graph_" + uuid.uuid4().hex

@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.plugins.graphstatistics
 
-import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 import org.apache.spark.SparkContext._
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
 
 /**
  * Object for calculating degree and its generalizations: Per-vertex statistics about the edges incident to that vertex.

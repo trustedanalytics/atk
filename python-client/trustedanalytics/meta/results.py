@@ -56,10 +56,8 @@ def add_return_none_postprocessor(command_full_name):
 
 # post-processor methods --all take a json object argument
 
-@postprocessor('graph:titan/vertex_sample', 'graph:/export_to_titan', 'graph:titan/export_to_graph',
-               'graph:titan/annotate_degrees', 'graph:titan/annotate_weighted_degrees', 'graph/copy')
+@postprocessor('graph/copy')
 def return_graph(json_result):
-
     from trustedanalytics import get_graph
     return get_graph(json_result['uri'])
 
@@ -112,13 +110,6 @@ def return_label_propagation(json_result):
     frame = get_frame(json_result['output_frame']['uri'])
     return { 'frame': frame, 'report': json_result['report'] }
 
-@postprocessor('frame:/giraph_collaborative_filtering')
-def return_collaborative_filtering(json_result):
-    from trustedanalytics import get_frame
-    user_frame = get_frame(json_result['user_frame']['uri'])
-    item_frame= get_frame(json_result['item_frame']['uri'])
-    return { 'user_frame': user_frame, 'item_frame': item_frame, 'report': json_result['report'] }
-
 @postprocessor('graph/graphx_connected_components','graph/graphx_label_propagation', 'graph/annotate_weighted_degrees','graph/annotate_degrees','graph/graphx_triangle_count')
 def return_connected_components(json_result):
     from trustedanalytics import get_frame
@@ -134,10 +125,25 @@ def return_page_rank(json_result):
     edge_dictionary = dict([(k,get_frame(v["uri"])) for k,v in edge_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'edge_dictionary': edge_dictionary}
 
-@postprocessor('graph:/loopy_belief_propagation','graph:/kclique_percolation')
+@postprocessor('graph:/loopy_belief_propagation','graph:/label_propagation','graph:/kclique_percolation')
 def return_loopy_belief_propagation(json_result):
     from trustedanalytics import get_frame
     vertex_json = json_result['frame_dictionary_output']
     vertex_dictionary = dict([(k,get_frame(v["uri"])) for k,v in vertex_json.items()])
     return {'vertex_dictionary': vertex_dictionary, 'time': json_result['time']}
 
+@postprocessor('frame/export_to_csv','frame/export_to_json','model:libsvm/publish',
+               'model:random_forest_regressor/publish','model:random_forest_classifier/publish',
+               'model:k_means/publish', 'model:lda/publish', 'model:naive_bayes/publish',
+               'model:linear_regression/publish', 'model:principal_components/publish', 'model:svm/publish')
+def return_export_metadata(export_metadata):
+    from trustedanalytics import data_catalog
+    return data_catalog.publish(export_metadata)['value']
+
+@postprocessor('model:power_iteration_clustering/predict')
+def return_power_iteration_clustering_predict(json_result):
+    from trustedanalytics import get_frame
+    predicted_frame = get_frame(json_result['frame']['uri'])
+    number_of_clusters = json_result['k']
+    cluster_size = json_result['cluster_size']
+    return {'predicted_frame': predicted_frame , 'number_of_clusters': number_of_clusters, 'cluster_size': cluster_size}

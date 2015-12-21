@@ -123,7 +123,7 @@ class FrameBackendRest(object):
            return ("[1]" for item in iterable if predicate(item))
         arguments = {'frame': frame.uri,
                      'udf': get_udf_arg(frame, where, icountwhere)}
-        return executor.execute("frame/count_where", self, arguments)
+        return executor.execute("frame/count_where", self, arguments)['value']
 
     def get_error_frame(self, frame):
         return self.get_frame_by_uri(self._get_frame_info(frame).error_frame_uri)

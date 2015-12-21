@@ -68,7 +68,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
     var flattener: RDD[Row] => RDD[Row] = null
     val columnIndices = arguments.columns.map(c => schema.columnIndex(c))
     val columnDataTypes = arguments.columns.map(c => schema.columnDataType(c))
-    var delimiters = arguments.defaultDelimiters
+    val delimiters = arguments.defaultDelimiters
 
     var stringDelimiterCount = 0 // counter used to track delimiters for string columns
 
@@ -87,7 +87,7 @@ class FlattenColumnPlugin extends SparkCommandPlugin[FlattenColumnArgs, UnitRetu
           }
         case _ =>
           val illegalDataType = columnDataTypes(i).toString
-          throw new IllegalArgumentException(s"Invalid column ('${arguments.columns(i)}') data type provided: ${illegalDataType}. Only string or vector columns can be flattened.")
+          throw new IllegalArgumentException(s"Invalid column ('${arguments.columns(i)}') data type provided: $illegalDataType. Only string or vector columns can be flattened.")
       }
     }
 
@@ -225,6 +225,6 @@ object FlattenColumnFunctions extends Serializable {
 
     }
 
-    return rowBuffer.toArray
+    rowBuffer.toArray
   }
 }

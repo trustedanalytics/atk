@@ -46,13 +46,17 @@ trait CommandStorage {
    */
   def complete(id: Long, result: Try[JsObject]): Unit
 
-  /* Stores result for the command but does not yet mark it complete */
-  def storeResult(id: Long, result: Try[JsObject]): Unit
-
   /**
    * update command info regarding progress of jobs initiated by this command
    * @param id command id
    * @param progressInfo list of progress for the jobs initiated by this command
    */
   def updateProgress(id: Long, progressInfo: List[ProgressInfo]): Unit
+
+  /**
+   * update job context for the command
+   * @param id command id
+   * @param jobContextId job context id
+   */
+  def updateJobContextId(id: Long, jobContextId: Long): Unit
 }
