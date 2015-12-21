@@ -21,10 +21,6 @@
    "type": "Weekly", 
    "version": "w20150925"
   }, 
-  "w20151130": {
-   "type": "Weekly", 
-   "version": "w20151130"
-  }, 
   "w20151210": {
    "type": "Weekly", 
    "version": "w20151210"
@@ -36,6 +32,10 @@
   "w20151217": {
    "type": "Weekly", 
    "version": "w20151217"
+  }, 
+  "w20151218": {
+   "type": "Weekly", 
+   "version": "w20151218"
   }
  }
 }
