@@ -16,20 +16,16 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters._
 import org.apache.spark.mllib.classification.SVMModel
 import org.apache.spark.mllib.linalg.DenseVector
-import org.apache.spark.mllib.tree.configuration.Algo
-import org.apache.spark.mllib.ScoringJsonReaderWriters._
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
-import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
 import org.apache.spark.mllib.tree.model._
 import org.scalatest.{ FlatSpec, Matchers }
-import org.trustedanalytics.atk.scoring.models.{ LdaModel, LdaModelPredictReturn }
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import spray.json._
-import org.apache.spark.mllib.ScoringJsonReaderWriters._
 
 class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
   val epsilon = 1e-6
