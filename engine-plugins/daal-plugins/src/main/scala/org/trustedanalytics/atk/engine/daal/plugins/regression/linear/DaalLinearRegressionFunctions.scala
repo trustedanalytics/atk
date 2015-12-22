@@ -20,18 +20,15 @@ import java.io.Serializable
 import java.lang
 
 import com.intel.daal.algorithms.ModelSerializer
+import com.intel.daal.algorithms.linear_regression.Model
 import com.intel.daal.algorithms.linear_regression.prediction._
 import com.intel.daal.algorithms.linear_regression.training._
-import com.intel.daal.algorithms.linear_regression.Model
-import com.intel.daal.data_management.data.{ NumericTable, HomogenNumericTable }
+import com.intel.daal.data_management.data.{HomogenNumericTable, NumericTable}
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
-import org.trustedanalytics.atk.engine.daal.plugins.DaalDataConverters
+import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
 
 object DaalLinearRegressionFunctions extends Serializable {
 
@@ -47,8 +44,8 @@ object DaalLinearRegressionFunctions extends Serializable {
                        frameRdd: FrameRdd,
                        featureColumns: List[String],
                        dependentVariableColumns: List[String]): Model = {
-    val data = DaalDataConverters.convertFrameToNumericTableRdd(frameRdd, featureColumns)
-    val dependentVariables = DaalDataConverters.convertFrameToNumericTableRdd(frameRdd, dependentVariableColumns)
+    val data = frameRdd.toNumericTableRdd(featureColumns)
+    val dependentVariables = frameRdd.toNumericTableRdd(dependentVariableColumns)
     val trainTables = data.join(dependentVariables)
 
     val partialModels = computePartialLinearModels(trainTables)
@@ -124,29 +121,24 @@ object DaalLinearRegressionFunctions extends Serializable {
   def predictLinearModel(modelData: DaalLinearRegressionModelData,
                          frameRdd: FrameRdd,
                          featureColumns: List[String]): FrameRdd = {
-    val rowWrapper = frameRdd.rowWrapper
 
-    frameRdd.cache()
-    val predictResultsRdd: RDD[sql.Row] = frameRdd.mapPartitions { iter =>
+    val numericTableRdd = frameRdd.toNumericTableRdd(featureColumns)
+
+    val predictResultsRdd = numericTableRdd.mapPartitions(iter => {
       val context = new DaalContext()
       val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray)
       require(modelData.featureColumns.length == featureColumns.length,
         "Number of feature columns for train and predict should be same")
 
-      val rows = DaalDataConverters.convertRowsToNumericTable(featureColumns, rowWrapper, iter) match {
-        case Some(testData) => {
-          val predictions = predictLinearModelLocal(trainedModel, testData)
-          val rows: Array[Row] = DaalDataConverters.createArrayOfVectors(context, predictions).map(row => {
-            new GenericRow(row.toArray.map(_.asInstanceOf[Any]))
-          })
-
-          rows.iterator
-        }
-        case _ => List.empty[sql.Row].iterator
+      val rows =iter.flatMap{ case(id, testData) =>
+        val predictions = predictLinearModelLocal(trainedModel, testData)
+        predictions.toRowIter(context)
       }
+
       context.dispose()
       rows
-    }
+    })
+
     val predictColumns = modelData.labelColumns.map(col => Column("predict_" + col, DataTypes.float64))
     frameRdd.zipFrameRdd(new FrameRdd(FrameSchema(predictColumns), predictResultsRdd))
   }

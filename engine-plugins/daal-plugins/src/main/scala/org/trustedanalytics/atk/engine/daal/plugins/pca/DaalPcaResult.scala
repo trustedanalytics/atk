@@ -13,23 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
-package com.intel.daal.algorithms;
-import com.intel.daal.data_management.data.HomogenNumericTable;
+package org.trustedanalytics.atk.engine.daal.plugins.pca
 
-public class PcaResult {
-    private HomogenNumericTable eigenVectors;
-    private HomogenNumericTable eigenValues;
+import com.intel.daal.data_management.data.NumericTable
 
-    public PcaResult(HomogenNumericTable eigenVectors, HomogenNumericTable eigenValues) {
-        this.eigenVectors = eigenVectors;
-        this.eigenValues = eigenValues;
-    }
-
-    public HomogenNumericTable getEigenValues() {
-        return eigenValues;
-    }
-
-    public HomogenNumericTable getEigenVectors() {
-        return eigenVectors;
-    }
-}
+case class DaalPcaResult (eigenValues: NumericTable, eigenVectors: NumericTable)

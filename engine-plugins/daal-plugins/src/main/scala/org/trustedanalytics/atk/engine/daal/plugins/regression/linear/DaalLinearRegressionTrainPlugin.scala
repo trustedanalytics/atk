@@ -20,11 +20,11 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.PluginDocAnnotation
+import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, ApiMaturityTag, Invocation }
-import org.trustedanalytics.atk.engine.daal.plugins.DaalDataConverters
+import DaalConversionImplicits._
 
 import scala.util.{ Success, Failure, Try }
 
@@ -57,7 +57,7 @@ case class DaalLinearRegressionArgs(model: ModelReference,
  *
  * @param betas Beta parameters for trained linear regression model
  */
-case class DaalLinearRegressionTrainResult(betas: List[Vector[Double]])
+case class DaalLinearRegressionTrainResult(betas: Array[Array[Double]])
 
 import spray.json._
 import DaalLinearRegressionModelDataFormat._
@@ -113,7 +113,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         featureColumns,
         labelColumns)
       val betas = trainModel.getBeta()
-      val betaArray = DaalDataConverters.createArrayOfVectors(context, betas).toList
+      val betaArray = betas.toArrayOfDoubleArray()
 
       // Save model results to metastore
       val serializedModel = Try(ModelSerializer.serializeQrModel(trainModel).toList) match {
