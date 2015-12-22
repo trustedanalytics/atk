@@ -115,6 +115,8 @@
         <dependency>
             <groupId>com.intel.daal</groupId>
             <artifactId>daal-core</artifactId>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/daal-core-${dep.daal.version}.jar</systemPath>
         </dependency>
         <!-- END Intel DAAL dependencies -->
         <dependency>
