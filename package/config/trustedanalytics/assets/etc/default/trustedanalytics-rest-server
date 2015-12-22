@@ -38,4 +38,9 @@ fi
 
 export CLASSPATH=$CLASSPATH
 export YARN_CONF_DIR="/etc/hadoop/conf"
-export DAAL_LIB_DIR="/usr/lib/trustedanalytics/rest-server/daal"
+
+if [ -d "/usr/lib/trustedanalytics/rest-server/lib/daal/intel64_lin" ]; then
+ echo "Adding Intel DAAL libraries"
+ export DAAL_LIB_DIR="/usr/lib/trustedanalytics/rest-server/lib/daal/intel64_lin"
+ export DAAL_GCC_VERSION="gcc4.4"
+fi

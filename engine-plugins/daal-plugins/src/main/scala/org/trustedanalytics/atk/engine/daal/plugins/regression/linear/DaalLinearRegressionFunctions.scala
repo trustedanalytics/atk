@@ -23,11 +23,11 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.algorithms.linear_regression.Model
 import com.intel.daal.algorithms.linear_regression.prediction._
 import com.intel.daal.algorithms.linear_regression.training._
-import com.intel.daal.data_management.data.{HomogenNumericTable, NumericTable}
+import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
 
 object DaalLinearRegressionFunctions extends Serializable {
@@ -130,9 +130,10 @@ object DaalLinearRegressionFunctions extends Serializable {
       require(modelData.featureColumns.length == featureColumns.length,
         "Number of feature columns for train and predict should be same")
 
-      val rows =iter.flatMap{ case(id, testData) =>
-        val predictions = predictLinearModelLocal(trainedModel, testData)
-        predictions.toRowIter(context)
+      val rows = iter.flatMap {
+        case (id, testData) =>
+          val predictions = predictLinearModelLocal(trainedModel, testData)
+          predictions.toRowIter(context)
       }
 
       context.dispose()

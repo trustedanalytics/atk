@@ -143,13 +143,15 @@ export PWD=`pwd`
 export PATH=$PWD/.java-buildpack/open_jdk_jre/bin:$PATH
 export JAVA_HOME=$PWD/.java-buildpack/open_jdk_jre
 
-if [ -f "daal.tar.gz" ]; then
- echo "Installing DAAL libraries"
- tar -xvzf daal.tar.gz
- export DAAL_LIB_DIR="$DIR/../daal/"
+jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
+
+if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
+ echo "Adding Intel DAAL libraries"
+ export DAAL_LIB_DIR="$DIR/../lib/daal/intel64_lin"
+ export DAAL_GCC_VERSION="gcc4.4"
  jars="$jars daal-plugins.jar"
 fi
-jars="engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar"
+
 echo "Creating jar links"
 for jar in $jars
 do

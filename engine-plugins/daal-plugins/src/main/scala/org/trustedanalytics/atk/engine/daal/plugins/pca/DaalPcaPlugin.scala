@@ -33,12 +33,12 @@ import DaalConversionImplicits._
  */
 case class DaalPcaArgs(frame: FrameReference,
                        columnNames: List[String],
-                       method: String ="cor") {
+                       method: String = "cor") {
   require(frame != null, "frame is required")
   require(columnNames != null && !columnNames.isEmpty, "column names should not be empty")
   require(method == "cor" || "method" == "svd", "method must be 'svd' or 'cor'")
 
-  def getPcaMethod() : Method = method match {
+  def getPcaMethod(): Method = method match {
     case "svd" => Method.svdDense
     case "cor" => Method.correlationDense
     case _ => throw new IllegalArgumentException(s"Unsupported PCA method: ${method}")
@@ -46,8 +46,8 @@ case class DaalPcaArgs(frame: FrameReference,
 }
 
 case class DaalPcaReturn(observationColumns: List[String],
-                            eigenValues: Array[Double],
-                            eigenVectors: Array[Array[Double]])
+                         eigenValues: Array[Double],
+                         eigenVectors: Array[Array[Double]])
 
 /** JSON conversion for arguments and return value case classes */
 object DaalPcaJsonFormat {

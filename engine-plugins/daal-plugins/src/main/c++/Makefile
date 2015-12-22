@@ -18,7 +18,7 @@ LFLAGS  = -L${DAALROOT}/lib/intel64_lin
 LDFLAGS = -shared
 
 TARGET  = libAtkDaalJavaAPI.so
-TARGETFILE = ../../../lib/${TARGET}
+TARGETFILE = ../../../lib/intel64_lin/${TARGET}
 SOURCES = com_intel_daal_algorithms_ModelSerializer.c
 OBJ     = serializer.o
 

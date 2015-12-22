@@ -3,3 +3,4 @@ package/config/trustedanalytics-tar/jq filter=lfs diff=lfs merge=lfs -text
 *.so filter=lfs diff=lfs merge=lfs -text
 *.so* filter=lfs diff=lfs merge=lfs -text
 daal-core*.jar filter=lfs diff=lfs merge=lfs -text
+engine-plugins/daal-plugins/lib/daal-libs.tar.bz2 filter=lfs diff=lfs merge=lfs -text

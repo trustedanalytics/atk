@@ -22,6 +22,6 @@ object DaalConversionImplicits {
 
   implicit def daalFrameRddFunctions(self: FrameRdd): DaalFrameRddFunctions = new DaalFrameRddFunctions(self)
 
-  implicit def numericTableFunctions(self: NumericTable) : DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
+  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
 
 }

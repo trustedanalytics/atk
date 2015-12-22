@@ -72,7 +72,7 @@ class DaalNumericTableFunctions(self: NumericTable) {
    * @param context Daal context
    * @return Iterator of rows
    */
-  def toRowIter(context : DaalContext) : Iterator[Row] = {
+  def toRowIter(context: DaalContext): Iterator[Row] = {
     val numRows = self.getNumberOfRows.toInt
     val numCols = self.getNumberOfColumns.toInt
 

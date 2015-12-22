@@ -38,12 +38,12 @@ echo "$SCRIPTPATH"
 
 pwd
 
-mkdir -p  ${BUILD_DIR}/etc/trustedanalytics/rest-server
-mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
-mkdir -p  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/daal
+mkdir -pv  ${BUILD_DIR}/etc/trustedanalytics/rest-server
+mkdir -pv  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib
+mkdir -pv  ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/daal
 
 #copy example scripts
-mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
+mkdir -pv ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
 cp -Rv ../python-client/examples/end-user/* ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/examples/
 
 if [ -d /home/agent/datasets ]; then
@@ -64,6 +64,10 @@ echo "copy jar dependencies"
 cp -v rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 # this is weird but for now the scoring engine is running out of the same lib dir as the rest server
 cp -v scoring-engine-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
+
+echo "copy DAAL dynamic libraries"
+tar -jxvf engine-plugins/daal-plugins/lib/daal-libs.tar.bz2 -C ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/daal
+cp -v engine-plugins/daal-plugins/lib/daal-core-${DAAL_JAR_VERSION}.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
 ls -l config/trustedanalytics-python-client/trustedanalytics/dist

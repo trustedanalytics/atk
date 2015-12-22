@@ -29,7 +29,12 @@ pwd
 export SEARCH_PATH="-Datk.module-loader.search-path=${BASEDIR}/module-loader:${BASEDIR}/rest-server:${BASEDIR}/engine:${BASEDIR}/engine-plugins:${BASEDIR}/model-publish-format:${HOME}/.m2/"
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
-export DAAL_LIB_DIR="$DIR/../daal/"
+
+if [ -d "${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin" ]; then
+ echo "Adding Intel DAAL libraries"
+ export DAAL_LIB_DIR="${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin"
+ export DAAL_GCC_VERSION="gcc4.4"
+fi
 
 # needed for Python UDFs to work locally
 if [ -z "$SPARK_HOME" ]

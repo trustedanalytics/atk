@@ -39,15 +39,16 @@ object DaalPcaFunctions extends Serializable {
   }
 
   private def computePcaPartialResults(dataRdd: RDD[(Integer, HomogenNumericTable)], pcaMethod: Method): RDD[(Integer, PartialResult)] = {
-    dataRdd.map { case (tableId, table) =>
-      val context = new DaalContext
-      val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], pcaMethod)
-      table.unpack(context)
-      pcaLocal.input.set(InputId.data, table)
-      val partialResult = pcaLocal.compute
-      partialResult.pack
-      context.dispose
-      (tableId, partialResult)
+    dataRdd.map {
+      case (tableId, table) =>
+        val context = new DaalContext
+        val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], pcaMethod)
+        table.unpack(context)
+        pcaLocal.input.set(InputId.data, table)
+        val partialResult = pcaLocal.compute
+        partialResult.pack
+        context.dispose
+        (tableId, partialResult)
     }
   }
 

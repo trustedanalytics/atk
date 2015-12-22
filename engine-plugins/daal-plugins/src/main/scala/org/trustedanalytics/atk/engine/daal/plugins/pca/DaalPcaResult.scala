@@ -17,4 +17,4 @@ package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.data_management.data.NumericTable
 
-case class DaalPcaResult (eigenValues: NumericTable, eigenVectors: NumericTable)
+case class DaalPcaResult(eigenValues: NumericTable, eigenVectors: NumericTable)

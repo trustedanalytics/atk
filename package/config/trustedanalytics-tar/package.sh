@@ -39,7 +39,8 @@ echo "create package directories"
 mkdir -pv  tarballs/$package/bin
 mkdir -pv  tarballs/$package/conf
 mkdir -pv  tarballs/$package/lib
-mkdir -p  tarballs/$package/daal
+mkdir -pv  tarballs/$package/lib/daal
+
 echo "copy config into package"
 cp -v  config/$package/application.conf tarballs/$package/conf
 cp -v  config/$package/logback.xml tarballs/$package/conf
@@ -47,7 +48,10 @@ cp -Rv config/trustedanalytics/assets/etc/trustedanalytics/rest-server/* tarball
 cp -v  config/$package/rest-server.sh tarballs/$package/bin/
 cp -v  config/$package/jq tarballs/$package/
 cp -v  config/$package/manifest.yml.tpl tarballs/$package/
-cp -v  config/$package/daal.tar.gz tarballs/$package/
+
+echo "copy Intel DAAL dynamic libraries into package"
+tar -jxvf ../engine-plugins/daal-plugins/lib/daal-libs.tar.bz2 -C tarballs/$package/lib/daal
+cp -v ../engine-plugins/daal-plugins/lib/daal-core-${DAAL_JAR_VERSION}.jar tarballs/$package/lib
 
 echo "copy jar dependencies"
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
