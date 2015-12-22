@@ -250,6 +250,31 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                 </execution>
                             </executions>
                         </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>exec-maven-plugin</artifactId>
+                            <inherited>false</inherited>
+                            <executions>
+                                <execution>
+                                    <id>chmod-shellscripts</id>
+                                    <phase>compile</phase>
+                                    <goals>
+                                        <goal>exec</goal>
+                                    </goals>
+                                    <configuration>
+                                        <executable>mvn</executable>
+                                        <arguments>
+                                            <argument>install:install-file</argument>
+                                            <argument>-Dfile=${project.basedir}/engine-plugins/daal-plugins/lib/daal-core-${dep.daal.version}.jar</argument>
+                                            <argument>-DgroupId=com.intel.daal</argument>
+                                            <argument>-DartifactId=daal-core</argument>
+                                            <argument>-Dversion=${dep.daal.version}</argument>
+                                            <argument>-Dpackaging=jar</argument>
+                                        </arguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
                         <!--END DO NOT TOUCH-->
                     </plugins>
                 </pluginManagement>
