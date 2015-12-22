@@ -199,6 +199,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     override def createReference(id: Long): FrameReference = id
     override def createReference(uri: String): FrameReference = uri
   }
+
   implicit def singletonOrListFormat[T: JsonFormat] = new JsonFormat[SingletonOrListValue[T]] {
     def write(list: SingletonOrListValue[T]) = JsArray(list.value.map(_.toJson))
     def read(value: JsValue): SingletonOrListValue[T] = value match {
