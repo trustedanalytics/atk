@@ -139,7 +139,6 @@
 <li><a class="reference internal" href="#review-changes" id="id31">Review Changes</a></li>
 <li><a class="reference internal" href="#finishing-up-in-cloudera-manager" id="id32">Finishing Up In Cloudera Manager</a></li>
 <li><a class="reference internal" href="#final-settings-and-tests" id="id33">Final Settings and Tests</a></li>
-<li><a class="reference internal" href="#tweaks" id="id34">Tweaks</a></li>
 </ul>
 </div>
 <p>This guide discusses the process of configuring Cloudera Hadoop 5
@@ -365,65 +364,6 @@ Finishing Up In Cloudera Manager</span></p>
 <div class="section" id="final-settings-and-tests">
 <h2>Final Settings and Tests<a class="headerlink" href="#final-settings-and-tests" title="Permalink to this headline">¶</a></h2>
 <p>Test functionality of <abbr title="Hadoop Distributed File System">HDFS</abbr>.</p>
-</div>
-<div class="section" id="tweaks">
-<h2>Tweaks<a class="headerlink" href="#tweaks" title="Permalink to this headline">¶</a></h2>
-<p>The graph machine learning algorithms in Trusted Analytics Platform use the Giraph
-graph-processing framework.
-Giraph is designed to run the whole graph computation in memory, and requires
-large amounts of memory to process big graphs.
-There should be at least 4GB of memory per map task to cater for graphs with
-supernodes.
-Giraph jobs are scheduled using YARN.
-If a Giraph job requests twice the amount of memory configured in YARN, then
-the YARN resource manager will not schedule it causing the job to hang.</p>
-<p>To run Giraph jobs, ensure that the memory settings in <abbr title="Cloudera Hadoop">CDH</abbr> match those in
-application.conf using one of the following approaches:</p>
-<ol class="arabic simple">
-<li>Modify the following YARN configuration in <abbr title="Cloudera Hadoop">CDH</abbr> to match the setting under
-trustedanalytics.atk.giraph in application.conf.
-Under the YARN section in <abbr title="Cloudera Hadoop">CDH</abbr>, click on <em>Configuration</em> and select <em>View
-and Edit</em>.<ol class="arabic">
-<li>Search for <code class="docutils literal"><span class="pre">mapreduce.map.memory.mb</span></code> in the search box on the upper
-left corner.
-Modify <code class="docutils literal"><span class="pre">mapreduce.map.memory.mb</span></code> to match mapreduce.map.memory.mb in
-application.conf (currently 4096 MB)</li>
-<li>Search for <code class="docutils literal"><span class="pre">mapreduce.map.java.opts.max</span></code> in the search box.
-Modify this setting to match mapreduce.map.java.opts in
-application.conf (currently 3072MB).
-The rule of thumb is that mapreduce.map.java.opts.max should be at most
-85% of mapreduce.map.memory.mb</li>
-<li>Search for <code class="docutils literal"><span class="pre">yarn.nodemanager.resource.memory-mb</span></code> in the search box.
-Modify this setting to a multiple of <code class="docutils literal"><span class="pre">mapreduce.map.memory.mb</span></code>.
-For example, to run at most 4 mappers on each node, and
-<code class="docutils literal"><span class="pre">mapreduce.map.memory.mb</span></code> is set to 4096MB, then set
-<code class="docutils literal"><span class="pre">yarn.nodemanager.resource.memory-mb</span></code> to 16384MB.</li>
-<li>Save these changes.</li>
-<li>Click on <em>Actions</em>, on the top-right corner and then <em>Deploy Client
-Configuration</em> to update the configurations across the cluster.</li>
-<li>Restart YARN.</li>
-</ol>
-</li>
-<li>Limit the Giraph memory allocation in application.conf to match the
-configured <abbr title="Cloudera Hadoop">CDH</abbr> settings in YARN.
-The relevant settings in the Trusted Analytics Platform application.conf file are in
-trustedanalytics.atk.giraph:<ol class="arabic">
-<li>mapreduce.map.memory.mb.
-This setting should match mapreduce.map.memory.mb in YARN.</li>
-<li>mapreduce.map.java.opts.
-This setting should match mapreduce.map.java.opts.max in YARN.</li>
-<li>giraph.maxWorkers.
-The maximum value for this setting should be the maximum number of map
-tasks that can run on the cluster - 1.
-One mapper is reserved for the Giraph master, while the rest of the
-mappers are Giraph workers.
-Since Giraph is memory-intensive, a good estimate for giraph.maxWorkers
-is ((<code class="docutils literal"><span class="pre">Number</span> <span class="pre">of</span> <span class="pre">Yarn</span> <span class="pre">node</span> <span class="pre">managers</span></code> *
-<code class="docutils literal"><span class="pre">yarn.nodemanager.resource.memory-mb</span></code> /
-<code class="docutils literal"><span class="pre">yarn.nodemanager.resource.memory-mb</span></code>)-1).</li>
-</ol>
-</li>
-</ol>
 </div>
 </div>
 
