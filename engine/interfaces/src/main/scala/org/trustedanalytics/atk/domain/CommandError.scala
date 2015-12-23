@@ -18,6 +18,11 @@ package org.trustedanalytics.atk.domain
 
 import org.apache.commons.lang3.exception.ExceptionUtils
 
+/**
+ * Holds an error from running a command plugin
+ * @param message displayed to user
+ * @param stackTrace for diagnostics
+ */
 case class CommandError(message: String, stackTrace: Option[String])
 
 object CommandError {
