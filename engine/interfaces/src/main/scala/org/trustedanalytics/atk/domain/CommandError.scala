@@ -14,17 +14,29 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk
+package org.trustedanalytics.atk.domain
 
 import org.apache.commons.lang3.exception.ExceptionUtils
 
-package object domain {
+case class CommandError(message: String, stackTrace: Option[String])
 
-  implicit def throwableToError(t: Throwable): Error = {
+object CommandError {
+
+  def appendError(currentError: Option[CommandError], additionalException: Throwable): CommandError = {
+    currentError match {
+      case Some(error) =>
+        val appendedStackTrace = error.stackTrace.getOrElse("") + "\n" + ExceptionUtils.getStackTrace(additionalException)
+        error.copy(stackTrace = Some(appendedStackTrace))
+      case None => throwableToError(additionalException)
+    }
+  }
+
+  private def throwableToError(t: Throwable): CommandError = {
     val message = t.getMessage match {
       case null | "" => t.getClass.getName
       case s => s
     }
-    Error(message, stackTrace = Some(ExceptionUtils.getStackTrace(t)))
+    CommandError(message, stackTrace = Some(ExceptionUtils.getStackTrace(t)))
   }
+
 }

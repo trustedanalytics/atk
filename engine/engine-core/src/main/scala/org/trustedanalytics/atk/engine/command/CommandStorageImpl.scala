@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.command
 
 import org.trustedanalytics.atk.NotFoundException
+import org.trustedanalytics.atk.domain.CommandError
 
 import scala.util.{ Success, Failure, Try }
 import spray.json.JsObject
@@ -67,12 +68,11 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
         if (command.complete) {
           warn(s"Completion attempt for command $commandId, already completed")
         }
-        import org.trustedanalytics.atk.domain.throwableToError
         val changed = result match {
           case Failure(ex) =>
             error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
             command.copy(complete = true,
-              error = Some(throwableToError(ex)),
+              error = Some(CommandError.appendError(command.error, ex)),
               correlationId = corId)
           case Success(r) =>
             // update progress to 100 since the command is complete. This step is necessary

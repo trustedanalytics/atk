@@ -18,9 +18,8 @@ package org.trustedanalytics.atk.domain.command
 
 import org.joda.time.format.DateTimeFormat
 import spray.json.JsObject
-import org.trustedanalytics.atk.domain.HasId
+import org.trustedanalytics.atk.domain.{ CommandError, HasId }
 import org.joda.time.DateTime
-import org.trustedanalytics.atk.domain.Error
 import org.trustedanalytics.atk.engine.ProgressInfo
 
 /**
@@ -44,7 +43,7 @@ case class Command(id: Long,
                    name: String,
                    arguments: Option[JsObject] = None,
                    correlationId: String = "",
-                   error: Option[Error] = None,
+                   error: Option[CommandError] = None,
                    progress: List[ProgressInfo] = List(),
                    complete: Boolean = false,
                    result: Option[JsObject] = None,
