@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils
  * Convert CamelCase String to lower_case_with_underscores.
  */
 object JsonPropertyNameConverter {
-
   /**
    * Convert CamelCase String to lower_case_with_underscores.
    */
@@ -38,6 +37,15 @@ object JsonPropertyNameConverter {
     val mixedCaseWithUnderscores = StringUtils.join(parts.asInstanceOf[Array[AnyRef]], "_")
     val lower = mixedCaseWithUnderscores.toLowerCase
     // remove extra underscores (these might be added if the string already had underscores in it)
-    StringUtils.replacePattern(lower, "[_]+", "_")
+    replacePattern(lower, "[_]+", "_")
+  }
+
+  /**
+   * Same as org.apache.commons.lang3.StringUtils.replacePattern
+   *
+   * Copied here because an earlier version of commons-lang3 was getting picked up by some plugins.
+   */
+  private def replacePattern(source: String, regex: String, replacement: String): String = {
+    Pattern.compile(regex, Pattern.DOTALL).matcher(source).replaceAll(replacement)
   }
 }
