@@ -38,6 +38,6 @@ object JsonPropertyNameConverter {
     val mixedCaseWithUnderscores = StringUtils.join(parts.asInstanceOf[Array[AnyRef]], "_")
     val lower = mixedCaseWithUnderscores.toLowerCase
     // remove extra underscores (these might be added if the string already had underscores in it)
-    replacePattern(lower, "[_]+", "_")
+    StringUtils.replacePattern(lower, "[_]+", "_")
   }
 }
