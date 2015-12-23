@@ -144,6 +144,66 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     }
 
   /**
+   * Prepare save path, return info about the save
+   *
+   * Exposed here for and any plugin where the frame will be materialized outside of Spark
+   * - you don't need to call this for Spark plugins.
+   *
+   * Developer needs to call postSave() once the frame has been materialized.
+   */
+  def prepareForSave(frame: FrameReference, forceStorageFormat: Option[String] = None)(implicit invocation: Invocation): SaveInfo = {
+    val frameEntity = expectFrame(frame)
+    val targetPath = new Path(frameFileStorage.calculateFramePath(frameEntity), EntityRev.getNextRevFolderName(frameEntity.storageLocation))
+    // delete incomplete data on disk if it exists
+    frameFileStorage.deletePath(targetPath)
+    val storageFormat = forceStorageFormat.getOrElse(frameEntity.storageFormat.getOrElse(defaultStorageFormat))
+    info(s"Preparing to save frame ${frame.id} (name: ${frameEntity.name}) to $targetPath as $storageFormat")
+    SaveInfo(targetPath = targetPath.toString, victimPath = frameEntity.storageLocation, storageFormat = storageFormat)
+  }
+
+  /**
+   * After saving update timestamps, status, row count, etc.
+   *
+   * Don't need to be called for Spark plugins.
+   *
+   * @param targetFrameRef might be same as originalFrameRef or the next revision
+   * @param saveInfo prepare save info
+   * @param schema the new schema
+   * @return the latest version of the entity
+   */
+  override def postSave(targetFrameRef: FrameReference, saveInfo: SaveInfo, schema: Schema)(implicit invocation: Invocation): FrameEntity = {
+    // update the metastore
+    metaStore.withSession("frame.saveFrame") {
+      implicit session =>
+        {
+          val frameEntity = expectFrame(targetFrameRef)
+
+          require(schema != null, "frame schema was null, we need developer to add logic to handle this - we used to have this, not sure if we still do --Todd 12/16/2014")
+
+          val now = new DateTime
+          val updatedFrame = frameEntity.copy(status = Status.Active,
+            schema = schema,
+            storageLocation = Some(saveInfo.targetPath),
+            storageFormat = Some(saveInfo.storageFormat),
+            materializationComplete = Some(now),
+            lastReadDate = now,
+            modifiedOn = now,
+            modifiedBy = Some(invocation.user.user.id))
+
+          val withCount = updatedFrame.copy(rowCount = Some(getRowCount(updatedFrame)))
+
+          metaStore.frameRepo.update(withCount)
+          updateLastReadDate(withCount)
+
+          if (saveInfo.victimPath.isDefined) {
+            frameFileStorage.deletePath(new Path(saveInfo.victimPath.get))
+          }
+        }
+    }
+    expectFrame(targetFrameRef)
+  }
+
+  /**
    * Retrieve records from the given dataframe
    * @param frame Frame to retrieve records from
    * @param offset offset in frame before retrieval
