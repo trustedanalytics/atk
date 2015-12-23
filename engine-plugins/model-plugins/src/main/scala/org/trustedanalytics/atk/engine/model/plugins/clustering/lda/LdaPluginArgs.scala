@@ -43,7 +43,7 @@ Larger value implies that documents are assumed to cover all topics
 more uniformly; smaller value implies that documents are more
 concentrated on a small subset of topics.
 Valid value range is all positive float greater than or equal to 1.
- Default is 0.1.""") alpha: Float = 1.1f,
+ Default is 0.1.""") alpha: List[Double] = List(-1d),
                         @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
@@ -68,9 +68,10 @@ if the corpus and LDA parameters are unchanged.""") randomSeed: Option[Long] = N
   require(frame != null, "frame is required")
   require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
   require(StringUtils.isNotBlank(wordColumnName), "word column name is required")
-  require(StringUtils.isNotBlank(wordCountColumnName), "word count column name is required")
   require(maxIterations > 0, "Max iterations should be greater than 0")
-  require(alpha > 0, "Alpha should be greater than 0")
+  if (alpha.size == 1) {require(alpha.head == -1d || alpha.head>1d, "Values should be ")}
+  else {require(alpha.forall(alpha => alpha < 1.0), "Alpha should be greater than 0")}
+
   require(beta > 0, "Beta should be greater than 0")
   require(numTopics > 0, "Number of topics (K) should be greater than 0")
 

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering.lda
 
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.clustering.{ AtkLdaModel, DistributedLDAModel, LDA }
-import org.apache.spark.mllib.linalg.Vector
+import org.apache.spark.mllib.linalg.{Vectors, Vector}
 import org.apache.spark.rdd.RDD
 
 object LdaTrainFunctions extends Serializable {
@@ -56,7 +56,8 @@ object LdaTrainFunctions extends Serializable {
    */
   private[clustering] def initializeLdaRunner(args: LdaTrainArgs): LDA = {
     val ldaRunner = new LDA()
-    ldaRunner.setDocConcentration(args.alpha)
+    val alpha : Vector = Vectors.dense(args.alpha.toArray)
+    ldaRunner.setDocConcentration(alpha)
     ldaRunner.setTopicConcentration(args.beta)
     ldaRunner.setMaxIterations(args.maxIterations)
     ldaRunner.setK(args.numTopics)
