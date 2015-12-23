@@ -978,7 +978,6 @@ Glossary
 
         A vertex is an object in a graph.
         Each vertex has an ID and a property map.
-        In Giraph, a long integer is used as ID for each vertex.
         The property map may contain 0 or more properties.
         Each vertex is connected to others by edges.
 

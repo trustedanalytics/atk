@@ -40,13 +40,4 @@ object JsonPropertyNameConverter {
     // remove extra underscores (these might be added if the string already had underscores in it)
     replacePattern(lower, "[_]+", "_")
   }
-
-  /**
-   * Same as org.apache.commons.lang3.StringUtils.replacePattern
-   *
-   * Copied here because an earlier version of commons-lang3 was getting picked up when running Giraph.
-   */
-  private def replacePattern(source: String, regex: String, replacement: String): String = {
-    Pattern.compile(regex, Pattern.DOTALL).matcher(source).replaceAll(replacement)
-  }
 }
