@@ -21,7 +21,7 @@ D. Wilkinson, R. Schreiber and R. Pan,
 CGD provides a faster, more approximate optimization of the cost function and
 should be used when memory is a constraint.
 
-A typical representation of the preference matrix P in Giraph is a bi-partite
+A typical representation of the preference matrix P in MLlib is a bi-partite
 graph, where nodes at the left side represent a list of users and nodes at the
 right side represent a set of items (for example, movies), and edges encode
 the rating a user provided to an item.

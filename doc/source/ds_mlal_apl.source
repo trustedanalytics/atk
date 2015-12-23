@@ -25,10 +25,6 @@
             The convergence progress output interval.
             The default value is 1, which means output every :term:`superstep`.
 
-        num_worker : String, optional
-            The number of Giraph workers.
-            The default value is 15.
-
     Returns
 
 
