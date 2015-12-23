@@ -23,7 +23,6 @@ import org.scalatest.mock.MockitoSugar
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTrainArgs
-import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDTrainPlugin
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {

@@ -102,7 +102,7 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
             CfRequests.getOrganizationForSpaceId(apiKey, RestServerConfig.appSpace)
           }
           catch {
-            case ex =>
+            case ex: Throwable =>
               error(ex.getMessage)
               throw new AuthenticationException("CF-InvalidAuthToken", ex.getCause)
           }

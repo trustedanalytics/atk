@@ -96,8 +96,8 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Export
               val str = value match {
                 case null => "null"
                 case s: String => "\"" + s + "\""
-                case arr: ArrayBuffer[Double] => arr.mkString("[", ",", "]")
-                case seq: Seq[Double] => seq.mkString("[", ",", "]")
+                case arr: ArrayBuffer[_] => arr.mkString("[", ",", "]")
+                case seq: Seq[_] => seq.mkString("[", ",", "]")
                 case x => x.toString
               }
               new String("\"" + header + "\":" + str)

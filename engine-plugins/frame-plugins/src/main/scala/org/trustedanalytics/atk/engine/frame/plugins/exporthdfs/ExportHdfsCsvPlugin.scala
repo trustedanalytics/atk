@@ -102,8 +102,8 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
       val array = row.toSeq.map(col =>
         col match {
           case null => ""
-          case seq: Seq[Double] => seq.mkString(",")
-          case arr: ArrayBuffer[Double] => arr.mkString(",")
+          case arr: ArrayBuffer[_] => arr.mkString(",")
+          case seq: Seq[_] => seq.mkString(",")
           case x => x.toString
         })
       for (i <- array) printer.print(i)
