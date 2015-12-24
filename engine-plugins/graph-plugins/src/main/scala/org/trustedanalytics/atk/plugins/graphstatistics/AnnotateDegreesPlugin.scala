@@ -101,9 +101,6 @@ For a directed edge relation, a vertex has both an out-degree (the number of
 edges leaving the vertex) and an in-degree (the number of edges entering the
 vertex).
 
-The toolkit provides this routine for calculating the degrees of vertices.
-This calculation could be performed with a Gremlin query on smaller datasets
-because Gremlin queries cannot be executed on a distributed scale.
 The |PACKAGE| routine ``annotate_degrees`` can be executed at distributed scale.
 
 In the presence of edge weights, vertices can have weighted degrees: The

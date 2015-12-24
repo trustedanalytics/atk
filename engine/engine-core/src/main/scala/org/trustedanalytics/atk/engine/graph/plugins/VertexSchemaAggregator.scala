@@ -25,7 +25,7 @@ import scala.collection.immutable.Map
 /**
  * Aggregation methods for getting VertexSchema from GBVertices
  *
- * @param indexNames vertex properties with unique indexes in Titan
+ * @param indexNames vertex properties with unique indexes
  */
 class VertexSchemaAggregator(indexNames: List[String]) extends Serializable {
 

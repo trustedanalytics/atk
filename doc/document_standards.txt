@@ -141,10 +141,6 @@ Examples
     To query::
 
         tc_graph = get_graph('tc_graph')
-        tc_graph.query.gremlin("g.V [0..4]")
-
-        {u'results':[{u'_id':4,u'_type':u'vertex',u'b':3603376,u'pr':0.967054,u'titanPhysicalId':363016,u'triangle_count':1},{u'_id':8,u'_type':u'vertex',u'a':3118124,u'pr':0.967054,u'titanPhysicalId':343201000,u'triangle_count':1},{u'_id':12,u'_type':u'vertex',u'a':3063711,u'pr':0.967054,u'titanPhysicalId':43068,u'triangle_count':1},{u'_id':16,u'_type':u'vertex',u'c':899225,u'pr':0.967054,u'titanPhysicalId':202800088,u'triangle_count':1},{u'_id':20,u'_type':u'vertex',u'c':1493990,u'pr':0.967054,u'titanPhysicalId':268188,u'triangle_count':1}],u'run_time_seconds':0.271}
-
         g.ml.conjugate_gradient_descent(edge_value_property_list = "rating", vertex_type_property_key = "vertex_type", input_edge_label_list = "edge", output_vertex_property_list = "cgd_result", edge_type_property_key = "splits", vector_value = "true", cgd_lambda = 0.065, num_iters = 3)
 
     The expected output is like this::
@@ -154,42 +150,6 @@ Examples
 .. only:: latex
 
     To query::
-
-        tc_graph = get_graph('tc_graph')
-        tc_graph.query.gremlin("g.V [0..4]")
-
-        {u'results':
-            [{u'_id':4,
-              u'_type':u'vertex',
-              u'b':3603376,
-              u'pr':0.967054,
-              u'titanPhysicalId':363016,
-              u'triangle_count':1},
-             {u'_id':8,
-              u'_type':u'vertex',
-              u'a':3118124,
-              u'pr':0.967054,
-              u'titanPhysicalId':343201000,
-              u'triangle_count':1},
-             {u'_id':12,
-              u'_type':u'vertex',
-              u'a':3063711,
-              u'pr':0.967054,
-              u'titanPhysicalId':43068,
-              u'triangle_count':1},
-             {u'_id':16,
-              u'_type':u'vertex',
-              u'c':899225,
-              u'pr':0.967054,
-              u'titanPhysicalId':202800088,
-              u'triangle_count':1},
-             {u'_id':20,
-              u'_type':u'vertex',
-              u'c':1493990,
-              u'pr':0.967054,
-              u'titanPhysicalId':268188,
-              u'triangle_count':1}],
-              u'run_time_seconds':0.271}
 
         g.ml.conjugate_gradient_descent(                \\
             edge_value_property_list = "rating",        \\

@@ -193,7 +193,7 @@ Use a FrameReference as the type, and place this parameter first in the case
 class definition if it is desired that this parameter is filled by the Frame
 instance whose method is being invoked by the user.
 Similarly, if the method is on a graph, using  a GraphReference in the first
-position will do the trick for :term:`TitanGraph` instances.
+position will do the trick for :term:`Graph` instances.
 
 Single Value Results
 ====================
@@ -319,9 +319,6 @@ sections to be pulled in so they're available to the plugin.
                 sampling {
                     vertex_sample {
                         class = "com.trustedanalytics.spark.graphon.sampling.VertexSample"
-                        config {
-                            titan = ${trustedanalytics.atk.engine.titan}
-                        }
                     }
                 }
             }
@@ -332,7 +329,6 @@ sections to be pulled in so they're available to the plugin.
     #these will not be used when the application is actually running
     trustedanalytics.atk.engine {
         default-timeout = 30s
-        titan {}
     }
 
 --------------------

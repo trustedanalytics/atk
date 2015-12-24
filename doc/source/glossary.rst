@@ -467,13 +467,6 @@ Glossary
         pairs, that is, properties, associated with it.
         Each element can have zero properties as well.
 
-    Gremlin
-
-        A graph query language.
-        Gremlin works with the Titan Graph Database, though it is made by a
-        different company.
-        For more information see: `Gremlin Wiki`_.
-
     HBase
 
         Apache HBase is the Hadoop database, a distributed, scalable, big data
@@ -915,11 +908,6 @@ Glossary
 
         See :term:`Character-Separated Values`.
 
-    TitanGraph
-
-        A class object with the functionality to manipulate the data in a
-        :term:`graph`.
-
     Topic Modeling
 
         Topic models provide a simple way to analyze large volumes of unlabeled
@@ -1034,7 +1022,6 @@ Glossary
     http://en.wikipedia.org/wiki/Gaussian_random_field
 .. _Wikipedia\: Graph (mathematics):
     http://en.wikipedia.org/wiki/Graph_(mathematics)
-.. _Gremlin Wiki: https://github.com/tinkerpop/gremlin/wiki
 .. _Wikipedia\: Ising Model: http://en.wikipedia.org/wiki/Ising_model
 .. _Wikipedia\: Machine Learning / Algorithm Types:
     http://en.wikipedia.org/wiki/Machine_learning#Algorithm_types
