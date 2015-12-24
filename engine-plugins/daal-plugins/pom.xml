@@ -22,8 +22,8 @@
                 <inherited>false</inherited>
                 <executions>
                     <execution>
-                        <id>chmod-shellscripts</id>
-                        <phase>compile</phase>
+                        <id>install-daal-jar</id>
+                        <phase>validate</phase>
                         <goals>
                             <goal>exec</goal>
                         </goals>
