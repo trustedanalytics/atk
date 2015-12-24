@@ -20,6 +20,8 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
@@ -98,6 +100,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
    */
   override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): DaalLinearRegressionTrainResult =
     {
+      DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
       val model: Model = arguments.model
 
       // Create RDD from the frame

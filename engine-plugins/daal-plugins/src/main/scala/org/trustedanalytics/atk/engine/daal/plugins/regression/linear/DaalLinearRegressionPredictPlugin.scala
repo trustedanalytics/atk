@@ -27,6 +27,8 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, ApiMaturityTag, Invocation }
@@ -65,7 +67,7 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 1
+  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 2
 
   /**
    * Get predictions for DAAL's Linear Regression with QR decomposition using test frame
@@ -78,6 +80,7 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
    */
   override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): FrameReference =
     {
+      DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
       val model: Model = arguments.model
 
       //create RDD from the frame

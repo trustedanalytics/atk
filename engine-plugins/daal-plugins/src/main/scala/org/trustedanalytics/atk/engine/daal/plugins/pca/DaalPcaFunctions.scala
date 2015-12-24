@@ -27,22 +27,21 @@ import org.apache.spark.rdd.RDD
 object DaalPcaFunctions extends Serializable {
 
   def runPCA(frameRdd: FrameRdd, arguments: DaalPcaArgs): DaalPcaResult = {
-    val pcaMethod = arguments.getPcaMethod()
     val context = new DaalContext()
     val dataRdd = frameRdd.toNumericTableRdd(arguments.columnNames)
 
-    val partialResults = computePcaPartialResults(dataRdd, pcaMethod)
-    val pcaResults = mergePcaPartialResults(context, partialResults, pcaMethod)
+    val partialResults = computePcaPartialResults(dataRdd, arguments)
+    val pcaResults = mergePcaPartialResults(context, partialResults, arguments)
 
     context.dispose()
     pcaResults
   }
 
-  private def computePcaPartialResults(dataRdd: RDD[(Integer, HomogenNumericTable)], pcaMethod: Method): RDD[(Integer, PartialResult)] = {
+  private def computePcaPartialResults(dataRdd: RDD[(Integer, HomogenNumericTable)], arguments: DaalPcaArgs): RDD[(Integer, PartialResult)] = {
     dataRdd.map {
       case (tableId, table) =>
         val context = new DaalContext
-        val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], pcaMethod)
+        val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], arguments.getPcaMethod())
         table.unpack(context)
         pcaLocal.input.set(InputId.data, table)
         val partialResult = pcaLocal.compute
@@ -52,15 +51,23 @@ object DaalPcaFunctions extends Serializable {
     }
   }
 
-  private def mergePcaPartialResults(context: DaalContext, partsRDD: RDD[(Integer, PartialResult)], pcaMethod: Method): DaalPcaResult = {
-    val pcaMaster: DistributedStep2Master = new DistributedStep2Master(context, classOf[java.lang.Double], Method.correlationDense)
+  private def mergePcaPartialResults(context: DaalContext, partsRDD: RDD[(Integer, PartialResult)], arguments: DaalPcaArgs): DaalPcaResult = {
+    val pcaMaster: DistributedStep2Master = new DistributedStep2Master(context, classOf[java.lang.Double], arguments.getPcaMethod())
     val parts_List = partsRDD.collect()
     for (value <- parts_List) {
       value._2.unpack(context)
       pcaMaster.input.add(MasterInputId.partialResults, value._2)
     }
     pcaMaster.compute
-    val res = pcaMaster.finalizeCompute
-    DaalPcaResult(res.get(ResultId.eigenValues), res.get(ResultId.eigenVectors))
+    val result = pcaMaster.finalizeCompute
+    getPcaResult(result)
+  }
+
+  def getPcaResult(res: Result): DaalPcaResult = {
+    val eigenValues = res.get(ResultId.eigenValues)
+    val eigenVectors = res.get(ResultId.eigenVectors)
+    eigenValues.pack()
+    eigenVectors.pack()
+    DaalPcaResult(eigenValues, eigenVectors)
   }
 }

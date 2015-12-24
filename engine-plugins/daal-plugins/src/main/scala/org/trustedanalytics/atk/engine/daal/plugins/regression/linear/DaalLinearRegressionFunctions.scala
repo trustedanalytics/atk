@@ -16,10 +16,8 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
-import java.io.Serializable
-import java.lang
-
 import com.intel.daal.algorithms.ModelSerializer
+import com.intel.daal.algorithms.classifier.prediction.NumericTableInputId
 import com.intel.daal.algorithms.linear_regression.Model
 import com.intel.daal.algorithms.linear_regression.prediction._
 import com.intel.daal.algorithms.linear_regression.training._
@@ -27,8 +25,12 @@ import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.apache.spark.sql
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
+import java.io.Serializable
+
+import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalFrameRddFunctions
 
 object DaalLinearRegressionFunctions extends Serializable {
 
@@ -122,18 +124,19 @@ object DaalLinearRegressionFunctions extends Serializable {
                          frameRdd: FrameRdd,
                          featureColumns: List[String]): FrameRdd = {
 
-    val numericTableRdd = frameRdd.toNumericTableRdd(featureColumns)
-
-    val predictResultsRdd = numericTableRdd.mapPartitions(iter => {
+    val rowWrapper = frameRdd.rowWrapper
+    val predictResultsRdd = frameRdd.mapPartitions(iter => {
       val context = new DaalContext()
       val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray)
       require(modelData.featureColumns.length == featureColumns.length,
         "Number of feature columns for train and predict should be same")
 
-      val rows = iter.flatMap {
-        case (id, testData) =>
-          val predictions = predictLinearModelLocal(trainedModel, testData)
+      val rows = DaalFrameRddFunctions.convertRowsToNumericTable(rowWrapper, featureColumns, iter) match {
+        case Some(testData) =>
+          val predictions = predictLinearModelLocal(context, trainedModel, testData)
+          testData.dispose()
           predictions.toRowIter(context)
+        case _ => List.empty[sql.Row].iterator
       }
 
       context.dispose()
@@ -144,22 +147,19 @@ object DaalLinearRegressionFunctions extends Serializable {
     frameRdd.zipFrameRdd(new FrameRdd(FrameSchema(predictColumns), predictResultsRdd))
   }
 
-  def predictLinearModelLocal(trainedModel: Model, testData: HomogenNumericTable): NumericTable = {
-    val context = new DaalContext()
-    val linearRegressionPredict = new PredictionBatch(context, classOf[lang.Double], PredictionMethod.defaultDense)
+  def predictLinearModelLocal(context: DaalContext, trainedModel: Model, testData: NumericTable): NumericTable = {
+    val predictAlgorithm = new PredictionBatch(context, classOf[java.lang.Double], PredictionMethod.defaultDense)
 
     // Getting number of rows/columns to prevent seg-faults --- not sure why this happens
     testData.unpack(context)
     require(testData.getNumberOfColumns > 0 && testData.getNumberOfRows > 0)
-    linearRegressionPredict.input.set(PredictionInputId.data, testData)
-    linearRegressionPredict.input.set(PredictionInputId.model, trainedModel)
+    predictAlgorithm.input.set(PredictionInputId.data, testData)
+    predictAlgorithm.input.set(PredictionInputId.model, trainedModel)
 
     /* Compute and retrieve prediction results */
-    val predictionResult = linearRegressionPredict.compute()
+    val predictionResult = predictAlgorithm.compute()
 
     val predictions = predictionResult.get(PredictionResultId.prediction)
-    predictions.pack()
-    context.dispose()
     predictions
   }
 }

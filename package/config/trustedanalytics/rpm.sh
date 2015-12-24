@@ -64,18 +64,6 @@ if [ -d /usr/lib/trustedanalytics/rest-server/lib/ ]; then
 
 POST="
 restUser=atkuser
-deployJar=deploy.jar
-
-jars=\"engine-core.jar giraph-plugins.jar frame-plugins.jar graph-plugins.jar model-plugins.jar daal-plugins.jar\"
-
-for jar in \$jars
-do
-if [ -f /usr/lib/trustedanalytics/rest-server/lib/\$jar ]; then
-   rm /usr/lib/trustedanalytics/rest-server/lib/\$jar
- fi
-
- ln -s /usr/lib/trustedanalytics/rest-server/lib/\$deployJar  /usr/lib/trustedanalytics/rest-server/lib/\$jar
-done
 
 if [ \$1 -eq 2 ]; then
   echo start trustedanalytics

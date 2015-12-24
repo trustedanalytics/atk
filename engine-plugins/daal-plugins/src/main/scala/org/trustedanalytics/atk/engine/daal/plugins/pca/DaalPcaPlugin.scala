@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.algorithms.pca.Method
 import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -36,7 +38,7 @@ case class DaalPcaArgs(frame: FrameReference,
                        method: String = "cor") {
   require(frame != null, "frame is required")
   require(columnNames != null && !columnNames.isEmpty, "column names should not be empty")
-  require(method == "cor" || "method" == "svd", "method must be 'svd' or 'cor'")
+  require(method == "cor" || method == "svd", "method must be 'svd' or 'cor'")
 
   def getPcaMethod(): Method = method match {
     case "svd" => Method.svdDense
@@ -91,6 +93,7 @@ class DaalPcaPlugin extends SparkCommandPlugin[DaalPcaArgs, DaalPcaReturn] {
    * @return New frame containing the eigen vectors, and eigen valued computed by PCA
    */
   override def execute(arguments: DaalPcaArgs)(implicit invocation: Invocation): DaalPcaReturn = {
+    DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
 
     // Load the ATK data frame
     val frame: SparkFrame = arguments.frame

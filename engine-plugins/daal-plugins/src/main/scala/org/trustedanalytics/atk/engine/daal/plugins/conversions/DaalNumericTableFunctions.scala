@@ -24,7 +24,7 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 
 import scala.collection.mutable.ListBuffer
 
-class DaalNumericTableFunctions(self: NumericTable) {
+class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
 
   /**
    * Convert DAAL numeric table into an array of array of doubles

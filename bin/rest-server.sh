@@ -34,6 +34,7 @@ if [ -d "${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin" ]; then
  echo "Adding Intel DAAL libraries"
  export DAAL_LIB_DIR="${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin"
  export DAAL_GCC_VERSION="gcc4.4"
+ export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
 fi
 
 # needed for Python UDFs to work locally

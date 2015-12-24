@@ -21,6 +21,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
+import org.trustedanalytics.atk.engine.frame.RowWrapper
 
 /**
  * Functions for extending frames with DAAL-related methods.
@@ -29,8 +30,8 @@ import org.apache.spark.sql.Row
  * </p>
  * @param self input that these functions are applicable to
  */
-class DaalFrameRddFunctions(self: FrameRdd) {
-
+class DaalFrameRddFunctions(self: FrameRdd) extends Serializable {
+  import DaalFrameRddFunctions._
   /**
    * Convert ATK data frame into DAAL homogeneous numeric table
    *
@@ -41,7 +42,7 @@ class DaalFrameRddFunctions(self: FrameRdd) {
     val numericTableRdd = self.mapPartitionsWithIndex {
       case (i, iter) =>
         // Convert rows in a Spark partition into a single comma-delimited string
-        convertRowsToNumericTable(columnNames, iter) match {
+        convertRowsToNumericTable(self.rowWrapper, columnNames, iter) match {
           case Some(dataTable) => List((new Integer(i), dataTable)).toIterator
           case _ => List.empty[(Integer, HomogenNumericTable)].iterator
         }
@@ -49,6 +50,9 @@ class DaalFrameRddFunctions(self: FrameRdd) {
     numericTableRdd
   }
 
+}
+
+object DaalFrameRddFunctions extends Serializable {
   /**
    * Convert row iterator to DAAL homogeneous numeric table
    *
@@ -56,14 +60,14 @@ class DaalFrameRddFunctions(self: FrameRdd) {
    * @param iter Row iterator
    * @return Optional numeric table if iterator is not empty
    */
-  def convertRowsToNumericTable(columnNames: List[String],
+  def convertRowsToNumericTable(rowWrapper: RowWrapper, columnNames: List[String],
                                 iter: Iterator[Row]): Option[HomogenNumericTable] = {
     if (iter.isEmpty) return None
 
     var numRows = 0
     val stringBuilder = new StringBuilder()
     while (iter.hasNext) {
-      val row = self.rowWrapper(iter.next()).valuesAsArray(columnNames)
+      val row = rowWrapper(iter.next()).valuesAsArray(columnNames)
       stringBuilder ++= row.mkString(",") + "\n"
       numRows += 1
     }

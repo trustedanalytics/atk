@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ ModelReference, GenericNewModelArgs }
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, CommandPlugin }
 
 //Implicits needed for JSON conversion
@@ -56,6 +58,8 @@ class DaalLinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, M
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
+    DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
+
     val models = engine.models
     models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_linear_regression")))
   }
