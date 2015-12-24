@@ -416,7 +416,7 @@ regarding topic membership, using this information.
 
     ::
 
-        g.ml.latent_dirichlet_allocation(
+        g.latent_dirichlet_allocation(
                 edge_value_property_list = "word_count",
                 vertex_type_property_key = "vertex_type",
                 input_edge_label_list = "contains",
