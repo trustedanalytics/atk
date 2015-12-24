@@ -41,7 +41,7 @@ import org.trustedanalytics.atk.domain.schema.EdgeSchema
 import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.model.ModelTemplate
 import org.trustedanalytics.atk.domain.command.CommandTemplate
-import org.trustedanalytics.atk.domain.Error
+import org.trustedanalytics.atk.domain.CommandError
 import org.trustedanalytics.atk.domain.graph.GraphTemplate
 import org.trustedanalytics.atk.domain.UserTemplate
 import org.trustedanalytics.atk.domain.schema.VertexSchema
@@ -69,9 +69,9 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     { string => JsonParser(string).convertTo[JsObject] }
   )
 
-  implicit val errorColumnType = MappedColumnType.base[Error, String](
+  implicit val errorColumnType = MappedColumnType.base[CommandError, String](
     { error => error.toJson.prettyPrint },
-    { string => JsonParser(string).convertTo[Error] }
+    { string => JsonParser(string).convertTo[CommandError] }
   )
 
   implicit val commandProgressType = MappedColumnType.base[List[ProgressInfo], String](
@@ -618,7 +618,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     def correlationId = column[String]("correlation")
 
-    def error = column[Option[Error]]("error")
+    def error = column[Option[CommandError]]("error")
 
     def progress = column[List[ProgressInfo]]("progress")
 

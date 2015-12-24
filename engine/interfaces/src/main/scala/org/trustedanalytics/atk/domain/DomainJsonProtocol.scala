@@ -346,7 +346,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val groupByColumnFormat = jsonFormat3(GroupByArgs)
   implicit val copyWhereFormat = jsonFormat2(CountWhereArgs)
 
-  implicit val errorFormat = jsonFormat2(Error)
+  implicit val errorFormat = jsonFormat2(CommandError.apply)
   implicit val flattenColumnLongFormat = jsonFormat3(FlattenColumnArgs)
   implicit val unflattenColumnLongFormat = jsonFormat3(UnflattenColumnArgs)
   implicit val dropDuplicatesFormat = jsonFormat2(DropDuplicatesArgs)

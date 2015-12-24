@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
-import org.trustedanalytics.atk.domain.Error
+import org.trustedanalytics.atk.domain.CommandError
 import spray.json.JsObject
 
 /**
@@ -30,7 +30,7 @@ import spray.json.JsObject
  * @param result result of the query
  * @param links relevant links
  */
-case class GetQuery(id: Option[Long], name: String, arguments: Option[JsObject], error: Option[Error],
+case class GetQuery(id: Option[Long], name: String, arguments: Option[JsObject], error: Option[CommandError],
                     complete: Boolean, result: Option[GetQueryPage], links: List[RelLink], correlationId: String = "") {
   require(name != null, "name must not be null")
   require(arguments != null, "arguments may not be null")

@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.rest.v1.viewmodels
 
-import org.trustedanalytics.atk.domain.Error
+import org.trustedanalytics.atk.domain.CommandError
 import spray.json.JsObject
 import org.trustedanalytics.atk.engine.ProgressInfo
 
@@ -39,7 +39,7 @@ case class GetCommand(id: Long,
                       name: String,
                       correlationId: String,
                       arguments: Option[JsObject],
-                      error: Option[Error],
+                      error: Option[CommandError],
                       progress: List[ProgressInfo],
                       complete: Boolean,
                       result: Option[JsObject],
