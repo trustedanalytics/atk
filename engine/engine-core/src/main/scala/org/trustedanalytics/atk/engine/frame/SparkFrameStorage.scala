@@ -146,7 +146,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   /**
    * Prepare save path, return info about the save
    *
-   * Exposed here for Giraph (and anything else where the frame will be materialized outside of Spark)
+   * Exposed here for and any plugin where the frame will be materialized outside of Spark
    * - you don't need to call this for Spark plugins.
    *
    * Developer needs to call postSave() once the frame has been materialized.
@@ -164,7 +164,7 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
   /**
    * After saving update timestamps, status, row count, etc.
    *
-   * Exposed here for Giraph - you don't need to call this for Spark plugins.
+   * Don't need to be called for Spark plugins.
    *
    * @param targetFrameRef might be same as originalFrameRef or the next revision
    * @param saveInfo prepare save info

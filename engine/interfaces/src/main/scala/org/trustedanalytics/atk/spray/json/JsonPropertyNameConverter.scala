@@ -24,7 +24,6 @@ import org.apache.commons.lang3.StringUtils
  * Convert CamelCase String to lower_case_with_underscores.
  */
 object JsonPropertyNameConverter {
-
   /**
    * Convert CamelCase String to lower_case_with_underscores.
    */
@@ -44,7 +43,7 @@ object JsonPropertyNameConverter {
   /**
    * Same as org.apache.commons.lang3.StringUtils.replacePattern
    *
-   * Copied here because an earlier version of commons-lang3 was getting picked up when running Giraph.
+   * Copied here because an earlier version of commons-lang3 was getting picked up by some plugins.
    */
   private def replacePattern(source: String, regex: String, replacement: String): String = {
     Pattern.compile(regex, Pattern.DOTALL).matcher(source).replaceAll(replacement)
