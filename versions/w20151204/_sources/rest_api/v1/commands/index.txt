@@ -53,7 +53,6 @@
     frame__covariance_matrix
     frame__cumulative_percent
     frame__cumulative_sum
-    frame__daal_pca
     frame__dot_product
     frame__drop_columns
     frame__drop_duplicates
@@ -102,9 +101,6 @@
     model-collaborative_filtering__recommend
     model-collaborative_filtering__score
     model-collaborative_filtering__train
-    model-daal_linear_regression__new
-    model-daal_linear_regression__predict
-    model-daal_linear_regression__train
     model-giraph_collaborative_filtering__new
     model-giraph_collaborative_filtering__recommend
     model-giraph_collaborative_filtering__train
@@ -183,7 +179,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/covariance_matrix <frame__covariance_matrix>`                                                   Calculate covariance matrix for two or more columns.
 :doc:`frame/cumulative_percent <frame__cumulative_percent>`                                                 |BETA| Add column to frame with cumulative percent sum.
 :doc:`frame/cumulative_sum <frame__cumulative_sum>`                                                         |BETA| Add column to frame with cumulative percent sum.
-:doc:`frame/daal_pca <frame__daal_pca>`                                                                     |ALPHA| <Missing Doc>
 :doc:`frame/dot_product <frame__dot_product>`                                                               |ALPHA| Calculate dot product for each row in current frame.
 :doc:`frame/drop_columns <frame__drop_columns>`                                                             Remove columns from the frame.
 :doc:`frame/drop_duplicates <frame__drop_duplicates>`                                                       Modify the current frame, removing duplicate rows.
@@ -246,9 +241,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`                   |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/score <model-collaborative_filtering__score>`                           |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/train <model-collaborative_filtering__train>`                           Collaborative filtering (ALS) model
-:doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                                 |ALPHA| Create a 'new' instance of a Linear Regression model.
-:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`                         |ALPHA| Make new frame with column for label prediction.
-:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                             |ALPHA| Build linear regression model.
 :doc:`model:giraph_collaborative_filtering/new <model-giraph_collaborative_filtering__new>`                 Create a new Collaborative Filtering Recommend model.
 :doc:`model:giraph_collaborative_filtering/recommend <model-giraph_collaborative_filtering__recommend>`     |BETA| Collaborative Filtering Recommend (ALS/CGD) model.
 :doc:`model:giraph_collaborative_filtering/train <model-giraph_collaborative_filtering__train>`             Collaborative filtering (ALS/CGD) model
