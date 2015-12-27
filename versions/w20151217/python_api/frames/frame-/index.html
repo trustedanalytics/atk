@@ -223,103 +223,106 @@
 <tr class="row-even"><td><a class="reference internal" href="cumulative_sum.html"><em>cumulative_sum</em></a>(self, sample_col)</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Add column to frame with cumulative percent sum.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="dot_product.html"><em>dot_product</em></a>(self, left_column_names, right_column_names, ...[, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="daal_pca.html"><em>daal_pca</em></a>(self, column_names[, method])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> &lt;Missing Doc&gt;</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="dot_product.html"><em>dot_product</em></a>(self, left_column_names, right_column_names, ...[, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Calculate dot product for each row in current frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="download.html"><em>download</em></a>(self[, n, offset, columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="download.html"><em>download</em></a>(self[, n, offset, columns])</td>
 <td>Download frame data from the server into client workspace as a pandas dataframe</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="drop_columns.html"><em>drop_columns</em></a>(self, columns)</td>
+<tr class="row-even"><td><a class="reference internal" href="drop_columns.html"><em>drop_columns</em></a>(self, columns)</td>
 <td>Remove columns from the frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="drop_duplicates.html"><em>drop_duplicates</em></a>(self[, unique_columns])</td>
+<tr class="row-odd"><td><a class="reference internal" href="drop_duplicates.html"><em>drop_duplicates</em></a>(self[, unique_columns])</td>
 <td>Modify the current frame, removing duplicate rows.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="drop_rows.html"><em>drop_rows</em></a>(self, predicate)</td>
+<tr class="row-even"><td><a class="reference internal" href="drop_rows.html"><em>drop_rows</em></a>(self, predicate)</td>
 <td>Erase any row in the current frame which qualifies.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="ecdf.html"><em>ecdf</em></a>(self, column[, result_frame_name])</td>
+<tr class="row-odd"><td><a class="reference internal" href="ecdf.html"><em>ecdf</em></a>(self, column[, result_frame_name])</td>
 <td>Builds new frame with columns for data and distribution.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="entropy.html"><em>entropy</em></a>(self, data_column[, weights_column])</td>
+<tr class="row-even"><td><a class="reference internal" href="entropy.html"><em>entropy</em></a>(self, data_column[, weights_column])</td>
 <td>Calculate the Shannon entropy of a column.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_csv.html"><em>export_to_csv</em></a>(self, folder_name[, separator, count, offset])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_csv.html"><em>export_to_csv</em></a>(self, folder_name[, separator, count, offset])</td>
 <td>Write current frame to HDFS in csv format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_hbase.html"><em>export_to_hbase</em></a>(self, table_name[, key_column_name, family_name])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_hbase.html"><em>export_to_hbase</em></a>(self, table_name[, key_column_name, family_name])</td>
 <td>Write current frame to HBase table.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_hive.html"><em>export_to_hive</em></a>(self, table_name)</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_hive.html"><em>export_to_hive</em></a>(self, table_name)</td>
 <td>Write current frame to Hive table.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="export_to_jdbc.html"><em>export_to_jdbc</em></a>(self, table_name[, connector_type, url, driver_name, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_jdbc.html"><em>export_to_jdbc</em></a>(self, table_name[, connector_type, url, driver_name, ...])</td>
 <td>Write current frame to JDBC table.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="export_to_json.html"><em>export_to_json</em></a>(self, folder_name[, count, offset])</td>
+<tr class="row-odd"><td><a class="reference internal" href="export_to_json.html"><em>export_to_json</em></a>(self, folder_name[, count, offset])</td>
 <td>Write current frame to HDFS in JSON format.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="filter.html"><em>filter</em></a>(self, predicate)</td>
+<tr class="row-even"><td><a class="reference internal" href="filter.html"><em>filter</em></a>(self, predicate)</td>
 <td>Select all rows which satisfy a predicate.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="flatten_column.html"><em>flatten_column</em></a>(self, column[, delimiter])</td>
+<tr class="row-odd"><td><a class="reference internal" href="flatten_column.html"><em>flatten_column</em></a>(self, column[, delimiter])</td>
 <td><abbr title="This is a function or feature which is no longer supported. It is recommended that an alternate solution be found. This function may be removed in future releases.">[DEPRECATED]</abbr> Note that flatten_column() has been deprecated.  Use flatten_columns() instead.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="flatten_columns.html"><em>flatten_columns</em></a>(self, columns[, delimiters])</td>
+<tr class="row-even"><td><a class="reference internal" href="flatten_columns.html"><em>flatten_columns</em></a>(self, columns[, delimiters])</td>
 <td>Spread data to multiple rows based on cell data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="get_error_frame.html"><em>get_error_frame</em></a>(self)</td>
+<tr class="row-odd"><td><a class="reference internal" href="get_error_frame.html"><em>get_error_frame</em></a>(self)</td>
 <td>Get a frame with error recordings.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="group_by.html"><em>group_by</em></a>(self, group_by_columns, *aggregation_arguments)</td>
+<tr class="row-even"><td><a class="reference internal" href="group_by.html"><em>group_by</em></a>(self, group_by_columns, *aggregation_arguments)</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Create summarized frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="helloworld.html"><em>helloworld</em></a>(self[, msg])</td>
+<tr class="row-odd"><td><a class="reference internal" href="helloworld.html"><em>helloworld</em></a>(self[, msg])</td>
 <td>This is a Hello World Plugin for Frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="histogram.html"><em>histogram</em></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
+<tr class="row-even"><td><a class="reference internal" href="histogram.html"><em>histogram</em></a>(self, column_name[, num_bins, weight_column_name, bin_type])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute the histogram for a column in a frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="inspect.html"><em>inspect</em></a>(self[, n, offset, columns, wrap, truncate, round, width, margin, ...])</td>
 <td>Pretty-print of the frame data</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="join.html"><em>join</em></a>(self, right, left_on[, right_on, how, name])</td>
+<tr class="row-even"><td><a class="reference internal" href="join.html"><em>join</em></a>(self, right, left_on[, right_on, how, name])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Join operation on one or two frames, creating a new frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="mapreducewordcount.html"><em>mapreducewordcount</em></a>(self, input_dir, output_dir)</td>
+<tr class="row-odd"><td><a class="reference internal" href="mapreducewordcount.html"><em>mapreducewordcount</em></a>(self, input_dir, output_dir)</td>
 <td>Counts and reports the top 10 words across all columns with string data in a frame.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="quantiles.html"><em>quantiles</em></a>(self, column_name, quantiles)</td>
+<tr class="row-even"><td><a class="reference internal" href="quantiles.html"><em>quantiles</em></a>(self, column_name, quantiles)</td>
 <td>New frame with Quantiles and their values.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="rename_columns.html"><em>rename_columns</em></a>(self, names)</td>
+<tr class="row-odd"><td><a class="reference internal" href="rename_columns.html"><em>rename_columns</em></a>(self, names)</td>
 <td>Rename columns</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="sort.html"><em>sort</em></a>(self, columns[, ascending])</td>
+<tr class="row-even"><td><a class="reference internal" href="sort.html"><em>sort</em></a>(self, columns[, ascending])</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Sort the data in a frame.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="sorted_k.html"><em>sorted_k</em></a>(self, k, column_names_and_ascending[, reduce_tree_depth])</td>
+<tr class="row-odd"><td><a class="reference internal" href="sorted_k.html"><em>sorted_k</em></a>(self, k, column_names_and_ascending[, reduce_tree_depth])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Get a sorted subset of the data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="take.html"><em>take</em></a>(self, n[, offset, columns])</td>
+<tr class="row-even"><td><a class="reference internal" href="take.html"><em>take</em></a>(self, n[, offset, columns])</td>
 <td>Get data subset.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="tally.html"><em>tally</em></a>(self, sample_col, count_val)</td>
+<tr class="row-odd"><td><a class="reference internal" href="tally.html"><em>tally</em></a>(self, sample_col, count_val)</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Count number of times a value is seen.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="tally_percent.html"><em>tally_percent</em></a>(self, sample_col, count_val)</td>
+<tr class="row-even"><td><a class="reference internal" href="tally_percent.html"><em>tally_percent</em></a>(self, sample_col, count_val)</td>
 <td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Compute a cumulative percent count.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="top_k.html"><em>top_k</em></a>(self, column_name, k[, weights_column])</td>
+<tr class="row-odd"><td><a class="reference internal" href="top_k.html"><em>top_k</em></a>(self, column_name, k[, weights_column])</td>
 <td>Most or least frequent column values.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="unflatten_column.html"><em>unflatten_column</em></a>(self, columns[, delimiter])</td>
+<tr class="row-even"><td><a class="reference internal" href="unflatten_column.html"><em>unflatten_column</em></a>(self, columns[, delimiter])</td>
 <td><abbr title="This is a function or feature which is no longer supported. It is recommended that an alternate solution be found. This function may be removed in future releases.">[DEPRECATED]</abbr> Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="unflatten_columns.html"><em>unflatten_columns</em></a>(self, columns[, delimiter])</td>
+<tr class="row-odd"><td><a class="reference internal" href="unflatten_columns.html"><em>unflatten_columns</em></a>(self, columns[, delimiter])</td>
 <td>Compacts data from multiple rows based on cell data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="wordcount.html"><em>wordcount</em></a>(self)</td>
+<tr class="row-even"><td><a class="reference internal" href="wordcount.html"><em>wordcount</em></a>(self)</td>
 <td>Counts and reports the top 10 words across all columns with string data in a frame.</td>
 </tr>
 </tbody>
@@ -403,7 +406,7 @@ It has no data yet, but it does have the name <em>yourframe</em>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 26, 2015.
+      Last updated on Dec 27, 2015.
       </li>
     </ul>
     </div>
