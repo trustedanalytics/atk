@@ -1,0 +1,169 @@
+
+
+-------------------------------------------
+:doc:`Commands <index>` model:k_means/train
+-------------------------------------------
+
+|BETA|
+Creates KMeans Model from train frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:k_means/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame to train the model on.
+
+
+
+    **observation_columns** : list
+
+    ..
+
+        Columns containing the
+        observations.
+
+
+
+    **column_scalings** : list
+
+    ..
+
+        Column scalings for each of the observation columns.
+        The scaling value is multiplied by the corresponding value in the
+        observation column.
+
+
+
+    **k** : int32 (default=2)
+
+    ..
+
+        Desired number of clusters.
+        Default is 2.
+
+
+
+    **max_iterations** : int32 (default=20)
+
+    ..
+
+        Number of iterations for which the algorithm should run.
+        Default is 20.
+
+
+
+    **epsilon** : float64 (default=0.0001)
+
+    ..
+
+        Distance threshold within which we consider k-means to have converged.
+        Default is 1e-4. If all centers move less than this Euclidean distance, we stop iterating one run.
+
+
+
+    **initialization_mode** : unicode (default=k-means||)
+
+    ..
+
+        The initialization technique for the algorithm.
+        It could be either "random" to choose random points as initial clusters, or "k-means||" to use a parallel variant of k-means++.
+        Default is "k-means||".
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a KMeans Model using the observation columns.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        dictionary
+            A dictionary with trained KMeans model with the following keys\:
+        'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
+        'within_set_sum_of_squared_error' : The set of sum of squared error for the model.
+
+

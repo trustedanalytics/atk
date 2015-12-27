@@ -1,0 +1,84 @@
+
+:doc:`PowerIterationClusteringModel <index>`  predict
+*****************************************************
+
+------
+
+
+.. function:: predict(self, frame, source_column, destination_column, similarity_column, k=2, max_iterations=100, initialization_mode='random')
+
+    Predict the clusters to which the nodes belong to
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            Frame storing the graph to be clustered
+
+
+
+        **source_column** : unicode
+
+        ..
+
+            Name of the column containing the source node
+
+
+
+        **destination_column** : unicode
+
+        ..
+
+            Name of the column containing the destination node
+
+
+
+        **similarity_column** : unicode
+
+        ..
+
+            Name of the column containing the similarity
+
+
+
+        **k** : int32 (default=2)
+
+        ..
+
+            Number of clusters to cluster the graph into. Default is 2
+
+
+
+        **max_iterations** : int32 (default=100)
+
+        ..
+
+            Maximum number of iterations of the power iteration loop. Default is 100
+
+
+
+        **initialization_mode** : unicode (default=random)
+
+        ..
+
+            Initialization mode of power iteration clustering. This can be either "random" to use a
+            random vector as vertex properties, or "degree" to use normalized sum similarities. Default is "random".
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            A new frame with a column storing node id and a column with corresponding cluster assignment
+    Predict the cluster assignments for the nodes of the graph and create a new frame with a column storing node id and a column with corresponding cluster assignment
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

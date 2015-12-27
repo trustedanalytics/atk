@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Scoring Engine &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.4.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="index.html" >
+    <link rel="up" title="Administration" href="ad_over.html" >
+    <link rel="next" title="Virtual Machines" href="ad_inst_vm.html" >
+    <link rel="prev" title="Configuration Script" href="ad_inst_ta3.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" accesskey="U">Administration</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_inst_ta3.html" title="Configuration Script"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_inst_vm.html" title="Virtual Machines"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="scoring-engine">
+<span id="ad-scoring-engine"></span><h1>Scoring Engine<a class="headerlink" href="#scoring-engine" title="Permalink to this headline">¶</a></h1>
+<p>This section covers the scoring engine installation, configuration
+and running the scoring engine.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The scoring engine repositories are automatically installed as part of the
+ATK repositories.
+Please see section ATK packages installation.</p>
+</div>
+<div class="section" id="scoring-models-implementation">
+<h2>Scoring Models Implementation<a class="headerlink" href="#scoring-models-implementation" title="Permalink to this headline">¶</a></h2>
+<p>The scoring engine is a generic engine and is oblivious to the streaming
+scoring model.
+It is up to the user of the engine to provide the scoring implementation.
+The implementation, model bytes and the class name is provided in a tar file
+at the startup of the scoring engine.
+The scoring engine expects three files in the tar file as listed below.</p>
+<ol class="arabic simple">
+<li>The model implementation jar file.
+This is the</li>
+<li>A file by the name modelname.txt that contains the name of the class that
+implements the scoring in the jar file.</li>
+<li>The file that will have the model bytes that will be used by the scoring.
+The name of this file will the name of the URL of the rest server.
+See section <a class="reference internal" href="#starting-scoring-engine">starting_scoring_engine</a> below.</li>
+</ol>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using ATK to score, the publish method on the models will
+create the tar file that can used as input to the scoring engine.</p>
+</div>
+</div>
+<div class="section" id="configuration-of-the-engine">
+<h2>Configuration of the Engine<a class="headerlink" href="#configuration-of-the-engine" title="Permalink to this headline">¶</a></h2>
+<p><em>/etc/trustedanalytics/scoring/application.conf</em></p>
+<p>The scoring engine provides a configuration template file which must be used
+to create a configuration file.
+Copy the configuration template file <em>application.conf.tpl</em> in the same
+directory, like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ cd /etc/trustedanalytics/scoring
+$ sudp cp application.conf.tpl application.conf
+</pre></div>
+</div>
+<p>Open the file with a text editor:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo vi application.conf
+</pre></div>
+</div>
+<p>Modify the section below to point to the where the scoring tar file is located.
+Below is an example:</p>
+<div class="highlight-python"><div class="highlight"><pre>trustedanalytics.scoring-engine {
+  archive-tar = &quot;hdfs://scoring-server.intel.com:8020/user/atkuser/kmeans.tar&quot;
+}
+</pre></div>
+</div>
+</div>
+<div class="section" id="starting-the-scoring-engine-service">
+<span id="starting-scoring-engine"></span><h2>Starting the Scoring Engine Service<a class="headerlink" href="#starting-the-scoring-engine-service" title="Permalink to this headline">¶</a></h2>
+<p>Once the application.conf file has been modified to point to the scoring tar
+file, the scoring engine can be started with the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>$ sudo service scoring-engine start
+</pre></div>
+</div>
+<p>This will launch the rest server for the engine.
+The REST API is:</p>
+<div class="highlight-python"><div class="highlight"><pre>GET /v1/models/[name]?data=[urlencoded record 1]
+</pre></div>
+</div>
+</div>
+<div class="section" id="scoring-client">
+<h2>Scoring Client<a class="headerlink" href="#scoring-client" title="Permalink to this headline">¶</a></h2>
+<p>Below is a sample python script to connect to the scoring engine:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s">&#39;application/json&#39;</span><span class="p">,</span>
+<span class="gp">... </span>           <span class="s">&#39;Accept&#39;</span><span class="p">:</span> <span class="s">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s">&#39;http://localhost:9099/v1/models/testjson?data=2&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>where data is passed the observation to be scored by the trained model.</p>
+<p>However, the PrincipalComponentsModel requires the observation and the number of principal components also to be passed.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Dec 27, 2015.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
