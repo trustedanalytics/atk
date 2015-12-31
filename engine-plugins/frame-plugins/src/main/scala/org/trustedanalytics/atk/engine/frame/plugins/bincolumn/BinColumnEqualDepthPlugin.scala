@@ -71,7 +71,7 @@ tie-adjusted rank is the average of their ordered rank values.
   returns = "A list containing the edges of each bin.")
 class BinColumnEqualDepthPlugin extends ComputedBinColumnPlugin {
   /**
-   * The name of the command, e.g. graphs/ml/loopy_belief_propagation
+   * The name of the command, e.g. graphs/loopy_belief_propagation
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.

@@ -36,7 +36,7 @@
     Example
 
 
-        graph.ml.avg_path_len(
+        graph.avg_path_len(
                     input_edge_label="edge",
                     output_vertex_property_list="apl_num, apl_sum",
                     convergence_output_interval="1",

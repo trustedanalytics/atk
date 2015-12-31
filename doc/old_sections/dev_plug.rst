@@ -156,9 +156,9 @@ converted back to Python objects.
 If the name of the command contains more than one slash, the Python client will
 create intermediate objects that allow functions to be grouped logically
 together.
-For example, if the command is named dataframe/ml/my_new_algorithm (of course,
+For example, if the command is named dataframe/my_new_algorithm (of course,
 real algorithms will have better names!), then the method created in the Python
-client could be accessed on a frame *f* using ``f.ml.my_new_algorithm()``.
+client could be accessed on a frame *f* using ``f.my_new_algorithm()``.
 Commands can be nested as deeply as needed, any number of intermediary objects
 will be created automatically so the object model of the frame or graph matches
 the command tree structure defined by the command names in the system.

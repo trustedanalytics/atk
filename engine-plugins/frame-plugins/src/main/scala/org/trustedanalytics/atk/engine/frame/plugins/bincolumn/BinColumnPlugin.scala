@@ -56,7 +56,7 @@ into bins, or groups, based on a list of bin cutoff points.
 class BinColumnPlugin extends SparkCommandPlugin[BinColumnArgs, UnitReturn] {
 
   /**
-   * The name of the command, e.g. graphs/ml/loopy_belief_propagation
+   * The name of the command, e.g. graphs/loopy_belief_propagation
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
