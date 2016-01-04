@@ -81,12 +81,12 @@ class FileStorage extends EventLogging {
    * Path from a path
    * @param path a path relative to the root or that includes the root
    */
-  def absolutePath(path: String): Path = {
+  def absolutePath(path: String, prefix: String = EngineConfig.fsRoot): Path = {
     if (absolutePathPattern.findFirstIn(path).isDefined) {
       new Path(path)
     }
     else {
-      new Path(concatPaths(EngineConfig.fsRoot, path))
+      new Path(concatPaths(prefix, path))
     }
   }
 
