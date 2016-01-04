@@ -175,11 +175,7 @@ using <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> with Python.</
 <li><a class="reference internal" href="#other-graph-options" id="id32">Other Graph Options</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#titan-graph" id="id33">Titan Graph</a><ul>
-<li><a class="reference internal" href="#graph-creation" id="id34">Graph Creation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#models" id="id35">Models</a></li>
+<li><a class="reference internal" href="#models" id="id33">Models</a></li>
 </ul>
 </div>
 <div class="section" id="python-path-setup">
@@ -1033,10 +1029,6 @@ data, based upon which order the records are delivered to the function.</p>
 </pre></div>
 </div>
 <p>For further information, see the API section on <span class="xref std std-ref">Graphs</span>.</p>
-<p id="export-to-titan">Export the graph to a TitanGraph:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_titan_graph</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">export_to_titan</span><span class="p">(</span><span class="s">&quot;titan_graph&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
 <p>Make a VertexFrame:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_vertex_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">(</span><span class="s">&quot;employee&quot;</span><span class="p">)</span>
 </pre></div>
@@ -1045,15 +1037,6 @@ data, based upon which order the records are delivered to the function.</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s">&quot;worksunder&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="titan-graph">
-<h2>Titan Graph<a class="headerlink" href="#titan-graph" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="graph-creation">
-<h3>Graph Creation<a class="headerlink" href="#graph-creation" title="Permalink to this headline">¶</a></h3>
-<p>A Titan graph is created by exporting it from a seamless graph.
-For further information, as well as Titan graph attributes and methods, see the
-API section on <span class="xref std std-ref">Titan Graph</span>.</p>
 <span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound" id="index-15">
 </div>
 </div>
@@ -1090,7 +1073,7 @@ See <span class="xref std std-ref">graph API</span> for details of the
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 27, 2015.
+      Last updated on Jan 04, 2016.
       </li>
     </ul>
     </div>

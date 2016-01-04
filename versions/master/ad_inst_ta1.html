@@ -150,23 +150,22 @@
 <li><a class="reference internal" href="#manual-configuration" id="id24">Manual Configuration</a><ul>
 <li><a class="reference internal" href="#etc-trustedanalytics-rest-server-application-conf" id="id25">/etc/trustedanalytics/rest-server/application.conf</a><ul>
 <li><a class="reference internal" href="#configure-file-system-root" id="id26">Configure File System Root</a></li>
-<li><a class="reference internal" href="#configure-zookeeper-hosts" id="id27">Configure Zookeeper Hosts</a></li>
-<li><a class="reference internal" href="#configure-spark-master-host" id="id28">Configure Spark Master Host</a></li>
-<li><a class="reference internal" href="#configure-spark-executor-memory" id="id29">Configure Spark Executor Memory</a></li>
-<li><a class="reference internal" href="#set-the-bind-ip-address-optional" id="id30">Set the Bind IP Address (Optional)</a></li>
-<li><a class="reference internal" href="#updating-the-spark-class-path" id="id31">Updating the Spark Class Path</a></li>
+<li><a class="reference internal" href="#configure-spark-master-host" id="id27">Configure Spark Master Host</a></li>
+<li><a class="reference internal" href="#configure-spark-executor-memory" id="id28">Configure Spark Executor Memory</a></li>
+<li><a class="reference internal" href="#set-the-bind-ip-address-optional" id="id29">Set the Bind IP Address (Optional)</a></li>
+<li><a class="reference internal" href="#updating-the-spark-class-path" id="id30">Updating the Spark Class Path</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#database-configuration" id="id32">Database Configuration</a><ul>
-<li><a class="reference internal" href="#h2" id="id33">H2</a></li>
-<li><a class="reference internal" href="#postgresql" id="id34">PostgreSQL</a></li>
+<li><a class="reference internal" href="#database-configuration" id="id31">Database Configuration</a><ul>
+<li><a class="reference internal" href="#h2" id="id32">H2</a></li>
+<li><a class="reference internal" href="#postgresql" id="id33">PostgreSQL</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#starting-the-package-rest-server" id="id35">Starting The Trusted Analytics Platform REST Server</a></li>
-<li><a class="reference internal" href="#troubleshooting-package-rest-server" id="id36">Troubleshooting Trusted Analytics Platform REST Server</a></li>
-<li><a class="reference internal" href="#upgrading" id="id37">Upgrading</a></li>
+<li><a class="reference internal" href="#starting-the-package-rest-server" id="id34">Starting The Trusted Analytics Platform REST Server</a></li>
+<li><a class="reference internal" href="#troubleshooting-package-rest-server" id="id35">Troubleshooting Trusted Analytics Platform REST Server</a></li>
+<li><a class="reference internal" href="#upgrading" id="id36">Upgrading</a></li>
 </ul>
 </li>
 </ul>
@@ -429,24 +428,6 @@ HDFS Namenode.</p>
 <p>If the HDFS Name Node port does not use the standard port, specify it
 after the host name with a colon:</p>
 <div class="code highlight-python"><div class="highlight"><pre><span class="n">fs</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="s">&quot;hdfs://localhost.localdomain:8020/user/atkuser&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="section" id="configure-zookeeper-hosts">
-<h5>Configure Zookeeper Hosts<a class="headerlink" href="#configure-zookeeper-hosts" title="Permalink to this headline">¶</a></h5>
-<p>Replace the text &#8220;invalid-titan-host&#8221; with a comma delimited list of fully
-qualified domain names of all nodes running the zookeeper service.</p>
-<p>Example:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="s">&quot;invalid-titan-host&quot;</span>
-</pre></div>
-</div>
-<p>Becomes:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="s">&quot;localhost.localdomain,localhost.localdomain&quot;</span>
-</pre></div>
-</div>
-<p>If the zookeeper client port is not 2181, un-comment the following line and
-replace 2181 with the zookeeper client port:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">titan</span><span class="o">.</span><span class="n">load</span><span class="o">.</span><span class="n">storage</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="s">&quot;2181&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -733,7 +714,7 @@ old software prior to installation of new software.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Dec 27, 2015.
+      Last updated on Jan 04, 2016.
       </li>
     </ul>
     </div>
