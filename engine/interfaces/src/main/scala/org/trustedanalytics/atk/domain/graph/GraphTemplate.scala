@@ -39,7 +39,4 @@ case class GraphTemplate(name: Option[String], storageFormat: String = StorageFo
     StorageFormats.isSeamlessGraph(storageFormat)
   }
 
-  def isTitan: Boolean = {
-    !StorageFormats.isSeamlessGraph(storageFormat)
-  }
 }

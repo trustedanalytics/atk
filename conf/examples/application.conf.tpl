@@ -64,16 +64,6 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://invalid-fsroot-host/user/atkuser"
 
-    # The (comma separated, no spaces) Zookeeper hosts that
-    # Comma separated list of host names with zookeeper role assigned
-    titan.load.storage.hostname = "invalid-titan-host"
-
-    # Titan storage backend. Available options are hbase and cassandra. The default is hbase
-    //titan.load.storage.backend = "hbase"
-
-    # Titan storage port, defaults to 2181 for HBase ZooKeeper. Use 9160 for Cassandra
-    //titan.load.storage.port = "2181"
-
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
 

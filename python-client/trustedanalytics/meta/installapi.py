@@ -205,8 +205,6 @@ def post_install_clean_up():
     # inherited class that matches the inheriance of its parent class
     # Example:  say someone registers   "graph/colors/red"
     # We end up with  _BaseGraphColors, where _BaseGraph has a property 'colors' which points to it
-    # Then we see  "graph:titan/colors/blue"
-    # We get TitanGraphColors(_BaseGraphColors) and TitaGraph has a property 'colors' which points to it
     # Now, regular old Graph(_BaseGraph) did get any commands installed at colors specifically, so it inherits property 'color' which points to _BaseGraphColors
     # This makes things awkward because the Graph class installation doesn't know about the property color, since it wasn't installed there.
     # It becomes much more straightforward in Graph gets its own proeprty 'colors' (overriding inheritance) which points to a class GraphColors

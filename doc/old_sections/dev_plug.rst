@@ -156,9 +156,9 @@ converted back to Python objects.
 If the name of the command contains more than one slash, the Python client will
 create intermediate objects that allow functions to be grouped logically
 together.
-For example, if the command is named dataframe/ml/my_new_algorithm (of course,
+For example, if the command is named dataframe/my_new_algorithm (of course,
 real algorithms will have better names!), then the method created in the Python
-client could be accessed on a frame *f* using ``f.ml.my_new_algorithm()``.
+client could be accessed on a frame *f* using ``f.my_new_algorithm()``.
 Commands can be nested as deeply as needed, any number of intermediary objects
 will be created automatically so the object model of the frame or graph matches
 the command tree structure defined by the command names in the system.
@@ -189,7 +189,7 @@ Use a FrameReference as the type, and place this parameter first in the case
 class definition if it is desired that this parameter is filled by the Frame
 instance whose method is being invoked by the user.
 Similarly, if the method is on a graph, using  a GraphReference in the first
-position will do the trick for :term:`TitanGraph` instances.
+position will do the trick for :term:`Graph` instances.
 
 Single Value Results
 ====================
@@ -315,9 +315,6 @@ sections to be pulled in so they're available to the plugin.
                 sampling {
                     vertex_sample {
                         class = "com.trustedanalytics.spark.graphon.sampling.VertexSample"
-                        config {
-                            titan = ${trustedanalytics.atk.engine.titan}
-                        }
                     }
                 }
             }
@@ -328,7 +325,6 @@ sections to be pulled in so they're available to the plugin.
     #these will not be used when the application is actually running
     trustedanalytics.atk.engine {
         default-timeout = 30s
-        titan {}
     }
 
 --------------------

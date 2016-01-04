@@ -5,12 +5,10 @@ This folder is for integration tests that are run at build time.
 - Tests are ran in parallel
 - Spark is ran in local mode - one context is shared between all tests
 - No HDFS, everything is against local file system
-- No Titan available, yet (maybe Berkeley later)
 - No PostgreSQL, all tests are against in-memory H2 DB
 - All output should go to 'target' folder and using in-memory DB - so no clean-up is needed in tests
 - You can view the data left behind from a test
 
-- TODO: Allow tests to go against Titan
 - TODO: Modify logging to go under target/logs (/var/logs gets some still)
 - TODO: We should start on random port since it doesn't seem to get released right away (or we need a better test to see if it is still open)
 - TODO: Python UDF's aren't working (error message about can't find pyspark)

@@ -12,9 +12,7 @@ edges leaving the vertex) and an in-degree (the number of edges entering the
 vertex).
 
 The toolkit provides a routine ``annotate_degrees`` for calculating the degrees
-of vertices. This calculation could be performed with a Gremlin query on
-smaller datasets because Gremlin queries cannot be executed on a distributed
-scale.
+of vertices.
 The |PACKAGE| routine ``annotate_degrees`` can be executed at distributed scale.
 
 In the presence of edge weights, vertices can have weighted degrees: The

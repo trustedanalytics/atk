@@ -35,7 +35,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 class LoadFromJdbcPlugin extends SparkCommandPlugin[JdbcArgs, FrameEntity] {
 
   /**
-   * The name of the command, e.g. graph/ml/loopy_belief_propagation
+   * The name of the command, e.g. graph/loopy_belief_propagation
    *
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.

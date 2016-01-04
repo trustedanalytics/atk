@@ -412,31 +412,6 @@ after the host name with a colon:
 
     fs.root = "hdfs://localhost.localdomain:8020/user/atkuser"
 
-Configure Zookeeper Hosts
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Replace the text "invalid-titan-host" with a comma delimited list of fully
-qualified domain names of all nodes running the zookeeper service.
-
-Example:
-
-.. code::
-
-    titan.load.storage.hostname = "invalid-titan-host"
-
-Becomes:
-
-.. code::
-
-    titan.load.storage.hostname = "localhost.localdomain,localhost.localdomain"
-
-If the zookeeper client port is not 2181, un-comment the following line and
-replace 2181 with the zookeeper client port:
-
-.. code::
-
-    titan.load.storage.port = "2181"
-
 Configure Spark Master Host
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

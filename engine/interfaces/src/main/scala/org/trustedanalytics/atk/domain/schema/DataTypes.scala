@@ -769,8 +769,6 @@ object DataTypes extends EventLogging {
   /**
    * Match java type object and return DataType instance.
    *
-   * (java types are used in TitanGraph)
-   *
    * @return DataType instance
    */
   def javaTypeToDataType(a: java.lang.Class[_]): DataType = {
