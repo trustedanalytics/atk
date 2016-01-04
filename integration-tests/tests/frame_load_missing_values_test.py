@@ -29,22 +29,21 @@ ta.connect()
 
 class FrameLoadMissingValuesTest(unittest.TestCase):
     """
-    Test loads data with missing values, verifies that the load passes and then checks
-    that we are able to add_column (i.e. to swap missing values for another value) and
-    drop_rows (in case we want to just get rid of rows with missing values)
+    Tests creating frames with missing values (from a csv file and using UploadRows).  Checks
+    that we are able to drop rows with missing values, or use add columns to create a new column
+    that replaces missing values with some other value.
     """
-    _multiprocess_can_split_ = True
 
-    def test_missing_values_load_from_csv(self):
-        # Test that we can load from a csv file that has missing values
+    def test_load_csv_with_missing_values(self):
+        # Load csv with missing values
         schema = [('a', ta.int32), ('b', ta.int64), ('c', ta.float32), ('d', ta.float64)]
-        csv = ta.CsvFile("/datasets/missing_values.csv", schema=schema)
-        frame = ta.Frame(csv, schema)
+        csv = ta.CsvFile("datasets/missing_values.csv", schema=schema)
+        frame = ta.Frame(csv)
 
         # Check row count
         self.assertEqual(6, frame.row_count)
 
-        # Check frame values
+        # Check expected values
         expected_value = [[1,2,None,3.5],
                           [4,None,None,7.0],
                           [None,None,None,None],
@@ -53,17 +52,43 @@ class FrameLoadMissingValuesTest(unittest.TestCase):
                           [None,None,None,None]]
         self.assertEqual(expected_value, frame.take(frame.row_count))
 
-    def test_upload_rows_with_missing_values(self):
-        # Test that we can create a frame with missing values using UploadRows
-        data = [[1],[None],[5],[7],[None]]
+    def test_missing_values_add_column(self):
+        # Create frame with missing values using upload rows
         schema = [('a', ta.int32)]
+        data = [[1],[4],[None],[None],[10],[None]]
         frame = ta.Frame(ta.UploadRows(data, schema))
 
-        # Check row count
-        self.assertEqual(5, frame.row_count)
+        # Check that frame was correctly created
+        self.assertEqual(6, frame.row_count)
+        self.assertEqual(data, frame.take(frame.row_count))
 
-        # Check frame values
-        self.assertEquals(data, frame.take(frame.row_count))
+        # Define function that replaces missing values with zero
+        def noneToZero(x):
+            if x is None:
+                return 0
+            else:
+                return x
+
+        # Use add columns to create a new column that replaces missing values with 0.
+        frame.add_columns(lambda row: noneToZero(row['a']), ('a_corrected', ta.int32), columns_accessed='a')
+        expected = [[1],[4],[0],[0],[10],[0]]
+        self.assertEqual(expected, frame.take(frame.row_count, columns='a_corrected'))
+
+
+    def test_missing_values_drop_rows(self):
+        # Create frame with missing values using upload rows
+        schema = [('a', ta.int32)]
+        data = [[1],[4],[None],[None],[10],[None]]
+        frame = ta.Frame(ta.UploadRows(data, schema))
+
+        # Check that frame was correctly created
+        self.assertEqual(6, frame.row_count)
+        self.assertEqual(data, frame.take(frame.row_count))
+
+        # Check that we can drop rows with missing values
+        frame.drop_rows(lambda row: row['a'] == None)
+        expected = [[1],[4],[10]]
+        self.assertEqual(expected, frame.take(frame.row_count, columns='a'))
 
 
 if __name__ == "__main__":
