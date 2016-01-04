@@ -41,9 +41,9 @@ Default is 20.""") maxIterations: Int = 20,
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 If set to a singleton list List(-1d), then docConcentration is set automatically.
 If set to singleton list List(t) where t != -1, then t is replicated to a vector of length k during LDAOptimizer.initialize().
-Otherwise, the alpha must be length k. (default = List(-1) = automatic)
+Otherwise, the alpha must be length k.
 Currently the EM optimizer only supports symmetric distributions, so all values in the vector should be the same.
-Values should be > 1.0""") alpha: List[Double] = List(-1d),
+Values should be greater than 1.0. Default value is -1.0 indicating automatic setting.""") alpha: Option[List[Double]] = None,
                         @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
@@ -69,9 +69,14 @@ if the corpus and LDA parameters are unchanged.""") randomSeed: Option[Long] = N
   require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
   require(StringUtils.isNotBlank(wordColumnName), "word column name is required")
   require(maxIterations > 0, "Max iterations should be greater than 0")
-  if (alpha.size == 1) { require(alpha.head == -1d || alpha.head > 1d, "Alpha should be greater than 1 or -1 indicating default setting ") }
-  else { require(alpha.forall(alpha => alpha > 1.0), "All values of alpha should be greater than 0") }
-
+  if (alpha.isDefined) {
+    if (alpha.get.size == 1) {
+      require(alpha.get.head == -1d || alpha.get.head > 1d, "Alpha should be greater than 1.0. Or -1.0 indicating default setting ")
+    }
+    else {
+      require(alpha.get.forall(a => a > 1d), "All values of alpha should be greater than 0")
+    }
+  }
   require(beta > 0, "Beta should be greater than 0")
   require(numTopics > 0, "Number of topics (K) should be greater than 0")
 

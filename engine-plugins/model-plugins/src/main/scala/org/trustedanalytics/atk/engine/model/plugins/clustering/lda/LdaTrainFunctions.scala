@@ -56,7 +56,7 @@ object LdaTrainFunctions extends Serializable {
    */
   private[clustering] def initializeLdaRunner(args: LdaTrainArgs): LDA = {
     val ldaRunner = new LDA()
-    val alpha: Vector = Vectors.dense(args.alpha.toArray)
+    val alpha: Vector = Vectors.dense(args.alpha.getOrElse(List(-1d)).toArray)
     ldaRunner.setDocConcentration(alpha)
     ldaRunner.setTopicConcentration(args.beta)
     ldaRunner.setMaxIterations(args.maxIterations)
