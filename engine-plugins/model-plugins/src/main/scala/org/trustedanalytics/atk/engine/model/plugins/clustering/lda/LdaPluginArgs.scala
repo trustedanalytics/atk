@@ -83,6 +83,10 @@ if the corpus and LDA parameters are unchanged.""") randomSeed: Option[Long] = N
   def columnNames: List[String] = {
     List(documentColumnName, wordColumnName, wordCountColumnName)
   }
+
+  def getAlpha: List[Double] = {
+    alpha.getOrElse(List(-1d))
+  }
 }
 
 /**
