@@ -17,73 +17,6 @@ using |ATK| with Python.
 .. index::
     single: Python
 
------------------
-Python Path Setup
------------------
-
-.. _pythonpath:
-
-The location of the 'trustedanalytics' directory should be added
-to the PYTHONPATH environmental variable prior to starting Python.
-This can be done from a shell script, like this::
-
-    export PYTHONPATH=$PYTHONPATH:/usr/lib/ # appends path where trustedanalytics directory exists to
-                                            # any existing path
-                                            # this could also be added to .bashrc or other profile script
-    python  # starts python CLI
-
-This way, from inside Python, it is easier to load and connect to the
-REST server:
-
-.. code::
-
-    >>> import trustedanalytics as ta
-    >>> ta.connect()
-
-.. index::
-    pair: data; type
-
-.. _valid_data_types:
-
---------
-Raw Data
---------
-
-Data is made up of variables of heterogeneous types (for example: strings,
-integers, and floats) that can be organized as a collection of rows and
-columns, similar to a table or spreadsheet.
-Each row corresponds to the data associated with one observation, and each
-column corresponds to a variable being observed.
-See the Python API :ref:`Data Types <python_api/datatypes/index>` for
-a current list of data types supported.
-
-To see the data types supported:
-
-.. code::
-
-    >>> print ta.valid_data_types
-
-You should see a list of variable types similar to this:
-
-.. code::
-
-    float32, float64, int32, int64, unicode
-    (and aliases: float->float64, int->int32, long->int64, str->unicode)
-
-.. note::
-
-    Although |PACKAGE| utilizes the NumPy package, NumPy values of positive
-    infinity (np.inf), negative infinity (-np.inf) or nan (np.nan) are treated
-    as None.
-    Results of any user-defined functions which deal with such values are
-    automatically converted to None, so any further usage of those data points
-    should treat the values as None.
-
-.. _Importing Data:
-
-.. index::
-    single: import
-
 Ingesting the Raw Data
 ======================
 
@@ -152,58 +85,11 @@ It can be changed with the parameter *delimiter*:
 This can be helpful if the delimiter is something other than a comma, for
 example, ``\t`` for tab-delimited records.
 
-Occasionally, there are header lines in the data file.
-For example, these lines may describe the source or format of the data.
-If there are lines at the beginning of the file, they should be skipped by
-the import mechanism.
-The number of lines to skip is specified by the *skip_header_lines*
-parameter:
-
-.. code::
-
-    >>> csv_description = ta.CsvFile(my_data_file, my_schema, skip_header_lines = 5)
-
-.. warning::
-
-    See :ref:`Errata` for an issue skipping header lines.
-
-Now we use the schema and the file name to create CsvFile objects, which define
-the data layouts:
-
-.. only:: html
-
-    .. code::
-
-        >>> my_csv = ta.CsvFile(my_data_file, my_schema)
-        >>> csv1 = ta.CsvFile(file_name="data1.csv", schema=schema_ab)
-        >>> csv2 = ta.CsvFile(file_name="more_data.txt", schema=schema_ab)
-
-        >>> raw_csv_data_file = "datasets/my_data.csv"
-        >>> column_schema_list = [("x", ta.float64), ("y", ta.float64), ("z", str)]
-        >>> csv4 = ta.CsvFile(file_name=raw_csv_data_file, schema=column_schema_list, delimiter='|', skip_header_lines=2)
-
-
-.. only:: latex
-
-    .. code::
-
-        >>> my_csv = ta.CsvFile(my_data_file, my_schema)
-        >>> csv1 = ta.CsvFile(file_name="data1.csv", schema=schema_ab)
-        >>> csv2 = ta.CsvFile(file_name="more_data.txt", schema=schema_ab)
-
-        >>> raw_csv_data_file = "datasets/my_data.csv"
-        >>> column_schema_list = [("x", ta.float64), ("y", ta.float64), ("z", str)]
-        >>> csv4 = ta.CsvFile(file_name=raw_csv_data_file,
-        ... schema=column_schema_list, delimiter='|', skip_header_lines=2)
-
-
-.. _example_frame.frame:
-
 ------
 Frames
 ------
 
-A Frame is a class of objects capable of accessing and controlling "big data".
+A Frame is a class of objects capable of accessing and controlling any data set.
 The data can be visualized as a two-dimensional table structure of rows and
 columns.
 |PACKAGE| can handle frames with large volumes of data, because it is
