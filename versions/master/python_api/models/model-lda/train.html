@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>document_column_name</em>, <em>word_column_name</em>, <em>word_count_column_name</em>, <em>max_iterations=20</em>, <em>alpha=1.10000002384</em>, <em>beta=1.10000002384</em>, <em>num_topics=10</em>, <em>random_seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>document_column_name</em>, <em>word_column_name</em>, <em>word_count_column_name</em>, <em>max_iterations=20</em>, <em>alpha=None</em>, <em>beta=1.10000002384</em>, <em>num_topics=10</em>, <em>random_seed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Creates Latent Dirichlet Allocation model</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -147,17 +147,15 @@ Column should contain an int32 or int64 value.</p>
 The valid value range is all positive int.
 Default is 20.</p>
 </div></blockquote>
-<p><strong>alpha</strong> : float32 (default=1.10000002384)</p>
+<p><strong>alpha</strong> : list (default=None)</p>
 <blockquote>
 <div><p>The <a class="reference internal" href="../../../glossary.html#term-hyperparameter"><span class="xref std std-term">hyperparameter</span></a> for document-specific distribution over topics.
 Mainly used as a smoothing parameter in <a class="reference internal" href="../../../glossary.html#term-bayesian-inference"><span class="xref std std-term">Bayesian inference</span></a>.
-Larger value implies that documents are assumed to cover all topics
-more uniformly; smaller value implies that documents are more
-concentrated on a small subset of topics.
-Valid value range is all positive float greater than or equal to 1.</p>
-<blockquote>
-<div><p>Default is 0.1.</p>
-</div></blockquote>
+If set to a singleton list List(-1d), then docConcentration is set automatically.
+If set to singleton list List(t) where t != -1, then t is replicated to a vector of length k during LDAOptimizer.initialize().
+Otherwise, the alpha must be length k.
+Currently the EM optimizer only supports symmetric distributions, so all values in the vector should be the same.
+Values should be greater than 1.0. Default value is -1.0 indicating automatic setting.</p>
 </div></blockquote>
 <p><strong>beta</strong> : float32 (default=1.10000002384)</p>
 <blockquote>

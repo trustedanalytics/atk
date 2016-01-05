@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, document_column_name, word_column_name, word_count_column_name, max_iterations=20, alpha=1.10000002384, beta=1.10000002384, num_topics=10, random_seed=None)
+.. function:: train(self, frame, document_column_name, word_column_name, word_count_column_name, max_iterations=20, alpha=None, beta=1.10000002384, num_topics=10, random_seed=None)
 
     |ALPHA|
     Creates Latent Dirichlet Allocation model
@@ -58,17 +58,17 @@
 
 
 
-        **alpha** : float32 (default=1.10000002384)
+        **alpha** : list (default=None)
 
         ..
 
             The :term:`hyperparameter` for document-specific distribution over topics.
             Mainly used as a smoothing parameter in :term:`Bayesian inference`.
-            Larger value implies that documents are assumed to cover all topics
-            more uniformly; smaller value implies that documents are more
-            concentrated on a small subset of topics.
-            Valid value range is all positive float greater than or equal to 1.
-             Default is 0.1.
+            If set to a singleton list List(-1d), then docConcentration is set automatically.
+            If set to singleton list List(t) where t != -1, then t is replicated to a vector of length k during LDAOptimizer.initialize().
+            Otherwise, the alpha must be length k.
+            Currently the EM optimizer only supports symmetric distributions, so all values in the vector should be the same.
+            Values should be greater than 1.0. Default value is -1.0 indicating automatic setting.
 
 
 
