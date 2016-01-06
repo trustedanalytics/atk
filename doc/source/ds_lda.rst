@@ -1,79 +1,100 @@
-        """Documentation test for classifiers"""
-        # Establish a connection to the ATK Rest Server
-        # This handle will be used for the remaineder of the script
-        # No cleanup is required
+.. _ds_lda:
 
-        # First you have to get your server URL and credentials file
-        # from your TAP administrator
-        atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
-        credentials_file = os.getenv("ATK_CREDENTIALS", "")
+===========================
+Latent Dirichlet Allocation
+===========================
 
-        # set the server, and use the credentials to connect to the ATK
-        ia.server.uri = atk_server_uri
-        ia.connect(credentials_file)
-
-        # LDA performs what is known as topic modeling, which is a form of
-        # clustering. The conceptual idea is you have some number of 
-        # documents, each which contain some number of words. Based on the
-        # words you want to associate each document with a particular topic.
-        # This algorithm is unsupervised, meaning there is no known values
-        # that are being trained against, rather it simply associates similar
-        # papers, where similarity is defined as having similar words.
-        # The number of times a word occurs in a paper is also taken into
-        # account
-
-        # The general workflow will be build a frame, build a model,
-        # train the model on the frame,
-        # Predict on the model. Note there's no metrics, evaluating
-        # unsupervised machine learning results can be difficult
-
-        # First Step, construct a frame
-        # Construct a frame to be uploaded, this is done using plain python
-        # lists uploaded to the server
+LDA, short for Latent Dirichlet Allocation, performs topic modeling, which is a form of clustering.
+For example, given a number of documents, LDA can group the texts on similar topics together based on whether they contain similar words. LDA is an unsupervised algorithm, meaning that the groups are created based on the similarity to each other, rather than by comparing them to an idealized or standardized dataset.
 
 
-        # I am representing 3 papers on 2 topics, with 4 words each, which
-        # each appear 2 times
+Setup
+-----
 
-        rows_frame = ia.UploadRows([["paper1", "word11", 2],
-                                    ["paper1", "word12", 2],
-                                    ["paper1", "word13", 2],
-                                    ["paper1", "word14", 2],
+Establish a connection to the ATK Rest Server.
+This handle will be used for the remainder of the script.
 
-                                    ["paper2", "word11", 2],
-                                    ["paper2", "word12", 2],
-                                    ["paper2", "word13", 2],
-                                    ["paper2", "word14", 2],
+Get server URL and credentials file from the TAP administrator.
 
-                                    ["paper3", "word11", 2],
-                                    ["paper3", "word22", 2],
-                                    ["paper3", "word23", 2],
-                                    ["paper3", "word24", 2]],
-                                   [("paper", str),
-                                    ("word", str),
-                                    ("count", ia.int32)])
-        # Actually build the frame described in in the UploadRows object
-        frame = ia.Frame(rows_frame)
+.. code::
+   atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
+   credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-        print frame.inspect()
+Set the server, and use the credentials to connect to the ATK.
 
-        # Build a model
-        # This lda model will be trained against the above frame
-        lda_model = ia.LdaModel()
+.. code::
+   ia.server.uri = atk_server_uri
+   ia.connect(credentials_file)
 
-        # Give the model the papers to train topics on, and words associated
-        # with those papers, and the count of words in a paper. The final
-        # argument is the number of topics to search for.
-        lda_model.train(frame, "paper", "word", "count", num_topics=2)
+--------
+Workflow
+--------
 
-        # predict the words of 2 new papers, and show that they are in different
-        # topics. A new paper is just a list of words and counts of those
-        # words
-        cluster1 = lda_model.predict(["word11", "word13"])
-        cluster2 = lda_model.predict(["word21", "word23"])
-        print cluster1
-        print cluster2
+The standard workflow is: build a frame, build a model, train the model on the frame, predict on the model.
+Note there is no metrics. Evaluating unsupervised machine learning results can be difficult.
 
-        self.assertNotEqual(cluster1, cluster2)
+Construct a Frame
+-----------------
+
+Construct a frame to be uploaded, this is done using Python lists uploaded to the server
+
+In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times
+
+.. code::
+
+   rows_frame = ia.UploadRows([["paper1", "word11", 2],
+                               ["paper1", "word12", 2],
+                               ["paper1", "word13", 2],
+                               ["paper1", "word14", 2],
+
+                               ["paper2", "word11", 2],
+                               ["paper2", "word12", 2],
+                               ["paper2", "word13", 2],
+                               ["paper2", "word14", 2],
+
+                               ["paper3", "word11", 2],
+                               ["paper3", "word22", 2],
+                               ["paper3", "word23", 2],
+                               ["paper3", "word24", 2]],
+                               [("paper", str),
+                                ("word", str),
+                                ("count", ia.int32)])
+
+   frame = ia.Frame(rows_frame)
+
+   print frame.inspect()
+
+Build a Model
+-------------
+
+.. code::
+
+   lda_model = ia.LdaModel()
+
+Train the Model
+---------------
+
+This LDA model will be trained using the frame above.
+
+[FIX THIS]Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
+The final argument is the number of topics to search for.
+
+.. code::
+
+   lda_model.train(frame, "paper", "word", "count", num_topics=2)
+
+Predict on the Model
+--------------------
+
+Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words
+
+.. code::
+
+   cluster1 = lda_model.predict(["word11", "word13"])
+   cluster2 = lda_model.predict(["word21", "word23"])
+   print cluster1
+   print cluster2
+
+   self.assertNotEqual(cluster1, cluster2)
 
 
