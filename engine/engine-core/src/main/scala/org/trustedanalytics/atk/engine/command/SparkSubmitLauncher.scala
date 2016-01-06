@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
-import org.trustedanalytics.atk.domain.jobcontext.JobContextTemplate
+import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -38,7 +38,7 @@ import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
  */
 class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
 
-  def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String)(implicit invocation: Invocation): Int = {
+  def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
 
       try {
@@ -97,7 +97,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
         val verbose = Array("--verbose")
 
         val sparkInternalDriverClass = Array("spark-internal")
-        val pluginArguments = Array(s"${command.id}")
+        val jobArguments = Array(s"${jobContext.id}", s"${command.id}")
 
         // Prepare input arguments for Spark Submit; Do not change the order
         val inputArgs = sparkMaster ++
@@ -109,7 +109,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
           executionConfigs ++
           verbose ++
           sparkInternalDriverClass ++
-          pluginArguments
+          jobArguments
 
         val engineClasspath = Module.allLibs("engine").map(url => url.getPath).mkString(":")
 

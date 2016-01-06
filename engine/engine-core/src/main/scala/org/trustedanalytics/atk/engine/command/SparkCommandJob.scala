@@ -16,12 +16,13 @@
 
 package org.trustedanalytics.atk.engine.command
 
+import java.net.InetAddress
+
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, Call }
 import org.trustedanalytics.atk.engine._
 import com.typesafe.config.ConfigFactory
-import org.trustedanalytics.atk.moduleloader.Component
 import org.apache.commons.lang3.exception.ExceptionUtils
 import scala.reflect.io.Directory
 
@@ -32,14 +33,19 @@ import scala.reflect.io.Directory
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-class SparkCommandJob extends AbstractEngineComponent {
+class SparkCommandJob(jobContextId: Long) extends AbstractEngineComponent {
 
   override lazy val commandLoader = new CommandLoader(loadFromModules = false)
+
+  val jobContext = jobContextStorage.expectJobContext(jobContextId)
 
   var webserver: YarnWebServer = null
   if (EngineConfig.keepYarnJobAlive) {
     webserver = YarnWebServer.init(engine)
-    println("webserver lisening port: " + webserver.getListeningPort)
+    // TODO: need better way to get the local host, this won't always work
+    val uri = s"http://${InetAddress.getLocalHost.getHostAddress}:${webserver.getListeningPort}/"
+    println(s"webserver URI: $uri")
+    jobContextStorage.updateJobServerUri(jobContextId, uri)
   }
 
   /**
@@ -60,7 +66,7 @@ class SparkCommandJob extends AbstractEngineComponent {
         implicit val invocation: Invocation = new Call(user match {
           case Some(u) => userStorage.createUserPrincipalFromUser(u)
           case _ => null
-        }, EngineExecutionContext.global, null /* TODO: clientId */ )
+        }, EngineExecutionContext.global, jobContext.clientId)
         commandExecutor.executeInForeground(command)(invocation)
     }
   }
@@ -91,14 +97,14 @@ object SparkCommandJob {
   /**
    * Usage string if this was being executed from the command line
    */
-  def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <command_id>")
+  def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <jobcontext_id> <command_id>")
 
   /**
    * Entry point of SparkCommandJob for use by SparkSubmit.
    * @param args command line arguments. Requires command id
    */
   def main(args: Array[String]) = {
-    if (args.length < 1) {
+    if (args.length < 2) {
       usage()
     }
     else {
@@ -111,9 +117,11 @@ object SparkCommandJob {
       try {
         /* Set to true as for some reason in yarn cluster mode, this doesn't seem to be set on remote driver container */
         sys.props += Tuple2("SPARK_SUBMIT", "true")
-        val commandId = args(0).toLong
 
-        driver = new SparkCommandJob
+        val jobContextId = args(0).toLong
+        val commandId = args(1).toLong
+
+        driver = new SparkCommandJob(jobContextId)
         driver.execute(commandId)
 
       }

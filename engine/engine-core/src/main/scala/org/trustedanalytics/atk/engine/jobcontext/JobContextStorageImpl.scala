@@ -24,6 +24,10 @@ import org.trustedanalytics.atk.repository.SlickMetaStoreComponent
 class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) extends EventLogging {
   val repo = metaStore.jobContextRepo
 
+  def expectJobContext(id: Long): JobContext = {
+    lookup(id).getOrElse(throw new RuntimeException(s"JobContext with id $id was NOT found"))
+  }
+
   def lookup(id: Long): Option[JobContext] = metaStore.withSession("se.command.lookup") {
     implicit session =>
       repo.lookup(id)
