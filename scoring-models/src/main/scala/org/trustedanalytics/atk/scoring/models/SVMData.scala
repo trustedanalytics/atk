@@ -14,25 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.regression
+package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.classification.SVMModel
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param linRegModel Trained MLLib's LinearRegressionModel object
+ * @param svmModel Trained MLLib's SVMModel object
  * @param observationColumns Handle to the observation columns of the data frame
  */
-case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String]) {
+case class SVMData(svmModel: SVMModel, observationColumns: List[String]) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(linRegModel != null, "linRegModel must not be null")
+  require(svmModel != null, "svmModel must not be null")
 }
-
-/**
- * Results of Linear Regression Train plugin
- * @param observationColumns List of column names on which the model was trained
- * @param labelColumn Column name containing the true value of the observation
- * @param weightsVector An array of weights of the trained model
- * @param intercept Intercept value of the trained model
- */
-case class LinearRegressionTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)

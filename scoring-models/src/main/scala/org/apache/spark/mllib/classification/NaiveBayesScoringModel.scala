@@ -17,21 +17,37 @@ package org.apache.spark.mllib.classification
 
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 
-class NaiveBayesScoringModel(naiveBayesModel: NaiveBayesModel) extends NaiveBayesModel(naiveBayesModel.labels, naiveBayesModel.pi, naiveBayesModel.theta) with Model {
+class NaiveBayesScoringModel(naiveBayesData : NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ predict(Vectors.dense(x))
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
+    score = score :+ predict(Vectors.dense(x))
+
     score
   }
 
+  override def input: Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = naiveBayesData.observationColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name)
+    }
+    input
+  }
+
+  override def output: Array[Field] = {
+    var output = Array[Field]()
+    val obsCols = naiveBayesData.observationColumns
+    obsCols.foreach { name =>
+      output = output :+ Field(name)
+    }
+    output
+  }
 }
+

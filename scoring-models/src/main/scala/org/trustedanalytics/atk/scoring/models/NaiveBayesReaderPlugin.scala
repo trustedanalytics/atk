@@ -28,10 +28,9 @@ class NaiveBayesReaderPlugin() extends ModelLoader {
     val str = new String(bytes)
     println(str)
     val json: JsValue = str.parseJson
-    val naiveBayesModel = json.convertTo[NaiveBayesModel]
-    nbModel = new NaiveBayesScoringModel(naiveBayesModel)
+    val naiveBayesData = json.convertTo[NaiveBayesData]
+    nbModel = new NaiveBayesScoringModel(naiveBayesData)
     nbModel.asInstanceOf[Model]
-
   }
 }
 

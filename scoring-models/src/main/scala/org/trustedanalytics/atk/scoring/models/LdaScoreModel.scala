@@ -28,14 +28,20 @@ import ScoringJsonReaderWriters._
  */
 class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { document =>
-      {
-        val predictReturn = predict(document.toList)
-        score = score :+ predictReturn.toJson
-      }
-    }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+    val predictReturn = predict(data.map(_.toString)toList)
+    score = score :+ predictReturn.toJson
     score
   }
+
+  override def input: Array[Field] = {
+    var input = Array[Field]()
+    input
+  }
+
+  override def output: Array[Field] = {
+
+  }
+
 }

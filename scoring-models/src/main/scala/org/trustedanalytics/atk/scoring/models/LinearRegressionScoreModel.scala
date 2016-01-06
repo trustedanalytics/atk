@@ -23,20 +23,42 @@ import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
+class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ predict(Vectors.dense(x))
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
+    score = data :+ predict(Vectors.dense(x))
+
     score
   }
 
+  override def input: Array[Field] = {
+    val obsCols = linearRegressionData.observationColumns
+    val input: Array[Field] = new Array[Field](obsCols.length)
+    var i = 0
+    obsCols.foreach { obsColName =>
+      {
+        input(i) = new Field(obsColName)
+        i = i + 1
+      }
+    }
+    input
+  }
+
+  override def output: Array[Field] = {
+    val obsCols = linearRegressionData.observationColumns
+    val input: Array[Field] = new Array[Field](obsCols.length)
+    var i = 0
+    obsCols.foreach { obsColName =>
+      {
+        input(i) = new Field(obsColName)
+        i = i + 1
+      }
+    }
+    input
+  }
 }

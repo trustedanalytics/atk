@@ -30,9 +30,11 @@ class SVMWithSGDModelReaderPlugin() extends ModelLoader {
     val str = new String(bytes)
     println(str)
     val json: JsValue = str.parseJson
-    val svmModel = json.convertTo[SVMModel]
-    mySVMModel = new SVMWithSGDScoreModel(svmModel)
+    val svmData = json.convertTo[SVMData]
+    val svmModel = svmData.svmModel
+    mySVMModel = new SVMWithSGDScoreModel(svmModel, svmData)
     mySVMModel.asInstanceOf[Model]
 
   }
 }
+

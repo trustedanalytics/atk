@@ -14,11 +14,9 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.classification.NaiveBayesModel
 import org.apache.spark.mllib.tree.model.RandomForestModel
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
 
 /**
  * Command for loading model data into existing model in the model database.

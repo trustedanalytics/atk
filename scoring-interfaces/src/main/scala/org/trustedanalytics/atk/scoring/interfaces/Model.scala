@@ -25,6 +25,15 @@ trait Model {
   /**
    * Called for scoring
    */
-  def score(data: Seq[Array[String]]): Seq[Any]
+  def score(row: Array[Any]): Array[Any]
+
+  def input(): Array[Field]
+
+  def output(): Array[Field]
+
+  case class Field(name: String) // TODO:  , dataType: String)
+  {
+  }
 
 }
+

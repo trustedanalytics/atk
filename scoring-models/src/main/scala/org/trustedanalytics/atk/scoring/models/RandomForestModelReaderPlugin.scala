@@ -38,9 +38,9 @@ class RandomForestModelReaderPlugin() extends ModelLoader {
     val str = new String(bytes)
     println(str)
     val json: JsValue = str.parseJson
-    val randomForestModel = json.convertTo[RandomForestModel]
-    rfModel = new RandomForestScoreModel(randomForestModel)
+    val randomForestModelData = json.convertTo[RandomForestClassifierData]
+    val randomForestModel = randomForestModelData.randomForestModel
+    rfModel = new RandomForestScoreModel(randomForestModel, randomForestModelData)
     rfModel.asInstanceOf[Model]
-
   }
 }

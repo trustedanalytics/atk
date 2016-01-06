@@ -22,20 +22,34 @@ import org.apache.spark.mllib.linalg.Vectors
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class KMeansScoreModel(libKMeansModel: KMeansModel) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
+class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ (predict(Vectors.dense(x)) + 1)
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
+    score = data :+ (predict(Vectors.dense(x)) + 1)
     score
   }
 
+  override def input: Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = kmeansData.observationColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name)
+    }
+    input
+  }
+
+  override def output: Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = kmeansData.observationColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name)
+    }
+    input
+  }
 }
+
