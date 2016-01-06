@@ -722,6 +722,16 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       q.update(progress)
     }
 
+    override def updateJobContextId(id: Long, jobContextId: Long)(implicit session: Session): Try[Unit] = Try {
+      val q = for { c <- commandTable if c.id === id } yield c.jobContextId
+      q.update(Some(jobContextId))
+    }
+
+    override def updateResult(id: Long, result: JsObject)(implicit session: Session): Try[Unit] = Try {
+      val q = for { c <- commandTable if c.id === id } yield c.result
+      q.update(Some(result))
+    }
+
   }
 
   class GraphTable(tag: Tag) extends Table[GraphEntity](tag, "graph") {

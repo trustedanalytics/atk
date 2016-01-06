@@ -97,7 +97,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @tparam A plugin arguments
    * @return plugin return value as JSON
    */
-  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): JsObject = withContext("cmdExcector") {
+  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): Unit = withContext("cmdExcector") {
 
     info(s"command id:${commandContext.command.id}, name:${commandContext.command.name}, args:${commandContext.command.compactArgs}, ${JvmMemory.memory}")
     debug(s"System Properties are: ${sys.props.keys.mkString(",")}")
@@ -110,24 +110,20 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
 
         if (!notifyJob(jobContext)) {
-          // TODO: if notify is not successful, launch yarn job
-        }
 
-        val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-        new SparkSubmitLauncher(new FileStorage, engine).execute(commandContext.command, sparkCommandPlugin, moduleName)
+          val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
+          new SparkSubmitLauncher(new FileStorage, engine).execute(commandContext.command, sparkCommandPlugin, moduleName)
 
-        // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
-        val updatedCommand = commands.expectCommand(commandContext.command.id)
-        if (updatedCommand.error.isDefined) {
-          error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
-          throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
-        }
-        if (updatedCommand.result.isDefined) {
-          updatedCommand.result.get
-        }
-        else {
-          error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
-          throw new Exception(s"Error submitting command to yarn-cluster.")
+          // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
+          val updatedCommand = commands.expectCommand(commandContext.command.id)
+          if (updatedCommand.error.isDefined) {
+            error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
+            throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
+          }
+          if (updatedCommand.result.isEmpty) {
+            error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
+            throw new Exception(s"Error submitting command to yarn-cluster.")
+          }
         }
       case _ =>
         // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
@@ -135,7 +131,8 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         val arguments = plugin.parseArguments(commandContext.command.arguments.get)
         info(s"Invoking command ${commandContext.command.name}")
         val returnValue = plugin(commandInvocation, arguments)
-        plugin.serializeReturn(returnValue)
+        val jsonResult = plugin.serializeReturn(returnValue)
+        engine.commandStorage.updateResult(commandContext.command.id, jsonResult)
     }
   }
 
@@ -145,7 +142,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @return true if successful, false means a new job needs to be launched
    */
   private def notifyJob(jobContext: JobContext): Boolean = {
-    if (jobContext.jobServerUri.isDefined) {
+    if (EngineConfig.keepYarnJobAlive && jobContext.jobServerUri.isDefined) {
       // TODO: send HTTP request to job, return true if successful, false otherwise
       false
     }

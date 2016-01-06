@@ -44,7 +44,7 @@ trait CommandStorage {
   /**
    * On complete - mark progress as 100% or failed
    */
-  def complete(id: Long, result: Try[JsObject]): Unit
+  def complete(id: Long, result: Try[Unit]): Unit
 
   /**
    * update command info regarding progress of jobs initiated by this command
@@ -59,4 +59,6 @@ trait CommandStorage {
    * @param jobContextId job context id
    */
   def updateJobContextId(id: Long, jobContextId: Long): Unit
+
+  def updateResult(id: Long, result: JsObject): Unit
 }
