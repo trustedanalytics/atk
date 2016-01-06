@@ -89,7 +89,8 @@ class HistogramPlugin extends SparkCommandPlugin[HistogramArgs, Histogram] {
 
     val numBins: Int = HistogramPlugin.getNumBins(arguments.numBins, frame)
 
-    computeHistogram(frame.rdd, columnIndex, weightColumnIndex, numBins, arguments.binType.getOrElse("equalwidth") == "equalwidth")
+    computeHistogram(frame.rdd, columnIndex, weightColumnIndex, numBins, arguments.missing.getOrElse(MissingIgnore()),
+      arguments.binType.getOrElse("equalwidth") == "equalwidth")
   }
 
   /**
@@ -101,9 +102,10 @@ class HistogramPlugin extends SparkCommandPlugin[HistogramArgs, Histogram] {
    * @param equalWidth true if we are using equalwidth binning false if not
    * @return a new RDD containing the inclusive start, exclusive end, size and density of each bin.
    */
-  private[bincolumn] def computeHistogram(dataFrame: RDD[Row], columnIndex: Int, weightColumnIndex: Option[Int], numBins: Int, equalWidth: Boolean = true): Histogram = {
+  private[bincolumn] def computeHistogram(dataFrame: RDD[Row], columnIndex: Int, weightColumnIndex: Option[Int], numBins: Int,
+                                          missing: Missing[Any], equalWidth: Boolean = true): Histogram = {
     val binnedResults = if (equalWidth)
-      DiscretizationFunctions.binEqualWidth(columnIndex, numBins, dataFrame)
+      DiscretizationFunctions.binEqualWidth(columnIndex, numBins, missing, dataFrame)
     else
       DiscretizationFunctions.binEqualDepth(columnIndex, numBins, weightColumnIndex, dataFrame)
 

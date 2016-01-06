@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.bincolumn
 
-import org.trustedanalytics.atk.domain.frame.ComputedBinColumnArgs
+import org.trustedanalytics.atk.domain.frame.{ ComputedBinColumnArgs, Missing }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
@@ -96,10 +96,12 @@ class BinColumnEqualDepthPlugin extends ComputedBinColumnPlugin {
    * Discretize a variable into a finite number of bins
    * @param columnIndex index of column to bin
    * @param numBins number of bins to use
+   * @param missing specifies the behavior of missing values in the bin column.  Either ignore missing values
+   *                 (and bin them to -1), or specify a value to use when binning elements with a missing value.
    * @param rdd rdd to bin against
    * @return a result object containing the binned rdd and the list of computed cutoffs
    */
-  override def executeBinColumn(columnIndex: Int, numBins: Int, rdd: FrameRdd): RddWithCutoffs = {
+  override def executeBinColumn(columnIndex: Int, numBins: Int, missing: Missing[Any], rdd: FrameRdd): RddWithCutoffs = {
     DiscretizationFunctions.binEqualDepth(columnIndex, numBins, None, rdd)
   }
 }

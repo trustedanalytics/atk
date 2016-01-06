@@ -35,6 +35,7 @@ from trustedanalytics.core.frame import Frame, VertexFrame
 from trustedanalytics.core.graph import Graph
 from trustedanalytics.core.model import _BaseModel
 from trustedanalytics.core.ui import inspect_settings
+from trustedanalytics.core.missing import missing
 
 from trustedanalytics.rest.atkserver import server
 connect = server.connect

@@ -89,9 +89,11 @@ class BinColumnEqualWidthPlugin extends ComputedBinColumnPlugin {
    * @param columnIndex index of column to bin
    * @param numBins number of bins to use
    * @param rdd rdd to bin against
+   * @param missing specifies the behavior of missing values in the bin column.  Either ignore missing values
+   *                 (and bin them to -1), or specify a value to use when binning elements with a missing value.
    * @return a result object containing the binned rdd and the list of computed cutoffs
    */
-  override def executeBinColumn(columnIndex: Int, numBins: Int, rdd: FrameRdd): RddWithCutoffs = {
-    DiscretizationFunctions.binEqualWidth(columnIndex, numBins, rdd)
+  override def executeBinColumn(columnIndex: Int, numBins: Int, missing: Missing[Any], rdd: FrameRdd): RddWithCutoffs = {
+    DiscretizationFunctions.binEqualWidth(columnIndex, numBins, missing, rdd)
   }
 }
