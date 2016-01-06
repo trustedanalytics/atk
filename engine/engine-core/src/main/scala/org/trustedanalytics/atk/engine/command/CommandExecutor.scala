@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.command
 
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, CommandPlugin }
 import org.trustedanalytics.atk.engine.util.JvmMemory
@@ -104,8 +105,17 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
       case sparkCommandPlugin: SparkCommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
+
+        val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, commandContext.command.getJobName, invocation.clientId)
+        engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
+
+        if (!notifyJob(jobContext)) {
+          // TODO: if notify is not successful, launch yarn job
+        }
+
         val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
         new SparkSubmitLauncher(new FileStorage, engine).execute(commandContext.command, sparkCommandPlugin, moduleName)
+
         // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
         val updatedCommand = commands.expectCommand(commandContext.command.id)
         if (updatedCommand.error.isDefined) {
@@ -121,11 +131,27 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         }
       case _ =>
         // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
-        val commandInvocation = new SimpleInvocation(engine, commands, commandContext)
+        val commandInvocation = new SimpleInvocation(engine, commands, commandContext, invocation.clientId)
         val arguments = plugin.parseArguments(commandContext.command.arguments.get)
         info(s"Invoking command ${commandContext.command.name}")
         val returnValue = plugin(commandInvocation, arguments)
         plugin.serializeReturn(returnValue)
+    }
+  }
+
+  /**
+   * Notify the running job that there is a new command to execute
+   * @param jobContext meta store record
+   * @return true if successful, false means a new job needs to be launched
+   */
+  private def notifyJob(jobContext: JobContext): Boolean = {
+    if (jobContext.jobServerUri.isDefined) {
+      // TODO: send HTTP request to job, return true if successful, false otherwise
+      false
+    }
+    else {
+      // job was never created, so nothing to notify
+      false
     }
   }
 

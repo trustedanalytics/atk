@@ -38,7 +38,7 @@ abstract class AbstractEngineComponent extends DbProfileComponent
     with EventLoggingImplicits
     with ClassLoaderAware {
 
-  implicit lazy val startupCall = Call(null, EngineExecutionContext.global)
+  implicit lazy val startupCall = Call(null, EngineExecutionContext.global, null)
 
   val commandLoader: CommandLoader
 

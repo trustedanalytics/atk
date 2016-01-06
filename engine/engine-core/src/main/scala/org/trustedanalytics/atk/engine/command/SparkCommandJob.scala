@@ -60,7 +60,7 @@ class SparkCommandJob extends AbstractEngineComponent {
         implicit val invocation: Invocation = new Call(user match {
           case Some(u) => userStorage.createUserPrincipalFromUser(u)
           case _ => null
-        }, EngineExecutionContext.global)
+        }, EngineExecutionContext.global, null /* TODO: clientId */ )
         commandExecutor.executeInForeground(command)(invocation)
     }
   }
