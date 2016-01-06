@@ -175,7 +175,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     override def write(obj: T): JsValue = JsObject("uri" -> JsString(obj.uri))
 
     override def read(json: JsValue): T = {
-      implicit val invocation: Invocation = Call(null, EngineExecutionContext.global)
+      implicit val invocation: Invocation = Call(null, EngineExecutionContext.global, null)
       try {
         json match {
           case JsString(uri) => createReference(uri.substring(uri.lastIndexOf('/') + 1).toLong)

@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
-import org.trustedanalytics.atk.domain.jobcontext.JobContextTemplate
+import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -38,7 +38,7 @@ import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
  */
 class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
 
-  def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String)(implicit invocation: Invocation): Int = {
+  def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
 
       try {
@@ -97,7 +97,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
         val verbose = Array("--verbose")
 
         val sparkInternalDriverClass = Array("spark-internal")
-        val pluginArguments = Array(s"${command.id}")
+        val jobArguments = Array(s"${jobContext.id}", s"${command.id}")
 
         // Prepare input arguments for Spark Submit; Do not change the order
         val inputArgs = sparkMaster ++
@@ -109,7 +109,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
           executionConfigs ++
           verbose ++
           sparkInternalDriverClass ++
-          pluginArguments
+          jobArguments
 
         val engineClasspath = Module.allLibs("engine").map(url => url.getPath).mkString(":")
 
@@ -132,41 +132,12 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
 
         val pb = new java.lang.ProcessBuilder(javaArgs: _*)
         val job = pb.inheritIO().start()
-        createJobContext(command)
         val result = job.waitFor()
         info(s"Command ${command.id} completed with exitCode:$result, ${JvmMemory.memory}")
         result
       }
       finally {
         sys.props -= "SPARK_SUBMIT" /* Removing so that next command executes in a clean environment to begin with */
-      }
-    }
-  }
-
-  /**
-   * Create a job context for command. (Later -- Create a job context upon checking the client_id + repl_id)
-   * @param command Current Command being executed
-   * @param invocation Current Invocation
-   * @return
-   */
-  def createJobContext(command: Command)(implicit invocation: Invocation): Unit = {
-    if (EngineConfig.keepYarnJobAlive) {
-      withMyClassLoader {
-        // TODO Insert a record in jobcontext table if request is coming from the same user_id/client_id - It should tend to
-        // TODO go to the same yarn job
-        val engineImpl = engine.asInstanceOf[EngineImpl]
-        val jobContext = engineImpl.jobContextStorage.lookupByName(command.getJobName)
-        // TODO By this time the yarn job has not even been created (i.e. has not reach the NEW Phase) - need to figure this out
-        // TODO hence introducing a sleep for 5 seconds. Another way might be to populate this field after it gets launched in yarn
-        Thread.sleep(5000)
-        val result = jobContext.getOrElse {
-          val yarnAppId = YarnUtils.getYarnJobId(command.getJobName)
-          // Hardcoded Client Id for now
-          val clientId = invocation.user.clientId.getOrElse("clientId")
-          val newJobContextTemplate = new JobContextTemplate(invocation.user.user.id, command.getJobName, yarnAppId, clientId)
-          engineImpl.jobContextStorage.create(newJobContextTemplate)
-        }
-        engineImpl.commandStorage.updateJobContextId(command.id, result.id)
       }
     }
   }

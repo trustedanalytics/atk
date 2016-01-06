@@ -21,5 +21,4 @@ package org.trustedanalytics.atk.domain
  * @param user user DB entity representing the API user
  * @param roles roles of the authenticated user
  */
-case class UserPrincipal(user: User, roles: List[String], token: Option[String] = None, appOrgId: Option[String] = None,
-                         clientId: Option[String] = None)
+case class UserPrincipal(user: User, roles: List[String], token: Option[String] = None, appOrgId: Option[String] = None)

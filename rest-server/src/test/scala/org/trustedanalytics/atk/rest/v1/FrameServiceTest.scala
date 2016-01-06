@@ -31,7 +31,7 @@ import org.joda.time.DateTime
 class FrameServiceTest extends ServiceTest {
 
   implicit val userPrincipal = mock[UserPrincipal]
-  implicit val call: Invocation = Call(userPrincipal, SprayExecutionContext.global)
+  implicit val call: Invocation = Call(userPrincipal, SprayExecutionContext.global, "fakeClientId")
   val commonDirectives = mock[CommonDirectives]
   when(commonDirectives.apply("frames")).thenReturn(provide(call))
   "DataFrameService" should "give an empty set when there are no frames" in {
