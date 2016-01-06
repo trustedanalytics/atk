@@ -23,7 +23,7 @@ import spray.json.JsObject
 case class JobContext(id: Long,
                       userId: Long,
                       yarnAppName: String,
-                      yarnAppId: String,
+                      yarnAppId: Option[String],
                       clientId: String,
                       createdOn: DateTime,
                       modifiedOn: DateTime,

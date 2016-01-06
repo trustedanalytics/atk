@@ -21,6 +21,7 @@ import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, Com
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
+import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.command.CommandExecutor
 import org.trustedanalytics.atk.engine.frame._
@@ -50,7 +51,7 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  val models: ModelStorageImpl,
                  users: UserStorage,
                  val sparkAutoPartitioner: SparkAutoPartitioner,
-                 val jobContextStorage: JobContextStorage) extends Engine
+                 val jobContextStorage: JobContextStorageImpl) extends Engine
     with EventLogging
     with EventLoggingImplicits {
 

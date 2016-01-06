@@ -55,6 +55,8 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
     .maximumSize(RestServerConfig.userPrincipalCacheMaxSize)
     .build[String, UserPrincipal]()
 
+  // TODO: clientId is needed in Call
+
   /**
    * Gets authorization header and authenticates a user
    * @return the authenticated user
@@ -62,7 +64,7 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
   def authenticateKey: Directive1[Invocation] =
     //TODO: proper authorization with spray authenticate directive in a manner similar to S3.
     optionalHeaderValue(getUserPrincipalFromHeader).flatMap {
-      case Some(p) => provide(Call(p, SprayExecutionContext.global))
+      case Some(p) => provide(Call(p, SprayExecutionContext.global, "deleteme"))
       case None => reject(AuthenticationFailedRejection(AuthenticationFailedRejection.CredentialsMissing, List()))
     }
 
@@ -75,7 +77,7 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
     cache.get(apiKey, new Callable[UserPrincipal]() {
       override def call(): UserPrincipal = {
         // cache miss, look it up
-        Await.result(lookupUserPrincipal(apiKey)(Call(null, SprayExecutionContext.global)), RestServerConfig.defaultTimeout)
+        Await.result(lookupUserPrincipal(apiKey)(Call(null, SprayExecutionContext.global, null)), RestServerConfig.defaultTimeout)
       }
     })
   }
