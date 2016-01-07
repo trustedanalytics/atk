@@ -30,6 +30,13 @@ export SEARCH_PATH="-Datk.module-loader.search-path=${BASEDIR}/module-loader:${B
 export HOSTNAME=`hostname`
 export YARN_CONF_DIR="/etc/hadoop/conf"
 
+if [ -d "${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin" ]; then
+ echo "Adding Intel DAAL libraries"
+ export DAAL_LIB_DIR="${BASEDIR}/engine-plugins/daal-plugins/lib/intel64_lin"
+ export DAAL_GCC_VERSION="gcc4.4"
+ export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
+fi
+
 # needed for Python UDFs to work locally
 if [ -z "$SPARK_HOME" ]
 then
@@ -41,7 +48,7 @@ echo "$NAME SPARK_HOME=$SPARK_HOME"
 # NOTE: Add this parameter to Java for connecting to a debugger
 # -agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5005
 
-CMD=`echo java $@ -XX:MaxPermSize=384m $SEARCH_PATH -cp "$CP" org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication`
+CMD=`echo java $@ -XX:MaxPermSize=384m $SEARCH_PATH -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication`
 echo $CMD
 $CMD
 
