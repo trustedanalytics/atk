@@ -683,6 +683,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       commandTable.where(_.id === id).firstOption
     }
 
+    override def lookup(jobContext: JobContext)(implicit session: Session): Seq[Command] = {
+      commandTable.where(_.complete === false).where(_.jobContextId === jobContext.id).sortBy(_.id.asc).list
+    }
+
     override def lookupByName(name: Option[String])(implicit session: Session): Option[Command] = {
       name match {
         case Some(n) => commandTable.where(_.name === n).firstOption

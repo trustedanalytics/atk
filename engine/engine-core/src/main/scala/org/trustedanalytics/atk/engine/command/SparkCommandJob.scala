@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.command
 
 import java.net.InetAddress
 
+import org.trustedanalytics.atk.engine.command.mgmt.{ YarnWebServer, JobManager }
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, Call }
@@ -39,9 +40,11 @@ class SparkCommandJob(jobContextId: Long) extends AbstractEngineComponent {
 
   val jobContext = jobContextStorage.expectJobContext(jobContextId)
 
+  val manager = new JobManager(EngineConfig.yarnWaitTimeout)
+
   var webserver: YarnWebServer = null
   if (EngineConfig.keepYarnJobAlive) {
-    webserver = YarnWebServer.init(engine)
+    webserver = YarnWebServer.init(manager)
     // TODO: need better way to get the local host, this won't always work
     val uri = s"http://${InetAddress.getLocalHost.getHostAddress}:${webserver.getListeningPort}/"
     println(s"webserver URI: $uri")
@@ -53,21 +56,52 @@ class SparkCommandJob(jobContextId: Long) extends AbstractEngineComponent {
    * @param commandId id of command to execute
    */
   def execute(commandId: Long): Unit = {
-    commands.lookup(commandId) match {
-      case None => error(s"Command $commandId not found")
-      case Some(command) =>
-        val user: Option[User] = command.createdById match {
-          case Some(id) => metaStore.withSession("se.command.lookup") {
-            implicit session =>
-              metaStore.userRepo.lookup(id)
+
+    if (EngineConfig.keepYarnJobAlive) {
+      while (manager.isKeepRunning) {
+        if (manager.shouldDoWork()) {
+          val commands = commandStorage.lookup(jobContext)
+          info(s"executing ${commands.size} commands for jobContext $jobContext")
+          for (command <- commands) {
+            val user: Option[User] = command.createdById match {
+              case Some(id) => metaStore.withSession("se.command.lookup") {
+                implicit session =>
+                  metaStore.userRepo.lookup(id)
+              }
+              case _ => None
+            }
+            implicit val invocation: Invocation = new Call(user match {
+              case Some(u) => userStorage.createUserPrincipalFromUser(u)
+              case _ => null
+            }, EngineExecutionContext.global, jobContext.clientId)
+            commandExecutor.executeInForeground(command)(invocation)
           }
-          case _ => None
+          manager.logActivity()
         }
-        implicit val invocation: Invocation = new Call(user match {
-          case Some(u) => userStorage.createUserPrincipalFromUser(u)
-          case _ => null
-        }, EngineExecutionContext.global, jobContext.clientId)
-        commandExecutor.executeInForeground(command)(invocation)
+        else {
+          Thread.sleep(1000L)
+        }
+      }
+    }
+    else {
+
+      commandStorage.lookup(commandId) match {
+        case None => error(s"Command $commandId not found")
+        case Some(command) =>
+          val user: Option[User] = command.createdById match {
+            case Some(id) => metaStore.withSession("se.command.lookup") {
+              implicit session =>
+                metaStore.userRepo.lookup(id)
+            }
+            case _ => None
+          }
+          implicit val invocation: Invocation = new Call(user match {
+            case Some(u) => userStorage.createUserPrincipalFromUser(u)
+            case _ => null
+          }, EngineExecutionContext.global, jobContext.clientId)
+          commandExecutor.executeInForeground(command)(invocation)
+      }
+
     }
   }
 

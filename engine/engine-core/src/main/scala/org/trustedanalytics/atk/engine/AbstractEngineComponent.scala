@@ -65,9 +65,9 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   val userStorage = new UserStorage(metaStore.asInstanceOf[SlickMetaStore])
 
-  val commands = new CommandStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
+  val commandStorage = new CommandStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
 
-  lazy val commandExecutor: CommandExecutor = new CommandExecutor(engine, commands, commandPluginRegistry)
+  lazy val commandExecutor: CommandExecutor = new CommandExecutor(engine, commandStorage, commandPluginRegistry)
 
   val jobContextStorage = new JobContextStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
 
@@ -84,6 +84,6 @@ abstract class AbstractEngineComponent extends DbProfileComponent
   }(startupCall.eventContext)
 
   val engine = new EngineImpl(sparkContextFactory,
-    commandExecutor, commands, frameStorage, graphStorage, modelStorage, userStorage,
+    commandExecutor, commandStorage, frameStorage, graphStorage, modelStorage, userStorage,
     sparkAutoPartitioner, jobContextStorage) {}
 }

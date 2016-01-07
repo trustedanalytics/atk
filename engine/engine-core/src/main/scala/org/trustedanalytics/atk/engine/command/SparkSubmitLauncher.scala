@@ -20,11 +20,10 @@ import java.io.File
 import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
-import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, SparkCommandPlugin }
 import org.trustedanalytics.atk.engine.util.{ JvmMemory, KerberosAuthenticator }
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.domain.command.Command
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
@@ -38,7 +37,7 @@ import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
  */
 class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
 
-  def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
+  def execute(command: Command, plugin: CommandPlugin[_, _], moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
 
       try {

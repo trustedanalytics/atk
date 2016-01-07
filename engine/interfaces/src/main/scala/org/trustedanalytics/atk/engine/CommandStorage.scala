@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.NotFoundException
 import org.trustedanalytics.atk.domain.command.{ CommandTemplate, Command }
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import scala.util.Try
 import spray.json.JsObject
 
@@ -28,6 +29,11 @@ trait CommandStorage {
    * so if you have an id it should be valid
    */
   def lookup(id: Long): Option[Command]
+
+  /**
+   * Lookup commands by jobContext
+   */
+  def lookup(jobContext: JobContext): Seq[Command]
 
   /** Look-up a Command expecting it exists, throw Exception otherwise */
   def expectCommand(id: Long): Command = {
