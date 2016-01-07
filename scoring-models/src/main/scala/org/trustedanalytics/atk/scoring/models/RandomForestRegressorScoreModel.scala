@@ -16,34 +16,42 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.ScoringJsonReaderWriters
+import org.apache.spark.mllib.linalg.Vectors
+import org.apache.spark.mllib.tree.model.RandomForestModel
 import org.trustedanalytics.atk.scoring.interfaces.Model
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
-import spray.json._
-import ScoringJsonReaderWriters._
 
 /**
- * Scoring model for Latent Dirichlet Allocation
+ * Scoring model for MLLib's RandomForest
+ * @param randomForestData RandomForestClassifierData
  */
-class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
+class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorData) extends RandomForestModel(randomForestData.randomForestModel.algo, randomForestData.randomForestModel.trees) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-    val predictReturn = predict(data.map(_.toString)toList)
-    score = score :+ predictReturn.toJson
+
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
+    }
+    score = data :+ predict(Vectors.dense(x))
     score
   }
 
   override def input: Array[Field] = {
-    //TODO
+    val obsCols = randomForestData.observationColumns
     var input = Array[Field]()
+    obsCols.foreach { name =>
+      input = input :+ Field(name)
+    }
     input
   }
 
   override def output: Array[Field] = {
+    val obsCols = randomForestData.observationColumns
     var output = Array[Field]()
+    obsCols.foreach { name =>
+      output = output :+ Field(name)
+    }
     output
   }
-
 }

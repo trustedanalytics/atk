@@ -19,7 +19,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.Model
 import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 
-class NaiveBayesScoringModel(naiveBayesData : NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
+class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()

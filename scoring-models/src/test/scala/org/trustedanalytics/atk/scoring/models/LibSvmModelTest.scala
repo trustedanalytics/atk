@@ -25,8 +25,10 @@ import org.scalatest.WordSpec
 class LibSvmModelTest extends WordSpec {
   val data = new String("nr_class 2\ntotal_sv 2\nrho 0.5\nlabel 1 -1\nnr_sv 1 1\nSV\n1 1:0 2:1 3:1\n-1 4:2 1:0 2:2")
   val inputStream = new ByteArrayInputStream(data.getBytes())
-  var reader = new BufferedReader(new InputStreamReader(inputStream))
-  var libSvmModel = new LibSvmModel(svm.svm_load_model(reader))
+  val reader = new BufferedReader(new InputStreamReader(inputStream))
+  val libModel = svm.svm_load_model(reader)
+  val libSvmModel = new LibSvmModel(libModel, new LibSvmData(libModel, List("a", "b", "c")))
+
   val numRows = 5
 
   "LibSvmModel" should {
@@ -51,4 +53,39 @@ class LibSvmModelTest extends WordSpec {
     }
   }
 }
+
+//class KMeansScoreModelTest extends WordSpec {
+//
+//  "KMeansScoreModel" should {
+//    val kmeansModel = new KMeansModel(Array[Vector](new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
+//    val kmeansData = new KMeansData(kmeansModel, List ("a", "b", "c"), List(23, 45.7, 97.2) )
+//    val kmeansScoreModel = new KMeansScoreModel(kmeansModel, kmeansData)
+//    val numRows = 5 // number of rows of data to test with
+//
+//    "throw an exception when attempting to score null data" in {
+//      ScoringModelTestUtils.nullDataTest(kmeansScoreModel)
+//    }
+//
+//    "throw an exception when scoring data with too few columns" in {
+//      ScoringModelTestUtils.tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+//    }
+//
+//    "throw an exception when scoring data with too many columns" in {
+//      ScoringModelTestUtils.tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+//    }
+//
+//    "throw an exception when scoring data with non-numerical records" in {
+//      ScoringModelTestUtils.invalidDataTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
+//    }
+//
+//    "successfully score a model when float data is provided" in {
+//      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+//    }
+//
+//    "successfully score a model when integer data is provided" in {
+//      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+//    }
+//  }
+//}
+//
 

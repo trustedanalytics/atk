@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class SVMWithSGDScoreModel(svmModel: SVMModel, svmData: SVMData) extends SVMModel(svmModel.weights, svmModel.intercept) with Model {
+class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.weights, svmData.svmModel.intercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()

@@ -49,9 +49,13 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
       Array.empty[String]
     )
 
-    val scores = scoringModel.score(documents)
+    var scores = Array[Any]()
+    documents.foreach { document =>
 
-    scores.size should equal(3)
+      scores = scores :+ scoringModel.score(document.asInstanceOf[Array[Any]])
+    }
+
+    scores.length should equal(3)
 
     val score0 = JsonParser(scores(0).toString).asJsObject.convertTo[LdaModelPredictReturn]
     score0.topicsGivenDoc.toArray should equalWithTolerance(Array(0.5, 0.333333))

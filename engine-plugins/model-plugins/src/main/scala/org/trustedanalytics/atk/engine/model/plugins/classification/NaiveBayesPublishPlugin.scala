@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.scoring.models.{NaiveBayesData, NaiveBayesReaderPlugin}
+import org.trustedanalytics.atk.scoring.models.{ NaiveBayesData, NaiveBayesReaderPlugin }
 
 // Implicits needed for JSON conversion
 import spray.json._

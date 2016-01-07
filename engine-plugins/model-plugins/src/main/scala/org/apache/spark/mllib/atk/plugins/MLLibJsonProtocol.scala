@@ -23,22 +23,17 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
-import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomForestClassifierTrainReturn, RandomForestClassifierPredictArgs, RandomForestClassifierTestArgs, RandomForestClassifierTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
 import org.trustedanalytics.atk.engine.model.plugins.regression._
-import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.clustering._
-import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.scoring.models._
+import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData, LinearRegressionData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData, LinearRegressionTrainReturn }
 import spray.json._
 
 /**

@@ -37,7 +37,7 @@ object ScoringModelTestUtils {
     assert(numColumns > 1)
 
     // generate data
-    var data = Seq[Array[String]]()
+    var data = Array[Any]()
     for (i <- 1 until numRows) {
       data = data :+ getRandomIntegerArray(numColumns - 1)
     }
@@ -54,7 +54,7 @@ object ScoringModelTestUtils {
     assert(numColumns > 0)
 
     // generate data
-    var data = Seq[Array[String]]()
+    var data = Array[Any]()
     for (i <- 1 to numRows) {
       data = data :+ getRandomIntegerArray(numColumns + 1)
     }
@@ -70,7 +70,7 @@ object ScoringModelTestUtils {
   def invalidDataTest(model: Model, numColumns: Int) = {
     assert(numColumns > 0)
 
-    var data = Seq[Array[String]]()
+    var data = Array[Any]()
 
     // generate data by getting integers and then adding on an "a"
     var row1 = getRandomIntegerArray(numColumns)
@@ -89,7 +89,7 @@ object ScoringModelTestUtils {
   // Generates data with float data for the specified number of column/rows and then
   // scores the model.  Verifies that the result returned has the expected length.
   def successfulModelScoringFloatTest(model: Model, numColumns: Int, numRows: Int) = {
-    var data = Seq[Array[String]]()
+    var data = Array[Any]()
 
     for (i <- 1 to numRows) {
       data = data :+ getRandomFloatArray(numColumns)
@@ -103,7 +103,7 @@ object ScoringModelTestUtils {
   // Generates data with integer data for the specified number of column/rows and then
   // scores the model.  Verifies that the result returned has the expected length.
   def successfulModelScoringIntegerTest(model: Model, numColumns: Int, numRows: Int) = {
-    var data = Seq[Array[String]]()
+    var data = Array[Any]()
 
     for (i <- 1 to numRows) {
       data = data :+ getRandomIntegerArray(numColumns)

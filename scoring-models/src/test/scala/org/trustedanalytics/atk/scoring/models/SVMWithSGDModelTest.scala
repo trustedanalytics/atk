@@ -26,7 +26,8 @@ class SVMWithSGDModelTest extends WordSpec {
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
   val svmWithSGDModel = new SVMModel(weights, intercept)
-  var svmScoreModel = new SVMWithSGDScoreModel(svmWithSGDModel)
+  val svmWithSGDData = new SVMData(svmWithSGDModel, List("a", "b", "c"))
+  var svmScoreModel = new SVMWithSGDScoreModel(svmWithSGDData)
   val numRows = 5 // number of rows of data to test with
 
   "SVMWithSGDModel" should {

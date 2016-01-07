@@ -506,6 +506,35 @@ object ScoringJsonReaderWriters {
 
   }
 
+  implicit object SVMDataFormat extends JsonFormat[SVMData] {
+    /**
+     * The write methods converts from SVMData to JsValue
+     * @param obj SVMData. Where SVMData's format is
+     *            SVMData(svmModel: SVMModel, observationColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: SVMData): JsValue = {
+      val model = SVMModelFormat.write(obj.svmModel)
+      JsObject("model" -> model,
+        "observation_columns" -> obj.observationColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to SVMData
+     * @param json JsValue
+     * @return SVMData with format SVMData(svmModel: SVMModel, observationColumns: List[String])
+     */
+    override def read(json: JsValue): SVMData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val model = fields.get("model").map(v => {
+        SVMModelFormat.read(v)
+      }
+      ).get
+      new SVMData(model, obsCols)
+    }
+  }
+
   implicit object PrincipalComponentsModelFormat extends JsonFormat[PrincipalComponentsData] {
     /**
      * The write methods converts from PrincipalComponentsData to JsValue
@@ -859,6 +888,35 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object RandomForestRegressorDataFormat extends JsonFormat[RandomForestRegressorData] {
+    /**
+     * The write methods converts from RandomForestRegressorData to JsValue
+     * @param obj RandomForestRegressorData. Where RandomForestRegressorData format is:
+     *            RandomForestRegressorData(randomForestModel: RandomForestModel, observationColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: RandomForestRegressorData): JsValue = {
+      val model = RandomForestModelFormat.write(obj.randomForestModel)
+      JsObject("model" -> model,
+        "observation_columns" -> obj.observationColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to RandomForestRegressorData
+     * @param json JsValue
+     * @return RandomForestRegressorData with format RandomForestRegressorData(randomForestModel: RandomForestModel, observationColumns: List[String])
+     */
+    override def read(json: JsValue): RandomForestRegressorData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val model = fields.get("model").map(v => {
+        RandomForestModelFormat.read(v)
+      }
+      ).get
+      new RandomForestRegressorData(model, obsCols)
+    }
+  }
+
   implicit object NaiveBayesModelFormat extends JsonFormat[NaiveBayesModel] {
 
     override def write(obj: NaiveBayesModel): JsValue = {
@@ -878,7 +936,7 @@ object ScoringJsonReaderWriters {
     }
 
   }
-  //NaiveBayesData(naiveBayesModel: NaiveBayesModel, observationColumns: List[String])
+
   implicit object NaiveBayesDataFormat extends JsonFormat[NaiveBayesData] {
     /**
      * The write methods converts from NaiveBayesData to JsValue
@@ -886,11 +944,11 @@ object ScoringJsonReaderWriters {
      *            NaiveBayesData(naiveBayesModel: NaiveBayesModel, observationColumns: List[String])
      * @return JsValue
      */
-    override def write(obj: RandomForestClassifierData): JsValue = {
-      val model = RandomForestModelFormat.write(obj.randomForestModel)
+    override def write(obj: NaiveBayesData): JsValue = {
+      val model = NaiveBayesModelFormat.write(obj.naiveBayesModel)
       JsObject("model" -> model,
-        "observation_columns" -> obj.observationColumns.toJson,
-        "num_classes" -> obj.numClasses.toJson)
+        "observation_columns" -> obj.observationColumns.toJson)
+
     }
 
     /**
@@ -898,16 +956,14 @@ object ScoringJsonReaderWriters {
      * @param json JsValue
      * @return NaiveBayesData with format NaiveBayesData(naiveBayesModel: NaiveBayesModel, observationColumns: List[String])
      */
-    override def read(json: JsValue): RandomForestClassifierData = {
+    override def read(json: JsValue): NaiveBayesData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
-      val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
       val model = fields.get("model").map(v => {
-        RandomForestModelFormat.read(v)
+        NaiveBayesModelFormat.read(v)
       }
       ).get
-      new RandomForestClassifierData(model, obsCols, numClasses)
+      new NaiveBayesData(model, obsCols)
     }
   }
 

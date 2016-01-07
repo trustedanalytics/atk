@@ -25,7 +25,8 @@ class LinearRegressionModelTest extends WordSpec {
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
   val linearRegressionModel = new LinearRegressionModel(weights, intercept)
-  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel)
+  val linearRegressiondata = new LinearRegressionData(linearRegressionModel, List("a", "b", "c"))
+  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressiondata)
   val numRows = 5 // number of rows of data to test with
 
   "LinearRegressionModel" should {
