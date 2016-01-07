@@ -58,7 +58,7 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
   /**
    * On complete - mark progress as 100% or failed
    */
-  override def complete(commandId: Long, result: Try[JsObject]): Unit = {
+  override def complete(commandId: Long, result: Try[Unit]): Unit = {
     require(commandId > 0, s"invalid command id $commandId")
     require(result != null, "result must not be null")
     metaStore.withSession("se.command.updateResult") {
@@ -74,7 +74,7 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
             command.copy(complete = true,
               error = Some(CommandError.appendError(command.error, ex)),
               correlationId = corId)
-          case Success(r) =>
+          case Success(unit) =>
             // update progress to 100 since the command is complete. This step is necessary
             // because the actually progress notification events are sent to SparkProgressListener.
             // The exact timing of the events arrival can not be determined.
@@ -86,7 +86,6 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
             }
             command.copy(complete = true,
               progress = progress,
-              result = Some(r),
               error = None,
               correlationId = corId)
         }
@@ -114,8 +113,14 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
   override def updateJobContextId(id: Long, jobContextId: Long): Unit = {
     metaStore.withSession("se.command.updateJobContext") {
       implicit session =>
-        val command = repo.lookup(id)
-        repo.update(command.get.copy(jobContextId = Some(jobContextId)))
+        repo.updateJobContextId(id, jobContextId)
+    }
+  }
+
+  override def updateResult(id: Long, result: JsObject): Unit = {
+    metaStore.withSession("se.command.updateResult") {
+      implicit session =>
+        repo.updateResult(id, result)
     }
   }
 
