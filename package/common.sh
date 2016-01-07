@@ -40,6 +40,9 @@ export DAY=$(date +"%Y%m%d")
 RELEASE=$DAY$BUILD_NUMBER
 SOURCE="$PACKAGE_NAME-$VERSION.tar.gz"
 
+# Intel DAAL version
+DAAL_JAR_VERSION="2016.0.109"
+
 gitLog=$(git log -n 1)
 
 function log()
