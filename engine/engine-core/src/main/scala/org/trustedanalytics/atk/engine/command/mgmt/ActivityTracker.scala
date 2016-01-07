@@ -19,9 +19,9 @@ package org.trustedanalytics.atk.engine.command.mgmt
 /**
  * Keep track of last activity and if timeout should occur
  */
-class ActivityTracker(timeoutInMinutes: Long) {
+class ActivityTracker(timeoutInSeconds: Long) {
 
-  private val timeoutInMillis = timeoutInMinutes * 60 * 1000
+  private val timeoutInMillis = timeoutInSeconds * 1000
   private var lastActivityTime = System.currentTimeMillis()
 
   /** log that activity has happened to avoid timing out */

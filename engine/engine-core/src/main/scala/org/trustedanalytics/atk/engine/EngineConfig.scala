@@ -81,7 +81,7 @@ trait EngineConfig extends EventLogging {
   val keepYarnJobAlive: Boolean = config.getBoolean("trustedanalytics.atk.engine.keep-yarn-job-alive")
 
   /**
-   * After this many minutes Yarn job will be shutdown if there was no further activity
+   * After this many seconds Yarn job will be shutdown if there was no further activity
    */
   val yarnWaitTimeout: Long = config.getLong("trustedanalytics.atk.engine.yarn-wait-timeout")
 

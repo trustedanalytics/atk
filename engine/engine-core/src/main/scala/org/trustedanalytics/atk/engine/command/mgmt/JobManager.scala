@@ -16,9 +16,9 @@
 
 package org.trustedanalytics.atk.engine.command.mgmt
 
-class JobManager(timeoutInMinutes: Long) {
+class JobManager(timeoutInSeconds: Long) {
 
-  private val activityTracker = new ActivityTracker(timeoutInMinutes)
+  private val activityTracker = new ActivityTracker(timeoutInSeconds)
 
   private var shutdownRequested = false
   private var commandReceived = true
