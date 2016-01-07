@@ -97,6 +97,7 @@ This is an overview. Additional details and instructions are in the user documen
   * frame-plugins/ - frame related plugins, e.g. frame.add_columns()
   * graph-plugins/ - graph related plugins that run on Spark and GraphX
   * model-plugins/ - model related plugins, e.g. LinearRegressionModel
+  * daal-plugins/ - experimental plugins related to Intel Data Analytics Acceleration Library (DAAL), e.g., DaalLinearRegressionModel
 * integration-tests/ - developer written, build time integration tests in python, these run against a minimal version of our product
 * misc/ - miscellaneous items that aren't really part of our product
 * module-loader/ - starts application and sets up ClassLoaders appropriately.

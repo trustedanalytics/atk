@@ -67,7 +67,7 @@ class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends 
 
         // the pound symbol '#' is used to rename a file during upload e.g. "/some/path/oldname#newname"
         val confFile = EngineConfig.effectiveApplicationConf
-        val pluginDependencyFiles = Array("--files", s"$confFile$kerbFile$pythonDependencyPath")
+        val pluginDependencyFiles = Array("--files", s"$confFile$kerbFile$pythonDependencyPath,${EngineConfig.daalDynamicLibraries}")
         val executionParams = Array(
           "--driver-java-options", s"-XX:MaxPermSize=${EngineConfig.sparkDriverMaxPermSize} $kerbOptions -Dconfig.resource=${EngineConfig.effectiveApplicationConfFileName}")
 
