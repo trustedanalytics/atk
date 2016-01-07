@@ -28,6 +28,8 @@ import scala.collection.JavaConverters._
 import scala.collection.JavaConversions._
 import org.apache.commons.lang3.StringUtils
 
+import scala.util.Try
+
 /**
  * Configuration Settings for the SparkEngine,
  *
@@ -138,6 +140,11 @@ trait EngineConfig extends EventLogging {
    * and debugging when someone suspects Kryo might be causing some kind of issue).
    */
   val disableKryo: Boolean = config.getBoolean("trustedanalytics.atk.engine.spark.disable-kryo")
+
+  /**
+   * Path to DAAL dynamic libraries
+   */
+  val daalDynamicLibraries: String = Try(config.getString("trustedanalytics.atk.engine.spark.daal.dynamic-libraries")).getOrElse("")
 
   /**
    * Sorted list of mappings for file size to partition size (larger file sizes first)
