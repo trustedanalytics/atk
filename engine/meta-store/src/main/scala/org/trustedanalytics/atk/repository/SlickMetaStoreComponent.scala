@@ -1247,18 +1247,19 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     override def updateJobServerUri(id: Long, uri: String)(implicit session: Session): Unit = {
-      val column = for (c <- jobContextTable if c.id === id) yield c.jobServerUri
-      column.update(Some(uri))
+      val columns = for (c <- jobContextTable if c.id === id) yield (c.jobServerUri, c.modifiedOn)
+      columns.update(Some(uri), new DateTime)
     }
 
     override def updateProgress(id: Long, progress: String)(implicit session: Session): Unit = {
-      val column = for (c <- jobContextTable if c.id === id) yield c.progress
-      column.update(Some(progress))
+      val columns = for (c <- jobContextTable if c.id === id) yield (c.progress, c.modifiedOn)
+      columns.update(Some(progress), new DateTime)
+
     }
 
     override def updateYarnAppName(id: Long, yarnAppName: String)(implicit session: Session): Unit = {
-      val column = for (c <- jobContextTable if c.id === id) yield c.yarnAppName
-      column.update(Some(yarnAppName))
+      val columns = for (c <- jobContextTable if c.id === id) yield (c.yarnAppName, c.modifiedOn)
+      columns.update(Some(yarnAppName), new DateTime)
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {
