@@ -105,7 +105,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
 
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
-      case commandPlugin: CommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
+      case sparkCommandPlugin: SparkCommandPlugin[A, R] if !isRunningInYarn && EngineConfig.isSparkOnYarn =>
 
         val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, commandContext.command.getJobName, invocation.clientId)
         engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
@@ -113,7 +113,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         if (!notifyJob(jobContext)) {
           commands.complete(commandContext.command.id, Try {
             val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-            new SparkSubmitLauncher(engine).execute(commandContext.command, commandPlugin, moduleName, jobContext)
+            new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName, jobContext)
 
             // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
             val updatedCommand = commands.expectCommand(commandContext.command.id)
@@ -128,16 +128,29 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
           })
         }
       case _ =>
-        commands.complete(commandContext.command.id, Try {
-          // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
-          val commandInvocation = new SimpleInvocation(engine, commands, commandContext, invocation.clientId)
-          val arguments = plugin.parseArguments(commandContext.command.arguments.get)
-          info(s"Invoking command ${commandContext.command.name}")
-          val returnValue = plugin(commandInvocation, arguments)
-          val jsonResult = plugin.serializeReturn(returnValue)
-          engine.commandStorage.updateResult(commandContext.command.id, jsonResult)
-        })
+        // CommandPlugins get executed by the REST server while SparkCommandPlugins run in Yarn
+        if ((isRunningInYarn && plugin.isInstanceOf[SparkCommandPlugin[A, R]]) || !isRunningInYarn) {
+          commands.complete(commandContext.command.id, Try {
+            // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
+            val commandInvocation = new SimpleInvocation(engine, commands, commandContext, invocation.clientId)
+            val arguments = plugin.parseArguments(commandContext.command.arguments.get)
+            info(s"Invoking command ${commandContext.command.name}")
+            val returnValue = plugin(commandInvocation, arguments)
+            val jsonResult = plugin.serializeReturn(returnValue)
+            engine.commandStorage.updateResult(commandContext.command.id, jsonResult)
+          })
+        }
+        else {
+          info(s"not running command ${plugin.name} isYarn:$isRunningInYarn")
+        }
     }
+  }
+
+  /**
+   * True if this class is currently running in a Yarn job
+   */
+  private def isRunningInYarn: Boolean = {
+    sys.props.contains("SPARK_SUBMIT")
   }
 
   /**

@@ -75,31 +75,30 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
       implicit session =>
         val command = repo.lookup(commandId).getOrElse(throw new IllegalArgumentException(s"Command $commandId not found"))
         val corId = EventContext.getCurrent.getCorrelationId
-        if (command.complete) {
-          warn(s"Completion attempt for command $commandId, already completed")
+        if (!command.complete) {
+          val changed = result match {
+            case Failure(ex) =>
+              error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
+              command.copy(complete = true,
+                error = Some(CommandError.appendError(command.error, ex)),
+                correlationId = corId)
+            case Success(unit) =>
+              // update progress to 100 since the command is complete. This step is necessary
+              // because the actually progress notification events are sent to SparkProgressListener.
+              // The exact timing of the events arrival can not be determined.
+              val progress = if (command.progress.nonEmpty) {
+                command.progress.map(info => info.copy(progress = 100f))
+              }
+              else {
+                List(ProgressInfo(100f, None))
+              }
+              command.copy(complete = true,
+                progress = progress,
+                error = None,
+                correlationId = corId)
+          }
+          repo.update(changed)
         }
-        val changed = result match {
-          case Failure(ex) =>
-            error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
-            command.copy(complete = true,
-              error = Some(CommandError.appendError(command.error, ex)),
-              correlationId = corId)
-          case Success(unit) =>
-            // update progress to 100 since the command is complete. This step is necessary
-            // because the actually progress notification events are sent to SparkProgressListener.
-            // The exact timing of the events arrival can not be determined.
-            val progress = if (command.progress.nonEmpty) {
-              command.progress.map(info => info.copy(progress = 100f))
-            }
-            else {
-              List(ProgressInfo(100f, None))
-            }
-            command.copy(complete = true,
-              progress = progress,
-              error = None,
-              correlationId = corId)
-        }
-        repo.update(changed)
     }
   }
 
