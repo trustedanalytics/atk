@@ -211,7 +211,13 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         SparkCommandPlugin.stop(commandId)
       }
       else {
-        YarnUtils.killYarnJob(command.getJobName)
+        command.jobContextId match {
+          case Some(id) => engine.jobContextStorage.lookup(id) match {
+            case Some(jobContext) => YarnUtils.killYarnJob(jobContext.yarnAppName)
+            case None => info("Cancel couldn't find jobContext for this command " + command)
+          }
+          case None => info("Cancel couldn't find jobContextId for this command " + command)
+        }
       }
     }
     else {
