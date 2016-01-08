@@ -1207,7 +1207,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
       def userId = column[Long]("user_id")
 
-      def yarnAppName = column[String]("yarn_app_name")
+      def yarnAppName = column[Option[String]]("yarn_app_name")
 
       def yarnAppId = column[Option[String]]("yarn_app_id")
 
@@ -1234,7 +1234,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     override def insert(jobContext: JobContextTemplate)(implicit session: Session): Try[JobContext] = Try {
-      val m = JobContext(1, jobContext.userId, jobContext.yarnAppName, None, jobContext.clientId, new DateTime(), new DateTime(), None, None)
+      val m = JobContext(1, jobContext.userId, None, None, jobContext.clientId, new DateTime(), new DateTime(), None, None)
       jobContextAutoInc.insert(m)
     }
 
@@ -1258,7 +1258,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def updateYarnAppName(id: Long, yarnAppName: String)(implicit session: Session): Unit = {
       val column = for (c <- jobContextTable if c.id === id) yield c.yarnAppName
-      column.update(yarnAppName)
+      column.update(Some(yarnAppName))
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {

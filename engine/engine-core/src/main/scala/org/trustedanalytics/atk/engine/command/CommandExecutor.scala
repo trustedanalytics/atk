@@ -107,13 +107,14 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
     plugin match {
       case sparkCommandPlugin: SparkCommandPlugin[A, R] if !isRunningInYarn && EngineConfig.isSparkOnYarn =>
 
-        val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, commandContext.command.getJobName, invocation.clientId)
+        val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, invocation.clientId)
         engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
 
         if (!notifyJob(jobContext)) {
           commands.complete(commandContext.command.id, Try {
             val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-            new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName, jobContext)
+            val refreshedJobContext = engine.jobContextStorage.assignYarnAppName(jobContext)
+            new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName, refreshedJobContext)
 
             // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
             val updatedCommand = commands.expectCommand(commandContext.command.id)
@@ -214,7 +215,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         command.jobContextId match {
           case Some(id) => engine.jobContextStorage.lookup(id) match {
             case Some(jobContext) => commands.complete(command.id, Try {
-              YarnUtils.killYarnJob(jobContext.yarnAppName)
+              YarnUtils.killYarnJob(jobContext.getYarnAppName)
               throw new RuntimeException("Command was cancelled")
             })
             case None => info("Cancel couldn't find jobContext for this command " + command)

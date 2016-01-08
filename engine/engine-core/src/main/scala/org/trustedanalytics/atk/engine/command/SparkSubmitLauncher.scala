@@ -56,7 +56,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         }
 
         val sparkMaster = Array(s"--master", s"${EngineConfig.sparkMaster}")
-        val jobName = Array(s"--name", s"${command.getJobName}")
+        val jobName = Array(s"--name", s"${jobContext.getYarnAppName}")
         val pluginExecutionDriverClass = Array("--class", "org.trustedanalytics.atk.engine.command.SparkCommandJob")
 
         val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName))

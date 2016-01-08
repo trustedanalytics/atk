@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.engine.jobcontext
 
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
 import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
 import org.trustedanalytics.atk.event.EventLogging
@@ -33,16 +35,13 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
       repo.lookup(id)
   }
 
-  def lookupOrCreate(user: User, yarnAppName: String, clientId: String): JobContext = {
+  def lookupOrCreate(user: User, clientId: String): JobContext = {
     lookupByClientId(user, clientId) match {
       case Some(jobContext) =>
-        metaStore.withSession("se.jobcontext.yarnAppName") {
-          implicit session =>
-            repo.updateYarnAppName(jobContext.id, yarnAppName)
-        }
+
         // refresh it
         expectJobContext(jobContext.id)
-      case None => create(new JobContextTemplate(user.id, yarnAppName, clientId))
+      case None => create(new JobContextTemplate(user.id, clientId))
     }
   }
 
@@ -77,6 +76,18 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
   def updateJobServerUri(id: Long, jobServerUri: String): Unit = metaStore.withSession("se.jobcontext.updateJobServer") {
     implicit session =>
       repo.updateJobServerUri(id, jobServerUri)
+  }
+
+  def assignYarnAppName(jobContext: JobContext): JobContext = {
+    val yarnAppName = s"client${jobContext.id}-${jobContext.clientId}-" +
+      DateTimeFormat.forPattern("yyyymmdd_kk:mm").print(new DateTime)
+    updateYarnAppName(jobContext.id, yarnAppName)
+    expectJobContext(jobContext.id)
+  }
+
+  def updateYarnAppName(id: Long, yarnAppName: String): Unit = metaStore.withSession("se.jobcontext.yarnAppName") {
+    implicit session =>
+      repo.updateYarnAppName(id, yarnAppName)
   }
 
 }

@@ -16,4 +16,4 @@
 package org.trustedanalytics.atk.domain.jobcontext
 
 /* Template for creating a new JobContext */
-case class JobContextTemplate(userId: Long, yarnAppName: String, clientId: String)
+case class JobContextTemplate(userId: Long, clientId: String)
