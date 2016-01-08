@@ -50,7 +50,8 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  val models: ModelStorageImpl,
                  users: UserStorage,
                  val sparkAutoPartitioner: SparkAutoPartitioner,
-                 val jobContextStorage: JobContextStorage) extends Engine
+                 val jobContextStorage: JobContextStorage,
+                 val fileStorage: FileStorage) extends Engine
     with EventLogging
     with EventLoggingImplicits {
 
