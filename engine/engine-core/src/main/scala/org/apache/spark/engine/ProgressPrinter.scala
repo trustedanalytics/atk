@@ -51,7 +51,7 @@ class ProgressPrinter(implicit invocation: Invocation) extends SparkListener
   }
 
   private def buildStageInfoMessage(stageInfo: StageInfo): String = {
-      " stageId:" + stageInfo.stageId +
+    " stageId:" + stageInfo.stageId +
       " stageInfoName:" + stageInfo.name +
       " numTasks:" + stageInfo.numTasks +
       //      " emittedTaskSizeWarning:" + stageInfo.emittedTaskSizeWarning +
