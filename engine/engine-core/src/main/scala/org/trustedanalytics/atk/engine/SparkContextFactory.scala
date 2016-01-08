@@ -34,7 +34,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
    * Creates a new sparkContext
    */
   def context(description: String, kryoRegistrator: Option[String] = None)(implicit invocation: Invocation): SparkContext = withContext("engine.SparkContextFactory") {
-    if (EngineConfig.reuseSparkContext) {
+    if (EngineConfig.reuseSparkContext || EngineConfig.keepYarnJobAlive) {
       SparkContextFactory.sharedSparkContext()
     }
     else {
