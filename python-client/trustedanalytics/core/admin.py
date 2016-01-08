@@ -37,3 +37,9 @@ def finalize_dropped():
     Execute garbage collection out of cycle to finalize all dropped entities (i.e. erase their data)
     """
     execute_command("_admin:/_finalize_dropped", None, bogus=0)
+
+def release():
+    """
+    Release the current job context (shuts down Yarn application)
+    """
+    execute_command("_admin:/_release", None, bogus=0)
