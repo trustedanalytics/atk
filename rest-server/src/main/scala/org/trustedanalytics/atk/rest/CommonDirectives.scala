@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.rest
 
+import java.util.UUID
+
 import org.trustedanalytics.atk.event.EventContext
 import org.trustedanalytics.atk.NotFoundException
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -32,6 +34,8 @@ import scala.util.control.NonFatal
  * @param authenticationDirective implementation for authentication
  */
 class CommonDirectives(val authenticationDirective: AuthenticationDirective) extends Directives with EventLoggingDirectives {
+
+  val clientIdHeaderName = "Client-ID"
 
   def logReqResp(contextName: String)(req: HttpRequest) = {
     //In case we're re-using a thread that already had an event context
@@ -52,17 +56,20 @@ class CommonDirectives(val authenticationDirective: AuthenticationDirective) ext
    */
   def apply(eventCtx: String): Directive1[Invocation] = {
     //eventContext(eventCtx) &
-    logRequestResponse(LoggingMagnet(logReqResp(eventCtx))) &
-      //      logRequest(LoggingMagnet((req: HttpRequest) => {
-      //        EventContext.enter(eventCtx)
-      //        info(req.method.toString() + " " + req.uri.toString())
-      //      })) &
-      //      logResponse(LoggingMagnet((res: Any) => {
-      //        info("RESPONSE: " + res.toString())
-      //      })) &
-      addCommonResponseHeaders &
-      handleExceptions(errorHandler) &
-      authenticationDirective.authenticateKey
+    optionalHeaderValueByName(clientIdHeaderName).flatMap { clientIdHeader =>
+      val clientId = clientIdHeader.getOrElse(UUID.randomUUID().toString)
+      logRequestResponse(LoggingMagnet(logReqResp(eventCtx))) &
+        //      logRequest(LoggingMagnet((req: HttpRequest) => {
+        //        EventContext.enter(eventCtx)
+        //        info(req.method.toString() + " " + req.uri.toString())
+        //      })) &
+        //      logResponse(LoggingMagnet((res: Any) => {
+        //        info("RESPONSE: " + res.toString())
+        //      })) &
+        addCommonResponseHeaders(clientId) &
+        handleExceptions(errorHandler) &
+        authenticationDirective.authenticateKey(clientId)
+    }
   }
 
   def errorHandler = {
@@ -85,14 +92,17 @@ class CommonDirectives(val authenticationDirective: AuthenticationDirective) ext
    * Adds header fields common to all responses
    * @return directive to wrap route with headers
    */
-  def addCommonResponseHeaders(): Directive0 =
+  def addCommonResponseHeaders(clientId: String)(): Directive0 =
     mapInnerRoute {
       route =>
-        respondWithVersion {
+        respondWithVersionAndClientId(clientId) {
           route
         }
     }
 
   def respondWithVersion = respondWithHeader(RawHeader("version", RestServerConfig.version))
+
+  def respondWithVersionAndClientId(clientId: String) = respondWithHeaders(RawHeader("version", RestServerConfig.version),
+    RawHeader(clientIdHeaderName, clientId))
 
 }
