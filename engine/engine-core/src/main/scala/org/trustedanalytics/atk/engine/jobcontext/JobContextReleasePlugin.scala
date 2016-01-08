@@ -38,8 +38,11 @@ class JobContextReleasePlugin extends CommandPlugin[NoArgs, UnitReturn] {
     val jobContextStorage = engine.asInstanceOf[EngineImpl].jobContextStorage
     jobContextStorage.lookupByClientId(context.user.user, context.clientId) match {
       case Some(jobContext) =>
-        val uri = jobContext.jobServerUri.get
-        new YarnWebClient(new URL(uri)).shutdownServer()
+        jobContext.jobServerUri match {
+          case Some(uri) => new YarnWebClient(new URL(uri)).shutdownServer()
+          case None => info(s"no job server uri so release() has nothing to do")
+        }
+
       case None => info(s"nothing to do, clientId ${context.clientId} for user ${context.user.user} not found ")
     }
   }

@@ -93,9 +93,7 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
     val context: SparkContext = sparkContextFactory.context(s"(id:${cmd.id},name:${cmd.name})", kryoRegistrator)
     if (!EngineConfig.reuseSparkContext) {
       try {
-        val listener = new SparkProgressListener(SparkProgressListener.progressUpdater, cmd, numberOfJobs(arguments)) // Pass number of Jobs here
-        val progressPrinter = new ProgressPrinter(listener)
-        context.addSparkListener(listener)
+        val progressPrinter = new ProgressPrinter
         context.addSparkListener(progressPrinter)
         context.addSparkListener(new JobContextProgressListener(engine.jobContextStorage, invocation))
       }
