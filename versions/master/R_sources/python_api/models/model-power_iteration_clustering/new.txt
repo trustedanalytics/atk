@@ -34,7 +34,7 @@
     .. rubric:: footnotes
 
     .. [1] http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf
-    .. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#power-iteration-clustering-pic
+    .. [2] https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic
 
     Examples
     --------

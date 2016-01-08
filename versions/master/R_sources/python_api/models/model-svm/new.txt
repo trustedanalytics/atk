@@ -44,7 +44,7 @@
     .. rubric:: footnotes
 
     .. [1] https://en.wikipedia.org/wiki/Support_vector_machine
-    .. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html
+    .. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-support-vector-machines-svms
     .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
 
     Examples

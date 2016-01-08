@@ -42,7 +42,7 @@
     .. rubric:: footnotes
 
     .. [1] https://en.wikipedia.org/wiki/K-means_clustering
-    .. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#k-means
+    .. [2] https://spark.apache.org/docs/1.5.0/mllib-clustering.html#k-means
 
     Examples
     --------
