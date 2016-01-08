@@ -59,6 +59,8 @@ import scala.collection.mutable.ArrayBuffer
  */
 object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
+  implicit val NoArgsFormat = jsonFormat1(NoArgs)
+
   implicit object DataTypeFormat extends JsonFormat[DataTypes.DataType] {
     override def read(json: JsValue): DataType = {
       val raw = json.asInstanceOf[JsString].value
