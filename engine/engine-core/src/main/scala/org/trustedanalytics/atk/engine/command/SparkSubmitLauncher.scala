@@ -36,7 +36,9 @@ import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-class SparkSubmitLauncher(hdfsFileStorage: FileStorage, engine: Engine) extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
+class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
+
+  lazy val hdfsFileStorage: FileStorage = engine.asInstanceOf[EngineImpl].fileStorage
 
   def execute(command: Command, plugin: SparkCommandPlugin[_, _], moduleName: String)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
