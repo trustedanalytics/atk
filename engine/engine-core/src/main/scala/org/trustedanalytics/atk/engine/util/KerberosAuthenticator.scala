@@ -36,8 +36,8 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
    */
   def loginWithKeyTab(): Unit = {
     if (EngineConfig.enableKerberos) {
-      println("What's in my path?")
-      Directory.Current.get.deepFiles.foreach(println)
+      debug("Listing Files under Current Directory")
+      Directory.Current.get.deepFiles.foreach(f => debug(f.name))
       //if kerberos is enabled the following configs will have been set.
       val keyTabPrincipal: String = EngineConfig.kerberosPrincipalName.get
       val keyTabFile: String = EngineConfig.kerberosKeyTabPath.get

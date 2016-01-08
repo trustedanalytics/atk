@@ -27,6 +27,9 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://"${HOSTNAME}"/user/atkuser"
 
+    # uncomment the next line in order to enable Intel Data Analytics Acceleration Library (Intel DAAL)
+    //spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
+
     spark {
       # Yarn Cluster mode
       #master = "yarn-cluster"

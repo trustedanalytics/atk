@@ -41,7 +41,7 @@ value of the random forest.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Random_forest
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-ensembles.html""",
+.. [2] https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests""",
   returns = """A new instance of RandomForestRegressor Model""")
 class RandomForestRegressorNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**

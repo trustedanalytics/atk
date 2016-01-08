@@ -1,9 +1,9 @@
 {
-    "DEFAULT_VERSION": "v0.4.0",
+    "DEFAULT_VERSION": "v0.6.0",
     "VERSIONS": {
-        "v0.4.0": {
+        "v0.6.0": {
             "type": "Production",
-            "version": "v0.4.0"
+            "version": "v0.6.0"
         },
         "ww37.5": {
             "type": "Weekly",
