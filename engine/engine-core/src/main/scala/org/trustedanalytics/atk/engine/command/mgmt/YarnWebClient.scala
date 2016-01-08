@@ -18,6 +18,10 @@ package org.trustedanalytics.atk.engine.command.mgmt
 
 import java.net.{ HttpURLConnection, URL }
 
+/**
+ * Client for YarnWebServer
+ * @param baseUrl the base url for the YarnWebServer
+ */
 class YarnWebClient(baseUrl: URL) {
 
   def notifyServer(): Unit = {
