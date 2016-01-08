@@ -26,10 +26,11 @@ class LibSvmModelTest extends WordSpec {
   val data = new String("nr_class 2\ntotal_sv 2\nrho 0.5\nlabel 1 -1\nnr_sv 1 1\nSV\n1 1:0 2:1 3:1\n-1 4:2 1:0 2:2")
   val inputStream = new ByteArrayInputStream(data.getBytes())
   val reader = new BufferedReader(new InputStreamReader(inputStream))
+  val obsCols = List("a", "b", "c")
   val libModel = svm.svm_load_model(reader)
-  val libSvmModel = new LibSvmModel(libModel, new LibSvmData(libModel, List("a", "b", "c")))
+  val libSvmModel = new LibSvmModel(libModel, new LibSvmData(libModel, obsCols))
 
-  val numRows = 1
+  val numObsCols = obsCols.length
 
   "LibSvmModel" should {
     "throw an exception when attempting to score null data" in {
@@ -50,6 +51,14 @@ class LibSvmModelTest extends WordSpec {
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3)
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1)
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20)
+    }
+
+    "successfully return the observation columns used for training the model" in {
+      ScoringModelTestUtils.successfulInputTest(libSvmModel, numObsCols)
+    }
+
+    "successfully return the observation columns used for training the model along with score" in {
+      ScoringModelTestUtils.successfulOutputTest(libSvmModel, numObsCols)
     }
   }
 }

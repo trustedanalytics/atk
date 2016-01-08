@@ -38,7 +38,7 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, l
     var i = 0
     obsCols.foreach { obsColName =>
       {
-        input(i) = new Field(obsColName)
+        input(i) = new Field(obsColName, "Double")
         i = i + 1
       }
     }
@@ -47,7 +47,6 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, l
 
   override def output(): Array[Field] = {
     var output = input()
-    //Double
-    output :+ Field("score")
+    output :+ Field("Prediction", "Double")
   }
 }

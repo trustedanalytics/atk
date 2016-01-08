@@ -41,14 +41,13 @@ class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorDat
     val obsCols = randomForestData.observationColumns
     var input = Array[Field]()
     obsCols.foreach { name =>
-      input = input :+ Field(name)
+      input = input :+ Field(name, "Double")
     }
     input
   }
 
   override def output(): Array[Field] = {
     var output = input()
-    //Double
-    output :+ Field("score")
+    output :+ Field("Prediction", "Double")
   }
 }

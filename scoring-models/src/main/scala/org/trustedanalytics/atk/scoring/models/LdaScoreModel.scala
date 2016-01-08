@@ -31,7 +31,7 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
     val predictReturn = predict(data.map(_.toString)toList)
-    score = score :+ predictReturn.toJson
+    score = data :+ predictReturn.toJson
     score
   }
 
@@ -43,7 +43,9 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
 
   override def output(): Array[Field] = {
     var output = input()
-    output
+    output = output :+ Field("topicsGivenDoc", "Vector[Double]")
+    output = output :+ Field("newWordsCount", "Int")
+    output:+ Field("percentOfNewWords", "Double")
   }
 
 }

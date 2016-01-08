@@ -56,21 +56,24 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
     }
 
     scores.length should equal(3)
+    val score0 = scores(0).asInstanceOf[Array[Any]]
+    val score1 = scores(1).asInstanceOf[Array[Any]]
+    val score2 = scores(2).asInstanceOf[Array[Any]]
 
-    val score0 = JsonParser(scores(0).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score0.topicsGivenDoc.toArray should equalWithTolerance(Array(0.5, 0.333333))
-    score0.newWordsCount should equal(1)
-    score0.newWordsPercentage should equal(100 / 6d +- epsilon)
+    val score06 = JsonParser(score0(6).toString).asJsObject.convertTo[LdaModelPredictReturn]
+    score06.topicsGivenDoc.toArray should equalWithTolerance(Array(0.5, 0.333333))
+    score06.newWordsCount should equal(1)
+    score06.newWordsPercentage should equal(100 / 6d +- epsilon)
 
-    val score1 = JsonParser(scores(1).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score1.topicsGivenDoc.toArray should equalWithTolerance(Array(0.4375, 0.5625))
-    score1.newWordsCount should equal(0)
-    score1.newWordsPercentage should equal(0d +- epsilon)
+    val score14 = JsonParser(score1(4).toString).asJsObject.convertTo[LdaModelPredictReturn]
+    score14.topicsGivenDoc.toArray should equalWithTolerance(Array(0.4375, 0.5625))
+    score14.newWordsCount should equal(0)
+    score14.newWordsPercentage should equal(0d +- epsilon)
 
-    val score2 = JsonParser(scores(2).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score2.topicsGivenDoc.toArray should equalWithTolerance(Array(0d, 0d))
-    score2.newWordsCount should equal(0)
-    score2.newWordsPercentage should equal(0d +- epsilon)
+    val score20 = JsonParser(score2(0).toString).asJsObject.convertTo[LdaModelPredictReturn]
+    score20.topicsGivenDoc.toArray should equalWithTolerance(Array(0d, 0d))
+    score20.newWordsCount should equal(0)
+    score20.newWordsPercentage should equal(0d +- epsilon)
   }
 
 }

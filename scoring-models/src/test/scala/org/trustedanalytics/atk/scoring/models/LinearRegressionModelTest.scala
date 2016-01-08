@@ -24,10 +24,11 @@ import org.scalatest.WordSpec
 class LinearRegressionModelTest extends WordSpec {
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
+  val obsCols = List("a", "b", "c")
   val linearRegressionModel = new LinearRegressionModel(weights, intercept)
-  val linearRegressiondata = new LinearRegressionData(linearRegressionModel, List("a", "b", "c"))
+  val linearRegressiondata = new LinearRegressionData(linearRegressionModel, obsCols)
   var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressiondata)
-  val numRows = 5 // number of rows of data to test with
+  val numObsCols = obsCols.length
 
   "LinearRegressionModel" should {
     "throw an exception when attempting to score null data" in {
@@ -52,6 +53,14 @@ class LinearRegressionModelTest extends WordSpec {
 
     "successfully score a model when integer data is provided" in {
       ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size)
+    }
+
+    "successfully return the observation columns used for training the model" in {
+      ScoringModelTestUtils.successfulInputTest(linearRegressionScoreModel, numObsCols)
+    }
+
+    "successfully return the observation columns used for training the model along with score" in {
+      ScoringModelTestUtils.successfulOutputTest(linearRegressionScoreModel, numObsCols)
     }
 
   }

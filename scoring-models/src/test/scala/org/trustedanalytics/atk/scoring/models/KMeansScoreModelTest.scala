@@ -25,9 +25,10 @@ class KMeansScoreModelTest extends WordSpec {
 
   "KMeansScoreModel" should {
     val kmeansModel = new KMeansModel(Array[Vector](new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
-    val kmeansData = new KMeansData(kmeansModel, List("a", "b", "c"), List(23, 45.7, 97.2))
+    val obsCols = List("a", "b", "c")
+    val kmeansData = new KMeansData(kmeansModel, obsCols, List(23, 45.7, 97.2))
     val kmeansScoreModel = new KMeansScoreModel(kmeansModel, kmeansData)
-    val numRows = 5 // number of rows of data to test with
+    val numObsCols = obsCols.length
 
     "throw an exception when attempting to score null data" in {
       ScoringModelTestUtils.nullDataTest(kmeansScoreModel)
@@ -51,6 +52,14 @@ class KMeansScoreModelTest extends WordSpec {
 
     "successfully score a model when integer data is provided" in {
       ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
+    }
+
+    "successfully return the observation columns used for training the model" in {
+      ScoringModelTestUtils.successfulInputTest(kmeansScoreModel, numObsCols)
+    }
+
+    "successfully return the observation columns used for training the model along with score" in {
+      ScoringModelTestUtils.successfulOutputTest(kmeansScoreModel, numObsCols)
     }
   }
 }

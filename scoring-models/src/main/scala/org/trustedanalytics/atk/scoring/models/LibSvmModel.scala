@@ -66,7 +66,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     var input = Array[Field]()
     val obsCols = libsvm.observationColumns
     obsCols.foreach { name =>
-      input = input :+ Field(name)
+      input = input :+ Field(name, "Double")
     }
     input
   }
@@ -74,6 +74,6 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
   override def output(): Array[Field] = {
     var output = input()
     //Double
-    output :+ Field("score")
+    output :+ Field("Prediction", "Double")
   }
 }
