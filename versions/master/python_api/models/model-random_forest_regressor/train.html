@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>RandomForestRegressorModel train &mdash; Trusted Analytics Platform 0.4.0 documentation</title>
+    <title>RandomForestRegressorModel train &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.4.0',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="../../../R_static/doctools.js"></script>
     <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" >
-    <link rel="top" title="Trusted Analytics Platform 0.4.0 documentation" href="../../../index.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models RandomForestRegressorModel" href="index.html" >
     <link rel="next" title="Models PowerIterationClusteringModel" href="../model-power_iteration_clustering/index.html" >
     <link rel="prev" title="RandomForestRegressorModel status" href="status.html" > 
@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=1300234042</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=-2094433359</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build Random Forests Regressor model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -150,7 +150,7 @@ Build Random Forests Regressor model.</p>
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=1300234042)</p>
+<p><strong>seed</strong> : int32 (default=-2094433359)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -214,7 +214,7 @@ If &#8220;auto&#8221; is set, this is based on numTrees: if numTrees == 1, set t
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 07, 2016.
+      Last updated on Jan 08, 2016.
       </li>
     </ul>
     </div>
