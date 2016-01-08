@@ -62,10 +62,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         val hdfsJars = hdfsFileStorage.hdfsLibs(Module.allJarNames(moduleName))
         val pluginDependencyJars = Array("--jars", hdfsJars.mkString(","))
 
-        val pythonDependencyPath = plugin.executesPythonUdf match {
-          case true => "," + PythonRddStorage.pythonDepZip
-          case false => ""
-        }
+        val pythonDependencyPath = "," + PythonRddStorage.pythonDepZip
 
         // the pound symbol '#' is used to rename a file during upload e.g. "/some/path/oldname#newname"
         val confFile = EngineConfig.effectiveApplicationConf
