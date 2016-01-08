@@ -48,7 +48,7 @@ class RestServerApplication extends Component with EventLogging with ClassLoader
    * Main entry point to start the API Service Application
    */
   override def start(): Unit = {
-    implicit val call = Call(null, SprayExecutionContext.global)
+    implicit val call = Call(null, SprayExecutionContext.global, null)
     engine = initializeEngine()
 
     withMyClassLoader {

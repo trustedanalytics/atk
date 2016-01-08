@@ -16,8 +16,12 @@
 
 package org.trustedanalytics.atk.engine.command
 
+import java.net.URL
+
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
+import org.trustedanalytics.atk.engine.command.mgmt.YarnWebClient
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, CommandPlugin }
 import org.trustedanalytics.atk.engine.util.JvmMemory
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
@@ -83,10 +87,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
     withContext(s"ce.executeInForeground.${cmd.name}") {
       validatePluginExists(cmd)
       val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
-
-      commands.complete(context.command.id, Try {
-        executeCommandContext(context)
-      })
+      executeCommandContext(context)
     }
   }
 
@@ -96,7 +97,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @tparam A plugin arguments
    * @return plugin return value as JSON
    */
-  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): JsObject = withContext("cmdExcector") {
+  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): Unit = withContext("cmdExcector") {
 
     info(s"command id:${commandContext.command.id}, name:${commandContext.command.name}, args:${commandContext.command.compactArgs}, ${JvmMemory.memory}")
     info(s"System Properties are:")
@@ -104,29 +105,62 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
 
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
-      case sparkCommandPlugin: SparkCommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
-        val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-        new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName)
-        // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
-        val updatedCommand = commands.expectCommand(commandContext.command.id)
-        if (updatedCommand.error.isDefined) {
-          error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
-          throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
-        }
-        if (updatedCommand.result.isDefined) {
-          updatedCommand.result.get
-        }
-        else {
-          error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
-          throw new Exception(s"Error submitting command to yarn-cluster.")
+      case commandPlugin: CommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
+
+        val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, commandContext.command.getJobName, invocation.clientId)
+        engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
+
+        if (!notifyJob(jobContext)) {
+          commands.complete(commandContext.command.id, Try {
+            val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
+            new SparkSubmitLauncher(engine).execute(commandContext.command, commandPlugin, moduleName, jobContext)
+
+            // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
+            val updatedCommand = commands.expectCommand(commandContext.command.id)
+            if (updatedCommand.error.isDefined) {
+              error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
+              throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
+            }
+            if (updatedCommand.result.isEmpty) {
+              error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
+              throw new Exception(s"Error submitting command to yarn-cluster.")
+            }
+          })
         }
       case _ =>
-        // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
-        val commandInvocation = new SimpleInvocation(engine, commands, commandContext)
-        val arguments = plugin.parseArguments(commandContext.command.arguments.get)
-        info(s"Invoking command ${commandContext.command.name}")
-        val returnValue = plugin(commandInvocation, arguments)
-        plugin.serializeReturn(returnValue)
+        commands.complete(commandContext.command.id, Try {
+          // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
+          val commandInvocation = new SimpleInvocation(engine, commands, commandContext, invocation.clientId)
+          val arguments = plugin.parseArguments(commandContext.command.arguments.get)
+          info(s"Invoking command ${commandContext.command.name}")
+          val returnValue = plugin(commandInvocation, arguments)
+          val jsonResult = plugin.serializeReturn(returnValue)
+          engine.commandStorage.updateResult(commandContext.command.id, jsonResult)
+        })
+    }
+  }
+
+  /**
+   * Notify the running job that there is a new command to execute
+   * @param jobContext meta store record
+   * @return true if successful, false means a new job needs to be launched
+   */
+  private def notifyJob(jobContext: JobContext): Boolean = {
+    if (EngineConfig.keepYarnJobAlive && jobContext.jobServerUri.isDefined) {
+      try {
+        val uri = jobContext.jobServerUri.get
+        new YarnWebClient(new URL(uri)).notifyServer()
+        true
+      }
+      catch {
+        case e: Exception =>
+          info("couldn't send message: " + e)
+          false
+      }
+    }
+    else {
+      // job was never created, so nothing to notify
+      false
     }
   }
 

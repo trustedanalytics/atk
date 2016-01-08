@@ -42,7 +42,8 @@ case class SparkInvocation(engine: EngineImpl,
                            arguments: Option[JsObject],
                            sparkContext: SparkContext,
                            commandStorage: CommandStorage,
-                           eventContext: EventContext) extends CommandInvocation {
+                           eventContext: EventContext,
+                           clientId: String) extends CommandInvocation {
   override val progressUpdater: CommandProgressUpdater = new CommandStorageProgressUpdater(commandStorage)
 }
 

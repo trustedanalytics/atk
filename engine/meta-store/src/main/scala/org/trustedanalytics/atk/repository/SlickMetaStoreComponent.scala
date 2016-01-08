@@ -683,6 +683,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       commandTable.where(_.id === id).firstOption
     }
 
+    override def lookup(jobContext: JobContext)(implicit session: Session): Seq[Command] = {
+      commandTable.where(_.complete === false).where(_.jobContextId === jobContext.id).sortBy(_.id.asc).list
+    }
+
     override def lookupByName(name: Option[String])(implicit session: Session): Option[Command] = {
       name match {
         case Some(n) => commandTable.where(_.name === n).firstOption
@@ -720,6 +724,16 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     override def updateProgress(id: Long, progress: List[ProgressInfo])(implicit session: Session): Try[Unit] = Try {
       val q = for { c <- commandTable if c.id === id && c.complete === false } yield c.progress
       q.update(progress)
+    }
+
+    override def updateJobContextId(id: Long, jobContextId: Long)(implicit session: Session): Try[Unit] = Try {
+      val q = for { c <- commandTable if c.id === id } yield c.jobContextId
+      q.update(Some(jobContextId))
+    }
+
+    override def updateResult(id: Long, result: JsObject)(implicit session: Session): Try[Unit] = Try {
+      val q = for { c <- commandTable if c.id === id } yield c.result
+      q.update(Some(result))
     }
 
   }
@@ -1195,7 +1209,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
       def yarnAppName = column[String]("yarn_app_name")
 
-      def yarnAppId = column[String]("yarn_app_id")
+      def yarnAppId = column[Option[String]]("yarn_app_id")
 
       def clientId = column[String]("client_id")
 
@@ -1213,54 +1227,66 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     }
 
-    val jobContexts = TableQuery[JobContextTable]
+    val jobContextTable = TableQuery[JobContextTable]
 
-    protected val jobContextAutoInc = jobContexts returning jobContexts.map(_.id) into {
+    protected val jobContextAutoInc = jobContextTable returning jobContextTable.map(_.id) into {
       case (jobContext, id) => jobContext.copy(id = id)
     }
 
     override def insert(jobContext: JobContextTemplate)(implicit session: Session): Try[JobContext] = Try {
-      val m = JobContext(1, jobContext.userId, jobContext.yarnAppName, jobContext.yarnAppId, jobContext.replId, new DateTime(), new DateTime(), None, None)
+      val m = JobContext(1, jobContext.userId, jobContext.yarnAppName, None, jobContext.clientId, new DateTime(), new DateTime(), None, None)
       jobContextAutoInc.insert(m)
     }
 
     override def delete(id: Long)(implicit session: Session): Try[Unit] = Try {
-      jobContexts.where(_.id === id).mutate(f => f.delete())
+      jobContextTable.where(_.id === id).mutate(f => f.delete())
     }
 
     override def update(jobContext: JobContext)(implicit session: Session): Try[JobContext] = Try {
-      val updatedJobContext = jobContext.copy(modifiedOn = new DateTime)
-      jobContexts.where(_.id === jobContext.id).update(updatedJobContext)
-      updatedJobContext
+      throw new RuntimeException("don't use update because it will wipe out job progress, these meta store classes are a mess")
+    }
+
+    override def updateJobServerUri(id: Long, uri: String)(implicit session: Session): Unit = {
+      val column = for (c <- jobContextTable if c.id === id) yield c.jobServerUri
+      column.update(Some(uri))
+    }
+
+    override def updateProgress(id: Long, progress: String)(implicit session: Session): Unit = {
+      val column = for (c <- jobContextTable if c.id === id) yield c.progress
+      column.update(Some(progress))
     }
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {
-      jobContexts.drop(offset).take(count).list
+      jobContextTable.drop(offset).take(count).list
     }
 
     def scanAll()(implicit session: Session): Seq[JobContext] = {
-      jobContexts.list
+      jobContextTable.list
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[JobContext] = {
-      jobContexts.where(_.id === id).firstOption
+      jobContextTable.where(_.id === id).firstOption
     }
 
-    override def lookupByName(name: Option[String])(implicit session: Session): Option[JobContext] = {
+    override def lookupByYarnAppName(name: Option[String])(implicit session: Session): Option[JobContext] = {
       name match {
-        case Some(n) => jobContexts.where(_.yarnAppName === n).firstOption
+        case Some(n) => jobContextTable.where(_.yarnAppName === n).firstOption
         case _ => None
       }
     }
 
+    override def lookupByClientId(user: User, clientId: String)(implicit session: Session): Option[JobContext] = {
+      jobContextTable.where(_.clientId === clientId).where(_.userId === user.id).firstOption
+    }
+
     /** execute DDL to create the underlying table */
     def createTable(implicit session: Session) = {
-      jobContexts.ddl.create
+      jobContextTable.ddl.create
     }
 
     /** execute DDL to drop the underlying table - for unit testing */
     def dropTable()(implicit session: Session) = {
-      jobContexts.ddl.drop
+      jobContextTable.ddl.drop
     }
 
   }
