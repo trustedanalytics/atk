@@ -98,7 +98,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         val verbose = Array("--verbose")
 
         val sparkInternalDriverClass = Array("spark-internal")
-        val jobArguments = Array(s"${jobContext.id}", s"${command.id}")
+        val jobArguments = Array(s"${jobContext.id}")
 
         // Prepare input arguments for Spark Submit; Do not change the order
         val inputArgs = sparkMaster ++

@@ -125,7 +125,7 @@ object SparkCommandPlugin extends EventLogging {
   }
 
   private def stopContextIfNeeded(sc: SparkContext): Unit = {
-    if (!EngineConfig.reuseSparkContext && !EngineConfig.keepYarnJobAlive) {
+    if (!EngineConfig.reuseSparkContext && !EngineConfig.isSparkOnYarn) {
       // TODO: do we still need this?  Doesn't seem like it the way we run in Yarn now --Todd  Jan 2016
       sc.stop()
     }

@@ -159,7 +159,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @return true if successful, false means a new job needs to be launched
    */
   private def notifyJob(jobContext: JobContext): Boolean = {
-    if (EngineConfig.keepYarnJobAlive && jobContext.jobServerUri.isDefined) {
+    if (EngineConfig.isSparkOnYarn && jobContext.jobServerUri.isDefined) {
       try {
         val uri = jobContext.jobServerUri.get
         new YarnWebClient(new URL(uri)).notifyServer()

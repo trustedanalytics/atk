@@ -34,7 +34,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
    * Creates a new sparkContext
    */
   def context(description: String, kryoRegistrator: Option[String] = None)(implicit invocation: Invocation): SparkContext = withContext("engine.SparkContextFactory") {
-    if (EngineConfig.reuseSparkContext || EngineConfig.keepYarnJobAlive) {
+    if (EngineConfig.reuseSparkContext || EngineConfig.isSparkOnYarn) {
       SparkContextFactory.sharedSparkContext()
     }
     else {
@@ -69,13 +69,8 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
 
 object SparkContextFactory extends SparkContextFactory {
 
-  // for integration tests only
   private var sc: SparkContext = null
 
-  /**
-   * This shared SparkContext is for integration tests and regression tests only
-   * NOTE: this should break the progress bar.
-   */
   private def sharedSparkContext()(implicit invocation: Invocation): SparkContext = {
     this.synchronized {
       if (sc == null) {
