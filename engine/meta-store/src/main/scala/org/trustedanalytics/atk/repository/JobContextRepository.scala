@@ -12,4 +12,6 @@ trait JobContextRepository[Session] extends Repository[Session, JobContextTempla
   def updateJobServerUri(id: Long, uri: String)(implicit session: Session): Unit
 
   def updateProgress(id: Long, progress: String)(implicit session: Session): Unit
+
+  def updateYarnAppName(id: Long, yarnAppName: String)(implicit session: Session): Unit
 }

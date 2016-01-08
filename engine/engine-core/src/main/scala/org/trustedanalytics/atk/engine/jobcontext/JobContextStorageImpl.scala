@@ -36,8 +36,12 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
   def lookupOrCreate(user: User, yarnAppName: String, clientId: String): JobContext = {
     lookupByClientId(user, clientId) match {
       case Some(jobContext) =>
-        // TODO: update yarnAppName?
-        jobContext
+        metaStore.withSession("se.jobcontext.yarnAppName") {
+          implicit session =>
+            repo.updateYarnAppName(jobContext.id, yarnAppName)
+        }
+        // refresh it
+        expectJobContext(jobContext.id)
       case None => create(new JobContextTemplate(user.id, yarnAppName, clientId))
     }
   }
