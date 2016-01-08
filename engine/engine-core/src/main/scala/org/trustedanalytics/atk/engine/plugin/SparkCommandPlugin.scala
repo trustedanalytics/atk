@@ -28,7 +28,7 @@ import scala.collection.JavaConversions._
 
 import com.typesafe.config.{ ConfigFactory, ConfigList, ConfigValue }
 import org.apache.spark.SparkContext
-import org.apache.spark.engine.{ ProgressPrinter, SparkProgressListener }
+import org.apache.spark.engine.{ JobContextProgressListener, ProgressPrinter, SparkProgressListener }
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig, EngineImpl }
 
@@ -97,6 +97,7 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
         val progressPrinter = new ProgressPrinter(listener)
         context.addSparkListener(listener)
         context.addSparkListener(progressPrinter)
+        context.addSparkListener(new JobContextProgressListener(engine.jobContextStorage, invocation))
       }
       catch {
         // exception only shows up here due to dev error, but it is hard to debug without this logging
