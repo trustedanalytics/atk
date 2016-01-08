@@ -42,7 +42,7 @@ This model runs the MLLib implementation of Naive Bayes [2]_.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Naive_Bayes_classifier
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-naive-bayes.html
+.. [2] https://spark.apache.org/docs/1.5.0/mllib-naive-bayes.html
              """,
   returns = """A new instance of NaiveBayesModel""")
 class NaiveBayesNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {

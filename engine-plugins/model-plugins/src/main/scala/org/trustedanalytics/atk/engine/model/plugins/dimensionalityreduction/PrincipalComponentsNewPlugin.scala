@@ -47,7 +47,7 @@ predict and 2) compute the t-squared index during prediction.
 
 .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
 .. [2] https://en.wikipedia.org/wiki/Singular_value_decomposition
-.. [3] https://spark.apache.org/docs/1.3.0/mllib-dimensionality-reduction.html""",
+.. [3] https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html""",
   returns = """A new instance of PrincipalComponentsModel""")
 class PrincipalComponentsNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
