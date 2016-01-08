@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Connect to the Server &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../index.html" >
+    <link rel="up" title="Python API" href="index.html" >
+    <link rel="next" title="Data Types" href="datatypes/index.html" >
+    <link rel="prev" title="Python API" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="index.html" accesskey="U">Python API</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Python API"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="datatypes/index.html" title="Data Types"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ad_over.html">Administration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Python API</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="">Connect to the Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datatypes/index.html">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datasources/index.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frames/index.html">Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="graphs/index.html">Graphs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models/index.html">Models</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="connect-to-the-server">
+<span id="index-0"></span><h1>Connect to the Server<a class="headerlink" href="#connect-to-the-server" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#basic-connecting" id="id1">Basic connecting</a></li>
+<li><a class="reference internal" href="#connections-requiring-oauth" id="id2">Connections requiring OAuth</a></li>
+<li><a class="reference internal" href="#using-environmental-variables" id="id3">Using Environmental Variables</a></li>
+<li><a class="reference internal" href="#troubleshooting" id="id4">Troubleshooting</a><ul>
+<li><a class="reference internal" href="#client-s-server-settings" id="id5">Client&#8217;s Server Settings</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<p>The Python client must &#8216;connect&#8217; to an Trusted Analytics Platform server before it can be used.
+Here is the &#8216;connect&#8217; process described by the method&#8217;s documentation:</p>
+<dl class="function">
+<dt id="trustedanalytics.connect">
+<code class="descclassname">trustedanalytics.</code><code class="descname">connect</code><span class="sig-paren">(</span><em>self</em>, <em>credentials_file=None</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the trustedanalytics server.</p>
+<p>This method calls the server, downloads its API information and
+dynamically generates and adds the appropriate Python code to the
+Python package for this python session.
+Calling this method is required before invoking any server activity.</p>
+<p>After the client has connected to the server, the server config
+cannot be changed.
+User must restart Python in order to change connection info.</p>
+<p>Subsequent calls to this method invoke no action.</p>
+<p>There is no &#8220;connection&#8221; object or notion of being continuously
+&#8220;connected&#8221;.
+The call to connect is just a one-time process to download the API
+and prepare the client.
+If the server goes down and comes back up, this client will not
+recognize any difference from a connection point of view, and will
+still be operating with the API information originally downloaded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>credentials_file: str (optional)</strong></p>
+<blockquote class="last">
+<div><p>File name of a credentials file.
+If supplied, it will override the settings authentication
+settings in the client&#8217;s server configuration.
+The credentials file is normally obtained through the environment.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<div class="section" id="basic-connecting">
+<h2>Basic connecting<a class="headerlink" href="#basic-connecting" title="Permalink to this headline">¶</a></h2>
+<p>To use the default settings provided by the environment and/or configuration:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To connect to a specific server:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s">&#39;myhost-name:port&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="connections-requiring-oauth">
+<h2>Connections requiring OAuth<a class="headerlink" href="#connections-requiring-oauth" title="Permalink to this headline">¶</a></h2>
+<p>To connect to a TAP instance of Trusted Analytics Platform, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
+The user must have a credentials file which holds an OAuth access token and a refresh token.</p>
+<p>The user can create a credentials file using Trusted Analytics Platform client running in an interactive python session.  Call <cite>create_credentials_file(&#8216;filename_of_your_choice&#8217;)</cite> and interactively provide answers to its prompt.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ python2.7
+
+&gt;&gt;&gt; import trustedanalytics as ta
+&gt;&gt;&gt; ta.create_connect_file(&#39;~/.ta/demo.creds&#39;)
+OAuth server URI: uaa.my-tap-domain.com
+user name: dscientist9
+Password: **********
+
+Credentials created at &#39;/home/dscientist9/.ta/demo.creds&#39;
+</pre></div>
+</div>
+<p>The credentials file can be specified when calling <code class="docutils literal"><span class="pre">connect</span></code> or set as an environmental variable $TA_CREDS.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;~/.ta/demo.creds&#39;</span><span class="p">)</span>
+<span class="go">Connected.  This client instance connected to server http://my-ta-instance.my-tap-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.</span>
+</pre></div>
+</div>
+<p>The credentials file path must be relative to how python was launched.
+Full paths are recommended.
+Multiple credentials files can be created.
+They should be protected with appropriate OS privileges.</p>
+</div>
+<div class="section" id="using-environmental-variables">
+<h2>Using Environmental Variables<a class="headerlink" href="#using-environmental-variables" title="Permalink to this headline">¶</a></h2>
+<p>The URI of the Trusted Analytics Platform server can be specified by the environmental variable <code class="docutils literal"><span class="pre">$TA_URI</span></code>.
+The python client will initialize its config setting to this value.
+It may still be overridden as shown above in the session or script.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ export TA_URI=ta-server.demo-gotapaas.com
+</pre></div>
+</div>
+<p>The credentials file can be specified by $TA_CREDS.</p>
+<div class="code highlight-python"><div class="highlight"><pre>$ export TA_CREDS=~/.ta/demo.creds
+</pre></div>
+</div>
+<p>With these two variables set, the simple connect sequence works.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="client-s-server-settings">
+<h3>Client&#8217;s Server Settings<a class="headerlink" href="#client-s-server-settings" title="Permalink to this headline">¶</a></h3>
+<p>To see the client&#8217;s configuration to find the server, look at <code class="docutils literal"><span class="pre">ta.server</span></code>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span>
+<span class="go">{</span>
+<span class="go">    &quot;headers&quot;: {</span>
+<span class="go">        &quot;Accept&quot;: &quot;application/json,text/plain&quot;,</span>
+<span class="go">        &quot;Authorization&quot;: &quot;eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIyOTllYmMxZC0zNDgyLTRhOWEtODM2ZC03ZDM1ZmIzZWZiNmYiLCJzdWIiOiJiZTYzMWQ1OS1iYWM4LTRiOWQtOTFhNy05NzMyMTBhMWRhMTkiLCJzY29wZSI6WyJjbG91ZF9jb250cm9sbGVyX3NlcnZpY2VfcGVybWlzc2lvbnMucmVhZCIsImNsb3VkX2NvbnRyb2xsZXIud3JpdGUiLCJvcGVuaWQiLCJjbG91ZF9jb250cm9sbGVyLnJlYWQiXSwiY2xpZW50X2lkIjoiYXRrLWNsaWVudCIsImNpZCI6ImF0ay1jbGllbnQiLCJhenAiOiJhdGstY2xpZW50IiwiZ3JhbnRfdHlwZSI6InBhc3N3b3JkIiwidXNlcl9pZCI6ImJlNjMxZDU5LWJhYzgtNGI5ZC05MWE3LTk3MzIxMGExZGExOSIsInVzZXJfbmFtZSI6ImFuamFsaS5zb29kQGludGVsLmNvbSIsImVtYWlsIjoiYW5qYWxpLnNvb2RAaW50ZWwuY29tIiwiaWF0IjoxNDM0NzUyODU4LCJleHAiOjE0MzQ3OTYwNTgsImlzcyI6Imh0dHBzOi8vdWFhLmRlbW8tZ290YXBhYXMuY29tL29hdXRoL3Rva2VuIiwiYXVkIjpbImF0ay1jbGllbnQiLCJjbG91ZF9jb250cm9sbGVyX3NlcnZpY2VfcGVybWlzc2lvbnMiLCJjbG91ZF9jb250cm9sbGVyIiwib3BlbmlkIl19.PAwF2OtC0Wd97-gmZ4OXQ36xpyaeCCUC2ErGgCk619m7s6uCGcqydrWveTtgehEjIkZxZ5jfaFI53_bU0cHLseKlxMi1llggk6xC0rWnaUePF47pw-u6eGm2z-rPIqP9i4_2TdTxDKCe9_qziNTQzKOlrn2_yN6KSgtytGEKxkE&quot;,</span>
+<span class="go">        &quot;Content-type&quot;: &quot;application/json&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;scheme&quot;: &quot;http&quot;,</span>
+<span class="go">    &quot;oauth_uri&quot;: &quot;uaa.my-tap-domain.comdemo-gotapaas.com&quot;,</span>
+<span class="go">    &quot;user&quot;: &quot;dscientist9&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>The settings may be individually modified with the <code class="docutils literal"><span class="pre">ta.server</span></code> object, before calling connect.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 08, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,87 @@
+
+:doc:`Models<../index>` CollaborativeFilteringModel
+***************************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    recommend
+    score
+    status
+    train
+
+.. class:: CollaborativeFilteringModel
+
+    Entity CollaborativeFilteringModel
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Read-only property - Last time this model's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Read-only property - Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <CollaborativeFilteringModel__init__>`\ (self[, name, _info])                          Create a new Collaborative Filtering (ALS) model.
+    :doc:`predict <predict>`\ (self, frame, input_source_column_name, input_dest_column_name[, ...])      |BETA| Collaborative Filtering Predict (ALS).
+    :doc:`recommend <recommend>`\ (self, entity_id[, number_of_recommendations, recommend_products])      |BETA| Collaborative Filtering Predict (ALS).
+    :doc:`score <score>`\ (self, user_id, item_id)                                                        |BETA| Collaborative Filtering Predict (ALS).
+    :doc:`train <train>`\ (self, frame, source_column_name, dest_column_name, weight_column_name)         Collaborative filtering (ALS) model
+    ====================================================================================================  ====================================================================================================
+
+.. _CollaborativeFilteringModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a new Collaborative Filtering (ALS) model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+
+    For details about Collaborative Filter (ALS) modelling,
+    see :ref:`Collaborative Filter <CollaborativeFilteringNewPlugin_Summary>`.
+
+    Examples
+    --------
+    >>> model = ta.CollaborativeFilteringModel()
+    [===Job Progress===]
+    >>> model.train(edge_frame, 'source', 'dest', 'weight')
+    [===Job Progress===]
+    >>> model.score(1,5)
+    [===Job Progress===]
+    >>> recommendations = model.recommend(1, 3, True)
+    [===Job Progress===]
+    >>> recommendations
+    [{u'rating': 0.04854799984010311, u'product': 4, u'user': 1}, {u'rating': 0.04045666535703035, u'product': 3, u'user': 1}, {u'rating': 0.030060528471388848, u'product': 5, u'user': 1}]
+    >>> recommendations = model.recommend(5, 2, False)
+    [===Job Progress===]
+
+

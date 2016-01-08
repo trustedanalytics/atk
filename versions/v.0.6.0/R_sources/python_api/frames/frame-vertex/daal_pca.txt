@@ -1,0 +1,39 @@
+
+:doc:`VertexFrame <index>`  daal_pca
+************************************
+
+------
+
+
+.. function:: daal_pca(self, column_names, method='cor')
+
+    |ALPHA|
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **column_names** : list
+
+        ..
+
+
+
+
+
+        **method** : unicode (default=cor)
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

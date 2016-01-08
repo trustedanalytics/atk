@@ -1,0 +1,36 @@
+
+:doc:`VertexFrame <index>`  unflatten_column
+********************************************
+
+------
+
+
+.. function:: unflatten_column(self, columns, delimiter=None)
+
+    |DEPRECATED|
+    Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
+
+
+    :Parameters:
+
+        **columns** : str
+
+        ..
+
+            Name of the column(s) to be used as keys for unflattening
+
+
+
+        **delimiter** : str (default=None)
+
+        ..
+
+            Separator for the data in the result columns. Default is comma (,).
+
+
+    Compacts data from multiple rows based on cell data.
+
+    Groups together cells in all columns (less the composite key) using "," as string delimiter.
+    The original rows are deleted.
+    The grouping takes place based on a composite key created from cell values.
+    The column datatypes are changed to string.

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame covariance_matrix &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame cumulative_percent" href="cumulative_percent.html" >
+    <link rel="prev" title="VertexFrame covariance" href="covariance.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="covariance.html" title="VertexFrame covariance"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="cumulative_percent.html" title="VertexFrame cumulative_percent"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-covariance-matrix">
+<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  covariance_matrix<a class="headerlink" href="#vertexframe-covariance-matrix" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="covariance_matrix">
+<code class="descname">covariance_matrix</code><span class="sig-paren">(</span><em>self</em>, <em>data_column_names</em>, <em>matrix_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#covariance_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate covariance matrix for two or more columns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data_column_names</strong> : list</p>
+<blockquote>
+<div><p>The names of the column from which to compute the matrix.
+Names should refer to a single column of type vector, or two or more
+columns of numeric scalars.</p>
+</div></blockquote>
+<p><strong>matrix_name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>The name of the new
+matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>A matrix with the covariance values for the columns.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This function applies only to columns containing numerical data.</p>
+<p class="rubric">Examples</p>
+<p>Consider Frame <em>my_frame</em>, which contains the data</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go"> [#]  idnum  x1   x2   x3   x4</span>
+<span class="go">===============================</span>
+<span class="go">[0]      0  1.0  4.0  0.0  -1.0</span>
+<span class="go">[1]      1  2.0  3.0  0.0  -1.0</span>
+<span class="go">[2]      2  3.0  2.0  1.0  -1.0</span>
+<span class="go">[3]      3  4.0  1.0  2.0  -1.0</span>
+<span class="go">[4]      4  5.0  0.0  2.0  -1.0</span>
+</pre></div>
+</div>
+<p>my_frame.covariance_matrix computes the covariance on each pair of columns in the user-provided list.</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<p>The resulting table (specifying all columns) is:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  idnum  x1    x2    x3    x4</span>
+<span class="go">=================================</span>
+<span class="go">[0]    2.5   2.5  -2.5   1.5  0.0</span>
+<span class="go">[1]    2.5   2.5  -2.5   1.5  0.0</span>
+<span class="go">[2]   -2.5  -2.5   2.5  -1.5  0.0</span>
+<span class="go">[3]    1.5   1.5  -1.5   1.0  0.0</span>
+<span class="go">[4]    0.0   0.0   0.0   0.0  0.0</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 08, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
