@@ -106,7 +106,6 @@ class AtkServer(Server):
             print msg
         return value
 
-
     def init_with_credentials(self, credentials_file):
         """initializes this server config with credentials from the given file, calls an oauth server"""
         cleaned_path = clean_file_path(credentials_file)
@@ -177,6 +176,9 @@ class AtkServer(Server):
         """override base check response to check for an invalid token error"""
         if (response.status_code == 400 and "CF-InvalidAuthToken" in response.text) or (response.status_code == 401):
             raise InvalidAuthTokenError(response.text)
+        client_id = response.headers.get('Client-ID', None)
+        if client_id:
+            self.headers['Client-ID'] = client_id
         super(AtkServer, self)._check_response(response)
 
     def ping(self):

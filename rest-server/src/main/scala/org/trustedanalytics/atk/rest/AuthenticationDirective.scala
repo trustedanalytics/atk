@@ -59,7 +59,7 @@ class AuthenticationDirective(val engine: Engine) extends Directives with EventL
    * Gets authorization header and authenticates a user
    * @return the authenticated user
    */
-  def authenticateKey: Directive1[Invocation] =
+  def authenticateKey(clientId: String): Directive1[Invocation] =
     //TODO: proper authorization with spray authenticate directive in a manner similar to S3.
     optionalHeaderValue(getUserPrincipalFromHeader).flatMap {
       case Some(p) => provide(Call(p, SprayExecutionContext.global))
