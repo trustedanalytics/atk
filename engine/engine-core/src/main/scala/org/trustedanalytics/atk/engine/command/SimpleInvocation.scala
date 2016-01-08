@@ -34,16 +34,18 @@ case class SimpleInvocation(engine: Engine,
                             arguments: Option[JsObject],
                             commandId: Long,
                             user: UserPrincipal,
-                            eventContext: EventContext) extends CommandInvocation {
+                            eventContext: EventContext,
+                            clientId: String) extends CommandInvocation {
 
-  def this(engine: Engine, commandStorage: CommandStorage, commandContext: CommandContext) = {
+  def this(engine: Engine, commandStorage: CommandStorage, commandContext: CommandContext, clientId: String) = {
     this(engine,
       commandStorage,
       commandContext.executionContext,
       commandContext.command.arguments,
       commandContext.command.id,
       commandContext.user,
-      commandContext.eventContext)
+      commandContext.eventContext,
+      clientId)
   }
 
   override val progressUpdater: CommandProgressUpdater = new CommandStorageProgressUpdater(commandStorage)

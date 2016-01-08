@@ -16,6 +16,8 @@
 
 package org.trustedanalytics.atk.repository
 import org.trustedanalytics.atk.domain.command.{ Command, CommandTemplate }
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
+import spray.json.JsObject
 import scala.util.Try
 import org.trustedanalytics.atk.engine.ProgressInfo
 
@@ -23,6 +25,14 @@ import org.trustedanalytics.atk.engine.ProgressInfo
  * Repository for command records
  */
 trait CommandRepository[Session] extends Repository[Session, CommandTemplate, Command] {
+
+  def lookup(jobContext: JobContext)(implicit session: Session): Seq[Command]
+
   def updateComplete(id: Long, complete: Boolean)(implicit session: Session): Try[Unit]
+
   def updateProgress(id: Long, progressInfo: List[ProgressInfo])(implicit session: Session): Try[Unit]
+
+  def updateJobContextId(id: Long, jobContextId: Long)(implicit session: Session): Try[Unit]
+
+  def updateResult(id: Long, result: JsObject)(implicit session: Session): Try[Unit]
 }

@@ -83,7 +83,8 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
       //TODO: Hide context factory behind a property on SparkEngine?
       null,
       commandInvocation.commandStorage,
-      invocation.eventContext)
+      invocation.eventContext,
+      invocation.clientId)
     sparkInvocation.copy(sparkContext = createSparkContextForCommand(arguments, sparkEngine.sparkContextFactory)(sparkInvocation))
   }
 
@@ -111,10 +112,6 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
     SparkCommandPlugin.stop(sparkInvocation.commandId)
   }
 
-  /* plugins which execute python UDF will override this to true; by default this is false .
-     if true, additional files are shipped for udf execution during a yarn job
-   */
-  def executesPythonUdf = false
 }
 
 object SparkCommandPlugin extends EventLogging {
@@ -127,10 +124,8 @@ object SparkCommandPlugin extends EventLogging {
   }
 
   private def stopContextIfNeeded(sc: SparkContext): Unit = {
-    if (EngineConfig.reuseSparkContext) {
-      info("not stopping local SparkContext so that it can be re-used")
-    }
-    else {
+    if (!EngineConfig.reuseSparkContext && !EngineConfig.keepYarnJobAlive) {
+      // TODO: do we still need this?  Doesn't seem like it the way we run in Yarn now --Todd  Jan 2016
       sc.stop()
     }
   }
