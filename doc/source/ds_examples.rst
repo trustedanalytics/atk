@@ -27,10 +27,10 @@ Requirements
 Datasets
 --------
 
-For convenience all the datasets used in the examples ship with the client and are also available publicly in `aws <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/index.html?prefix=public/production/v0.4.0/datasets/>`__.
+For convenience all the datasets used in the examples ship with the client and are also available publicly in `aws <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/index.html?prefix=public/production/v0.6.0/datasets/>`__.
 
-* `movie_data_random.csv <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.4.0/datasets/movie_data_random.csv>`__
-* `cities.csv <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.4.0/datasets/cities.csv>`__
+* `movie_data_random.csv <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.6.0/datasets/movie_data_random.csv>`__
+* `cities.csv <https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/production/v0.6.0/datasets/cities.csv>`__
 
 `or the github repository <https://github.com/trustedanalytics/atk/tree/master/python-client/trustedanalytics/examples/datasets>`__
 

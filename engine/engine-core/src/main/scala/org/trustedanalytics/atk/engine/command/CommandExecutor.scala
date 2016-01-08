@@ -100,7 +100,8 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
   private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): Unit = withContext("cmdExcector") {
 
     info(s"command id:${commandContext.command.id}, name:${commandContext.command.name}, args:${commandContext.command.compactArgs}, ${JvmMemory.memory}")
-    debug(s"System Properties are: ${sys.props.keys.mkString(",")}")
+    info(s"System Properties are:")
+    sys.props.foreach { case (k, v) => info(s"$k -> $v") }
 
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
@@ -112,7 +113,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         if (!notifyJob(jobContext)) {
           commands.complete(commandContext.command.id, Try {
             val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-            new SparkSubmitLauncher(new FileStorage, engine).execute(commandContext.command, commandPlugin, moduleName, jobContext)
+            new SparkSubmitLauncher(engine).execute(commandContext.command, commandPlugin, moduleName, jobContext)
 
             // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
             val updatedCommand = commands.expectCommand(commandContext.command.id)

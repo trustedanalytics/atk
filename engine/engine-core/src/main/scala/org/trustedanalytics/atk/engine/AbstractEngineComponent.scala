@@ -85,5 +85,6 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   val engine = new EngineImpl(sparkContextFactory,
     commandExecutor, commandStorage, frameStorage, graphStorage, modelStorage, userStorage,
-    sparkAutoPartitioner, jobContextStorage) {}
+    sparkAutoPartitioner, jobContextStorage, fileStorage) {}
+
 }
