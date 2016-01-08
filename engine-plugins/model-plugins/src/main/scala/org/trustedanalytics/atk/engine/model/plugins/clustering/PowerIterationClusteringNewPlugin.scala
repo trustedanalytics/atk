@@ -34,7 +34,7 @@ A Power Iteration Clustering model is initialized and the cluster assignments of
 .. rubric:: footnotes
 
 .. [1] http://www.cs.cmu.edu/~wcohen/postscript/icm12010-pic-final.pdf
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-clustering.html#power-iteration-clustering-pic""",
+.. [2] https://spark.apache.org/docs/1.5.0/mllib-clustering.html#power-iteration-clustering-pic""",
   returns = """A new instance of PowerIterationClustering Model""")
 class PowerIterationClusteringNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
 
