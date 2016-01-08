@@ -35,11 +35,11 @@ class LinearRegressionModelTest extends WordSpec {
     }
 
     "throw an exception when scoring data with too few columns" in {
-      ScoringModelTestUtils.tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(linearRegressionScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      ScoringModelTestUtils.tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(linearRegressionScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
@@ -47,11 +47,11 @@ class LinearRegressionModelTest extends WordSpec {
     }
 
     "successfully score a model when float data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size)
     }
 
     "successfully score a model when integer data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size)
     }
 
   }

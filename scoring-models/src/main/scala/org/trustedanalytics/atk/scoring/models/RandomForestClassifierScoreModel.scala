@@ -37,7 +37,7 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
     score
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     val obsCols = randomForestData.observationColumns
     var input = Array[Field]()
     obsCols.foreach { name =>
@@ -46,12 +46,9 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
     input
   }
 
-  override def output: Array[Field] = {
-    val obsCols = randomForestData.observationColumns
-    var output = Array[Field]()
-    obsCols.foreach { name =>
-      output = output :+ Field(name)
-    }
-    output
+  override def output(): Array[Field] = {
+    var output = input()
+    //Double
+    output :+ Field("score")
   }
 }

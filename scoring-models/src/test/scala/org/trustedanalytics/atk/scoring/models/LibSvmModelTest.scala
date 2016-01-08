@@ -29,7 +29,7 @@ class LibSvmModelTest extends WordSpec {
   val libModel = svm.svm_load_model(reader)
   val libSvmModel = new LibSvmModel(libModel, new LibSvmData(libModel, List("a", "b", "c")))
 
-  val numRows = 5
+  val numRows = 1
 
   "LibSvmModel" should {
     "throw an exception when attempting to score null data" in {
@@ -41,51 +41,16 @@ class LibSvmModelTest extends WordSpec {
     }
 
     "successfully score a model when float data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20)
     }
 
     "successfully score a model when integer data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3, numRows)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1, numRows)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20)
     }
   }
 }
-
-//class KMeansScoreModelTest extends WordSpec {
-//
-//  "KMeansScoreModel" should {
-//    val kmeansModel = new KMeansModel(Array[Vector](new DenseVector(Array(1.2, 2.1)), new DenseVector(Array(3.4, 4.3))))
-//    val kmeansData = new KMeansData(kmeansModel, List ("a", "b", "c"), List(23, 45.7, 97.2) )
-//    val kmeansScoreModel = new KMeansScoreModel(kmeansModel, kmeansData)
-//    val numRows = 5 // number of rows of data to test with
-//
-//    "throw an exception when attempting to score null data" in {
-//      ScoringModelTestUtils.nullDataTest(kmeansScoreModel)
-//    }
-//
-//    "throw an exception when scoring data with too few columns" in {
-//      ScoringModelTestUtils.tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
-//    }
-//
-//    "throw an exception when scoring data with too many columns" in {
-//      ScoringModelTestUtils.tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
-//    }
-//
-//    "throw an exception when scoring data with non-numerical records" in {
-//      ScoringModelTestUtils.invalidDataTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
-//    }
-//
-//    "successfully score a model when float data is provided" in {
-//      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
-//    }
-//
-//    "successfully score a model when integer data is provided" in {
-//      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
-//    }
-//  }
-//}
-//
 

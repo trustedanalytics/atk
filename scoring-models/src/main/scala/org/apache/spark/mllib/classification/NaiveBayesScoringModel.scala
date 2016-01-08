@@ -28,11 +28,10 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
       case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
     score = score :+ predict(Vectors.dense(x))
-
     score
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     var input = Array[Field]()
     val obsCols = naiveBayesData.observationColumns
     obsCols.foreach { name =>
@@ -41,13 +40,10 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
     input
   }
 
-  override def output: Array[Field] = {
-    var output = Array[Field]()
-    val obsCols = naiveBayesData.observationColumns
-    obsCols.foreach { name =>
-      output = output :+ Field(name)
-    }
-    output
+  override def output(): Array[Field] = {
+    var output = input()
+    //Double
+    output :+ Field("score")
   }
 }
 

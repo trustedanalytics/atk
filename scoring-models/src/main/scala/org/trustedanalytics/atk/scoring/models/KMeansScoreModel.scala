@@ -26,15 +26,12 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-    val x: Array[Double] = new Array[Double](data.length)
-    data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
-    }
+    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
     score = data :+ (predict(Vectors.dense(x)) + 1)
     score
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     var input = Array[Field]()
     val obsCols = kmeansData.observationColumns
     obsCols.foreach { name =>
@@ -43,13 +40,9 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
     input
   }
 
-  override def output: Array[Field] = {
-    var input = Array[Field]()
-    val obsCols = kmeansData.observationColumns
-    obsCols.foreach { name =>
-      input = input :+ Field(name)
-    }
-    input
+  override def output(): Array[Field] = {
+    var output = input()
+    //Int
+    output :+ Field("score")
   }
 }
-

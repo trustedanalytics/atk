@@ -34,11 +34,11 @@ class KMeansScoreModelTest extends WordSpec {
     }
 
     "throw an exception when scoring data with too few columns" in {
-      ScoringModelTestUtils.tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      ScoringModelTestUtils.tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
@@ -46,11 +46,11 @@ class KMeansScoreModelTest extends WordSpec {
     }
 
     "successfully score a model when float data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
     }
 
     "successfully score a model when integer data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(kmeansScoreModel, kmeansModel.clusterCenters(0).size)
     }
   }
 }

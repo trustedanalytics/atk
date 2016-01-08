@@ -35,14 +35,14 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
     score
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     //TODO
     var input = Array[Field]()
     input
   }
 
-  override def output: Array[Field] = {
-    var output = Array[Field]()
+  override def output(): Array[Field] = {
+    var output = input()
     output
   }
 

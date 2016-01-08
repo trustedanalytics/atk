@@ -77,7 +77,11 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     t
   }
 
-  override def input: Array[Field] = {
+  /**
+   * observation columns used for training the model
+   * @return
+   */
+  override def input(): Array[Field] = {
     val obsCols = pcaModel.observationColumns
     var input = Array[Field]()
     obsCols.foreach { name =>
@@ -86,12 +90,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     input
   }
 
-  override def output: Array[Field] = {
-    val obsCols = pcaModel.observationColumns
-    var output = Array[Field]()
-    obsCols.foreach { name =>
-      output = output :+ Field(name)
-    }
-    output
+  override def output(): Array[Field] = {
+    var output = input()
+    //Map[String, Any]
+    output :+ Field("score")
   }
 }

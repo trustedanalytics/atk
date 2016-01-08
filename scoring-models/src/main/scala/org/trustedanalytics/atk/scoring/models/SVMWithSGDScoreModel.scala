@@ -27,40 +27,25 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-
-    val x: Array[Double] = new Array[Double](data.length)
-    data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
-    }
+    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
     score = data :+ predict(Vectors.dense(x))
-
     score
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     val obsCols = svmData.observationColumns
-    val input: Array[Field] = new Array[Field](obsCols.length)
-    var i = 0
-    obsCols.foreach { obsColName =>
-      {
-        input(i) = new Field(obsColName)
-        i = i + 1
-      }
+    var input = Array[Field]()
+    obsCols.foreach { name =>
+      input = input :+ Field(name)
     }
     input
   }
 
-  override def output: Array[Field] = {
-    val obsCols = svmData.observationColumns
-    val input: Array[Field] = new Array[Field](obsCols.length)
-    var i = 0
-    obsCols.foreach { obsColName =>
-      {
-        input(i) = new Field(obsColName)
-        i = i + 1
-      }
-    }
-    input
+  override def output(): Array[Field] = {
+    var output = input()
+    //Double
+    output :+ Field("score")
   }
+
 
 }

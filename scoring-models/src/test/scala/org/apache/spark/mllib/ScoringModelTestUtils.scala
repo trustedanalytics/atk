@@ -33,35 +33,21 @@ object ScoringModelTestUtils {
 
   // Generates data with one less than the number of columns specified, then scores the model,
   // and expects to get an IllegalArgumentException
-  def tooFewDataColumnsTest(model: Model, numColumns: Int, numRows: Int) = {
+  def tooFewDataColumnsTest(model: Model, numColumns: Int) = {
     assert(numColumns > 1)
-
-    // generate data
-    var data = Array[Any]()
-    for (i <- 1 until numRows) {
-      data = data :+ getRandomIntegerArray(numColumns - 1)
-    }
-
     // score model and expect an IllegalArgumentException
     intercept[IllegalArgumentException] {
-      model.score(data)
+      model.score(getRandomIntegerArray(numColumns - 1))
     }
   }
 
   // Generates data with one more than the number of columns specified, then scores the model,
   // and expects to get an IllegalArgumentException
-  def tooManyDataColumnsTest(model: Model, numColumns: Int, numRows: Int) = {
+  def tooManyDataColumnsTest(model: Model, numColumns: Int) = {
     assert(numColumns > 0)
-
-    // generate data
-    var data = Array[Any]()
-    for (i <- 1 to numRows) {
-      data = data :+ getRandomIntegerArray(numColumns + 1)
-    }
-
     // score model and expect an IllegalArgumentException
     intercept[IllegalArgumentException] {
-      model.score(data)
+      model.score(getRandomIntegerArray(numColumns + 1))
     }
   }
 
@@ -73,65 +59,63 @@ object ScoringModelTestUtils {
     var data = Array[Any]()
 
     // generate data by getting integers and then adding on an "a"
-    var row1 = getRandomIntegerArray(numColumns)
+    val row1 = getRandomIntegerArray(numColumns)
     for (i <- row1.indices) {
       row1(i) += "a"
     }
-
-    // score model
-    data = data :+ row1
-
     intercept[NumberFormatException] {
-      model.score(data)
+      model.score(row1)
     }
   }
 
   // Generates data with float data for the specified number of column/rows and then
   // scores the model.  Verifies that the result returned has the expected length.
-  def successfulModelScoringFloatTest(model: Model, numColumns: Int, numRows: Int) = {
-    var data = Array[Any]()
-
-    for (i <- 1 to numRows) {
-      data = data :+ getRandomFloatArray(numColumns)
-    }
-
+  def successfulModelScoringFloatTest(model: Model, numColumns: Int) = {
     // score model and check result length
-    val score = model.score(data)
-    assert(score.length == numRows)
+    val score = model.score(getRandomFloatArray(numColumns))
+    assert(score.length == numColumns + 1)
   }
 
   // Generates data with integer data for the specified number of column/rows and then
   // scores the model.  Verifies that the result returned has the expected length.
-  def successfulModelScoringIntegerTest(model: Model, numColumns: Int, numRows: Int) = {
-    var data = Array[Any]()
-
-    for (i <- 1 to numRows) {
-      data = data :+ getRandomIntegerArray(numColumns)
-    }
-
+  def successfulModelScoringIntegerTest(model: Model, numColumns: Int) = {
     // score model and check result length
-    val score = model.score(data)
-    assert(score.length == numRows)
+    val score = model.score(getRandomIntegerArray(numColumns))
+    assert(score.length == numColumns + 1)
+  }
+
+  //Verifies that the input API on the model returns the correct number of observation columns that the
+  //model was trained on
+  def successfulInputTest(model: Model, numObsCols: Int) = {
+    val input = model.input()
+    assert (input.length == numObsCols)
+  }
+
+  //Verifies that the length of the array returned by the output API on the model is one more than the
+  // number of observation columns that the model was trained in
+  def successfulOutputTest(model: Model, numObsCols: Int) = {
+    val output = model.output()
+    assert (output.length == numObsCols + 1)
   }
 
   // Helper function to return an array filled with random string floats
-  def getRandomFloatArray(length: Int): Array[String] = {
+  def getRandomFloatArray(length: Int): Array[Any] = {
     val row = new Array[String](length)
 
     for (i <- 0 until row.length) {
       row(i) = Random.nextFloat().toString()
     }
-    row
+    row.asInstanceOf[Array[Any]]
   }
 
   // Helper function to return an array filled with random string integers
-  def getRandomIntegerArray(length: Int): Array[String] = {
+  def getRandomIntegerArray(length: Int): Array[Any] = {
     val row = new Array[String](length)
 
     for (i <- 0 until row.length) {
       row(i) = Random.nextInt().toString()
     }
-    row
+    row.asInstanceOf[Array[Any]]
   }
 
 }

@@ -28,8 +28,8 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-    val output = columnFormatter(data.zipWithIndex)
-    val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
+    //val output = columnFormatter(data.zipWithIndex)
+    val splitObs: StringTokenizer = new StringTokenizer(data.mkString(","), " \t\n\r\f:")
     splitObs.nextToken()
     val counter: Int = splitObs.countTokens / 2
     val x: Array[svm_node] = new Array[svm_node](counter)
@@ -40,7 +40,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
       x(j).value = atof(splitObs.nextToken)
       j += 1
     }
-    score = score :+ svm.svm_predict(libSvmModel, x)
+    score = data :+ svm.svm_predict(libSvmModel, x)
     score
   }
 
@@ -62,7 +62,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     Integer.parseInt(s)
   }
 
-  override def input: Array[Field] = {
+  override def input(): Array[Field] = {
     var input = Array[Field]()
     val obsCols = libsvm.observationColumns
     obsCols.foreach { name =>
@@ -71,13 +71,9 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     input
   }
 
-  override def output: Array[Field] = {
-    var output = Array[Field]()
-    val obsCols = libsvm.observationColumns
-    obsCols.foreach { name =>
-      output = output :+ Field(name)
-    }
-    output
+  override def output(): Array[Field] = {
+    var output = input()
+    //Double
+    output :+ Field("score")
   }
-
 }
