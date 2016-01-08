@@ -47,5 +47,4 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
     output :+ Field("score")
   }
 
-
 }

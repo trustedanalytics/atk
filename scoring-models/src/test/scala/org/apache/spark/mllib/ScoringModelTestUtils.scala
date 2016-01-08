@@ -88,14 +88,14 @@ object ScoringModelTestUtils {
   //model was trained on
   def successfulInputTest(model: Model, numObsCols: Int) = {
     val input = model.input()
-    assert (input.length == numObsCols)
+    assert(input.length == numObsCols)
   }
 
   //Verifies that the length of the array returned by the output API on the model is one more than the
   // number of observation columns that the model was trained in
   def successfulOutputTest(model: Model, numObsCols: Int) = {
     val output = model.output()
-    assert (output.length == numObsCols + 1)
+    assert(output.length == numObsCols + 1)
   }
 
   // Helper function to return an array filled with random string floats
