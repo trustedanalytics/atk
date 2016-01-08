@@ -39,7 +39,7 @@ It also allows the user to select the optimizer to be used - L-BFGS [3]_ or SGD 
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Logistic_regression
-.. [2] https://spark.apache.org/docs/1.3.0/mllib-linear-methods.html#logistic-regression
+.. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#logistic-regression
 .. [3] https://en.wikipedia.org/wiki/Limited-memory_BFGS
 .. [4] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
     """,
