@@ -39,11 +39,11 @@ The valid value range is all positive int.
 Default is 20.""") maxIterations: Int = 20,
                         @ArgDoc("""The :term:`hyperparameter` for document-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
-Larger value implies that documents are assumed to cover all topics
-more uniformly; smaller value implies that documents are more
-concentrated on a small subset of topics.
-Valid value range is all positive float greater than or equal to 1.
- Default is 0.1.""") alpha: Float = 1.1f,
+If set to a singleton list List(-1d), then docConcentration is set automatically.
+If set to singleton list List(t) where t != -1, then t is replicated to a vector of length k during LDAOptimizer.initialize().
+Otherwise, the alpha must be length k.
+Currently the EM optimizer only supports symmetric distributions, so all values in the vector should be the same.
+Values should be greater than 1.0. Default value is -1.0 indicating automatic setting.""") alpha: Option[List[Double]] = None,
                         @ArgDoc("""The :term:`hyperparameter` for word-specific distribution over topics.
 Mainly used as a smoothing parameter in :term:`Bayesian inference`.
 Larger value implies that topics contain all words more uniformly and
@@ -68,14 +68,24 @@ if the corpus and LDA parameters are unchanged.""") randomSeed: Option[Long] = N
   require(frame != null, "frame is required")
   require(StringUtils.isNotBlank(documentColumnName), "document column name is required")
   require(StringUtils.isNotBlank(wordColumnName), "word column name is required")
-  require(StringUtils.isNotBlank(wordCountColumnName), "word count column name is required")
   require(maxIterations > 0, "Max iterations should be greater than 0")
-  require(alpha > 0, "Alpha should be greater than 0")
+  if (alpha.isDefined) {
+    if (alpha.get.size == 1) {
+      require(alpha.get.head == -1d || alpha.get.head > 1d, "Alpha should be greater than 1.0. Or -1.0 indicating default setting ")
+    }
+    else {
+      require(alpha.get.forall(a => a > 1d), "All values of alpha should be greater than 0")
+    }
+  }
   require(beta > 0, "Beta should be greater than 0")
   require(numTopics > 0, "Number of topics (K) should be greater than 0")
 
   def columnNames: List[String] = {
     List(documentColumnName, wordColumnName, wordCountColumnName)
+  }
+
+  def getAlpha: List[Double] = {
+    alpha.getOrElse(List(-1d))
   }
 }
 

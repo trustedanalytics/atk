@@ -21,6 +21,7 @@
         <module>graph-plugins</module>
         <module>model-plugins</module>
         <module>example-plugins</module>
+        <module>daal-plugins</module>
     </modules>
 
 </project>

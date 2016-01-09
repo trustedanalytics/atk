@@ -1212,14 +1212,6 @@ Inspect the graph:
 
 For further information, see the API section on :ref:`Graphs <python_api/graphs/index>`.
 
-.. _export_to_titan:
-
-Export the graph to a TitanGraph:
-
-.. code::
-
-    >>> my_titan_graph = my_graph.export_to_titan("titan_graph")
-
 Make a VertexFrame:
 
 .. code::
@@ -1231,17 +1223,6 @@ Make an EdgeFrame:
 .. code::
 
     >>> my_edge_frame = my_graph.edges("worksunder")
-
------------
-Titan Graph
------------
-
-Graph Creation
-==============
-
-A Titan graph is created by exporting it from a seamless graph.
-For further information, as well as Titan graph attributes and methods, see the
-API section on :ref:`Titan Graph <python_api/graphs/graph-titan/index>`.
 
 .. _Graph_Analytics:
 

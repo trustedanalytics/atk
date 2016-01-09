@@ -336,7 +336,7 @@ def _create_class_type(new_class_name, baseclass, doc, init=None):
     new_class._is_api = True
     return new_class
 
-    #  Example: given commands "graph:titan/ml/pagerank" and "graph/ml/graphx_pagerank"  and class structure:
+    #  Example: given command "graph/graphx_pagerank" and class structure:
     #
     #     CommandsInstallable
     #            |
@@ -347,12 +347,9 @@ def _create_class_type(new_class_name, baseclass, doc, init=None):
     #
     #  We need to create:
     #
-    # t = Graph()
-    # t.ml.graphx_pagerank(...)   # works
-    # t.ml.pagerank(...)          # works
     # g = Graph()
-    # g.ml.graphx_pagerank(...)   # works
-    # g.ml.pagerank(...)          # attribute 'pagerank' not found (desired behavior)
+    # g.graphx_pagerank(...)   # works
+    # g.pagerank(...)          # attribute 'pagerank' not found (desired behavior)
 
 
 def get_class_init_from_path(install_path):
