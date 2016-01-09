@@ -171,23 +171,30 @@ class Polling(object):
         command_info = None
         last_progress = []
         start_time = time.time()
+        blank = '\r' + (" " * 80)
         while True:
             command_info = Polling._get_command_info(uri)
             finish = predicate(command_info)
             progress = command_info.progress
-            printer.print_progress(progress, finish)
+            sys.stdout.write(blank)
+            sys.stdout.write("\r%s" % progress)
+            sys.stdout.flush()
+            #printer.print_progress(progress, finish)
 
             if finish:
                 break
 
-            if len(last_progress) == len(progress) and interval_secs < max_interval_secs:
-                interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
+            #if len(last_progress) == len(progress) and interval_secs < max_interval_secs:
+            #    interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
 
-            last_progress = progress
+            #last_progress = progress
             uri = command_info.uri
             time.sleep(interval_secs)
 
         logger.info("polling %s completed after %0.3f seconds" % (uri, time.time() - start_time))
+        sys.stdout.write(blank)
+        sys.stdout.write("\rDone\n")
+        sys.stdout.flush()
         return command_info
 
     @staticmethod

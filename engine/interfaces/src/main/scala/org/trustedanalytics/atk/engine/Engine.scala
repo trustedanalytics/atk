@@ -53,7 +53,9 @@ trait Engine {
 
   def getCommands(offset: Int, count: Int)(implicit invocation: Invocation): Future[Seq[Command]]
 
-  def getCommand(id: Identifier)(implicit invocation: Invocation): Future[Option[Command]]
+  def getCommand(id: Identifier)(implicit invocation: Invocation): Option[Command]
+
+  def getCommandJobContextProgress(command: Command)(implicit invocation: Invocation): Option[String]
 
   def getUserPrincipal(userKey: String)(implicit invocation: Invocation): UserPrincipal
 
