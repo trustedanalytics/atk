@@ -72,10 +72,13 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     }
   }
 
-  override def getCommand(id: Long)(implicit invocation: Invocation): Future[Option[Command]] = withContext("se.getCommand") {
-    future {
-      commandStorage.lookup(id)
+  override def getCommandJobContextProgress(command: Command)(implicit invocation: Invocation): Option[String] =
+    withContext("se.getCommandJobContextProgress") {
+      command.jobContextId.flatMap(jobContextStorage.lookup).flatMap(_.progress)
     }
+
+  override def getCommand(id: Long)(implicit invocation: Invocation): Option[Command] = withContext("se.getCommand") {
+    commandStorage.lookup(id)
   }
 
   override def getUserPrincipal(apiKey: String)(implicit invocation: Invocation): UserPrincipal = {

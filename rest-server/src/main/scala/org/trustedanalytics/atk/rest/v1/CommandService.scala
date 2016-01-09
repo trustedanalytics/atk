@@ -53,10 +53,11 @@ class CommandService(commonDirectives: CommonDirectives, engine: Engine) extends
    * @param command The command being decorated
    * @return View model of the command.
    */
-  def decorate(uri: Uri, command: Command): GetCommand = {
+  def decorate(uri: Uri, command: Command)(implicit invocation: Invocation): GetCommand = {
     //TODO: add other relevant links
     val links = List(Rel.self(uri.toString()))
-    CommandDecorator.decorateEntity(uri.toString(), links, command)
+    val progress: Option[String] = engine.getCommandJobContextProgress(command)
+    CommandDecorator.decorateEntity(uri.toString(), links, command).copy(progress = progress.getOrElse(""))
   }
 
   /**
@@ -70,8 +71,10 @@ class CommandService(commonDirectives: CommonDirectives, engine: Engine) extends
             requestUri {
               uri =>
                 get {
-                  onComplete(engine.getCommand(id)) {
-                    case Success(Some(command)) => complete(decorate(uri, command))
+                  onComplete(Future {
+                    engine.getCommand(id).map(command => decorate(uri, command))
+                  }) {
+                    case Success(Some(decoration)) => complete(decoration)
                     case Success(None) => complete(StatusCodes.NotFound)
                     case Failure(ex) => throw ex
                     case _ => reject()
