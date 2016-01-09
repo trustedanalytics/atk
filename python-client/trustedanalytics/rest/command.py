@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 import trustedanalytics.rest.config as config
 from trustedanalytics.rest.atkserver import server
-from trustedanalytics.rest.progress import ProgressPrinter
+from trustedanalytics.rest.progress import ProgressPrinter, ProgressPrinterOld
 from collections import namedtuple
 from spark import IaPyWorkerError
 
@@ -167,19 +167,14 @@ class Polling(object):
         if not CommandInfo.is_valid_command_uri(uri):
             raise ValueError('Cannot poll ' + uri + ' - a /commands/{number} uri is required')
         interval_secs = start_interval_secs
-        printer = ProgressPrinter()
         command_info = None
-        last_progress = []
+        printer = ProgressPrinter()
         start_time = time.time()
-        blank = '\r' + (" " * 80)
         while True:
             command_info = Polling._get_command_info(uri)
             finish = predicate(command_info)
             progress = command_info.progress
-            sys.stdout.write(blank)
-            sys.stdout.write("\r%s" % progress)
-            sys.stdout.flush()
-            #printer.print_progress(progress, finish)
+            printer.update(progress)
 
             if finish:
                 break
@@ -192,9 +187,7 @@ class Polling(object):
             time.sleep(interval_secs)
 
         logger.info("polling %s completed after %0.3f seconds" % (uri, time.time() - start_time))
-        sys.stdout.write(blank)
-        sys.stdout.write("\rDone\n")
-        sys.stdout.flush()
+        printer.update("Done\n")
         return command_info
 
     @staticmethod
@@ -312,7 +305,7 @@ class Executor(object):
             command = self.poll_command_info(response)
 
             #retreive the data
-            printer = ProgressPrinter()
+            printer = ProgressPrinterOld()
             total_pages = command.result["total_pages"] + 1
 
             start = 1
