@@ -17,8 +17,8 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.model.{GenericNewModelArgs, ModelReference}
-import org.trustedanalytics.atk.engine.plugin.{Invocation, PluginDoc, SparkCommandPlugin}
+import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
 //Implicits needed for JSON conversion
 

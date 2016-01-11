@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.clustering.{GaussianMixtureModel, GaussianMixture, KMeansModel, KMeans}
+import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, GaussianMixture}
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.SparkContext._
 import scala.Long
@@ -37,14 +37,12 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Creates GMM Model from train frame.",
   extended = "Upon training the 'k' cluster centers are computed.",
   returns = """dict
-    Results.
-    The data returned is composed of multiple components:
+    Returns a dictionary storing the number of elements belonging to each Gaussian mixture
 cluster_size : dict
     Cluster size
 ClusterId : int
     Number of elements in the cluster 'ClusterId'.
-within_set_sum_of_squared_error : double
-    The set of sum of squared error for the model.""")
+""")
 class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.Map[Int, scala.Long]] {
   /**
    * The name of the command.
@@ -86,8 +84,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
     trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val gmmModel = gmm.run(vectorRDD)
-    val size = computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns, arguments.columnScalings)
-    //val withinSetSumOfSquaredError = gmmModel.computeCost(vectorRDD)
+    //val size = computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns, arguments.columnScalings)
     trainFrameRdd.unpersist()
 
     //Writing the gmmModel as JSON
@@ -95,11 +92,11 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
     val model: Model = arguments.model
     model.data = jsonModel.toJson.asJsObject
 
-    size//, withinSetSumOfSquaredError)
+    computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns, arguments.columnScalings)
   }
 
   /**
-   * Constructs a KMeans instance with parameters passed or default parameters if not specified
+   * Constructs a GaussianMixture instance with parameters passed or default parameters if not specified
    */
   private def initializeGMM(arguments: GMMTrainArgs): GaussianMixture = {
     val gmm = new GaussianMixture()
@@ -113,6 +110,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
   private def computeClusterSize(gmmModel: GaussianMixtureModel, vectorRDD: RDD[org.apache.spark.mllib.linalg.Vector], observationColumns: List[String], columnScalings: List[Double]): scala.collection.Map[Int, scala.Long] = {
 
     val clusterAssignment = gmmModel.predict(vectorRDD)
-    clusterAssignment.countByValue().toInt
+    clusterAssignment.countByValue()
   }
 }

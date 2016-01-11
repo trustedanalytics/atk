@@ -28,7 +28,6 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -96,11 +95,9 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
 
     val predictionsRdd = gmmModel.predict(frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues))
     val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (row, index) => (index, row) }
-    val indexedInputRdd = frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues).zipWithIndex().map{case (cluster, index) =>(index,cluster)}
+    val indexedInputRdd = frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues).zipWithIndex().map { case (cluster, index) => (index, cluster) }
 
-    //   val resultFrameRdd = yNew.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
-    //     .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
-    val resultFrameRdd = indexedInputRdd.join(indexedPredictionsRdd).map{case (index, (vect, cluster)) => Row.fromSeq(vect.toArray.toSeq ++ Array(cluster).toSeq)}
+    val resultFrameRdd = indexedInputRdd.join(indexedPredictionsRdd).map { case (index, (vect, cluster)) => Row.fromSeq(vect.toArray.toSeq ++ Array(cluster).toSeq) }
 
     //Updating the frame schema
     var columnNames = new ListBuffer[String]()
