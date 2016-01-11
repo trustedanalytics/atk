@@ -28,8 +28,8 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-    //val output = columnFormatter(data.zipWithIndex)
-    val splitObs: StringTokenizer = new StringTokenizer(data.mkString(","), " \t\n\r\f:")
+    val output = columnFormatter(data.zipWithIndex)
+    val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
     splitObs.nextToken()
     val counter: Int = splitObs.countTokens / 2
     val x: Array[svm_node] = new Array[svm_node](counter)
