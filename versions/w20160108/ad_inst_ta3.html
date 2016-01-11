@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Configuration Script &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="Package Installation" href="ad_inst_ta1.html" >
+    <link rel="next" title="Scoring Engine" href="ad_scoring_engine.html" >
+    <link rel="prev" title="Package Installation" href="ad_inst_ta1.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_inst_ta1.html" accesskey="U">Package Installation</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_inst_ta1.html" title="Package Installation"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_scoring_engine.html" title="Scoring Engine"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="configuration-script">
+<span id="ad-inst-ta3"></span><h1>Configuration Script<a class="headerlink" href="#configuration-script" title="Permalink to this headline">¶</a></h1>
+<p>Sample output with notes:</p>
+<div class="highlight-python"><div class="highlight"><pre>#if the default is correct hit enter
+$ sudo ./config
+
+What port is Cloudera Manager listening on? defaults to &quot;7180&quot; if nothing is entered:
+What is the Cloudera Manager username? defaults to &quot;admin&quot; if nothing is entered:
+What is the Cloudera Manager password? defaults to &quot;admin&quot; if nothing is entered:
+
+No current SPARK_CLASSPATH set.
+Setting to:
+
+Deploying config   .   .   .   .   .   .   .   .   .   .   .   .
+Config Deployed
+
+You need to restart Spark service for the config changes to take affect.
+Would you like to restart now? Enter &#39;yes&#39; to restart. defaults to &#39;no&#39; if nothing is
+entered: yes
+Restarting Spark  .   .   .   .   .   .   .   .   .   .   .   .   .   .   .   .
+Restarted Spark
+
+
+What is the hostname of the database server? defaults to &quot;localhost&quot; if nothing is entered:
+What is the port of the database server? defaults to &quot;5432&quot; if nothing is entered:
+What is the name of the database? defaults to &quot;ta_metastore&quot; if nothing is entered:
+What is the database user name? defaults to &quot;atkuser&quot; if nothing is entered:
+
+#The dollar sign($) is not allowed in the password.
+What is the database password? The default password was randomly generated.
+    Defaults to &quot;****************************&quot; if nothing is entered:
+
+Creating application.conf file from application.conf.tpl
+Reading application.conf.tpl
+Updating configuration
+Configuration created for Trusted Analytics ATK
+Configuring postgres access for  &quot;atkuser&quot;
+Initializing database:                                     [  OK  ]
+Stopping postgresql service:                               [  OK  ]
+Starting postgresql service:                               [  OK  ]
+0
+CREATE ROLE
+0
+CREATE DATABASE
+0
+Stopping postgresql service:                               [  OK  ]
+Starting postgresql service:                               [  OK  ]
+0
+initctl: Unknown instance:
+trustedanalytics-rest-server start/running, process 17484
+0
+Waiting for Trusted Analytics ATK server to restart
+ .   .   .   .
+You are now connected to database &quot;ta_metastore&quot;.
+INSERT 0 1
+0
+postgres is configured
+Trusted Analytics ATK is ready for use.
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 11, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

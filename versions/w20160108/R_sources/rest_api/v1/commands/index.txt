@@ -1,0 +1,285 @@
+
+:doc:`REST API <../index>` Commands
+===================================
+
+.. toctree::
+    :maxdepth: 1
+
+    Issue Command <issue_command.rst>
+    Get Command <get_command.rst>
+
+.. toctree::
+    :hidden:
+
+    about_command_names
+    _admin-___drop_stale
+    _admin-___finalize_dropped
+    frame-__filter
+    frame-__helloworld
+    frame-__join
+    frame-__load
+    frame-__mapreducewordcount
+    frame-__rename_columns
+    frame-__wordcount
+    frame-edge__add_edges
+    frame-edge__rename_columns
+    frame-vertex__add_vertices
+    frame-vertex__drop_duplicates
+    frame-vertex__filter
+    frame-vertex__rename_columns
+    frame___coalesce
+    frame___loadhbase
+    frame___loadhive
+    frame___loadjdbc
+    frame___partition_count
+    frame___repartition
+    frame___size_on_disk
+    frame__add_columns
+    frame__assign_sample
+    frame__bin_column
+    frame__bin_column_equal_depth
+    frame__bin_column_equal_width
+    frame__categorical_summary
+    frame__classification_metrics
+    frame__column_median
+    frame__column_mode
+    frame__column_summary_statistics
+    frame__copy
+    frame__correlation
+    frame__correlation_matrix
+    frame__count_where
+    frame__covariance
+    frame__covariance_matrix
+    frame__cumulative_percent
+    frame__cumulative_sum
+    frame__daal_pca
+    frame__dot_product
+    frame__drop_columns
+    frame__drop_duplicates
+    frame__ecdf
+    frame__entropy
+    frame__export_to_csv
+    frame__export_to_hbase
+    frame__export_to_hive
+    frame__export_to_jdbc
+    frame__export_to_json
+    frame__flatten_columns
+    frame__group_by
+    frame__histogram
+    frame__quantiles
+    frame__rename
+    frame__sort
+    frame__sorted_k
+    frame__tally
+    frame__tally_percent
+    frame__top_k
+    frame__unflatten_columns
+    graph-___info
+    graph-__define_edge_type
+    graph-__define_vertex_type
+    graph-__edge_count
+    graph-__kclique_percolation
+    graph-__label_propagation
+    graph-__loopy_belief_propagation
+    graph-__vertex_count
+    graph__annotate_degrees
+    graph__annotate_weighted_degrees
+    graph__clustering_coefficient
+    graph__copy
+    graph__graphx_connected_components
+    graph__graphx_label_propagation
+    graph__graphx_pagerank
+    graph__graphx_triangle_count
+    graph__rename
+    graph__vertex_outdegree
+    model-collaborative_filtering__new
+    model-collaborative_filtering__predict
+    model-collaborative_filtering__recommend
+    model-collaborative_filtering__score
+    model-collaborative_filtering__train
+    model-daal_linear_regression__new
+    model-daal_linear_regression__predict
+    model-daal_linear_regression__train
+    model-k_means__new
+    model-k_means__predict
+    model-k_means__publish
+    model-k_means__train
+    model-lda__new
+    model-lda__predict
+    model-lda__publish
+    model-lda__train
+    model-libsvm__new
+    model-libsvm__predict
+    model-libsvm__publish
+    model-libsvm__score
+    model-libsvm__test
+    model-libsvm__train
+    model-linear_regression__new
+    model-linear_regression__predict
+    model-linear_regression__train
+    model-logistic_regression__new
+    model-logistic_regression__predict
+    model-logistic_regression__test
+    model-logistic_regression__train
+    model-naive_bayes__new
+    model-naive_bayes__predict
+    model-naive_bayes__publish
+    model-naive_bayes__test
+    model-naive_bayes__train
+    model-power_iteration_clustering__new
+    model-power_iteration_clustering__predict
+    model-principal_components__new
+    model-principal_components__predict
+    model-principal_components__publish
+    model-principal_components__train
+    model-random_forest_classifier__new
+    model-random_forest_classifier__predict
+    model-random_forest_classifier__publish
+    model-random_forest_classifier__test
+    model-random_forest_classifier__train
+    model-random_forest_regressor__new
+    model-random_forest_regressor__predict
+    model-random_forest_regressor__publish
+    model-random_forest_regressor__train
+    model-svm__new
+    model-svm__predict
+    model-svm__publish
+    model-svm__test
+    model-svm__train
+    model__rename
+
+------
+
+Command List
+------------
+
+
+==============================================================================================  ============================================================================================
+Command Name  (explained :doc:`here <about_command_names>`)                                     Description
+==============================================================================================  ============================================================================================
+:doc:`frame/add_columns <frame__add_columns>`                                                   Add columns to current frame.
+:doc:`frame/assign_sample <frame__assign_sample>`                                               Randomly group rows into user-defined classes.
+:doc:`frame/bin_column <frame__bin_column>`                                                     Classify data into user-defined groups.
+:doc:`frame/bin_column_equal_depth <frame__bin_column_equal_depth>`                             Classify column into groups with the same frequency.
+:doc:`frame/bin_column_equal_width <frame__bin_column_equal_width>`                             Classify column into same-width groups.
+:doc:`frame/categorical_summary <frame__categorical_summary>`                                   Build summary of the data.
+:doc:`frame/classification_metrics <frame__classification_metrics>`                             Model statistics of accuracy, precision, and others.
+:doc:`frame/column_median <frame__column_median>`                                               Calculate the (weighted) median of a column.
+:doc:`frame/column_mode <frame__column_mode>`                                                   Evaluate the weights assigned to rows.
+:doc:`frame/column_summary_statistics <frame__column_summary_statistics>`                       Calculate multiple statistics for a column.
+:doc:`frame/copy <frame__copy>`                                                                 New frame with copied columns.
+:doc:`frame/correlation <frame__correlation>`                                                   Calculate correlation for two columns of current frame.
+:doc:`frame/correlation_matrix <frame__correlation_matrix>`                                     Calculate correlation matrix for two or more columns.
+:doc:`frame/count_where <frame__count_where>`                                                   Counts qualified rows.
+:doc:`frame/covariance <frame__covariance>`                                                     Calculate covariance for exactly two columns.
+:doc:`frame/covariance_matrix <frame__covariance_matrix>`                                       Calculate covariance matrix for two or more columns.
+:doc:`frame/cumulative_percent <frame__cumulative_percent>`                                     |BETA| Add column to frame with cumulative percent sum.
+:doc:`frame/cumulative_sum <frame__cumulative_sum>`                                             |BETA| Add column to frame with cumulative percent sum.
+:doc:`frame/daal_pca <frame__daal_pca>`                                                         |ALPHA| <Missing Doc>
+:doc:`frame/dot_product <frame__dot_product>`                                                   |ALPHA| Calculate dot product for each row in current frame.
+:doc:`frame/drop_columns <frame__drop_columns>`                                                 Remove columns from the frame.
+:doc:`frame/drop_duplicates <frame__drop_duplicates>`                                           Modify the current frame, removing duplicate rows.
+:doc:`frame/ecdf <frame__ecdf>`                                                                 Builds new frame with columns for data and distribution.
+:doc:`frame/entropy <frame__entropy>`                                                           Calculate the Shannon entropy of a column.
+:doc:`frame/export_to_csv <frame__export_to_csv>`                                               Write current frame to HDFS in csv format.
+:doc:`frame/export_to_hbase <frame__export_to_hbase>`                                           Write current frame to HBase table.
+:doc:`frame/export_to_hive <frame__export_to_hive>`                                             Write current frame to Hive table.
+:doc:`frame/export_to_jdbc <frame__export_to_jdbc>`                                             Write current frame to JDBC table.
+:doc:`frame/export_to_json <frame__export_to_json>`                                             Write current frame to HDFS in JSON format.
+:doc:`frame/flatten_columns <frame__flatten_columns>`                                           Spread data to multiple rows based on cell data.
+:doc:`frame/group_by <frame__group_by>`                                                         |BETA| Summarized Frame with Aggregations.
+:doc:`frame/histogram <frame__histogram>`                                                       |BETA| Compute the histogram for a column in a frame.
+:doc:`frame/quantiles <frame__quantiles>`                                                       New frame with Quantiles and their values.
+:doc:`frame/rename <frame__rename>`                                                             Change the name of the current frame.
+:doc:`frame/sort <frame__sort>`                                                                 |BETA| Sort by one or more columns.
+:doc:`frame/sorted_k <frame__sorted_k>`                                                         |ALPHA| Get a sorted subset of the data.
+:doc:`frame/tally <frame__tally>`                                                               |BETA| Count number of times a value is seen.
+:doc:`frame/tally_percent <frame__tally_percent>`                                               |BETA| Compute a cumulative percent count.
+:doc:`frame/top_k <frame__top_k>`                                                               Most or least frequent column values.
+:doc:`frame/unflatten_columns <frame__unflatten_columns>`                                       Compacts data from multiple rows based on cell data.
+:doc:`frame:/filter <frame-__filter>`                                                           Select all rows which satisfy a predicate.
+:doc:`frame:/helloworld <frame-__helloworld>`                                                   This is a Hello World Plugin for Frame.
+:doc:`frame:/join <frame-__join>`                                                               |BETA| Join two data frames (similar to SQL JOIN).
+:doc:`frame:/load <frame-__load>`                                                               Append data from a CSV/XML into an existing (possibly empty) frame
+:doc:`frame:/mapreducewordcount <frame-__mapreducewordcount>`                                   Counts and reports the top 10 words across all columns with string data in a frame.
+:doc:`frame:/rename_columns <frame-__rename_columns>`                                           Rename columns
+:doc:`frame:/wordcount <frame-__wordcount>`                                                     Counts and reports the top 10 words across all columns with string data in a frame.
+:doc:`frame:edge/add_edges <frame-edge__add_edges>`                                             Add edges to a graph.
+:doc:`frame:edge/rename_columns <frame-edge__rename_columns>`                                   Rename columns for edge frame.
+:doc:`frame:vertex/add_vertices <frame-vertex__add_vertices>`                                   Add vertices to a graph.
+:doc:`frame:vertex/drop_duplicates <frame-vertex__drop_duplicates>`                             Remove duplicate vertex rows.
+:doc:`frame:vertex/filter <frame-vertex__filter>`                                               
+:doc:`frame:vertex/rename_columns <frame-vertex__rename_columns>`                               Rename columns for vertex frame.
+:doc:`graph/annotate_degrees <graph__annotate_degrees>`                                         Make new graph with degrees.
+:doc:`graph/annotate_weighted_degrees <graph__annotate_weighted_degrees>`                       Calculates the weighted degree of each vertex with respect to an (optional) set of labels.
+:doc:`graph/clustering_coefficient <graph__clustering_coefficient>`                             Coefficient of graph with respect to labels.
+:doc:`graph/copy <graph__copy>`                                                                 Make a copy of the current graph.
+:doc:`graph/graphx_connected_components <graph__graphx_connected_components>`                   Implements the connected components computation on a graph by invoking graphx api.
+:doc:`graph/graphx_label_propagation <graph__graphx_label_propagation>`                         |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
+:doc:`graph/graphx_pagerank <graph__graphx_pagerank>`                                           Determine which vertices are the most important.
+:doc:`graph/graphx_triangle_count <graph__graphx_triangle_count>`                               Number of triangles among vertices of current graph.
+:doc:`graph/rename <graph__rename>`                                                             Rename a graph in the database.
+:doc:`graph/vertex_outdegree <graph__vertex_outdegree>`                                         Counts the out-degree of vertices in a graph.
+:doc:`graph:/define_edge_type <graph-__define_edge_type>`                                       Define an edge type.
+:doc:`graph:/define_vertex_type <graph-__define_vertex_type>`                                   Define a vertex type by label.
+:doc:`graph:/edge_count <graph-__edge_count>`                                                   Get the total number of edges in the graph.
+:doc:`graph:/kclique_percolation <graph-__kclique_percolation>`                                 |ALPHA| Find groups of vertices with similar attributes.
+:doc:`graph:/label_propagation <graph-__label_propagation>`                                     Classification on sparse data using Belief Propagation.
+:doc:`graph:/loopy_belief_propagation <graph-__loopy_belief_propagation>`                       Classification on sparse data using Belief Propagation.
+:doc:`graph:/vertex_count <graph-__vertex_count>`                                               Get the total number of vertices in the graph.
+:doc:`model/rename <model__rename>`                                                             Rename a model.
+:doc:`model:collaborative_filtering/new <model-collaborative_filtering__new>`                   Create a new Collaborative Filtering (ALS) model.
+:doc:`model:collaborative_filtering/predict <model-collaborative_filtering__predict>`           |BETA| Collaborative Filtering Predict (ALS).
+:doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`       |BETA| Collaborative Filtering Predict (ALS).
+:doc:`model:collaborative_filtering/score <model-collaborative_filtering__score>`               |BETA| Collaborative Filtering Predict (ALS).
+:doc:`model:collaborative_filtering/train <model-collaborative_filtering__train>`               Collaborative filtering (ALS) model
+:doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a Linear Regression model.
+:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Make new frame with column for label prediction.
+:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build linear regression model.
+:doc:`model:k_means/new <model-k_means__new>`                                                   Create a 'new' instance of a k-means model.
+:doc:`model:k_means/predict <model-k_means__predict>`                                           |BETA| Predict the cluster assignments for the data points.
+:doc:`model:k_means/publish <model-k_means__publish>`                                           |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:k_means/train <model-k_means__train>`                                               |BETA| Creates KMeans Model from train frame.
+:doc:`model:lda/new <model-lda__new>`                                                           Creates Latent Dirichlet Allocation model
+:doc:`model:lda/predict <model-lda__predict>`                                                   |ALPHA| Predict conditional probabilities of topics given document.
+:doc:`model:lda/publish <model-lda__publish>`                                                   |ALPHA| Creates a tar file that will used as input to the scoring engine
+:doc:`model:lda/train <model-lda__train>`                                                       |ALPHA| Creates Latent Dirichlet Allocation model
+:doc:`model:libsvm/new <model-libsvm__new>`                                                     |ALPHA| Create a 'new' instance of a Support Vector Machine model.
+:doc:`model:libsvm/predict <model-libsvm__predict>`                                             |ALPHA| New frame with new predicted label column.
+:doc:`model:libsvm/publish <model-libsvm__publish>`                                             |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:libsvm/score <model-libsvm__score>`                                                 |ALPHA| Calculate the prediction label for a single observation.
+:doc:`model:libsvm/test <model-libsvm__test>`                                                   |ALPHA| Predict test frame labels and return metrics.
+:doc:`model:libsvm/train <model-libsvm__train>`                                                 |ALPHA| Train a Lib Svm model
+:doc:`model:linear_regression/new <model-linear_regression__new>`                               Create a 'new' instance of a Linear Regression model.
+:doc:`model:linear_regression/predict <model-linear_regression__predict>`                       |ALPHA| Make new frame with column for label prediction.
+:doc:`model:linear_regression/train <model-linear_regression__train>`                           |ALPHA| Build linear regression model.
+:doc:`model:logistic_regression/new <model-logistic_regression__new>`                           Create a 'new' instance of logistic regression model.
+:doc:`model:logistic_regression/predict <model-logistic_regression__predict>`                   |ALPHA| Predict labels for data points using trained logistic regression model.
+:doc:`model:logistic_regression/test <model-logistic_regression__test>`                         |ALPHA| Predict test frame labels and return metrics.
+:doc:`model:logistic_regression/train <model-logistic_regression__train>`                       |ALPHA| Build logistic regression model.
+:doc:`model:naive_bayes/new <model-naive_bayes__new>`                                           Create a 'new' instance of a Naive Bayes model
+:doc:`model:naive_bayes/predict <model-naive_bayes__predict>`                                   |ALPHA| Predict labels for data points using trained Naive Bayes model.
+:doc:`model:naive_bayes/publish <model-naive_bayes__publish>`                                   |ALPHA| Creates a scoring engine tar file.
+:doc:`model:naive_bayes/test <model-naive_bayes__test>`                                         |ALPHA| Predict test frame labels and return metrics.
+:doc:`model:naive_bayes/train <model-naive_bayes__train>`                                       |ALPHA| Build a naive bayes model.
+:doc:`model:power_iteration_clustering/new <model-power_iteration_clustering__new>`             Create a 'new' instance of a PowerIterationClustering model.
+:doc:`model:power_iteration_clustering/predict <model-power_iteration_clustering__predict>`     Predict the clusters to which the nodes belong to
+:doc:`model:principal_components/new <model-principal_components__new>`                         Create a 'new' instance of a Principal Components model.
+:doc:`model:principal_components/predict <model-principal_components__predict>`                 |ALPHA| Predict using principal components model.
+:doc:`model:principal_components/publish <model-principal_components__publish>`                 |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:principal_components/train <model-principal_components__train>`                     Build principal components model.
+:doc:`model:random_forest_classifier/new <model-random_forest_classifier__new>`                 Create a 'new' instance of a Random Forest Classifier model.
+:doc:`model:random_forest_classifier/predict <model-random_forest_classifier__predict>`         |ALPHA| Predict the labels for the data points.
+:doc:`model:random_forest_classifier/publish <model-random_forest_classifier__publish>`         |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:random_forest_classifier/test <model-random_forest_classifier__test>`               |ALPHA| Predict test frame labels and return metrics.
+:doc:`model:random_forest_classifier/train <model-random_forest_classifier__train>`             |ALPHA| Build Random Forests Classifier model.
+:doc:`model:random_forest_regressor/new <model-random_forest_regressor__new>`                   Create a 'new' instance of a Random Forest Regressor model.
+:doc:`model:random_forest_regressor/predict <model-random_forest_regressor__predict>`           |ALPHA| Predict the values for the data points.
+:doc:`model:random_forest_regressor/publish <model-random_forest_regressor__publish>`           |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:random_forest_regressor/train <model-random_forest_regressor__train>`               |ALPHA| Build Random Forests Regressor model.
+:doc:`model:svm/new <model-svm__new>`                                                           |ALPHA| Create a 'new' instance of a Support Vector Machine model.
+:doc:`model:svm/predict <model-svm__predict>`                                                   |ALPHA| Predict the labels for the data points
+:doc:`model:svm/publish <model-svm__publish>`                                                   |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:svm/test <model-svm__test>`                                                         |ALPHA| Predict test frame labels and return metrics.
+:doc:`model:svm/train <model-svm__train>`                                                       |ALPHA| Build SVM with SGD model
+==============================================================================================  ============================================================================================

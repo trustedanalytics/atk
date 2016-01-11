@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Eclipse Setup Instructions &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="Windows Python Setup" href="ad_other.html" >
+    <link rel="next" title="IntelliJ IDEA Setup Instructions" href="ds_intellij.html" >
+    <link rel="prev" title="Windows Python Setup" href="ad_other.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" >Administration</a></li>
+          <li class="active"><a href="ad_other.html" accesskey="U">Windows Python Setup</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_other.html" title="Windows Python Setup"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_intellij.html" title="IntelliJ IDEA Setup Instructions"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ds-eclipse"></span><div class="section" id="eclipse-setup-instructions">
+<span id="index-0"></span><h1>Eclipse Setup Instructions<a class="headerlink" href="#eclipse-setup-instructions" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></li>
+<li><a class="reference internal" href="#setup" id="id2">Setup</a></li>
+</ul>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>These instructions assume you have already installed:</p>
+<ul class="simple">
+<li><a class="reference internal" href="ad_other.html#windows-python-setup"><span>Python 2.7</span></a>.</li>
+<li>Trusted Analytics Platform <a class="reference internal" href="ad_inst_ta1.html#installing-ta-packages"><span>Python REST Client</span></a> and required
+dependencies.</li>
+<li>Eclipse Standard.</li>
+</ul>
+<p>Trusted Analytics Platform should work with any version of Eclipse, but these instructions were
+tested with Eclipse Standard Version 4.4 Luna.</p>
+<p>If you are on a corporate network, you may need to configure proxy settings in
+Eclipse before beginning (see <a class="reference external" href="http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jpt.doc.user%2Ftips_and_tricks.htm">Eclipse Help</a> ).</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p class="first">Download, install, and start the
+<a class="reference external" href="http://www.eclipse.org/">Eclipse IDE</a>.</p>
+</li>
+<li><p class="first">Choose <span class="menuselection">Help ‣ Eclipse Marketplace</span>.</p>
+<a class="reference internal image-reference" href="R_images/ds_eclipse_01.png"><img alt="R_images/ds_eclipse_01.png" class="align-center" src="R_images/ds_eclipse_01.png" style="width: 40%;" /></a>
+<p>If the marketplace screen does not come up, you may need to configure
+proxy settings (see <a class="reference external" href="http://help.eclipse.org/luna/index.jsp?topic=%2Forg.eclipse.jpt.doc.user%2Ftips_and_tricks.htm">Eclipse Help</a> ).</p>
+</li>
+<li><p class="first">Search for &#8220;PyDev&#8221; and choose <em>PyDev - Python IDE for Eclipse 3.6.0</em> or
+newer version.</p>
+<ol class="loweralpha simple">
+<li>Choose <em>Confirm</em> button.</li>
+<li>Choose <em>Accept</em> when prompted for license agreement.</li>
+<li>If prompted &#8220;Do you trust these certificates?&#8221;.
+Select &#8220;Brainwy Software; PyDev; Brainwy&#8221; and choose the <em>OK</em> button.</li>
+<li>When prompted to restart Eclipse, choose the <em>Yes</em> button.</li>
+</ol>
+</li>
+<li><p class="first">Choose the default Workspace.</p>
+</li>
+<li><p class="first">Choose <span class="menuselection">File ‣ New ‣ Project...</span>.</p>
+<ol class="loweralpha simple">
+<li>Choose the <em>PyDev</em> folder and <em>PyDev Project</em> and choose the <em>Next</em>
+button.</li>
+<li>Give your project a name, for example &#8220;myproject&#8221;.</li>
+<li>Choose version 2.7.</li>
+<li>Choose <em>Please configure an interpreter before proceeding</em>.<ol class="lowerroman">
+<li>Choose <em>Manual Configure</em>.</li>
+<li>Choose the <em>New</em> button.</li>
+<li>Browse for Python 2.7.  On RedHat and CentOS this is probably
+/usr/bin/python.</li>
+<li>Choose the <em>Ok</em> button.</li>
+<li>Choose the <em>Ok</em> button.</li>
+</ol>
+</li>
+<li>Select the interpreter you just setup from the Interpreter drop-down.</li>
+<li>Choose the <em>Finish</em> button.</li>
+<li>When prompted &#8220;This kind of project is associated with the PyDev
+perspective. Do you want to open this perspective now?&#8221; choose <em>Yes</em>.</li>
+</ol>
+</li>
+<li><p class="first">Right click your project folder, for example, &#8220;myproject&#8221;.</p>
+<ol class="loweralpha simple">
+<li>Choose <em>Properties</em>.</li>
+<li>Choose <em>PyDev - PYTHONPATH</em> in the left hand pane.</li>
+<li>Choose the <em>External Libraries</em> tab.</li>
+<li>Choose <em>Add source folder</em> button.</li>
+<li>Browse for the Trusted Analytics Platform Python REST Client libraries.
+On RedHat and CentOS these are found under
+&#8216;/usr/lib/trustedanalytics/rest-client/python&#8217;.</li>
+<li>Choose the <em>OK</em> button.</li>
+</ol>
+</li>
+<li><p class="first">Right click your project folder, for example, &#8220;myproject&#8221;.</p>
+<ol class="loweralpha simple">
+<li>Choose <span class="menuselection">New ‣ Source Folder</span>.</li>
+<li>Give it the name &#8220;src&#8221; and choose the <em>Finish</em> button.</li>
+</ol>
+</li>
+<li><p class="first">Right click <em>src</em> folder and choose <span class="menuselection">New ‣ File</span>.</p>
+<ol class="loweralpha">
+<li><p class="first">Give the file name &#8216;test.py&#8217;.</p>
+</li>
+<li><p class="first">If prompted, confirm the default settings for PyDev by choosing <em>OK</em>.</p>
+</li>
+<li><p class="first">Close the <em>Help keeping PyDev alive</em> dialog, if it appears.</p>
+</li>
+<li><p class="first">Type the following code into test.py:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="s">&quot;correct host name or IP address&quot;</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">ping</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p class="first">Choose <span class="menuselection">Run ‣ Run</span>.</p>
+<ol class="arabic">
+<li><p class="first">Choose <em>Python Run</em> and choose the <em>OK</em> button, you should see the
+output:</p>
+<div class="highlight-python"><div class="highlight"><pre>Successful ping to Trusted Analytics ATK at http://localhost:9099/info
+</pre></div>
+</div>
+</li>
+</ol>
+</li>
+<li><p class="first">Next take a look at the included examples.</p>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Jan 11, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
