@@ -17,7 +17,7 @@
 package org.apache.spark.mllib.atk.plugins
 
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
-import org.apache.spark.mllib.clustering.KMeansModel
+import org.apache.spark.mllib.clustering.{GaussianMixtureModel, KMeansModel}
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
@@ -569,6 +569,21 @@ object MLLibJsonProtocol {
     }
   }
 
+  implicit object GaussianMixtureModelFormat extends JsonFormat[GaussianMixtureModel] {
+
+    override def write(obj: GaussianMixtureModel): JsValue = {
+      JsObject("weights" -> obj.weights.toJson,
+        "gaussians" -> new JsArray(obj.gaussians.map(g => MultivariateGaussianModelFormat.write(g)).toList))
+    }
+
+    override def read(json: JsValue): GaussianMixtureModel = {
+      val fields = json.asJsObject.fields
+      val weights = getOrInvalid(fields, "weights").convertTo[Array[Double]]
+      val gaussians = getOrInvalid(fields, "gaussians").asInstanceOf[JsArray].elements.map(i => MultivariateGaussianModelFormat.read(i)).toArray
+      new GaussianMixtureModel(weights, gaussians)
+    }
+  }
+
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
@@ -605,6 +620,9 @@ object MLLibJsonProtocol {
   implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
   implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
   implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
+  implicit val gmmDataFormat = jsonFormat2(GMMData)
+  implicit val gmmModelTrainFormat = jsonFormat7(GMMTrainArgs)
+  implicit val gmmModelTrainReturn = jsonFormat3(GMMTrainReturn)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
