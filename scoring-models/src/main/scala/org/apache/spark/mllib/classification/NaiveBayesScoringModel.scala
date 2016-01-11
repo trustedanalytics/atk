@@ -35,7 +35,7 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
     var input = Array[Field]()
     val obsCols = naiveBayesData.observationColumns
     obsCols.foreach { name =>
-      input = input :+ Field(name)
+      input = input :+ Field(name, "Double")
     }
     input
   }
@@ -43,7 +43,7 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
   override def output(): Array[Field] = {
     var output = input()
     //Double
-    output :+ Field("score")
+    output :+ Field("score", "Double")
   }
 }
 

@@ -36,8 +36,11 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
   }
 
   override def input(): Array[Field] = {
-    //TODO
     var input = Array[Field]()
+    val keys = ldaModel.topicWordMap.keys
+    keys.foreach{key =>
+      input = input :+ Field(key, "String")
+    }
     input
   }
 
@@ -45,7 +48,6 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
     var output = input()
     output = output :+ Field("topicsGivenDoc", "Vector[Double]")
     output = output :+ Field("newWordsCount", "Int")
-    output:+ Field("percentOfNewWords", "Double")
+    output :+ Field("percentOfNewWords", "Double")
   }
-
 }

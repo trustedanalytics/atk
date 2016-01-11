@@ -139,13 +139,13 @@ class TestModel() extends Model {
 
   override def input: Array[Field] = {
     var input = Array[Field]()
-    input = input :+ Field("input")
+    input = input :+ Field("input", "Float")
     input
   }
 
   override def output: Array[Field] = {
     var output = Array[Field]()
-    output = output :+ Field("output")
+    output = output :+ Field("output", "Float")
     output
   }
 }

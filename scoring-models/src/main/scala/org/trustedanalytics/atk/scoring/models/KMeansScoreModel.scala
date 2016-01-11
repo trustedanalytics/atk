@@ -35,7 +35,7 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
     var input = Array[Field]()
     val obsCols = kmeansData.observationColumns
     obsCols.foreach { name =>
-      input = input :+ Field(name)
+      input = input :+ Field(name, "Double")
     }
     input
   }
@@ -43,6 +43,6 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
   override def output(): Array[Field] = {
     var output = input()
     //Int
-    output :+ Field("score")
+    output :+ Field("score", "Double")
   }
 }

@@ -31,8 +31,7 @@ trait Model {
 
   def output(): Array[Field]
 
-  case class Field(name: String, dataType: String)
-  {
+  case class Field(name: String, dataType: String) {
   }
 
 }
