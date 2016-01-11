@@ -38,7 +38,7 @@ class LibSvmModelTest extends WordSpec {
     }
 
     "throw an exception when scoring data with non-numerical records" in {
-      ScoringModelTestUtils.invalidDataTest(libSvmModel, 3)
+      ScoringModelTestUtils.invalidDataTest(libSvmModel, 6)
     }
 
     "successfully score a model when float data is provided" in {
