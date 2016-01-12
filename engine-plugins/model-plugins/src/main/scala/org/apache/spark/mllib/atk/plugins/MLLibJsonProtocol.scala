@@ -17,9 +17,10 @@
 package org.apache.spark.mllib.atk.plugins
 
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
-import org.apache.spark.mllib.clustering.{GaussianMixtureModel, KMeansModel}
+import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, KMeansModel }
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
 import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.stat.distribution.MultivariateGaussian
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
@@ -569,6 +570,21 @@ object MLLibJsonProtocol {
     }
   }
 
+  implicit object MultivariateGaussianModelFormat extends JsonFormat[MultivariateGaussian] {
+
+    override def write(obj: MultivariateGaussian): JsValue = {
+      JsObject("mu" -> VectorFormat.write(obj.mu),
+        "sigma" -> obj.sigma.toJson)
+    }
+
+    override def read(json: JsValue): MultivariateGaussian = {
+      val fields = json.asJsObject.fields
+      val mu = VectorFormat.read(getOrInvalid(fields, "mu"))
+      val sigma = MatrixFormat.read(getOrInvalid(fields, "sigma"))
+      new MultivariateGaussian(mu, sigma)
+    }
+  }
+
   implicit object GaussianMixtureModelFormat extends JsonFormat[GaussianMixtureModel] {
 
     override def write(obj: GaussianMixtureModel): JsValue = {
@@ -620,9 +636,10 @@ object MLLibJsonProtocol {
   implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
   implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
   implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
-  implicit val gmmDataFormat = jsonFormat2(GMMData)
-  implicit val gmmModelTrainFormat = jsonFormat7(GMMTrainArgs)
-  implicit val gmmModelTrainReturn = jsonFormat3(GMMTrainReturn)
+  implicit val gmmDataFormat = jsonFormat3(GMMData)
+  implicit val gmmModelTrainFormat = jsonFormat8(GMMTrainArgs)
+  implicit val gmmModelTrainReturnFormat = jsonFormat1(GMMTrainReturn)
+  implicit val gmmModelPredictFormat = jsonFormat3(GMMPredictArgs)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

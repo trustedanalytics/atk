@@ -21,6 +21,8 @@ import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReferen
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
 //Implicits needed for JSON conversion
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 @PluginDoc(oneLine = "create a new model")
 class GMMNewPlugin extends SparkCommandPlugin[GenericNewModelArgs, ModelReference] {

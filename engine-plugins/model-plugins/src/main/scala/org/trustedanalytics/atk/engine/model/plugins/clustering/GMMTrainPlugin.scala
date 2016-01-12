@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
-//Implicits needed for JSON conversion
-
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.DataTypes
@@ -26,7 +24,7 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, GaussianMixture}
+import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, GaussianMixture }
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.SparkContext._
 import scala.Long
@@ -43,7 +41,7 @@ cluster_size : dict
 ClusterId : int
     Number of elements in the cluster 'ClusterId'.
 """)
-class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.Map[Int, scala.Long]] {
+class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
   /**
    * The name of the command.
    *
@@ -75,7 +73,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: GMMTrainArgs)(implicit invocation: Invocation): scala.collection.Map[Int, scala.Long] = {
+  override def execute(arguments: GMMTrainArgs)(implicit invocation: Invocation): GMMTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
     val gmm = initializeGMM(arguments)
@@ -84,7 +82,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
     trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val gmmModel = gmm.run(vectorRDD)
-    //val size = computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns, arguments.columnScalings)
     trainFrameRdd.unpersist()
 
     //Writing the gmmModel as JSON
@@ -92,7 +89,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
     val model: Model = arguments.model
     model.data = jsonModel.toJson.asJsObject
 
-    computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns, arguments.columnScalings)
+    computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns)
   }
 
   /**
@@ -107,9 +104,8 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, scala.collection.M
     gmm.setSeed(arguments.seed)
   }
 
-  private def computeClusterSize(gmmModel: GaussianMixtureModel, vectorRDD: RDD[org.apache.spark.mllib.linalg.Vector], observationColumns: List[String], columnScalings: List[Double]): scala.collection.Map[Int, scala.Long] = {
-
+  private def computeClusterSize(gmmModel: GaussianMixtureModel, vectorRDD: RDD[org.apache.spark.mllib.linalg.Vector], observationColumns: List[String]): GMMTrainReturn = {
     val clusterAssignment = gmmModel.predict(vectorRDD)
-    clusterAssignment.countByValue()
+    new GMMTrainReturn(clusterAssignment.countByValue.map(x => (x._1, x._2.toInt)).toMap)
   }
 }

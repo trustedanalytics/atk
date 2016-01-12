@@ -27,14 +27,13 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
+import scala.collection.mutable.ListBuffer
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.linalg.Vectors
+
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
-import org.apache.spark.mllib.atk.plugins.VectorUtils._
-
-import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
   extended = "",
