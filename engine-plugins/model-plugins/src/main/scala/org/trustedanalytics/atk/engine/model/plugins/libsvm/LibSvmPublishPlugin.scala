@@ -89,21 +89,13 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata
     //Extracting the LibSvmModel from the stored JsObject
     val libsvmData = model.data.convertTo[LibSvmData]
     val libsvmModel = libsvmData.svmModel
-    //    var file: File = null
-    //
-    try {
-      //      file = File.createTempFile("tmp", ".txt")
-      //      svm.svm_save_model(file.getAbsolutePath, libsvmModel)
-      //      val modelValues = FileUtils.readFileToByteArray(file)
 
+    try {
       val jsvalue: JsValue = libsvmData.toJson
       val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[LibSvmModelReaderPlugin].getName)
       ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("libsvm_model"))
     }
     catch { case ex: Exception => throw new RuntimeException(s"Unable to Publish the LibSvm Model\n" + ex.toString) }
-    //    finally {
-    //      FileUtils.deleteQuietly(file)
-    //    }
   }
 
 }

@@ -40,23 +40,5 @@ class LibSvmModelReaderPlugin extends ModelLoader {
   }
 }
 
-//    var inputStream: InputStream = null
-//    var svm_model: Model = null
-//    try {
-//      inputStream = new ByteArrayInputStream(bytes)
-//      val bfReader = new BufferedReader(new InputStreamReader(inputStream))
-//      libsvmModel = new LibSvmModel(svm.svm_load_model(bfReader))
-//    }
-//    catch {
-//      //TODO: log the error
-//      case e: IOException => throw e
-//    }
-//    finally {
-//      if (inputStream != null)
-//        inputStream.close()
-//    }
-//
-//    libsvmModel.asInstanceOf[Model]
-//  }
-//}
+
 

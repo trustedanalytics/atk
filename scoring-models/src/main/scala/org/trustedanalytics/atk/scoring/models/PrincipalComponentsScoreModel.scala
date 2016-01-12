@@ -33,7 +33,6 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    var score = Array[Any]()
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
@@ -43,8 +42,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     pcaScoreOutput.put("principal_components", y.values.toList)
     val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
     pcaScoreOutput.put("t_squared_index", t_squared_index)
-    score = data :+ pcaScoreOutput
-    score
+    data :+ pcaScoreOutput
   }
 
   /**
@@ -78,7 +76,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   }
 
   /**
-   *  @return names of observation columns used for training the model
+   *  @return fields containing the input names and their datatypes
    */
   override def input(): Array[Field] = {
     val obsCols = pcaModel.observationColumns
@@ -90,8 +88,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   }
 
   /**
-   *  @return names of observation columns used for training the model and the name
-   *          of the score
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
    */
   override def output(): Array[Field] = {
     var output = input()

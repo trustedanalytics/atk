@@ -27,7 +27,6 @@ import scala.concurrent._
 class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    var score = Array[Any]()
     val output = columnFormatter(data.zipWithIndex)
     val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
     splitObs.nextToken()
@@ -40,8 +39,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
       x(j).value = atof(splitObs.nextToken)
       j += 1
     }
-    score = data :+ svm.svm_predict(libSvmModel, x)
-    score
+    data :+ svm.svm_predict(libSvmModel, x)
   }
 
   private def columnFormatter(valueIndexPairArray: Array[(Any, Int)]): String = {
@@ -62,6 +60,9 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     Integer.parseInt(s)
   }
 
+  /**
+   *  @return fields containing the input names and their datatypes
+   */
   override def input(): Array[Field] = {
     var input = Array[Field]()
     val obsCols = libsvm.observationColumns
@@ -71,6 +72,9 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     input
   }
 
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
   override def output(): Array[Field] = {
     var output = input()
     //Double
