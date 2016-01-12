@@ -38,7 +38,7 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
   override def input(): Array[Field] = {
     var input = Array[Field]()
     val keys = ldaModel.topicWordMap.keys
-    keys.foreach{key =>
+    keys.foreach { key =>
       input = input :+ Field(key, "String")
     }
     input
