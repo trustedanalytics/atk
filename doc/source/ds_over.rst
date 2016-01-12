@@ -10,5 +10,7 @@ User Manual
     ds_strt
     ds_dflw
     ds_ml
-    ds_algorithms
+    ds_naive_bayes
+    ds_lda
+    ds_graph
     ds_bkm

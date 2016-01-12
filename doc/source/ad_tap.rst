@@ -106,13 +106,7 @@ In order to download the file, simply run the command:
 
 .. code::
 
-    wget https://s3.amazonaws.com/gao-internal-archive/<Your_Branch_Name>/trustedanalytics.tar.gz
-
-For example, if you are on "master" branch you run:
-
-.. code::
-
-    wget https://s3.amazonaws.com/gao-internal-archive/master/trustedanalytics.tar.gz
+    https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/weekly/regressed/latest/archive/trustedanalytics.tar.gz
 
 For Dev:
 
