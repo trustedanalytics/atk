@@ -1285,6 +1285,11 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       jobContextTable.where(_.clientId === clientId).where(_.userId === user.id).firstOption
     }
 
+    override def lookupRecentlyActive(seconds: Int)(implicit session: Session): Seq[JobContext] = {
+      val recentTime = (new DateTime).minusSeconds(seconds)
+      jobContextTable.where(_.modifiedOn >= recentTime).list
+    }
+
     /** execute DDL to create the underlying table */
     def createTable(implicit session: Session) = {
       jobContextTable.ddl.create
