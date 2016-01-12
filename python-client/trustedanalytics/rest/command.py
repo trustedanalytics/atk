@@ -187,7 +187,8 @@ class Polling(object):
             time.sleep(interval_secs)
 
         logger.info("polling %s completed after %0.3f seconds" % (uri, time.time() - start_time))
-        printer.update("Done\n")
+        if not command_info.error:
+            printer.update("Done  [=========================] 100.00%\n")
         return command_info
 
     @staticmethod
