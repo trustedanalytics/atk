@@ -98,8 +98,6 @@ class ScoringService(model: Model) extends Directives {
                 val splitSegment = decoded.split(",")
                 records = records :+ splitSegment
               }
-              val input = model.input()
-              val output = model.output()
               onComplete(Future {
                 records.foreach { row =>
                   {
