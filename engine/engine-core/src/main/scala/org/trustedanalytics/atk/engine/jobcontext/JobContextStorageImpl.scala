@@ -82,6 +82,7 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
     val yarnAppName = s"client${jobContext.id}-${jobContext.clientId}-" +
       DateTimeFormat.forPattern("yyyymmdd_kk:mm").print(new DateTime)
     updateYarnAppName(jobContext.id, yarnAppName)
+    updateProgress(jobContext.id, "Initializing cluster resources...")
     expectJobContext(jobContext.id)
   }
 

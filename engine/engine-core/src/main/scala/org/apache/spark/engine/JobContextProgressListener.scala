@@ -16,11 +16,12 @@
 
 package org.apache.spark.engine
 
-import org.apache.spark.SparkConf
+import org.apache.commons.lang3.StringUtils
+import org.apache.spark.{ SparkContext, SparkConf }
 import org.apache.spark.scheduler.{ SparkListenerJobStart, SparkListenerTaskEnd }
 import org.apache.spark.ui.jobs.JobProgressListener
 import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
-import org.trustedanalytics.atk.engine.plugin.{ SparkInvocation, Invocation }
+import org.trustedanalytics.atk.engine.plugin.SparkInvocation
 
 class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invocation: SparkInvocation) extends JobProgressListener(new SparkConf(true)) {
 
@@ -28,8 +29,12 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
 
   val jobContext = jobContextStorage.lookupByClientId(invocation.user.user, invocation.clientId).getOrElse(throw new IllegalArgumentException(s"couldn't find jobContext id for invocation $invocation"))
 
+  // Store the Current Job Group ID
+  var jobGroupId = StringUtils.EMPTY
+
   override def onJobStart(jobStart: SparkListenerJobStart) {
     super.onJobStart(jobStart)
+    jobGroupId = jobStart.properties.getProperty(SparkContext.SPARK_JOB_GROUP_ID)
     updateProgress()
   }
 
@@ -41,15 +46,20 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
   private def updateProgress(): Unit = {
     if (System.currentTimeMillis() - 1000 > lastUpdate) {
 
-      //      for (j <- activeJobs.valuesIterator) {
-      //        System.out.println(s"Active jobid:${j.jobId} activestages:${j.numActiveStages} numTasks:${j.numTasks} failedTasks:${j.numFailedTasks} completedTasks:${j.numCompletedTasks} ${j.stageIds.mkString(",")}")
-      //      }
-      //      for (j <- activeStages.valuesIterator) {
-      //        System.out.println(s"Active stageid:${j.stageId} status: ${j.getStatusString}  numTasks: ${j.numTasks} ${j.failureReason}")
-      //      }
+      val completedJobs = numCompletedJobs
+      val numTasks = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numTasks }.sum
+      val completedTasks = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numCompletedTasks }.sum
+      val retries = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numFailedTasks }.sum
+      val showTaskRetries = if (retries > 0) s"Task retries:$retries" else ""
+      val percentComplete = if (numTasks > 0) {
+        completedTasks * 100.0 / numTasks
+      }
+      else 0.0
+      val percentIncomplete = 100 - percentComplete
 
-      val progress = s"Completed Jobs:$numCompletedJobs Stages:$numCompletedStages" +
-        s" Failed Jobs:$numFailedJobs Stages:$numFailedStages"
+      val progressBar = s"[${"=" * Math.floor(percentComplete / 4).toInt}${"." * Math.ceil(percentIncomplete / 4).toInt}]"
+
+      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%% $showTaskRetries"
 
       System.out.println(progress)
 
