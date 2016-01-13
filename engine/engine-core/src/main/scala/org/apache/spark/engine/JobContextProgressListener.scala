@@ -50,7 +50,7 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
       val numTasks = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numTasks }.sum
       val completedTasks = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numCompletedTasks }.sum
       val retries = activeJobs.map { case (jobId, jobsUIData) => jobsUIData.numFailedTasks }.sum
-      val showTaskRetries = if (retries > 0) s"Task retries:$retries" else ""
+      val showTaskRetries = if (retries > 0) s" Task retries:$retries" else ""
       val percentComplete = if (numTasks > 0) {
         completedTasks * 100.0 / numTasks
       }
@@ -59,9 +59,7 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
 
       val progressBar = s"[${"=" * Math.floor(percentComplete / 4).toInt}${"." * Math.ceil(percentIncomplete / 4).toInt}]"
 
-      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%% $showTaskRetries"
-
-      System.out.println(progress)
+      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%%$showTaskRetries"
 
       jobContextStorage.updateProgress(jobContext.id, progress)
     }
