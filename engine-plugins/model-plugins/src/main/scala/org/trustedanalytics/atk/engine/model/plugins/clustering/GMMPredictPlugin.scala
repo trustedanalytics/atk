@@ -36,12 +36,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
-  extended = "",
+  extended = "Predicts the clusters for each data point of the frame using the trained model",
   returns = """Frame
-    A new frame consisting of the existing columns of the frame and new columns.
-    The data returned is composed of multiple components:
-'k' columns : double
-    Containing squared distance of each point to every cluster center.
+    A new frame consisting of the existing columns of the frame and a new column:
 predicted_cluster : int
     Integer containing the cluster assignment.""")
 class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference] {

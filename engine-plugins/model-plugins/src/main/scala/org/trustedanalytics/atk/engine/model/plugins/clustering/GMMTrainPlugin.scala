@@ -32,14 +32,12 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Creates GMM Model from train frame.",
-  extended = "Upon training the 'k' cluster centers are computed.",
+@PluginDoc(oneLine = "Creates a GMM Model from the train frame.",
+  extended = "At training the 'k' cluster centers are computed.",
   returns = """dict
     Returns a dictionary storing the number of elements belonging to each Gaussian mixture
 cluster_size : dict
-    Cluster size
-ClusterId : int
-    Number of elements in the cluster 'ClusterId'.
+with the key being a string of the form 'Cluster:Id' storing the number of elements in cluster number 'Id'
 """)
 class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
   /**
@@ -64,19 +62,20 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 15
+
   /**
    * Run MLLib's GaussianMixtureModel() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
-   * as well as a function that can be called to produce a SparkContext that
-   * can be used during this invocation.
+   *                   as well as a function that can be called to produce a SparkContext that
+   *                   can be used during this invocation.
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: GMMTrainArgs)(implicit invocation: Invocation): GMMTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
-    val gmm = initializeGMM(arguments)
+    val gmm = GMMTrainPlugin.initializeGMM(arguments)
 
     val trainFrameRdd = frame.rdd
     trainFrameRdd.cache()
@@ -89,13 +88,17 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     val model: Model = arguments.model
     model.data = jsonModel.toJson.asJsObject
 
-    computeClusterSize(gmmModel, vectorRDD, arguments.observationColumns)
+    new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD))
   }
+}
 
+  object GMMTrainPlugin{
   /**
    * Constructs a GaussianMixture instance with parameters passed or default parameters if not specified
+   * @param arguments Arguments passed to GMM train plugin
+   * @return An initialized Gaussian Mixture Model
    */
-  private def initializeGMM(arguments: GMMTrainArgs): GaussianMixture = {
+  def initializeGMM(arguments: GMMTrainArgs): GaussianMixture = {
     val gmm = new GaussianMixture()
 
     gmm.setK(arguments.k)
@@ -104,8 +107,14 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     gmm.setSeed(arguments.seed)
   }
 
-  private def computeClusterSize(gmmModel: GaussianMixtureModel, vectorRDD: RDD[org.apache.spark.mllib.linalg.Vector], observationColumns: List[String]): GMMTrainReturn = {
-    val clusterAssignment = gmmModel.predict(vectorRDD)
-    new GMMTrainReturn(clusterAssignment.countByValue.map(x => (x._1, x._2.toInt)).toMap)
+  /**
+   * Computes the number of elements belonging to each GMM cluster
+   * @param gmmModel The trained GMM Model
+   * @param vectorRdd RDD storing the observations as a Vector
+   * @return A map storing the cluster number and number of elements it contains
+   */
+  def computeGmmClusterSize(gmmModel: GaussianMixtureModel, vectorRdd: RDD[org.apache.spark.mllib.linalg.Vector]): Map[String, Int] = {
+    val predictRDD = gmmModel.predict(vectorRdd)
+    predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
   }
 }

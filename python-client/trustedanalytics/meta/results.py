@@ -147,8 +147,3 @@ def return_power_iteration_clustering_predict(json_result):
     number_of_clusters = json_result['k']
     cluster_size = json_result['cluster_size']
     return {'predicted_frame': predicted_frame , 'number_of_clusters': number_of_clusters, 'cluster_size': cluster_size}
-
-@postprocessor('model:gmm/train')
-def return_gmm_train(json_result):
-    cluster_size = json_result['cluster_size']
-    return {'cluster_size': cluster_size}
