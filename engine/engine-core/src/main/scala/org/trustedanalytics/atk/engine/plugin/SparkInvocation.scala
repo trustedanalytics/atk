@@ -18,8 +18,7 @@ package org.trustedanalytics.atk.engine.plugin
 
 import org.trustedanalytics.atk.domain.UserPrincipal
 import org.trustedanalytics.atk.event.EventContext
-import org.trustedanalytics.atk.engine.{ CommandProgressUpdater, EngineImpl }
-import org.trustedanalytics.atk.engine.{ CommandStorageProgressUpdater, CommandStorage }
+import org.trustedanalytics.atk.engine.EngineImpl
 import spray.json.JsObject
 import org.apache.spark.SparkContext
 
@@ -41,10 +40,8 @@ case class SparkInvocation(engine: EngineImpl,
                            executionContext: ExecutionContext,
                            arguments: Option[JsObject],
                            sparkContext: SparkContext,
-                           commandStorage: CommandStorage,
                            eventContext: EventContext,
                            clientId: String) extends CommandInvocation {
-  override val progressUpdater: CommandProgressUpdater = new CommandStorageProgressUpdater(commandStorage)
 }
 
 object SparkInvocation {

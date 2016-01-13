@@ -59,9 +59,6 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
   type Data = FrameRdd
   type Context = SparkContext
 
-  /* This progress listener saves progress update to command table */
-  SparkProgressListener.progressUpdater = new CommandStorageProgressUpdater(commandStorage)
-
   override def getCommands(offset: Int, count: Int)(implicit invocation: Invocation): Future[Seq[Command]] = {
     withContext("se.getCommands") {
       require(offset >= 0, "offset cannot be negative")

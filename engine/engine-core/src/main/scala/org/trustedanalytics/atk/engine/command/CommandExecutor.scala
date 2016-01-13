@@ -133,7 +133,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         if ((isRunningInYarn && plugin.isInstanceOf[SparkCommandPlugin[A, R]]) || !isRunningInYarn) {
           commands.complete(commandContext.command.id, Try {
             // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
-            val commandInvocation = new SimpleInvocation(engine, commands, commandContext, invocation.clientId)
+            val commandInvocation = new SimpleInvocation(engine, commandContext, invocation.clientId)
             val arguments = plugin.parseArguments(commandContext.command.arguments.get)
             info(s"Invoking command ${commandContext.command.name}")
             val returnValue = plugin(commandInvocation, arguments)

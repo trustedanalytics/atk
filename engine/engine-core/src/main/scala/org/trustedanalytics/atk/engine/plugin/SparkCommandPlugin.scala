@@ -82,14 +82,13 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
       commandInvocation.arguments,
       //TODO: Hide context factory behind a property on SparkEngine?
       null,
-      commandInvocation.commandStorage,
       invocation.eventContext,
       invocation.clientId)
     sparkInvocation.copy(sparkContext = createSparkContextForCommand(arguments, sparkEngine.sparkContextFactory)(sparkInvocation))
   }
 
   def createSparkContextForCommand(arguments: Argument, sparkContextFactory: SparkContextFactory)(implicit invocation: SparkInvocation): SparkContext = {
-    val cmd = invocation.commandStorage.expectCommand(invocation.commandId)
+    val cmd = invocation.engine.commandStorage.expectCommand(invocation.commandId)
     val context: SparkContext = sparkContextFactory.context(cmd.id, cmd.name, kryoRegistrator)
 
     SparkCommandPlugin.commandIdContextMapping += (cmd.id -> context)
