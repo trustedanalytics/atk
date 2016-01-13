@@ -9,6 +9,8 @@ trait JobContextRepository[Session] extends Repository[Session, JobContextTempla
 
   def lookupByClientId(user: User, clientId: String)(implicit session: Session): Option[JobContext]
 
+  def lookupRecentlyActive(seconds: Int)(implicit session: Session): Seq[JobContext]
+
   def updateJobServerUri(id: Long, uri: String)(implicit session: Session): Unit
 
   def updateProgress(id: Long, progress: String)(implicit session: Session): Unit
