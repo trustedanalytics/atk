@@ -77,7 +77,11 @@ class SparkCommandJob(jobContextId: Long) extends AbstractEngineComponent {
         Thread.sleep(1000L)
       }
     }
-
+    if (manager.shouldDoWork()) {
+      val msg = "job was asked to exit, so it is exiting, but it still had more work to do!"
+      System.err.println(msg)
+      throw new Exception(msg)
+    }
   }
 
   /**
