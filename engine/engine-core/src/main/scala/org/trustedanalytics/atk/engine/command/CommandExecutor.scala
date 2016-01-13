@@ -114,7 +114,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
           commands.complete(commandContext.command.id, Try {
             val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
             val refreshedJobContext = engine.jobContextStorage.assignYarnAppName(jobContext)
-            new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName, refreshedJobContext)
+            new SparkSubmitLauncher(engine).execute(moduleName, refreshedJobContext)
 
             // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
             val updatedCommand = commands.expectCommand(commandContext.command.id)
