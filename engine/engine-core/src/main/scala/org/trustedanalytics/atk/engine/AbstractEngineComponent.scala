@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.trustedanalytics.atk.engine.command.mgmt.YarnJobShutdownHook
 import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
@@ -87,4 +88,5 @@ abstract class AbstractEngineComponent extends DbProfileComponent
     commandExecutor, commandStorage, frameStorage, graphStorage, modelStorage, userStorage,
     sparkAutoPartitioner, jobContextStorage, fileStorage) {}
 
+  YarnJobShutdownHook.createHook(jobContextStorage)
 }

@@ -20,6 +20,7 @@ import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.repository.SlickMetaStoreComponent
 
@@ -55,6 +56,11 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
       repo.lookupByClientId(user, clientId)
   }
 
+  def lookupRecentlyActive(seconds: Int): Seq[JobContext] = metaStore.withSession("se.jobcontext.lookupRecentlyActive") {
+    implicit session =>
+      repo.lookupRecentlyActive(seconds)
+  }
+
   def create(createReq: JobContextTemplate): JobContext =
     metaStore.withSession("se.command.create") {
       implicit session =>
@@ -79,9 +85,9 @@ class JobContextStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStor
   }
 
   def assignYarnAppName(jobContext: JobContext): JobContext = {
-    val yarnAppName = s"client${jobContext.id}-${jobContext.clientId}-" +
-      DateTimeFormat.forPattern("yyyymmdd_kk:mm").print(new DateTime)
+    val yarnAppName = s"client${jobContext.id}-${jobContext.clientId}-" + DateTimeFormat.forPattern("yyyymmdd_kk:mm").print(new DateTime)
     updateYarnAppName(jobContext.id, yarnAppName)
+    updateProgress(jobContext.id, "Initializing cluster resources...")
     expectJobContext(jobContext.id)
   }
 

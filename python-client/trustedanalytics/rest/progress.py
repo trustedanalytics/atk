@@ -39,11 +39,12 @@ class ProgressPrinter(object):
         minutes, seconds = divmod(rem, 60)
         return "{:0>2}:{:0>2}:{:0>2}".format(int(hours),int(minutes),int(seconds))
 
-    def update(self, message):
-        sys.stdout.write(self._blank)
-        elapsed = self._get_elapsed_time()
-        sys.stdout.write("\r%s %s" % (elapsed, message))
-        sys.stdout.flush()
+    def update(self, message, carriage_return=False):
+        if message:
+            sys.stdout.write(self._blank)
+            elapsed = self._get_elapsed_time()
+            sys.stdout.write("\r%s Time %s%s" % (message, elapsed, '\n' if carriage_return else ''))
+            sys.stdout.flush()
 
 
 class ProgressPrinterOld(object):

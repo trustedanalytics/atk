@@ -90,18 +90,8 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
 
   def createSparkContextForCommand(arguments: Argument, sparkContextFactory: SparkContextFactory)(implicit invocation: SparkInvocation): SparkContext = {
     val cmd = invocation.commandStorage.expectCommand(invocation.commandId)
-    val context: SparkContext = sparkContextFactory.context(s"(id:${cmd.id},name:${cmd.name})", kryoRegistrator)
-    if (!EngineConfig.reuseSparkContext) {
-      try {
-        val progressPrinter = new ProgressPrinter
-        context.addSparkListener(progressPrinter)
-        context.addSparkListener(new JobContextProgressListener(engine.jobContextStorage, invocation))
-      }
-      catch {
-        // exception only shows up here due to dev error, but it is hard to debug without this logging
-        case e: Exception => error("could not create progress listeners", exception = e)
-      }
-    }
+    val context: SparkContext = sparkContextFactory.context(cmd.id, cmd.name, kryoRegistrator)
+
     SparkCommandPlugin.commandIdContextMapping += (cmd.id -> context)
     context
   }
