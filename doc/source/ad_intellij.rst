@@ -66,18 +66,6 @@ Setup
     #)  Choose *myproject* and click *OK* button.
     #)  Name the library "ta-python-client".
     #)  Choose *OK* button.
-
-#)  Choose :menuselection:`File --> New --> Python File`.
-#)  Name the file 'test' and type in the following code::
-
-        import trustedanalytics as ta
-        ta.server.host = "correct host name or IP address"
-        ta.connect()
-        ta.server.ping()
-
-#)  Choose :menuselection:`Run --> Run`, you should see the output::
-
-        Successful ping to Trusted Analytics ATK at http://localhost:9099/info
-
+    #)  In order to connect to the analytics instance in TAP follow instructions :doc:`here </python_api/connect>`
 #)  Next take a look at the included examples.
 

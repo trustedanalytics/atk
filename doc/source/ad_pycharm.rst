@@ -58,25 +58,4 @@ Setup
 #)  Right click your project folder, for example, "myproject", and select
     :menuselection:`New --> Python File`.
 
-    a)  Name the file "test" and type in the following code::
-
-            import trustedanalytics as ta
-            ta.server.host = "correct host name or IP address"
-            ta.connect()
-            ta.server.ping()
-
-    #)  If you see a yellow bar across the top of the file warning about
-        "Package requirements" not being satisfied then your system is not
-        setup correctly.
-
-        i)  You may not have installed all of the Python dependencies for the
-            |PACKAGE| REST Client correctly.
-        #)  You may have chosen the wrong Python interpreter.
-
-
-#)  Choose :menuselection:`Run --> Run`, you should see the output::
-
-        Successful ping to Trusted Analytics ATK at http://localhost:9099/info
-
-#)  Next take a look at the included examples.
-
+    #)  In order to connect to the analytics instance in TAP follow instructions :doc:`here </python_api/connect>`
