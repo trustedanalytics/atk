@@ -27,8 +27,8 @@
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="Administration" href="ad_over.html" >
-    <link rel="next" title="Physical Machine Configuration" href="ad_inst_pre_cloudera.html" >
-    <link rel="prev" title="Deploy and Run ATK App on TAP" href="ad_tap.html" > 
+    <link rel="next" title="Scoring Engine" href="ad_scoring_engine.html" >
+    <link rel="prev" title="Administration" href="ad_over.html" > 
   </head>
   <body>
 
@@ -55,11 +55,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="ad_tap.html" title="Deploy and Run ATK App on TAP"
+        <a href="ad_over.html" title="Administration"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ad_inst_pre_cloudera.html" title="Physical Machine Configuration"
+        <a href="ad_scoring_engine.html" title="Scoring Engine"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -95,14 +95,12 @@
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">System Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_other.html">Windows Python Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_other.html#integrated-development-environments">Integrated Development Environments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_eclipse.html">Eclipse Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_intellij.html">IntelliJ IDEA Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_pycharm.html">PyCharm Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
@@ -121,37 +119,12 @@
   <div class="section" id="system-requirements">
 <span id="ad-reqs"></span><h1>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="ad_inst_pre_cloudera.html">Physical Machine Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_pre_cloudera.html#pre-configuration">Pre-Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_pre_cloudera.html#base-configuration">Base Configuration</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ad_inst_cloudera.html">Cloudera Hadoop 5 Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#install-cloudera-manager">Install Cloudera Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#proxy-and-parcel-info-in-cloudera-manager">Proxy and Parcel Info in Cloudera Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#submit-license-file">Submit License File</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#specifying-hosts">Specifying Hosts</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#cdh-parcel-repository"><abbr title="Cloudera Hadoop">CDH</abbr> Parcel Repository</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#java-encryption">Java Encryption</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#ssh-login-credentials">SSH Login Credentials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#cluster-installation">Cluster Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#host-configuration">Host Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#cdh-services-to-install"><abbr title="Cloudera Hadoop">CDH</abbr> Services to Install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#customize-role-assignments">Customize Role Assignments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#database-setup">Database Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#review-changes">Review Changes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#finishing-up-in-cloudera-manager">Finishing Up In Cloudera Manager</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_cloudera.html#final-settings-and-tests">Final Settings and Tests</a></li>
-</ul>
-</li>
+<ul class="simple">
 </ul>
 </div>
 <p>The hardware requirements for the Trusted Analytics Platform package server are
 insignificant with comparison to the requirements for a Cloudera server.
 See <a class="reference external" href="http://blog.cloudera.com/blog/2013/08/how-to-select-the-right-hardware-for-your-new-hadoop-cluster/">Cloudera Requirements</a>.</p>
-<p>Requirements specifically for the Trusted Analytics Platform Package can be found in
-<a class="reference internal" href="ad_inst_ta1.html"><em>Package Installation</em></a>.</p>
 </div>
 
 
@@ -175,7 +148,7 @@ See <a class="reference external" href="http://blog.cloudera.com/blog/2013/08/ho
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 12, 2016.
+      Last updated on Jan 14, 2016.
       </li>
     </ul>
     </div>

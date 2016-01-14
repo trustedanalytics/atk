@@ -150,11 +150,7 @@
 </div>
 <div class="section" id="when-to-write-a-plugin">
 <h2>When to Write a Plugin<a class="headerlink" href="#when-to-write-a-plugin" title="Permalink to this headline">¶</a></h2>
-<p>Many of the operations and algorithms that only address a single can be written
-in Python using Python UDFs in the client.</p>
-<p>Anytime there is a new function such as an analytical or
-<a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a> algorithm that would be desirable to publish for use
-via the Python client or REST server, use a CommandPlugin.</p>
+<p>The framework provides a few different mechanisms for customization. The simplest is using Python User-Defined Functions (UDFs). While powerful, these functions are limited in scope to basic map and filter operations, like <cite>add_columns</cite> or <cite>drop_rows</cite>, which operate on a per-row basis. Plugins offer a far more extensibility for more complex custom operations, involving entire frames, multiple frames, external sources/sinks, analytics and machine learning algorithms, etc.</p>
 </div>
 <div class="section" id="plugin-support-services">
 <h2>Plugin Support Services<a class="headerlink" href="#plugin-support-services" title="Permalink to this headline">¶</a></h2>
@@ -187,28 +183,11 @@ contains settings that are relevant.</p>
 <h2>Creating a CommandPlugin<a class="headerlink" href="#creating-a-commandplugin" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="naming">
 <h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
-<p>Naming the command correctly is crucial for the usability of the system.
-The Python client creates Python functions to match the commands in the engine,
-and it places them and names them in accordance with the name specified for the
-plugin.</p>
-<p>Name components are separated by slashes.
-For instance, the command that drops columns from a frame is called
-frame/drop_column.
-The Python client sees that name, knows that frame commands are associated
-with the Frame class, and therefore generates a function
-named drop_column on the Frame.
-When the user calls that function, its arguments will be converted to JSON,
-sent to the REST server, and then on to the engine for processing.
-The results from the engine flow back through the REST server, and are
-converted back to Python objects.</p>
-<p>If the name of the command contains more than one slash, the Python client will
-create intermediate objects that allow functions to be grouped logically
-together.
-For example, if the command is named frame/my_new_algorithm then the method created in the Python
-client could be accessed on a frame <em>f</em> using <code class="docutils literal"><span class="pre">f.my_new_algorithm()</span></code>.
-Commands can be nested as deeply as needed, any number of intermediary objects
-will be created automatically so the object model of the frame or graph matches
-the command tree structure defined by the command names in the system.</p>
+<p>All command plugins have a unique name. This name is the command’s identification and is also used to determine how command will be “installed” within the client-facing APIs. All commands are associated with an entity, which is the type of object the command is a member of. For example, the command for sorting rows in a frame has the formal name of “frame/sort”. The “frame” is the entity for the command, and the “sort” is the name of the function. This allows the Python client to support calling the plugin like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>There is limited subtyping available with the entities. This is most common in plugins for models. For example, the “train” command for the KMeansModel looks like this: “model:k_means/train”, where “:k_means” denotes a model subtype.</p>
 </div>
 <div class="section" id="rest-input-and-output">
 <h3>REST Input and Output<a class="headerlink" href="#rest-input-and-output" title="Permalink to this headline">¶</a></h3>
@@ -284,7 +263,7 @@ possible to add a plugin without restarting the server.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 12, 2016.
+      Last updated on Jan 14, 2016.
       </li>
     </ul>
     </div>
