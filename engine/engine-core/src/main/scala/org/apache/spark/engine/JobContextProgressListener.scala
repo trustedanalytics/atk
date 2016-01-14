@@ -57,7 +57,7 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
 
       val progressBar = s"[${"=" * Math.floor(percentComplete / 4).toInt}${"." * Math.ceil(percentIncomplete / 4).toInt}]"
 
-      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%%$showTaskRetries"
+      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%%$showTaskRetries ${jobContext.getYarnAppName}"
 
       jobContextStorage.updateProgress(jobContext.id, progress)
     }
