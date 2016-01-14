@@ -22,7 +22,7 @@ package org.trustedanalytics.atk.engine.command.mgmt
 class ActivityTracker(timeoutInSeconds: Long) {
 
   private val timeoutInMillis = timeoutInSeconds * 1000
-  private var lastActivityTime = System.currentTimeMillis()
+  @volatile private var lastActivityTime = System.currentTimeMillis()
 
   /** log that activity has happened to avoid timing out */
   def logActivity(): Unit = {
