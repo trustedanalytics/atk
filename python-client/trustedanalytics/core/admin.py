@@ -46,11 +46,4 @@ def release():
     Release the current job context (shuts down Yarn application)
     """
     print "Releasing cluster resources..."
-    try:
-        execute_command("_admin:/_release", None, bogus=0)
-    except Exception:
-        print "Error releasing cluster resources."
-        raise
-    else:
-        print "Resources released."
-
+    execute_command("_admin:/_release", None, bogus=0)
