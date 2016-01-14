@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
@@ -69,9 +70,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     }
   }
 
-  override def getCommandJobContextProgress(command: Command)(implicit invocation: Invocation): Option[String] =
-    withContext("se.getCommandJobContextProgress") {
-      command.jobContextId.flatMap(jobContextStorage.lookup).flatMap(_.progress)
+  override def getCommandJobContext(command: Command)(implicit invocation: Invocation): Option[JobContext] =
+    withContext("se.getCommandJobContext") {
+      command.jobContextId.flatMap(jobContextStorage.lookup)
     }
 
   override def getCommand(id: Long)(implicit invocation: Invocation): Option[Command] = withContext("se.getCommand") {

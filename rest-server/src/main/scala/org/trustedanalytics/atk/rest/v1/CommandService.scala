@@ -56,8 +56,14 @@ class CommandService(commonDirectives: CommonDirectives, engine: Engine) extends
   def decorate(uri: Uri, command: Command)(implicit invocation: Invocation): GetCommand = {
     //TODO: add other relevant links
     val links = List(Rel.self(uri.toString()))
-    val progress: Option[String] = engine.getCommandJobContextProgress(command)
-    CommandDecorator.decorateEntity(uri.toString(), links, command).copy(progress = progress.getOrElse(""))
+    val jobContext = engine.getCommandJobContext(command)
+    val progress: Option[String] = jobContext.flatMap(_.progress)
+    val additionalCorrelation = jobContext.flatMap(_.yarnAppName) match {
+      case Some(name) => "-" + name
+      case None => ""
+    }
+    val correlationId = command.correlationId + additionalCorrelation
+    CommandDecorator.decorateEntity(uri.toString(), links, command).copy(progress = progress.getOrElse(""), correlationId = correlationId)
   }
 
   /**
