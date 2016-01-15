@@ -25,6 +25,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import ssl
+import threading
 
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.poolmanager import PoolManager
@@ -63,7 +64,10 @@ def _get_arg(key, from_kwargs, default):
 
 def _get_headers(server, from_kwargs):
     """Helper function to collect headers from kwargs when the http caller wants to override them"""
-    return _get_arg('headers', from_kwargs, server.headers)
+    headers = _get_arg('headers', from_kwargs, server.headers)
+    h = dict(headers)
+    h['Client-ID'] = "PyThread" + str(threading.current_thread().ident)
+    return h
 
 
 # HTTP methods

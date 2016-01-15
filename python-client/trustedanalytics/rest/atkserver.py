@@ -176,9 +176,9 @@ class AtkServer(Server):
         """override base check response to check for an invalid token error"""
         if (response.status_code == 400 and "CF-InvalidAuthToken" in response.text) or (response.status_code == 401):
             raise InvalidAuthTokenError(response.text)
-        client_id = response.headers.get('Client-ID', None)
-        if client_id:
-            self.headers['Client-ID'] = client_id
+        #client_id = response.headers.get('Client-ID', None)
+        #if client_id:
+            #self.headers['Client-ID'] = client_id
         super(AtkServer, self)._check_response(response)
 
     def ping(self):
