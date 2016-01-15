@@ -11,22 +11,37 @@
 Windows Python Setup
 --------------------
 
-1.  Download Anaconda with Python 2.7.
+If you are behind  a corporate firewall you will need your windows proxy settings before trying to run any commands.
+To use the ATK client on a windows machine you will need to install the anaconda python distribution. The installation is done through an msi and can be found on the anocanda download page.
+ 
+Before installing the ATK client you must first install numpy and pandas through anaconda.
+You will also need to update pip.
+Open a windows command line and run the following command.
 
-#.  Install
+------------------------
+Install Pandas and Numpy
+------------------------
 
-    -   By default, Anaconda installs to the user's AppData hidden folder.
-        It's better to put this in a more accessible location, like
-        ``c:\anaconda``.
-        This is the only change from the default installation necessary.
+.. code::
+    $ conda install pandas
+    $ conda update pip
 
-#.  Open a command prompt.
+Numpy will be installed automatically since it's a dependency for pandas.
 
-#.  Run the command:
-    ``conda create -n trustedanalytics-python python=2.7 numpy=1.8 requests=2.3
-    ordereddict=1.1``.
-    This creates a virtual Python environment that mimics the cluster's
-    configuration.
+Once pandas and numpy are installed you can install the ATK client through pip with the following command
+
+------------------
+Install ATK client
+------------------
+
+.. code::
+    $ pip install trustedanalytics
+
+All the dependencies for the Intel Analytics package will be installed automatically.
+    Weekly and production releases of client are available on pypi.python.org. If you need to install a weekly build you must specify the version right after the package name
+
+.. code::
+    $ pip install trustedanalytics== 0.4.2.dev201512019643
 
 .. index::
     single: IDE

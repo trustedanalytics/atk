@@ -106,6 +106,11 @@ classification using logistic regression.
 See the section on :doc:`machine learning </ds_ml>` and the
 :doc:`API </python_api/index>` for further information.
 
+--------------
+Scoring Engine
+--------------
+
+The scoring engine produces predictions from inputs using a previously trained machine learning model. Once a model has been trained and evaluated, it can be deployed easily into production via the scoring engine.
 
 ---------------
 Plugins Summary

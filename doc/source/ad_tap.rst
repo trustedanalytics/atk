@@ -8,20 +8,20 @@ Deploy and Run |ATK| App on TAP
 Installing Required Packages
 ----------------------------
 
-Install "golang" from the package manager 
+Install Golang from the package manager 
 =========================================
 On RedHat/CentOS, ensure "EPEL" repo is enabled.
 For more information, see :ref:`Yum Repo <EPEL Repository>`.
 
 From the command line interface (terminal),
-install the "go" language and the required libraries.
+install Go and the required libraries.
 
 .. code::
 
     $ sudo yum install golang
 
-To read more about "go" see https://golang.org/ .
-To test the "go" installation:
+To read more about Go, see https://golang.org/ .
+To test the Go installation:
 
 .. code::
 
@@ -34,7 +34,7 @@ Install the CloudFoundry |CLI| package:
    
     $ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
 
-This downloads the prepackaged RPM to your local machine.
+This command downloads the prepackaged RPM to your local machine.
 Install this package:
 
 .. code::
@@ -99,20 +99,14 @@ And your output looks like this:
 Prepare |ATK| Tarball
 =====================
 
-For QA:
+For Admin:
 
 |ATK| tarballs are built as part of the TeamCity build and are uploaded to S3.
 In order to download the file, simply run the command:
 
 .. code::
 
-    wget https://s3.amazonaws.com/gao-internal-archive/<Your_Branch_Name>/trustedanalytics.tar.gz
-
-For example, if you are on "master" branch you run:
-
-.. code::
-
-    wget https://s3.amazonaws.com/gao-internal-archive/master/trustedanalytics.tar.gz
+    https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/weekly/regressed/latest/archive/trustedanalytics.tar.gz
 
 For Dev:
 
@@ -135,7 +129,7 @@ In order to do so, do the following:
     .. code::
 
         applications:
-        - name: <YOUR_ATK_APP_NAME_HERE> for example "atk-ebi"
+        - name: <YOUR_ATK_APP_NAME_HERE> for example "atk-yourapp"
           command: bin/rest-server.sh
           memory: 1G
           disk_quota: 2G
@@ -143,25 +137,25 @@ In order to do so, do the following:
           instances: 1
         services:
         - bryn-cdh
-        - <YOUR_POSTGRESQL_SERVICE_NAME_HERE> for example "pg-atk-ebi"
+        - <YOUR_POSTGRESQL_SERVICE_NAME_HERE> for example "pg-atk-yourapp"
         - bryn-zk
         env:
           CC_URI: <CLOUD_FOUNDRY_API_ENDPOINT> 
           UAA_URI: <UAA_ENDPOINT> 
           UAA_CLIENT_NAME: atk-client
-          UAA_CLIENT_PASSWORD: c1oudc0w
+          UAA_CLIENT_PASSWORD: *******
 
 #)  Create an instance of PostgreSQL by running the command: 
 
     .. code::
 
-        $ cf create-service postgresql93 free pg-atk-ebi
+        $ cf create-service postgresql93 free <PG-ATK-YOURAPP>
 
     and you should see an output like this:
 
     .. code::
 
-        Creating service instance pg-atk-ebi in org seedorg / space seedspace as admin...
+        Creating service instance PG-ATK-YOURAPP in org seedorg / space seedspace as admin...
         OK
 
 #)  Change to the "~/vcap/app" folder (or wherever you have
@@ -173,51 +167,45 @@ In order to do so, do the following:
 
         [hadoop@master app]$ cf push
         Using manifest file /home/hadoop/vcap/app/manifest.yaml
-        Creating app atk-ebi in org seedorg / space seedspace as admin...
+        Creating app <ATK-YOURAPP> in org seedorg / space seedspace as admin...
         OK
-        Using route atk-ebi.apps.gotapaas.eu
-        Binding atk-ebi.apps.gotapaas.eu to atk-ebi...
+        Using route yourdomain.for.yourapp.com
+        Binding yourdomain.for.yourapp.com to <ATK-YOURAPP>...
         OK
-        Uploading atk-ebi...
+        Uploading <ATK-YOURAPP>...
         Uploading app files from: /home/hadoop/vcap/app
         Uploading 48.3K, 9 files
         Done uploading
         OK
-        Binding service bryn-cdh to app atk-ebi in org seedorg / space seedspace as admin...
-        OK
-        Binding service pg-atk-ebi to app atk-ebi in org seedorg / space seedspace as admin...
-        OK
-        Binding service bryn-zk to app atk-ebi in org seedorg / space seedspace as admin...
-        OK
-        Starting app atk-ebi in org seedorg / space seedspace as admin...
+        Starting app <ATK-YOURAPP> in org seedorg / space seedspace as admin...
         0 of 1 instances running, 1 starting
         1 of 1 instances running
         App started
 
         OK
-        App atk-ebi was started using this command `bin/rest-server.sh`
-        Showing health and status for app atk-ebi in org seedorg / space seedspace as admin...
+        App <ATK-YOURAPP> was started using this command `bin/rest-server.sh`
+        Showing health and status for app <ATK-YOURAPP> in org seedorg / space seedspace as admin...
         OK
         requested state: started
         instances: 1/1
         usage: 1G x 1 instances
-        urls: atk-ebi.apps.gotapaas.eu
+        urls: yourdomain.for.yourapp.com
         last uploaded: Wed May 20 22:22:54 UTC 2015
         stack: cflinuxfs2
         state since cpu memory disk details
         #0 running 2015-05-20 03:25:13 PM 0.0% 622.9M of 1G 432.9M of 2G
 
     If you like to see the complete configuration for your app, run the
-    command "cf env atk-ebi".
-#)  Retrieve data from VCAP_APPLICATION uris.
+    command "cf env <ATK-YOURAPP>".
+#)  Retrieve data from VCAP_APPLICATION URIs.
 #)  Create a client credentials file.
     For more information,
-    see https://github.com/trustedanalytics/atk/wiki/python-client
+    see `Python Client Documentation <https://github.com/trustedanalytics/atk/wiki/python-client/>`__
 #)  To tail your app logs:
 
     .. code::
        
-        cf logs atk-ebi
+        cf logs <ATK-YOURAPP>
 
 #)  Open a Python2.7 or IPython session and do the following:
 
@@ -225,13 +213,8 @@ In order to do so, do the following:
 
         In [1]: import trustedanalytics as ta
         In [2]: ta.connect("<PATH_TO_YOUR_CREDENTIALS_FILE")
-        Connected to intelanalytics server.
+        Connected to trustedanalytics server.
         In [3]: ta.server.host
-        Out[3]: 'atk-ebi.apps.gotapaas.eu'
+        Out[3]: 'yourdomain.for.yourapp.com'
         In [4]: exit
 
-#)  Ready to run some examples:
-
-    .. code::
-
-        TBD

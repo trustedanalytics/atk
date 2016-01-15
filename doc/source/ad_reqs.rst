@@ -15,7 +15,3 @@ insignificant with comparison to the requirements for a Cloudera server.
 See `Cloudera Requirements
 <http://blog.cloudera.com/blog/2013/08/how-to-select-the-right-hardware-for-your-new-hadoop-cluster/>`__.
 
-Requirements specifically for the |TOOLKIT| can be found in
-:doc:`/ad_inst_ta1`.
-
-

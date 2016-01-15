@@ -10,10 +10,9 @@ Administration
 .. toctree::
     :maxdepth: 2
 
-    ad_tap
     ad_reqs
-    ad_inst_ta1
     ad_scoring_engine
-    ad_inst_vm
-    ad_bkm
-    ad_other
+    ad_eclipse
+    ad_intellij
+    ad_pycharm
+    ad_tap
