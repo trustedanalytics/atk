@@ -29,12 +29,8 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
 
   val jobContext = jobContextStorage.lookupByClientId(invocation.user.user, invocation.clientId).getOrElse(throw new IllegalArgumentException(s"couldn't find jobContext id for invocation $invocation"))
 
-  // Store the Current Job Group ID
-  var jobGroupId = StringUtils.EMPTY
-
   override def onJobStart(jobStart: SparkListenerJobStart) {
     super.onJobStart(jobStart)
-    jobGroupId = jobStart.properties.getProperty(SparkContext.SPARK_JOB_GROUP_ID)
     updateProgress()
   }
 
@@ -57,7 +53,7 @@ class JobContextProgressListener(jobContextStorage: JobContextStorageImpl, invoc
 
       val progressBar = s"[${"=" * Math.floor(percentComplete / 4).toInt}${"." * Math.ceil(percentIncomplete / 4).toInt}]"
 
-      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%%$showTaskRetries ${jobContext.getYarnAppName}"
+      val progress = f"Job:$completedJobs $progressBar $percentComplete%6.2f%%$showTaskRetries"
 
       jobContextStorage.updateProgress(jobContext.id, progress)
     }
