@@ -16,7 +16,9 @@
 
 package org.trustedanalytics.atk.engine.command.mgmt
 
-class JobManager(timeoutInSeconds: Long) {
+import org.trustedanalytics.atk.event.EventLogging
+
+class JobManager(timeoutInSeconds: Long) extends EventLogging {
 
   private val activityTracker = new ActivityTracker(timeoutInSeconds)
 
@@ -26,6 +28,7 @@ class JobManager(timeoutInSeconds: Long) {
   def accept(message: String): Unit = {
     this.synchronized {
       if (message == YarnWebProtocol.NextMsg) {
+        info("received request to process next command")
         if (shutdownRequested) {
           throw new RuntimeException("Job in process of shutting down, not accepting new commands")
         }
@@ -35,6 +38,7 @@ class JobManager(timeoutInSeconds: Long) {
         }
       }
       else if (message == YarnWebProtocol.ShutdownMsg) {
+        info("received request to shutdown")
         shutdownRequested = true
       }
       else {
@@ -54,6 +58,7 @@ class JobManager(timeoutInSeconds: Long) {
   def isKeepRunning: Boolean = {
     this.synchronized {
       if (activityTracker.isTimedout) {
+        info("timing out because of lack of activity")
         shutdownRequested = true
       }
       !shutdownRequested

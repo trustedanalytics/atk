@@ -84,14 +84,6 @@ trait CommandInvocation extends Invocation {
    */
   private[trustedanalytics] def arguments: Option[JsObject]
 
-  /**
-   * Command Storage to read/update command progress
-   */
-  private[trustedanalytics] def commandStorage: CommandStorage
-
-  val progressUpdater: CommandProgressUpdater
-
-  override private[trustedanalytics] def updateProgress(progress: Float): Unit = progressUpdater.updateProgress(commandId, progress)
 }
 
 object Invocation {

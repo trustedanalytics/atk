@@ -95,19 +95,7 @@ Setup
     a)  Give the file name 'test.py'.
     #)  If prompted, confirm the default settings for PyDev by choosing *OK*.
     #)  Close the *Help keeping PyDev alive* dialog, if it appears.
-    #)  Type the following code into test.py::
-
-            import trustedanalytics as ta
-            ta.server.host = "correct host name or IP address"
-            ta.connect()
-            ta.server.ping()
-
-#)  Choose :menuselection:`Run --> Run`.
-
-    #)  Choose *Python Run* and choose the *OK* button, you should see the
-        output::
-
-            Successful ping to Trusted Analytics ATK at http://localhost:9099/info
+    #)  In order to connect to the analytics instance in TAP follow instructions :doc:`here </python_api/connect>`
 
 #)  Next take a look at the included examples.
 

@@ -41,7 +41,12 @@ class JobContextReleasePlugin extends CommandPlugin[NoArgs, UnitReturn] {
         jobContext.jobServerUri match {
           case Some(uri) =>
             info(s"releasing client ${jobContext.clientId} at $uri")
-            new YarnWebClient(new URL(uri)).shutdownServer()
+            try {
+              new YarnWebClient(new URL(uri)).shutdownServer()
+            }
+            catch {
+              case e: Exception => info(s"error releasing client: $e")
+            }
           case None => info(s"no job server uri so release() has nothing to do")
         }
       case None => info(s"nothing to do, clientId ${context.clientId} for user ${context.user.user} not found ")

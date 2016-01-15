@@ -39,7 +39,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
   lazy val hdfsFileStorage: FileStorage = engine.asInstanceOf[EngineImpl].fileStorage
 
-  def execute(command: Command, plugin: CommandPlugin[_, _], moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
+  def execute(moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
     withContext("executeCommandOnYarn") {
 
       try {
@@ -131,7 +131,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         val pb = new java.lang.ProcessBuilder(javaArgs: _*)
         val job = pb.inheritIO().start()
         val result = job.waitFor()
-        info(s"Command ${command.id} completed with exitCode:$result, ${JvmMemory.memory}")
+        info(s"Completed with exitCode:$result, ${JvmMemory.memory}")
         result
       }
       finally {

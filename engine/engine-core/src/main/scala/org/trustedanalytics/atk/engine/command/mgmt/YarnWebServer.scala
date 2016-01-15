@@ -29,8 +29,13 @@ class YarnWebServer(manager: JobManager) extends NanoHTTPD(YarnWebServer.Port) {
 
   override def serve(session: IHTTPSession): Response = {
     val message = session.getParms.get("message")
-    manager.accept(message) // exception thrown if not accepted
-    NanoHTTPD.newFixedLengthResponse("Message Accepted: " + new Date)
+    try {
+      manager.accept(message) // exception thrown if not accepted
+      NanoHTTPD.newFixedLengthResponse("Message Accepted: " + new Date)
+    }
+    catch {
+      case e: Exception => NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "text/plain", e.getMessage)
+    }
   }
 
 }
