@@ -25,7 +25,22 @@ import java.net.{ HttpURLConnection, URL }
 class YarnWebClient(baseUrl: URL) {
 
   def notifyServer(): Unit = {
-    sendMsg(YarnWebProtocol.NextMsg)
+    try {
+      sendMsg(YarnWebProtocol.NextMsg)
+    }
+    catch {
+      case e: Exception =>
+        Thread.sleep(1000)
+        try {
+          sendMsg(YarnWebProtocol.NextMsg)
+        }
+        catch {
+          case e: Exception =>
+            Thread.sleep(10000)
+            sendMsg(YarnWebProtocol.NextMsg)
+        }
+    }
+
   }
 
   def shutdownServer(): Unit = {
