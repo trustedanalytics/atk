@@ -14,22 +14,28 @@
 // limitations under the License.
 */
 
-package org.trustedanalytics.atk.engine.command
+package org.trustedanalytics.atk.engine.command.mgmt
 
 import java.util.Date
 
 import fi.iki.elonen.NanoHTTPD
-import fi.iki.elonen.NanoHTTPD.{ Response, IHTTPSession }
-import org.trustedanalytics.atk.engine.Engine
+import fi.iki.elonen.NanoHTTPD.{ IHTTPSession, Response }
 
 /**
  * Lightweight webserver for running in Yarn so that we can communicate
  * from the rest-server to a long-running Yarn job.
  */
-class YarnWebServer(engine: Engine) extends NanoHTTPD(YarnWebServer.Port) {
+class YarnWebServer(manager: JobManager) extends NanoHTTPD(YarnWebServer.Port) {
 
   override def serve(session: IHTTPSession): Response = {
-    NanoHTTPD.newFixedLengthResponse("YarnWebServer: " + new Date)
+    val message = session.getParms.get("message")
+    try {
+      manager.accept(message) // exception thrown if not accepted
+      NanoHTTPD.newFixedLengthResponse("Message Accepted: " + new Date)
+    }
+    catch {
+      case e: Exception => NanoHTTPD.newFixedLengthResponse(NanoHTTPD.Response.Status.INTERNAL_ERROR, "text/plain", e.getMessage)
+    }
   }
 
 }
@@ -44,8 +50,8 @@ object YarnWebServer {
    * Initialize a webserver for running in yarn
    * @return initialized webserver
    */
-  def init(engine: Engine): YarnWebServer = {
-    val webserver = new YarnWebServer(engine)
+  def init(state: JobManager): YarnWebServer = {
+    val webserver = new YarnWebServer(state)
     webserver.start(Timeout, false)
     webserver
   }

@@ -21,6 +21,7 @@ Admin commands, not part of public API
 """
 
 from trustedanalytics.rest.command import execute_command
+import atexit
 
 
 def drop_stale(stale_age=None):
@@ -39,8 +40,10 @@ def finalize_dropped():
     execute_command("_admin:/_finalize_dropped", None, bogus=0)
 
 
+@atexit.register  # registers release to be call on normal python exit
 def release():
     """
     Release the current job context (shuts down Yarn application)
     """
-    #execute_command("_admin:/_release", None, bogus=0)
+    print "Releasing cluster resources..."
+    execute_command("_admin:/_release", None, bogus=0)
