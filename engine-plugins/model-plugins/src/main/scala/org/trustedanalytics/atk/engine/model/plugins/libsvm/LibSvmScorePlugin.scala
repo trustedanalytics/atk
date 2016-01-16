@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
 import libsvm.{ svm_model, svm, svm_node }
 import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 
 // TODO: all plugins should move out of engine-core into plugin modules
 

@@ -24,26 +24,22 @@ import libsvm.{ svm, svm_node, svm_model }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class LibSvmModel(libSvmModel: svm_model) extends svm_model with Model {
+class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { vector =>
-      val output = columnFormatter(vector.zipWithIndex)
-      val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
-      splitObs.nextToken()
-      val counter: Int = splitObs.countTokens / 2
-      val x: Array[svm_node] = new Array[svm_node](counter)
-      var j: Int = 0
-      while (j < counter) {
-        x(j) = new svm_node
-        x(j).index = atoi(splitObs.nextToken) + 1
-        x(j).value = atof(splitObs.nextToken)
-        j += 1
-      }
-      score = score :+ svm.svm_predict(libSvmModel, x)
+  override def score(data: Array[Any]): Array[Any] = {
+    val output = columnFormatter(data.zipWithIndex)
+    val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
+    splitObs.nextToken()
+    val counter: Int = splitObs.countTokens / 2
+    val x: Array[svm_node] = new Array[svm_node](counter)
+    var j: Int = 0
+    while (j < counter) {
+      x(j) = new svm_node
+      x(j).index = atoi(splitObs.nextToken) + 1
+      x(j).value = atof(splitObs.nextToken)
+      j += 1
     }
-    score
+    data :+ svm.svm_predict(libSvmModel, x)
   }
 
   private def columnFormatter(valueIndexPairArray: Array[(Any, Int)]): String = {
@@ -64,4 +60,24 @@ class LibSvmModel(libSvmModel: svm_model) extends svm_model with Model {
     Integer.parseInt(s)
   }
 
+  /**
+   *  @return fields containing the input names and their datatypes
+   */
+  override def input(): Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = libsvm.observationColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
+  override def output(): Array[Field] = {
+    var output = input()
+    //Double
+    output :+ Field("Prediction", "Double")
+  }
 }

@@ -91,13 +91,20 @@ class ScoringService(model: Model) extends Directives {
           post {
             parameterSeq { (params) =>
               val sr = params.toArray
+              var scoredRecords = Array[Any]()
               var records = Seq[Array[String]]()
               for (i <- sr.indices) {
                 val decoded = java.net.URLDecoder.decode(sr(i)._2, "UTF-8")
                 val splitSegment = decoded.split(",")
                 records = records :+ splitSegment
               }
-              onComplete(Future { model.score(records) }) {
+              onComplete(Future {
+                records.foreach { row =>
+                  {
+                    scoredRecords = scoredRecords :+ model.score(row.asInstanceOf[Array[Any]])
+                  }
+                }
+              }) {
                 case Success(scored) => complete(scored.toString)
                 case Failure(ex) => ctx => {
                   ctx.complete(StatusCodes.InternalServerError, ex.getMessage)

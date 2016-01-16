@@ -23,14 +23,20 @@ import org.trustedanalytics.atk.domain.StringValue
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.{ EngineConfig, FileStorage }
+import org.trustedanalytics.atk.scoring.models.{ LibSvmModelReaderPlugin, LibSvmData }
+import spray.json.JsValue
+
 // Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
+import ModelPublishJsonProtocol._
 import libsvm.svm
+import spray.json._
 import java.io.File
 import org.apache.commons.io.FileUtils
 import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
+import com.google.common.base.Charsets
 
 /**
  * Publish a Libsvm Model for scoring
@@ -83,20 +89,14 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata
     //Extracting the LibSvmModel from the stored JsObject
     val libsvmData = model.data.convertTo[LibSvmData]
     val libsvmModel = libsvmData.svmModel
-    var file: File = null
 
     try {
-      file = File.createTempFile("tmp", ".txt")
-      svm.svm_save_model(file.getAbsolutePath, libsvmModel)
-      val modelValues = FileUtils.readFileToByteArray(file)
-
-      val modelArtifact = ModelPublish.createTarForScoringEngine(modelValues, "scoring-models", "org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin")
+      val jsvalue: JsValue = libsvmData.toJson
+      val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[LibSvmModelReaderPlugin].getName)
       ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("libsvm_model"))
     }
     catch { case ex: Exception => throw new RuntimeException(s"Unable to Publish the LibSvm Model\n" + ex.toString) }
-    finally {
-      FileUtils.deleteQuietly(file)
-    }
   }
 
 }
+

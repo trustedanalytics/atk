@@ -131,10 +131,22 @@ class TestModelReaderPlugin extends ModelLoader {
 
 class TestModel() extends Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
     score = score :+ 2
     score
+  }
+
+  override def input: Array[Field] = {
+    var input = Array[Field]()
+    input = input :+ Field("input", "Float")
+    input
+  }
+
+  override def output: Array[Field] = {
+    var output = Array[Field]()
+    output = output :+ Field("output", "Float")
+    output
   }
 }
 
