@@ -61,7 +61,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
    *
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 15
+  override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 60
 
   /**
    * Run MLLib's GaussianMixtureModel() on the training frame and create a Model for it.
@@ -88,11 +88,12 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     val model: Model = arguments.model
     model.data = jsonModel.toJson.asJsObject
 
-    new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD))
+    val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma))
+    new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD), gmmModel.weights.toList, gaussians)
   }
 }
 
-  object GMMTrainPlugin{
+object GMMTrainPlugin {
   /**
    * Constructs a GaussianMixture instance with parameters passed or default parameters if not specified
    * @param arguments Arguments passed to GMM train plugin

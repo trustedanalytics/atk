@@ -43,5 +43,5 @@ observation column.""") columnScalings: List[Double],
 
 }
 
-case class GMMTrainReturn(clusterSize: Map[String, Int])
+case class GMMTrainReturn(clusterSize: Map[String, Int], weights: List[Double], gaussians: Array[(String, String)])
 

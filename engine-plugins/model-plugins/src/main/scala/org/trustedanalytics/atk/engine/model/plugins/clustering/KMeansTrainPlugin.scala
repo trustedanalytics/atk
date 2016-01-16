@@ -92,11 +92,10 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
   }
 }
 
-
 object KMeansTrainPlugin {
-/**
- * Constructs a KMeans instance with parameters passed or default parameters if not specified
- */
+  /**
+   * Constructs a KMeans instance with parameters passed or default parameters if not specified
+   */
   def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
     val kmeans = new KMeans()
 

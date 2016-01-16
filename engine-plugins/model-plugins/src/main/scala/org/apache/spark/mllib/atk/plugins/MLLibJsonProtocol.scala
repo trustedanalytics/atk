@@ -638,7 +638,7 @@ object MLLibJsonProtocol {
   implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
   implicit val gmmDataFormat = jsonFormat3(GMMData)
   implicit val gmmModelTrainFormat = jsonFormat8(GMMTrainArgs)
-  implicit val gmmModelTrainReturnFormat = jsonFormat1(GMMTrainReturn)
+  implicit val gmmModelTrainReturnFormat = jsonFormat3(GMMTrainReturn)
   implicit val gmmModelPredictFormat = jsonFormat3(GMMPredictArgs)
 }
 

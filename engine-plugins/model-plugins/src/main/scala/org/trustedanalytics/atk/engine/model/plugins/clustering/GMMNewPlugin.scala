@@ -28,8 +28,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Create a new instance of a gmm model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a gmm model.",
-extended =
-  """A Gaussian Mixture Model [1]_ represents a distribution where the observations are drawn from one of the k
+  extended =
+    """A Gaussian Mixture Model [1]_ represents a distribution where the observations are drawn from one of the k
 Gaussian sub-distributions, each with its own probability. Each observation can belong to only one cluster,
 the cluster representing the distribution with highest probability for that observation.
 
