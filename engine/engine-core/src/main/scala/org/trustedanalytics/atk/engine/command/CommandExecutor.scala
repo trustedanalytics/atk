@@ -108,6 +108,10 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
       case sparkCommandPlugin: SparkCommandPlugin[A, R] if !isRunningInYarn && EngineConfig.isSparkOnYarn =>
 
         val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, invocation.clientId)
+
+        // hack to clear progress for the next command (won't work perfectly but will do okay for now)
+        engine.jobContextStorage.updateProgress(jobContext.id, "")
+
         engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
 
         if (!notifyJob(jobContext)) {
