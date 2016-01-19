@@ -15,7 +15,7 @@ pushd ..
 popd
 
 echo "PID: " $PID
-max=10
+max=100
 count=0
 
 while [ $count -lt $max ];
