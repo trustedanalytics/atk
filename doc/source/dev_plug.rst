@@ -34,12 +34,7 @@ Plug-ins are written in Scala and have a few requirements that follow this patte
 When to Write a Plugin
 ----------------------
 
-Many of the operations and algorithms that only address a single can be written
-in Python using Python UDFs in the client.
-
-Anytime there is a new function such as an analytical or
-:term:`machine learning` algorithm that would be desirable to publish for use
-via the Python client or REST server, use a CommandPlugin.
+The framework provides a few different mechanisms for customization. The simplest is using Python User-Defined Functions (UDFs). While powerful, these functions are limited in scope to basic map and filter operations, like `add_columns` or `drop_rows`, which operate on a per-row basis. Plugins offer a far more extensibility for more complex custom operations, involving entire frames, multiple frames, external sources/sinks, analytics and machine learning algorithms, etc.
 
 -----------------------
 Plugin Support Services
@@ -83,30 +78,11 @@ Creating a CommandPlugin
 Naming
 ======
 
-Naming the command correctly is crucial for the usability of the system.
-The Python client creates Python functions to match the commands in the engine,
-and it places them and names them in accordance with the name specified for the
-plugin.
+All command plugins have a unique name. This name is the command’s identification and is also used to determine how command will be “installed” within the client-facing APIs. All commands are associated with an entity, which is the type of object the command is a member of. For example, the command for sorting rows in a frame has the formal name of “frame/sort”. The “frame” is the entity for the command, and the “sort” is the name of the function. This allows the Python client to support calling the plugin like this:
 
-Name components are separated by slashes.
-For instance, the command that drops columns from a frame is called
-frame/drop_column.
-The Python client sees that name, knows that frame commands are associated
-with the Frame class, and therefore generates a function
-named drop_column on the Frame.
-When the user calls that function, its arguments will be converted to JSON,
-sent to the REST server, and then on to the engine for processing.
-The results from the engine flow back through the REST server, and are
-converted back to Python objects.
+>>> my_frame.sort()
 
-If the name of the command contains more than one slash, the Python client will
-create intermediate objects that allow functions to be grouped logically
-together.
-For example, if the command is named frame/my_new_algorithm then the method created in the Python
-client could be accessed on a frame *f* using ``f.my_new_algorithm()``.
-Commands can be nested as deeply as needed, any number of intermediary objects
-will be created automatically so the object model of the frame or graph matches
-the command tree structure defined by the command names in the system.
+There is limited subtyping available with the entities. This is most common in plugins for models. For example, the “train” command for the KMeansModel looks like this: “model:k_means/train”, where “:k_means” denotes a model subtype.
 
 REST Input and Output
 =====================
