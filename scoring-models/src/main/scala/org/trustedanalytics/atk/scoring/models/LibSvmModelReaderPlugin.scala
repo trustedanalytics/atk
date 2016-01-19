@@ -40,5 +40,3 @@ class LibSvmModelReaderPlugin extends ModelLoader {
   }
 }
 
-
-

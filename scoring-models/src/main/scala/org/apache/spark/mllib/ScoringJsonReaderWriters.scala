@@ -401,7 +401,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): LibSvmData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("svm_model").map(v => {
         LibSVMModelFormat.read(v)
       }
       ).get
