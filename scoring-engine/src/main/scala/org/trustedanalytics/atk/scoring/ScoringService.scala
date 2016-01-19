@@ -90,7 +90,6 @@ class ScoringService(model: Model) extends Directives {
         requestUri { uri =>
           post {
             parameterSeq { (params) =>
-              println("Scoring Service Post request received now debugging")
               val sr = params.toArray
               var records = Seq[Array[String]]()
               for (i <- sr.indices) {
