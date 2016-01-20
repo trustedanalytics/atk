@@ -31,7 +31,7 @@ logger = logging.getLogger(__name__)
 
 import trustedanalytics.rest.config as config
 from trustedanalytics.rest.atkserver import server
-from trustedanalytics.rest.progress import ProgressPrinter
+from trustedanalytics.rest.progress import ProgressPrinter, ProgressPrinterOld
 from collections import namedtuple
 from spark import IaPyWorkerError
 
@@ -167,27 +167,28 @@ class Polling(object):
         if not CommandInfo.is_valid_command_uri(uri):
             raise ValueError('Cannot poll ' + uri + ' - a /commands/{number} uri is required')
         interval_secs = start_interval_secs
-        printer = ProgressPrinter()
         command_info = None
-        last_progress = []
+        printer = ProgressPrinter()
         start_time = time.time()
         while True:
             command_info = Polling._get_command_info(uri)
             finish = predicate(command_info)
             progress = command_info.progress
-            printer.print_progress(progress, finish)
+            printer.update(progress)
 
             if finish:
                 break
 
-            if len(last_progress) == len(progress) and interval_secs < max_interval_secs:
-                interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
+            #if len(last_progress) == len(progress) and interval_secs < max_interval_secs:
+            #    interval_secs = min(max_interval_secs, interval_secs * backoff_factor)
 
-            last_progress = progress
+            #last_progress = progress
             uri = command_info.uri
             time.sleep(interval_secs)
 
         logger.info("polling %s completed after %0.3f seconds" % (uri, time.time() - start_time))
+        if not command_info.error:
+            printer.update("Done [=========================] 100.00%", True)
         return command_info
 
     @staticmethod
@@ -305,7 +306,7 @@ class Executor(object):
             command = self.poll_command_info(response)
 
             #retreive the data
-            printer = ProgressPrinter()
+            printer = ProgressPrinterOld()
             total_pages = command.result["total_pages"] + 1
 
             start = 1

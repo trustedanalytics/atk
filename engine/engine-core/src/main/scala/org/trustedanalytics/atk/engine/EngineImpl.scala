@@ -16,11 +16,13 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.domain.{ UserPrincipal, CreateEntityArgs }
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph._
 import org.trustedanalytics.atk.domain.model.{ ModelEntity, ModelReference }
+import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.command.CommandExecutor
 import org.trustedanalytics.atk.engine.frame._
@@ -50,16 +52,13 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
                  val models: ModelStorageImpl,
                  users: UserStorage,
                  val sparkAutoPartitioner: SparkAutoPartitioner,
-                 val jobContextStorage: JobContextStorage,
+                 val jobContextStorage: JobContextStorageImpl,
                  val fileStorage: FileStorage) extends Engine
     with EventLogging
     with EventLoggingImplicits {
 
   type Data = FrameRdd
   type Context = SparkContext
-
-  /* This progress listener saves progress update to command table */
-  SparkProgressListener.progressUpdater = new CommandStorageProgressUpdater(commandStorage)
 
   override def getCommands(offset: Int, count: Int)(implicit invocation: Invocation): Future[Seq[Command]] = {
     withContext("se.getCommands") {
@@ -71,10 +70,13 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     }
   }
 
-  override def getCommand(id: Long)(implicit invocation: Invocation): Future[Option[Command]] = withContext("se.getCommand") {
-    future {
-      commandStorage.lookup(id)
+  override def getCommandJobContext(command: Command)(implicit invocation: Invocation): Option[JobContext] =
+    withContext("se.getCommandJobContext") {
+      command.jobContextId.flatMap(jobContextStorage.lookup)
     }
+
+  override def getCommand(id: Long)(implicit invocation: Invocation): Option[Command] = withContext("se.getCommand") {
+    commandStorage.lookup(id)
   }
 
   override def getUserPrincipal(apiKey: String)(implicit invocation: Invocation): UserPrincipal = {
