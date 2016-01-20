@@ -14,25 +14,23 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.interfaces
+package org.trustedanalytics.atk.scoring.models
 
-import scala.concurrent.Future
-/**
- * Base interface for a Model loader.
- */
-trait Model {
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import org.apache.spark.mllib.ScoringJsonReaderWriters._
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
 
-  /**
-   * Called for scoring
-   */
-  def score(row: Array[Any]): Array[Any]
+class RandomForestRegressorModelReaderPlugin() extends ModelLoader {
 
-  def input(): Array[Field]
+  private var rfModel: RandomForestRegressorScoreModel = _
 
-  def output(): Array[Field]
-
-  case class Field(name: String, dataType: String) {
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    println(str)
+    val json: JsValue = str.parseJson
+    val randomForestModelData = json.convertTo[RandomForestRegressorData]
+    rfModel = new RandomForestRegressorScoreModel(randomForestModelData)
+    rfModel.asInstanceOf[Model]
   }
-
 }
-
