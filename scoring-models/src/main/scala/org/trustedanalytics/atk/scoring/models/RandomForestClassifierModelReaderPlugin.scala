@@ -30,17 +30,16 @@ import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, Vector }
 import spray.json._
 import DefaultJsonProtocol._
 
-class RandomForestModelReaderPlugin() extends ModelLoader {
+class RandomForestClassifierModelReaderPlugin() extends ModelLoader {
 
-  private var rfModel: RandomForestScoreModel = _
+  private var rfModel: RandomForestClassifierScoreModel = _
 
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
     println(str)
     val json: JsValue = str.parseJson
-    val randomForestModel = json.convertTo[RandomForestModel]
-    rfModel = new RandomForestScoreModel(randomForestModel)
+    val randomForestModelData = json.convertTo[RandomForestClassifierData]
+    rfModel = new RandomForestClassifierScoreModel(randomForestModelData)
     rfModel.asInstanceOf[Model]
-
   }
 }

@@ -25,6 +25,8 @@ import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.scoring.models.{ SVMWithSGDModelReaderPlugin, SVMData }
+
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -78,10 +80,9 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMeta
     val model: Model = arguments.model
     //Extracting the SVMModel from the stored JsObject
     val svmData = model.data.convertTo[SVMData]
-    val svmModel = svmData.svmModel
-    val jsvalue: JsValue = svmModel.toJson
+    val jsvalue: JsValue = svmData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.SVMWithSGDModelReaderPlugin")
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[SVMWithSGDModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("svm_with_sgd_model"))
   }
 }

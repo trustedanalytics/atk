@@ -97,8 +97,8 @@ class ScoringService(model: Model) extends Directives {
                 val splitSegment = decoded.split(",")
                 records = records :+ splitSegment
               }
-              onComplete(Future { model.score(records) }) {
-                case Success(scored) => complete(scored.toString)
+              onComplete(scoreModel(records)) {
+                case Success(string) => complete(string)
                 case Failure(ex) => ctx => {
                   ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
                 }
@@ -108,5 +108,15 @@ class ScoringService(model: Model) extends Directives {
         }
       }
   }
+
+  def scoreModel(records: Seq[Array[String]]): Future[String] = Future {
+    var scores = ""
+    records.foreach(row => {
+      val score = model.score(row.asInstanceOf[Array[Any]])
+      scores = scores + score.mkString(",")
+    })
+    scores
+  }
 }
+
 case class ServiceDescription(name: String, identifier: String, versions: List[String])

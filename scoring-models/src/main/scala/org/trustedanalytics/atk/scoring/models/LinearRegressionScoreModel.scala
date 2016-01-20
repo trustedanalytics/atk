@@ -23,20 +23,30 @@ import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
+class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ predict(Vectors.dense(x))
-      }
-    }
-    score
+  override def score(data: Array[Any]): Array[Any] = {
+    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    data :+ predict(Vectors.dense(x))
   }
 
+  /**
+   *  @return fields containing the input names and their datatypes
+   */
+  override def input(): Array[Field] = {
+    val obsCols = linearRegressionData.observationColumns
+    var input = Array[Field]()
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
+  override def output(): Array[Field] = {
+    var output = input()
+    output :+ Field("Prediction", "Double")
+  }
 }
