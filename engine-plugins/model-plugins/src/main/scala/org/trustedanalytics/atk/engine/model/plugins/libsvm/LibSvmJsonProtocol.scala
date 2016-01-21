@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import libsvm.svm_model
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 import spray.json._
 
 /**

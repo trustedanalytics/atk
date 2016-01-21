@@ -18,30 +18,27 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.io._
 
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import libsvm.svm
+import spray.json.JsValue
+import ScoringJsonReaderWriters._
+import spray.json._
 
 class LibSvmModelReaderPlugin extends ModelLoader {
 
   private var libsvmModel: LibSvmModel = _
 
   override def load(bytes: Array[Byte]): Model = {
-    var inputStream: InputStream = null
-    var svm_model: Model = null
-    try {
-      inputStream = new ByteArrayInputStream(bytes)
-      val bfReader = new BufferedReader(new InputStreamReader(inputStream))
-      libsvmModel = new LibSvmModel(svm.svm_load_model(bfReader))
-    }
-    catch {
-      //TODO: log the error
-      case e: IOException => throw e
-    }
-    finally {
-      if (inputStream != null)
-        inputStream.close()
-    }
-
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val libSvmData = json.convertTo[LibSvmData]
+    val libModel = libSvmData.svmModel
+    libsvmModel = new LibSvmModel(libModel, libSvmData)
     libsvmModel.asInstanceOf[Model]
+
   }
 }
+
+
+
