@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8">
     
-    <title>Commands frame:/filter &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    <title>Commands _admin:/_release &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
     
     <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
     <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
@@ -27,8 +27,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands frame:/helloworld" href="frame-__helloworld.html" >
-    <link rel="prev" title="Commands _admin:/_release" href="_admin-___release.html" > 
+    <link rel="next" title="Commands frame:/filter" href="frame-__filter.html" >
+    <link rel="prev" title="Commands _admin:/_finalize_dropped" href="_admin-___finalize_dropped.html" > 
   </head>
   <body>
 
@@ -56,11 +56,11 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="_admin-___release.html" title="Commands _admin:/_release"
+        <a href="_admin-___finalize_dropped.html" title="Commands _admin:/_finalize_dropped"
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="frame-__helloworld.html" title="Commands frame:/helloworld"
+        <a href="frame-__filter.html" title="Commands frame:/filter"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -109,9 +109,9 @@
         <div class="bodywrapper">
           <div class="body" id="spc-section-body">
             
-  <div class="section" id="commands-frame-filter">
-<h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame:/filter<a class="headerlink" href="#commands-frame-filter" title="Permalink to this headline">¶</a></h1>
-<p>Select all rows which satisfy a predicate.</p>
+  <div class="section" id="commands-admin-release">
+<h1><a class="reference internal" href="index.html"><em>Commands</em></a> _admin:/_release<a class="headerlink" href="#commands-admin-release" title="Permalink to this headline">¶</a></h1>
+<p>&lt;Missing Doc&gt;</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -124,26 +124,16 @@
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
-<blockquote>
-<div><strong>Note</strong> - An argument for this command requires a Python User-Defined Function (UDF).
-This function must be especially prepared (wrapped/serialized) in order for it to run
-in the engine.  <strong>If this argument is needed for your call (i.e. it may be optional),
-then this particular command usage is NOT practically available as a REST API.</strong>
-Today, the trustedanalytics Python client does the special function preparation and calls this API.</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">frame:/filter</p>
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body"><p class="first">_admin:/_release</p>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
-<blockquote>
-<div><p>&lt;Missing Description&gt;</p>
-</div></blockquote>
-<p><strong>udf</strong> : None</p>
+<tr class="field-even field"><th class="field-name">arguments:</th><td class="field-body"><p class="first"><strong>bogus</strong> : int64 (default=0)</p>
 <blockquote class="last">
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>Ignore this argument</p>
 </div></blockquote>
 </td>
 </tr>
@@ -161,8 +151,6 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Modifies the current frame to save defined rows and
-delete everything else.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
