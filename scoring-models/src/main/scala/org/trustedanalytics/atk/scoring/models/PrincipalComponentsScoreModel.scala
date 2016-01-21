@@ -32,22 +32,18 @@ import scala.concurrent._
 class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends PrincipalComponentsData(pcaModel.k, pcaModel.observationColumns,
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
-        val pcaScoreOutput: Map[String, Any] = Map[String, Any]()
-        pcaScoreOutput.put("principal_components", y.values.toList)
-        val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
-        pcaScoreOutput.put("t_squared_index", t_squared_index)
-        score = score :+ pcaScoreOutput
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
+    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
+    val pcaScoreOutput: Map[String, Any] = Map[String, Any]()
+    pcaScoreOutput.put("principal_components", y.values.toList)
+    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
+    pcaScoreOutput.put("t_squared_index", t_squared_index)
+    score = data :+ pcaScoreOutput
     score
   }
 
@@ -79,5 +75,28 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
       t += ((yArray(i) * yArray(i)) / (E(i) * E(i)))
     }
     t
+  }
+
+  /**
+   *  @return names of observation columns used for training the model
+   */
+  override def input(): Array[Field] = {
+    val obsCols = pcaModel.observationColumns
+    var input = Array[Field]()
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+
+  /**
+   *  @return names of observation columns used for training the model and the name
+   *          of the score
+   */
+  override def output(): Array[Field] = {
+    var output = input()
+    output = output :+ Field("principal_components", "List[Double")
+    output :+ Field("t_squared_index", "Double")
+
   }
 }

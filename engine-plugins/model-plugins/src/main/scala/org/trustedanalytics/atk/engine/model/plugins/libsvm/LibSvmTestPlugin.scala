@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import LibSvmJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 
 @PluginDoc(oneLine = "Predict test frame labels and return metrics.",
   extended = """Predict the labels for a test frame and run classification metrics on predicted

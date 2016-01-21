@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import libsvm.{ svm_node, svm_problem, svm_parameter, svm }
 import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 
 //Implicits needed for JSON conversion
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._

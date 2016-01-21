@@ -16,24 +16,30 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
+import org.apache.spark.mllib.tree.model.RandomForestModel
+import org.trustedanalytics.atk.scoring.interfaces.Model
 
-class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
+/**
+ * Scoring model for MLLib's RandomForest
+ * @param randomForestData RandomForestClassifierData
+ */
+class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorData) extends RandomForestModel(randomForestData.randomForestModel.algo, randomForestData.randomForestModel.trees) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     var score = Array[Any]()
-    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
-    score = data :+ (predict(Vectors.dense(x)) + 1)
+
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
+    }
+    score = data :+ predict(Vectors.dense(x))
     score
   }
 
   override def input(): Array[Field] = {
+    val obsCols = randomForestData.observationColumns
     var input = Array[Field]()
-    val obsCols = kmeansData.observationColumns
     obsCols.foreach { name =>
       input = input :+ Field(name, "Double")
     }
@@ -42,7 +48,6 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
 
   override def output(): Array[Field] = {
     var output = input()
-    //Int
-    output :+ Field("score", "Double")
+    output :+ Field("Prediction", "Double")
   }
 }

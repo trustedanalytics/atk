@@ -25,9 +25,11 @@ import org.scalatest.WordSpec
 class SVMWithSGDModelTest extends WordSpec {
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
+  val obsCols = List("a", "b", "c")
   val svmWithSGDModel = new SVMModel(weights, intercept)
-  var svmScoreModel = new SVMWithSGDScoreModel(svmWithSGDModel)
-  val numRows = 5 // number of rows of data to test with
+  val svmWithSGDData = new SVMData(svmWithSGDModel, obsCols)
+  var svmScoreModel = new SVMWithSGDScoreModel(svmWithSGDData)
+  val numObsCols = obsCols.length
 
   "SVMWithSGDModel" should {
     "throw an exception when attempting to score null data" in {
@@ -35,11 +37,11 @@ class SVMWithSGDModelTest extends WordSpec {
     }
 
     "throw an exception when scoring data with too few columns" in {
-      ScoringModelTestUtils.tooFewDataColumnsTest(svmScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(svmScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      ScoringModelTestUtils.tooManyDataColumnsTest(svmScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(svmScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
@@ -47,11 +49,19 @@ class SVMWithSGDModelTest extends WordSpec {
     }
 
     "successfully score a model when float data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(svmScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(svmScoreModel, weights.size)
     }
 
     "successfully score a model when integer data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(svmScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(svmScoreModel, weights.size)
+    }
+
+    "successfully return the observation columns used for training the model" in {
+      ScoringModelTestUtils.successfulInputTest(svmScoreModel, numObsCols)
+    }
+
+    "successfully return the observation columns used for training the model along with score" in {
+      ScoringModelTestUtils.successfulOutputTest(svmScoreModel, numObsCols)
     }
 
   }

@@ -22,22 +22,32 @@ import org.apache.spark.mllib.linalg.Vectors
 
 /**
  * Scoring model for MLLib's RandomForest
- * @param randomForestClassifierModel RandomForestModel(val algo: Algo.Algo, override val trees: Array[DecisionTreeModel])
+ * @param randomForestData RandomForestClassifierData
  */
-class RandomForestScoreModel(randomForestClassifierModel: RandomForestModel) extends RandomForestModel(randomForestClassifierModel.algo, randomForestClassifierModel.trees) with Model {
+class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierData) extends RandomForestModel(randomForestData.randomForestModel.algo, randomForestData.randomForestModel.trees) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ predict(Vectors.dense(x))
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
+
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
+    score = data :+ predict(Vectors.dense(x))
     score
   }
 
+  override def input(): Array[Field] = {
+    val obsCols = randomForestData.observationColumns
+    var input = Array[Field]()
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+
+  override def output(): Array[Field] = {
+    var output = input()
+    output :+ Field("Prediction", "Double")
+  }
 }
