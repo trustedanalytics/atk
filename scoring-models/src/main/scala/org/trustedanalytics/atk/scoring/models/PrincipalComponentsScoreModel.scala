@@ -92,7 +92,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
    */
   override def output(): Array[Field] = {
     var output = input()
-    output = output :+ Field("principal_components", "List[Double")
+    output = output :+ Field("principal_components", "List[Double]")
     output :+ Field("t_squared_index", "Double")
 
   }
