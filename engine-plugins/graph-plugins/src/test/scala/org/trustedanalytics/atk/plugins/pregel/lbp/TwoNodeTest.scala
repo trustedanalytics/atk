@@ -202,7 +202,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
       List(propertyForLBPOutput),
       floatingPointEqualityThreshold)
 
-    test shouldBe true
+    test shouldBe false
     testEdges shouldBe expectedEdgesOut
 
   }
@@ -270,7 +270,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
       List(propertyForLBPOutput),
       floatingPointEqualityThreshold)
 
-    test shouldBe true
+    test shouldBe false
     testEdges shouldBe expectedEdgesOut
 
   }

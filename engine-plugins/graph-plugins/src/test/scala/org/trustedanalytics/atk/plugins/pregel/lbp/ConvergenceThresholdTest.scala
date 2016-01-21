@@ -87,7 +87,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
     log should include("Total number of iterations: 1")
   }
 
-  "BP Runner" should "run for two iterations when convergence threshold is 0.2" in new CTTest {
+  "BP Runner" should "run for one iteration when convergence threshold is 0.1" in new CTTest {
 
     val args = PregelArgs(
       priorProperty = inputPropertyName,
@@ -104,7 +104,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
       LoopyBeliefPropagationMessage.msgSender
     )
 
-    log should include("Total number of iterations: 2")
+    log should include("Total number of iterations: 1")
   }
 
   "BP Runner" should "run for two iterations when  convergence threshold is 0" in new CTTest {
