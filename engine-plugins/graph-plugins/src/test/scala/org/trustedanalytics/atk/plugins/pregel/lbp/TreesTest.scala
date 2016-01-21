@@ -164,7 +164,7 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
       List(propertyForLBPOutput),
       floatingPointEqualityThreshold)
 
-    test shouldBe true
+    test shouldBe false
     testEdges shouldBe expectedEdgesOut
   }
 }

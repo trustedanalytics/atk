@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.engine.command
 
-import java.util
-import org.apache.hadoop.yarn.api.records.YarnApplicationState
 import org.trustedanalytics.atk.event.EventLogging
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.yarn.client.api.YarnClient

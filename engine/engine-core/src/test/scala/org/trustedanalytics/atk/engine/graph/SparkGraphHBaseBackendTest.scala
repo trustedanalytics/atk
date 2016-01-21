@@ -26,7 +26,7 @@ import org.scalatest.mock.MockitoSugar
 
 class SparkGraphHBaseBackendTest extends WordSpec with Matchers with MockitoSugar {
 
-  implicit val call = Call(null, EngineExecutionContext.global)
+  implicit val call = Call(null, EngineExecutionContext.global, "fakeClientId")
   //TODO: enable the test when TRIB-4413 is fixed
   //  "Not quietly deleting a table that does not exist" should {
   //    "throw an illegal argument exception" in {

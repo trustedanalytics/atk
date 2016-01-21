@@ -23,7 +23,7 @@ import org.scalatest.FlatSpec
 
 class FrameFileStorageTest extends FlatSpec {
 
-  implicit val call = Call(null, EngineExecutionContext.global)
+  implicit val call = Call(null, EngineExecutionContext.global, "fakeClientId")
   val frameFileStorage = new FrameFileStorage("hdfs://hostname/user/atkuser", null)
 
   "FrameFileStorage" should "determine the correct data frames base directory" in {
