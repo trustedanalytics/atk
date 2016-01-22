@@ -21,6 +21,7 @@ import spray.routing._
 import spray.http._
 import MediaTypes._
 import akka.event.Logging
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
@@ -89,6 +90,7 @@ class ScoringService(model: Model) extends Directives {
       path("v1" / prefix) {
         requestUri { uri =>
           post {
+            import spray.httpx.SprayJsonSupport._
             parameterSeq { (params) =>
               val sr = params.toArray
               var records = Seq[Array[String]]()
@@ -109,14 +111,15 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scoreModel(records: Seq[Array[String]]): Future[String] = Future {
-    var scores = ""
+  def scoreModel(records: Seq[Array[String]]): Future[Array[String]] = Future {
+    var scores = ArrayBuffer[String]()
     records.foreach(row => {
       val score = model.score(row.asInstanceOf[Array[Any]])
-      scores = scores + score.mkString(",")
+      scores += score.mkString(",")
     })
-    scores
+    scores.toArray
   }
 }
 
 case class ServiceDescription(name: String, identifier: String, versions: List[String])
+
