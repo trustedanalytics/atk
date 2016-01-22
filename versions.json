@@ -1,5 +1,5 @@
 {
- "DEFAULT_VERSION": "v0.6.0", 
+ "DEFAULT_VERSION": "v.0.6.0", 
  "VERSIONS": {
   "master": {
    "type": "Master", 
