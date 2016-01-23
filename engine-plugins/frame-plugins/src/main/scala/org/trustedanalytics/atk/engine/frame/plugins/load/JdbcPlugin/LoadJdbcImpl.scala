@@ -35,7 +35,7 @@ object LoadJdbcImpl extends Serializable {
    */
   def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
     val sqlContext = new SQLContext(sc)
-    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.url, arguments.driverName)
+    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.driverName)
 
     sqlContext.load("jdbc", connectionArgs)
   }

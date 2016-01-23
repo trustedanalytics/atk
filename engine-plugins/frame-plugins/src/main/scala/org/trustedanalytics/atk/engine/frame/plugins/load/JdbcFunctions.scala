@@ -26,16 +26,14 @@ object JdbcFunctions extends Serializable {
   /**
    * Builds connection argmuments for jdbc
    * @param tableName table name
-   * @param url optional connection url
    * @param connectorType optional connector type
    * @param driverName optional driver name
    * @return connection args as map
    */
   def buildConnectionArgs(tableName: String,
                           connectorType: Option[String],
-                          url: Option[String],
                           driverName: Option[String]): Map[String, String] = {
-    val connectionUrl = url.getOrElse(buildUrl(connectorType))
+    val connectionUrl = buildUrl(connectorType)
 
     if (driverName.isEmpty) {
       Map(
