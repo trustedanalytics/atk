@@ -28,9 +28,22 @@ Regression Algorithms
 Clustering Algorithms
 =====================
 -   :ref:`K means <python_api/models/model-k_means/index>`
+-   :ref:`Power Iteration Clustering <python_api/models/model-power_iteration_clustering/index>`
 
 Dimensionality Reduction Algorithms
 ===================================
 -   :ref:`Principal Component Analysis <python_api/models/model-principal_components/index>`
 
+Topic Modelling Algorithms
+==========================
+-   :ref: `Latent Dirichlet allocation (LDA) <python_api/models/model-lda/index>`
+
+Recommendation Algorithms
+=========================
+-   :ref: `Collaborative Filtering using ALS (Alternating Least Squares) <python_api/models/model-model-collaborative_filtering/index>`
+
+Graph Algorithms
+================
+Label Propagation
+Loopy Belief Propagation
 
