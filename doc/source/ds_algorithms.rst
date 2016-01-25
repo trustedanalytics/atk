@@ -36,14 +36,14 @@ Dimensionality Reduction Algorithms
 
 Topic Modelling Algorithms
 ==========================
--   :ref: `Latent Dirichlet allocation (LDA) <python_api/models/model-lda/index>`
+-   :ref:`Latent Dirichlet Allocation (LDA) <python_api/models/model-lda/index>`
 
 Recommendation Algorithms
 =========================
--   :ref: `Collaborative Filtering using ALS (Alternating Least Squares) <python_api/models/model-model-collaborative_filtering/index>`
+-   :ref:`Collaborative Filtering using ALS (Alternating Least Squares) <python_api/models/model-model-collaborative_filtering/index>`
 
 Graph Algorithms
 ================
-Label Propagation
-Loopy Belief Propagation
 
+-   :ref:`Label Propagation<python_api/graphs/graph-/label_propagation>`
+-   :ref:`Loopy Belief Propagation<python_api/graphs/graph-/loopy_belief_propagation>`
