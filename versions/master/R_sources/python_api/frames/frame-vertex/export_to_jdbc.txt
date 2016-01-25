@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: export_to_jdbc(self, table_name, connector_type=None, url=None, driver_name=None, query=None)
+.. function:: export_to_jdbc(self, table_name, connector_type=None, driver_name=None, query=None)
 
     Write current frame to JDBC table.
 
@@ -25,14 +25,6 @@
         ..
 
             (optional) JDBC connector type
-
-
-
-        **url** : unicode (default=None)
-
-        ..
-
-            (optional) connection url (includes server name, database name, user acct and password
 
 
 

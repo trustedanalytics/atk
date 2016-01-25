@@ -54,14 +54,6 @@ Request
 
 
 
-    **url** : unicode (default=None)
-
-    ..
-
-        (optional) connection url (includes server name, database name, user acct and password
-
-
-
     **driver_name** : unicode (default=None)
 
     ..
