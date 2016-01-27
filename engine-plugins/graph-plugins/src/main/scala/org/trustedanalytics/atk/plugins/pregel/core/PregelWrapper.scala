@@ -66,7 +66,7 @@ class PregelWrapper(val maxIterations: Int,
     val superStepReporter = new AverageDeltaSuperStepStatusGenerator[VertexState](convergenceThreshold)
 
     Pregel(graph,
-      initialMsgSet,
+      Initializers.defaultMsgSet(),
       initialReporter,
       superStepReporter,
       maxIterations,
@@ -84,11 +84,4 @@ class PregelWrapper(val maxIterations: Int,
   private def msgCombiner(m1: Map[Long, Vector[Double]],
                           m2: Map[Long, Vector[Double]]): Map[Long, Vector[Double]] = m1 ++ m2
 
-  /**
-   * Initial message for algorithm
-   * @return an empty map
-   */
-  private def initialMsgSet(): Map[Long, Vector[Double]] = {
-    Map().asInstanceOf[Map[Long, Vector[Double]]]
-  }
 }

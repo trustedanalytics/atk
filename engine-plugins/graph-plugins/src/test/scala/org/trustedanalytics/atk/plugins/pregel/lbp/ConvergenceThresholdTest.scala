@@ -20,46 +20,42 @@ import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
-import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
+import org.trustedanalytics.atk.plugins.pregel.core.{ TestInitializers, DefaultTestValues, PregelAlgorithm, PregelArgs }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 /**
  * "Convergence threshold" in our system:
- * When the average change in posterior beliefs between supersteps falls below this threshold,
- * terminate. Terminate! TERMINATE!!!
+ * When the average change in posterior beliefs between supersteps falls below this threshold, terminate.
  *
  */
 class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
-  trait CTTest {
-
-    val vertexIdPropertyName = "id"
-    val srcIdPropertyName = "srcId"
-    val dstIdPropertyName = "dstId"
-    val edgeLabel = "label"
-    val inputPropertyName = "input_property_name"
-    val propertyForLBPOutput = "LBP_VALUE"
-
-    val floatingPointEqualityThreshold: Double = 0.000000001d
+  trait LBPTest {
 
     val vertexSet: Set[Long] = Set(1, 2)
 
     val firstNodePriors = Vector(0.6d, 0.4d)
     val secondNodePriors = Vector(0.3d, 0.7d)
 
-    val priors: Map[Long, Vector[Double]] = Map(1.toLong -> firstNodePriors,
+    val priors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> firstNodePriors,
       2.toLong -> secondNodePriors)
 
     //  directed edge list is made bidirectional with a flatmap
+    val edgeSet: Set[(Long, Long)] = Set(
+       (1.toLong,
+        2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
-    val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
-
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x,
+      Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst,
+            Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst), DefaultTestValues.edgeLabel, Set.empty[Property])
       })
 
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
@@ -67,16 +63,16 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   }
 
-  "BP Runner" should "run for one iteration when convergence threshold is 1.0" in new CTTest {
+  "LBP Runner" should "run for one iteration when convergence threshold is 1.0" in new LBPTest {
 
     val args = PregelArgs(
-      priorProperty = inputPropertyName,
+      priorProperty = DefaultTestValues.inputPropertyName,
       edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
+      maxIterations = DefaultTestValues.maxIterations,
+      stringOutput = DefaultTestValues.stringOutput,
       convergenceThreshold = 1d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = firstNodePriors.length)
+      posteriorProperty = DefaultTestValues.outputPropertyName,
+      stateSpaceSize = DefaultTestValues.stateSpaceSize)
 
     val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
       LoopyBeliefPropagationMessage.msgSender,
@@ -87,16 +83,16 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
     log should include("Total number of iterations: 1")
   }
 
-  "BP Runner" should "run for one iteration when convergence threshold is 0.1" in new CTTest {
+  "LBP Runner" should "run for one iteration when convergence threshold is 0.1" in new LBPTest {
 
     val args = PregelArgs(
-      priorProperty = inputPropertyName,
+      priorProperty = DefaultTestValues.inputPropertyName,
       edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
+      maxIterations = DefaultTestValues.maxIterations,
+      stringOutput = DefaultTestValues.stringOutput,
       convergenceThreshold = 0.2d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = firstNodePriors.length)
+      posteriorProperty = DefaultTestValues.outputPropertyName,
+      stateSpaceSize = DefaultTestValues.stateSpaceSize)
 
     val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
       LoopyBeliefPropagationMessage.msgSender,
@@ -107,16 +103,9 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
     log should include("Total number of iterations: 1")
   }
 
-  "BP Runner" should "run for two iterations when  convergence threshold is 0" in new CTTest {
+  "LBP Runner" should "run for two iterations when  convergence threshold is 0" in new LBPTest {
 
-    val args = PregelArgs(
-      priorProperty = inputPropertyName,
-      edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
-      convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = firstNodePriors.length)
+    val args = TestInitializers.defaultPregelArgs()
 
     val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
       LoopyBeliefPropagationMessage.msgSender,
@@ -129,16 +118,9 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
   // an example that slowly converges to an asymptote would make a better test when no threshold is given
 
-  "BP Runner" should "run for two iterations when no convergence threshold given" in new CTTest {
+  "LBP Runner" should "run for two iterations when no convergence threshold given" in new LBPTest {
 
-    val args = PregelArgs(
-      priorProperty = inputPropertyName,
-      edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
-      convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = firstNodePriors.length)
+    val args = TestInitializers.defaultPregelArgs()
 
     val (verticesOut, edgesOut, log) = PregelAlgorithm.run(verticesIn, edgesIn, args)(
       LoopyBeliefPropagationMessage.msgSender,
