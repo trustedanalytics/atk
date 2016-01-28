@@ -1,0 +1,126 @@
+
+
+----------------------------------------------------------
+:doc:`Commands <index>` model:daal_linear_regression/train
+----------------------------------------------------------
+
+|ALPHA|
+Build linear regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:daal_linear_regression/train
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **feature_columns** : list
+
+    ..
+
+        <Missing Description>
+
+
+
+    **label_columns** : list
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Creating a LinearRegression Model using the observation column and target column of the train frame
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Trained linear regression model
+
+

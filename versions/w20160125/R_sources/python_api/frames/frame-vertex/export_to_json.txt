@@ -1,0 +1,60 @@
+
+:doc:`VertexFrame <index>`  export_to_json
+******************************************
+
+------
+
+
+.. function:: export_to_json(self, folder_name, count=None, offset=None)
+
+    Write current frame to HDFS in JSON format.
+
+
+    :Parameters:
+
+        **folder_name** : unicode
+
+        ..
+
+            The HDFS folder path where the files
+            will be created.
+
+
+
+        **count** : int32 (default=None)
+
+        ..
+
+            The number of records you want.
+            Default, or a non-positive value, is the whole frame.
+
+
+
+        **offset** : int32 (default=None)
+
+        ..
+
+            The number of rows to skip before exporting to the file.
+            Default is zero (0).
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+
+    Export the frame to a file in JSON format as a Hadoop file.
+
+    Examples
+    --------
+    Consider Frame *my_frame*:
+
+    .. code::
+
+        >>> my_frame.export_to_json('covarianceresults')
+
+
