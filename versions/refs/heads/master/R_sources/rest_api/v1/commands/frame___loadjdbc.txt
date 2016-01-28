@@ -1,0 +1,133 @@
+
+
+---------------------------------------
+:doc:`Commands <index>` frame/_loadjdbc
+---------------------------------------
+
+Append data from a JDBC table into an existing (possibly empty) frame
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/_loadjdbc
+
+:arguments:
+
+
+    **destination** : Frame
+
+    ..
+
+        DataFrame to load data into.Should be either a uri or id.
+
+
+
+    **table_name** : unicode
+
+    ..
+
+        table name
+
+
+
+    **connector_type** : unicode (default=None)
+
+    ..
+
+        (optional) connector type
+
+
+
+    **driver_name** : unicode (default=None)
+
+    ..
+
+        (optional) driver name
+
+
+
+    **query** : unicode (default=None)
+
+    ..
+
+        (optional) query for filtering. Not supported yet.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Append data from a JDBC table into an existing (possibly empty) frame
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        the initial frame with the JDBC data appended
+
+
