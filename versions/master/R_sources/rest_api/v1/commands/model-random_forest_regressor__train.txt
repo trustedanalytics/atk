@@ -95,7 +95,7 @@ Request
 
 
 
-    **seed** : int32 (default=1487849896)
+    **seed** : int32 (default=-425596364)
 
     ..
 
