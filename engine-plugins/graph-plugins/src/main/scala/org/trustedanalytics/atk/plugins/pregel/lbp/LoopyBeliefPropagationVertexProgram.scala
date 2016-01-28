@@ -1,8 +1,10 @@
 package org.trustedanalytics.atk.plugins.pregel.lbp
 
 import org.apache.spark.graphx._
+import org.trustedanalytics.atk.graphbuilder.elements.GBVertex
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.plugins.pregel.core.{ VertexState }
+import org.trustedanalytics.atk.plugins.pregel.core.{ Initializers, VertexState }
+import org.trustedanalytics.atk.graphbuilder.elements.Property
 
 object LoopyBeliefPropagationVertexProgram {
   /**

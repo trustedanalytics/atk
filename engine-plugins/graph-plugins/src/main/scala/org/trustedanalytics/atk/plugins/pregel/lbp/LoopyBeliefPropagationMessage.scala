@@ -2,7 +2,7 @@ package org.trustedanalytics.atk.plugins.pregel.lbp
 
 import org.apache.spark.graphx.{ EdgeTriplet, _ }
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, VertexState }
+import org.trustedanalytics.atk.plugins.pregel.core.{ Initializers, PregelAlgorithm, VertexState }
 
 object LoopyBeliefPropagationMessage {
   /**
