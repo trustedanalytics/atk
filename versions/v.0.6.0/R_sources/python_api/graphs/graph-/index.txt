@@ -29,7 +29,6 @@
     name
     status
     vertex_count
-    vertex_outdegree
     vertices
 
 .. class:: Graph
@@ -73,7 +72,6 @@
     :doc:`kclique_percolation <kclique_percolation>`\ (self, clique_size, community_property_label)       |ALPHA| Find groups of vertices with similar attributes.
     :doc:`label_propagation <label_propagation>`\ (self, prior_property, posterior_property, ...)         Classification on sparse data using Belief Propagation.
     :doc:`loopy_belief_propagation <loopy_belief_propagation>`\ (self, prior_property, ...[, ...])        Classification on sparse data using Belief Propagation.
-    :doc:`vertex_outdegree <vertex_outdegree>`\ (self)                                                    Counts the out-degree of vertices in a graph.
     ====================================================================================================  ====================================================================================================
 
 .. _Graph__init__:
@@ -216,7 +214,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2016, 1, 28, 20, 57, 50, 572095)
+    datetime.datetime(2016, 1, 28, 22, 30, 59, 370607)
 
     >>> graph
     Graph <unnamed>

@@ -30,7 +30,6 @@
     covariance_matrix
     cumulative_percent
     cumulative_sum
-    daal_pca
     dot_product
     download
     drop_columns
@@ -126,7 +125,6 @@
     :doc:`covariance_matrix <covariance_matrix>`\ (self, data_column_names[, matrix_name])                Calculate covariance matrix for two or more columns.
     :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    |BETA| Add column to frame with cumulative percent sum.
     :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            |BETA| Add column to frame with cumulative percent sum.
-    :doc:`daal_pca <daal_pca>`\ (self, column_names[, method])                                            |ALPHA| <Missing Doc>
     :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           |ALPHA| Calculate dot product for each row in current frame.
     :doc:`download <download>`\ (self[, n, offset, columns])                                              Download frame data from the server into client workspace as a pandas dataframe
     :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
