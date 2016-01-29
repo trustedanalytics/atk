@@ -8,6 +8,7 @@ User Manual
     :maxdepth: 3
 
     ds_strt
+    ds_algorithms
     ds_dflw
     ds_ml
     ds_naive_bayes
