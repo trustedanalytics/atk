@@ -28,7 +28,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
     <link rel="next" title="Extending Trusted Analytics Platform" href="dev_over.html" >
-    <link rel="prev" title="Scoring Engine" href="scoring_engine.html" > 
+    <link rel="prev" title="Graphs" href="ds_graph.html" > 
   </head>
   <body>
 
@@ -55,7 +55,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="scoring_engine.html" title="Scoring Engine"
+        <a href="ds_graph.html" title="Graphs"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -94,10 +94,11 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_ml.html">Machine Learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -124,7 +125,6 @@
 <li><a class="reference internal" href="#python" id="id1">Python</a><ul>
 <li><a class="reference internal" href="#server-connection" id="id2">Server Connection</a></li>
 <li><a class="reference internal" href="#errors" id="id3">Errors</a></li>
-<li><a class="reference internal" href="#tab-completion" id="id4">Tab Completion</a></li>
 </ul>
 </li>
 </ul>
@@ -197,56 +197,6 @@ messages.
 The longer error messages are really helpful in bug reports, emails about
 issues, etc.</p>
 </div>
-<div class="section" id="tab-completion">
-<h3>Tab Completion<a class="headerlink" href="#tab-completion" title="Permalink to this headline">¶</a></h3>
-<p>Enabling tab completion allows you to use the tab key to complete your typing for you.</p>
-<p>If you are running with a standard Python <a class="reference external" href="https://pypi.python.org/pypi/repl/1.0">REPL</a> (not IPython, bPython, or the
-like) you will have to set up the tab completion manually:</p>
-<p>Create a .pythonrc file in your home directory with the following contents:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">rlcompleter</span><span class="o">,</span> <span class="nn">readline</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s">&#39;tab:complete&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Or you can just run the two lines in your <a class="reference external" href="https://pypi.python.org/pypi/repl/1.0">REPL</a> session.</p>
-<p>This will let you do the tab completion, but will also remember your history
-over multiple sessions:</p>
-<div class="code highlight-python"><div class="highlight"><pre># Add auto-completion and a stored history file of commands to your Python
-# interactive interpreter. Requires Python 2.0+, readline.
-
-&gt;&gt;&gt; import atexit
-&gt;&gt;&gt; import os
-&gt;&gt;&gt; import readline
-&gt;&gt;&gt; import rlcompleter
-&gt;&gt;&gt; import sys
-
-# Auto-complete is bound to the ESC key by default, so change it to tab.
-&gt;&gt;&gt; readline.parse_and_bind(&quot;tab: complete&quot;)
-
-&gt;&gt;&gt; historyPath = os.path.expanduser(&quot;~/.pyhistory&quot;)
-
-&gt;&gt;&gt; def save_history(historyPath=historyPath):
-...     import readline
-...     readline.write_history_file(historyPath)
-
-&gt;&gt;&gt; if os.path.exists(historyPath):
-...     readline.read_history_file(historyPath)
-
-&gt;&gt;&gt; atexit.register(save_history)
-
-# anything not deleted (sys and os) will remain in the interpreter session
-&gt;&gt;&gt; del atexit, readline, rlcompleter, save_history, historyPath
-</pre></div>
-</div>
-<dl class="docutils">
-<dt>Note:</dt>
-<dd><p class="first">If the .pythonrc does not take effect, add PYTHONSTARTUP in your .bashrc
-file:</p>
-<div class="code last highlight-python"><div class="highlight"><pre>export PYTHONSTARTUP=~/.pythonrc
-</pre></div>
-</div>
-</dd>
-</dl>
-</div>
 </div>
 </div>
 
@@ -271,7 +221,7 @@ file:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 08, 2016.
+      Last updated on Jan 28, 2016.
       </li>
     </ul>
     </div>

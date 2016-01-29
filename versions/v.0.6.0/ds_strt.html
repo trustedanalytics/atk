@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
     <link rel="up" title="User Manual" href="ds_over.html" >
-    <link rel="next" title="Process Flow Examples" href="ds_dflw.html" >
+    <link rel="next" title="Algorithms" href="ds_algorithms.html" >
     <link rel="prev" title="User Manual" href="ds_over.html" > 
   </head>
   <body>
@@ -59,7 +59,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="ds_dflw.html" title="Process Flow Examples"
+        <a href="ds_algorithms.html" title="Algorithms"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -94,10 +94,11 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="ds_over.html">User Manual</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_ml.html">Machine Learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -123,7 +124,6 @@
 <ul class="simple">
 <li><a class="reference internal" href="#open-source" id="id1">Open-Source</a></li>
 <li><a class="reference internal" href="#features" id="id2">Features</a></li>
-<li><a class="reference internal" href="#script-examples" id="id3">Script Examples</a></li>
 </ul>
 </div>
 <div class="section" id="open-source">
@@ -141,50 +141,6 @@ transforming values to a normalized state and constructing
 new features through manipulating existing values</li>
 <li>Analysis and machine learning algorithms give deeper insight into the data</li>
 </ul>
-</div>
-<div class="section" id="script-examples">
-<h2>Script Examples<a class="headerlink" href="#script-examples" title="Permalink to this headline">¶</a></h2>
-<p>Trusted Analytics Platform ships with example Python scripts and data sets that exercise the
-various features of the platform.
-The default location for the example scripts is atkuser&#8216;s home directory
-&#8216;/home/atkuser&#8216;.</p>
-<p>The examples are located in &#8216;/home/trustedanalytics/examples&#8217;:</p>
-<div class="highlight-python"><div class="highlight"><pre>-rwxr-xr-- 1 atkuser atkuser  904 Jul 30 04:20 als.py
--rwxr-xr-- 1 atkuser atkuser  921 Jul 30 04:20 cgd.py
--rwxr-xr-- 1 atkuser atkuser 1078 Jul 30 04:20 lbp.py
--rwxr-xr-- 1 atkuser atkuser  707 Aug  7 18:21 lda.py
--rwxr-xr-- 1 atkuser atkuser  930 Jul 30 04:20 lp.py
--rwxr-xr-- 1 atkuser atkuser  859 Jul 30 04:20 movie_graph_5mb.py
--rwxr-xr-- 1 atkuser atkuser  861 Jul 30 04:20 movie_graph_small.py
--rwxr-xr-- 1 atkuser atkuser  563 Jul 30 04:20 pr.py
-</pre></div>
-</div>
-<p>The datasets are located in &#8216;/home/trustedanalytics/examples/datasets&#8217; and
-&#8216;hdfs://user/trustedanalytics/datasets/&#8217;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">README</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">apl</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">lbp_edge</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">lp_edge</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">movie_sample_data_5mb</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">movie_sample_data_small</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">recommendation_raw_input</span><span class="o">.</span><span class="n">csv</span>
-<span class="o">-</span><span class="n">rw</span><span class="o">-</span><span class="n">r</span><span class="o">--</span><span class="n">r</span><span class="o">--</span>  <span class="o">...</span>  <span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">trustedanalytics</span><span class="o">/</span><span class="n">datasets</span><span class="o">/</span><span class="n">test_lda</span><span class="o">.</span><span class="n">csv</span>
-</pre></div>
-</div>
-<p>The datasets in &#8216;/home/trustedanalytics/examples/datasets&#8217; are for reference.
-The actual data that is being used by the Python examples and the Trusted Analytics Platform server
-is in the <abbr title="Hadoop Distributed File System">HDFS</abbr> system.</p>
-<p>To get access to the scripts, login as atkuser and go to the example scripts
-directory:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ sudo su atkuser
-$ cd /home/trustedanalytics/examples
-</pre></div>
-</div>
-<p>To run any of the Python example scripts type:</p>
-<div class="highlight-python"><div class="highlight"><pre>$ python &lt;SCRIPT_NAME&gt;
-</pre></div>
-</div>
-<p>where &#8220;&lt;SCRIPT_NAME&gt;&#8221; is any of the scripts.</p>
 </div>
 </div>
 
@@ -209,7 +165,7 @@ $ cd /home/trustedanalytics/examples
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 08, 2016.
+      Last updated on Jan 28, 2016.
       </li>
     </ul>
     </div>

@@ -92,10 +92,11 @@
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">User Manual</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html">Getting Started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_ml.html">Machine Learning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html">Algorithms</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_graph.html">Graphs</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a></li>
 </ul>
 </li>
@@ -121,34 +122,6 @@
 <li class="toctree-l1"><a class="reference internal" href="ds_strt.html">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html#open-source">Open-Source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_strt.html#features">Features</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_strt.html#script-examples">Script Examples</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#python-path-setup">Python Path Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#raw-data">Raw Data</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#ingesting-the-raw-data">Ingesting the Raw Data</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#frames">Frames</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#create-a-frame">Create a Frame</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#inspect-the-data">Inspect the Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#clean-the-data">Clean the Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#transform-the-data">Transform the Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#examining-the-data">Examining the Data</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#seamless-graph">Seamless Graph</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#build-the-graph">Build the Graph</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#other-graph-options">Other Graph Options</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#models">Models</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ds_ml.html">Machine Learning</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_ml.html#supervision">Supervision</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_ml.html#other-resources">Other Resources</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ds_algorithms.html">Algorithms</a><ul>
@@ -156,21 +129,81 @@
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#regression-algorithms">Regression Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#clustering-algorithms">Clustering Algorithms</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#dimensionality-reduction-algorithms">Dimensionality Reduction Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#topic-modelling-algorithms">Topic Modelling Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#recommendation-algorithms">Recommendation Algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_algorithms.html#graph-algorithms">Graph Algorithms</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="scoring_engine.html">Scoring Engine</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html#scoring-models-implementation">Scoring Models Implementation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html#configuration-of-the-engine">Configuration of the Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html#starting-the-scoring-engine-service">Starting the Scoring Engine Service</a></li>
-<li class="toctree-l2"><a class="reference internal" href="scoring_engine.html#scoring-client">Scoring Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_dflw.html">Process Flow Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#ingesting-the-raw-data">Ingesting the Raw Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#importing-a-csv-file">Importing a <abbr title="Character-Separated Variables">CSV</abbr> file.</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#create-a-frame">Create a Frame</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#examples">Examples:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#append">Append:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#inspect-the-data">Inspect the Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#id1">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#clean-the-data">Clean the Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#drop-rows">Drop Rows:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#filter-rows">Filter Rows:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#drop-duplicates">Drop Duplicates:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#drop-columns">Drop Columns:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#rename-columns">Rename Columns:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#transform-the-data">Transform the Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#add-columns">Add Columns:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#examining-the-data">Examining the Data</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#group-by-and-aggregate">Group by (and aggregate):</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#join">Join:</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#flatten-column">Flatten Column:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#build-the-graph">Build the Graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_dflw.html#other-graph-options">Other Graph Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#collaborative-filtering">Collaborative Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#graphical-models">Graphical Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ds_dflw.html#topic-modeling">Topic Modeling</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ds_naive_bayes.html">Naive Bayes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_naive_bayes.html#workflow">Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html#build-a-frame">Build a Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_naive_bayes.html#build-a-model">Build a Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ds_lda.html">Latent Dirichlet Allocation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html#setup">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ds_lda.html#workflow">Workflow</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html#construct-a-frame">Construct a Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html#build-a-model">Build a Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html#train-the-model">Train the Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_lda.html#predict-on-the-model">Predict on the Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ds_graph.html">Graphs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ds_graph.html#setup">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ds_graph.html#build-a-graph">Build a Graph</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="ds_bkm.html">Best Known Methods (User)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ds_bkm.html#python">Python</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="ds_bkm.html#server-connection">Server Connection</a></li>
 <li class="toctree-l3"><a class="reference internal" href="ds_bkm.html#errors">Errors</a></li>
-<li class="toctree-l3"><a class="reference internal" href="ds_bkm.html#tab-completion">Tab Completion</a></li>
 </ul>
 </li>
 </ul>
@@ -200,7 +233,7 @@
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 08, 2016.
+      Last updated on Jan 28, 2016.
       </li>
     </ul>
     </div>

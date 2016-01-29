@@ -25,10 +25,7 @@
     <script type="text/javascript" src="R_static/doctools.js"></script>
     <script type="text/javascript" src="R_static/js/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" >
-    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
-    <link rel="up" title="Administration" href="ad_over.html" >
-    <link rel="next" title="Eclipse Setup Instructions" href="ds_eclipse.html" >
-    <link rel="prev" title="HBase Performance Tuning" href="ad_hbtune.html" > 
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" > 
   </head>
   <body>
 
@@ -48,20 +45,11 @@
     <ul class="nav nav-pills pull-left">
 	
         <li class="active"><a href="index.html">Trusted Analytics</a></li>
-	
-          <li class="active"><a href="ad_over.html" accesskey="U">Administration</a></li> 
+	 
     </ul>
               
               
     <ul class="nav nav-pills pull-right">
-      <li class="active">
-        <a href="ad_hbtune.html" title="HBase Performance Tuning"
-           accesskey="P">previous</a>
-      </li>
-      <li class="active">
-        <a href="ds_eclipse.html" title="Eclipse Setup Instructions"
-           accesskey="N">next</a>
-      </li>
       <li class="active">
         <a href="genindex.html" title="General Index"
            accesskey="I">index</a>
@@ -90,21 +78,11 @@
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
 <h3><a href="index.html">Table Of Contents</a></h3>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
 <li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_ta1.html">Package Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_inst_vm.html">Virtual Machines</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ad_bkm.html">Best Known Methods (Admin)</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="">Windows Python Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#integrated-development-environments">Integrated Development Environments</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
 </ul>
@@ -120,42 +98,28 @@
             
   <span class="target" id="windows-python-setup"><span id="ad-other"></span></span><div class="section" id="index-0">
 <span id="id1"></span><h1>Windows Python Setup<a class="headerlink" href="#index-0" title="Permalink to this headline">¶</a></h1>
-<ol class="arabic simple">
-<li>Download Anaconda with Python 2.7.</li>
-<li>Install<ul>
-<li>By default, Anaconda installs to the user&#8217;s AppData hidden folder.
-It&#8217;s better to put this in a more accessible location, like
-<code class="docutils literal"><span class="pre">c:\anaconda</span></code>.
-This is the only change from the default installation necessary.</li>
-</ul>
-</li>
-<li>Open a command prompt.</li>
-<li>Run the command:
-<code class="docutils literal"><span class="pre">conda</span> <span class="pre">create</span> <span class="pre">-n</span> <span class="pre">trustedanalytics-python</span> <span class="pre">python=2.7</span> <span class="pre">numpy=1.8</span> <span class="pre">requests=2.3</span>
-<span class="pre">ordereddict=1.1</span></code>.
-This creates a virtual Python environment that mimics the cluster&#8217;s
-configuration.</li>
-</ol>
+<p>If you are behind  a corporate firewall you will need your windows proxy settings before trying to run any commands.
+To use the ATK client on a windows machine you will need to install the anaconda python distribution. The installation is done through an msi and can be found on the anocanda download page.</p>
+<p>Before installing the ATK client you must first install numpy and pandas through anaconda.
+You will also need to update pip.
+Open a windows command line and run the following command.</p>
+</div>
+<div class="section" id="install-pandas-and-numpy">
+<h1>Install Pandas and Numpy<a class="headerlink" href="#install-pandas-and-numpy" title="Permalink to this headline">¶</a></h1>
+<p>Numpy will be installed automatically since it&#8217;s a dependency for pandas.</p>
+<p>Once pandas and numpy are installed you can install the ATK client through pip with the following command</p>
+</div>
+<div class="section" id="install-atk-client">
+<h1>Install ATK client<a class="headerlink" href="#install-atk-client" title="Permalink to this headline">¶</a></h1>
+<dl class="docutils">
+<dt>All the dependencies for the Intel Analytics package will be installed automatically.</dt>
+<dd>Weekly and production releases of client are available on pypi.python.org. If you need to install a weekly build you must specify the version right after the package name</dd>
+</dl>
 </div>
 <div class="section" id="integrated-development-environments">
 <span id="index-1"></span><h1>Integrated Development Environments<a class="headerlink" href="#integrated-development-environments" title="Permalink to this headline">¶</a></h1>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="ds_eclipse.html">Eclipse Setup Instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_eclipse.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_eclipse.html#setup">Setup</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ds_intellij.html">IntelliJ IDEA Setup Instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_intellij.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_intellij.html#setup">Setup</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="ds_pycharm.html">PyCharm Setup Instructions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ds_pycharm.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ds_pycharm.html#setup">Setup</a></li>
-</ul>
-</li>
+<ul class="simple">
 </ul>
 </div>
 </div>
@@ -181,7 +145,7 @@ configuration.</li>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 08, 2016.
+      Last updated on Jan 28, 2016.
       </li>
     </ul>
     </div>
