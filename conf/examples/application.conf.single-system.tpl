@@ -28,7 +28,7 @@ trustedanalytics.atk {
     fs.root = "hdfs://"${HOSTNAME}"/user/atkuser"
 
     # dynamic libraries for Intel Data Analytics Acceleration Library (Intel DAAL)
-    //spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
+    spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
 
     spark {
       # Yarn Cluster mode
