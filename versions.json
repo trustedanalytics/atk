@@ -9,6 +9,10 @@
    "type": "Production", 
    "version": "v.0.6.0"
   }, 
+  "v.0.6.0-new": {
+   "type": "Production", 
+   "version": "v.0.6.0-new"
+  }, 
   "v0.4.0": {
    "type": "Production", 
    "version": "v0.4.0"
