@@ -223,7 +223,13 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div>A new frame with a column storing node id and a column with corresponding cluster assignment</div></blockquote>
+<div>Dictionary containing clustering results
+|    predicted_frame : Frame
+|        A new frame with a column &#8216;id&#8217; with the node id, and a column &#8216;cluster&#8217; with the node&#8217;s cluster assignment
+|    number_of_clusters : int
+|        Quantity of clusters used
+|    cluster_size : dict
+|        Cluster populations, keyed by names &#8216;Cluster:1&#8217; through &#8216;Cluster:n&#8217;</div></blockquote>
 </div>
 </div>
 </div>
@@ -249,7 +255,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Jan 28, 2016.
+      Last updated on Jan 29, 2016.
       </li>
     </ul>
     </div>
