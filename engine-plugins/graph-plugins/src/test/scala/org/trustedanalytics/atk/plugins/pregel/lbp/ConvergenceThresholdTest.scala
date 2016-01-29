@@ -43,7 +43,7 @@ class ConvergenceThresholdTest extends FlatSpec with Matchers with TestingSparkC
 
     //  directed edge list is made bidirectional with a flatmap
     val edgeSet: Set[(Long, Long)] = Set(
-       (1.toLong,
+      (1.toLong,
         2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
     val gbVertexSet = vertexSet.map(x => GBVertex(x,
