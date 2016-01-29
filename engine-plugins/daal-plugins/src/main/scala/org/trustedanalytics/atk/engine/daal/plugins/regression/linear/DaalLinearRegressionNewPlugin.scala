@@ -30,7 +30,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Create a 'new' instance of a Linear Regression model
  */
 
-@PluginDoc(oneLine = "Create a 'new' instance of a Linear Regression model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a DAAL Linear Regression model.",
   extended = """Linear Regression [1]_ is used to model the relationship between a scalar
 dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
@@ -44,7 +44,7 @@ QR [3]_ decomposition.
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
 .. [2] https://software.intel.com/en-us/daal
 .. [3] https://en.wikipedia.org/wiki/QR_decomposition""",
-  returns = """A new instance of LinearRegressionModel"""
+  returns = """A new instance of DaalLinearRegressionNewPlugin"""
 )
 class DaalLinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**

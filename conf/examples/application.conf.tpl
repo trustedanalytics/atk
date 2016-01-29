@@ -67,7 +67,7 @@ trustedanalytics.atk {
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
 
-    # uncomment the next line in order to enable Intel Data Analytics Acceleration Library (Intel DAAL)
+    # dynamic libraries for Intel Data Analytics Acceleration Library (Intel DAAL)
     //spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
 
     spark.conf.properties {

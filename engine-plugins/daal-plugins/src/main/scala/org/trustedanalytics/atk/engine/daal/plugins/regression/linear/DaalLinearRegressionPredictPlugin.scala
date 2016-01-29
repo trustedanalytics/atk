@@ -43,7 +43,7 @@ import DaalLinearRegressionJsonFormat._
 /**
  * Plugin for scoring DAAL's Linear Regression using QR decomposition
  */
-@PluginDoc(oneLine = "Make new frame with column for label prediction.",
+@PluginDoc(oneLine = "Predict labels for a test frame using trained DAAL linear regression model.",
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted value column.""",
   returns =
