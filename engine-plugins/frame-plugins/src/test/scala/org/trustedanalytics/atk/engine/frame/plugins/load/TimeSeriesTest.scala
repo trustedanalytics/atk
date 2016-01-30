@@ -27,6 +27,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.apache.spark.sql.functions._
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes }
 import org.scalatest.{ Matchers }
 import org.scalatest.Assertions._
@@ -34,7 +35,9 @@ import org.trustedanalytics.atk.engine.frame.plugins.bincolumn.DiscretizationFun
 import org.trustedanalytics.atk.engine.frame.plugins.load.TextPlugin.CsvRowParser
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import com.cloudera.sparkts._
-
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.frame.{ SparkFrame, PythonRddStorage }
+import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.{ SparkContext, SparkConf }
 import org.apache.spark.sql.{ DataFrame, Row, SQLContext }
 import org.apache.spark.sql.types._
@@ -102,7 +105,6 @@ class TimeSeriesTest extends TestingSparkContextWordSpec with Matchers {
     }
     */
 
-    /*
     "create timeseries rdd" in {
       val sqlContext = new SQLContext(sparkContext)
       val dateTimeCol = "dates"
@@ -138,9 +140,23 @@ class TimeSeriesTest extends TestingSparkContextWordSpec with Matchers {
       // Add a "timestamp" column using the Timestamp data type
       val toTimestamp = udf((t: String) => Timestamp.from(ZonedDateTime.parse(t).toInstant))
       frameDataFrame = frameDataFrame.withColumn(tsCol, toTimestamp(frameDataFrame(dateTimeCol))).select(tsCol, keyCol, valCol)
-
+      //assert(frameDataFrame.count == inputData.count)
       // Create a timeseries RDD
       val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dtIndex, frameDataFrame, tsCol, keyCol, valCol)
+      assert(timeseriesRdd.count == 2) // we should have one row per key in the timeseries rdd
+      // Back to a FrameRdd
+      val timeseriesSchema = FrameSchema(List(Column(keyCol, DataTypes.string), Column(valCol, DataTypes.vector(dtIndex.size))))
+      println("*************")
+      println("*************\n frameDataFrame count: " + frameDataFrame.count().toString)
+      println("*************\ntimeseriesRdd count: " + timeseriesRdd.count.toString)
+
+      val mapped = timeseriesRdd.map(row => Array[Any](row._1, row._2))
+      val timeseriesFrame = FrameRdd.toFrameRdd(timeseriesSchema, mapped)
+      println("*************\ntimeseries frame count: " + timeseriesFrame.count.toString)
+
+      for (row <- timeseriesFrame.take(timeseriesFrame.count().toInt)) {
+        println("ROW: " + row(0).toString + "\t" + row(1).toString)
+      }
 
       // Implute missing values
       val filled = timeseriesRdd.fill("nearest")
@@ -169,7 +185,7 @@ class TimeSeriesTest extends TestingSparkContextWordSpec with Matchers {
         }
       }
 
-    } */
+    }
   }
 
   /*

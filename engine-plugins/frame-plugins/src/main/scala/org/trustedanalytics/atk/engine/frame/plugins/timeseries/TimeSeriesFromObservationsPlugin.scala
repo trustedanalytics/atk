@@ -14,16 +14,12 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.frame.plugins
+package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
-import java.time.{ ZonedDateTime, ZoneId, LocalDate }
-
-import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, FrameSchema, Column }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.frame.{ SparkFrame, PythonRddStorage }
+import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import com.cloudera.sparkts._
 
@@ -38,7 +34,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
   extended = """Reformats a frame of observations as a time series, using the
                 specified timestamp, key, and value columns and the date/time
                 index provided.""")
-class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFromObservationsArgs, UnitReturn] {
+class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFromObservationsArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/loopy_belief_propagation
@@ -58,7 +54,7 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
   override def numberOfJobs(arguments: TimeSeriesFromObservationsArgs)(implicit invocation: Invocation) = 1
 
   /**
-   * Adds one or more new columns to the frame by evaluating the given func on each row.
+   * Returns a frame formatted as a timeseries, based on the specified frame of observations.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -66,7 +62,7 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: TimeSeriesFromObservationsArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: TimeSeriesFromObservationsArgs)(implicit invocation: Invocation): FrameReference = {
 
     val frame: SparkFrame = arguments.frame
 
@@ -83,24 +79,22 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
     if (frame.schema.hasColumn(valueColumn) == false)
       throw new IllegalArgumentException(s"Invalid valueColumn provided. Column named '$valueColumn' does not exist in the frame's schema.")
 
-    val dateTimeArray = new Array[ZonedDateTime](arguments.dateTimeIndex.size)
-    var i = 0
+    // Get DateTimeIndex
+    val dateTimeIndex = TimeSeriesFunctions.getDateTimeIndexFromStrings(arguments.dateTimeIndex)
 
-    for (datetime <- arguments.dateTimeIndex) {
-      dateTimeArray(i) = LocalDate.parse(datetime).atStartOfDay(ZoneId.systemDefault())
-      i += 1
+    // Create DataFrame with a new column that's formatted as a Timestamp
+    val newTimestampColumn = timestampColumn + "_new" // name for the new timestamp formatted column
+    val dataFrame = frame.rdd.toDataFrame
+    val dataFrameWithTimestamp = dataFrame.withColumn(newTimestampColumn, TimeSeriesFunctions.toTimestamp(dataFrame(timestampColumn))).select(newTimestampColumn, keyColumn, valueColumn)
+
+    // Convert the frame of observations to a TimeSeriesRDD
+    val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dateTimeIndex, dataFrameWithTimestamp, newTimestampColumn, keyColumn, valueColumn)
+
+    // Convert back to a frame to return
+    val timeseriesFrameRdd = TimeSeriesFunctions.getFrameFromTimeSeriesRdd(timeseriesRdd, keyColumn, valueColumn)
+    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by timeseries_from_observations command"))) {
+      newFrame => newFrame.save(timeseriesFrameRdd)
     }
-
-    // Create DateTimeIndex
-    val dateTimeIndex = DateTimeIndex.irregular(dateTimeArray)
-    val dataFrameWithTimestamp = frame.rdd.toDataFrame
-    val newTimestampColumn = timestampColumn + "_new"
-    val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dateTimeIndex, dataFrameWithTimestamp, timestampColumn, keyColumn, valueColumn)
-
-    val timeseriesSchema = FrameSchema(List(Column(keyColumn, DataTypes.string), Column(valueColumn, DataTypes.vector(i))))
-    val timeseriesFrameRdd = FrameRdd.toFrameRdd(timeseriesSchema, timeseriesRdd.map(row => Array(row)))
-
-    frame.save(frame.rdd.zipFrameRdd(timeseriesFrameRdd))
 
   }
 }

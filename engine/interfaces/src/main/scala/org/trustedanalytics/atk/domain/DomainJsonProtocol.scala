@@ -406,6 +406,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   // timeseries operation arg formats
   implicit val timeseriesFromObservationsFormat = jsonFormat5(TimeSeriesFromObservationsArgs)
+  implicit val timeseriesSplitFormat = jsonFormat4(TimeSeriesSliceArgs)
 
   // model performance formats
 
