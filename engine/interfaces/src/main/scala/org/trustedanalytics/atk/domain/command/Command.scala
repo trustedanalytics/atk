@@ -57,6 +57,4 @@ case class Command(id: Long,
    */
   def compactArgs: String = arguments.map { _.compactPrint }.getOrElse("")
 
-  def getJobName: String = s"${this.id}_${this.name}_${DateTimeFormat.forPattern("yyyymmdd_kk:mm").print(this.createdOn)}"
-
 }

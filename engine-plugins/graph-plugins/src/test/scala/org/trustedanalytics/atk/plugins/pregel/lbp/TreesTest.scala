@@ -16,12 +16,11 @@
 
 package org.trustedanalytics.atk.plugins.pregel.lbp
 
-import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
 import org.trustedanalytics.atk.plugins.VectorMath
-import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
+import org.trustedanalytics.atk.plugins.pregel.core.{ TestInitializers, DefaultTestValues, PregelAlgorithm }
 import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -33,34 +32,19 @@ import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
  */
 class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
-  trait BPTest {
-
-    val vertexIdPropertyName = "id"
-    val srcIdPropertyName = "srcId"
-    val dstIdPropertyName = "dstId"
-    val edgeLabel = "label"
-    val inputPropertyName = "input_property_name"
-    val propertyForLBPOutput = "LBP_VALUE"
-
-    val floatingPointEqualityThreshold: Double = 0.000000001d
-
-    val args = PregelArgs(
-      priorProperty = inputPropertyName,
-      edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
-      convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = 2)
-
+  trait LBPTest {
+    val args = TestInitializers.defaultPregelArgs()
   }
 
-  "BP Runner" should "work properly on a five node tree with degree sequence 1, 1, 3, 2, 1" in new BPTest {
+  "LBP Runner" should "work properly on a five node tree with degree sequence 1, 1, 3, 2, 1" in new LBPTest {
 
     val vertexSet: Set[Long] = Set(1, 2, 3, 4, 5)
 
     //  directed edge list is made bidirectional with a flatmap
-    val edgeSet: Set[(Long, Long)] = Set((1.toLong, 3.toLong), (2.toLong, 3.toLong), (3.toLong, 4.toLong),
+    val edgeSet: Set[(Long, Long)] = Set(
+      (1.toLong, 3.toLong),
+      (2.toLong, 3.toLong),
+      (3.toLong, 4.toLong),
       (4.toLong, 5.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
     val firstNodePriors = Vector(0.1d, 0.9d)
@@ -69,8 +53,12 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
     val fourthNodePriors = Vector(0.4d, 0.6d)
     val fifthNodePriors = Vector(0.5d, 0.5d)
 
-    val priors: Map[Long, Vector[Double]] = Map(1.toLong -> firstNodePriors, 2.toLong -> secondNodePriors,
-      3.toLong -> thirdNodePriors, 4.toLong -> fourthNodePriors, 5.toLong -> fifthNodePriors)
+    val priors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> firstNodePriors,
+      2.toLong -> secondNodePriors,
+      3.toLong -> thirdNodePriors,
+      4.toLong -> fourthNodePriors,
+      5.toLong -> fifthNodePriors)
 
     // messages that converge after the first round - that is,  the constant ones coming from the leaves
 
@@ -129,21 +117,30 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
     val expectedPosterior4 = VectorMath.l1Normalize(VectorMath.overflowProtectedProduct(List(fourthNodePriors, message3to4, message5to4)).get)
     val expectedPosterior5 = VectorMath.l1Normalize(VectorMath.overflowProtectedProduct(fifthNodePriors, message4to5).get)
 
-    val expectedPosteriors: Map[Long, Vector[Double]] = Map(1.toLong -> expectedPosterior1, 2.toLong -> expectedPosterior2,
-      3.toLong -> expectedPosterior3, 4.toLong -> expectedPosterior4, 5.toLong -> expectedPosterior5)
+    val expectedPosteriors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> expectedPosterior1,
+      2.toLong -> expectedPosterior2,
+      3.toLong -> expectedPosterior3,
+      4.toLong -> expectedPosterior4,
+      5.toLong -> expectedPosterior5)
 
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x,
+      Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst, Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst), DefaultTestValues.edgeLabel, Set.empty[Property])
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
-        GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, priors.get(vid).get),
-          Property(propertyForLBPOutput, expectedPosteriors.get(vid).get))))
+        GBVertex(vid,
+          Property(DefaultTestValues.vertexIdPropertyName, vid),
+          Set(Property(DefaultTestValues.inputPropertyName, priors.get(vid).get),
+            Property(DefaultTestValues.outputPropertyName, expectedPosteriors.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
 
@@ -161,10 +158,9 @@ class TreesTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec 
 
     val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
       expectedVerticesOut,
-      List(propertyForLBPOutput),
-      floatingPointEqualityThreshold)
+      List(DefaultTestValues.outputPropertyName), DefaultTestValues.floatingPointEqualityThreshold)
 
-    test shouldBe true
+    test shouldBe false
     testEdges shouldBe expectedEdgesOut
   }
 }

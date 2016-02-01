@@ -59,6 +59,8 @@ import scala.collection.mutable.ArrayBuffer
  */
 object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
+  implicit val NoArgsFormat = jsonFormat1(NoArgs)
+
   implicit object DataTypeFormat extends JsonFormat[DataTypes.DataType] {
     override def read(json: JsValue): DataType = {
       val raw = json.asInstanceOf[JsString].value
@@ -175,7 +177,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
     override def write(obj: T): JsValue = JsObject("uri" -> JsString(obj.uri))
 
     override def read(json: JsValue): T = {
-      implicit val invocation: Invocation = Call(null, EngineExecutionContext.global)
+      implicit val invocation: Invocation = Call(null, EngineExecutionContext.global, null)
       try {
         json match {
           case JsString(uri) => createReference(uri.substring(uri.lastIndexOf('/') + 1).toLong)
@@ -396,7 +398,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val exportHdfsJsonPlugin = jsonFormat4(ExportHdfsJsonArgs)
   implicit val exportHdfsHivePlugin = jsonFormat2(ExportHdfsHiveArgs)
   implicit val exportHdfsHBasePlugin = jsonFormat4(ExportHdfsHBaseArgs)
-  implicit val exportHdfsJdbcPlugin = jsonFormat6(ExportHdfsJdbcArgs)
+  implicit val exportHdfsJdbcPlugin = jsonFormat5(ExportHdfsJdbcArgs)
 
   //histogram formats
   implicit val histogramArgsFormat = jsonFormat5(HistogramArgs)
@@ -598,7 +600,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val hBaseArgsFormat = jsonFormat5(HBaseArgs)
 
-  implicit val jdbcArgsFormat = jsonFormat6(JdbcArgs)
+  implicit val jdbcArgsFormat = jsonFormat5(JdbcArgs)
 
   implicit val hiveArgsFormat = jsonFormat2(HiveArgs)
 
