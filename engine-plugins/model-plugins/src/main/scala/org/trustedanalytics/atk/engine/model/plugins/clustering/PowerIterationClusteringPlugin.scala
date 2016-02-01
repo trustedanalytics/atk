@@ -62,7 +62,13 @@ case class PowerIterationClusteringReturn(frame: FrameReference, k: Int, cluster
 @PluginDoc(oneLine = "Predict the clusters to which the nodes belong to",
   extended =
     """Predict the cluster assignments for the nodes of the graph and create a new frame with a column storing node id and a column with corresponding cluster assignment""",
-  returns = """A new frame with a column storing node id and a column with corresponding cluster assignment""")
+  returns = """Dictionary containing clustering results
+|    predicted_frame : Frame
+|        A new frame with a column 'id' with the node id, and a column 'cluster' with the node's cluster assignment
+|    number_of_clusters : int
+|        Quantity of clusters used
+|    cluster_size : dict
+|        Cluster populations, keyed by names 'Cluster:1' through 'Cluster:n'""")
 class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationClusteringArgs, PowerIterationClusteringReturn] {
   /**
    * The name of the command.

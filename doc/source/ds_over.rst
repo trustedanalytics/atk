@@ -8,8 +8,10 @@ User Manual
     :maxdepth: 3
 
     ds_strt
+    ds_algorithms
     ds_dflw
     ds_ml
-    ds_algorithms
-    scoring_engine
+    ds_naive_bayes
+    ds_lda
+    ds_graph
     ds_bkm

@@ -27,7 +27,7 @@ import scala.concurrent.Future
 class CommandServiceTest extends ServiceTest {
 
   implicit val userPrincipal = mock[UserPrincipal]
-  implicit val call: Invocation = Call(userPrincipal, SprayExecutionContext.global)
+  implicit val call: Invocation = Call(userPrincipal, SprayExecutionContext.global, "fakeClientId")
   val commonDirectives = mock[CommonDirectives]
   when(commonDirectives.apply("commands")).thenReturn(provide(call))
 

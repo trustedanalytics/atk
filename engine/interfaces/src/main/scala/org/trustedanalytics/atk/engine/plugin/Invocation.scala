@@ -49,6 +49,8 @@ trait Invocation {
    * @param progress current progress
    */
   private[trustedanalytics] def updateProgress(progress: Float): Unit = ???
+
+  private[trustedanalytics] def clientId: String
 }
 
 /**
@@ -58,10 +60,12 @@ trait Invocation {
 case class BackendInvocation(executionContext: ExecutionContext) extends Invocation {
   private[trustedanalytics] def user: UserPrincipal = null
   private[trustedanalytics] def eventContext: EventContext = null
+  private[trustedanalytics] def clientId: String = null
 }
 
 case class Call(user: UserPrincipal,
                 executionContext: ExecutionContext,
+                override val clientId: String,
                 eventContext: EventContext = null) extends Invocation
 
 trait CommandInvocation extends Invocation {
@@ -80,14 +84,6 @@ trait CommandInvocation extends Invocation {
    */
   private[trustedanalytics] def arguments: Option[JsObject]
 
-  /**
-   * Command Storage to read/update command progress
-   */
-  private[trustedanalytics] def commandStorage: CommandStorage
-
-  val progressUpdater: CommandProgressUpdater
-
-  override private[trustedanalytics] def updateProgress(progress: Float): Unit = progressUpdater.updateProgress(commandId, progress)
 }
 
 object Invocation {

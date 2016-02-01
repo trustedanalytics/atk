@@ -19,32 +19,30 @@ package org.trustedanalytics.atk.engine.command
 import org.trustedanalytics.atk.domain.UserPrincipal
 import org.trustedanalytics.atk.event.EventContext
 import org.trustedanalytics.atk.engine.plugin.CommandInvocation
-import org.trustedanalytics.atk.engine.{ CommandStorageProgressUpdater, CommandStorage, Engine }
+import org.trustedanalytics.atk.engine.Engine
 import spray.json.JsObject
 
 import scala.concurrent.ExecutionContext
-import org.trustedanalytics.atk.engine.CommandProgressUpdater
 
 /**
  * Basic invocation for commands that don't need Spark
  */
 case class SimpleInvocation(engine: Engine,
-                            commandStorage: CommandStorage,
                             executionContext: ExecutionContext,
                             arguments: Option[JsObject],
                             commandId: Long,
                             user: UserPrincipal,
-                            eventContext: EventContext) extends CommandInvocation {
+                            eventContext: EventContext,
+                            clientId: String) extends CommandInvocation {
 
-  def this(engine: Engine, commandStorage: CommandStorage, commandContext: CommandContext) = {
+  def this(engine: Engine, commandContext: CommandContext, clientId: String) = {
     this(engine,
-      commandStorage,
       commandContext.executionContext,
       commandContext.command.arguments,
       commandContext.command.id,
       commandContext.user,
-      commandContext.eventContext)
+      commandContext.eventContext,
+      clientId)
   }
 
-  override val progressUpdater: CommandProgressUpdater = new CommandStorageProgressUpdater(commandStorage)
 }

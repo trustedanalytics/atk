@@ -15,6 +15,7 @@
  */
 package org.trustedanalytics.atk.domain.jobcontext
 
+import org.joda.time.format.DateTimeFormat
 import org.trustedanalytics.atk.domain.HasId
 import org.joda.time.DateTime
 import spray.json.JsObject
@@ -22,10 +23,15 @@ import spray.json.JsObject
 // JobContext class to store the yarn job & application master details
 case class JobContext(id: Long,
                       userId: Long,
-                      yarnAppName: String,
-                      yarnAppId: String,
+                      yarnAppName: Option[String],
+                      yarnAppId: Option[String],
                       clientId: String,
                       createdOn: DateTime,
                       modifiedOn: DateTime,
                       progress: Option[String] = None,
-                      jobServerUri: Option[String] = None) extends HasId
+                      jobServerUri: Option[String] = None) extends HasId {
+
+  def getYarnAppName: String = {
+    yarnAppName.getOrElse(throw new IllegalStateException("yarnAppName was never set"))
+  }
+}

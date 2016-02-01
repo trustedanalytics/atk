@@ -25,7 +25,7 @@ import org.apache.spark.scheduler._
 /**
  * Logs progress from SparkProgressListener
  */
-class ProgressPrinter(progressListener: SparkProgressListener)(implicit invocation: Invocation) extends SparkListener
+class ProgressPrinter(implicit invocation: Invocation) extends SparkListener
     with EventLogging
     with EventLoggingImplicits {
 
@@ -39,25 +39,19 @@ class ProgressPrinter(progressListener: SparkProgressListener)(implicit invocati
   override def onTaskEnd(taskEnd: SparkListenerTaskEnd): Unit = withContext("taskEnd") {
     taskEnd.reason match {
       case Success => //ignore
-      case _ => warn(taskEnd.reason.toString + " " + buildMessage())
+      case _ => warn(taskEnd.reason.toString)
     }
   }
 
   override def onJobEnd(jobEnd: SparkListenerJobEnd): Unit = withContext("jobEnd") {
     jobEnd.jobResult match {
       case JobSucceeded => //ignore
-      case _ => warn(jobEnd.jobResult.toString + buildMessage())
+      case _ => warn(jobEnd.jobResult.toString)
     }
   }
 
-  private def buildMessage(): String = {
-    val cmd = progressListener.command
-    "command id:" + cmd.id + " name:" + cmd.name + " args:" + cmd.compactArgs + ", progress: " + progressListener.getCommandProgress() + "%"
-  }
-
   private def buildStageInfoMessage(stageInfo: StageInfo): String = {
-    buildMessage() +
-      " stageId:" + stageInfo.stageId +
+    " stageId:" + stageInfo.stageId +
       " stageInfoName:" + stageInfo.name +
       " numTasks:" + stageInfo.numTasks +
       //      " emittedTaskSizeWarning:" + stageInfo.emittedTaskSizeWarning +

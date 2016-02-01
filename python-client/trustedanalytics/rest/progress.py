@@ -25,6 +25,29 @@ import datetime
 
 
 class ProgressPrinter(object):
+    """
+    Updates progress messages to user
+    """
+
+    _blank = '\r' + (" " * 80)
+
+    def __init__(self):
+        self.start_time = time.time()
+
+    def _get_elapsed_time(self):
+        hours, rem = divmod(time.time() - self.start_time, 3600)
+        minutes, seconds = divmod(rem, 60)
+        return "{:0>2}:{:0>2}:{:0>2}".format(int(hours),int(minutes),int(seconds))
+
+    def update(self, message, carriage_return=False):
+        if message:
+            sys.stdout.write(self._blank)
+            elapsed = self._get_elapsed_time()
+            sys.stdout.write("\r%s Time %s%s" % (message, elapsed, '\n' if carriage_return else ''))
+            sys.stdout.flush()
+
+
+class ProgressPrinterOld(object):
 
     def __init__(self):
         self.job_count = 0
