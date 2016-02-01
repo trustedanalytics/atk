@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
-import org.trustedanalytics.atk.engine.command.mgmt.YarnJobShutdownHook
+import org.trustedanalytics.atk.engine.command.mgmt.{ YarnJobsMonitor, YarnJobShutdownHook }
 import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
@@ -89,4 +89,7 @@ abstract class AbstractEngineComponent extends DbProfileComponent
     sparkAutoPartitioner, jobContextStorage, fileStorage) {}
 
   YarnJobShutdownHook.createHook(jobContextStorage)
+
+  val yarnJobsMonitorThread = new Thread(new YarnJobsMonitor(engine))
+  yarnJobsMonitorThread.start()
 }
