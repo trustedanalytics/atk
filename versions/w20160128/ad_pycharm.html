@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>PyCharm Setup Instructions &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="Administration" href="ad_over.html" >
+    <link rel="next" title="Deploy and Run ATK App on TAP" href="ad_tap.html" >
+    <link rel="prev" title="IntelliJ IDEA Setup Instructions" href="ad_intellij.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="ad_over.html" accesskey="U">Administration</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="ad_intellij.html" title="IntelliJ IDEA Setup Instructions"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ad_tap.html" title="Deploy and Run ATK App on TAP"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="ad_over.html">Administration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ad_reqs.html">System Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_scoring_engine.html">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_eclipse.html">Eclipse Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_intellij.html">IntelliJ IDEA Setup Instructions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="">PyCharm Setup Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ad_tap.html">Deploy and Run <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> App on TAP</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <span class="target" id="ds-pycharm"></span><div class="section" id="pycharm-setup-instructions">
+<span id="index-0"></span><h1>PyCharm Setup Instructions<a class="headerlink" href="#pycharm-setup-instructions" title="Permalink to this headline">¶</a></h1>
+<p>PyCharm is a Python IDE created by JetBrains.</p>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#prerequisites" id="id1">Prerequisites</a></li>
+<li><a class="reference internal" href="#setup" id="id2">Setup</a></li>
+</ul>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>These instructions assume you have already installed:</p>
+<ul class="simple">
+<li>Python 2.7.</li>
+<li>Trusted Analytics Platform Python REST Client and required dependencies.</li>
+<li><a class="reference external" href="http://www.jetbrains.com/pycharm/">PyCharm</a>.</li>
+</ul>
+<p>Trusted Analytics Platform should work with any version of PyCharm but these instructions were
+tested with PyCharm Community Edition 3.4.1.</p>
+</div>
+<div class="section" id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Select <em>New Project</em> on PyCharm&#8217;s initial screen.<ol class="arabic">
+<li>Give your project a name, for example, &#8220;myproject&#8221;.</li>
+<li>Choose <em>Python 2.7</em> as the Python Interpreter and choose the <em>OK</em>
+button.<ol class="lowerroman">
+<li>If <em>Python 2.7</em> does not appear in the list you will need to
+configure a Python 2.7 interpreter.<ol class="arabic">
+<li>Choose the button that looks like a &#8220;gear&#8221;.</li>
+<li>Choose <em>Add Local</em>.</li>
+<li>Browse for your local Python 2.7 installation.
+On RedHat or CentOS this is probably /usr/bin/python.</li>
+<li>Choose the <em>OK</em> button.</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>Choose <span class="menuselection">File ‣ Settings</span>.<ol class="loweralpha">
+<li>Choose <em>Project Structure</em>.</li>
+<li>Choose <em>Add Content Root</em> and browse to the Trusted Analytics Platform Python REST Client
+libraries.
+On RedHat or CentOS these are found under
+&#8216;/usr/lib/trustedanalytics/rest-client/python&#8217;.</li>
+<li>Choose <em>Apply</em> button.</li>
+<li>Choose <em>OK</em> button.</li>
+</ol>
+</li>
+<li>Right click your project folder, for example, &#8220;myproject&#8221;, and select
+<span class="menuselection">New ‣ Python File</span>.<ol class="arabic">
+<li>In order to connect to the analytics instance in TAP follow instructions <a class="reference internal" href="python_api/connect.html"><em>here</em></a></li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Feb 01, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
