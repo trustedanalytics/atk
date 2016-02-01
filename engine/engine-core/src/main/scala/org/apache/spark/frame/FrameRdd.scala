@@ -88,6 +88,10 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   def toDataFrameUsingHiveContext = new org.apache.spark.sql.hive.HiveContext(this.sparkContext).createDataFrame(this, sparkSchema)
 
+  def toDataFrameWithSchema(schema: StructType): DataFrame = {
+    new SQLContext(this.sparkContext).createDataFrame(this, schema)
+  }
+
   override def compute(split: Partition, context: TaskContext): Iterator[Row] =
     firstParent[Row].iterator(split, context)
 
@@ -174,6 +178,15 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     this mapRows (row => {
       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
       Vectors.dense(features.toArray)
+    })
+  }
+
+  def toRddOfDoubleAndVector(valueColumnName: String, featureColumnNames: List[String]) = {
+    this mapRows (row => {
+      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
+      val vector = Vectors.dense(features.toArray)
+      val value = row.value(valueColumnName).asInstanceOf[Double]
+      (value, vector)
     })
   }
 

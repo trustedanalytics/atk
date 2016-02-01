@@ -67,7 +67,7 @@ class LinearRegressionWithSGDPredictPlugin extends SparkCommandPlugin[Classifica
 
     //Running MLLib
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
-    val linRegData = linRegJsObject.convertTo[LinearRegressionData]
+    val linRegData = linRegJsObject.convertTo[LinearRegressionWithSGDData]
     val linRegModel = linRegData.linRegModel
     if (arguments.observationColumns.isDefined) {
       require(linRegData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")

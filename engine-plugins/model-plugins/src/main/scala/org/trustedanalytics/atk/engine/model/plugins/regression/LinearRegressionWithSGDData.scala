@@ -23,7 +23,7 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
  * @param linRegModel Trained MLLib's LinearRegressionModel object
  * @param observationColumns Handle to the obsergvation columns of the data frame
  */
-case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String]) {
+case class LinearRegressionWithSGDData(linRegModel: LinearRegressionModel, observationColumns: List[String]) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
   require(linRegModel != null, "linRegModel must not be null")
 }
@@ -35,4 +35,4 @@ case class LinearRegressionData(linRegModel: LinearRegressionModel, observationC
  * @param weightsVector An array of weights of the trained model
  * @param intercept Intercept value of the trained model
  */
-case class LinearRegressionTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)
+case class LinearRegressionWithSGDTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)

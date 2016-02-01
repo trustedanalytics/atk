@@ -19,6 +19,7 @@ package org.apache.spark.mllib.atk.plugins
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
+import org.apache.spark.mllib.regression
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
@@ -37,7 +38,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionData
+import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDData
 import spray.json._
 
 /**
@@ -143,7 +144,7 @@ object MLLibJsonProtocol {
 
   }
 
-  implicit object LinearRegressionModelFormat extends JsonFormat[LinearRegressionModel] {
+  implicit object LinearRegressionModelFormat extends JsonFormat[org.apache.spark.mllib.regression.LinearRegressionModel] {
     /**
      * The write methods converts from LinearRegressionModel to JsValue
      * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
@@ -151,7 +152,7 @@ object MLLibJsonProtocol {
      *            and the weights Vector could be either a SparseVector or DenseVector
      * @return JsValue
      */
-    override def write(obj: LinearRegressionModel): JsValue = {
+    override def write(obj: org.apache.spark.mllib.regression.LinearRegressionModel): JsValue = {
       val weights = VectorFormat.write(obj.weights)
       JsObject(
         "weights" -> weights,
@@ -165,7 +166,7 @@ object MLLibJsonProtocol {
      * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
      *         and the weights Vector could be either a SparseVector or DenseVector
      */
-    override def read(json: JsValue): LinearRegressionModel = {
+    override def read(json: JsValue): org.apache.spark.mllib.regression.LinearRegressionModel = {
       val fields = json.asJsObject.fields
       val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
         .asInstanceOf[JsNumber].value.doubleValue()
@@ -175,9 +176,8 @@ object MLLibJsonProtocol {
       }
       ).get
 
-      new LinearRegressionModel(weights, intercept)
+      new org.apache.spark.mllib.regression.LinearRegressionModel(weights, intercept)
     }
-
   }
 
   implicit object VectorFormat extends JsonFormat[Vector] {
@@ -583,7 +583,8 @@ object MLLibJsonProtocol {
   implicit val kmeansModelTrainReturnFormat = jsonFormat2(KMeansTrainReturn)
   implicit val kmeansModelLoadFormat = jsonFormat8(KMeansTrainArgs)
   implicit val kmeansModelPredictFormat = jsonFormat3(KMeansPredictArgs)
-  implicit val linRegDataFormat = jsonFormat2(LinearRegressionData)
+  implicit val linRegDataFormat = jsonFormat2(LinearRegressionWithSGDData)
+  implicit val linRegTrainReturnFormat = jsonFormat4(LinearRegressionWithSGDTrainReturn)
   implicit val naiveBayesDataFormat = jsonFormat2(NaiveBayesData)
   implicit val naiveBayesTrainFormat = jsonFormat5(NaiveBayesTrainArgs)
   implicit val naiveBayesPredictFormat = jsonFormat3(NaiveBayesPredictArgs)
@@ -604,7 +605,7 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
   implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
   implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
-  implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
+
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

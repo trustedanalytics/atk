@@ -80,7 +80,7 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
     val model: Model = arguments.model
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
-    val linRegData = linRegJsObject.convertTo[LinearRegressionData]
+    val linRegData = linRegJsObject.convertTo[LinearRegressionWithSGDData]
     val linRegModel: LinearRegressionModel = linRegData.linRegModel
     val jsvalue: JsValue = linRegModel.toJson
 

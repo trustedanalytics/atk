@@ -41,9 +41,9 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
     val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(trainArgs)
     val linRegModel = linReg.run(rdd)
 
-    val linRegData = new LinearRegressionData(linRegModel, trainArgs.observationColumns)
+    val linRegData = new LinearRegressionWithSGDData(linRegModel, trainArgs.observationColumns)
 
-    linRegData shouldBe a[LinearRegressionData]
+    linRegData shouldBe a[LinearRegressionWithSGDData]
   }
 
   "LinearRegressionModel" should "thow an IllegalArgumentException for empty observationColumns during train" in {

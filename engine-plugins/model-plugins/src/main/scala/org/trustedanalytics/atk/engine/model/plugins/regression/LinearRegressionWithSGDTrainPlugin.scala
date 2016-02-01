@@ -32,7 +32,7 @@ import spray.json._
 @PluginDoc(oneLine = "Build linear regression model.",
   extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
   returns = "Trained linear regression model")
-class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, LinearRegressionTrainReturn] {
+class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrainArgs, LinearRegressionWithSGDTrainReturn] {
   /**
    * The name of the command.
    *
@@ -57,7 +57,7 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation): LinearRegressionTrainReturn = {
+  override def execute(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation): LinearRegressionWithSGDTrainReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
@@ -66,10 +66,10 @@ class LinearRegressionWithSGDTrainPlugin extends SparkCommandPlugin[Classificati
     //Running MLLib
     val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.run(labeledTrainRdd)
-    val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns)
+    val jsonModel = new LinearRegressionWithSGDData(linRegModel, arguments.observationColumns)
 
     model.data = jsonModel.toJson.asJsObject
-    new LinearRegressionTrainReturn(arguments.observationColumns, arguments.labelColumn, linRegModel.weights.toArray, linRegModel.intercept)
+    new LinearRegressionWithSGDTrainReturn(arguments.observationColumns, arguments.labelColumn, linRegModel.weights.toArray, linRegModel.intercept)
   }
 }
 object LinearRegressionWithSGDTrainPlugin {
