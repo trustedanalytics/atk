@@ -18,6 +18,8 @@ package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.model.plugins.MatrixImplicits
+import MatrixImplicits._
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
@@ -35,9 +37,11 @@ import MLLibJsonProtocol._
 @PluginDoc(oneLine = "Creates a GMM Model from the train frame.",
   extended = "At training the 'k' cluster centers are computed.",
   returns = """dict
-    Returns a dictionary storing the number of elements belonging to each Gaussian mixture
+    Returns a dictionary the following fields
 cluster_size : dict
-with the key being a string of the form 'Cluster:Id' storing the number of elements in cluster number 'Id'
+    with the key being a string of the form 'Cluster:Id' storing the number of elements in cluster number 'Id'
+gaussians : dict
+    Stores the 'mu' and 'sigma' corresponding to the Multivariate Gaussian (Normal) Distribution for each Gaussian
 """)
 class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
   /**
@@ -88,7 +92,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     val model: Model = arguments.model
     model.data = jsonModel.toJson.asJsObject
 
-    val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma))
+    val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma.toListOfList))
     new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD), gmmModel.weights.toList, gaussians)
   }
 }
@@ -116,6 +120,6 @@ object GMMTrainPlugin {
    */
   def computeGmmClusterSize(gmmModel: GaussianMixtureModel, vectorRdd: RDD[org.apache.spark.mllib.linalg.Vector]): Map[String, Int] = {
     val predictRDD = gmmModel.predict(vectorRdd)
-    predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
+    predictRDD.map(row => ("Cluster:" + row.toString, 1)).reduceByKey(_ + _).collect().toMap
   }
 }

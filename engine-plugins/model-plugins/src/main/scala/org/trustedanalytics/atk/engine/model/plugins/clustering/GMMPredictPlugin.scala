@@ -17,7 +17,9 @@
 package org.trustedanalytics.atk.engine.model.plugins.clustering
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
+import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
@@ -88,13 +90,16 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
 
     val gmmColumns = arguments.observationColumns.getOrElse(gmmData.observationColumns)
     val scalingValues = gmmData.columnScalings
-
     val predictionsRdd = gmmModel.predict(frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues))
-    val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (row, index) => (index, row) }
-    val indexedInputRdd = frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues).zipWithIndex().map { case (cluster, index) => (index, cluster) }
+    val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (cluster, index) => (index, cluster) }
+    val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
 
-    val resultRdd = indexedInputRdd.join(indexedPredictionsRdd).map { case (index, (vect, cluster)) => Row.fromSeq(vect.toArray.toSeq ++ Array(cluster).toSeq) }
-    val testresultRdd = resultRdd.collect()
+    val resultRdd: RDD[Row] = indexedPredictionsRdd.join(indexedFrameRdd).map { value =>
+      val row = value._2._2
+      val cluster = value._2._1
+      new GenericRow(row.toSeq.toArray :+ cluster)
+    }
+
     //Updating the frame schema
     var columnNames = new ListBuffer[String]()
     var columnTypes = new ListBuffer[DataTypes.DataType]()
@@ -104,7 +109,6 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
     val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
     val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
     val predictFrameRdd = new FrameRdd(updatedSchema, resultRdd)
-    val predictRdd = predictFrameRdd.collect()
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by GMM predict operation"))) { newPredictedFrame: FrameEntity =>
       newPredictedFrame.save(predictFrameRdd)

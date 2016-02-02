@@ -24,10 +24,9 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class GMMModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
-
+  val modelRef = mock[ModelReference]
+  val frameRef = mock[FrameReference]
   "GMMModel" should "create a GMMModel" in {
-    val modelRef = mock[ModelReference]
-    val frameRef = mock[FrameReference]
     val vectors = Array(Vectors.dense(2), Vectors.dense(1), Vectors.dense(7),
       Vectors.dense(1), Vectors.dense(9))
     val rdd = sparkContext.parallelize(vectors)
@@ -42,6 +41,21 @@ class GMMModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
     gmmData shouldBe a[GMMData]
   }
 
-  "GMMModel" should "throw an Illegal Argument Exception for empty "
+  "GMMModel" should "throw an Illegal Argument Exception for empty observation columns name during train" in {
+    intercept[IllegalArgumentException] {
+      GMMTrainArgs(modelRef, frameRef, observationColumns = List(), columnScalings = List(2.0))
+    }
+  }
 
+  "GMMMModel" should "throw an Illegal Argument Exception for empty scaling columns name during train" in {
+    intercept[IllegalArgumentException] {
+      GMMTrainArgs(modelRef, frameRef, observationColumns = List("column1"), columnScalings = List())
+    }
+  }
+
+  "GMMModel" should "throw an Illegal Argument Exception for unequal observation columns and column scalings during train" in {
+    intercept[IllegalArgumentException] {
+      GMMTrainArgs(modelRef, frameRef, observationColumns = List("column1", "column2"), columnScalings = List(1.0))
+    }
+  }
 }
