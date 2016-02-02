@@ -16,12 +16,14 @@
 
 package org.trustedanalytics.atk.engine.command
 
+import java.net.InetAddress
+
+import org.trustedanalytics.atk.engine.command.mgmt.{ YarnWebServer, JobManager }
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.domain.User
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, Call }
 import org.trustedanalytics.atk.engine._
 import com.typesafe.config.ConfigFactory
-import org.trustedanalytics.atk.moduleloader.Component
 import org.apache.commons.lang3.exception.ExceptionUtils
 import scala.reflect.io.Directory
 
@@ -32,36 +34,54 @@ import scala.reflect.io.Directory
  * Next, SparkSubmit starts a SparkCommandJob.
  * Finally, SparkCommandJob executes a SparkCommandPlugin.
  */
-class SparkCommandJob extends AbstractEngineComponent {
+class SparkCommandJob(jobContextId: Long) extends AbstractEngineComponent {
 
   override lazy val commandLoader = new CommandLoader(loadFromModules = false)
 
-  var webserver: YarnWebServer = null
-  if (EngineConfig.keepYarnJobAlive) {
-    webserver = YarnWebServer.init(engine)
-    println("webserver lisening port: " + webserver.getListeningPort)
-  }
+  val jobContext = jobContextStorage.expectJobContext(jobContextId)
+
+  val manager = new JobManager(EngineConfig.yarnWaitTimeout)
+
+  var webserver: YarnWebServer = YarnWebServer.init(manager)
+  // TODO: need better way to get the local host, this won't always work
+  val uri = s"http://${InetAddress.getLocalHost.getHostAddress}:${webserver.getListeningPort}/"
+  println(s"webserver URI: $uri")
+  jobContextStorage.updateJobServerUri(jobContextId, uri)
 
   /**
    * Execute Command
-   * @param commandId id of command to execute
    */
-  def execute(commandId: Long): Unit = {
-    commands.lookup(commandId) match {
-      case None => error(s"Command $commandId not found")
-      case Some(command) =>
-        val user: Option[User] = command.createdById match {
-          case Some(id) => metaStore.withSession("se.command.lookup") {
-            implicit session =>
-              metaStore.userRepo.lookup(id)
+  def execute(): Unit = {
+
+    while (manager.isKeepRunning) {
+      if (manager.shouldDoWork()) {
+        val commands = commandStorage.lookup(jobContext)
+        info(s"executing ${commands.size} commands for jobContext $jobContext")
+        for (command <- commands) {
+          val user: Option[User] = command.createdById match {
+            case Some(id) => metaStore.withSession("se.command.lookup") {
+              implicit session =>
+                metaStore.userRepo.lookup(id)
+            }
+            case _ => None
           }
-          case _ => None
+          implicit val invocation: Invocation = new Call(user match {
+            case Some(u) => userStorage.createUserPrincipalFromUser(u)
+            case _ => null
+          }, EngineExecutionContext.global, jobContext.clientId)
+          commandExecutor.executeInForeground(command)(invocation)
         }
-        implicit val invocation: Invocation = new Call(user match {
-          case Some(u) => userStorage.createUserPrincipalFromUser(u)
-          case _ => null
-        }, EngineExecutionContext.global)
-        commandExecutor.executeInForeground(command)(invocation)
+        manager.logActivity()
+      }
+      else {
+        Thread.sleep(1000L)
+      }
+    }
+    if (manager.shouldDoWork()) {
+      // This shouldn't be able to happen unless you have a multi-thread client who calling release() while submitting work
+      val msg = "job was asked to exit, so it is exiting, but it still had more work to do!"
+      System.err.println(msg)
+      throw new Exception(msg)
     }
   }
 
@@ -91,11 +111,11 @@ object SparkCommandJob {
   /**
    * Usage string if this was being executed from the command line
    */
-  def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <command_id>")
+  def usage() = println("Usage: java -cp engine.jar org.trustedanalytics.atk.engine.commmand.SparkCommandJob <jobcontext_id>")
 
   /**
    * Entry point of SparkCommandJob for use by SparkSubmit.
-   * @param args command line arguments. Requires command id
+   * @param args command line arguments.
    */
   def main(args: Array[String]) = {
     if (args.length < 1) {
@@ -111,11 +131,11 @@ object SparkCommandJob {
       try {
         /* Set to true as for some reason in yarn cluster mode, this doesn't seem to be set on remote driver container */
         sys.props += Tuple2("SPARK_SUBMIT", "true")
-        val commandId = args(0).toLong
 
-        driver = new SparkCommandJob
-        driver.execute(commandId)
+        val jobContextId = args(0).toLong
 
+        driver = new SparkCommandJob(jobContextId)
+        driver.execute()
       }
       catch {
         case t: Throwable => error(s"Error captured in SparkCommandJob to prevent percolating up to ApplicationMaster + ${ExceptionUtils.getStackTrace(t)}")

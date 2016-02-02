@@ -48,12 +48,14 @@ then
 fi
 
 
-
-if [ ! -d $TARGET_DIR/surefire-reports/ ]
+if [ -d $TARGET_DIR ]
 then
-    echo "$NAME Creating target dir"
-    mkdir -p $TARGET_DIR/surefire-reports/
+    echo "$NAME Deleting old target dir: $TARGET_DIR"
+    rm -rf $TARGET_DIR
 fi
+
+echo "$NAME Preparing new target dir: $TARGET_DIR"
+mkdir -p $TARGET_DIR/surefire-reports/
 
 
 # define the nosetests commands here:
@@ -76,8 +78,6 @@ else
     SKIP_NC=0
 fi
 
-echo "$NAME remove old trustedanalytics"
-rm -rf $TARGET_DIR/fs-root/trustedanalytics
 
 echo "$NAME Starting REST server... "
 $DIR/rest-server-start.sh

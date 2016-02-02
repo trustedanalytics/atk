@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.command
 
 import org.trustedanalytics.atk.NotFoundException
 import org.trustedanalytics.atk.domain.CommandError
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 
 import scala.util.{ Success, Failure, Try }
 import spray.json.JsObject
@@ -42,15 +43,28 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
         repo.lookup(id)
     }
 
+  /**
+   * Lookup commands by jobContext
+   */
+  override def lookup(jobContext: JobContext): Seq[Command] = {
+    metaStore.withSession("se.command.lookup") {
+      implicit session =>
+        repo.lookup(jobContext)
+    }
+  }
+
+  override def lookupNotComplete(): Seq[Command] = metaStore.withSession("se.command.scan") {
+    implicit session => repo.lookupNotComplete()
+  }
+
   override def create(createReq: CommandTemplate): Command =
     metaStore.withSession("se.command.create") {
       implicit session =>
-
         val created = repo.insert(createReq)
         repo.lookup(created.get.id).getOrElse(throw new Exception("Command not found immediately after creation"))
     }
 
-  override def scan(offset: Int, count: Int): Seq[Command] = metaStore.withSession("se.command.getCommands") {
+  override def scan(offset: Int, count: Int): Seq[Command] = metaStore.withSession("se.command.scan") {
     implicit session =>
       repo.scan(offset, count).sortBy(c => c.id) //TODO: Can't seem to get db to produce sorted results.
   }
@@ -58,39 +72,37 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
   /**
    * On complete - mark progress as 100% or failed
    */
-  override def complete(commandId: Long, result: Try[JsObject]): Unit = {
+  override def complete(commandId: Long, result: Try[Unit]): Unit = {
     require(commandId > 0, s"invalid command id $commandId")
     require(result != null, "result must not be null")
     metaStore.withSession("se.command.updateResult") {
       implicit session =>
         val command = repo.lookup(commandId).getOrElse(throw new IllegalArgumentException(s"Command $commandId not found"))
         val corId = EventContext.getCurrent.getCorrelationId
-        if (command.complete) {
-          warn(s"Completion attempt for command $commandId, already completed")
+        if (!command.complete) {
+          val changed = result match {
+            case Failure(ex) =>
+              error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
+              command.copy(complete = true,
+                error = Some(CommandError.appendError(command.error, ex)),
+                correlationId = corId)
+            case Success(unit) =>
+              // update progress to 100 since the command is complete. This step is necessary
+              // because the actually progress notification events are sent to SparkProgressListener.
+              // The exact timing of the events arrival can not be determined.
+              val progress = if (command.progress.nonEmpty) {
+                command.progress.map(info => info.copy(progress = 100f))
+              }
+              else {
+                List(ProgressInfo(100f, None))
+              }
+              command.copy(complete = true,
+                progress = progress,
+                error = None,
+                correlationId = corId)
+          }
+          repo.update(changed)
         }
-        val changed = result match {
-          case Failure(ex) =>
-            error(s"command completed with error, id: $commandId, name: ${command.name}, args: ${command.compactArgs} ", exception = ex)
-            command.copy(complete = true,
-              error = Some(CommandError.appendError(command.error, ex)),
-              correlationId = corId)
-          case Success(r) =>
-            // update progress to 100 since the command is complete. This step is necessary
-            // because the actually progress notification events are sent to SparkProgressListener.
-            // The exact timing of the events arrival can not be determined.
-            val progress = if (command.progress.nonEmpty) {
-              command.progress.map(info => info.copy(progress = 100f))
-            }
-            else {
-              List(ProgressInfo(100f, None))
-            }
-            command.copy(complete = true,
-              progress = progress,
-              result = Some(r),
-              error = None,
-              correlationId = corId)
-        }
-        repo.update(changed)
     }
   }
 
@@ -114,8 +126,14 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
   override def updateJobContextId(id: Long, jobContextId: Long): Unit = {
     metaStore.withSession("se.command.updateJobContext") {
       implicit session =>
-        val command = repo.lookup(id)
-        repo.update(command.get.copy(jobContextId = Some(jobContextId)))
+        repo.updateJobContextId(id, jobContextId)
+    }
+  }
+
+  override def updateResult(id: Long, result: JsObject): Unit = {
+    metaStore.withSession("se.command.updateResult") {
+      implicit session =>
+        repo.updateResult(id, result)
     }
   }
 

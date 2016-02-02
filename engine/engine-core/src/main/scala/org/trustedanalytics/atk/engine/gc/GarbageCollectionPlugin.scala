@@ -21,7 +21,7 @@ package org.trustedanalytics.atk.engine.gc
 import java.util.concurrent.TimeUnit
 
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.DomainJsonProtocol
+import org.trustedanalytics.atk.domain.{ NoArgs, DomainJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, CommandPlugin, Invocation }
 import com.typesafe.config.ConfigFactory
 
@@ -32,13 +32,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Arguments used for a single execution of garbage collection
  */
 case class GarbageCollectionDropStaleArgs(@ArgDoc("""Minimum age of entity staleness.  Defaults to server config.  As a string it supports units according to https://github.com/typesafehub/config/blob/master/HOCON.md#duration-format""") staleAge: Option[String] = None)
-case class NoArgs(@ArgDoc("""Ignore this argument""") bogus: Long = 0) // todo: this is a bogus reference for now to fit current plugin framework and JSON support
 
 /** Json conversion for arguments and return value case classes */
 object GcJsonFormat {
   import DomainJsonProtocol._
   implicit val GarbageCollectionDropStaleArgsFormat = jsonFormat1(GarbageCollectionDropStaleArgs)
-  implicit val NoArgsFormat = jsonFormat1(NoArgs)
 
   /**
    * Converts unit of duration using typesafe's SimpleConfig.parseDuration into milliseconds

@@ -20,6 +20,7 @@ import org.trustedanalytics.atk.domain._
 import org.trustedanalytics.atk.domain.command.{ Command, CommandDefinition, CommandTemplate }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate }
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.domain.model.ModelEntity
 import org.trustedanalytics.atk.domain.frame.RowQueryArgs
 import org.trustedanalytics.atk.engine.plugin.Invocation
@@ -53,7 +54,11 @@ trait Engine {
 
   def getCommands(offset: Int, count: Int)(implicit invocation: Invocation): Future[Seq[Command]]
 
-  def getCommand(id: Identifier)(implicit invocation: Invocation): Future[Option[Command]]
+  def getCommand(id: Identifier)(implicit invocation: Invocation): Option[Command]
+
+  def getCommandJobContext(command: Command)(implicit invocation: Invocation): Option[JobContext]
+
+  def getCommandsNotComplete()(implicit invocation: Invocation): Seq[Command]
 
   def getUserPrincipal(userKey: String)(implicit invocation: Invocation): UserPrincipal
 
@@ -106,8 +111,9 @@ trait Engine {
   /**
    * Cancel a running command
    * @param id command id
+   * @param msg optional message
    * @return optional command instance
    */
-  def cancelCommand(id: Identifier)(implicit invocation: Invocation): Future[Unit]
+  def cancelCommand(id: Identifier, msg: Option[String] = None)(implicit invocation: Invocation): Future[Unit]
 
 }

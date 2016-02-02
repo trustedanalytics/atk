@@ -16,8 +16,12 @@
 
 package org.trustedanalytics.atk.engine.command
 
+import java.net.URL
+
 import org.trustedanalytics.atk.domain._
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
+import org.trustedanalytics.atk.engine.command.mgmt.YarnWebClient
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, CommandPlugin }
 import org.trustedanalytics.atk.engine.util.JvmMemory
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
@@ -83,10 +87,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
     withContext(s"ce.executeInForeground.${cmd.name}") {
       validatePluginExists(cmd)
       val context = CommandContext(cmd, EngineExecutionContext.global, user, eventContext)
-
-      commands.complete(context.command.id, Try {
-        executeCommandContext(context)
-      })
+      executeCommandContext(context)
     }
   }
 
@@ -96,7 +97,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * @tparam A plugin arguments
    * @return plugin return value as JSON
    */
-  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): JsObject = withContext("cmdExcector") {
+  private def executeCommandContext[R <: Product: TypeTag, A <: Product: TypeTag](commandContext: CommandContext)(implicit invocation: Invocation): Unit = withContext("cmdExcector") {
 
     info(s"command id:${commandContext.command.id}, name:${commandContext.command.name}, args:${commandContext.command.compactArgs}, ${JvmMemory.memory}")
     info(s"System Properties are:")
@@ -104,29 +105,80 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
 
     val plugin = expectCommandPlugin[A, R](commandContext.command)
     plugin match {
-      case sparkCommandPlugin: SparkCommandPlugin[A, R] if !sys.props.contains("SPARK_SUBMIT") && EngineConfig.isSparkOnYarn =>
-        val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
-        new SparkSubmitLauncher(engine).execute(commandContext.command, sparkCommandPlugin, moduleName)
-        // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
-        val updatedCommand = commands.expectCommand(commandContext.command.id)
-        if (updatedCommand.error.isDefined) {
-          error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
-          throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
-        }
-        if (updatedCommand.result.isDefined) {
-          updatedCommand.result.get
-        }
-        else {
-          error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
-          throw new Exception(s"Error submitting command to yarn-cluster.")
+      case sparkCommandPlugin: SparkCommandPlugin[A, R] if !isRunningInYarn && EngineConfig.isSparkOnYarn =>
+
+        val jobContext = engine.jobContextStorage.lookupOrCreate(invocation.user.user, invocation.clientId)
+
+        // hack to clear progress for the next command (won't work perfectly but will do okay for now)
+        engine.jobContextStorage.updateProgress(jobContext.id, "")
+
+        engine.commandStorage.updateJobContextId(commandContext.command.id, jobContext.id)
+
+        if (!notifyJob(jobContext)) {
+          commands.complete(commandContext.command.id, Try {
+            val moduleName = commandPluginRegistry.moduleNameForPlugin(plugin.name)
+            val refreshedJobContext = engine.jobContextStorage.assignYarnAppName(jobContext)
+            new SparkSubmitLauncher(engine).execute(moduleName, refreshedJobContext)
+
+            // Reload the command as the error/result etc fields should have been updated in metastore upon yarn execution
+            val updatedCommand = commands.expectCommand(commandContext.command.id)
+            if (updatedCommand.error.isDefined) {
+              error(s"Command id:${commandContext.command.id} plugin:${plugin.name} ${updatedCommand.error.get}")
+              throw new Exception(s"Error executing ${plugin.name}: ${updatedCommand.error.get.message}")
+            }
+            if (updatedCommand.result.isEmpty) {
+              error(s"Command didn't have any results, this is probably do to an error submitting command to yarn-cluster: $updatedCommand")
+              throw new Exception(s"Error submitting command to yarn-cluster.")
+            }
+          })
         }
       case _ =>
-        // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
-        val commandInvocation = new SimpleInvocation(engine, commands, commandContext)
-        val arguments = plugin.parseArguments(commandContext.command.arguments.get)
-        info(s"Invoking command ${commandContext.command.name}")
-        val returnValue = plugin(commandInvocation, arguments)
-        plugin.serializeReturn(returnValue)
+        // CommandPlugins get executed by the REST server while SparkCommandPlugins run in Yarn
+        if ((isRunningInYarn && plugin.isInstanceOf[SparkCommandPlugin[A, R]]) || !isRunningInYarn) {
+          commands.complete(commandContext.command.id, Try {
+            // here we are either in Yarn or we are running a command that doesn't need to run in Yarn
+            val commandInvocation = new SimpleInvocation(engine, commandContext, invocation.clientId)
+            val arguments = plugin.parseArguments(commandContext.command.arguments.get)
+            info(s"Invoking command ${commandContext.command.name}")
+            val returnValue = plugin(commandInvocation, arguments)
+            val jsonResult = plugin.serializeReturn(returnValue)
+            engine.commandStorage.updateResult(commandContext.command.id, jsonResult)
+          })
+        }
+        else {
+          info(s"not running command ${plugin.name} isYarn:$isRunningInYarn")
+        }
+    }
+  }
+
+  /**
+   * True if this class is currently running in a Yarn job
+   */
+  private def isRunningInYarn: Boolean = {
+    sys.props.contains("SPARK_SUBMIT")
+  }
+
+  /**
+   * Notify the running job that there is a new command to execute
+   * @param jobContext meta store record
+   * @return true if successful, false means a new job needs to be launched
+   */
+  private def notifyJob(jobContext: JobContext): Boolean = {
+    if (EngineConfig.isSparkOnYarn && jobContext.jobServerUri.isDefined) {
+      try {
+        val uri = jobContext.jobServerUri.get
+        new YarnWebClient(new URL(uri)).notifyServer()
+        true
+      }
+      catch {
+        case e: Exception =>
+          info("couldn't send message: " + e)
+          false
+      }
+    }
+    else {
+      // job was never created, so nothing to notify
+      false
     }
   }
 
@@ -154,7 +206,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * Cancel a command
    * @param commandId command id
    */
-  def cancelCommand(commandId: Long): Unit = withMyClassLoader {
+  def cancelCommand(commandId: Long, msg: Option[String] = None): Unit = withMyClassLoader {
     // This should be killing any yarn jobs running
     val command = commands.lookup(commandId).getOrElse(throw new Exception(s"Command $commandId does not exist"))
     val commandPlugin = commandPluginRegistry.getCommandDefinition(command.name).get
@@ -164,7 +216,19 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         SparkCommandPlugin.stop(commandId)
       }
       else {
-        YarnUtils.killYarnJob(command.getJobName)
+        command.jobContextId match {
+          case Some(id) => engine.jobContextStorage.lookup(id) match {
+            case Some(jobContext) => commands.complete(command.id, Try {
+              val attempt = Try { YarnUtils.killYarnJob(jobContext.getYarnAppName) }
+              if (attempt.isFailure) {
+                error(s"Error trying to kill YARN job for command ${command.id} (will still complete command as cancelled).  $attempt")
+              }
+              throw new RuntimeException("Command was cancelled" + msg.getOrElse(""))
+            })
+            case None => info("Cancel couldn't find jobContext for this command " + command)
+          }
+          case None => info("Cancel couldn't find jobContextId for this command " + command)
+        }
       }
     }
     else {

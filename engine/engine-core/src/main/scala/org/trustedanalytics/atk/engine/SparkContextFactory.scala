@@ -16,8 +16,9 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.apache.spark.engine.{ JobContextProgressListener, ProgressPrinter }
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.plugin.{ SparkInvocation, Invocation }
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.EventLogging
 import org.apache.commons.lang3.StringUtils
@@ -33,16 +34,20 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
   /**
    * Creates a new sparkContext
    */
-  def context(description: String, kryoRegistrator: Option[String] = None)(implicit invocation: Invocation): SparkContext = withContext("engine.SparkContextFactory") {
-    if (EngineConfig.reuseSparkContext) {
+  def context(commandId: Long, commandName: String, kryoRegistrator: Option[String] = None)(implicit invocation: SparkInvocation): SparkContext = withContext("engine.SparkContextFactory") {
+    val description = s"(id:$commandId,name:$commandName)"
+    val sparkContext = if (EngineConfig.reuseSparkContext || EngineConfig.isSparkOnYarn) {
       SparkContextFactory.sharedSparkContext()
     }
     else {
       createContext(description, kryoRegistrator)
     }
+    info(s"Setting Job Group Id as $commandId")
+    sparkContext.setJobGroup(s"$commandId", description)
+    sparkContext
   }
 
-  private def createContext(description: String, kryoRegistrator: Option[String] = None)(implicit invocation: Invocation): SparkContext = {
+  private def createContext(description: String, kryoRegistrator: Option[String] = None)(implicit invocation: SparkInvocation): SparkContext = {
     val userName = user.user.apiKey.getOrElse(
       throw new RuntimeException("User didn't have an apiKey which shouldn't be possible if they were authenticated"))
     val sparkConf = new SparkConf()
@@ -62,21 +67,28 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
 
     info("SparkConf settings: " + sparkConf.toDebugString)
 
-    new SparkContext(sparkConf)
+    val context = new SparkContext(sparkConf)
+    if (!EngineConfig.reuseSparkContext) {
+      try {
+        val progressPrinter = new ProgressPrinter
+        context.addSparkListener(progressPrinter)
+        context.addSparkListener(new JobContextProgressListener(invocation.engine.jobContextStorage, invocation))
+      }
+      catch {
+        // exception only shows up here due to dev error, but it is hard to debug without this logging
+        case e: Exception => error("could not create progress listeners", exception = e)
+      }
+    }
+    context
   }
 
 }
 
 object SparkContextFactory extends SparkContextFactory {
 
-  // for integration tests only
   private var sc: SparkContext = null
 
-  /**
-   * This shared SparkContext is for integration tests and regression tests only
-   * NOTE: this should break the progress bar.
-   */
-  private def sharedSparkContext()(implicit invocation: Invocation): SparkContext = {
+  private def sharedSparkContext()(implicit invocation: SparkInvocation): SparkContext = {
     this.synchronized {
       if (sc == null) {
         sc = createContext("reused-spark-context", None)

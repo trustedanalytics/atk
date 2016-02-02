@@ -28,7 +28,7 @@ import scala.collection.JavaConversions._
 
 import com.typesafe.config.{ ConfigFactory, ConfigList, ConfigValue }
 import org.apache.spark.SparkContext
-import org.apache.spark.engine.{ ProgressPrinter, SparkProgressListener }
+import org.apache.spark.engine.{ JobContextProgressListener, ProgressPrinter, SparkProgressListener }
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig, EngineImpl }
 
@@ -82,26 +82,15 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
       commandInvocation.arguments,
       //TODO: Hide context factory behind a property on SparkEngine?
       null,
-      commandInvocation.commandStorage,
-      invocation.eventContext)
+      invocation.eventContext,
+      invocation.clientId)
     sparkInvocation.copy(sparkContext = createSparkContextForCommand(arguments, sparkEngine.sparkContextFactory)(sparkInvocation))
   }
 
   def createSparkContextForCommand(arguments: Argument, sparkContextFactory: SparkContextFactory)(implicit invocation: SparkInvocation): SparkContext = {
-    val cmd = invocation.commandStorage.expectCommand(invocation.commandId)
-    val context: SparkContext = sparkContextFactory.context(s"(id:${cmd.id},name:${cmd.name})", kryoRegistrator)
-    if (!EngineConfig.reuseSparkContext) {
-      try {
-        val listener = new SparkProgressListener(SparkProgressListener.progressUpdater, cmd, numberOfJobs(arguments)) // Pass number of Jobs here
-        val progressPrinter = new ProgressPrinter(listener)
-        context.addSparkListener(listener)
-        context.addSparkListener(progressPrinter)
-      }
-      catch {
-        // exception only shows up here due to dev error, but it is hard to debug without this logging
-        case e: Exception => error("could not create progress listeners", exception = e)
-      }
-    }
+    val cmd = invocation.engine.commandStorage.expectCommand(invocation.commandId)
+    val context: SparkContext = sparkContextFactory.context(cmd.id, cmd.name, kryoRegistrator)
+
     SparkCommandPlugin.commandIdContextMapping += (cmd.id -> context)
     context
   }
@@ -111,10 +100,6 @@ trait SparkCommandPlugin[Argument <: Product, Return <: Product]
     SparkCommandPlugin.stop(sparkInvocation.commandId)
   }
 
-  /* plugins which execute python UDF will override this to true; by default this is false .
-     if true, additional files are shipped for udf execution during a yarn job
-   */
-  def executesPythonUdf = false
 }
 
 object SparkCommandPlugin extends EventLogging {
@@ -127,10 +112,8 @@ object SparkCommandPlugin extends EventLogging {
   }
 
   private def stopContextIfNeeded(sc: SparkContext): Unit = {
-    if (EngineConfig.reuseSparkContext) {
-      info("not stopping local SparkContext so that it can be re-used")
-    }
-    else {
+    if (!EngineConfig.reuseSparkContext && !EngineConfig.isSparkOnYarn) {
+      // TODO: do we still need this?  Doesn't seem like it the way we run in Yarn now --Todd  Jan 2016
       sc.stop()
     }
   }

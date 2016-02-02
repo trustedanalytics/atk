@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.trustedanalytics.atk.engine.command.mgmt.YarnJobShutdownHook
 import org.trustedanalytics.atk.engine.jobcontext.JobContextStorageImpl
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
@@ -38,7 +39,7 @@ abstract class AbstractEngineComponent extends DbProfileComponent
     with EventLoggingImplicits
     with ClassLoaderAware {
 
-  implicit lazy val startupCall = Call(null, EngineExecutionContext.global)
+  implicit lazy val startupCall = Call(null, EngineExecutionContext.global, null)
 
   val commandLoader: CommandLoader
 
@@ -65,11 +66,11 @@ abstract class AbstractEngineComponent extends DbProfileComponent
 
   val userStorage = new UserStorage(metaStore.asInstanceOf[SlickMetaStore])
 
-  val commands = new CommandStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
+  val commandStorage = new CommandStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
 
-  lazy val commandExecutor: CommandExecutor = new CommandExecutor(engine, commands, commandPluginRegistry)
+  lazy val commandExecutor: CommandExecutor = new CommandExecutor(engine, commandStorage, commandPluginRegistry)
 
-  val jobContexts = new JobContextStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
+  val jobContextStorage = new JobContextStorageImpl(metaStore.asInstanceOf[SlickMetaStore])
 
   override lazy val profile = withContext("engine connecting to metastore") {
 
@@ -84,6 +85,8 @@ abstract class AbstractEngineComponent extends DbProfileComponent
   }(startupCall.eventContext)
 
   val engine = new EngineImpl(sparkContextFactory,
-    commandExecutor, commands, frameStorage, graphStorage, modelStorage, userStorage,
-    sparkAutoPartitioner, jobContexts, fileStorage) {}
+    commandExecutor, commandStorage, frameStorage, graphStorage, modelStorage, userStorage,
+    sparkAutoPartitioner, jobContextStorage, fileStorage) {}
+
+  YarnJobShutdownHook.createHook(jobContextStorage)
 }

@@ -83,6 +83,11 @@ trait EngineConfig extends EventLogging {
   val keepYarnJobAlive: Boolean = config.getBoolean("trustedanalytics.atk.engine.keep-yarn-job-alive")
 
   /**
+   * After this many seconds Yarn job will be shutdown if there was no further activity
+   */
+  val yarnWaitTimeout: Long = config.getLong("trustedanalytics.atk.engine.yarn-wait-timeout")
+
+  /**
    * true to re-use a SparkContext, this can be helpful for automated integration tests, not for customers.
    * NOTE: true should break the progress bar.
    */

@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.engine.command
 
-import java.util
-import org.apache.hadoop.yarn.api.records.YarnApplicationState
 import org.trustedanalytics.atk.event.EventLogging
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.yarn.client.api.YarnClient
@@ -48,6 +46,7 @@ object YarnUtils extends EventLogging {
     val yarnClient = initYarnClient()
     using[YarnClient, Unit](yarnClient) {
       yarnClient =>
+        yarnClient.start()
         val app = yarnClient.getApplications.find(ap => ap.getName == jobName)
         if (app.isDefined) {
           info(s"Killing yarn application ${app.get.getApplicationId} which corresponds to command $jobName")

@@ -40,7 +40,7 @@ case class GetCommand(id: Long,
                       correlationId: String,
                       arguments: Option[JsObject],
                       error: Option[CommandError],
-                      progress: List[ProgressInfo],
+                      progress: String,
                       complete: Boolean,
                       result: Option[JsObject],
                       links: List[RelLink]) {
