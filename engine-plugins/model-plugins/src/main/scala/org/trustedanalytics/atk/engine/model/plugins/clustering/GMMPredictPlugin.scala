@@ -79,7 +79,7 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
-    //Extracting the KMeansModel from the stored JsObject
+    //Extracting the GmmModel from the stored JsObject
     val gmmData = model.data.convertTo[GMMData]
     val gmmModel = gmmData.gmmModel
     if (arguments.observationColumns.isDefined) {
@@ -93,8 +93,8 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
     val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (row, index) => (index, row) }
     val indexedInputRdd = frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues).zipWithIndex().map { case (cluster, index) => (index, cluster) }
 
-    val resultFrameRdd = indexedInputRdd.join(indexedPredictionsRdd).map { case (index, (vect, cluster)) => Row.fromSeq(vect.toArray.toSeq ++ Array(cluster).toSeq) }
-
+    val resultRdd = indexedInputRdd.join(indexedPredictionsRdd).map { case (index, (vect, cluster)) => Row.fromSeq(vect.toArray.toSeq ++ Array(cluster).toSeq) }
+    val testresultRdd = resultRdd.collect()
     //Updating the frame schema
     var columnNames = new ListBuffer[String]()
     var columnTypes = new ListBuffer[DataTypes.DataType]()
@@ -103,7 +103,8 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
 
     val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
     val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
-    val predictFrameRdd = new FrameRdd(updatedSchema, resultFrameRdd)
+    val predictFrameRdd = new FrameRdd(updatedSchema, resultRdd)
+    val predictRdd = predictFrameRdd.collect()
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by GMM predict operation"))) { newPredictedFrame: FrameEntity =>
       newPredictedFrame.save(predictFrameRdd)
