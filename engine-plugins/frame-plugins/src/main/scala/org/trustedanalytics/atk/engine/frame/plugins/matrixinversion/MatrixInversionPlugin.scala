@@ -39,8 +39,14 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  *
  */
 @PluginDoc(oneLine = "Inverts a matrix.",
-  extended = """Inverts a matrix.""",
-  returns = "A pseudo-inverted matrix or error if the matrix is singular (cannot be inverted).")
+  extended = """The algorithm consists of the following steps:
+
+1. Load the matrix data from HDFS into a frame
+2. Convert the frame into a RowMatrix
+2. Invert the RowMatrix generating a DenseMatrix object
+3. Convert the DenseMatrix matrix into a frame
+4. Save the frame to HDFS""",
+  returns = "A pseudo-inverted matrix or runtime exception if the matrix is singular and cannot be inverted.")
 class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, FrameReference] {
 
   /**
@@ -58,7 +64,7 @@ class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, Fram
   override def numberOfJobs(arguments: MatrixInversionArgs)(implicit invocation: Invocation) = 3
 
   /**
-   * Calculate the pseudo-inverted of a matrix.
+   * Calculate the pseudo-inverted of an invertible matrix.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -71,6 +77,11 @@ class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, Fram
     val frame: SparkFrame = arguments.frame
     val columnNames = arguments.columnNames
     val inputSchema = frame.schema
+
+    //validate the matrix contains numerical values
+    for (i <- 0 until columnNames.length) {
+      inputSchema.requireColumnIsNumerical(columnNames(i))
+    }
 
     // run the operation
     val rowMatrix = new RowMatrix(frame.rdd.toDenseVectorRDD(columnNames))
@@ -93,7 +104,7 @@ class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, Fram
     val columns = matrix.numCols.toInt
     val svd = matrix.computeSVD(columns, computeU = true)
     if (svd.s.size < columns) {
-      throw  new RuntimeException(s"MatrixInversionPlugin computeInverse cannot be called on a singular matrix")
+      throw new RuntimeException(s"MatrixInversionPlugin computeInverse cannot be called on a singular matrix")
     }
 
     // Create the inv diagonal matrix from svd.s

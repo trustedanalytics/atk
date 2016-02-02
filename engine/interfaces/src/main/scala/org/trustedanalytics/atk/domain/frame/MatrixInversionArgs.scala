@@ -23,8 +23,8 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  *
  */
 case class MatrixInversionArgs(frame: FrameReference,
-                               @ArgDoc("""The number of columns of the matrix to be inverted.""") columnNames: List[String]) {
+                               @ArgDoc("""The list of columns of the matrix to be inverted.""") columnNames: List[String]) {
   require(frame != null, "frame is required")
   require(columnNames != null, "the matrix must have at least 2 columns ")
-  require(columnNames.length >= 1, "number of columns should be greater than equal to 1")
+  require(columnNames.length >= 2, "number of columns should be greater than equal to 2")
 }
