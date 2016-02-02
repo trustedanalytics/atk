@@ -46,6 +46,7 @@ object YarnUtils extends EventLogging {
     val yarnClient = initYarnClient()
     using[YarnClient, Unit](yarnClient) {
       yarnClient =>
+        yarnClient.start()
         val app = yarnClient.getApplications.find(ap => ap.getName == jobName)
         if (app.isDefined) {
           info(s"Killing yarn application ${app.get.getApplicationId} which corresponds to command $jobName")

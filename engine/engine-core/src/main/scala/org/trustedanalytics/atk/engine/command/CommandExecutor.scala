@@ -206,7 +206,7 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
    * Cancel a command
    * @param commandId command id
    */
-  def cancelCommand(commandId: Long): Unit = withMyClassLoader {
+  def cancelCommand(commandId: Long, msg: Option[String] = None): Unit = withMyClassLoader {
     // This should be killing any yarn jobs running
     val command = commands.lookup(commandId).getOrElse(throw new Exception(s"Command $commandId does not exist"))
     val commandPlugin = commandPluginRegistry.getCommandDefinition(command.name).get
@@ -219,8 +219,11 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         command.jobContextId match {
           case Some(id) => engine.jobContextStorage.lookup(id) match {
             case Some(jobContext) => commands.complete(command.id, Try {
-              YarnUtils.killYarnJob(jobContext.getYarnAppName)
-              throw new RuntimeException("Command was cancelled")
+              val attempt = Try { YarnUtils.killYarnJob(jobContext.getYarnAppName) }
+              if (attempt.isFailure) {
+                error(s"Error trying to kill YARN job for command ${command.id} (will still complete command as cancelled).  $attempt")
+              }
+              throw new RuntimeException("Command was cancelled" + msg.getOrElse(""))
             })
             case None => info("Cancel couldn't find jobContext for this command " + command)
           }
