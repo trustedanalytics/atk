@@ -35,6 +35,11 @@ trait CommandStorage {
    */
   def lookup(jobContext: JobContext): Seq[Command]
 
+  /*
+   * Get commands which are not marked complete
+   */
+  def lookupNotComplete(): Seq[Command]
+
   /** Look-up a Command expecting it exists, throw Exception otherwise */
   def expectCommand(id: Long): Command = {
     lookup(id).getOrElse(throw new NotFoundException("Command", id))
