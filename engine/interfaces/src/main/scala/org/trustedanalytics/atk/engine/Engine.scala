@@ -58,6 +58,8 @@ trait Engine {
 
   def getCommandJobContext(command: Command)(implicit invocation: Invocation): Option[JobContext]
 
+  def getCommandsNotComplete()(implicit invocation: Invocation): Seq[Command]
+
   def getUserPrincipal(userKey: String)(implicit invocation: Invocation): UserPrincipal
 
   def addUserPrincipal(userKey: String)(implicit invocation: Invocation): UserPrincipal
@@ -109,8 +111,9 @@ trait Engine {
   /**
    * Cancel a running command
    * @param id command id
+   * @param msg optional message
    * @return optional command instance
    */
-  def cancelCommand(id: Identifier)(implicit invocation: Invocation): Future[Unit]
+  def cancelCommand(id: Identifier, msg: Option[String] = None)(implicit invocation: Invocation): Future[Unit]
 
 }

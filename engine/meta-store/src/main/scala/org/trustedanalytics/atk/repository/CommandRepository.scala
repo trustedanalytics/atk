@@ -28,6 +28,8 @@ trait CommandRepository[Session] extends Repository[Session, CommandTemplate, Co
 
   def lookup(jobContext: JobContext)(implicit session: Session): Seq[Command]
 
+  def lookupNotComplete()(implicit session: Session): Seq[Command]
+
   def updateComplete(id: Long, complete: Boolean)(implicit session: Session): Try[Unit]
 
   def updateProgress(id: Long, progressInfo: List[ProgressInfo])(implicit session: Session): Try[Unit]
