@@ -53,6 +53,10 @@ class CommandStorageImpl(val metaStore: SlickMetaStoreComponent#SlickMetaStore) 
     }
   }
 
+  override def lookupNotComplete(): Seq[Command] = metaStore.withSession("se.command.scan") {
+    implicit session => repo.lookupNotComplete()
+  }
+
   override def create(createReq: CommandTemplate): Command =
     metaStore.withSession("se.command.create") {
       implicit session =>

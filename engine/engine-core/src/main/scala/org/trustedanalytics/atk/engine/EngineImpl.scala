@@ -70,6 +70,12 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     }
   }
 
+  override def getCommandsNotComplete()(implicit invocation: Invocation): Seq[Command] = {
+    withContext("se.getRunningCommands") {
+      commandStorage.lookupNotComplete()
+    }
+  }
+
   override def getCommandJobContext(command: Command)(implicit invocation: Invocation): Option[JobContext] =
     withContext("se.getCommandJobContext") {
       command.jobContextId.flatMap(jobContextStorage.lookup)
@@ -286,9 +292,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
   //    }
   //  }
 
-  override def cancelCommand(id: Long)(implicit invocation: Invocation): Future[Unit] = withContext("se.cancelCommand") {
+  override def cancelCommand(id: Long, msg: Option[String] = None)(implicit invocation: Invocation): Future[Unit] = withContext("se.cancelCommand") {
     future {
-      commands.cancelCommand(id)
+      commands.cancelCommand(id, msg)
     }
   }
 
