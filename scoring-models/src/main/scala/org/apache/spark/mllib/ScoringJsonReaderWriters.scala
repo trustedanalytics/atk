@@ -16,6 +16,7 @@
 
 package org.apache.spark.mllib
 
+import com.cloudera.sparkts.ARXModel
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
@@ -593,6 +594,47 @@ object ScoringJsonReaderWriters {
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
+  }
+
+  implicit object ARXModelFormat extends JsonFormat[ARXModel] {
+    /**
+     * The write methods converts from ARXModel to JsValue
+     * @param obj ARXModel. Where ARXModel's format is
+     *              c : scala.Double
+     *              coefficients : scala.Array[scala.Double]
+     *              yMaxLag : scala.Int
+     *              xMaxLag : scala.Int
+     * @return JsValue
+     */
+    override def write(obj: ARXModel): JsValue = {
+      JsObject(
+        "c" -> obj.c.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "xMaxLag" -> obj.xMaxLag.toJson,
+        "yMaxLag" -> obj.yMaxLag.toJson
+      // NOTE: unable to save includesOriginalX parameter
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARXModel
+     * @param json JsValue
+     * @return ARXModel with format
+     *            c : scala.Double
+     *            coefficients : scala.Array[scala.Double]
+     *            yMaxLag : scala.Int
+     *            xMaxLag : scala.Int
+     */
+    override def read(json: JsValue): ARXModel = {
+      val fields = json.asJsObject.fields
+      val c = getOrInvalid(fields, "c").convertTo[Double]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
+      val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
+      // NOTE: unable to get includesOriginalX - defaulting to true
+      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+    }
+
   }
 
 }
