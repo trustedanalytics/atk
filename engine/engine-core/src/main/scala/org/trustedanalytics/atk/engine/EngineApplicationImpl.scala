@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine
 
 import org.trustedanalytics.atk.engine.command.CommandLoader
+import org.trustedanalytics.atk.engine.command.mgmt.YarnJobsMonitor
 import org.trustedanalytics.atk.engine.gc.GarbageCollector
 import org.trustedanalytics.atk.engine.util.{ JvmVersionReporter, EnvironmentLogger }
 import org.trustedanalytics.atk.event.EventLogging
@@ -39,5 +40,7 @@ class EngineApplicationImpl extends AbstractEngineComponent with EngineApplicati
 
   BackgroundInit.start
 
+  val yarnJobsMonitorThread = new Thread(new YarnJobsMonitor(engine))
+  yarnJobsMonitorThread.start()
 }
 

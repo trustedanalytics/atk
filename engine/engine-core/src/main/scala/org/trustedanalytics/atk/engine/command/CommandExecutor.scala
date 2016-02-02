@@ -219,7 +219,10 @@ class CommandExecutor(engine: => EngineImpl, commands: CommandStorage, commandPl
         command.jobContextId match {
           case Some(id) => engine.jobContextStorage.lookup(id) match {
             case Some(jobContext) => commands.complete(command.id, Try {
-              YarnUtils.killYarnJob(jobContext.getYarnAppName)
+              val attempt = Try { YarnUtils.killYarnJob(jobContext.getYarnAppName) }
+              if (attempt.isFailure) {
+                error(s"Error trying to kill YARN job for command ${command.id} (will still complete command as cancelled).  $attempt")
+              }
               throw new RuntimeException("Command was cancelled" + msg.getOrElse(""))
             })
             case None => info("Cancel couldn't find jobContext for this command " + command)
