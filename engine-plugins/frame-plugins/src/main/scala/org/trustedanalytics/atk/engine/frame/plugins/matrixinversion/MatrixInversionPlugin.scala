@@ -26,7 +26,7 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ MatrixInversionArgs, FrameReference }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin}
 
 import scala.collection.mutable.ListBuffer
 
@@ -63,6 +63,8 @@ class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, Fram
    */
   override def numberOfJobs(arguments: MatrixInversionArgs)(implicit invocation: Invocation) = 3
 
+  /** Tag indicating the maturity of the plugin's API */
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
   /**
    * Calculate the pseudo-inverted of an invertible matrix.
    *
