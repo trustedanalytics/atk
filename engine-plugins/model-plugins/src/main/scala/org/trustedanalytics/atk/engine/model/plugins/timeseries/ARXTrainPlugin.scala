@@ -81,7 +81,10 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
     val trainFrameRdd = frame.rdd
     trainFrameRdd.cache()
 
-    ARXTrainReturn()
+    val testc = 5.0
+    val testcoefficients = new Array[Double](1)
+
+    ARXTrainReturn(testc, testcoefficients)
 
     /*
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
@@ -98,7 +101,7 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
     KMeansTrainReturn(size, withinSetSumOfSquaredError)*/
   }
 
-  def arxTrainFormatter(frameRdd: FrameRdd, timeseriesColumn: String, xColumn: String): Tuple3 = {
+  def arxTrainFormatter(frameRdd: FrameRdd, timeseriesColumn: String, xColumn: String): Unit = {
     frameRdd.map(row => columnFormatterForTrain(row.toSeq.toArray.zipWithIndex)).collect()
 
     for (row <- frameRdd.collect()) {

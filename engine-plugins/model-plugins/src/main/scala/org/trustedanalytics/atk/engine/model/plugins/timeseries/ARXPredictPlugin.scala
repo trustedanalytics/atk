@@ -100,7 +100,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
       //      }
       //      val prediction = kmeansModel.predict(point)
       //      row.addValue(prediction + 1)
-      row.addOrSetValue(0)
+      row.addValue(0)
     })
 
     //Updating the frame schema
@@ -118,7 +118,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
     val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
     val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
 
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by KMeans predict operation"))) { newPredictedFrame: FrameEntity =>
+    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARX predict operation"))) { newPredictedFrame: FrameEntity =>
       newPredictedFrame.save(predictFrameRdd)
     }
   }

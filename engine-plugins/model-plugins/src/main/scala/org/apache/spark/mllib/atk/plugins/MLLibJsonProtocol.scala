@@ -16,6 +16,7 @@
 
 package org.apache.spark.mllib.atk.plugins
 
+import com.cloudera.sparkts.ARXModel
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
@@ -33,11 +34,11 @@ import org.trustedanalytics.atk.engine.model.plugins.regression._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.clustering._
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionData
+import org.trustedanalytics.atk.engine.model.plugins.timeseries.{ARXData, ARXTrainReturn, ARXTrainArgs, ARXPredictArgs}
 import spray.json._
 
 /**
@@ -574,6 +575,46 @@ object MLLibJsonProtocol {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
+  implicit object ARXModelFormat extends JsonFormat[ARXModel] {
+    /**
+     * The write methods converts from ARXModel to JsValue
+     * @param obj ARXModel. Where ARXModel's format is
+     *            c : scala.Double
+     *            coefficients : scala.Array[scala.Double]
+     *            yMaxLag : scala.Int
+     *            xMaxLag : scala.Int
+     * @return JsValue
+     */
+    override def write(obj: ARXModel): JsValue = {
+      JsObject(
+        "c" -> obj.c.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "xMaxLag" -> obj.xMaxLag.toJson,
+        "yMaxLag" -> obj.yMaxLag.toJson
+        // NOTE: unable to save includesOriginalX parameter
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARXModel
+     * @param json JsValue
+     * @return ARXModel with format
+     *         c : scala.Double
+     *         coefficients : scala.Array[scala.Double]
+     *         yMaxLag : scala.Int
+     *         xMaxLag : scala.Int
+     */
+    override def read(json: JsValue): ARXModel = {
+      val fields = json.asJsObject.fields
+      val c = getOrInvalid(fields, "c").convertTo[Double]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
+      val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
+      // NOTE: unable to get includesOriginalX - defaulting to true
+      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+    }
+  }
+
   implicit val logRegDataFormat = jsonFormat2(LogisticRegressionData)
   implicit val classificationWithSGDTrainFormat = jsonFormat10(ClassificationWithSGDTrainArgs)
   implicit val classificationWithSGDPredictFormat = jsonFormat3(ClassificationWithSGDPredictArgs)
@@ -605,6 +646,10 @@ object MLLibJsonProtocol {
   implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
   implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
   implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
+  implicit val arxPredictArgsFormat = jsonFormat3(ARXPredictArgs)
+  implicit val arxTrainArgsFormat = jsonFormat9(ARXTrainArgs)
+  implicit val arxTrainReturnFormat = jsonFormat2(ARXTrainReturn)
+  implicit val arxDataFormat = jsonFormat3(ARXData)
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

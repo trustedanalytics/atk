@@ -20,9 +20,10 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import com.cloudera.sparkts.ARXModel
 
-
 /** Json conversion for arguments and return value case classes */
 object ARXJsonProtocol {
+
+
   implicit object ARXModelFormat extends JsonFormat[ARXModel] {
     /**
      * The write methods converts from ARXModel to JsValue
@@ -39,7 +40,7 @@ object ARXJsonProtocol {
         "coefficients" -> obj.coefficients.toJson,
         "xMaxLag" -> obj.xMaxLag.toJson,
         "yMaxLag" -> obj.yMaxLag.toJson
-        // NOTE: unable to save includesOriginalX parameter
+      // NOTE: unable to save includesOriginalX parameter
       )
     }
 
