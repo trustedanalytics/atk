@@ -694,6 +694,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       }
     }
 
+    def lookupNotComplete()(implicit session: Session): Seq[Command] = {
+      commandTable.filter(!_.complete).list
+    }
+
     /**
      * update the command to complete
      * @param id command id

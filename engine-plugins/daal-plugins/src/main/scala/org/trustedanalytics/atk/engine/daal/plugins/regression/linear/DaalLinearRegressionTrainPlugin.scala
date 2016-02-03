@@ -20,12 +20,12 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, PluginDocAnnotation, EngineConfig }
 import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.engine.plugin._
 import DaalConversionImplicits._
 
 import scala.util.{ Success, Failure, Try }
@@ -45,9 +45,11 @@ object DaalLinearRegressionJsonFormat {
  * @param featureColumns Handle to the observation column of the data frame
  */
 case class DaalLinearRegressionArgs(model: ModelReference,
-                                    frame: FrameReference,
-                                    featureColumns: List[String],
-                                    labelColumns: List[String]) {
+                                    @ArgDoc("""A frame to train or test the model on.""") frame: FrameReference,
+                                    @ArgDoc("""List of column(s) containing the
+observations.""") featureColumns: List[String],
+                                    @ArgDoc("""Column name containing the label
+for each observation.""") labelColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(featureColumns != null && !featureColumns.isEmpty, "observationColumn must not be null nor empty")
@@ -67,9 +69,9 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalLinearRegressionJsonFormat._
 
 /** Plugin for training DAAL's Linear Regression using QR decomposition */
-@PluginDoc(oneLine = "Build linear regression model.",
-  extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",
-  returns = "Trained linear regression model")
+@PluginDoc(oneLine = "Build DAAL linear regression model.",
+  extended = "Create DAAL LinearRegression Model using the observation column and target column of the train frame",
+  returns = "Array with coefficients of linear regression model")
 class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, DaalLinearRegressionTrainResult] {
   /**
    * The name of the command.
