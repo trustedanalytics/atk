@@ -22,7 +22,7 @@ import org.apache.spark.mllib.optimization.{ L1Updater, SquaredL2Updater }
 import org.apache.spark.mllib.regression.{ LabeledPoint, LinearRegressionWithSGD }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types._
-import org.apache.spark.sql.types.{ StructType, StructField }
+import org.apache.spark.sql.types.{ StructType, StructField, DoubleType }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
@@ -69,7 +69,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
     //Running MLLib
     val rdd = trainFrameRdd.toRddOfDoubleAndVector(arguments.labelColumn, arguments.observationColumns)
 
-    val schema = StructType(Seq(StructField("label", DoubleType, true), StructField("features", new VectorUDT, true)))
+    val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("label", DoubleType, true)))
     val dataFrame = frame.rdd.toDataFrameWithSchema(schema)
 
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)

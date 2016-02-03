@@ -181,12 +181,20 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     })
   }
 
+  //  def toRddOfDoubleAndVector(valueColumnName: String, featureColumnNames: List[String]) = {
+  //    this mapRows (row => {
+  //      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
+  //      val vector = Vectors.dense(features.toArray)
+  //      val value = row.value(valueColumnName).asInstanceOf[Double]
+  //      (value, vector)
+  //    })
+  //  }
   def toRddOfDoubleAndVector(valueColumnName: String, featureColumnNames: List[String]) = {
     this mapRows (row => {
       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-      val vector = Vectors.dense(features.toArray)
-      val value = row.value(valueColumnName).asInstanceOf[Double]
-      (value, vector)
+      val vector = features.toArray
+      val value = row.value(valueColumnName)
+      new GenericRow(vector :+ value)
     })
   }
 
