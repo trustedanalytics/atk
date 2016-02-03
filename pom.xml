@@ -737,6 +737,14 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <version>${dep.daal.version}</version>
             </dependency>
             <!-- END Intel DAAL dependencies -->
+            <!-- START Netlib for Intel MKL dependencies -->
+            <dependency>
+                <groupId>com.github.fommil.netlib</groupId>
+                <artifactId>all</artifactId>
+                <version>1.1.2</version>
+                <type>pom</type>
+            </dependency>
+            <!-- END Netlib dependencies -->
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>event-api</artifactId>

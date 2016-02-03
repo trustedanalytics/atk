@@ -400,6 +400,8 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val exportHdfsHBasePlugin = jsonFormat4(ExportHdfsHBaseArgs)
   implicit val exportHdfsJdbcPlugin = jsonFormat5(ExportHdfsJdbcArgs)
 
+  implicit val matrixInversionFormat = jsonFormat2(MatrixInversionArgs)
+
   //histogram formats
   implicit val histogramArgsFormat = jsonFormat5(HistogramArgs)
   implicit val histogramResultFormat = jsonFormat3(Histogram)
