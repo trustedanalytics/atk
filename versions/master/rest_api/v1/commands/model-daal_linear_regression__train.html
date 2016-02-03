@@ -112,7 +112,7 @@
   <div class="section" id="commands-model-daal-linear-regression-train">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:daal_linear_regression/train<a class="headerlink" href="#commands-model-daal-linear-regression-train" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Build linear regression model.</p>
+Build DAAL linear regression model.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -138,15 +138,17 @@ Build linear regression model.</p>
 </div></blockquote>
 <p><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>A frame to train or test the model on.</p>
 </div></blockquote>
 <p><strong>feature_columns</strong> : list</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>List of column(s) containing the
+observations.</p>
 </div></blockquote>
 <p><strong>label_columns</strong> : list</p>
 <blockquote class="last">
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>Column name containing the label
+for each observation.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -164,7 +166,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Creating a LinearRegression Model using the observation column and target column of the train frame</p>
+<p>Create DAAL LinearRegression Model using the observation column and target column of the train frame</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -207,7 +209,7 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div>Trained linear regression model</div></blockquote>
+<div>Array with coefficients of linear regression model</div></blockquote>
 </div>
 </div>
 </div>

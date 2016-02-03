@@ -117,18 +117,50 @@
 <dt id="daal_pca">
 <code class="descname">daal_pca</code><span class="sig-paren">(</span><em>self</em>, <em>column_names</em>, <em>method='cor'</em><span class="sig-paren">)</span><a class="headerlink" href="#daal_pca" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-&lt;Missing Doc&gt;</p>
+Calculate principal components using Intel&#8217;s Data Analytics Acceleration Library (DAAL).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_names</strong> : list</p>
+<blockquote>
+<div><p>The names of the column from which to compute PCA.</p>
+</div></blockquote>
 <p><strong>method</strong> : unicode (default=cor)</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>PCA method.</dt>
+<dd><div class="first last line-block">
+<div class="line">cor - correlation.</div>
+<div class="line">svd - singular value decomposition.</div>
+</div>
+</dd>
+</dl>
+</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: dict</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
+<blockquote class="last">
+<div><p>Frame with eigen values and eigen vectors.</p>
+</div></blockquote>
 </td>
 </tr>
+</tbody>
+</table>
+<p>Principal component analysis (PCA) <a class="reference internal" href="#r1" id="id1">[R1]</a> is used to transform a set of possibly correlated
+variables into a smaller number of uncorrelated variables called principal components.
+This method runs the DAAL implementation of Principal component analysis <a class="reference internal" href="#r2" id="id2">[R2]</a>.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R2]</a></td><td><a class="reference external" href="https://software.intel.com/en-us/daal">https://software.intel.com/en-us/daal</a></td></tr>
 </tbody>
 </table>
 </dd></dl>

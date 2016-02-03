@@ -31,9 +31,9 @@
     .. rubric:: Methods
 
     ====================================================================================================  ====================================================================================================
-    :ref:`__init__ <DaalLinearRegressionModel__init__>`\ (self[, name, _info])                            |ALPHA| Create a 'new' instance of a Linear Regression model.
-    :doc:`predict <predict>`\ (self, frame, feature_columns, label_columns)                               |ALPHA| Make new frame with column for label prediction.
-    :doc:`train <train>`\ (self, frame, feature_columns, label_columns)                                   |ALPHA| Build linear regression model.
+    :ref:`__init__ <DaalLinearRegressionModel__init__>`\ (self[, name, _info])                            |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
+    :doc:`predict <predict>`\ (self, frame, feature_columns, label_columns)                               |ALPHA| Predict labels for a test frame using trained DAAL linear regression model.
+    :doc:`train <train>`\ (self, frame, feature_columns, label_columns)                                   |ALPHA| Build DAAL linear regression model.
     ====================================================================================================  ====================================================================================================
 
 .. _DaalLinearRegressionModel__init__:
@@ -42,7 +42,7 @@
 .. function:: __init__(self, name=None)
 
     |ALPHA|
-    Create a 'new' instance of a Linear Regression model.
+    Create a 'new' instance of a DAAL Linear Regression model.
 
 
     :Parameters:
@@ -62,7 +62,7 @@
 
         ..
 
-            A new instance of LinearRegressionModel
+            A new instance of DaalLinearRegressionNewPlugin
     Linear Regression [1]_ is used to model the relationship between a scalar
     dependent variable and one or more independent variables.
     The Linear Regression model is initialized, trained on columns of a frame and

@@ -5,7 +5,7 @@
 ----------------------------------------------------------
 
 |ALPHA|
-Build linear regression model.
+Build DAAL linear regression model.
 
 POST /v1/commands/
 ==================
@@ -43,7 +43,7 @@ Request
 
     ..
 
-        <Missing Description>
+        A frame to train or test the model on.
 
 
 
@@ -51,7 +51,8 @@ Request
 
     ..
 
-        <Missing Description>
+        List of column(s) containing the
+        observations.
 
 
 
@@ -59,7 +60,8 @@ Request
 
     ..
 
-        <Missing Description>
+        Column name containing the label
+        for each observation.
 
 
 
@@ -73,7 +75,7 @@ Request
 
 **Description**
 
-Creating a LinearRegression Model using the observation column and target column of the train frame
+Create DAAL LinearRegression Model using the observation column and target column of the train frame
 
 |
 
@@ -121,6 +123,6 @@ Response
 
 ``dict``
 
-        Trained linear regression model
+        Array with coefficients of linear regression model
 
 

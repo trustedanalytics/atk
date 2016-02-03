@@ -156,9 +156,9 @@ Command List
 ------------
 
 
-==============================================================================================  ============================================================================================
+==============================================================================================  ==================================================================================================
 Command Name  (explained :doc:`here <about_command_names>`)                                     Description
-==============================================================================================  ============================================================================================
+==============================================================================================  ==================================================================================================
 :doc:`frame/add_columns <frame__add_columns>`                                                   Add columns to current frame.
 :doc:`frame/assign_sample <frame__assign_sample>`                                               Randomly group rows into user-defined classes.
 :doc:`frame/bin_column <frame__bin_column>`                                                     Classify data into user-defined groups.
@@ -177,7 +177,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/covariance_matrix <frame__covariance_matrix>`                                       Calculate covariance matrix for two or more columns.
 :doc:`frame/cumulative_percent <frame__cumulative_percent>`                                     |BETA| Add column to frame with cumulative percent sum.
 :doc:`frame/cumulative_sum <frame__cumulative_sum>`                                             |BETA| Add column to frame with cumulative percent sum.
-:doc:`frame/daal_pca <frame__daal_pca>`                                                         |ALPHA| <Missing Doc>
+:doc:`frame/daal_pca <frame__daal_pca>`                                                         |ALPHA| Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).
 :doc:`frame/dot_product <frame__dot_product>`                                                   |ALPHA| Calculate dot product for each row in current frame.
 :doc:`frame/drop_columns <frame__drop_columns>`                                                 Remove columns from the frame.
 :doc:`frame/drop_duplicates <frame__drop_duplicates>`                                           Modify the current frame, removing duplicate rows.
@@ -236,9 +236,9 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`       |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/score <model-collaborative_filtering__score>`               |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/train <model-collaborative_filtering__train>`               Collaborative filtering (ALS) model
-:doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a Linear Regression model.
-:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Make new frame with column for label prediction.
-:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build linear regression model.
+:doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
+:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Predict labels for a test frame using trained DAAL linear regression model.
+:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build DAAL linear regression model.
 :doc:`model:k_means/new <model-k_means__new>`                                                   Create a 'new' instance of a k-means model.
 :doc:`model:k_means/predict <model-k_means__predict>`                                           |BETA| Predict the cluster assignments for the data points.
 :doc:`model:k_means/publish <model-k_means__publish>`                                           |BETA| Creates a tar file that will be used as input to the scoring engine
@@ -285,4 +285,4 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:svm/publish <model-svm__publish>`                                                   |BETA| Creates a tar file that will be used as input to the scoring engine
 :doc:`model:svm/test <model-svm__test>`                                                         |ALPHA| Predict test frame labels and return metrics.
 :doc:`model:svm/train <model-svm__train>`                                                       |ALPHA| Build SVM with SGD model
-==============================================================================================  ============================================================================================
+==============================================================================================  ==================================================================================================

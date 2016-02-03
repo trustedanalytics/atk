@@ -112,7 +112,7 @@
   <div class="section" id="commands-model-daal-linear-regression-predict">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:daal_linear_regression/predict<a class="headerlink" href="#commands-model-daal-linear-regression-predict" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Make new frame with column for label prediction.</p>
+Predict labels for a test frame using trained DAAL linear regression model.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -138,15 +138,17 @@ Make new frame with column for label prediction.</p>
 </div></blockquote>
 <p><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>A frame to train or test the model on.</p>
 </div></blockquote>
 <p><strong>feature_columns</strong> : list</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>List of column(s) containing the
+observations.</p>
 </div></blockquote>
 <p><strong>label_columns</strong> : list</p>
 <blockquote class="last">
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>Column name containing the label
+for each observation.</p>
 </div></blockquote>
 </td>
 </tr>

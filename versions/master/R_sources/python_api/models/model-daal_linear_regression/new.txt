@@ -8,7 +8,7 @@
 .. function:: __init__(self, name=None)
 
     |ALPHA|
-    Create a 'new' instance of a Linear Regression model.
+    Create a 'new' instance of a DAAL Linear Regression model.
 
 
     :Parameters:
@@ -28,7 +28,7 @@
 
         ..
 
-            A new instance of LinearRegressionModel
+            A new instance of DaalLinearRegressionNewPlugin
     Linear Regression [1]_ is used to model the relationship between a scalar
     dependent variable and one or more independent variables.
     The Linear Regression model is initialized, trained on columns of a frame and

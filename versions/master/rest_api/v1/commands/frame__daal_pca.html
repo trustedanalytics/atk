@@ -112,7 +112,7 @@
   <div class="section" id="commands-frame-daal-pca">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/daal_pca<a class="headerlink" href="#commands-frame-daal-pca" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-&lt;Missing Doc&gt;</p>
+Calculate principal components using Intel&#8217;s Data Analytics Acceleration Library (DAAL).</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -138,11 +138,18 @@
 </div></blockquote>
 <p><strong>column_names</strong> : list</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>The names of the column from which to compute PCA.</p>
 </div></blockquote>
 <p><strong>method</strong> : unicode (default=cor)</p>
 <blockquote class="last">
-<div><p>&lt;Missing Description&gt;</p>
+<div><dl class="docutils">
+<dt>PCA method.</dt>
+<dd><div class="first last line-block">
+<div class="line">cor - correlation.</div>
+<div class="line">svd - singular value decomposition.</div>
+</div>
+</dd>
+</dl>
 </div></blockquote>
 </td>
 </tr>
@@ -160,6 +167,22 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
+<p>Principal component analysis (PCA) <a class="footnote-reference" href="#id3" id="id1">[1]</a> is used to transform a set of possibly correlated
+variables into a smaller number of uncorrelated variables called principal components.
+This method runs the DAAL implementation of Principal component analysis <a class="footnote-reference" href="#id4" id="id2">[2]</a>.</p>
+<p class="rubric">footnotes</p>
+<table class="docutils footnote" frame="void" id="id3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="https://software.intel.com/en-us/daal">https://software.intel.com/en-us/daal</a></td></tr>
+</tbody>
+</table>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -174,10 +197,10 @@ Content-type: application/json
 <p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
 </div>
 </div>
-<div class="section" id="id1">
-<h2>GET /v1/commands/:id<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id2">
-<h3>Request<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id5">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id6">
+<h3>Request<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
@@ -193,14 +216,16 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="id3">
-<h3>Response<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id7">
+<h3>Response<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
 <div class="highlight-python"><div class="highlight"><pre>200 OK
 </pre></div>
 </div>
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
+<blockquote>
+<div>Frame with eigen values and eigen vectors.</div></blockquote>
 </div>
 </div>
 </div>

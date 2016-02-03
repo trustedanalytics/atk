@@ -5,7 +5,7 @@
 ------------------------------------------------------------
 
 |ALPHA|
-Make new frame with column for label prediction.
+Predict labels for a test frame using trained DAAL linear regression model.
 
 POST /v1/commands/
 ==================
@@ -43,7 +43,7 @@ Request
 
     ..
 
-        <Missing Description>
+        A frame to train or test the model on.
 
 
 
@@ -51,7 +51,8 @@ Request
 
     ..
 
-        <Missing Description>
+        List of column(s) containing the
+        observations.
 
 
 
@@ -59,7 +60,8 @@ Request
 
     ..
 
-        <Missing Description>
+        Column name containing the label
+        for each observation.
 
 
 

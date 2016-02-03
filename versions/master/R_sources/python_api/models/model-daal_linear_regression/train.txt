@@ -8,7 +8,7 @@
 .. function:: train(self, frame, feature_columns, label_columns)
 
     |ALPHA|
-    Build linear regression model.
+    Build DAAL linear regression model.
 
 
     :Parameters:
@@ -17,7 +17,7 @@
 
         ..
 
-
+            A frame to train or test the model on.
 
 
 
@@ -25,7 +25,8 @@
 
         ..
 
-
+            List of column(s) containing the
+            observations.
 
 
 
@@ -33,7 +34,8 @@
 
         ..
 
-
+            Column name containing the label
+            for each observation.
 
 
 
@@ -44,5 +46,5 @@
 
         ..
 
-            Trained linear regression model
-    Creating a LinearRegression Model using the observation column and target column of the train frame
+            Array with coefficients of linear regression model
+    Create DAAL LinearRegression Model using the observation column and target column of the train frame

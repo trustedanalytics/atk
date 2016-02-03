@@ -8,7 +8,7 @@
 .. function:: predict(self, frame, feature_columns, label_columns)
 
     |ALPHA|
-    Make new frame with column for label prediction.
+    Predict labels for a test frame using trained DAAL linear regression model.
 
 
     :Parameters:
@@ -17,7 +17,7 @@
 
         ..
 
-
+            A frame to train or test the model on.
 
 
 
@@ -25,7 +25,8 @@
 
         ..
 
-
+            List of column(s) containing the
+            observations.
 
 
 
@@ -33,7 +34,8 @@
 
         ..
 
-
+            Column name containing the label
+            for each observation.
 
 
 
