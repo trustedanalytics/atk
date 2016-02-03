@@ -103,8 +103,8 @@ class DaalPcaPlugin extends SparkCommandPlugin[DaalPcaArgs, DaalPcaReturn] {
     val pcaResults = DaalPcaFunctions.runPCA(frameRdd, arguments)
 
     // Convert PCA results to ATK data frame
-    val eigenVectors = pcaResults.eigenVectors.toArrayOfDoubleArray()
-    val eigenValues = pcaResults.eigenValues.toDoubleArray()
+    val eigenVectors = pcaResults.getLoadings.toArrayOfDoubleArray()
+    val eigenValues = pcaResults.getScores.toDoubleArray()
 
     DaalPcaReturn(arguments.columnNames, eigenValues, eigenVectors)
   }

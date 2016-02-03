@@ -16,21 +16,21 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
+import java.io.Serializable
+
 import com.intel.daal.algorithms.ModelSerializer
-import com.intel.daal.algorithms.classifier.prediction.NumericTableInputId
 import com.intel.daal.algorithms.linear_regression.Model
 import com.intel.daal.algorithms.linear_regression.prediction._
 import com.intel.daal.algorithms.linear_regression.training._
-import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
+import com.intel.daal.data_management.data.NumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
-import java.io.Serializable
-
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalFrameRddFunctions
+import org.trustedanalytics.atk.engine.daal.plugins.{ DistributedLabeledTable, NumericTableWithIndex }
 
 object DaalLinearRegressionFunctions extends Serializable {
 
@@ -46,10 +46,8 @@ object DaalLinearRegressionFunctions extends Serializable {
                        frameRdd: FrameRdd,
                        featureColumns: List[String],
                        dependentVariableColumns: List[String]): Model = {
-    val data = frameRdd.toNumericTableRdd(featureColumns)
-    val dependentVariables = frameRdd.toNumericTableRdd(dependentVariableColumns)
-    val trainTables = data.join(dependentVariables)
 
+    val trainTables = new DistributedLabeledTable(frameRdd, featureColumns, dependentVariableColumns)
     val partialModels = computePartialLinearModels(trainTables)
     val trainedModel = mergeLinearModels(context, partialModels)
     trainedModel
@@ -58,14 +56,14 @@ object DaalLinearRegressionFunctions extends Serializable {
   /**
    * Compute partial results for linear regression  using QR decomposition
    *
-   * @param trainRdd RDD of features and dependent variables for training
+   * @param trainTables RDD of features and dependent variables for training
    * @return RDD of partial results
    */
-  def computePartialLinearModels(trainRdd: RDD[(Integer, (HomogenNumericTable, HomogenNumericTable))]): RDD[(Integer, PartialResult)] = {
-    val linearModelsRdd = trainRdd.map {
-      case (index, (features, dependentVariables)) =>
-        val linearRegressionModel = computeLinearModelsLocal(features, dependentVariables)
-        (index, linearRegressionModel)
+  def computePartialLinearModels(trainTables: DistributedLabeledTable): RDD[PartialResult] = {
+    val linearModelsRdd = trainTables.rdd.map {
+      case (featureTable, labelTable) =>
+        val linearRegressionModel = computeLinearModelsLocal(featureTable, labelTable)
+        linearRegressionModel
     }
     linearModelsRdd
   }
@@ -75,21 +73,15 @@ object DaalLinearRegressionFunctions extends Serializable {
    *
    * This function is run once for each Spark partition
    *
-   * @param features Feature table
-   * @param dependentVariables Dependent variable table
+   * @param featureTable Feature table
+   * @param labelTable Dependent variable table
    * @return Partial result of training
    */
-  def computeLinearModelsLocal(features: HomogenNumericTable, dependentVariables: HomogenNumericTable): PartialResult = {
+  def computeLinearModelsLocal(featureTable: NumericTableWithIndex, labelTable: NumericTableWithIndex): PartialResult = {
     val context = new DaalContext()
-    features.unpack(context)
-    dependentVariables.unpack(context)
-    require(features.getNumberOfColumns > 0 && features.getNumberOfRows > 0)
-    require(dependentVariables.getNumberOfColumns > 0 && dependentVariables.getNumberOfRows > 0)
-
-    // Compute model
     val linearRegressionTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double], TrainingMethod.qrDense)
-    linearRegressionTraining.input.set(TrainingInputId.data, features.asInstanceOf[NumericTable])
-    linearRegressionTraining.input.set(TrainingInputId.dependentVariable, dependentVariables.asInstanceOf[NumericTable])
+    linearRegressionTraining.input.set(TrainingInputId.data, featureTable.getTable(context))
+    linearRegressionTraining.input.set(TrainingInputId.dependentVariable, labelTable.getTable(context))
     val lrResult = linearRegressionTraining.compute()
     lrResult.pack()
     context.dispose()
@@ -102,15 +94,14 @@ object DaalLinearRegressionFunctions extends Serializable {
    * @param linearModels RDD of partial results of linear regression
    * @return Trained linear regression model
    */
-  def mergeLinearModels(context: DaalContext, linearModels: RDD[(Integer, PartialResult)]): Model = {
+  def mergeLinearModels(context: DaalContext, linearModels: RDD[PartialResult]): Model = {
     val linearRegressionTraining = new TrainingDistributedStep2Master(context, classOf[java.lang.Double], TrainingMethod.qrDense)
 
     /* Build and retrieve final linear model */
     val linearModelsArray = linearModels.collect()
-    linearModelsArray.map {
-      case (index, partialModel) =>
-        partialModel.unpack(context)
-        linearRegressionTraining.input.add(MasterInputId.partialModels, partialModel)
+    linearModelsArray.foreach { partialModel =>
+      partialModel.unpack(context)
+      linearRegressionTraining.input.add(MasterInputId.partialModels, partialModel)
     }
 
     linearRegressionTraining.compute()
@@ -125,6 +116,7 @@ object DaalLinearRegressionFunctions extends Serializable {
                          featureColumns: List[String]): FrameRdd = {
 
     val rowWrapper = frameRdd.rowWrapper
+
     val predictResultsRdd = frameRdd.mapPartitions(iter => {
       val context = new DaalContext()
       val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray)
