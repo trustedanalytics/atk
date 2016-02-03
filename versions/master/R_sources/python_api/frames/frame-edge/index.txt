@@ -50,6 +50,7 @@
     group_by
     histogram
     inspect
+    invert_matrix
     join
     last_read_date
     name
@@ -142,6 +143,7 @@
     :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
     :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
     :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
+    :doc:`invert_matrix <invert_matrix>`\ (self, column_names)                                            |ALPHA| Inverts a matrix.
     :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
     :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
     :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns for edge frame.

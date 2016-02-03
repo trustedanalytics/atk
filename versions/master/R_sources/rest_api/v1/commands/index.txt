@@ -67,6 +67,7 @@
     frame__flatten_columns
     frame__group_by
     frame__histogram
+    frame__invert_matrix
     frame__quantiles
     frame__rename
     frame__sort
@@ -190,6 +191,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/flatten_columns <frame__flatten_columns>`                                           Spread data to multiple rows based on cell data.
 :doc:`frame/group_by <frame__group_by>`                                                         |BETA| Summarized Frame with Aggregations.
 :doc:`frame/histogram <frame__histogram>`                                                       |BETA| Compute the histogram for a column in a frame.
+:doc:`frame/invert_matrix <frame__invert_matrix>`                                               |ALPHA| Inverts a matrix.
 :doc:`frame/quantiles <frame__quantiles>`                                                       New frame with Quantiles and their values.
 :doc:`frame/rename <frame__rename>`                                                             Change the name of the current frame.
 :doc:`frame/sort <frame__sort>`                                                                 |BETA| Sort by one or more columns.
