@@ -1,7 +1,8 @@
 Examples
 --------
 In this example, we will use a frame of observations of resting heart rate for
-three individuals for three days.  The data is accessed by a Frame object *my_frame*:
+three individuals over three days.  The data is accessed from Frame object
+called *my_frame*:
 
 <hide>
 >>> import trustedanalytics as ta

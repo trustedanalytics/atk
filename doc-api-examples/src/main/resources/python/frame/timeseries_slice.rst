@@ -3,6 +3,7 @@ Examples
 For this example, we start with a frame that has already been formatted as a time series.
 This means that the frame has a string column for key and a vector column that contains
 a series of the observed values.  We must also know the date/time index that corresponds
+to the time series.
 
 The time series is in a Frame object called *ts_frame*.
 

@@ -30,10 +30,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Reformats a frame of observations as a time series.
  */
-@PluginDoc(oneLine = "Reformats a frame of observations as a time series.",
-  extended = """Reformats a frame of observations as a time series, using the
-                specified timestamp, key, and value columns and the date/time
-                index provided.""")
+@PluginDoc(oneLine = "Returns a frame that has the observations formatted as a time series.",
+  extended = """Uses the specified timestamp, key, and value columns and the date/time
+                index provided to format the observations as a time series.  The time series
+                frame will have columns for the key and a vector of the observed values that
+                correspond to the date/time index.""")
 class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFromObservationsArgs, FrameReference] {
 
   /**
