@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.apache.spark.{ SparkContext, sql }
+import org.apache.spark.{ SparkContext }
 
 import scala.util.Try
 
