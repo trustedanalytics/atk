@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 import org.joda.time.DateTime
 
 case class TimeSeriesSliceArgs(
-    @ArgDoc("Frame of observations to format as a time series") frame: FrameReference,
+    @ArgDoc("Frame formatted as a time series (must have a string key column and a vector column that contains the values that correspond to the specified DateTimeIndex.") frame: FrameReference,
     @ArgDoc("DateTimeIndex to conform all series to.") dateTimeIndex: List[String],
     @ArgDoc("The start date for the slice in the ISO 8601 format, like: yyyy-MM-dd'T'HH:mm:ss.SSSZ ") start: DateTime,
     @ArgDoc("The end date for the slice (inclusive) in the ISO 8601 format, like: yyyy-MM-dd'T'HH:mm:ss.SSSZ.") end: DateTime) {
