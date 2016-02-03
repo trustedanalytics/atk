@@ -67,17 +67,8 @@ object TimeSeriesFunctions extends Serializable {
    * @return DateTimeIndex
    */
   def getDateTimeIndexFromStrings(dateTimeStrings: List[String]): DateTimeIndex = {
-    // Convert date/time index strings to ZonedDateTime array
-    val dateTimeArray = new Array[ZonedDateTime](dateTimeStrings.size)
-    var i = 0
-
-    for (datetime <- dateTimeStrings) {
-      dateTimeArray(i) = ZonedDateTime.parse(datetime)
-      i += 1
-    }
-
-    // Create DateTimeIndex
-    DateTimeIndex.irregular(dateTimeArray)
+    // Create DateTimeIndex after parsing the strings as ZonedDateTime
+    DateTimeIndex.irregular(dateTimeStrings.map(str => ZonedDateTime.parse(str)).toArray)
   }
 
   /**

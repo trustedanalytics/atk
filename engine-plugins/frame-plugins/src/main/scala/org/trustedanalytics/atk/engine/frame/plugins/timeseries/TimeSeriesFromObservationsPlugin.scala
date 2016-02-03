@@ -83,7 +83,7 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
     // Get DateTimeIndex
     val dateTimeIndex = TimeSeriesFunctions.getDateTimeIndexFromStrings(arguments.dateTimeIndex)
 
-    // Create DataFrame with a new column that's formatted as a Timestamp
+    // Create DataFrame with a new column that's formatted as a Timestamp (because this is what timeSeriesRDDFromObservations requires)
     val newTimestampColumn = timestampColumn + "_new" // name for the new timestamp formatted column
     val dataFrame = frame.rdd.toDataFrame
     val dataFrameWithTimestamp = dataFrame.withColumn(newTimestampColumn, TimeSeriesFunctions.toTimestamp(dataFrame(timestampColumn))).select(newTimestampColumn, keyColumn, valueColumn)

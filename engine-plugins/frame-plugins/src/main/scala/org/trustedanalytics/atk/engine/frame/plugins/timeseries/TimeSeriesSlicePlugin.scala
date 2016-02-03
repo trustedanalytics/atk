@@ -76,7 +76,8 @@ class TimeSeriesSlicePlugin extends SparkCommandPlugin[TimeSeriesSliceArgs, Fram
     if (frame.schema.columns.size != 2)
       throw new RuntimeException("Frame has unsupported number of columns.  Time series frames are only expected to have 2 columns -- a string column (key) and a vector column (series values).")
 
-    // Get key and series column names
+    // Get key and series column names.
+    // The frame should have just one string column for key and one vector column that has the time series values.
     for (column <- frame.schema.columns) {
       val columnName = column.name
 
