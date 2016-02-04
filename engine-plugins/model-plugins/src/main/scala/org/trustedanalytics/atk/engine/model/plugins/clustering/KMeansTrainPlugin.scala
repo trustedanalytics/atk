@@ -106,7 +106,7 @@ object KMeansTrainPlugin {
   }
 
   /**
-   *
+   * Computes the number of elements belonging to each cluster given the trained model and names of the frame's columns storing the observations
    * @param kmeansModel The trained KMeans Model
    * @param trainFrameRdd A Frame Rdd formed by observations used for training
    * @param observationColumns The columns of frame storing the observations

@@ -82,10 +82,8 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     val gmm = GMMTrainPlugin.initializeGMM(arguments)
 
     val trainFrameRdd = frame.rdd
-    trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val gmmModel = gmm.run(vectorRDD)
-    trainFrameRdd.unpersist()
 
     //Writing the gmmModel as JSON
     val jsonModel = new GMMData(gmmModel, arguments.observationColumns, arguments.columnScalings)
