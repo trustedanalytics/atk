@@ -16,11 +16,10 @@
 
 package org.trustedanalytics.atk.plugins.pregel.lbp
 
-import org.apache.commons.lang3.StringUtils
 import org.apache.spark.rdd.RDD
 import org.scalatest.{ FlatSpec, Matchers }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, Property, GBVertex }
-import org.trustedanalytics.atk.plugins.pregel.core.{ PregelAlgorithm, PregelArgs }
+import org.trustedanalytics.atk.plugins.pregel.core._
 import org.trustedanalytics.atk.plugins.testutils.ApproximateVertexEquality
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -32,52 +31,41 @@ import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
  */
 class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpec {
 
-  trait BPTest {
-
-    val vertexIdPropertyName = "id"
-    val srcIdPropertyName = "srcId"
-    val dstIdPropertyName = "dstId"
-    val edgeLabel = "label"
-    val inputPropertyName = "input_property_name"
-    val propertyForLBPOutput = "LBP_VALUE"
-
-    val floatingPointEqualityThreshold: Double = 0.000000001d
-
-    val args = PregelArgs(
-      priorProperty = inputPropertyName,
-      edgeWeightProperty = StringUtils.EMPTY,
-      maxIterations = 10,
-      stringOutput = false,
-      convergenceThreshold = 0d,
-      posteriorProperty = propertyForLBPOutput,
-      stateSpaceSize = 2)
-
+  trait LBPTest {
+    val args = TestInitializers.defaultPregelArgs()
   }
 
-  "BP Runner" should "work with two nodes of differing unit states" in new BPTest {
+  "LBP Runner" should "work with two nodes of differing unit states" in new LBPTest {
 
     val vertexSet: Set[Long] = Set(1, 2)
+    val priors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> Vector(1.0d, 0.0d),
+      2.toLong -> Vector(0.0d, 1.0d))
 
-    val priors: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d, 0.0d), 2.toLong -> Vector(0.0d, 1.0d))
-    val expectedPosteriors: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(1.0d, 0.0d), 2.toLong -> Vector(0.0d, 1.0d))
+    val expectedPosteriors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> Vector(1.0d, 0.0d),
+      2.toLong -> Vector(0.0d, 1.0d))
 
     //  directed edge list is made bidirectional with a flatmap
-    val edgeSet: Set[(Long, Long)] = Set()
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val edgeSet: Set[(Long, Long)] = Initializers.defaultEdgeSet()
+    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
+
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
           GBEdge(None, src, dst,
-            Property(srcIdPropertyName, src),
-            Property(dstIdPropertyName, dst),
-            edgeLabel, Set.empty[Property]
+            Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst),
+            DefaultTestValues.edgeLabel, Set.empty[Property]
           )
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
-        GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, expectedPosteriors.get(vid).get),
-          Property(propertyForLBPOutput, priors.get(vid).get))))
+        GBVertex(vid, Property(DefaultTestValues.vertexIdPropertyName, vid),
+          Set(Property(DefaultTestValues.inputPropertyName, expectedPosteriors.get(vid).get),
+            Property(DefaultTestValues.outputPropertyName, priors.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
     val verticesIn: RDD[GBVertex] = sparkContext.parallelize(gbVertexSet.toList)
@@ -94,40 +82,47 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
       expectedVerticesOut,
-      List(propertyForLBPOutput),
-      floatingPointEqualityThreshold)
+      List(DefaultTestValues.outputPropertyName), DefaultTestValues.floatingPointEqualityThreshold)
 
     test shouldBe true
     testEdges shouldBe expectedEdgesOut
 
   }
 
-  "BP Runner" should "work properly with a two node graph, uniform probabilities" in new BPTest {
+  "LBP Runner" should "work properly with a two node graph, uniform probabilities" in new LBPTest {
 
+    val priorVector = Vector(0.5d, 0.5d)
     val vertexSet: Set[Long] = Set(1, 2)
 
-    val priors: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
-      2.toLong -> Vector(0.5d, 0.5d))
+    val priors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> priorVector,
+      2.toLong -> priorVector)
 
-    val expectedPosteriors: Map[Long, Vector[Double]] = Map(1.toLong -> Vector(0.5d, 0.5d),
-      2.toLong -> Vector(0.5d, 0.5d))
+    val expectedPosteriors: Map[Long, Vector[Double]] = Map(
+      1.toLong -> priorVector,
+      2.toLong -> priorVector)
 
     //  directed edge list is made bidirectional with a flatmap
 
-    val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
+    val edgeSet: Set[(Long, Long)] = Set(
+      (1.toLong,
+        2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst, Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst), DefaultTestValues.edgeLabel, Set.empty[Property])
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
-        GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, priors.get(vid).get),
-          Property(propertyForLBPOutput, expectedPosteriors.get(vid).get))))
+        GBVertex(vid, Property(DefaultTestValues.vertexIdPropertyName, vid),
+          Set(Property(DefaultTestValues.inputPropertyName, priors.get(vid).get),
+            Property(DefaultTestValues.outputPropertyName, expectedPosteriors.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
 
@@ -145,15 +140,14 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
       expectedVerticesOut,
-      List(propertyForLBPOutput),
-      floatingPointEqualityThreshold)
+      List(DefaultTestValues.outputPropertyName), DefaultTestValues.floatingPointEqualityThreshold)
 
     test shouldBe true
     testEdges shouldBe expectedEdgesOut
 
   }
 
-  "BP Runner" should "work properly with one node uniform, one node unit" in new BPTest {
+  "LBP Runner" should "work properly with one node uniform, one node unit" in new LBPTest {
 
     val vertexSet: Set[Long] = Set(1, 2)
 
@@ -170,18 +164,22 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst,
+            Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst), DefaultTestValues.edgeLabel, Set.empty[Property])
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
-        GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, priors.get(vid).get),
-          Property(propertyForLBPOutput, expectedPosteriors.get(vid).get))))
+        GBVertex(vid, Property(DefaultTestValues.vertexIdPropertyName, vid),
+          Set(Property(DefaultTestValues.inputPropertyName, priors.get(vid).get),
+            Property(DefaultTestValues.outputPropertyName, expectedPosteriors.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
 
@@ -199,15 +197,14 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
       expectedVerticesOut,
-      List(propertyForLBPOutput),
-      floatingPointEqualityThreshold)
+      List(DefaultTestValues.outputPropertyName), DefaultTestValues.floatingPointEqualityThreshold)
 
     test shouldBe false
     testEdges shouldBe expectedEdgesOut
 
   }
 
-  "BP Runner" should "work properly with two nodes of differing non-uniform, non-unit priors" in new BPTest {
+  "LBP Runner" should "work properly with two nodes of differing non-uniform, non-unit priors" in new LBPTest {
 
     val vertexSet: Set[Long] = Set(1, 2)
 
@@ -238,18 +235,21 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val edgeSet: Set[(Long, Long)] = Set((1.toLong, 2.toLong)).flatMap({ case (x, y) => Set((x, y), (y, x)) })
 
-    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(vertexIdPropertyName, x), Set(Property(inputPropertyName, priors.get(x).get))))
+    val gbVertexSet = vertexSet.map(x => GBVertex(x, Property(DefaultTestValues.vertexIdPropertyName, x),
+      Set(Property(DefaultTestValues.inputPropertyName, priors.get(x).get))))
 
     val gbEdgeSet =
       edgeSet.map({
         case (src, dst) =>
-          GBEdge(None, src, dst, Property(srcIdPropertyName, src), Property(dstIdPropertyName, dst), edgeLabel, Set.empty[Property])
+          GBEdge(None, src, dst, Property(DefaultTestValues.srcIdPropertyName, src),
+            Property(DefaultTestValues.dstIdPropertyName, dst), DefaultTestValues.edgeLabel, Set.empty[Property])
       })
 
     val expectedVerticesOut =
       vertexSet.map(vid =>
-        GBVertex(vid, Property(vertexIdPropertyName, vid), Set(Property(inputPropertyName, priors.get(vid).get),
-          Property(propertyForLBPOutput, expectedPosteriors.get(vid).get))))
+        GBVertex(vid, Property(DefaultTestValues.vertexIdPropertyName, vid),
+          Set(Property(DefaultTestValues.inputPropertyName, priors.get(vid).get),
+            Property(DefaultTestValues.outputPropertyName, expectedPosteriors.get(vid).get))))
 
     val expectedEdgesOut = gbEdgeSet // no expected changes to the edge set
 
@@ -267,8 +267,7 @@ class TwoNodeTest extends FlatSpec with Matchers with TestingSparkContextFlatSpe
 
     val test = ApproximateVertexEquality.approximatelyEquals(testVertices,
       expectedVerticesOut,
-      List(propertyForLBPOutput),
-      floatingPointEqualityThreshold)
+      List(DefaultTestValues.outputPropertyName), DefaultTestValues.floatingPointEqualityThreshold)
 
     test shouldBe false
     testEdges shouldBe expectedEdgesOut
