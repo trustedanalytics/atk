@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.domain.schema
 
-import javax.swing.plaf.ColorUIResource
-
 import org.trustedanalytics.atk.StringUtils
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 import scala.reflect.runtime.universe._
@@ -212,6 +210,16 @@ object Schema {
     val right = funcAppendLetterForConflictingNames(rightColumns, leftColumns, "R")
 
     left ++ right
+  }
+
+  def create(dataColumnNames: List[String],
+             dType: DataType,
+             outputVectorLength: Option[Long] = None): FrameSchema = {
+    val outputColumns = outputVectorLength match {
+      case Some(length) => List(Column(dataColumnNames.head, DataTypes.vector(length)))
+      case _ => dataColumnNames.map(name => Column(name, dType))
+    }
+    FrameSchema(outputColumns)
   }
 }
 
