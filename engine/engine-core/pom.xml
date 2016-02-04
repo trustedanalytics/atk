@@ -55,6 +55,13 @@
     </build>
 
     <dependencies>
+        <!-- START Netlib for Intel MKL dependencies -->
+        <dependency>
+            <groupId>com.github.fommil.netlib</groupId>
+            <artifactId>all</artifactId>
+            <type>pom</type>
+        </dependency>
+        <!-- END Netlib dependencies -->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>module-loader</artifactId>
