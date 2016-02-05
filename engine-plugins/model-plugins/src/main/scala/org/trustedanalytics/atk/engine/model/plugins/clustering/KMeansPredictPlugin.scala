@@ -38,7 +38,7 @@ import org.apache.spark.mllib.atk.plugins.VectorUtils._
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
-  extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along ",
+  extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and the following new columns:
     'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center

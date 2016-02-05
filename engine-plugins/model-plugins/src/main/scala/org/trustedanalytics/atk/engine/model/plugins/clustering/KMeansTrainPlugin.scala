@@ -62,7 +62,7 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
    */
   override def numberOfJobs(arguments: KMeansTrainArgs)(implicit invocation: Invocation) = 15
   /**
-   * Run MLLib's LogisticRegressionWithSGD() on the training frame and create a Model for it.
+   * Run MLLib's KMeans() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    * as well as a function that can be called to produce a SparkContext that
@@ -92,10 +92,10 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
   }
 }
 
-/**
- * Constructs a KMeans instance with parameters passed or default parameters if not specified
- */
 object KMeansTrainPlugin {
+  /**
+   * Constructs a KMeans instance with parameters passed or default parameters if not specified
+   */
   def initializeKmeans(arguments: KMeansTrainArgs): KMeans = {
     val kmeans = new KMeans()
 
@@ -105,6 +105,14 @@ object KMeansTrainPlugin {
     kmeans.setEpsilon(arguments.epsilon)
   }
 
+  /**
+   * Computes the number of elements belonging to each cluster given the trained model and names of the frame's columns storing the observations
+   * @param kmeansModel The trained KMeans Model
+   * @param trainFrameRdd A Frame Rdd formed by observations used for training
+   * @param observationColumns The columns of frame storing the observations
+   * @param columnScalings The scalings of the observations
+   * @return A map storing the cluster number and number of elements it contains
+   */
   def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
 
     val predictRDD = trainFrameRdd.mapRows(row => {
