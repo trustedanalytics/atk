@@ -28,7 +28,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models" href="../index.html" >
     <link rel="next" title="PrincipalComponentsModel __init__" href="new.html" >
-    <link rel="prev" title="RandomForestClassifierModel train" href="../model-random_forest_classifier/train.html" > 
+    <link rel="prev" title="GmmModel train" href="../model-gmm/train.html" > 
   </head>
   <body>
 
@@ -56,7 +56,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="../model-random_forest_classifier/train.html" title="RandomForestClassifierModel train"
+        <a href="../model-gmm/train.html" title="GmmModel train"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -189,37 +189,37 @@
 </tr>
 </tbody>
 </table>
-<p>Principal component analysis <a class="reference internal" href="#r49" id="id1">[R49]</a> is a statistical algorithm
+<p>Principal component analysis <a class="reference internal" href="#r53" id="id1">[R53]</a> is a statistical algorithm
 that converts possibly correlated features to linearly uncorrelated variables
 called principal components.
 The number of principal components is less than or equal to the number of
 original variables.
 This implementation of computing Principal Components is done by Singular
-Value Decomposition <a class="reference internal" href="#r50" id="id2">[R50]</a> of the data, providing the user with an option to
+Value Decomposition <a class="reference internal" href="#r54" id="id2">[R54]</a> of the data, providing the user with an option to
 mean center the data.
 The Principal Components model is initialized; trained on
 specifying the observation columns of the frame and the number of components;
 used to predict principal components.
-The MLLib Singular Value Decomposition <a class="reference internal" href="#r51" id="id3">[R51]</a> implementation has been used for
+The MLLib Singular Value Decomposition <a class="reference internal" href="#r55" id="id3">[R55]</a> implementation has been used for
 this, with additional features to 1) mean center the data during train and
 predict and 2) compute the t-squared index during prediction.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r49" rules="none">
+<table class="docutils citation" frame="void" id="r53" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R49]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R53]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r50" rules="none">
+<table class="docutils citation" frame="void" id="r54" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R50]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R54]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r51" rules="none">
+<table class="docutils citation" frame="void" id="r55" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R51]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R55]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>

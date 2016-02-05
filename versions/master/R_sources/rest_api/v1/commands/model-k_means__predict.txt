@@ -71,7 +71,7 @@ Request
 
 **Description**
 
-Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along 
+Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model
 
 |
 
