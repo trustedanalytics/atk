@@ -65,6 +65,11 @@
         </dependency>
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>example-plugins</artifactId>
+            <version>master-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>daal-plugins</artifactId>
         </dependency>
         <dependency>
