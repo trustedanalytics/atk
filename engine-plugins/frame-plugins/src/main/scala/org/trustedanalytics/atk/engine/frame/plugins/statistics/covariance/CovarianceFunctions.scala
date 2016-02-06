@@ -16,12 +16,11 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.covariance
 
-import breeze.linalg.DenseVector
 import breeze.numerics.abs
 import org.trustedanalytics.atk.domain.DoubleValue
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.{ Vectors, Vector, Matrix }
+import org.apache.spark.mllib.linalg.{ Matrix }
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row

@@ -21,8 +21,6 @@ import org.scalatest.Matchers
 import org.scalatest.matchers.{ MatchResult, Matcher }
 import spray.json._
 
-import scala.collection.JavaConverters._
-
 object MatcherUtils extends Matchers {
 
   /**
