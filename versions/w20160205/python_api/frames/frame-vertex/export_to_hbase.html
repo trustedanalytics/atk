@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame export_to_hbase &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame export_to_hive" href="export_to_hive.html" >
+    <link rel="prev" title="VertexFrame export_to_csv" href="export_to_csv.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="export_to_csv.html" title="VertexFrame export_to_csv"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="export_to_hive.html" title="VertexFrame export_to_hive"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-export-to-hbase">
+<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  export_to_hbase<a class="headerlink" href="#vertexframe-export-to-hbase" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="export_to_hbase">
+<code class="descname">export_to_hbase</code><span class="sig-paren">(</span><em>self</em>, <em>table_name</em>, <em>key_column_name=None</em>, <em>family_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_hbase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write current frame to HBase table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>table_name</strong> : unicode</p>
+<blockquote>
+<div><p>The name of the HBase table that will contain the exported frame</p>
+</div></blockquote>
+<p><strong>key_column_name</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>The name of the column to be used as row key in hbase table</p>
+</div></blockquote>
+<p><strong>family_name</strong> : unicode (default=None)</p>
+<blockquote class="last">
+<div><p>The family name of the HBase table that will contain the exported frame</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Table must exist in HBase.
+Export of Vectors is not currently supported.</p>
+<p class="rubric">Examples</p>
+<p>Overwrite/append scenarios (see below):</p>
+<ol class="arabic">
+<li><dl class="first docutils">
+<dt>create a simple hbase table from csv</dt>
+<dd><p class="first last">load csv into a frame using existing frame api
+save the frame into hbase (it creates a table - lets call it table1)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>overwrite existing table with new data</dt>
+<dd><p class="first last">do scenario 1 and create table1
+load the second csv into a frame
+save the frame into table1 (old data is gone)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>append data to the existing table 1</dt>
+<dd><p class="first last">do scenario 1 and create table1
+load table1 into frame1
+load csv into frame2
+let frame1 = frame1 + frame2 (concatenate frame2 into frame1)
+save frame1 into base as table1 (overwrite with initial + appended data)</p>
+</dd>
+</dl>
+</li>
+</ol>
+<p>Vector scenarios (see below):</p>
+<p>Vectors are not directly supported by HBase (which represents data as byte arrays) or the plugin.
+While is true that a vector can be saved because of the byte array conversion for hbase, the following
+is actually the recommended practice:</p>
+<ol class="arabic simple">
+<li>Convert the vector to csv (in python, outside ATK)</li>
+<li>save the csv as string in the database (using ATK export_to_hbase)</li>
+<li>read the cell as string (using ATK, read from hbase</li>
+<li>convert the csv to vector (in python, outside ATK)</li>
+</ol>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Feb 06, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

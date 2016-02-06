@@ -1,0 +1,49 @@
+
+:doc:`LogisticRegressionModel <index>`  predict
+***********************************************
+
+------
+
+
+.. function:: predict(self, frame, observation_columns=None)
+
+    |ALPHA|
+    Predict labels for data points using trained logistic regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame whose labels are to be predicted.
+            By default, predict is run on the same columns over which the model is
+            trained.
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            Column(s) containing the observations
+            whose labels are to be predicted.
+            Default is the labels the model was trained on.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            Frame containing the original frame's columns and a column with the predicted label.
+    Predict the labels for a test frame using trained logistic regression model,
+                  and create a new frame revision with existing columns and a new predicted label's column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

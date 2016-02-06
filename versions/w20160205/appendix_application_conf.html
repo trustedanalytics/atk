@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Appendix A — Sample Application Configuration File &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="up" title="Appendices" href="appendices.html" >
+    <link rel="next" title="Errata" href="errata.html" >
+    <link rel="prev" title="Appendices" href="appendices.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="appendices.html" accesskey="U">Appendices</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="appendices.html" title="Appendices"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="errata.html" title="Errata"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="appendix-a-em-sample-application-configuration-file">
+<span id="appendix-application-conf"></span><h1>Appendix A — Sample Application Configuration File<a class="headerlink" href="#appendix-a-em-sample-application-configuration-file" title="Permalink to this headline">¶</a></h1>
+<div class="code highlight-python"><div class="highlight"><pre># BEGIN REQUIRED SETTINGS
+
+trustedanalytics.atk {
+#bind address - change to 0.0.0.0 to listen on all interfaces
+//api.host = &quot;127.0.0.1&quot;
+
+#bind port
+//api.port = 9099
+
+# The host name for the Postgresql database in which the metadata will be stored
+metastore.connection-postgresql.host = &quot;localhost&quot;
+metastore.connection-postgresql.port = &quot;5432&quot;
+metastore.connection-postgresql.database = &quot;ta_metastore&quot;
+metastore.connection-postgresql.username = &quot;atkuser&quot;
+metastore.connection-postgresql.password = &quot;MyPassword&quot;
+metastore.connection-postgresql.url =
+    &quot;jdbc:postgresql://&quot;${trustedanalytics.atk.metastore.connection-postgresql.host}&quot;:
+    &quot;${trustedanalytics.atk.metastore.connection-postgresql.port}&quot;/
+    &quot;${trustedanalytics.atk.metastore.connection-postgresql.database}
+
+# This allows for the use of postgres for a metastore.
+# Service restarts will not affect the data stored in postgres.
+metastore.connection = ${trustedanalytics.atk.metastore.connection-postgresql}
+
+# This allows the use of an in memory data store.
+# Restarting the REST server will create a fresh database and any
+# data in the h2 DB will be lost
+//metastore.connection = ${trustedanalytics.atk.metastore.connection-h2}
+
+engine {
+
+    # The hdfs URL where the trustedanalytics folder will be created
+    # and which will be used as the starting point for any relative URLs
+    fs.root = &quot;hdfs://master.silvern.gao.cluster:8020/user/atkuser&quot;
+
+
+    # The URL for connecting to the Spark master server
+    #spark.master = &quot;spark://master.silvern.gao.cluster:7077&quot;
+    yarn-client = &quot;spark://master.silvern.gao.cluster:7077&quot;
+
+
+    spark.conf.properties {
+        # Memory should be same or lower than what is listed as available
+        # in Cloudera Manager.
+        # Values should generally be in gigabytes, e.g. &quot;64g&quot;.
+        spark.executor.memory = &quot;103079215104&quot;
+    }
+}
+
+}
+# END REQUIRED SETTINGS
+
+# The settings below are all optional.
+# Some may need to be configured depending on the
+# specifics of your cluster and workload.
+
+trustedanalytics.atk {
+  engine {
+    auto-partitioner {
+      # auto-partitioning spark based on the file size
+      file-size-to-partition-size = [
+                                       { upper-bound=&quot;1MB&quot;, partitions = 15 },
+                                       { upper-bound=&quot;1GB&quot;, partitions = 45 },
+                                       { upper-bound=&quot;5GB&quot;, partitions = 100 },
+                                       { upper-bound=&quot;10GB&quot;, partitions = 200 },
+                                       { upper-bound=&quot;15GB&quot;, partitions = 375 },
+                                       { upper-bound=&quot;25GB&quot;, partitions = 500 },
+                                       { upper-bound=&quot;50GB&quot;, partitions = 750 },
+                                       { upper-bound=&quot;100GB&quot;, partitions = 1000 },
+                                       { upper-bound=&quot;200GB&quot;, partitions = 1500 },
+                                       { upper-bound=&quot;300GB&quot;, partitions = 2000 },
+                                       { upper-bound=&quot;400GB&quot;, partitions = 2500 },
+                                       { upper-bound=&quot;600GB&quot;, partitions = 3750 }
+                                    ]
+  # max-partitions is used if value is above the max upper-bound
+          max-partitions = 10000
+      }
+    }
+
+    # Configuration for the Trusted Analytics ATK REST API server
+    api {
+      # this is reported by the API server in the /info results -
+      # it can be used to identify a particular server or cluster.
+      //identifier = &quot;ta&quot;
+
+      #The default page size for result pagination
+      //default-count = 20
+
+      #Timeout for waiting for results from the engine
+      //default-timeout = 30s
+
+      #HTTP request timeout for the REST server
+      //request-timeout = 29s
+    }
+
+      #Configuration for the processing engine
+      engine {
+          //default-timeout = 30s
+         //page-size = 1000
+
+    spark {
+
+      # When master is empty the system defaults to spark://`hostname`:7070
+      # where hostname is calculated from the current system.
+      # For local mode (useful only for development testing) set master = &quot;local[4]&quot;
+      # in cluster mode, set master and home like the example
+      # master = &quot;spark://MASTER_HOSTNAME:7077&quot;
+      # home = &quot;/opt/cloudera/parcels/CDH/lib/spark&quot;
+
+      # When home is empty the system will check expected locations on the
+      # local system and use the first one it finds.
+      # If spark is running in yarn-cluster mode (spark.master = &quot;yarn-cluster&quot;),
+      # spark.home needs to be set to the spark directory on CDH cluster
+      # (&quot;/usr/lib/spark&quot;,&quot;/opt/cloudera/parcels/CDH/lib/spark/&quot;, etc)
+      //home = &quot;&quot;
+
+      conf {
+        properties {
+          # These key/value pairs will be parsed dynamically and provided
+          # to SparkConf().
+          # See Spark docs for possible values
+          # http://spark.apache.org/docs/0.9.0/configuration.html.
+          # All values should be convertible to Strings.
+
+          #Examples of other useful properties to edit for performance tuning:
+
+          # Increased Akka frame size from default of 10MB to 100MB to
+          # allow tasks to send large results to Spark driver
+          # (e.g., using collect() on large datasets).
+          //spark.akka.frameSize=100
+
+          #spark.akka.retry.wait=30000
+          #spark.akka.timeout=200
+          #spark.akka.timeout=30000
+
+          //spark.shuffle.consolidateFiles=true
+
+          # Enabling RDD compression to save space (might increase CPU cycles)
+          # Snappy compression is more efficient
+          //spark.rdd.compress=true
+          //spark.io.compression.codec=org.apache.spark.io.SnappyCompressionCodec
+
+          #spark.storage.blockManagerHeartBeatMs=300000
+          #spark.storage.blockManagerSlaveTimeoutMs=300000
+
+          #spark.worker.timeout=600
+          #spark.worker.timeout=30000
+          spark.eventLog.enabled=true
+          spark.eventLog.dir=
+          &quot;hdfs://master.silvern.gao.cluster:8020/user/spark/applicationHistory&quot;
+        }
+
+      }
+    }
+  }
+}
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Feb 06, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
