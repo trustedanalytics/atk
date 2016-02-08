@@ -25,8 +25,9 @@ import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ MatrixInversionArgs, FrameReference }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin}
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 import scala.collection.mutable.ListBuffer
 
@@ -91,8 +92,10 @@ class MatrixInversionPlugin extends SparkCommandPlugin[MatrixInversionArgs, Fram
 
     // save results
     val invertedMatrixRdd = toFrameRdd(sc, invertedMatrix)
+    val outputSchema = Schema.create(arguments.columnNames, DataTypes.float64)
+
     frameStorage.tryNewFrame(CreateEntityArgs(description = Some("created by invert_matrix command"))) {
-      newFrame => newFrame.save(new FrameRdd(inputSchema, invertedMatrixRdd))
+      newFrame => newFrame.save(new FrameRdd(outputSchema, invertedMatrixRdd))
     }
   }
 
