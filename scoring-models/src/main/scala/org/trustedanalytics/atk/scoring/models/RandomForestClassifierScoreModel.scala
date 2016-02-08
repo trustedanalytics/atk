@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 import org.apache.spark.mllib.tree.model.RandomForestModel
 import org.apache.spark.mllib.linalg.Vectors
 
@@ -44,6 +44,11 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
       input = input :+ Field(name, "Double")
     }
     input
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    //TODO: get the created date from Publish
+    Map("Model Type" -> "Random Forest Classifier Model", "Class Name" -> classOf[RandomForestClassifierScoreModel].getName, "Model Reader" -> classOf[RandomForestClassifierModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
   }
 
   /**

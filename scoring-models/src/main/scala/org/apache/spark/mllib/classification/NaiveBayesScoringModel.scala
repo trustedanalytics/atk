@@ -16,8 +16,8 @@
 package org.apache.spark.mllib.classification
 
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.Model
-import org.trustedanalytics.atk.scoring.models.NaiveBayesData
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.models.{ NaiveBayesReaderPlugin, NaiveBayesData }
 
 class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
 
@@ -39,6 +39,11 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
       input = input :+ Field(name, "Double")
     }
     input
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    //TODO: get the created date from Publish
+    Map("Model Type" -> "Naive Bayes Model", "Class Name" -> classOf[NaiveBayesScoringModel].getName, "Model Reader" -> classOf[NaiveBayesReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
   }
 
   /**

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -40,6 +40,11 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, l
       input = input :+ Field(name, "Double")
     }
     input
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    //TODO: get the created date from Publish
+    Map("Model Type" -> "Linear Regression Model", "Class Name" -> classOf[LinearRegressionModel].getName, "Model Reader" -> classOf[LinearRegressionModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
   }
 
   /**

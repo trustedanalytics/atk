@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.scoring
 
 import akka.actor.Actor
+import spray.json.JsValue
 import spray.routing._
 import spray.http._
 import MediaTypes._
@@ -27,6 +28,7 @@ import ExecutionContext.Implicits.global
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import scala.util.{ Failure, Success }
 import org.trustedanalytics.atk.scoring.interfaces.Model
+import spray.json._
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -55,7 +57,6 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
  * Defines our service behavior independently from the service actor
  */
 class ScoringService(model: Model) extends Directives {
-
   def homepage = {
     respondWithMediaType(`text/html`) {
       complete {
@@ -76,6 +77,10 @@ class ScoringService(model: Model) extends Directives {
 
   import AtkDefaultJsonProtocol._
   implicit val descFormat = jsonFormat3(ServiceDescription)
+  val jsonFormat = new ScoringServiceJsonProtocol(model)
+  import jsonFormat._
+
+  import spray.json._
 
   /**
    * Main Route entry point to the Scoring Server
@@ -87,23 +92,37 @@ class ScoringService(model: Model) extends Directives {
         homepage
       }
     } ~
-      path("v1" / prefix) {
+      path("v2" / prefix) {
         requestUri { uri =>
           post {
-            import spray.httpx.SprayJsonSupport._
-            parameterSeq { (params) =>
-              val sr = params.toArray
-              var records = Seq[Array[String]]()
-              for (i <- sr.indices) {
-                val decoded = java.net.URLDecoder.decode(sr(i)._2, "UTF-8")
-                val splitSegment = decoded.split(",")
-                records = records :+ splitSegment
-              }
-              onComplete(scoreModel(records)) {
-                case Success(string) => complete(string)
-                case Failure(ex) => ctx => {
-                  ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+            entity(as[String]) {
+              scoreArgs =>
+                val json: JsValue = scoreArgs.parseJson
+                import jsonFormat.DataOutputFormat
+                onComplete(scoreModel(DataInputFormat.read(json), false)) {
+                  case Success(output) => complete(DataOutputFormat.write(output).toString())
+                  case Failure(ex) => ctx => {
+                    ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+                  }
                 }
+            }
+          }
+        }
+      } ~
+      path("v1" / prefix) {
+        requestUri { uri =>
+          parameterSeq { (params) =>
+            val sr = params.toArray
+            var records = Seq[Array[Any]]()
+            for (i <- sr.indices) {
+              val decoded = java.net.URLDecoder.decode(sr(i)._2, "UTF-8")
+              val splitSegment = decoded.split(",")
+              records = records :+ splitSegment.asInstanceOf[Array[Any]]
+            }
+            onComplete(scoreModel(records, true)) {
+              case Success(string) => complete(string.mkString(","))
+              case Failure(ex) => ctx => {
+                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
               }
             }
           }
@@ -111,15 +130,19 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scoreModel(records: Seq[Array[String]]): Future[Array[String]] = Future {
-    var scores = ArrayBuffer[String]()
+  def scoreModel(records: Seq[Array[Any]], v1: Boolean): Future[Array[Any]] = Future {
+    var scores = new ArrayBuffer[Any]()
     records.foreach(row => {
-      val score = model.score(row.asInstanceOf[Array[Any]])
-      scores += score.mkString(",")
+      val score = model.score(row)
+      if (v1) {
+        scores += score(score.length - 1).toString
+      }
+      else {
+        scores += score
+      }
     })
     scores.toArray
   }
 }
 
 case class ServiceDescription(name: String, identifier: String, versions: List[String])
-

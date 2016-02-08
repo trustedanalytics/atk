@@ -22,7 +22,7 @@ import org.apache.commons.compress.archivers.tar.{ TarArchiveOutputStream, TarAr
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.scalatest.Assertions._
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 
 class ModelPublishFormatTest extends WordSpec {
 
@@ -147,6 +147,10 @@ class TestModel() extends Model {
     var output = Array[Field]()
     output = output :+ Field("output", "Float")
     output
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    Map("Name" -> "Dummy Model", "created on" -> "dont know")
   }
 }
 

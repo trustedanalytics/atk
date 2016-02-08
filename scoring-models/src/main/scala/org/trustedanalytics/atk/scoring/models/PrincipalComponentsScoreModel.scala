@@ -21,9 +21,9 @@ import breeze.linalg.DenseVector
 import org.apache.spark.mllib.linalg._
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.linalg.distributed.RowMatrix
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.collection.mutable.Map
+//import scala.collection.mutable.Map
 import scala.concurrent._
 
 /**
@@ -38,7 +38,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
       case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
     }
     val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
-    val pcaScoreOutput: Map[String, Any] = Map[String, Any]()
+    val pcaScoreOutput: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
     pcaScoreOutput.put("principal_components", y.values.toList)
     val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
     pcaScoreOutput.put("t_squared_index", t_squared_index)
@@ -57,6 +57,11 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
       inputVector = new org.apache.spark.mllib.linalg.DenseVector(meanCenteredVector)
     }
     new DenseMatrix(1, inputVector.size, inputVector.toArray).multiply(pcaModel.vFactor.asInstanceOf[DenseMatrix])
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    //TODO: get the created date from Publish
+    Map("Model Type" -> "Principal Components Model", "Class Name" -> classOf[PrincipalComponentsScoreModel].getName, "Model Reader" -> classOf[PrincipalComponentsModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
   }
 
   /**

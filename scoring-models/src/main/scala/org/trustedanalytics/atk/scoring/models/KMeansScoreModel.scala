@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -39,6 +39,11 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
       input = input :+ Field(name, "Double")
     }
     input
+  }
+
+  override def modelMetadata(): Map[String, String] = {
+    //TODO: get the created date from Publish
+    Map("Model Type" -> "KMeans Model", "Class Name" -> classOf[KMeansScoreModel].getName, "Model Reader" -> classOf[KMeansModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
   }
 
   /**

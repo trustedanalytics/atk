@@ -16,21 +16,6 @@
 
 package org.trustedanalytics.atk.scoring.interfaces
 
-import scala.concurrent.Future
-/**
- * Base interface for a Model loader.
- */
-trait Model {
-
-  /**
-   * Called for scoring
-   */
-  def score(row: Array[Any]): Array[Any]
-
-  def input(): Array[Field]
-
-  def output(): Array[Field]
-
-  def modelMetadata(): Map[String, String]
+case class Field(name: String, dataType: String) {
 }
 
