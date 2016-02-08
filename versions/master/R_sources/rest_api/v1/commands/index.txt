@@ -19,7 +19,6 @@
     frame-__helloworld
     frame-__join
     frame-__load
-    frame-__mapreducewordcount
     frame-__rename_columns
     frame-__wordcount
     frame-edge__add_edges
@@ -207,7 +206,6 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame:/helloworld <frame-__helloworld>`                                                   This is a Hello World Plugin for Frame.
 :doc:`frame:/join <frame-__join>`                                                               |BETA| Join two data frames (similar to SQL JOIN).
 :doc:`frame:/load <frame-__load>`                                                               Append data from a CSV/XML into an existing (possibly empty) frame
-:doc:`frame:/mapreducewordcount <frame-__mapreducewordcount>`                                   Counts and reports the top 10 words across all columns with string data in a frame.
 :doc:`frame:/rename_columns <frame-__rename_columns>`                                           Rename columns
 :doc:`frame:/wordcount <frame-__wordcount>`                                                     Counts and reports the top 10 words across all columns with string data in a frame.
 :doc:`frame:edge/add_edges <frame-edge__add_edges>`                                             Add edges to a graph.
