@@ -25,13 +25,16 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.clustering.{ KMeansModel, KMeans }
+import org.apache.spark.mllib.linalg.Matrices
+import breeze.linalg._
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.SparkContext._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 import com.cloudera.sparkts.{ ARXModel, AutoregressionX }
+import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
+import scala.collection.mutable.WrappedArray
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
   extended = "Creating a AutoregressionX (ARX) Model Model using the observation columns.",
@@ -74,15 +77,60 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   override def execute(arguments: ARXTrainArgs)(implicit invocation: Invocation): ARXTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
-    //arguments.
-
-    //AutoregressionX.fitModel(arguments)
-
     val trainFrameRdd = frame.rdd
+    val timeseriesColumn = arguments.timeseriesColumn
+    val xColumns = arguments.xColumns
+    var timeseriesLength: Long = 0 // vector length for timeseries column
+
+    warn("ARX Train Plugin:  IN")
+    timeseriesLength = ARXTrainPlugin.verifyVectorColumn(trainFrameRdd, timeseriesColumn, "timeseriesColumn")
+
+    for (xColumn <- xColumns) {
+      val xColumnVectorLength = ARXTrainPlugin.verifyVectorColumn(trainFrameRdd, xColumn, "xColumns")
+
+      if (xColumnVectorLength != timeseriesLength)
+        throw new IllegalArgumentException(s"xColumn named $xColumn vector must be the same length as the time series vector.")
+    }
+
     trainFrameRdd.cache()
+
+    val timeseriesColIndex = trainFrameRdd.frameSchema.columnIndex(timeseriesColumn)
+    var str: String = "timeseries lengths (column index: " + timeseriesColIndex.toString + ", count: " + trainFrameRdd.count().toString + "): "
+
+    str += "... \n"
+
+    str += "xColumns (" + xColumns.size.toString + ") : "
+
+    for (xCol <- xColumns) {
+      str += xCol + ", "
+    }
+
+    str += "\n"
+
+    for (row <- trainFrameRdd.collect()) {
+      val tsVector = new DenseVector(row.get(timeseriesColIndex).asInstanceOf[WrappedArray[Double]].toArray)
+      val xMatrix = new DenseMatrix(rows = xColumns.size, cols = timeseriesLength.toInt)
+
+      var colIndex = 0
+      var rowIndex = 0
+
+      for (rowIndex <- 0 until xColumns.size) {
+        val xSchemaIndex = trainFrameRdd.frameSchema.columnIndex(xColumns(rowIndex))
+        str += "\n" + xColumns(rowIndex).toString + " column Index: " + xSchemaIndex.toString + ", "
+
+        for (colIndex <- 0 until timeseriesLength.toInt) {
+          str += row.getString(colIndex).toString + ", "
+          //xMatrix.(rowIndex, colIndex) = row.getDouble(colIndex)
+        }
+
+        str += "\n"
+      }
+    }
 
     val testc = 5.0
     val testcoefficients = new Array[Double](1)
+
+    throw new RuntimeException(str)
 
     ARXTrainReturn(testc, testcoefficients)
 
@@ -120,31 +168,30 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   }
 }
 
-/**
- * Constructs a ARX instance with parameters passed or default parameters if not specified
- */
-/*
 object ARXTrainPlugin {
-  def initializeAutoregressionX(arguments: ARXTrainArgs): AutoregressionX = {
-    val arx = new AutoregressionX()
+  /**
+   * Checks the frame's schema to verify that the specified column exists and is a vector.
+   * @param frameRdd  Frame to check
+   * @param columnName  Name of the vector column to check
+   * @param parameterName  Name of the column parameter - just used in the exception message to
+   *                       make it more clear to the user which parameter is invalid (i.e. "timeseriesColumn")
+   * @return The length of the specified vector column
+   */
+  def verifyVectorColumn(frameRdd: FrameRdd, columnName: String, parameterName: String): Long = {
+    var vectorLength: Long = 0
 
-    kmeans.setK(arguments.k)
-    kmeans.setMaxIterations(arguments.maxIterations)
-    kmeans.setInitializationMode(arguments.initializationMode)
-    kmeans.setEpsilon(arguments.epsilon)
-  }
+    if (frameRdd.frameSchema.hasColumn(columnName) == false) {
+      // Column does not exist
+      throw new IllegalArgumentException(s"$parameterName column named $columnName does not exist in the frame's schema.")
+    }
+    else {
+      // Verify that it's a vector column
+      frameRdd.frameSchema.columnDataType(columnName) match {
+        case DataTypes.vector(length) => vectorLength = length
+        case _ => throw new IllegalArgumentException(s"$parameterName column $columnName must be a vector.")
+      }
+    }
 
-  def computeClusterSize(kmeansModel: KMeansModel, trainFrameRdd: FrameRdd, observationColumns: List[String], columnScalings: List[Double]): Map[String, Int] = {
-
-    val predictRDD = trainFrameRdd.mapRows(row => {
-      val array = row.valuesAsArray(observationColumns).map(row => DataTypes.toDouble(row))
-      val columnWeightsArray = columnScalings.toArray
-      val doubles = array.zip(columnWeightsArray).map { case (x, y) => x * y }
-      val point = Vectors.dense(doubles)
-      kmeansModel.predict(point)
-    })
-    predictRDD.map(row => ("Cluster:" + (row + 1).toString, 1)).reduceByKey(_ + _).collect().toMap
+    return vectorLength
   }
 }
-
-*/ 

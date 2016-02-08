@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
@@ -32,6 +31,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import com.cloudera.sparkts.ARXModel
+import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 
 import scala.collection.mutable.ListBuffer
 
@@ -79,27 +79,29 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
     //Extracting the KMeansModel from the stored JsObject
     val arxData = model.data.convertTo[ARXData]
     val arxModel = arxData.arxModel
-    if (arguments.observationColumns.isDefined) {
-      require(arxData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
-    }
 
-    val arxColumns = arguments.observationColumns.getOrElse(arxData.observationColumns)
-    val scalingValues = arxData.columnScalings
+    //val arxColumns = arguments.observationColumns.getOrElse(arxData.observationColumns)
+    //val scalingValues = arxData.columnScalings
 
+    //    val predictionsRDD = frame.rdd.mapRows(row => {
+    //      val columnsArray = row.valuesAsDenseVector(arxColumns).toArray
+    //      val columnScalingsArray = scalingValues.toArray
+    //      val doubles = columnsArray.zip(columnScalingsArray).map { case (x, y) => x * y }
+    //      val point = Vectors.dense(doubles)
+    //
+    //      //val clusterCenters = kmeansModel.clusterCenters
+    //      //
+    //      //      for (i <- clusterCenters.indices) {
+    //      //        val distance = toMahoutVector(point).getDistanceSquared(toMahoutVector(clusterCenters(i)))
+    //      //        row.addValue(distance)
+    //      //      }
+    //      //      val prediction = kmeansModel.predict(point)
+    //      //      row.addValue(prediction + 1)
+    //      row.addValue(0)
+    //    })
+
+    // temp
     val predictionsRDD = frame.rdd.mapRows(row => {
-      val columnsArray = row.valuesAsDenseVector(arxColumns).toArray
-      val columnScalingsArray = scalingValues.toArray
-      val doubles = columnsArray.zip(columnScalingsArray).map { case (x, y) => x * y }
-      val point = Vectors.dense(doubles)
-
-      //val clusterCenters = kmeansModel.clusterCenters
-      //
-      //      for (i <- clusterCenters.indices) {
-      //        val distance = toMahoutVector(point).getDistanceSquared(toMahoutVector(clusterCenters(i)))
-      //        row.addValue(distance)
-      //      }
-      //      val prediction = kmeansModel.predict(point)
-      //      row.addValue(prediction + 1)
       row.addValue(0)
     })
 

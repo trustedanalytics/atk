@@ -21,24 +21,24 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
 /**
  * Command for loading model data into existing model in the model database.
  */
 case class ARXTrainArgs(model: ModelReference,
                         @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-                        @ArgDoc("""Column that contains the time series values.""") timeseriesColumn: String,
-                        @ArgDoc("""Column that contains the values of previous exogenous regressors.""") xColumn: String,
-                        @ArgDoc("""Column that contains the value of current exogenous regressors.""") currentXColumn: String,
+                        @ArgDoc("""Name of the column that contains the time series values.""") timeseriesColumn: String,
+                        @ArgDoc("""Names of the column(s) that contain the values of previous exogenous regressors.""") xColumns: List[String],
                         @ArgDoc("""The maximum lag order for the dependent (time series) variable""") yMaxLag: Int,
                         @ArgDoc("""The maximum lag order for exogenous variables""") xMaxLang: Int,
-                        @ArgDoc("""a boolean flag indicating if the non-lagged exogenous variables should be included. Default is true""") includeOriginalX: Boolean = true,
                         @ArgDoc("""a boolean flag indicating if the intercept should be dropped. Default is false""") noIntercept: Boolean = false) {
 
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
   require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be null nor empty")
-  require(xColumn != null && xColumn.nonEmpty, "xColumn must not be null nor empty")
-  require(currentXColumn != null && currentXColumn.nonEmpty, "currentXColumn must not be null nor empty")
+  require(xColumns != null && xColumns.nonEmpty, "Must provide at least one x column.")
 }
 
 /**

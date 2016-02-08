@@ -23,7 +23,6 @@ import com.cloudera.sparkts.ARXModel
 /** Json conversion for arguments and return value case classes */
 object ARXJsonProtocol {
 
-
   implicit object ARXModelFormat extends JsonFormat[ARXModel] {
     /**
      * The write methods converts from ARXModel to JsValue
@@ -65,7 +64,8 @@ object ARXJsonProtocol {
   }
 
   implicit val arxPredictArgsFormat = jsonFormat3(ARXPredictArgs)
-  implicit val arxTrainArgsFormat = jsonFormat9(ARXTrainArgs)
+  implicit val arxTrainArgsFormat = jsonFormat7(ARXTrainArgs)
   implicit val arxTrainReturnFormat = jsonFormat2(ARXTrainReturn)
-  implicit val arxDataFormat = jsonFormat3(ARXData)
+  implicit val arxDataFormat = jsonFormat1(ARXData)
+
 }

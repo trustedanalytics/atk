@@ -23,11 +23,12 @@ import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, Plugi
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 
 /**
- * Create a 'new' instance of a k-means model
+ * Create a 'new' instance of a AutoRegressive Exogenous model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of a autoregressive exogenous model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a AutoRegressive Exogenous model.",
   extended = """TBD""",
   returns = """A new instance of ARXModel""")
 class ARXNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {

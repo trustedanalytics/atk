@@ -21,6 +21,10 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
+//Implicits needed for JSON conversion
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
 /**
  * Command for loading model data into existing model in the model database.
  */
