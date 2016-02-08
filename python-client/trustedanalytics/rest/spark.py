@@ -36,7 +36,7 @@ if spark_python not in sys.path:
 
 from serializers import PickleSerializer, BatchedSerializer, write_int
 
-from trustedanalytics.core.row import Row
+from trustedanalytics.core.row import Row, MutableRow
 from trustedanalytics.core.atktypes import valid_data_types, numpy_to_bson_friendly
 
 import bson
@@ -84,6 +84,28 @@ def get_add_many_columns_function(row_function, data_types):
     return add_many_columns
 
 
+def get_aggregate_by_key_function(combiner_row_function, data_types):
+
+    def aggregate(acc, row):
+        accumulator_wrapper = acc
+        combiner_row_function(accumulator_wrapper, row)
+        acc_data = accumulator_wrapper._get_data()
+        data = []
+        for i, data_type in enumerate(data_types):
+            try:
+                value = acc_data[i]
+            except TypeError as e:
+                raise RuntimeError("UDF returned non-indexable value. Provided schema indicated an Indexable return type")
+            except IndexError as e:
+                raise RuntimeError("UDF return value did not match the number of items in the provided schema")
+            cast_value = valid_data_types.cast(value, data_type)
+            data.append(numpy_to_bson_friendly(cast_value))
+        # return json.dumps(data, cls=NumpyJSONEncoder)
+        return data
+        # return bson.binary.Binary(bson.BSON.encode({"array": data}))
+    return aggregate
+
+
 def get_copy_columns_function(column_names, from_schema):
     """Returns a function which copies only certain columns for a row"""
     indices = [i for i, column in enumerate(from_schema) if column[0] in column_names]
@@ -106,7 +128,51 @@ class RowWrapper(Row):
     """
 
     def load_row(self, data):
-        self._set_data(bson.decode_all(data)[0]['array'])
+        self._set_data(data)
+
+def _aggregate_wrap_rows_function(frame, aggregate_function, aggregation_schema, init_acc_values, optional_schema=None):
+    """
+    Wraps a python row function, like one used for a filter predicate, such
+    that it will be evaluated with using the expected 'row' object rather than
+    whatever raw form the engine is using.  Ideally, this belong in the engine
+    """
+    row_schema = optional_schema if optional_schema is not None else frame.schema  # must grab schema now so frame is not closed over
+    acc_schema = valid_data_types.standardize_schema(aggregation_schema)
+
+    if init_acc_values is None:
+        init_acc_values = valid_data_types.get_default_data_for_schema(acc_schema)
+    else:
+        init_acc_values = valid_data_types.validate_data(acc_schema, init_acc_values)
+
+    acc_wrapper = MutableRow(aggregation_schema)
+    row_wrapper = RowWrapper(row_schema)
+    def rows_func(rows):
+        try:
+            rows_data = bson.decode_all(rows)[0]['array']
+            key_index=bson.decode_all(rows)[0]['keyindex']
+            acc_wrapper._set_data(list(init_acc_values))
+            for row in rows_data:
+                row_wrapper.load_row(row)
+                aggregate_function(acc_wrapper, row_wrapper)
+            answer = [rows_data[0][key_index]]
+            answer.extend(acc_wrapper._get_data())
+            return answer
+        except Exception as e:
+            try:
+                e_msg = unicode(e)
+            except:
+                e_msg = u'<unable to get exception message>'
+            try:
+                e_row = unicode(bson.decode_all(rows)[0]['array'])
+            except:
+                e_row = u'<unable to get row data>'
+            try:
+                msg = base64.urlsafe_b64encode((u'Exception: %s running UDF on row: %s' % (e_msg, e_row)).encode('utf-8'))
+            except:
+                msg = base64.urlsafe_b64encode(u'Exception running UDF, unable to provide details.'.encode('utf-8'))
+            raise IaPyWorkerError(msg)
+    return rows_func
+
 
 def _wrap_row_function(frame, row_function, optional_schema=None):
     """
@@ -118,7 +184,8 @@ def _wrap_row_function(frame, row_function, optional_schema=None):
     row_wrapper = RowWrapper(schema)
     def row_func(row):
         try:
-            row_wrapper.load_row(row)
+            xdata = bson.decode_all(row)[0]['array']
+            row_wrapper.load_row(xdata)
             return row_function(row_wrapper)
         except Exception as e:
             try:

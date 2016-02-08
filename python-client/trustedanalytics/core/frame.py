@@ -437,6 +437,12 @@ class _BaseFrame(CommandLoadable):
 
         .. code::
 
+            <hide>
+            >>> frame = _frame.copy()
+            -etc-
+
+            </hide>
+
             >>> frame.inspect()
             [#]  name      age  tenure  phone
             ====================================
@@ -491,7 +497,7 @@ class _BaseFrame(CommandLoadable):
             <progress>
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode]
             status = ACTIVE  (last_read_date = -etc-)
@@ -539,6 +545,55 @@ class _BaseFrame(CommandLoadable):
         # For further examples, see :ref:`example_frame.add_columns`.
         self._backend.add_columns(self, func, schema, columns_accessed)
 
+
+    @api
+    @has_udf_arg
+    @arg('key', str, "Name of the key column based on which aggregation should be done")
+    @arg('output_schema', 'tuple | list of tuples', "The schema for the results of the |UDF|, indicating new column(s) in the output"
+                                             ".Each tuple provides the column name and data type, and is of the form (str, type).")
+    @arg('combiner_func', 'UDF', "User-Defined Function (|UDF|) which takes the values in the row and produces a value, or "
+                        "collection of values, for the new cell(s).")
+    @arg('init_acc_values', list, "Initial accumulator value which |UDF| will access. If accumulator is not initialized, default value is set (Ex: '0' for Int, 0.0 for double).")
+    def __aggregate_by_key(self, key, output_schema, combiner_func, init_acc_values=None):
+        """
+
+        <hide>
+        >>> f = ta.Frame(ta.UploadRows([["a", 1], ['b', 2], ['c', 3], ['a', 4], ['b', 5]], [('letter', str), ('number', ta.int32)]))
+        <progress>
+
+        </hide>
+
+        >>> f.inspect()
+        [#]  letter  number
+        ===================
+        [0]  a            1
+        [1]  b            2
+        [2]  c            3
+        [3]  a            4
+        [4]  b            5
+
+
+        >>> def combiner(acc, upd):
+        ...     acc.sum = acc.sum + upd.number
+        ...     acc.prod= acc.prod * upd.number
+
+        >>> aggregated_frame = f.aggregate_by_key("letter", [('sum', ta.int64), ('prod', ta.float64)], combiner, init_acc_values=[0,1])
+        <progress>
+
+        >>> aggregated_frame.inspect()
+        [#]  letter  sum  prod
+        ======================
+        [0]  a         5   4.0
+        [1]  b         7  10.0
+        [2]  c         3   3.0
+
+
+        """
+        return self._backend.aggregate_by_key(self, key, output_schema, combiner_func,
+                                              init_acc_values)
+
+
+
     @api
     @arg('columns', 'str | list of str | dict', "If not None, the copy will only include the columns specified. "
          "If dict, the string pairs represent a column renaming, {source_column_name: destination_column_name}")
@@ -558,7 +613,7 @@ class _BaseFrame(CommandLoadable):
         .. code::
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]
             status = ACTIVE  (last_read_date = -etc-)

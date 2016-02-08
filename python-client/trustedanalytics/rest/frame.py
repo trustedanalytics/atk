@@ -39,7 +39,8 @@ from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.atktypes import get_data_type_from_rest_str, get_rest_str_from_data_type
 from trustedanalytics.rest.command import CommandRequest, executor
 from trustedanalytics.rest.spark import get_add_one_column_function, get_add_many_columns_function
-from trustedanalytics.rest.spark_helper import get_udf_arg
+from trustedanalytics.rest.spark_helper import get_udf_arg, agg_get_udf_arg
+from trustedanalytics.rest.spark import get_aggregate_by_key_function
 
 TakeResult = namedtuple("TakeResult", ['data', 'schema'])
 """
@@ -314,6 +315,29 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                      'columns_accessed': columns_accessed}
 
         execute_update_frame_command('add_columns', arguments, frame)
+
+
+    def aggregate_by_key(self, frame, key, output_schema, combiner_expression, init_acc_values=None):
+        if not output_schema or not hasattr(output_schema, "__iter__"):
+            raise ValueError("aggregate_by_key requires a non-empty schema of (name, type)")
+
+        if isinstance(output_schema[0], basestring):
+            output_schema = [output_schema]
+
+        output_schema = self._format_schema(output_schema)
+        names, data_types = zip(*output_schema)
+
+        aggregate_by_key_function = get_aggregate_by_key_function(combiner_expression, data_types)
+
+        from itertools import imap
+        arguments = { "frame": frame.uri,
+                      "key": key,
+                      "column_names": names,
+                      "column_types": [get_rest_str_from_data_type(t) for t in data_types],
+                      "udf": agg_get_udf_arg(frame, aggregate_by_key_function, imap, output_schema, init_acc_values)
+                    }
+
+        return execute_new_frame_command('frame/aggregate_by_key', arguments)
 
     @staticmethod
     def _handle_error(result):
