@@ -784,6 +784,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>example-plugins</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>interfaces</artifactId>
                 <version>${project.version}</version>
                 <!-- <scope>provided</scope> -->
