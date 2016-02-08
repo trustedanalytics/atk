@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.statistics.correlation
 
 import breeze.numerics._
 import org.trustedanalytics.atk.domain.DoubleValue
-import org.apache.spark.mllib.linalg.{ Vectors, Vector, Matrix }
+import org.apache.spark.mllib.linalg.{ Matrix }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.stat.Statistics
 import org.apache.spark.rdd.RDD
