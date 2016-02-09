@@ -62,7 +62,7 @@ class ScoringService(model: Model) extends Directives {
       complete {
         <html>
           <body>
-            <h1>Welcome to the Scoring Engine -2</h1>
+            <h1>Welcome to the Scoring Engine</h1>
           </body>
         </html>
       }
@@ -72,7 +72,7 @@ class ScoringService(model: Model) extends Directives {
   lazy val description = {
     new ServiceDescription(name = "Trusted Analytics",
       identifier = "ia",
-      versions = List("v1"))
+      versions = List("v2"))
   }
 
   import AtkDefaultJsonProtocol._
