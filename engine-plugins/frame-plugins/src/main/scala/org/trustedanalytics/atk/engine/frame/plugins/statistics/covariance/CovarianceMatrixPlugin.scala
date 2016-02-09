@@ -17,17 +17,16 @@
 package org.trustedanalytics.atk.engine.frame.plugins.statistics.covariance
 
 import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, SparkInvocation }
-import org.trustedanalytics.atk.domain.schema.FrameSchema
+import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin }
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.CovarianceMatrixArgs
 import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.schema.Column
 import org.trustedanalytics.atk.domain.schema.DataTypes.vector
+import org.trustedanalytics.atk.domain.schema.Schema
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -65,17 +64,19 @@ class CovarianceMatrixPlugin extends SparkCommandPlugin[CovarianceMatrixArgs, Fr
   override def execute(arguments: CovarianceMatrixArgs)(implicit invocation: Invocation): FrameReference = {
 
     val frame: SparkFrame = arguments.frame
-    frame.schema.requireColumnsAreVectorizable(arguments.dataColumnNames)
+    val dataColumnNames = arguments.dataColumnNames
+    frame.schema.requireColumnsAreVectorizable(dataColumnNames)
 
     // compute covariance
-    val outputColumnDataType = frame.schema.columnDataType(arguments.dataColumnNames.head)
+    val outputColumnDataType = frame.schema.columnDataType(dataColumnNames.head)
     val outputVectorLength: Option[Long] = outputColumnDataType match {
       case vector(length) => Some(length)
       case _ => None
     }
-    val covarianceRdd = CovarianceFunctions.covarianceMatrix(frame.rdd, arguments.dataColumnNames, outputVectorLength)
 
-    val outputSchema = getOutputSchema(arguments.dataColumnNames, outputVectorLength)
+    val covarianceRdd = CovarianceFunctions.covarianceMatrix(frame.rdd, dataColumnNames, outputVectorLength)
+    val outputSchema = Schema.create(arguments.dataColumnNames, DataTypes.float64, outputVectorLength)
+
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by covariance matrix command"))) { newFrame: FrameEntity =>
       if (arguments.matrixName.isDefined) {
         engine.frames.renameFrame(newFrame, FrameName.validate(arguments.matrixName.get))
@@ -84,12 +85,4 @@ class CovarianceMatrixPlugin extends SparkCommandPlugin[CovarianceMatrixArgs, Fr
     }
   }
 
-  // Get output schema for covariance matrix
-  private def getOutputSchema(dataColumnNames: List[String], outputVectorLength: Option[Long] = None): FrameSchema = {
-    val outputColumns = outputVectorLength match {
-      case Some(length) => List(Column(dataColumnNames.head, DataTypes.vector(length)))
-      case _ => dataColumnNames.map(name => Column(name, DataTypes.float64))
-    }
-    FrameSchema(outputColumns)
-  }
 }
