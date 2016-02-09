@@ -214,7 +214,7 @@ object Schema {
 
   /**
    *  Creates Frame schema from input parameters
-   *  
+   *
    * @param dataColumnNames list of column names for the output schema
    * @param dType uniform data type to be applied to all columns if outputVectorLength is not specified
    * @param outputVectorLength optional parameter for a vector datatype

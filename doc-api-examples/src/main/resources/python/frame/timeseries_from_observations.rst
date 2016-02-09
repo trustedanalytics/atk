@@ -9,7 +9,7 @@ called *my_frame*:
 >>> ta.connect()
 -etc-
 
->>> data = [["Edward", "2016-01-01T12:00:00Z", 62],["Sarah", "2016-01-01T12:00:00Z", 65],["Stanley", "2016-01-01T12:00:00Z", 57],["Edward", "2016-01-02T12:00:00Z", 63],["Sarah", "2016-01-02T12:00:00Z", 64],["Stanley", "2016-01-02T12:00:00Z", 57],["Edward", "2016-01-03T12:00:00Z", 62],["Sarah", "2016-01-03T12:00:00Z", 64],["Stanley", "2016-01-03T12:00:00Z", 56]]
+>>> data = [["Edward", "2016-01-01T12:00:00Z", 62],["Stanley", "2016-01-01T12:00:00Z", 57],["Edward", "2016-01-02T12:00:00Z", 63],["Sarah", "2016-01-02T12:00:00Z", 64],["Stanley", "2016-01-02T12:00:00Z", 57],["Edward", "2016-01-03T12:00:00Z", 62],["Sarah", "2016-01-03T12:00:00Z", 64],["Stanley", "2016-01-03T12:00:00Z", 56]]
 >>> schema = [("name", str), ("date", ta.datetime), ("resting_heart_rate", ta.float64)]
 
 >>> my_frame = ta.Frame(ta.UploadRows(data, schema))
@@ -23,14 +23,13 @@ called *my_frame*:
  [#]  name     date                      resting_heart_rate
  ==========================================================
  [0]  Edward   2016-01-01T12:00:00.000Z                62.0
- [1]  Sarah    2016-01-01T12:00:00.000Z                65.0
- [2]  Stanley  2016-01-01T12:00:00.000Z                57.0
- [3]  Edward   2016-01-02T12:00:00.000Z                63.0
- [4]  Sarah    2016-01-02T12:00:00.000Z                64.0
- [5]  Stanley  2016-01-02T12:00:00.000Z                57.0
- [6]  Edward   2016-01-03T12:00:00.000Z                62.0
- [7]  Sarah    2016-01-03T12:00:00.000Z                64.0
- [8]  Stanley  2016-01-03T12:00:00.000Z                56.0
+ [1]  Stanley  2016-01-01T12:00:00.000Z                57.0
+ [2]  Edward   2016-01-02T12:00:00.000Z                63.0
+ [3]  Sarah    2016-01-02T12:00:00.000Z                64.0
+ [4]  Stanley  2016-01-02T12:00:00.000Z                57.0
+ [5]  Edward   2016-01-03T12:00:00.000Z                62.0
+ [6]  Sarah    2016-01-03T12:00:00.000Z                64.0
+ [7]  Stanley  2016-01-03T12:00:00.000Z                56.0
 
 
 We then need to create an array that contains the date/time index,
@@ -64,5 +63,5 @@ Take a look at the resulting time series frame schema and contents:
  ================================
  [0]  Stanley  [57.0, 57.0, 56.0]
  [1]  Edward   [62.0, 63.0, 62.0]
- [2]  Sarah    [65.0, 64.0, 64.0]
+ [2]  Sarah    [None, 64.0, 64.0]
 

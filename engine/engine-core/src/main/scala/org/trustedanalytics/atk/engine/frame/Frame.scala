@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.frame
 
+import org.apache.spark.sql.{ SQLContext, DataFrame }
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.engine.FrameStorage
@@ -84,6 +85,9 @@ trait SparkFrame extends Frame {
 
   /** Update the data for this frame */
   def save(rdd: FrameRdd): SparkFrame
+
+  /** Convert to a Spark DataFrame */
+  def toDataFrame(): DataFrame
 }
 
 object SparkFrame {
@@ -145,6 +149,11 @@ class SparkFrameImpl(frame: FrameReference, sc: SparkContext, sparkFrameStorage:
   override def save(rdd: FrameRdd): SparkFrame = {
     val result = sparkFrameStorage.saveFrameData(frame, rdd)
     new SparkFrameImpl(result, sc, sparkFrameStorage)
+  }
+
+  /** Convert to a Spark DataFrame */
+  override def toDataFrame(): DataFrame = {
+    this.rdd.toDataFrame
   }
 
 }
