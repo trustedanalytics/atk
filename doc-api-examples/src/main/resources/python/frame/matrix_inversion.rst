@@ -7,7 +7,7 @@ Consider Frame *my_frame*, which contains the data
     >>> ta.connect()
     -etc-
 
-    >>> s = [("x1", ta.float64), ("x2", ta.float64), ("x3", ta.float64)]
+    >>> s = [("x1", ta.float32), ("x2", ta.float32), ("x3", ta.float32)]
     >>> rows = [ [1.0, 0.0, 0.0], [2.0, 1.0, 0.0], [0.0, 0.0, 1.0]]
     >>> my_frame = ta.Frame(ta.UploadRows (rows, s))
     -etc-

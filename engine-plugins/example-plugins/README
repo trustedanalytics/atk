@@ -6,6 +6,9 @@ The hello world plugin will add a method to the frame class that prints hello wo
 The word-count plugin will add a method to the frame class that counts words in the frame.
 The vertex-degree count plugin will add a method to the graph class that counts the vertex out-degree.
 
+To register the plugins with the Analytics Toolkit, update the following configuration files:
+src/main/resources/atk-module.conf
+src/main/resources/atk-plugin.conf
 
 Installing plugins:
 
