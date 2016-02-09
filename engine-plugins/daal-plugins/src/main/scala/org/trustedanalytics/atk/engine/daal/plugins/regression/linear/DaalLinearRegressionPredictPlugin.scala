@@ -35,7 +35,7 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, A
 
 //Implicits needed for JSON conversion
 import spray.json._
-import DaalLinearRegressionModelDataFormat._
+import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 import DaalLinearRegressionJsonFormat._
@@ -90,7 +90,7 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
 
       //Load the libsvm model
       val lrJsObject = model.data
-      val modelData = lrJsObject.convertTo[DaalLinearRegressionModelData]
+      val modelData = lrJsObject.convertTo[DaalLinearRegressionModel]
 
       require(modelData.featureColumns.length == arguments.featureColumns.length,
         "Number of feature columns for train and predict should be same")

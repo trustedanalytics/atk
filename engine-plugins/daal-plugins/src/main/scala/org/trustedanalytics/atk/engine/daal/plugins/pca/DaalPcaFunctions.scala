@@ -24,6 +24,13 @@ import org.apache.spark.rdd.RDD
 
 object DaalPcaFunctions extends Serializable {
 
+  /**
+   * Run DAAL Principal Components Algorithm (PCA)
+   *
+   * @param frameRdd Input frame
+   * @param arguments PCA arguments
+   * @return PCA results with eigen values and vectors
+   */
   def runPCA(frameRdd: FrameRdd, arguments: DaalPcaArgs): DaalPcaResult = {
     val distributedTable = new DistributedNumericTable(frameRdd, arguments.columnNames)
     val partialResults = computePcaPartialResults(distributedTable, arguments)
@@ -31,11 +38,20 @@ object DaalPcaFunctions extends Serializable {
     pcaResults
   }
 
+  /**
+   * Compute partial PCA results locally
+   *
+   * This function is run once for each Spark partition
+   *
+   * @param distributedTable Input table
+   * @param arguments PCA arguments
+   * @return Partial PCA results
+   */
   private def computePcaPartialResults(distributedTable: DistributedNumericTable, arguments: DaalPcaArgs): RDD[PartialResult] = {
     distributedTable.rdd.map(tableWithIndex => {
       val context = new DaalContext
       val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], arguments.getPcaMethod())
-      pcaLocal.input.set(InputId.data, tableWithIndex.getTable(context))
+      pcaLocal.input.set(InputId.data, tableWithIndex.getUnpackedTable(context))
       val partialResult = pcaLocal.compute
       partialResult.pack
       context.dispose
@@ -43,6 +59,13 @@ object DaalPcaFunctions extends Serializable {
     })
   }
 
+  /**
+   *  Merge partial PCA results at Spark master
+   *
+   * @param partsRDD Partial PCA results
+   * @param arguments PCA arguments
+   * @return PCA results with eigen values and vectors
+   */
   private def mergePcaPartialResults(partsRDD: RDD[PartialResult], arguments: DaalPcaArgs): DaalPcaResult = {
     val context = new DaalContext
     val pcaMaster: DistributedStep2Master = new DistributedStep2Master(context, classOf[java.lang.Double], arguments.getPcaMethod())

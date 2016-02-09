@@ -15,35 +15,57 @@
 */
 package org.trustedanalytics.atk.engine.daal.plugins
 
-import java.nio.DoubleBuffer
-
 import com.intel.daal.data_management.data.NumericTable
 import com.intel.daal.services.DaalContext
+import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-
 import scala.collection.mutable.ListBuffer
+import java.nio.DoubleBuffer
 
-class NumericTableWithIndex(index: Long, table: NumericTable) extends Serializable {
-  val numRows = table.getNumberOfRows
-  val numCols = table.getNumberOfColumns
-  table.pack()
+/**
+ * DAAL numeric table with index
+ *
+ * The table index is unique and allows each task to know the global offset of the
+ * local table. The inde allows the master task to establish a global order when
+ * partial results.
+ *
+ * @param index Table index
+ * @param table DAAL numeric table
+ */
+case class IndexedNumericTable(index: Long, private val table: NumericTable) extends Serializable {
+  val numRows: Long = table.getNumberOfRows
+  val numCols: Long = table.getNumberOfColumns
+  table.pack() //serialize table
 
-  def getTable(context: DaalContext): NumericTable = {
+  /**
+   * Deserialize numeric table
+   *
+   * @param context DAAL context
+   * @return deserialized table
+   */
+  def getUnpackedTable(context: DaalContext): NumericTable = {
     table.unpack(context)
     table
   }
 
+  /**
+   * Get DAAL table index and serialized numeric table
+   *
+   * @return table index and serialized numeric table
+   */
   def getTuple2: (Long, NumericTable) = (index, table)
 
   /**
    * Convert DAAL numeric table into iterator of Spark SQL rows
    *
-   * @param context Daal context
-   * @return Iterator of rows
+   * @param context DAAL context
+   * @return Row iterator
    */
   def toRowIter(context: DaalContext): Iterator[Row] = {
-    val unpackedTable = getTable(context)
+    if (isEmpty) return List.empty[sql.Row].iterator
+
+    val unpackedTable = getUnpackedTable(context)
     val numRows = unpackedTable.getNumberOfRows.toInt
     val numCols = unpackedTable.getNumberOfColumns.toInt
 
@@ -61,4 +83,9 @@ class NumericTableWithIndex(index: Long, table: NumericTable) extends Serializab
 
     rowBuffer.iterator
   }
+
+  /**
+   * Check if table is empty
+   */
+  def isEmpty: Boolean = numRows < 1
 }

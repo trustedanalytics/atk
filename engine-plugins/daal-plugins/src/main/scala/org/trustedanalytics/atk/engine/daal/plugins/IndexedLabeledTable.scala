@@ -13,13 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
+package org.trustedanalytics.atk.engine.daal.plugins
 
-package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
-
-object DaalLinearRegressionModelDataFormat {
-  import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val lrModelDataFormat = jsonFormat3(DaalLinearRegressionModelData)
-}
-case class DaalLinearRegressionModelData(serializedModel: List[Byte],
-                                         featureColumns: List[String],
-                                         labelColumns: List[String])
+/**
+ * Indexed numeric tables with features and corresponding labels
+ */
+case class IndexedLabeledTable(features: IndexedNumericTable, labels: IndexedNumericTable)

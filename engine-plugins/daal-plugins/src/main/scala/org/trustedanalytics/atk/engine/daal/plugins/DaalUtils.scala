@@ -40,4 +40,13 @@ object DaalUtils extends Serializable {
       }
     })
   }
+
+  /**
+   * Set number of Math Kernel Library (MKL) threads
+   *
+   * @param threads Number of threads
+   */
+  def setNumberOfThreads(threads: Int) : Unit = {
+    val enviroment = new Environment()
+  }
 }

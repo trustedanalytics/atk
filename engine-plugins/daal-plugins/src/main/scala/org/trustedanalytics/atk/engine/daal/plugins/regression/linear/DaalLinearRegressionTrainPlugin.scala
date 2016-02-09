@@ -64,7 +64,7 @@ for each observation.""") labelColumns: List[String]) {
 case class DaalLinearRegressionTrainResult(betas: Array[Array[Double]])
 
 import spray.json._
-import DaalLinearRegressionModelDataFormat._
+import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalLinearRegressionJsonFormat._
 
@@ -91,6 +91,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 3
+
   /**
    * Run DAAL's Linear Regression with QR decomposition on the training frame and create a Model for it.
    *
@@ -129,7 +130,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         }
       }
 
-      val jsonModel = DaalLinearRegressionModelData(serializedModel,
+      val jsonModel = DaalLinearRegressionModel(serializedModel,
         featureColumns,
         labelColumns).toJson.asJsObject
       model.data = jsonModel

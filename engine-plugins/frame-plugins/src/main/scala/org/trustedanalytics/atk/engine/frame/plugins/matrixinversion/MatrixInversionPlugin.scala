@@ -26,7 +26,7 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ MatrixInversionArgs, FrameReference }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin}
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 import scala.collection.mutable.ListBuffer
 

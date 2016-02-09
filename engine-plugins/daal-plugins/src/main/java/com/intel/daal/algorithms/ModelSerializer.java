@@ -1,50 +1,41 @@
 /*
-//  Copyright(C) 2014-2015 Intel Corporation. All Rights Reserved.
+// Copyright (c) 2015 Intel Corporation 
 //
-//  The source code, information  and  material ("Material") contained herein is
-//  owned  by Intel Corporation or its suppliers or licensors, and title to such
-//  Material remains  with Intel Corporation  or its suppliers or licensors. The
-//  Material  contains proprietary information  of  Intel or  its  suppliers and
-//  licensors. The  Material is protected by worldwide copyright laws and treaty
-//  provisions. No  part  of  the  Material  may  be  used,  copied, reproduced,
-//  modified, published, uploaded, posted, transmitted, distributed or disclosed
-//  in any way  without Intel's  prior  express written  permission. No  license
-//  under  any patent, copyright  or  other intellectual property rights  in the
-//  Material  is  granted  to  or  conferred  upon  you,  either  expressly,  by
-//  implication, inducement,  estoppel or  otherwise.  Any  license  under  such
-//  intellectual  property  rights must  be express  and  approved  by  Intel in
-//  writing.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
 //
-//  *Third Party trademarks are the property of their respective owners.
+//      http://www.apache.org/licenses/LICENSE-2.0
 //
-//  Unless otherwise  agreed  by Intel  in writing, you may not remove  or alter
-//  this  notice or  any other notice embedded  in Materials by Intel or Intel's
-//  suppliers or licensors in any way.
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 */
-
 package com.intel.daal.algorithms;
 
 import com.intel.daal.algorithms.linear_regression.Model;
 import com.intel.daal.services.DaalContext;
-
 import java.nio.ByteBuffer;
 
+/**
+ * Serializer/Deserializer for DAAL models
+ */
 public final class ModelSerializer {
     static {
         System.loadLibrary("AtkDaalJavaAPI");
     }
+
     private ModelSerializer() {
     }
 
-    public static com.intel.daal.algorithms.linear_regression.Model deserializeQrModel(DaalContext context, byte[] serializedCObject) {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(serializedCObject.length);
-        buffer.put(serializedCObject);
-
-        long cModelRef = cDeserializeQrModel(buffer, buffer.capacity());
-        Model qrModel = new Model(context, cModelRef);
-        return qrModel;
-    }
-
+    /**
+     * Serialize DAAL linear regression QR model
+     *
+     * @param model Linear regression model
+     * @return Serialized model
+     */
     public static byte[] serializeQrModel(com.intel.daal.algorithms.linear_regression.Model model) {
         ByteBuffer buffer = cSerializeQrModel(model.getCModel());
         byte[] serializedCObject = new byte[buffer.capacity()];
@@ -54,12 +45,25 @@ public final class ModelSerializer {
         return serializedCObject;
     }
 
+    /**
+     * Deserialize DAAL linear regression QR model
+     *
+     * @param context DAAL context
+     * @param serializedCObject Serialized model
+     * @return Deserialized model
+     */
+    public static com.intel.daal.algorithms.linear_regression.Model deserializeQrModel(DaalContext context, byte[] serializedCObject) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(serializedCObject.length);
+        buffer.put(serializedCObject);
+
+        long cModelRef = cDeserializeQrModel(buffer, buffer.capacity());
+        Model qrModel = new Model(context, cModelRef);
+        return qrModel;
+    }
+
     protected static native ByteBuffer cSerializeQrModel(long cModel);
 
     protected static native long cDeserializeQrModel(ByteBuffer buffer, long size);
 
     private static native void cFreeByteBuffer(ByteBuffer var1);
-
-
-
 }

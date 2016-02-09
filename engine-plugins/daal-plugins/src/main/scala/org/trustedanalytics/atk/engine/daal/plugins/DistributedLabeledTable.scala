@@ -23,12 +23,23 @@ import org.apache.spark.rdd.RDD
 
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * Distributed DAAL numeric table with features and labels
+ */
 class DistributedLabeledTable extends Serializable {
-  private var tableRdd: RDD[(NumericTableWithIndex, NumericTableWithIndex)] = null
+  private var tableRdd: RDD[IndexedLabeledTable] = null
   private var numRows: Long = 0L
-  private var numFeatureCols: Int = 0
-  private var numLabelCols: Int = 0
+  private var numFeatureCols: Long = 0L
+  private var numLabelCols: Long = 0L
 
+  /**
+   * Create distributed numeric table with features and labels from Vector RDD
+   *
+   * @param vectorRdd Vector RDD
+   * @param splitIndex Column index at which to split vector into features and labels
+   * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
+   *                         then all rows in a partition are transformed into a single numeric table
+   */
   def this(vectorRdd: RDD[Vector], splitIndex: Int, maxRowsPerTable: Int = -1) = {
     this()
     val first: Vector = vectorRdd.first()
@@ -40,10 +51,11 @@ class DistributedLabeledTable extends Serializable {
     tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
-        var tableRows = 0
+        var tableRows = 0L
+        var tableSize = 0L
         val featureBuf = new ArrayBuffer[Double]()
         val labelBuf = new ArrayBuffer[Double]()
-        val tables = new ArrayBuffer[(NumericTableWithIndex, NumericTableWithIndex)]()
+        val tables = new ArrayBuffer[IndexedLabeledTable]()
 
         while (iter.hasNext) {
           val array = iter.next().toArray
@@ -53,12 +65,12 @@ class DistributedLabeledTable extends Serializable {
 
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
             val tableIndex = i - tableRows + 1
-            val featureTable = new NumericTableWithIndex(tableIndex,
+            val featureTable = new IndexedNumericTable(tableIndex,
               new HomogenNumericTable(context, featureBuf.toArray, numFeatureCols, tableRows))
-            val labelTable = new NumericTableWithIndex(tableIndex,
+            val labelTable = new IndexedNumericTable(tableIndex,
               new HomogenNumericTable(context, labelBuf.toArray, numLabelCols, tableRows))
 
-            tables += ((featureTable, labelTable))
+            tables += IndexedLabeledTable(featureTable, labelTable)
             numRows += tableRows
             tableRows = 0
             featureBuf.clear()
@@ -69,9 +81,38 @@ class DistributedLabeledTable extends Serializable {
     }
   }
 
-  def this(frameRdd: FrameRdd, featureColumns: List[String], labelColums: List[String]) = {
-    this(frameRdd.toDenseVectorRDD(featureColumns ++ labelColums), featureColumns.size)
+  /**
+   * Create distributed numeric table with features and labels from frame
+   *
+   * @param frameRdd Input frame
+   * @param featureColumns List of feature columns
+   * @param labelColums List of label columns
+   * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
+   *                         then all rows in a partition are transformed into a single numeric table
+   */
+  def this(frameRdd: FrameRdd, featureColumns: List[String], labelColums: List[String], maxRowsPerTable: Int = -1) = {
+    this(frameRdd.toDenseVectorRDD(featureColumns ++ labelColums), featureColumns.size, maxRowsPerTable)
   }
 
-  def rdd: RDD[(NumericTableWithIndex, NumericTableWithIndex)] = tableRdd
+  /**
+   * Get number of rows in distributed table
+   */
+  def getNumRows: Long = numRows
+
+  /**
+   * Get number of feature columns in distributed table
+   */
+  def getNumFeatureCols: Long = numFeatureCols
+
+  /**
+   * Get number of label columns in distributed table
+   */
+  def getNumLabelCols: Long = numLabelCols
+
+  /**
+   * Get Pair RDD of feature and label numeric tables
+   */
+  def rdd: RDD[(IndexedNumericTable, IndexedNumericTable)] = {
+    tableRdd.map(table => (table.features, table.labels))
+  }
 }

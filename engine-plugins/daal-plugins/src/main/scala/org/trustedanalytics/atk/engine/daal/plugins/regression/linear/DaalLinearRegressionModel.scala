@@ -13,14 +13,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
 
-import com.intel.daal.data_management.data.NumericTable
-import org.apache.spark.frame.FrameRdd
+package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 /**
- * These implicits can be imported to add conversion functions related functions to DAAL tables
+ * DAAL linear regression model
+ *
+ * @param serializedModel Serialized linear regression model
+ * @param featureColumns List of feature column names
+ * @param labelColumns List of label column names
  */
-object DaalConversionImplicits {
-  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
+case class DaalLinearRegressionModel(serializedModel: List[Byte],
+                                         featureColumns: List[String],
+                                         labelColumns: List[String])
+
+/**
+ * JSON serialization for model
+ */
+object DaalLinearRegressionModelFormat {
+  import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+  implicit val lrModelDataFormat = jsonFormat3(DaalLinearRegressionModel)
 }
