@@ -17,21 +17,14 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.ml.regression.LinearRegression
-import org.apache.spark.mllib.linalg.VectorUDT
-import org.apache.spark.mllib.optimization.{ L1Updater, SquaredL2Updater }
-import org.apache.spark.mllib.regression.{ LabeledPoint, LinearRegressionWithSGD }
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.types._
-import org.apache.spark.sql.types.{ StructType, StructField, DoubleType }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
-import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTrainArgs
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.apache.spark.ml.atk.plugins.MLJsonProtocol._
 //Implicits needed for JSON conversion
 import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.apache.spark.ml.atk.plugins.MLJsonProtocol._
 
 @PluginDoc(oneLine = "Build linear regression model.",
   extended = "Creating a LinearRegression Model using the observation column and target column of the train frame",

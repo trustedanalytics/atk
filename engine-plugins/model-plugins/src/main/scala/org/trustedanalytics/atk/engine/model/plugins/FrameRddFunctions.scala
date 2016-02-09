@@ -20,7 +20,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.{ VectorUDT, DenseVector }
 import org.apache.spark.mllib.regression.{ LabeledPoint, LabeledPointWithFrequency }
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{ SQLContext, DataFrame }
+import org.apache.spark.sql.{ Row, SQLContext, DataFrame }
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.apache.spark.sql.types.{ DoubleType, StructField, StructType }
 import org.trustedanalytics.atk.domain.schema.DataTypes
@@ -62,6 +62,16 @@ class FrameRddFunctions(self: FrameRdd) {
         }
       }
     })
+  }
+
+  /**
+   * Convert FrameRdd into labeled frame with label of type double, and features of type vector
+   */
+  def toLabeledDataFrame(labelColumnName: String, featureColumnNames: List[String]): DataFrame = {
+    val labeledPointRdd = toLabeledPointRDD(labelColumnName, featureColumnNames)
+    val rowRdd: RDD[Row] = labeledPointRdd.map(labeledPoint => new GenericRow(Array[Any](labeledPoint.label, labeledPoint.features)))
+    val schema = StructType(Seq(StructField("label", DoubleType, true), StructField("features", new VectorUDT, true)))
+    new SQLContext(self.sparkContext).createDataFrame(rowRdd, schema)
   }
 
 }

@@ -94,16 +94,6 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     new SQLContext(this.sparkContext).createDataFrame(this, schema)
   }
 
-  def toLabeledDataFrame(labelColumnName: String, featureColumnNames: List[String]): DataFrame = {
-    val labeledPointRdd = this.mapRows(row => {
-      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-      new LabeledPoint(DataTypes.toDouble(row.value(labelColumnName)), new org.apache.spark.mllib.linalg.DenseVector(features.toArray))
-    })
-    val rowRdd = labeledPointRdd.map(labeledPoint => Row(Array(labeledPoint.features, labeledPoint.label)))
-    val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("label", DoubleType, true)))
-    new SQLContext(this.sparkContext).createDataFrame(rowRdd, schema)
-  }
-
   override def compute(split: Partition, context: TaskContext): Iterator[Row] =
     firstParent[Row].iterator(split, context)
 
