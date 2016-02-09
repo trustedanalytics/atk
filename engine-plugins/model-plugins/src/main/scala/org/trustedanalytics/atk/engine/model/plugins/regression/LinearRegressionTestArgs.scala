@@ -17,14 +17,15 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class LinearRegressionTestArgs(model: ModelReference,
-                                    frame: FrameReference,
-                                    labelColumn: String,
-                                    observationColumns: Option[String])
+                                    @ArgDoc("""The frame to train the model on""") frame: FrameReference,
+                                    @ArgDoc("""Column name containing the label of each observation""") labelColumn: String,
+                                    @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[String])
 
-case class LinearRegressionTestReturn(explainedVariance: Double,
-                                      meanAbsoluteError: Double,
-                                      meanSquaredError: Double,
-                                      r2: Double,
-                                      rootMeanSquaredError: Double)
+case class LinearRegressionTestReturn(@ArgDoc("""The variance explained by regression""") explainedVariance: Double,
+                                      @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
+                                      @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
+                                      @ArgDoc("""The unadjusted coefficient of determination""") r2: Double,
+                                      @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double)

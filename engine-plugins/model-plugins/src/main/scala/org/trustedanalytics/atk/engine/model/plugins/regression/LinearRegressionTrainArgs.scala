@@ -30,21 +30,30 @@ case class LinearRegressionTrainArgs(model: ModelReference,
 for each observation.""") labelColumn: String,
                                      @ArgDoc("""List of column(s) containing the
 observations.""") observationColumns: List[String],
-                                     elasticNetParameter: Double = 0.0,
-                                     fitIntercept: Boolean = true,
-                                     maxIterations: Int = 100,
-                                     regParam: Double = 0.0,
-                                     standardization: Boolean = true,
-                                     tolerance: Double = 1E-6) {
+                                     @ArgDoc("""Parameter for the ElasticNet mixing""") elasticNetParameter: Double = 0.0,
+                                     @ArgDoc("""Parameter for whether to fit an intercept term""") fitIntercept: Boolean = true,
+                                     @ArgDoc("""Parameter for maximum number of iterations""") maxIterations: Int = 100,
+                                     @ArgDoc("""Parameter for regularization""") regParam: Double = 0.0,
+                                     @ArgDoc("""Parameter for whether to standardize the training features before fitting the model""") standardization: Boolean = true,
+                                     @ArgDoc("""Parameter for the convergence tolerance for iterative algorithms""") tolerance: Double = 1E-6) {
 
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
   require(maxIterations > 0, "numIterations must be a positive value")
+  require(regParam >= 0, "regParam should be greater than or equal to 0")
 
 }
 
-case class LinearRegressionTrainReturn(observationColumns: List[String], label: String, intercept: Double, weights: Array[Double], explainedVariance: Double,
-                                       meanAbsoluteError: Double, meanSquaredError: Double, objectiveHistory: Array[Double], r2: Double,
-                                       rootMeanSquaredError: Double, iterations: Int)
+case class LinearRegressionTrainReturn(@ArgDoc("""The list of column(s) storing the observations""") observationColumns: List[String],
+                                       @ArgDoc("""Name of the column storing the label""") label: String,
+                                       @ArgDoc("""Intercept of the trained model""") intercept: Double,
+                                       @ArgDoc("""Weights of the trained model""") weights: Array[Double],
+                                       @ArgDoc("""The explained variance regression score""") explainedVariance: Double,
+                                       @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
+                                       @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
+                                       @ArgDoc("""Objective function(scaled loss + regularization) at each iteration""") objectiveHistory: Array[Double],
+                                       @ArgDoc("""The coefficient of determination of the trained model""") r2: Double,
+                                       @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double,
+                                       @ArgDoc("""The number of training iterations until termination""") iterations: Int)

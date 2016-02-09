@@ -17,8 +17,9 @@ package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class LinearRegressionPredictArgs(model: ModelReference,
-                                       frame: FrameReference,
-                                       observationColumns: Option[String])
+                                       @ArgDoc("""The frame to train the model on""") frame: FrameReference,
+                                       @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[String])
 

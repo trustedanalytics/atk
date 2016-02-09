@@ -17,11 +17,13 @@
 package org.apache.spark.frame
 
 import breeze.linalg.DenseVector
+import breeze.linalg.DenseVector
+import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
 import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
 import org.apache.spark.frame.ordering.FrameOrderingUtils
 import org.apache.spark.mllib.linalg.distributed.IndexedRow
-import org.apache.spark.mllib.linalg.{ Vector, Vectors }
+import org.apache.spark.mllib.linalg.{ VectorUDT, DenseVector, Vector, Vectors }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.catalyst.expressions.{ GenericRow }
 import org.apache.spark.sql.types.{ ArrayType, BooleanType, ByteType, DateType, DecimalType, DoubleType, FloatType, IntegerType, LongType, ShortType, StringType, StructField, StructType, TimestampType }
@@ -92,6 +94,16 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     new SQLContext(this.sparkContext).createDataFrame(this, schema)
   }
 
+  def toLabeledDataFrame(labelColumnName: String, featureColumnNames: List[String]): DataFrame = {
+    val labeledPointRdd = this.mapRows(row => {
+      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
+      new LabeledPoint(DataTypes.toDouble(row.value(labelColumnName)), new org.apache.spark.mllib.linalg.DenseVector(features.toArray))
+    })
+    val rowRdd = labeledPointRdd.map(labeledPoint => Row(Array(labeledPoint.features, labeledPoint.label)))
+    val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("label", DoubleType, true)))
+    new SQLContext(this.sparkContext).createDataFrame(rowRdd, schema)
+  }
+
   override def compute(split: Partition, context: TaskContext): Iterator[Row] =
     firstParent[Row].iterator(split, context)
 
@@ -137,7 +149,7 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     val vectorRdd = toDenseVectorRDD(featureColumnNames)
     val columnMeans: Vector = columnStatistics(featureColumnNames).mean
     vectorRdd.map(i => {
-      Vectors.dense((new DenseVector(i.toArray) - new DenseVector(columnMeans.toArray)).toArray)
+      Vectors.dense((new breeze.linalg.DenseVector(i.toArray) - new breeze.linalg.DenseVector(columnMeans.toArray)).toArray)
     })
   }
 
@@ -178,23 +190,6 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     this mapRows (row => {
       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
       Vectors.dense(features.toArray)
-    })
-  }
-
-  //  def toRddOfDoubleAndVector(valueColumnName: String, featureColumnNames: List[String]) = {
-  //    this mapRows (row => {
-  //      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-  //      val vector = Vectors.dense(features.toArray)
-  //      val value = row.value(valueColumnName).asInstanceOf[Double]
-  //      (value, vector)
-  //    })
-  //  }
-  def toRddOfDoubleAndVector(valueColumnName: String, featureColumnNames: List[String]) = {
-    this mapRows (row => {
-      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-      val vector = features.toArray
-      val value = row.value(valueColumnName)
-      new GenericRow(vector :+ value)
     })
   }
 
@@ -636,7 +631,7 @@ object FrameRdd {
       case (index, row) =>
         val array = rowWrapper(row).valuesAsArray(featureColumnNames, flattenInputs = true)
         val b = array.map(i => DataTypes.toDouble(i))
-        val meanCenteredVector = Vectors.dense((new DenseVector(b) - new DenseVector(meanVector.toArray)).toArray)
+        val meanCenteredVector = Vectors.dense((new breeze.linalg.DenseVector(b) - new breeze.linalg.DenseVector(meanVector.toArray)).toArray)
         IndexedRow(index, meanCenteredVector)
     }
   }

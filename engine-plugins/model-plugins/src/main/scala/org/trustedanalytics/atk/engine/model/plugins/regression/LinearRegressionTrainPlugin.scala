@@ -67,10 +67,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
 
     val trainFrameRdd = frame.rdd
     //Running MLLib
-    val rdd = trainFrameRdd.toRddOfDoubleAndVector(arguments.labelColumn, arguments.observationColumns)
-
-    val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("label", DoubleType, true)))
-    val dataFrame = frame.rdd.toDataFrameWithSchema(schema)
+    val dataFrame = trainFrameRdd.toLabeledDataFrame(arguments.labelColumn, arguments.observationColumns)
 
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.fit(dataFrame)
