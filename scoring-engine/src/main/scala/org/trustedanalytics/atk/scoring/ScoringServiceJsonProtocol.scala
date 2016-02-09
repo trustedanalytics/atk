@@ -26,22 +26,6 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 
 class ScoringServiceJsonProtocol(model: Model) {
 
-  //  implicit object MetadataFormat extends JsonFormat[Array[Any]] {
-  //    override def write(obj: Array[Any]): JsValue = {
-  //      JsObject(
-  //        "name" -> JsString(obj.name),
-  //        "value" -> JsString(obj.value))
-  //    }
-  //
-  //    override def read(json: JsValue): MetaField = {
-  //      val fields = json.asJsObject.fields
-  //      val name = fields.get("name").get.asInstanceOf[JsString].value.toString
-  //      val value = fields.get("value").get.asInstanceOf[JsString].value.toString
-  //
-  //      MetaField(name, value)
-  //    }
-  //  }
-
   implicit object FieldFormat extends JsonFormat[Field] {
     override def write(obj: Field): JsValue = {
       JsObject(
@@ -86,6 +70,9 @@ class ScoringServiceJsonProtocol(model: Model) {
       decodedRecords.foreach(decodedRecord => {
         val featureArray = new Array[Any](model.input().length)
         val obsColumns = model.input()
+        if (decodedRecord.size != featureArray.length) {
+          throw new scala.IllegalArgumentException("Size of the input record is not the same as the number of Obs Columns that the model was trained on")
+        }
         decodedRecord.foreach(record => {
           var counter = 0
           while (obsColumns(counter).name != record._1 && counter < obsColumns.length) {
@@ -155,9 +142,7 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      println("about to serialize")
-      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => DataTypeJsonFormat.write(data)).toList),
-      JsObject("Model Details" -> new JsArray(List(DataTypeJsonFormat.write(modelMetadata))),
+      JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
         "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
         "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
