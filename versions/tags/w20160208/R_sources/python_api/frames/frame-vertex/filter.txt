@@ -1,0 +1,21 @@
+
+:doc:`VertexFrame <index>`  filter
+**********************************
+
+------
+
+
+.. function:: filter(self, predicate)
+
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **predicate** : function
+
+        ..
+
+            |UDF| which evaluates a row to a boolean; vertices that answer False are dropped from the Frame
+
+

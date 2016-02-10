@@ -1,0 +1,50 @@
+
+:doc:`Frame <index>`  daal_pca
+******************************
+
+------
+
+
+.. function:: daal_pca(self, column_names, method='cor')
+
+    |ALPHA|
+    Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).
+
+
+    :Parameters:
+
+        **column_names** : list
+
+        ..
+
+            The names of the column from which to compute PCA.
+
+
+
+        **method** : unicode (default=cor)
+
+        ..
+
+            PCA method.
+                                       | cor - correlation.
+                                       | svd - singular value decomposition.
+                                     
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Frame with eigen values and eigen vectors.
+    Principal component analysis (PCA) [1]_ is used to transform a set of possibly correlated
+    variables into a smaller number of uncorrelated variables called principal components.
+    This method runs the DAAL implementation of Principal component analysis [2]_.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+    .. [2] https://software.intel.com/en-us/daal
