@@ -27,7 +27,7 @@ case class ExportHdfsCsvArgs(frame: FrameReference,
                              @ArgDoc("""The HDFS folder path where the files
 will be created.""") folderName: String,
                              @ArgDoc("""The separator for separating the values.
-Default is comma (,).""") separator: Char = ',',
+Default is comma (,).""") separator: String = ",",
                              @ArgDoc("""The number of records you want.
 Default, or a non-positive value, is the whole frame.""") count: Int = -1,
                              @ArgDoc("""The number of rows to skip before exporting to the file.
