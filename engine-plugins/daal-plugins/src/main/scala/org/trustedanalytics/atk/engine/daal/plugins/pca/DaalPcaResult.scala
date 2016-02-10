@@ -19,30 +19,17 @@ import com.intel.daal.algorithms.pca.{ ResultId, Result }
 import com.intel.daal.data_management.data.NumericTable
 
 /**
- * Class for PCA results
- * scores - A nx1 NumericTable of Eigen values, sorted from largest
- * to the smallest.
+ * Class for PCA results with two tables: scores, and labels
+ *
+ * scores - A nx1 NumericTable of Eigen values, sorted from largest to the smallest.
  * loadings - A nxp NumericTable of corresponding Eigen vectors.
+ *
+ * @param results Results of PCA algorithm
  */
-case class DaalPcaResult() {
-  private var scores: NumericTable = null
-  private var loadings: NumericTable = null
-
-  def this(scores: NumericTable, loadings: NumericTable) = {
-    this()
-    this.scores = scores
-    this.loadings = loadings
-  }
-
-  def this(res: Result) = {
-    this()
-    scores = res.get(ResultId.eigenValues)
-    loadings = res.get(ResultId.eigenVectors)
-    scores.pack()
-    loadings.pack()
-  }
-
-  def getScores: NumericTable = scores
-
-  def getLoadings: NumericTable = loadings
+case class DaalPcaResult(results: Result) {
+  val scores = results.get(ResultId.eigenValues)
+  val loadings = results.get(ResultId.eigenVectors)
+  scores.pack()
+  loadings.pack()
 }
+

@@ -87,12 +87,6 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
   override def kryoRegistrator: Option[String] = None
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 3
-
-  /**
    * Run DAAL's Linear Regression with QR decomposition on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,

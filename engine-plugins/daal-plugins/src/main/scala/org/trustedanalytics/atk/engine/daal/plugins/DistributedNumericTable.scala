@@ -101,14 +101,14 @@ class DistributedNumericTable extends Serializable {
   /**
    * Cache distributed table in memory.
    */
-  def cache {
+  def cache(): Unit = {
     tableRdd.cache
   }
 
   /**
    * Unpersist cached distributed table.
    */
-  def unpersist {
+  def unpersist(): Unit = {
     tableRdd.unpersist()
   }
 

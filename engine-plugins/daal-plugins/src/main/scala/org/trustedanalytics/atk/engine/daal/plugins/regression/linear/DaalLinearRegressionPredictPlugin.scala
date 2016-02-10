@@ -64,12 +64,6 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
   override def kryoRegistrator: Option[String] = None
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 2
-
-  /**
    * Get predictions for DAAL's Linear Regression with QR decomposition using test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -88,7 +82,7 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
       val featureColumns = arguments.featureColumns
       val labelColumns = arguments.labelColumns
 
-      //Load the libsvm model
+      //Load the DAAL linear regression model
       val lrJsObject = model.data
       val modelData = lrJsObject.convertTo[DaalLinearRegressionModel]
 

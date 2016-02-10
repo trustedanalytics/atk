@@ -82,7 +82,6 @@ object DaalLinearRegressionFunctions extends Serializable {
     frameRdd.zipFrameRdd(new FrameRdd(FrameSchema(predictColumns), predictRdd))
   }
 
-
   /**
    * Compute partial results for linear regression  using QR decomposition
    *
