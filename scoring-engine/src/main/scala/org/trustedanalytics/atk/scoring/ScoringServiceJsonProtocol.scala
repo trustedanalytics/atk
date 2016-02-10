@@ -30,13 +30,13 @@ class ScoringServiceJsonProtocol(model: Model) {
     override def write(obj: Field): JsValue = {
       JsObject(
         "name" -> JsString(obj.name),
-        "value" -> JsString(obj.dataType))
+        "value" -> JsString(obj.data_type))
     }
 
     override def read(json: JsValue): Field = {
       val fields = json.asJsObject.fields
       val name = fields.get("name").get.asInstanceOf[JsString].value.toString
-      val value = fields.get("dataType").get.asInstanceOf[JsString].value.toString
+      val value = fields.get("data_type").get.asInstanceOf[JsString].value.toString
 
       Field(name, value)
     }
@@ -45,50 +45,62 @@ class ScoringServiceJsonProtocol(model: Model) {
   implicit object DataInputFormat extends JsonFormat[Seq[Array[Any]]] {
 
     //don't need this method. just there to satisfy the API.
-    override def write(obj: Seq[Array[Any]]): JsValue = {
-      val jsObject = JsObject()
-      jsObject
-
-    }
+    override def write(obj: Seq[Array[Any]]): JsValue = ???
 
     override def read(json: JsValue): Seq[Array[Any]] = {
       val records = json.asJsObject.getFields("records") match {
         case Seq(JsArray(records)) => records
         case x => deserializationError(s"Expected array of records but got $x")
       }
-
-      val decodedRecords: Seq[Map[String, Any]] = records.map { record =>
-        record match {
-          case JsObject(fields) =>
-            val decodedRecord: Map[String, Any] = for ((feature, value) <- fields) yield (feature, decodeJValue(value))
-            decodedRecord
-        }
-      }
-
-      var features: Seq[Array[Any]] = Seq[Array[Any]]()
-
-      decodedRecords.foreach(decodedRecord => {
-        val featureArray = new Array[Any](model.input().length)
-        val obsColumns = model.input()
-        if (decodedRecord.size != featureArray.length) {
-          throw new scala.IllegalArgumentException("Size of the input record is not the same as the number of Obs Columns that the model was trained on")
-        }
-        decodedRecord.foreach(record => {
-          var counter = 0
-          while (obsColumns(counter).name != record._1 && counter < obsColumns.length) {
-            counter = counter + 1
-          }
-          featureArray(counter) = record._2
-        })
-        features = features :+ featureArray
-      })
-      features
+      decodeRecords(records)
     }
+  }
+
+  def decodeRecords(records: List[JsValue]): Seq[Array[Any]] = {
+    val decodedRecords: Seq[Map[String, Any]] = records.map { record =>
+      record match {
+        case JsObject(fields) =>
+          val decodedRecord: Map[String, Any] = for ((feature, value) <- fields) yield (feature, decodeJValue(value))
+          decodedRecord
+      }
+    }
+    var features: Seq[Array[Any]] = Seq[Array[Any]]()
+    decodedRecords.foreach(decodedRecord => {
+      val featureArray = new Array[Any](model.input().length)
+      val obsColumns = model.input()
+      if (decodedRecord.size != featureArray.length) {
+        throw new scala.IllegalArgumentException("Size of the input record is not the same as the number of Obs Columns that the model was trained on")
+      }
+      decodedRecord.foreach({
+        case (name, value) => {
+          var counter = 0
+          var found = false
+          while (counter < obsColumns.length && !found) {
+            if (obsColumns(counter).name != name) {
+              counter = counter + 1
+            }
+            else {
+              featureArray(counter) = value
+              found = true
+            }
+          }
+          if (!found) {
+            throw new scala.IllegalArgumentException(s"$name was not found in the list of Observation Columns that the model was trained on")
+          }
+
+        }
+      })
+      features = features :+ featureArray
+    })
+    features
   }
 
   def decodeJValue(v: JsValue): Any = {
     v match {
       case JsString(s) => s
+      case JsNumber(n) if n.isValidInt => n.intValue()
+      case JsNumber(n) if n.isValidLong => n.longValue()
+      case JsNumber(n) if n.isValidFloat => n.floatValue()
       case JsNumber(n) => n.toDouble
       case JsArray(items) => for (item <- items) yield decodeJValue(item)
       case JsNull => null
@@ -148,10 +160,7 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
 
     //don't need this method. just there to satisfy the API.
-    override def read(json: JsValue): Array[Any] = {
-      val outputArray = new Array[Any](model.output().length)
-      outputArray
-    }
+    override def read(json: JsValue): Array[Any] = ???
   }
 }
 

@@ -16,6 +16,10 @@
 
 package org.trustedanalytics.atk.scoring.interfaces
 
-case class Field(name: String, dataType: String) {
-}
+/**
+ * For providing information about Model inputs and outputs
+ * @param name name of the observation column
+ * @param data_type data type of the observation column
+ */
+case class Field(name: String, data_type: String)
 

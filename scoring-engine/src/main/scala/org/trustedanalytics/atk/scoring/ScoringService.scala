@@ -72,7 +72,7 @@ class ScoringService(model: Model) extends Directives {
   lazy val description = {
     new ServiceDescription(name = "Trusted Analytics",
       identifier = "ia",
-      versions = List("v2"))
+      versions = List("v1", "v2"))
   }
 
   import AtkDefaultJsonProtocol._
@@ -99,7 +99,7 @@ class ScoringService(model: Model) extends Directives {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
                 import jsonFormat.DataOutputFormat
-                onComplete(scoreModel(DataInputFormat.read(json), false)) {
+                onComplete(scoreModel(DataInputFormat.read(json), "v2")) {
                   case Success(output) => complete(DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -119,7 +119,7 @@ class ScoringService(model: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(scoreModel(records, true)) {
+            onComplete(scoreModel(records, "v1")) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -130,15 +130,18 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scoreModel(records: Seq[Array[Any]], v1: Boolean): Future[Array[Any]] = Future {
+  def scoreModel(records: Seq[Array[Any]], version: String): Future[Array[Any]] = Future {
     var scores = new ArrayBuffer[Any]()
     records.foreach(row => {
       val score = model.score(row)
-      if (v1) {
+      if (version == "v1") {
         scores += score(score.length - 1).toString
       }
-      else {
+      else if (version == "v2") {
         scores += score
+      }
+      else {
+        throw new IllegalArgumentException(s"Not supported version: $version")
       }
     })
     scores.toArray
