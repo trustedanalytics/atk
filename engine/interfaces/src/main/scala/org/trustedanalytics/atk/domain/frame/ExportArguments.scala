@@ -34,7 +34,7 @@ Default, or a non-positive value, is the whole frame.""") count: Int = -1,
 Default is zero (0).""") offset: Int = 0) {
   require(frame != null, "frame is required")
   require(folderName != null, "folder name is required")
-  require(StringUtils.isNotBlank(separator) && separator.length == 1)
+  require(StringUtils.isNotBlank(separator) && separator.length == 1, "A single character separator is required")
 }
 
 /**
