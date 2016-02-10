@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.command
 
 import org.trustedanalytics.atk.domain.command.{ CommandDocLoader, CommandDefinition, CommandDoc }
 import org.trustedanalytics.atk.engine.plugin.CommandPlugin
+import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.shared.JsonSchemaExtractor
 import org.trustedanalytics.atk.spray.json.{ JsonSchema, ObjectSchema }
 import scala.reflect.runtime.{ universe => ru }
@@ -26,7 +27,7 @@ import ru._
 /**
  * Register and store command plugin
  */
-class CommandPluginRegistry(loader: CommandLoader) {
+class CommandPluginRegistry(loader: CommandLoader) extends EventLogging {
 
   private lazy val registry = loader.loadFromConfig()
 
@@ -53,6 +54,7 @@ class CommandPluginRegistry(loader: CommandLoader) {
   lazy val commandDefinitions: Iterable[CommandDefinition] = {
     commandPlugins.values.map(p => {
       // It seems that the underlying operations are not thread-safe -- Todd 3/10/2015
+      info(s"Creating CommandDefinition for ${p.name}")
       val argSchema = getArgumentsSchema(p)
       val retSchema = getReturnSchema(p)
       val doc = getCommandDoc(p)
