@@ -68,8 +68,9 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{\"Model Details\":[{\"name\":\"Name\",\"value\":\"Dummy Model\"},{\"name\":\"Class Name\",\"value\":\"Dummy Class\"},{\"name\":\"Model Reader\",\"value\":\"Dummy Reader Plugin\"},{\"name\":\"Created On\",\"value\":\"Feb 5th 2016\"}],\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"Model Details\":[{\"Model Type\":\"Dummy Model\"},{\"Class Name\":\"Model Class\"},{\"Model Reader\":\"Model Reader\"},{\"Created On\":\"Jan 29th 2016\"}],\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
+
   }
 }
 

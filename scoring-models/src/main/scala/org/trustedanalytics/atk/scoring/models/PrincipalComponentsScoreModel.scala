@@ -17,11 +17,8 @@
 package org.trustedanalytics.atk.scoring.models
 
 import breeze.linalg
-import breeze.linalg.DenseVector
 import org.apache.spark.mllib.linalg._
-import org.apache.spark.mllib.linalg.DenseVector
-import org.apache.spark.mllib.linalg.distributed.RowMatrix
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.Model
 import scala.concurrent.ExecutionContext.Implicits.global
 //import scala.collection.mutable.Map
 import scala.concurrent._
