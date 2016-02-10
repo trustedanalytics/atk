@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import breeze.linalg
 import org.apache.spark.mllib.linalg._
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
 import scala.concurrent.ExecutionContext.Implicits.global
 //import scala.collection.mutable.Map
 import scala.concurrent._
