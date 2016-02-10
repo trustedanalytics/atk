@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-508558065, categorical_features_info=None, feature_subset_category=None)
+.. function:: train(self, frame, label_column, observation_columns, num_classes=2, num_trees=1, impurity='gini', max_depth=4, max_bins=100, seed=-632677435, categorical_features_info=None, feature_subset_category=None)
 
     |ALPHA|
     Build Random Forests Classifier model.
@@ -77,7 +77,7 @@
 
 
 
-        **seed** : int32 (default=-508558065)
+        **seed** : int32 (default=-632677435)
 
         ..
 
