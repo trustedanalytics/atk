@@ -5,10 +5,6 @@
    "type": "Master", 
    "version": "master"
   }, 
-  "tags/w20160208": {
-   "type": "Weekly", 
-   "version": "tags/w20160208"
-  }, 
   "v.0.6.0": {
    "type": "Production", 
    "version": "v.0.6.0"
@@ -44,6 +40,10 @@
   "w20160205": {
    "type": "Weekly", 
    "version": "w20160205"
+  }, 
+  "w20160208": {
+   "type": "Weekly", 
+   "version": "w20160208"
   }
  }
 }
