@@ -54,12 +54,13 @@ class CollaborativeFilteringTrainPlugin
     schema.requireColumnIsType(arguments.destColumnName, DataTypes.int)
     require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
-    val alsInput = edgeFrame.rdd.map(edge =>
+    val alsInput = edgeFrame.rdd.mapRows(row =>
       {
-        Rating(edge.getInt(schema.columnIndex(arguments.sourceColumnName)),
-          edge.getInt(schema.columnIndex(arguments.destColumnName)),
-          edge.getFloat(schema.columnIndex(arguments.weightColumnName)).toDouble)
+        Rating(row.intValue(arguments.sourceColumnName),
+          row.intValue(arguments.destColumnName),
+          row.doubleValue(arguments.weightColumnName))
       })
+
     val als = new ALS()
       .setRank(arguments.numFactors)
       .setIterations(arguments.maxSteps)
@@ -83,7 +84,7 @@ class CollaborativeFilteringTrainPlugin
                             alsRddSchema: FrameSchema,
                             modelRdd: RDD[(Int, Array[Double])])(implicit invocation: Invocation): FrameEntity = {
     val rowRdd = modelRdd.map {
-      case (id, features) => Row(id.toInt, DataTypes.toVector(features.length)(features))
+      case (id, features) => Row(id, DataTypes.toVector(features.length)(features))
     }
     frames.tryNewFrame(CreateEntityArgs(description = Some("created by ALS train operation"))) {
       frame: FrameEntity =>
