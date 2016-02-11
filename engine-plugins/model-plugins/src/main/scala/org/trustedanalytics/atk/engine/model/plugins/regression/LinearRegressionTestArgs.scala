@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 case class LinearRegressionTestArgs(model: ModelReference,
                                     @ArgDoc("""The frame to train the model on""") frame: FrameReference,
                                     @ArgDoc("""Column name containing the label of each observation""") labelColumn: String,
-                                    @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[String])
+                                    @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]])
 
 case class LinearRegressionTestReturn(@ArgDoc("""The variance explained by regression""") explainedVariance: Double,
                                       @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,

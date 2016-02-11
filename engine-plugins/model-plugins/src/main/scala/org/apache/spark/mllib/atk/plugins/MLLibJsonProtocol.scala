@@ -39,7 +39,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDData
+//import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDData
 import spray.json._
 
 /**
@@ -614,8 +614,8 @@ object MLLibJsonProtocol {
   implicit val kmeansModelTrainReturnFormat = jsonFormat2(KMeansTrainReturn)
   implicit val kmeansModelLoadFormat = jsonFormat8(KMeansTrainArgs)
   implicit val kmeansModelPredictFormat = jsonFormat3(KMeansPredictArgs)
-  implicit val linRegDataFormat = jsonFormat2(LinearRegressionWithSGDData)
-  implicit val linRegTrainReturnFormat = jsonFormat4(LinearRegressionWithSGDTrainReturn)
+  //implicit val linRegDataFormat = jsonFormat2(LinearRegressionWithSGDData)
+  //implicit val linRegTrainReturnFormat = jsonFormat4(LinearRegressionWithSGDTrainReturn)
   implicit val naiveBayesDataFormat = jsonFormat2(NaiveBayesData)
   implicit val naiveBayesTrainFormat = jsonFormat5(NaiveBayesTrainArgs)
   implicit val naiveBayesPredictFormat = jsonFormat3(NaiveBayesPredictArgs)

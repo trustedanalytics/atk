@@ -36,7 +36,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:linear_regression_ml/train"
+  override def name: String = "model:linear_regression/train"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 

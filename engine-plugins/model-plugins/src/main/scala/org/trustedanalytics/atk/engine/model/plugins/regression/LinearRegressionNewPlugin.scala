@@ -45,7 +45,7 @@ class LinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, Model
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:linear_regression_ml/new"
+  override def name: String = "model:linear_regression/new"
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:linear_regression_ml")))

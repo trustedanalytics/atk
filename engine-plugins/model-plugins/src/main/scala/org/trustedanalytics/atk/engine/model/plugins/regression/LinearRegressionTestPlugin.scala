@@ -16,15 +16,16 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.mllib.evaluation.RegressionMetrics
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.apache.spark.ml.atk.plugins.MLJsonProtocol._
+import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin }
-
 //Implicits needed for JSON conversion
 import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.apache.spark.ml.atk.plugins.MLJsonProtocol._
 
 class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTestArgs, LinearRegressionTestReturn] {
   /**
@@ -33,7 +34,7 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:linear_regression_ml/test"
+  override def name: String = "model:linear_regression/test"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
@@ -56,18 +57,20 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
 
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
-    val dataFrame = frame.rdd.toDataFrame
+    val testFrameRdd = frame.rdd
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]
     val linRegModel = linRegData.linRegModel
+    val observationColumns = arguments.observationColumns.getOrElse(linRegData.observationColumns)
+    val dataFrame = testFrameRdd.toLabeledDataFrame(arguments.labelColumn, observationColumns)
 
-    val linRegColumn = arguments.observationColumns.getOrElse(linRegData.observationColumns)
     linRegModel.setFeaturesCol("features")
     linRegModel.setPredictionCol("predicted_value")
+
     val fullPrediction = linRegModel.transform(dataFrame).cache()
     val prediction = fullPrediction.select("predicted_value").map(_.getDouble(0))
-    val label = fullPrediction.select(arguments.labelColumn).map(_.getDouble(0))
+    val label = fullPrediction.select("label").map(_.getDouble(0))
 
     val metrics = new RegressionMetrics(prediction.zip(label))
     new LinearRegressionTestReturn(metrics.explainedVariance, metrics.meanAbsoluteError, metrics.meanSquaredError, metrics.r2, metrics.rootMeanSquaredError)
