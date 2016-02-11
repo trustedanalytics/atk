@@ -564,6 +564,7 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
 
         if n == 0:
             return TakeResult([], frame.schema)
+
         result = get_take_result()
 
         schema = FrameSchema.from_strings_to_types(result.schema)
