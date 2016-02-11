@@ -1,0 +1,49 @@
+
+:doc:`CollaborativeFilteringModel <index>`  __init__
+****************************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    Create a new Collaborative Filtering (ALS) model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+
+    For details about Collaborative Filter (ALS) modelling,
+    see :ref:`Collaborative Filter <CollaborativeFilteringNewPlugin_Summary>`.
+
+    Examples
+    --------
+    >>> model = ta.CollaborativeFilteringModel()
+    [===Job Progress===]
+    >>> model.train(edge_frame, 'source', 'dest', 'weight')
+    [===Job Progress===]
+    >>> model.score(1,5)
+    [===Job Progress===]
+    >>> recommendations = model.recommend(1, 3, True)
+    [===Job Progress===]
+    >>> recommendations
+    [{u'rating': 0.04854799984010311, u'product': 4, u'user': 1}, {u'rating': 0.04045666535703035, u'product': 3, u'user': 1}, {u'rating': 0.030060528471388848, u'product': 5, u'user': 1}]
+    >>> recommendations = model.recommend(5, 2, False)
+    [===Job Progress===]
+
+
