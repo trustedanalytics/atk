@@ -68,6 +68,49 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
+  implicit object DataTypeJsonFormat extends JsonFormat[Any] {
+    override def write(obj: Any): JsValue = {
+      obj match {
+        case n: Int => new JsNumber(n)
+        case n: Long => new JsNumber(n)
+        case n: Float => new JsNumber(BigDecimal(n))
+        case n: Double => new JsNumber(n)
+        case s: String => new JsString(s)
+        case s: Boolean => JsBoolean(s)
+        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
+        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
+        case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
+        case n: java.lang.Long => new JsNumber(n.longValue())
+        // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
+        case unk =>
+          val name: String = if (unk != null) {
+            unk.getClass.getName
+          }
+          else {
+            "null"
+          }
+          serializationError("Cannot serialize " + name)
+      }
+    }
+
+    //don't need this method. just there to satisfy the API.
+    override def read(json: JsValue): Any = ???
+  }
+
+  implicit object DataOutputFormat extends JsonFormat[Array[Any]] {
+
+    override def write(obj: Array[Any]): JsValue = {
+      val modelMetadata = model.modelMetadata()
+      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
+      JsObject("Model Details" -> modelMetadata.toJson,
+        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+    }
+
+    //don't need this method. just there to satisfy the API.
+    override def read(json: JsValue): Array[Any] = ???
+  }
+
   def decodeRecords(records: List[JsValue]): Seq[Array[Any]] = {
     val decodedRecords: Seq[Map[String, Any]] = records.map { record =>
       record match {
@@ -123,47 +166,6 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
-  implicit object DataTypeJsonFormat extends JsonFormat[Any] {
-    override def write(obj: Any): JsValue = {
-      obj match {
-        case n: Int => new JsNumber(n)
-        case n: Long => new JsNumber(n)
-        case n: Float => new JsNumber(BigDecimal(n))
-        case n: Double => new JsNumber(n)
-        case s: String => new JsString(s)
-        case s: Boolean => JsBoolean(s)
-        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
-        case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
-        case n: java.lang.Long => new JsNumber(n.longValue())
-        // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
-        case unk =>
-          val name: String = if (unk != null) {
-            unk.getClass.getName
-          }
-          else {
-            "null"
-          }
-          serializationError("Cannot serialize " + name)
-      }
-    }
 
-    //don't need this method. just there to satisfy the API.
-    override def read(json: JsValue): Any = ???
-  }
-
-  implicit object DataOutputFormat extends JsonFormat[Array[Any]] {
-
-    override def write(obj: Array[Any]): JsValue = {
-      val modelMetadata = model.modelMetadata()
-      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
-      JsObject("Model Details" -> modelMetadata.toJson,
-        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
-    }
-
-    //don't need this method. just there to satisfy the API.
-    override def read(json: JsValue): Array[Any] = ???
-  }
 }
 
