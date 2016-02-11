@@ -166,6 +166,5 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
-
 }
 

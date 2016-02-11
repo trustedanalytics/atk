@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.util.StringTokenizer
 
-import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
 import libsvm.{ svm, svm_node, svm_model }
 
 import scala.concurrent.ExecutionContext.Implicits.global

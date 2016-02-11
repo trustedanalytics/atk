@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
 import org.apache.spark.mllib.tree.model.RandomForestModel
 import org.apache.spark.mllib.linalg.Vectors
 

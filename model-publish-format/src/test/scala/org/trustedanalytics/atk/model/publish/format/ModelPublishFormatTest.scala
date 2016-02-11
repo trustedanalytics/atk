@@ -22,7 +22,7 @@ import org.apache.commons.compress.archivers.tar.{ TarArchiveOutputStream, TarAr
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.scalatest.Assertions._
-import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
 
 class ModelPublishFormatTest extends WordSpec {
 
