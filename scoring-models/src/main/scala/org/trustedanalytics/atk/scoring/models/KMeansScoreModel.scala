@@ -42,8 +42,7 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("KMeans Model", classOf[KMeansScoreModel].getName, classOf[KMeansModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("KMeans Model", classOf[KMeansScoreModel].getName, classOf[KMeansModelReaderPlugin].getName, Map())
   }
 
   /**

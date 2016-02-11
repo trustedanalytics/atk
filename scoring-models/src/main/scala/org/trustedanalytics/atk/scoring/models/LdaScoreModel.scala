@@ -46,8 +46,7 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map())
   }
 
   /**

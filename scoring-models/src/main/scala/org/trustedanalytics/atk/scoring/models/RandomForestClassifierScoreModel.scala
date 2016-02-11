@@ -47,8 +47,7 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("Random Forest Classifier Model", classOf[RandomForestClassifierScoreModel].getName, classOf[RandomForestClassifierModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("Random Forest Classifier Model", classOf[RandomForestClassifierScoreModel].getName, classOf[RandomForestClassifierModelReaderPlugin].getName, Map())
   }
 
   /**

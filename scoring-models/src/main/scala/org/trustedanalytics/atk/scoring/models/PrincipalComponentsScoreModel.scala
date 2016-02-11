@@ -57,8 +57,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("Principal Components Model", classOf[PrincipalComponentsScoreModel].getName, classOf[PrincipalComponentsModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("Principal Components Model", classOf[PrincipalComponentsScoreModel].getName, classOf[PrincipalComponentsModelReaderPlugin].getName, Map())
   }
 
   /**

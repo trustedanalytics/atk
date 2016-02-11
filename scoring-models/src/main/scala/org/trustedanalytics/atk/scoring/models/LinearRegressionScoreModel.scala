@@ -43,8 +43,7 @@ class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, l
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("Linear Regression Model", classOf[LinearRegressionModel].getName, classOf[LinearRegressionModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("Linear Regression Model", classOf[LinearRegressionModel].getName, classOf[LinearRegressionModelReaderPlugin].getName, Map())
   }
 
   /**

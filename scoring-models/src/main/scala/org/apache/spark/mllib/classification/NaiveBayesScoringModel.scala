@@ -42,8 +42,7 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("Naive Bayes Model", classOf[NaiveBayesScoringModel].getName, classOf[NaiveBayesReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("Naive Bayes Model", classOf[NaiveBayesScoringModel].getName, classOf[NaiveBayesReaderPlugin].getName, Map())
   }
 
   /**

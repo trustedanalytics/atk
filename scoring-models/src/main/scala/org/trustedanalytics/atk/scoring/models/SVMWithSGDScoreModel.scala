@@ -40,8 +40,7 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("SVM with SGD Model", classOf[SVMWithSGDScoreModel].getName, classOf[SVMWithSGDModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("SVM with SGD Model", classOf[SVMWithSGDScoreModel].getName, classOf[SVMWithSGDModelReaderPlugin].getName, Map())
   }
 
   override def output(): Array[Field] = {

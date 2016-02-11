@@ -93,8 +93,18 @@ class ScoringServiceJsonProtocol(model: Model) {
       }
     }
 
-    //don't need this method. just there to satisfy the API.
-    override def read(json: JsValue): Any = ???
+    override def read(json: JsValue): Any = {
+      json match {
+        case JsNumber(n) if n.isValidInt => n.intValue()
+        case JsNumber(n) if n.isValidLong => n.longValue()
+        case JsNumber(n) if n.isValidFloat => n.floatValue()
+        case JsNumber(n) => n.doubleValue()
+        case JsBoolean(b) => b
+        case JsString(s) => s
+        case JsArray(v) => v.map(x => read(x)).toList
+        case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
+      }
+    }
   }
 
   implicit object DataOutputFormat extends JsonFormat[Array[Any]] {
@@ -153,9 +163,6 @@ class ScoringServiceJsonProtocol(model: Model) {
   def decodeJValue(v: JsValue): Any = {
     v match {
       case JsString(s) => s
-      case JsNumber(n) if n.isValidInt => n.intValue()
-      case JsNumber(n) if n.isValidLong => n.longValue()
-      case JsNumber(n) if n.isValidFloat => n.floatValue()
       case JsNumber(n) => n.toDouble
       case JsArray(items) => for (item <- items) yield decodeJValue(item)
       case JsNull => null

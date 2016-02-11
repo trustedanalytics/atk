@@ -61,8 +61,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
   }
 
   override def modelMetadata(): ModelMetaData = {
-    //TODO: get the created date from Publish
-    new ModelMetaData("LibSvm Model", classOf[LibSvmModel].getName, classOf[LibSvmModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
+    new ModelMetaData("LibSvm Model", classOf[LibSvmModel].getName, classOf[LibSvmModelReaderPlugin].getName, Map())
   }
 
   /**
