@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.tree.model.RandomForestModel
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
 
 /**
  * Scoring model for MLLib's RandomForest
@@ -46,9 +46,9 @@ class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorDat
     input
   }
 
-  override def modelMetadata(): Map[String, String] = {
+  override def modelMetadata(): ModelMetaData = {
     //TODO: get the created date from Publish
-    Map("Model Type" -> "Random Forest Regressor Model", "Class Name" -> classOf[RandomForestRegressorScoreModel].getName, "Model Reader" -> classOf[RandomForestRegressorModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
+    new ModelMetaData("Random Forest Regressor Model", classOf[RandomForestRegressorScoreModel].getName, classOf[RandomForestRegressorModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
   }
 
   /**

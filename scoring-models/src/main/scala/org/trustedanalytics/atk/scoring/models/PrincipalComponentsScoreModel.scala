@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import breeze.linalg
 import org.apache.spark.mllib.linalg._
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
 import scala.concurrent.ExecutionContext.Implicits.global
 //import scala.collection.mutable.Map
 import scala.concurrent._
@@ -56,9 +56,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     new DenseMatrix(1, inputVector.size, inputVector.toArray).multiply(pcaModel.vFactor.asInstanceOf[DenseMatrix])
   }
 
-  override def modelMetadata(): Map[String, String] = {
+  override def modelMetadata(): ModelMetaData = {
     //TODO: get the created date from Publish
-    Map("Model Type" -> "Principal Components Model", "Class Name" -> classOf[PrincipalComponentsScoreModel].getName, "Model Reader" -> classOf[PrincipalComponentsModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
+    new ModelMetaData("Principal Components Model", classOf[PrincipalComponentsScoreModel].getName, classOf[PrincipalComponentsModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
   }
 
   /**

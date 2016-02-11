@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import spray.json._
@@ -45,9 +45,9 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
     input
   }
 
-  override def modelMetadata(): Map[String, String] = {
+  override def modelMetadata(): ModelMetaData = {
     //TODO: get the created date from Publish
-    Map("Model Type" -> "Lda Model", "Class Name" -> classOf[LdaScoreModel].getName, "Model Reader" -> classOf[LdaModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
+    new ModelMetaData("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
   }
 
   /**

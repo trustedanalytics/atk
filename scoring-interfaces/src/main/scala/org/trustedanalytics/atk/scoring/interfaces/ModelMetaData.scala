@@ -16,21 +16,18 @@
 
 package org.trustedanalytics.atk.scoring.interfaces
 
-import scala.concurrent.Future
+import org.apache.commons.lang3.StringUtils
+
 /**
- * Base interface for a Model loader.
+ * For providing the model details
+ * @param modelType type of model
+ * @param modelClass class of the model
+ * @param modelReader reader class of the model
+ * @param metaData Map for providing any other customized information about the model such as creation date etc.
  */
-trait Model {
-
-  /**
-   * Called for scoring
-   */
-  def score(row: Array[Any]): Array[Any]
-
-  def input(): Array[Field]
-
-  def output(): Array[Field]
-
-  def modelMetadata(): ModelMetaData
+case class ModelMetaData(modelType: String, modelClass: String, modelReader: String, metaData: Map[String, String]) {
+  require(StringUtils.isNotEmpty(modelType), "published model type should not be empty")
+  require(StringUtils.isNotEmpty(modelClass), "published model classs should not be empty")
+  require(StringUtils.isNotEmpty(modelReader), "published model reader should not be empty")
 }
 

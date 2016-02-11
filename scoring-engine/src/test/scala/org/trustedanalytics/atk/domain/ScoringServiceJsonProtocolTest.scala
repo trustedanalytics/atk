@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.scoring.ScoringServiceJsonProtocol
 import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
-import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Field, Model }
 
 class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
   val model = new Model {
@@ -28,8 +28,8 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       Array(Field("col1", "Double"), Field("col2", "Double"), Field("col3", "double"))
     }
 
-    override def modelMetadata(): Map[String, String] = {
-      Map("Model Type" -> "Dummy Model", "Class Name" -> "Model Class", "Model Reader" -> "Model Reader", "Created On" -> "Jan 29th 2016")
+    override def modelMetadata(): ModelMetaData = {
+      new ModelMetaData("Dummy Model", "Dummy Class", "Dummy Reader", Map("Created_On" -> "Jan 29th 2016"))
     }
 
     override def output(): Array[Field] = ???
@@ -68,7 +68,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{\"Model Details\":[{\"Model Type\":\"Dummy Model\"},{\"Class Name\":\"Model Class\"},{\"Model Reader\":\"Model Reader\"},{\"Created On\":\"Jan 29th 2016\"}],\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"Model Details\":{\"model_type\":\"Dummy Model\",\"model_class\":\"Dummy Class\",\"model_reader\":\"Dummy Reader\",\"custom_values\":{\"Created_On\":\"Jan 29th 2016\"}},\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
   }

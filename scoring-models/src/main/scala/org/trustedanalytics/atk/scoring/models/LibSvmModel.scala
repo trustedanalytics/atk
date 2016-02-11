@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.util.StringTokenizer
 
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
 import libsvm.{ svm, svm_node, svm_model }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,9 +60,9 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     Integer.parseInt(s)
   }
 
-  override def modelMetadata(): Map[String, String] = {
+  override def modelMetadata(): ModelMetaData = {
     //TODO: get the created date from Publish
-    Map("Model Type" -> "LibSvm Model", "Class Name" -> classOf[LibSvmModel].getName, "Model Reader" -> classOf[LibSvmModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
+    new ModelMetaData("LibSvm Model", classOf[LibSvmModel].getName, classOf[LibSvmModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
   }
 
   /**

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 import org.apache.spark.mllib.classification.SVMModel
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ModelMetaData, Model, Field}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -39,9 +39,9 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
     input
   }
 
-  override def modelMetadata(): Map[String, String] = {
+  override def modelMetadata(): ModelMetaData = {
     //TODO: get the created date from Publish
-    Map("Model Type" -> "SVM with SGD Model", "Class Name" -> classOf[SVMWithSGDScoreModel].getName, "Model Reader" -> classOf[SVMWithSGDModelReaderPlugin].getName, "Created On" -> "Jan 29th 2016")
+    new ModelMetaData("SVM with SGD Model", classOf[SVMWithSGDScoreModel].getName, classOf[SVMWithSGDModelReaderPlugin].getName, Map("Created_On" -> "Jan 29th 2016"))
   }
 
   override def output(): Array[Field] = {

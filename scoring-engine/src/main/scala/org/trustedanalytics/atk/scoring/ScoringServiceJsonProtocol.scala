@@ -22,9 +22,21 @@ import spray.json.DefaultJsonProtocol._
 import spray.json._
 import scala.collection.immutable.Map
 import scala.collection.mutable.ArrayBuffer
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
 
 class ScoringServiceJsonProtocol(model: Model) {
+
+  implicit object ModelMetaDataFormat extends JsonFormat[ModelMetaData] {
+    override def write(obj: ModelMetaData): JsValue = {
+      JsObject(
+        "model_type" -> JsString(obj.modelType),
+        "model_class" -> JsString(obj.modelClass),
+        "model_reader" -> JsString(obj.modelReader),
+        "custom_values" -> obj.metaData.toJson)
+    }
+
+    override def read(json: JsValue): ModelMetaData = ???
+  }
 
   implicit object FieldFormat extends JsonFormat[Field] {
     override def write(obj: Field): JsValue = {
@@ -136,25 +148,16 @@ class ScoringServiceJsonProtocol(model: Model) {
       }
     }
 
-    override def read(json: JsValue): Any = {
-      json match {
-        case JsNumber(n) if n.isValidInt => n.intValue()
-        case JsNumber(n) if n.isValidLong => n.longValue()
-        case JsNumber(n) if n.isValidFloat => n.floatValue()
-        case JsNumber(n) => n.doubleValue()
-        case JsBoolean(b) => b
-        case JsString(s) => s
-        case JsArray(v) => v.map(x => read(x)).toList
-        case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
-      }
-    }
+    //don't need this method. just there to satisfy the API.
+    override def read(json: JsValue): Any = ???
   }
 
   implicit object DataOutputFormat extends JsonFormat[Array[Any]] {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
+      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
+      JsObject("Model Details" -> modelMetadata.toJson,
         "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
         "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
