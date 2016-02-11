@@ -69,7 +69,7 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD
-    val sample = exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.getOrElse(','), arguments.count, arguments.offset)
+    val sample = exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.charAt(0), arguments.count, arguments.offset)
 
     val artifactPath = new Path(s"${fileStorage.hdfs.getHomeDirectory()}/${arguments.folderName}")
     ExportMetadata(artifactPath.toString, "all", "csv", frame.rowCount, sample,
@@ -86,13 +86,10 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
     frameRdd: FrameRdd,
     filename: String,
     separator: Char,
-    count: Option[Int] = None,
-    offset: Option[Int] = None) = {
+    count: Int,
+    offset: Int) = {
 
-    val recCount = count.getOrElse(-1)
-    val recOffset = offset.getOrElse(0)
-
-    val filterRdd = if (recCount > 0) MiscFrameFunctions.getPagedRdd(frameRdd, recOffset, recCount, -1) else frameRdd
+    val filterRdd = if (count > 0) MiscFrameFunctions.getPagedRdd(frameRdd, offset, count, -1) else frameRdd
     val headers = frameRdd.frameSchema.columnNames.mkString(separator.toString)
     val csvFormat = CSVFormat.RFC4180.withDelimiter(separator)
 
