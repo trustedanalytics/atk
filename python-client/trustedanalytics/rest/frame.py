@@ -565,15 +565,6 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         if n == 0:
             return TakeResult([], frame.schema)
 
-        # Limit the number of items returned by take or inspect to 10000. Returning large number of items
-        # ends up causing timeouts due to network issues
-        max_rows = 10000
-        if n > max_rows:
-            msg = "truncating to %d rows" % max_rows
-            logger.warning(msg)
-            print "warn: %s" % msg
-            n = max_rows
-
         result = get_take_result()
 
         schema = FrameSchema.from_strings_to_types(result.schema)
