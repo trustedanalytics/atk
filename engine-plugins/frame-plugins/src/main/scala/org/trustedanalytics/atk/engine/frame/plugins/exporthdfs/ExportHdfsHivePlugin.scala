@@ -31,8 +31,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Export a frame to hive table
  */
-@PluginDoc(oneLine = "Write current frame to Hive table.",
-  extended = """Table must not exist in Hive.
+@PluginDoc(oneLine = "Write  current frame to Hive table.",
+  extended = """Table must not exist in Hive. Hive does not support case sensitive table names and columns names. Hence column names with uppercase letters will be converted to lower case by Hive.
 Export of Vectors is not currently supported.""")
 class ExportHdfsHivePlugin extends SparkCommandPlugin[ExportHdfsHiveArgs, UnitReturn] {
 
