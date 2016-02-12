@@ -90,7 +90,7 @@ trait EngineConfig extends EventLogging {
   /**
    *  Max time in minutes for a task to complete before aborting (also the frequency of the YarnJobMonitor check)
    */
-  val yarnMonitorTaskTimeout: Long = config.getDuration("trustedanalytics.atk.engine.yarn-monitor-task-timeout", TimeUnit.MINUTES)
+  val yarnMonitorTaskTimeout: Long = config.getLong("trustedanalytics.atk.engine.yarn-monitor-task-timeout")
 
   /**
    * true to re-use a SparkContext, this can be helpful for automated integration tests, not for customers.

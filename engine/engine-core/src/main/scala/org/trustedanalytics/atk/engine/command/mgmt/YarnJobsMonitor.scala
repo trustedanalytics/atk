@@ -35,7 +35,7 @@ class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends R
       engine.getCommandsNotComplete().foreach { command =>
         engine.getCommandJobContext(command) match {
           case Some(context) => if (hasStaleContext(context)) {
-            engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes"))
+            engine.cancelCommand(command.id, Some(s" by ATK context monitor due to timeout.  The job context ${context.clientId} has not provided an update for more than $timeoutMinutes minutes.  This may indicate that a task is running for a very long time.  Try increasing the 'trustedanalytics.atk.engine.yarn-monitor-task-timeout' config setting."))
           }
           case None => ; // there is no know YARN job to shutdown (command remains not complete, but this is not the responsibility of a YARN jobs monitor
         }
