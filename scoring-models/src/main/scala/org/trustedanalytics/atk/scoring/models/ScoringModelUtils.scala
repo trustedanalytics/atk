@@ -14,23 +14,25 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.interfaces
+package org.trustedanalytics.atk.scoring.models
 
-import scala.concurrent.Future
-/**
- * Base interface for a Model loader.
- */
-trait Model {
-
+object ScoringModelUtils {
   /**
-   * Called for scoring
+   * Attempt to cast Any type to Double
+   *
+   * @param value input Any type to be cast
+   * @return value cast as Double, if possible
    */
-  def score(row: Array[Any]): Array[Any]
-
-  def input(): Array[Field]
-
-  def output(): Array[Field]
-
-  def modelMetadata(): ModelMetaDataArgs
+  def toDouble(value: Any): Double = {
+    value match {
+      case null => throw new IllegalArgumentException("null cannot be converted to Double")
+      case i: Int => i.toDouble
+      case l: Long => l.toDouble
+      case f: Float => f.toDouble
+      case d: Double => d
+      case bd: BigDecimal => bd.toDouble
+      case s: String => s.trim().toDouble
+      case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
+    }
+  }
 }
-

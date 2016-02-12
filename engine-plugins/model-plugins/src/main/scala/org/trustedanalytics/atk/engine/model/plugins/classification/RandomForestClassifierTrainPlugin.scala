@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ApiMaturityTag, Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.scoring.models.RandomForestClassifierData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
