@@ -16,22 +16,28 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
+import com.cloudera.sparkts.AutoregressionX
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.{ Vectors, DenseVector }
+//import org.apache.spark.mllib.linalg.{ Vectors, DenseVector }
 import org.apache.spark.rdd.RDD
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
-import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXTrainPlugin
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
+
+// ARX example
+import org.apache.commons.math3.random.MersenneTwister
+import breeze.linalg._
+import com.cloudera.sparkts
 
 class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {
 
   "ARXTrainArgs" should "be created with valid arguments" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
+    val keyCol = "key"
     val timeseriesCol = "values"
     val xColumns = List("temperature", "humidity")
 
@@ -42,6 +48,7 @@ class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
   it should "throw an exception when the time series column name is empty or null" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
+    val keyCol = "key"
     val xColumns = List("temperature", "humidity")
 
     intercept[IllegalArgumentException] {
@@ -56,6 +63,7 @@ class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
   it should "thrown an exception when the exogenous value column list is empty or null" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
+    val keyCol = "key"
     val timeseriesCol = "values"
     val xColumns = List()
 
@@ -69,27 +77,57 @@ class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
   }
 
   "ARXTrainPlugin" should "verifyVectorColumn() with valid arguments and return the vector length" in {
-    val rows = sparkContext.parallelize((1 to 10).map(i => Array(i.toString, Array(5.0, 1.0), Array(2.0, 3.5))))
+
     val schema = FrameSchema(List(Column("name", DataTypes.string), Column("timeseries", DataTypes.vector(2)), Column("x", DataTypes.vector(2))))
-    val rdd = FrameRdd.toFrameRdd(schema, rows.asInstanceOf[RDD[Array[Any]]])
 
-    assertResult(2) { ARXTrainPlugin.verifyVectorColumn(rdd, "timeseries", "timeseriesColumn") }
+    assertResult(2) { ARXFunctions.verifyVectorColumn(schema, "timeseries") }
 
-    assertResult(2) { ARXTrainPlugin.verifyVectorColumn(rdd, "x", "xColumn") }
+    assertResult(2) { ARXFunctions.verifyVectorColumn(schema, "x") }
   }
 
   it should "throw an exception from verifyVectorColumns() if the column specified is not a vector" in {
-    val rows = sparkContext.parallelize((1 to 10).map(i => Array(i.toString, Array(5.0, 1.0), Array(2.0, 3.5))))
     val schema = FrameSchema(List(Column("name", DataTypes.string), Column("timeseries", DataTypes.vector(2)), Column("x", DataTypes.vector(2))))
-    val rdd = FrameRdd.toFrameRdd(schema, rows.asInstanceOf[RDD[Array[Any]]])
 
     intercept[IllegalArgumentException] {
-      ARXTrainPlugin.verifyVectorColumn(rdd, "bogusColumnName", "bogusColumn")
+      ARXFunctions.verifyVectorColumn(schema, "bogusColumnName")
     }
 
     intercept[IllegalArgumentException] {
-      ARXTrainPlugin.verifyVectorColumn(rdd, "name", "nameColumm")
+      ARXFunctions.verifyVectorColumn(schema, "name")
+    }
+  }
+
+  val rand = new MersenneTwister(10L)
+  val nRows = 50
+  val nCols = 2
+  val X = Array.fill(nRows, nCols)(rand.nextGaussian())
+  val intercept = rand.nextGaussian * 10
+
+  "ARXModel" should "fit model" in {
+    val xCoeffs = Array(0.8, 0.2)
+    val rawY = X.map(_.zip(xCoeffs).map { case (b, v) => b * v }.sum + intercept)
+    val arCoeff = 0.4
+    val y = rawY.scanLeft(0.0) { case (priorY, currY) => currY + priorY * arCoeff }.tail
+    val dy = new DenseVector(y)
+    val dx = new DenseMatrix(rows = X.length, cols = X.head.length, data = X.transpose.flatten)
+    //    val xArray = Array.ofDim[Double](2, 5)
+    //    xArray(0) = Array(1.0, 2.0, 1.0, 1.0, 2.0)
+    //    xArray(1) = Array(5.0, 5.5, 4.0, 5.5, 5.0)
+    //    val yArray = Array(10.0, 11.0, 12.0, 15.0, 10.0)
+    //    val dy = new DenseVector(yArray)
+    //    val dx = new DenseMatrix(rows = xArray.length, cols = xArray.head.length, data = xArray.transpose.flatten)
+    val model = AutoregressionX.fitModel(dy, dx, 1, 0)
+    val combinedCoeffs = Array(arCoeff) ++ xCoeffs
+
+    model.c should be(intercept +- 1e-4)
+    for (i <- combinedCoeffs.indices) {
+      model.coefficients(i) should be(combinedCoeffs(i) +- 1e-4)
+    }
+
+    it should "fit the model " in {
+
     }
   }
 
 }
+

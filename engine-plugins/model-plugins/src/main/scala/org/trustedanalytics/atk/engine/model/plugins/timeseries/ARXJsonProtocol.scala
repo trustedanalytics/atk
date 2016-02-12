@@ -63,7 +63,7 @@ object ARXJsonProtocol {
     }
   }
 
-  implicit val arxPredictArgsFormat = jsonFormat3(ARXPredictArgs)
+  implicit val arxPredictArgsFormat = jsonFormat4(ARXPredictArgs)
   implicit val arxTrainArgsFormat = jsonFormat7(ARXTrainArgs)
   implicit val arxTrainReturnFormat = jsonFormat2(ARXTrainReturn)
   implicit val arxDataFormat = jsonFormat1(ARXData)

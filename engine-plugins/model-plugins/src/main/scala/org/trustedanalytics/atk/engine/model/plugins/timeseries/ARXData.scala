@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param arxModel Trained ARX Model object
+ * @param arxModel Trained ARXModel
  */
 case class ARXData(arxModel: ARXModel) {
   require(arxModel != null, "arxModel must not be null")

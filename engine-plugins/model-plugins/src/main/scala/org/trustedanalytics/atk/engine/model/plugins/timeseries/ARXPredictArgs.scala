@@ -32,11 +32,12 @@ case class ARXPredictArgs(model: ModelReference,
                           @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
-                          @ArgDoc("""Column(s) containing the observations
-whose clusters are to be predicted.
-Default is to predict the clusters over columns the ARX model was trained on.
-The columns are scaled using the same values used when training the
-model.""") observationColumns: Option[List[String]]) {
+                          /*@ArgDoc("""Name of the column that contains the key.""") keyColumn: String,*/
+                          @ArgDoc("""Name of the column that contains the time series values.""") timeseriesColumn: String,
+                          @ArgDoc("""Names of the column(s) that contain the values of previous exogenous regressors.""") xColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
+  //require(keyColumn != null && keyColumn.nonEmpty, "keyColumn must not be null nor empty")
+  require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be null nor empty")
+  require(xColumns != null && xColumns.nonEmpty, "Must provide at least one x column.")
 }

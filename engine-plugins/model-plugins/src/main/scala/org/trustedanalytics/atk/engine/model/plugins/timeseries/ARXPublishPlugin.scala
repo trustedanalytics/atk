@@ -16,29 +16,33 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
-import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.Column
-import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes }
-import org.trustedanalytics.atk.domain.schema.DataTypes._
-import org.trustedanalytics.atk.engine.frame.SparkFrame
+import com.google.common.base.Charsets
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import MLLibJsonProtocol._
+import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
-import org.apache.spark.frame.FrameRdd
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.linalg.Vectors
+import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
+import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.domain.StringValue
+import org.apache.hadoop.fs.Path
+// Implicits needed for JSON conversion
 import spray.json._
+import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import com.cloudera.sparkts.ARXModel
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
+import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 
-import scala.collection.mutable.ListBuffer
-
-@PluginDoc(oneLine = "TBD",
-  extended = "TBD",
-  returns = """Frame""")
-class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference] {
+/**
+ * Publish a ARX Model for scoring
+ */
+@PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
+  extended =
+    """The publish method exports the ARX Model and its implementation into a tar file. The tar file is then published
+on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+This model can then be used to predict the cluster assignment of an observation.""",
+  returns = """Returns the HDFS path to the trained model's tar file""")
+class ARXPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -46,7 +50,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:arx/predict"
+  override def name: String = "model:arx/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
@@ -61,7 +65,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: ARXPredictArgs)(implicit invocation: Invocation) = 1
+  override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -72,29 +76,17 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ARXPredictArgs)(implicit invocation: Invocation): FrameReference = {
-    val frame: SparkFrame = arguments.frame
+  override def execute(arguments: ModelPublishArgs)(implicit invocation: Invocation): ExportMetadata = {
+
     val model: Model = arguments.model
 
-    //Extracting the ARXModel from the stored JsObject
+    //Extracting the ARX Model from the stored JsObject
     val arxData = model.data.convertTo[ARXData]
     val arxModel = arxData.arxModel
+    val jsvalue: JsValue = arxModel.toJson
 
-    val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
-    val predictions = arxModel.predict(yVector, xMatrix).toArray
-    val predictColumn = Column("predicted_y", DataTypes.float64)
+    val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin")
 
-    var i = 0
-    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
-      val predictedY = predictions(i)
-      i += 1
-      predictedY
-    })
-
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARXModel predict command"))) {
-      newFrame => newFrame.save(predictFrame)
-    }
-
+    ExportMetadata(modelartifacts.filePath, "model", "tar", modelartifacts.fileSize, model.name.getOrElse("arx_model"))
   }
-
 }

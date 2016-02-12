@@ -19,11 +19,13 @@ package org.trustedanalytics.atk.engine.model.plugins.timeseries
 //Implicits needed for JSON conversion
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
+import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.linalg.Matrices
 import breeze.linalg._
@@ -32,12 +34,12 @@ import org.apache.spark.SparkContext._
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
-import com.cloudera.sparkts.{ ARXModel, AutoregressionX }
+import com.cloudera.sparkts.{ ARXModel, AutoregressionX, Autoregression }
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
-import scala.collection.mutable.WrappedArray
+import scala.collection.mutable.ArrayBuffer
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
-  extended = "Creating a AutoregressionX (ARX) Model Model using the observation columns.",
+  extended = "Creating a AutoregressionX (ARX) Model using the observation columns.",
   returns = """dictionary
     A dictionary with trained ARX model with the following keys\:
 'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
@@ -76,122 +78,34 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
    */
   override def execute(arguments: ARXTrainArgs)(implicit invocation: Invocation): ARXTrainReturn = {
     val frame: SparkFrame = arguments.frame
-
+    val model = arguments.model
     val trainFrameRdd = frame.rdd
-    val timeseriesColumn = arguments.timeseriesColumn
-    val xColumns = arguments.xColumns
-    var timeseriesLength: Long = 0 // vector length for timeseries column
-
-    warn("ARX Train Plugin:  IN")
-    timeseriesLength = ARXTrainPlugin.verifyVectorColumn(trainFrameRdd, timeseriesColumn, "timeseriesColumn")
-
-    for (xColumn <- xColumns) {
-      val xColumnVectorLength = ARXTrainPlugin.verifyVectorColumn(trainFrameRdd, xColumn, "xColumns")
-
-      if (xColumnVectorLength != timeseriesLength)
-        throw new IllegalArgumentException(s"xColumn named $xColumn vector must be the same length as the time series vector.")
-    }
 
     trainFrameRdd.cache()
 
-    val timeseriesColIndex = trainFrameRdd.frameSchema.columnIndex(timeseriesColumn)
-    var str: String = "timeseries lengths (column index: " + timeseriesColIndex.toString + ", count: " + trainFrameRdd.count().toString + "): "
+    var arxModels = List[ARXModel]()
+    val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, arguments.timeseriesColumn, arguments.xColumns)
 
-    str += "... \n"
-
-    str += "xColumns (" + xColumns.size.toString + ") : "
-
-    for (xCol <- xColumns) {
-      str += xCol + ", "
-    }
-
-    str += "\n"
-
-    for (row <- trainFrameRdd.collect()) {
-      val tsVector = new DenseVector(row.get(timeseriesColIndex).asInstanceOf[WrappedArray[Double]].toArray)
-      val xMatrix = new DenseMatrix(rows = xColumns.size, cols = timeseriesLength.toInt)
-
-      var colIndex = 0
-      var rowIndex = 0
-
-      for (rowIndex <- 0 until xColumns.size) {
-        val xSchemaIndex = trainFrameRdd.frameSchema.columnIndex(xColumns(rowIndex))
-        str += "\n" + xColumns(rowIndex).toString + " column Index: " + xSchemaIndex.toString + ", "
-
-        for (colIndex <- 0 until timeseriesLength.toInt) {
-          str += row.getString(colIndex).toString + ", "
-          //xMatrix.(rowIndex, colIndex) = row.getDouble(colIndex)
-        }
-
-        str += "\n"
-      }
-    }
-
-    val testc = 5.0
-    val testcoefficients = new Array[Double](1)
-
-    throw new RuntimeException(str)
-
-    ARXTrainReturn(testc, testcoefficients)
-
-    /*
-    val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
-    val kmeansModel = kMeans.run(vectorRDD)
-    val size = KMeansTrainPlugin.computeClusterSize(kmeansModel, trainFrameRdd, arguments.observationColumns, arguments.columnScalings)
-    val withinSetSumOfSquaredError = kmeansModel.computeCost(vectorRDD)
-    trainFrameRdd.unpersist()
-
-    //Writing the kmeansModel as JSON
-    val jsonModel = new KMeansData(kmeansModel, arguments.observationColumns, arguments.columnScalings)
-    val model: Model = arguments.model
+    val arxModel = AutoregressionX.fitModel(yVector, xMatrix, arguments.yMaxLag, arguments.xMaxLag, true, arguments.noIntercept)
+    val jsonModel = new ARXData(arxModel)
     model.data = jsonModel.toJson.asJsObject
 
-    KMeansTrainReturn(size, withinSetSumOfSquaredError)*/
+    return ARXTrainReturn(arxModel.c, arxModel.coefficients)
+
+    /*
+    for (row <- trainFrameRdd.collect()) {
+      val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, trainFrameRdd.frameSchema, timeseriesColumn, xColumns)
+
+      val arxModel = AutoregressionX.fitModel(yVector, xMatrix, arguments.yMaxLag, arguments.xMaxLang, true, arguments.noIntercept)
+      val jsonModel = new ARXData(arxModel)
+      model.data = jsonModel.toJson.asJsObject
+      //val key = row.getString(trainFrameRdd.frameSchema.columnIndex(keyColumn))
+      //arxModels ::= arxModel
+      //keys ::= key
+    }*/
+
+    //val jsonModel = new ARXData(keys, arxModels)
+    //model.data = jsonModel.toJson.asJsObject
   }
 
-  def arxTrainFormatter(frameRdd: FrameRdd, timeseriesColumn: String, xColumn: String): Unit = {
-    frameRdd.map(row => columnFormatterForTrain(row.toSeq.toArray.zipWithIndex)).collect()
-
-    for (row <- frameRdd.collect()) {
-      val rowSeq = row.toSeq
-    }
-  }
-
-  private def columnFormatterForTrain(valueIndexPairArray: Array[(Any, Int)]): String = {
-    val result = for {
-      i <- valueIndexPairArray
-      value = i._1
-      index = i._2
-      if index != 0 && value != 0
-    } yield s"$index:$value"
-    s"${valueIndexPairArray(0)._1} ${result.mkString(" ")}"
-  }
-}
-
-object ARXTrainPlugin {
-  /**
-   * Checks the frame's schema to verify that the specified column exists and is a vector.
-   * @param frameRdd  Frame to check
-   * @param columnName  Name of the vector column to check
-   * @param parameterName  Name of the column parameter - just used in the exception message to
-   *                       make it more clear to the user which parameter is invalid (i.e. "timeseriesColumn")
-   * @return The length of the specified vector column
-   */
-  def verifyVectorColumn(frameRdd: FrameRdd, columnName: String, parameterName: String): Long = {
-    var vectorLength: Long = 0
-
-    if (frameRdd.frameSchema.hasColumn(columnName) == false) {
-      // Column does not exist
-      throw new IllegalArgumentException(s"$parameterName column named $columnName does not exist in the frame's schema.")
-    }
-    else {
-      // Verify that it's a vector column
-      frameRdd.frameSchema.columnDataType(columnName) match {
-        case DataTypes.vector(length) => vectorLength = length
-        case _ => throw new IllegalArgumentException(s"$parameterName column $columnName must be a vector.")
-      }
-    }
-
-    return vectorLength
-  }
 }
