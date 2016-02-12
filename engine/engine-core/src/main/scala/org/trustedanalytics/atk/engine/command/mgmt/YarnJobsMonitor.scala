@@ -18,17 +18,19 @@ package org.trustedanalytics.atk.engine.command.mgmt
 import java.util.concurrent.TimeUnit
 
 import org.trustedanalytics.atk.domain.jobcontext.JobContext
-import org.trustedanalytics.atk.engine.Engine
+import org.trustedanalytics.atk.engine.{ EngineConfig, Engine }
 import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
  * Runs in the REST server to monitor YARN jobs that should be actively running commands
  */
-class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends Runnable {
+class YarnJobsMonitor(engine: Engine)(implicit invocation: Invocation) extends Runnable with EventLogging {
 
-  private val timeoutMinutes: Long = 5
+  lazy val timeoutMinutes: Long = EngineConfig.yarnMonitorTaskTimeout
 
   def run(): Unit = {
+    info(s"YarnJobsMonitor started.  Task timeout is $timeoutMinutes minutes.")
     while (true) {
       engine.getCommandsNotComplete().foreach { command =>
         engine.getCommandJobContext(command) match {
