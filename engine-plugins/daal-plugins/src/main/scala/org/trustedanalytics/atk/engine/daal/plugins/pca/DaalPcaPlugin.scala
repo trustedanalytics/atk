@@ -39,10 +39,10 @@ case class DaalPcaArgs(frame: FrameReference,
                            | svd - singular value decomposition.
                          """) method: String = "cor") {
   require(frame != null, "frame is required")
-  require(columnNames != null && !columnNames.isEmpty, "column names should not be empty")
+  require(columnNames != null && columnNames.nonEmpty, "column names should not be empty")
   require(method == "cor" || method == "svd", "method must be 'svd' or 'cor'")
 
-  def getPcaMethod(): Method = method match {
+  def getPcaMethod(): Method = method.toLowerCase match {
     case "svd" => Method.svdDense
     case "cor" => Method.correlationDense
     case _ => throw new IllegalArgumentException(s"Unsupported PCA method: ${method}")

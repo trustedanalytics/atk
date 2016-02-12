@@ -48,12 +48,12 @@ case class DaalLinearRegressionArgs(model: ModelReference,
                                     @ArgDoc("""A frame to train or test the model on.""") frame: FrameReference,
                                     @ArgDoc("""List of column(s) containing the
 observations.""") featureColumns: List[String],
-                                    @ArgDoc("""Column name containing the label
+                                    @ArgDoc("""List of column(s) containing the label
 for each observation.""") labelColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  require(featureColumns != null && !featureColumns.isEmpty, "observationColumn must not be null nor empty")
-  require(labelColumns != null && !labelColumns.isEmpty, "labelColumn must not be null nor empty")
+  require(featureColumns != null && featureColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(labelColumns != null && labelColumns.nonEmpty, "labelColumn must not be null nor empty")
 }
 
 /**
