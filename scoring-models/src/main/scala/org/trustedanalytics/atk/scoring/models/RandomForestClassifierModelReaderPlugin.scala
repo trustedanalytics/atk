@@ -17,22 +17,22 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import ScoringJsonReaderWriters.KmeansDataFormat
+import ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.apache.spark.mllib.clustering.KMeansModel
+import org.apache.spark.mllib.tree.model._
 import spray.json._
+import DefaultJsonProtocol._
 
-class KMeansModelReaderPlugin() extends ModelLoader {
+class RandomForestClassifierModelReaderPlugin() extends ModelLoader {
 
-  private var myKMeansModel: KMeansScoreModel = _
+  private var rfModel: RandomForestClassifierScoreModel = _
 
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
+    println(str)
     val json: JsValue = str.parseJson
-    val kMeansData = json.convertTo[KMeansData]
-    val kMeansModel = kMeansData.kMeansModel
-    myKMeansModel = new KMeansScoreModel(kMeansModel, kMeansData)
-    myKMeansModel.asInstanceOf[Model]
-
+    val randomForestModelData = json.convertTo[RandomForestClassifierData]
+    rfModel = new RandomForestClassifierScoreModel(randomForestModelData)
+    rfModel.asInstanceOf[Model]
   }
 }

@@ -24,6 +24,7 @@ import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.scoring.models.SVMData
 
 //Implicits needed for JSON conversion
 import spray.json._
