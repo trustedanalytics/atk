@@ -16,7 +16,7 @@
 package org.apache.spark.mllib.classification
 
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import org.trustedanalytics.atk.scoring.models.{ NaiveBayesReaderPlugin, NaiveBayesData }
 
 class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
@@ -41,8 +41,8 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
     input
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("Naive Bayes Model", classOf[NaiveBayesScoringModel].getName, classOf[NaiveBayesReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Naive Bayes Model", classOf[NaiveBayesScoringModel].getName, classOf[NaiveBayesReaderPlugin].getName, Map())
   }
 
   /**

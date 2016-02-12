@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.scoring.ScoringServiceJsonProtocol
 import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Field, Model }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Field, Model }
 
 class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
   val model = new Model {
@@ -28,8 +28,8 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       Array(Field("col1", "Double"), Field("col2", "Double"), Field("col3", "double"))
     }
 
-    override def modelMetadata(): ModelMetaData = {
-      new ModelMetaData("Dummy Model", "Dummy Class", "Dummy Reader", Map("Created_On" -> "Jan 29th 2016"))
+    override def modelMetadata(): ModelMetaDataArgs = {
+      new ModelMetaDataArgs("Dummy Model", "Dummy Class", "Dummy Reader", Map("Created_On" -> "Jan 29th 2016"))
     }
 
     override def output(): Array[Field] = ???

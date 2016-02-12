@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 import org.apache.spark.mllib.classification.SVMModel
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
@@ -39,8 +39,8 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
     input
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("SVM with SGD Model", classOf[SVMWithSGDScoreModel].getName, classOf[SVMWithSGDModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("SVM with SGD Model", classOf[SVMWithSGDScoreModel].getName, classOf[SVMWithSGDModelReaderPlugin].getName, Map())
   }
 
   override def output(): Array[Field] = {

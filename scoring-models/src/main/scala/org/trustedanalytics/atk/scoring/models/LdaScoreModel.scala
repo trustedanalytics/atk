@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import spray.json._
@@ -45,8 +45,8 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
     input
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map())
   }
 
   /**

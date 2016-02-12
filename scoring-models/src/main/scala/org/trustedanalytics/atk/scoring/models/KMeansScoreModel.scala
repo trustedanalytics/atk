@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -41,8 +41,8 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
     input
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("KMeans Model", classOf[KMeansScoreModel].getName, classOf[KMeansModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("KMeans Model", classOf[KMeansScoreModel].getName, classOf[KMeansModelReaderPlugin].getName, Map())
   }
 
   /**

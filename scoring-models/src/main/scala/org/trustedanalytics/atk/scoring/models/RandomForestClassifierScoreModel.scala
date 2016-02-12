@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import org.apache.spark.mllib.tree.model.RandomForestModel
 import org.apache.spark.mllib.linalg.Vectors
 
@@ -46,8 +46,8 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
     input
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("Random Forest Classifier Model", classOf[RandomForestClassifierScoreModel].getName, classOf[RandomForestClassifierModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Random Forest Classifier Model", classOf[RandomForestClassifierScoreModel].getName, classOf[RandomForestClassifierModelReaderPlugin].getName, Map())
   }
 
   /**

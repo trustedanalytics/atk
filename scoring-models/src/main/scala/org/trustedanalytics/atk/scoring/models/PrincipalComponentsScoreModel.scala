@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import breeze.linalg
 import org.apache.spark.mllib.linalg._
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import scala.concurrent.ExecutionContext.Implicits.global
 //import scala.collection.mutable.Map
 import scala.concurrent._
@@ -56,8 +56,8 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     new DenseMatrix(1, inputVector.size, inputVector.toArray).multiply(pcaModel.vFactor.asInstanceOf[DenseMatrix])
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("Principal Components Model", classOf[PrincipalComponentsScoreModel].getName, classOf[PrincipalComponentsModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Principal Components Model", classOf[PrincipalComponentsScoreModel].getName, classOf[PrincipalComponentsModelReaderPlugin].getName, Map())
   }
 
   /**

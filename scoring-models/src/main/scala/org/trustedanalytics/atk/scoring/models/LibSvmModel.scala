@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.util.StringTokenizer
 
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaData, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import libsvm.{ svm, svm_node, svm_model }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,8 +60,8 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     Integer.parseInt(s)
   }
 
-  override def modelMetadata(): ModelMetaData = {
-    new ModelMetaData("LibSvm Model", classOf[LibSvmModel].getName, classOf[LibSvmModelReaderPlugin].getName, Map())
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("LibSvm Model", classOf[LibSvmModel].getName, classOf[LibSvmModelReaderPlugin].getName, Map())
   }
 
   /**
