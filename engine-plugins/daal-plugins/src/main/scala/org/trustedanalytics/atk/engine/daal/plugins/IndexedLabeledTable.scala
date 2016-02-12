@@ -13,14 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
-
-import com.intel.daal.data_management.data.NumericTable
-import org.apache.spark.frame.FrameRdd
+package org.trustedanalytics.atk.engine.daal.plugins
 
 /**
- * These implicits can be imported to add conversion functions related functions to DAAL tables
+ * Indexed numeric tables with features and corresponding labels
+ *
+ * @param features Numeric table with features
+ * @param labels Numeric table with labels
  */
-object DaalConversionImplicits {
-  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
-}
+case class IndexedLabeledTable(features: IndexedNumericTable, labels: IndexedNumericTable)

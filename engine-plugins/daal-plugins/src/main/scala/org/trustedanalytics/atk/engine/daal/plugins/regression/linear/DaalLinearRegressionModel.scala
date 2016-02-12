@@ -16,10 +16,21 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
-object DaalLinearRegressionModelDataFormat {
+/**
+ * DAAL linear regression model
+ *
+ * @param serializedModel Serialized linear regression model
+ * @param featureColumns List of feature column names
+ * @param labelColumns List of label column names
+ */
+case class DaalLinearRegressionModel(serializedModel: List[Byte],
+                                     featureColumns: List[String],
+                                     labelColumns: List[String])
+
+/**
+ * JSON serialization for model
+ */
+object DaalLinearRegressionModelFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val lrModelDataFormat = jsonFormat3(DaalLinearRegressionModelData)
+  implicit val lrModelDataFormat = jsonFormat3(DaalLinearRegressionModel)
 }
-case class DaalLinearRegressionModelData(serializedModel: List[Byte],
-                                         featureColumns: List[String],
-                                         labelColumns: List[String])
