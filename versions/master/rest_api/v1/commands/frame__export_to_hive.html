@@ -111,7 +111,7 @@
             
   <div class="section" id="commands-frame-export-to-hive">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> frame/export_to_hive<a class="headerlink" href="#commands-frame-export-to-hive" title="Permalink to this headline">¶</a></h1>
-<p>Write current frame to Hive table.</p>
+<p>Write  current frame to Hive table.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -155,7 +155,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Table must not exist in Hive.
+<p>Table must not exist in Hive. Hive does not support case sensitive table names and columns names. Hence column names with uppercase letters will be converted to lower case by Hive.
 Export of Vectors is not currently supported.</p>
 <div class="line-block">
 <div class="line"><br /></div>
@@ -223,7 +223,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Feb 10, 2016.
+      Last updated on Feb 12, 2016.
       </li>
     </ul>
     </div>

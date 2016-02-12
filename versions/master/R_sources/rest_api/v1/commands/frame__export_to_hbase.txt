@@ -54,7 +54,7 @@ Request
 
 
 
-    **family_name** : unicode (default=None)
+    **family_name** : unicode (default=familyColumn)
 
     ..
 

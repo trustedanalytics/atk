@@ -115,7 +115,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="export_to_json">
-<code class="descname">export_to_json</code><span class="sig-paren">(</span><em>self</em>, <em>folder_name</em>, <em>count=None</em>, <em>offset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_json" title="Permalink to this definition">¶</a></dt>
+<code class="descname">export_to_json</code><span class="sig-paren">(</span><em>self</em>, <em>folder_name</em>, <em>count=0</em>, <em>offset=0</em><span class="sig-paren">)</span><a class="headerlink" href="#export_to_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write current frame to HDFS in JSON format.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -126,12 +126,12 @@
 <div><p>The HDFS folder path where the files
 will be created.</p>
 </div></blockquote>
-<p><strong>count</strong> : int32 (default=None)</p>
+<p><strong>count</strong> : int32 (default=0)</p>
 <blockquote>
 <div><p>The number of records you want.
-Default, or a non-positive value, is the whole frame.</p>
+Default (0), or a non-positive value, is the whole frame.</p>
 </div></blockquote>
-<p><strong>offset</strong> : int32 (default=None)</p>
+<p><strong>offset</strong> : int32 (default=0)</p>
 <blockquote>
 <div><p>The number of rows to skip before exporting to the file.
 Default is zero (0).</p>
@@ -174,7 +174,7 @@ Default is zero (0).</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Feb 10, 2016.
+      Last updated on Feb 12, 2016.
       </li>
     </ul>
     </div>

@@ -187,7 +187,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/entropy <frame__entropy>`                                                           Calculate the Shannon entropy of a column.
 :doc:`frame/export_to_csv <frame__export_to_csv>`                                               Write current frame to HDFS in csv format.
 :doc:`frame/export_to_hbase <frame__export_to_hbase>`                                           Write current frame to HBase table.
-:doc:`frame/export_to_hive <frame__export_to_hive>`                                             Write current frame to Hive table.
+:doc:`frame/export_to_hive <frame__export_to_hive>`                                             Write  current frame to Hive table.
 :doc:`frame/export_to_jdbc <frame__export_to_jdbc>`                                             Write current frame to JDBC table.
 :doc:`frame/export_to_json <frame__export_to_json>`                                             Write current frame to HDFS in JSON format.
 :doc:`frame/flatten_columns <frame__flatten_columns>`                                           Spread data to multiple rows based on cell data.

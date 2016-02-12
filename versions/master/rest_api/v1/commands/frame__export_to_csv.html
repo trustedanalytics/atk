@@ -140,16 +140,17 @@
 <div><p>The HDFS folder path where the files
 will be created.</p>
 </div></blockquote>
-<p><strong>separator</strong> : None (default=None)</p>
+<p><strong>separator</strong> : unicode (default=,)</p>
 <blockquote>
-<div><p>&lt;Missing Description&gt;</p>
+<div><p>The separator for separating the values.
+Default is comma (,).</p>
 </div></blockquote>
-<p><strong>count</strong> : int32 (default=None)</p>
+<p><strong>count</strong> : int32 (default=-1)</p>
 <blockquote>
 <div><p>The number of records you want.
 Default, or a non-positive value, is the whole frame.</p>
 </div></blockquote>
-<p><strong>offset</strong> : int32 (default=None)</p>
+<p><strong>offset</strong> : int32 (default=0)</p>
 <blockquote class="last">
 <div><p>The number of rows to skip before exporting to the file.
 Default is zero (0).</p>
@@ -237,7 +238,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Feb 10, 2016.
+      Last updated on Feb 12, 2016.
       </li>
     </ul>
     </div>

@@ -34,7 +34,7 @@
 
         ..
 
-            Column name containing the label
+            List of column(s) containing the label
             for each observation.
 
 

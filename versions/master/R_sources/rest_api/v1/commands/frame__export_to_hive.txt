@@ -4,7 +4,7 @@
 :doc:`Commands <index>` frame/export_to_hive
 --------------------------------------------
 
-Write current frame to Hive table.
+Write  current frame to Hive table.
 
 POST /v1/commands/
 ==================
@@ -56,7 +56,7 @@ Request
 
 **Description**
 
-Table must not exist in Hive.
+Table must not exist in Hive. Hive does not support case sensitive table names and columns names. Hence column names with uppercase letters will be converted to lower case by Hive.
 Export of Vectors is not currently supported.
 
 |
