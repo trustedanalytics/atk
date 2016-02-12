@@ -16,23 +16,15 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.ScoringJsonReaderWriters
-import ScoringJsonReaderWriters.KmeansDataFormat
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.apache.spark.mllib.clustering.KMeansModel
-import spray.json._
+import org.apache.spark.mllib.tree.model.RandomForestModel
 
-class KMeansModelReaderPlugin() extends ModelLoader {
-
-  private var myKMeansModel: KMeansScoreModel = _
-
-  override def load(bytes: Array[Byte]): Model = {
-    val str = new String(bytes)
-    val json: JsValue = str.parseJson
-    val kMeansData = json.convertTo[KMeansData]
-    val kMeansModel = kMeansData.kMeansModel
-    myKMeansModel = new KMeansScoreModel(kMeansModel, kMeansData)
-    myKMeansModel.asInstanceOf[Model]
-
-  }
+/**
+ * Command for loading model data into existing model in the model database.
+ * @param randomForestModel Trained MLLib's LinearRegressionModel object
+ * @param observationColumns Handle to the observation columns of the data frame
+ * @param numClasses Number of classes of the data
+ */
+case class RandomForestClassifierData(randomForestModel: RandomForestModel, observationColumns: List[String], numClasses: Int) {
+  require(observationColumns != null && !observationColumns.isEmpty, "observationColumns must not be null nor empty")
+  require(randomForestModel != null, "randomForestModel must not be null")
 }

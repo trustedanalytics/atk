@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.clustering.{ KMeansModel, KMeans }
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.SparkContext._
+import org.trustedanalytics.atk.scoring.models.KMeansData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._

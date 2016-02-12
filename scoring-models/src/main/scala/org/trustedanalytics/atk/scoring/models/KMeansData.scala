@@ -14,16 +14,19 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.libsvm
+package org.trustedanalytics.atk.scoring.models
 
-import libsvm.{ svm_node, svm_parameter, svm_model }
+import org.apache.spark.mllib.clustering.KMeansModel
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param svmModel Trained libSVMModel object
+ * @param kMeansModel Trained MLLib's KMeansModel object
  * @param observationColumns Handle to the observation columns of the data frame
+ * @param columnScalings Handle to the weights for the observation columns of the data frame
  */
-case class LibSvmData(svmModel: svm_model, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
-  require(svmModel != null, "libsvmModel must not be null")
+case class KMeansData(kMeansModel: KMeansModel, observationColumns: List[String], columnScalings: List[Double]) {
+  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
+  require(columnScalings != null && columnScalings.nonEmpty, "columnWeights must not be null nor empty")
+  require(columnScalings.length == observationColumns.length, "number of elements in observationColumns and columnWeights needs to be the same")
+  require(kMeansModel != null, "kMeansModel must not be null")
 }

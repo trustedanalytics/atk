@@ -25,6 +25,8 @@ import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.scoring.models.{ NaiveBayesData, NaiveBayesReaderPlugin }
+
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -77,10 +79,9 @@ class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMeta
     val model: Model = arguments.model
     //Extracting the NaiveBayesModel from the stored JsObject
     val naiveBayesData = model.data.convertTo[NaiveBayesData]
-    val naiveBayesModel = naiveBayesData.naiveBayesModel
-    val jsvalue: JsValue = naiveBayesModel.toJson
+    val jsvalue: JsValue = naiveBayesData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin")
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[NaiveBayesReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("naive_bayes_model"))
   }
 }
