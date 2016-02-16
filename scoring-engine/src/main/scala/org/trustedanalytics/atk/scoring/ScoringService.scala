@@ -122,7 +122,7 @@ class ScoringService(model: Model) extends Directives {
             onComplete(scoreModel(records, "v1")) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
-                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+                ctx.complete(StatusCodes.InternalServerError, ex)
               }
             }
           }

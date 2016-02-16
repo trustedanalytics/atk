@@ -32,9 +32,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
-    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
+    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length))
     val pcaScoreOutput: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
     pcaScoreOutput.put("principal_components", y.values.toList)
     val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
