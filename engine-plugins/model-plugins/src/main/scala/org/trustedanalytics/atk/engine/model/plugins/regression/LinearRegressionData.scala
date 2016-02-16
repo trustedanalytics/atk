@@ -16,9 +16,23 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.apache.spark.ml.regression.LinearRegressionModel
+import org.apache.spark.mllib.regression.LinearRegressionModel
 
-case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
+/**
+ * Command for loading model data into existing model in the model database.
+ * @param linRegModel Trained MLLib's LinearRegressionModel object
+ * @param observationColumns Handle to the obsergvation columns of the data frame
+ */
+case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], labelColumn:String) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
   require(linRegModel != null, "linRegModel must not be null")
 }
+
+///**
+// * Results of Linear Regression Train plugin
+// * @param observationColumns List of column names on which the model was trained
+// * @param labelColumn Column name containing the true value of the observation
+// * @param weightsVector An array of weights of the trained model
+// * @param intercept Intercept value of the trained model
+// */
+//case class LinearRegressionWithSGDTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)

@@ -48,12 +48,12 @@ case class DaalLinearRegressionArgs(model: ModelReference,
                                     @ArgDoc("""A frame to train or test the model on.""") frame: FrameReference,
                                     @ArgDoc("""List of column(s) containing the
 observations.""") featureColumns: List[String],
-                                    @ArgDoc("""Column name containing the label
+                                    @ArgDoc("""List of column(s) containing the label
 for each observation.""") labelColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  require(featureColumns != null && !featureColumns.isEmpty, "observationColumn must not be null nor empty")
-  require(labelColumns != null && !labelColumns.isEmpty, "labelColumn must not be null nor empty")
+  require(featureColumns != null && featureColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(labelColumns != null && labelColumns.nonEmpty, "labelColumn must not be null nor empty")
 }
 
 /**
@@ -64,7 +64,7 @@ for each observation.""") labelColumns: List[String]) {
 case class DaalLinearRegressionTrainResult(betas: Array[Array[Double]])
 
 import spray.json._
-import DaalLinearRegressionModelDataFormat._
+import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalLinearRegressionJsonFormat._
 
@@ -86,11 +86,6 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
   /** Disable Kryo serialization to prevent seg-faults when using DAAL */
   override def kryoRegistrator: Option[String] = None
 
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 3
   /**
    * Run DAAL's Linear Regression with QR decomposition on the training frame and create a Model for it.
    *
@@ -129,7 +124,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         }
       }
 
-      val jsonModel = DaalLinearRegressionModelData(serializedModel,
+      val jsonModel = DaalLinearRegressionModel(serializedModel,
         featureColumns,
         labelColumns).toJson.asJsObject
       model.data = jsonModel

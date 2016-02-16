@@ -14,16 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.classification.SVMModel
+import org.apache.spark.mllib.tree.model.RandomForestModel
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param svmModel Trained MLLib's SVMModel object
+ * @param randomForestModel Trained MLLib's RandomForestModel object
  * @param observationColumns Handle to the observation columns of the data frame
  */
-case class SVMData(svmModel: SVMModel, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(svmModel != null, "svmModel must not be null")
+case class RandomForestRegressorData(randomForestModel: RandomForestModel, observationColumns: List[String]) {
+  require(observationColumns != null && !observationColumns.isEmpty, "observationColumns must not be null nor empty")
+  require(randomForestModel != null, "randomForestModel must not be null")
 }

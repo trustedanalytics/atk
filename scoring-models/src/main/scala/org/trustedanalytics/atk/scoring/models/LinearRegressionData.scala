@@ -14,16 +14,11 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.libsvm
+package org.trustedanalytics.atk.scoring.models
 
-import libsvm.{ svm_node, svm_parameter, svm_model }
+import org.apache.spark.ml.regression.LinearRegressionModel
 
-/**
- * Command for loading model data into existing model in the model database.
- * @param svmModel Trained libSVMModel object
- * @param observationColumns Handle to the observation columns of the data frame
- */
-case class LibSvmData(svmModel: svm_model, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
-  require(svmModel != null, "libsvmModel must not be null")
+case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
+  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
+  require(linRegModel != null, "linRegModel must not be null")
 }

@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.clustering
+package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.clustering.KMeansModel
 

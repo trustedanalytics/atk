@@ -17,57 +17,67 @@ package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.algorithms.pca._
 import com.intel.daal.algorithms.PartialResult
-import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
-import DaalConversionImplicits._
+import org.trustedanalytics.atk.engine.daal.plugins.DistributedNumericTable
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 
 object DaalPcaFunctions extends Serializable {
 
+  /**
+   * Run DAAL Principal Components Algorithm (PCA)
+   *
+   * @param frameRdd Input frame
+   * @param arguments PCA arguments
+   * @return PCA results with eigen values and vectors
+   */
   def runPCA(frameRdd: FrameRdd, arguments: DaalPcaArgs): DaalPcaResult = {
-    val context = new DaalContext()
-    val dataRdd = frameRdd.toNumericTableRdd(arguments.columnNames)
-
-    val partialResults = computePcaPartialResults(dataRdd, arguments)
-    val pcaResults = mergePcaPartialResults(context, partialResults, arguments)
-
-    context.dispose()
+    val distributedTable = new DistributedNumericTable(frameRdd, arguments.columnNames)
+    val partialResults = computePcaPartialResults(distributedTable, arguments)
+    val pcaResults = mergePcaPartialResults(partialResults, arguments)
     pcaResults
   }
 
-  private def computePcaPartialResults(dataRdd: RDD[(Integer, HomogenNumericTable)], arguments: DaalPcaArgs): RDD[(Integer, PartialResult)] = {
-    dataRdd.map {
-      case (tableId, table) =>
-        val context = new DaalContext
-        val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], arguments.getPcaMethod())
-        table.unpack(context)
-        pcaLocal.input.set(InputId.data, table)
-        val partialResult = pcaLocal.compute
-        partialResult.pack
-        context.dispose
-        (tableId, partialResult)
-    }
+  /**
+   * Compute partial PCA results locally
+   *
+   * This function is run once for each Spark partition
+   *
+   * @param distributedTable Input table
+   * @param arguments PCA arguments
+   * @return Partial PCA results
+   */
+  private def computePcaPartialResults(distributedTable: DistributedNumericTable, arguments: DaalPcaArgs): RDD[PartialResult] = {
+    distributedTable.rdd.map(tableWithIndex => {
+      val context = new DaalContext
+      val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], arguments.getPcaMethod())
+      pcaLocal.input.set(InputId.data, tableWithIndex.getUnpackedTable(context))
+      val partialResult = pcaLocal.compute
+      partialResult.pack
+      context.dispose
+      partialResult
+    })
   }
 
-  private def mergePcaPartialResults(context: DaalContext, partsRDD: RDD[(Integer, PartialResult)], arguments: DaalPcaArgs): DaalPcaResult = {
+  /**
+   *  Merge partial PCA results at Spark master
+   *
+   * @param partsRDD Partial PCA results
+   * @param arguments PCA arguments
+   * @return PCA results with eigen values and vectors
+   */
+  private def mergePcaPartialResults(partsRDD: RDD[PartialResult], arguments: DaalPcaArgs): DaalPcaResult = {
+    val context = new DaalContext
     val pcaMaster: DistributedStep2Master = new DistributedStep2Master(context, classOf[java.lang.Double], arguments.getPcaMethod())
     val parts_List = partsRDD.collect()
     for (value <- parts_List) {
-      value._2.unpack(context)
-      pcaMaster.input.add(MasterInputId.partialResults, value._2)
+      value.unpack(context)
+      pcaMaster.input.add(MasterInputId.partialResults, value)
     }
     pcaMaster.compute
-    val result = pcaMaster.finalizeCompute
-    getPcaResult(result)
+    val result = new DaalPcaResult(pcaMaster.finalizeCompute)
+    context.dispose()
+    result
   }
 
-  def getPcaResult(res: Result): DaalPcaResult = {
-    val eigenValues = res.get(ResultId.eigenValues)
-    val eigenVectors = res.get(ResultId.eigenVectors)
-    eigenValues.pack()
-    eigenVectors.pack()
-    DaalPcaResult(eigenValues, eigenVectors)
-  }
 }

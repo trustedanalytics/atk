@@ -25,20 +25,17 @@ import org.apache.spark.mllib.stat.distribution.MultivariateGaussian
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
-import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.engine.model.plugins.classification._
-import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomForestClassifierData, RandomForestClassifierTrainReturn, RandomForestClassifierPredictArgs, RandomForestClassifierTestArgs, RandomForestClassifierTrainArgs }
+import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomForestClassifierTrainReturn, RandomForestClassifierPredictArgs, RandomForestClassifierTestArgs, RandomForestClassifierTrainArgs }
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
 import org.trustedanalytics.atk.engine.model.plugins.regression._
-import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.clustering._
-import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
+import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData, LinearRegressionData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData, LinearRegressionTrainReturn }
 //import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDData
 import spray.json._
 
@@ -145,41 +142,42 @@ object MLLibJsonProtocol {
 
   }
 
-  implicit object LinearRegressionModelFormat extends JsonFormat[org.apache.spark.mllib.regression.LinearRegressionModel] {
-    /**
-     * The write methods converts from LinearRegressionModel to JsValue
-     * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
-     *            LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *            and the weights Vector could be either a SparseVector or DenseVector
-     * @return JsValue
-     */
-    override def write(obj: org.apache.spark.mllib.regression.LinearRegressionModel): JsValue = {
-      val weights = VectorFormat.write(obj.weights)
-      JsObject(
-        "weights" -> weights,
-        "intercept" -> JsNumber(obj.intercept)
-      )
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionModel
-     * @param json JsValue
-     * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *         and the weights Vector could be either a SparseVector or DenseVector
-     */
-    override def read(json: JsValue): org.apache.spark.mllib.regression.LinearRegressionModel = {
-      val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
-      val weights = fields.get("weights").map(v => {
-        VectorFormat.read(v)
-      }
-      ).get
-
-      new org.apache.spark.mllib.regression.LinearRegressionModel(weights, intercept)
-    }
-  }
+//  implicit object LinearRegressionModelFormat extends JsonFormat[org.apache.spark.mllib.regression.LinearRegressionModel] {
+//    /**
+//     * The write methods converts from LinearRegressionModel to JsValue
+//     * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
+//     *            LinearRegressionModel(val weights: Vector,val intercept: Double)
+//     *            and the weights Vector could be either a SparseVector or DenseVector
+//     * @return JsValue
+//     */
+//    override def write(obj: LinearRegressionModel): JsValue = {
+//      val weights = VectorFormat.write(obj.weights)
+//      JsObject(
+//        "weights" -> weights,
+//        "intercept" -> JsNumber(obj.intercept)
+//      )
+//    }
+//
+//    /**
+//     * The read method reads a JsValue to LinearRegressionModel
+//     * @param json JsValue
+//     * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
+//     *         and the weights Vector could be either a SparseVector or DenseVector
+//     */
+//    override def read(json: JsValue): LinearRegressionModel = {
+//      val fields = json.asJsObject.fields
+//      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
+//        .asInstanceOf[JsNumber].value.doubleValue()
+//
+//      val weights = fields.get("weights").map(v => {
+//        VectorFormat.read(v)
+//      }
+//      ).get
+//
+//      new LinearRegressionModel(weights, intercept)
+//    }
+//
+//  }
 
   implicit object VectorFormat extends JsonFormat[Vector] {
     override def write(obj: Vector): JsValue = {

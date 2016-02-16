@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import org.apache.spark.ml.regression.LinearRegressionScoreModel
 import org.apache.spark.mllib.ScoringModelTestUtils
 import org.apache.spark.mllib.linalg.DenseVector
 import org.apache.spark.mllib.regression.LinearRegressionModel
@@ -24,9 +25,11 @@ import org.scalatest.WordSpec
 class LinearRegressionModelTest extends WordSpec {
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
+  val obsCols = List("a", "b", "c")
   val linearRegressionModel = new LinearRegressionModel(weights, intercept)
-  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel)
-  val numRows = 5 // number of rows of data to test with
+  val linearRegressiondata = new LinearRegressionData(linearRegressionModel, obsCols)
+  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressiondata)
+  val numObsCols = obsCols.length
 
   "LinearRegressionModel" should {
     "throw an exception when attempting to score null data" in {
@@ -34,11 +37,11 @@ class LinearRegressionModelTest extends WordSpec {
     }
 
     "throw an exception when scoring data with too few columns" in {
-      ScoringModelTestUtils.tooFewDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooFewDataColumnsTest(linearRegressionScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with too many columns" in {
-      ScoringModelTestUtils.tooManyDataColumnsTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.tooManyDataColumnsTest(linearRegressionScoreModel, weights.size)
     }
 
     "throw an exception when scoring data with non-numerical records" in {
@@ -46,11 +49,19 @@ class LinearRegressionModelTest extends WordSpec {
     }
 
     "successfully score a model when float data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size)
     }
 
     "successfully score a model when integer data is provided" in {
-      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size, numRows)
+      ScoringModelTestUtils.successfulModelScoringFloatTest(linearRegressionScoreModel, weights.size)
+    }
+
+    "successfully return the observation columns used for training the model" in {
+      ScoringModelTestUtils.successfulInputTest(linearRegressionScoreModel, numObsCols)
+    }
+
+    "successfully return the observation columns used for training the model along with score" in {
+      ScoringModelTestUtils.successfulOutputTest(linearRegressionScoreModel, numObsCols)
     }
 
   }

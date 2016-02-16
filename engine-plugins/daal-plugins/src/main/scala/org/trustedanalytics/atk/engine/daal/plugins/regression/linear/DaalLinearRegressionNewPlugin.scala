@@ -27,7 +27,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
- * Create a 'new' instance of a Linear Regression model
+ * Create a 'new' instance of a DAAL Linear Regression model
  */
 
 @PluginDoc(oneLine = "Create a 'new' instance of a DAAL Linear Regression model.",

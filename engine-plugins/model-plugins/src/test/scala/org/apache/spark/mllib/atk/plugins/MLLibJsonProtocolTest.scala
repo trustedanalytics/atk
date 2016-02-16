@@ -22,8 +22,6 @@ import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.LogisticRegressionData
-import org.trustedanalytics.atk.engine.model.plugins.classification.SVMData
-import org.trustedanalytics.atk.engine.model.plugins.clustering.KMeansData
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
 import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, DenseMatrix, Vector }
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, SVMModel }
@@ -32,7 +30,7 @@ import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.scalatest.WordSpec
 import MLLibJsonProtocol._
-//import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDData
+import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, SVMData, KMeansData }
 
 import spray.json._
 
