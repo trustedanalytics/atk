@@ -80,6 +80,14 @@ object PythonRddStorage {
     FrameRdd.toFrameRdd(newSchema, frameRdd)
   }
 
+  /**
+   * This method returns a FrameRdd after applying UDF on referencing FrameRdd
+   * @param data Current referencing FrameRdd
+   * @param aggregateByColumnKeys List of column name(s) based on which aggregation is performed
+   * @param udf User Defined function(UDF) to apply on each row
+   * @param udfSchema Mandatory output schema
+   * @return FrameRdd
+   */
   def aggregateMapWith(data: FrameRdd, aggregateByColumnKeys: List[String], udf: Udf, udfSchema: Schema, sc: SparkContext): FrameRdd = {
     //Create a new schema which includes keys (KeyedSchema).
     val keyedSchema = udfSchema.copy(columns = data.frameSchema.columns(aggregateByColumnKeys) ++ udfSchema.columns)
@@ -137,7 +145,13 @@ object PythonRddStorage {
     pyRdd
   }
 
-  //Common method to generate pyRdd from given Rdd
+  /**
+   * This method converts the base RDD into Python RDD which is processed by the Python VM at the server.
+   * @param udf UDF provided by the user
+   * @param baseRdd Base RDD in Array[Bytes]
+   * @param predicateInBytes UDF in Array[Bytes]
+   * @return pythonRDD
+   */
   def getPyRdd(udf: Udf, sc: SparkContext, baseRdd: RDD[Array[Byte]], predicateInBytes: Array[Byte]): EnginePythonRdd[Array[Byte]] = {
     val pythonExec = EngineConfig.pythonWorkerExec
     val environment = new util.HashMap[String, String]()
@@ -180,7 +194,11 @@ object PythonRddStorage {
   }
 
   /**
-   * Converts the RDD[Keys, rows] to Bson objects
+   * This method encodes the raw rdd into Bson to convert into PythonRDD
+   * @param udf UDF provided by user to apply on each row
+   * @param rdd rdd(List[keys], List[Rows])
+   * @param keyIndices List of key indices, used to retreive key data with result frame
+   * @return PythonRdd
    */
   def AggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)

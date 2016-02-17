@@ -74,7 +74,7 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
     val newSchema = new FrameSchema(columnList)
     val frameRDD = PythonRddStorage.aggregateMapWith(frame.rdd, arguments.aggregateByColumnKeys, arguments.udf, newSchema, sc)
     engine.frames.tryNewFrame(CreateEntityArgs(
-      description = Some("Created a new frame by applying custom aggregation using UDF on referencing frame"))) {
+      description = Some("Creats new frame by applying custom aggregation on current referencing frame"))) {
       newFrame => newFrame.save(frameRDD)
     }
   }

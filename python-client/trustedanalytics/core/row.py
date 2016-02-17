@@ -95,10 +95,11 @@ class Row(object):
         except IndexError:
             raise IndexError("Internal Error: improper index %d used in schema with %d columns" % (index, len(self._schema_dict)))
 
-# Mutable rows to handle accumulators
-
 
 class MutableRow(Row):
+    """
+    Row object that allows setting individual column values
+    """
     def __setattr__(self, key, value):
         if key in ['_schema_dict', '_data', '_dtypes', '_indices_dict', '_dtype_constructors']:
             super(MutableRow, self).__setattr__(key, value)
