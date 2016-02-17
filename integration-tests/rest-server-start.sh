@@ -39,16 +39,9 @@ fi
 
 echo "$NAME SPARK_HOME=$SPARK_HOME"
 
-# Export path to DAAL libraries
-if [ -d "${BASEDIR}/../engine-plugins/daal-plugins/lib/intel64_lin" ]; then
- export DAAL_LIB_DIR="${BASEDIR}/../engine-plugins/daal-plugins/lib/intel64_lin"
- export DAAL_GCC_VERSION="gcc4.4"
- export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
- echo "Added Intel DAAL libraries"
-fi
-
 export MAVEN_REPO=~/.m2/repository
 export CP=$DIR/../conf/:/etc/hadoop/conf:/etc/hbase/conf:$DIR/../module-loader/target/module-loader-master-SNAPSHOT.jar:$MAVEN_REPO/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar:$MAVEN_REPO/com/typesafe/config/1.2.1/config-1.2.1.jar:$MAVEN_REPO/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar:`ls $TARGET_DIR/dependencies/*.jar | tr '\n' ':' `
+
 
 export SEARCH_PATH="-Datk.module-loader.search-path=${DIR}/..:${HOME}/.m2/"
 
