@@ -35,7 +35,7 @@ observations of a frame.
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
-.. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
+.. [2] https://spark.apache.org/docs/1.5.0/ml-linear-methods.html
 """,
   returns = """A new instance of LinearRegressionModel""")
 class LinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
@@ -48,6 +48,6 @@ class LinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, Model
   override def name: String = "model:linear_regression/new"
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
-    engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:linear_regression_ml")))
+    engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:linear_regression")))
   }
 }

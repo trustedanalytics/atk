@@ -35,9 +35,9 @@ import MLLibJsonProtocol._
 
 case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
-                                          @ArgDoc("""Column name containing the label for each observation""") labelColumn: String,
+                                          @ArgDoc("""Column name containing the label for each observation""") valueColumn: String,
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
-                                          @ArgDoc("""Number of tress in the random forest. Default is 1.""") numTrees: Int = 1,
+                                          @ArgDoc("""Number of trees in the random forest. Default is 1.""") numTrees: Int = 1,
                                           @ArgDoc("""Criterion used for information gain calculation. Default supported value is "variance".""") impurity: String = "variance",
                                           @ArgDoc("""Maxium depth of the tree. Default is 4.""") maxDepth: Int = 4,
                                           @ArgDoc("""Maximum number of bins used for splitting features. Default is 100.""") maxBins: Int = 100,
@@ -48,7 +48,7 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
-  require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(valueColumn != null && !valueColumn.isEmpty, "labelColumn must not be null nor empty")
   require(numTrees > 0, "numTrees must be greater than 0")
   require(maxDepth >= 0, "maxDepth must be non negative")
 
@@ -118,13 +118,13 @@ class RandomForestRegressorTrainPlugin extends SparkCommandPlugin[RandomForestRe
     val model: Model = arguments.model
 
     //create RDD from the frame
-    val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
+    val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.valueColumn, arguments.observationColumns)
     val randomForestModel = RandomForest.trainRegressor(labeledTrainRdd, arguments.getCategoricalFeaturesInfo, arguments.numTrees,
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
     val jsonModel = new RandomForestRegressorData(randomForestModel, arguments.observationColumns)
 
     model.writeToStorage(jsonModel.toJson.asJsObject)
-    new RandomForestRegressorTrainReturn(arguments.observationColumns, arguments.labelColumn, randomForestModel.numTrees, randomForestModel.totalNumNodes,
+    new RandomForestRegressorTrainReturn(arguments.observationColumns, arguments.valueColumn, randomForestModel.numTrees, randomForestModel.totalNumNodes,
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)
   }
 }

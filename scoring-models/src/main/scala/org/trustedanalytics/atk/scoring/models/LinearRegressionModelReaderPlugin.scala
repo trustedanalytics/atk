@@ -20,7 +20,6 @@ import java.io._
 import org.apache.spark.ml.ScoringJsonReaderWriters._
 import org.apache.spark.ml.regression.LinearRegressionScoreModel
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import spray.json._
 import spray.json.DefaultJsonProtocol._
 

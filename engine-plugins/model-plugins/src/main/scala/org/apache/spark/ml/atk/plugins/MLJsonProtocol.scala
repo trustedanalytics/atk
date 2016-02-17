@@ -20,6 +20,7 @@ import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol.VectorFormat
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.regression._
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 import spray.json._
 
 /**

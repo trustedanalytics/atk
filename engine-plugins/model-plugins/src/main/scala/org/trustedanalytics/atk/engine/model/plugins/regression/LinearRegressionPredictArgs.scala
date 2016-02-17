@@ -19,7 +19,13 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
+/**
+ * Arguments for LinearRegression predict
+ * @param model The trained Linear Regression model
+ * @param frame The handle to the frame to run predict on
+ * @param observationColumns The frame's column(s) storing the observations
+ */
 case class LinearRegressionPredictArgs(model: ModelReference,
-                                       @ArgDoc("""The frame to train the model on""") frame: FrameReference,
+                                       @ArgDoc("""The frame to predict on""") frame: FrameReference,
                                        @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]])
 

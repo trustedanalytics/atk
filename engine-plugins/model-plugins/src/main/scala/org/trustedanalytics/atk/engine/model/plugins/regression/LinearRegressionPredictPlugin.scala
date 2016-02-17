@@ -19,7 +19,6 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
@@ -28,6 +27,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin }
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 
 import scala.collection.mutable.ListBuffer
 
@@ -54,8 +54,7 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
   override def numberOfJobs(arguments: LinearRegressionPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
-   *
-   *
+   * Predict values for a frame using a trained Linear Regression model
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
    *                   can be used during this invocation.
@@ -66,8 +65,6 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
     val predictFrameRdd = frame.rdd
-
-
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]

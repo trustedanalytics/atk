@@ -22,32 +22,55 @@ import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
 
 /**
- * Command for loading model data into existing model in the model database.
+ * Parameters for Linear Regression train
+ * @param model The handle to the model
+ * @param frame Frame storing the training data
+ * @param valueColumn Frame's column storing the value for the observation
+ * @param observationColumns Frame's column(s) storing the observations
+ * @param elasticNetParameter Parameter for ElasticNet mixing        
+ * @param fitIntercept Parameter indicating whether an intercept should be fitted
+ * @param maxIterations Maximum number of iterations
+ * @param regParam Parameter for regularization
+ * @param standardization Parameter indicating whether training features are to be standardized before fitting the model
+ * @param tolerance Parameter for convergence tolerance for iterative algorithms
  */
 case class LinearRegressionTrainArgs(model: ModelReference,
-                                     @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-                                     @ArgDoc("""Column name containing the label
-for each observation.""") labelColumn: String,
+                                     @ArgDoc("""A frame to train the model on""") frame: FrameReference,
+                                     @ArgDoc("""Column name containing the value for each observation.""") valueColumn: String,
                                      @ArgDoc("""List of column(s) containing the
 observations.""") observationColumns: List[String],
-                                     @ArgDoc("""Parameter for the ElasticNet mixing""") elasticNetParameter: Double = 0.0,
-                                     @ArgDoc("""Parameter for whether to fit an intercept term""") fitIntercept: Boolean = true,
-                                     @ArgDoc("""Parameter for maximum number of iterations""") maxIterations: Int = 100,
-                                     @ArgDoc("""Parameter for regularization""") regParam: Double = 0.0,
-                                     @ArgDoc("""Parameter for whether to standardize the training features before fitting the model""") standardization: Boolean = true,
-                                     @ArgDoc("""Parameter for the convergence tolerance for iterative algorithms""") tolerance: Double = 1E-6) {
+                                     @ArgDoc("""Parameter for the ElasticNet mixing. Default is 0.0""") elasticNetParameter: Double = 0.0,
+                                     @ArgDoc("""Parameter for whether to fit an intercept term. Default is true""") fitIntercept: Boolean = true,
+                                     @ArgDoc("""Parameter for maximum number of iterations. Default is 100""") maxIterations: Int = 100,
+                                     @ArgDoc("""Parameter for regularization. Default is 0.0""") regParam: Double = 0.0,
+                                     @ArgDoc("""Parameter for whether to standardize the training features before fitting the model. Default is true""") standardization: Boolean = true,
+                                     @ArgDoc("""Parameter for the convergence tolerance for iterative algorithms. Default is 1E-6""") tolerance: Double = 1E-6) {
 
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
-  require(labelColumn != null && !labelColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(valueColumn != null && !valueColumn.isEmpty, "labelColumn must not be null nor empty")
   require(maxIterations > 0, "numIterations must be a positive value")
   require(regParam >= 0, "regParam should be greater than or equal to 0")
 
 }
 
+/** 
+  * Return of Linear Regression train
+  * @param observationColumns The 
+  * @param valueColumn
+  * @param intercept
+  * @param weights
+  * @param explainedVariance
+  * @param meanAbsoluteError
+  * @param meanSquaredError
+  * @param objectiveHistory
+  * @param r2
+  * @param rootMeanSquaredError
+  * @param iterations
+  */
 case class LinearRegressionTrainReturn(@ArgDoc("""The list of column(s) storing the observations""") observationColumns: List[String],
-                                       @ArgDoc("""Name of the column storing the label""") label: String,
+                                       @ArgDoc("""Name of the column storing the label""") valueColumn: String,
                                        @ArgDoc("""Intercept of the trained model""") intercept: Double,
                                        @ArgDoc("""Weights of the trained model""") weights: Array[Double],
                                        @ArgDoc("""The explained variance regression score""") explainedVariance: Double,

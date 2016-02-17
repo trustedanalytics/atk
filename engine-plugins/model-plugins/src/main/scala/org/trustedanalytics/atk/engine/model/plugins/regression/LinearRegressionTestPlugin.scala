@@ -22,6 +22,8 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin }
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
+
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -42,10 +44,10 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: LinearRegressionTestArgs)(implicit invocation: Invocation) = 9
+  override def numberOfJobs(arguments: LinearRegressionTestArgs)(implicit invocation: Invocation) = 1
 
   /**
-   * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
+   * Run Spark ml's LinearRegression() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -63,7 +65,7 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]
     val linRegModel = linRegData.linRegModel
     val observationColumns = arguments.observationColumns.getOrElse(linRegData.observationColumns)
-    val dataFrame = testFrameRdd.toLabeledDataFrame(arguments.labelColumn, observationColumns)
+    val dataFrame = testFrameRdd.toLabeledDataFrame(arguments.valueColumn, observationColumns)
 
     linRegModel.setFeaturesCol("features")
     linRegModel.setPredictionCol("predicted_value")

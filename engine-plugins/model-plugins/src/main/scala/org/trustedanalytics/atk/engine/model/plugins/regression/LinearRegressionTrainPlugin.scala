@@ -21,6 +21,8 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
+
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -60,11 +62,11 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
 
     val trainFrameRdd = frame.rdd
     //Running MLLib
-    val dataFrame = trainFrameRdd.toLabeledDataFrame(arguments.labelColumn, arguments.observationColumns)
+    val dataFrame = trainFrameRdd.toLabeledDataFrame(arguments.valueColumn, arguments.observationColumns)
 
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.fit(dataFrame)
-    val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns, arguments.labelColumn)
+    val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns, arguments.valueColumn)
 
     model.data = jsonModel.toJson.asJsObject
     val intercept = linRegModel.intercept
@@ -77,7 +79,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
     val r2 = summary.r2
     val rootMeanSquaredError = summary.rootMeanSquaredError
     val iterations = summary.totalIterations
-    new LinearRegressionTrainReturn(arguments.observationColumns, arguments.labelColumn, intercept, weights.toArray, explainedVariance, meanAbsoluteError,
+    new LinearRegressionTrainReturn(arguments.observationColumns, arguments.valueColumn, intercept, weights.toArray, explainedVariance, meanAbsoluteError,
       meanSquaredError, objectiveHistory, r2, rootMeanSquaredError, iterations)
   }
 }

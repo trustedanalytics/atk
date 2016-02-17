@@ -19,12 +19,27 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
+/**
+ * Arguments to Linear Regression test plugin
+ * @param model The trained linear regression model to run test on
+ * @param frame The frame to test the linear regression model on
+ * @param valueColumn Frame's column containing the value for the observation
+ * @param observationColumns Frame's column(s) containing the observations
+ */
 case class LinearRegressionTestArgs(model: ModelReference,
-                                    @ArgDoc("""The frame to train the model on""") frame: FrameReference,
-                                    @ArgDoc("""Column name containing the label of each observation""") labelColumn: String,
+                                    @ArgDoc("""The frame to test the linear regression model on""") frame: FrameReference,
+                                    @ArgDoc("""Column name containing the value of each observation""") valueColumn: String,
                                     @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]])
 
-case class LinearRegressionTestReturn(@ArgDoc("""The variance explained by regression""") explainedVariance: Double,
+/**
+ * Return of Linear Regression test plugin
+ * @param explainedVariance The explained variance regression score
+ * @param meanAbsoluteError The risk function corresponding to the expected value of the absolute error loss or l1-norm loss
+ * @param meanSquaredError The risk function corresponding to the expected value of the squared error loss or quadratic loss
+ * @param r2 The coefficient of determination
+ * @param rootMeanSquaredError The square root of the mean squared error
+ */
+case class LinearRegressionTestReturn(@ArgDoc("""The explained variance regression score""") explainedVariance: Double,
                                       @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
                                       @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
                                       @ArgDoc("""The unadjusted coefficient of determination""") r2: Double,

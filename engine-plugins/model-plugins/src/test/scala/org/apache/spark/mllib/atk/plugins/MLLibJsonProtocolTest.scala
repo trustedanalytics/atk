@@ -158,24 +158,6 @@ class MLLibJsonProtocolTest extends WordSpec {
 
   }
 
-//  "LinearRegressionDataFormat" should {
-//
-//    "be able to serialize" in {
-//      val l = new LinearRegressionWithSGDData(new LinearRegressionModel(new DenseVector(Array(1.3, 3.1)), 3.5), List("column1", "column2"))
-//      assert(l.toJson.compactPrint == "{\"lin_reg_model\":{\"weights\":{\"values\":[1.3,3.1]},\"intercept\":3.5},\"observation_columns\":[\"column1\",\"column2\"]}")
-//    }
-//
-//    "parse json" in {
-//      val string = "{\"lin_reg_model\":{\"weights\":{\"values\":[1.3,3.1]},\"intercept\":3.5},\"observation_columns\":[\"column1\",\"column2\"]}"
-//      val json = JsonParser(string).asJsObject
-//      val l = json.convertTo[LinearRegressionWithSGDData]
-//
-//      assert(l.linRegModel.weights.size == 2)
-//      assert(l.linRegModel.intercept == 3.5)
-//      assert(l.observationColumns.length == 2)
-//    }
-//  }
-
   "DenseMatrixFormat" should {
 
     "be able to serialize" in {
