@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 
 //Implicits needed for JSON conversion
 import spray.json._

@@ -27,9 +27,6 @@ public final class ModelSerializer {
         System.loadLibrary("AtkDaalJavaAPI");
     }
 
-    private ModelSerializer() {
-    }
-
     /**
      * Serialize DAAL linear regression QR model
      *

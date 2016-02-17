@@ -52,7 +52,6 @@ class DistributedLabeledTable extends Serializable {
       case (i, iter) =>
         val context = new DaalContext
         var tableRows = 0L
-        var tableSize = 0L
         val featureBuf = new ArrayBuffer[Double]()
         val labelBuf = new ArrayBuffer[Double]()
         val tables = new ArrayBuffer[IndexedLabeledTable]()
@@ -63,6 +62,7 @@ class DistributedLabeledTable extends Serializable {
           labelBuf ++= array.slice(splitIndex, numCols)
           tableRows += 1
 
+          //partition can be split into multiple numeric tables if maximum rows per table is set
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
             val tableIndex = i - tableRows + 1
             val featureTable = new IndexedNumericTable(tableIndex,

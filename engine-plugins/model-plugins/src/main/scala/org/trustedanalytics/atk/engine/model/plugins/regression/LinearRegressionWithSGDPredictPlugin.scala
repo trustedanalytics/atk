@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, Plug
 
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 
 @PluginDoc(oneLine = "Make new frame with column for label prediction.",
   extended = """Predict the labels for a test frame and create a new frame revision with

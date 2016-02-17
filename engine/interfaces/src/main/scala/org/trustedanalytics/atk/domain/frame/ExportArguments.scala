@@ -27,13 +27,14 @@ case class ExportHdfsCsvArgs(frame: FrameReference,
                              @ArgDoc("""The HDFS folder path where the files
 will be created.""") folderName: String,
                              @ArgDoc("""The separator for separating the values.
-Default is comma (,).""") separator: Option[Char] = None,
+Default is comma (,).""") separator: String = ",",
                              @ArgDoc("""The number of records you want.
-Default, or a non-positive value, is the whole frame.""") count: Option[Int] = None,
+Default, or a non-positive value, is the whole frame.""") count: Int = -1,
                              @ArgDoc("""The number of rows to skip before exporting to the file.
-Default is zero (0).""") offset: Option[Int] = None) {
+Default is zero (0).""") offset: Int = 0) {
   require(frame != null, "frame is required")
   require(folderName != null, "folder name is required")
+  require(StringUtils.isNotBlank(separator) && separator.length == 1, "A single character separator is required")
 }
 
 /**
@@ -43,9 +44,9 @@ case class ExportHdfsJsonArgs(frame: FrameReference,
                               @ArgDoc("""The HDFS folder path where the files
 will be created.""") folderName: String,
                               @ArgDoc("""The number of records you want.
-Default, or a non-positive value, is the whole frame.""") count: Option[Int] = None,
+Default (0), or a non-positive value, is the whole frame.""") count: Int = 0,
                               @ArgDoc("""The number of rows to skip before exporting to the file.
-Default is zero (0).""") offset: Option[Int] = None) {
+Default is zero (0).""") offset: Int = 0) {
   require(frame != null, "frame is required")
   require(folderName != null, "folder name is required")
 }
@@ -65,7 +66,7 @@ case class ExportHdfsHiveArgs(frame: FrameReference,
 case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: FrameReference,
                                @ArgDoc("The name of the HBase table that will contain the exported frame") tableName: String,
                                @ArgDoc("The name of the column to be used as row key in hbase table") keyColumnName: Option[String],
-                               @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: Option[String]) {
+                               @ArgDoc("The family name of the HBase table that will contain the exported frame") familyName: String = "familyColumn") {
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
 }

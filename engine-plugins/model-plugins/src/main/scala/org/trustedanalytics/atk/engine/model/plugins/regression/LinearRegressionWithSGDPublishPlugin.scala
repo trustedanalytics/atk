@@ -30,6 +30,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
 import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin }
 
 /**
  * Publish a Linear Regression Model for scoring
@@ -81,10 +82,11 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]
-    val linRegModel: LinearRegressionModel = linRegData.linRegModel
-    val jsvalue: JsValue = linRegModel.toJson
+    val jsvalue: JsValue = linRegData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin")
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8),
+      "scoring-models",
+      classOf[LinearRegressionModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("linear_regression_model"))
   }
 }

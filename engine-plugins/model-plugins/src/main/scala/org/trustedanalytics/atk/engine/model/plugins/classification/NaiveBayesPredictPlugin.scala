@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vectors
+import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 
 //Implicits needed for JSON conversion
 import spray.json._

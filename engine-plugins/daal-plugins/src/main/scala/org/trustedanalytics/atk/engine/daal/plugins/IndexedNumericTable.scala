@@ -27,15 +27,16 @@ import java.nio.DoubleBuffer
  * DAAL numeric table with index
  *
  * The table index is unique and allows each task to know the global offset of the
- * local table. The inde allows the master task to establish a global order when
+ * local table. The index allows the master task to establish a global order when
  * partial results.
  *
  * @param index Table index
  * @param table DAAL numeric table
  */
 case class IndexedNumericTable(index: Long, private val table: NumericTable) extends Serializable {
-  val numRows: Long = table.getNumberOfRows
-  val numCols: Long = table.getNumberOfColumns
+  require(table != null, "Numeric table must not be null")
+  val numRows: Int = table.getNumberOfRows.toInt
+  val numCols: Int = table.getNumberOfColumns.toInt
   table.pack() //serialize table
 
   /**
@@ -54,7 +55,7 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
    *
    * @return table index and serialized numeric table
    */
-  def getTuple2: (Long, NumericTable) = (index, table)
+  def getIndexTablePair: (Long, NumericTable) = (index, table)
 
   /**
    * Convert DAAL numeric table into iterator of Spark SQL rows
@@ -66,9 +67,6 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
     if (isEmpty) return List.empty[sql.Row].iterator
 
     val unpackedTable = getUnpackedTable(context)
-    val numRows = unpackedTable.getNumberOfRows.toInt
-    val numCols = unpackedTable.getNumberOfColumns.toInt
-
     val buffer = DoubleBuffer.allocate(numRows * numCols)
     val doubleBuffer = unpackedTable.getBlockOfRows(0, numRows, buffer)
     val rowBuffer = new ListBuffer[Row]()

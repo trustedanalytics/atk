@@ -16,26 +16,40 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 
-class KMeansScoreModel(libKMeansModel: KMeansModel) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
+class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { row =>
-      {
-        val x: Array[Double] = new Array[Double](row.length)
-        row.zipWithIndex.foreach {
-          case (value: Any, index: Int) => x(index) = value.toDouble
-        }
-        score = score :+ (predict(Vectors.dense(x)) + 1)
-      }
-    }
-    score
+  override def score(data: Array[Any]): Array[Any] = {
+    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    data :+ (predict(Vectors.dense(x)) + 1)
   }
 
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
+  override def input(): Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = kmeansData.observationColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("KMeans Model", classOf[KMeansScoreModel].getName, classOf[KMeansModelReaderPlugin].getName, Map())
+  }
+
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
+  override def output(): Array[Field] = {
+    var output = input()
+    output :+ Field("score", "Int")
+  }
 }
