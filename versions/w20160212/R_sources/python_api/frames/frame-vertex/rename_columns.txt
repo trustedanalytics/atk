@@ -1,0 +1,21 @@
+
+:doc:`VertexFrame <index>`  rename_columns
+******************************************
+
+------
+
+
+.. function:: rename_columns(self, names)
+
+    Rename columns for vertex frame.
+
+
+    :Parameters:
+
+        **names** : dict
+
+        ..
+
+            Dictionary of old names to new names.
+
+
