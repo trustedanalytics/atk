@@ -50,36 +50,36 @@ object ScoringJsonReaderWriters {
     }
   }
 
-    implicit object LinearRegressionDataFormat extends JsonFormat[LinearRegressionData] {
-      /**
-       * The write methods converts from LinearRegressionData to JsValue
-       * @param obj LinearRegressionData. Where LinearRegressionData format is:
-       *            LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
-       * @return JsValue
-       */
-      override def write(obj: LinearRegressionData): JsValue = {
-        val model = LinearRegressionModelFormat.write(obj.linRegModel)
-        JsObject("model" -> model,
-          "observation_columns" -> obj.observationColumns.toJson,
+  implicit object LinearRegressionDataFormat extends JsonFormat[LinearRegressionData] {
+    /**
+     * The write methods converts from LinearRegressionData to JsValue
+     * @param obj LinearRegressionData. Where LinearRegressionData format is:
+     *            LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: LinearRegressionData): JsValue = {
+      val model = LinearRegressionModelFormat.write(obj.linRegModel)
+      JsObject("model" -> model,
+        "observation_columns" -> obj.observationColumns.toJson,
         "label_column" -> obj.labelColumn.toJson)
-      }
-
-      /**
-       * The read method reads a JsValue to LinearRegressionData
-       * @param json JsValue
-       * @return LinearRegressionData with format LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], label:String)
-       */
-      override def read(json: JsValue): LinearRegressionData = {
-        val fields = json.asJsObject.fields
-        val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-        val labelColumn = getOrInvalid(fields,"label_column").convertTo[String]
-        val model = fields.get("model").map(v => {
-          LinearRegressionModelFormat.read(v)
-        }
-        ).get
-        new LinearRegressionData(model, obsCols, labelColumn)
-      }
     }
+
+    /**
+     * The read method reads a JsValue to LinearRegressionData
+     * @param json JsValue
+     * @return LinearRegressionData with format LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], label:String)
+     */
+    override def read(json: JsValue): LinearRegressionData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val labelColumn = getOrInvalid(fields, "label_column").convertTo[String]
+      val model = fields.get("model").map(v => {
+        LinearRegressionModelFormat.read(v)
+      }
+      ).get
+      new LinearRegressionData(model, obsCols, labelColumn)
+    }
+  }
 
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake

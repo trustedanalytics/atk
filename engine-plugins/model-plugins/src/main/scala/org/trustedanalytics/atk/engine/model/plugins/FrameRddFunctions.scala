@@ -79,7 +79,7 @@ class FrameRddFunctions(self: FrameRdd) {
    */
   def toLabeledDataFrame(featureColumnNames: List[String]): DataFrame = {
     val vectorRdd: RDD[org.apache.spark.mllib.linalg.Vector] = self.mapRows(row => {
-       val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
+      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
       new DenseVector(features.toArray)
     })
     val rowRdd: RDD[Row] = vectorRdd.map(vector => new GenericRow(Array[Any](0.0, vector)))

@@ -22,7 +22,7 @@ import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseV
 import org.apache.spark.mllib.regression
 import org.apache.spark.mllib.stat.distribution.MultivariateGaussian
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
-import org.apache.spark.mllib.tree.configuration.{FeatureType, Algo}
+import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType

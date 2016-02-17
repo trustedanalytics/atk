@@ -27,7 +27,7 @@ class LinearRegressionModelTest extends WordSpec {
   val intercept = 4
   val obsCols = List("a", "b", "c")
   val labelCol = "d"
-  val linearRegressionModel = new LinearRegressionModel(uid,weights, intercept)
+  val linearRegressionModel = new LinearRegressionModel(uid, weights, intercept)
   val linearRegressionData = new LinearRegressionData(linearRegressionModel, obsCols, labelCol)
   var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressionData)
   val numObsCols = obsCols.length

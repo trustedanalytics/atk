@@ -17,10 +17,10 @@
 package org.apache.spark.ml.regression
 
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.{Field, Model, ModelMetaDataArgs}
-import org.trustedanalytics.atk.scoring.models.{LinearRegressionData, LinearRegressionModelReaderPlugin, ScoringModelUtils}
+import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
+import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin, ScoringModelUtils }
 
-class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionModel.uid,linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
+class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionModel.uid, linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))

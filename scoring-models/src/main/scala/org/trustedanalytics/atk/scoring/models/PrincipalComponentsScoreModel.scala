@@ -46,9 +46,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
    * Compute the principal components for the observation
    * @param x Each observation stored as an Array[Double]
    * @return (org.apache.spark.mllib)DenseMatrix
-
-
-
+   *
+   *
+   *
    */
   def computePrincipalComponents(x: Array[Double]): DenseMatrix = {
     var inputVector = new org.apache.spark.mllib.linalg.DenseVector(x)

@@ -17,9 +17,9 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import org.apache.spark.ml.regression.LinearRegressionModel
-import org.apache.spark.mllib.linalg.{VectorUDT, DenseVector}
-import org.apache.spark.sql.types.{DoubleType, StructField, StructType}
-import org.apache.spark.sql.{SQLContext, Row}
+import org.apache.spark.mllib.linalg.{ VectorUDT, DenseVector }
+import org.apache.spark.sql.types.{ DoubleType, StructField, StructType }
+import org.apache.spark.sql.{ SQLContext, Row }
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
@@ -36,7 +36,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
     val rowArray: Array[Row] = Array(new GenericRow((Array[Any](1, new DenseVector(Array(16.8974, 2.693))))))
     val rdd = sparkContext.parallelize(rowArray)
     val schema = StructType(Seq(StructField("label", DoubleType, true), StructField("features", new VectorUDT, true)))
-    val dataFrame = new SQLContext(sparkContext).createDataFrame(rdd,schema)
+    val dataFrame = new SQLContext(sparkContext).createDataFrame(rdd, schema)
 
     val trainArgs = LinearRegressionTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"))
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(trainArgs)

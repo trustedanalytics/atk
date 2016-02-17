@@ -25,7 +25,6 @@ import spray.json._
 
 class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
 
-
   "LinearRegressionModelFormat" should "serialize" in {
     val l = new LinearRegressionModel("Id", new DenseVector(Array(2.3, 3.4, 4.5)), 3.0)
     l.toJson.compactPrint should equal("{\"uid\":\"Id\",\"weights\":{\"values\":[2.3,3.4,4.5]},\"intercept\":3.0}")

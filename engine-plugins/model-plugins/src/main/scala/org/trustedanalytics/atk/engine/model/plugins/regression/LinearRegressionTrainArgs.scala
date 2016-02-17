@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * @param frame Frame storing the training data
  * @param valueColumn Frame's column storing the value for the observation
  * @param observationColumns Frame's column(s) storing the observations
- * @param elasticNetParameter Parameter for ElasticNet mixing        
+ * @param elasticNetParameter Parameter for ElasticNet mixing
  * @param fitIntercept Parameter indicating whether an intercept should be fitted
  * @param maxIterations Maximum number of iterations
  * @param regParam Parameter for regularization
@@ -55,20 +55,20 @@ observations.""") observationColumns: List[String],
 
 }
 
-/** 
-  * Return of Linear Regression train
-  * @param observationColumns The 
-  * @param valueColumn
-  * @param intercept
-  * @param weights
-  * @param explainedVariance
-  * @param meanAbsoluteError
-  * @param meanSquaredError
-  * @param objectiveHistory
-  * @param r2
-  * @param rootMeanSquaredError
-  * @param iterations
-  */
+/**
+ * Return of Linear Regression train
+ * @param observationColumns The
+ * @param valueColumn
+ * @param intercept
+ * @param weights
+ * @param explainedVariance
+ * @param meanAbsoluteError
+ * @param meanSquaredError
+ * @param objectiveHistory
+ * @param r2
+ * @param rootMeanSquaredError
+ * @param iterations
+ */
 case class LinearRegressionTrainReturn(@ArgDoc("""The list of column(s) storing the observations""") observationColumns: List[String],
                                        @ArgDoc("""Name of the column storing the label""") valueColumn: String,
                                        @ArgDoc("""Intercept of the trained model""") intercept: Double,
