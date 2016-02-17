@@ -161,8 +161,6 @@ class ValidDataTypes(unittest.TestCase):
     def test_validate_data(self):
         s = [('a', str), ('f', float)]
         d = ["string", 3.14]
-        #s = [('a', str), ('v', vector), ('f', float)]
-        #d = ["string", [1.0, 2.0], 3.14]
         results = valid_data_types.validate_data(s, d)
         self.assertEqual(d, results)
 

@@ -20,22 +20,22 @@ import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class AggregateByKeyArgs(
-    @ArgDoc("Frame to which combine by key applied") frame: FrameReference,
-    @ArgDoc("key, based on which data should be combined") key: String,
+    @ArgDoc("Frame to which aggregate by key applied") frame: FrameReference,
+    @ArgDoc("""list of column key(s) to aggregate on""") aggregateByColumnKeys: List[String],
     @ArgDoc("List of names for the new columns") columnNames: List[String],
     @ArgDoc("List of data types for the new columns") columnTypes: List[String],
     @ArgDoc("""User-Defined Function (|UDF|) which takes the values in the row
 and produces a value, or collection of values, for the
 new cell(s).""") udf: Udf) {
   require(frame != null, "frame is required")
-  require(key != null, "column name is required")
-  require(columnNames != null, "column names is required")
+  require(aggregateByColumnKeys != null, "aggregate_by column key(s) are required")
+  require(columnNames != null, "column names for new frame are required")
   for {
     i <- columnNames.indices
   } {
-    require(columnNames(i) != "", "column name is required")
+    require(columnNames(i) != "", "column names for new frame are required")
   }
-  require(columnTypes != null, "column types is required")
-  require(columnNames.size == columnTypes.size, "Equal number of column names and types is required")
+  require(columnTypes != null, "column types for new frame are required")
+  require(columnNames.size == columnTypes.size, "Equal number of column names and types are required")
   require(udf != null, "User defined expression is required")
 }

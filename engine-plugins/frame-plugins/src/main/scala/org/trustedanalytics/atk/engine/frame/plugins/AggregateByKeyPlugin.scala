@@ -39,15 +39,7 @@ import AggregateByKeyJsonFormat._
  * Adds one or more new columns to the frame by evaluating the given func on each row.
  */
 @PluginDoc(oneLine = "Combine by key current frame.",
-  extended = """Combines data of frame based on key by evaluating a function for each row.
-
-Notes
------
-    1)  The row |UDF| ('func') must return a value in the same format as
-        specified by the schema.
-        See :doc:`/ds_apir`.
-    2)  Unicode in column names is not supported and will likely cause the
-        drop_frames() method (and others) to fail!""")
+  extended = """Combines data of frame based on key by evaluating a function for each row.""")
 class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameReference] {
 
   /**
@@ -68,8 +60,7 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
   override def numberOfJobs(arguments: AggregateByKeyArgs)(implicit invocation: Invocation) = 2
 
   /**
-   * Adds one or more new columns to the frame by evaluating the given func on each row.
-   *
+   * Computes the aggregation on reference frame by applying user defined function (UDF) on each row
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
    *                   can be used during this invocation.
@@ -78,17 +69,13 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
    */
   override def execute(arguments: AggregateByKeyArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
-
     val newColumns = arguments.columnNames.zip(arguments.columnTypes.map(x => x: DataType))
     val columnList = newColumns.map { case (name, dataType) => Column(name, dataType) }
     val newSchema = new FrameSchema(columnList)
-
-    val frameRDD = PythonRddStorage.aggregateMapWith(frame.rdd, arguments.key, arguments.udf, newSchema, sc)
-
+    val frameRDD = PythonRddStorage.aggregateMapWith(frame.rdd, arguments.aggregateByColumnKeys, arguments.udf, newSchema, sc)
     engine.frames.tryNewFrame(CreateEntityArgs(
-      description = Some("created sample frame"))) {
+      description = Some("Created a new frame by applying custom aggregation using UDF on referencing frame"))) {
       newFrame => newFrame.save(frameRDD)
     }
-
   }
 }

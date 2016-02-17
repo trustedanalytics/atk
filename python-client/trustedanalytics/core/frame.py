@@ -545,55 +545,6 @@ class _BaseFrame(CommandLoadable):
         # For further examples, see :ref:`example_frame.add_columns`.
         self._backend.add_columns(self, func, schema, columns_accessed)
 
-
-    @api
-    @has_udf_arg
-    @arg('key', str, "Name of the key column based on which aggregation should be done")
-    @arg('output_schema', 'tuple | list of tuples', "The schema for the results of the |UDF|, indicating new column(s) in the output"
-                                             ".Each tuple provides the column name and data type, and is of the form (str, type).")
-    @arg('combiner_func', 'UDF', "User-Defined Function (|UDF|) which takes the values in the row and produces a value, or "
-                        "collection of values, for the new cell(s).")
-    @arg('init_acc_values', list, "Initial accumulator value which |UDF| will access. If accumulator is not initialized, default value is set (Ex: '0' for Int, 0.0 for double).")
-    def __aggregate_by_key(self, key, output_schema, combiner_func, init_acc_values=None):
-        """
-
-        <hide>
-        >>> f = ta.Frame(ta.UploadRows([["a", 1], ['b', 2], ['c', 3], ['a', 4], ['b', 5]], [('letter', str), ('number', ta.int32)]))
-        <progress>
-
-        </hide>
-
-        >>> f.inspect()
-        [#]  letter  number
-        ===================
-        [0]  a            1
-        [1]  b            2
-        [2]  c            3
-        [3]  a            4
-        [4]  b            5
-
-
-        >>> def combiner(acc, upd):
-        ...     acc.sum = acc.sum + upd.number
-        ...     acc.prod= acc.prod * upd.number
-
-        >>> aggregated_frame = f.aggregate_by_key("letter", [('sum', ta.int64), ('prod', ta.float64)], combiner, init_acc_values=[0,1])
-        <progress>
-
-        >>> aggregated_frame.inspect()
-        [#]  letter  sum  prod
-        ======================
-        [0]  a         5   4.0
-        [1]  b         7  10.0
-        [2]  c         3   3.0
-
-
-        """
-        return self._backend.aggregate_by_key(self, key, output_schema, combiner_func,
-                                              init_acc_values)
-
-
-
     @api
     @arg('columns', 'str | list of str | dict', "If not None, the copy will only include the columns specified. "
          "If dict, the string pairs represent a column renaming, {source_column_name: destination_column_name}")
@@ -843,6 +794,8 @@ class _BaseFrame(CommandLoadable):
             *   stdev
             *   sum
             *   var (see glossary :term:`Bias vs Variance`)
+            *   The aggregation arguments also accepts the User Defined function(UDF).
+                UDF acts on each row
 
         Examples
         --------
@@ -899,7 +852,6 @@ class _BaseFrame(CommandLoadable):
             [2]  2  charlie   12.0
             [3]  1  bravo      5.0
 
-
             >>> mix_frame = frame.group_by('a', ta.agg.count, {'f': [ta.agg.avg, ta.agg.sum, ta.agg.min], 'g': ta.agg.max})
             <progress>
             >>> mix_frame.inspect()
@@ -907,6 +859,23 @@ class _BaseFrame(CommandLoadable):
             =========================================
             [0]  1      3      9    5.0   15.0    3.0
             [1]  2      4      7   6.25   25.0    5.0
+
+            UDF to perform sum and prod based on column keys
+
+            >>> def custom_agg(acc, row):
+            ...     acc.c_sum = acc.c_sum + row.c
+            ...     acc.c_prod= acc.c_prod*row.c
+            <progress>
+
+            >>> sum_prod_frame = frame.group_by(['a', 'b'], ta.agg.udf(combiner=custom_agg,output_schema=[('c_sum', ta.float64),('c_prod', ta.float64)],init_values=[0,1]))
+            <progress>
+            >>> sum_prod_frame.inspect()
+            [#]  a  b        c_sum  c_prod
+            ==============================
+            [0]  1  bravo      5.0     5.0
+            [1]  1  alpha      8.0    15.0
+            [2]  2  charlie   12.0    12.0
+            [3]  2  bravo     27.0   672.0
 
         For further examples, see :ref:`example_frame.group_by`.
         """

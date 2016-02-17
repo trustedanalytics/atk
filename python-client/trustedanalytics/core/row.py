@@ -19,6 +19,7 @@
 from collections import OrderedDict
 from trustedanalytics.core.atktypes import valid_data_types
 
+
 class Row(object):
 
     def __init__(self, schema, data=None):
@@ -94,14 +95,10 @@ class Row(object):
         except IndexError:
             raise IndexError("Internal Error: improper index %d used in schema with %d columns" % (index, len(self._schema_dict)))
 
+# Mutable rows to handle accumulators
+
 
 class MutableRow(Row):
-
-    # def __getattr__(self, name):
-    #     if name != "_schema_dict" and name in self._schema_dict.keys():
-    #         return self._get_cell_value(name)
-    #     return self.__getattribute__(name)
-
     def __setattr__(self, key, value):
         if key in ['_schema_dict', '_data', '_dtypes', '_indices_dict', '_dtype_constructors']:
             super(MutableRow, self).__setattr__(key, value)
