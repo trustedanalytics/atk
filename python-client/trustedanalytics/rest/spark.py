@@ -144,10 +144,9 @@ def _wrap_combiner_rows_function(frame, combiner_function, combiner_schema, init
 
     acc_wrapper = MutableRow(combiner_schema)
     row_wrapper = RowWrapper(row_schema)
+
     def rows_func(rows):
         try:
-            with open('/usr/tmp/aggregatelog.txt', 'a') as the_file:
-                the_file.write(str(rows))
             bson_data = bson.decode_all(rows)[0]
             rows_data = bson_data['array']
             key_indices = bson_data['keyindices']
