@@ -20,6 +20,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -102,7 +103,7 @@ class DistributedNumericTable extends Serializable {
    * Cache distributed table in memory.
    */
   def cache(): Unit = {
-    tableRdd.cache
+    tableRdd.persist(StorageLevel.MEMORY_AND_DISK)
   }
 
   /**

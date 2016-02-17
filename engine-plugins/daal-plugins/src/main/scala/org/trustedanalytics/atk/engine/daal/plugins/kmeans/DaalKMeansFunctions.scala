@@ -41,7 +41,7 @@ object DaalKMeansFunctions extends Serializable {
     val sparkContext = frameRdd.sparkContext
     val daalContext = new DaalContext()
     val table = new DistributedNumericTable(frameRdd, args.observationColumns)
-
+    table.cache()
     var result: Result = null
     var centroids = initializeCentroids(sparkContext, daalContext, table, args)
 
@@ -63,6 +63,7 @@ object DaalKMeansFunctions extends Serializable {
     val assignmentFrame = frameRdd.zipFrameRdd(new FrameRdd(schema, assignments))
 
     val modelData = DaalKMeansModelData(centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray(), args.k, assignmentFrame)
+    table.unpersist()
     daalContext.dispose()
     modelData
   }
