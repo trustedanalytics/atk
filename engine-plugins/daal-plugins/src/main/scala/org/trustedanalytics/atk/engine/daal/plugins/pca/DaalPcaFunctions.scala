@@ -15,12 +15,12 @@
 */
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
-import com.intel.daal.algorithms.pca._
 import com.intel.daal.algorithms.PartialResult
+import com.intel.daal.algorithms.pca._
 import com.intel.daal.services.DaalContext
-import org.trustedanalytics.atk.engine.daal.plugins.DistributedNumericTable
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DistributedNumericTable
 
 object DaalPcaFunctions extends Serializable {
 
@@ -60,16 +60,16 @@ object DaalPcaFunctions extends Serializable {
   }
 
   /**
-   *  Merge partial PCA results at Spark master
+   * Merge partial PCA results at Spark master
    *
    * @param partsRDD Partial PCA results
    * @param arguments PCA arguments
    * @return PCA results with eigen values and vectors
    */
   private def mergePcaPartialResults(partsRDD: RDD[PartialResult], arguments: DaalPcaArgs): DaalPcaResult = {
+    val parts_List = partsRDD.collect()
     val context = new DaalContext
     val pcaMaster: DistributedStep2Master = new DistributedStep2Master(context, classOf[java.lang.Double], arguments.getPcaMethod())
-    val parts_List = partsRDD.collect()
     for (value <- parts_List) {
       value.unpack(context)
       pcaMaster.input.add(MasterInputId.partialResults, value)
