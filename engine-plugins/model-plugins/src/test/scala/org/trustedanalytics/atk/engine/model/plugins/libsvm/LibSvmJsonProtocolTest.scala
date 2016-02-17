@@ -21,6 +21,7 @@ package org.trustedanalytics.atk.engine.model.plugins.libsvm
 import libsvm.{ svm_model, svm_node, svm_parameter }
 import org.scalatest.WordSpec
 import LibSvmJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 import spray.json._
 
 import scala.Array._

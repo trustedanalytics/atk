@@ -18,10 +18,9 @@ package org.trustedanalytics.atk.engine.daal.plugins.conversions
 import com.intel.daal.data_management.data.NumericTable
 import org.apache.spark.frame.FrameRdd
 
+/**
+ * These implicits can be imported to add conversion functions related functions to DAAL tables
+ */
 object DaalConversionImplicits {
-
-  implicit def daalFrameRddFunctions(self: FrameRdd): DaalFrameRddFunctions = new DaalFrameRddFunctions(self)
-
   implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
-
 }

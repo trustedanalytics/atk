@@ -14,16 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.classification.NaiveBayesModel
+import org.apache.spark.mllib.classification.SVMModel
 
 /**
  * Command for loading model data into existing model in the model database.
- * @param naiveBayesModel Trained MLLib's LinearRegressionModel object
+ * @param svmModel Trained MLLib's SVMModel object
  * @param observationColumns Handle to the observation columns of the data frame
  */
-case class NaiveBayesData(naiveBayesModel: NaiveBayesModel, observationColumns: List[String]) {
+case class SVMData(svmModel: SVMModel, observationColumns: List[String]) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(naiveBayesModel != null, "naiveBayesModel must not be null")
+  require(svmModel != null, "svmModel must not be null")
 }

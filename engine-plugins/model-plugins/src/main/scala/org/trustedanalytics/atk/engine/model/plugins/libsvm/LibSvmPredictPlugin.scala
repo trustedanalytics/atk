@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import LibSvmJsonProtocol._
+import org.trustedanalytics.atk.scoring.models.LibSvmData
 
 // TODO: all plugins should move out of engine-core into plugin modules
 

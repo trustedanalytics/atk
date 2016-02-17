@@ -14,16 +14,12 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
-
-import org.apache.spark.mllib.classification.SVMModel
+package org.trustedanalytics.atk.scoring.interfaces
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param svmModel Trained MLLib's SVMModel object
- * @param observationColumns Handle to the observation columns of the data frame
+ * For providing information about Model inputs and outputs
+ * @param name name of the observation column
+ * @param data_type data type of the observation column
  */
-case class SVMData(svmModel: SVMModel, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(svmModel != null, "svmModel must not be null")
-}
+case class Field(name: String, data_type: String)
+

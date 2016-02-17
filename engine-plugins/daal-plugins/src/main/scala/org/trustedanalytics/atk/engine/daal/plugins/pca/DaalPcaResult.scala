@@ -15,6 +15,21 @@
 */
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
+import com.intel.daal.algorithms.pca.{ ResultId, Result }
 import com.intel.daal.data_management.data.NumericTable
 
-case class DaalPcaResult(eigenValues: NumericTable, eigenVectors: NumericTable)
+/**
+ * Class for PCA results with two tables: scores, and labels
+ *
+ * scores - A nx1 NumericTable of Eigen values, sorted from largest to the smallest.
+ * loadings - A nxp NumericTable of corresponding Eigen vectors.
+ *
+ * @param results Results of PCA algorithm
+ */
+case class DaalPcaResult(results: Result) {
+  val scores = results.get(ResultId.eigenValues)
+  val loadings = results.get(ResultId.eigenVectors)
+  scores.pack()
+  loadings.pack()
+}
+
