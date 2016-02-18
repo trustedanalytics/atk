@@ -36,7 +36,6 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       Array(Field("col1", "Double"), Field("col2", "Double"), Field("col3", "double"), Field("score", "double"))
     }
 
-
     override def score(row: Array[Any]): Array[Any] = ???
   }
 
@@ -53,7 +52,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
           |   "records": [
           |           {"col1": -1, "col2": -1, "col3": -1}, {"col1": 0, "col2": -2, "col3": 1}
           |    ]
-          |}
+          |}{"Input":[{"name":"col1","value":"Double"},{"name":"col2","value":"Double"},{"name":"col3","value":"double"}],"Output Columns":[{"name":"col1","value":"Double"},{"name":"col2","value":"Double"},{"name":"col3","value":"double"},{"name":"score","value":"double"}],"Output Values":["-1","-1","-1","0.0"]}
         """.stripMargin
       val json = JsonParser(string).asJsObject
       val input = DataInputFormat.read(json)
@@ -71,7 +70,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{{\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"Output Columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"Output Values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}}")
+      assert(output.compactPrint == "{\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"Output Columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"Output Values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
   }

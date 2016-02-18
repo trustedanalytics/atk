@@ -43,7 +43,7 @@ Below are a couple of examples of posting a request to a scoring engine containi
 version 1 of Scoring Engine supporting strings for requests and response:
 
 request from a python client with String Input scoring a record:
-r = requests.post('http://localhost:9100/v1/score?data=-1,-1, -1', headers=headers)
+r = requests.post('http://localhost:9100/v1/score?data=-1,-1, -1, -1', headers=headers)
 String response:
 '-1.0'
 
@@ -52,6 +52,7 @@ version 2 of Scoring Engine supporting Json for requests and responses:
 request from a python client with Json Input scoring a record:
 r = requests.post("http://localhost:9100/v2/score", json={"records": [{"b": 1, "c": 2, "d": 3}]})
 Json response:
-u'{"Input":[{"name":"b","value":"Double"},{"name":"c","value":"Double"},{"name":"d","value":"Double"}],"output":[[1.0,2.0,3.0,-1.0]]}'
+u'{"Input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"Output Columns":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}],"Output Values":[[-1.0,-1.0,1.0]]}'
 
-
+r =requests.get('http://localhost:9100/v2/metadata')
+u'{"Model Details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"Input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
