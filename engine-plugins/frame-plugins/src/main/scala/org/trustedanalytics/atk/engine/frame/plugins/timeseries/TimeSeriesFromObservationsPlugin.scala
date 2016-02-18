@@ -77,7 +77,7 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
 
     // Create DataFrame with a new column that's formatted as a Timestamp (because this is what timeSeriesRDDFromObservations requires)
     val newTimestampColumn = arguments.timestampColumn + "_as_timestamp" // name for the new timestamp formatted column
-    val dataFrame = frame.toDataFrame()
+    val dataFrame = frame.toDataFrame
     val dataFrameWithTimestamp = dataFrame.withColumn(newTimestampColumn, TimeSeriesFunctions.toTimestamp(dataFrame(arguments.timestampColumn)))
 
     // Convert the frame of observations to a TimeSeriesRDD
