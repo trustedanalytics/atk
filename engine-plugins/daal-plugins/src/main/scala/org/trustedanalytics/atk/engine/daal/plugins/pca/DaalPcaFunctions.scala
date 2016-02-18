@@ -51,9 +51,12 @@ object DaalPcaFunctions extends Serializable {
     distributedTable.rdd.map(tableWithIndex => {
       val context = new DaalContext
       val pcaLocal = new DistributedStep1Local(context, classOf[java.lang.Double], arguments.getPcaMethod())
-      pcaLocal.input.set(InputId.data, tableWithIndex.getUnpackedTable(context))
+      val unpackedTable = tableWithIndex.getUnpackedTable(context)
+      pcaLocal.input.set(InputId.data, unpackedTable)
+
       val partialResult = pcaLocal.compute
       partialResult.pack
+      unpackedTable.dispose()
       context.dispose
       partialResult
     })
