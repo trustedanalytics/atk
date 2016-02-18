@@ -120,6 +120,19 @@ class ScoringServiceJsonProtocol(model: Model) {
     override def read(json: JsValue): Array[Any] = ???
   }
 
+  implicit object ModelMetaDataOutputFormat extends JsonFormat[Array[Any]] {
+
+    override def write(obj: Array[Any]): JsValue = {
+      val modelMetadata = model.modelMetadata()
+      JsObject("Model Details" -> modelMetadata.toJson,
+        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+        "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList))
+    }
+
+    //don't need this method. just there to satisfy the API.
+    override def read(json: JsValue): Array[Any] = ???
+  }
+
   def decodeRecords(records: List[JsValue]): Seq[Array[Any]] = {
     val decodedRecords: Seq[Map[String, Any]] = records.map { record =>
       record match {
