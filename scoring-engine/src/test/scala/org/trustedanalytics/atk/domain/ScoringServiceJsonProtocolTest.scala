@@ -52,7 +52,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
           |   "records": [
           |           {"col1": -1, "col2": -1, "col3": -1}, {"col1": 0, "col2": -2, "col3": 1}
           |    ]
-          |}{"Input":[{"name":"col1","value":"Double"},{"name":"col2","value":"Double"},{"name":"col3","value":"double"}],"Output Columns":[{"name":"col1","value":"Double"},{"name":"col2","value":"Double"},{"name":"col3","value":"double"},{"name":"score","value":"double"}],"Output Values":["-1","-1","-1","0.0"]}
+          |}
         """.stripMargin
       val json = JsonParser(string).asJsObject
       val input = DataInputFormat.read(json)
