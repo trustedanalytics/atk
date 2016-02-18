@@ -111,9 +111,9 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("Model Details" -> modelMetadata.toJson,
-        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("Input" -> )
+//      JsObject("Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+//        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
