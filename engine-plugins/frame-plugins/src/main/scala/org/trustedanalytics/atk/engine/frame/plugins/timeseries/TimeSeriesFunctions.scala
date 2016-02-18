@@ -21,6 +21,7 @@ import java.sql.Timestamp
 import java.time.ZonedDateTime
 
 import org.apache.spark.mllib.linalg.{ Vector, DenseVector }
+import org.apache.spark.sql.UserDefinedFunction
 import org.apache.spark.sql.functions._
 import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame, VectorFunctions, RowWrapper }
@@ -35,7 +36,7 @@ import org.joda.time.format.ISODateTimeFormat
 object TimeSeriesFunctions extends Serializable {
 
   // Spark SQL UDF for converting our datetime column (which is string based) to a Timestamp datatype
-  val toTimestamp = udf((t: String) => Timestamp.from(ZonedDateTime.parse(t).toInstant))
+  val toTimestamp: UserDefinedFunction = udf((t: String) => Timestamp.from(ZonedDateTime.parse(t).toInstant))
 
   /**
    * Creates a FrameRdd for the specified TimeSeriesRdd
@@ -57,7 +58,7 @@ object TimeSeriesFunctions extends Serializable {
     })
 
     // Create FrameRdd to return
-    return FrameRdd.toFrameRdd(timeseriesSchema, withVector)
+    FrameRdd.toFrameRdd(timeseriesSchema, withVector)
   }
 
   /**
@@ -67,7 +68,7 @@ object TimeSeriesFunctions extends Serializable {
    */
   def createDateTimeIndex(dateTimeStrings: List[DateTime]): DateTimeIndex = {
     // Create DateTimeIndex after parsing the strings as ZonedDateTime
-    return DateTimeIndex.irregular(dateTimeStrings.map(dt => parseZonedDateTime(dt)).toArray)
+    DateTimeIndex.irregular(dateTimeStrings.map(dt => parseZonedDateTime(dt)).toArray)
   }
 
   /**
@@ -76,7 +77,7 @@ object TimeSeriesFunctions extends Serializable {
    * @return ZonedDateTime
    */
   def parseZonedDateTime(dateTime: DateTime): ZonedDateTime = {
-    return ZonedDateTime.parse(dateTime.toString(ISODateTimeFormat.dateTime))
+    ZonedDateTime.parse(dateTime.toString(ISODateTimeFormat.dateTime))
   }
 
   /**
@@ -124,7 +125,7 @@ object TimeSeriesFunctions extends Serializable {
       }
     }
 
-    return (keyColumn, valueColumn)
+    (keyColumn, valueColumn)
   }
 
   /**
@@ -148,7 +149,7 @@ object TimeSeriesFunctions extends Serializable {
       (key.asInstanceOf[String], vector.asInstanceOf[Vector])
     })
 
-    return new TimeSeriesRDD[String](dateTimeIndex, rdd)
+    new TimeSeriesRDD[String](dateTimeIndex, rdd)
   }
 
 }

@@ -87,7 +87,7 @@ trait SparkFrame extends Frame {
   def save(rdd: FrameRdd): SparkFrame
 
   /** Convert to a Spark DataFrame */
-  def toDataFrame(): DataFrame
+  def toDataFrame: DataFrame
 }
 
 object SparkFrame {
