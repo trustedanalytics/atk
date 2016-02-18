@@ -30,6 +30,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.apache.spark.mllib.regression.LabeledPoint
 import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.scoring.models.RandomForestClassifierData
 
 //Implicits needed for JSON conversion
 import spray.json._

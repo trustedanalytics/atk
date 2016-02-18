@@ -23,6 +23,7 @@ import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
+import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
 class NaiveBayesModelTest extends TestingSparkContextFlatSpec with Matchers with MockitoSugar {

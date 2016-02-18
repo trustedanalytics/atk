@@ -27,6 +27,7 @@ import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.scoring.models.RandomForestRegressorData
 import org.trustedanalytics.atk.spray.json.JsonMaps
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._

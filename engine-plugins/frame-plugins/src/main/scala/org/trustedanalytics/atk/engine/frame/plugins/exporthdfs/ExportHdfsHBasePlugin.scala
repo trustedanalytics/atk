@@ -67,7 +67,7 @@ class ExportHdfsHBasePlugin extends SparkCommandPlugin[ExportHdfsHBaseArgs, Unit
 
     val frame: SparkFrame = arguments.frame
     val conf = createConfig(arguments.tableName)
-    val familyName = arguments.familyName.getOrElse("familyColumn")
+    val familyName = arguments.familyName
 
     val pairRdd = ExportHBaseImpl.convertToPairRDD(frame.rdd,
       familyName,

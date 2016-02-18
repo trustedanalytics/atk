@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent._
 import spray.json._
@@ -28,14 +28,34 @@ import ScoringJsonReaderWriters._
  */
 class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    data.foreach { document =>
-      {
-        val predictReturn = predict(document.toList)
-        score = score :+ predictReturn.toJson
-      }
+  override def score(data: Array[Any]): Array[Any] = {
+    val predictReturn = predict(data.map(_.toString)toList)
+    data :+ predictReturn.toJson
+  }
+
+  /**
+   *  @return fields containing the input names and their datatypes
+   */
+  override def input(): Array[Field] = {
+    var input = Array[Field]()
+    val keys = ldaModel.topicWordMap.keys
+    keys.foreach { key =>
+      input = input :+ Field(key, "String")
     }
-    score
+    input
+  }
+
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Lda Model", classOf[LdaScoreModel].getName, classOf[LdaModelReaderPlugin].getName, Map())
+  }
+
+  /**
+   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   */
+  override def output(): Array[Field] = {
+    var output = input()
+    output = output :+ Field("topicsGivenDoc", "Vector[Double]")
+    output = output :+ Field("newWordsCount", "Int")
+    output :+ Field("percentOfNewWords", "Double")
   }
 }

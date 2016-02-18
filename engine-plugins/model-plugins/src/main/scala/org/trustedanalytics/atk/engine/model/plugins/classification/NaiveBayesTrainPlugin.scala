@@ -29,6 +29,7 @@ import org.apache.spark.mllib.classification.NaiveBayes
 import org.apache.spark.mllib.regression.LabeledPoint
 import ModelPluginImplicits._
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.scoring.models.NaiveBayesData
 
 //Implicits needed for JSON conversion
 import spray.json._
