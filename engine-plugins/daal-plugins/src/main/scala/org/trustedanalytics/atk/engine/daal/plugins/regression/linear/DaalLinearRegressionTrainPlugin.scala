@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
@@ -48,12 +49,12 @@ case class DaalLinearRegressionArgs(model: ModelReference,
                                     @ArgDoc("""A frame to train or test the model on.""") frame: FrameReference,
                                     @ArgDoc("""List of column(s) containing the
 observations.""") featureColumns: List[String],
-                                    @ArgDoc("""Column name containing the label
+                                    @ArgDoc("""List of column(s) containing the label
 for each observation.""") labelColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  require(featureColumns != null && !featureColumns.isEmpty, "observationColumn must not be null nor empty")
-  require(labelColumns != null && !labelColumns.isEmpty, "labelColumn must not be null nor empty")
+  require(featureColumns != null && featureColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(labelColumns != null && labelColumns.nonEmpty, "labelColumn must not be null nor empty")
 }
 
 /**
@@ -64,7 +65,7 @@ for each observation.""") labelColumns: List[String]) {
 case class DaalLinearRegressionTrainResult(betas: Array[Array[Double]])
 
 import spray.json._
-import DaalLinearRegressionModelDataFormat._
+import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalLinearRegressionJsonFormat._
 
@@ -86,11 +87,6 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
   /** Disable Kryo serialization to prevent seg-faults when using DAAL */
   override def kryoRegistrator: Option[String] = None
 
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation) = 3
   /**
    * Run DAAL's Linear Regression with QR decomposition on the training frame and create a Model for it.
    *
@@ -129,7 +125,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         }
       }
 
-      val jsonModel = DaalLinearRegressionModelData(serializedModel,
+      val jsonModel = DaalLinearRegressionModel(serializedModel,
         featureColumns,
         labelColumns).toJson.asJsObject
       model.data = jsonModel

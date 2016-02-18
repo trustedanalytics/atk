@@ -22,7 +22,7 @@ import org.apache.commons.compress.archivers.tar.{ TarArchiveOutputStream, TarAr
 import org.scalatest.WordSpec
 import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.scalatest.Assertions._
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 
 class ModelPublishFormatTest extends WordSpec {
 
@@ -131,10 +131,26 @@ class TestModelReaderPlugin extends ModelLoader {
 
 class TestModel() extends Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
+  override def score(data: Array[Any]): Array[Any] = {
+    var score = Array[Any]()
     score = score :+ 2
     score
+  }
+
+  override def input: Array[Field] = {
+    var input = Array[Field]()
+    input = input :+ Field("input", "Float")
+    input
+  }
+
+  override def output: Array[Field] = {
+    var output = Array[Field]()
+    output = output :+ Field("output", "Float")
+    output
+  }
+
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("Dummy Model", "dummy class", "dummy reader", Map("created_on" -> "Jan 29th 2016"))
   }
 }
 

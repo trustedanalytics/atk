@@ -14,16 +14,24 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
 
-import org.apache.spark.mllib.classification.NaiveBayesModel
+package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param naiveBayesModel Trained MLLib's LinearRegressionModel object
- * @param observationColumns Handle to the observation columns of the data frame
+ * DAAL linear regression model
+ *
+ * @param serializedModel Serialized linear regression model
+ * @param featureColumns List of feature column names
+ * @param labelColumns List of label column names
  */
-case class NaiveBayesData(naiveBayesModel: NaiveBayesModel, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(naiveBayesModel != null, "naiveBayesModel must not be null")
+case class DaalLinearRegressionModel(serializedModel: List[Byte],
+                                     featureColumns: List[String],
+                                     labelColumns: List[String])
+
+/**
+ * JSON serialization for model
+ */
+object DaalLinearRegressionModelFormat {
+  import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+  implicit val lrModelDataFormat = jsonFormat3(DaalLinearRegressionModel)
 }

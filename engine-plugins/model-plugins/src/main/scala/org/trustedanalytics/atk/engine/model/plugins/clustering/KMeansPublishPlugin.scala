@@ -25,6 +25,8 @@ import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, Mod
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.scoring.models.{ KMeansModelReaderPlugin, KMeansData }
+
 // Implicits needed for JSON conversion
 import spray.json._
 import ModelPublishJsonProtocol._
@@ -81,10 +83,10 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata
 
     //Extracting the KMeansModel from the stored JsObject
     val kmeansData = model.data.convertTo[KMeansData]
-    val kmeansModel = kmeansData.kMeansModel
-    val jsvalue: JsValue = kmeansModel.toJson
+    //val kmeansModel = kmeansData.kMeansModel
+    val jsvalue: JsValue = kmeansData.toJson
 
-    val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.KMeansModelReaderPlugin")
+    val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[KMeansModelReaderPlugin].getName)
 
     ExportMetadata(modelartifacts.filePath, "model", "tar", modelartifacts.fileSize, model.name.getOrElse("kmeans_model"))
   }

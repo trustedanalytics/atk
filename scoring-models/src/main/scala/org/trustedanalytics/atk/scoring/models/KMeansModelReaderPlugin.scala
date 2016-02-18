@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import ScoringJsonReaderWriters.KmeansModelFormat
+import ScoringJsonReaderWriters.KmeansDataFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import org.apache.spark.mllib.clustering.KMeansModel
 import spray.json._
@@ -29,8 +29,9 @@ class KMeansModelReaderPlugin() extends ModelLoader {
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
     val json: JsValue = str.parseJson
-    val kMeansModel = json.convertTo[KMeansModel]
-    myKMeansModel = new KMeansScoreModel(kMeansModel)
+    val kMeansData = json.convertTo[KMeansData]
+    val kMeansModel = kMeansData.kMeansModel
+    myKMeansModel = new KMeansScoreModel(kMeansModel, kMeansData)
     myKMeansModel.asInstanceOf[Model]
 
   }

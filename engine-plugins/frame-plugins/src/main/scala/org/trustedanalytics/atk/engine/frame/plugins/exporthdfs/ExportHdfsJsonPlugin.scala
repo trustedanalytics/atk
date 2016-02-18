@@ -80,13 +80,10 @@ class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, Export
   private def exportToHdfsJson(
     frameRdd: FrameRdd,
     filename: String,
-    count: Option[Int],
-    offset: Option[Int]) = {
+    count: Int,
+    offset: Int) = {
 
-    val recCount = count.getOrElse(-1)
-    val recOffset = offset.getOrElse(0)
-
-    val filterRdd = if (recCount > 0) MiscFrameFunctions.getPagedRdd(frameRdd, recOffset, recCount, -1) else frameRdd
+    val filterRdd = if (count > 0) MiscFrameFunctions.getPagedRdd(frameRdd, offset, count, -1) else frameRdd
     val headers = frameRdd.frameSchema.columnNames
     val jsonRDD = filterRdd.map {
       row =>

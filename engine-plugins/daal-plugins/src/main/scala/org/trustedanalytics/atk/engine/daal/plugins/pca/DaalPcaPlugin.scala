@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
@@ -39,10 +40,10 @@ case class DaalPcaArgs(frame: FrameReference,
                            | svd - singular value decomposition.
                          """) method: String = "cor") {
   require(frame != null, "frame is required")
-  require(columnNames != null && !columnNames.isEmpty, "column names should not be empty")
+  require(columnNames != null && columnNames.nonEmpty, "column names should not be empty")
   require(method == "cor" || method == "svd", "method must be 'svd' or 'cor'")
 
-  def getPcaMethod(): Method = method match {
+  def getPcaMethod(): Method = method.toLowerCase match {
     case "svd" => Method.svdDense
     case "cor" => Method.correlationDense
     case _ => throw new IllegalArgumentException(s"Unsupported PCA method: ${method}")
@@ -115,8 +116,8 @@ class DaalPcaPlugin extends SparkCommandPlugin[DaalPcaArgs, DaalPcaReturn] {
     val pcaResults = DaalPcaFunctions.runPCA(frameRdd, arguments)
 
     // Convert PCA results to ATK data frame
-    val eigenVectors = pcaResults.eigenVectors.toArrayOfDoubleArray()
-    val eigenValues = pcaResults.eigenValues.toDoubleArray()
+    val eigenVectors = pcaResults.loadings.toArrayOfDoubleArray()
+    val eigenValues = pcaResults.scores.toDoubleArray()
 
     DaalPcaReturn(arguments.columnNames, eigenValues, eigenVectors)
   }
