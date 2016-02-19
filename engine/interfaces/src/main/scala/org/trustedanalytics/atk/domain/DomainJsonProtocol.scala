@@ -15,7 +15,6 @@
  */
 
 package org.trustedanalytics.atk.domain
-
 import java.net.URI
 import java.util.ArrayList
 
