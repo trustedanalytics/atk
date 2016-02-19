@@ -33,7 +33,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
   "LinearRegressionModel" should "create a LinearRegressionModel" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
-    val rowArray: Array[Row] = Array(new GenericRow((Array[Any](1, new DenseVector(Array(16.8974, 2.693))))))
+    val rowArray: Array[Row] = Array(new GenericRow((Array[Any](1.0, new DenseVector(Array(16.8974, 2.693))))))
     val rdd = sparkContext.parallelize(rowArray)
     val schema = StructType(Seq(StructField("label", DoubleType, true), StructField("features", new VectorUDT, true)))
     val dataFrame = new SQLContext(sparkContext).createDataFrame(rdd, schema)
