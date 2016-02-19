@@ -61,7 +61,11 @@ export PG_PASS=$(echo $PG_CREDENTIALS | $jq -c -r '.password')
 export PG_DB=$(echo $PG_CREDENTIALS | $jq -c -r '.dbname')
 export PG_URL=$(echo $PG_CREDENTIALS | $jq -c -r '.uri')
 
-export DATA_CATALOG_URI=$(echo $VCAP_SERVICES | $jq '.["user-provided"] | select(.[].name == "datacatalog") | .[0].credentials.host' | tr -d '"')
+export DATA_CATALOG_PREFIX="data-catalog."
+export TAP_DOMAIN=${echo $VCAP_SERVICES | jq --raw-output -r '.uris[0][.application_name|length + 1:]'}
+export DATA_CATALOG_URI=$DATA_CATALOG_PREFIX$TAP_DOMAIN
+
+#export DATA_CATALOG_URI=$(echo $VCAP_SERVICES | $jq '.["user-provided"] | select(.[].name == "datacatalog") | .[0].credentials.host' | tr -d '"')
 export POSTGRES_HOST=$PG_HOST
 export POSTGRES_PORT=$PG_PORT
 export POSTGRES_USER=$PG_USER
