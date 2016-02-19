@@ -945,7 +945,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: NaiveBayesData): JsValue = {
       val model = NaiveBayesModelFormat.write(obj.naiveBayesModel)
-      JsObject("model" -> model,
+      JsObject("naive_bayes_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
 
     }
@@ -958,7 +958,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): NaiveBayesData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("naive_bayes_model").map(v => {
         NaiveBayesModelFormat.read(v)
       }
       ).get
