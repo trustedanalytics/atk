@@ -878,7 +878,6 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestClassifierData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
       val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
