@@ -65,6 +65,8 @@
     take
     tally
     tally_percent
+    timeseries_from_observations
+    timeseries_slice
     top_k
     unflatten_column
     unflatten_columns
@@ -157,6 +159,8 @@
     :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
     :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   |BETA| Count number of times a value is seen.
     :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   |BETA| Compute a cumulative percent count.
+    :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
+    :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
     :doc:`unflatten_column <unflatten_column>`\ (self, columns[, delimiter])                              |DEPRECATED| Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
     :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.

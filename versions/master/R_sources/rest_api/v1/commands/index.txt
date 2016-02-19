@@ -73,6 +73,8 @@
     frame__sorted_k
     frame__tally
     frame__tally_percent
+    frame__timeseries_from_observations
+    frame__timeseries_slice
     frame__top_k
     frame__unflatten_columns
     graph-___info
@@ -200,6 +202,8 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/sorted_k <frame__sorted_k>`                                                         |ALPHA| Get a sorted subset of the data.
 :doc:`frame/tally <frame__tally>`                                                               |BETA| Count number of times a value is seen.
 :doc:`frame/tally_percent <frame__tally_percent>`                                               |BETA| Compute a cumulative percent count.
+:doc:`frame/timeseries_from_observations <frame__timeseries_from_observations>`                 Returns a frame that has the observations formatted as a time series.
+:doc:`frame/timeseries_slice <frame__timeseries_slice>`                                         Returns a frame that is a sub-slice of the given series.
 :doc:`frame/top_k <frame__top_k>`                                                               Most or least frequent column values.
 :doc:`frame/unflatten_columns <frame__unflatten_columns>`                                       Compacts data from multiple rows based on cell data.
 :doc:`frame:/filter <frame-__filter>`                                                           Select all rows which satisfy a predicate.
