@@ -460,7 +460,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
+      val colScales = getOrInvalid(fields, "column_scalings").convertTo[List[Double]]
       val model = fields.get("k_means_model").map(v => {
         KmeansModelFormat.read(v)
       }
