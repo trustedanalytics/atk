@@ -26,11 +26,10 @@ import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.Pri
 import org.apache.spark.mllib.linalg.{ DenseVector, SparseVector, DenseMatrix, Vector }
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.scalatest.WordSpec
 import MLLibJsonProtocol._
-import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, SVMData, KMeansData }
+import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData }
 
 import spray.json._
 

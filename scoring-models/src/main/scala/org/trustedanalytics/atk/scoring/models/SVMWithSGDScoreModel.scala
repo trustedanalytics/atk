@@ -16,7 +16,6 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.classification.SVMModel
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 
