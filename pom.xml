@@ -55,7 +55,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <enabled>true</enabled>
             </snapshots>
         </repository>
-
+        <repository>
+            <id>cloudera-repos</id>
+            <name>Cloudera Repos</name>
+            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
+        </repository>
         <repository>
             <id>central</id>
             <url>http://repo1.maven.org/maven2</url>
@@ -1443,6 +1447,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>jackson-databind</artifactId>
                 <version>2.2.3</version>
             </dependency>
+			<!-- com.cloudera.sparkts -->
+			<dependency>
+				<groupId>com.cloudera.sparkts</groupId>
+				<artifactId>sparkts</artifactId>
+				<version>0.2.0</version>
+			</dependency>
             <!--test scope-->
             <dependency>
                 <groupId>org.mockito</groupId>

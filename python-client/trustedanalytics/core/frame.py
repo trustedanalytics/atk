@@ -656,7 +656,14 @@ class _BaseFrame(CommandLoadable):
 
         for i, dtype in enumerate(data_types):
             dtype_str = atk_dtype_to_pandas_str(dtype)
-            pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            try:
+                pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            except TypeError:
+                if dtype_str.startswith("int"):
+                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
+                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
+                else:
+                    raise
         return pandas_df
 
     @api

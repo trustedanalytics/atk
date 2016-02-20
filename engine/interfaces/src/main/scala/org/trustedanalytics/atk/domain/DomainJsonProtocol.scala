@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 package org.trustedanalytics.atk.domain
-
 import java.net.URI
 import java.util.ArrayList
 
@@ -406,7 +405,6 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val histogramResultFormat = jsonFormat3(Histogram)
 
   // model performance formats
-
   implicit val classificationMetricLongFormat = jsonFormat6(ClassificationMetricArgs)
   implicit val classificationMetricValueLongFormat = jsonFormat5(ClassificationMetricValue)
   implicit val commandActionFormat = jsonFormat1(CommandPost)
