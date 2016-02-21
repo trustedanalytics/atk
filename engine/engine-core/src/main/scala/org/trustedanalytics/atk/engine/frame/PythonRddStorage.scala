@@ -81,7 +81,7 @@ object PythonRddStorage {
     val pythonIncludes = new JArrayList[String]()
     if (uploads != null) {
       for (k <- uploads.indices) {
-        sc.addFile(s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
+        sc.addPyFile(s"file://${EngineConfig.pythonUdfDependenciesDirectory}" + uploads(k))
         pythonIncludes.add(uploads(k))
       }
     }
@@ -142,7 +142,7 @@ object PythonRddStorage {
 
     val pyIncludes = new JArrayList[String]()
 
-    sc.addFile(s"file://$pythonDepZip")
+    sc.addPyFile(s"file://$pythonDepZip")
     pyIncludes.add("trustedanalytics.zip")
 
     if (udf.dependencies != null) {
