@@ -108,10 +108,10 @@ def _make_archive(file_list, archive, root):
 
 def _zip_dir(path):
     """
-    zips a path to /tmp/iapydependencies.zip. Please note that this zip file will be truncated every time
-    this call is made. So to preserve the contents, read the file immediately or copy. Not thread-safe.
+    zips a path to /tmp/<UUID>iapydependencies.zip and returns that path.
+    Name is hardened to allow for concurrency.
     """
-    file_path = _zip_file_path + uuid.uuid1().hex
+    file_path = uuid.uuid1().hex + _zip_file_path
     _make_archive(_get_dir_entries(path, True), file_path, path[0:path.rfind('/')])
     return file_path
 
