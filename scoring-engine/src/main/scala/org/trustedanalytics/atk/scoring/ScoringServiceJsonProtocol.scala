@@ -78,7 +78,10 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
+        case v: Array[_] => new JsArray(v.map {
+          case d: Double => JsNumber(d)
+          case n: Int => JsNumber(n)
+        }.toList)
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
         // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
