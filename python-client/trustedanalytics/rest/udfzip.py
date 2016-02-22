@@ -64,8 +64,6 @@ class UdfDependencies(list):
     pass  # note this list-wrapping class is used solely for the purpose of providing runtime documentation
 
 
-_zip_file_path = '/tmp/iapydependencies.zip'
-
 # From http://stackoverflow.com/questions/14438928/python-zip-a-sub-folder-and-not-the-entire-folder-path
 def _get_dir_entries(dir_name, subdir, *args):
     """
@@ -108,10 +106,10 @@ def _make_archive(file_list, archive, root):
 
 def _zip_dir(path):
     """
-    zips a path to /tmp/<UUID>iapydependencies.zip and returns that path.
+    zips a path to /tmp/iapydependencies-<UUID>.zip and returns that path.
     Name is hardened to allow for concurrency.
     """
-    file_path = uuid.uuid1().hex + _zip_file_path
+    file_path = '/tmp/iapydependencies-' + uuid.uuid1().hex + ".zip"
     _make_archive(_get_dir_entries(path, True), file_path, path[0:path.rfind('/')])
     return file_path
 
