@@ -18,15 +18,13 @@ package org.trustedanalytics.atk.engine.frame.plugins.statistics.correlation
 
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.schema.DataTypes
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 import org.trustedanalytics.atk.domain.frame.CorrelationMatrixArgs
-import org.trustedanalytics.atk.domain.schema.FrameSchema
-import org.trustedanalytics.atk.domain.schema.Column
+import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -63,17 +61,18 @@ class CorrelationMatrixPlugin extends SparkCommandPlugin[CorrelationMatrixArgs, 
    */
   override def execute(arguments: CorrelationMatrixArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
-    frame.schema.validateColumnsExist(arguments.dataColumnNames)
+    val dataColumnNames = arguments.dataColumnNames
 
-    val inputDataColumnNamesAndTypes: List[Column] = arguments.dataColumnNames.map({ name => Column(name, DataTypes.float64) })
-    val correlationRDD = CorrelationFunctions.correlationMatrix(frame.rdd, arguments.dataColumnNames)
+    frame.schema.validateColumnsExist(dataColumnNames)
 
-    val schema = FrameSchema(inputDataColumnNamesAndTypes)
+    val correlationRDD = CorrelationFunctions.correlationMatrix(frame.rdd, dataColumnNames)
+    val outputSchema = Schema.create(dataColumnNames, DataTypes.float64)
+
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by correlation matrix command"))) { newFrame: FrameEntity =>
       if (arguments.matrixName.isDefined) {
         engine.frames.renameFrame(newFrame, FrameName.validate(arguments.matrixName.get))
       }
-      newFrame.save(new FrameRdd(schema, correlationRDD))
+      newFrame.save(new FrameRdd(outputSchema, correlationRDD))
     }
   }
 }

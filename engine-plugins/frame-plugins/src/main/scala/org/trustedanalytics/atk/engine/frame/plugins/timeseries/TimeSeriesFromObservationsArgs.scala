@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2016 Intel Corporation 
+ *  Copyright (c) 2015 Intel Corporation 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.domain.frame
+package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
-import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
+import org.joda.time.DateTime
+import org.trustedanalytics.atk.domain.frame.FrameReference
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class TimeSeriesFromObservationsArgs(
     @ArgDoc("Frame of observations to format as a time series") frame: FrameReference,
-    @ArgDoc("DateTimeIndex to conform all series to.") dateTimeIndex: List[String],
+    @ArgDoc("DateTimeIndex to conform all series to.") dateTimeIndex: List[DateTime],
     @ArgDoc("The name of the column telling when the observation occurred.") timestampColumn: String,
     @ArgDoc("The name of the column that contains which string key the observation belongs to.") keyColumn: String,
     @ArgDoc("The name of the column that contains the observed value.") valueColumn: String) {
