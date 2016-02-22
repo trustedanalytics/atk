@@ -81,6 +81,10 @@ class ScoringServiceJsonProtocol(model: Model) {
         case v: Array[_] => new JsArray(v.map {
           case d: Double => JsNumber(d)
           case n: Int => JsNumber(n)
+          case m: scala.collection.mutable.Map[String, _] => new JsArray(m.map {
+            case (a: String, l: List[Double]) => new JsArray(List(JsString(a), l.toJson))
+            case (a: String, b: Double) => new JsArray(List(JsString(a), JsNumber(b)))
+          }.toList)
         }.toList)
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
