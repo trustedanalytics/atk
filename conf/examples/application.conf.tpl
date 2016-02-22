@@ -233,6 +233,9 @@ trustedanalytics.atk {
           spark.eventLog.enabled = true
           spark.eventLog.dir = "hdfs://invalid-spark-application-history-folder:8020/user/spark/applicationHistory"
 
+          # Allow user defined functions (UDF's) to be overwritten
+          spark.files.overwrite = true
+
           # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
           # Verify that the path below exist across all yarn master/worker nodes.
           // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
