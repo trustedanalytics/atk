@@ -32,12 +32,12 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
-    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
+    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length))
     val pcaScoreOutput: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
     pcaScoreOutput.put("principal_components", y.values.toList)
-    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
+    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x.length)
     pcaScoreOutput.put("t_squared_index", t_squared_index)
     data :+ pcaScoreOutput
   }
@@ -70,8 +70,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   def computeTSquaredIndex(y: Array[Double], E: Vector, k: Int): Double = {
     val yArray: Array[Double] = y
     var t: Double = 0.0
-    for (i <- 0 to k - 1) {
-      t += ((yArray(i) * yArray(i)) / (E(i) * E(i)))
+    for (i <- 0 until k) {
+      if (E(i) > 0)
+        t += ((yArray(i) * yArray(i)) / (E(i) * E(i)))
     }
     t
   }
