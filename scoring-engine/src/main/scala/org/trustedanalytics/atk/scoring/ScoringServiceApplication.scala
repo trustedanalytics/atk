@@ -32,6 +32,7 @@ import org.trustedanalytics.atk.event.EventLogging
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.reflect.ClassTag
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
+import org.trustedanalytics.hadoop.config.client.helper.Hdfs
 import java.net.URI
 import org.apache.commons.io.FileUtils
 
@@ -80,7 +81,15 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
           val relativePath = tarFilePath.substring(tarFilePath.indexOf("hdfs:") + 6)
           tarFilePath = "hdfs://" + relativePath
         }
-        val hdfsFileSystem: FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
+
+        val hdfsFileSystem = try {
+          Hdfs.newInstance().createFileSystem()
+        }
+        catch {
+          case _ =>
+            info("Failed to create HDFS instance using hadoop-library. Default to FileSystem")
+            org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
+        }
         tempTarFile = File.createTempFile("modelTar", ".tar")
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
         tarFilePath = tempTarFile.getAbsolutePath

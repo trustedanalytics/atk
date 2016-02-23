@@ -448,7 +448,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: KMeansData): JsValue = {
       val model = KmeansModelFormat.write(obj.kMeansModel)
-      JsObject("model" -> model,
+      JsObject("k_means_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "column_scalings" -> obj.columnScalings.toJson)
     }
@@ -461,8 +461,8 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
-      val model = fields.get("model").map(v => {
+      val colScales = getOrInvalid(fields, "column_scalings").convertTo[List[Double]]
+      val model = fields.get("k_means_model").map(v => {
         KmeansModelFormat.read(v)
       }
       ).get
@@ -516,7 +516,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: SVMData): JsValue = {
       val model = SVMModelFormat.write(obj.svmModel)
-      JsObject("model" -> model,
+      JsObject("svm_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -528,7 +528,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): SVMData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("svm_model").map(v => {
         SVMModelFormat.read(v)
       }
       ).get
@@ -866,7 +866,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestClassifierData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "num_classes" -> obj.numClasses.toJson)
     }
@@ -879,9 +879,8 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestClassifierData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -898,7 +897,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestRegressorData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -910,7 +909,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestRegressorData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -947,7 +946,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: NaiveBayesData): JsValue = {
       val model = NaiveBayesModelFormat.write(obj.naiveBayesModel)
-      JsObject("model" -> model,
+      JsObject("naive_bayes_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
 
     }
@@ -960,7 +959,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): NaiveBayesData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("naive_bayes_model").map(v => {
         NaiveBayesModelFormat.read(v)
       }
       ).get
