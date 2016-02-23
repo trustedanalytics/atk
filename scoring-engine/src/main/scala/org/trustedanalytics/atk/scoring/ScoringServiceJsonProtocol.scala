@@ -78,7 +78,16 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
+        case v: Array[_] => new JsArray(v.map {
+          case d: Double => JsNumber(d)
+          case n: Int => JsNumber(n)
+          case n: Long => JsNumber(n)
+          case n: Float => JsNumber(n)
+          case m: scala.collection.mutable.Map[String, _] => new JsArray(m.map {
+            case (a: String, l: List[Double]) => new JsArray(List(JsString(a), l.toJson))
+            case (a: String, b: Double) => new JsArray(List(JsString(a), JsNumber(b)))
+          }.toList)
+        }.toList)
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
         // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
@@ -111,10 +120,9 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
-      JsObject("Model Details" -> modelMetadata.toJson,
-        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+        "output_columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
+        "output_values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.

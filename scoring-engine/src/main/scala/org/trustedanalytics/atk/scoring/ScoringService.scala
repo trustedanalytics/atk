@@ -87,6 +87,7 @@ class ScoringService(model: Model) extends Directives {
    */
   val serviceRoute: Route = logRequest("scoring service", Logging.InfoLevel) {
     val prefix = "score"
+    val metadataPrefix = "metadata"
     path("") {
       get {
         homepage
@@ -127,6 +128,22 @@ class ScoringService(model: Model) extends Directives {
             }
           }
         }
+      } ~
+      path("v2" / metadataPrefix) {
+        requestUri { uri =>
+          get {
+            import spray.json._
+            onComplete(Future { model.modelMetadata() }) {
+              case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
+                "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString)
+              case Failure(ex) => ctx => {
+                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+
+              }
+            }
+          }
+        }
       }
   }
 
@@ -149,3 +166,4 @@ class ScoringService(model: Model) extends Directives {
 }
 
 case class ServiceDescription(name: String, identifier: String, versions: List[String])
+
