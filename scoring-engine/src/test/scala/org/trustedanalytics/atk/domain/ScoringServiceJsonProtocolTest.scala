@@ -32,7 +32,9 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       new ModelMetaDataArgs("Dummy Model", "Dummy Class", "Dummy Reader", Map("Created_On" -> "Jan 29th 2016"))
     }
 
-    override def output(): Array[Field] = ???
+    override def output(): Array[Field] = {
+      Array(Field("col1", "Double"), Field("col2", "Double"), Field("col3", "double"), Field("score", "double"))
+    }
 
     override def score(row: Array[Any]): Array[Any] = ???
   }
@@ -68,7 +70,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{\"Model Details\":{\"model_type\":\"Dummy Model\",\"model_class\":\"Dummy Class\",\"model_reader\":\"Dummy Reader\",\"custom_values\":{\"Created_On\":\"Jan 29th 2016\"}},\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"Output Columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"Output Values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
   }
