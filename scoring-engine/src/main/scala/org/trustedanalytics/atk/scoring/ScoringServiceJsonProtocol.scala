@@ -81,6 +81,8 @@ class ScoringServiceJsonProtocol(model: Model) {
         case v: Array[_] => new JsArray(v.map {
           case d: Double => JsNumber(d)
           case n: Int => JsNumber(n)
+          case n: Long => JsNumber(n)
+          case n: Float => JsNumber(n)
           case m: scala.collection.mutable.Map[String, _] => new JsArray(m.map {
             case (a: String, l: List[Double]) => new JsArray(List(JsString(a), l.toJson))
             case (a: String, b: Double) => new JsArray(List(JsString(a), JsNumber(b)))
@@ -118,9 +120,9 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "Output Columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
-        "Output Values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+        "output_columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
+        "output_values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.

@@ -63,16 +63,16 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   /**
    * Compute the t-squared index for the observation
    * @param y Projection of singular vectors on the input
-   * @param E Right singular values of the input
+   * @param singularValues Right singular values of the input
    * @param k Number of principal components
    * @return t-squared index for the observation
    */
-  def computeTSquaredIndex(y: Array[Double], E: Vector, k: Int): Double = {
+  def computeTSquaredIndex(y: Array[Double], singularValues: Vector, k: Int): Double = {
     val yArray: Array[Double] = y
     var t: Double = 0.0
     for (i <- 0 until k) {
-      if (E(i) > 0)
-        t += ((yArray(i) * yArray(i)) / (E(i) * E(i)))
+      if (singularValues(i) > 0)
+        t += ((yArray(i) * yArray(i)) / (singularValues(i) * singularValues(i)))
     }
     t
   }
