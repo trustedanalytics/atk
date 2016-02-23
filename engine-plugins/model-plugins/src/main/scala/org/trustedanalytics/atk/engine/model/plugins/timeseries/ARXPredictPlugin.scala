@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
@@ -28,9 +29,10 @@ import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, Plug
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.linalg.Vectors
+import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import com.cloudera.sparkts.ARXModel
+import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 
 import scala.collection.mutable.ListBuffer
@@ -79,6 +81,8 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
     //Extracting the ARXModel from the stored JsObject
     val arxData = model.data.convertTo[ARXData]
     val arxModel = arxData.arxModel
+
+    require(arxData.xColumns.length == arguments.xColumns.length, "Number of columns for train and predict should be the same")
 
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
     val predictions = arxModel.predict(yVector, xMatrix).toArray

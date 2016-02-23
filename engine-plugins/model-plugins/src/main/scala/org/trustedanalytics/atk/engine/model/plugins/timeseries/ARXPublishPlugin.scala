@@ -17,14 +17,15 @@
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import com.google.common.base.Charsets
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import MLLibJsonProtocol._
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.domain.StringValue
 import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.scoring.models.ARXData
+
 // Implicits needed for JSON conversion
 import spray.json._
 import ModelPublishJsonProtocol._

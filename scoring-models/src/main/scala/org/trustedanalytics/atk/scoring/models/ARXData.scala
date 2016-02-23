@@ -14,19 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.timeseries
+package org.trustedanalytics.atk.scoring.models
 
 import com.cloudera.sparkts.ARXModel
-import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
-
-//Implicits needed for JSON conversion
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
  * Command for loading model data into existing model in the model database.
  * @param arxModel Trained ARXModel
+ * @param xColumns Name of the column that contain exogenous variables
  */
-case class ARXData(arxModel: ARXModel) {
+case class ARXData(arxModel: ARXModel, xColumns: List[String]) {
   require(arxModel != null, "arxModel must not be null")
+  require(xColumns != null && xColumns.nonEmpty, "xColumns list must not be null or empty")
 }

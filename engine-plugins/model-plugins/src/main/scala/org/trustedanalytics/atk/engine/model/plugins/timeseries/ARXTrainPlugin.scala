@@ -31,11 +31,13 @@ import org.apache.spark.mllib.linalg.Matrices
 import breeze.linalg._
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.SparkContext._
+import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 import com.cloudera.sparkts.{ ARXModel, AutoregressionX, Autoregression }
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 import scala.collection.mutable.ArrayBuffer
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
@@ -87,7 +89,7 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, arguments.timeseriesColumn, arguments.xColumns)
 
     val arxModel = AutoregressionX.fitModel(yVector, xMatrix, arguments.yMaxLag, arguments.xMaxLag, true, arguments.noIntercept)
-    val jsonModel = new ARXData(arxModel)
+    val jsonModel = new ARXData(arxModel, arguments.xColumns)
     model.data = jsonModel.toJson.asJsObject
 
     return ARXTrainReturn(arxModel.c, arxModel.coefficients)

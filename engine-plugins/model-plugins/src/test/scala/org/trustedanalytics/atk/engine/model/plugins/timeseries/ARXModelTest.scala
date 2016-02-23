@@ -97,37 +97,5 @@ class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
     }
   }
 
-  val rand = new MersenneTwister(10L)
-  val nRows = 50
-  val nCols = 2
-  val X = Array.fill(nRows, nCols)(rand.nextGaussian())
-  val intercept = rand.nextGaussian * 10
-
-  "ARXModel" should "fit model" in {
-    val xCoeffs = Array(0.8, 0.2)
-    val rawY = X.map(_.zip(xCoeffs).map { case (b, v) => b * v }.sum + intercept)
-    val arCoeff = 0.4
-    val y = rawY.scanLeft(0.0) { case (priorY, currY) => currY + priorY * arCoeff }.tail
-    val dy = new DenseVector(y)
-    val dx = new DenseMatrix(rows = X.length, cols = X.head.length, data = X.transpose.flatten)
-    //    val xArray = Array.ofDim[Double](2, 5)
-    //    xArray(0) = Array(1.0, 2.0, 1.0, 1.0, 2.0)
-    //    xArray(1) = Array(5.0, 5.5, 4.0, 5.5, 5.0)
-    //    val yArray = Array(10.0, 11.0, 12.0, 15.0, 10.0)
-    //    val dy = new DenseVector(yArray)
-    //    val dx = new DenseMatrix(rows = xArray.length, cols = xArray.head.length, data = xArray.transpose.flatten)
-    val model = AutoregressionX.fitModel(dy, dx, 1, 0)
-    val combinedCoeffs = Array(arCoeff) ++ xCoeffs
-
-    model.c should be(intercept +- 1e-4)
-    for (i <- combinedCoeffs.indices) {
-      model.coefficients(i) should be(combinedCoeffs(i) +- 1e-4)
-    }
-
-    it should "fit the model " in {
-
-    }
-  }
-
 }
 

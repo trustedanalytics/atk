@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
+import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import com.cloudera.sparkts.ARXModel
@@ -66,6 +67,6 @@ object ARXJsonProtocol {
   implicit val arxPredictArgsFormat = jsonFormat4(ARXPredictArgs)
   implicit val arxTrainArgsFormat = jsonFormat7(ARXTrainArgs)
   implicit val arxTrainReturnFormat = jsonFormat2(ARXTrainReturn)
-  implicit val arxDataFormat = jsonFormat1(ARXData)
+  implicit val arxDataFormat = jsonFormat2(ARXData)
 
 }

@@ -16,10 +16,10 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import java.io._
-import com.cloudera.sparkts.ARXModel
-import org.apache.spark.mllib.ScoringJsonReaderWriters.ARXModelFormat
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import ScoringJsonReaderWriters.ARXDataFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import com.cloudera.sparkts.ARXModel
 import spray.json._
 
 class ARXModelReaderPlugin() extends ModelLoader {
@@ -29,8 +29,9 @@ class ARXModelReaderPlugin() extends ModelLoader {
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
     val json: JsValue = str.parseJson
-    val arxModel = json.convertTo[ARXModel]
-    myArxModel = new ARXScoreModel(arxModel, true)
+    val arxData = json.convertTo[ARXData]
+    val arxModel = arxData.arxModel
+    myArxModel = new ARXScoreModel(arxModel, arxData)
     myArxModel.asInstanceOf[Model]
 
   }

@@ -16,29 +16,48 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Field, Model }
 
 import org.apache.spark.mllib.linalg.Vectors
 import breeze.linalg._
 import com.cloudera.sparkts.ARXModel
 
-class ARXScoreModel(arxModel: ARXModel, includesOriginalX: Boolean) extends ARXModel(arxModel.c, arxModel.coefficients, arxModel.yMaxLag, arxModel.xMaxLag, includesOriginalX) with Model {
+class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxModel.c, arxModel.coefficients, arxModel.yMaxLag, arxModel.xMaxLag, true) with Model {
 
-  override def score(data: Seq[Array[String]]): Seq[Any] = {
-    var score = Seq[Any]()
-    //    data.foreach { row =>
-    //    {
-    //      val tempMatrix = Matrix.create(1,1, new Array[Double](1))
-    //
-    //      val y: Array[Double] = new Array[Double](row.length)
-    //      val x = Array.ofDim[Double](row.length, 2)
-    //      row.zipWithIndex.foreach {
-    //        case (value: Any, index: Int) => y(index) = value.toDouble
-    //      }
-    //      score = score :+ (predict(Vectors.dense(y).asInstanceOf[Vector[Double]], tempMatrix) + 1)
-    //    }
-    //    }
-    score
+  override def score(row: Array[Any]): Array[Any] = {
+    val xColumnsLength = arxData.xColumns.length
+
+    // Length of the row should be 1 (y) + the number of x columns
+    require(row.length == (xColumnsLength + 1), "Number of items in the row should be " + (xColumnsLength + 1).toString + " (1 y value and " + xColumnsLength.toString + " x values).")
+
+    // Values should be doubles
+    val rowDoubles = row.map(item => {
+      ScoringModelUtils.toDouble(item)
+    })
+
+    // Create Vector and Matrix to call predict
+    val y = new DenseVector(Array[Double](rowDoubles(0)))
+    val xValues = rowDoubles.slice(1, rowDoubles.length)
+    val x = new DenseMatrix(rows = 1, cols = xColumnsLength, data = xValues)
+
+    arxModel.predict(y, x).map(_.asInstanceOf[Any]).toArray
+  }
+
+  override def input(): Array[Field] = {
+    var input = Array[Field]()
+    val obsCols = arxData.xColumns
+    obsCols.foreach { name =>
+      input = input :+ Field(name, "Double")
+    }
+    input
+  }
+  override def modelMetadata(): ModelMetaDataArgs = {
+    new ModelMetaDataArgs("ARX Model", classOf[ARXModel].getName, classOf[ARXModelReaderPlugin].getName, Map())
+  }
+
+  override def output(): Array[Field] = {
+    var output = input()
+    output :+ Field("score", "Int")
   }
 
 }
