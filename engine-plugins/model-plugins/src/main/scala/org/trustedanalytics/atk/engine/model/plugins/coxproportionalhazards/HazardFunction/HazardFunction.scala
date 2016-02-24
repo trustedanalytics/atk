@@ -31,6 +31,7 @@ class HazardFunction {
    */
   private def predict(rdd: RDD[(HazardFunctionRow, Long)], beta: Double): Double =
     {
+      //TODO: Consider a parallel implementation and replace the loop below
       val hazardFuncRdd = rdd.map { case (value, index) => value }
       val initialValueRdd = hazardFuncRdd.map(row => row.x)
       val colSum = CoxProportionalHazardTrainFunctions.columnSum(initialValueRdd)

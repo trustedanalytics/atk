@@ -77,6 +77,7 @@ object HazardFunctionBetaEstimator {
    */
   def nextBeta(hazardFuncRdd: RDD[(HazardFunctionRow, Long)], beta: Double): Double = {
 
+    //TODO: Consider a parallel implementation and replace the current firstAndSecondDerivative method
     val (first, second) = firstAndSecondDerivative(hazardFuncRdd)
 
     beta + (first / second)
