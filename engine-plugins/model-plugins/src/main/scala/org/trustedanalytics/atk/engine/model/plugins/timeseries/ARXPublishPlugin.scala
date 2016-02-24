@@ -81,10 +81,9 @@ class ARXPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
     val model: Model = arguments.model
 
-    //Extracting the ARX Model from the stored JsObject
+    //Extracting the ARXData from the stored JsObject
     val arxData = model.data.convertTo[ARXData]
-    val arxModel = arxData.arxModel
-    val jsvalue: JsValue = arxModel.toJson
+    val jsvalue: JsValue = arxData.toJson
 
     val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin")
 
