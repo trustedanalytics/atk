@@ -70,10 +70,10 @@ object HazardFunctionBetaEstimator {
     }
 
   /**
-   * Calculates the next step beta (newton-Rapson is an iterative algorithm)
+   * Calculates the next step for beta using Newton-Raphson (an iterative algorithm)
    * @param hazardFuncRdd the input frame
-   * @param beta the current step beta
-   * @return the next step beta
+   * @param beta the current beta
+   * @return the next beta
    */
   def nextBeta(hazardFuncRdd: RDD[(HazardFunctionRow, Long)], beta: Double): Double = {
 
@@ -84,20 +84,18 @@ object HazardFunctionBetaEstimator {
 
   /**
    * Add exponential functions as rdd columns
-   * @param sortedRdd initial rdd (time, covariance)
+   * @param sortedRdd initial rdd (time, covariate)
    * @param expMultiplier beta multiplier for exponent
    * @return rdd in the format (time, exp(x), x*exp(x), (x*x)exp(x))
    */
   def hazardFunctionRdd(sortedRdd: RDD[(Double, Double)], expMultiplier: Double): RDD[(HazardFunctionRow, Long)] = {
-    val hazardFuncRdd = sortedRdd.map { row =>
-      val time = row._1
-      val x = row._2
+    val hazardFuncRdd = sortedRdd.map {
+      case (time, x) =>
+        val exp = Math.exp(x * expMultiplier)
+        val xTimesExp = x * exp
+        val xSquaredTimesExp = x * xTimesExp
 
-      val exp = Math.exp(x * expMultiplier)
-      val xTimesExp = x * exp
-      val xSquaredTimesExp = x * xTimesExp
-
-      HazardFunctionRow(time, x, exp, xTimesExp, xSquaredTimesExp)
+        HazardFunctionRow(time, x, exp, xTimesExp, xSquaredTimesExp)
     }
 
     hazardFuncRdd.zipWithIndex()

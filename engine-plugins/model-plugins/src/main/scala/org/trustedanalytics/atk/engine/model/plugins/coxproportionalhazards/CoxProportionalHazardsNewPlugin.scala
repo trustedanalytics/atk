@@ -27,7 +27,18 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Creates a 'new' instance of Cox proportional hazard model
  */
 @PluginDoc(oneLine = "Creates a 'new' instance of Cox proportional hazard model.",
-  extended = """""")
+  extended =
+    """A Cox model is a popular statistics technique used in survival analysis to assess the importance of various covariates
+      | in the survival times of individuals or objects. The model estimates the survival through a hazard function.
+      | The model must be fitted and the final model from a Cox regression analysis will yield an equation for the
+      | hazard as a function of several explanatory variables.
+      | Interpreting the Cox model involves examining the coefficients for each explanatory variable. A positive
+      | regression coefficient for an explanatory variable means that the hazard is higher, and thus the prognosis
+      | worse. Conversely, a negative regression coefficient implies a better prognosis for patients with higher values
+      | of that variable.The model is described in more detail in the following papers:
+      |
+      | http://sfb649.wiwi.hu-berlin.de/fedc_homepage/xplore/tutorials/xaghtmlnode28.html
+      |https://courses.nus.edu.sg/course/stacar/internet/st3242/handouts/notes3.pdf """.stripMargin)
 class CoxProportionalHazardsNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
    * The name of the command.

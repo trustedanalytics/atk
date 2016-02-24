@@ -9,8 +9,6 @@ Consider the following model trained and tested on the sample data set in *frame
 -etc-
 
 </hide>
-Consider the following frame containing two columns.
-
 >>> frame.inspect()
 [#]  time_column  covariance_column
 ===================================
@@ -29,7 +27,7 @@ Consider the following frame containing two columns.
 
 >>> train_output = model.train(frame, "time_column", "covariance_column", 0.01, 0.03)
 <progress>
->>> train_output['value']
+>>> train_output['beta']
 0.029976090327051643
 >>> train_output['error']
 2.3909672948355803e-05

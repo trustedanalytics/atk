@@ -16,17 +16,18 @@ object CoxProportionalHazardTrainFunctions {
   /**
    * Sort the initial frame on the time column
    * @param rdd the initial RDD
-   * @param timeColIndex index of the time column
-   * @param covarianceColIndex index of the covariance column
+   * @param timeCol index of the time column
+   * @param covariateCol index of the covariate column
    * @return sorted RDD
    */
-  def frameToSortedPairRdd(rdd: FrameRdd, timeColIndex: Int, covarianceColIndex: Int): RDD[(Double, Double)] = {
-    val pairedRdd = try {
+  def frameToSortedTupleRdd(rdd: FrameRdd, timeCol: String, covariateCol: String): RDD[(Double, Double)] = {
+    val rowWrapper = rdd.rowWrapper
+    val tupleRdd = try {
       rdd.map { row =>
-        val timeValue = java.lang.Double.parseDouble(row(timeColIndex).toString)
-        val covarianceValue = java.lang.Double.parseDouble(row(covarianceColIndex).toString)
+        val timeValue = rowWrapper(row).doubleValue(timeCol)
+        val covariateValue = rowWrapper(row).doubleValue(covariateCol)
 
-        (timeValue, covarianceValue)
+        (timeValue, covariateValue)
       }
     }
     catch {
@@ -34,13 +35,13 @@ object CoxProportionalHazardTrainFunctions {
         new NumberFormatException("Column values need to be numeric: " + exception.toString)
     }
 
-    pairedRdd.sortByKey(ascending = true)
+    tupleRdd.sortByKey(ascending = true)
   }
 
   /**
    * Converts a paired rdd[(double, double)] to frameRdd
    * @param rdd paired rdd[(double, double)]
-   * @return frameRdd
+   * @return a frameRdd
    */
   def pairToFrameRdd(rdd: RDD[(Double, Double)]): RDD[Row] = {
 
@@ -85,7 +86,7 @@ object CoxProportionalHazardTrainFunctions {
    */
   def columnSum(rdd: RDD[Double]): Double = {
 
-    CumulativeDistFunctions.columnSum(rdd)
+    CumulativeDistFunctions.partitionSums(rdd).sum
   }
 
 }

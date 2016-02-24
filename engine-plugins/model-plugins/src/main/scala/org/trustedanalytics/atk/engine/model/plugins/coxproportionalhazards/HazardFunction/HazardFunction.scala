@@ -5,7 +5,7 @@ import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards.CoxProportionalHazardTrainFunctions
 
 /**
- * Predicts an event using the hazard function of the cox proportional model
+ * Predicts an event using the hazard function of the Cox proportional model
  */
 class HazardFunction {
 
@@ -13,12 +13,12 @@ class HazardFunction {
    * Predicts an event
    * @param rdd initial rdd
    * @param beta (fitted) beta
-   * @param timeColIndex index of the time column in the initial rdd
-   * @param covarianceColIndex index of the covariance column in the initial rdd
+   * @param timeCol the time column in the initial rdd
+   * @param covariateCol the covariate column in the initial rdd
    * @return a predicted hazard
    */
-  def predict(rdd: FrameRdd, beta: Double, timeColIndex: Int, covarianceColIndex: Int): Double = {
-    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedPairRdd(rdd, timeColIndex, covarianceColIndex)
+  def predict(rdd: FrameRdd, beta: Double, timeCol: String, covariateCol: String): Double = {
+    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedTupleRdd(rdd, timeCol, covariateCol)
     val rddWithExpColumns = HazardFunctionBetaEstimator.hazardFunctionRdd(sortedRdd, beta)
 
     predict(rddWithExpColumns, beta)

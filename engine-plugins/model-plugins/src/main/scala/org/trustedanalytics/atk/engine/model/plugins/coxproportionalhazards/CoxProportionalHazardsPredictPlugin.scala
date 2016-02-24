@@ -24,9 +24,9 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import CoxProportionalHazardJSonFormat._
 
-@PluginDoc(oneLine = "",
-  extended = """""",
-  returns = """""")
+@PluginDoc(oneLine = "TBD",
+  extended = """TBD""",
+  returns = """TBD""")
 class CoxProportionalHazardsPredictPlugin extends SparkCommandPlugin[CoxProportionalHazardsPredictArgs, FrameReference] {
   /**
    * The name of the command.
@@ -42,7 +42,6 @@ class CoxProportionalHazardsPredictPlugin extends SparkCommandPlugin[CoxProporti
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-
   override def numberOfJobs(arguments: CoxProportionalHazardsPredictArgs)(implicit invocation: Invocation) = 9
 
   /**
