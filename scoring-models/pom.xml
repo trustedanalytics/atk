@@ -127,8 +127,8 @@
             <version>${dep.spark.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.cloudera.datascience</groupId>
-            <artifactId>sparktimeseries</artifactId>
+            <groupId>com.cloudera.sparkts</groupId>
+            <artifactId>sparkts</artifactId>
         </dependency>
     </dependencies>
 

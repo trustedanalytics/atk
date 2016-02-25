@@ -17,7 +17,7 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringModelTestUtils
-import com.cloudera.sparkts.ARXModel
+import com.cloudera.sparkts.models.ARXModel
 import org.scalatest.WordSpec
 
 class ARXScoreModelTest extends WordSpec {

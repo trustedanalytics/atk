@@ -16,10 +16,11 @@
 
 package org.apache.spark.mllib
 
+import com.cloudera.sparkts.models.ARXModel
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
-import com.cloudera.sparkts.ARXModel
+import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.Algo._

@@ -35,7 +35,7 @@ import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
-import com.cloudera.sparkts.{ ARXModel, AutoregressionX, Autoregression }
+import com.cloudera.sparkts.models.{ ARXModel, AutoregressionX }
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 import org.apache.spark.mllib.ScoringJsonReaderWriters
 import scala.collection.mutable.ArrayBuffer

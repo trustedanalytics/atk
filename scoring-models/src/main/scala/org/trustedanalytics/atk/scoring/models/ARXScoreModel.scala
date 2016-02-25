@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Field, M
 
 import org.apache.spark.mllib.linalg.Vectors
 import breeze.linalg._
-import com.cloudera.sparkts.ARXModel
+import com.cloudera.sparkts.models.ARXModel
 
 class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxModel.c, arxModel.coefficients, arxModel.yMaxLag, arxModel.xMaxLag, true) with Model {
 

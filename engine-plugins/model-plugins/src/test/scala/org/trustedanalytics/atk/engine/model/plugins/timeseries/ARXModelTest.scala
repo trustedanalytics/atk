@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-import com.cloudera.sparkts.AutoregressionX
+import com.cloudera.sparkts.models.AutoregressionX
 import org.apache.spark.frame.FrameRdd
 //import org.apache.spark.mllib.linalg.{ Vectors, DenseVector }
 import org.apache.spark.rdd.RDD

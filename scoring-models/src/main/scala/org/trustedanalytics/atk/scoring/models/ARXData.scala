@@ -16,7 +16,7 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import com.cloudera.sparkts.ARXModel
+import com.cloudera.sparkts.models.ARXModel
 
 /**
  * Command for loading model data into existing model in the model database.

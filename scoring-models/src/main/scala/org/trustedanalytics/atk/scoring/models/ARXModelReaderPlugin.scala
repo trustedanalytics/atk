@@ -19,7 +19,6 @@ package org.trustedanalytics.atk.scoring.models
 import org.apache.spark.mllib.ScoringJsonReaderWriters
 import ScoringJsonReaderWriters.ARXDataFormat
 import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
-import com.cloudera.sparkts.ARXModel
 import spray.json._
 
 class ARXModelReaderPlugin() extends ModelLoader {

@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.model.plugins.timeseries
 import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import com.cloudera.sparkts.ARXModel
+import com.cloudera.sparkts.models.ARXModel
 
 /** Json conversion for arguments and return value case classes */
 object ARXJsonProtocol {
