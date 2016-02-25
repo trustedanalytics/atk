@@ -151,7 +151,7 @@ class ScoringServiceJsonProtocol(model: Model) {
       if (decodedRecord.size != featureArray.length) {
         throw new IllegalArgumentException(
           "Size of input record is not equal to number of observation columns that model was trained on:\n" +
-            s"""Expected columns are: [${obsColumns.mkString(",")}}]"""
+            s"""Expected columns are: [${obsColumns.mkString(",")}]"""
         )
       }
       decodedRecord.foreach({
