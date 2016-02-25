@@ -49,7 +49,7 @@ observations.""") observationColumns: List[String],
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
-  require(valueColumn != null && !valueColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(valueColumn != null && !valueColumn.isEmpty, "valueColumn must not be null nor empty")
   require(maxIterations > 0, "numIterations must be a positive value")
   require(regParam >= 0, "regParam should be greater than or equal to 0")
 

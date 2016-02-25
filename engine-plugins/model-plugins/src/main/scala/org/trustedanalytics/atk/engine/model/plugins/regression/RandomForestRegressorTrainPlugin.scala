@@ -48,7 +48,7 @@ If "auto" is set, this is based on numTrees: if numTrees == 1, set to "all"; if 
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && !observationColumns.isEmpty, "observationColumn must not be null nor empty")
-  require(valueColumn != null && !valueColumn.isEmpty, "labelColumn must not be null nor empty")
+  require(valueColumn != null && !valueColumn.isEmpty, "valueColumn must not be null nor empty")
   require(numTrees > 0, "numTrees must be greater than 0")
   require(maxDepth >= 0, "maxDepth must be non negative")
 
