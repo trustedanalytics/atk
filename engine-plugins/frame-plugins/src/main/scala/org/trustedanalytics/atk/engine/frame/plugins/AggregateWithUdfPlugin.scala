@@ -29,18 +29,18 @@ import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /** Json conversion for arguments and return value case classes */
-object AggregateByKeyJsonFormat {
-  implicit val AggregateByKeyArgsFormat = jsonFormat5(AggregateByKeyArgs)
+object AggregateWithUdfJsonFormat {
+  implicit val AggregateWithUdfArgsFormat = jsonFormat5(AggregateWithUdfArgs)
 }
 
-import AggregateByKeyJsonFormat._
+import AggregateWithUdfJsonFormat._
 
 /**
  * Adds one or more new columns to the frame by evaluating the given func on each row.
  */
 @PluginDoc(oneLine = "Combine by key current frame.",
   extended = """Combines data of frame based on key by evaluating a function for each row.""")
-class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameReference] {
+class AggregateWithUdfPlugin extends SparkCommandPlugin[AggregateWithUdfArgs, FrameReference] {
 
   /**
    * The name of the command, e.g. graphs/loopy_belief_propagation
@@ -48,7 +48,7 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "frame/aggregate_by_key"
+  override def name: String = "frame/aggregate_with_udf"
 
   /* This plugin executes python udfs; by default sparkcommandplugins have this property as false */
   override def executesPythonUdf = true
@@ -57,7 +57,7 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: AggregateByKeyArgs)(implicit invocation: Invocation) = 2
+  override def numberOfJobs(arguments: AggregateWithUdfArgs)(implicit invocation: Invocation) = 2
 
   /**
    * Computes the aggregation on reference frame by applying user defined function (UDF) on each row
@@ -67,7 +67,7 @@ class AggregateByKeyPlugin extends SparkCommandPlugin[AggregateByKeyArgs, FrameR
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: AggregateByKeyArgs)(implicit invocation: Invocation): FrameReference = {
+  override def execute(arguments: AggregateWithUdfArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val newColumns = arguments.columnNames.zip(arguments.columnTypes.map(x => x: DataType))
     val columnList = newColumns.map { case (name, dataType) => Column(name, dataType) }

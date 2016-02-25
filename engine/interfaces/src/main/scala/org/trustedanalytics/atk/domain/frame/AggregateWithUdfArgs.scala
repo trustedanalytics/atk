@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.domain.frame
 import org.trustedanalytics.atk.domain.schema.Schema
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-case class AggregateByKeyArgs(
+case class AggregateWithUdfArgs(
     @ArgDoc("Frame to which aggregate by key applied") frame: FrameReference,
     @ArgDoc("""list of column key(s) to aggregate on""") aggregateByColumnKeys: List[String],
     @ArgDoc("List of names for the new columns") columnNames: List[String],

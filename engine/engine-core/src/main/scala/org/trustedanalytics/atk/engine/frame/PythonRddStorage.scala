@@ -95,7 +95,7 @@ object PythonRddStorage {
     val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
-    val pyRdd = AggregateRddToPyRdd(udf, groupRDD, keyIndices, sc)
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, keyIndices, sc)
     val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
@@ -200,7 +200,7 @@ object PythonRddStorage {
    * @param keyIndices List of key indices, used to retreive key data with result frame
    * @return PythonRdd
    */
-  def AggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     val baseRdd: RDD[Array[Byte]] = rdd.map {
       case (key, rows) => {
