@@ -51,8 +51,10 @@ version 2 of Scoring Engine supporting Json for requests and responses. In the f
 
 request from a python client with Json Input scoring a record:
 r = requests.post("http://localhost:9100/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6}]})
+r.text
 Json response:
 u'{"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output_columns":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}],"output_values":[[-1.0,-1.0,1.0]]}'
 
 r =requests.get('http://localhost:9100/v2/metadata')
+r.text
 u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'

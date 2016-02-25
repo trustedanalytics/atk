@@ -35,12 +35,12 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
 
   "LdaScoringModel" should "throw an IllegalArgumentException if number of topics is less than one" in {
     intercept[IllegalArgumentException] {
-      new LdaScoreModel(LdaModel(0, topicWordMap))
+      new LdaScoreModel(LdaModel(0, topicWordMap, "doc", "word"))
     }
   }
 
   "predict" should "compute topic probabilities for document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = LdaModel(numTopics, topicWordMap, "doc", "word")
     val scoringModel = new LdaScoreModel(ldaModel)
 
     val documents = Seq(
