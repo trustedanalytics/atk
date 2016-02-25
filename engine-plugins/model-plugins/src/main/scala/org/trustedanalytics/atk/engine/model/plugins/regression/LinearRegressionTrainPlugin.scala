@@ -46,7 +46,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: LinearRegressionTrainArgs)(implicit invocation: Invocation) = arguments.maxIterations + 9
+  override def numberOfJobs(arguments: LinearRegressionTrainArgs)(implicit invocation: Invocation) = 1
   /**
    * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
    *
@@ -61,7 +61,6 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
     val frame: SparkFrame = arguments.frame
 
     val trainFrameRdd = frame.rdd
-    //Running MLLib
     val dataFrame = trainFrameRdd.toLabeledDataFrame(arguments.valueColumn, arguments.observationColumns)
 
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)

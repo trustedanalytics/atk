@@ -47,7 +47,7 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
   override def numberOfJobs(arguments: LinearRegressionTestArgs)(implicit invocation: Invocation) = 1
 
   /**
-   * Run Spark ml's LinearRegression() on the training frame and create a Model for it.
+   * Run Spark ML's LinearRegression() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
