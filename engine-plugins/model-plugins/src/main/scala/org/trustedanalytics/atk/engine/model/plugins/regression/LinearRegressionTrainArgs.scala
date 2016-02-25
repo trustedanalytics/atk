@@ -57,17 +57,17 @@ observations.""") observationColumns: List[String],
 
 /**
  * Return of Linear Regression train
- * @param observationColumns The
- * @param valueColumn
- * @param intercept
- * @param weights
- * @param explainedVariance
- * @param meanAbsoluteError
- * @param meanSquaredError
- * @param objectiveHistory
- * @param r2
- * @param rootMeanSquaredError
- * @param iterations
+ * @param observationColumns Frame's column(s) storing the observations
+ * @param valueColumn Frame's column storing the value of the observation
+ * @param intercept The intercept of the trained model
+ * @param weights Weights of the trained model
+ * @param explainedVariance The explained variance regression score
+ * @param meanAbsoluteError The risk function corresponding to the expected value of the absolute error loss or l1-norm loss
+ * @param meanSquaredError The risk function corresponding to the expected value of the squared error loss or quadratic loss
+ * @param objectiveHistory Objective function(scaled loss + regularization) at each iteration
+ * @param r2 The coefficient of determination of the trained model
+ * @param rootMeanSquaredError The square root of the mean squared error
+ * @param iterations The number of training iterations until termination
  */
 case class LinearRegressionTrainReturn(@ArgDoc("""The list of column(s) storing the observations""") observationColumns: List[String],
                                        @ArgDoc("""Name of the column storing the label""") valueColumn: String,

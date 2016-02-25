@@ -15,8 +15,6 @@
  */
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-// Implicits needed for JSON conversion
-
 import com.google.common.base.Charsets
 import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.apache.spark.ml.atk.plugins.MLJsonProtocol
@@ -25,13 +23,13 @@ import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, ApiMaturityTag, CommandPlugin }
 import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin }
-
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import ModelPublishJsonProtocol._
 import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
+
 /**
  * Publish a Linear Regression Model for scoring
  */
