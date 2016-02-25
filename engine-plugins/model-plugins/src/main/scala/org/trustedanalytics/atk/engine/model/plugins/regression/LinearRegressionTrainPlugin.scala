@@ -48,7 +48,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
    */
   override def numberOfJobs(arguments: LinearRegressionTrainArgs)(implicit invocation: Invocation) = 1
   /**
-   * Run MLLib's LinearRegressionWithSGD() on the training frame and create a Model for it.
+   * Run Spark Ml's LinearRegression on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -83,7 +83,11 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
   }
 }
 object LinearRegressionTrainPlugin {
-
+  /**
+   * Initializing the LinearRegression model given the train arguments
+   * @param arguments Arguments passed for training the LinearRegression model
+   * @return Initialized LinearRegression model with training arguments
+   */
   def initializeLinearRegressionModel(arguments: LinearRegressionTrainArgs): LinearRegression = {
     val linReg = new LinearRegression()
     linReg.setElasticNetParam(arguments.elasticNetParameter)
@@ -94,8 +98,6 @@ object LinearRegressionTrainPlugin {
     linReg.setTol(arguments.tolerance)
     linReg.setLabelCol("label")
     linReg.setFeaturesCol("features")
-
   }
-
 }
 
