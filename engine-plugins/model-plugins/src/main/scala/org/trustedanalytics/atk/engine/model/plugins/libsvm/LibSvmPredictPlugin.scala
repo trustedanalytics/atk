@@ -73,7 +73,9 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
     if (arguments.observationColumns.isDefined) {
       require(libsvmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
-
+    if (frame.rdd.isEmpty()) {
+      throw new RuntimeException("Predict Frame is empty. Please predict with a non-empty Frame")
+    }
     //predicting a label for the observation column/s
     val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
     val predictColumn = Column("predicted_label", DataTypes.float64)

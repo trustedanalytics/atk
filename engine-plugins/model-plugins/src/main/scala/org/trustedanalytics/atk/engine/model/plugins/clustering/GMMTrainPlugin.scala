@@ -85,7 +85,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     if (trainFrameRdd.isEmpty()) {
       throw new RuntimeException("Training Frame is empty. Please train with a non-empty Frame")
     }
-    else {
       val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
       val gmmModel = gmm.run(vectorRDD)
 
@@ -96,7 +95,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
 
       val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma.toListOfList))
       new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD), gmmModel.weights.toList, gaussians)
-    }
   }
 }
 
