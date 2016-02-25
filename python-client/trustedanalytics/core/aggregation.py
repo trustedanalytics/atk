@@ -29,9 +29,9 @@ class AggregationUdf(object):
     Class for Aggregate-by-key that holds the user given parameters
     """
 
-    def __init__(self, combiner, output_schema, init_values=None):
+    def __init__(self, aggregator, output_schema, init_values=None):
         self.output_schema = output_schema
-        self.combiner = combiner
+        self.aggregator = aggregator
         self.init_values = init_values
 
 
@@ -59,8 +59,8 @@ class AggregationFunctions(object):
     def __contains__(self, item):
         return (item in AggregationFunctions.__dict__.values()) or isinstance(item, AggregationUdf)
 
-    def udf(self, combiner, output_schema, init_values=None):
-        return AggregationUdf(combiner, output_schema, init_values)
+    def udf(self, aggregator, output_schema, init_values=None):
+        return AggregationUdf(aggregator, output_schema, init_values)
 
 agg = AggregationFunctions()
 

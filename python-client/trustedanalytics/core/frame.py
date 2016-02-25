@@ -870,7 +870,7 @@ class _BaseFrame(CommandLoadable):
             ...     acc.c_sum = acc.c_sum + row.c
             ...     acc.c_prod= acc.c_prod*row.c
 
-            >>> sum_prod_frame = frame.group_by(['a', 'b'], ta.agg.udf(combiner=custom_agg,output_schema=[('c_sum', ta.float64),('c_prod', ta.float64)],init_values=[0,1]))
+            >>> sum_prod_frame = frame.group_by(['a', 'b'], ta.agg.udf(aggregator=custom_agg,output_schema=[('c_sum', ta.float64),('c_prod', ta.float64)],init_values=[0,1]))
             <progress>
 
             >>> sum_prod_frame.inspect()

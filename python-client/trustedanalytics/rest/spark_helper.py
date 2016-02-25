@@ -21,7 +21,7 @@ import base64
 import itertools
 
 from serializers import UTF8Deserializer, CloudPickleSerializer
-from trustedanalytics.rest.spark import _wrap_row_function, get_copy_columns_function, IaBatchedSerializer, ifiltermap, _wrap_combiner_rows_function
+from trustedanalytics.rest.spark import _wrap_row_function, get_copy_columns_function, IaBatchedSerializer, ifiltermap, _wrap_aggregator_rows_function
 from trustedanalytics.rest.udfzip import get_dependencies_content
 
 
@@ -81,7 +81,7 @@ def get_udf_arg(frame, subject_function, iteration_function, optional_schema=Non
 
 
 
-def get_combiner_udf_arg(frame, combiner_function, iteration_function, combiner_schema, init_val, optional_schema=None):
+def get_aggregator_udf_arg(frame, aggregator_function, iteration_function, aggregator_schema, init_val, optional_schema=None):
     """
     Prepares a python row function for server execution and http transmission
 
@@ -95,7 +95,7 @@ def get_combiner_udf_arg(frame, combiner_function, iteration_function, combiner_
         the iteration function to apply for the frame.  In general, it is
         imap.  For filter however, it is ifilter
     """
-    row_ready_function = _wrap_combiner_rows_function(frame, combiner_function, combiner_schema, init_val, optional_schema)
+    row_ready_function = _wrap_aggregator_rows_function(frame, aggregator_function, aggregator_schema, init_val, optional_schema)
     def iterator_function(iterator): return iteration_function(row_ready_function, iterator)
     def iteration_ready_function(s, iterator): return iterator_function(iterator)
     x = make_http_ready(iteration_ready_function)

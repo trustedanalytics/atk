@@ -84,11 +84,11 @@ def get_add_many_columns_function(row_function, data_types):
     return add_many_columns
 
 
-def get_group_by_combiner_function(combiner_row_function, data_types):
+def get_group_by_aggregator_function(aggregator_row_function, data_types):
     """Wraps the UDF into new function and returns it"""
     def aggregate(acc, row):
         accumulator_wrapper = acc
-        combiner_row_function(accumulator_wrapper, row)
+        aggregator_row_function(accumulator_wrapper, row)
         acc_data = accumulator_wrapper._get_data()
         data = []
         for i, data_type in enumerate(data_types):
@@ -128,21 +128,21 @@ class RowWrapper(Row):
     def load_row(self, data):
         self._set_data(data)
 
-def _wrap_combiner_rows_function(frame, combiner_function, combiner_schema, init_acc_values, optional_schema=None):
+def _wrap_aggregator_rows_function(frame, aggregator_function, aggregator_schema, init_acc_values, optional_schema=None):
     """
     Wraps a python row function, like one used for a filter predicate, such
     that it will be evaluated with using the expected 'row' object rather than
     whatever raw form the engine is using.  Ideally, this belong in the engine
     """
     row_schema = optional_schema if optional_schema is not None else frame.schema
-    acc_schema = valid_data_types.standardize_schema(combiner_schema)
+    acc_schema = valid_data_types.standardize_schema(aggregator_schema)
 
     if init_acc_values is None:
         init_acc_values = valid_data_types.get_default_data_for_schema(acc_schema)
     else:
         init_acc_values = valid_data_types.validate_data(acc_schema, init_acc_values)
 
-    acc_wrapper = MutableRow(combiner_schema)
+    acc_wrapper = MutableRow(aggregator_schema)
     row_wrapper = RowWrapper(row_schema)
 
     def rows_func(rows):
@@ -153,7 +153,7 @@ def _wrap_combiner_rows_function(frame, combiner_function, combiner_schema, init
             acc_wrapper._set_data(list(init_acc_values))
             for row in rows_data:
                 row_wrapper.load_row(row)
-                combiner_function(acc_wrapper, row_wrapper)
+                aggregator_function(acc_wrapper, row_wrapper)
             result = []
             for key_index in key_indices:
                 answer = [rows_data[0][key_index]]

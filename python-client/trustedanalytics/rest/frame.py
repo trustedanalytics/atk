@@ -39,8 +39,8 @@ from trustedanalytics.rest.atkserver import server
 from trustedanalytics.rest.atktypes import get_data_type_from_rest_str, get_rest_str_from_data_type
 from trustedanalytics.rest.command import CommandRequest, executor
 from trustedanalytics.rest.spark import get_add_one_column_function, get_add_many_columns_function
-from trustedanalytics.rest.spark_helper import get_udf_arg, get_combiner_udf_arg
-from trustedanalytics.rest.spark import get_group_by_combiner_function
+from trustedanalytics.rest.spark_helper import get_udf_arg, get_aggregator_udf_arg
+from trustedanalytics.rest.spark import get_group_by_aggregator_function
 
 
 TakeResult = namedtuple("TakeResult", ['data', 'schema'])
@@ -317,7 +317,7 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
 
         execute_update_frame_command('add_columns', arguments, frame)
 
-    def aggregate_by_key(self, frame, group_by_column_keys, combiner_expression, output_schema, init_acc_values=None):
+    def aggregate_by_key(self, frame, group_by_column_keys, aggregator_expression, output_schema, init_acc_values=None):
         if not output_schema or not hasattr(output_schema, "__iter__"):
             raise ValueError("aggregate_by_key requires a non-empty schema of (name, type)")
 
@@ -327,14 +327,14 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         output_schema = self._format_schema(output_schema)
         names, data_types = zip(*output_schema)
 
-        aggregate_by_key_function = get_group_by_combiner_function(combiner_expression, data_types)
+        aggregate_by_key_function = get_group_by_aggregator_function(aggregator_expression, data_types)
 
         from itertools import imap
         arguments = { "frame": frame.uri,
                       "aggregate_by_column_keys": group_by_column_keys,
                       "column_names": names,
                       "column_types": [get_rest_str_from_data_type(t) for t in data_types],
-                      "udf": get_combiner_udf_arg(frame, aggregate_by_key_function, imap, output_schema, init_acc_values)
+                      "udf": get_aggregator_udf_arg(frame, aggregate_by_key_function, imap, output_schema, init_acc_values)
                     }
         return execute_new_frame_command('frame/aggregate_by_key', arguments)
 
@@ -513,7 +513,7 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 if arg == agg.count:
                     aggregation_list.append({'function': agg.count, 'column_name': first_column_name, 'new_column_name': "count"})
                 else:
-                    return FrameBackendRest.aggregate_by_key(self, frame, group_by_columns, arg.combiner, arg.output_schema, arg.init_values)
+                    return FrameBackendRest.aggregate_by_key(self, frame, group_by_columns, arg.aggregator, arg.output_schema, arg.init_values)
             elif isinstance(arg, dict):
                 for k,v in arg.iteritems():
                     # leave the valid column check to the server
