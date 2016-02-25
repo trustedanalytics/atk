@@ -99,7 +99,7 @@ def get_group_by_combiner_function(combiner_row_function, data_types):
             except IndexError as e:
                 raise RuntimeError("UDF return value did not match the number of items in the provided schema")
             cast_value = valid_data_types.cast(value, data_type)
-            data.append(numpy_to_bson_friendly(cast_value))
+            data.append(cast_value)
         return data
     return aggregate
 
@@ -159,7 +159,7 @@ def _wrap_combiner_rows_function(frame, combiner_function, combiner_schema, init
                 answer = [rows_data[0][key_index]]
                 result.extend(answer)
             result.extend(acc_wrapper._get_data())
-            return result
+            return numpy_to_bson_friendly(result)
         except Exception as e:
             try:
                 e_msg = unicode(e)
