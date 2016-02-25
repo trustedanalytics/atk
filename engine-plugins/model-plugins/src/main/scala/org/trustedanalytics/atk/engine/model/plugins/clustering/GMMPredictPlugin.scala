@@ -90,28 +90,33 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
 
     val gmmColumns = arguments.observationColumns.getOrElse(gmmData.observationColumns)
     val scalingValues = gmmData.columnScalings
-    val predictionsRdd = gmmModel.predict(frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues))
-    val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (cluster, index) => (index, cluster) }
-    val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
-
-    val resultRdd: RDD[Row] = indexedPredictionsRdd.join(indexedFrameRdd).map { value =>
-      val row = value._2._2
-      val cluster = value._2._1
-      new GenericRow(row.toSeq.toArray :+ cluster)
+    if (frame.rdd.isEmpty()) {
+      throw new RuntimeException("Predict Frame is empty. Please predict with a non-empty Frame")
     }
+    else {
+      val predictionsRdd = gmmModel.predict(frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues))
+      val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (cluster, index) => (index, cluster) }
+      val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
 
-    //Updating the frame schema
-    var columnNames = new ListBuffer[String]()
-    var columnTypes = new ListBuffer[DataTypes.DataType]()
-    columnNames += "predicted_cluster"
-    columnTypes += DataTypes.int32
+      val resultRdd: RDD[Row] = indexedPredictionsRdd.join(indexedFrameRdd).map { value =>
+        val row = value._2._2
+        val cluster = value._2._1
+        new GenericRow(row.toSeq.toArray :+ cluster)
+      }
 
-    val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
-    val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
-    val predictFrameRdd = new FrameRdd(updatedSchema, resultRdd)
+      //Updating the frame schema
+      var columnNames = new ListBuffer[String]()
+      var columnTypes = new ListBuffer[DataTypes.DataType]()
+      columnNames += "predicted_cluster"
+      columnTypes += DataTypes.int32
 
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by GMM predict operation"))) { newPredictedFrame: FrameEntity =>
-      newPredictedFrame.save(predictFrameRdd)
+      val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
+      val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
+      val predictFrameRdd = new FrameRdd(updatedSchema, resultRdd)
+
+      engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by GMM predict operation"))) { newPredictedFrame: FrameEntity =>
+        newPredictedFrame.save(predictFrameRdd)
+      }
     }
   }
 
