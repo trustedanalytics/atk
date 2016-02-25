@@ -15,10 +15,11 @@ class HazardFunction {
    * @param beta (fitted) beta
    * @param timeCol the time column in the initial rdd
    * @param covariateCol the covariate column in the initial rdd
+   * @param censoredCol the censored column in the initial rdd
    * @return a predicted hazard
    */
-  def predict(rdd: FrameRdd, beta: Double, timeCol: String, covariateCol: String): Double = {
-    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedTupleRdd(rdd, timeCol, covariateCol)
+  def predict(rdd: FrameRdd, beta: Double, timeCol: String, covariateCol: String, censoredCol: String): Double = {
+    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedTupleRdd(rdd, timeCol, covariateCol, censoredCol)
     val rddWithExpColumns = HazardFunctionBetaEstimator.hazardFunctionRdd(sortedRdd, beta)
 
     predict(rddWithExpColumns, beta)
@@ -32,7 +33,7 @@ class HazardFunction {
   private def predict(rdd: RDD[(HazardFunctionRow, Long)], beta: Double): Double =
     {
       //TODO: Consider a parallel implementation and replace the loop below
-      val hazardFuncRdd = rdd.map { case (value, index) => value }
+      val hazardFuncRdd = rdd.map { case (row, index) => row }
       val initialValueRdd = hazardFuncRdd.map(row => row.x)
       val colSum = CoxProportionalHazardTrainFunctions.columnSum(initialValueRdd)
 

@@ -1,12 +1,13 @@
 package org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards
 
+import org.apache.commons.lang3.StringUtils
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.plugins.cumulativedist.CumulativeDistFunctions
-import org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards.HazardFunction.HazardFunctionRow
+import org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards.HazardFunction.{ CensoredFeaturePair, HazardFunctionRow }
 
 /**
  * Helper class for Cox proportional hazard model
@@ -20,14 +21,15 @@ object CoxProportionalHazardTrainFunctions {
    * @param covariateCol index of the covariate column
    * @return sorted RDD
    */
-  def frameToSortedTupleRdd(rdd: FrameRdd, timeCol: String, covariateCol: String): RDD[(Double, Double)] = {
+  def frameToSortedTupleRdd(rdd: FrameRdd, timeCol: String, covariateCol: String, censoredCol: String): RDD[(Double, CensoredFeaturePair)] = {
     val rowWrapper = rdd.rowWrapper
     val tupleRdd = try {
       rdd.map { row =>
         val timeValue = rowWrapper(row).doubleValue(timeCol)
         val covariateValue = rowWrapper(row).doubleValue(covariateCol)
+        val censoredValue = if (StringUtils.isNotBlank(censoredCol)) rowWrapper(row).intValue(censoredCol) else 1
 
-        (timeValue, covariateValue)
+        (timeValue, new CensoredFeaturePair(covariateValue, censoredValue))
       }
     }
     catch {
@@ -63,7 +65,7 @@ object CoxProportionalHazardTrainFunctions {
   def hazardFuncToFrameRdd(rdd: RDD[(HazardFunctionRow, Long)]): RDD[Row] = {
     rdd.map {
       case (hazardRow, index) => {
-        val rowArray = new Array[Any](6)
+        val rowArray = new Array[Any](7)
 
         rowArray(0) = hazardRow.time
         rowArray(1) = hazardRow.x

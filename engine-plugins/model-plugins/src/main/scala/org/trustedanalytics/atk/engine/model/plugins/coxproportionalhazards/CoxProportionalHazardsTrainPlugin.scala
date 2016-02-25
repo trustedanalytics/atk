@@ -60,11 +60,12 @@ class CoxProportionalHazardsTrainPlugin extends SparkCommandPlugin[CoxProportion
     val schema = frame.schema
     val timeCol = arguments.timeColumn
     val covariateCol = arguments.covariateColumn
+    val censoredCol = arguments.censoredColumn
     val convergenceEps = arguments.epsilon
     val maxSteps = arguments.maxSteps
     val initialBeta = arguments.beta
 
-    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedTupleRdd(frame.rdd, timeCol, covariateCol)
+    val sortedRdd = CoxProportionalHazardTrainFunctions.frameToSortedTupleRdd(frame.rdd, timeCol, covariateCol, censoredCol)
     val (beta, error) = HazardFunctionBetaEstimator.newtonRaphson(sortedRdd, convergenceEps, maxSteps, initialBeta)
 
     //TODO: save beta to the model for predictions. Requires further discussion on multiple beta (covariate variables)...

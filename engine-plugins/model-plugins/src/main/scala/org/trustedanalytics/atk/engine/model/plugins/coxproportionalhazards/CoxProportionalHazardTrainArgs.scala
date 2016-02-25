@@ -29,6 +29,7 @@ case class CoxProportionalHazardTrainArgs(model: ModelReference,
                                           @ArgDoc("""Column containing the time data.""") timeColumn: String,
                                           @ArgDoc("""List of column(s) containing the covariate data.""") covariateColumn: String,
                                           @ArgDoc("""Convergence epsilon.""") epsilon: Double,
+                                          @ArgDoc("""List of column(s) containing the censored data. Can have 2 values: 0 - event did not happen (censored); 1 - event happened (not censored)""") censoredColumn: String = StringUtils.EMPTY,
                                           @ArgDoc("""Initial beta.""") beta: Double = 0.0,
                                           @ArgDoc("""Max steps.""") maxSteps: Int = 10) {
 

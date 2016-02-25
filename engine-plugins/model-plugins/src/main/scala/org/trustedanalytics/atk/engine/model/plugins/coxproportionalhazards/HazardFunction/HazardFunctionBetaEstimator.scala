@@ -14,7 +14,7 @@ object HazardFunctionBetaEstimator {
    * @param convergenceEps convergence epsilon
    * @return the final beta for hazard function
    */
-  def newtonRaphson(sortedRdd: RDD[(Double, Double)], convergenceEps: Double, maxSteps: Int, initialBeta: Double): (Double, Double) = {
+  def newtonRaphson(sortedRdd: RDD[(Double, CensoredFeaturePair)], convergenceEps: Double, maxSteps: Int, initialBeta: Double): (Double, Double) = {
 
     var currentStepBeta = initialBeta
     var error = 0.0
@@ -89,14 +89,14 @@ object HazardFunctionBetaEstimator {
    * @param expMultiplier beta multiplier for exponent
    * @return rdd in the format (time, exp(x), x*exp(x), (x*x)exp(x))
    */
-  def hazardFunctionRdd(sortedRdd: RDD[(Double, Double)], expMultiplier: Double): RDD[(HazardFunctionRow, Long)] = {
+  def hazardFunctionRdd(sortedRdd: RDD[(Double, CensoredFeaturePair)], expMultiplier: Double): RDD[(HazardFunctionRow, Long)] = {
     val hazardFuncRdd = sortedRdd.map {
-      case (time, x) =>
-        val exp = Math.exp(x * expMultiplier)
-        val xTimesExp = x * exp
-        val xSquaredTimesExp = x * xTimesExp
+      case (time, censoredFeature) =>
+        val exp = Math.exp(censoredFeature.x * expMultiplier) * censoredFeature.censored
+        val xTimesExp = censoredFeature.x * exp
+        val xSquaredTimesExp = censoredFeature.x * xTimesExp
 
-        HazardFunctionRow(time, x, exp, xTimesExp, xSquaredTimesExp)
+        HazardFunctionRow(time, censoredFeature.x, exp, xTimesExp, xSquaredTimesExp)
     }
 
     hazardFuncRdd.zipWithIndex()
