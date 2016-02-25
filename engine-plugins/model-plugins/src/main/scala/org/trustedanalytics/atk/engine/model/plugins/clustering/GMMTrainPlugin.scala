@@ -82,16 +82,21 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
     val gmm = GMMTrainPlugin.initializeGMM(arguments)
 
     val trainFrameRdd = frame.rdd
-    val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
-    val gmmModel = gmm.run(vectorRDD)
+    if (trainFrameRdd.isEmpty()) {
+      throw new RuntimeException("Training Frame is empty. Please train with a non-empty Frame")
+    }
+    else {
+      val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
+      val gmmModel = gmm.run(vectorRDD)
 
-    //Writing the gmmModel as JSON
-    val jsonModel = new GMMData(gmmModel, arguments.observationColumns, arguments.columnScalings)
-    val model: Model = arguments.model
-    model.data = jsonModel.toJson.asJsObject
+      //Writing the gmmModel as JSON
+      val jsonModel = new GMMData(gmmModel, arguments.observationColumns, arguments.columnScalings)
+      val model: Model = arguments.model
+      model.data = jsonModel.toJson.asJsObject
 
-    val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma.toListOfList))
-    new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD), gmmModel.weights.toList, gaussians)
+      val gaussians = gmmModel.gaussians.map(i => ("mu:" + i.mu.toString, "sigma:" + i.sigma.toListOfList))
+      new GMMTrainReturn(GMMTrainPlugin.computeGmmClusterSize(gmmModel, vectorRDD), gmmModel.weights.toList, gaussians)
+    }
   }
 }
 
