@@ -21,7 +21,7 @@ import java.io.{ FileOutputStream, File, FileInputStream }
 import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import org.apache.hadoop.conf.Configuration
-import org.apache.hadoop.fs.Path
+import org.apache.hadoop.fs.{ FileSystem, Path }
 import org.trustedanalytics.atk.moduleloader.{ ClassLoaderAware, Component }
 import spray.can.Http
 import org.trustedanalytics.atk.model.publish.format.ModelPublishFormat
@@ -31,7 +31,8 @@ import scala.concurrent.duration._
 import org.trustedanalytics.atk.event.EventLogging
 import com.typesafe.config.{ Config, ConfigFactory }
 import scala.reflect.ClassTag
-import org.trustedanalytics.atk.scoring.interfaces.Model
+import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
+import org.trustedanalytics.hadoop.config.client.helper.Hdfs
 import java.net.URI
 import org.apache.commons.io.FileUtils
 
@@ -60,6 +61,7 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
     val model = getModel
     val service = new ScoringService(model)
     withMyClassLoader {
+
       createActorSystemAndBindToHttp(service)
     }
   }
@@ -71,9 +73,7 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
   }
 
   private def getModel: Model = withMyClassLoader {
-
     var tempTarFile: File = null
-
     try {
       var tarFilePath = config.getString("trustedanalytics.scoring-engine.archive-tar")
       if (tarFilePath.startsWith("hdfs:/")) {
@@ -81,7 +81,15 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
           val relativePath = tarFilePath.substring(tarFilePath.indexOf("hdfs:") + 6)
           tarFilePath = "hdfs://" + relativePath
         }
-        val hdfsFileSystem: org.apache.hadoop.fs.FileSystem = org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
+
+        val hdfsFileSystem = try {
+          Hdfs.newInstance().createFileSystem()
+        }
+        catch {
+          case _ =>
+            info("Failed to create HDFS instance using hadoop-library. Default to FileSystem")
+            org.apache.hadoop.fs.FileSystem.get(new URI(tarFilePath), new Configuration())
+        }
         tempTarFile = File.createTempFile("modelTar", ".tar")
         hdfsFileSystem.copyToLocalFile(false, new Path(tarFilePath), new Path(tempTarFile.getAbsolutePath))
         tarFilePath = tempTarFile.getAbsolutePath
@@ -108,3 +116,4 @@ class ScoringServiceApplication extends Component with EventLogging with ClassLo
   }
 
 }
+

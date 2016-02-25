@@ -17,15 +17,18 @@
 package org.trustedanalytics.atk.scoring
 
 import akka.actor.Actor
+import spray.json.JsValue
 import spray.routing._
 import spray.http._
 import MediaTypes._
 import akka.event.Logging
+import scala.collection.mutable.ArrayBuffer
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import org.trustedanalytics.atk.spray.json.AtkDefaultJsonProtocol
 import scala.util.{ Failure, Success }
 import org.trustedanalytics.atk.scoring.interfaces.Model
+import spray.json._
 
 /**
  * We don't implement our route structure directly in the service actor because
@@ -54,13 +57,12 @@ class ScoringServiceActor(val scoringService: ScoringService) extends Actor with
  * Defines our service behavior independently from the service actor
  */
 class ScoringService(model: Model) extends Directives {
-
   def homepage = {
     respondWithMediaType(`text/html`) {
       complete {
         <html>
           <body>
-            <h1>Welcome to the Scoring Engine -2</h1>
+            <h1>Welcome to the Scoring Engine</h1>
           </body>
         </html>
       }
@@ -70,43 +72,98 @@ class ScoringService(model: Model) extends Directives {
   lazy val description = {
     new ServiceDescription(name = "Trusted Analytics",
       identifier = "ia",
-      versions = List("v1"))
+      versions = List("v1", "v2"))
   }
 
   import AtkDefaultJsonProtocol._
   implicit val descFormat = jsonFormat3(ServiceDescription)
+  val jsonFormat = new ScoringServiceJsonProtocol(model)
+  import jsonFormat._
+
+  import spray.json._
 
   /**
    * Main Route entry point to the Scoring Server
    */
   val serviceRoute: Route = logRequest("scoring service", Logging.InfoLevel) {
     val prefix = "score"
+    val metadataPrefix = "metadata"
     path("") {
       get {
         homepage
       }
     } ~
-      path("v1" / prefix) {
+      path("v2" / prefix) {
         requestUri { uri =>
           post {
-            parameterSeq { (params) =>
-              val sr = params.toArray
-              var records = Seq[Array[String]]()
-              for (i <- sr.indices) {
-                val decoded = java.net.URLDecoder.decode(sr(i)._2, "UTF-8")
-                val splitSegment = decoded.split(",")
-                records = records :+ splitSegment
-              }
-              onComplete(Future { model.score(records) }) {
-                case Success(scored) => complete(scored.toString)
-                case Failure(ex) => ctx => {
-                  ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+            entity(as[String]) {
+              scoreArgs =>
+                val json: JsValue = scoreArgs.parseJson
+                import jsonFormat.DataOutputFormat
+                onComplete(scoreModel(DataInputFormat.read(json), "v2")) {
+                  case Success(output) => complete(DataOutputFormat.write(output).toString())
+                  case Failure(ex) => ctx => {
+                    ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+                  }
                 }
+            }
+          }
+        }
+      } ~
+      path("v1" / prefix) {
+        requestUri { uri =>
+          parameterSeq { (params) =>
+            val sr = params.toArray
+            var records = Seq[Array[Any]]()
+            for (i <- sr.indices) {
+              val decoded = java.net.URLDecoder.decode(sr(i)._2, "UTF-8")
+              val splitSegment = decoded.split(",")
+              records = records :+ splitSegment.asInstanceOf[Array[Any]]
+            }
+            onComplete(scoreModel(records, "v1")) {
+              case Success(string) => complete(string.mkString(","))
+              case Failure(ex) => ctx => {
+                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+              }
+            }
+          }
+        }
+      } ~
+      path("v2" / metadataPrefix) {
+        requestUri { uri =>
+          get {
+            import spray.json._
+            onComplete(Future { model.modelMetadata() }) {
+              case Success(metadata) => complete(JsObject("model_details" -> metadata.toJson,
+                "input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+                "output" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList)).toString)
+              case Failure(ex) => ctx => {
+                ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
+
               }
             }
           }
         }
       }
   }
+
+  def scoreModel(records: Seq[Array[Any]], version: String): Future[Array[Any]] = Future {
+    var scores = new ArrayBuffer[Any]()
+    records.foreach(row => {
+      val score = model.score(row)
+      if (version == "v1") {
+        scores += score(score.length - 1).toString
+      }
+      else if (version == "v2") {
+        scores += score
+      }
+      else {
+        throw new IllegalArgumentException(s"Not supported version: $version")
+      }
+    })
+    scores.toArray
+  }
 }
+
 case class ServiceDescription(name: String, identifier: String, versions: List[String])
+

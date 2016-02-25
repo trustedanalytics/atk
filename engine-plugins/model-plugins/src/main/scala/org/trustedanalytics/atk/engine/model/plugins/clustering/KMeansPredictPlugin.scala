@@ -30,6 +30,7 @@ import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.mllib.clustering.KMeansModel
 import org.apache.spark.mllib.linalg.Vectors
+import org.trustedanalytics.atk.scoring.models.KMeansData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -38,7 +39,7 @@ import org.apache.spark.mllib.atk.plugins.VectorUtils._
 import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
-  extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model along ",
+  extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and the following new columns:
     'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center

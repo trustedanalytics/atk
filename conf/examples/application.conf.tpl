@@ -67,8 +67,8 @@ trustedanalytics.atk {
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
 
-    # uncomment the next line in order to enable Intel Data Analytics Acceleration Library (Intel DAAL)
-    //spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
+    # dynamic libraries for Intel Data Analytics Acceleration Library (Intel DAAL)
+    spark.daal.dynamic-libraries=${DAAL_LIB_DIR}"/libAtkDaalJavaAPI.so,"${DAAL_LIB_DIR}"/libiomp5.so,"${DAAL_LIB_DIR}"/libJavaAPI.so,"${DAAL_LIB_DIR}"/"${DAAL_GCC_VERSION}"/libtbb.so.2"
 
     spark.conf.properties {
       # Memory should be same or lower than what is listed as available in Cloudera Manager.
@@ -232,6 +232,9 @@ trustedanalytics.atk {
           //spark.eventLog.overwrite = true
           spark.eventLog.enabled = true
           spark.eventLog.dir = "hdfs://invalid-spark-application-history-folder:8020/user/spark/applicationHistory"
+
+          # Allow user defined functions (UDF's) to be overwritten
+          spark.files.overwrite = true
 
           # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
           # Verify that the path below exist across all yarn master/worker nodes.

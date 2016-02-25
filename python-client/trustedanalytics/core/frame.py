@@ -621,7 +621,7 @@ class _BaseFrame(CommandLoadable):
         return self._backend.get_row_count(self, where)
 
     @api
-    @arg('n', int, 'The number of rows to download to the client')
+    @arg('n', int, 'The number of rows to download to this client from the frame (warning: do not overwhelm this client by downloading too much)')
     @arg('offset', int, 'The number of rows to skip before copying')
     @arg('columns', list, 'Column filter, the names of columns to be included (default is all columns)')
     @returns('pandas.DataFrame', 'A new pandas dataframe object containing the downloaded frame data' )
@@ -662,6 +662,12 @@ class _BaseFrame(CommandLoadable):
                     raise RuntimeError("DataFrame is unable to handle missing values in integer column: '" + headers[i] + "'.  Rectify missing values or use the float datatype instead of integers.")
                 else:
                     raise e
+            except TypeError:
+                if dtype_str.startswith("int"):
+                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
+                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
+                else:
+                    raise
         return pandas_df
 
     @api
@@ -939,7 +945,7 @@ class _BaseFrame(CommandLoadable):
         return self._backend.categorical_summary(self, column_inputs)
 
     @api
-    @arg('n', int, 'The number of rows to print.')
+    @arg('n', int, 'The number of rows to print (warning: do not overwhelm this client by downloading too much)')
     @arg('offset', int, 'The number of rows to skip before printing.')
     @arg('columns', int, 'Filter columns to be included.  By default, all columns are included')
     @arg('wrap', "int or 'stripes'", "If set to 'stripes' then inspect prints rows in stripes; if set to an integer N, "
@@ -1321,7 +1327,7 @@ class _BaseFrame(CommandLoadable):
         return self._backend.sort(self, columns, ascending)
 
     @api
-    @arg('n', int, "The number of rows to copy to the client from the frame.")
+    @arg('n', int, 'The number of rows to copy to this client from the frame (warning: do not overwhelm this client by downloading too much)')
     @arg('offset', int, "The number of rows to skip before starting to copy")
     @arg('columns', 'str | iterable of str', "If not None, only the given columns' data will be provided.  "
          "By default, all columns are included")

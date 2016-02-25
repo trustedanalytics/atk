@@ -14,16 +14,17 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.classification
+package org.trustedanalytics.atk.domain.frame
 
-import org.apache.spark.mllib.classification.SVMModel
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param svmModel Trained MLLib's SVMModel object
- * @param observationColumns Handle to the observation columns of the data frame
+ * Arguments for the matrix inversion plugin.
+ *
  */
-case class SVMData(svmModel: SVMModel, observationColumns: List[String]) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(svmModel != null, "svmModel must not be null")
+case class MatrixInversionArgs(frame: FrameReference,
+                               @ArgDoc("""The list of columns of the matrix to be inverted.""") columnNames: List[String]) {
+  require(frame != null, "frame is required")
+  require(columnNames != null, "the matrix must have at least 2 columns ")
+  require(columnNames.length >= 2, "number of columns should be greater than equal to 2")
 }

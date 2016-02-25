@@ -1,29 +1,29 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.algorithms.pca.Method
 import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, PluginDocAnnotation, EngineConfig }
 import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalConversionImplicits._
 
@@ -34,13 +34,16 @@ import DaalConversionImplicits._
  * @param columnNames Column names
  */
 case class DaalPcaArgs(frame: FrameReference,
-                       columnNames: List[String],
-                       method: String = "cor") {
+                       @ArgDoc("""The names of the column from which to compute PCA.""") columnNames: List[String],
+                       @ArgDoc("""PCA method.
+                           | cor - correlation.
+                           | svd - singular value decomposition.
+                         """) method: String = "cor") {
   require(frame != null, "frame is required")
-  require(columnNames != null && !columnNames.isEmpty, "column names should not be empty")
+  require(columnNames != null && columnNames.nonEmpty, "column names should not be empty")
   require(method == "cor" || method == "svd", "method must be 'svd' or 'cor'")
 
-  def getPcaMethod(): Method = method match {
+  def getPcaMethod(): Method = method.toLowerCase match {
     case "svd" => Method.svdDense
     case "cor" => Method.correlationDense
     case _ => throw new IllegalArgumentException(s"Unsupported PCA method: ${method}")
@@ -62,6 +65,16 @@ import DaalPcaJsonFormat._
 /**
  * Plugin that executes Principal Component Analysis using Intel's Data Analytics Acceleration Library (DAAL)
  */
+@PluginDoc(oneLine = "Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).",
+  extended = """Principal component analysis (PCA) [1]_ is used to transform a set of possibly correlated
+variables into a smaller number of uncorrelated variables called principal components.
+This method runs the DAAL implementation of Principal component analysis [2]_.
+
+.. rubric:: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Principal_component_analysis
+.. [2] https://software.intel.com/en-us/daal""",
+  returns = "Frame with eigen values and eigen vectors.")
 class DaalPcaPlugin extends SparkCommandPlugin[DaalPcaArgs, DaalPcaReturn] {
   /**
    * The name of the command, e.g. graphs/ml/loopy_belief_propagation
@@ -103,8 +116,8 @@ class DaalPcaPlugin extends SparkCommandPlugin[DaalPcaArgs, DaalPcaReturn] {
     val pcaResults = DaalPcaFunctions.runPCA(frameRdd, arguments)
 
     // Convert PCA results to ATK data frame
-    val eigenVectors = pcaResults.eigenVectors.toArrayOfDoubleArray()
-    val eigenValues = pcaResults.eigenValues.toDoubleArray()
+    val eigenVectors = pcaResults.loadings.toArrayOfDoubleArray()
+    val eigenValues = pcaResults.scores.toDoubleArray()
 
     DaalPcaReturn(arguments.columnNames, eigenValues, eigenVectors)
   }

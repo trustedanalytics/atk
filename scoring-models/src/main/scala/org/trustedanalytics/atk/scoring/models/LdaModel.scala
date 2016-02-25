@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import breeze.linalg.{ DenseVector, axpy }
 import scala.collection.immutable.Map
 
 //TODO: This code duplicates LdaModel in model plugin. Need to be refactored.

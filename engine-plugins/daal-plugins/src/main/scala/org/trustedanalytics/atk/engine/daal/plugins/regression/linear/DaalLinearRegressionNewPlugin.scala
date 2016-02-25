@@ -1,18 +1,19 @@
-/*
-// Copyright (c) 2015 Intel Corporation 
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-*/
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
@@ -27,10 +28,10 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /**
- * Create a 'new' instance of a Linear Regression model
+ * Create a 'new' instance of a DAAL Linear Regression model
  */
 
-@PluginDoc(oneLine = "Create a 'new' instance of a Linear Regression model.",
+@PluginDoc(oneLine = "Create a 'new' instance of a DAAL Linear Regression model.",
   extended = """Linear Regression [1]_ is used to model the relationship between a scalar
 dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
@@ -44,7 +45,7 @@ QR [3]_ decomposition.
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
 .. [2] https://software.intel.com/en-us/daal
 .. [3] https://en.wikipedia.org/wiki/QR_decomposition""",
-  returns = """A new instance of LinearRegressionModel"""
+  returns = """A new instance of DaalLinearRegressionNewPlugin"""
 )
 class DaalLinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
   /**
