@@ -85,7 +85,9 @@ class SVMWithSGDTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
       require(svmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and test should be same")
     }
     val svmColumns = arguments.observationColumns.getOrElse(svmData.observationColumns)
-
+    if (frame.rdd.isEmpty()) {
+      throw new RuntimeException("Test Frame is empty. Please test with a non-empty Frame")
+    }
     //predicting and testing
     val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
       val labeledPoint = row.valuesAsLabeledPoint(svmColumns, arguments.labelColumn)

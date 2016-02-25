@@ -74,6 +74,9 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
       require(svmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
     val svmColumns = arguments.observationColumns.getOrElse(svmData.observationColumns)
+    if (frame.rdd.isEmpty()) {
+      throw new RuntimeException("Predict Frame is empty. Please predict with a non-empty Frame")
+    }
 
     //predicting a label for the observation columns
     val predictColumn = Column("predicted_label", DataTypes.int32)
