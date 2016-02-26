@@ -22,10 +22,10 @@ import java.util
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.frame.Udf
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, Schema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
-import org.apache.spark.SparkContext
+import org.apache.spark.{ Accumulator, SparkContext }
 import org.apache.spark.api.python.{ AtkPythonBroadcast, EnginePythonAccumulatorParam, EnginePythonRdd }
 import org.apache.commons.codec.binary.Base64.decodeBase64
 import java.util.{ ArrayList => JArrayList, List => JList }
@@ -36,7 +36,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.bson.types.BasicBSONList
 import org.bson.{ BSON, BasicBSONObject }
-import scala.collection.mutable.ArrayBuffer
+import scala.collection.mutable.{ ListBuffer, ArrayBuffer }
 import com.google.common.io.Files
 
 import scala.collection.JavaConversions._
@@ -68,12 +68,36 @@ object PythonRddStorage {
   }
 
   def mapWith(data: FrameRdd, udf: Udf, udfSchema: Schema = null, sc: SparkContext): FrameRdd = {
-    val newSchema = if (udfSchema == null) { data.frameSchema } else { udfSchema }
+    val newSchema = if (udfSchema == null) {
+      data.frameSchema
+    }
+    else {
+      udfSchema
+    }
     val converter = DataTypes.parseMany(newSchema.columns.map(_.dataType).toArray)(_)
-
-    val pyRdd = RDDToPyRDD(udf, data, sc)
+    val pyRdd = rddToPyRdd(udf, data, sc)
     val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(newSchema, frameRdd)
+  }
+
+  /**
+   * This method returns a FrameRdd after applying UDF on referencing FrameRdd
+   * @param data Current referencing FrameRdd
+   * @param aggregateByColumnKeys List of column name(s) based on which aggregation is performed
+   * @param udf User Defined function(UDF) to apply on each row
+   * @param udfSchema Mandatory output schema
+   * @return FrameRdd
+   */
+  def aggregateMapWith(data: FrameRdd, aggregateByColumnKeys: List[String], udf: Udf, udfSchema: Schema, sc: SparkContext): FrameRdd = {
+    //Create a new schema which includes keys (KeyedSchema).
+    val keyedSchema = udfSchema.copy(columns = data.frameSchema.columns(aggregateByColumnKeys) ++ udfSchema.columns)
+    //track key indices to fetch data during BSON decode.
+    val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
+    val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
+    val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, keyIndices, sc)
+    val frameRdd = getRddFromPythonRdd(pyRdd, converter)
+    FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
 
   //TODO: fix hardcoded paths
@@ -90,6 +114,7 @@ object PythonRddStorage {
 
   /**
    * Convert an iterable into a BasicBSONList for serialiation purposes
+   *
    * @param iterable vector object
    */
   def iterableToBsonList(iterable: Iterable[Any]): BasicBSONList = {
@@ -101,13 +126,11 @@ object PythonRddStorage {
     bsonList
   }
 
-  def RDDToPyRDD(udf: Udf, rdd: RDD[Row], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def rddToPyRdd(udf: Udf, rdd: RDD[Row], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
-
     // Create an RDD of byte arrays representing bson objects
     val baseRdd: RDD[Array[Byte]] = rdd.map(
       x => {
-
         val obj = new BasicBSONObject()
         obj.put("array", x.toSeq.toArray.map {
           case y: ArrayBuffer[_] => iterableToBsonList(y)
@@ -118,7 +141,18 @@ object PythonRddStorage {
         BSON.encode(obj)
       }
     )
+    val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
+    pyRdd
+  }
 
+  /**
+   * This method converts the base RDD into Python RDD which is processed by the Python VM at the server.
+   * @param udf UDF provided by the user
+   * @param baseRdd Base RDD in Array[Bytes]
+   * @param predicateInBytes UDF in Array[Bytes]
+   * @return pythonRDD
+   */
+  def getPyRdd(udf: Udf, sc: SparkContext, baseRdd: RDD[Array[Byte]], predicateInBytes: Array[Byte]): EnginePythonRdd[Array[Byte]] = {
     val pythonExec = EngineConfig.pythonWorkerExec
     val environment = new util.HashMap[String, String]()
     //This is needed to make the python executors put the spark jar (with the pyspark files) on the PYTHONPATH.
@@ -136,7 +170,7 @@ object PythonRddStorage {
         //TODO: Maybe hide behind a flag?
         Directory.Current.get / "python").map(_.toString()).mkString(":"))
 
-    val accumulator = rdd.sparkContext.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
+    val accumulator = sc.accumulator[JList[Array[Byte]]](new JArrayList[Array[Byte]]())(new EnginePythonAccumulatorParam())
     val broadcastVars = new JArrayList[Broadcast[AtkPythonBroadcast]]()
     val pythonVersion = "2.7"
 
@@ -156,6 +190,36 @@ object PythonRddStorage {
       pythonExec = pythonExec,
       pythonVer = pythonVersion,
       broadcastVars, accumulator)
+    pyRdd
+  }
+
+  /**
+   * This method encodes the raw rdd into Bson to convert into PythonRDD
+   * @param udf UDF provided by user to apply on each row
+   * @param rdd rdd(List[keys], List[Rows])
+   * @param keyIndices List of key indices, used to retreive key data with result frame
+   * @return PythonRdd
+   */
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+    val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
+    val baseRdd: RDD[Array[Byte]] = rdd.map {
+      case (key, rows) => {
+        val obj = new BasicBSONObject()
+        val bsonRows = rows.map(
+          row => {
+            row.toSeq.toArray.map {
+              case cell: ArrayBuffer[_] => iterableToBsonList(cell)
+              case cell: Vector[_] => iterableToBsonList(cell)
+              case cell: scala.collection.mutable.Seq[_] => iterableToBsonList(cell)
+              case value => value
+            }
+          }).toArray
+        obj.put("keyindices", keyIndices.toArray)
+        obj.put("array", bsonRows)
+        BSON.encode(obj)
+      }
+    }
+    val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
     pyRdd
   }
 
@@ -205,6 +269,7 @@ class PythonRddStorage(frames: SparkFrameStorage) extends ClassLoaderAware {
 
   /**
    * Create a Python RDD
+   *
    * @param frameRef source frame for the parent RDD
    * @param py_expression Python expression encoded in Python's Base64 encoding (different than Java's)
    * @return the RDD
@@ -213,7 +278,7 @@ class PythonRddStorage(frames: SparkFrameStorage) extends ClassLoaderAware {
     withMyClassLoader {
       val frameEntity = frames.expectFrame(frameRef)
       val rdd = frames.loadFrameData(sc, frameEntity)
-      PythonRddStorage.RDDToPyRDD(new Udf(py_expression, null), rdd, sc)
+      PythonRddStorage.rddToPyRdd(new Udf(py_expression, null), rdd, sc)
     }
   }
 }
