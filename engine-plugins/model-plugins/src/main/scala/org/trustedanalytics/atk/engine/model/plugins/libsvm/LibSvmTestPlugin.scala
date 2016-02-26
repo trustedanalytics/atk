@@ -84,7 +84,9 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
     if (arguments.observationColumns.isDefined) {
       require(libsvmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and test should be same")
     }
-
+    if (frame.rdd.isEmpty()) {
+      throw new RuntimeException("Testing Frame is empty. Please test with a non-empty Frame")
+    }
     //predicting a label for the observation column/s
     val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
     val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {
