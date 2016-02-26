@@ -37,7 +37,7 @@ class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
     )
     val ldaModel = LdaModel(2, topicWordMap, "doc", "word")
     val json = ldaModel.toJson
-    json.compactPrint should equal("""{"num_topics":2,"topic_word_map":{"harry":[0.9,0.1],"economy":[0.35,0.65]}, "document_column" : "doc", "word_column": "word"}""")
+    json.compactPrint should equal("""{"num_topics":2,"topic_word_map":{"harry":[0.9,0.1],"economy":[0.35,0.65]},"document_column":"doc","word_column":"word"}""")
   }
 
   "LdaModelFormat" should "deserialize JSON to LDA model" in {
