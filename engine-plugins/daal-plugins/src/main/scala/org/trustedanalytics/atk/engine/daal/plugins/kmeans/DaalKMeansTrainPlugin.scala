@@ -31,7 +31,7 @@ import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionIm
 object DaalKMeansJsonFormat {
   implicit val daalKMeansArgsFormat = jsonFormat6(DaalKMeansTrainArgs)
   implicit val daalKmeansReturnArgsFormat = jsonFormat2(DaalKMeansTrainReturn)
-  //implicit val daalKmeansModelData = jsonFormat3(DaalKMeansModelData)
+  implicit val daalKmeansModelData = jsonFormat3(DaalKMeansModelData)
 }
 
 import DaalKMeansJsonFormat._
@@ -41,7 +41,7 @@ import DaalKMeansJsonFormat._
   returns = """dictionary
     A dictionary with trained KMeans model with the following keys\:
 'centroids' : dictionary with 'Cluster:id' as the key and the corresponding centroid as the value
-'within_set_sum_of_squared_error' : The set of sum of squared error for the model.""")
+'assignments' : Frame with cluster assignments.""")
 class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, DaalKMeansTrainReturn] {
   /**
    * The name of the command.

@@ -32,6 +32,7 @@ object DaalKMeansFunctions extends Serializable {
 
   /**
    * Train K-means clustering model
+   *
    * @param frameRdd Input frame
    * @param args Input arguments
    * @return Trained k-means model
@@ -42,28 +43,26 @@ object DaalKMeansFunctions extends Serializable {
     val daalContext = new DaalContext()
     val table = new DistributedNumericTable(frameRdd, args.observationColumns)
     table.cache()
-    var result: Result = null
-    var centroids = initializeCentroids(sparkContext, daalContext, table, args)
 
+    // Iteratively update cluster centroids
+    var centroids = initializeCentroids(sparkContext, daalContext, table, args)
+    var result: Result = null
     for (i <- 1 until args.maxIterations) {
       result = updateCentroids(sparkContext, daalContext, table, centroids, args)
       centroids = getCentroids(result)
     }
 
-    val finalResults = getClusterAssignments(sparkContext, daalContext, table, centroids, args)
-    centroids = getCentroids(finalResults._1)
-    val assignments = finalResults._2.flatMap(table => {
-      val context = new DaalContext
-      val rows = table.toRowIter(context)
-      context.dispose()
-      rows
-    })
-
-    val schema = FrameSchema(List(Column("cluster", DataTypes.float64)))
-    val assignmentFrame = frameRdd.zipFrameRdd(new FrameRdd(schema, assignments))
-
-    val modelData = DaalKMeansModelData(centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray(), args.k, assignmentFrame)
+    // Run final iteration and get cluster assignments
+    val (finalResults, assigmentTable) = getClusterAssignments(sparkContext, daalContext, table, centroids, args)
+    centroids = getCentroids(finalResults)
     table.unpersist()
+
+    // Create frame with cluster assignments
+    val schema = FrameSchema(List(Column("cluster", DataTypes.float64)))
+    val assignmentFrame = frameRdd.zipFrameRdd(assigmentTable.toFrameRdd(schema))
+    val modelData = DaalKMeansModelData(centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray(),
+      args.k, assignmentFrame)
+
     daalContext.dispose()
     modelData
   }
@@ -105,16 +104,16 @@ object DaalKMeansFunctions extends Serializable {
    * @param featureTable Feature table
    * @param inputCentroids Cluster centroids
    * @param args Input arguments
-   * @return Table with cluster assignments for each observation
+   * @return Kmeans result object and table with cluster assignments for each observation
    */
   def getClusterAssignments(sparkContext: SparkContext,
                             daalContext: DaalContext,
                             featureTable: DistributedNumericTable,
                             inputCentroids: IndexedNumericTable,
-                            args: DaalKMeansTrainArgs): (Result, RDD[IndexedNumericTable]) = {
+                            args: DaalKMeansTrainArgs): (Result, DistributedNumericTable) = {
     val partialResults = updateCentroidsLocal(featureTable, inputCentroids, args, true)
     val centroids = mergeClusterCentroids(daalContext, inputCentroids, args, partialResults.keys)
-    val assignments = partialResults.values
+    val assignments = new DistributedNumericTable(partialResults.values)
     (centroids, assignments)
   }
 
@@ -198,12 +197,13 @@ object DaalKMeansFunctions extends Serializable {
   }
 
   /**
+   * Partially update cluster centroids on each Spark partition
    *
-   * @param featureTable
-   * @param inputCentroids
-   * @param args
-   * @param assignFlag
-   * @return
+   * @param featureTable Feature table
+   * @param inputCentroids Input centroids
+   * @param args Input arguments
+   * @param assignFlag If true, create table with cluster assignments
+   * @return Partial k-means results and RDD with cluster assignments
    */
   def updateCentroidsLocal(featureTable: DistributedNumericTable,
                            inputCentroids: IndexedNumericTable,

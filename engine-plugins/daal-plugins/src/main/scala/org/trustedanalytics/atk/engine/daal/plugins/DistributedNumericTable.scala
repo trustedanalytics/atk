@@ -22,6 +22,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
+import org.trustedanalytics.atk.domain.schema.{FrameSchema, Column}
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -31,6 +32,21 @@ class DistributedNumericTable extends Serializable {
   private var tableRdd: RDD[IndexedNumericTable] = null
   private var numRows: Long = 0L
   private var numCols: Long = 0L
+
+  /**
+   * Create distributed numeric table from RDD of indexed numeric table
+   *
+   * @param rdd RDD of indexed numeric table
+   */
+  def this(rdd: RDD[IndexedNumericTable]) = {
+    this()
+    tableRdd = rdd
+
+    if (tableRdd != null) {
+      numCols = tableRdd.first().numCols
+      tableRdd.foreach(table => numRows += table.numRows)
+    }
+  }
 
   /**
    * Create distributed numeric table from Vector RDD
@@ -114,4 +130,19 @@ class DistributedNumericTable extends Serializable {
     tableRdd.unpersist()
   }
 
+  /**
+   * Convert table to frame RDD
+   *
+   * @param schema Frame schema
+   * @return Frame RDD
+   */
+  def toFrameRdd(schema: FrameSchema) : FrameRdd = {
+    val rowRdd = tableRdd.flatMap(table => {
+      val context = new DaalContext
+      val rows = table.toRowIter(context)
+      context.dispose()
+      rows
+    })
+    new FrameRdd(schema, rowRdd)
+  }
 }
