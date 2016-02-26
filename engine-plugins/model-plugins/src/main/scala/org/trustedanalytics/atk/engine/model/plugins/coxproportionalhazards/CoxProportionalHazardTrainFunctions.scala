@@ -21,15 +21,17 @@ object CoxProportionalHazardTrainFunctions {
    * @param covariateCol index of the covariate column
    * @return sorted RDD
    */
-  def frameToSortedTupleRdd(rdd: FrameRdd, timeCol: String, covariateCol: String, censoredCol: String): RDD[(Double, CensoredFeaturePair)] = {
+  def frameToSortedTupleRdd(rdd: FrameRdd, timeCol: String, covariateCol: String, censoredCol: String): RDD[(Double, Double)] = {
     val rowWrapper = rdd.rowWrapper
+    val hasCensoredColumn = StringUtils.isNotBlank(censoredCol)
+
+    val filteredRdd = if (hasCensoredColumn) rdd.filter(row => rowWrapper(row).intValue(censoredCol) == 1) else rdd
     val tupleRdd = try {
-      rdd.map { row =>
+      filteredRdd.map { row =>
         val timeValue = rowWrapper(row).doubleValue(timeCol)
         val covariateValue = rowWrapper(row).doubleValue(covariateCol)
-        val censoredValue = if (StringUtils.isNotBlank(censoredCol)) rowWrapper(row).intValue(censoredCol) else 1
 
-        (timeValue, new CensoredFeaturePair(covariateValue, censoredValue))
+        (timeValue, covariateValue)
       }
     }
     catch {
@@ -37,7 +39,12 @@ object CoxProportionalHazardTrainFunctions {
         new NumberFormatException("Column values need to be numeric: " + exception.toString)
     }
 
-    tupleRdd.sortByKey(ascending = true)
+    if (tupleRdd.count() == 0) {
+      throw new RuntimeException("All events censored, nothing to calculate")
+    }
+    else {
+      tupleRdd.sortByKey(ascending = true)
+    }
   }
 
   /**
