@@ -71,7 +71,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
     val frame: SparkFrame = arguments.frame
     frame.schema.validateColumnsExist(arguments.observationColumns)
 
-    if (frame.rdd.isEmpty()){
+    if (frame.rdd.isEmpty()) {
       throw new RuntimeException("Training Frame is empty. Please train with a non-empty Frame")
     }
     val labeledTrainRDD: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)

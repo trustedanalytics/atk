@@ -98,7 +98,7 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
     val model: Model = arguments.model
 
     val trainFrameRdd = frame.rdd
-    if (trainFrameRdd.isEmpty()){
+    if (trainFrameRdd.isEmpty()) {
       throw new RuntimeException("Input Frame is empty. Please pass a non-empty Frame")
     }
     trainFrameRdd.cache()
