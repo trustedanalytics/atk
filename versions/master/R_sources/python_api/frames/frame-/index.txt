@@ -11,6 +11,7 @@
 
     __init__
     add_columns
+    aggregate_with_udf
     append
     assign_sample
     bin_column
@@ -96,6 +97,7 @@
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <Frame__init__>`\ (self[, source, name, _info])                                        Create a Frame/frame.
     :doc:`add_columns <add_columns>`\ (self, func, schema[, columns_accessed])                            Add columns to current frame.
+    :doc:`aggregate_with_udf <aggregate_with_udf>`\ (self, aggregate_by_column_keys, column_names, ...)   Combine by key current frame.
     :doc:`append <append>`\ (self, data)                                                                  Adds more data to the current frame.
     :doc:`assign_sample <assign_sample>`\ (self, sample_percentages[, sample_labels, ...])                Randomly group rows into user-defined classes.
     :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.

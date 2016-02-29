@@ -12,6 +12,7 @@
     __init__
     add_columns
     add_vertices
+    aggregate_with_udf
     assign_sample
     bin_column
     bin_column_equal_depth
@@ -112,6 +113,7 @@
     :ref:`__init__ <VertexFrame__init__>`\ (self[, source, graph, label, _info])                          Examples
     :doc:`add_columns <add_columns>`\ (self, func, schema[, columns_accessed])                            Add columns to current frame.
     :doc:`add_vertices <add_vertices>`\ (self, source_frame, id_column_name[, column_names])              Add vertices to a graph.
+    :doc:`aggregate_with_udf <aggregate_with_udf>`\ (self, aggregate_by_column_keys, column_names, ...)   Combine by key current frame.
     :doc:`assign_sample <assign_sample>`\ (self, sample_percentages[, sample_labels, ...])                Randomly group rows into user-defined classes.
     :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
     :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.

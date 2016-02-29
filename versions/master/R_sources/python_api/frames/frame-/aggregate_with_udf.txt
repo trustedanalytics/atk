@@ -1,0 +1,55 @@
+
+:doc:`Frame <index>`  aggregate_with_udf
+****************************************
+
+------
+
+
+.. function:: aggregate_with_udf(self, aggregate_by_column_keys, column_names, column_types, udf)
+
+    Combine by key current frame.
+
+
+    :Parameters:
+
+        **aggregate_by_column_keys** : list
+
+        ..
+
+            list of column key(s) to aggregate on
+
+
+
+        **column_names** : list
+
+        ..
+
+            List of names for the new columns
+
+
+
+        **column_types** : list
+
+        ..
+
+            List of data types for the new columns
+
+
+
+        **udf** : None
+
+        ..
+
+
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+
+    Combines data of frame based on key by evaluating a function for each row.

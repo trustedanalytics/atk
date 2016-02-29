@@ -53,7 +53,7 @@
     .. code::
 
         >>> frame
-        Frame "example_frame"
+        Frame <unnamed>
         row_count = 4
         schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]
         status = ACTIVE  (last_read_date = -etc-)

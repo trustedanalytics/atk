@@ -35,6 +35,7 @@
     frame___repartition
     frame___size_on_disk
     frame__add_columns
+    frame__aggregate_with_udf
     frame__assign_sample
     frame__bin_column
     frame__bin_column_equal_depth
@@ -164,6 +165,7 @@ Command List
 Command Name  (explained :doc:`here <about_command_names>`)                                     Description
 ==============================================================================================  ==================================================================================================
 :doc:`frame/add_columns <frame__add_columns>`                                                   Add columns to current frame.
+:doc:`frame/aggregate_with_udf <frame__aggregate_with_udf>`                                     Combine by key current frame.
 :doc:`frame/assign_sample <frame__assign_sample>`                                               Randomly group rows into user-defined classes.
 :doc:`frame/bin_column <frame__bin_column>`                                                     Classify data into user-defined groups.
 :doc:`frame/bin_column_equal_depth <frame__bin_column_equal_depth>`                             Classify column into groups with the same frequency.

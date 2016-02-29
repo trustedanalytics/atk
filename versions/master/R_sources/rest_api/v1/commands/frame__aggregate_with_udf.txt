@@ -1,0 +1,133 @@
+
+
+------------------------------------------------
+:doc:`Commands <index>` frame/aggregate_with_udf
+------------------------------------------------
+
+Combine by key current frame.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/aggregate_with_udf
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        Frame to which aggregate by key applied
+
+
+
+    **aggregate_by_column_keys** : list
+
+    ..
+
+        list of column key(s) to aggregate on
+
+
+
+    **column_names** : list
+
+    ..
+
+        List of names for the new columns
+
+
+
+    **column_types** : list
+
+    ..
+
+        List of data types for the new columns
+
+
+
+    **udf** : None
+
+    ..
+
+        <Missing Description>
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Combines data of frame based on key by evaluating a function for each row.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+
+
+
