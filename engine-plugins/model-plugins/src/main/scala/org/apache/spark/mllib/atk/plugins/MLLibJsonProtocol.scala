@@ -30,7 +30,6 @@ import org.trustedanalytics.atk.engine.model.plugins.classification.{ RandomFore
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.PrincipalComponentsData
 import org.trustedanalytics.atk.engine.model.plugins.regression._
 import org.trustedanalytics.atk.engine.model.plugins.clustering._
-import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }

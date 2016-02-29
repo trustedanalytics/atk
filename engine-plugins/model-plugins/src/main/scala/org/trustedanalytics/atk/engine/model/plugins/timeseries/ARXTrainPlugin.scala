@@ -93,21 +93,6 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
     model.data = jsonModel.toJson.asJsObject
 
     return ARXTrainReturn(arxModel.c, arxModel.coefficients)
-
-    /*
-    for (row <- trainFrameRdd.collect()) {
-      val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, trainFrameRdd.frameSchema, timeseriesColumn, xColumns)
-
-      val arxModel = AutoregressionX.fitModel(yVector, xMatrix, arguments.yMaxLag, arguments.xMaxLang, true, arguments.noIntercept)
-      val jsonModel = new ARXData(arxModel)
-      model.data = jsonModel.toJson.asJsObject
-      //val key = row.getString(trainFrameRdd.frameSchema.columnIndex(keyColumn))
-      //arxModels ::= arxModel
-      //keys ::= key
-    }*/
-
-    //val jsonModel = new ARXData(keys, arxModels)
-    //model.data = jsonModel.toJson.asJsObject
   }
 
 }

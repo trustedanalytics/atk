@@ -37,9 +37,11 @@ import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol.
 
 import scala.collection.mutable.ListBuffer
 
-@PluginDoc(oneLine = "TBD",
-  extended = "TBD",
-  returns = """Frame""")
+@PluginDoc(oneLine = "New frame with column of predicted y values",
+  extended = """Predict the time series values for a test frame, based on the specified
+x values.  Creates a new frame revision with the existing columns and a new predicted_y
+column.""",
+  returns = """A new frame containing the original frame's columns and a column *predictied_y*""")
 class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference] {
 
   /**

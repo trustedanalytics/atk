@@ -29,15 +29,11 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Command for loading model data into existing model in the model database.
  */
 case class ARXPredictArgs(model: ModelReference,
-                          @ArgDoc("""A frame whose labels are to be predicted.
-By default, predict is run on the same columns over which the model is
-trained.""") frame: FrameReference,
-                          /*@ArgDoc("""Name of the column that contains the key.""") keyColumn: String,*/
+                          @ArgDoc("""A frame whose values are to be predicted.""") frame: FrameReference,
                           @ArgDoc("""Name of the column that contains the time series values.""") timeseriesColumn: String,
-                          @ArgDoc("""Names of the column(s) that contain the values of previous exogenous regressors.""") xColumns: List[String]) {
+                          @ArgDoc("""Names of the column(s) that contain the values of the exogenous inputs.""") xColumns: List[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  //require(keyColumn != null && keyColumn.nonEmpty, "keyColumn must not be null nor empty")
   require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be null nor empty")
   require(xColumns != null && xColumns.nonEmpty, "Must provide at least one x column.")
 }

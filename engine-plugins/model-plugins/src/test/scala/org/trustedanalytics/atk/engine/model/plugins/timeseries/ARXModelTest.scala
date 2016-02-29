@@ -97,5 +97,50 @@ class ARXModelTest extends TestingSparkContextFlatSpec with Matchers with Mockit
     }
   }
 
+  "ARXFunctions getYandXFromFrame" should "throw an exception if the y or x columns are not numerical" in {
+    val schema = FrameSchema(List(Column("float_value", DataTypes.float32), Column("str_value", DataTypes.string), Column("int_value", DataTypes.int32)))
+    val rows = sparkContext.parallelize((1 to 10).map(i => Array(i, i.toString, i)))
+    val rdd = FrameRdd.toFrameRdd(schema, rows)
+
+    intercept[IllegalArgumentException] {
+      // We should get an exception when y is a string
+      ARXFunctions.getYandXFromFrame(rdd, "str_value", List("int_value"))
+    }
+
+    intercept[IllegalArgumentException] {
+      // We should get an exception when an x column is a string
+      ARXFunctions.getYandXFromFrame(rdd, "int_value", List("float_value", "str_value"))
+    }
+  }
+
+  it should "throw an exception when a column does not exist" in {
+    val schema = FrameSchema(List(Column("float_value", DataTypes.float32), Column("str_value", DataTypes.string), Column("int_value", DataTypes.int32)))
+    val rows = sparkContext.parallelize((1 to 10).map(i => Array(i, i.toString, i)))
+    val rdd = FrameRdd.toFrameRdd(schema, rows)
+
+    intercept[IllegalArgumentException] {
+      // We should get an exception when the y column does not exist
+      ARXFunctions.getYandXFromFrame(rdd, "bogus", List("int_value"))
+    }
+
+    intercept[IllegalArgumentException] {
+      // We should get an exception when an x column does not exist
+      ARXFunctions.getYandXFromFrame(rdd, "int_value", List("float_value", "bogus"))
+    }
+  }
+
+  it should "return x and y values when columns are numerical data types" in {
+    val schema = FrameSchema(List(Column("name", DataTypes.string), Column("float32_value", DataTypes.float32), Column("float64_value", DataTypes.float64), Column("int_value", DataTypes.int32)))
+    val rows = sparkContext.parallelize((1 to 10).map(i => Array(i.toString, i, i * 2, i * 3)))
+    val rdd = FrameRdd.toFrameRdd(schema, rows)
+
+    val (y, x) = ARXFunctions.getYandXFromFrame(rdd, "float32_value", List("float64_value", "int_value"))
+    for (i <- 1 until 10) {
+      assert(y(i - 1) == i)
+      assert(x(i - 1, 0) == (i * 2))
+      assert(x(i - 1, 1) == (i * 3))
+    }
+  }
+
 }
 

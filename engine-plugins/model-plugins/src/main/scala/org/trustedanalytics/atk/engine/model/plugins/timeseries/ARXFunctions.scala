@@ -53,35 +53,17 @@ object ARXFunctions extends Serializable {
       }
     }
 
-    return vectorLength
+    vectorLength
   }
 
-  def getYandXFromVectors(row: Row, schema: Schema, yColumnName: String, xColumnNames: List[String]): (Array[Double], Array[Array[Double]]) = {
-    val yColumnLength = verifyVectorColumn(schema, yColumnName).toInt
-    val yColumnIndex = schema.columnIndex(yColumnName)
-    val yValues = row.get(yColumnIndex).asInstanceOf[WrappedArray[Double]].toArray
-    val xValues = Array.ofDim[Double](yColumnLength, xColumnNames.size)
-
-    var i = 0
-    for (xColumnName <- xColumnNames) {
-      val xColumnLength = verifyVectorColumn(schema, xColumnName)
-      val xColumnIndex = schema.columnIndex(xColumnName)
-
-      if (xColumnLength != yColumnLength) {
-        throw new RuntimeException("Length of x column '" + xColumnName + "' must have the same vector length (" + xColumnLength.toString + ") as the y column '" + yColumnName + "' (" + yColumnLength.toString + ").")
-      }
-
-      val xValue = row.get(xColumnIndex).asInstanceOf[WrappedArray[Double]].toArray
-      for (j <- 0 until xValue.size) {
-        xValues(j)(i) = xValue(j)
-      }
-      i += 1
-    }
-
-    return (yValues, xValues)
-  }
-
-  def getYandXFromRows(frame: FrameRdd, yColumnName: String, xColumnNames: List[String]): (Array[Double], Array[Array[Double]]) = {
+  /**
+   * Gets values from the specified y and x columns.
+   * @param frame Frame to get values from
+   * @param yColumnName Name of the y column
+   * @param xColumnNames Name of the x columns
+   * @return Array of y values, and 2-dimensional array of x values
+   */
+  private def getYandXFromRows(frame: FrameRdd, yColumnName: String, xColumnNames: List[String]): (Array[Double], Array[Array[Double]]) = {
     val schema = frame.frameSchema
 
     schema.requireColumnIsNumerical(yColumnName)
@@ -95,37 +77,37 @@ object ARXFunctions extends Serializable {
     var rowCounter = 0
 
     for (row <- frame.collect()) {
-      yValues(rowCounter) = row.getAs[Double](yColumnName)
+      yValues(rowCounter) = row.get(schema.columnIndex(yColumnName)).toString.toDouble
 
       var xColumnCounter = 0
       for (xColumn <- xColumnNames) {
-        xValues(rowCounter)(xColumnCounter) = row.getAs[Double](xColumn)
+        xValues(rowCounter)(xColumnCounter) = row.get(schema.columnIndex(xColumn)).toString.toDouble
         xColumnCounter += 1
       }
 
       rowCounter += 1
     }
 
-    return (yValues, xValues)
+    (yValues, xValues)
 
   }
 
+  /**
+   * Gets x and y values from the specified frame
+   * @param frame  Frame to get values from
+   * @param yColumnName Name of the column that has y values
+   * @param xColumnNames Name of the columns that have x values
+   * @return Vector of y values and Matrix of x values
+   */
   def getYandXFromFrame(frame: FrameRdd, yColumnName: String, xColumnNames: List[String]): (Vector[Double], Matrix[Double]) = {
 
-    val (yValues, xValues) = (frame.frameSchema.columnDataType(yColumnName)) match {
-      case DataTypes.vector(length) => {
-        val row = frame.collect()(0) // Grab the first row
-        getYandXFromVectors(row, frame.frameSchema, yColumnName, xColumnNames)
-      }
-      case DataTypes.float64 => {
-        getYandXFromRows(frame, yColumnName, xColumnNames)
-      }
-      case _ => throw new IllegalArgumentException("Unsupported column type.  Time series and exogenous values must be either vectors or float64 data types.")
-    }
+    // Get values in arrays
+    val (yValues, xValues) = getYandXFromRows(frame, yColumnName, xColumnNames)
 
+    // Put values into a vector and matrix to return
     val yVector = new DenseVector(yValues)
     val xMatrix = new DenseMatrix(rows = yValues.length, cols = xColumnNames.size, data = xValues.transpose.flatten)
 
-    return (yVector, xMatrix)
+    (yVector, xMatrix)
   }
 }

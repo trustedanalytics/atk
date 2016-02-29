@@ -29,7 +29,18 @@ import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol.
  * Create a 'new' instance of a AutoRegressive Exogenous model
  */
 @PluginDoc(oneLine = "Create a 'new' instance of a AutoRegressive Exogenous model.",
-  extended = """TBD""",
+  extended =
+    """An Autoregressive (AR) model [1]_ is a representation of a type of random process; as such,
+it describes certain time-varing processes in nature, economics, etc.  The term autoregressive model
+specifies that the ouput variable lineraly on its own previous value and on a stochastic term
+(a stochastic - an imperfectly predictable - term); thus the model is in the form of a stochastic
+difference equation.
+The Autoregressive Exogeneous (ARX) model add the use of exogeneous inputs to predict future values.
+
+.. rubric: footnotes
+
+.. [1] https://en.wikipedia.org/wiki/Autoregressive_model
+    """.stripMargin,
   returns = """A new instance of ARXModel""")
 class ARXNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
 

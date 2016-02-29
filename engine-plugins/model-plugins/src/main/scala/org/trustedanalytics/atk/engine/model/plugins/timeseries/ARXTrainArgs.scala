@@ -29,7 +29,6 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  */
 case class ARXTrainArgs(model: ModelReference,
                         @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
-                        /*@ArgDoc("""Name of the column that contains the key.""") keyColumn: String,*/
                         @ArgDoc("""Name of the column that contains the time series values.""") timeseriesColumn: String,
                         @ArgDoc("""Names of the column(s) that contain the values of previous exogenous regressors.""") xColumns: List[String],
                         @ArgDoc("""The maximum lag order for the dependent (time series) variable""") yMaxLag: Int,
@@ -38,7 +37,6 @@ case class ARXTrainArgs(model: ModelReference,
 
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
-  //require(keyColumn != null && keyColumn.nonEmpty, "keyColumn must not be null nor empty")
   require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be null nor empty")
   require(xColumns != null && xColumns.nonEmpty, "Must provide at least one x column.")
 }
