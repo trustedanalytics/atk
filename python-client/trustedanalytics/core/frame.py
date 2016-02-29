@@ -437,6 +437,12 @@ class _BaseFrame(CommandLoadable):
 
         .. code::
 
+            <hide>
+            >>> frame = _frame.copy()
+            -etc-
+
+            </hide>
+
             >>> frame.inspect()
             [#]  name      age  tenure  phone
             ====================================
@@ -491,7 +497,7 @@ class _BaseFrame(CommandLoadable):
             <progress>
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode]
             status = ACTIVE  (last_read_date = -etc-)
@@ -558,7 +564,7 @@ class _BaseFrame(CommandLoadable):
         .. code::
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]
             status = ACTIVE  (last_read_date = -etc-)
@@ -657,7 +663,14 @@ class _BaseFrame(CommandLoadable):
 
         for i, dtype in enumerate(data_types):
             dtype_str = atk_dtype_to_pandas_str(dtype)
-            pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            try:
+                pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            except TypeError:
+                if dtype_str.startswith("int"):
+                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
+                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
+                else:
+                    raise
         return pandas_df
 
     @api
@@ -788,6 +801,7 @@ class _BaseFrame(CommandLoadable):
             *   stdev
             *   sum
             *   var (see glossary :term:`Bias vs Variance`)
+            *   The aggregation arguments also accepts the User Defined function(UDF). UDF acts on each row
 
         Examples
         --------
@@ -844,7 +858,6 @@ class _BaseFrame(CommandLoadable):
             [2]  2  charlie   12.0
             [3]  1  bravo      5.0
 
-
             >>> mix_frame = frame.group_by('a', ta.agg.count, {'f': [ta.agg.avg, ta.agg.sum, ta.agg.min], 'g': ta.agg.max})
             <progress>
             >>> mix_frame.inspect()
@@ -852,6 +865,21 @@ class _BaseFrame(CommandLoadable):
             =========================================
             [0]  1      3      9    5.0   15.0    3.0
             [1]  2      4      7   6.25   25.0    5.0
+
+            >>> def custom_agg(acc, row):
+            ...     acc.c_sum = acc.c_sum + row.c
+            ...     acc.c_prod= acc.c_prod*row.c
+
+            >>> sum_prod_frame = frame.group_by(['a', 'b'], ta.agg.udf(aggregator=custom_agg,output_schema=[('c_sum', ta.float64),('c_prod', ta.float64)],init_values=[0,1]))
+            <progress>
+
+            >>> sum_prod_frame.inspect()
+            [#]  a  b        c_sum  c_prod
+            ==============================
+            [0]  2  bravo     27.0   672.0
+            [1]  1  alpha      8.0    15.0
+            [2]  2  charlie   12.0    12.0
+            [3]  1  bravo      5.0     5.0
 
         For further examples, see :ref:`example_frame.group_by`.
         """

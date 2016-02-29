@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2016 Intel Corporation 
+ *  Copyright (c) 2015 Intel Corporation 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,14 +17,15 @@
 package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
 import java.sql.Timestamp
-import java.time.format.DateTimeParseException
+import java.time.format.{ DateTimeFormatter, DateTimeParseException }
 
 import com.cloudera.sparkts.{ TimeSeriesRDD, DayFrequency, DateTimeIndex }
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.types._
 import org.apache.spark.sql.{ Row, DataFrame, SQLContext }
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
+import org.joda.time.format.ISODateTimeFormat
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema, Schema }
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 import org.scalatest.Matchers
 import org.joda.time.DateTime
@@ -34,33 +35,28 @@ import scala.collection.mutable
 
 class TimeSeriesTest extends TestingSparkContextFlatSpec with Matchers {
 
-  "getZonedDateTime" should "return ZonedDateTime for the DateTime provided" in {
+  "TimeSeriesFunctions parseZonedDateTime" should "return ZonedDateTime for the DateTime provided" in {
     val dateTime = DateTime.parse("2016-01-05T12:15:55Z")
-    val zonedDateTime = TimeSeriesFunctions.getZonedDateTime(dateTime)
-    assertResult(2016) { zonedDateTime.getYear }
-    assertResult(1) { zonedDateTime.getMonthValue }
-    assertResult(5) { zonedDateTime.getDayOfMonth }
-    assertResult(12) { zonedDateTime.getHour }
-    assertResult(15) { zonedDateTime.getMinute }
-    assertResult(55) { zonedDateTime.getSecond }
-    assertResult("Z") { zonedDateTime.getZone.toString }
+    val zonedDateTime = TimeSeriesFunctions.parseZonedDateTime(dateTime)
+    assert(2016 == zonedDateTime.getYear)
+    assert(1 == zonedDateTime.getMonthValue)
+    assert(5 == zonedDateTime.getDayOfMonth)
+    assert(12 == zonedDateTime.getHour)
+    assert(15 == zonedDateTime.getMinute)
+    assert(55 == zonedDateTime.getSecond)
+    assert("Z" == zonedDateTime.getZone.toString)
   }
 
-  "getDateTimeIndexFromStrings" should "return a DateTimeIndex if a valid list of date/time strings is provided" in {
-    val dateTimeStrings = List("2016-01-01T12:00Z", "2016-01-03T12:00Z", "2016-01-05T12:00Z")
+  "TimeSeriesFunctions createDateTimeIndex" should "return a DateTimeIndex if a valid list of date/times is provided" in {
+    val dateTimeList = List(DateTime.parse("2016-01-01T12:00:0Z"), DateTime.parse("2016-01-03T12:00:00Z"), DateTime.parse("2016-01-05T12:00:00Z"))
 
-    val dateTimeIndex = TimeSeriesFunctions.getDateTimeIndexFromStrings(dateTimeStrings)
+    val dateTimeIndex = TimeSeriesFunctions.createDateTimeIndex(dateTimeList)
     dateTimeIndex.size shouldBe 3
     val x = 0
     for (x <- 0 until dateTimeIndex.size) {
-      assertResult(dateTimeStrings(x)) { dateTimeIndex.dateTimeAtLoc(x).toString }
-    }
-  }
-
-  "getDateTimeIndexFromStrings" should "throw an DateTimeParseException if invalid strings are provided" in {
-    val invalidDateStrings = List("4", "invalid", "tuesday")
-    intercept[DateTimeParseException] {
-      TimeSeriesFunctions.getDateTimeIndexFromStrings(invalidDateStrings)
+      assertResult(dateTimeList(x).toString()) {
+        dateTimeIndex.dateTimeAtLoc(x).format(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'hh:mm:ss'.'SSSVV"))
+      }
     }
   }
 
@@ -83,7 +79,7 @@ class TimeSeriesTest extends TestingSparkContextFlatSpec with Matchers {
     sqlContext.createDataFrame(rowRdd, schema)
   }
 
-  "getFrameFromTimeSeriesRdd" should "create a frame from a TimeSeriesRDD" in {
+  "TimeSeriesFunctions createFrameRdd" should "create a FrameRDD from a TimeSeriesRDD" in {
     val sqlContext = new SQLContext(sparkContext)
     val dateTimeCol = "dates"
     val tsCol = "timestamp"
@@ -121,31 +117,79 @@ class TimeSeriesTest extends TestingSparkContextFlatSpec with Matchers {
 
     // Create a timeseries RDD
     val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dtIndex, frameDataFrame, tsCol, keyCol, valCol)
-    assertResult(2) { timeseriesRdd.count } // we should have one row per key in the timeseries rdd
+    assert(2 == timeseriesRdd.count) // we should have one row per key in the timeseries rdd
 
     // Create frame from the timeseries RDD
-    var frame = TimeSeriesFunctions.getFrameFromTimeSeriesRdd(timeseriesRdd, keyCol, valCol)
-    assertResult(2) { frame.count() }
+    var frame = TimeSeriesFunctions.createFrameRdd(timeseriesRdd, keyCol, valCol)
+    assert(2 == frame.count())
+
     val frameData = frame.sortByColumns(List((keyCol, true))).take(frame.count.toInt)
     val expectedData = Array(
-      Row("a", Vector(1.0, Double.NaN, 3.0, 4.0, Double.NaN, 6.0)),
-      Row("b", Vector(2.0, 3.0, 4.0, 5.0, 6.0, 7.0))
+      Row("a", Array(1.0, Double.NaN, 3.0, 4.0, Double.NaN, 6.0)),
+      Row("b", Array(2.0, 3.0, 4.0, 5.0, 6.0, 7.0))
     )
-    val row_i = 0
+
+    // Get column indexes for the key and time series values
+    val keyIndex = frame.frameSchema.columnIndex(keyCol)
+    val seriesIndex = frame.frameSchema.columnIndex(valCol)
+
+    // Check that the time series frame has the expected values
     for (row_i <- 0 until expectedData.length) {
-      // compare key column
-      assertResult(expectedData(row_i).get(0)) {
-        frameData(row_i).get(0)
-      }
-      val expectedVector = expectedData(row_i).get(1).asInstanceOf[Vector[Double]]
-      val frameVector = frameData(row_i).get(1).asInstanceOf[mutable.WrappedArray[Double]]
-      assertResult(expectedVector.length) {
-        frameVector.length
-      }
-      val vector_i = 0
-      for (vector_i <- 0 until expectedVector.length) {
-        assert(expectedVector(vector_i).equals(frameVector(vector_i)))
-      }
+      // Compare key
+      assert(expectedData(row_i).get(keyIndex) == frameData(row_i).get(keyIndex))
+      // Compare time series values
+      val expectedValues = expectedData(row_i).get(seriesIndex).asInstanceOf[Array[Double]]
+      val frameValues = frameData(row_i).get(seriesIndex).asInstanceOf[mutable.WrappedArray[Double]].toArray
+      assert(expectedValues.corresponds(frameValues) { _.equals(_) })
+    }
+  }
+
+  "TimeSeriesFunctions discoverKeyAndValueColumns" should "return the key and value column names for a valid time series schema" in {
+    val expectedKeyColumn = "Name"
+    val expectedValueColumn = "TimeSeries"
+    val frameSchema = FrameSchema(List(Column(expectedKeyColumn, DataTypes.string), Column(expectedValueColumn, DataTypes.vector(2))))
+
+    val (actualKeyColumn, actualValueColumn) = TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
+
+    assert(expectedKeyColumn == actualKeyColumn)
+    assert(expectedValueColumn == actualValueColumn)
+  }
+
+  "TimeSeriesFunctions discoverKeyAndValueColumns" should "throw an exception when the schema does not conform to a time series frame" in {
+
+    // Frame with two string columns
+    var frameSchema = FrameSchema(List(Column("key1", DataTypes.string), Column("key2", DataTypes.string)))
+
+    intercept[RuntimeException] {
+      TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
+    }
+
+    // Frame with two vector columns
+    frameSchema = FrameSchema(List(Column("value1", DataTypes.vector(1)), Column("value2", DataTypes.vector(2))))
+
+    intercept[RuntimeException] {
+      TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
+    }
+
+    // Frame with only one column
+    frameSchema = FrameSchema(List(Column("key", DataTypes.str)))
+
+    intercept[RuntimeException] {
+      TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
+    }
+
+    // Frame with three columns
+    frameSchema = FrameSchema(List(Column("key", DataTypes.str), Column("value", DataTypes.vector(5)), Column("other", DataTypes.string)))
+
+    intercept[RuntimeException] {
+      TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
+    }
+
+    // Frame with non-string/vector types
+    frameSchema = FrameSchema(List(Column("key", DataTypes.int32), Column("timeseries", DataTypes.vector(4))))
+
+    intercept[RuntimeException] {
+      TimeSeriesFunctions.discoverKeyAndValueColumns(frameSchema)
     }
   }
 }

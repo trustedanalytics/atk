@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2016 Intel Corporation 
+ *  Copyright (c) 2015 Intel Corporation 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -26,9 +27,13 @@ import com.cloudera.sparkts._
 import org.joda.time.DateTime
 import org.apache.spark.mllib.linalg.{ Vector, DenseVector }
 
+/** Json conversion for arguments and return value case classes */
+object TimeSeriesSliceFormat {
+  implicit val sliceArgFormat = jsonFormat4(TimeSeriesSliceArgs)
+}
+
 // Implicits needed for JSON conversion
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import TimeSeriesSliceFormat._
 
 /**
  * Reformats a frame of observations as a time series.
@@ -67,62 +72,21 @@ class TimeSeriesSlicePlugin extends SparkCommandPlugin[TimeSeriesSliceArgs, Fram
     val frame: SparkFrame = arguments.frame
     val start: DateTime = arguments.start
     val end: DateTime = arguments.end
-    var keyColumn = ""
-    var valueColumn = ""
-
-    if (start.compareTo(end) == 0)
-      throw new IllegalArgumentException(s"Start date ($start) must be less than the end date ($end) specified.")
-
-    if (frame.schema.columns.size != 2)
-      throw new RuntimeException("Frame has unsupported number of columns.  Time series frames are only expected to have 2 columns -- a string column (key) and a vector column (series values).")
-
-    // Get key and series column names.
-    // The frame should have just one string column for key and one vector column that has the time series values.
-    for (column <- frame.schema.columns) {
-      val columnName = column.name
-
-      column.dataType match {
-        case DataTypes.string => {
-          if (keyColumn.isEmpty) {
-            keyColumn = columnName
-          }
-          else {
-            // Found two string columns
-            throw new RuntimeException(s"Frame has more than one string column ('$columnName' and '$keyColumn').  Time series frames should only have one string key column.")
-          }
-        }
-        case DataTypes.vector(length) => {
-          if (valueColumn.isEmpty) {
-            valueColumn = columnName
-          }
-          else {
-            // Found two vector columns
-            throw new RuntimeException(s"Frame has more than one vector column('$columnName' and '$valueColumn'). Time series frames should only have one vector column, which contains the series values.")
-          }
-        }
-        case _ => {
-          throw new RuntimeException(s"Frame has unsupported column type (${column.dataType.getClass.toString}.  Time series frames are only expected to have a string column (key) and a vector column (series values).")
-        }
-      }
-    }
 
     // Get DateTimeIndex
-    val dateTimeIndex = TimeSeriesFunctions.getDateTimeIndexFromStrings(arguments.dateTimeIndex)
+    val dateTimeIndex = TimeSeriesFunctions.createDateTimeIndex(arguments.dateTimeIndex)
+
+    // Discover the column names of the key and value column
+    val (keyColumn, valueColumn) = TimeSeriesFunctions.discoverKeyAndValueColumns(frame.schema)
 
     // Create TimeSeriesRDD
-    val rdd = frame.rdd.mapRows(row => {
-      val key = row.stringValue(keyColumn)
-      val series = row.vectorValue(valueColumn)
-      val vector = new DenseVector(series.toArray)
-      (key.asInstanceOf[String], vector.asInstanceOf[Vector])
-    })
-    val timeseriesRdd = new TimeSeriesRDD[String](dateTimeIndex, rdd)
+    val timeseriesRdd = TimeSeriesFunctions.createTimeSeriesRDD(keyColumn, valueColumn, frame, dateTimeIndex)
 
     // Perform Slice
-    val sliced = timeseriesRdd.slice(TimeSeriesFunctions.getZonedDateTime(start), TimeSeriesFunctions.getZonedDateTime(end))
+    val sliced = timeseriesRdd.slice(TimeSeriesFunctions.parseZonedDateTime(start), TimeSeriesFunctions.parseZonedDateTime(end))
 
     // Convert back to a frame to return
-    val timeseriesFrameRdd = TimeSeriesFunctions.getFrameFromTimeSeriesRdd(sliced, keyColumn, valueColumn)
+    val timeseriesFrameRdd = TimeSeriesFunctions.createFrameRdd(sliced, keyColumn, valueColumn)
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by timeseries_slice command"))) {
       newFrame => newFrame.save(timeseriesFrameRdd)
     }

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2016 Intel Corporation 
+ *  Copyright (c) 2015 Intel Corporation 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,14 +18,20 @@ package org.trustedanalytics.atk.engine.frame.plugins.timeseries
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
+import org.trustedanalytics.atk.domain.schema.DataTypes
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import com.cloudera.sparkts._
 
+/** Json conversion for arguments and return value case classes */
+object TimeSeriesFromObservationsJsonFormat {
+  implicit val dotProductFormat = jsonFormat5(TimeSeriesFromObservationsArgs)
+}
+
 // Implicits needed for JSON conversion
-import spray.json._
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import TimeSeriesFromObservationsJsonFormat._
 
 /**
  * Reformats a frame of observations as a time series.
@@ -49,12 +55,6 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
   override def executesPythonUdf = false
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: TimeSeriesFromObservationsArgs)(implicit invocation: Invocation) = 1
-
-  /**
    * Returns a frame formatted as a timeseries, based on the specified frame of observations.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -67,32 +67,24 @@ class TimeSeriesFromObservationsPlugin extends SparkCommandPlugin[TimeSeriesFrom
 
     val frame: SparkFrame = arguments.frame
 
-    val timestampColumn: String = arguments.timestampColumn
-    val keyColumn: String = arguments.keyColumn
-    val valueColumn: String = arguments.valueColumn
-
-    if (frame.schema.hasColumn(timestampColumn) == false)
-      throw new IllegalArgumentException(s"Invalid timestampColumn provided. Column named '$timestampColumn' does not exist in the frame's schema.")
-
-    if (frame.schema.hasColumn(keyColumn) == false)
-      throw new IllegalArgumentException(s"Invalid keyColumn provided. Column named '$keyColumn' does not exist in the frame's schema.")
-
-    if (frame.schema.hasColumn(valueColumn) == false)
-      throw new IllegalArgumentException(s"Invalid valueColumn provided. Column named '$valueColumn' does not exist in the frame's schema.")
+    // Column validation
+    frame.schema.validateColumnsExist(List(arguments.timestampColumn, arguments.keyColumn, arguments.valueColumn))
+    frame.schema.requireColumnIsType(arguments.timestampColumn, DataTypes.datetime)
+    frame.schema.requireColumnIsType(arguments.valueColumn, DataTypes.float64)
 
     // Get DateTimeIndex
-    val dateTimeIndex = TimeSeriesFunctions.getDateTimeIndexFromStrings(arguments.dateTimeIndex)
+    val dateTimeIndex = TimeSeriesFunctions.createDateTimeIndex(arguments.dateTimeIndex)
 
     // Create DataFrame with a new column that's formatted as a Timestamp (because this is what timeSeriesRDDFromObservations requires)
-    val newTimestampColumn = timestampColumn + "_new" // name for the new timestamp formatted column
-    val dataFrame = frame.rdd.toDataFrame
-    val dataFrameWithTimestamp = dataFrame.withColumn(newTimestampColumn, TimeSeriesFunctions.toTimestamp(dataFrame(timestampColumn))).select(newTimestampColumn, keyColumn, valueColumn)
+    val newTimestampColumn = arguments.timestampColumn + "_as_timestamp" // name for the new timestamp formatted column
+    val dataFrame = frame.toDataFrame
+    val dataFrameWithTimestamp = dataFrame.withColumn(newTimestampColumn, TimeSeriesFunctions.toTimestamp(dataFrame(arguments.timestampColumn)))
 
     // Convert the frame of observations to a TimeSeriesRDD
-    val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dateTimeIndex, dataFrameWithTimestamp, newTimestampColumn, keyColumn, valueColumn)
+    val timeseriesRdd = TimeSeriesRDD.timeSeriesRDDFromObservations(dateTimeIndex, dataFrameWithTimestamp, newTimestampColumn, arguments.keyColumn, arguments.valueColumn)
 
     // Convert back to a frame to return
-    val timeseriesFrameRdd = TimeSeriesFunctions.getFrameFromTimeSeriesRdd(timeseriesRdd, keyColumn, valueColumn)
+    val timeseriesFrameRdd = TimeSeriesFunctions.createFrameRdd(timeseriesRdd, arguments.keyColumn, arguments.valueColumn)
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by timeseries_from_observations command"))) {
       newFrame => newFrame.save(timeseriesFrameRdd)
     }

@@ -1,5 +1,5 @@
 /**
- *  Copyright (c) 2015-2016 Intel Corporation 
+ *  Copyright (c) 2015 Intel Corporation 
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 
 package org.trustedanalytics.atk.domain
-
 import java.net.URI
 import java.util.ArrayList
 
@@ -406,12 +405,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
   implicit val histogramArgsFormat = jsonFormat5(HistogramArgs)
   implicit val histogramResultFormat = jsonFormat3(Histogram)
 
-  // timeseries operation arg formats
-  implicit val timeseriesFromObservationsFormat = jsonFormat5(TimeSeriesFromObservationsArgs)
-  implicit val timeseriesSplitFormat = jsonFormat4(TimeSeriesSliceArgs)
-
   // model performance formats
-
   implicit val classificationMetricLongFormat = jsonFormat6(ClassificationMetricArgs)
   implicit val classificationMetricValueLongFormat = jsonFormat5(ClassificationMetricValue)
   implicit val commandActionFormat = jsonFormat1(CommandPost)
