@@ -1,0 +1,293 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>VertexFrame add_columns &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames VertexFrame" href="index.html" >
+    <link rel="next" title="VertexFrame add_vertices" href="add_vertices.html" >
+    <link rel="prev" title="VertexFrame __init__" href="__init__.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> VertexFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="__init__.html" title="VertexFrame __init__"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="add_vertices.html" title="VertexFrame add_vertices"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="vertexframe-add-columns">
+<h1><a class="reference internal" href="index.html"><em>VertexFrame</em></a>  add_columns<a class="headerlink" href="#vertexframe-add-columns" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="add_columns">
+<code class="descname">add_columns</code><span class="sig-paren">(</span><em>self</em>, <em>func</em>, <em>schema</em>, <em>columns_accessed=None</em><span class="sig-paren">)</span><a class="headerlink" href="#add_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add columns to current frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>func</strong> : UDF</p>
+<blockquote>
+<div><p>User-Defined Function (<abbr title="Python User-defined Function">UDF</abbr>) which takes the values in the row and produces a value, or collection of values, for the new cell(s).</p>
+</div></blockquote>
+<p><strong>schema</strong> : tuple | list of tuples</p>
+<blockquote>
+<div><p>The schema for the results of the <abbr title="Python User-defined Function">UDF</abbr>, indicating the new column(s) to add.  Each tuple provides the column name and data type, and is of the form (str, type).</p>
+</div></blockquote>
+<p><strong>columns_accessed</strong> : list (default=None)</p>
+<blockquote class="last">
+<div><p>List of columns which the <abbr title="Python User-defined Function">UDF</abbr> will access.  This adds significant performance benefit if we know which column(s) will be needed to execute the <abbr title="Python User-defined Function">UDF</abbr>, especially when the frame has significantly more columns than those being used to evaluate the <abbr title="Python User-defined Function">UDF</abbr>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Assigns data to column based on evaluating a function for each row.</p>
+<p class="rubric">Notes</p>
+<ol class="arabic simple">
+<li>The row <abbr title="Python User-defined Function">UDF</abbr> (&#8216;func&#8217;) must return a value in the same format as
+specified by the schema.
+See <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a>.</li>
+<li>Unicode in column names is not supported and will likely cause the
+drop_frames() method (and others) to fail!</li>
+</ol>
+<p class="rubric">Examples</p>
+<p>Given our frame, let&#8217;s add a column which has how many years the person has been over 18</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  tenure  phone</span>
+<span class="go">====================================</span>
+<span class="go">[0]  Fred       39      16  555-1234</span>
+<span class="go">[1]  Susan      33       3  555-0202</span>
+<span class="go">[2]  Thurston   65      26  555-4510</span>
+<span class="go">[3]  Judy       44      14  555-2183</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">age</span> <span class="o">-</span> <span class="mi">18</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;adult_years&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years</span>
+<span class="go">=================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21</span>
+<span class="go">[1]  Susan      33       3  555-0202           15</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47</span>
+<span class="go">[3]  Judy       44      14  555-2183           26</span>
+</pre></div>
+</div>
+<p>Multiple columns can be added at the same time.  Let&#8217;s add percentage of
+life and percentage of adult life in one call, which is more efficient.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="n">row</span><span class="o">.</span><span class="n">tenure</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">age</span><span class="p">),</span> <span class="n">row</span><span class="o">.</span><span class="n">tenure</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">adult_years</span><span class="p">)],</span> <span class="p">[(</span><span class="s">&quot;of_age&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;of_adult&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years  of_age  of_adult</span>
+<span class="go">===================================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21    0.41      0.76</span>
+<span class="go">[1]  Susan      33       3  555-0202           15    0.09      0.20</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47    0.40      0.55</span>
+<span class="go">[3]  Judy       44      14  555-2183           26    0.32      0.54</span>
+</pre></div>
+</div>
+<p>Note that the function returns a list, and therefore the schema also needs to be a list.</p>
+<p>It is not necessary to use lambda syntax, any function will do, as long as it takes a single row argument.  We
+can also call other local functions within.</p>
+<p>Let&#8217;s add a column which shows the amount of person&#8217;s name based on their adult tenure percentage.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">percentage_of_string</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">percentage</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&#39;&#39;&#39;returns a substring of the given string according to the given percentage&#39;&#39;&#39;</span>
+<span class="gp">... </span>    <span class="n">substring_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">percentage</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">string</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">string</span><span class="p">[:</span><span class="n">substring_len</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">add_name_by_adult_tenure</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">percentage_of_string</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">of_adult</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">add_name_by_adult_tenure</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;tenured_name&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">))</span>
+<span class="go">[===Job Progress===]</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span>
+<span class="go">Frame &lt;unnamed&gt;</span>
+<span class="go">row_count = 4</span>
+<span class="go">schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode]</span>
+<span class="go">status = ACTIVE  (last_read_date = -etc-)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;of_adult&#39;</span><span class="p">,</span> <span class="s">&#39;tenured_name&#39;</span><span class="p">],</span> <span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      of_adult  tenured_name</span>
+<span class="go">=====================================</span>
+<span class="go">[0]  Fred          0.76  Fre</span>
+<span class="go">[1]  Susan         0.20  S</span>
+<span class="go">[2]  Thurston      0.55  Thur</span>
+<span class="go">[3]  Judy          0.54  Ju</span>
+</pre></div>
+</div>
+<p><strong>Optimization</strong> - If we know up front which columns our row function will access, we
+can tell add_columns to speed up the execution by working on only the limited feature
+set rather than the entire row.</p>
+<p>Let&#8217;s add a name based on tenure percentage of age.  We know we&#8217;re only going to use
+columns &#8216;name&#8217; and &#8216;of_age&#8217;.</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">percentage_of_string</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">of_age</span><span class="p">),</span>
+<span class="gp">... </span>                  <span class="p">(</span><span class="s">&#39;tenured_name_age&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span>
+<span class="gp">... </span>                  <span class="n">columns_accessed</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;of_age&#39;</span><span class="p">])</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="nb">round</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">[#]  name      age  tenure  phone     adult_years  of_age  of_adult</span>
+<span class="go">===================================================================</span>
+<span class="go">[0]  Fred       39      16  555-1234           21    0.41      0.76</span>
+<span class="go">[1]  Susan      33       3  555-0202           15    0.09      0.20</span>
+<span class="go">[2]  Thurston   65      26  555-4510           47    0.40      0.55</span>
+<span class="go">[3]  Judy       44      14  555-2183           26    0.32      0.54</span>
+
+<span class="go">[#]  tenured_name  tenured_name_age</span>
+<span class="go">===================================</span>
+<span class="go">[0]  Fre           F</span>
+<span class="go">[1]  S</span>
+<span class="go">[2]  Thur          Thu</span>
+<span class="go">[3]  Ju            J</span>
+</pre></div>
+</div>
+<p>More information on a row <abbr title="Python User-defined Function">UDF</abbr> can be found at <a class="reference internal" href="../../../ds_apir.html"><em>Python User Functions</em></a></p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Mar 01, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

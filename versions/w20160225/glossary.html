@@ -1,0 +1,995 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Glossary &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="next" title="Legal Statement" href="legal.html" >
+    <link rel="prev" title="REST API Info" href="rest_api/v1/info.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="rest_api/v1/info.html" title="REST API Info"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="legal.html" title="Legal Statement"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="glossary">
+<span id="id1"></span><h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline">¶</a></h1>
+<dl class="glossary docutils">
+<dt id="term-adjacency-list">Adjacency List</dt>
+<dd><p class="first">A representation of a graph as a list.
+Each line of the list consists of a unique vertex identification, and
+a list of all of that vertex&#8217;s neighboring vertices.</p>
+<p>Example:</p>
+<div class="last highlight-python"><div class="highlight"><pre>  Node   Connection List
+/------------------------/
+   A         B, D
+   B         A, C, D
+   C         B
+   D         A, B
+</pre></div>
+</div>
+</dd>
+<dt id="term-aggregation-function">Aggregation Function</dt>
+<dd><p class="first">A mathematical function which is usually computed over a single column.
+Supported functions:</p>
+<ul class="last simple">
+<li>avg : The average (mean) value in the column</li>
+<li>count : The count of the rows</li>
+<li>count_distinct : The count of unique rows</li>
+<li>max : The largest (most positive) value in the column</li>
+<li>min : The least (most negative) value in the column</li>
+<li>stdev : The standard deviation of the values in the column, see
+<a class="reference external" href="http://en.wikipedia.org/wiki/Standard_deviation">Wikipedia: Standard Deviation</a></li>
+<li>sum : The result of adding all the values in the column together</li>
+<li>var : The variance of the values in the column, see
+<a class="reference external" href="https://en.wikipedia.org/wiki/Variance">Wikipedia: Variance</a> and <a class="reference internal" href="#term-bias-vs-variance"><span class="xref std std-term">Bias vs Variance</span></a></li>
+</ul>
+</dd>
+<dt id="term-alpha">Alpha</dt>
+<dd>See <a class="reference internal" href="#term-api-maturity-tags"><span class="xref std std-term">API Maturity Tags</span></a>.</dd>
+<dt id="term-alternating-least-squares">Alternating Least Squares</dt>
+<dd><p class="first">A method used in some approaches to multidimensional scaling, where a
+goodness-of-fit measure for some data is minimized in a series of
+steps, each involving the application of the <a class="reference internal" href="#term-least-squares"><span class="xref std std-term">least squares</span></a>
+method of parameter estimation.</p>
+<p class="last">See the API section on the
+<span class="xref std std-ref">Collaborative Filter Model</span>
+for an in-depth discussion of this method.</p>
+</dd>
+<dt id="term-api-maturity-tags">API Maturity Tags</dt>
+<dd><p class="first">Functions in the API may be at different levels of software maturity.
+Where a function is not mature, the documentation will note it with one
+of the following tags.  The absence of a tag means the function is
+standardized and fully tested.</p>
+<p>[ALPHA] Indicates a function or feature which has been developed, but
+has not been completely tested.
+Use this function with caution.
+This function may be changed or eliminated in future releases.</p>
+<p>[BETA] Indicates a function or feature which has been developed and
+preliminarily tested, but has not been completely tested.
+Use this function with caution.
+This function may be changed in future releases.</p>
+<p class="last">[DEPRECATED] Indicates a function or feature which is no longer
+supported.
+It is recommended that an alternate solution be found.
+This function may be removed in future releases.</p>
+</dd>
+<dt id="term-arity">Arity</dt>
+<dd>In logic, mathematics, and computer science, the arity of a function
+or operation is the number of arguments or operands the function or
+operation accepts.</dd>
+<dt id="term-ascii">ASCII</dt>
+<dd>Abbreviated from American Standard Code for Information Interchange,
+ASCII is a character-encoding scheme.
+Originally based on the English alphabet, it encodes 128 specified
+characters into 7-bit binary integers.</dd>
+<dt id="term-average-path-length">Average Path Length</dt>
+<dd>In network topology, the average number of steps along the shortest
+paths for all possible pairs of vertices.</dd>
+<dt id="term-bayesian-inference">Bayesian Inference</dt>
+<dd><p class="first">A probabilistic graphical model representing the conditional
+dependencies amongst a set of random variables with a directed acyclic
+graph.</p>
+<p>Contrast with <a class="reference internal" href="#term-markov-random-fields"><span class="xref std std-term">Markov Random Fields</span></a></p>
+<p class="last">For more information, see <a class="reference external" href="http://en.wikipedia.org/wiki/Bayesian_network">Wikipedia: Bayesian Network</a>.</p>
+</dd>
+<dt id="term-belief-propagation">Belief Propagation</dt>
+<dd>See <a class="reference internal" href="#term-loopy-belief-propagation"><span class="xref std std-term">Loopy Belief Propagation</span></a>.</dd>
+<dt id="term-beta">Beta</dt>
+<dd>See <a class="reference internal" href="#term-api-maturity-tags"><span class="xref std std-term">API Maturity Tags</span></a>.</dd>
+<dt id="term-bias-vs-variance">Bias vs Variance</dt>
+<dd>In this context, &#8220;bias&#8221; means accuracy, while &#8220;variance&#8221; means
+accounting for outlier data points.</dd>
+<dt id="term-bias-variance-trade-off">Bias-variance trade-off</dt>
+<dd>In supervised classifier training, the problem of minimizing two
+sources of prediction error: erroneous assumptions in the learning
+algorithm, and sensitivity to small details in the training data (in
+other words, over-fitting) when generalizing to a testing data set.</dd>
+<dt id="term-central-tendency">Central Tendency</dt>
+<dd>A typical value for a probability distribution.
+It may also be called a center or location of the distribution.
+Colloquially, measures of central tendency are often called averages.</dd>
+<dt id="term-centrality">Centrality</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Centrality">Wikipedia: Centrality</a>:</p>
+<blockquote class="last">
+<div>In graph theory and network analysis, centrality of a vertex
+measures its relative importance within a graph.
+Applications include how influential a person is within a social
+network, how important a room is within a building (space syntax),
+and how well-used a road is within an urban network.
+There are four main measures of centrality: degree, betweenness,
+closeness, and eigenvector.
+Centrality concepts were first developed in social network analysis,
+and many of the terms used to measure centrality reflect their
+sociological origin. <a class="footnote-reference" href="#f10" id="id2">[8]</a></div></blockquote>
+</dd>
+<dt id="term-centrality-katz">Centrality (Katz)</dt>
+<dd>See <a class="reference internal" href="#term-katz-centrality"><span class="xref std std-term">Katz Centrality</span></a>.</dd>
+<dt id="term-centrality-pagerank">Centrality (PageRank)</dt>
+<dd>See <a class="reference internal" href="#term-centrality"><span class="xref std std-term">Centrality</span></a>.</dd>
+<dt id="term-character-separated-values">Character-Separated Values</dt>
+<dd>A file containing tabular data (numbers and text) in plain-text form.
+The file can consist of any number of records, separated by a unique
+character.
+New line characters are usually used for this purpose.
+Each record consists of one or more fields, separated by some unique
+character.
+Commas are usually used for this purpose.
+Tab characters are also quite common.</dd>
+<dt id="term-classification">Classification</dt>
+<dd>The process of predicting category membership for a set of
+observations based on a model learned from the known categorical
+groupings of another set of observations.</dd>
+<dt id="term-clustering">Clustering</dt>
+<dd>See <a class="reference internal" href="#term-collaborative-clustering"><span class="xref std std-term">Collaborative Clustering</span></a>.</dd>
+<dt id="term-collaborative-clustering">Collaborative Clustering</dt>
+<dd>The unsupervised grouping of observations based on one or more
+character traits.</dd>
+<dt id="term-collaborative-filtering">Collaborative Filtering</dt>
+<dd>The process of filtering for information or patterns using techniques
+involving collaboration among multiple agents, viewpoints, data
+sources, etc. <a class="footnote-reference" href="#f5" id="id3">[4]</a></dd>
+<dt id="term-comma-separated-variables">Comma-Separated Variables</dt>
+<dd>See <a class="reference internal" href="#term-character-separated-values"><span class="xref std std-term">Character-Separated Values</span></a>.</dd>
+<dt id="term-community-structure-detection">Community Structure Detection</dt>
+<dd>For complex networks, the process of identifying vertices that can be
+easily grouped into densely-connected sub-groupings.</dd>
+<dt id="term-confusion-matrices">Confusion Matrices</dt>
+<dd>Plural form of <a class="reference internal" href="#term-confusion-matrix"><span class="xref std std-term">Confusion Matrix</span></a></dd>
+<dt id="term-confusion-matrix">Confusion Matrix</dt>
+<dd>In machine learning, a table describing the performance of a
+supervised classification algorithm, in which each column corresponds
+to instances of a predicted class, while each row represents the
+instances of the true class.
+Also known as contingency table, error matrix, or misclassification
+matrix.</dd>
+<dt id="term-conjugate-gradient-descent">Conjugate Gradient Descent</dt>
+<dd><p class="first">Trusted Analytics Platform implements this algorithm.
+Specifically, it uses CGD with bias for collaborative filtering.</p>
+<p class="last">For more information: <a class="reference external" href="http://public.research.att.com/~volinsky/netflix/kdd08koren.pdf">Factorization Meets the Neighborhood (pdf)</a>
+(see equation 5).</p>
+</dd>
+<dt id="term-connected-component">Connected Component</dt>
+<dd>In graph theory, a sub-graph in which any two vertices are
+interconnected but share no connections with other vertices in the
+sub-graph.</dd>
+<dt id="term-convergence">Convergence</dt>
+<dd><p class="first">Where a calculation (often an iterative calculation) reaches a certain
+value.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Convergence_(mathematics)">Wikipedia: Convergence (mathematics)</a>.</p>
+</dd>
+<dt id="term-csv">CSV</dt>
+<dd>See <a class="reference internal" href="#term-character-separated-values"><span class="xref std std-term">Character-Separated Values</span></a></dd>
+<dt id="term-degree">Degree</dt>
+<dd><p class="first">The degree of a vertex is the number of edges incident to the vertex.
+Loops are counted twice.
+The maximum and minimum degree of a graph are the maximum and minimum
+degree of its vertices.</p>
+<p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Degree_(graph_theory)">Wikipedia: Degree (graph theory)</a>.</p>
+</dd>
+<dt id="term-deprecated">Deprecated</dt>
+<dd>See <a class="reference internal" href="#term-api-maturity-tags"><span class="xref std std-term">API Maturity Tags</span></a>.</dd>
+<dt id="term-directed-acyclic-graph-dag">Directed Acyclic Graph (DAG)</dt>
+<dd><p class="first">In mathematics and computer science, a graph formed by a collection of
+vertices and directed edges, each edge connecting one vertex to
+another, such that there is no way to start at some vertex <img class="math" src="R_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/>
+and follow a sequence of edges that eventually loops back to <img class="math" src="R_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/>
+again.</p>
+<p>Contrast with <a class="reference internal" href="#term-undirected-graph"><span class="xref std std-term">Undirected Graph</span></a>.</p>
+<p class="last">See <a class="reference external" href="https://en.wikipedia.org/wiki/Directed_acyclic_graph">Wikipedia: Directed Acyclic Graph</a>.</p>
+</dd>
+<dt id="term-ecdf">ECDF</dt>
+<dd>See <a class="reference internal" href="#term-empirical-cumulative-distribution"><span class="xref std std-term">Empirical Cumulative Distribution</span></a></dd>
+<dt id="term-edge">Edge</dt>
+<dd>A connection — either directed or not — between two vertices in a
+graph.</dd>
+<dt id="term-empirical-cumulative-distribution">Empirical Cumulative Distribution</dt>
+<dd><p class="first"><img class="math" src="R_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is a step function with jumps <img class="math" src="R_images/math/df37a8a72d641ab47d7bb55d37e235062b469770.png" alt="i/n"/> at
+observation values, where <img class="math" src="R_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> is the number of tied observations
+at that value.
+Missing values are ignored.</p>
+<p>For observations <img class="math" src="R_images/math/9ce404145facac6c588b54395e49e7c4b7db8bba.png" alt="x = (x_{1},x_{2}, ... x_{n})"/>,
+<img class="math" src="R_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is the fraction of observations less than or
+equal to <img class="math" src="R_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.</p>
+<div class="math">
+<p><img src="R_images/math/9eeeefbeaf71ffe3770521016159044715aa43fe.png" alt="\hat F_{n}(t) = \frac {x_{i} \le t}{n} = \frac {1}{n} \
+\sum_{i=1}^{n} Indicator\{x_{i} \le t\}."/></p>
+</div><p class="last">where <img class="math" src="R_images/math/abcb304578fb16af504b213cb90b156849d328cc.png" alt="Indicator\{A\}"/> is the indicator of event <img class="math" src="R_images/math/0acafa529182e79b4f56165ec677554fba7fcf98.png" alt="A"/>.
+For a fixed <img class="math" src="R_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, the indicator <img class="math" src="R_images/math/205c84c7f2cc4a182862ebd5d7a5435077d45d3b.png" alt="Indicator\{x_{i} \le t\}"/>
+is a Bernoulli random variable with parameter <img class="math" src="R_images/math/431c0555606dbd53681c3a5a564fe355573329ed.png" alt="p = F(t)"/>, hence
+<img class="math" src="R_images/math/5b25d3bb413ef259a81db898392745b1fc3e2a9f.png" alt="n \hat F_{n}(t)"/> is a binomial random variable with mean
+<img class="math" src="R_images/math/4c9170be5a67f0522ecfc41ebbf5978abe944699.png" alt="n F(t)"/> and variance <img class="math" src="R_images/math/d71684fe0c3dbc92e8491bb9add1828f349e37d0.png" alt="n F(t)(1 - F(t))"/>.
+This implies that <img class="math" src="R_images/math/8883e7e745f2e33cb9214397cd3ad6ab6d39976a.png" alt="\hat F_{n}(t)"/> is an unbiased estimator for
+<img class="math" src="R_images/math/a32e81020a3ca462e0631810c836a2a84632ee82.png" alt="F(t)"/>.</p>
+</dd>
+<dt id="term-enumerate">Enumerate</dt>
+<dd>Verb — To specify each member of a sequence individually in incrementing order.</dd>
+<dt id="term-equal-depth-binning">Equal Depth Binning</dt>
+<dd>Equal depth binning places column values into groups such
+that each group contains the same number of elements.</dd>
+<dt id="term-equal-width-binning">Equal Width Binning</dt>
+<dd>Equal width binning places column values into groups such that the
+values in each group fall within the same interval and the interval
+width for each group is equal.</dd>
+<dt id="term-extract-transform-and-load">Extract, Transform, and Load</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Extract,_transform,_load">Wikipedia: Extract, Transform, and Load</a>:</p>
+<blockquote class="last">
+<div><p>In computing, <abbr title="extract, transform, and load">ETL</abbr> refers to a process in database usage and
+especially in data warehousing that:</p>
+<ul class="simple">
+<li>Extracts data from outside sources</li>
+<li>Transforms it to fit operational needs, which can include
+quality levels</li>
+<li>Loads it into the end target (database, more specifically,
+operational data store, data mart, or data warehouse)</li>
+</ul>
+<p><abbr title="extract, transform, and load">ETL</abbr> systems are commonly used to integrate data from multiple
+applications, typically developed and supported by different
+vendors or hosted on separate computer hardware.
+The disparate systems containing the original data are frequently
+managed and operated by different employees.
+For example a cost accounting system may combine data from
+payroll, sales and purchasing.</p>
+</div></blockquote>
+</dd>
+<dt id="term-f-measure">F-Measure</dt>
+<dd>In machine learning, a metric that quantifies a classifier&#8217;s accuracy.
+Traditionally defined as the harmonic mean of precision and recall.
+Also known as F1 score.</dd>
+<dt id="term-f-score">F-Score</dt>
+<dd>See <a class="reference internal" href="#term-f-measure"><span class="xref std std-term">F-Measure</span></a>.</dd>
+<dt id="term-f1-score">F1 Score</dt>
+<dd>See <a class="reference internal" href="#term-f-measure"><span class="xref std std-term">F-Measure</span></a>.</dd>
+<dt id="term-float32">float32</dt>
+<dd>A real number with 32 bits of precision.</dd>
+<dt id="term-float64">float64</dt>
+<dd>A real number with 64 bits of precision.</dd>
+<dt id="term-frame-capital-f">Frame (capital F)</dt>
+<dd><ol class="first last arabic simple">
+<li>A table database with rows and columns containing data.</li>
+<li>A class object with the functionality to manipulate the data in a frame.</li>
+</ol>
+</dd>
+<dt id="term-gabp">GaBP</dt>
+<dd>See <a class="reference internal" href="#term-gaussian-belief-propagation"><span class="xref std std-term">Gaussian Belief Propagation</span></a>.</dd>
+<dt id="term-gaussian-belief-propagation">Gaussian Belief Propagation</dt>
+<dd>A special case of belief propagation when the underlying distributions
+are <a class="reference internal" href="#term-gaussian-distribution"><span class="xref std std-term">Gaussian</span></a> (Weiss &amp; Freeman <a class="footnote-reference" href="#f11" id="id4">[9]</a>).</dd>
+<dt id="term-gaussian-distribution"><span id="term-normal-distribution"></span>Gaussian Distribution<br />Normal Distribution</dt>
+<dd><p class="first">A group of values, where the probability of any specific value:</p>
+<ul class="simple">
+<li>will fall between two real limits,</li>
+<li>is evenly centered around the mean,</li>
+<li>approaches zero on either side of the mean.</li>
+</ul>
+<p>A Gaussian distribution is defined as:</p>
+<div class="math">
+<p><img src="R_images/math/cc236ed043767edb1ba2315fb4f0fa9f9f542feb.png" alt="f(x, \mu, \sigma) = \frac{1}{ \sigma \sqrt{2 \pi}} \
+e^{-i \frac{(x-i \mu)^{2}}{2i \sigma^2}}"/></p>
+</div><ul class="last simple">
+<li><img class="math" src="R_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> is the mean of the distribution.</li>
+<li><img class="math" src="R_images/math/2298cf1485084afe72757a9c8483af49a138d81f.png" alt="\sigma"/> is the standard deviation.</li>
+</ul>
+</dd>
+<dt id="term-gaussian-random-fields">Gaussian Random Fields</dt>
+<dd>A random group of vertices displaying a <a class="reference internal" href="#term-gaussian-distribution"><span class="xref std std-term">Gaussian distribution</span></a>
+of one or more sets of properties.</dd>
+<dt id="term-global-clustering-coefficient">Global Clustering Coefficient</dt>
+<dd><p class="first">The global clustering coefficient is based on triplets of vertices.
+A triplet consists of three vertices that are connected by either two
+(open triplet) or three (closed triplet) undirected edges.
+A triangle consists of three closed triplets, one centered on each of
+the vertices.
+The global clustering coefficient is the number of closed triplets
+(or 3 x triangles) over the total number of triplets (both open and
+closed).</p>
+<p>For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Clustering_coefficient#Global_clustering_coefficient">Wikipedia: Global Clustering Coefficient</a>.</p>
+<p class="last">See also <a class="reference internal" href="#term-local-clustering-coefficient"><span class="xref std std-term">Local Clustering Coefficient</span></a>.</p>
+</dd>
+<dt id="term-graph">Graph</dt>
+<dd><p class="first">A representation of a set of vertices, where some pairs of objects are
+connected by edges.
+The links that connect some pairs of vertices are called edges.
+Typically, a graph is depicted in diagrammatic form as a set of dots
+for the vertices, joined by lines or curves for the edges.
+Graphs are one of the objects of study in discrete mathematics.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Graph_(mathematics)">Wikipedia: Graph (mathematics)</a>.</p>
+</dd>
+<dt id="term-graph-analytics">Graph Analytics</dt>
+<dd><p class="first">The broad category of methods used to examine the statistical and
+structural properties of a graph, including:</p>
+<ol class="arabic simple">
+<li>Traversals &#8211;
+Algorithmic walk-through of the graph to determine optimal
+paths and relationship between vertices.</li>
+<li>Statistics &#8211;
+Important attributes of the graph such as degrees of
+separation, number of triangular counts, centralities (highly
+influential nodes), and so on.</li>
+</ol>
+<p>Some are user-guided interactions, where the user navigates through
+the data connections, others are algorithmic, where a result is
+calculated by the software.</p>
+<p>Graph learning is a class of graph analytics applying machine learning
+and data mining algorithms to graph data.
+This means that calculations are iterated across the nodes of the
+graph to uncover patterns and relationships.
+Thus, finding similarities based on relationships, or recursively
+optimizing some parameter across nodes.</p>
+<p class="last">For more information, see the article
+<a class="reference external" href="http://vacommunity.org/article26">Graph Analytics</a>
+by Pak Chung Wong.</p>
+</dd>
+<dt id="term-graph-database-directions">Graph Database Directions</dt>
+<dd><p class="first">As a shorthand, graph database terminology uses relative directions,
+assumed to be from whatever vertex you are currently using.
+These directions are:</p>
+<ul class="simple">
+<li><strong>left</strong>: The calling frame&#8217;s index</li>
+<li><strong>right</strong>: The input frame&#8217;s index</li>
+<li><strong>inner</strong>: An intersection of indexes</li>
+</ul>
+<p class="last">So a direction like this: &#8220;The suffix to use from the left frame&#8217;s
+overlapping columns&#8221; means to use the suffix from the calling frame&#8217;s
+index.</p>
+</dd>
+<dt id="term-graph-element">Graph Element</dt>
+<dd>A graph element is an object that can have any number of key-value
+pairs, that is, properties, associated with it.
+Each element can have zero properties as well.</dd>
+<dt id="term-hbase">HBase</dt>
+<dd>Apache HBase is the Hadoop database, a distributed, scalable, big data
+store.</dd>
+<dt id="term-hyperparameter">Hyperparameter</dt>
+<dd><p class="first">Parameter that describe the prior distribution (the assumption about
+the data before observing it) as opposed to the parameters that govern
+the underlying system.</p>
+<p>In particular, for Latent Dirichlet Allocation:</p>
+<p>Alpha is the parameter of the Dirichlet &#8220;prior&#8221; on the per-document
+distribution of words.
+In other words, how the distribution of words per
+document is modeled before seeing any data.</p>
+<p class="last">Beta is the parameter of the Dirichlet &#8220;prior&#8221; on the per-topic word
+distribution.
+In other words, how the distribution of words per
+topic is modeled before seeing any data.</p>
+</dd>
+<dt id="term-int32">int32</dt>
+<dd>An integer is a member of the set of positive whole numbers {1, 2,
+3, . . . }, negative whole numbers {-1, -2, -3, . . . }, and zero {0}.
+Since a computer is limited, the computer representation of it can
+have 32 bits of precision.</dd>
+<dt id="term-int64">int64</dt>
+<dd>An integer is a member of the set of positive whole numbers {1, 2,
+3, . . . }, negative whole numbers {-1, -2, -3, . . . }, and zero {0}.
+Since a computer is limited, the computer representation of it can
+have 64 bits of precision.</dd>
+<dt id="term-ising-smoothing-parameter">Ising Smoothing Parameter</dt>
+<dd><p class="first">The smoothing parameter in the Ising model.
+For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Ising_model">Wikipedia: Ising Model</a>.</p>
+<p class="last">You can use any positive float number, so 3, 2.5, 1, or 0.7 are all
+valid values.
+A larger smoothing value implies stronger relationships between
+adjacent random variables in the graph.</p>
+</dd>
+<dt id="term-json">JSON</dt>
+<dd>Data in the JavaScript Object Notation format. An open standard format
+that uses human-readable text to transmit data objects consisting of
+attribute/value pairs. For more information see <a href="#id12"><span class="problematic" id="id13">`http:/json.org`__</span></a>.</dd>
+<dt id="term-k-s-test"><abbr title="Kolmogorov-Smirnov">K-S</abbr> Test</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/K-S_Test">Wikipedia: Kolmogorov|EM|Smirnov Test</a>:</p>
+<blockquote class="last">
+<div>In statistics, the <abbr title="Kolmogorov-Smirnov">K-S</abbr> test is a nonparametric test of the
+equality of continuous, one-dimensional probability distributions
+that can be used to compare a sample with a reference probability
+distribution (one-sample <abbr title="Kolmogorov-Smirnov">K-S</abbr> test), or to compare two samples
+(two-sample <abbr title="Kolmogorov-Smirnov">K-S</abbr> test).
+The <abbr title="Kolmogorov-Smirnov">K-S</abbr> statistic quantifies a distance between the empirical
+distribution function of the sample and the cumulative distribution
+function of the reference distribution, or between the empirical
+distribution functions of two samples.</div></blockquote>
+</dd>
+<dt id="term-katz-centrality">Katz Centrality</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Katz_centrality">Wikipedia: Katz Centrality</a>:</p>
+<blockquote class="last">
+<div>In Social Network Analysis (SNA) there are various measures of
+<a class="reference internal" href="#term-centrality"><span class="xref std std-term">centrality</span></a> which determine the relative importance of an
+actor (or node) within the network.
+Katz centrality was introduced by Leo Katz in 1953 and is used to
+measure the degree of influence of an actor in a social network.
+<a class="footnote-reference" href="#f8" id="id5">[6]</a>
+Unlike typical centrality measures which consider only the shortest
+path (the geodesic) between a pair of actors, Katz centrality
+measures influence by taking into account the total number of walks
+between a pair of actors. <a class="footnote-reference" href="#f9" id="id6">[7]</a></div></blockquote>
+</dd>
+<dt id="term-label-propagation">Label Propagation</dt>
+<dd><p class="first">A multi-pass process for grouping vertices.</p>
+<p>See <span class="xref std std-ref">Label Propagation (LP)</span>.</p>
+<p class="last">For additional reference:
+<a class="reference external" href="http://lvk.cs.msu.su/~bruzz/articles/classification/zhu02learning.pdf">Learning from Labeled and Unlabeled Data with Label Propagation</a>.</p>
+</dd>
+<dt id="term-labeled-data-vs-unlabeled-data">Labeled Data vs Unlabeled Data</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Machine_learning#Algorithm_types">Wikipedia: Machine Learning / Algorithm Types</a>:</p>
+<blockquote>
+<div>Supervised learning algorithms are trained on labeled examples, in
+other words, input where the desired output is known.
+While Unsupervised learning algorithms operate on unlabeled
+examples, in other words, input where the desired output is
+unknown.</div></blockquote>
+<p>Many machine-learning researchers have found that unlabeled data, when
+used in conjunction with a small amount of labeled data, can produce
+considerable improvement in learning accuracy.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Semi-supervised_learning">Wikipedia: Semi-Supervised Learning</a>.</p>
+</dd>
+<dt id="term-lambda">Lambda</dt>
+<dd><p class="first">Adapted from: <a class="reference external" href="http://openclassroom.stanford.edu/MainFolder/DocumentPage.php?course=MachineLearning&amp;doc=exercises/ex5/ex5.html">Stanford: Machine Learning</a>:</p>
+<blockquote class="last">
+<div>This is the trade-off parameter, used in <a class="reference internal" href="#term-label-propagation"><span class="xref std std-term">Label Propagation</span></a>
+on <a class="reference internal" href="#term-gaussian-random-fields"><span class="xref std std-term">Gaussian Random Fields</span></a>.
+The regularization parameter is a control on fitting parameters.
+It is used in machine learning algorithms to prevent over-fitting.
+As the magnitude of the fitting parameter increases, there will be
+an increasing penalty on the cost function.
+This penalty is dependent on the squares of the parameters as well
+as the magnitude of lambda.</div></blockquote>
+</dd>
+<dt id="term-lambda-function">Lambda Function</dt>
+<dd><p class="first">An anonymous function or function literal in code.
+Lambda functions are used when a method requires a function as an input
+parameter and the function is coded directly in the method call.</p>
+<p>Further examples and explanations can be found at this page:
+<a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
+<p>Related term: <a class="reference internal" href="#term-python-user-defined-function"><span class="xref std std-term">Python User-defined Function</span></a>.</p>
+<div class="last admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This term is often used where a <a class="reference internal" href="#term-python-user-defined-function"><span class="xref std std-term">Python user-defined
+function</span></a> is more accurate.
+A key distinction is that the lambda function is not referable by a
+name.</p>
+</div>
+</dd>
+<dt id="term-latent-dirichlet-allocation">Latent Dirichlet Allocation</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Latent_Dirichlet_allocation">Wikipedia: Latent Dirichlet Allocation</a>:</p>
+<blockquote class="last">
+<div>[A] generative model that allows sets of observations to be
+explained by unobserved groups that explain why some parts of the
+data are similar.
+For example, if observations are words collected into documents,
+it posits that each document is a mixture of a small number of
+topics and that each word&#8217;s creation is attributable to one of the
+document&#8217;s topics.
+<abbr title="Latent Dirichlet Allocation">LDA</abbr> is an example of a topic model and was first presented as a
+graphical model for topic discovery by David Blei, Andrew Ng,
+and Michael Jordan in 2003.</div></blockquote>
+</dd>
+<dt id="term-least-squares">Least Squares</dt>
+<dd>A mathematical procedure for finding the best-fitting curve to a given
+set of points by minimizing the sum of the squares of the offsets (&#8220;the
+residuals&#8221;) of the points from the curve.
+The sum of the squares of the offsets is used instead of the offset
+absolute values because this allows the residuals to be treated as a
+continuous differentiable quantity.
+However, because squares of the offsets are used, outlying points can
+have a disproportionate effect on the fit, a property which may or may
+not be desirable depending on the problem at hand.</dd>
+<dt id="term-linefile">LineFile</dt>
+<dd>A data format where the records are line-delimited.</dd>
+<dt id="term-local-clustering-coefficient">Local Clustering Coefficient</dt>
+<dd><p class="first">The local clustering coefficient of a vertex in a graph quantifies how
+close its neighbors are to being a clique (complete graph).</p>
+<p>For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Clustering_coefficient#Local_clustering_coefficient">Wikipedia: Local Clustering Coefficient</a>.</p>
+<p class="last">See also <a class="reference internal" href="#term-global-clustering-coefficient"><span class="xref std std-term">Global Clustering Coefficient</span></a>.</p>
+</dd>
+<dt id="term-loopy-belief-propagation">Loopy Belief Propagation</dt>
+<dd><p class="first">Belief Propagation is an algorithm that makes inferences on graph
+models, like a <a class="reference internal" href="#term-bayesian-inference"><span class="xref std std-term">Bayesian inference</span></a> or <a class="reference internal" href="#term-markov-random-fields"><span class="xref std std-term">Markov Random
+Fields</span></a>.
+It is called Loopy when the algorithm runs iteratively until
+convergence.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Loopy_belief_propagation">Wikipedia: Belief Propagation</a>.</p>
+</dd>
+<dt id="term-machine-learning">Machine Learning</dt>
+<dd>Machine learning is a branch of artificial intelligence.
+It is about constructing and studying software that can &#8220;learn&#8221; from
+data.
+The more iterations the software computes, the better it gets at making
+that calculation.
+For more information, see <a class="reference external" href="https://en.wikipedia.org/wiki/Machine_learning">Wikipedia</a>.</dd>
+<dt id="term-mapreduce">MapReduce</dt>
+<dd><p class="first">MapReduce is a programming model for processing large data sets with a
+parallel, distributed algorithm on a cluster.
+It is composed of a map() procedure that performs filtering and sorting
+(such as sorting students by first name into queues, one queue for each
+name) and a reduce() procedure that performs a summary operation (such
+as counting the number of students in each queue, yielding name
+frequencies).
+The &#8220;MapReduce System&#8221; (also called &#8220;infrastructure&#8221; or &#8220;framework&#8221;)
+orchestrates by marshaling the distributed servers, running the various
+tasks in parallel, managing all communications and data transfers
+between the various parts of the system, and providing for redundancy
+and fault tolerance.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Map_reduce">Wikipedia: MapReduce</a>.</p>
+</dd>
+<dt id="term-markov-random-fields">Markov Random Fields</dt>
+<dd><p class="first">Markov Random fields, or Markov Network, are an undirected graph model
+that may be cyclic.
+This contrasts with <a class="reference internal" href="#term-bayesian-inference"><span class="xref std std-term">Bayesian inference</span></a>, which is directed and
+acyclic.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Markov_random_field">Wikipedia: Markov Random Field</a>.</p>
+</dd>
+<dt id="term-olap">OLAP</dt>
+<dd><p class="first">Online analytical processing.
+An approach to answering <abbr title="Multi-Dimensional Analytical">MDA</abbr> queries swiftly.
+The term <abbr title="OnLine Analytical Processing">OLAP</abbr> was created as a slight modification of the traditional
+database term <abbr title="OnLine Transaction Processing">OLAP</abbr>.</p>
+<p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Online_analytical_processing">Wikipedia: Online analytical processing</a>.</p>
+</dd>
+<dt id="term-oltp">OLTP</dt>
+<dd><p class="first">Online transaction processing.
+A class of information systems that facilitate and manage
+transaction-oriented applications.
+<abbr title="OnLine Transaction Processing">OLAP</abbr> involves gathering input information, processing the information
+and updating existing information to reflect the gathered and processed
+information.</p>
+<p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Online_transaction_processing">Wikipedia: Online transaction processing</a>.</p>
+</dd>
+<dt id="term-pagerank">PageRank</dt>
+<dd><p class="first">An algorithm to measure the importance of vertices.</p>
+<p>PageRank works by counting the number and quality of edges to a vertex
+to determine a rough estimate of how important the vertex is.
+The underlying assumption is that more important vertices are likely to
+have more edges from other vertices.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/PageRank">Wikipedia: PageRank</a>.</p>
+</dd>
+<dt id="term-pagerank-centrality">PageRank Centrality</dt>
+<dd>See <a class="reference internal" href="#term-centrality"><span class="xref std std-term">Centrality</span></a>.</dd>
+<dt id="term-precision-recall">Precision/Recall</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Precision_and_recall">Wikipedia: Precision and Recall</a>:</p>
+<blockquote class="last">
+<div>In pattern recognition and information retrieval with binary
+classification, precision (also called positive predictive value) is
+the fraction of retrieved instances that are relevant, while recall
+(also known as sensitivity) is the fraction of relevant instances
+that are retrieved.
+Both precision and recall are therefore based on an understanding
+and measure of relevance.</div></blockquote>
+</dd>
+<dt id="term-property-map">Property Map</dt>
+<dd><p class="first">A property map is a key-value map.
+Both edges and vertices have property maps.</p>
+<p class="last">For more information see: <a class="reference external" href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Tinkerpop: Property Graph Model</a>.</p>
+</dd>
+<dt id="term-python-user-defined-function">Python User-defined Function</dt>
+<dd><p class="first">A Python User-defined Function (UDF) is a Python function written by
+the user on the client-side which can execute in a distributed fashion
+on the cluster.
+For further explanation, see <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a></p>
+<p>Further examples and explanations can be found at <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
+<p class="last">Related: <a class="reference internal" href="#term-lambda-function"><span class="xref std std-term">Lambda Function</span></a>.</p>
+</dd>
+<dt id="term-quantile">Quantile</dt>
+<dd>One value of a set that partitions a collection of data.
+Each partition (also known as a quantile) contains all the collection
+elements from the given value, up to (but not including) the lowest
+value of the next quantile.</dd>
+<dt id="term-rdf">RDF</dt>
+<dd>See <a class="reference internal" href="#term-resource-description-framework"><span class="xref std std-term">Resource Description Framework</span></a></dd>
+<dt id="term-receiver-operating-characteristic">Receiver Operating Characteristic</dt>
+<dd><p class="first">From <a class="reference external" href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">Wikipedia: Receiver Operating Characteristic</a>:</p>
+<blockquote class="last">
+<div>In signal detection theory, a receiver operating characteristic
+(ROC), or simply ROC curve, is a graphical plot which illustrates
+the performance of a binary classifier system as its discrimination
+threshold is varied.
+It is created by plotting the fraction of true positives out of the
+total actual positives (TPR = true positive rate) vs. the fraction
+of false positives out of the total actual negatives (FPR = false
+positive rate), at various threshold settings.
+TPR is also known as sensitivity or recall in machine learning.
+The FPR is also known as the fall-out and can be calculated as one
+minus the more well known specificity.
+The ROC curve is then the sensitivity as a function of fall-out.
+In general, if both of the probability distributions for detection
+and false alarm are known,
+the ROC curve can be generated by plotting the Cumulative
+Distribution Function (area under the probability distribution from
+-inf to +inf) of the detection probability in the y-axis versus the
+Cumulative Distribution Function of the false alarm probability in
+x-axis.</div></blockquote>
+</dd>
+<dt id="term-recommendation-systems">Recommendation Systems</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Recommendation_system">Wikipedia: Recommender System</a>:</p>
+<blockquote class="last">
+<div>Recommender systems or recommendation systems (sometimes replacing
+&#8220;system&#8221; with a synonym such as platform or engine) are a subclass
+of information filtering system that seek to predict the &#8216;rating&#8217;
+or &#8216;preference&#8217; that user would give to an item <a class="footnote-reference" href="#f3" id="id7">[2]</a> <a class="footnote-reference" href="#f4" id="id8">[3]</a> .</div></blockquote>
+</dd>
+<dt id="term-resource-description-framework">Resource Description Framework</dt>
+<dd>A specific format for storing graphs.
+Vertices also referred to as resources, have property/value pairs
+describing the resource.
+A vertex is any object which can be pointed to by a URI.
+Properties are attributes of the vertex, and values are either specific
+values for the attribute, or the URI for another vertex.
+For example, information in a particular vertex, might include the
+property &#8220;Author&#8221;.
+The value for the Author property could be either a string giving the
+name of the author, or a link to another resource describing the author.
+Sets of properties are defined within RDF Vocabularies (or schemas).
+A vertex may include properties defined in different schemas.
+The properties within a resource description are associated with a
+certain schema definition using the XML namespace mechanism.</dd>
+<dt id="term-roc">ROC</dt>
+<dd>See <a class="reference internal" href="#term-receiver-operating-characteristic"><span class="xref std std-term">Receiver Operating Characteristic</span></a></dd>
+<dt id="term-row-functions">Row Functions</dt>
+<dd>Refer to <a class="reference internal" href="#term-lambda-function"><span class="xref std std-term">Lambda Function</span></a> and <a class="reference internal" href="#term-python-user-defined-function"><span class="xref std std-term">Python User-defined
+Function</span></a></dd>
+<dt id="term-schema">Schema</dt>
+<dd>A computer structure that defines the structure of something else.</dd>
+<dt id="term-semi-supervised-learning">Semi-Supervised Learning</dt>
+<dd><p class="first">In Semi-Supervised learning algorithms, most the input data are not
+labeled and a small amount are labeled.
+The expectation is that the software &#8220;learns&#8221; to calculate faster than
+in either supervised or unsupervised algorithms.</p>
+<p class="last">For more information see: <a class="reference internal" href="#term-supervised-learning"><span class="xref std std-term">Supervised Learning</span></a>, and
+<a class="reference internal" href="#term-unsupervised-learning"><span class="xref std std-term">Unsupervised Learning</span></a>.</p>
+</dd>
+<dt id="term-simple-random-sampling">Simple Random Sampling</dt>
+<dd><p class="first">In statistics, a simple random sample (SRS) is a subset of individuals
+(a sample) chosen from a larger set (a population).
+Each individual is chosen randomly and entirely by chance, such that
+each individual has the same probability of being chosen at any stage
+during the sampling process, and each subset of <em>k</em> individuals has the
+same probability of being chosen for the sample as any other subset of
+<em>k</em> individuals <a class="footnote-reference" href="#f1" id="id9">[1]</a>.
+This process and technique is known as simple random sampling.
+A simple random sample is an unbiased surveying technique.</p>
+<p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Simple_random_sampling">Wikipedia: Simple Random Sample</a>.</p>
+</dd>
+<dt id="term-smoothing">Smoothing</dt>
+<dd><p class="first">Smoothing means to reduce the &#8220;noise&#8221; in a data set.
+&#8220;In smoothing, the data points of a signal are modified so individual
+points (presumably because of noise) are reduced, and points that are
+lower than the adjacent points are increased leading to a smoother
+signal.&#8221;</p>
+<p>For more information see:</p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line"><a class="reference external" href="http://en.wikipedia.org/wiki/Smoothing">Wikipedia: Smoothing</a></div>
+<div class="line"><a class="reference external" href="http://en.wikipedia.org/wiki/Relaxation_(iterative_method">Wikipedia: Relaxation (iterative method)</a></div>
+</div>
+</div></blockquote>
+</dd>
+<dt id="term-stratified-sampling">Stratified Sampling</dt>
+<dd><p class="first">In statistics, stratified sampling is a method of sampling from a
+population.
+In statistical surveys, when subpopulations within an overall
+population vary, it is advantageous to sample each subpopulation
+(stratum) independently.
+Stratification is the process of dividing members of the population
+into homogeneous subgroups before sampling.
+The strata should be mutually exclusive: every element in the
+population must be assigned to only one stratum.
+The strata should also be collectively exhaustive: no population
+element can be excluded.
+Then simple random sampling or systematic sampling is applied within
+each stratum.
+This often improves the representativeness of the sample by reducing
+sampling error.
+It can produce a weighted mean that has less variability than the
+arithmetic mean of a simple random sample of the population.</p>
+<p class="last">For more information see: <a class="reference external" href="https://en.wikipedia.org/wiki/Stratified_sampling">Wikipedia: Stratified Sampling</a>.</p>
+</dd>
+<dt id="term-superstep"><span id="term-supersteps"></span>Superstep<br />Supersteps</dt>
+<dd>A single iteration of an algorithm.</dd>
+<dt id="term-supervised-learning">Supervised Learning</dt>
+<dd><p class="first">Supervised learning refers to algorithms where the input data are all
+labeled, and the outcome of the calculation is known.
+These algorithms train the software to make a certain calculation.</p>
+<p class="last">For more information see: <a class="reference internal" href="#term-unsupervised-learning"><span class="xref std std-term">Unsupervised Learning</span></a>, and
+<a class="reference internal" href="#term-semi-supervised-learning"><span class="xref std std-term">Semi-Supervised Learning</span></a>.</p>
+</dd>
+<dt id="term-tab-separated-variables">Tab-Separated Variables</dt>
+<dd>See <a class="reference internal" href="#term-character-separated-values"><span class="xref std std-term">Character-Separated Values</span></a>.</dd>
+<dt id="term-topic-modeling">Topic Modeling</dt>
+<dd>Topic models provide a simple way to analyze large volumes of unlabeled
+text.
+A &#8220;topic&#8221; consists of a cluster of words that frequently occur together.
+Using contextual clues, topic models can connect words with similar
+meanings and distinguish between uses of words with multiple meanings.</dd>
+<dt id="term-transaction-processing">Transaction Processing</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Transaction_processing">Wikipedia: Transaction Processing</a>:</p>
+<blockquote class="last">
+<div>In computer science, transaction processing is information
+processing that is divided into individual, indivisible operations,
+called transactions.
+Each transaction must succeed or fail as a complete unit; it cannot
+be only partially complete.</div></blockquote>
+</dd>
+<dt id="term-transactional-functionality">Transactional Functionality</dt>
+<dd>See <a class="reference internal" href="#term-transaction-processing"><span class="xref std std-term">Transaction Processing</span></a>.</dd>
+<dt id="term-udf">UDF</dt>
+<dd>See <a class="reference internal" href="#term-python-user-defined-function"><span class="xref std std-term">Python User-defined Function</span></a>.</dd>
+<dt id="term-undirected-graph">Undirected Graph</dt>
+<dd><p class="first">An undirected graph is one in which the edges have no orientation
+(direction).
+The edge (a, b) is identical to the edge (b, a), in other words,
+they are not ordered pairs, but sets {u, v} (or 2-multisets) of
+vertices.
+The maximum number of edges in an undirected graph without a self-loop
+is <img class="math" src="R_images/math/c41466d523aac6f3233cd76649231c243315a59f.png" alt="\dfrac{n (n - 1)}{2}"/></p>
+<p>Contrast with <a class="reference internal" href="#term-directed-acyclic-graph-dag"><span class="xref std std-term">Directed Acyclic Graph (DAG)</span></a>.</p>
+<p class="last">For more information see: <a class="reference external" href="http://en.wikipedia.org/wiki/Undirected_graph#Undirected_graph">Wikipedia: Undirected Graph</a>.</p>
+</dd>
+<dt id="term-unicode">Unicode</dt>
+<dd>A data type consisting of a string of characters designed to represent
+all characters in the world, a universal character set.</dd>
+<dt id="term-unsupervised-learning">Unsupervised Learning</dt>
+<dd><p class="first">Unsupervised learning refers to algorithms where the input data are not
+labeled, and the outcome of the calculation is unknown.
+In this case, the software needs to &#8220;learn&#8221; how to make the calculation.</p>
+<p class="last">For more information see: <a class="reference internal" href="#term-supervised-learning"><span class="xref std std-term">Supervised Learning</span></a>, and
+<a class="reference internal" href="#term-semi-supervised-learning"><span class="xref std std-term">Semi-Supervised Learning</span></a>.</p>
+</dd>
+<dt id="term-vertex">Vertex</dt>
+<dd><p class="first">A vertex is an object in a graph.
+Each vertex has an ID and a property map.
+The property map may contain 0 or more properties.
+Each vertex is connected to others by edges.</p>
+<p class="last">For more information see: <a class="reference internal" href="#term-edge"><span class="xref std std-term">Edge</span></a>, and
+<a class="reference external" href="https://github.com/tinkerpop/blueprints/wiki/Property-Graph-Model">Tinkerpop: Property Graph Model</a>.</p>
+</dd>
+<dt id="term-vertex-degree">Vertex Degree</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Vertex_degree">Wikipedia: Vertex Degree</a>:</p>
+<blockquote class="last">
+<div>In graph theory, the degree (or valency) of a vertex of a graph is
+the number of edges incident to the vertex, with loops counted
+twice <a class="footnote-reference" href="#f7" id="id10">[5]</a>.
+The degree of a vertex <img class="math" src="R_images/math/0e22076955898e6c9bb38aa079135195c24dc81e.png" alt="v"/> is denoted <img class="math" src="R_images/math/616c733212302e887503ce0ca417573c6155b39b.png" alt="\deg(v)"/>.
+The maximum degree of a graph <img class="math" src="R_images/math/b92c09a649305a0aef3239729d93cdf941e0e5cf.png" alt="G"/>, denoted by
+<img class="math" src="R_images/math/a0e977c73b5db44242842aeb84d5807437d0c6a3.png" alt="\Delta(G)"/>,
+and the minimum degree of a graph, denoted by <img class="math" src="R_images/math/a2a79e9e669d3eb53c3dc44afad2110dc13acf8e.png" alt="\delta(G)"/>, are
+the maximum and minimum degree of its vertices.</div></blockquote>
+</dd>
+<dt id="term-vertex-degree-distribution">Vertex Degree Distribution</dt>
+<dd><p class="first">From <a class="reference external" href="http://en.wikipedia.org/wiki/Degree_distribution">Wikipedia: Degree Distribution</a>:</p>
+<blockquote class="last">
+<div>In the study of graphs and networks, the degree of a node in a
+network is the number of connections it has to other nodes and the
+degree distribution is the probability distribution of these
+degrees over the whole network.</div></blockquote>
+</dd>
+<dt id="term-vertices">Vertices</dt>
+<dd>Plural form of <a class="reference internal" href="#term-vertex"><span class="xref std std-term">Vertex</span></a>.</dd>
+</dl>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="f1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id9">[1]</a></td><td>Yates, Daniel S.; David S. Moore, Daren S. Starnes (2008).
+The Practice of Statistics, 3rd Ed. Freeman. ISBN 978-0-7167-7309-2.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[2]</a></td><td>Francesco Ricci and Lior Rokach and Bracha Shapira (2011).
+Recommender Systems Handbook, pp. 1-35. Springer.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id8">[3]</a></td><td>Lev Grossman (2010).
+<a class="reference external" href="http://content.time.com/time/magazine/article/0,9171,1992403,00.html">How Computers Know What We Want |EM| Before We Do</a>. Time.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f5" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id3">[4]</a></td><td>Terveen, Loren; Hill, Will (2001).
+Beyond Recommender Systems: Helping People Help Each Other pp. 6.
+Addison-Wesley.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f7" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id10">[5]</a></td><td>Diestel, Reinhard (2005). Graph Theory (3rd ed.). Berlin, New York:
+Springer-Verlag. ISBN 978-3-540-26183-4.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f8" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id5">[6]</a></td><td>Katz, L. (1953). A New Status Index Derived from Sociometric Index.
+Psychometrika, 39-43.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f9" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id6">[7]</a></td><td>Hanneman, R. A., &amp; Riddle, M. (2005).
+<a class="reference external" href="http://faculty.ucr.edu/~hanneman/nettext/">Introduction to Social Network Methods</a>.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f10" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[8]</a></td><td>Newman, M.E.J. 2010. Networks: An Introduction. Oxford, UK:
+Oxford University Press.</td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="f11" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id4">[9]</a></td><td>Weiss, Yair; Freeman, William T. (October 2001). &#8220;Correctness of
+Belief Propagation in Gaussian Graphical Models of Arbitrary Topology&#8221;.
+Neural Computation 13 (10): 2173|EM|2200. doi:10.1162/089976601750541769.
+PMID 11570995.</td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Mar 01, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

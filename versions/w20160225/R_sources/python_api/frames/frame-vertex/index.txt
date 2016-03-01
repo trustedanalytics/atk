@@ -1,0 +1,253 @@
+
+:doc:`Frames<../index>` VertexFrame
+***********************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    __init__
+    add_columns
+    add_vertices
+    aggregate_with_udf
+    assign_sample
+    bin_column
+    bin_column_equal_depth
+    bin_column_equal_width
+    categorical_summary
+    classification_metrics
+    column_median
+    column_mode
+    column_names
+    column_summary_statistics
+    copy
+    correlation
+    correlation_matrix
+    count
+    covariance
+    covariance_matrix
+    cumulative_percent
+    cumulative_sum
+    daal_pca
+    dot_product
+    download
+    drop_columns
+    drop_duplicates
+    drop_rows
+    drop_vertices
+    ecdf
+    entropy
+    export_to_csv
+    export_to_hbase
+    export_to_hive
+    export_to_jdbc
+    export_to_json
+    filter
+    flatten_column
+    flatten_columns
+    get_error_frame
+    group_by
+    histogram
+    inspect
+    invert_matrix
+    join
+    last_read_date
+    name
+    quantiles
+    rename_columns
+    row_count
+    schema
+    sort
+    sorted_k
+    status
+    take
+    tally
+    tally_percent
+    timeseries_from_observations
+    timeseries_slice
+    top_k
+    unflatten_column
+    unflatten_columns
+
+.. class:: VertexFrame
+
+    A list of Vertices owned by a Graph.
+
+    A VertexFrame is similar to a Frame but with a few important differences:
+
+    -   VertexFrames are not instantiated directly by the user, instead they
+        are created by defining a vertex type in a graph
+    -   Each row of a VertexFrame represents a vertex in a graph
+    -   VertexFrames have many of the same methods as Frames but not all (for
+        example, flatten_column())
+    -   VertexFrames have extra methods not found on Frames (for example,
+        add_vertices())
+    -   Removing a vertex (or row) from a VertexFrame also removes edges
+        connected to that vertex from the graph
+    -   VertexFrames have special system columns (_vid, _label) that are
+        maintained automatically by the system and cannot be modified by the
+        user
+    -   VertexFrames have a special user defined id column whose value uniquely
+        identifies the vertex
+    -   "Columns" on a VertexFrame can also be thought of as "properties" on
+        vertices
+        
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`column_names <column_names>`\                                                                   Column identifications in the current frame.
+    :doc:`last_read_date <last_read_date>`\                                                               Last time this frame's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the frame object.
+    :doc:`row_count <row_count>`\                                                                         Number of rows in the current frame.
+    :doc:`schema <schema>`\                                                                               Current frame column names and types.
+    :doc:`status <status>`\                                                                               Current frame life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <VertexFrame__init__>`\ (self[, source, graph, label, _info])                          Examples
+    :doc:`add_columns <add_columns>`\ (self, func, schema[, columns_accessed])                            Add columns to current frame.
+    :doc:`add_vertices <add_vertices>`\ (self, source_frame, id_column_name[, column_names])              Add vertices to a graph.
+    :doc:`aggregate_with_udf <aggregate_with_udf>`\ (self, aggregate_by_column_keys, column_names, ...)   Combine by key current frame.
+    :doc:`assign_sample <assign_sample>`\ (self, sample_percentages[, sample_labels, ...])                Randomly group rows into user-defined classes.
+    :doc:`bin_column <bin_column>`\ (self, column_name, cutoffs[, include_lowest, strict_binning, ...])   Classify data into user-defined groups.
+    :doc:`bin_column_equal_depth <bin_column_equal_depth>`\ (self, column_name[, num_bins, ...])          Classify column into groups with the same frequency.
+    :doc:`bin_column_equal_width <bin_column_equal_width>`\ (self, column_name[, num_bins, ...])          Classify column into same-width groups.
+    :doc:`categorical_summary <categorical_summary>`\ (self, \*column_inputs)                             |ALPHA| Compute a summary of the data in a column(s) for categorical or numerical data types.
+    :doc:`classification_metrics <classification_metrics>`\ (self, label_column, pred_column[, ...])      Model statistics of accuracy, precision, and others.
+    :doc:`column_median <column_median>`\ (self, data_column[, weights_column])                           Calculate the (weighted) median of a column.
+    :doc:`column_mode <column_mode>`\ (self, data_column[, weights_column, max_modes_returned])           Evaluate the weights assigned to rows.
+    :doc:`column_summary_statistics <column_summary_statistics>`\ (self, data_column[, ...])              Calculate multiple statistics for a column.
+    :doc:`copy <copy>`\ (self[, columns, where, name])                                                    Create new frame from current frame.
+    :doc:`correlation <correlation>`\ (self, data_column_names)                                           Calculate correlation for two columns of current frame.
+    :doc:`correlation_matrix <correlation_matrix>`\ (self, data_column_names[, matrix_name])              Calculate correlation matrix for two or more columns.
+    :doc:`count <count>`\ (self, where)                                                                   Counts the number of rows which meet given criteria.
+    :doc:`covariance <covariance>`\ (self, data_column_names)                                             Calculate covariance for exactly two columns.
+    :doc:`covariance_matrix <covariance_matrix>`\ (self, data_column_names[, matrix_name])                Calculate covariance matrix for two or more columns.
+    :doc:`cumulative_percent <cumulative_percent>`\ (self, sample_col)                                    |BETA| Add column to frame with cumulative percent sum.
+    :doc:`cumulative_sum <cumulative_sum>`\ (self, sample_col)                                            |BETA| Add column to frame with cumulative percent sum.
+    :doc:`daal_pca <daal_pca>`\ (self, column_names[, method])                                            |ALPHA| Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).
+    :doc:`dot_product <dot_product>`\ (self, left_column_names, right_column_names, ...[, ...])           |ALPHA| Calculate dot product for each row in current frame.
+    :doc:`download <download>`\ (self[, n, offset, columns])                                              Download frame data from the server into client workspace as a pandas dataframe
+    :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
+    :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Remove duplicate vertex rows.
+    :doc:`drop_rows <drop_rows>`\ (self, predicate)                                                       Delete rows in this vertex frame that qualify.
+    :doc:`drop_vertices <drop_vertices>`\ (self, predicate)                                               |DEPRECATED| drop_vertices has been deprecated.  Use drop_rows instead.
+    :doc:`ecdf <ecdf>`\ (self, column[, result_frame_name])                                               Builds new frame with columns for data and distribution.
+    :doc:`entropy <entropy>`\ (self, data_column[, weights_column])                                       Calculate the Shannon entropy of a column.
+    :doc:`export_to_csv <export_to_csv>`\ (self, folder_name[, separator, count, offset])                 Write current frame to HDFS in csv format.
+    :doc:`export_to_hbase <export_to_hbase>`\ (self, table_name[, key_column_name, family_name])          Write current frame to HBase table.
+    :doc:`export_to_hive <export_to_hive>`\ (self, table_name)                                            Write  current frame to Hive table.
+    :doc:`export_to_jdbc <export_to_jdbc>`\ (self, table_name[, connector_type, driver_name, query])      Write current frame to JDBC table.
+    :doc:`export_to_json <export_to_json>`\ (self, folder_name[, count, offset])                          Write current frame to HDFS in JSON format.
+    :doc:`filter <filter>`\ (self, predicate)                                                             <Missing Doc>
+    :doc:`flatten_column <flatten_column>`\ (self, column[, delimiter])                                   |DEPRECATED| Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
+    :doc:`flatten_columns <flatten_columns>`\ (self, columns[, delimiters])                               Spread data to multiple rows based on cell data.
+    :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
+    :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
+    :doc:`histogram <histogram>`\ (self, column_name[, num_bins, weight_column_name, bin_type])           |BETA| Compute the histogram for a column in a frame.
+    :doc:`inspect <inspect>`\ (self[, n, offset, columns, wrap, truncate, round, width, margin, ...])     Pretty-print of the frame data
+    :doc:`invert_matrix <invert_matrix>`\ (self, column_names)                                            |ALPHA| Inverts a matrix.
+    :doc:`join <join>`\ (self, right, left_on[, right_on, how, name])                                     |BETA| Join operation on one or two frames, creating a new frame.
+    :doc:`quantiles <quantiles>`\ (self, column_name, quantiles)                                          New frame with Quantiles and their values.
+    :doc:`rename_columns <rename_columns>`\ (self, names)                                                 Rename columns for vertex frame.
+    :doc:`sort <sort>`\ (self, columns[, ascending])                                                      |BETA| Sort the data in a frame.
+    :doc:`sorted_k <sorted_k>`\ (self, k, column_names_and_ascending[, reduce_tree_depth])                |ALPHA| Get a sorted subset of the data.
+    :doc:`take <take>`\ (self, n[, offset, columns])                                                      Get data subset.
+    :doc:`tally <tally>`\ (self, sample_col, count_val)                                                   |BETA| Count number of times a value is seen.
+    :doc:`tally_percent <tally_percent>`\ (self, sample_col, count_val)                                   |BETA| Compute a cumulative percent count.
+    :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
+    :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
+    :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
+    :doc:`unflatten_column <unflatten_column>`\ (self, columns[, delimiter])                              |DEPRECATED| Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
+    :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.
+    ====================================================================================================  ====================================================================================================
+
+.. _VertexFrame__init__:
+
+
+.. function:: __init__(self, source=None, graph=None, label=None)
+
+    Examples
+
+
+    :Parameters:
+
+        **source** :  (default=None)
+
+        ..
+
+
+
+
+
+        **graph** :  (default=None)
+
+        ..
+
+
+
+
+
+        **label** :  (default=None)
+
+        ..
+
+
+
+
+    --------
+    Given a data file, create a frame, move the data to graph and then define a
+    new VertexFrame and add data to it:
+
+    .. only:: html
+
+        .. code::
+
+            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32), ('user_name', str), ('movie_id', int32), ('movie_title', str), ('rating', str)])
+            >>> my_frame = ta.Frame(csv)
+            >>> my_graph = ta.Graph()
+            >>> my_graph.define_vertex_type('users')
+            >>> my_vertex_frame = my_graph.vertices['users']
+            >>> my_vertex_frame.add_vertices(my_frame, 'user_id', ['user_name', 'age'])
+
+    .. only:: html
+
+        .. code::
+
+            >>> csv = ta.CsvFile("/movie.csv", schema= [('user_id', int32),
+            ...                                     ('user_name', str),
+            ...                                     ('movie_id', int32),
+            ...                                     ('movie_title', str),
+            ...                                     ('rating', str)])
+            >>> my_frame = ta.Frame(csv)
+            >>> my_graph = ta.Graph()
+            >>> my_graph.define_vertex_type('users')
+            >>> my_vertex_frame = my_graph.vertices['users']
+            >>> my_vertex_frame.add_vertices(my_frame, 'user_id',
+            ... ['user_name', 'age'])
+
+    Retrieve a previously defined graph and retrieve a VertexFrame from it:
+
+    .. code::
+
+        >>> my_graph = ta.get_graph("your_graph")
+        >>> my_vertex_frame = my_graph.vertices["your_label"]
+
+    Calling methods on a VertexFrame:
+
+    .. code::
+
+        >>> my_vertex_frame.vertices["your_label"].inspect(20)
+
+    Convert a VertexFrame to a frame:
+
+    .. code::
+
+        >>> new_Frame = my_vertex_frame.vertices["label"].copy()
+        
