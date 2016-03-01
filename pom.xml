@@ -1443,7 +1443,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </dependency>
             <!--test scope-->
             <dependency>
-                <groupId>org.mockito</groupId>
+                <groupId>org.mockito</g "roupId>
                 <artifactId>mockito-all</artifactId>
                 <version>1.9.5</version>
                 <scope>test</scope>
