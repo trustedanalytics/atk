@@ -48,7 +48,7 @@ case class ARXTrainArgs(model: ModelReference,
  *                     follows:
  *                     - Autoregressive terms for the dependent variable, in increasing order of lag
  *                     - For each column in the exogenous matrix (in their original order), the
- *                     lagged terms in increasingorder of lag (excluding the non-lagged versions).
+ *                     lagged terms in increasing order of lag (excluding the non-lagged versions).
  *                     - The coefficients associated with the non-lagged exogenous matrix
  */
 case class ARXTrainReturn(c: Double, coefficients: Array[Double])

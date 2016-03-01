@@ -41,11 +41,12 @@ import org.apache.spark.mllib.ScoringJsonReaderWriters
 import scala.collection.mutable.ArrayBuffer
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
-  extended = "Creating a AutoregressionX (ARX) Model using the observation columns.",
+  extended = """Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
+dataset being trained must be small enough to be worked with on a single node.""",
   returns = """dictionary
     A dictionary with trained ARX model with the following keys\:
-'cluster_size' : dictionary with 'Cluster:id' as the key and the corresponding cluster size is the value
-'within_set_sum_of_squared_error' : The set of sum of squared error for the model.""")
+'c' : intercept term, or zero for no intercept
+'coefficients' : coefficients for each column of exogenous inputs.""")
 class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   /**
    * The name of the command.
@@ -55,7 +56,7 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
    */
   override def name: String = "model:arx/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * User documentation exposed in Python.

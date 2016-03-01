@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -45,6 +45,8 @@ The Autoregressive Exogeneous (ARX) model add the use of exogeneous inputs to pr
 class ARXNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
 
   override def name: String = "model:arx/new"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:arx")))

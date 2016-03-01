@@ -1,5 +1,7 @@
 
 Consider the following model trained and tested on the sample data set in *frame* 'frame'.
+The frame has five columns where "y" is the time series value and "vistors", "wkends",
+"incidentRate", and "seasonality" are exogenous inputs.
 
 <hide>
 >>> import trustedanalytics as ta
@@ -25,8 +27,6 @@ Consider the following model trained and tested on the sample data set in *frame
 -etc-
 
 </hide>
-Consider the following frame containing five columns where "y" is the time series value and "vistors", "wkends",
-"incidentRate", and "seasonality" are exogenous inputs.
 
 >>> frame.inspect()
 [#]  y      visitors  wkends  incidentRate  seasonality
@@ -48,11 +48,32 @@ Consider the following frame containing five columns where "y" is the time serie
 >>> train_output = model.train(frame, "y", ["visitors", "wkends", "incidentRate", "seasonality"], 0, 0, True)
 <progress>
 
+>>> train_output
+{u'c': 0.0,
+ u'coefficients': [0.27583285049358186,
+  -13.096710518563603,
+  -0.030872283789462572,
+  -103.8264674349643]}
+
 >>> predicted_frame = model.predict(frame, "y", ["visitors", "wkends", "incidentRate", "seasonality"])
 <progress>
 
 >>> predicted_frame.column_names
 [u'y', u'visitors', u'wkends', u'incidentRate', u'seasonality', u'predicted_y']
+
+>>> predicted_frame.inspect(columns=("y","predicted_y"))
+[#]  y      predicted_y
+=========================
+[0]   68.0  74.2459276772
+[1]   89.0  87.3102478836
+[2]   96.0  84.8763748216
+[3]   98.0  91.8146447141
+[4]   70.0  78.7839977035
+[5]   88.0  75.2293498516
+[6]   76.0  81.4498419659
+[7]  104.0  83.6503308076
+[8]   64.0  81.4963026157
+[9]   89.0  84.5780055922
 
 >>> model.publish()
 <progress>

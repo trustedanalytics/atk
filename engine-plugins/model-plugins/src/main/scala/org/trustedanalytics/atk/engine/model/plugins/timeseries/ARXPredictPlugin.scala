@@ -17,12 +17,13 @@
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
-import org.trustedanalytics.atk.engine.frame.SparkFrame
+import org.trustedanalytics.atk.engine.frame.{ RowWrapper, SparkFrame }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
@@ -52,7 +53,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
    */
   override def name: String = "model:arx/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * User documentation exposed in Python.
@@ -87,18 +88,22 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
     require(arxData.xColumns.length == arguments.xColumns.length, "Number of columns for train and predict should be the same")
 
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
-    val predictions = arxModel.predict(yVector, xMatrix).toArray
-    val predictColumn = Column("predicted_y", DataTypes.float64)
+    val predictions = arxModel.predict(yVector, xMatrix)
 
-    var i = 0
-    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
-      val predictedY = predictions(i)
-      i += 1
-      predictedY
-    })
+    if (predictions.length != frame.rdd.count())
+      throw new RuntimeException("Received unexpected number of y values from ARX Model predict (expected " +
+        frame.rdd.count.toString + " values, but received " + predictions.length.toString + " values).")
+
+    val dataWithPredictions = frame.rdd.zipWithIndex().map {
+      case (row: Row, index: Long) =>
+        Row.fromSeq(row.toSeq :+ predictions(index.toInt))
+    }
+
+    val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))
+    val frameWithPredictions = new FrameRdd(schemaWithPredictions, dataWithPredictions)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARXModel predict command"))) {
-      newFrame => newFrame.save(predictFrame)
+      newFrame => newFrame.save(frameWithPredictions)
     }
 
   }
