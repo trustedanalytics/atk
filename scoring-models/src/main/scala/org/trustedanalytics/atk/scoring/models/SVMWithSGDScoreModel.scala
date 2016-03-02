@@ -27,7 +27,14 @@ class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.w
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
-    data :+ predict(Vectors.dense(x))
+    val inputNames = input().map(f => f.name)
+    val inputMap: Map[String, Any] = (inputNames zip data).toMap
+    val prediction = predict(Vectors.dense(x))
+    val scoreOutput: Map[String, Any] = Map(
+      "prediction" -> prediction
+    )
+    val output: Array[Any] = Array(inputMap ++ scoreOutput)
+    output
   }
 
   override def input(): Array[Field] = {

@@ -23,10 +23,17 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
+    val inputNames = input().map(f => f.name)
+    val inputMap: Map[String, Any] = (inputNames zip data).toMap
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
-    data :+ predict(Vectors.dense(x))
+    val prediction = predict(Vectors.dense(x))
+    val scoreOutput: Map[String, Any] = Map(
+      "prediction" -> prediction
+    )
+    val output: Array[Any] = Array(inputMap ++ scoreOutput)
+    output
   }
 
   /**

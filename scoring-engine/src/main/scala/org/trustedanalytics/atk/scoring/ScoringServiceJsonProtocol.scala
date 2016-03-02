@@ -71,13 +71,6 @@ class ScoringServiceJsonProtocol(model: Model) {
   implicit object DataTypeJsonFormat extends JsonFormat[Any] {
     override def write(obj: Any): JsValue = {
       obj match {
-        case n: Int => new JsNumber(n)
-        case n: Long => new JsNumber(n)
-        case n: Float => new JsNumber(BigDecimal(n))
-        case n: Double => new JsNumber(n)
-        case s: String => new JsString(s)
-        case s: Boolean => JsBoolean(s)
-        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
         case v: Array[_] => new JsArray(v.map {
           case d: Double => JsNumber(d)
           case n: Int => JsNumber(n)
@@ -127,9 +120,7 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output_columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
-        "output_values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("data" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
