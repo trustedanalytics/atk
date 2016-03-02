@@ -56,12 +56,6 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
@@ -96,7 +90,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
 
     val dataWithPredictions = frame.rdd.zipWithIndex().map {
       case (row: Row, index: Long) =>
-        Row.fromSeq(row.toSeq :+ predictions(index.toInt))
+        Row.fromSeq(row.toSeq :+ predictions(index.toInt)) // Add predicted y to the row
     }
 
     val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))

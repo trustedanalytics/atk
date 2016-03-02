@@ -39,21 +39,11 @@ object ARXFunctions extends Serializable {
    * @return The length of the specified vector column
    */
   def verifyVectorColumn(schema: Schema, columnName: String): Long = {
-    var vectorLength: Long = 0
+    // Verify that it's a vector column
+    schema.requireColumnIsType(columnName, DataTypes.isVectorDataType)
 
-    if (schema.hasColumn(columnName) == false) {
-      // Column does not exist
-      throw new IllegalArgumentException(s"Column named $columnName does not exist in the frame's schema.")
-    }
-    else {
-      // Verify that it's a vector column
-      schema.columnDataType(columnName) match {
-        case DataTypes.vector(length) => vectorLength = length
-        case _ => throw new IllegalArgumentException(s"Column $columnName must be a vector.")
-      }
-    }
-
-    vectorLength
+    // Return the vector length
+    schema.columnDataType(columnName).asInstanceOf[DataTypes.vector].length
   }
 
   /**
@@ -67,12 +57,10 @@ object ARXFunctions extends Serializable {
     val schema = frame.frameSchema
 
     schema.requireColumnIsNumerical(yColumnName)
+    xColumnNames.foreach((xColumn: String) => schema.requireColumnIsNumerical(xColumn))
 
-    for (xColumn <- xColumnNames) {
-      schema.requireColumnIsNumerical(xColumn)
-    }
     val totalRowCount = frame.count.toInt
-    val yValues = Array.ofDim[Double](totalRowCount)
+    val yValues = new Array[Double](totalRowCount)
     val xValues = Array.ofDim[Double](totalRowCount, xColumnNames.size)
     var rowCounter = 0
 

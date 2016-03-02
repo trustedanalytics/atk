@@ -59,17 +59,12 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
    * Number of Spark jobs that get created by running this command
    *
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: ARXTrainArgs)(implicit invocation: Invocation) = 15
+
   /**
    * Run the spark time series ARX fitmodel() on the training frame and create a Model for it.
    *
@@ -86,10 +81,11 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
 
     trainFrameRdd.cache()
 
-    var arxModels = List[ARXModel]()
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(trainFrameRdd, arguments.timeseriesColumn, arguments.xColumns)
-
     val arxModel = AutoregressionX.fitModel(yVector, xMatrix, arguments.yMaxLag, arguments.xMaxLag, true, arguments.noIntercept)
+
+    trainFrameRdd.unpersist()
+
     val jsonModel = new ARXData(arxModel, arguments.xColumns)
     model.data = jsonModel.toJson.asJsObject
 

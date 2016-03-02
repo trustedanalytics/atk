@@ -23,15 +23,10 @@ import spray.json._
 
 class ARXModelReaderPlugin() extends ModelLoader {
 
-  private var myArxModel: ARXScoreModel = _
-
   override def load(bytes: Array[Byte]): Model = {
     val str = new String(bytes)
-    val json: JsValue = str.parseJson
-    val arxData = json.convertTo[ARXData]
+    val arxData = str.parseJson.convertTo[ARXData]
     val arxModel = arxData.arxModel
-    myArxModel = new ARXScoreModel(arxModel, arxData)
-    myArxModel.asInstanceOf[Model]
-
+    new ARXScoreModel(arxModel, arxData).asInstanceOf[Model]
   }
 }

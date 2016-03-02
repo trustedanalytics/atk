@@ -28,7 +28,7 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
     val xColumnsLength = arxData.xColumns.length
 
     // Length of the row should be 1 (y) + the number of x columns
-    require(row.length == (xColumnsLength + 1), "Number of items in the row should be " + (xColumnsLength + 1).toString + " (1 y value and " + xColumnsLength.toString + " x values).")
+    require(row.length == (xColumnsLength + 1), s"Number of items in the row should be ${(xColumnsLength + 1).toString} (1 y value and ${xColumnsLength.toString} x values), but was ${row.length}.")
 
     // Values should be doubles
     val rowDoubles = row.map(item => {
@@ -44,12 +44,7 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
   }
 
   override def input(): Array[Field] = {
-    var input = Array[Field]()
-    val obsCols = arxData.xColumns
-    obsCols.foreach { name =>
-      input = input :+ Field(name, "Double")
-    }
-    input
+    arxData.xColumns.map(name => Field(name, "Double")).toArray
   }
   override def modelMetadata(): ModelMetaDataArgs = {
     new ModelMetaDataArgs("ARX Model", classOf[ARXModel].getName, classOf[ARXModelReaderPlugin].getName, Map())
