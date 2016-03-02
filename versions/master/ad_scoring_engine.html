@@ -172,9 +172,11 @@ String response:
 <p>version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#8216;tr_row&#8217; and &#8216;tr_col&#8217; are the names of the observation columns that the model was trained on.</p>
 <p>request from a python client with Json Input scoring a record:
 r = requests.post(&#8220;<a class="reference external" href="http://localhost:9100/v2/score">http://localhost:9100/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;tr_row&#8221;: 1.0, &#8220;tr_col&#8221;: 2.6}]})
+r.text
 Json response:
 u&#8217;{&#8220;input&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output_columns&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output_values&#8221;:[[-1.0,-1.0,1.0]]}&#8217;</p>
 <p>r =requests.get(&#8216;<a class="reference external" href="http://localhost:9100/v2/metadata">http://localhost:9100/v2/metadata</a>&#8216;)
+r.text
 u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;LibSvm Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LibSvmModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
 </div>
 </div>
@@ -200,7 +202,7 @@ u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;LibSvm Mod
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 01, 2016.
+      Last updated on Mar 02, 2016.
       </li>
     </ul>
     </div>
