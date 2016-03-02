@@ -135,6 +135,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
         <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.0.109</dep.daal.version>
+
         <!--START GAO MAVEN -->
 
         <scala.long.version>2.10.4</scala.long.version>
@@ -1445,6 +1446,12 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <groupId>com.cloudera.sparkts</groupId>
                 <artifactId>sparkts</artifactId>
                 <version>0.3.1</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>breeze_${scala.short.version}</artifactId>
+                        <groupId>org.scalanlp</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!--test scope-->
             <dependency>
