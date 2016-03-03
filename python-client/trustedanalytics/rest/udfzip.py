@@ -22,6 +22,7 @@ by the UdfDependencies class below, just to provide a docstring.
 """
 
 import zipfile
+import uuid
 import os
 import base64
 import os.path
@@ -61,8 +62,6 @@ class UdfDependencies(list):
     """
     pass  # note this list-wrapping class is used solely for the purpose of providing runtime documentation
 
-
-_zip_file_path = '/tmp/iapydependencies.zip'
 
 # From http://stackoverflow.com/questions/14438928/python-zip-a-sub-folder-and-not-the-entire-folder-path
 def _get_dir_entries(dir_name, subdir, *args):
@@ -106,23 +105,24 @@ def _make_archive(file_list, archive, root):
 
 def _zip_dir(path):
     """
-    zips a path to /tmp/iapydependencies.zip. Please note that this zip file will be truncated every time
-    this call is made. So to preserve the contents, read the file immediately or copy. Not thread-safe.
+    zips a path to /tmp/iapydependencies-<UUID>.zip and returns that path.
+    Name is hardened to allow for concurrency.
     """
-    # todo: fix such that this is thread-safe, and does not continue to zip and rezip
-    _make_archive(_get_dir_entries(path, True), _zip_file_path, path[0:path.rfind('/')])
+    file_path = '/tmp/iapydependencies-' + uuid.uuid1().hex + ".zip"
+    _make_archive(_get_dir_entries(path, True), file_path, path[0:path.rfind('/')])
+    return file_path
 
 
 def _get_file_content_as_str(filename):
 
     if isinstance(filename, ModuleType) and hasattr(filename, '__path__'):  # Serialize modules
-        _zip_dir(filename.__path__)
-        name, file_to_serialize = ('%s.zip' % os.path.basename(filename), _zip_file_path)
+        file_path = _zip_dir(filename.__path__)
+        name, file_to_serialize = ('%s.zip' % os.path.basename(filename), file_path)
     elif isinstance(filename, ModuleType) and hasattr(filename, '__file__'): # Serialize single file based modules
         name, file_to_serialize = (filename.__file__, filename.__file__)
     elif os.path.isdir(filename): # Serialize local directories
-        _zip_dir(filename)
-        name, file_to_serialize = ('%s.zip' % os.path.basename(filename), _zip_file_path)
+        file_path = _zip_dir(filename)
+        name, file_to_serialize = ('%s.zip' % os.path.basename(filename), file_path)
     elif os.path.isfile(filename) and filename.endswith('.py'): # Serialize local files
         name, file_to_serialize = (filename, filename)
     else:

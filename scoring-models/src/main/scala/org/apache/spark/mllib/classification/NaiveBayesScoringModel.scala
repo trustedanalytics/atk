@@ -17,14 +17,14 @@ package org.apache.spark.mllib.classification
 
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
-import org.trustedanalytics.atk.scoring.models.{ NaiveBayesReaderPlugin, NaiveBayesData }
+import org.trustedanalytics.atk.scoring.models.{ ScoringModelUtils, NaiveBayesReaderPlugin, NaiveBayesData }
 
 class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesModel(naiveBayesData.naiveBayesModel.labels, naiveBayesData.naiveBayesModel.pi, naiveBayesData.naiveBayesModel.theta) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
     data :+ predict(Vectors.dense(x))
   }

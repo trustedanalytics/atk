@@ -15,32 +15,38 @@
  */
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.ScoringJsonReaderWriters
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
+import org.apache.spark.mllib.ScoringJsonReaderWriters._
+import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
 import spray.json._
-import ScoringJsonReaderWriters._
 
 /**
  * Scoring model for Latent Dirichlet Allocation
+ *
+ * The input to the scoring model is a document represented as list of words,
+ * and the output is the topic vector, and the number of new words not contained
+ * in the original model.
  */
-class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, ldaModel.topicWordMap) with Model {
+class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(
+  ldaModel.numTopics,
+  ldaModel.topicWordMap,
+  ldaModel.documentColumnName,
+  ldaModel.wordColumnName) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val predictReturn = predict(data.map(_.toString)toList)
-    data :+ predictReturn.toJson
+    val inputDocument = data.flatMap {
+      case list: List[_] => list.map(_.toString)
+      case _ => throw new IllegalArgumentException("Scoring input must be a list of words")
+    }
+    val predictReturn = predict(inputDocument.toList)
+    data :+ predictReturn.toMap
   }
 
   /**
-   *  @return fields containing the input names and their datatypes
+   * Input for the LDA model is a document containing a list of words
+   * @return fields containing the input names and their datatypes
    */
   override def input(): Array[Field] = {
-    var input = Array[Field]()
-    val keys = ldaModel.topicWordMap.keys
-    keys.foreach { key =>
-      input = input :+ Field(key, "String")
-    }
+    val input = Array[Field](Field(documentColumnName, "Array[String]"))
     input
   }
 
@@ -49,12 +55,12 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(ldaModel.numTopics, lda
   }
 
   /**
-   *  @return fields containing the input names and their datatypes along with the output and its datatype
+   * @return fields containing the input names and their datatypes along with the output and its datatype
    */
   override def output(): Array[Field] = {
     var output = input()
-    output = output :+ Field("topicsGivenDoc", "Vector[Double]")
-    output = output :+ Field("newWordsCount", "Int")
-    output :+ Field("percentOfNewWords", "Double")
+    output = output :+ Field("topics_given_doc", "Vector[Double]")
+    output = output :+ Field("new_words_count", "Int")
+    output :+ Field("new_words_percentage", "Double")
   }
 }

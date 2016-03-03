@@ -41,7 +41,7 @@ class ScoringServiceJsonProtocol(model: Model) {
     override def write(obj: Field): JsValue = {
       JsObject(
         "name" -> JsString(obj.name),
-        "value" -> JsString(obj.data_type))
+        "value" -> JsString(obj.dataType))
     }
 
     override def read(json: JsValue): Field = {
@@ -77,7 +77,19 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
+        case v: Array[_] => new JsArray(v.map {
+          case d: Double => JsNumber(d)
+          case n: Int => JsNumber(n)
+          case n: Long => JsNumber(n)
+          case n: Float => JsNumber(n)
+          case s: String => JsString(s)
+          case l: List[_] => new JsArray(l.map(x => write(x)))
+          case m: Map[String, _] => new JsObject(m.map {
+            case (a: String, l: List[Double]) => new JsField(a, l.toJson)
+            case (a: String, b: Double) => new JsField(a, JsNumber(b))
+            case (a: String, i: Int) => new JsField(a, JsNumber(i))
+          })
+        }.toList)
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
         // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
@@ -100,7 +112,11 @@ class ScoringServiceJsonProtocol(model: Model) {
         case JsNumber(n) => n.doubleValue()
         case JsBoolean(b) => b
         case JsString(s) => s
-        case JsArray(v) => v.map(x => read(x)).toList
+        case JsArray(v) => v.map(x => read(x))
+        case obj: JsObject => obj.fields.map {
+          case (a, JsArray(v)) => (a, v.map(x => read(x)))
+          case (a, JsNumber(b)) => (a, b)
+        }
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
     }
@@ -110,10 +126,9 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
-      JsObject("Model Details" -> modelMetadata.toJson,
-        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
+        "output_columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
+        "output_values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
@@ -130,10 +145,13 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
     var features: Seq[Array[Any]] = Seq[Array[Any]]()
     decodedRecords.foreach(decodedRecord => {
-      val featureArray = new Array[Any](model.input().length)
       val obsColumns = model.input()
+      val featureArray = new Array[Any](obsColumns.length)
       if (decodedRecord.size != featureArray.length) {
-        throw new scala.IllegalArgumentException("Size of the input record is not the same as the number of Obs Columns that the model was trained on")
+        throw new IllegalArgumentException(
+          "Size of input record is not equal to number of observation columns that model was trained on:\n" +
+            s"""Expected columns are: [${obsColumns.mkString(",")}]"""
+        )
       }
       decodedRecord.foreach({
         case (name, value) => {
@@ -149,7 +167,9 @@ class ScoringServiceJsonProtocol(model: Model) {
             }
           }
           if (!found) {
-            throw new scala.IllegalArgumentException(s"$name was not found in the list of Observation Columns that the model was trained on")
+            throw new IllegalArgumentException(
+              s"""$name was not found in list of Observation Columns that model was trained on: [${obsColumns.mkString(",")}]"""
+            )
           }
 
         }

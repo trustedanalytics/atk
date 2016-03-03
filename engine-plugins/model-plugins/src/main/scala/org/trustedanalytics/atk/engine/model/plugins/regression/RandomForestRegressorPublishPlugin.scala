@@ -21,7 +21,7 @@ import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.scoring.models.{ RandomForestRegressorData, RandomForestClassifierModelReaderPlugin }
+import org.trustedanalytics.atk.scoring.models.{ RandomForestRegressorModelReaderPlugin, RandomForestRegressorData }
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -81,7 +81,7 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
     val randomForestData = model.readFromStorage().convertTo[RandomForestRegressorData]
     val jsvalue: JsValue = randomForestData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[RandomForestClassifierModelReaderPlugin].getName)
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[RandomForestRegressorModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("random_forest_regressor_model"))
   }
 }

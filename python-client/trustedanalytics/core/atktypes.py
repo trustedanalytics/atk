@@ -139,6 +139,15 @@ _primitive_alias_type_to_type_table = {
 
 _primitive_alias_str_to_type_table = dict([(alias.__name__, t) for alias, t in _primitive_alias_type_to_type_table.iteritems()])
 
+_primitive_type_to_default_value = {
+    #bool: False, TODO
+    float32: 0.0,
+    float64: 0.0,
+    int32: 0,
+    int64: 0,
+    unicode: "",
+    #datetime: "datetime",
+}
 
 def get_float_constructor(float_type):
     """Creates special constructor for floating point types which handles nan, inf, -inf"""
@@ -315,6 +324,30 @@ class _DataTypes(object):
             return constructor
 
     @staticmethod
+    def standardize_schema(schema):
+        return [(name, _DataTypes.get_from_type(t)) for name, t in schema]
+
+    @staticmethod
+    def validate_data(schema, data):
+        return [_DataTypes.cast(value, data_type) for value, data_type in zip(data, map(lambda t: t[1], schema))]
+
+    @staticmethod
+    def get_default_data_for_schema(schema):
+        return [_DataTypes.get_default_type_value(data_type) for name, data_type in schema]
+
+    @staticmethod
+    def get_default_type_value(data_type):
+        try:
+            return _primitive_type_to_default_value[data_type]
+        except KeyError:
+            if data_type == vector:
+                return []
+            if data_type == datetime:
+                return datetime.now()
+            raise ValueError("Unable to find default value for data type %s (invalid data type)" % data_type)
+
+
+    @staticmethod
     def cast(value, to_type):
         """
         Returns the given value cast to the given type.  None is always returned as None
@@ -374,6 +407,8 @@ def numpy_to_bson_friendly(obj):
         return obj.isoformat()
     if isinstance(obj, dict):
         return dict([(numpy_to_bson_friendly(key), numpy_to_bson_friendly(value)) for key, value in obj.items()])
+    if isinstance(obj, list):
+        return [numpy_to_bson_friendly(item) for item in obj]
     # Let the base class default method raise the TypeError
     return obj
 

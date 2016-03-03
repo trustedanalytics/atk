@@ -18,7 +18,12 @@ package org.trustedanalytics.atk.scoring.interfaces
 /**
  * For providing information about Model inputs and outputs
  * @param name name of the observation column
- * @param data_type data type of the observation column
+ * @param dataType data type of the observation column
  */
-case class Field(name: String, data_type: String)
+case class Field(name: String, dataType: String) {
+
+  override def toString: String = {
+    s"""{"name": "${name}", "data_type": "${dataType}"}"""
+  }
+}
 

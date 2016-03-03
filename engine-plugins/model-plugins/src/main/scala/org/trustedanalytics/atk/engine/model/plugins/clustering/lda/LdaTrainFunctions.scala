@@ -34,7 +34,7 @@ object LdaTrainFunctions extends Serializable {
     val trainCorpus = ldaCorpus.createCorpus().cache()
     val distLdaModel = runLda(trainCorpus, args)
 
-    val ldaModel = new AtkLdaModel(distLdaModel)
+    val ldaModel = new AtkLdaModel(distLdaModel, args.documentColumnName, args.wordColumnName)
     ldaModel.setDocTopicFrame(trainCorpus, args.documentColumnName, "topic_probabilities")
     ldaModel.setWordTopicFrames(
       ldaCorpus.uniqueWordsFrame,

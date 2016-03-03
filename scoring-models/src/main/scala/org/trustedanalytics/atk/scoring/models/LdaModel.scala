@@ -23,9 +23,13 @@ import scala.collection.immutable.Map
  *
  * @param numTopics Number of topics in trained model
  * @param topicWordMap Map of conditional probabilities of topics given word
+ * @param documentColumnName Document column name
+ * @param wordColumnName Word column name
  */
 case class LdaModel(numTopics: Int,
-                    topicWordMap: Map[String, Vector[Double]]) {
+                    topicWordMap: Map[String, Vector[Double]],
+                    documentColumnName: String,
+                    wordColumnName: String) {
   require(numTopics > 0, "number of topics must be greater than zero")
 
   /**
@@ -136,4 +140,16 @@ case class LdaModel(numTopics: Int,
  */
 case class LdaModelPredictReturn(topicsGivenDoc: Vector[Double],
                                  newWordsCount: Int,
-                                 newWordsPercentage: Double)
+                                 newWordsPercentage: Double) {
+
+  /**
+   * Convert return arguments to LDA predict to map
+   */
+  def toMap: Map[String, Any] = {
+    Map(
+      "topics_given_doc" -> topicsGivenDoc.toList,
+      "new_words_count" -> newWordsCount,
+      "new_words_percentage" -> newWordsPercentage
+    )
+  }
+}

@@ -33,8 +33,10 @@ import scala.util.Try
  * Model for Latent Dirichlet Allocation
  *
  * @param numTopics Number of topics in trained model
+ * @param documentColumnName Name of document column
+ * @param wordColumnName Name of word column
  */
-case class AtkLdaModel(numTopics: Int) {
+case class AtkLdaModel(numTopics: Int, documentColumnName: String, wordColumnName: String) {
   import AtkLdaModel._
   require(numTopics > 0, "number of topics must be greater than zero")
 
@@ -57,8 +59,8 @@ case class AtkLdaModel(numTopics: Int) {
    * Create ATK LDA model
    * @param distLdaModel Trained LDA model
    */
-  def this(distLdaModel: DistributedLDAModel) = {
-    this(distLdaModel.k)
+  def this(distLdaModel: DistributedLDAModel, documentColumnName: String, wordColumnName: String) = {
+    this(distLdaModel.k, documentColumnName, wordColumnName)
     this.distLdaModel = distLdaModel
   }
 

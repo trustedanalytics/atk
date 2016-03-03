@@ -38,20 +38,23 @@ Below is a sample python script to connect to the scoring engine:
 Posting Requests to Scoring Engine
 ----------------------------------
 
-Below are a couple of examples of posting a request to a scoring engine containing a LibSvm Model, and its response
+Below are a couple of examples of posting a request to a scoring engine containing a LibSvm Model, and its response.
 
 version 1 of Scoring Engine supporting strings for requests and response:
 
 request from a python client with String Input scoring a record:
-r = requests.post('http://localhost:9100/v1/score?data=-1,-1, -1', headers=headers)
+r = requests.post('http://localhost:9100/v1/score?data=-1,-1, -1, -1', headers=headers)
 String response:
 '-1.0'
 
-version 2 of Scoring Engine supporting Json for requests and responses:
+version 2 of Scoring Engine supporting Json for requests and responses. In the following example, 'tr_row' and 'tr_col' are the names of the observation columns that the model was trained on.
 
 request from a python client with Json Input scoring a record:
-r = requests.post("http://localhost:9100/v2/score", json={"records": [{"b": 1, "c": 2, "d": 3}]})
+r = requests.post("http://localhost:9100/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6}]})
+r.text
 Json response:
-u'{"Model Details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"Input":[{"name":"b","value":"Double"},{"name":"c","value":"Double"},{"name":"d","value":"Double"}],"output":[[1.0,2.0,3.0,-1.0]]}'
+u'{"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output_columns":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}],"output_values":[[-1.0,-1.0,1.0]]}'
 
-
+r =requests.get('http://localhost:9100/v2/metadata')
+r.text
+u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'

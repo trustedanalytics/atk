@@ -22,6 +22,18 @@ import json
 
 from trustedanalytics.core.atktypes import valid_data_types
 
+
+class AggregationUdf(object):
+    """
+    Class for Aggregate-by-key that holds the user given parameters
+    """
+
+    def __init__(self, aggregator, output_schema, init_values=None):
+        self.output_schema = output_schema
+        self.aggregator = aggregator
+        self.init_values = init_values
+
+
 class AggregationFunctions(object):
 
     """
@@ -41,10 +53,13 @@ class AggregationFunctions(object):
 
     def __repr__(self):
         return ", ".join([k for k in AggregationFunctions.__dict__.keys()
-                          if isinstance(k, basestring) and not k.startswith("__")])
+                          if isinstance(k, basestring) and not k.startswith("__")]) + ", udf"
 
     def __contains__(self, item):
-        return item in AggregationFunctions.__dict__.values()
+        return (item in AggregationFunctions.__dict__.values()) or isinstance(item, AggregationUdf)
+
+    def udf(self, aggregator, output_schema, init_values=None):
+        return AggregationUdf(aggregator, output_schema, init_values)
 
 agg = AggregationFunctions()
 
@@ -63,3 +78,11 @@ class GroupByHistogram:
 
     def __repr__(self):
         return 'HISTOGRAM=' + json.dumps(self.__dict__)
+
+
+
+
+
+
+
+

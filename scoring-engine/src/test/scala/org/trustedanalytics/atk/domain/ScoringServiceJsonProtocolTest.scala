@@ -31,7 +31,9 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       new ModelMetaDataArgs("Dummy Model", "Dummy Class", "Dummy Reader", Map("Created_On" -> "Jan 29th 2016"))
     }
 
-    override def output(): Array[Field] = ???
+    override def output(): Array[Field] = {
+      Array(Field("col1", "Double"), Field("col2", "Double"), Field("col3", "double"), Field("score", "double"))
+    }
 
     override def score(row: Array[Any]): Array[Any] = ???
   }
@@ -40,6 +42,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
   import jsonFormat.DataInputFormat
   import jsonFormat.DataOutputFormat
+  import jsonFormat.DataTypeJsonFormat
 
   "DataInputFormat" should {
     "parse JSON input" in {
@@ -67,9 +70,38 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{\"Model Details\":{\"model_type\":\"Dummy Model\",\"model_class\":\"Dummy Class\",\"model_reader\":\"Dummy Reader\",\"custom_values\":{\"Created_On\":\"Jan 29th 2016\"}},\"Input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output_columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"output_values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
+  }
+
+  "DataTypeJsonFormat" should {
+    "construct a Json Object" in {
+      val scores = Array("test_string", 1.0d, Map("int_key" -> 1, "list_key" -> List(2.0, 3.0)))
+
+      val output = DataTypeJsonFormat.write(scores)
+      assert(output != null)
+      assert(output.compactPrint == """["test_string",1.0,{"int_key":1,"list_key":[2.0,3.0]}]""")
+    }
+
+    "parse JSON input" in {
+      val string = """["test_string",1, {"int_key":1,"list_key":[2,3]}]"""
+      val json = JsonParser(string)
+      val input = DataTypeJsonFormat.read(json).asInstanceOf[List[Any]]
+      assert(input != null)
+      assert(input(0) == "test_string")
+      assert(input(1) == 1)
+      assert(input(2).isInstanceOf[Map[String, Any]])
+
+      val map = input(2).asInstanceOf[Map[String, Any]]
+      assert(map("int_key") == 1)
+      assert(map("list_key").isInstanceOf[List[Int]])
+
+      val list = map("list_key").asInstanceOf[List[Int]]
+      assert(list.length == 2)
+      assert(list(0) == 2)
+      assert(list(1) == 3)
+    }
   }
 }
 
