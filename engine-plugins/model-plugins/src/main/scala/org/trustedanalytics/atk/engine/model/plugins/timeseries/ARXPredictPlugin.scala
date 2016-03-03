@@ -81,6 +81,8 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
 
     require(arxData.xColumns.length == arguments.xColumns.length, "Number of columns for train and predict should be the same")
 
+    // TODO: Update the call to arxModel.predict to be called per from inside addColumn,
+    // after ARXModel is updated to be serializable (to accomodate larger datasets).
     val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
     val predictions = arxModel.predict(yVector, xMatrix)
 
