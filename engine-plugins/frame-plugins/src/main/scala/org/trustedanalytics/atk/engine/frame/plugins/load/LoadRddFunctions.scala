@@ -86,7 +86,7 @@ object LoadRddFunctions extends Serializable {
     if (parser != null) {
 
       // parse a sample so we can bail early if needed
-      parseSampleOfData(fileContentRdd, parser)
+      //parseSampleOfData(fileContentRdd, parser)
 
       // re-parse the entire file
       parse(fileContentRdd, parser)
@@ -172,21 +172,14 @@ object LoadRddFunctions extends Serializable {
    * @param parser the parser to use
    * @return the parse result - successes and failures
    */
-  private[frame] def parse[T](rowsToParse: RDD[T], parser: LineParser): ParseResultRddWrapper = {
+  private[frame] def parse[T](rowsToParse: RDD[T], parser: LineParser)(implicit m: scala.reflect.ClassTag[T]): ParseResultRddWrapper = {
 
     val schemaArgs = parser.arguments.schema
     val skipRows = parser.arguments.skip_rows
     val parserFunction = getLineParser(parser, schemaArgs.columns.map(_._2).toArray)
 
-    val parseResultRdd = rowsToParse.mapPartitionsWithIndex {
-      case (partition, lines) =>
-        if (partition == 0) {
-          lines.drop(skipRows.getOrElse(0)).map(parserFunction)
-        }
-        else {
-          lines.map(parserFunction)
-        }
-    }
+    val parseResultRdd = rowsToParse.zipWithIndex.filter(_._2 >= skipRows.getOrElse(0)).map { _._1 }.mapPartitionsWithIndex { case (partition, lines) => lines.map(parserFunction) }
+
     try {
       parseResultRdd.cache()
       val successesRdd = parseResultRdd.filter(rowParseResult => rowParseResult.parseSuccess)
