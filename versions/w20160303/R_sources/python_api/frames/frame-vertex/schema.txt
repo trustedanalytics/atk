@@ -1,0 +1,44 @@
+
+:doc:`VertexFrame <index>`  schema
+**********************************
+
+------
+
+
+.. attribute:: schema
+
+    Current frame column names and types.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            list of tuples of the form (<column name>, <data type>)
+    The schema of the current frame is a list of column names and
+    associated data types.
+    It is retrieved as a list of tuples.
+    Each tuple has the name and data type of one of the frame's columns.
+
+    Examples
+    --------
+
+    .. code::
+
+        >>> frame.schema
+        [(u'name', <type 'unicode'>), (u'age', <type 'numpy.int32'>), (u'tenure', <type 'numpy.int32'>), (u'phone', <type 'unicode'>)]
+
+    Note how the types shown are the raw, underlying types used in python.  To see the schema in a friendlier
+    format, used the __repr__ presentation, invoke by simply entering the frame:
+        >>> frame
+        Frame "example_frame"
+        row_count = 4
+        schema = [name:unicode, age:int32, tenure:int32, phone:unicode]
+        status = ACTIVE  (last_read_date = -etc-)
+

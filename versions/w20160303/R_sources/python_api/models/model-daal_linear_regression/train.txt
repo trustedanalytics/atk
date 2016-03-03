@@ -1,0 +1,50 @@
+
+:doc:`DaalLinearRegressionModel <index>`  train
+***********************************************
+
+------
+
+
+.. function:: train(self, frame, feature_columns, label_columns)
+
+    |ALPHA|
+    Build DAAL linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train or test the model on.
+
+
+
+        **feature_columns** : list
+
+        ..
+
+            List of column(s) containing the
+            observations.
+
+
+
+        **label_columns** : list
+
+        ..
+
+            List of column(s) containing the label
+            for each observation.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Array with coefficients of linear regression model
+    Create DAAL LinearRegression Model using the observation column and target column of the train frame
