@@ -17,24 +17,18 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
-import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, SparkCommandPlugin }
-import org.trustedanalytics.atk.engine.util.{ JvmMemory, KerberosAuthenticator }
+import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.util.{ KerberosProperties, JvmMemory, KerberosAuthenticator }
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 
-import org.trustedanalytics.hadoop.config.client.Configurations
-import org.trustedanalytics.hadoop.config.client.ServiceType
-import org.trustedanalytics.hadoop.kerberos.KrbLoginManager
+import org.trustedanalytics.hadoop.config.client.{ Configurations, ServiceType }
 import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
-import org.trustedanalytics.hadoop.config.ConfigurationHelper
-import org.trustedanalytics.hadoop.config.ConfigurationHelperImpl
-import org.trustedanalytics.hadoop.config.PropertyLocator
 
 /**
  * Our wrapper for calling SparkSubmit to run a plugin.
@@ -128,25 +122,17 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         else {
           Array("java", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
         }
-
-        val pb1 = new java.lang.ProcessBuilder(Array(s"klist"): _*)
-        val job1 = pb1.inheritIO().start()
-        val result1 = job1.waitFor()
-        info(s"Completed with exitCode:$result1")
-
-        info(s"The value for KRB5CCNAME: ${sys.env.get("KRB5CCNAME").getOrElse("DOES_NOT_EXIST")}")
-
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
         val helper = Configurations.newInstanceFromEnv()
         val hdfsConf = helper.getServiceConfig(ServiceType.HDFS_TYPE)
-        val kerberosProperties = getKerberosProperties()
-        val loginManager = KrbLoginManagerFactory.getInstance()
-          .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
-        loginManager.loginInHadoop(loginManager.loginWithCredentials(kerberosProperties.user, kerberosProperties.password.toCharArray()),
-          hdfsConf.asHadoopConfiguration())
-
-        hdfsConf.asHadoopConfiguration()
+        if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
+          val kerberosProperties = new KerberosProperties
+          val loginManager = KrbLoginManagerFactory.getInstance()
+            .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
+          loginManager.loginInHadoop(loginManager.loginWithCredentials(kerberosProperties.user, kerberosProperties.password.toCharArray()),
+            hdfsConf.asHadoopConfiguration())
+        }
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
@@ -166,20 +152,4 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
     }
   }
 
-  def getKerberosProperties(): KerberosProperties = {
-    val confHelper = ConfigurationHelperImpl.getInstance()
-    val DEFAULT_VALUE = ""
-    val krbProps = new KerberosProperties(confHelper.getPropertyFromEnv(PropertyLocator.KRB_KDC).get(),
-      confHelper.getPropertyFromEnv(PropertyLocator.KRB_REALM).get(),
-      confHelper.getPropertyFromEnv(PropertyLocator.USER).get(),
-      confHelper.getPropertyFromEnv(PropertyLocator.PASSWORD).get())
-    krbProps
-  }
-
-}
-
-case class KerberosProperties(kdc: String = "", realm: String = "", user: String = "", password: String = "") {
-
-  val KRB5_REALM_PROP = "java.security.krb5.realm"
-  val KRB5_KDC_PROP = "java.security.krb5.kdc"
 }
