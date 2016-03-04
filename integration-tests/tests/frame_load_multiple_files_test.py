@@ -43,7 +43,7 @@ class FrameLoadMultipleFilesTest(unittest.TestCase):
                                                                ('vertex_type', str),
                                                                ('movie', ta.int32),
                                                                ('rating', ta.int32),
-                                                               ('splits', str)])
+                                                               ('splits', str)],skip_header_lines=1)
 
         frame = ta.Frame(csv)
         self.assertEquals(frame.row_count, 20, "frame should have 20 rows")
