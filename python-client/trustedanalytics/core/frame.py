@@ -658,13 +658,16 @@ class _BaseFrame(CommandLoadable):
         from trustedanalytics.core.atkpandas import atk_dtype_to_pandas_str
         result = self._backend.take(self, n, offset, columns)
         headers, data_types = zip(*result.schema)
-
         pandas_df = pandas.DataFrame(result.data, columns=headers)
-
         for i, dtype in enumerate(data_types):
             dtype_str = atk_dtype_to_pandas_str(dtype)
             try:
                 pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            except ValueError as e:
+                if e.message == "Cannot convert NA to integer":
+                    raise RuntimeError("DataFrame is unable to handle missing values in integer column: '" + headers[i] + "'.  Rectify missing values or use the float datatype instead of integers.")
+                else:
+                    raise e
             except TypeError:
                 if dtype_str.startswith("int"):
                     print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
