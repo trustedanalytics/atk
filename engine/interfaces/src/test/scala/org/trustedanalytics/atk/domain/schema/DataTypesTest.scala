@@ -215,4 +215,40 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.isCompatibleDataType(DataTypes.vector(2), DataTypes.vector(3)) shouldBe false
 
   }
+
+  "parseMany" should "treat non-numerical values as missing (null)" in {
+    val parser = DataTypes.parseMany(Array[DataTypes.DataType](DataTypes.int32, DataTypes.int64, DataTypes.float32, DataTypes.float64))(_)
+    parser(Array("a", "b", "c", "d")) shouldBe Array(null, null, null, null)
+    parser(Array("", "", "", "")) shouldBe Array(null, null, null, null)
+    parser(Array(null, null, null, null)) shouldBe Array(null, null, null, null)
+  }
+
+  "int parse" should "be unsuccessful if the value is not numerical" in {
+    DataTypes.int32.parse("a").isSuccess shouldBe false
+    DataTypes.int32.parse("").isSuccess shouldBe false
+    DataTypes.int32.parse(null).isSuccess shouldBe false
+    DataTypes.int32.parse("5").isSuccess shouldBe true
+    DataTypes.int32.parse(5).isSuccess shouldBe true
+
+    DataTypes.int64.parse("a").isSuccess shouldBe false
+    DataTypes.int64.parse("").isSuccess shouldBe false
+    DataTypes.int64.parse(null).isSuccess shouldBe false
+    DataTypes.int64.parse("5").isSuccess shouldBe true
+    DataTypes.int64.parse(5).isSuccess shouldBe true
+  }
+
+  "float parse" should "be unsuccessful if the value is not numerical" in {
+    DataTypes.float32.parse("a").isSuccess shouldBe false
+    DataTypes.float32.parse("").isSuccess shouldBe false
+    DataTypes.float32.parse(null).isSuccess shouldBe false
+    DataTypes.float32.parse("5.5").isSuccess shouldBe true
+    DataTypes.float32.parse(5.5).isSuccess shouldBe true
+
+    DataTypes.float64.parse("a").isSuccess shouldBe false
+    DataTypes.float64.parse("").isSuccess shouldBe false
+    DataTypes.float64.parse(null).isSuccess shouldBe false
+    DataTypes.float64.parse("5.5").isSuccess shouldBe true
+    DataTypes.float64.parse(5.5).isSuccess shouldBe true
+  }
+
 }

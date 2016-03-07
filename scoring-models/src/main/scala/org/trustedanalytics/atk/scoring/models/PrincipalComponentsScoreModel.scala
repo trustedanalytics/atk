@@ -19,9 +19,6 @@ package org.trustedanalytics.atk.scoring.models
 import breeze.linalg
 import org.apache.spark.mllib.linalg._
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
-import scala.concurrent.ExecutionContext.Implicits.global
-//import scala.collection.mutable.Map
-import scala.concurrent._
 
 /**
  * Scoring model for Principal Components
@@ -30,15 +27,14 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = new Array[Double](data.length)
-    data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = value.asInstanceOf[Double]
-    }
-    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length - 1))
-    val pcaScoreOutput: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
-    pcaScoreOutput.put("principal_components", y.values.toList)
-    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x(x.length - 1).toInt)
-    pcaScoreOutput.put("t_squared_index", t_squared_index)
+    val x: Array[Double] = data.map(value => ScoringModelUtils.toDouble(value))
+    val y: DenseMatrix = computePrincipalComponents(x)
+    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
+
+    val pcaScoreOutput: Map[String, Any] = Map(
+      "principal_components" -> y.values.toList,
+      "t_squared_index" -> t_squared_index
+    )
     data :+ pcaScoreOutput
   }
 
@@ -63,15 +59,16 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   /**
    * Compute the t-squared index for the observation
    * @param y Projection of singular vectors on the input
-   * @param E Right singular values of the input
+   * @param singularValues Right singular values of the input
    * @param k Number of principal components
    * @return t-squared index for the observation
    */
-  def computeTSquaredIndex(y: Array[Double], E: Vector, k: Int): Double = {
+  def computeTSquaredIndex(y: Array[Double], singularValues: Vector, k: Int): Double = {
     val yArray: Array[Double] = y
     var t: Double = 0.0
-    for (i <- 0 to k - 1) {
-      t += ((yArray(i) * yArray(i)) / (E(i) * E(i)))
+    for (i <- 0 until k) {
+      if (singularValues(i) > 0)
+        t += ((yArray(i) * yArray(i)) / (singularValues(i) * singularValues(i)))
     }
     t
   }
