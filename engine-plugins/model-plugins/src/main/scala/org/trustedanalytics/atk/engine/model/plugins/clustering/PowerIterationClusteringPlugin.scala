@@ -83,7 +83,7 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: PowerIterationClusteringArgs)(implicit invocation: Invocation) = 25
+  override def numberOfJobs(arguments: PowerIterationClusteringArgs)(implicit invocation: Invocation) = 1
   /**
    * Get the predictions for observations in a test frame
    *
@@ -98,10 +98,8 @@ class PowerIterationClusteringPlugin extends SparkCommandPlugin[PowerIterationCl
     val model: Model = arguments.model
 
     val trainFrameRdd = frame.rdd
-    if (trainFrameRdd.isEmpty()) {
-      throw new RuntimeException("Input Frame is empty. Please pass a non-empty Frame")
-    }
-    trainFrameRdd.cache()
+    require(!trainFrameRdd.isEmpty(), "Frame is empty. Please run on a non-empty Frame.")
+
     val similaritiesRdd = trainFrameRdd.toSourceDestinationSimilarityRDD(arguments.sourceColumn, arguments.destinationColumn, arguments.similarityColumn)
     val powerIterationClustering = PowerIterationClusteringPlugin.initializePIC(arguments)
 

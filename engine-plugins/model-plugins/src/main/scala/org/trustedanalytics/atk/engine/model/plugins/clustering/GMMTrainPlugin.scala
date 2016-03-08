@@ -65,7 +65,7 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
    *
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 60
+  override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Run MLLib's GaussianMixtureModel() on the training frame and create a Model for it.
@@ -78,13 +78,12 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
    */
   override def execute(arguments: GMMTrainArgs)(implicit invocation: Invocation): GMMTrainReturn = {
     val frame: SparkFrame = arguments.frame
+    val trainFrameRdd = frame.rdd
+
+    require(!trainFrameRdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
 
     val gmm = GMMTrainPlugin.initializeGMM(arguments)
 
-    val trainFrameRdd = frame.rdd
-    if (trainFrameRdd.isEmpty()) {
-      throw new RuntimeException("Training Frame is empty. Please train with a non-empty Frame")
-    }
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val gmmModel = gmm.run(vectorRDD)
 

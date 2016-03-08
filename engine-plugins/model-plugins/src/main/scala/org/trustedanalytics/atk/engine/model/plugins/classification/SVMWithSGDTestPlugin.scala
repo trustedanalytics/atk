@@ -64,7 +64,7 @@ class SVMWithSGDTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation) = 9
+  override def numberOfJobs(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation) = 1
   /**
    * Get the predictions for observations in a test frame
    *
@@ -78,6 +78,7 @@ class SVMWithSGDTestPlugin extends SparkCommandPlugin[ClassificationWithSGDTestA
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Test Frame is empty. Please test on a non-empty Frame.")
     //Extracting the model and data to run on
     val svmData = model.data.convertTo[SVMData]
     val svmModel = svmData.svmModel

@@ -53,7 +53,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
-  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 103
+  override def numberOfJobs(arguments: ClassificationWithSGDTrainArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Run MLLib's SVMWithSGD() on the training frame and create a Model for it.
@@ -69,6 +69,7 @@ class SVMWithSGDTrainPlugin extends SparkCommandPlugin[ClassificationWithSGDTrai
     val model: Model = arguments.model
 
     val frame: SparkFrame = arguments.frame
+    require(!frame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     frame.schema.validateColumnsExist(arguments.observationColumns)
 
     if (frame.rdd.isEmpty()) {

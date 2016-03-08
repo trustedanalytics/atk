@@ -81,6 +81,7 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Extracting the GmmModel from the stored JsObject
     val gmmData = model.data.convertTo[GMMData]
     val gmmModel = gmmData.gmmModel
@@ -90,9 +91,7 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
 
     val gmmColumns = arguments.observationColumns.getOrElse(gmmData.observationColumns)
     val scalingValues = gmmData.columnScalings
-    if (frame.rdd.isEmpty()) {
-      throw new RuntimeException("Predict Frame is empty. Please predict with a non-empty Frame")
-    }
+
     val predictionsRdd = gmmModel.predict(frame.rdd.toDenseVectorRDDWithWeights(gmmColumns, scalingValues))
     val indexedPredictionsRdd = predictionsRdd.zipWithIndex().map { case (cluster, index) => (index, cluster) }
     val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
