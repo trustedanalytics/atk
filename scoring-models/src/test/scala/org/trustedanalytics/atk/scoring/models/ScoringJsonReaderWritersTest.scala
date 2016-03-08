@@ -35,18 +35,20 @@ class ScoringJsonReaderWritersTest extends FlatSpec with Matchers {
       "harry" -> Vector(0.9d, 0.1d),
       "economy" -> Vector(0.35d, 0.65d)
     )
-    val ldaModel = LdaModel(2, topicWordMap)
+    val ldaModel = LdaModel(2, topicWordMap, "doc", "word")
     val json = ldaModel.toJson
-    json.compactPrint should equal("""{"num_topics":2,"topic_word_map":{"harry":[0.9,0.1],"economy":[0.35,0.65]}}""")
+    json.compactPrint should equal("""{"num_topics":2,"topic_word_map":{"harry":[0.9,0.1],"economy":[0.35,0.65]},"document_column":"doc","word_column":"word"}""")
   }
 
   "LdaModelFormat" should "deserialize JSON to LDA model" in {
-    val json = """{"num_topics":2,"topic_word_map":{"rain":[0.2,0.8],"weather":[0.35,0.65]}}"""
+    val json = """{"num_topics":2,"topic_word_map":{"rain":[0.2,0.8],"weather":[0.35,0.65]}, "document_column" : "doc", "word_column": "word"}"""
 
     val ldaModel = JsonParser(json).asJsObject.convertTo[LdaModel]
     ldaModel.numTopics should equal(2)
     ldaModel.topicWordMap("rain").toArray should equalWithTolerance(Array(0.2d, 0.8d))
     ldaModel.topicWordMap("weather").toArray should equalWithTolerance(Array(0.35d, 0.65d))
+    ldaModel.documentColumnName should equal("doc")
+    ldaModel.wordColumnName should equal("word")
   }
 
   "LdaModelPredictReturnFormat" should "serialize LdaModelPredictReturn to JSON" in {

@@ -43,6 +43,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
   import jsonFormat.DataInputFormat
   import jsonFormat.DataOutputFormat
+  import jsonFormat.DataTypeJsonFormat
 
   "DataInputFormat" should {
     "parse JSON input" in {
@@ -73,6 +74,35 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       assert(output.compactPrint == "{\"input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output_columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"output_values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
+  }
+
+  "DataTypeJsonFormat" should {
+    "construct a Json Object" in {
+      val scores = Array("test_string", 1.0d, Map("int_key" -> 1, "list_key" -> List(2.0, 3.0)))
+
+      val output = DataTypeJsonFormat.write(scores)
+      assert(output != null)
+      assert(output.compactPrint == """["test_string",1.0,{"int_key":1,"list_key":[2.0,3.0]}]""")
+    }
+
+    "parse JSON input" in {
+      val string = """["test_string",1, {"int_key":1,"list_key":[2,3]}]"""
+      val json = JsonParser(string)
+      val input = DataTypeJsonFormat.read(json).asInstanceOf[List[Any]]
+      assert(input != null)
+      assert(input(0) == "test_string")
+      assert(input(1) == 1)
+      assert(input(2).isInstanceOf[Map[String, Any]])
+
+      val map = input(2).asInstanceOf[Map[String, Any]]
+      assert(map("int_key") == 1)
+      assert(map("list_key").isInstanceOf[List[Int]])
+
+      val list = map("list_key").asInstanceOf[List[Int]]
+      assert(list.length == 2)
+      assert(list(0) == 2)
+      assert(list(1) == 3)
+    }
   }
 }
 

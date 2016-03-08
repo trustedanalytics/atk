@@ -47,7 +47,7 @@ class FrameSmokeTest(unittest.TestCase):
                                             ('population_2013', str),
                                             ('pop_2010', str),
                                             ('change', str),
-                                            ('county', str)], delimiter='|')
+                                            ('county', str)], delimiter='|', skip_header_lines=1)
 
         print "create frame"
         frame = ta.Frame(csv)
@@ -69,7 +69,7 @@ class FrameSmokeTest(unittest.TestCase):
         print
         print error_frame.inspect(20)
         print
-        self.assertEquals(error_frame.row_count, 2, "error frame should have 2 bad rows after loading")
+        self.assertEquals(error_frame.row_count, 1, "error frame should have 1 bad row after loading")
         self.assertEquals(len(error_frame.column_names), 2, "error frames should have 2 columns (original value and error message)")
 
         # TODO: add verification that one Python UDF is working (not working yet)

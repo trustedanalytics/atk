@@ -46,7 +46,7 @@ class FrameSortTest(unittest.TestCase):
                                                                  ('population_2013', str),
                                                                  ('pop_2010', str),
                                                                  ('change', str),
-                                                                 ('county', str)], delimiter='|')
+                                                                 ('county', str)], delimiter='|',skip_header_lines=1)
 
         print "create frame"
         self.frame = ta.Frame(csv)
