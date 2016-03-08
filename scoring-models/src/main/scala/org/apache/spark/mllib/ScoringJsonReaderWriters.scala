@@ -587,7 +587,9 @@ object ScoringJsonReaderWriters {
     override def write(obj: LdaModel): JsValue = {
       JsObject(
         "num_topics" -> JsNumber(obj.numTopics),
-        "topic_word_map" -> obj.topicWordMap.toJson
+        "topic_word_map" -> obj.topicWordMap.toJson,
+        "document_column" -> obj.documentColumnName.toJson,
+        "word_column" -> obj.wordColumnName.toJson
       )
     }
 
@@ -600,7 +602,10 @@ object ScoringJsonReaderWriters {
       val fields = json.asJsObject.fields
       val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
       val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
-      LdaModel(numTopics, topicWordMap)
+      val documentColumnName = getOrInvalid(fields, "document_column").convertTo[String]
+      val wordColumnName = getOrInvalid(fields, "word_column").convertTo[String]
+
+      LdaModel(numTopics, topicWordMap, documentColumnName, wordColumnName)
     }
   }
 
