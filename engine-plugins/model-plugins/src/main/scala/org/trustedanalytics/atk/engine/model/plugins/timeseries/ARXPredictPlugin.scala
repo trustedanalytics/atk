@@ -81,21 +81,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
 
     require(arxData.xColumns.length == arguments.xColumns.length, "Number of columns for train and predict should be the same")
 
-    // TODO: Update the call to arxModel.predict to be called per from inside addColumn,
-    // after ARXModel is updated to be serializable (to accomodate larger datasets).
-    val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
-    val predictions = arxModel.predict(yVector, xMatrix)
-
-    if (predictions.length != frame.rdd.count())
-      throw new RuntimeException("Received unexpected number of y values from ARX Model predict (expected " +
-        frame.rdd.count.toString + " values, but received " + predictions.length.toString + " values).")
-
-    /*
-    val dataWithPredictions = frame.rdd.zipWithIndex().map {
-      case (row: Row, index: Long) =>
-        Row.fromSeq(row.toSeq :+ predictions(index.toInt)) // Add predicted y to the row
-    }*/
-
+    // Add column of predicted y values
     val predictColumn = Column("predicted_y", DataTypes.float64)
     val predictFrame = frame.rdd.addColumn(predictColumn, row => {
       val yValue = row.doubleValue(arguments.timeseriesColumn)
@@ -106,13 +92,8 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
       predictedValues(0)
     })
 
-    //val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))
-    //val frameWithPredictions = new FrameRdd(schemaWithPredictions, dataWithPredictions)
-
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARXModel predict command"))) {
       newFrame => newFrame.save(predictFrame)
     }
-
   }
-
 }
