@@ -29,7 +29,7 @@ import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.linalg.Vectors
+import breeze.linalg._
 import org.trustedanalytics.atk.scoring.models.ARXData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -90,16 +90,27 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
       throw new RuntimeException("Received unexpected number of y values from ARX Model predict (expected " +
         frame.rdd.count.toString + " values, but received " + predictions.length.toString + " values).")
 
+    /*
     val dataWithPredictions = frame.rdd.zipWithIndex().map {
       case (row: Row, index: Long) =>
         Row.fromSeq(row.toSeq :+ predictions(index.toInt)) // Add predicted y to the row
-    }
+    }*/
 
-    val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))
-    val frameWithPredictions = new FrameRdd(schemaWithPredictions, dataWithPredictions)
+    val predictColumn = Column("predicted_y", DataTypes.float64)
+    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
+      val yValue = row.doubleValue(arguments.timeseriesColumn)
+      val xValues = row.valuesAsDoubleArray(arguments.xColumns)
+      val predictedValues = arxModel.predict(new DenseVector(Array[Double](yValue)), new DenseMatrix(rows = 1, cols = xValues.length, data = xValues))
+      if (predictedValues.length != 1)
+        throw new RuntimeException("Unexpected number of predicted values returned from ARX (expected 1 value, received " + predictedValues.length.toString + ").")
+      predictedValues(0)
+    })
+
+    //val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))
+    //val frameWithPredictions = new FrameRdd(schemaWithPredictions, dataWithPredictions)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARXModel predict command"))) {
-      newFrame => newFrame.save(frameWithPredictions)
+      newFrame => newFrame.save(predictFrame)
     }
 
   }
