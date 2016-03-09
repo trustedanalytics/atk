@@ -521,10 +521,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       framesAutoInc.insert(frame)
     }
 
-    override def scanAll()(implicit session: Session): Seq[FrameEntity] = {
-      frames.list
-    }
-
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[FrameEntity] = {
       frames.drop(offset).take(count).list
     }
@@ -538,6 +534,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
         case Some(n) => frames.where(_.name === n).firstOption
         case _ => None
       }
+    }
+
+    override def lookupActiveNamedFrames()(implicit session: Session): Seq[FrameEntity] = {
+      frames.where(_.statusId === (Status.Active: Long)).filter(_.name.isNotNull).list
     }
 
     override def lookupByGraphId(graphId: Long)(implicit session: Session): Seq[FrameEntity] = {
@@ -828,10 +828,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       graphs.drop(offset).take(count).list
     }
 
-    override def scanAll()(implicit session: Session): Seq[GraphEntity] = {
-      graphs.list
-    }
-
     override def lookup(id: Long)(implicit session: Session): Option[GraphEntity] = {
       graphs.where(_.id === id).firstOption
     }
@@ -841,6 +837,10 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
         case Some(n) => graphs.where(_.name === n).firstOption
         case _ => None
       }
+    }
+
+    override def lookupActiveNamedGraphs()(implicit session: Session): Seq[GraphEntity] = {
+      graphs.where(_.statusId === (Status.Active: Long)).filter(_.name.isNotNull).list
     }
 
     /** execute DDL to create the underlying table */
@@ -947,10 +947,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       models.drop(offset).take(count).list
     }
 
-    override def scanAll()(implicit session: Session): Seq[ModelEntity] = {
-      models.list
-    }
-
     override def lookup(id: Long)(implicit session: Session): Option[ModelEntity] = {
       models.where(_.id === id).firstOption
     }
@@ -995,7 +991,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
     }
 
     /** Return seq of model entities for all Active model entities with a name */
-    override def activeNamedModels()(implicit session: Session): Seq[ModelEntity] = {
+    override def lookupActiveNamedModels()(implicit session: Session): Seq[ModelEntity] = {
       models.where(_.statusId === Status.Active.id).filter(_.name.isNotNull).list
     }
 
@@ -1003,7 +999,7 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
      * Return list of model entities (without data) for all Active model entities with a name
      * @param session current session
      */
-    override def activeNamedModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
+    override def lookupActiveNamedModelsNoData()(implicit session: Session): Seq[ModelEntity] = {
       // special query which avoids pulling the data field, which can be large.  (there may be a better way to do this!)
       (for {
         m <- models; if m.name.isNotNull && m.statusId === Status.Active.id

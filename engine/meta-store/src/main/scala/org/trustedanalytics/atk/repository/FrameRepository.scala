@@ -35,12 +35,7 @@ trait FrameRepository[Session] extends Repository[Session, DataFrameTemplate, Fr
   /** Update the errorFrameId column */
   def updateErrorFrameId(frame: FrameEntity, errorFrameId: Option[Long])(implicit session: Session): FrameEntity
 
-  /**
-   * Return all the frames
-   * @param session current session
-   * @return all the dataframes
-   */
-  def scanAll()(implicit session: Session): Seq[FrameEntity]
+  def lookupActiveNamedFrames()(implicit session: Session): Seq[FrameEntity]
 
   def lookupByGraphId(graphId: Long)(implicit session: Session): Seq[FrameEntity]
 
