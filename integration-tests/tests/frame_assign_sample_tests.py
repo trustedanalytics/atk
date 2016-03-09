@@ -50,7 +50,7 @@ class FrameAssignSampleTests(unittest.TestCase):
                          ('movie', ta.int32),
                          ('rating', ta.int32),
                          ('splits', str)]
-        self.csv = ta.CsvFile("/datasets/movie.csv", self.schema)
+        self.csv = ta.CsvFile("/datasets/movie.csv", self.schema, skip_header_lines=1)
 
         print "creating frame"
         self.frame = ta.Frame(self.csv)
