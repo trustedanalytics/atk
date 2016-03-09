@@ -9,6 +9,7 @@ Models
     DaalLinearRegressionModel <model-daal_linear_regression/index.rst>
     RandomForestClassifierModel <model-random_forest_classifier/index.rst>
     GmmModel <model-gmm/index.rst>
+    ArxModel <model-arx/index.rst>
     PrincipalComponentsModel <model-principal_components/index.rst>
     CollaborativeFilteringModel <model-collaborative_filtering/index.rst>
     KMeansModel <model-k_means/index.rst>

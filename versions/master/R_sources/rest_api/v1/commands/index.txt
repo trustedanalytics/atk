@@ -96,6 +96,10 @@
     graph__graphx_triangle_count
     graph__rename
     graph__vertex_outdegree
+    model-arx__new
+    model-arx__predict
+    model-arx__publish
+    model-arx__train
     model-collaborative_filtering__new
     model-collaborative_filtering__predict
     model-collaborative_filtering__recommend
@@ -238,6 +242,10 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`graph:/loopy_belief_propagation <graph-__loopy_belief_propagation>`                       Classification on sparse data using Belief Propagation.
 :doc:`graph:/vertex_count <graph-__vertex_count>`                                               Get the total number of vertices in the graph.
 :doc:`model/rename <model__rename>`                                                             Rename a model.
+:doc:`model:arx/new <model-arx__new>`                                                           |ALPHA| Create a 'new' instance of a AutoRegressive Exogenous model.
+:doc:`model:arx/predict <model-arx__predict>`                                                   |ALPHA| New frame with column of predicted y values
+:doc:`model:arx/publish <model-arx__publish>`                                                   |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:arx/train <model-arx__train>`                                                       |ALPHA| Creates AutoregressionX (ARX) Model from train frame.
 :doc:`model:collaborative_filtering/new <model-collaborative_filtering__new>`                   Create a new Collaborative Filtering (ALS) model.
 :doc:`model:collaborative_filtering/predict <model-collaborative_filtering__predict>`           |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`       |BETA| Collaborative Filtering Predict (ALS).
