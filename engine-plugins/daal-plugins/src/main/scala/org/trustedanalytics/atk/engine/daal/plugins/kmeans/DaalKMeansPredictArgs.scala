@@ -24,15 +24,14 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * Command for loading model data into existing model in the model database.
  */
 case class DaalKMeansPredictArgs(model: ModelReference,
-                             @ArgDoc("""A frame whose labels are to be predicted.
+                                 @ArgDoc("""A frame whose labels are to be predicted.
 By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
-                             @ArgDoc("""Column(s) containing the observations
+                                 @ArgDoc("""Column(s) containing the observations
 whose clusters are to be predicted.
 Default is to predict the clusters over columns the KMeans model was trained on.""") observationColumns: Option[List[String]],
                                  @ArgDoc("""Name of output column with
-index of cluster each observation belongs to.""") labelColumn: String = "cluster") {
+index of cluster each observation belongs to.""") labelColumn: Option[String]) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
 }

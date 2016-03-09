@@ -137,7 +137,7 @@ class DistributedNumericTable extends Serializable {
    * @param schema Frame schema
    * @return Frame RDD
    */
-  def toFrameRdd(schema: FrameSchema) : FrameRdd = {
+  def toFrameRdd(schema: FrameSchema): FrameRdd = {
     val rowRdd = tableRdd.flatMap(table => {
       val context = new DaalContext
       val rows = table.toRowIter(context)

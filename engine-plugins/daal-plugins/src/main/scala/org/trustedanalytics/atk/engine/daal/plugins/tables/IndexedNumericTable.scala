@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
 
-import com.intel.daal.data_management.data.{HomogenNumericTable, NumericTable}
+import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
 import com.intel.daal.services.DaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
@@ -91,12 +91,12 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
   def isEmpty: Boolean = numRows < 1
 }
 
-object IndexedNumericTable extends Serializable{
+object IndexedNumericTable extends Serializable {
 
   /**
    * Create indexed numeric table from matrix
    */
-  def createTable(matrix: Array[Array[Double]]) : IndexedNumericTable = {
+  def createTable(matrix: Array[Array[Double]]): IndexedNumericTable = {
     require(matrix != null && matrix.length > 0, "Array must not be null or empty")
     val context = new DaalContext()
     val numRows = matrix.length

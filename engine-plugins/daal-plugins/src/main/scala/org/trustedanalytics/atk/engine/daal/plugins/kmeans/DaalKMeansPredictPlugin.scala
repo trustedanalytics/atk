@@ -16,14 +16,12 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-import com.intel.daal.services.DaalContext
+import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.{FrameSchema, Column, DataTypes}
-import org.trustedanalytics.atk.engine.daal.plugins.tables.{IndexedNumericTable, DistributedNumericTable}
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin}
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -47,12 +45,6 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -66,19 +58,12 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
     val model: Model = arguments.model
 
     //Extracting the KMeansModel from the stored JsObject
-    val kmeansData = model.data.convertTo[DaalKMeansModelData]
+    val modelData = model.data.convertTo[DaalKMeansModelData]
     if (arguments.observationColumns.isDefined) {
-      require(kmeansData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
+      require(modelData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
 
-    val observationColumns = arguments.observationColumns.getOrElse(kmeansData.observationColumns)
-    val table = new DistributedNumericTable(frame.rdd, observationColumns)
-    val daalContext = new DaalContext()
-    val centroids = IndexedNumericTable.createTable(kmeansData.centroids)
-    val (finalResults, assigmentTable) = DaalKMeansFunctions.getClusterAssignments(frame.rdd.sparkContext, daalContext, table, centroids, arguments)
-    val schema = FrameSchema(List(Column(arguments.labelColumn, DataTypes.float64)))
-    val assignmentFrame = frame.rdd.zipFrameRdd(assigmentTable.toFrameRdd(schema))
-
+    val assignmentFrame: FrameRdd = DaalKMeansFunctions.predictKMeansModel(arguments, frame.rdd, modelData)
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL kmeans predict operation"))) {
       frameEntity: FrameEntity =>
         frameEntity.save(assignmentFrame)

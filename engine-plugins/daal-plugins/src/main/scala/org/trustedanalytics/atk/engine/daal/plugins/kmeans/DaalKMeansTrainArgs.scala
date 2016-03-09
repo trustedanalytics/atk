@@ -29,12 +29,12 @@ case class DaalKMeansTrainArgs(model: ModelReference,
                                @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                @ArgDoc("""Columns containing the
 observations.""") observationColumns: List[String],
-                               @ArgDoc("""Name of output column with
-index of cluster each observation belongs to.""") labelColumn: String = "cluster",
                                @ArgDoc("""Desired number of clusters.
 Default is 2.""") k: Int = 2,
                                @ArgDoc("""Number of iterations for which the algorithm should run.
 Default is 20.""") maxIterations: Int = 20,
+                               @ArgDoc("""Name of output column with
+index of cluster each observation belongs to.""") labelColumn: String = "cluster",
                                @ArgDoc("""The initialization mode for cluster centroids.
 random - Random choice of k feature vectors from the data set.
 deterministic - Choice of first k feature vectors from the data set.""") initializationMode: String = "random") {
@@ -47,15 +47,6 @@ deterministic - Choice of first k feature vectors from the data set.""") initial
   require(maxIterations > 0, "maxIterations must be a positive value")
   require(initializationMode == "random" || initializationMode == "deterministic",
     "initialization mode must be 'random' or 'deterministic'")
-
-  /**
-   * Get k-means clustering method
-   *
-   * Currently, k-means uses LLoyd's algorithm
-   * @see https://en.wikipedia.org/wiki/Lloyd%27s_algorithm
-   * @return k-means clustering method
-   */
-  def getClusteringMethod: Method = Method.defaultDense
 
   /**
    * Get centroid initialization method

@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
+import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -57,24 +58,28 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
   override def execute(arguments: DaalKMeansTrainArgs)(implicit invocation: Invocation): DaalKMeansTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
+    // Train model
     val results = DaalKMeansFunctions.trainKMeansModel(frame.rdd, arguments)
+    val daalContext = new DaalContext()
+    val centroids = results.centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray()
+    daalContext.dispose()
 
     //Writing the kmeansModel as JSON
     val model: Model = arguments.model
     model.data = DaalKMeansModelData(arguments.observationColumns, arguments.labelColumn,
-      results.centroids, arguments.k).toJson.asJsObject
+      centroids, arguments.k).toJson.asJsObject
 
     //Get dictionary with centroids
-    val centroids = results.centroids.zipWithIndex.map {
+    val centroidsMap = centroids.zipWithIndex.map {
       case (centroid, i) =>
         ("Cluster:" + (i + 1).toString, centroid)
     }.toMap
 
     val assignmentFrame = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL kmeans train operation"))) {
       frameEntity: FrameEntity =>
-        frameEntity.save(results.assignmentFrame)
+        frameEntity.save(results.getAssignmentFrame)
     }
-    DaalKMeansTrainReturn(centroids, assignmentFrame)
+    DaalKMeansTrainReturn(centroidsMap, assignmentFrame)
   }
 }
 
