@@ -1,0 +1,52 @@
+
+:doc:`DaalLinearRegressionModel <index>`  predict
+*************************************************
+
+------
+
+
+.. function:: predict(self, frame, feature_columns, label_columns)
+
+    |ALPHA|
+    Predict labels for a test frame using trained DAAL linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train or test the model on.
+
+
+
+        **feature_columns** : list
+
+        ..
+
+            List of column(s) containing the
+            observations.
+
+
+
+        **label_columns** : list
+
+        ..
+
+            List of column(s) containing the label
+            for each observation.
+
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            frame\:
+              Frame containing the original frame's columns and a column with the predicted value.
+    Predict the labels for a test frame and create a new frame revision with
+    existing columns and a new predicted value column.

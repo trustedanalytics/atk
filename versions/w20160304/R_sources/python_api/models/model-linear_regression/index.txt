@@ -1,0 +1,118 @@
+
+:doc:`Models<../index>` LinearRegressionModel
+*********************************************
+
+------
+
+
+
+.. toctree::
+    :hidden:
+
+    new
+    last_read_date
+    name
+    predict
+    status
+    train
+
+.. class:: LinearRegressionModel
+
+    Entity LinearRegressionModel
+
+    .. rubric:: Attributes
+
+    ====================================================================================================  ====================================================================================================
+    :doc:`last_read_date <last_read_date>`\                                                               Read-only property - Last time this model's data was accessed.
+    :doc:`name <name>`\                                                                                   Set or get the name of the model object.
+    :doc:`status <status>`\                                                                               Read-only property - Current model life cycle status.
+    ====================================================================================================  ====================================================================================================
+
+    .. rubric:: Methods
+
+    ====================================================================================================  ====================================================================================================
+    :ref:`__init__ <LinearRegressionModel__init__>`\ (self[, name, _info])                                Create a 'new' instance of a Linear Regression model.
+    :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Make new frame with column for label prediction.
+    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, intercept, ...])              |ALPHA| Build linear regression model.
+    ====================================================================================================  ====================================================================================================
+
+.. _LinearRegressionModel__init__:
+
+
+.. function:: __init__(self, name=None)
+
+    Create a 'new' instance of a Linear Regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            A new instance of LinearRegressionModel
+    Linear Regression [1]_ is used to model the relationship between a scalar
+    dependent variable and one or more independent variables.
+    The Linear Regression model is initialized, trained on columns of a frame and
+    used to predict the value of the dependent variable given the independent
+    observations of a frame.
+    This model runs the MLLib implementation of Linear Regression [2]_ with the
+    SGD [3]_ optimizer.
+                    
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Linear_regression
+    .. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
+    .. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+
+    Examples
+    --------
+    Consider the following model trained and tested on the sample data set in *frame* 'frame'.
+
+    Consider the following frame containing two columns.
+
+    >>> frame.inspect()
+    [#]  x1   y
+    ==============
+    [0]  0.0   0.0
+    [1]  1.0   2.5
+    [2]  2.0   5.0
+    [3]  3.0   7.5
+    [4]  4.0  10.0
+    [5]  5.0  12.5
+    [6]  6.0  15.0
+    [7]  7.0  17.5
+    [8]  8.0  20.0
+    [9]  9.0  22.5
+
+    >>> model = ta.LinearRegressionModel()
+    [===Job Progress===]
+    >>> model.train(frame, "y", ["x1"], intercept=True, num_iterations=100)
+    [===Job Progress===]
+    >>> predicted_frame = model.predict(frame, ["x1"])
+    [===Job Progress===]
+    >>> predicted_frame.inspect()
+    [#]  x1   y     predicted_value
+    ==================================
+    [0]  0.0   0.0  -3.74940273364e+55
+    [1]  1.0   2.5  -2.72603544372e+56
+    [2]  2.0   5.0  -5.07713061407e+56
+    [3]  3.0   7.5  -7.42822578442e+56
+    [4]  4.0  10.0  -9.77932095478e+56
+    [5]  5.0  12.5  -1.21304161251e+57
+    [6]  6.0  15.0  -1.44815112955e+57
+    [7]  7.0  17.5  -1.68326064658e+57
+    [8]  8.0  20.0  -1.91837016362e+57
+    [9]  9.0  22.5  -2.15347968065e+57
+

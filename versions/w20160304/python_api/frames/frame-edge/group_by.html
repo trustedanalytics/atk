@@ -1,0 +1,282 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>EdgeFrame group_by &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames EdgeFrame" href="index.html" >
+    <link rel="next" title="EdgeFrame histogram" href="histogram.html" >
+    <link rel="prev" title="EdgeFrame get_error_frame" href="get_error_frame.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> EdgeFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="get_error_frame.html" title="EdgeFrame get_error_frame"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="histogram.html" title="EdgeFrame histogram"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="edgeframe-group-by">
+<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  group_by<a class="headerlink" href="#edgeframe-group-by" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="group_by">
+<code class="descname">group_by</code><span class="sig-paren">(</span><em>self</em>, <em>group_by_columns</em>, <em>*aggregation_arguments</em><span class="sig-paren">)</span><a class="headerlink" href="#group_by" title="Permalink to this definition">¶</a></dt>
+<dd><p><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr>
+Create summarized frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>group_by_columns</strong> : list</p>
+<blockquote>
+<div><p>Column name or list of column names</p>
+</div></blockquote>
+<p><strong>*aggregation_arguments</strong> : dict</p>
+<blockquote>
+<div><p>Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>A new frame with the results of the group_by</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Creates a new frame and returns a Frame object to access it.
+Takes a column or group of columns, finds the unique combination of
+values, and creates unique rows with these column values.
+The other columns are combined according to the aggregation
+argument(s).</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>Column order is not guaranteed when columns are added</li>
+<li>The column names created by aggregation functions in the new frame
+are the original column name appended with the &#8216;_&#8217; character and
+the aggregation function.
+For example, if the original field is <em>a</em> and the function is
+<em>avg</em>, the resultant column is named <em>a_avg</em>.</li>
+<li>An aggregation argument of <em>count</em> results in a column named
+<em>count</em>.</li>
+<li>The aggregation function <em>agg.count</em> is the only full row
+aggregation function supported at this time.</li>
+<li>Aggregation currently supports using the following functions:<ul>
+<li>avg</li>
+<li>count</li>
+<li>count_distinct</li>
+<li>max</li>
+<li>min</li>
+<li>stdev</li>
+<li>sum</li>
+<li>var (see glossary <a class="reference internal" href="../../../glossary.html#term-bias-vs-variance"><span class="xref std std-term">Bias vs Variance</span></a>)</li>
+<li>The aggregation arguments also accepts the User Defined function(UDF). UDF acts on each row</li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Examples</p>
+<p>For setup, we will use a Frame <em>my_frame</em> accessing a frame with a
+column <em>a</em>:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b        c     d       e  f    g</span>
+<span class="go">========================================</span>
+<span class="go">[0]  1  alpha     3.0  small   1  3.0  9</span>
+<span class="go">[1]  1  bravo     5.0  medium  1  4.0  9</span>
+<span class="go">[2]  1  alpha     5.0  large   1  8.0  8</span>
+<span class="go">[3]  2  bravo     8.0  large   1  5.0  7</span>
+<span class="go">[4]  2  charlie  12.0  medium  1  6.0  6</span>
+<span class="go">[5]  2  bravo     7.0  small   1  8.0  5</span>
+<span class="go">[6]  2  bravo    12.0  large   1  6.0  4</span>
+
+<span class="go">Count the groups in column &#39;b&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_count</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b_count</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  b        count</span>
+<span class="go">===================</span>
+<span class="go">[0]  alpha        2</span>
+<span class="go">[1]  bravo        4</span>
+<span class="go">[2]  charlie      1</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">avg1</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;c&#39;</span> <span class="p">:</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">avg1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b        c_AVG</span>
+<span class="go">======================</span>
+<span class="go">[0]  2  bravo      9.0</span>
+<span class="go">[1]  1  alpha      4.0</span>
+<span class="go">[2]  2  charlie   12.0</span>
+<span class="go">[3]  1  bravo      5.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mix_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;f&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">],</span> <span class="s">&#39;g&#39;</span><span class="p">:</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">})</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mix_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  count  g_MAX  f_AVG  f_SUM  f_MIN</span>
+<span class="go">=========================================</span>
+<span class="go">[0]  1      3      9    5.0   15.0    3.0</span>
+<span class="go">[1]  2      4      7   6.25   25.0    5.0</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">custom_agg</span><span class="p">(</span><span class="n">acc</span><span class="p">,</span> <span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">acc</span><span class="o">.</span><span class="n">c_sum</span> <span class="o">=</span> <span class="n">acc</span><span class="o">.</span><span class="n">c_sum</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">c</span>
+<span class="gp">... </span>    <span class="n">acc</span><span class="o">.</span><span class="n">c_prod</span><span class="o">=</span> <span class="n">acc</span><span class="o">.</span><span class="n">c_prod</span><span class="o">*</span><span class="n">row</span><span class="o">.</span><span class="n">c</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sum_prod_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">],</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">udf</span><span class="p">(</span><span class="n">aggregator</span><span class="o">=</span><span class="n">custom_agg</span><span class="p">,</span><span class="n">output_schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;c_sum&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),(</span><span class="s">&#39;c_prod&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">)],</span><span class="n">init_values</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]))</span>
+<span class="go">[===Job Progress===]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sum_prod_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">[#]  a  b        c_sum  c_prod</span>
+<span class="go">==============================</span>
+<span class="go">[0]  2  bravo     27.0   672.0</span>
+<span class="go">[1]  1  alpha      8.0    15.0</span>
+<span class="go">[2]  2  charlie   12.0    12.0</span>
+<span class="go">[3]  1  bravo      5.0     5.0</span>
+</pre></div>
+</div>
+<p>For further examples, see <a class="reference internal" href="../../../ds_dflw.html#example-frame-group-by"><span>Group by (and aggregate):</span></a>.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Mar 09, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>

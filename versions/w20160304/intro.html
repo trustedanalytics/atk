@@ -1,0 +1,282 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>Technical Summary &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="R_static/jquery.js"></script>
+    <script type="text/javascript" src="R_static/underscore.js"></script>
+    <script type="text/javascript" src="R_static/doctools.js"></script>
+    <script type="text/javascript" src="R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="index.html" >
+    <link rel="next" title="User Manual" href="ds_over.html" >
+    <link rel="prev" title="Trusted Analytics Platform Package" href="index.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="index.html">Trusted Analytics</a></li>
+	 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="index.html" title="Trusted Analytics Platform Package"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="ds_over.html" title="User Manual"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="index.html">Table Of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">Technical Summary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#python-and-data-frame-user-interface-summary">Python and Data Frame User Interface Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-pipeline-summary">Graph Pipeline Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#graph-analytics-summary">Graph Analytics Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#machine-learning-summary">Machine Learning Summary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scoring-engine">Scoring Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins-summary">Plugins Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="technical-summary">
+<span id="intro"></span><h1>Technical Summary<a class="headerlink" href="#technical-summary" title="Permalink to this headline">¶</a></h1>
+<div class="contents local topic" id="table-of-contents">
+<p class="topic-title first">Table of Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#overview" id="id1">Overview</a></li>
+<li><a class="reference internal" href="#python-and-data-frame-user-interface-summary" id="id2">Python and Data Frame User Interface Summary</a></li>
+<li><a class="reference internal" href="#graph-pipeline-summary" id="id3">Graph Pipeline Summary</a></li>
+<li><a class="reference internal" href="#graph-analytics-summary" id="id4">Graph Analytics Summary</a></li>
+<li><a class="reference internal" href="#machine-learning-summary" id="id5">Machine Learning Summary</a></li>
+<li><a class="reference internal" href="#scoring-engine" id="id6">Scoring Engine</a></li>
+<li><a class="reference internal" href="#plugins-summary" id="id7">Plugins Summary</a></li>
+</ul>
+</div>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>Trusted Analytics Platform is a platform that simplifies applying <a class="reference internal" href="glossary.html#term-graph-analytics"><span class="xref std std-term">graph analytics</span></a> and
+<a class="reference internal" href="glossary.html#term-machine-learning"><span class="xref std std-term">machine learning</span></a> to big data for superior knowledge discovery and
+predictive modeling across a wide variety of use cases and solutions.
+Trusted Analytics Platform provides an analytics pipeline (<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr>) spanning feature engineering, graph
+construction, graph analytics, and machine learning using an extensible,
+modular framework.
+By unifying graph and entity-based machine learning, machine learning
+developers can incorporate an entity&#8217;s nearby relationships to yield superior
+predictive models that better represent the contextual information in the data.
+All functionality operates at full scale, yet are accessed using a higher level
+Python data science programming abstraction to significantly ease the
+complexity of cluster computing and parallel processing.
+The platform is fully extensible through a plugin architecture that allows
+incorporating the full range of analytics and machine learning for any solution
+need in a unified workflow that frees the researchers from the overhead of
+understanding, integrating, and inefficiently iterating across a diversity of
+formats and interfaces.</p>
+</div>
+<div class="section" id="python-and-data-frame-user-interface-summary">
+<h2>Python and Data Frame User Interface Summary<a class="headerlink" href="#python-and-data-frame-user-interface-summary" title="Permalink to this headline">¶</a></h2>
+<p><abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> utilizes Python data science abstractions to make programming fully
+scalable big data analytic workflows using Spark/Hadoop clusters as familiar
+and accessible as using popular desktop machine learning solutions such as
+Pandas and SciKit Learn.
+The scalable data frame representation is more familiar and intuitive to data
+researchers compared to low level HDFS file and Spark RDD formats.
+<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> provides an extensive library to manipulate the data frames for
+feature engineering and exploration, such as joins and aggregations.
+User-defined transformations and filters can be written in Python and applied
+to terabytes (and more) of data using distributed processing.
+Machine learning algorithms are also invoked as higher-level data science API
+(Application Programming Interface) abstractions, making model development
+(such as creating parallel recommender systems or training classifier and
+clustering models) accessible to a broad population of researchers possessing
+mainstream data science programming skills.
+For more information, see the section on <a class="reference internal" href="ds_dflw.html"><em>process flow</em></a>
+and the <a class="reference external" href="http://www.python.org">Python website</a>.</p>
+</div>
+<div class="section" id="graph-pipeline-summary">
+<h2>Graph Pipeline Summary<a class="headerlink" href="#graph-pipeline-summary" title="Permalink to this headline">¶</a></h2>
+<p>In addition to enabling use of entity-based data representations and
+algorithms, the toolkit provides a full graph pipeline to enable application of
+graph methods to big data.
+Graph representations are broadly useful, for example to link disparate data
+using arbitrary edge types, and then analyze the connections for powerful
+predictive signals that can otherwise be missed with entity-based methods.
+Working with graph representations can often be more intuitive and
+computationally efficient for data sets where the connections between data
+observations are more numerous and more important than the data points alone.
+<abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> offers a representation of graph data as fully-scalable property
+graph objects with vertices, edges, and associated properties.
+The pipeline brings together into one workflow all the capabilities to create
+and analyze graph objects, including engineering features, linking data,
+performing rich traversal queries, and applying graph-based algorithms.
+Because data scientists often need to iterate analysis using both graph and
+frame representations (for example, applying a clustering algorithm to a vertex
+list with features developed using graph analytics), <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> provides the
+seamless ability to move between both data representations.</p>
+</div>
+<div class="section" id="graph-analytics-summary">
+<h2>Graph Analytics Summary<a class="headerlink" href="#graph-analytics-summary" title="Permalink to this headline">¶</a></h2>
+<p>Fully-scalable graph analytic algorithms are provided for uncovering central
+influences and communities in the data set.
+This ability is useful for exploring the data, as well as for incorporating as
+machine learning features that incorporate the context of an entity in the
+graph, thus creating better, more predictive, machine learning results.</p>
+</div>
+<div class="section" id="machine-learning-summary">
+<h2>Machine Learning Summary<a class="headerlink" href="#machine-learning-summary" title="Permalink to this headline">¶</a></h2>
+<p>The toolkit provides algorithms for supervised, unsupervised, and
+semi-supervised machine learning using both entity and graphical machine
+learning tools.
+Graph machine learning algorithms such as label propagation and loopy belief
+propagation, exploit the connections in the graph structure and provide
+powerful new methods of labeling or classifying graph data.
+Examples of other machine learning capabilities provided include recommender
+systems using alternating least squares and conjugate gradient descent, topic
+modeling using Latent Dirichlet Allocation, clustering using K-means, and
+classification using logistic regression.
+See the section on <code class="xref doc docutils literal"><span class="pre">machine</span> <span class="pre">learning</span></code> and the
+<a class="reference internal" href="python_api/index.html"><em>API</em></a> for further information.</p>
+</div>
+<div class="section" id="scoring-engine">
+<h2>Scoring Engine<a class="headerlink" href="#scoring-engine" title="Permalink to this headline">¶</a></h2>
+<p>The scoring engine produces predictions from inputs using a previously trained machine learning model. Once a model has been trained and evaluated, it can be deployed easily into production via the scoring engine.</p>
+</div>
+<div class="section" id="plugins-summary">
+<h2>Plugins Summary<a class="headerlink" href="#plugins-summary" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the extensive set of capabilities provided, the platform is
+fully extensible using a plugin architecture.
+This allows developers to incorporate graph analytical tools into the existing
+range of machine learning abilities, expanding the capabilities of Trusted Analytics Platform
+for new problem solutions.
+Plugins are developed using a thin Scala wrapper, and the <abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> framework
+automatically generates a Python presentation for those added functions.
+Plug-ins can be used for a range of purposes, such as developing custom
+algorithms for specialized data types, building custom transformations for
+commonly used functions to get higher performance than a <abbr title="Python User-defined Function">UDF</abbr>, or integrating
+other tools to further unify the workflow.
+See the <a class="reference internal" href="dev_plug.html"><em>Plugin Authoring Guide</em></a> for more information.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Mar 09, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
