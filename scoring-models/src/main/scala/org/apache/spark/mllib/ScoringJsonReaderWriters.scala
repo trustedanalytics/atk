@@ -16,9 +16,11 @@
 
 package org.apache.spark.mllib
 
+import com.cloudera.sparkts.models.ARXModel
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
+import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
 import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.Algo._
@@ -587,7 +589,9 @@ object ScoringJsonReaderWriters {
     override def write(obj: LdaModel): JsValue = {
       JsObject(
         "num_topics" -> JsNumber(obj.numTopics),
-        "topic_word_map" -> obj.topicWordMap.toJson
+        "topic_word_map" -> obj.topicWordMap.toJson,
+        "document_column" -> obj.documentColumnName.toJson,
+        "word_column" -> obj.wordColumnName.toJson
       )
     }
 
@@ -600,7 +604,10 @@ object ScoringJsonReaderWriters {
       val fields = json.asJsObject.fields
       val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
       val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
-      LdaModel(numTopics, topicWordMap)
+      val documentColumnName = getOrInvalid(fields, "document_column").convertTo[String]
+      val wordColumnName = getOrInvalid(fields, "word_column").convertTo[String]
+
+      LdaModel(numTopics, topicWordMap, documentColumnName, wordColumnName)
     }
   }
 
@@ -969,6 +976,76 @@ object ScoringJsonReaderWriters {
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
+  }
+
+  implicit object ARXModelFormat extends JsonFormat[ARXModel] {
+    /**
+     * The write methods converts from ARXModel to JsValue
+     * @param obj ARXModel. Where ARXModel's format is
+     *              c : scala.Double
+     *              coefficients : scala.Array[scala.Double]
+     *              yMaxLag : scala.Int
+     *              xMaxLag : scala.Int
+     * @return JsValue
+     */
+    override def write(obj: ARXModel): JsValue = {
+      JsObject(
+        "c" -> obj.c.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "xMaxLag" -> obj.xMaxLag.toJson,
+        "yMaxLag" -> obj.yMaxLag.toJson
+      // NOTE: unable to save includesOriginalX parameter
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARXModel
+     * @param json JsValue
+     * @return ARXModel with format
+     *            c : scala.Double
+     *            coefficients : scala.Array[scala.Double]
+     *            yMaxLag : scala.Int
+     *            xMaxLag : scala.Int
+     */
+    override def read(json: JsValue): ARXModel = {
+      val fields = json.asJsObject.fields
+      val c = getOrInvalid(fields, "c").convertTo[Double]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
+      val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
+      // NOTE: unable to get includesOriginalX - defaulting to true
+      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+    }
+
+  }
+
+  implicit object ARXDataFormat extends JsonFormat[ARXData] {
+    /**
+     * The write methods converts from ARXData to JsValue
+     * @param obj ARXData. Where ARXData format is:
+     *            ARXData(arxModel: ARXModel, xColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: ARXData): JsValue = {
+      val model = ARXModelFormat.write(obj.arxModel)
+      JsObject("arx_model" -> model,
+        "x_columns" -> obj.xColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to ARXData
+     * @param json JsValue
+     * @return ARXData with format ARXData(arxModel: ARXModel, xColumns: List[String])
+     */
+    override def read(json: JsValue): ARXData = {
+      val fields = json.asJsObject.fields
+      val xCols = getOrInvalid(fields, "x_columns").convertTo[List[String]]
+      val model = fields.get("arx_model").map(v => {
+        ARXModelFormat.read(v)
+      }
+      ).get
+      new ARXData(model, xCols)
+    }
   }
 
 }

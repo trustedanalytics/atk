@@ -134,6 +134,35 @@ class ValidDataTypes(unittest.TestCase):
         self.assertTrue(valid_data_types.cast(np.float64(2 ** 1000), float32) is None)
         self.assertTrue(valid_data_types.cast(-np.float64(2 ** 1000), float32) is None)
 
+    def test_standardize_schema(self):
+        s1 = [('a', str), ('b', int)]
+        expected1 = [('a', unicode), ('b', int32)]
+        results1 = valid_data_types.standardize_schema(s1)
+        self.assertEqual(expected1, results1)
+
+    def test_get_default_type_value(self):
+        self.assertEqual(0, valid_data_types.get_default_type_value(int32))
+        self.assertEqual(0, valid_data_types.get_default_type_value(int64))
+        self.assertEqual("", valid_data_types.get_default_type_value(unicode))
+        self.assertEqual(0.0, valid_data_types.get_default_type_value(float32))
+        self.assertEqual(0.0, valid_data_types.get_default_type_value(float64))
+        try:
+            valid_data_types.get_default_type_value(str)
+        except ValueError as e:
+            self.assertTrue("Unable to find default value" in str(e))
+        else:
+            self.fail("Exception expected")
+
+    def test_get_default_data_for_schema(self):
+        s = [('a', unicode), ('b', int32)]
+        expected = ["", 0]
+        self.assertEqual(expected, valid_data_types.get_default_data_for_schema(s))
+
+    def test_validate_data(self):
+        s = [('a', str), ('f', float)]
+        d = ["string", 3.14]
+        results = valid_data_types.validate_data(s, d)
+        self.assertEqual(d, results)
 
 if __name__ == '__main__':
     unittest.main()
