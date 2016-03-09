@@ -76,7 +76,6 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
     }
     val svmColumns = arguments.observationColumns.getOrElse(svmData.observationColumns)
 
-
     //predicting a label for the observation columns
     val predictColumn = Column("predicted_label", DataTypes.int32)
     val predictFrame = frame.rdd.addColumn(predictColumn, row => {
