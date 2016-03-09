@@ -69,7 +69,7 @@ class FrameService(commonDirectives: CommonDirectives, engine: Engine) extends D
                   }
                 }
                 case _ =>
-                  onComplete(engine.getFrames()) {
+                  onComplete(engine.lookupActiveNamedFrames()) {
                     case Success(frames) =>
                       import AtkDefaultJsonProtocol._
                       implicit val indexFormat = ViewModelJsonImplicits.getFramesFormat

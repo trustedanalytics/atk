@@ -27,13 +27,6 @@ trait GarbageCollectionRepository[Session]
     extends Repository[Session, GarbageCollectionTemplate, GarbageCollection] {
 
   /**
-   * Return all the models
-   * @param session current session
-   * @return all the garbage Collections
-   */
-  def scanAll()(implicit session: Session): Seq[GarbageCollection]
-
-  /**
    * Return all unended Garbage Collection Executions
    * @param session current session
    * @return all open gc entities

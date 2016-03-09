@@ -39,7 +39,7 @@ class FrameServiceTest extends ServiceTest {
     val engine = mock[Engine]
     val dataFrameService = new FrameService(commonDirectives, engine)
 
-    when(engine.getFrames()).thenReturn(Future.successful(Seq()))
+    when(engine.lookupActiveNamedFrames()).thenReturn(Future.successful(Seq()))
 
     Get("/frames") ~> dataFrameService.frameRoutes() ~> check {
       assert(responseAs[String] == "[]")
@@ -50,7 +50,7 @@ class FrameServiceTest extends ServiceTest {
     val engine = mock[Engine]
     val dataFrameService = new FrameService(commonDirectives, engine)
 
-    when(engine.getFrames()).thenReturn(Future.successful(Seq(FrameEntity(1, Some("name"), FrameSchema(), 1, new DateTime, new DateTime))))
+    when(engine.lookupActiveNamedFrames()).thenReturn(Future.successful(Seq(FrameEntity(1, Some("name"), FrameSchema(), 1, new DateTime, new DateTime))))
 
     Get("/frames") ~> dataFrameService.frameRoutes() ~> check {
       assert(responseAs[String] == """[{

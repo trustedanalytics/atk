@@ -83,7 +83,7 @@ class ModelService(commonDirectives: CommonDirectives, engine: Engine) extends D
                     }
                     case _ =>
                       //TODO: cursor
-                      onComplete(engine.getModels()) {
+                      onComplete(engine.lookupActiveNamedModelsNoData()) {
                         case Success(models) =>
                           import AtkDefaultJsonProtocol._
                           implicit val indexFormat = ViewModelJsonImplicits.getModelsFormat
