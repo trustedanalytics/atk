@@ -25,15 +25,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, Plug
 //Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
-
-/** JSON conversion for arguments and return value case classes */
-object DaalKMeansJsonFormat {
-  implicit val daalKMeansArgsFormat = jsonFormat6(DaalKMeansTrainArgs)
-  implicit val daalKmeansReturnArgsFormat = jsonFormat2(DaalKMeansTrainReturn)
-  implicit val daalKmeansModelData = jsonFormat3(DaalKMeansModelData)
-}
-
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
 import DaalKMeansJsonFormat._
 
 @PluginDoc(oneLine = "Creates DAAL KMeans Model from train frame.",
@@ -65,21 +57,22 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
   override def execute(arguments: DaalKMeansTrainArgs)(implicit invocation: Invocation): DaalKMeansTrainReturn = {
     val frame: SparkFrame = arguments.frame
 
-    val modelData = DaalKMeansFunctions.trainKMeansModel(frame.rdd, arguments)
+    val results = DaalKMeansFunctions.trainKMeansModel(frame.rdd, arguments)
 
     //Writing the kmeansModel as JSON
     val model: Model = arguments.model
-    //model.data = modelData.toJson.asJsObject
+    model.data = DaalKMeansModelData(arguments.observationColumns, arguments.labelColumn,
+      results.centroids, arguments.k).toJson.asJsObject
 
     //Get dictionary with centroids
-    val centroids = modelData.centroids.zipWithIndex.map {
+    val centroids = results.centroids.zipWithIndex.map {
       case (centroid, i) =>
         ("Cluster:" + (i + 1).toString, centroid)
     }.toMap
 
     val assignmentFrame = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL kmeans train operation"))) {
       frameEntity: FrameEntity =>
-        frameEntity.save(modelData.assignmentFrame)
+        frameEntity.save(results.assignmentFrame)
     }
     DaalKMeansTrainReturn(centroids, assignmentFrame)
   }

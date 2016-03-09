@@ -13,10 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.engine.daal.plugins.kmeans
-
-import org.trustedanalytics.atk.domain.frame.FrameEntity
-
 /*
 // Copyright (c) 2015 Intel Corporation 
 //
@@ -32,10 +28,16 @@ import org.trustedanalytics.atk.domain.frame.FrameEntity
 // See the License for the specific language governing permissions and
 // limitations under the License.
 */
+package org.trustedanalytics.atk.engine.daal.plugins.kmeans
+
+import org.apache.spark.frame.FrameRdd
 
 /**
- * Return object when training a DaalKMeansModel
- * @param centroids A dictionary containing the cluster Id and centroids
- * @param assignments Frame with cluster assignments
+ * DAAL KMeans clustering results
+ *
+ * @param centroids Cluster centroids
+ * @param k Number of clusters
  */
-case class DaalKMeansTrainReturn(centroids: Map[String, Array[Double]], assignments: FrameEntity)
+case class DaalKMeansResults(centroids: Array[Array[Double]],
+                               k: Int,
+                               assignmentFrame: FrameRdd)

@@ -13,15 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-import com.intel.daal.data_management.data.NumericTable
-import org.apache.spark.frame.FrameRdd
-
-/**
- * These implicits can be imported to add conversion functions related functions to DAAL tables
- */
-object DaalConversionImplicits {
-  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
+/** JSON conversion for arguments and return value case classes */
+object DaalKMeansJsonFormat {
+  implicit val daalKMeansArgsFormat = jsonFormat7(DaalKMeansTrainArgs)
+  implicit val daalKmeansReturnArgsFormat = jsonFormat2(DaalKMeansTrainReturn)
+  implicit val daalKmeansModelData = jsonFormat4(DaalKMeansModelData)
+  implicit val daalKmeansPredictArgsFormat = jsonFormat4(DaalKMeansPredictArgs)
 }

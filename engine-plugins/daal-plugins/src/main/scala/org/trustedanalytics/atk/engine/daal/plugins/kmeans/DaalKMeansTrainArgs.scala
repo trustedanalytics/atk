@@ -29,6 +29,8 @@ case class DaalKMeansTrainArgs(model: ModelReference,
                                @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                @ArgDoc("""Columns containing the
 observations.""") observationColumns: List[String],
+                               @ArgDoc("""Name of output column with
+index of cluster each observation belongs to.""") labelColumn: String = "cluster",
                                @ArgDoc("""Desired number of clusters.
 Default is 2.""") k: Int = 2,
                                @ArgDoc("""Number of iterations for which the algorithm should run.
@@ -40,6 +42,7 @@ deterministic - Choice of first k feature vectors from the data set.""") initial
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(labelColumn != null && labelColumn.nonEmpty, "labelColumn must not be null nor empty")
   require(k > 0, "k must be at least 1")
   require(maxIterations > 0, "maxIterations must be a positive value")
   require(initializationMode == "random" || initializationMode == "deterministic",

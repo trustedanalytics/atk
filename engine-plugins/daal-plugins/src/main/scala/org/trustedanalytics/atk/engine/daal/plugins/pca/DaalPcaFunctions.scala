@@ -21,7 +21,7 @@ import com.intel.daal.algorithms.pca._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.engine.daal.plugins.DistributedNumericTable
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DistributedNumericTable
 
 object DaalPcaFunctions extends Serializable {
 

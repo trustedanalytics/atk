@@ -16,28 +16,23 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol._
-import org.apache.spark.mllib.atk.plugins.VectorUtils._
-import org.apache.spark.mllib.linalg.Vectors
+import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes}
-import org.trustedanalytics.atk.domain.schema.DataTypes._
+import org.trustedanalytics.atk.domain.schema.{FrameSchema, Column, DataTypes}
+import org.trustedanalytics.atk.engine.daal.plugins.tables.{IndexedNumericTable, DistributedNumericTable}
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin}
-import org.trustedanalytics.atk.scoring.models.KMeansData
 
-import scala.collection.mutable.ListBuffer
+import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import DaalKMeansJsonFormat._
 
 @PluginDoc(oneLine = "Predict the cluster assignments for the data points.",
   extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and the following new columns:
-    'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
     predicted_cluster column: The cluster assignment for the observation""")
 class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, FrameReference] {
 
@@ -71,49 +66,22 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
     val model: Model = arguments.model
 
     //Extracting the KMeansModel from the stored JsObject
-    val kmeansData = model.data.convertTo[DaalKMeansData]
-    val kmeansModel = kmeansData.kMeansModel
+    val kmeansData = model.data.convertTo[DaalKMeansModelData]
     if (arguments.observationColumns.isDefined) {
       require(kmeansData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
 
-    val kmeansColumns = arguments.observationColumns.getOrElse(kmeansData.observationColumns)
-    val scalingValues = kmeansData.columnScalings
+    val observationColumns = arguments.observationColumns.getOrElse(kmeansData.observationColumns)
+    val table = new DistributedNumericTable(frame.rdd, observationColumns)
+    val daalContext = new DaalContext()
+    val centroids = IndexedNumericTable.createTable(kmeansData.centroids)
+    val (finalResults, assigmentTable) = DaalKMeansFunctions.getClusterAssignments(frame.rdd.sparkContext, daalContext, table, centroids, arguments)
+    val schema = FrameSchema(List(Column(arguments.labelColumn, DataTypes.float64)))
+    val assignmentFrame = frame.rdd.zipFrameRdd(assigmentTable.toFrameRdd(schema))
 
-    val predictionsRDD = frame.rdd.mapRows(row => {
-      val columnsArray = row.valuesAsDenseVector(kmeansColumns).toArray
-      val columnScalingsArray = scalingValues.toArray
-      val doubles = columnsArray.zip(columnScalingsArray).map { case (x, y) => x * y }
-      val point = Vectors.dense(doubles)
-
-      val clusterCenters = kmeansModel.clusterCenters
-
-      for (i <- clusterCenters.indices) {
-        val distance = toMahoutVector(point).getDistanceSquared(toMahoutVector(clusterCenters(i)))
-        row.addValue(distance)
-      }
-      val prediction = kmeansModel.predict(point)
-      row.addValue(prediction + 1)
-    })
-
-    //Updating the frame schema
-    var columnNames = new ListBuffer[String]()
-    var columnTypes = new ListBuffer[DataTypes.DataType]()
-    for (i <- 1 to kmeansModel.clusterCenters.length) {
-      val colName = "distance_from_cluster_" + i.toString
-      columnNames += colName
-      columnTypes += DataTypes.float64
-    }
-    columnNames += "predicted_cluster"
-    columnTypes += DataTypes.int32
-
-    val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
-    val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
-    val predictFrameRdd = new FrameRdd(updatedSchema, predictionsRDD)
-
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by KMeans predict operation"))) { newPredictedFrame: FrameEntity =>
-      newPredictedFrame.save(predictFrameRdd)
+    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL kmeans predict operation"))) {
+      frameEntity: FrameEntity =>
+        frameEntity.save(assignmentFrame)
     }
   }
-
 }

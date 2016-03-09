@@ -29,9 +29,10 @@ By default, predict is run on the same columns over which the model is
 trained.""") frame: FrameReference,
                              @ArgDoc("""Column(s) containing the observations
 whose clusters are to be predicted.
-Default is to predict the clusters over columns the KMeans model was trained on.
-The columns are scaled using the same values used when training the
-model.""") observationColumns: Option[List[String]]) {
+Default is to predict the clusters over columns the KMeans model was trained on.""") observationColumns: Option[List[String]],
+                                 @ArgDoc("""Name of output column with
+index of cluster each observation belongs to.""") labelColumn: String = "cluster") {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
+  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
 }

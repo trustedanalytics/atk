@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
@@ -22,7 +22,8 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 import org.apache.spark.storage.StorageLevel
-import org.trustedanalytics.atk.domain.schema.{FrameSchema, Column}
+import org.trustedanalytics.atk.domain.schema.FrameSchema
+
 import scala.collection.mutable.ArrayBuffer
 
 /**

@@ -1,3 +1,18 @@
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 /*
 // Copyright (c) 2015 Intel Corporation 
 //
@@ -15,8 +30,6 @@
 */
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-import java.lang
-
 import com.intel.daal.algorithms.kmeans._
 import com.intel.daal.algorithms.kmeans.init._
 import com.intel.daal.data_management.data.HomogenNumericTable
@@ -25,8 +38,8 @@ import org.apache.spark.SparkContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
-import org.trustedanalytics.atk.engine.daal.plugins.{ DistributedNumericTable, IndexedNumericTable }
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
+import org.trustedanalytics.atk.engine.daal.plugins.tables.{IndexedNumericTable, DistributedNumericTable}
 
 object DaalKMeansFunctions extends Serializable {
 
@@ -38,7 +51,7 @@ object DaalKMeansFunctions extends Serializable {
    * @return Trained k-means model
    */
   def trainKMeansModel(frameRdd: FrameRdd,
-                       args: DaalKMeansTrainArgs): DaalKMeansModelData = {
+                       args: DaalKMeansTrainArgs): DaalKMeansResults = {
     val sparkContext = frameRdd.sparkContext
     val daalContext = new DaalContext()
     val table = new DistributedNumericTable(frameRdd, args.observationColumns)
@@ -58,9 +71,9 @@ object DaalKMeansFunctions extends Serializable {
     table.unpersist()
 
     // Create frame with cluster assignments
-    val schema = FrameSchema(List(Column("cluster", DataTypes.float64)))
+    val schema = FrameSchema(List(Column(args.labelColumn, DataTypes.float64)))
     val assignmentFrame = frameRdd.zipFrameRdd(assigmentTable.toFrameRdd(schema))
-    val modelData = DaalKMeansModelData(centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray(),
+    val modelData = DaalKMeansResults(centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray(),
       args.k, assignmentFrame)
 
     daalContext.dispose()
@@ -212,7 +225,7 @@ object DaalKMeansFunctions extends Serializable {
     // compute partial results at slaves
     featureTable.rdd.map { table =>
       val context = new DaalContext
-      val local = new DistributedStep1Local(context, classOf[lang.Double], args.getClusteringMethod, inputCentroids.numRows)
+      val local = new DistributedStep1Local(context, classOf[java.lang.Double], args.getClusteringMethod, inputCentroids.numRows)
       local.input.set(InputId.data, table.getUnpackedTable(context))
       local.input.set(InputId.inputCentroids, inputCentroids.getUnpackedTable(context))
       local.parameter.setAssignFlag(assignFlag)
@@ -234,17 +247,18 @@ object DaalKMeansFunctions extends Serializable {
   }
 
   /**
+   * Merge partial results of K-means clustering to compute cluster centroids
    *
-   * @param daalContext
-   * @param inputCentroids
-   * @param args
-   * @param partsRdd
-   * @return
+   * @param daalContext DAAL context
+   * @param inputCentroids Input cluster centroids
+   * @param args Input argument
+   * @param partsRdd RDD of partial results
+   * @return Updated cluster centroids
    */
   def mergeClusterCentroids(daalContext: DaalContext, inputCentroids: IndexedNumericTable, args: DaalKMeansTrainArgs, partsRdd: RDD[PartialResult]): Result = {
     // merge results at master
     val partialResults = partsRdd.collect()
-    val master = new DistributedStep2Master(daalContext, classOf[lang.Double], args.getClusteringMethod, inputCentroids.numRows)
+    val master = new DistributedStep2Master(daalContext, classOf[java.lang.Double], args.getClusteringMethod, inputCentroids.numRows)
 
     for (value <- partialResults) {
       value.unpack(daalContext)

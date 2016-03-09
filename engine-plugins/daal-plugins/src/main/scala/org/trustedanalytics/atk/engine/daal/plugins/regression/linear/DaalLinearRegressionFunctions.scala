@@ -27,8 +27,8 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
-import org.trustedanalytics.atk.engine.daal.plugins.{ DistributedNumericTable, DistributedLabeledTable, IndexedNumericTable }
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
+import org.trustedanalytics.atk.engine.daal.plugins.tables.{IndexedNumericTable, DistributedNumericTable, DistributedLabeledTable}
 
 object DaalLinearRegressionFunctions extends Serializable {
 

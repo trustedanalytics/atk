@@ -14,15 +14,17 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
-import com.intel.daal.data_management.data.NumericTable
+import java.nio.DoubleBuffer
+
+import com.intel.daal.data_management.data.{HomogenNumericTable, NumericTable}
 import com.intel.daal.services.DaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
+
 import scala.collection.mutable.ListBuffer
-import java.nio.DoubleBuffer
 
 /**
  * DAAL numeric table with index
@@ -87,4 +89,21 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
    * Check if table is empty
    */
   def isEmpty: Boolean = numRows < 1
+}
+
+object IndexedNumericTable extends Serializable{
+
+  /**
+   * Create indexed numeric table from matrix
+   */
+  def createTable(matrix: Array[Array[Double]]) : IndexedNumericTable = {
+    require(matrix != null && matrix.length > 0, "Array must not be null or empty")
+    val context = new DaalContext()
+    val numRows = matrix.length
+    val array = matrix.flatten
+    val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
+    val indexedTable = IndexedNumericTable(1L, table)
+    context.dispose()
+    indexedTable
+  }
 }
