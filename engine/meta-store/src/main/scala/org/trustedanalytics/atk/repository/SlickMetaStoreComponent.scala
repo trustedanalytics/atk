@@ -1083,10 +1083,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
       garbageCollections.drop(offset).take(count).list
     }
 
-    override def scanAll()(implicit session: Session): Seq[GarbageCollection] = {
-      garbageCollections.list
-    }
-
     override def lookup(id: Long)(implicit session: Session): Option[GarbageCollection] = {
       garbageCollections.where(_.id === id).firstOption
     }
@@ -1264,10 +1260,6 @@ trait SlickMetaStoreComponent extends MetaStoreComponent with EventLogging {
 
     override def scan(offset: Int = 0, count: Int = defaultScanCount)(implicit session: Session): Seq[JobContext] = {
       jobContextTable.drop(offset).take(count).list
-    }
-
-    def scanAll()(implicit session: Session): Seq[JobContext] = {
-      jobContextTable.list
     }
 
     override def lookup(id: Long)(implicit session: Session): Option[JobContext] = {
