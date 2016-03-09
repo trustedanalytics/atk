@@ -73,7 +73,7 @@ trait Engine {
 
   def dropFrame(id: Identifier)(implicit invocation: Invocation): Future[Unit]
 
-  def getFrames()(implicit invocation: Invocation): Future[Seq[FrameEntity]]
+  def lookupActiveNamedFrames()(implicit invocation: Invocation): Future[Seq[FrameEntity]]
 
   def getFrameByName(name: String)(implicit invocation: Invocation): Future[Option[FrameEntity]]
 
@@ -81,7 +81,7 @@ trait Engine {
 
   def getGraph(id: Identifier)(implicit invocation: Invocation): Future[GraphEntity]
 
-  def getGraphs()(implicit invocation: Invocation): Future[Seq[GraphEntity]]
+  def lookupActiveNamedGraphs()(implicit invocation: Invocation): Future[Seq[GraphEntity]]
 
   def getGraphByName(name: String)(implicit invocation: Invocation): Future[Option[GraphEntity]]
 
@@ -102,7 +102,7 @@ trait Engine {
 
   def getModel(id: Identifier)(implicit invocation: Invocation): Future[ModelEntity]
 
-  def getModels()(implicit invocation: Invocation): Future[Seq[ModelEntity]]
+  def lookupActiveNamedModelsNoData()(implicit invocation: Invocation): Future[Seq[ModelEntity]]
 
   def getModelByName(name: String)(implicit invocation: Invocation): Future[Option[ModelEntity]]
 

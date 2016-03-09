@@ -31,7 +31,7 @@ trait FrameStorage {
   @deprecated("please use expectFrame() instead")
   def lookup(id: Long)(implicit invocation: Invocation): Option[FrameEntity]
   def lookupByName(name: Option[String])(implicit invocation: Invocation): Option[FrameEntity]
-  def getFrames()(implicit invocation: Invocation): Seq[FrameEntity]
+  def lookupActiveNamedFrames()(implicit invocation: Invocation): Seq[FrameEntity]
   def create(arguments: CreateEntityArgs)(implicit invocation: Invocation): FrameEntity
   def renameFrame(frame: FrameEntity, newName: String)(implicit invocation: Invocation): FrameEntity
   def renameColumns(frame: FrameEntity, namePairs: Seq[(String, String)])(implicit invocation: Invocation): FrameEntity
