@@ -14,25 +14,19 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.repository
+package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.domain.gc.{ GarbageCollection, GarbageCollectionTemplate }
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import ScoringJsonReaderWriters.ARXDataFormat
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
 
-import scala.util.Try
+class ARXModelReaderPlugin() extends ModelLoader {
 
-/**
- * Repository for models
- */
-trait GarbageCollectionRepository[Session]
-    extends Repository[Session, GarbageCollectionTemplate, GarbageCollection] {
-
-  /**
-   * Return all unended Garbage Collection Executions
-   * @param session current session
-   * @return all open gc entities
-   */
-  def getCurrentExecutions()(implicit session: Session): Seq[GarbageCollection]
-
-  def updateEndTime(entity: GarbageCollection)(implicit session: Session): Try[GarbageCollection]
-
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    val arxData = str.parseJson.convertTo[ARXData]
+    val arxModel = arxData.arxModel
+    new ARXScoreModel(arxModel, arxData).asInstanceOf[Model]
+  }
 }

@@ -41,7 +41,7 @@ trait GraphStorage {
 
   def copyGraph(graph: GraphEntity, name: Option[String])(implicit invocation: Invocation): GraphEntity
 
-  def getGraphs()(implicit invocation: Invocation): Seq[GraphEntity]
+  def lookupActiveNamedGraphs()(implicit invocation: Invocation): Seq[GraphEntity]
 
   def getGraphByName(name: Option[String])(implicit invocation: Invocation): Option[GraphEntity]
 

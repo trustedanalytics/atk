@@ -287,24 +287,47 @@ def default_input(message, default):
     return raw_input("%s%s: " % (message, '' if not default else ' [%s]' % default)) or default
 
 
-def create_credentials_file(filename):
-    """Runs an interactive prompt to collect user input to make a credentials file, calls oauth server for a token."""
-    import json
+def get_credentials_interactively(uri_prompt=None, user_prompt=None):
+    """Collect uri, user, and password with interactive session"""
     import getpass
+    cache = _CreateCredentialsCache  # alias the cache singleton for convenience
+    if not uri_prompt:
+        uri_prompt = cache.uri
+    uri = default_input("URI of the ATK server", uri_prompt)
+    if not uri:
+        print "Empty URI, aborting."
+        return
+    if not user_prompt:
+        user_prompt = cache.user
+    user = default_input("User name", user_prompt)
+    password = getpass.getpass()
+    return uri, user, password
+
+
+def create_credentials_file(filename, uri=None, user=None, password=None):
+    """Calls oauth server for a token and create a credentials file; if uri, user or password are not provided,
+       then an interactive dialogue is started to collect them from the user."""
+    import json
     cleaned_path = clean_file_path(filename)
     with open(cleaned_path, "w"):
         pass
 
-    cache = _CreateCredentialsCache  # alias the cache singleton for convenience
-    cache.uri = default_input("URI of the ATK server", cache.uri)
-    if not cache.uri:
+    interactive = False
+    if uri is None or user is None or password is None:
+        interactive = True
+        uri, user, password = get_credentials_interactively(uri, user)
+
+    if not uri:
         print "Empty URI, aborting."
         return
-    cache.user = default_input("User name", cache.user)
-    password = getpass.getpass()
+
+    cache = _CreateCredentialsCache  # alias the cache singleton for convenience
+    cache.uri = uri
+    cache.user = user
+
     stars = "*" * len(password)
     try:
-        credentials = get_oauth_credentials(cache.uri, cache.user, password)
+        credentials = get_oauth_credentials(uri, user, password)
     except Exception as error:
         raise RuntimeError("""
 Unable to acquire oauth token with these credentials.
@@ -313,16 +336,16 @@ Unable to acquire oauth token with these credentials.
   Password: %s
 
   Error msg: %s
-""" % (cache.uri, cache.user, stars, str(error)))
+""" % (uri, user, stars, str(error)))
 
     with open(cleaned_path, "w") as f:
         f.write(json.dumps(credentials, indent=2))
     print "\nCredentials file created at '%s'" % cleaned_path
 
-    if cache.uri != credentials['oauth_uri']:
+    if interactive and uri != credentials['oauth_uri']:
         # indicates that cache.uri must be the ATK server uri, so we can offer to connect now
-        connect_now = raw_input("Connect now? [y/N] ")
-        if connect_now and connect_now[0].lower() == 'y':
-            print "Attempting to connect to %s now..." % cache.uri
-            server.uri = cache.uri
+        connect_now = raw_input("Connect now? [Y/n] ")
+        if not connect_now or connect_now[0].lower() != 'n':
+            print "Attempting to connect to %s now..." % uri
+            server.uri = uri
             server.connect(cleaned_path)

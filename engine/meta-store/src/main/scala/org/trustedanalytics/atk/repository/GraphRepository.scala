@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.repository
 
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.graph.{ GraphEntity, GraphTemplate }
 
 import scala.util.Try
@@ -25,12 +24,8 @@ import scala.util.Try
  * Repository for graphs
  */
 trait GraphRepository[Session] extends Repository[Session, GraphTemplate, GraphEntity] with NameableRepository[Session, GraphEntity] with GarbageCollectableRepository[Session, GraphEntity] {
-  /**
-   * Return all the graphs
-   * @param session current session
-   * @return all the graphs
-   */
-  def scanAll()(implicit session: Session): Seq[GraphEntity]
+
+  def lookupActiveNamedGraphs()(implicit session: Session): Seq[GraphEntity]
 
   def incrementIdCounter(id: Long, idCounter: Long)(implicit session: Session): Unit
 

@@ -165,11 +165,11 @@ class SparkGraphStorage(metaStore: MetaStore,
    * Obtain the graph metadata for a range of graph IDs.
    * @return Sequence of graph metadata objects.
    */
-  override def getGraphs()(implicit invocation: Invocation): Seq[GraphEntity] = {
+  override def lookupActiveNamedGraphs()(implicit invocation: Invocation): Seq[GraphEntity] = {
     metaStore.withSession("spark.graphstorage.getGraphs") {
       implicit session =>
         {
-          metaStore.graphRepo.scanAll().filter(g => g.isStatus(Status.Active) && g.name.isDefined)
+          metaStore.graphRepo.lookupActiveNamedGraphs()
         }
     }
   }
