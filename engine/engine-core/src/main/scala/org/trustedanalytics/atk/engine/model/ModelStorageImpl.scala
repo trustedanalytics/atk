@@ -115,11 +115,11 @@ class ModelStorageImpl(metaStore: MetaStore, fileStorage: ModelFileStorage)
    * Obtain the model metadata for a range of model IDs.
    * @return Sequence of model metadata objects.
    */
-  override def getModels()(implicit invocation: Invocation): Seq[ModelEntity] = {
+  override def lookupActiveNamedModelsNoData()(implicit invocation: Invocation): Seq[ModelEntity] = {
     metaStore.withSession("spark.modelstorage.getModels") {
       implicit session =>
         {
-          metaStore.modelRepo.activeNamedModelsNoData()
+          metaStore.modelRepo.lookupActiveNamedModelsNoData()
         }
     }
   }

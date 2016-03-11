@@ -84,7 +84,6 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-graphx_${scala.short.version}</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.short.version}</artifactId>
@@ -127,6 +126,16 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudera.sparkts</groupId>
+            <artifactId>sparkts</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>breeze_${scala.short.version}</artifactId>
+                    <groupId>org.scalanlp</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

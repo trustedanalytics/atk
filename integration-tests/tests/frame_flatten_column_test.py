@@ -275,16 +275,16 @@ class FrameFlattenColumnsTest(unittest.TestCase):
         expected_data = [
             [1,1.0,8.0],
             [1,2.0,7.0],
-            [1,3.0,0.0],
+            [1,3.0,None],
             [2,4.0,6.0],
             [2,5.0,5.0],
-            [2,6.0,0.0],
+            [2,6.0,None],
             [3,7.0,4.0],
             [3,8.0,3.0],
-            [3,9.0,0.0],
+            [3,9.0,None],
             [4,10.0,2.0],
             [4,11.0,1.0],
-            [4,12.0,0.0]
+            [4,12.0,None]
         ]
 
         self.assertEqual(test_frame.row_count, 12)

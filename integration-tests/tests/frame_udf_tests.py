@@ -32,7 +32,8 @@ csv = ta.CsvFile("/datasets/oregon-cities.csv", schema= [('rank', ta.int32),
                                                          ('population_2013', str),
                                                          ('pop_2010', str),
                                                          ('change', str),
-                                                         ('county', str)], delimiter='|')
+                                                         ('county', str)], delimiter='|',
+                                                         skip_header_lines=1)
 
 
 class FrameUdfTests(unittest.TestCase):
