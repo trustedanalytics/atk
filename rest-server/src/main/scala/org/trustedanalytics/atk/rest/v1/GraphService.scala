@@ -116,7 +116,7 @@ class GraphService(commonDirectives: CommonDirectives, engine: Engine) extends D
                     }
                     case _ =>
                       //TODO: cursor
-                      onComplete(engine.getGraphs()) {
+                      onComplete(engine.lookupActiveNamedGraphs()) {
                         case Success(graphs) =>
                           import AtkDefaultJsonProtocol._
                           implicit val indexFormat = ViewModelJsonImplicits.getGraphsFormat

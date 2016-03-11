@@ -29,7 +29,7 @@ trait ModelStorage {
 
   def renameModel(modelRef: ModelReference, newName: String): ModelEntity
 
-  def getModels()(implicit invocation: Invocation): Seq[ModelEntity]
+  def lookupActiveNamedModelsNoData()(implicit invocation: Invocation): Seq[ModelEntity]
 
   def getModelByName(name: Option[String]): Option[ModelEntity]
 

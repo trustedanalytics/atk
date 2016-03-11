@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.repository
 
+import org.trustedanalytics.atk.domain.graph.GraphEntity
 import org.trustedanalytics.atk.domain.model.{ ModelTemplate, ModelEntity }
 
 import scala.util.Try
@@ -25,13 +26,6 @@ import scala.util.Try
  */
 trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelEntity] with NameableRepository[Session, ModelEntity] with GarbageCollectableRepository[Session, ModelEntity] {
 
-  /**
-   * Return all the models
-   * @param session current session
-   * @return all the models
-   */
-  def scanAll()(implicit session: Session): Seq[ModelEntity]
-
   /** update a model entity as Dropped */
   def dropModel(graph: ModelEntity)(implicit session: Session): Try[ModelEntity]
 
@@ -39,8 +33,8 @@ trait ModelRepository[Session] extends Repository[Session, ModelTemplate, ModelE
   def droppedModels(implicit session: Session): Seq[ModelEntity]
 
   /** gets sequence of all models with status Active and have a name */
-  def activeNamedModels()(implicit session: Session): Seq[ModelEntity]
+  def lookupActiveNamedModels()(implicit session: Session): Seq[ModelEntity]
 
   /** gets sequence of all models (no data) with status Active and have a name */
-  def activeNamedModelsNoData()(implicit session: Session): Seq[ModelEntity]
+  def lookupActiveNamedModelsNoData()(implicit session: Session): Seq[ModelEntity]
 }

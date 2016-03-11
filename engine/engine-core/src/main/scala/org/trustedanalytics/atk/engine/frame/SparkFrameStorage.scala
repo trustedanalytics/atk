@@ -340,11 +340,11 @@ class SparkFrameStorage(val frameFileStorage: FrameFileStorage,
     }
   }
 
-  override def getFrames()(implicit invocation: Invocation): Seq[FrameEntity] = {
+  override def lookupActiveNamedFrames()(implicit invocation: Invocation): Seq[FrameEntity] = {
     metaStore.withSession("frame.getFrames") {
       implicit session =>
         {
-          metaStore.frameRepo.scanAll().filter(f => f.isStatus(Status.Active) && f.name.isDefined)
+          metaStore.frameRepo.lookupActiveNamedFrames()
         }
     }
   }
