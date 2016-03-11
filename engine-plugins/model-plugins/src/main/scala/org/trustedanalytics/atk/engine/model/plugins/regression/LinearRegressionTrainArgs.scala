@@ -70,7 +70,7 @@ observations.""") observationColumns: List[String],
  * @param iterations The number of training iterations until termination
  */
 case class LinearRegressionTrainReturn(@ArgDoc("""The list of column(s) storing the observations""") observationColumns: List[String],
-                                       @ArgDoc("""Name of the column storing the label""") valueColumn: String,
+                                       @ArgDoc("""Name of the column storing the value""") valueColumn: String,
                                        @ArgDoc("""Intercept of the trained model""") intercept: Double,
                                        @ArgDoc("""Weights of the trained model""") weights: Array[Double],
                                        @ArgDoc("""The explained variance regression score""") explainedVariance: Double,

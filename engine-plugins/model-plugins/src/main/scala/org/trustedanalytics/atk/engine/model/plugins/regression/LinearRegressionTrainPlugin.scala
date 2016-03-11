@@ -43,11 +43,6 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: LinearRegressionTrainArgs)(implicit invocation: Invocation) = 1
-  /**
    * Run Spark Ml's LinearRegression on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,

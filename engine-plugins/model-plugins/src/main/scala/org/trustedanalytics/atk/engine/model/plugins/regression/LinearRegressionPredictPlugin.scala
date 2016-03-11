@@ -48,12 +48,6 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: LinearRegressionPredictArgs)(implicit invocation: Invocation) = 1
-
-  /**
    * Predict values for a frame using a trained Linear Regression model
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
@@ -75,14 +69,13 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
     linRegModel.setFeaturesCol("features")
     linRegModel.setPredictionCol("predicted_value")
 
-    val fullPrediction = linRegModel.transform(dataFrame).cache()
+    val fullPrediction = linRegModel.transform(dataFrame)
     val prediction = fullPrediction.select("predicted_value").map(_.getDouble(0))
-    val indexedPrediction = prediction.zipWithIndex().map { case (label, index) => (index, label) }
-    val indexedPredictFrameRdd = predictFrameRdd.zipWithIndex().map { case (row, index) => (index, row) }
+    val combinedRdd = predictFrameRdd.zip(prediction)
 
-    val resultRdd: RDD[Row] = indexedPrediction.join(indexedPredictFrameRdd).map { value =>
-      val row = value._2._2
-      val label = value._2._1
+    val resultRdd: RDD[Row] = combinedRdd.map { value =>
+      val row = value._1
+      val label = value._2
       new GenericRow(row.toSeq.toArray :+ label)
     }
 
@@ -93,6 +86,7 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
 
     val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
     val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
+
     val outputFrameRdd = new FrameRdd(updatedSchema, resultRdd)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by LinearRegression's predict operation"))) {

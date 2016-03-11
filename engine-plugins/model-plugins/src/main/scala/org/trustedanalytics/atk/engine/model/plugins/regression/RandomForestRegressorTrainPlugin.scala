@@ -35,7 +35,7 @@ import MLLibJsonProtocol._
 
 case class RandomForestRegressorTrainArgs(@ArgDoc("""Handle to the model to be used.""") model: ModelReference,
                                           @ArgDoc("""A frame to train the model on""") frame: FrameReference,
-                                          @ArgDoc("""Column name containing the label for each observation""") valueColumn: String,
+                                          @ArgDoc("""Column name containing the value for each observation""") valueColumn: String,
                                           @ArgDoc("""Column(s) containing the observations""") observationColumns: List[String],
                                           @ArgDoc("""Number of trees in the random forest. Default is 1.""") numTrees: Int = 1,
                                           @ArgDoc("""Criterion used for information gain calculation. Default supported value is "variance".""") impurity: String = "variance",

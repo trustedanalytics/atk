@@ -65,10 +65,9 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): SparseVector = {
       val fields = json.asJsObject.fields
-      val size = fields.get("size").get.asInstanceOf[JsNumber].value.intValue
-      val indices = fields.get("indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
-
+      val size = getOrInvalid(fields, "size").asInstanceOf[JsNumber].value.intValue
+      val indices = getOrInvalid(fields, "indices").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new SparseVector(size, indices, values)
     }
   }
@@ -92,7 +91,7 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): DenseVector = {
       val fields = json.asJsObject.fields
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new DenseVector(values)
     }
   }
@@ -175,7 +174,7 @@ object MLLibJsonProtocol {
 
       val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
       val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
 
       new DenseMatrix(numRows, numCols, values, isTransposed)
@@ -251,9 +250,7 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): SVMModel = {
       val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
+      val intercept = getOrInvalid(fields, "intercept").asInstanceOf[JsNumber].value.doubleValue()
       val weights = fields.get("weights").map(v => {
         VectorFormat.read(v)
       }

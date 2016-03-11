@@ -41,12 +41,6 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: LinearRegressionTestArgs)(implicit invocation: Invocation) = 1
-
-  /**
    * Run Spark ML's LinearRegression() on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -70,11 +64,10 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
     linRegModel.setFeaturesCol("features")
     linRegModel.setPredictionCol("predicted_value")
 
-    val fullPrediction = linRegModel.transform(dataFrame).cache()
-    val prediction = fullPrediction.select("predicted_value").map(_.getDouble(0))
-    val label = fullPrediction.select("label").map(_.getDouble(0))
+    val fullPrediction = linRegModel.transform(dataFrame)
+    val predictionLabelRdd = fullPrediction.select("predicted_value", "label").map(row => (row.getDouble(0), row.getDouble(1)))
+    val metrics = new RegressionMetrics(predictionLabelRdd)
 
-    val metrics = new RegressionMetrics(prediction.zip(label))
     new LinearRegressionTestReturn(metrics.explainedVariance, metrics.meanAbsoluteError, metrics.meanSquaredError, metrics.r2, metrics.rootMeanSquaredError)
   }
 }
