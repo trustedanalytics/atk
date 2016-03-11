@@ -61,7 +61,7 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: LibSvmTestArgs)(implicit invocation: Invocation) = 2
+  override def numberOfJobs(arguments: LibSvmTestArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -76,6 +76,7 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Test Frame is empty. Please test on a non-empty Frame.")
     //Loading the model
     val svmColumns = arguments.observationColumns
     val libsvmData = model.data.convertTo[LibSvmData]
@@ -84,7 +85,6 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
     if (arguments.observationColumns.isDefined) {
       require(libsvmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and test should be same")
     }
-
     //predicting a label for the observation column/s
     val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
     val scoreAndLabelRdd = frame.rdd.toScoreAndLabelRdd(row => {

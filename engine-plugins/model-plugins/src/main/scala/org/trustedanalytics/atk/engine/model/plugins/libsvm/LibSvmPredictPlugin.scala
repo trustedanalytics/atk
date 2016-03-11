@@ -50,7 +50,7 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: LibSvmPredictArgs)(implicit invocation: Invocation) = 2
+  override def numberOfJobs(arguments: LibSvmPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -65,6 +65,7 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Load the libsvm model
     val svmColumns = arguments.observationColumns
     val libsvmData = model.data.convertTo[LibSvmData]
@@ -73,7 +74,6 @@ class LibSvmPredictPlugin extends SparkCommandPlugin[LibSvmPredictArgs, FrameRef
     if (arguments.observationColumns.isDefined) {
       require(libsvmData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
     }
-
     //predicting a label for the observation column/s
     val observationColumns = arguments.observationColumns.getOrElse(libsvmData.observationColumns)
     val predictColumn = Column("predicted_label", DataTypes.float64)
