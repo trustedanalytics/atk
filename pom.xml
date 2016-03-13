@@ -499,11 +499,18 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     <artifactId>license-maven-plugin</artifactId>
                     <version>2.3</version>
                     <configuration>
+                        <headerDefinitions>
+                            <headerDefinition>package/python.xml</headerDefinition>
+                        </headerDefinitions>
+                        <mapping>
+                            <py>python_style</py>
+                        </mapping>
                         <header>package/license-header.txt</header>
                         <properties>
-                            <currentYear>2015</currentYear>
+                            <currentYear>2016</currentYear>
                         </properties>
                         <excludes>
+                            <exclude>package/python.xml</exclude>
                             <exclude>findbugs-exclude.xml</exclude>
                             <exclude>scalastyle-config.xml</exclude>
                             <exclude>checkstyle.xml</exclude>
