@@ -58,7 +58,7 @@ object ScoringJsonReaderWriters {
      * @return JsValue
      */
     override def write(obj: LinearRegressionData): JsValue = {
-      val model = LinearRegressionModelFormat.write(obj.linRegModel)
+      val model = LinearRegressionModelFormat.write(obj.model)
       JsObject("model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "label_column" -> obj.labelColumn.toJson)

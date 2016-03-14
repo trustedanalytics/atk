@@ -21,12 +21,12 @@ import org.apache.spark.ml.regression.LinearRegressionModel
 
 /**
  * Linear Regression data object
- * @param linRegModel The trained LinearRegression Model
+ * @param model The trained LinearRegression Model
  * @param observationColumns Frame's column(s) storing the observations
  * @param labelColumn Frame's column storing the label
  */
-case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
+case class LinearRegressionData(model: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(linRegModel != null, "linRegModel must not be null")
+  require(model != null, "linRegModel must not be null")
   require(labelColumn != null && labelColumn != "", "labelColumn must not be null or empty")
 }

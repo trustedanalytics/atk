@@ -16,13 +16,13 @@
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
 import com.google.common.base.Charsets
-import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.apache.spark.ml.atk.plugins.MLJsonProtocol
 import MLJsonProtocol._
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, ApiMaturityTag, CommandPlugin }
+import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin }
+
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -58,13 +58,6 @@ class LinearRegressionPublishPlugin extends CommandPlugin[ModelPublishArgs, Expo
    */
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
-
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -77,11 +70,11 @@ class LinearRegressionPublishPlugin extends CommandPlugin[ModelPublishArgs, Expo
 
     val model: Model = arguments.model
 
-    //Extracting the RandomForestRegressorModel from the stored JsObject
-    val linearRegressionData = model.readFromStorage().convertTo[LinearRegressionData]
-    val jsvalue: JsValue = linearRegressionData.toJson
+    //Extracting the LinearRegressionModel from the stored JsObject
+    val linearRegressionData = model.data.convertTo[LinearRegressionData]
+    val jsValue: JsValue = linearRegressionData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[LinearRegressionModelReaderPlugin].getName)
+    val modelArtifact = ModelPublish.createTarForScoringEngine(jsValue.toString().getBytes(Charsets.UTF_8), "scoring-models", classOf[LinearRegressionModelReaderPlugin].getName)
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("linear_regression_model"))
   }
 }

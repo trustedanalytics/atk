@@ -29,7 +29,7 @@ class LinearRegressionModelTest extends WordSpec {
   val labelCol = "d"
   val linearRegressionModel = new LinearRegressionModel(uid, weights, intercept)
   val linearRegressionData = new LinearRegressionData(linearRegressionModel, obsCols, labelCol)
-  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressionData)
+  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionData)
   val numObsCols = obsCols.length
 
   "LinearRegressionModel" should {

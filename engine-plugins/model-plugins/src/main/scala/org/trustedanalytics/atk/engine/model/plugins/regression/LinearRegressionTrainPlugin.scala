@@ -61,8 +61,8 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)
     val linRegModel = linReg.fit(dataFrame)
     val jsonModel = new LinearRegressionData(linRegModel, arguments.observationColumns, arguments.valueColumn)
-
     model.data = jsonModel.toJson.asJsObject
+
     val intercept = linRegModel.intercept
     val weights = linRegModel.weights
     val summary = linRegModel.summary
