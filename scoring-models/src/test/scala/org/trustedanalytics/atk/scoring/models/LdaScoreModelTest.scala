@@ -60,17 +60,17 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
     val score1 = scores(1).asInstanceOf[Array[Any]]
     val score2 = scores(2).asInstanceOf[Array[Any]]
 
-    val score01 = score0(1).asInstanceOf[Map[String, Any]]
+    val score01 = score0(0).asInstanceOf[Map[String, Any]]
     score01("topics_given_doc").asInstanceOf[List[Double]].toArray should equalWithTolerance(Array(0.5, 0.333333))
     score01("new_words_count").asInstanceOf[Int] should equal(1)
     score01("new_words_percentage").asInstanceOf[Double] should equal(100 / 6d +- epsilon)
 
-    val score11 = score1(1).asInstanceOf[Map[String, Any]]
+    val score11 = score1(0).asInstanceOf[Map[String, Any]]
     score11("topics_given_doc").asInstanceOf[List[Double]].toArray should equalWithTolerance(Array(0.4375, 0.5625))
     score11("new_words_count").asInstanceOf[Int] should equal(0)
     score11("new_words_percentage").asInstanceOf[Double] should equal(0d +- epsilon)
 
-    val score21 = score2(1).asInstanceOf[Map[String, Any]]
+    val score21 = score2(0).asInstanceOf[Map[String, Any]]
     score21("topics_given_doc").asInstanceOf[List[Double]].toArray should equalWithTolerance(Array(0d, 0d))
     score21("new_words_count").asInstanceOf[Int] should equal(0)
     score21("new_words_percentage").asInstanceOf[Double] should equal(0d +- epsilon)
