@@ -71,6 +71,13 @@ class ScoringServiceJsonProtocol(model: Model) {
   implicit object DataTypeJsonFormat extends JsonFormat[Any] {
     override def write(obj: Any): JsValue = {
       obj match {
+        case n: Int => new JsNumber(n)
+        case n: Long => new JsNumber(n)
+        case n: Float => new JsNumber(BigDecimal(n))
+        case n: Double => new JsNumber(n)
+        case s: String => new JsString(s)
+        case s: Boolean => JsBoolean(s)
+        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
         case v: Array[_] => new JsArray(v.map {
           case d: Double => JsNumber(d)
           case n: Int => JsNumber(n)
