@@ -47,13 +47,6 @@ class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationW
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation) = 9
-
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -66,6 +59,7 @@ class LogisticRegressionPredictPlugin extends SparkCommandPlugin[ClassificationW
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Running MLLib
     val logRegData = model.data.convertTo[LogisticRegressionData]
     val logRegModel = logRegData.logRegModel

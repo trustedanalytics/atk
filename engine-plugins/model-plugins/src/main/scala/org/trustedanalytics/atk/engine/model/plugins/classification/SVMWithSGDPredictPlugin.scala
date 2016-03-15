@@ -46,14 +46,7 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
   override def name: String = "model:svm/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation) = 1
-
+  
   /**
    * Get the predictions for observations in a test frame
    *

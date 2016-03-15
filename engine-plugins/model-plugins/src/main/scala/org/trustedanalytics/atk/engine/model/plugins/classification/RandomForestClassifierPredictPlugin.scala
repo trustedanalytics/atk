@@ -62,13 +62,6 @@ class RandomForestClassifierPredictPlugin extends SparkCommandPlugin[RandomFores
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: RandomForestClassifierPredictArgs)(implicit invocation: Invocation) = 9
-
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -82,6 +75,7 @@ class RandomForestClassifierPredictPlugin extends SparkCommandPlugin[RandomFores
     val frame: SparkFrame = arguments.frame
 
     //Running MLLib
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     val rfData = model.readFromStorage().convertTo[RandomForestClassifierData]
     val rfModel = rfData.randomForestModel
     if (arguments.observationColumns.isDefined) {

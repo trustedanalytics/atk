@@ -75,13 +75,6 @@ class NaiveBayesTestPlugin extends SparkCommandPlugin[NaiveBayesTestArgs, Classi
   override def name: String = "model:naive_bayes/test"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: NaiveBayesTestArgs)(implicit invocation: Invocation) = 9
   /**
    * Get the predictions for observations in a test frame
    *
@@ -95,6 +88,7 @@ class NaiveBayesTestPlugin extends SparkCommandPlugin[NaiveBayesTestArgs, Classi
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Test Frame is empty. Please test on a non-empty Frame.")
     //Extracting the model and data to run on
     val naiveBayesData = model.data.convertTo[NaiveBayesData]
     val naiveBayesModel = naiveBayesData.naiveBayesModel
