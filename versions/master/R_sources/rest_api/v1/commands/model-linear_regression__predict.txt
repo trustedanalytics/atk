@@ -5,7 +5,7 @@
 -------------------------------------------------------
 
 |ALPHA|
-Make new frame with column for label prediction.
+<Missing Doc>
 
 POST /v1/commands/
 ==================
@@ -43,9 +43,7 @@ Request
 
     ..
 
-        A frame whose labels are to be predicted.
-        By default, predict is run on the same columns over which the model is
-        trained.
+        The frame to predict on
 
 
 
@@ -53,9 +51,7 @@ Request
 
     ..
 
-        Column(s) containing the observations
-        whose labels are to be predicted.
-        Default is the labels the model was trained on.
+        List of column(s) containing the observations
 
 
 
@@ -69,8 +65,7 @@ Request
 
 **Description**
 
-Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted value column.
+
 
 |
 
@@ -118,7 +113,6 @@ Response
 
 ``Frame``
 
-        frame\:
-              Frame containing the original frame's columns and a column with the predicted value.
+
 
 

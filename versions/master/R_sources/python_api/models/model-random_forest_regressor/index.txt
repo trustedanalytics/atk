@@ -35,7 +35,7 @@
     :ref:`__init__ <RandomForestRegressorModel__init__>`\ (self[, name, _info])                           Create a 'new' instance of a Random Forest Regressor model.
     :doc:`predict <predict>`\ (self, frame[, observation_columns])                                        |ALPHA| Predict the values for the data points.
     :doc:`publish <publish>`\ (self)                                                                      |BETA| Creates a tar file that will be used as input to the scoring engine
-    :doc:`train <train>`\ (self, frame, label_column, observation_columns[, num_trees, impurity, ...])    |ALPHA| Build Random Forests Regressor model.
+    :doc:`train <train>`\ (self, frame, value_column, observation_columns[, num_trees, impurity, ...])    |ALPHA| Build Random Forests Regressor model.
     ====================================================================================================  ====================================================================================================
 
 .. _RandomForestRegressorModel__init__:

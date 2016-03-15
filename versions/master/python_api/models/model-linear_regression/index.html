@@ -172,9 +172,15 @@
 <td>Create a &#8216;new&#8217; instance of a Linear Regression model.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns])</td>
-<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Make new frame with column for label prediction.</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> &lt;Missing Doc&gt;</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, label_column, observation_columns[, intercept, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed and preliminarily tested, but has not been completely tested. Use this function with caution. This function may be changed in future releases.">[BETA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="test.html"><em>test</em></a>(self, frame, value_column[, observation_columns])</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> &lt;Missing Doc&gt;</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, value_column, observation_columns[, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Build linear regression model.</td>
 </tr>
 </tbody>
@@ -207,9 +213,7 @@
 dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
 used to predict the value of the dependent variable given the independent
-observations of a frame.
-This model runs the MLLib implementation of Linear Regression <a class="reference internal" href="../model-power_iteration_clustering/new.html#r12" id="id2">[R12]</a> with the
-SGD <a class="reference internal" href="../model-principal_components/index.html#r13" id="id3">[R13]</a> optimizer.</p>
+observations of a frame.</p>
 <p class="rubric">footnotes</p>
 <table class="docutils citation" frame="void" id="r11" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -220,13 +224,7 @@ SGD <a class="reference internal" href="../model-principal_components/index.html
 <table class="docutils citation" frame="void" id="r12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R12]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r13" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R13]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+<tr><td class="label">[R12]</td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/ml-linear-methods.html">https://spark.apache.org/docs/1.5.0/ml-linear-methods.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -234,38 +232,58 @@ SGD <a class="reference internal" href="../model-principal_components/index.html
 <p>Consider the following frame containing two columns.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  x1   y</span>
-<span class="go">==============</span>
-<span class="go">[0]  0.0   0.0</span>
-<span class="go">[1]  1.0   2.5</span>
-<span class="go">[2]  2.0   5.0</span>
-<span class="go">[3]  3.0   7.5</span>
-<span class="go">[4]  4.0  10.0</span>
-<span class="go">[5]  5.0  12.5</span>
-<span class="go">[6]  6.0  15.0</span>
-<span class="go">[7]  7.0  17.5</span>
-<span class="go">[8]  8.0  20.0</span>
-<span class="go">[9]  9.0  22.5</span>
+<span class="go">===============</span>
+<span class="go">[0]  0.0    0.0</span>
+<span class="go">[1]  1.0    2.5</span>
+<span class="go">[2]  2.0    5.0</span>
+<span class="go">[3]  3.0    7.5</span>
+<span class="go">[4]  4.0   10.0</span>
+<span class="go">[5]  5.0   12.5</span>
+<span class="go">[6]  6.0   13.0</span>
+<span class="go">[7]  7.0  17.15</span>
+<span class="go">[8]  8.0   18.5</span>
+<span class="go">[9]  9.0   23.5</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LinearRegressionModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="n">intercept</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,[</span><span class="s1">&#39;x1&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
+<span class="go">{u&#39;explained_variance&#39;: 49.27592803030301,</span>
+<span class="go"> u&#39;intercept&#39;: -0.032727272727271384,</span>
+<span class="go"> u&#39;iterations&#39;: 3,</span>
+<span class="go"> u&#39;label&#39;: u&#39;y&#39;,</span>
+<span class="go"> u&#39;mean_absolute_error&#39;: 0.5299393939393939,</span>
+<span class="go"> u&#39;mean_squared_error&#39;: 0.6300969696969692,</span>
+<span class="go"> u&#39;objective_history&#39;: [0.5, 0.007324606455391047, 0.006312834669731454],</span>
+<span class="go"> u&#39;observation_columns&#39;: [u&#39;x1&#39;],</span>
+<span class="go"> u&#39;r_2&#39;: 0.9873743306605371,</span>
+<span class="go"> u&#39;root_mean_squared_error&#39;: 0.7937864761363531,</span>
+<span class="go"> u&#39;weights&#39;: [2.4439393939393934]}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_output</span>
+<span class="go">{u&#39;explained_variance&#39;: 49.27592803030301,</span>
+<span class="go"> u&#39;mean_absolute_error&#39;: 0.5299393939393939,</span>
+<span class="go"> u&#39;mean_squared_error&#39;: 0.6300969696969692,</span>
+<span class="go"> u&#39;r_2&#39;: 0.9873743306605371,</span>
+<span class="go"> u&#39;root_mean_squared_error&#39;: 0.7937864761363531}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">[#]  x1   y     predicted_value</span>
+<span class="go">[#]  x1   y      predicted_value</span>
 <span class="go">==================================</span>
-<span class="go">[0]  0.0   0.0  -3.74940273364e+55</span>
-<span class="go">[1]  1.0   2.5  -2.72603544372e+56</span>
-<span class="go">[2]  2.0   5.0  -5.07713061407e+56</span>
-<span class="go">[3]  3.0   7.5  -7.42822578442e+56</span>
-<span class="go">[4]  4.0  10.0  -9.77932095478e+56</span>
-<span class="go">[5]  5.0  12.5  -1.21304161251e+57</span>
-<span class="go">[6]  6.0  15.0  -1.44815112955e+57</span>
-<span class="go">[7]  7.0  17.5  -1.68326064658e+57</span>
-<span class="go">[8]  8.0  20.0  -1.91837016362e+57</span>
-<span class="go">[9]  9.0  22.5  -2.15347968065e+57</span>
+<span class="go">[0]  4.0   10.0      9.74303030303</span>
+<span class="go">[1]  0.0    0.0   -0.0327272727273</span>
+<span class="go">[2]  1.0    2.5      2.41121212121</span>
+<span class="go">[3]  6.0   13.0      14.6309090909</span>
+<span class="go">[4]  3.0    7.5      7.29909090909</span>
+<span class="go">[5]  7.0  17.15      17.0748484848</span>
+<span class="go">[6]  9.0   23.5      21.9627272727</span>
+<span class="go">[7]  8.0   18.5      19.5187878788</span>
+<span class="go">[8]  5.0   12.5       12.186969697</span>
+<span class="go">[9]  2.0    5.0      4.85515151515</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -293,7 +311,7 @@ SGD <a class="reference internal" href="../model-principal_components/index.html
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

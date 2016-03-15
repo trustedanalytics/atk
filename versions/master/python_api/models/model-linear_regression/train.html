@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LinearRegressionModel" href="index.html" >
     <link rel="next" title="Models RandomForestRegressorModel" href="../model-random_forest_regressor/index.html" >
-    <link rel="prev" title="LinearRegressionModel status" href="status.html" > 
+    <link rel="prev" title="LinearRegressionModel test" href="test.html" > 
   </head>
   <body>
 
@@ -74,7 +74,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="status.html" title="LinearRegressionModel status"
+        <a href="test.html" title="LinearRegressionModel test"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -132,7 +132,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>intercept=True</em>, <em>num_iterations=100</em>, <em>step_size=1.0</em>, <em>reg_type=None</em>, <em>reg_param=0.01</em>, <em>mini_batch_fraction=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>value_column</em>, <em>observation_columns</em>, <em>elastic_net_parameter=0.0</em>, <em>fit_intercept=True</em>, <em>max_iterations=100</em>, <em>reg_param=0.0</em>, <em>standardization=True</em>, <em>tolerance=1e-06</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build linear regression model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -141,44 +141,40 @@ Build linear regression model.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train the model on.</p>
+<div><p>A frame to train the model on</p>
 </div></blockquote>
-<p><strong>label_column</strong> : unicode</p>
+<p><strong>value_column</strong> : unicode</p>
 <blockquote>
-<div><p>Column name containing the label
-for each observation.</p>
+<div><p>Column name containing the value for each observation.</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
 <div><p>List of column(s) containing the
 observations.</p>
 </div></blockquote>
-<p><strong>intercept</strong> : bool (default=True)</p>
+<p><strong>elastic_net_parameter</strong> : float64 (default=0.0)</p>
 <blockquote>
-<div><p>Flag indicating if the algorithm adds an intercept.
-Default is true.</p>
+<div><p>Parameter for the ElasticNet mixing. Default is 0.0</p>
 </div></blockquote>
-<p><strong>num_iterations</strong> : int32 (default=100)</p>
+<p><strong>fit_intercept</strong> : bool (default=True)</p>
 <blockquote>
-<div><p>Number of iterations for SGD. Default is 100.</p>
+<div><p>Parameter for whether to fit an intercept term. Default is true</p>
 </div></blockquote>
-<p><strong>step_size</strong> : float64 (default=1.0)</p>
+<p><strong>max_iterations</strong> : int32 (default=100)</p>
 <blockquote>
-<div><p>Initial step size for SGD optimizer for the first step.
-Default is 1.0.</p>
+<div><p>Parameter for maximum number of iterations. Default is 100</p>
 </div></blockquote>
-<p><strong>reg_type</strong> : unicode (default=None)</p>
+<p><strong>reg_param</strong> : float64 (default=0.0)</p>
 <blockquote>
-<div><p>Regularization &#8220;L1&#8221; or &#8220;L2&#8221;.
-Default is &#8220;L2&#8221;.</p>
+<div><p>Parameter for regularization. Default is 0.0</p>
 </div></blockquote>
-<p><strong>reg_param</strong> : float64 (default=0.01)</p>
+<p><strong>standardization</strong> : bool (default=True)</p>
 <blockquote>
-<div><p>Regularization parameter. Default is 0.01.</p>
+<div><p>Parameter for whether to standardize the training features before fitting the model. Default is true</p>
 </div></blockquote>
-<p><strong>mini_batch_fraction</strong> : float64 (default=1.0)</p>
+<p><strong>tolerance</strong> : float64 (default=1e-06)</p>
 <blockquote>
-<div><p>Set fraction of data to be used for each SGD iteration. Default is 1.0; corresponding to deterministic/classical gradient descent.</p>
+<div><p>Parameter for the convergence tolerance for iterative algorithms. Default is 1E-6</p>
 </div></blockquote>
 </td>
 </tr>
@@ -218,7 +214,7 @@ Default is &#8220;L2&#8221;.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

@@ -1,0 +1,47 @@
+
+:doc:`LinearRegressionModel <index>`  test
+******************************************
+
+------
+
+
+.. function:: test(self, frame, value_column, observation_columns=None)
+
+    |ALPHA|
+    <Missing Doc>
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            The frame to test the linear regression model on
+
+
+
+        **value_column** : unicode
+
+        ..
+
+            Column name containing the value of each observation
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            List of column(s) containing the observations
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+

@@ -61,14 +61,12 @@ dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
 used to predict the value of the dependent variable given the independent
 observations of a frame.
-This model runs the MLLib implementation of Linear Regression [2]_ with the
-SGD [3]_ optimizer.
-                
+
 .. rubric:: footnotes
 
 .. [1] https://en.wikipedia.org/wiki/Linear_regression
-.. [2] https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression
-.. [3] https://en.wikipedia.org/wiki/Stochastic_gradient_descent
+.. [2] https://spark.apache.org/docs/1.5.0/ml-linear-methods.html
+
 
 |
 

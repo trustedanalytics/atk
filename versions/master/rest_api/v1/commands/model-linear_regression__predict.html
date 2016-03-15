@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands model:linear_regression/train" href="model-linear_regression__train.html" >
+    <link rel="next" title="Commands model:linear_regression/publish" href="model-linear_regression__publish.html" >
     <link rel="prev" title="Commands model:linear_regression/new" href="model-linear_regression__new.html" > 
   </head>
   <body>
@@ -77,7 +77,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="model-linear_regression__train.html" title="Commands model:linear_regression/train"
+        <a href="model-linear_regression__publish.html" title="Commands model:linear_regression/publish"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -129,7 +129,7 @@
   <div class="section" id="commands-model-linear-regression-predict">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:linear_regression/predict<a class="headerlink" href="#commands-model-linear-regression-predict" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Make new frame with column for label prediction.</p>
+&lt;Missing Doc&gt;</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -155,15 +155,11 @@ Make new frame with column for label prediction.</p>
 </div></blockquote>
 <p><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame whose labels are to be predicted.
-By default, predict is run on the same columns over which the model is
-trained.</p>
+<div><p>The frame to predict on</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote class="last">
-<div><p>Column(s) containing the observations
-whose labels are to be predicted.
-Default is the labels the model was trained on.</p>
+<div><p>List of column(s) containing the observations</p>
 </div></blockquote>
 </td>
 </tr>
@@ -181,8 +177,6 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted value column.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -224,12 +218,6 @@ Content-type: application/json
 </div>
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">Frame</span></code></p>
-<blockquote>
-<div><dl class="docutils">
-<dt>frame:</dt>
-<dd>Frame containing the original frame&#8217;s columns and a column with the predicted value.</dd>
-</dl>
-</div></blockquote>
 </div>
 </div>
 </div>
@@ -255,7 +243,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

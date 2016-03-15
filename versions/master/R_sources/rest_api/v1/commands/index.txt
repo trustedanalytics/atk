@@ -127,6 +127,8 @@
     model-libsvm__train
     model-linear_regression__new
     model-linear_regression__predict
+    model-linear_regression__publish
+    model-linear_regression__test
     model-linear_regression__train
     model-logistic_regression__new
     model-logistic_regression__predict
@@ -272,7 +274,9 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:libsvm/test <model-libsvm__test>`                                                   |ALPHA| Predict test frame labels and return metrics.
 :doc:`model:libsvm/train <model-libsvm__train>`                                                 |ALPHA| Train a Lib Svm model
 :doc:`model:linear_regression/new <model-linear_regression__new>`                               Create a 'new' instance of a Linear Regression model.
-:doc:`model:linear_regression/predict <model-linear_regression__predict>`                       |ALPHA| Make new frame with column for label prediction.
+:doc:`model:linear_regression/predict <model-linear_regression__predict>`                       |ALPHA| <Missing Doc>
+:doc:`model:linear_regression/publish <model-linear_regression__publish>`                       |BETA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:linear_regression/test <model-linear_regression__test>`                             |ALPHA| <Missing Doc>
 :doc:`model:linear_regression/train <model-linear_regression__train>`                           |ALPHA| Build linear regression model.
 :doc:`model:logistic_regression/new <model-logistic_regression__new>`                           Create a 'new' instance of logistic regression model.
 :doc:`model:logistic_regression/predict <model-logistic_regression__predict>`                   |ALPHA| Predict labels for data points using trained logistic regression model.

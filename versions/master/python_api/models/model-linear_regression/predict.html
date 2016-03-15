@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models LinearRegressionModel" href="index.html" >
-    <link rel="next" title="LinearRegressionModel status" href="status.html" >
+    <link rel="next" title="LinearRegressionModel publish" href="publish.html" >
     <link rel="prev" title="LinearRegressionModel name" href="name.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="status.html" title="LinearRegressionModel status"
+        <a href="publish.html" title="LinearRegressionModel publish"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -134,41 +134,26 @@
 <dt id="predict">
 <code class="descname">predict</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#predict" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Make new frame with column for label prediction.</p>
+&lt;Missing Doc&gt;</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame whose labels are to be predicted.
-By default, predict is run on the same columns over which the model is
-trained.</p>
+<div><p>The frame to predict on</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote>
-<div><p>Column(s) containing the observations
-whose labels are to be predicted.
-Default is the labels the model was trained on.</p>
+<div><p>List of column(s) containing the observations</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>frame:</dt>
-<dd><p class="first last">Frame containing the original frame&#8217;s columns and a column with the predicted value.</p>
-</dd>
-</dl>
-</div></blockquote>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">: Frame</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Predict the labels for a test frame and create a new frame revision with
-existing columns and a new predicted value column.</p>
-<p class="rubric">Examples</p>
-<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -194,7 +179,7 @@ existing columns and a new predicted value column.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

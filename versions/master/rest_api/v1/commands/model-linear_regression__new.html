@@ -172,30 +172,22 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Linear Regression <a class="footnote-reference" href="#id4" id="id1">[1]</a> is used to model the relationship between a scalar
+<p>Linear Regression <a class="footnote-reference" href="#id2" id="id1">[1]</a> is used to model the relationship between a scalar
 dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
 used to predict the value of the dependent variable given the independent
-observations of a frame.
-This model runs the MLLib implementation of Linear Regression <a class="footnote-reference" href="#id5" id="id2">[2]</a> with the
-SGD <a class="footnote-reference" href="#id6" id="id3">[3]</a> optimizer.</p>
+observations of a frame.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils footnote" frame="void" id="id4" rules="none">
+<table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Linear_regression">https://en.wikipedia.org/wiki/Linear_regression</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id5" rules="none">
+<table class="docutils footnote" frame="void" id="id3" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[2]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression</a></td></tr>
-</tbody>
-</table>
-<table class="docutils footnote" frame="void" id="id6" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+<tr><td class="label">[2]</td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/ml-linear-methods.html">https://spark.apache.org/docs/1.5.0/ml-linear-methods.html</a></td></tr>
 </tbody>
 </table>
 <div class="line-block">
@@ -212,10 +204,10 @@ SGD <a class="footnote-reference" href="#id6" id="id3">[3]</a> optimizer.</p>
 <p>Returns information about the command.  See the Response Body for Get Command here below.  It is the same.</p>
 </div>
 </div>
-<div class="section" id="id7">
-<h2>GET /v1/commands/:id<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="id8">
-<h3>Request<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id4">
+<h2>GET /v1/commands/:id<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h3>Request<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <p><strong>Route</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GET</span> <span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">commands</span><span class="o">/</span><span class="mi">18</span>
 </pre></div>
@@ -231,8 +223,8 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 </div>
-<div class="section" id="id9">
-<h3>Response<a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="id6">
+<h3>Response<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
 <p><strong>Status</strong></p>
 <div class="highlight-python"><div class="highlight"><pre><span></span>200 OK
 </pre></div>
@@ -266,7 +258,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

@@ -132,7 +132,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>label_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=2077561709</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>value_column</em>, <em>observation_columns</em>, <em>num_trees=1</em>, <em>impurity='variance'</em>, <em>max_depth=4</em>, <em>max_bins=100</em>, <em>seed=1121084675</em>, <em>categorical_features_info=None</em>, <em>feature_subset_category=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Build Random Forests Regressor model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -143,9 +143,9 @@ Build Random Forests Regressor model.</p>
 <blockquote>
 <div><p>A frame to train the model on</p>
 </div></blockquote>
-<p><strong>label_column</strong> : unicode</p>
+<p><strong>value_column</strong> : unicode</p>
 <blockquote>
-<div><p>Column name containing the label for each observation</p>
+<div><p>Column name containing the value for each observation</p>
 </div></blockquote>
 <p><strong>observation_columns</strong> : list</p>
 <blockquote>
@@ -153,7 +153,7 @@ Build Random Forests Regressor model.</p>
 </div></blockquote>
 <p><strong>num_trees</strong> : int32 (default=1)</p>
 <blockquote>
-<div><p>Number of tress in the random forest. Default is 1.</p>
+<div><p>Number of trees in the random forest. Default is 1.</p>
 </div></blockquote>
 <p><strong>impurity</strong> : unicode (default=variance)</p>
 <blockquote>
@@ -167,7 +167,7 @@ Build Random Forests Regressor model.</p>
 <blockquote>
 <div><p>Maximum number of bins used for splitting features. Default is 100.</p>
 </div></blockquote>
-<p><strong>seed</strong> : int32 (default=2077561709)</p>
+<p><strong>seed</strong> : int32 (default=1121084675)</p>
 <blockquote>
 <div><p>Random seed for bootstrapping and choosing feature subsets. Default is a randomly chosen seed.</p>
 </div></blockquote>
@@ -231,7 +231,7 @@ If &#8220;auto&#8221; is set, this is based on numTrees: if numTrees == 1, set t
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 14, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>
