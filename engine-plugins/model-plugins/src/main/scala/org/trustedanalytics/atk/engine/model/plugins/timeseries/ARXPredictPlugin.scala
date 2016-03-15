@@ -73,16 +73,24 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
 
     require(arxData.xColumns.length == arguments.xColumns.length, "Number of columns for train and predict should be the same")
 
-    // Add column of predicted y values
-    val predictColumn = Column("predicted_y", DataTypes.float64)
-    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
-      val yValue = row.doubleValue(arguments.timeseriesColumn)
-      val xValues = row.valuesAsDoubleArray(arguments.xColumns)
-      val predictedValues = arxModel.predict(new DenseVector(Array[Double](yValue)), new DenseMatrix(rows = 1, cols = xValues.length, data = xValues))
-      if (predictedValues.length != 1)
-        throw new RuntimeException("Unexpected number of predicted values returned from ARX (expected 1 value, received " + predictedValues.length.toString + ").")
-      predictedValues(0)
-    })
+    // Get vector or y values and matrix of x values
+    val (yVector, xMatrix) = ARXFunctions.getYandXFromFrame(frame.rdd, arguments.timeseriesColumn, arguments.xColumns)
+
+    // Find the maximum lag and fill that many spots with nulls, followed by the predicted y values
+    val maxLag = max(arxModel.yMaxLag, arxModel.xMaxLag)
+    val predictions = Array.fill(maxLag) { null } ++ arxModel.predict(yVector, xMatrix).toArray
+
+    if (predictions.length != frame.rdd.count)
+      throw new RuntimeException("Received unexpected number of y values from ARX Model predict (expected " +
+        (frame.rdd.count - maxLag).toString + " values, but received " + (predictions.length - maxLag).toString + " values).")
+
+    val dataWithPredictions = frame.rdd.zipWithIndex().map {
+      case (row: Row, index: Long) =>
+        Row.fromSeq(row.toSeq :+ predictions(index.toInt))
+    }
+
+    val schemaWithPredictions = frame.rdd.frameSchema.addColumn(Column("predicted_y", DataTypes.float64))
+    val predictFrame = new FrameRdd(schemaWithPredictions, dataWithPredictions)
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARXModel predict command"))) {
       newFrame => newFrame.save(predictFrame)
