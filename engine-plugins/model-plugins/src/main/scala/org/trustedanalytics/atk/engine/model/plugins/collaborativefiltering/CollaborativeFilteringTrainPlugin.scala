@@ -48,8 +48,9 @@ class CollaborativeFilteringTrainPlugin
   override def execute(arguments: CollaborativeFilteringTrainArgs)(implicit invocation: Invocation): UnitReturn = {
     val frames = engine.frames
     val edgeFrame: SparkFrame = arguments.frame
-    val schema = edgeFrame.schema
+    require(!edgeFrame.rdd.isEmpty(), "Edge Frame is empty. Please train on a non-empty Edge Frame.")
 
+    val schema = edgeFrame.schema
     schema.requireColumnIsType(arguments.sourceColumnName, DataTypes.int)
     schema.requireColumnIsType(arguments.destColumnName, DataTypes.int)
     require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")

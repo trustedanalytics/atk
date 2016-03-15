@@ -54,6 +54,7 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
     val testFrameRdd = frame.rdd
+    require(!testFrameRdd.isEmpty(), "Test Frame is empty. Please test on a non-empty Frame.")
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]

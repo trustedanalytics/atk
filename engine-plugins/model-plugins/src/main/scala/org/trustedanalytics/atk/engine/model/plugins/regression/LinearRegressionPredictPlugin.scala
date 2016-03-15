@@ -61,6 +61,7 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
     val predictFrameRdd = frame.rdd
 
     val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     val linRegData = linRegJsObject.convertTo[LinearRegressionData]
     val linRegModel = linRegData.model
     val observationColumns = arguments.observationColumns.getOrElse(linRegData.observationColumns)

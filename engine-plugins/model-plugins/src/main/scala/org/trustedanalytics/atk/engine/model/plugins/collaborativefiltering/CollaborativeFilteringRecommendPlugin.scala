@@ -51,7 +51,9 @@ class CollaborativeFilteringRecommendPlugin
     val frames = engine.frames
 
     val userFrame = frames.loadFrameData(sc, data.userFrame)
+    require(!userFrame.isEmpty(), "User Frame is empty. Please use a non-empty User Frame.")
     val productFrame = frames.loadFrameData(sc, data.productFrame)
+    require(!productFrame.isEmpty(), "Product Frame is empty. Please use a non-empty Product Frame.")
     val alsModel = new MatrixFactorizationModel(data.rank,
       CollaborativeFilteringHelper.toAlsRdd(userFrame, data),
       CollaborativeFilteringHelper.toAlsRdd(productFrame, data))
