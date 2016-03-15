@@ -19,10 +19,11 @@ package org.apache.spark.mllib.atk.plugins
 import org.apache.spark.mllib.classification.{ LogisticRegressionModelWithFrequency, NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.{ GaussianMixtureModel, KMeansModel }
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.mllib.regression
 import org.apache.spark.mllib.stat.distribution.MultivariateGaussian
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.configuration.{ FeatureType, Algo }
+import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.Algo.Algo
 import org.apache.spark.mllib.tree.configuration.FeatureType.FeatureType
 import org.apache.spark.mllib.tree.model._
@@ -34,7 +35,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.classification._
 import org.trustedanalytics.atk.engine.model.plugins.classification.glm.{ LogisticRegressionData, LogisticRegressionSummaryTable, LogisticRegressionTrainArgs }
 import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction._
-import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData, LinearRegressionData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData, LinearRegressionTrainReturn }
+import org.trustedanalytics.atk.scoring.models.{ SVMData, KMeansData, NaiveBayesData, RandomForestClassifierData, RandomForestRegressorData }
 import spray.json._
 
 /**
@@ -64,10 +65,9 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): SparseVector = {
       val fields = json.asJsObject.fields
-      val size = fields.get("size").get.asInstanceOf[JsNumber].value.intValue
-      val indices = fields.get("indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
-
+      val size = getOrInvalid(fields, "size").asInstanceOf[JsNumber].value.intValue
+      val indices = getOrInvalid(fields, "indices").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new SparseVector(size, indices, values)
     }
   }
@@ -91,7 +91,7 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): DenseVector = {
       val fields = json.asJsObject.fields
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new DenseVector(values)
     }
   }
@@ -140,43 +140,6 @@ object MLLibJsonProtocol {
 
   }
 
-  implicit object LinearRegressionModelFormat extends JsonFormat[LinearRegressionModel] {
-    /**
-     * The write methods converts from LinearRegressionModel to JsValue
-     * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
-     *            LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *            and the weights Vector could be either a SparseVector or DenseVector
-     * @return JsValue
-     */
-    override def write(obj: LinearRegressionModel): JsValue = {
-      val weights = VectorFormat.write(obj.weights)
-      JsObject(
-        "weights" -> weights,
-        "intercept" -> JsNumber(obj.intercept)
-      )
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionModel
-     * @param json JsValue
-     * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *         and the weights Vector could be either a SparseVector or DenseVector
-     */
-    override def read(json: JsValue): LinearRegressionModel = {
-      val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
-      val weights = fields.get("weights").map(v => {
-        VectorFormat.read(v)
-      }
-      ).get
-
-      new LinearRegressionModel(weights, intercept)
-    }
-
-  }
-
   implicit object VectorFormat extends JsonFormat[Vector] {
     override def write(obj: Vector): JsValue = {
       obj match {
@@ -211,7 +174,7 @@ object MLLibJsonProtocol {
 
       val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
       val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
 
       new DenseMatrix(numRows, numCols, values, isTransposed)
@@ -287,9 +250,7 @@ object MLLibJsonProtocol {
      */
     override def read(json: JsValue): SVMModel = {
       val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
+      val intercept = getOrInvalid(fields, "intercept").asInstanceOf[JsNumber].value.doubleValue()
       val weights = fields.get("weights").map(v => {
         VectorFormat.read(v)
       }
@@ -610,7 +571,6 @@ object MLLibJsonProtocol {
   implicit val kmeansModelTrainReturnFormat = jsonFormat2(KMeansTrainReturn)
   implicit val kmeansModelLoadFormat = jsonFormat8(KMeansTrainArgs)
   implicit val kmeansModelPredictFormat = jsonFormat3(KMeansPredictArgs)
-  implicit val linRegDataFormat = jsonFormat2(LinearRegressionData)
   implicit val naiveBayesDataFormat = jsonFormat2(NaiveBayesData)
   implicit val naiveBayesTrainFormat = jsonFormat5(NaiveBayesTrainArgs)
   implicit val naiveBayesPredictFormat = jsonFormat3(NaiveBayesPredictArgs)
@@ -631,7 +591,11 @@ object MLLibJsonProtocol {
   implicit val randomForestRegressorTrainReturn = jsonFormat9(RandomForestRegressorTrainReturn)
   implicit val picArgs = jsonFormat8(PowerIterationClusteringArgs)
   implicit val picReturn = jsonFormat3(PowerIterationClusteringReturn)
-  implicit val linearRegressionModelReturn = jsonFormat4(LinearRegressionTrainReturn)
+  implicit val linearRegressionTrainReturn = jsonFormat11(LinearRegressionTrainReturn)
+  implicit val linearRegressionTrainArgs = jsonFormat10(LinearRegressionTrainArgs)
+  implicit val linearRegressionPredictArgs = jsonFormat3(LinearRegressionPredictArgs)
+  implicit val linearRegressionTestArgs = jsonFormat4(LinearRegressionTestArgs)
+  implicit val linearRegressionTestReturn = jsonFormat5(LinearRegressionTestReturn)
   implicit val gmmDataFormat = jsonFormat3(GMMData)
   implicit val gmmModelTrainFormat = jsonFormat8(GMMTrainArgs)
   implicit val gmmModelTrainReturnFormat = jsonFormat3(GMMTrainReturn)

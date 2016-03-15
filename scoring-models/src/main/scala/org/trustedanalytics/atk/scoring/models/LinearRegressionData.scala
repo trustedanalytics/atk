@@ -1,3 +1,4 @@
+
 /**
  *  Copyright (c) 2015 Intel Corporation 
  *
@@ -16,23 +17,16 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.ml.regression.LinearRegressionModel
 
 /**
- * Command for loading model data into existing model in the model database.
- * @param linRegModel Trained MLLib's LinearRegressionModel object
- * @param observationColumns Handle to the obsergvation columns of the data frame
+ * Linear Regression data object
+ * @param model The trained LinearRegression Model
+ * @param observationColumns Frame's column(s) storing the observations
+ * @param labelColumn Frame's column storing the label
  */
-case class LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String]) {
+case class LinearRegressionData(model: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
   require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(linRegModel != null, "linRegModel must not be null")
+  require(model != null, "linRegModel must not be null")
+  require(labelColumn != null && labelColumn != "", "labelColumn must not be null or empty")
 }
-
-/**
- * Results of Linear Regression Train plugin
- * @param observationColumns List of column names on which the model was trained
- * @param labelColumn Column name containing the true value of the observation
- * @param weightsVector An array of weights of the trained model
- * @param intercept Intercept value of the trained model
- */
-case class LinearRegressionTrainReturn(observationColumns: List[String], labelColumn: String, weightsVector: Array[Double], intercept: Double)
