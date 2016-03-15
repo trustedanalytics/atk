@@ -1,0 +1,53 @@
+
+:doc:`CollaborativeFilteringModel <index>`  recommend
+*****************************************************
+
+------
+
+
+.. function:: recommend(self, entity_id, number_of_recommendations=1, recommend_products=True)
+
+    |BETA|
+    Collaborative Filtering Predict (ALS).
+
+
+    :Parameters:
+
+        **entity_id** : int32
+
+        ..
+
+            A user/product id
+
+
+
+        **number_of_recommendations** : int32 (default=1)
+
+        ..
+
+            Number of recommendations
+
+
+
+        **recommend_products** : bool (default=True)
+
+        ..
+
+            True - products for user; false - users for the product
+
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            Returns an array of recommendations (as array of csv-strings)
+    See :ref:`Collaborative Filtering Train
+    <python_api/models/model-collaborative_filtering/train>` for more information.
+
+    Examples
+    --------
+    See :doc: 'here <new>' for examples.

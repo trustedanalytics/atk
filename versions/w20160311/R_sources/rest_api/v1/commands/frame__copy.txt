@@ -1,0 +1,132 @@
+
+
+----------------------------------
+:doc:`Commands <index>` frame/copy
+----------------------------------
+
+New frame with copied columns.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+    **Note** - An argument for this command requires a Python User-Defined Function (UDF).
+    This function must be especially prepared (wrapped/serialized) in order for it to run
+    in the engine.  **If this argument is needed for your call (i.e. it may be optional),
+    then this particular command usage is NOT practically available as a REST API.**
+    Today, the trustedanalytics Python client does the special function preparation and calls this API.
+
+
+:name:
+
+    frame/copy
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **columns** : dict (default=None)
+
+    ..
+
+        dictionary of column names to include in the copy and target names
+
+
+
+    **where** : None (default=None)
+
+    ..
+
+        <Missing Description>
+
+
+
+    **name** : unicode (default=None)
+
+    ..
+
+        name of the frame copy
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Copies specified columns into a new Frame object, optionally
+renaming them and/or filtering them.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        New Frame object.
+
+

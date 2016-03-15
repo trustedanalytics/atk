@@ -1,0 +1,127 @@
+
+
+---------------------------------------------------------------
+:doc:`Commands <index>` model:collaborative_filtering/recommend
+---------------------------------------------------------------
+
+|BETA|
+Collaborative Filtering Predict (ALS).
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:collaborative_filtering/recommend
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **entity_id** : int32
+
+    ..
+
+        A user/product id
+
+
+
+    **number_of_recommendations** : int32 (default=1)
+
+    ..
+
+        Number of recommendations
+
+
+
+    **recommend_products** : bool (default=True)
+
+    ..
+
+        True - products for user; false - users for the product
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+See :ref:`Collaborative Filtering Train
+<python_api/models/model-collaborative_filtering/train>` for more information.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``list``
+
+        Returns an array of recommendations (as array of csv-strings)
+
+

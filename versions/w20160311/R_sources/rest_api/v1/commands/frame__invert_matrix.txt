@@ -1,0 +1,116 @@
+
+
+-------------------------------------------
+:doc:`Commands <index>` frame/invert_matrix
+-------------------------------------------
+
+|ALPHA|
+Inverts a matrix.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/invert_matrix
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **column_names** : list
+
+    ..
+
+        The list of columns of the matrix to be inverted.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+The algorithm consists of the following steps:
+
+1. Load the matrix data from HDFS into a frame
+2. Convert the frame into a RowMatrix
+2. Invert the RowMatrix generating a DenseMatrix object
+3. Convert the DenseMatrix matrix into a frame
+4. Save the frame to HDFS
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        A pseudo-inverted matrix or runtime exception if the matrix is singular and cannot be inverted.
+
+
