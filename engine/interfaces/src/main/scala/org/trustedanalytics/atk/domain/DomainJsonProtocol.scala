@@ -308,6 +308,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
         case JsBoolean(b) => b
         case JsString(s) => s
         case JsArray(v) => v.map(x => read(x)).toList
+        case JsNull => null
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
     }

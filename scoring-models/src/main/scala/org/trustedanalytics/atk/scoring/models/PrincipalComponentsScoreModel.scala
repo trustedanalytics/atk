@@ -19,9 +19,6 @@ package org.trustedanalytics.atk.scoring.models
 import breeze.linalg
 import org.apache.spark.mllib.linalg._
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
-import scala.concurrent.ExecutionContext.Implicits.global
-//import scala.collection.mutable.Map
-import scala.concurrent._
 
 /**
  * Scoring model for Principal Components
@@ -30,15 +27,14 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = new Array[Double](data.length)
-    data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
-    }
-    val y: DenseMatrix = computePrincipalComponents(x.slice(0, x.length))
-    val pcaScoreOutput: scala.collection.mutable.Map[String, Any] = scala.collection.mutable.Map[String, Any]()
-    pcaScoreOutput.put("principal_components", y.values.toList)
-    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, x.length)
-    pcaScoreOutput.put("t_squared_index", t_squared_index)
+    val x: Array[Double] = data.map(value => ScoringModelUtils.toDouble(value))
+    val y: DenseMatrix = computePrincipalComponents(x)
+    val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
+
+    val pcaScoreOutput: Map[String, Any] = Map(
+      "principal_components" -> y.values.toList,
+      "t_squared_index" -> t_squared_index
+    )
     data :+ pcaScoreOutput
   }
 
@@ -46,6 +42,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
    * Compute the principal components for the observation
    * @param x Each observation stored as an Array[Double]
    * @return (org.apache.spark.mllib)DenseMatrix
+   *
+   *
+   *
    */
   def computePrincipalComponents(x: Array[Double]): DenseMatrix = {
     var inputVector = new org.apache.spark.mllib.linalg.DenseVector(x)

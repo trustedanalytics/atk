@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.algorithms.pca.Method

@@ -131,9 +131,9 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
     }
   }
 
-  def getFrames()(implicit invocation: Invocation): Future[Seq[FrameEntity]] = withContext("se.getFrames") {
+  def lookupActiveNamedFrames()(implicit invocation: Invocation): Future[Seq[FrameEntity]] = withContext("se.lookupActiveNamedFrames") {
     future {
-      frames.getFrames()
+      frames.lookupActiveNamedFrames()
     }
   }
 
@@ -190,10 +190,10 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
    * Get the metadata for a range of graph identifiers.
    * @return Future of the sequence of graph metadata entries to be returned.
    */
-  def getGraphs()(implicit invocation: Invocation): Future[Seq[GraphEntity]] =
-    withContext("se.getGraphs") {
+  def lookupActiveNamedGraphs()(implicit invocation: Invocation): Future[Seq[GraphEntity]] =
+    withContext("se.lookupActiveNamedGraphs") {
       future {
-        graphs.getGraphs()
+        graphs.lookupActiveNamedGraphs()
       }
     }
 
@@ -248,10 +248,10 @@ class EngineImpl(val sparkContextFactory: SparkContextFactory,
       }
     }
 
-  def getModels()(implicit invocation: Invocation): Future[Seq[ModelEntity]] =
+  def lookupActiveNamedModelsNoData()(implicit invocation: Invocation): Future[Seq[ModelEntity]] =
     withContext("se.getModels") {
       future {
-        models.getModels()
+        models.lookupActiveNamedModelsNoData()
       }
     }
 
