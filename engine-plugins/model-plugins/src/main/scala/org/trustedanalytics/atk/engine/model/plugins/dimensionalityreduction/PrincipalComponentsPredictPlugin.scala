@@ -59,13 +59,6 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: PrincipalComponentsPredictArgs)(implicit invocation: Invocation) = 9
-
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -79,6 +72,7 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val model: Model = arguments.model
 
     //Running MLLib
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     val principalComponentJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val principalComponentData = principalComponentJsObject.convertTo[PrincipalComponentsData]
 
