@@ -382,40 +382,40 @@ Edges</li>
 <p>Given a data file <em>/movie.csv</em>, create a frame to match this data and move
 the data to the frame.
 Create an empty graph and define some vertex and edge types.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;/movie.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span> <span class="p">[(</span><span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span>
-<span class="gp">... </span>                                    <span class="p">(</span><span class="s">&#39;user_name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-<span class="gp">... </span>                                    <span class="p">(</span><span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span>
-<span class="gp">... </span>                                    <span class="p">(</span><span class="s">&#39;movie_title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-<span class="gp">... </span>                                    <span class="p">(</span><span class="s">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;/movie.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">&#39;user_name&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">&#39;movie_id&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">&#39;movie_title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+<span class="gp">... </span>                                    <span class="p">(</span><span class="s1">&#39;rating&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;users&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&#39;movies&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;ratings&#39;</span><span class="p">,</span><span class="s">&#39;users&#39;</span><span class="p">,</span><span class="s">&#39;movies&#39;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s1">&#39;movies&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s1">&#39;ratings&#39;</span><span class="p">,</span><span class="s1">&#39;users&#39;</span><span class="p">,</span><span class="s1">&#39;movies&#39;</span><span class="p">,</span><span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add data to the graph from the frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;user_name&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;movies].add_vertices(my_frame, &#39;</span><span class="n">movie_id</span><span class="s">&#39;, [&#39;</span><span class="n">movie_title</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;user_name&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;movies].add_vertices(my_frame, &#39;</span><span class="n">movie_id</span><span class="s1">&#39;, [&#39;</span><span class="n">movie_title</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Create an edge frame from the graph, and add edge data from the frame.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;ratings&#39;</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s">&#39;user_id&#39;</span><span class="p">,</span> <span class="s">&#39;movie_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;rating&#39;</span><span class="p">]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;ratings&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">my_frame</span><span class="p">,</span> <span class="s1">&#39;user_id&#39;</span><span class="p">,</span> <span class="s1">&#39;movie_id&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Retrieve a previously defined graph and retrieve an EdgeFrame from it:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_old_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_graph</span><span class="p">(</span><span class="s">&quot;your_graph&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_edge_frame</span> <span class="o">=</span> <span class="n">my_old_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&quot;your_label&quot;</span><span class="p">]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_old_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">get_graph</span><span class="p">(</span><span class="s2">&quot;your_graph&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_edge_frame</span> <span class="o">=</span> <span class="n">my_old_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s2">&quot;your_label&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>Calling methods on an EdgeFrame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_edge_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_edge_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Copy an EdgeFrame to a frame using the copy method:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_frame</span> <span class="o">=</span> <span class="n">my_new_edge_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_new_frame</span> <span class="o">=</span> <span class="n">my_new_edge_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -443,7 +443,7 @@ Create an empty graph and define some vertex and edge types.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

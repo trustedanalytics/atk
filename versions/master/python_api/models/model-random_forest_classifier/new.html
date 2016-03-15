@@ -152,34 +152,34 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r61" id="id1">[R61]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="#r21" id="id1">[R21]</a> is a supervised ensemble learning algorithm
 which can be used to perform binary and multi-class classification.
 The Random Forest Classifier model is initialized, trained on columns of a
 frame, used to predict the labels of observations in a frame, and tests the
 predicted labels against the true labels.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r62" id="id2">[R62]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r22" id="id2">[R22]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, each tree&#8217;s prediction is counted as vote for one class.
 The label is predicted to be the class which receives the most votes.
 During testing, labels of the observations are predicted and tested against the true labels
 using built-in binary and multi-class Classification Metrics.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r61" rules="none">
+<table class="docutils citation" frame="void" id="r21" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R61]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r62" rules="none">
+<table class="docutils citation" frame="void" id="r22" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R62]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R22]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2</span>
 <span class="go">=======================================</span>
 <span class="go">[0]      1  19.8446136104  2.2985856384</span>
@@ -190,15 +190,15 @@ using built-in binary and multi-class Classification Metrics.</p>
 <span class="go">[5]      0  34.6334526911  3.6429838715</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestClassifierModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_trees</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">impurity</span><span class="o">=</span><span class="s">&quot;entropy&quot;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">num_classes</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num_trees</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">impurity</span><span class="o">=</span><span class="s2">&quot;entropy&quot;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{u&#39;impurity&#39;: u&#39;entropy&#39;, u&#39;max_bins&#39;: 100, u&#39;observation_columns&#39;: [u&#39;Dim_1&#39;, u&#39;Dim_2&#39;], u&#39;num_nodes&#39;: 3, u&#39;max_depth&#39;: 4, u&#39;seed&#39;: 157264076, u&#39;num_trees&#39;: 1, u&#39;label_column&#39;: u&#39;Class&#39;, u&#39;feature_subset_category&#39;: u&#39;all&#39;, u&#39;num_classes&#39;: 2}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s">&#39;num_nodes&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 <span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s">&#39;label_column&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;label_column&#39;</span><span class="p">]</span>
 <span class="go">u&#39;Class&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2         predicted_class</span>
@@ -209,7 +209,7 @@ using built-in binary and multi-class Classification Metrics.</p>
 <span class="go">[3]      0  46.1810010826  3.1611961917                0</span>
 <span class="go">[4]      0  44.3117586448  3.3458963222                0</span>
 <span class="go">[5]      0  34.6334526911  3.6429838715                0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s1">&#39;Dim_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span>
 <span class="go">Precision: 1.0</span>
@@ -249,7 +249,7 @@ using built-in binary and multi-class Classification Metrics.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

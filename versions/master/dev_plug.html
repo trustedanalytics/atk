@@ -201,7 +201,7 @@ contains settings that are relevant.</p>
 <div class="section" id="naming">
 <h3>Naming<a class="headerlink" href="#naming" title="Permalink to this headline">¶</a></h3>
 <p>All command plugins have a unique name. This name is the command’s identification and is also used to determine how command will be “installed” within the client-facing APIs. All commands are associated with an entity, which is the type of object the command is a member of. For example, the command for sorting rows in a frame has the formal name of “frame/sort”. The “frame” is the entity for the command, and the “sort” is the name of the function. This allows the Python client to support calling the plugin like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>There is limited subtyping available with the entities. This is most common in plugins for models. For example, the “train” command for the KMeansModel looks like this: “model:k_means/train”, where “:k_means” denotes a model subtype.</p>
@@ -280,7 +280,7 @@ possible to add a plugin without restarting the server.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

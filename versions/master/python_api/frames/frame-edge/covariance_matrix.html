@@ -162,7 +162,7 @@ matrix.</p>
 <p>This function applies only to columns containing numerical data.</p>
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em>, which contains the data</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go"> [#]  idnum  x1   x2   x3   x4</span>
 <span class="go">===============================</span>
 <span class="go">[0]      0  1.0  4.0  0.0  -1.0</span>
@@ -174,12 +174,12 @@ matrix.</p>
 </div>
 <p>my_frame.covariance_matrix computes the covariance on each pair of columns in the user-provided list.</p>
 <blockquote>
-<div><div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
+<div><div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="p">(</span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_names</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>The resulting table (specifying all columns) is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cov_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  idnum  x1    x2    x3    x4</span>
 <span class="go">=================================</span>
 <span class="go">[0]    2.5   2.5  -2.5   1.5  0.0</span>
@@ -215,7 +215,7 @@ matrix.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

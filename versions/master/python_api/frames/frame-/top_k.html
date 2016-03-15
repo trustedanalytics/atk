@@ -171,7 +171,7 @@ If there are no data elements of finite weight &gt; 0, then topK is empty.</p>
 <p class="rubric">Examples</p>
 <p>For this example, we calculate the top 5 movie genres in a data frame:
 Consider the following frame containing four columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  rank  city         population_2013  population_2010  change  county</span>
 <span class="go">    ============================================================================</span>
 <span class="go">    [0]     1  Portland              609456           583776  4.40%   Multnomah</span>
@@ -184,7 +184,7 @@ Consider the following frame containing four columns.</p>
 <span class="go">    [7]    16  Oregon City            34622            31859  8.67%   Clackamas</span>
 <span class="go">    [8]    17  McMinnville            33131            32187  2.93%   Yamhill</span>
 <span class="go">    [9]    18  Redmond                27427            26215  4.62%   Deschutes</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s2">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">    [#]  county      count</span>
@@ -218,7 +218,7 @@ Consider the following frame containing four columns.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

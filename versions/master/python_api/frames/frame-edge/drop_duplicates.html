@@ -148,7 +148,7 @@ can be limited to one or more columns.
 This modifies the current frame.</p>
 <p class="rubric">Examples</p>
 <p>Given a frame with data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a    b  c</span>
 <span class="go">===============</span>
 <span class="go">[0]  200  4  25</span>
@@ -166,7 +166,7 @@ This modifies the current frame.</p>
 <p>Remove any rows that are identical to a previous row.
 The result is a frame of unique rows.
 Note that row order may change.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a    b  c</span>
@@ -182,13 +182,13 @@ Note that row order may change.</p>
 </div>
 <p>Now remove any rows that have the same data in columns <em>a</em> and
 <em>c</em> as a previously checked row:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span> <span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span> <span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="s2">&quot;c&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>The result is a frame with unique values for the combination of columns <em>a</em>
 and <em>c</em>.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a    b  c</span>
 <span class="go">===============</span>
 <span class="go">[0]  201  4  25</span>
@@ -222,7 +222,7 @@ and <em>c</em>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

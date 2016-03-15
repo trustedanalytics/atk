@@ -150,14 +150,14 @@ A <abbr title="Python User-defined Function">UDF</abbr> runs under the constrain
 The function has one parameter, a <em>row</em> object.
 Here is an example of a Row <abbr title="Python User-defined Function">UDF</abbr> that returns True for a row where the column
 named “score” has a value greater than zero:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_custom_row_func</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-<span class="gp">... </span>   <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;score&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_custom_row_func</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>   <span class="k">return</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 </div>
 <p>This function would be useful in a Frame filter command, which filters a data
 frame keeping only those rows which meet certain criteria, &#8211; in this case,
 only rows with scores greater than zero:</p>
-<div class="code highlight-python"><div class="highlight"><pre>&gt;&gt;&gt; my_csv = CsvFile(“results.txt”, [(‘test’, str), (‘score’, int32)])
+<div class="code highlight-python"><div class="highlight"><pre><span></span>&gt;&gt;&gt; my_csv = CsvFile(“results.txt”, [(‘test’, str), (‘score’, int32)])
 &gt;&gt;&gt; my_frame = Frame(my_csv)
 &gt;&gt;&gt; my_frame.filter(my_custom_row_func)
 </pre></div>
@@ -172,12 +172,12 @@ values for a particular row.
 The values are accessible using the column name, with typical Python square
 bracket lookup, as shown in the example above.
 The value of cell in column &#8216;score&#8217; is accessed like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">row</span><span class="p">[</span><span class="s">&#39;score&#39;</span><span class="p">]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;score&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>The cell values may also be accessed using <em>dot-member</em> notation.
 Here is an equivalent row function:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_custom_row_func2</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_custom_row_func2</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">row</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </pre></div>
 </div>
@@ -199,20 +199,20 @@ brackets with strings.</p>
 to correlate their indices.</p>
 <p>Also, iterating on the row object is the equivalent of iterating on items().
 For example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">row_sum</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">row_sum</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">    sums the values in the row, except for column &quot;name&quot;</span>
 <span class="gp">... </span><span class="sd">    &quot;&quot;&quot;</span>
 <span class="gp">... </span>    <span class="k">try</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="gp">... </span>        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">row</span><span class="p">:</span>
-<span class="gp">... </span>           <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s">&#39;name&#39;</span><span class="p">:</span>
+<span class="gp">... </span>           <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span>
 <span class="gp">... </span>               <span class="nb">sum</span> <span class="o">+=</span> <span class="n">v</span>
 <span class="gp">... </span>       <span class="k">return</span> <span class="n">s</span>
 <span class="gp">... </span>   <span class="k">except</span><span class="p">:</span>
 <span class="gp">... </span>       <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">row_sum</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;sum&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">row_sum</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">))</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -246,8 +246,8 @@ All dependencies used in the <abbr title="Python User-defined Function">UDF</abb
 files and folders which will be sent along with the UDF to the server
 when it is invoked.  This causes overhead, so use judiciously.</li>
 </ol>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">udf_dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;helper_script.py&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">udf_dependencies</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;helper_script.py&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </li>
@@ -269,7 +269,7 @@ In general, avoid printing.</p>
 </li>
 <li><p class="first">Lambda:
 Lambda syntax is valid, but discouraged:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This is legal and attractively shorter to write.
@@ -295,7 +295,7 @@ It could be useful to have a row function that takes a few other
 parameters.
 Let’s augment the row_sum function above to take a list of columns to
 ignore:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">get_row_sum_func</span><span class="p">(</span><span class="n">ignore_list</span><span class="p">):</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">get_row_sum_func</span><span class="p">(</span><span class="n">ignore_list</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="sd">&quot;&quot;&quot;</span>
 <span class="gp">... </span><span class="sd">   returns a row function which sums the values in the row,</span>
 <span class="gp">... </span><span class="sd">   except for ignored columns</span>
@@ -311,7 +311,7 @@ ignore:</p>
 <span class="gp">... </span>           <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 <span class="gp">... </span>       <span class="k">return</span> <span class="n">row_sum2</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">get_row_sum_func</span><span class="p">([</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="s">&#39;address&#39;</span><span class="p">]),</span> <span class="p">(</span><span class="s">&#39;sum&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">get_row_sum_func</span><span class="p">([</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;address&#39;</span><span class="p">]),</span> <span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>The <code class="code docutils literal"><span class="pre">row_sum2</span></code> function closes over the <em>ignore_list</em> argument making it
@@ -342,7 +342,7 @@ available to the row function that executes on each row.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

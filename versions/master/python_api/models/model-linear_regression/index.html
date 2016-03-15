@@ -203,36 +203,36 @@
 </tr>
 </tbody>
 </table>
-<p>Linear Regression <a class="reference internal" href="#r31" id="id1">[R31]</a> is used to model the relationship between a scalar
+<p>Linear Regression <a class="reference internal" href="../model-power_iteration_clustering/new.html#r11" id="id1">[R11]</a> is used to model the relationship between a scalar
 dependent variable and one or more independent variables.
 The Linear Regression model is initialized, trained on columns of a frame and
 used to predict the value of the dependent variable given the independent
 observations of a frame.
-This model runs the MLLib implementation of Linear Regression <a class="reference internal" href="#r32" id="id2">[R32]</a> with the
-SGD <a class="reference internal" href="#r33" id="id3">[R33]</a> optimizer.</p>
+This model runs the MLLib implementation of Linear Regression <a class="reference internal" href="../model-power_iteration_clustering/new.html#r12" id="id2">[R12]</a> with the
+SGD <a class="reference internal" href="../model-principal_components/index.html#r13" id="id3">[R13]</a> optimizer.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r31" rules="none">
+<table class="docutils citation" frame="void" id="r11" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R31]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Linear_regression">https://en.wikipedia.org/wiki/Linear_regression</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R11]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Linear_regression">https://en.wikipedia.org/wiki/Linear_regression</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r32" rules="none">
+<table class="docutils citation" frame="void" id="r12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R32]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R12]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#linear-least-squares-lasso-and-ridge-regression</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r33" rules="none">
+<table class="docutils citation" frame="void" id="r13" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R33]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R13]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing two columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  x1   y</span>
 <span class="go">==============</span>
 <span class="go">[0]  0.0   0.0</span>
@@ -247,11 +247,11 @@ SGD <a class="reference internal" href="#r33" id="id3">[R33]</a> optimizer.</p>
 <span class="go">[9]  9.0  22.5</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LinearRegressionModel</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LinearRegressionModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;x1&quot;</span><span class="p">],</span> <span class="n">intercept</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="n">intercept</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_iterations</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;x1&quot;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  x1   y     predicted_value</span>
@@ -293,7 +293,7 @@ SGD <a class="reference internal" href="#r33" id="id3">[R33]</a> optimizer.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

@@ -155,7 +155,7 @@ observing the column values and keeping track of the cumulative sum for each val
 <p class="rubric">Examples</p>
 <p>Consider Frame <em>my_frame</em>, which accesses a frame that contains a single
 column named <em>obs</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs</span>
 <span class="go">========</span>
 <span class="go">[0]    0</span>
@@ -167,14 +167,14 @@ column named <em>obs</em>:</p>
 </pre></div>
 </div>
 <p>The cumulative sum for column <em>obs</em> is obtained by:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_sum</span><span class="p">(</span><span class="s">&#39;obs&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">cumulative_sum</span><span class="p">(</span><span class="s1">&#39;obs&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>The Frame <em>my_frame</em> accesses the original frame that now contains two
 columns, <em>obs</em> that contains the original column values, and
 <em>obsCumulativeSum</em> that contains the cumulative percent count:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  obs  obs_cumulative_sum</span>
 <span class="go">============================</span>
 <span class="go">[0]    0                 0.0</span>
@@ -210,7 +210,7 @@ columns, <em>obs</em> that contains the original column values, and
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

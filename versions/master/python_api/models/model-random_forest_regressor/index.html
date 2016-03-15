@@ -206,31 +206,31 @@
 </tr>
 </tbody>
 </table>
-<p>Random Forest <a class="reference internal" href="#r63" id="id1">[R63]</a> is a supervised ensemble learning algorithm
+<p>Random Forest <a class="reference internal" href="#r1" id="id1">[R1]</a> is a supervised ensemble learning algorithm
 used to perform regression.
 A Random Forest Regressor model is initialized, trained on columns of a frame,
 and used to predict the value of each observation in the frame.
-This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r64" id="id2">[R64]</a>.
+This model runs the MLLib implementation of Random Forest <a class="reference internal" href="#r2" id="id2">[R2]</a>.
 During training, the decision trees are trained in parallel.
 During prediction, the average over-all tree&#8217;s predicted value is the predicted
 value of the random forest.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r63" rules="none">
+<table class="docutils citation" frame="void" id="r1" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R63]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R1]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Random_forest">https://en.wikipedia.org/wiki/Random_forest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r64" rules="none">
+<table class="docutils citation" frame="void" id="r2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R64]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R2]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests">https://spark.apache.org/docs/1.5.0/mllib-ensembles.html#random-forests</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2</span>
 <span class="go">=======================================</span>
 <span class="go">[0]      1  19.8446136104  2.2985856384</span>
@@ -241,15 +241,15 @@ value of the random forest.</p>
 <span class="go">[5]      0  34.6334526911  3.6429838715</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">RandomForestRegressorModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">num_trees</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">impurity</span><span class="o">=</span><span class="s">&quot;variance&quot;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">num_trees</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">impurity</span><span class="o">=</span><span class="s2">&quot;variance&quot;</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">max_bins</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{u&#39;impurity&#39;: u&#39;variance&#39;, u&#39;max_bins&#39;: 100, u&#39;observation_columns&#39;: [u&#39;Dim_1&#39;, u&#39;Dim_2&#39;], u&#39;num_nodes&#39;: 3, u&#39;max_depth&#39;: 4, u&#39;seed&#39;: -1632404927, u&#39;num_trees&#39;: 1, u&#39;label_column&#39;: u&#39;Class&#39;, u&#39;feature_subset_category&#39;: u&#39;all&#39;}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s">&#39;num_nodes&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;num_nodes&#39;</span><span class="p">]</span>
 <span class="go">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s">&#39;label_column&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;label_column&#39;</span><span class="p">]</span>
 <span class="go">u&#39;Class&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2         predicted_value</span>
@@ -289,7 +289,7 @@ value of the random forest.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

@@ -194,9 +194,9 @@ for the various methods of ingesting data.</p>
 <div class="section" id="importing-a-csv-file">
 <span id="example-files-csvfile"></span><h3>Importing a <abbr title="Character-Separated Variables">CSV</abbr> file.<a class="headerlink" href="#importing-a-csv-file" title="Permalink to this headline">¶</a></h3>
 <p>These are some rows from a <abbr title="Character-Separated Variables">CSV</abbr> file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="s">&quot;string&quot;</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="s">&quot;again&quot;</span><span class="p">,</span><span class="mf">25.125</span>
-<span class="s">&quot;next&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s">&quot;or not&quot;</span><span class="p">,</span><span class="mf">1.0</span>
-<span class="s">&quot;fail&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;again?&quot;</span><span class="p">,</span><span class="mf">11.11</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="s2">&quot;string&quot;</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span><span class="s2">&quot;again&quot;</span><span class="p">,</span><span class="mf">25.125</span>
+<span class="s2">&quot;next&quot;</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="s2">&quot;or not&quot;</span><span class="p">,</span><span class="mf">1.0</span>
+<span class="s2">&quot;fail&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;again?&quot;</span><span class="p">,</span><span class="mf">11.11</span>
 </pre></div>
 </div>
 <p><abbr title="Character-Separated Variables">CSV</abbr> files contain rows of information separated by new-line characters.
@@ -209,31 +209,31 @@ Schemas are constructed as a list of tuples, each of which contains an
 <a class="reference internal" href="glossary.html#term-ascii"><span class="xref std std-term">ASCII</span></a>-character name and the item&#8217;s <span class="xref std std-ref">data type</span>,
 ordered according to the order of columns in the input file.</p>
 <p>Given a file <em>datasets/small_songs.csv</em> whose contents look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Easy on My Mind&quot;</span>
-<span class="mi">2</span><span class="p">,</span><span class="s">&quot;No Rest For The Wicked&quot;</span>
-<span class="mi">3</span><span class="p">,</span><span class="s">&quot;Does Your Chewing Gum&quot;</span>
-<span class="mi">4</span><span class="p">,</span><span class="s">&quot;Gypsies, Tramps, and Thieves&quot;</span>
-<span class="mi">5</span><span class="p">,</span><span class="s">&quot;Symphony No. 5&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;Easy on My Mind&quot;</span>
+<span class="mi">2</span><span class="p">,</span><span class="s2">&quot;No Rest For The Wicked&quot;</span>
+<span class="mi">3</span><span class="p">,</span><span class="s2">&quot;Does Your Chewing Gum&quot;</span>
+<span class="mi">4</span><span class="p">,</span><span class="s2">&quot;Gypsies, Tramps, and Thieves&quot;</span>
+<span class="mi">5</span><span class="p">,</span><span class="s2">&quot;Symphony No. 5&quot;</span>
 </pre></div>
 </div>
 <p>Create a variable to hold the file name (for easier reuse):</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_data_file</span> <span class="o">=</span> <span class="s">&quot;datasets/small_songs.csv&quot;</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_data_file</span> <span class="o">=</span> <span class="s2">&quot;datasets/small_songs.csv&quot;</span>
 </pre></div>
 </div>
 <p>Create the schema <em>my_schema</em> with two columns: <em>id</em> (int32), and <em>title</em>
 (str):</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>The schema and file name are used in the CsvFile() command to describe the file
 format:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The data fields are separated by a character delimiter.
 The default delimiter to separate column data is a comma.
 It can be changed with the parameter <em>delimiter</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s">&quot;,&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv_description</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="n">my_data_file</span><span class="p">,</span> <span class="n">my_schema</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This can be helpful if the delimiter is something other than a comma, for
@@ -262,7 +262,7 @@ designed to work with data spread over multiple machines.</p>
 <div class="section" id="examples">
 <h3>Examples:<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <p>Create an empty frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The Frame <em>my_frame</em> is now a Python object which references an empty frame
@@ -270,30 +270,30 @@ that has been created on the server.</p>
 <p>To create a frame defined by the schema <em>my_csv</em> (see
 <a class="reference internal" href="#example-files-csvfile"><span>Importing a CSV file.</span></a>), import the data, give the frame the name
 <em>myframe</em>, and create a Frame object, <em>my_frame</em>, to access it:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;myframe&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;myframe&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To copy the frame <em>myframe</em>, create a Frame <em>my_frame2</em> to access it, and give
 it a new name, because the name must always be unique:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy_of_myframe&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;copy_of_myframe&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To create a new frame with only columns <em>x</em> and <em>z</em> from the original frame
 <em>myframe</em>, and save the Frame object as <em>my_frame3</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame3</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy2_of_myframe&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame3</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;copy2_of_myframe&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To create a frame copy of the original columns <em>x</em> and <em>z</em>, but only those
 rows where <em>z</em> is TRUE:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame4</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;z&#39;</span><span class="p">],</span> <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">Harry</span> <span class="n">Potter</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
-<span class="gp">... </span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;copy_of_myframe_true&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame4</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">([</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">],</span> <span class="n">where</span> <span class="o">=</span> <span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">Harry</span> <span class="n">Potter</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">title</span><span class="p">),</span>
+<span class="gp">... </span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;copy_of_myframe_true&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Frames are handled by reference.
 Commands such as <code class="code docutils literal"><span class="pre">f4</span> <span class="pre">=</span> <span class="pre">my_frame</span></code> will only give you a copy of the Frame
 proxy pointing to the same data.</p>
 <p>Let&#8217;s create a Frame and examine its contents:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&quot;small_songs&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">my_csv</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;small_songs&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">small_songs</span><span class="o">.</span><span class="n">get_error_frame</span><span class="p">()</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
@@ -309,7 +309,7 @@ go into the existing column.</p>
 <p>As an example, let&#8217;s start with a frame containing two columns <em>a</em> and <em>b</em>.
 The frame can be accessed by Frame <em>my_frame1</em>.
 We can look at the data and structure of the database by using the <span class="xref std std-ref">inspect</span> method:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str   b:ta.int64</span>
 <span class="go">/--------------------/</span>
@@ -319,7 +319,7 @@ We can look at the data and structure of the database by using the <span class="
 </pre></div>
 </div>
 <p>Given another frame, accessed by Frame <em>my_frame2</em> with one column <em>c</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  c:str</span>
 <span class="go">/-------/</span>
@@ -328,12 +328,12 @@ We can look at the data and structure of the database by using the <span class="
 </pre></div>
 </div>
 <p>With <span class="xref std std-ref">append</span>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">my_frame2</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">my_frame2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The result is that the first frame would have the data from both frames.
 It would still be accessed by Frame <em>my_frame1</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str     b:ta.int64     c:str</span>
 <span class="go">/--------------------------------/</span>
@@ -345,8 +345,8 @@ It would still be accessed by Frame <em>my_frame1</em>:</p>
 </pre></div>
 </div>
 <p>Try this example with data files <em>objects1.csv</em> and <em>objects2.csv</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/objects1.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;Object&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Count&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;objects1&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">objects2</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/objects2.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;Thing&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;objects2&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;datasets/objects1.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Object&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Count&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;objects1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">objects2</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;datasets/objects2.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;Thing&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;objects2&#39;</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">objects2</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
@@ -369,23 +369,23 @@ The Frame class also contains frame information like
 <div class="section" id="id1">
 <h3>Examples<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p>To see the number of rows:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">row_count</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">row_count</span>
 </pre></div>
 </div>
 <p>To see the number of columns:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">objects1</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">objects1</span><span class="o">.</span><span class="n">schema</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To see the Frame pointer:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span>
 </pre></div>
 </div>
 <p>To see two rows of data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">objects1</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Gives you something like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>  a:ta.float64  b:ta.int64
+<div class="code highlight-python"><div class="highlight"><pre><span></span>  a:ta.float64  b:ta.int64
 /--------------------------/
     12.3000            500
    195.1230         183954
@@ -394,12 +394,12 @@ The Frame class also contains frame information like
 <p>The take() method makes a list of lists of frame data.
 Each list has the data from a row in the frame accessed by the Frame,
 in this case, 3 rows beginning from row 2.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">subset_of_objects1</span> <span class="o">=</span> <span class="n">objects1</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">subset_of_objects1</span> <span class="o">=</span> <span class="n">objects1</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">subset_of_objects1</span>
 </pre></div>
 </div>
 <p>Gives you something like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">[[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mf">195.123</span><span class="p">,</span> <span class="mi">183954</span><span class="p">],</span> <span class="p">[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">]]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="p">[</span><span class="mf">195.123</span><span class="p">,</span> <span class="mi">183954</span><span class="p">],</span> <span class="p">[</span><span class="mf">12.3</span><span class="p">,</span> <span class="mi">500</span><span class="p">]]</span>
 </pre></div>
 </div>
 <div class="admonition note">
@@ -412,14 +412,14 @@ Also, the sequence order of the columns is changed (from original data)
 by some commands.</p>
 </div>
 <p>Some more examples to try:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;datasets/animals.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Float1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;Float2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s">&#39;animals&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;datasets/animals.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;User&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;animals&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Float1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;Float2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">)],</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;animals&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="n">animals</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s1">&#39;animals&#39;</span><span class="p">,</span> <span class="n">animals</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">freq</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="n">freq</span><span class="o">.</span><span class="n">row_count</span><span class="p">)</span>
 
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="p">{}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;int1&#39;</span><span class="p">,</span> <span class="s">&#39;int2&#39;</span><span class="p">,</span> <span class="s">&#39;Float1&#39;</span><span class="p">,</span> <span class="s">&#39;Float2&#39;</span><span class="p">]:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;int1&#39;</span><span class="p">,</span> <span class="s1">&#39;int2&#39;</span><span class="p">,</span> <span class="s1">&#39;Float1&#39;</span><span class="p">,</span> <span class="s1">&#39;Float2&#39;</span><span class="p">]:</span>
 <span class="gp">... </span>    <span class="n">summary</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
 <span class="gp">... </span>    <span class="n">pprint</span><span class="p">(</span><span class="n">summary</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
 </pre></div>
@@ -443,7 +443,7 @@ rather than return a new frame with the changed data.
 Copying the data to a new frame on a regular
 basis and work on the new frame,
 provides a fallback if something does not work as expected:</p>
-<div class="code last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">next_frame</span> <span class="o">=</span> <span class="n">current_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="code last highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">next_frame</span> <span class="o">=</span> <span class="n">current_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -451,17 +451,17 @@ provides a fallback if something does not work as expected:</p>
 in the row.
 For details about row selection based upon its data see <a class="reference internal" href="ds_apir.html"><em>Python User Functions</em></a>.</p>
 <p>Example of data cleaning:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">clean_animals</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">if</span> <span class="s">&#39;basset hound&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="s">&#39;dog&#39;</span>
-<span class="gp">... </span>    <span class="k">elif</span> <span class="s">&#39;guinea pig&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
-<span class="gp">... </span>        <span class="k">return</span> <span class="s">&#39;cavy&#39;</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">clean_animals</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="s1">&#39;basset hound&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s1">&#39;dog&#39;</span>
+<span class="gp">... </span>    <span class="k">elif</span> <span class="s1">&#39;guinea pig&#39;</span> <span class="ow">in</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="s1">&#39;cavy&#39;</span>
 <span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
 <span class="gp">... </span>        <span class="k">return</span> <span class="n">row</span><span class="o">.</span><span class="n">animals</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">clean_animals</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;animals_cleaned&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;animals_cleaned&#39;</span> <span class="p">:</span> <span class="s">&#39;animals&#39;</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">clean_animals</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;animals_cleaned&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s1">&#39;animals&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s1">&#39;animals_cleaned&#39;</span> <span class="p">:</span> <span class="s1">&#39;animals&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <div class="section" id="drop-rows">
@@ -471,15 +471,15 @@ method takes a predicate function and removes all rows for
 which the predicate evaluates to <code class="docutils literal"><span class="pre">True</span></code>.</p>
 <p>Drop any rows in the animals frame where the value in column <em>int2</em> is
 negative:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;int2&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;int2&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To drop any rows where <em>a</em> is empty:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>To drop any rows where any column is empty:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">any</span><span class="p">([</span><span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]))</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_rows</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="nb">any</span><span class="p">([</span><span class="n">cell</span> <span class="ow">is</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">cell</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]))</span>
 </pre></div>
 </div>
 </div>
@@ -489,7 +489,7 @@ negative:</p>
 <span class="xref std std-ref">drop_rows</span>, except it removes all rows
 for which the predicate evaluates to False.</p>
 <p>To delete those rows where field <em>b</em> is outside the range of 0 to 10:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="n">AND</span> <span class="n">row</span><span class="p">[</span><span class="s">&#39;b&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">0</span> <span class="o">&gt;=</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="n">AND</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -499,12 +499,12 @@ for which the predicate evaluates to False.</p>
 method performs a row uniqueness comparison across the whole table.</p>
 <p>To drop any rows where the data in <em>a</em> and column <em>b</em> are
 duplicates of some previously evaluated row:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>To drop all duplicate rows where the columns <em>User</em> and <em>animals</em>
 have the same values as in some previous row:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="s">&#39;animals&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s1">&#39;User&#39;</span><span class="p">,</span> <span class="s1">&#39;animals&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -512,8 +512,8 @@ have the same values as in some previous row:</p>
 <span id="example-frame-drop-columns"></span><span id="index-6"></span><h3>Drop Columns:<a class="headerlink" href="#drop-columns" title="Permalink to this headline">¶</a></h3>
 <p>Columns can be dropped either with a string matching the column name or a
 list of strings:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -523,11 +523,11 @@ list of strings:</p>
 in the form of a dictionary.
 Unicode characters should not be used for column names.</p>
 <p>Rename <em>a</em> to &#8220;id&#8221;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;a&#39;</span><span class="p">:</span> <span class="s">&#39;id&#39;</span><span class="p">})</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="s1">&#39;id&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>Rename column <em>b</em> to &#8220;author&#8221; and <em>c</em> to &#8220;publisher&#8221;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s">&#39;b&#39;</span><span class="p">:</span> <span class="s">&#39;author&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">:</span> <span class="s">&#39;publisher&#39;</span><span class="p">})</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="s1">&#39;author&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="s1">&#39;publisher&#39;</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
@@ -544,18 +544,18 @@ you need the average age of students attending a college.</p>
 value.</p>
 <p>Add a column <em>int1_times_int2</em> as an ta.float64 and fill it with the contents
 of column <em>int1</em> and column <em>int2</em> multiplied together:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="o">*</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;int1xint2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="o">*</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;int1xint2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Add a new column <em>all_ones</em> and fill the entire column with the value 1:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;all_ones&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">))</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;all_ones&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Add a new column <em>float1_plus_float2</em> and fill the entire column with the
 value of column <em>float1</em> plus column <em>float2</em>, then save a summary of
 the frame statistics:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">Float1</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Float2</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s">&#39;Float1PlusFloat2&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">Float1</span> <span class="o">+</span> <span class="n">row</span><span class="o">.</span><span class="n">Float2</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;Float1PlusFloat2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">summary</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">(</span><span class="s1">&#39;Float1PlusFloat2&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add a new column <em>pwl</em>, type ta.float64, and fill the value according to
@@ -592,7 +592,7 @@ times 0.0032 plus 0.4025</td>
 </tbody>
 </table>
 <p>An example of Piecewise Linear Transformation:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">piecewise_linear_transformation</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">piecewise_linear_transformation</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
 <span class="gp">... </span>   <span class="n">x</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">float1_plus_float2</span>
 <span class="gp">... </span>   <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 <span class="gp">... </span>       <span class="k">return</span> <span class="bp">None</span>
@@ -606,12 +606,12 @@ times 0.0032 plus 0.4025</td>
 <span class="gp">... </span>       <span class="k">return</span> <span class="bp">None</span>
 <span class="gp">... </span>   <span class="k">return</span> <span class="n">m</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">c</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">piecewise_linear_transformation</span><span class="p">,</span> <span class="p">(</span><span class="s">&#39;pwl&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">piecewise_linear_transformation</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;pwl&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span>
 </pre></div>
 </div>
 <p>Create multiple columns at once by making a function return a list of
 values for the new frame columns:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">)],</span> <span class="p">[(</span><span class="s">&#39;abs_int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;abs_int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">animals</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int1</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">int2</span><span class="p">)],</span> <span class="p">[(</span><span class="s1">&#39;abs_int1&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;abs_int2&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">)])</span>
 </pre></div>
 </div>
 <span class="target" id="ds-dflw-frame-examine"></span></div>
@@ -620,7 +620,7 @@ values for the new frame columns:</p>
 <span id="index-9"></span><h2>Examining the Data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
 <p>To get standard descriptive statistics information about my_frame, use the
 frame function <span class="xref std std-ref">column_summary_statistics</span>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">column_summary_statistics</span><span class="p">()</span>
 </pre></div>
 </div>
 <div class="section" id="group-by-and-aggregate">
@@ -643,7 +643,7 @@ column <em>int2_avg</em></li>
 <li>add up the grouped values in column <em>int2</em> and save it in a
 column <em>int2_sum</em></li>
 </ol>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;int1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">],</span> <span class="s">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">]})</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">(</span><span class="s1">&#39;animals&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;int1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">],</span> <span class="s1">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">sum</span><span class="p">]})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -666,7 +666,7 @@ standard deviation, variance, minimum, and maximum</li>
 <li>Count the number of distinct values in column <em>int2</em> for each group and
 put that number in column <em>int2_count_distinct</em></li>
 </ol>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="s">&#39;int1&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s">&#39;Float1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">var</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">],</span> <span class="s">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count_distinct</span><span class="p">]})</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s1">&#39;animals&#39;</span><span class="p">,</span> <span class="s1">&#39;int1&#39;</span><span class="p">],</span> <span class="p">{</span><span class="s1">&#39;Float1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">avg</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">var</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">min</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">max</span><span class="p">],</span> <span class="s1">&#39;int2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count_distinct</span><span class="p">]})</span>
 </pre></div>
 </div>
 <p>Example process of using aggregation based on row:</p>
@@ -677,7 +677,7 @@ put that number in column <em>int2_count_distinct</em></li>
 <li>Count the number of rows in each group and put that value in column
 <em>count</em></li>
 </ol>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s">&#39;animals&#39;</span><span class="p">,</span> <span class="s">&#39;int1&#39;</span><span class="p">],</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grouped_animals2</span> <span class="o">=</span> <span class="n">animals</span><span class="o">.</span><span class="n">group_by</span><span class="p">([</span><span class="s1">&#39;animals&#39;</span><span class="p">,</span> <span class="s1">&#39;int1&#39;</span><span class="p">],</span> <span class="n">ta</span><span class="o">.</span><span class="n">agg</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition note" id="aggregation-functions">
@@ -714,7 +714,7 @@ operation with another frame.</p>
 <em>b</em>, <em>c</em>, <em>d</em>).
 For the sake of readability, in these examples we will refer to the frames and
 the Frames by the same name, unless needed for clarity:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str       b:str       c:str</span>
 <span class="go">/-----------------------------------/</span>
@@ -737,11 +737,11 @@ Following this instruction will join <em>your_frame</em> to <em>my_frame</em>, c
 frame with a new Frame to access it, with all of the data from <em>my_frame</em> and
 only that data from <em>your_frame</em> which has a value in <em>b</em> that matches a value
 in <em>my_frame</em> <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;left&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;left&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The result is <em>our_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">our_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
 <span class="go">/-----------------------------------------------------------/</span>
@@ -753,15 +753,15 @@ in <em>my_frame</em> <em>b</em>:</p>
 </div>
 <p>Doing an &#8220;inner&#8221; join this time will include only data from <em>my_frame</em> and
 <em>your_frame</em> which have matching values in <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>or</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;inner&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Result is <em>inner_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">inner_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
 <span class="go">/-----------------------------------------------------------/</span>
@@ -771,11 +771,11 @@ in <em>my_frame</em> <em>b</em>:</p>
 </div>
 <p>Doing an &#8220;outer&#8221; join this time will include only data from <em>my_frame</em> and
 <em>your_frame</em> which do not have matching values in <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;outer&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;outer&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Result is <em>outer_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">outer_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str       b:str       c_L:str      c_R:ta.int64   d:str</span>
 <span class="go">/-----------------------------------------------------------/</span>
@@ -789,11 +789,11 @@ column:
 Doing it again but including all data from <em>your_frame</em> and only that data
 in <em>my_frame</em> which has a value in <em>b</em> that matches a value in
 <em>your_frame</em> <em>d</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s">&#39;right&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">your_frame</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Result is <em>right_frame</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">right_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:str      b_L:str      c:str      b_R:str    c:ta.int64   d:str</span>
 <span class="go">/---------------------------------------------------------------------/</span>
@@ -815,17 +815,17 @@ rows.</p>
 <p>Given a frame accessed by Frame <em>my_frame</em> and the frame has two columns
 <em>a</em> and <em>b</em>.
 The &#8220;original_data&#8221;:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="s">&quot;solo,mono,single&quot;</span>
-<span class="mi">2</span><span class="o">-</span><span class="s">&quot;duo,double&quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">-</span><span class="s2">&quot;solo,mono,single&quot;</span>
+<span class="mi">2</span><span class="o">-</span><span class="s2">&quot;duo,double&quot;</span>
 </pre></div>
 </div>
 <p>Bring the data in where it can by worked on:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Check the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:ta.int64   b:string</span>
 <span class="go">/---------------------------------/</span>
@@ -834,11 +834,11 @@ The &#8220;original_data&#8221;:</p>
 </pre></div>
 </div>
 <p>Spread out those sub-strings in column <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">flatten_column</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">flatten_column</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Now check again and the result is:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">your_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  a:ta.int64   b:str</span>
 <span class="go">/-----------------------/</span>
@@ -852,7 +852,7 @@ The &#8220;original_data&#8221;:</p>
 <div class="section" id="seamless-graph">
 <span id="ds-dflw-building-a-graph"></span><h4>Seamless Graph<a class="headerlink" href="#seamless-graph" title="Permalink to this headline">¶</a></h4>
 <p>For the examples below, we will use a Frame <em>my_frame</em>, which accesses an
-arbitrary frame of data consisting of the <a class="reference download internal" href="R_downloads/employees.csv"><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
+arbitrary frame of data consisting of the <a class="reference download internal" href="R_downloads/employees.csv" download=""><code class="xref download docutils literal"><span class="pre">following</span></code></a>:</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="22%" />
@@ -916,31 +916,31 @@ arbitrary frame of data consisting of the <a class="reference download internal"
 <div class="section" id="build-the-graph">
 <h2>Build the Graph<a class="headerlink" href="#build-the-graph" title="Permalink to this headline">¶</a></h2>
 <p>Make an empty graph and give it a name:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&quot;personnel&quot;</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">graph</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;personnel&quot;</span>
 </pre></div>
 </div>
 <p>Define the vertex types:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;employee&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;manager&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;title&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s">&quot;years&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s2">&quot;employee&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s2">&quot;manager&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_vertex_type</span><span class="p">(</span><span class="s2">&quot;years&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Define the edge type:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s">&#39;worksunder&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">define_edge_type</span><span class="p">(</span><span class="s1">&#39;worksunder&#39;</span><span class="p">,</span> <span class="s1">&#39;Employee&#39;</span><span class="p">,</span> <span class="s1">&#39;Employee&#39;</span><span class="p">,</span> <span class="n">directed</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Add the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Title&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s">&#39;Employee&#39;</span><span class="p">,</span> <span class="s">&#39;Manager&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Years&#39;</span><span class="p">],</span> <span class="n">create_missing_vertices</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_vertices</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s1">&#39;Employee&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Title&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">add_edges</span><span class="p">(</span><span class="n">employees_frame</span><span class="p">,</span> <span class="s1">&#39;Employee&#39;</span><span class="p">,</span> <span class="s1">&#39;Manager&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Years&#39;</span><span class="p">],</span> <span class="n">create_missing_vertices</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p>Improperly built graphs can give inconsistent results.
 For example, given EdgeFrames with this data:</p>
-<div class="highlight-python"><div class="highlight"><pre>Movieid, movieTitle, Rating, userId
+<div class="highlight-python"><div class="highlight"><pre><span></span>Movieid, movieTitle, Rating, userId
 1, Titanic, 3, 1
 1, My Own Private Idaho, 3, 2
 </pre></div>
@@ -953,19 +953,19 @@ data, based upon which order the records are delivered to the function.</p>
 <div class="section" id="other-graph-options">
 <h2>Other Graph Options<a class="headerlink" href="#other-graph-options" title="Permalink to this headline">¶</a></h2>
 <p>Inspect the graph:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertex_count</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertex_count</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edge_count</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">[</span><span class="s1">&#39;Employee&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">[</span><span class="s1">&#39;worksunder&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For further information, see the API section on <span class="xref std std-ref">Graphs</span>.</p>
 <p>Make a VertexFrame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_vertex_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">(</span><span class="s">&quot;employee&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_vertex_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">vertices</span><span class="p">(</span><span class="s2">&quot;employee&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Make an EdgeFrame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s">&quot;worksunder&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_edge_frame</span> <span class="o">=</span> <span class="n">my_graph</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="s2">&quot;worksunder&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <span class="target" id="graph-analytics"></span><div class="toctree-wrapper compound">
@@ -1009,7 +1009,7 @@ See <span class="xref std std-ref">graph API</span> for details of the
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

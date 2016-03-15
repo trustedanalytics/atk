@@ -155,7 +155,7 @@ Sort the data in a frame.</p>
 <p class="rubric">Examples</p>
 <dl class="docutils">
 <dt>Consider the frame</dt>
-<dd><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<dd><div class="first last highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
 <span class="go">==================</span>
 <span class="go">[0]     3  foxtrot</span>
@@ -169,7 +169,7 @@ Sort the data in a frame.</p>
 </dd>
 </dl>
 <p>Sort a single column:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;col1&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
@@ -183,7 +183,7 @@ Sort the data in a frame.</p>
 </pre></div>
 </div>
 <p>Sort a single column descending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
@@ -197,7 +197,7 @@ Sort the data in a frame.</p>
 </pre></div>
 </div>
 <p>Sort multiple columns:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="s">&#39;col2&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
@@ -211,7 +211,7 @@ Sort the data in a frame.</p>
 </pre></div>
 </div>
 <p>Sort multiple columns descending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="s">&#39;col2&#39;</span><span class="p">],</span> <span class="bp">False</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="s1">&#39;col2&#39;</span><span class="p">],</span> <span class="bp">False</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
@@ -225,7 +225,7 @@ Sort the data in a frame.</p>
 </pre></div>
 </div>
 <p>Sort multiple columns: &#8216;col1&#8217; decending and &#8216;col2&#8217; ascending:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span> <span class="p">(</span><span class="s">&#39;col1&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">sort</span><span class="p">([</span> <span class="p">(</span><span class="s1">&#39;col1&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;col2&#39;</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span> <span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  col1  col2</span>
@@ -263,7 +263,7 @@ Sort the data in a frame.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

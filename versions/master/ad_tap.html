@@ -143,22 +143,22 @@
 For more information, see <span class="xref std std-ref">Yum Repo</span>.</p>
 <p>From the command line interface (terminal),
 install Go and the required libraries.</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install golang
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ sudo yum install golang
 </pre></div>
 </div>
 <p>To read more about Go, see <a class="reference external" href="https://golang.org/">https://golang.org/</a> .
 To test the Go installation:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ go version
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ go version
 go version go1.4.2 linux/amd64
 </pre></div>
 </div>
 <p>Install the CloudFoundry <abbr title="Command Line Interface">CLI</abbr> package:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ wget --content-disposition https://cli.run.pivotal.io/stable?release=redhat64
 </pre></div>
 </div>
 <p>This command downloads the prepackaged RPM to your local machine.
 Install this package:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ sudo yum install cf-cli_amd64.rpm
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ sudo yum install cf-cli_amd64.rpm
 </pre></div>
 </div>
 <div class="admonition note">
@@ -166,7 +166,7 @@ Install this package:</p>
 <p class="last">See <a class="reference external" href="https://github.com/cloudfoundry/cli/releases">https://github.com/cloudfoundry/cli/releases</a> for installation on a system not running RedHat/CentOS.</p>
 </div>
 <p>Test the package installation:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf --version
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ cf --version
 cf version 6.11.2-2a26d55-2015-04-27T21:11:44+00:00
 </pre></div>
 </div>
@@ -176,7 +176,7 @@ cf version 6.11.2-2a26d55-2015-04-27T21:11:44+00:00
 <p>First, add the &lt;CLOUD_FOUNDRY_API_ENDPOINT&gt; to the &#8220;no_proxy&#8221; list.</p>
 <p>Now run <code class="docutils literal"><span class="pre">cf</span> <span class="pre">api</span> <span class="pre">&lt;CLOUD_FOUNDRY_API_ENDPOINT&gt;</span> <span class="pre">-skip-ssl-validation</span></code> to set your API endpoint.
 You should see a message like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf api my_endpoint -skip-ssl-validation
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ cf api my_endpoint -skip-ssl-validation
 Setting api endpoint to my_endpoint...
 OK
 API endpoint: my_endpoint (API version: 2.25.0)
@@ -185,7 +185,7 @@ Not logged in. Use &#39;cf login&#39; to log in.
 </div>
 <p>Now try login by running the command <code class="docutils literal"><span class="pre">cf</span> <span class="pre">login</span> <span class="pre">-u</span> <span class="pre">&lt;CLOUD_FOUNDRY_USERNAME&gt;</span> <span class="pre">-p</span> <span class="pre">&lt;CLOUD_FOUNDRY_PASSWORD&gt;</span>&nbsp; <span class="pre">-o</span> <span class="pre">&lt;CLOUD_FOUNDRY_ORGANIZATION</span> <span class="pre">&gt;</span> <span class="pre">-s</span> <span class="pre">&lt;CLOUD_FOUNDRY_SPACE&gt;</span></code></p>
 <p>Your output should look something like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf login -u my_name -p my_password -o my_org -s my_space
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ cf login -u my_name -p my_password -o my_org -s my_space
 API endpoint: my_endpoint
 Authenticating...
 OK
@@ -199,7 +199,7 @@ Space: my_space
 </div>
 <p>Verify that you are still connected by running &#8220;cf target&#8221;
 And your output looks like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf target
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ cf target
 API endpoint: my_endpoint (API version: 2.25.0)
 User: my_name
 Org: my_org
@@ -212,7 +212,7 @@ Space: my_space
 <p>For Admin:</p>
 <p><abbr title="Trusted Analytics Platform Toolkit">ATK</abbr> tarballs are built as part of the TeamCity build and are uploaded to S3.
 In order to download the file, simply run the command:</p>
-<div class="code highlight-python"><div class="highlight"><pre>https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/weekly/regressed/latest/archive/trustedanalytics.tar.gz
+<div class="code highlight-python"><div class="highlight"><pre><span></span>https://analytics-tool-kit.s3-us-west-2.amazonaws.com/public/weekly/regressed/latest/archive/trustedanalytics.tar.gz
 </pre></div>
 </div>
 <p>For Dev:</p>
@@ -235,7 +235,7 @@ unpack your &#8220;trustedanalytics.tar.gz&#8221; inside that directory.</p>
 <li><p class="first">CD to &#8220;~/vcap/app&#8221; and create a file &#8220;manifest.yml&#8221; with this content:
 (For now please ensure you are using below memory and disk_quota values and
 do not change them)</p>
-<div class="code highlight-python"><div class="highlight"><pre>applications:
+<div class="code highlight-python"><div class="highlight"><pre><span></span>applications:
 - name: &lt;YOUR_ATK_APP_NAME_HERE&gt; for example &quot;atk-yourapp&quot;
   command: bin/rest-server.sh
   memory: 1G
@@ -255,11 +255,11 @@ env:
 </div>
 </li>
 <li><p class="first">Create an instance of PostgreSQL by running the command:</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ cf create-service postgresql93 free &lt;PG-ATK-YOURAPP&gt;
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ cf create-service postgresql93 free &lt;PG-ATK-YOURAPP&gt;
 </pre></div>
 </div>
 <p>and you should see an output like this:</p>
-<div class="code highlight-python"><div class="highlight"><pre>Creating service instance PG-ATK-YOURAPP in org seedorg / space seedspace as admin...
+<div class="code highlight-python"><div class="highlight"><pre><span></span>Creating service instance PG-ATK-YOURAPP in org seedorg / space seedspace as admin...
 OK
 </pre></div>
 </div>
@@ -269,7 +269,7 @@ OK
 </li>
 <li><p class="first">Now run the command <code class="docutils literal"><span class="pre">cf</span> <span class="pre">push</span></code>.
 This takes a few minutes to run and you should see the following output:</p>
-<div class="code highlight-python"><div class="highlight"><pre>[hadoop@master app]$ cf push
+<div class="code highlight-python"><div class="highlight"><pre><span></span>[hadoop@master app]$ cf push
 Using manifest file /home/hadoop/vcap/app/manifest.yaml
 Creating app &lt;ATK-YOURAPP&gt; in org seedorg / space seedspace as admin...
 OK
@@ -310,12 +310,12 @@ For more information,
 see <a class="reference external" href="https://github.com/trustedanalytics/atk/wiki/python-client/">Python Client Documentation</a></p>
 </li>
 <li><p class="first">To tail your app logs:</p>
-<div class="code highlight-python"><div class="highlight"><pre>cf logs &lt;ATK-YOURAPP&gt;
+<div class="code highlight-python"><div class="highlight"><pre><span></span>cf logs &lt;ATK-YOURAPP&gt;
 </pre></div>
 </div>
 </li>
 <li><p class="first">Open a Python2.7 or IPython session and do the following:</p>
-<div class="code highlight-python"><div class="highlight"><pre>In [1]: import trustedanalytics as ta
+<div class="code highlight-python"><div class="highlight"><pre><span></span>In [1]: import trustedanalytics as ta
 In [2]: ta.connect(&quot;&lt;PATH_TO_YOUR_CREDENTIALS_FILE&quot;)
 Connected to trustedanalytics server.
 In [3]: ta.server.host
@@ -350,7 +350,7 @@ In [4]: exit
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

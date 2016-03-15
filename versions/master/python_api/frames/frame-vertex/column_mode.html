@@ -203,17 +203,17 @@ By default, only one is returned, but by setting the optional parameter
 max_modes_returned, a larger number of modes can be returned.</p>
 <p class="rubric">Examples</p>
 <p>Given a frame with column &#8216;a&#8217; accessed by a Frame object &#8216;my_frame&#8217;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 <span class="go">Connected ...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">],[</span><span class="mi">3</span><span class="p">],[</span><span class="mi">3</span><span class="p">],[</span><span class="mi">5</span><span class="p">],[</span><span class="mi">7</span><span class="p">],[</span><span class="mi">10</span><span class="p">],[</span><span class="mi">30</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>Inspect my_frame</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a</span>
 <span class="go">=======</span>
 <span class="go">[0]   2</span>
@@ -226,21 +226,21 @@ max_modes_returned, a larger number of modes can be returned.</p>
 </pre></div>
 </div>
 <p>Compute and return a dictionary containing summary statistics of column <em>a</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">column_mode</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">column_mode</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 <span class="go">[(u&#39;mode_count&#39;, 1), (u&#39;modes&#39;, [3]), (u&#39;total_weight&#39;, 7.0), (u&#39;weight_of_mode&#39;, 2.0)]</span>
 </pre></div>
 </div>
 <p>Given a frame with column &#8216;a&#8217; and column &#8216;w&#8217; as weights accessed by a Frame object &#8216;my_frame&#8217;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.7</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.2</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.8</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.8</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;w&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span><span class="mf">1.7</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mf">0.5</span><span class="p">],[</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.2</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mf">0.8</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mf">1.1</span><span class="p">],[</span><span class="mi">10</span><span class="p">,</span><span class="mf">0.8</span><span class="p">],[</span><span class="mi">30</span><span class="p">,</span><span class="mf">0.1</span><span class="p">]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>Inspect my_frame</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a   w</span>
 <span class="go">=======================</span>
 <span class="go">[0]   2   1.70000004768</span>
@@ -253,7 +253,7 @@ max_modes_returned, a larger number of modes can be returned.</p>
 </pre></div>
 </div>
 <p>Compute and return dictionary containing summary statistics of column &#8216;a&#8217; with weights &#8216;w&#8217;:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">column_mode</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">weights_column</span><span class="o">=</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mode</span> <span class="o">=</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">column_mode</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">weights_column</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mode</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
 <span class="go">[(u&#39;mode_count&#39;, 2), (u&#39;modes&#39;, [2]), (u&#39;total_weight&#39;, 6.200000144541264), (u&#39;weight_of_mode&#39;, 1.7000000476837158)]</span>
@@ -284,7 +284,7 @@ max_modes_returned, a larger number of modes can be returned.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

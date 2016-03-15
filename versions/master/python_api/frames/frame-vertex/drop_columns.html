@@ -154,12 +154,12 @@ If it is necessary to delete all columns, then delete the frame.</p>
 <p class="rubric">Examples</p>
 <p>For this example, the Frame object <em>my_frame</em> accesses a frame with 4 columns
 columns <em>column_a</em>, <em>column_b</em>, <em>column_c</em> and <em>column_d</em> and drops 2 columns <em>column_b</em> and <em>column_d</em> using drop columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
 <span class="go">[(u&#39;column_a&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_b&#39;, &lt;type &#39;numpy.int32&#39;&gt;), (u&#39;column_c&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_d&#39;, &lt;type &#39;numpy.int32&#39;&gt;)]</span>
 </pre></div>
 </div>
 <p>Eliminate columns <em>column_b</em> and <em>column_d</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&quot;column_b&quot;</span><span class="p">,</span> <span class="s">&quot;column_d&quot;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s2">&quot;column_b&quot;</span><span class="p">,</span> <span class="s2">&quot;column_d&quot;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">my_frame</span><span class="o">.</span><span class="n">schema</span>
 <span class="go">[(u&#39;column_a&#39;, &lt;type &#39;unicode&#39;&gt;), (u&#39;column_c&#39;, &lt;type &#39;unicode&#39;&gt;)]</span>
 </pre></div>
@@ -191,7 +191,7 @@ For further examples, see: ref:<cite>example_frame.drop_columns</cite>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

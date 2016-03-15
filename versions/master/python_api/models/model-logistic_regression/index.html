@@ -206,43 +206,43 @@
 </tr>
 </tbody>
 </table>
-<p>Logistic Regression <a class="reference internal" href="#r37" id="id1">[R37]</a> is a widely used supervised binary and multi-class classification algorithm.
+<p>Logistic Regression <a class="reference internal" href="../model-principal_components/new.html#r17" id="id1">[R17]</a> is a widely used supervised binary and multi-class classification algorithm.
 The Logistic Regression model is initialized, trained on columns of a frame, predicts the labels
 of observations, and tests the predicted labels against the true labels.
-This model runs the MLLib implementation of Logistic Regression <a class="reference internal" href="#r38" id="id2">[R38]</a>, with enhanced features —
+This model runs the MLLib implementation of Logistic Regression <a class="reference internal" href="../model-principal_components/new.html#r18" id="id2">[R18]</a>, with enhanced features —
 trained model summary statistics; Covariance and Hessian matrices; ability to specify the frequency
 of the train and test observations.
 Testing performance can be viewed via built-in binary and multi-class Classification Metrics.
-It also allows the user to select the optimizer to be used - L-BFGS <a class="reference internal" href="#r39" id="id3">[R39]</a> or SGD <a class="reference internal" href="#r40" id="id4">[R40]</a>.</p>
+It also allows the user to select the optimizer to be used - L-BFGS <a class="reference internal" href="../model-random_forest_classifier/index.html#r19" id="id3">[R19]</a> or SGD <a class="reference internal" href="../model-random_forest_classifier/index.html#r20" id="id4">[R20]</a>.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r37" rules="none">
+<table class="docutils citation" frame="void" id="r17" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R37]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_regression">https://en.wikipedia.org/wiki/Logistic_regression</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R17]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_regression">https://en.wikipedia.org/wiki/Logistic_regression</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r38" rules="none">
+<table class="docutils citation" frame="void" id="r18" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R38]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#logistic-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#logistic-regression</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R18]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#logistic-regression">https://spark.apache.org/docs/1.5.0/mllib-linear-methods.html#logistic-regression</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r39" rules="none">
+<table class="docutils citation" frame="void" id="r19" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R39]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Limited-memory_BFGS">https://en.wikipedia.org/wiki/Limited-memory_BFGS</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Limited-memory_BFGS">https://en.wikipedia.org/wiki/Limited-memory_BFGS</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r40" rules="none">
+<table class="docutils citation" frame="void" id="r20" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id4">[R40]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id4">[R20]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">https://en.wikipedia.org/wiki/Stochastic_gradient_descent</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Sepal_Length  Petal_Length  Class</span>
 <span class="go">======================================</span>
 <span class="go">[0]           4.9           1.4      0</span>
@@ -257,10 +257,10 @@ It also allows the user to select the optimizer to be used - L-BFGS <a class="re
 <span class="go">[9]           7.4           6.1      2</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LogisticRegressionModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Sepal_Length&#39;</span><span class="p">,</span> <span class="s">&#39;Petal_Length&#39;</span><span class="p">],</span>
-<span class="gp">... </span>                                <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s">&#39;LBFGS&#39;</span><span class="p">,</span> <span class="n">compute_covariance</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Sepal_Length&#39;</span><span class="p">,</span> <span class="s1">&#39;Petal_Length&#39;</span><span class="p">],</span>
+<span class="gp">... </span>                                <span class="n">num_classes</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="s1">&#39;LBFGS&#39;</span><span class="p">,</span> <span class="n">compute_covariance</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">summary_table</span>
 <span class="go">                coefficients  degrees_freedom  standard_errors  \</span>
@@ -280,7 +280,7 @@ Sepal_Length_0       -0.000002  1.000000
 intercept_1                NaN       NaN
 Petal_Length_0        0.000003  0.998559
 Petal_Length_1        0.000006  0.998094</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span><span class="o">.</span><span class="n">covariance_matrix</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Sepal_Length_0      Petal_Length_0      intercept_0</span>
 <span class="go">===============================================================</span>
 <span class="go">[0]   8.12518826843e+14   -1050552809704907   5.66008788624e+14</span>
@@ -316,7 +316,7 @@ Petal_Length_1        0.000006  0.998094</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

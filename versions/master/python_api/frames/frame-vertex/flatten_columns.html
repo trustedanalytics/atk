@@ -158,17 +158,17 @@ contain one value.
 The original row is deleted.</p>
 <p class="rubric">Examples</p>
 <p>Given a data file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="mi">1</span><span class="o">-</span><span class="n">solo</span><span class="p">,</span><span class="n">mono</span><span class="p">,</span><span class="n">single</span><span class="o">-</span><span class="n">green</span><span class="p">,</span><span class="n">yellow</span><span class="p">,</span><span class="n">red</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="mi">1</span><span class="o">-</span><span class="n">solo</span><span class="p">,</span><span class="n">mono</span><span class="p">,</span><span class="n">single</span><span class="o">-</span><span class="n">green</span><span class="p">,</span><span class="n">yellow</span><span class="p">,</span><span class="n">red</span>
 <span class="mi">2</span><span class="o">-</span><span class="n">duo</span><span class="p">,</span><span class="n">double</span><span class="o">-</span><span class="n">orange</span><span class="p">,</span><span class="n">black</span>
 </pre></div>
 </div>
 <p>The commands to bring the data into a frame, where it can be worked on:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),(</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_csv</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;original_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="nb">str</span><span class="p">)],</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">source</span><span class="o">=</span><span class="n">my_csv</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Looking at it:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a  b                 c</span>
 <span class="go">==========================================</span>
 <span class="go">[0]  1  solo,mono,single  green,yellow,red</span>
@@ -176,7 +176,7 @@ The original row is deleted.</p>
 </pre></div>
 </div>
 <p>Now, spread out those sub-strings in column <em>b</em> and <em>c</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">([</span><span class="s">&#39;b&#39;</span><span class="p">,</span><span class="s">&#39;c&#39;</span><span class="p">],</span> <span class="s">&#39;,&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">],</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
@@ -187,7 +187,7 @@ provided.  If a single delimiter is provided, it&#8217;s assumed that we are usi
 for all columns that are being flattened.  If more than one delimiter is provided, the number of
 delimiters must match the number of string columns being flattened.</p>
 <p>Check again:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a  b       c</span>
 <span class="go">======================</span>
 <span class="go">[0]  1  solo    green</span>
@@ -199,12 +199,12 @@ delimiters must match the number of string columns being flattened.</p>
 </div>
 <p>Alternatively, flatten_columns also accepts a single column name (instead of a list) if just one
 column is being flattened.  For example, we could have called flatten_column on just column <em>b</em>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">(</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;,&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">flatten_columns</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 </pre></div>
 </div>
 <p>Check again:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  a  b       c</span>
 <span class="go">================================</span>
 <span class="go">[0]  1  solo    green,yellow,red</span>
@@ -239,7 +239,7 @@ column is being flattened.  For example, we could have called flatten_column on 
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

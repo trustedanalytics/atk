@@ -158,7 +158,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  doc_id     word_id     word_count</span>
 <span class="go">======================================</span>
 <span class="go">[0]  nytimes    harry                3</span>
@@ -173,7 +173,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[9]  economist  movies               1</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_id&#39;</span><span class="p">,</span> <span class="s">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;doc_id&#39;</span><span class="p">,</span> <span class="s1">&#39;word_id&#39;</span><span class="p">,</span> <span class="s1">&#39;word_count&#39;</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_topics</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
 <span class="go">{&#39;topics_given_word&#39;: Frame  &lt;unnamed&gt;</span>
@@ -186,7 +186,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">row_count = 8</span>
 <span class="go">schema = [word_id:unicode, topic_probabilities:vector(2)]</span>
 <span class="go">status = ACTIVE  (last_read_date = 2015-10-23T11:07:46.465000-07:00)}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;topics_given_doc&#39;</span><span class="p">]</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  doc_id       topic_probabilities</span>
@@ -196,7 +196,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[2]  nytimes      [0.855316939742769, 0.14468306025723088]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_doc</span><span class="o">.</span><span class="n">column_names</span>
 <span class="go">[u&#39;doc_id&#39;, u&#39;topic_probabilities&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;word_given_topics&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;word_given_topics&#39;</span><span class="p">]</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  word_id     topic_probabilities</span>
@@ -211,7 +211,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[7]  jobs        [0.36277568884120137, 0.06389383278349432]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">word_given_topics</span><span class="o">.</span><span class="n">column_names</span>
 <span class="go">[u&#39;word_id&#39;, u&#39;topic_probabilities&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s">&#39;topics_given_word&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span> <span class="o">=</span> <span class="n">train_output</span><span class="p">[</span><span class="s1">&#39;topics_given_word&#39;</span><span class="p">]</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  word_id     topic_probabilities</span>
@@ -226,21 +226,21 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
 <span class="go">[7]  jobs        [0.8748608515169193, 0.12513914848308066]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">topics_given_word</span><span class="o">.</span><span class="n">column_names</span>
 <span class="go">[u&#39;word_id&#39;, u&#39;topic_probabilities&#39;]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;secrets&#39;</span><span class="p">,</span> <span class="s">&#39;magic&#39;</span><span class="p">,</span> <span class="s">&#39;harry&#39;</span><span class="p">,</span> <span class="s">&#39;chamber&#39;</span> <span class="s">&#39;test&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s1">&#39;harry&#39;</span><span class="p">,</span> <span class="s1">&#39;secrets&#39;</span><span class="p">,</span> <span class="s1">&#39;magic&#39;</span><span class="p">,</span> <span class="s1">&#39;harry&#39;</span><span class="p">,</span> <span class="s1">&#39;chamber&#39;</span> <span class="s1">&#39;test&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span>
 <span class="go">{u&#39;topics_given_doc&#39;: [0.3149285399451628, 0.48507146005483726], u&#39;new_words_percentage&#39;: 20.0, u&#39;new_words_count&#39;: 1}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s1">&#39;topics_given_doc&#39;</span><span class="p">]</span>
 <span class="go">[0.3149285399451628, 0.48507146005483726]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s1">&#39;new_words_percentage&#39;</span><span class="p">]</span>
 <span class="go">20.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s">&#39;new_words_count&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="p">[</span><span class="s1">&#39;new_words_count&#39;</span><span class="p">]</span>
 <span class="go">1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;topics_given_doc&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;topics_given_doc&#39;</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;new_words_percentage&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;new_words_percentage&#39;</span><span class="p">)</span>
 <span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s">&#39;new_words_count&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prediction</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="s1">&#39;new_words_count&#39;</span><span class="p">)</span>
 <span class="go">True</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">publish</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
@@ -271,7 +271,7 @@ For more detail see <span class="xref std std-ref">LDA</span>.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

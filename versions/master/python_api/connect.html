@@ -188,13 +188,13 @@ The credentials file is normally obtained through the environment.</p>
 <div class="section" id="basic-connecting">
 <h2>Basic connecting<a class="headerlink" href="#basic-connecting" title="Permalink to this headline">¶</a></h2>
 <p>To use the default settings provided by the environment and/or configuration:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>To connect to a specific server:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s">&#39;myhost-name:port&#39;</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s1">&#39;myhost-name:port&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -204,7 +204,7 @@ The credentials file is normally obtained through the environment.</p>
 <p>To connect to a TAP instance of Trusted Analytics Platform, the python client must have an OAuth access token (see [oauth tokens](<a class="reference external" href="http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html">http://self-issued.info/docs/draft-ietf-oauth-v2-bearer.html</a>)).
 The user must have a credentials file which holds an OAuth access token and a refresh token.</p>
 <p>The user can create a credentials file using Trusted Analytics Platform client running in an interactive python session.  Call <cite>create_credentials_file(&#8216;filename_of_your_choice&#8217;)</cite> and interactively provide answers to its prompt.</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ python2.7
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ python2.7
 
 &gt;&gt;&gt; import trustedanalytics as ta
 &gt;&gt;&gt; ta.create_connect_file(&#39;~/.ta/demo.creds&#39;)
@@ -216,7 +216,7 @@ Credentials created at &#39;/home/dscientist9/.ta/demo.creds&#39;
 </pre></div>
 </div>
 <p>The credentials file can be specified when calling <code class="docutils literal"><span class="pre">connect</span></code> or set as an environmental variable $TA_CREDS.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;~/.ta/demo.creds&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s1">&#39;~/.ta/demo.creds&#39;</span><span class="p">)</span>
 <span class="go">Connected.  This client instance connected to server http://my-ta-instance.my-tap-apps-domain.com/v1 as user dscientist9 at 2015-06-19 10:27:21.583704.</span>
 </pre></div>
 </div>
@@ -230,15 +230,15 @@ They should be protected with appropriate OS privileges.</p>
 <p>The URI of the Trusted Analytics Platform server can be specified by the environmental variable <code class="docutils literal"><span class="pre">$TA_URI</span></code>.
 The python client will initialize its config setting to this value.
 It may still be overridden as shown above in the session or script.</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ export TA_URI=ta-server.demo-gotapaas.com
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ export TA_URI=ta-server.demo-gotapaas.com
 </pre></div>
 </div>
 <p>The credentials file can be specified by $TA_CREDS.</p>
-<div class="code highlight-python"><div class="highlight"><pre>$ export TA_CREDS=~/.ta/demo.creds
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ export TA_CREDS=~/.ta/demo.creds
 </pre></div>
 </div>
 <p>With these two variables set, the simple connect sequence works.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -248,7 +248,7 @@ It may still be overridden as shown above in the session or script.</p>
 <div class="section" id="client-s-server-settings">
 <h3>Client&#8217;s Server Settings<a class="headerlink" href="#client-s-server-settings" title="Permalink to this headline">¶</a></h3>
 <p>To see the client&#8217;s configuration to find the server, look at <code class="docutils literal"><span class="pre">ta.server</span></code>:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">server</span>
 <span class="go">{</span>
 <span class="go">    &quot;headers&quot;: {</span>
 <span class="go">        &quot;Accept&quot;: &quot;application/json,text/plain&quot;,</span>
@@ -287,7 +287,7 @@ It may still be overridden as shown above in the session or script.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

@@ -152,7 +152,7 @@
 </tr>
 </tbody>
 </table>
-<p>Naive Bayes <a class="reference internal" href="#r47" id="id1">[R47]</a> is a probabilistic classifier with strong
+<p>Naive Bayes <a class="reference internal" href="../model-svm/index.html#r7" id="id1">[R7]</a> is a probabilistic classifier with strong
 independence assumptions between features.
 It computes the conditional probability distribution of each feature given label,
 and then applies Bayes&#8217; theorem to compute the conditional probability
@@ -160,24 +160,24 @@ distribution of a label given an observation, and use it for prediction.
 The Naive Bayes model is initialized, trained on columns of a frame, tested against true labels of a frame and used
 to predict the value of the dependent variable given the independent
 observations of a frame and test the performance of the classification on test data.
-This model runs the MLLib implementation of Naive Bayes <a class="reference internal" href="#r48" id="id2">[R48]</a>.</p>
+This model runs the MLLib implementation of Naive Bayes <a class="reference internal" href="../model-svm/new.html#r8" id="id2">[R8]</a>.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r47" rules="none">
+<table class="docutils citation" frame="void" id="r7" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R47]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier">https://en.wikipedia.org/wiki/Naive_Bayes_classifier</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R7]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier">https://en.wikipedia.org/wiki/Naive_Bayes_classifier</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r48" rules="none">
+<table class="docutils citation" frame="void" id="r8" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R48]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-naive-bayes.html">https://spark.apache.org/docs/1.5.0/mllib-naive-bayes.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R8]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-naive-bayes.html">https://spark.apache.org/docs/1.5.0/mllib-naive-bayes.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing three columns.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2</span>
 <span class="go">=======================================</span>
 <span class="go">[0]      1  19.8446136104  2.2985856384</span>
@@ -188,11 +188,11 @@ This model runs the MLLib implementation of Naive Bayes <a class="reference inte
 <span class="go">[5]      0  34.6334526911  3.6429838715</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">NaiveBayesModel</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">NaiveBayesModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">lambda_parameter</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">],</span> <span class="n">lambda_parameter</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span> <span class="s1">&#39;Dim_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  Class  Dim_1          Dim_2         predicted_class</span>
@@ -205,7 +205,7 @@ This model runs the MLLib implementation of Naive Bayes <a class="reference inte
 <span class="go">[5]      0  34.6334526911  3.6429838715              0.0</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s">&#39;Dim_2&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Dim_1&#39;</span><span class="p">,</span><span class="s1">&#39;Dim_2&#39;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">test_metrics</span>
 <span class="go">Precision: 1.0</span>
@@ -245,7 +245,7 @@ This model runs the MLLib implementation of Naive Bayes <a class="reference inte
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

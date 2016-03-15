@@ -154,23 +154,23 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 <h2>Construct a Frame<a class="headerlink" href="#construct-a-frame" title="Permalink to this headline">¶</a></h2>
 <p>Construct a frame to be uploaded, this is done using Python lists uploaded to the server</p>
 <p>In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s">&quot;paper1&quot;</span><span class="p">,</span> <span class="s">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper1&quot;</span><span class="p">,</span> <span class="s">&quot;word12&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper1&quot;</span><span class="p">,</span> <span class="s">&quot;word13&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper1&quot;</span><span class="p">,</span> <span class="s">&quot;word14&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word12&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper1&quot;</span><span class="p">,</span> <span class="s2">&quot;word14&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
 
-                            <span class="p">[</span><span class="s">&quot;paper2&quot;</span><span class="p">,</span> <span class="s">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper2&quot;</span><span class="p">,</span> <span class="s">&quot;word12&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper2&quot;</span><span class="p">,</span> <span class="s">&quot;word13&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper2&quot;</span><span class="p">,</span> <span class="s">&quot;word14&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper2&quot;</span><span class="p">,</span> <span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper2&quot;</span><span class="p">,</span> <span class="s2">&quot;word12&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper2&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper2&quot;</span><span class="p">,</span> <span class="s2">&quot;word14&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
 
-                            <span class="p">[</span><span class="s">&quot;paper3&quot;</span><span class="p">,</span> <span class="s">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper3&quot;</span><span class="p">,</span> <span class="s">&quot;word22&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper3&quot;</span><span class="p">,</span> <span class="s">&quot;word23&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
-                            <span class="p">[</span><span class="s">&quot;paper3&quot;</span><span class="p">,</span> <span class="s">&quot;word24&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
-                            <span class="p">[(</span><span class="s">&quot;paper&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-                             <span class="p">(</span><span class="s">&quot;word&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-                             <span class="p">(</span><span class="s">&quot;count&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
+                            <span class="p">[</span><span class="s2">&quot;paper3&quot;</span><span class="p">,</span> <span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper3&quot;</span><span class="p">,</span> <span class="s2">&quot;word22&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper3&quot;</span><span class="p">,</span> <span class="s2">&quot;word23&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+                            <span class="p">[</span><span class="s2">&quot;paper3&quot;</span><span class="p">,</span> <span class="s2">&quot;word24&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">]],</span>
+                            <span class="p">[(</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+                             <span class="p">(</span><span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+                             <span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
 
 <span class="n">frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">rows_frame</span><span class="p">)</span>
 
@@ -180,7 +180,7 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 </div>
 <div class="section" id="build-a-model">
 <h2>Build a Model<a class="headerlink" href="#build-a-model" title="Permalink to this headline">¶</a></h2>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">lda_model</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">lda_model</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">LdaModel</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -189,15 +189,15 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 <p>This LDA model will be trained using the frame above.</p>
 <p>[FIX THIS]Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
 The final argument is the number of topics to search for.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">lda_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&quot;paper&quot;</span><span class="p">,</span> <span class="s">&quot;word&quot;</span><span class="p">,</span> <span class="s">&quot;count&quot;</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">lda_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="s2">&quot;word&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">num_topics</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="predict-on-the-model">
 <h2>Predict on the Model<a class="headerlink" href="#predict-on-the-model" title="Permalink to this headline">¶</a></h2>
 <p>Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">cluster1</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&quot;word11&quot;</span><span class="p">,</span> <span class="s">&quot;word13&quot;</span><span class="p">])</span>
-<span class="n">cluster2</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s">&quot;word21&quot;</span><span class="p">,</span> <span class="s">&quot;word23&quot;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">cluster1</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s2">&quot;word11&quot;</span><span class="p">,</span> <span class="s2">&quot;word13&quot;</span><span class="p">])</span>
+<span class="n">cluster2</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">([</span><span class="s2">&quot;word21&quot;</span><span class="p">,</span> <span class="s2">&quot;word23&quot;</span><span class="p">])</span>
 <span class="k">print</span> <span class="n">cluster1</span>
 <span class="k">print</span> <span class="n">cluster2</span>
 
@@ -228,7 +228,7 @@ The final argument is the number of topics to search for.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

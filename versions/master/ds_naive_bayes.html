@@ -142,12 +142,12 @@
 <p>Establish a connection to the ATK Rest Server
 This handle will be used for the remaineder of the script</p>
 <p>Get your server URL and credentials file from the TAP administrator</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">atk_server_uri</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;ATK_SERVER_URI&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
-<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&quot;ATK_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">atk_server_uri</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_SERVER_URI&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+<span class="n">credentials_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ATK_CREDENTIALS&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Set the server, and use the credentials to connect to the ATK</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">atk_server_uri</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">ia</span><span class="o">.</span><span class="n">server</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">atk_server_uri</span>
 <span class="n">ia</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">credentials_file</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -161,14 +161,14 @@ This handle will be used for the remaineder of the script</p>
 <p>Construct a frame to be uploaded, this is done using Python lists uploaded to the server</p>
 <p>Each row represents a sample from a probability distribution, with a vector associated with a category. For the purposes of this example there are two categories (e.g. cat and dog) and three features to indicate whether the sample is a cat or a dog (weight, height, fur type)</p>
 <p>The frame has the schema Class, feature 1, feature 2, feature 3, where class is the category that the sample belongs to</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">rows_frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                             <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                             <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span>
                             <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span>
-                           <span class="p">[(</span><span class="s">&quot;class&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
-                            <span class="p">(</span><span class="s">&quot;f1&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-                            <span class="p">(</span><span class="s">&quot;f2&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-                            <span class="p">(</span><span class="s">&quot;f3&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
+                           <span class="p">[(</span><span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+                            <span class="p">(</span><span class="s2">&quot;f3&quot;</span><span class="p">,</span> <span class="n">ia</span><span class="o">.</span><span class="n">int32</span><span class="p">)])</span>
 
 <span class="n">frame</span> <span class="o">=</span> <span class="n">ia</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">rows_frame</span><span class="p">)</span>
 
@@ -181,7 +181,7 @@ This handle will be used for the remaineder of the script</p>
 <blockquote>
 <div>nb_model = ia.NaiveBayesModel()</div></blockquote>
 <p>Train the model on the frame, this is supervised training technique so the category is used in the training process. Note the feature vector is represented as a list of column names.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="n">nb_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s">&quot;class&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;f1&quot;</span><span class="p">,</span> <span class="s">&quot;f2&quot;</span><span class="p">,</span> <span class="s">&quot;f3&quot;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="n">nb_model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;f1&quot;</span><span class="p">,</span> <span class="s2">&quot;f2&quot;</span><span class="p">,</span> <span class="s2">&quot;f3&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -228,7 +228,7 @@ self.assertEqual(cm.confusion_matrix.values[1][0],0)</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

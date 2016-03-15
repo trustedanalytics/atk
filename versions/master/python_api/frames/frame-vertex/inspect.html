@@ -190,7 +190,7 @@ by python REPL (i.e. using the object&#8217;s __repr__).  If running in a script
 to be printed, then it must be explicitly printed, then <cite>print frame.inspect()</cite></p>
 <p class="rubric">Examples</p>
 <p>To look at the first 4 rows of data in a frame:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 <span class="go">[#]  animal    name    age  weight</span>
 <span class="go">==================================</span>
 <span class="go">[0]  human     George    8   542.5</span>
@@ -203,13 +203,13 @@ to be printed, then it must be explicitly printed, then <cite>print frame.inspec
 <p>Note: if the frame data contains unicode characters, this method may raise a Unicode exception when
 running in an interactive REPL or otherwise which triggers the standard python repr().  To get around
 this problem, explicitly print the unicode of the returned object:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">())</span>
 </pre></div>
 </div>
 <p><strong>Global Settings</strong></p>
 <p>If not specified, the arguments that control formatting receive default values from
 &#8216;trustedanalytics.inspect_settings&#8217;.  Make changes there to affect all calls to inspect.</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate       None</span>
@@ -217,8 +217,8 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width            80</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c"># changes inspect to use 120 width globally</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c"># changes inspect to always truncate strings to 16 chars</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">120</span>  <span class="c1"># changes inspect to use 120 width globally</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">truncate</span> <span class="o">=</span> <span class="mi">16</span>  <span class="c1"># changes inspect to always truncate strings to 16 chars</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate         16</span>
@@ -226,7 +226,7 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width           120</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># return value back to default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c1"># return value back to default</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate         16</span>
@@ -234,7 +234,7 @@ this problem, explicitly print the unicode of the returned object:</p>
 <span class="go">width            80</span>
 <span class="go">margin         None</span>
 <span class="go">with_types    False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c"># set everything back to default</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>  <span class="c1"># set everything back to default</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">inspect_settings</span>
 <span class="go">wrap             20</span>
 <span class="go">truncate       None</span>
@@ -269,7 +269,7 @@ this problem, explicitly print the unicode of the returned object:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

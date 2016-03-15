@@ -233,15 +233,15 @@ The columns have the data types <em>int32</em>, <em>int32</em>, and <em>str</em>
 The fields of data are separated by commas.
 There is no header to the file.</p>
 <p>Import the Trusted Analytics Platform:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 </pre></div>
 </div>
 <p>Define the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;a&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;b&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;c&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;a&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;b&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>Create a CsvFile object with this schema:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_define</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_define</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The default delimiter, a comma, was used to separate fields in the file, so
@@ -250,12 +250,12 @@ If the columns of data were separated by a character other than comma, the
 appropriate delimiter would be specified.
 For example if the data columns were separated by the colon character, the
 instruction would be:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">,</span> <span class="n">delimiter</span> <span class="o">=</span> <span class="s1">&#39;:&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If the data had some lines of header at the beginning of the file, the
 lines should be skipped:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_data</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">,</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_data</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;data/raw_data.csv&quot;</span><span class="p">,</span> <span class="n">csv_schema</span><span class="p">,</span> <span class="n">skip_header_lines</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For other examples see <a class="reference internal" href="../../ds_dflw.html#example-files-csvfile"><span>Importing a CSV File</span></a>.</p>
@@ -280,12 +280,12 @@ lines should be skipped:</p>
 <p class="rubric">Examples</p>
 <p>Given a raw data file &#8216;raw_data.csv&#8217; with columns <em>col1</em> (<em>int32</em>)
 and <em>col2</em> (<em>float32</em>):</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;raw_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;raw_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">csv_class</span><span class="o">.</span><span class="n">field_names</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>Results:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="s">&quot;col2&quot;</span><span class="p">]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;col2&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -309,17 +309,17 @@ and <em>col2</em> (<em>float32</em>):</p>
 <p class="rubric">Examples</p>
 <p>Given a raw data file &#8216;raw_data.csv&#8217; with columns <em>col1</em> (<em>int32</em>)
 and <em>col2</em> (<em>float32</em>):</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;raw_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;raw_data.csv&quot;</span><span class="p">,</span> <span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">csv_class</span><span class="o">.</span><span class="n">field_types</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s">&quot;raw_data.csv&quot;</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">csv_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">CsvFile</span><span class="p">(</span><span class="s2">&quot;raw_data.csv&quot;</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">csv_class</span><span class="o">.</span><span class="n">field_types</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>Results:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">]</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -340,6 +340,9 @@ and <em>col2</em> (<em>float32</em>):</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_json</span></code>()</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
@@ -347,7 +350,7 @@ and <em>col2</em> (<em>float32</em>):</p>
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>query</em><span class="sig-paren">)</span><a class="headerlink" href="#trustedanalytics.HiveQuery.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Define the sql query to retrieve the data from a Hive table.</p>
 <p>Only a subset of Hive data types are supported.</p>
-<div class="code highlight-python"><div class="highlight"><pre>Data Type   Support
+<div class="code highlight-python"><div class="highlight"><pre><span></span>Data Type   Support
 ___________ ____________________________________
 
 boolean     cast to int
@@ -396,16 +399,16 @@ union       not supported
 <p>Given a Hive table <em>person</em> having <em>name</em> and <em>age</em> among other columns.
 A simple query could be to get the query for the name and age
 .. code:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Define the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hive_query</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">HiveQuery</span><span class="p">(</span><span class="s">&quot;select name, age from person&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hive_query</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">HiveQuery</span><span class="p">(</span><span class="s2">&quot;select name, age from person&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a frame using the object:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">hive_query</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">hive_query</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -442,6 +445,9 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_json</span></code>()</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
@@ -468,9 +474,9 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">HBaseTable</span> <span class="p">(</span><span class="s">&quot;my_table&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;pants&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),(</span> <span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),(</span><span class="s">&quot;shirts&quot;</span><span class="p">,</span> <span class="s">&quot;row&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">HBaseTable</span> <span class="p">(</span><span class="s2">&quot;my_table&quot;</span><span class="p">,</span> <span class="p">[(</span><span class="s2">&quot;pants&quot;</span><span class="p">,</span> <span class="s2">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;pants&quot;</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),(</span> <span class="s2">&quot;shirts&quot;</span><span class="p">,</span> <span class="s2">&quot;aisle&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">),(</span><span class="s2">&quot;shirts&quot;</span><span class="p">,</span> <span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 </pre></div>
@@ -493,6 +499,9 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">to_json</span></code>()</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <dl class="method">
@@ -530,9 +539,9 @@ save frame1 into base as table1 (overwrite with initial + appended data)</li>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">,</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">jdbcTable</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JdbcTable</span> <span class="p">(</span><span class="s2">&quot;test&quot;</span><span class="p">,</span>
 <span class="go">                              &quot;jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord&quot;,</span>
 <span class="go">                              &quot;com.microsoft.sqlserver.jdbc.SQLServerDriver&quot;,</span>
 <span class="go">                              &quot;select * FROM SomeTable&quot;)</span>
@@ -587,38 +596,38 @@ See <span class="xref std std-ref">Configure File System Root</span>.</p>
 It consists of a 3 top level json objects with a single value each called
 obj. Each object contains the attributes color, size, and shape.</p>
 <p>The example JSON file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span> <span class="s">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s">&quot;color&quot;</span><span class="p">:</span> <span class="s">&quot;blue&quot;</span><span class="p">,</span>
-    <span class="s">&quot;size&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-    <span class="s">&quot;shape&quot;</span><span class="p">:</span> <span class="s">&quot;square&quot;</span> <span class="p">}</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">{</span> <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;square&quot;</span> <span class="p">}</span>
 <span class="p">}</span>
-<span class="p">{</span> <span class="s">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s">&quot;color&quot;</span><span class="p">:</span> <span class="s">&quot;green&quot;</span><span class="p">,</span>
-    <span class="s">&quot;size&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s">&quot;shape&quot;</span><span class="p">:</span> <span class="s">&quot;triangle&quot;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;triangle&quot;</span> <span class="p">}</span>
 <span class="p">}</span>
-<span class="p">{</span> <span class="s">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s">&quot;color&quot;</span><span class="p">:</span> <span class="s">&quot;orange&quot;</span><span class="p">,</span>
-    <span class="s">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-    <span class="s">&quot;shape&quot;</span><span class="p">:</span> <span class="s">&quot;square&quot;</span> <span class="p">}</span>
+<span class="p">{</span> <span class="s2">&quot;obj&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;orange&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;square&quot;</span> <span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Import the Trusted Analytics Platform:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Define the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">json_file</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JsonFile</span><span class="p">(</span><span class="s">&quot;data/raw_data.json&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">json_file</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">JsonFile</span><span class="p">(</span><span class="s2">&quot;data/raw_data.json&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a frame using this JsonFile:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The frame looks like:</p>
-<div class="code highlight-python"><div class="highlight"><pre>  data_lines
+<div class="code highlight-python"><div class="highlight"><pre><span></span>  data_lines
 /------------------------/
   &#39;{ &quot;obj&quot;: {
       &quot;color&quot;: &quot;blue&quot;,
@@ -638,22 +647,22 @@ obj. Each object contains the attributes color, size, and shape.</p>
 </pre></div>
 </div>
 <p>Parse values out of the XML column using the add_columns method:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">parse_my_json</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">parse_my_json</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="kn">import</span> <span class="nn">json</span>
 <span class="gp">... </span>    <span class="n">my_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">... </span>    <span class="n">obj</span> <span class="o">=</span> <span class="n">my_json</span><span class="p">[</span><span class="s">&#39;obj&#39;</span><span class="p">]</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s">&#39;color&#39;</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="s">&#39;size&#39;</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="s">&#39;shape&#39;</span><span class="p">])</span>
+<span class="gp">... </span>    <span class="n">obj</span> <span class="o">=</span> <span class="n">my_json</span><span class="p">[</span><span class="s1">&#39;obj&#39;</span><span class="p">]</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">obj</span><span class="p">[</span><span class="s1">&#39;color&#39;</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">],</span> <span class="n">obj</span><span class="p">[</span><span class="s1">&#39;shape&#39;</span><span class="p">])</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">parse_my_json</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;color&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;size&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
-<span class="gp">... </span><span class="p">(</span><span class="s">&quot;shape&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">parse_my_json</span><span class="p">,</span> <span class="p">[(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span>
+<span class="gp">... </span><span class="p">(</span><span class="s2">&quot;shape&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
 </pre></div>
 </div>
 <p>Original XML column is no longer necessary:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&#39;data_lines&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s1">&#39;data_lines&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Result:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  color:str   size:str    shape:str</span>
 <span class="go">/-----------------------------------/</span>
@@ -706,12 +715,12 @@ See <span class="xref std std-ref">Configure File System Root</span>.</p>
 &#8216;hdfs://localhost.localdomain/user/trusted/data/&#8217;.
 It consists of multiple lines separated by new line character.</p>
 <p>Import the Trusted Analytics Platform:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Define the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">linefile_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LineFile</span><span class="p">(</span><span class="s">&quot;data/rawline_data.txt&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">linefile_class</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">LineFile</span><span class="p">(</span><span class="s2">&quot;data/rawline_data.txt&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -778,25 +787,25 @@ Default value is True.</p>
 It consists of two columns, rating number and rating description.
 The columns have the data types, int32 and string.</p>
 <p>First import trustedanalytics and pandas:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="kn">import</span> <span class="nn">pandas</span>
 </pre></div>
 </div>
 <p>Connect:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Create data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ratings_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="s">&quot;invalid&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Very Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s">&quot;Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s">&quot;Average&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="s">&quot;Good&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s">&quot;Very Good&quot;</span><span class="p">]]</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratings_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;rating_id&#39;</span><span class="p">,</span> <span class="s">&#39;rating_text&#39;</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ratings_data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;invalid&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;Very Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;Poor&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;Average&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;Good&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;Very Good&quot;</span><span class="p">]]</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ratings_data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;rating_id&#39;</span><span class="p">,</span> <span class="s1">&#39;rating_text&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>At this point create a schema that defines the data:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;rating_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;rating_text&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;rating_id&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;rating_text&#39;</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">)]</span>
 </pre></div>
 </div>
 <p>Now build a PandasFrame object with this schema:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ratings</span><span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">Pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">ratings</span><span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">Pandas</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 </pre></div>
 </div>
 <dl class="docutils">
@@ -825,12 +834,12 @@ The columns have the data types, int32 and string.</p>
 <p class="rubric">Examples</p>
 <p>For this example, we are going to use a pandas dataframe object <em>your_pandas</em> .
 It will have two columns <em>col1</em> and <em>col2</em> with types of <em>int32</em> and <em>float32</em> respectively:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">my_pandas</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PandasFrame</span><span class="p">(</span><span class="n">your_pandas</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">my_pandas</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PandasFrame</span><span class="p">(</span><span class="n">your_pandas</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
 <span class="k">print</span><span class="p">(</span><span class="n">my_pandas</span><span class="o">.</span><span class="n">field_names</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>The output would be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="s">&quot;col2&quot;</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="s2">&quot;col2&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -855,12 +864,12 @@ It will have two columns <em>col1</em> and <em>col2</em> with types of <em>int32
 <p class="rubric">Examples</p>
 <p>For this example, we are going to use a pandas dataframe object <em>your_pandas</em> .
 It will have two columns <em>col1</em> and <em>col2</em> with types of <em>int32</em> and <em>float32</em> respectively:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">my_pandas</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PandasFrame</span><span class="p">(</span><span class="n">your_pandas</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">my_pandas</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">PandasFrame</span><span class="p">(</span><span class="n">your_pandas</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="p">[(</span><span class="s2">&quot;col1&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;col2&quot;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">float32</span><span class="p">)])</span>
 <span class="k">print</span><span class="p">(</span><span class="n">my_csv</span><span class="o">.</span><span class="n">field_types</span><span class="p">())</span>
 </pre></div>
 </div>
 <p>The output would be:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float32</span><span class="p">]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -895,9 +904,9 @@ It will have two columns <em>col1</em> and <em>col2</em> with types of <em>int32
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;one&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s">&#39;two&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">]],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s">&#39;three&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">]]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;n&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;s&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&#39;v&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">vector</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">]],</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">]],</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">]]]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">schema</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;n&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;s&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;v&#39;</span><span class="p">,</span> <span class="n">ta</span><span class="o">.</span><span class="n">vector</span><span class="p">(</span><span class="mi">2</span><span class="p">))]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">ta</span><span class="o">.</span><span class="n">UploadRows</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">schema</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 <span class="go">[#]  n      s           v</span>
@@ -964,7 +973,7 @@ One of the elements has an attribute called <em>color</em>.
 Additionally, the subelement <em>triangle</em> is not needed so we can skip it
 during the import.</p>
 <p>The example XML file:</p>
-<div class="highlight-python"><div class="highlight"><pre>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<div class="highlight-python"><div class="highlight"><pre><span></span>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;shapes&gt;
     &lt;square&gt;
         &lt;name&gt;left&lt;/name&gt;
@@ -981,20 +990,20 @@ during the import.</p>
 </pre></div>
 </div>
 <p>Import the Trusted Analytics Platform:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">trustedanalytics</span> <span class="kn">as</span> <span class="nn">ta</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ta</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Define the data:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">xml_file</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">XmlFile</span><span class="p">(</span><span class="s">&quot;data/raw_data.xml&quot;</span><span class="p">,</span> <span class="s">&quot;square&quot;</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">xml_file</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">XmlFile</span><span class="p">(</span><span class="s2">&quot;data/raw_data.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;square&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Create a frame using this XmlFile:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">xml_file</span><span class="p">)</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">Frame</span><span class="p">(</span><span class="n">xml_file</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The frame looks like:</p>
-<div class="code highlight-python"><div class="highlight"><pre>  data_lines
+<div class="code highlight-python"><div class="highlight"><pre><span></span>  data_lines
 /------------------------/
   &#39;&lt;square&gt;
         &lt;name&gt;left&lt;/name&gt;
@@ -1007,20 +1016,20 @@ during the import.</p>
 </pre></div>
 </div>
 <p>Parse values out of the XML column using the add_columns method:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">parse_my_xml</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">parse_my_xml</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
 <span class="gp">... </span>    <span class="n">ele</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&quot;color&quot;</span><span class="p">),</span> <span class="n">ele</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">ele</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&quot;size&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="p">(</span><span class="n">ele</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">),</span> <span class="n">ele</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">ele</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">parse_my_xml</span><span class="p">,</span> <span class="p">[(</span><span class="s">&quot;color&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s">&quot;size&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">add_columns</span><span class="p">(</span><span class="n">parse_my_xml</span><span class="p">,</span> <span class="p">[(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;size&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)])</span>
 </pre></div>
 </div>
 <p>Original XML column is no longer necessary:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s">&#39;data_lines&#39;</span><span class="p">])</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">drop_columns</span><span class="p">([</span><span class="s1">&#39;data_lines&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <p>Result:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
 
 <span class="go">  color:str   name:str    size:str</span>
 <span class="go">/----------------------------------/</span>
@@ -1056,7 +1065,7 @@ during the import.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>

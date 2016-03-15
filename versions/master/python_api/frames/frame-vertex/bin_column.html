@@ -189,7 +189,7 @@ cutoffs.</li>
 <p class="rubric">Examples</p>
 <p>For these examples, we will use a frame with column <em>a</em> accessed by a Frame
 object <em>my_frame</em>:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a</span>
 <span class="go">========</span>
 <span class="go">[0]    1</span>
@@ -207,8 +207,8 @@ object <em>my_frame</em>:</p>
 </div>
 <p>Modify the frame with a column showing what bin the data is in.
 The data values should use strict_binning:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a   binned</span>
@@ -228,8 +228,8 @@ The data values should use strict_binning:</p>
 </div>
 <p>Modify the frame with a column showing what bin the data is in.
 The data value should not use strict_binning:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">25</span><span class="p">,</span><span class="mi">60</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a   binned</span>
@@ -249,8 +249,8 @@ The data value should not use strict_binning:</p>
 </div>
 <p>Modify the frame with a column showing what bin the data is in.
 The bins should be lower inclusive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a   binned</span>
@@ -270,8 +270,8 @@ The bins should be lower inclusive:</p>
 </div>
 <p>Modify the frame with a column showing what bin the data is in.
 The bins should be upper inclusive:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s">&#39;binned&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">bin_column</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span><span class="mi">55</span><span class="p">,</span><span class="mi">89</span><span class="p">],</span> <span class="n">include_lowest</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+<span class="gp">... </span><span class="n">strict_binning</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">bin_column_name</span><span class="o">=</span><span class="s1">&#39;binned&#39;</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">my_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">(</span> <span class="n">n</span><span class="o">=</span><span class="mi">11</span> <span class="p">)</span>
 <span class="go">[##]  a   binned</span>
@@ -314,7 +314,7 @@ The bins should be upper inclusive:</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 11, 2016.
+      Last updated on Mar 15, 2016.
       </li>
     </ul>
     </div>
