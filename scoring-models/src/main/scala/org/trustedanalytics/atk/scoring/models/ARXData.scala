@@ -14,25 +14,16 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.repository
+package org.trustedanalytics.atk.scoring.models
 
-import org.trustedanalytics.atk.domain.gc.{ GarbageCollection, GarbageCollectionTemplate }
-
-import scala.util.Try
+import com.cloudera.sparkts.models.ARXModel
 
 /**
- * Repository for models
+ * Command for loading model data into existing model in the model database.
+ * @param arxModel Trained ARXModel
+ * @param xColumns Name of the column that contain exogenous variables
  */
-trait GarbageCollectionRepository[Session]
-    extends Repository[Session, GarbageCollectionTemplate, GarbageCollection] {
-
-  /**
-   * Return all unended Garbage Collection Executions
-   * @param session current session
-   * @return all open gc entities
-   */
-  def getCurrentExecutions()(implicit session: Session): Seq[GarbageCollection]
-
-  def updateEndTime(entity: GarbageCollection)(implicit session: Session): Try[GarbageCollection]
-
+case class ARXData(arxModel: ARXModel, xColumns: List[String]) {
+  require(arxModel != null, "arxModel must not be null")
+  require(xColumns != null && xColumns.nonEmpty, "xColumns list must not be null or empty")
 }

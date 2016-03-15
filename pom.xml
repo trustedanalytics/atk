@@ -56,11 +56,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             </snapshots>
         </repository>
         <repository>
-            <id>cloudera-repos</id>
-            <name>Cloudera Repos</name>
-            <url>https://repository.cloudera.com/artifactory/cloudera-repos/</url>
-        </repository>
-        <repository>
             <id>central</id>
             <url>http://repo1.maven.org/maven2</url>
             <releases>
@@ -135,6 +130,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
         <dep.hive.version>1.1.0-${dep.cdh.version}</dep.hive.version>
         <dev.spark.hive.version>1.5.0-${dep.cdh.version}</dev.spark.hive.version>
         <dep.daal.version>2016.0.109</dep.daal.version>
+
         <!--START GAO MAVEN -->
 
         <scala.long.version>2.10.4</scala.long.version>
@@ -1440,12 +1436,18 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>jackson-databind</artifactId>
                 <version>2.2.3</version>
             </dependency>
-			<!-- com.cloudera.sparkts -->
-			<dependency>
-				<groupId>com.cloudera.sparkts</groupId>
-				<artifactId>sparkts</artifactId>
-				<version>0.2.0</version>
-			</dependency>
+            <!-- com.cloudera.sparkts -->
+            <dependency>
+                <groupId>com.cloudera.sparkts</groupId>
+                <artifactId>sparkts</artifactId>
+                <version>0.3.2</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>breeze_${scala.short.version}</artifactId>
+                        <groupId>org.scalanlp</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <!--test scope-->
             <dependency>
                 <groupId>org.mockito</groupId>
