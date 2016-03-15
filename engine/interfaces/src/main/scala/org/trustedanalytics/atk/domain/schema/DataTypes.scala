@@ -24,7 +24,7 @@ import spray.json.{ JsValue, _ }
 
 import scala.collection.immutable.Set
 import scala.collection.mutable
-import scala.util.Try
+import scala.util.{ Success, Try }
 import scala.collection.mutable.ArrayBuffer
 import scala.collection.JavaConversions._
 
@@ -42,6 +42,11 @@ object DataTypes extends EventLogging {
     type ScalaType
 
     def parse(raw: Any): Try[ScalaType]
+
+    def toScalaType(raw: Any): ScalaType = parse(raw) match {
+      case Success(x) => x
+      case _ => throw new RuntimeException(s"Unable to convert ${raw} to ${scalaType.getName}")
+    }
 
     /** True if the supplied value matches this data type */
     def isType(raw: Any): Boolean
@@ -582,21 +587,6 @@ object DataTypes extends EventLogging {
       Try {
         vector(vector.parse(value).get.length)
       }.getOrElse(throw new IllegalArgumentException("No matching data type found for value: " + value))
-    }
-  }
-
-  /**
-   * Convert any type to any other type.
-   *
-   * Throw errors for conditions not supported (for example, string "s" cannot convert to a Long)
-   */
-  def convertToType(value: Any, dataType: DataType): Any = {
-    dataType match {
-      case `int64` => toLong(value)
-      case `float64` => toDouble(value)
-      // TODO: finish implementation (sorry, I only implemented the minimal I needed)
-      // TODO: throw exceptions when needed
-      case _ => throw new RuntimeException(s"${dataType.getClass.getName} is not implemented")
     }
   }
 

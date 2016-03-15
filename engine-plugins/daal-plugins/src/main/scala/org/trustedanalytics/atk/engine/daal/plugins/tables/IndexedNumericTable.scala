@@ -23,6 +23,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.domain.schema.FrameSchema
 
 import scala.collection.mutable.ListBuffer
 
@@ -66,7 +67,9 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
    * @param context DAAL context
    * @return Row iterator
    */
-  def toRowIter(context: DaalContext): Iterator[Row] = {
+  def toRowIter(context: DaalContext, frameSchema: Option[FrameSchema] = None): Iterator[Row] = {
+    require(frameSchema.isEmpty || frameSchema.get.columns.length == numCols,
+      "Size of frame schema must equal number of columns in numeric table")
     if (isEmpty) return List.empty[sql.Row].iterator
 
     val unpackedTable = getUnpackedTable(context)
@@ -77,7 +80,11 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
     for (i <- 0 until numRows) {
       val rowArray = new Array[Any](numCols)
       for (j <- 0 until numCols) {
-        rowArray(j) = doubleBuffer.get(i * numCols + j)
+        val doubleValue = doubleBuffer.get(i * numCols + j)
+        rowArray(j) = frameSchema match {
+          case Some(schema) => schema.columns(j).dataType.toScalaType(doubleValue)
+          case _ => doubleValue
+        }
       }
       rowBuffer += new GenericRow(rowArray)
     }

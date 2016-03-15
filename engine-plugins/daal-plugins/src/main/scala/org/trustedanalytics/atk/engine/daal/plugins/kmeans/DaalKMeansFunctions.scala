@@ -31,7 +31,6 @@ object DaalKMeansFunctions extends Serializable {
    */
   def trainKMeansModel(frameRdd: FrameRdd,
                        args: DaalKMeansTrainArgs): DaalKMeansResults = {
-    val sparkContext = frameRdd.sparkContext
     val table = new DistributedNumericTable(frameRdd, args.observationColumns)
     table.cache()
 

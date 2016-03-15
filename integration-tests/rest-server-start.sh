@@ -48,6 +48,16 @@ export SEARCH_PATH="-Datk.module-loader.search-path=${DIR}/..:${HOME}/.m2/"
 # EXTRA_CLASSPATH is not used in this script
 CONF="$CONFDIR"
 
+DAAL_DIR="${DIR}/../engine-plugins/daal-plugins/lib"
+if [ -f "${DAAL_DIR}/daal-libs.tar.bz2" ]; then
+ mkdir -p $TARGET_DIR/daal/lib
+ tar -jxvf ${DAAL_DIR}/daal-libs.tar.bz2 -C $TARGET_DIR/daal
+ export DAAL_LIB_DIR="${TARGET_DIR}/daal/lib/intel64_lin"
+ export DAAL_GCC_VERSION="gcc4.4"
+ export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
+ echo "Added Intel DAAL libraries"
+fi
+
 pushd $DIR/..
 pwd
 

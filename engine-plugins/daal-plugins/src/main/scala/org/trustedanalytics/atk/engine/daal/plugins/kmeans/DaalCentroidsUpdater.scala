@@ -107,16 +107,16 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
    * @return Optional frame of cluster assignments
    */
   def getClusterAssignments(partialResults: RDD[(PartialResult, Option[IndexedNumericTable])]): Option[FrameRdd] = {
-    val assigments = if (assignFlag) {
+    val assignments = if (assignFlag) {
       val rdd = partialResults.values.map(_.getOrElse(
         throw new scala.RuntimeException("Cluster assignment table cannot be empty")))
-      val assigmentTable = new DistributedNumericTable(rdd)
-      val schema = FrameSchema(List(Column(labelColumn, DataTypes.float64)))
-      Some(assigmentTable.toFrameRdd(schema))
+      val assignmentTable = new DistributedNumericTable(rdd)
+      val schema = FrameSchema(List(Column(labelColumn, DataTypes.int32)))
+      Some(assignmentTable.toFrameRdd(schema))
     }
     else {
       None
     }
-    assigments
+    assignments
   }
 }

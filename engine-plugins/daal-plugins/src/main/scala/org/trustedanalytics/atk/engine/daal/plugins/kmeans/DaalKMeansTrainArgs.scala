@@ -33,15 +33,20 @@ observations.""") observationColumns: List[String],
 Default is 2.""") k: Int = 2,
                                @ArgDoc("""Number of iterations for which the algorithm should run.
 Default is 20.""") maxIterations: Int = 20,
-                               @ArgDoc("""Name of output column with
+                               @ArgDoc("""Optional column scalings for each of the observation columns.
+The scaling value is multiplied by the corresponding value in the
+observation column.""") columnScalings: Option[List[Double]] = None,
+                               @ArgDoc("""Optional name of output column with
 index of cluster each observation belongs to.""") labelColumn: String = "cluster",
-                               @ArgDoc("""The initialization mode for cluster centroids.
+                               @ArgDoc("""Optional initialization mode for cluster centroids.
 random - Random choice of k feature vectors from the data set.
 deterministic - Choice of first k feature vectors from the data set.""") initializationMode: String = "random") {
 
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
+  require(columnScalings != null || columnScalings.isEmpty ||
+    observationColumns.length == columnScalings.get.length, "columnScalings must be empty or the same size as observationColumns")
   require(labelColumn != null && labelColumn.nonEmpty, "labelColumn must not be null nor empty")
   require(k > 0, "k must be at least 1")
   require(maxIterations > 0, "maxIterations must be a positive value")
