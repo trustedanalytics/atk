@@ -45,7 +45,7 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
    * @return Partial results of centroid initialization
    */
   private def initializeCentroidsLocal(): RDD[InitPartialResult] = {
-    val totalRows = featureTable.getNumRows
+    val totalRows = featureTable.numRows
     featureTable.rdd.map { table =>
       val context = new DaalContext
       val initLocal = new InitDistributedStep1Local(context, classOf[java.lang.Double], args.getInitMethod, args.k.toLong, totalRows, table.index)

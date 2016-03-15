@@ -110,7 +110,8 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
     val assignments = if (assignFlag) {
       val rdd = partialResults.values.map(_.getOrElse(
         throw new scala.RuntimeException("Cluster assignment table cannot be empty")))
-      val assignmentTable = new DistributedNumericTable(rdd)
+      val numRows = rdd.map(table => table.numRows.toLong).reduce(_ + _)
+      val assignmentTable = new DistributedNumericTable(rdd, numRows)
       val schema = FrameSchema(List(Column(labelColumn, DataTypes.int32)))
       Some(assignmentTable.toFrameRdd(schema))
     }
