@@ -17,9 +17,9 @@
 package org.apache.spark.frame
 
 import breeze.linalg.DenseVector
-import org.apache.commons.csv.{CSVPrinter, CSVFormat}
+import org.apache.commons.csv.{ CSVPrinter, CSVFormat }
 import org.apache.commons.lang3.StringUtils
-import org.apache.spark.mllib.stat.{MultivariateStatisticalSummary, Statistics }
+import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
 import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
 import org.apache.spark.frame.ordering.FrameOrderingUtils
 import org.apache.spark.mllib.linalg.distributed.IndexedRow
@@ -35,7 +35,7 @@ import org.trustedanalytics.atk.engine.frame.plugins.ScoreAndLabel
 import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, RowWrapper }
 import org.trustedanalytics.atk.engine.graph.plugins.{ VertexSchemaAggregator, EdgeSchemaAggregator, EdgeHolder }
 import org.trustedanalytics.atk.graphbuilder.elements.{ GBEdge, GBVertex }
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.{ ArrayBuffer, ListBuffer }
 import scala.reflect.ClassTag
 
 /**
@@ -82,8 +82,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert a FrameRdd to a Spark Dataframe
-    *
-    * @return Dataframe representing the FrameRdd
+   *
+   * @return Dataframe representing the FrameRdd
    */
   def toDataFrame: DataFrame = {
     new SQLContext(this.sparkContext).createDataFrame(this, sparkSchema)
@@ -106,8 +106,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd into RDD[Vector] format required by MLLib
-    *
-    * @param featureColumnNames Names of the frame's column(s) to be used
+   *
+   * @param featureColumnNames Names of the frame's column(s) to be used
    * @return RDD of (org.apache.spark.mllib)Vector
    */
   def toDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
@@ -120,8 +120,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Compute MLLib's MultivariateStatisticalSummary from FrameRdd
-    *
-    * @param columnNames Names of the frame's column(s) whose column statistics are to be computed
+   *
+   * @param columnNames Names of the frame's column(s) whose column statistics are to be computed
    * @return MLLib's MultivariateStatisticalSummary
    */
   def columnStatistics(columnNames: List[String]): MultivariateStatisticalSummary = {
@@ -131,8 +131,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd to RDD[Vector] by mean centering the specified columns
-    *
-    * @param featureColumnNames Names of the frame's column(s) to be used
+   *
+   * @param featureColumnNames Names of the frame's column(s) to be used
    * @return RDD of (org.apache.spark.mllib)Vector
    */
   def toMeanCenteredDenseVectorRDD(featureColumnNames: List[String]): RDD[Vector] = {
@@ -145,8 +145,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd to RDD[Vector]
-    *
-    * @param featureColumnNames Names of the frame's column(s) to be used
+   *
+   * @param featureColumnNames Names of the frame's column(s) to be used
    * @param columnWeights The weights of the columns
    * @return RDD of (org.apache.spark.mllib)Vector
    */
@@ -163,8 +163,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Convert FrameRdd to RDD[(Long, Long, Double)]
-    *
-    * @param sourceColumnName Name of the frame's column storing the source id of the edge
+   *
+   * @param sourceColumnName Name of the frame's column storing the source id of the edge
    * @param destinationColumnName Name of the frame's column storing the destination id of the edge
    * @param edgeSimilarityColumnName Name of the frame's column storing the similarity between the source and destination
    * @return RDD[(Long, Long, Double)]
@@ -227,8 +227,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Create a new FrameRdd that is only a subset of the columns of this FrameRdd
-    *
-    * @param columnNames names to include
+   *
+   * @param columnNames names to include
    * @return the FrameRdd with only some columns
    */
   def selectColumns(columnNames: List[String]): FrameRdd = {
@@ -240,8 +240,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Select a subset of columns while renaming them
-    *
-    * @param columnNamesWithRename map of old names to new names
+   *
+   * @param columnNamesWithRename map of old names to new names
    * @return the new FrameRdd
    */
   def selectColumnsWithRename(columnNamesWithRename: Map[String, String]): FrameRdd = {
@@ -346,8 +346,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Sort by one or more columns
-    *
-    * @param columnNamesAndAscending column names to sort by, true for ascending, false for descending
+   *
+   * @param columnNamesAndAscending column names to sort by, true for ascending, false for descending
    * @return the sorted Frame
    */
   def sortByColumns(columnNamesAndAscending: List[(String, Boolean)]): FrameRdd = {
@@ -401,8 +401,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   /**
    * Save this RDD to disk or other store
-    *
-    * @param absolutePath location to store
+   *
+   * @param absolutePath location to store
    * @param storageFormat "file/parquet", "file/sequence", etc.
    */
   def save(absolutePath: String, storageFormat: String = "file/parquet"): Unit = {
@@ -467,17 +467,17 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
 
   //TODO: update doc
   /**
-    * Export to a file in CSV format
-    * @param filename file path where to store the file
-    * @param separator
-    * @param count
-    * @param offset
-    * @return
-    */
-   def exportToHdfsCsv(filename: String,
-                               separator: Char,
-                               count: Int,
-                               offset: Int) = {
+   * Export to a file in CSV format
+   * @param filename file path where to store the file
+   * @param separator
+   * @param count
+   * @param offset
+   * @return
+   */
+  def exportToHdfsCsv(filename: String,
+                      separator: Char,
+                      count: Int,
+                      offset: Int) = {
 
     val filterRdd = if (count > 0) MiscFrameFunctions.getPagedRdd(this, offset, count, -1) else this
     val headers = this.frameSchema.columnNames.mkString(separator.toString)
@@ -516,8 +516,8 @@ object FrameRdd {
 
   /**
    * converts a data frame to frame rdd
-    *
-    * @param rdd a data frame
+   *
+   * @param rdd a data frame
    * @return a frame rdd
    */
   def toFrameRdd(rdd: DataFrame): FrameRdd = {
@@ -564,8 +564,8 @@ object FrameRdd {
 
   /**
    * Convert an RDD of mixed vertex types into a map where the keys are labels and values are FrameRdd's
-    *
-    * @param gbVertexRDD Graphbuilder Vertex RDD
+   *
+   * @param gbVertexRDD Graphbuilder Vertex RDD
    * @return  keys are labels and values are FrameRdd's
    */
   def toFrameRddMap(gbVertexRDD: RDD[GBVertex]): Map[String, FrameRdd] = {
@@ -595,8 +595,8 @@ object FrameRdd {
 
   /**
    * Convert an RDD of mixed vertex types into a map where the keys are labels and values are FrameRdd's
-    *
-    * @param gbEdgeRDD Graphbuilder Edge RDD
+   *
+   * @param gbEdgeRDD Graphbuilder Edge RDD
    * @param gbVertexRDD Graphbuilder Vertex RDD
    * @return  keys are labels and values are FrameRdd's
    */
@@ -617,8 +617,8 @@ object FrameRdd {
 
   /**
    * Converts row object from an RDD[Array[Any]] to an RDD[Product] so that it can be used to create a SchemaRDD
-    *
-    * @return RDD[org.apache.spark.sql.Row] with values equal to row object
+   *
+   * @return RDD[org.apache.spark.sql.Row] with values equal to row object
    */
   def toRowRDD(schema: Schema, rows: RDD[Array[Any]]): RDD[org.apache.spark.sql.Row] = {
     val rowRDD: RDD[org.apache.spark.sql.Row] = rows.map(row => {
@@ -640,8 +640,8 @@ object FrameRdd {
 
   /**
    * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
-    *
-    * @param indexedRows Rows of the frame as RDD[Row]
+   *
+   * @param indexedRows Rows of the frame as RDD[Row]
    * @param frameSchema Schema of the frame
    * @param featureColumnNames List of the frame's column(s) to be used
    * @return RDD[IndexedRow]
@@ -658,8 +658,8 @@ object FrameRdd {
 
   /**
    * Converts row object to RDD[IndexedRow] needed to create an IndexedRowMatrix
-    *
-    * @param indexedRows Rows of the frame as RDD[Row]
+   *
+   * @param indexedRows Rows of the frame as RDD[Row]
    * @param frameSchema Schema of the frame
    * @param featureColumnNames List of the frame's column(s) to be used
    * @param meanVector Vector storing the means of the columns
@@ -683,8 +683,8 @@ object FrameRdd {
 
   /**
    * Converts the schema object to a StructType for use in creating a SchemaRDD
-    *
-    * @return StructType with StructFields corresponding to the columns of the schema object
+   *
+   * @return StructType with StructFields corresponding to the columns of the schema object
    */
   def schemaToStructType(schema: Schema): StructType = {
     val fields: Seq[StructField] = schema.columns.map {
@@ -705,8 +705,8 @@ object FrameRdd {
 
   /**
    * Converts the spark DataTypes to our schema Datatypes
-    *
-    * @return our schema DataType
+   *
+   * @return our schema DataType
    */
   def sparkDataTypeToSchemaDataType(dataType: org.apache.spark.sql.types.DataType): org.trustedanalytics.atk.domain.schema.DataTypes.DataType = {
     val intType = IntegerType.getClass
@@ -740,8 +740,8 @@ object FrameRdd {
 
   /**
    * Converts a spark dataType (as string)to our schema Datatype
-    *
-    * @param sparkDataType spark data type
+   *
+   * @param sparkDataType spark data type
    * @return a DataType
    */
   def sparkDataTypeToSchemaDataType(sparkDataType: String): DataType = {
@@ -761,8 +761,8 @@ object FrameRdd {
 
   /**
    * Converts the schema object to a StructType for use in creating a SchemaRDD
-    *
-    * @return StructType with StructFields corresponding to the columns of the schema object
+   *
+   * @return StructType with StructFields corresponding to the columns of the schema object
    */
   def schemaToAvroType(schema: Schema): List[(String, String)] = {
     val fields = schema.columns.map {

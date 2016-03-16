@@ -76,5 +76,4 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
       fileStorage.size(artifactPath.toString), Some(arguments.folderName))
   }
 
-
 }

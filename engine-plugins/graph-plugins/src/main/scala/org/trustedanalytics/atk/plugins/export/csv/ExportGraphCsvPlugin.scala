@@ -16,17 +16,17 @@
 
 package org.trustedanalytics.atk.plugins.export.csv
 
-import org.apache.commons.csv.{CSVFormat, CSVPrinter}
+import org.apache.commons.csv.{ CSVFormat, CSVPrinter }
 import org.apache.commons.lang3.StringUtils
 import org.apache.hadoop.fs.Path
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
-import org.trustedanalytics.atk.domain.frame.{FrameEntity, ExportHdfsCsvArgs}
+import org.trustedanalytics.atk.domain.frame.{ FrameEntity, ExportHdfsCsvArgs }
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.engine.FileStorage
-import org.trustedanalytics.atk.engine.frame.{MiscFrameFunctions, SparkFrame}
+import org.trustedanalytics.atk.engine.frame.{ MiscFrameFunctions, SparkFrame }
 import org.trustedanalytics.atk.engine.graph.SparkGraph
-import org.trustedanalytics.atk.engine.plugin.{Invocation, PluginDoc, SparkCommandPlugin}
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -45,7 +45,6 @@ class ExportGraphCsvPlugin extends SparkCommandPlugin[ExportGraphCsvArgs, GraphE
    * The name of the command
    */
   override def name: String = "graph:/export_to_csv"
-
 
   /**
    * Calculate covariance for the specified columns
@@ -67,17 +66,16 @@ class ExportGraphCsvPlugin extends SparkCommandPlugin[ExportGraphCsvArgs, GraphE
     val graphMeta = engine.graphs.expectSeamless(graph)
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
 
-
     //TODO: export each frame to CSV file in HDFS
-    val vertexFolderName = arguments.folderName+"/vertices"
-    val edgeFolderName = arguments.folderName+"/edges"
-    val vertexMetadata = exportFramesToCsv(vertexFolderName,graphMeta.vertexFrames,arguments,fileStorage)
-    val edgeMetadata = exportFramesToCsv(edgeFolderName,graphMeta.edgeFrames,arguments,fileStorage)
+    val vertexFolderName = arguments.folderName + "/vertices"
+    val edgeFolderName = arguments.folderName + "/edges"
+    val vertexMetadata = exportFramesToCsv(vertexFolderName, graphMeta.vertexFrames, arguments, fileStorage)
+    val edgeMetadata = exportFramesToCsv(edgeFolderName, graphMeta.edgeFrames, arguments, fileStorage)
     GraphExportMetadata(vertexMetadata ++ edgeMetadata)
   }
   // TODO: add scala doc
 
-  def exportFramesToCsv(folderName: String,frameEntities: List[FrameEntity],arguments: ExportGraphCsvArgs,fileStorage: FileStorage)(implicit invocation: Invocation):List[ExportMetadata]= {
+  def exportFramesToCsv(folderName: String, frameEntities: List[FrameEntity], arguments: ExportGraphCsvArgs, fileStorage: FileStorage)(implicit invocation: Invocation): List[ExportMetadata] = {
     val frames = frameEntities.map(_.toReference)
     val metadata = frames.map(frame => {
       // load frame as RDD
