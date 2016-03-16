@@ -40,7 +40,7 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
     val context = new DaalContext()
     val partsRdd = computePartialResults()
     val results = mergePartialResults(context, partsRdd)
-    val centroids = IndexedNumericTable(0.toLong, results.get(InitResultId.centroids))
+    val centroids = IndexedNumericTable(0L, results.get(InitResultId.centroids))
     context.dispose()
     centroids
   }

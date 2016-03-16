@@ -47,7 +47,7 @@ object DaalKMeansFunctions extends Serializable {
     // Create frame with cluster assignments
     val clusterAssigner = DaalClusterAssigner(table, centroids, args.labelColumn)
     val assignmentFrame = clusterAssigner.assign()
-    val clusterSizes = clusterAssigner.cluster_sizes(assignmentFrame)
+    val clusterSizes = clusterAssigner.clusterSizes(assignmentFrame)
     val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes) //.zipFrameRdd(assignmentFrame)))
     kMeansResults
   }
@@ -58,7 +58,7 @@ object DaalKMeansFunctions extends Serializable {
    * @param arguments Prediction input arguments
    * @param frame Input frame
    * @param modelData KMeans model data
-   * @return Frame with cluster assignmemts
+   * @return Frame with cluster assignments
    */
   def predictKMeansModel(arguments: DaalKMeansPredictArgs, frame: FrameRdd, modelData: DaalKMeansModelData): FrameRdd = {
     val observationColumns = arguments.observationColumns.getOrElse(modelData.observationColumns)

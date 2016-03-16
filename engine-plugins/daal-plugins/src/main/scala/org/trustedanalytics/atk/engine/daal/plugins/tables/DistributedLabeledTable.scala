@@ -39,6 +39,7 @@ case class DistributedLabeledTable(tableRdd: RDD[IndexedLabeledTable],
 }
 
 object DistributedLabeledTable {
+
   /**
    * Create distributed numeric table with features and labels from Vector RDD
    *

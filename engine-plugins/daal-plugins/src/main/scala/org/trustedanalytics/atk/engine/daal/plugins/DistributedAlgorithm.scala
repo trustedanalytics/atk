@@ -19,10 +19,25 @@ import com.intel.daal.algorithms.{ Result, PartialResult }
 import com.intel.daal.services.DaalContext
 import org.apache.spark.rdd.RDD
 
+/**
+ * Interface for DAAL distributed algorithms
+ */
 trait DistributedAlgorithm[P <: PartialResult, R <: Result] {
 
+  /**
+   * Compute partial results for algorithm on each Spark partition
+   * 
+   * @return RDD of partial results  
+   */
   def computePartialResults(): RDD[P]
 
-  def mergePartialResults(daalContext: DaalContext, rdd: RDD[P]): R
+  /**
+   * Merge partial results on Spark driver to generate final result
+   * 
+   * @param context DAAL Context
+   * @param rdd RDD of partial results
+   * @return Final result of algorithm
+   */
+  def mergePartialResults(context: DaalContext, rdd: RDD[P]): R
 
 }

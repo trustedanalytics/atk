@@ -22,24 +22,30 @@ import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
+/**
+ * Assign cluster index to each observation in feature table
+ *
+ * @param featureTable Feature table
+ * @param centroids Cluster centroids
+ * @param labelColumn Name of output column with index of cluster each observation belongs to
+ */
 case class DaalClusterAssigner(featureTable: DistributedNumericTable,
-                               inputCentroids: IndexedNumericTable,
+                               centroids: IndexedNumericTable,
                                labelColumn: String) {
 
   /**
-   * Get table with cluster assignments
+   * Assign cluster index to each observation in feature table
    *
    * @return Frame of cluster assignments
    */
   def assign(): FrameRdd = {
-
     val schema = FrameSchema(List(Column(labelColumn, DataTypes.int32)))
     var numRows = 0L
     val rdd = featureTable.rdd.map { table =>
       val context = new DaalContext
-      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, inputCentroids.numRows)
+      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
       local.input.set(InputId.data, table.getUnpackedTable(context))
-      local.input.set(InputId.inputCentroids, inputCentroids.getUnpackedTable(context))
+      local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
       local.parameter.setAssignFlag(true)
       val partialResults = local.compute
       partialResults.pack()
@@ -61,10 +67,12 @@ case class DaalClusterAssigner(featureTable: DistributedNumericTable,
    * @param assignmentFrame Frame with cluster assignments
    * @return Map of cluster names and sizes
    */
-  def cluster_sizes(assignmentFrame: FrameRdd): Map[String, Long] = {
+  def clusterSizes(assignmentFrame: FrameRdd): Map[String, Long] = {
+    //TODO: Use DAAL partial results nObservations to compute cluster sizes
     assignmentFrame.mapRows(row => {
       val clusterId = row.intValue(labelColumn) + 1
       ("Cluster:" + clusterId.toString, 1L)
     }).reduceByKey(_ + _).collect().toMap
   }
+
 }

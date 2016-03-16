@@ -16,9 +16,7 @@
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 import com.intel.daal.algorithms.kmeans._
-import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
@@ -28,11 +26,11 @@ import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericT
  * Run one iteration of k-means clustering algorithm to update cluster centroids
  *
  * @param featureTable Feature table
- * @param inputCentroids Input centroids*
+ * @param centroids Input cluster centroids
  * @param labelColumn Name of output column with index of cluster each observation belongs to
  */
 case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
-                                inputCentroids: IndexedNumericTable,
+                                centroids: IndexedNumericTable,
                                 labelColumn: String)
     extends DistributedAlgorithm[PartialResult, Result] {
 
@@ -45,9 +43,9 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
     val context = new DaalContext
     val partialResults = computePartialResults()
     val results = mergePartialResults(context, partialResults)
-    val centroids = IndexedNumericTable(0.toLong, results.get(ResultId.centroids))
+    val updatedCentroids = IndexedNumericTable(0.toLong, results.get(ResultId.centroids))
     context.dispose()
-    centroids
+    updatedCentroids
   }
 
   /**
@@ -58,9 +56,9 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
   override def computePartialResults(): RDD[PartialResult] = {
     featureTable.rdd.map { table =>
       val context = new DaalContext
-      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, inputCentroids.numRows)
+      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
       local.input.set(InputId.data, table.getUnpackedTable(context))
-      local.input.set(InputId.inputCentroids, inputCentroids.getUnpackedTable(context))
+      local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
       local.parameter.setAssignFlag(false)
       val partialResult = local.compute
       partialResult.pack()
@@ -79,7 +77,7 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
    */
   override def mergePartialResults(context: DaalContext, partsRdd: RDD[PartialResult]): Result = {
     val partialResults = partsRdd.collect()
-    val master = new DistributedStep2Master(context, classOf[java.lang.Double], Method.defaultDense, inputCentroids.numRows)
+    val master = new DistributedStep2Master(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
 
     for (value <- partialResults) {
       value.unpack(context)
