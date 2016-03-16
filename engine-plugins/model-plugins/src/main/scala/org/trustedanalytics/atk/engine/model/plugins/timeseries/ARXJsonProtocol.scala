@@ -60,7 +60,7 @@ object ARXJsonProtocol {
       val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
       val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
       // NOTE: unable to get includesOriginalX - defaulting to true
-      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+      new ARXModel(c, coefficients, yMaxLag, xMaxLag, true)
     }
   }
 
