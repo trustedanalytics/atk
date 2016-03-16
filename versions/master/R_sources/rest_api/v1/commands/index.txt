@@ -105,6 +105,9 @@
     model-collaborative_filtering__recommend
     model-collaborative_filtering__score
     model-collaborative_filtering__train
+    model-cox_proportional_hazard__new
+    model-cox_proportional_hazard__predict
+    model-cox_proportional_hazard__train
     model-daal_linear_regression__new
     model-daal_linear_regression__predict
     model-daal_linear_regression__train
@@ -253,6 +256,9 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:collaborative_filtering/recommend <model-collaborative_filtering__recommend>`       |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/score <model-collaborative_filtering__score>`               |BETA| Collaborative Filtering Predict (ALS).
 :doc:`model:collaborative_filtering/train <model-collaborative_filtering__train>`               Collaborative filtering (ALS) model
+:doc:`model:cox_proportional_hazard/new <model-cox_proportional_hazard__new>`                   Creates a 'new' instance of Cox proportional hazard model.
+:doc:`model:cox_proportional_hazard/predict <model-cox_proportional_hazard__predict>`           |ALPHA| TBD
+:doc:`model:cox_proportional_hazard/train <model-cox_proportional_hazard__train>`               |ALPHA| Build Cox proportional hazard model.
 :doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
 :doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Predict labels for a test frame using trained DAAL linear regression model.
 :doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build DAAL linear regression model.

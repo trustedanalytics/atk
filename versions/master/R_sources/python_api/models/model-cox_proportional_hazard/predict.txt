@@ -1,0 +1,29 @@
+
+:doc:`CoxProportionalHazardModel <index>`  predict
+**************************************************
+
+------
+
+
+.. function:: predict(self)
+
+    |ALPHA|
+    TBD
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : Frame
+
+        ..
+
+            TBD
+    TBD
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
