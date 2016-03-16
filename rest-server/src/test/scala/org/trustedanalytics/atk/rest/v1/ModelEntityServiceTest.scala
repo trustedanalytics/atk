@@ -39,7 +39,7 @@ class ModelEntityServiceTest extends ServiceTest {
     val engine = mock[Engine]
     val modelService = new ModelService(commonDirectives, engine)
 
-    when(engine.getModels()).thenReturn(Future.successful(Seq()))
+    when(engine.lookupActiveNamedModelsNoData()).thenReturn(Future.successful(Seq()))
 
     Get("/models") ~> modelService.modelRoutes() ~> check {
       assert(responseAs[String] == "[]")

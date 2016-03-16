@@ -52,7 +52,7 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
 
-  override def numberOfJobs(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation) = 9
+  override def numberOfJobs(arguments: ClassificationWithSGDPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame
@@ -67,6 +67,7 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Running MLLib
     val svmData = model.data.convertTo[SVMData]
     val svmModel = svmData.svmModel

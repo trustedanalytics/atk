@@ -126,6 +126,10 @@
             <artifactId>spark-mllib_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.cloudera.sparkts</groupId>
+            <artifactId>sparkts</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
