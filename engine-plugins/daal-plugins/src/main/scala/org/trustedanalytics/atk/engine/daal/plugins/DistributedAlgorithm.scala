@@ -26,14 +26,14 @@ trait DistributedAlgorithm[P <: PartialResult, R <: Result] {
 
   /**
    * Compute partial results for algorithm on each Spark partition
-   * 
-   * @return RDD of partial results  
+   *
+   * @return RDD of partial results
    */
   def computePartialResults(): RDD[P]
 
   /**
    * Merge partial results on Spark driver to generate final result
-   * 
+   *
    * @param context DAAL Context
    * @param rdd RDD of partial results
    * @return Final result of algorithm
