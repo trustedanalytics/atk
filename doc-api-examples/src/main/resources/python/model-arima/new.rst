@@ -1,5 +1,5 @@
 
-Consider the following frame of observations collected over the course of five days.
+Consider the following frame of observations collected over seven days.
 
 <hide>
 >>> import trustedanalytics as ta
@@ -34,7 +34,7 @@ Define the date time index:
 ... '2015-01-03T00:00:00.000-08:00','2015-01-04T00:00:00.000-08:00','2015-01-05T00:00:00.000-08:00',
 ... '2015-01-06T00:00:00.000-08:00','2015-01-07T00:00:00.000-08:00']
 
-Then create a time series frame from the frame of observations, since the ARIMA model
+Then, create a time series frame from the frame of observations, since the ARIMA model
 expects data to be in a time series format (where the time series values are in a
 vector column).
 
