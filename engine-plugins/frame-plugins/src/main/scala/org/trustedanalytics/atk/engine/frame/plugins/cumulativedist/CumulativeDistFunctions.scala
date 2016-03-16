@@ -19,8 +19,6 @@ package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column }
 import org.apache.spark.sql.Row
-import org.apache.spark.SparkContext._
-import org.apache.spark.SparkException
 import org.apache.spark.rdd.RDD
 
 /**
@@ -32,7 +30,7 @@ import org.apache.spark.rdd.RDD
  * and Task Serialization
  * [[http://stackoverflow.com/questions/22592811/scala-spark-task-not-serializable-java-io-notserializableexceptionon-when]]
  */
-private object CumulativeDistFunctions extends Serializable {
+object CumulativeDistFunctions extends Serializable {
 
   /**
    * Generate the empirical cumulative distribution for an input dataframe column
@@ -88,16 +86,8 @@ private object CumulativeDistFunctions extends Serializable {
    * @return an RDD of tuples containing (originalValue, cumulativeSumAtThisValue)
    */
   def cumulativeSum(frameRdd: FrameRdd, sampleColumnName: String): RDD[Row] = {
-    // parse values
-    val pairedRdd = frameRdd.mapRows(rowWrapper => (rowWrapper.row, rowWrapper.doubleValue(sampleColumnName)))
 
-    // compute the partition sums
-    val partSums = partitionSums(pairedRdd.values)
-
-    // compute cumulative sum
-    val cumulativeSums = totalPartitionSums(pairedRdd, partSums)
-
-    revertTypes(cumulativeSums)
+    cumulativeCount(tupleRdd(frameRdd, sampleColumnName))
   }
 
   /**
@@ -109,24 +99,8 @@ private object CumulativeDistFunctions extends Serializable {
    * @return an RDD of tuples containing (originalValue, cumulativeCountAtThisValue)
    */
   def cumulativeCount(frameRdd: FrameRdd, sampleColumnName: String, countValue: String): RDD[Row] = {
-    // parse values
-    val pairedRdd = frameRdd.mapRows(rowWrapper => {
-      val sampleValue = rowWrapper.stringValue(sampleColumnName)
-      if (sampleValue.equals(countValue)) {
-        (rowWrapper.row, 1.0)
-      }
-      else {
-        (rowWrapper.row, 0.0)
-      }
-    })
 
-    // compute the partition sums
-    val partSums = partitionSums(pairedRdd.values)
-
-    // compute cumulative count
-    val cumulativeCounts = totalPartitionSums(pairedRdd, partSums)
-
-    revertTypes(cumulativeCounts)
+    cumulativeCount(pairedRdd(frameRdd, sampleColumnName, countValue))
   }
 
   /**
@@ -137,18 +111,8 @@ private object CumulativeDistFunctions extends Serializable {
    * @return an RDD of tuples containing (originalValue, cumulativePercentSumAtThisValue)
    */
   def cumulativePercentSum(frameRdd: FrameRdd, sampleColumnName: String): RDD[Row] = {
-    // parse values
-    val pairedRdd = frameRdd.mapRows(rowWrapper => (rowWrapper.row, rowWrapper.doubleValue(sampleColumnName)))
 
-    // compute the partition sums
-    val partSums = partitionSums(pairedRdd.values)
-
-    val numValues = pairedRdd.map { case (row, columnValue) => columnValue }.sum()
-
-    // compute cumulative sum
-    val cumulativeSums = totalPartitionSums(pairedRdd, partSums)
-
-    revertPercentTypes(cumulativeSums, numValues)
+    cumulativePercentCount(tupleRdd(frameRdd, sampleColumnName))
   }
 
   /**
@@ -160,26 +124,42 @@ private object CumulativeDistFunctions extends Serializable {
    * @return an RDD of tuples containing (originalValue, cumulativePercentCountAtThisValue)
    */
   def cumulativePercentCount(frameRdd: FrameRdd, sampleColumnName: String, countValue: String): RDD[Row] = {
-    // parse values
-    val pairedRdd = frameRdd.mapRows(rowWrapper => {
-      val sampleValue = rowWrapper.stringValue(sampleColumnName)
-      if (sampleValue.equals(countValue)) {
-        (rowWrapper.row, 1.0)
-      }
-      else {
-        (rowWrapper.row, 0.0)
-      }
-    })
 
-    // compute the partition sums
-    val partSums = partitionSums(pairedRdd.values)
+    cumulativePercentCount(pairedRdd(frameRdd, sampleColumnName, countValue))
+  }
 
-    val numValues = pairedRdd.map { case (row, columnValue) => columnValue }.sum()
+  /**
+   * Builds a pairedRdd from frame
+   *
+   * @param frameRdd input frame RDD
+   * @param sampleColumnName a column name for the output values
+   * @return rdd of a of Row and the values from the sampleColumnName
+   */
+  def tupleRdd(frameRdd: FrameRdd, sampleColumnName: String): RDD[(Row, Double)] = {
 
-    // compute cumulative count
-    val cumulativeCounts = totalPartitionSums(pairedRdd, partSums)
+    frameRdd.mapRows(rowWrapper => (rowWrapper.row, rowWrapper.doubleValue(sampleColumnName)))
+  }
 
-    revertPercentTypes(cumulativeCounts, numValues)
+  /**
+   * Compute the cumulative count of the input frameRdd for the specified column index
+   *
+   * @param pairedRdd input paired RDD
+   * @return an RDD of tuples containing (originalValue, cumulativeCountAtThisValue)
+   */
+  def cumulativeCountAsPairedRDD(pairedRdd: RDD[(Row, Double)]): RDD[(Row, Double)] = {
+
+    totalPartitionSums(pairedRdd, partitionSums(pairedRdd.values))
+  }
+
+  /**
+   * Calculates the sum of a numeric column
+   * @param frameRdd input frame
+   * @param columnName column name
+   * @return the sum as double
+   */
+  def columnSum(frameRdd: FrameRdd, columnName: String): Double = {
+
+    partitionSums(tupleRdd(frameRdd, columnName).values).sum
   }
 
   /**
@@ -188,10 +168,58 @@ private object CumulativeDistFunctions extends Serializable {
    * @param rdd the input RDD
    * @return an Array[Double] that contains the partition sums
    */
-  private[cumulativedist] def partitionSums(rdd: RDD[Double]): Array[Double] = {
+  def partitionSums(rdd: RDD[Double]): Array[Double] = {
     0.0 +: rdd.mapPartitionsWithIndex {
       case (index, partition) => Iterator(partition.sum)
     }.collect()
+  }
+
+  /**
+   * Compute the cumulative percent count of the input frameRdd
+   *
+   * @param pairedRdd input paired RDD
+   * @return an RDD of row containing (originalValue, cumulativePercentCountAtThisValue)
+   */
+  private def cumulativePercentCount(pairedRdd: RDD[(Row, Double)]): RDD[Row] = {
+
+    val cumulativeCounts = cumulativeCountAsPairedRDD(pairedRdd)
+    val numValues = pairedRdd.map { case (row, columnValue) => columnValue }.sum()
+
+    addCumulativePercentToRow(cumulativeCounts, numValues)
+  }
+
+  /**
+   * Compute the cumulative count of the input frameRdd
+   *
+   * @param pairedRdd input paired RDD
+   * @return an RDD of row containing (originalValue, cumulativeCountAtThisValue)
+   */
+  private def cumulativeCount(pairedRdd: RDD[(Row, Double)]): RDD[Row] = {
+
+    val cumulativeCounts = cumulativeCountAsPairedRDD(pairedRdd)
+
+    addCumulativeCountToRow(cumulativeCounts)
+  }
+
+  /**
+   * Builds a pairedRdd from frame
+   *
+   * @param frameRdd input frame RDD
+   * @param sampleColumnName column name whose values will be used to calculate the output pairedRdd
+   * @param countValue a count value
+   * @return an RDD of row and 0.0 or 1.0
+   */
+  private def pairedRdd(frameRdd: FrameRdd, sampleColumnName: String, countValue: String): RDD[(Row, Double)] = {
+
+    frameRdd.mapRows(rowWrapper => {
+      val sampleValue = rowWrapper.stringValue(sampleColumnName)
+      if (sampleValue.equals(countValue)) {
+        (rowWrapper.row, 1.0)
+      }
+      else {
+        (rowWrapper.row, 0.0)
+      }
+    })
   }
 
   /**
@@ -215,12 +243,12 @@ private object CumulativeDistFunctions extends Serializable {
   }
 
   /**
-   * Casts the input data back to the original input type
+   * Adds count to row
    *
    * @param rdd the RDD containing (value, cumulativeDistValue)
    * @return RDD containing Array[Any] (i.e., Rows)
    */
-  private def revertTypes(rdd: RDD[(Row, Double)]): RDD[Row] = {
+  private def addCumulativeCountToRow(rdd: RDD[(Row, Double)]): RDD[Row] = {
     rdd.map {
       case (row, valueSum) =>
         Row.fromSeq(row.toSeq :+ valueSum)
@@ -228,14 +256,13 @@ private object CumulativeDistFunctions extends Serializable {
   }
 
   /**
-   * Casts the input data for cumulative percents back to the original input type.  This includes check for
-   * divide-by-zero error.
+   * Adds percent to row
    *
    * @param rdd the RDD containing (value, cumulativeDistValue)
    * @param numValues number of values in the user-specified column
    * @return RDD containing Array[Any] (i.e., Rows)
    */
-  private def revertPercentTypes(rdd: RDD[(Row, Double)], numValues: Double): RDD[Row] = {
+  private def addCumulativePercentToRow(rdd: RDD[(Row, Double)], numValues: Double): RDD[Row] = {
     rdd.map {
       case (row, valueSum) => {
         numValues match {
