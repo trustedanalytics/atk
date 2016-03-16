@@ -36,6 +36,6 @@ import org.trustedanalytics.atk.domain.frame.FrameEntity
 /**
  * Return object when training a DaalKMeansModel
  * @param centroids A dictionary containing the cluster Id and centroids
- * @param assignments Frame with cluster assignments
+ * @param clusterSizes A dictionary of cluster names and sizes
  */
-case class DaalKMeansTrainReturn(centroids: Map[String, Array[Double]], assignments: FrameEntity)
+case class DaalKMeansTrainReturn(centroids: Map[String, Array[Double]], clusterSizes: Map[String, Long])

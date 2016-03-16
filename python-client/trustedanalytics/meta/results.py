@@ -104,15 +104,6 @@ def return_logistic_regression_train(json_result):
     from trustedanalytics.core.logisticregression import LogisticRegressionSummary
     return LogisticRegressionSummary(json_result)
 
-@postprocessor('model:daal_k_means/train')
-def return_daal_k_means_train(json_result):
-    from trustedanalytics import get_frame
-    if json_result.has_key('assignments'):
-        frame = get_frame(json_result['assignments']['uri'])
-    else:
-        frame = None
-    return {"centroids": json_result['centroids'], "assignments" : frame}
-
 @postprocessor('frame:/label_propagation')
 def return_label_propagation(json_result):
     from trustedanalytics import get_frame

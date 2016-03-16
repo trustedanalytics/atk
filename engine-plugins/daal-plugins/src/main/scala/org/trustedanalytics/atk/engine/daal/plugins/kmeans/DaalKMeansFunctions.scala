@@ -1,17 +1,17 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
@@ -37,18 +37,18 @@ object DaalKMeansFunctions extends Serializable {
     // Iteratively update cluster centroids
     var centroids = DaalCentroidsInitializer(table, args).initializeCentroids()
     for (i <- 1 until args.maxIterations) {
-      val result = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
-      centroids = result.centroids
+      centroids = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
     }
 
     // Run final iteration and get cluster assignments
-    val finalResults = DaalCentroidsUpdater(table, centroids, args.labelColumn, assignFlag = true).updateCentroids()
-    centroids = finalResults.centroids
+    centroids = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
     table.unpersist()
 
     // Create frame with cluster assignments
-    val assignmentFrame = finalResults.getAssignmentFrame
-    val kMeansResults = DaalKMeansResults(centroids, args.k, Some(frameRdd.zipFrameRdd(assignmentFrame)))
+    val clusterAssigner = DaalClusterAssigner(table, centroids, args.labelColumn)
+    val assignmentFrame = clusterAssigner.assign()
+    val clusterSizes = clusterAssigner.cluster_sizes(assignmentFrame)
+    val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes) //.zipFrameRdd(assignmentFrame)))
     kMeansResults
   }
 
@@ -66,11 +66,11 @@ object DaalKMeansFunctions extends Serializable {
 
     // Compute cluster assignments
     val table = DistributedNumericTable.createTable(frame, observationColumns)
-    val centroids = IndexedNumericTable.createTable(modelData.centroids)
-    val finalResults = DaalCentroidsUpdater(table, centroids, labelColumn, assignFlag = true).updateCentroids()
+    val centroids = IndexedNumericTable.createTable(0L, modelData.centroids)
+    val frameRdd = DaalClusterAssigner(table, centroids, modelData.labelColumn).assign()
 
     // Create assignment frame
-    val assignmentFrame = frame.zipFrameRdd(finalResults.getAssignmentFrame)
+    val assignmentFrame = frame.zipFrameRdd(frameRdd)
     assignmentFrame
   }
 

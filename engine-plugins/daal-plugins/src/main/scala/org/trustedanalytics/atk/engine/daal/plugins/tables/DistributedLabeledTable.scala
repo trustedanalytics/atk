@@ -73,7 +73,7 @@ object DistributedLabeledTable {
 
           //partition can be split into multiple numeric tables if maximum rows per table is set
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
-            val tableIndex = i - tableRows + 1
+            val tableIndex = i //- tableRows + 1
             val featureTable = new IndexedNumericTable(tableIndex,
               new HomogenNumericTable(context, featureBuf.toArray, numFeatureCols, tableRows))
             val labelTable = new IndexedNumericTable(tableIndex,

@@ -23,20 +23,8 @@ import org.trustedanalytics.atk.engine.daal.plugins.tables.IndexedNumericTable
  *
  * @param centroids Cluster centroids
  * @param k Number of clusters
- * @param assignmentFrame Optional table with cluster assignments for each observation
+ * @param clusterSizes Map of cluster names and sizes
  */
 case class DaalKMeansResults(centroids: IndexedNumericTable,
                              k: Int,
-                             assignmentFrame: Option[FrameRdd]) {
-
-  /**
-   * Get assignment frame
-   *
-   * Throws exception if assignment frame is None
-   */
-  def getAssignmentFrame: FrameRdd = {
-    assignmentFrame.getOrElse(
-      throw new RuntimeException("Unable to assign centroids to clusters")
-    )
-  }
-}
+                             clusterSizes: Map[String, Long])

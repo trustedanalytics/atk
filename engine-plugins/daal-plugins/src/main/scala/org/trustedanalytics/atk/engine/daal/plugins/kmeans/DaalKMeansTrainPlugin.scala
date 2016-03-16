@@ -75,11 +75,7 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
         ("Cluster:" + (i + 1).toString, centroid)
     }.toMap
 
-    val assignmentFrame = engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by DAAL kmeans train operation"))) {
-      frameEntity: FrameEntity =>
-        frameEntity.save(results.getAssignmentFrame)
-    }
-    DaalKMeansTrainReturn(centroidsMap, assignmentFrame)
+    DaalKMeansTrainReturn(centroidsMap, results.clusterSizes)
   }
 }
 

@@ -81,7 +81,7 @@ object DistributedNumericTable {
           tableElements += vector.size
 
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
-            val tableIndex = i - tableRows + 1
+            val tableIndex = i //- tableRows + 1
             val table = new HomogenNumericTable(context, buf.toArray, tableElements / tableRows, tableRows)
             tables += new IndexedNumericTable(tableIndex, table)
             totalRows += tableRows

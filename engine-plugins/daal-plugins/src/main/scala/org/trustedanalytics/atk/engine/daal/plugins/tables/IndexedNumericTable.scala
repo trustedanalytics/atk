@@ -37,7 +37,7 @@ import scala.collection.mutable.ListBuffer
  * @param index Table index
  * @param table DAAL numeric table
  */
-case class IndexedNumericTable(index: Long, private val table: NumericTable) extends Serializable {
+case class IndexedNumericTable(index: Long, table: NumericTable) extends Serializable {
   require(table != null, "Numeric table must not be null")
   val numRows: Int = table.getNumberOfRows.toInt
   val numCols: Int = table.getNumberOfColumns.toInt
@@ -103,13 +103,13 @@ object IndexedNumericTable extends Serializable {
   /**
    * Create indexed numeric table from matrix
    */
-  def createTable(matrix: Array[Array[Double]]): IndexedNumericTable = {
+  def createTable(index: Long, matrix: Array[Array[Double]]): IndexedNumericTable = {
     require(matrix != null && matrix.length > 0, "Array must not be null or empty")
     val context = new DaalContext()
     val numRows = matrix.length
     val array = matrix.flatten
     val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
-    val indexedTable = IndexedNumericTable(1L, table)
+    val indexedTable = IndexedNumericTable(index, table)
     context.dispose()
     indexedTable
   }

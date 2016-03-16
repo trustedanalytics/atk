@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import com.intel.daal.algorithms.kmeans.init._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ IndexedNumericTable, DistributedNumericTable }
 
 /**
@@ -27,16 +28,21 @@ import org.trustedanalytics.atk.engine.daal.plugins.tables.{ IndexedNumericTable
  * @param args Training arguments
  */
 case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
-                                    args: DaalKMeansTrainArgs) {
+                                    args: DaalKMeansTrainArgs)
+    extends DistributedAlgorithm[InitPartialResult, InitResult] {
+
   /**
    * Initialize cluster centroids using DAAL KMeans clustering
    *
-   * @return Numeric tbale with initial cluster centroids
+   * @return Numeric table with initial cluster centroids
    */
   def initializeCentroids(): IndexedNumericTable = {
-    // Compute partial results on local node, and merge results on master
-    val partsRdd = initializeCentroidsLocal()
-    mergeInitialCentroids(partsRdd)
+    val context = new DaalContext()
+    val partsRdd = computePartialResults()
+    val results = mergePartialResults(context, partsRdd)
+    val centroids = IndexedNumericTable(0.toLong, results.get(InitResultId.centroids))
+    context.dispose()
+    centroids
   }
 
   /**
@@ -44,11 +50,12 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
    *
    * @return Partial results of centroid initialization
    */
-  private def initializeCentroidsLocal(): RDD[InitPartialResult] = {
+  override def computePartialResults(): RDD[InitPartialResult] = {
     val totalRows = featureTable.numRows
     featureTable.rdd.map { table =>
       val context = new DaalContext
-      val initLocal = new InitDistributedStep1Local(context, classOf[java.lang.Double], args.getInitMethod, args.k.toLong, totalRows, table.index)
+      val initLocal = new InitDistributedStep1Local(context, classOf[java.lang.Double],
+        args.getInitMethod, args.k.toLong, totalRows, table.index)
       initLocal.input.set(InitInputId.data, table.getUnpackedTable(context))
       val partialResult = initLocal.compute
       partialResult.pack()
@@ -60,21 +67,23 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
   /**
    * Merge partial results of cluster initialiation at Spark master to create initial cluster centroids
    *
+   * @param context DAAL context
    * @param partsRdd Partial results of centroid initialization
    * @return Numeric table with initial cluster centroids
    */
-  private def mergeInitialCentroids(partsRdd: RDD[InitPartialResult]): IndexedNumericTable = {
-    val daalContext = new DaalContext()
+  override def mergePartialResults(context: DaalContext, partsRdd: RDD[InitPartialResult]): InitResult = {
     val partsCollection = partsRdd.collect()
-    val initMaster: InitDistributedStep2Master = new InitDistributedStep2Master(daalContext, classOf[java.lang.Double], args.getInitMethod, args.k)
+    val initMaster: InitDistributedStep2Master = new InitDistributedStep2Master(context,
+      classOf[java.lang.Double], args.getInitMethod, args.k)
+
     for (value <- partsCollection) {
-      value.unpack(daalContext)
+      value.unpack(context)
       initMaster.input.add(InitDistributedStep2MasterInputId.partialResults, value)
     }
     initMaster.compute
+
     val result = initMaster.finalizeCompute
-    val centroids = IndexedNumericTable(0.toLong, result.get(InitResultId.centroids))
-    daalContext.dispose()
-    centroids
+    result
   }
+
 }
