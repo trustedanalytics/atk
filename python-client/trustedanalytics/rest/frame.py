@@ -513,7 +513,17 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 if arg == agg.count:
                     aggregation_list.append({'function': agg.count, 'column_name': first_column_name, 'new_column_name': "count"})
                 else:
-                    return FrameBackendRest.aggregate_with_udf(self, frame, group_by_columns, arg.aggregator, arg.output_schema, arg.init_values)
+                    init_flag = False
+                    if arg.init_values is None:
+                        init_flag=True
+                    else:
+                        if len(arg.output_schema) == len(arg.init_values):
+                            init_flag=True
+
+                    if init_flag == True:
+                        return FrameBackendRest.aggregate_with_udf(self, frame, group_by_columns, arg.aggregator, arg.output_schema, arg.init_values)
+                    else:
+                        raise ValueError("Provide initial values for all column names in output schema or leave initial values as empty")
             elif isinstance(arg, dict):
                 for k,v in arg.iteritems():
                     # leave the valid column check to the server
