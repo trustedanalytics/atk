@@ -28,8 +28,6 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
-    val inputNames = input().map(f => f.name)
-    val inputMap: Map[String, Any] = (inputNames zip data).toMap
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
@@ -37,8 +35,7 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
     val scoreOutput: Map[String, Any] = Map(
       "prediction" -> prediction
     )
-    val output: Array[Any] = Array(inputMap ++ scoreOutput)
-    output
+    scoreOutput.toArray
   }
 
   /**

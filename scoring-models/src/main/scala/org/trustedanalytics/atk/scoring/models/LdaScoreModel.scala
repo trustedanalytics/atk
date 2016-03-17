@@ -33,15 +33,12 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(
   ldaModel.wordColumnName) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val inputNames = input().map(f => f.name)
-    val inputMap: Map[String, Any] = (inputNames zip data).toMap
     val inputDocument = data.flatMap {
       case list: List[_] => list.map(_.toString)
       case _ => throw new IllegalArgumentException("Scoring input must be a list of words")
     }
     val predictReturn = predict(inputDocument.toList)
-    val output: Array[Any] = Array(inputMap ++ predictReturn.toMap)
-    output
+    predictReturn.toMap.toArray
   }
 
   /**

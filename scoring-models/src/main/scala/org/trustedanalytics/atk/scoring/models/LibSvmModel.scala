@@ -27,8 +27,6 @@ import scala.concurrent._
 class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val inputNames = input().map(f => f.name)
-    val inputMap: Map[String, Any] = (inputNames zip data).toMap
     val output = columnFormatter(data.zipWithIndex)
     val splitObs: StringTokenizer = new StringTokenizer(output, " \t\n\r\f:")
     splitObs.nextToken()
@@ -46,8 +44,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
     val scoreOutput: Map[String, Any] = Map(
       "prediction" -> prediction
     )
-    val score: Array[Any] = Array(inputMap ++ scoreOutput)
-    score
+    scoreOutput.toArray
   }
 
   private def columnFormatter(valueIndexPairArray: Array[(Any, Int)]): String = {
