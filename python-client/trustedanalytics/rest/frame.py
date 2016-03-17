@@ -513,6 +513,7 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 if arg == agg.count:
                     aggregation_list.append({'function': agg.count, 'column_name': first_column_name, 'new_column_name': "count"})
                 else:
+                    #validte the arguments
                     init_flag = False
                     if arg.init_values is None:
                         init_flag=True
