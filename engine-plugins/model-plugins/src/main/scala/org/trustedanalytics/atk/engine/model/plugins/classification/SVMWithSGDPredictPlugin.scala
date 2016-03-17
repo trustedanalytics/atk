@@ -46,7 +46,7 @@ class SVMWithSGDPredictPlugin extends SparkCommandPlugin[ClassificationWithSGDPr
   override def name: String = "model:svm/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-  
+
   /**
    * Get the predictions for observations in a test frame
    *
