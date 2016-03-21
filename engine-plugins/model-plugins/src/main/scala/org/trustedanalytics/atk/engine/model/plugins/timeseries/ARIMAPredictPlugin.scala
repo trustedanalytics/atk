@@ -81,9 +81,11 @@ class ARIMAPredictPlugin extends SparkCommandPlugin[ARIMAPredictArgs, FrameRefer
     val arimaData = model.data.convertTo[ARIMAData]
     val arimaModel = arimaData.arimaModel
 
-    // Check schema to verify that time series column is a vector, and get the vector length
-    frame.schema.requireColumnIsType(arguments.timeseriesColumn, DataTypes.isVectorDataType)
-    val tsLength = frame.schema.columnDataType(arguments.timeseriesColumn).asInstanceOf[DataTypes.vector].length
+    // Verify that time series column is a vector, and get the vector length
+    val tsLength = frame.schema.columnDataType(arguments.timeseriesColumn) match {
+      case DataTypes.vector(length) => length
+      case default => throw new IllegalArgumentException("Time series column was expected to be a vector, but instead is " + default.toString)
+    }
 
     // Add column of predicted values
     val predictColumn = Column("predicted_values", DataTypes.vector(tsLength + arguments.futurePeriods))

@@ -54,8 +54,8 @@ class ARIMATrainPlugin extends SparkCommandPlugin[ARIMATrainArgs, ARIMATrainRetu
     frame.schema.requireColumnIsType(arguments.timeseriesColumn, DataTypes.isVectorDataType)
 
     // Only train one model at a time (for a single key)
-    if (frame.rdd.count() != 1)
-      throw new RuntimeException("Unexpected number of rows in time series frame.  Expected 1 row, but the frame has " + frame.rdd.count.toString + " rows.")
+    if (frame.rowCount.getOrElse(0) != 1)
+      throw new RuntimeException("Unexpected number of rows in time series frame.  Expected 1 row, but the frame has " + frame.rowCount.getOrElse("undefined number of") + " rows.")
 
     // Call fitModel() for each row (there should be just one row)
     val arimaModels = frame.rdd.mapRows(row => {
