@@ -109,6 +109,11 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   def isKerberosEnabled(hadoopConf: Configuration) =
     AUTHENTICATION_METHOD.equals(hadoopConf.get(AUTHENTICATION_METHOD_PROPERTY))
 
+  def loginAsCfUser(): Unit = {
+    import sys.process._
+    "echo cf1" #| "kinit cf"!
+  }
+
 }
 
 case class KerberosProperties(kdc: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.KRB_KDC),

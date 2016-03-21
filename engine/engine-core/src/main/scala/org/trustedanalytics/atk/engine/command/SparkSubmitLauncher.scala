@@ -53,7 +53,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         KerberosAuthenticator.loginWithKeyTabCLI()
         val (kerbFile, kerbOptions) = EngineConfig.kerberosKeyTabPath match {
           case Some(path) => (s",$path",
-            s"-Dtrustedanalytics.atk.engine.hadoop.kerberos.keytab-file=${new File(path).getName}")
+            s"-Dtrustedanalytics.atk.engine.hadoop.kerberos.keytab-file=${new File(path).getName} -Djavax.security.auth.useSubjectCredsOnly=false")
           case None => ("", "")
         }
 
