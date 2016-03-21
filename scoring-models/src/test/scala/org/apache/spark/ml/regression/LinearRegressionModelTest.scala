@@ -14,20 +14,22 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.apache.spark.ml.regression
 
 import org.apache.spark.mllib.ScoringModelTestUtils
 import org.apache.spark.mllib.linalg.DenseVector
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.scalatest.WordSpec
+import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 
 class LinearRegressionModelTest extends WordSpec {
+  val uid = "Id"
   val weights = new DenseVector(Array(2, 3))
   val intercept = 4
   val obsCols = List("a", "b", "c")
-  val linearRegressionModel = new LinearRegressionModel(weights, intercept)
-  val linearRegressiondata = new LinearRegressionData(linearRegressionModel, obsCols)
-  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionModel, linearRegressiondata)
+  val labelCol = "d"
+  val linearRegressionModel = new LinearRegressionModel(uid, weights, intercept)
+  val linearRegressionData = new LinearRegressionData(linearRegressionModel, obsCols, labelCol)
+  var linearRegressionScoreModel = new LinearRegressionScoreModel(linearRegressionData)
   val numObsCols = obsCols.length
 
   "LinearRegressionModel" should {

@@ -1,4 +1,3 @@
-
 /**
  *  Copyright (c) 2015 Intel Corporation 
  *
@@ -15,18 +14,14 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards
 
-import org.apache.spark.ml.regression.LinearRegressionModel
+import org.trustedanalytics.atk.domain.model.ModelReference
 
 /**
- * Linear Regression data object
- * @param model The trained LinearRegression Model
- * @param observationColumns Frame's column(s) storing the observations
- * @param labelColumn Frame's column storing the label
+ * Argument for predicting model data.
  */
-case class LinearRegressionData(model: LinearRegressionModel, observationColumns: List[String], labelColumn: String) {
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
-  require(model != null, "linRegModel must not be null")
-  require(labelColumn != null && labelColumn != "", "labelColumn must not be null or empty")
+case class CoxProportionalHazardsPredictArgs(model: ModelReference) {
+  require(model != null, "model is required")
+
 }

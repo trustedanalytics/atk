@@ -13,25 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.trustedanalytics.atk.engine.model.plugins.coxproportionalhazards
 
-package org.trustedanalytics.atk.scoring.models
-
-import org.apache.spark.ml.ScoringJsonReaderWriters._
-import org.apache.spark.ml.regression.LinearRegressionScoreModel
-import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import spray.json._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-class LinearRegressionModelReaderPlugin() extends ModelLoader {
+/** Json conversion for arguments and return value case classes */
+object CoxProportionalHazardJSonFormat {
 
-  private var myLRModel: LinearRegressionScoreModel = _
-
-  override def load(bytes: Array[Byte]): Model = {
-    val str = new String(bytes)
-    println(str)
-    val json: JsValue = str.parseJson
-    val linearRegressionModelData = json.convertTo[LinearRegressionData]
-    myLRModel = new LinearRegressionScoreModel(linearRegressionModelData)
-    myLRModel.asInstanceOf[Model]
-
-  }
+  implicit val coxProportionalHazardTrainFormat = jsonFormat8(CoxProportionalHazardTrainArgs)
+  implicit val coxProportionalHazardPredictFormat = jsonFormat1(CoxProportionalHazardsPredictArgs)
+  implicit val coxProportionalHazardTrainReturn = jsonFormat2(CoxProportionalHazardTrainReturn)
 }
