@@ -24,11 +24,17 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * Parameters used for predicting future values using the ARIMA Model
  */
 case class ARIMAPredictArgs(model: ModelReference,
-                            @ArgDoc("""A frame that has keys and coefficient values from training.""") trainedFrame: FrameReference,
-                            @ArgDoc("""Number of periods in the future to forecast (beyond the length the time series)""") futurePeriods: Int,
-                            @ArgDoc("""Name of the column that contains the time series to use as the gold standard.""") timeseriesColumn: String) {
+                            @ArgDoc("""Time series values to use as the gold standard.""") timeseriesValues: List[Double],
+                            @ArgDoc("""Number of periods in the future to forecast (beyond the length the time series)""") futurePeriods: Int) {
   require(model != null, "model is required")
-  require(trainedFrame != null, "frame is required")
-  require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be empty nor empty")
+  require(timeseriesValues != null && timeseriesValues.nonEmpty, "List of time series values must not be empty nor empty")
   require(futurePeriods >= 0, "Number of future periods should be greater than or equal to 0.")
 }
+
+/**
+ * Return object when forecasting values using an ARIMAModel
+ * @param forecasted a series consisting of fitted 1-step ahead forecasts for historicals and then
+ *         the number of future periods of forecasts. Note that in the future values error terms become
+ *         zero and prior predictions are used for any AR terms.
+ */
+case class ARIMAPredictReturn(forecasted: Array[Double])

@@ -31,7 +31,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARIMAJsonProtocol._
 
-@PluginDoc(oneLine = "Creates Autoregressive Integrated Moving Average (ARIMA) Model from train frame.",
+@PluginDoc(oneLine = "Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.",
   extended = """Given a time series, fits an non-seasonal Autoregressive Integrated Moving Average (ARIMA) model of
      order (p, d, q) where p represents the autoregression terms, d represents the order of differencing,
      and q represents the moving average error terms.  If includeIntercept is true, the model is fitted
@@ -46,30 +46,19 @@ class ARIMATrainPlugin extends SparkCommandPlugin[ARIMATrainArgs, ARIMATrainRetu
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   override def execute(arguments: ARIMATrainArgs)(implicit invocation: Invocation): ARIMATrainReturn = {
-    val frame: SparkFrame = arguments.frame
     val model = arguments.model
-    var trainFrame = frame.rdd
 
-    // Verify that the specified time series column exists and is a vector
-    frame.schema.requireColumnIsType(arguments.timeseriesColumn, DataTypes.isVectorDataType)
+    // Fit model using the specified time series values and ARIMA parameters
+    val userInitParams = if (arguments.userInitParams.isDefined) arguments.userInitParams.get.toArray else null
+    val arimaModel = ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
+      arguments.includeIntercept, arguments.method, userInitParams)
 
-    // Only train one model at a time (for a single key)
-    if (frame.rowCount.getOrElse(0) != 1)
-      throw new RuntimeException("Unexpected number of rows in time series frame.  Expected 1 row, but the frame has " + frame.rowCount.getOrElse("undefined number of") + " rows.")
+    /*if (arguments.userInitParams.isDefined)
+        ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
+          arguments.includeIntercept, arguments.method, arguments.userInitParams.get.toArray)
+      else ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
+      arguments.includeIntercept, arguments.method)*/
 
-    // Call fitModel() for each row (there should be just one row)
-    val arimaModels = frame.rdd.mapRows(row => {
-      val timeseriesValues = row.vectorValue(arguments.timeseriesColumn)
-      ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(timeseriesValues.toArray),
-        arguments.includeIntercept, arguments.method)
-    })
-
-    // Verify that we have just one item, and then grab it as an ARIMA Model.
-    if (arimaModels.count() != 1)
-      throw new RuntimeException("Exepcted 1 ARIMA model from training, but recevied " + arimaModels.count.toString + " models.")
-    val arimaModel = arimaModels.collect()(0).asInstanceOf[ARIMAModel]
-
-    val userInitParams = if (arguments.userInitParams.isDefined) arguments.userInitParams.get.toArray else Array[Double](0)
     val jsonModel = new ARIMAData(arimaModel)
     model.data = jsonModel.toJson.asJsObject
 

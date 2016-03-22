@@ -43,7 +43,7 @@ a series consisting of fitted 1-step ahead forecasts for historicals and then
 *         zero and prior predictions are used for any AR terms.
 */
 
-@PluginDoc(oneLine = """Forecasts future periods.""",
+@PluginDoc(oneLine = """Forecasts future periods using ARIMA.""",
   extended =
     """Provided fitted values of the time series as 1-step ahead forecasts, based
 on current model parameters, then provide future periods of forecast.  We assume
@@ -52,10 +52,9 @@ AR terms prior to the start of the series are equal to the model's intercept ter
 are assumed to be 0.0.  If there is differencing, the first d terms come from the
 original series.""",
   returns =
-    """A new frame containing the original frame's columns and a column of
-1-step ahead forecasts for historicals and then future periods of forecasts
-    """)
-class ARIMAPredictPlugin extends SparkCommandPlugin[ARIMAPredictArgs, FrameReference] {
+    """A series of 1-step ahead forecasts for historicals and then future periods
+of forecasts.""")
+class ARIMAPredictPlugin extends SparkCommandPlugin[ARIMAPredictArgs, ARIMAPredictReturn] {
 
   /**
    * The name of the command
@@ -73,30 +72,16 @@ class ARIMAPredictPlugin extends SparkCommandPlugin[ARIMAPredictArgs, FrameRefer
    *                   can be used during this invocation.
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: ARIMAPredictArgs)(implicit invocation: Invocation): FrameReference = {
-    val frame: SparkFrame = arguments.trainedFrame
+  override def execute(arguments: ARIMAPredictArgs)(implicit invocation: Invocation): ARIMAPredictReturn = {
     val model: Model = arguments.model
 
     // Extract the ARIMAModel from the stored JsObject
     val arimaData = model.data.convertTo[ARIMAData]
     val arimaModel = arimaData.arimaModel
 
-    // Verify that time series column is a vector, and get the vector length
-    val tsLength = frame.schema.columnDataType(arguments.timeseriesColumn) match {
-      case DataTypes.vector(length) => length
-      case default => throw new IllegalArgumentException("Time series column was expected to be a vector, but instead is " + default.toString)
-    }
+    // Call ARIMA model to forecast values using the specified golden values
+    val forecasted = arimaModel.forecast(new DenseVector(arguments.timeseriesValues.toArray), arguments.futurePeriods).toArray
 
-    // Add column of predicted values
-    val predictColumn = Column("predicted_values", DataTypes.vector(tsLength + arguments.futurePeriods))
-    val predictFrame = frame.rdd.addColumn(predictColumn, row => {
-      val ts = row.vectorValue(arguments.timeseriesColumn)
-      val forecasted = arimaModel.forecast(new DenseVector(ts.toArray), arguments.futurePeriods)
-      forecasted.toArray
-    })
-
-    engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by ARIMAModel predict command"))) {
-      newFrame => newFrame.save(predictFrame)
-    }
+    new ARIMAPredictReturn(forecasted)
   }
 }

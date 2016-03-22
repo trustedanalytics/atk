@@ -27,9 +27,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
  * Arguments used for training an ARIMA Model
  */
 case class ARIMATrainArgs(model: ModelReference,
-                          @ArgDoc("""A frame that contains a single time series in a vector column,
-                              which will be used to train the ARIMA model""") frame: FrameReference,
-                          @ArgDoc("""Name of the column that has the time series values.""") timeseriesColumn: String,
+                          @ArgDoc("""List of time series values.""") timeseriesValues: List[Double],
                           @ArgDoc("""Autoregressive order""") p: Int,
                           @ArgDoc("""Differencing order""") d: Int,
                           @ArgDoc("""Moving average order""") q: Int,
@@ -43,8 +41,7 @@ case class ARIMATrainArgs(model: ModelReference,
             should be: intercept term, AR parameters (in increasing order of lag), MA parameters (in
             increasing order of lag)""") userInitParams: Option[List[Double]] = None) {
   require(model != null, "model must not be null")
-  require(frame != null, "frame must not be null")
-  require(timeseriesColumn != null && timeseriesColumn.nonEmpty, "timeseriesColumn must not be null nor empty")
+  require(timeseriesValues != null && timeseriesValues.nonEmpty, "List of time series values must not be null or empty.")
 }
 
 /**

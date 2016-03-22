@@ -52,6 +52,23 @@ vector column).
 [0]  [12.88969427, 13.54964408, 13.8432745, 12.13843611, 12.81156092, 14.2499628, 15.12102595]
 
 
+Use the frame take function to get one row of data with just the "value" column
+
+>>> ts_frame_data = ts.take(n=1,offset=0,columns=["value"])
+
+From the ts_frame_data, get the first row and first column to extract out just the time series values.
+
+>>> ts_values = ts_frame_data[0][0]
+
+>>> ts_values
+[12.88969427,
+ 13.54964408,
+ 13.8432745,
+ 12.13843611,
+ 12.81156092,
+ 14.2499628,
+ 15.12102595]
+
 Create an ARIMA model:
 
 >>> model = ta.ArimaModel()
@@ -59,28 +76,20 @@ Create an ARIMA model:
 
 Train the model using the timeseries frame:
 
->>> model.train(ts, "value", 1, 0, 1)
+>>> model.train(ts_values, 1, 0, 1)
 <progress>
 {u'coefficients': [9.864444620964322, 0.2848511106449633, 0.47346114378593795]}
 
-Predict future periods:
+Call predict to future periods:
 
->>> predicted = model.predict(ts, 0, "value")
+>>> model.predict(ts_values, 0)
 <progress>
-
-The predicted frame returned has the same columns that were in the time series frame
-provided, plus an added column called "predicted_values" that contains a vector of
-forecasted values.
-
->>> predicted.column_names
-[u'name', u'value', u'predicted_values']
-
-Take a look at the vector of predicted values:
-
->>> predicted.inspect(columns="predicted_values")
-[#]  predicted_values
-================================================================================
-[0]  [12.674342627141744, 13.638048984791693, 13.682219498657313, 13.883970022400577, 12.49564914570843, 13.66340392811346, 14.201275185574925]
-
+{u'forecasted': [12.674342627141744,
+  13.638048984791693,
+  13.682219498657313,
+  13.883970022400577,
+  12.49564914570843,
+  13.66340392811346,
+  14.201275185574925]}
 
 

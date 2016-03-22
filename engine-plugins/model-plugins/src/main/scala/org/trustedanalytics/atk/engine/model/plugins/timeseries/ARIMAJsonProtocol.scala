@@ -66,8 +66,9 @@ object ARIMAJsonProtocol {
     }
   }
 
-  implicit val arimaPredictArgsFormat = jsonFormat4(ARIMAPredictArgs)
-  implicit val arimaTrainArgsFormat = jsonFormat9(ARIMATrainArgs)
+  implicit val arimaPredictArgsFormat = jsonFormat3(ARIMAPredictArgs)
+  implicit val arimaPredictReturnFormat = jsonFormat1(ARIMAPredictReturn)
+  implicit val arimaTrainArgsFormat = jsonFormat8(ARIMATrainArgs)
   implicit val arimaTrainReturnFormat = jsonFormat1(ARIMATrainReturn)
   implicit val arimaDataFormat = jsonFormat1(ARIMAData)
 }
