@@ -16,11 +16,13 @@
 
 package org.apache.spark.mllib
 
+import com.cloudera.sparkts.models.ARXModel
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
+import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.ml.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
@@ -58,9 +60,9 @@ object ScoringJsonReaderWriters {
      */
     override def read(json: JsValue): SparseVector = {
       val fields = json.asJsObject.fields
-      val size = fields.get("size").get.asInstanceOf[JsNumber].value.intValue
-      val indices = fields.get("indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val size = getOrInvalid(fields, "size").asInstanceOf[JsNumber].value.intValue
+      val indices = getOrInvalid(fields, "indices").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
 
       new SparseVector(size, indices, values)
     }
@@ -85,74 +87,8 @@ object ScoringJsonReaderWriters {
      */
     override def read(json: JsValue): DenseVector = {
       val fields = json.asJsObject.fields
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new DenseVector(values)
-    }
-  }
-
-  implicit object LinearRegressionModelFormat extends JsonFormat[LinearRegressionModel] {
-    /**
-     * The write methods converts from LinearRegressionModel to JsValue
-     * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
-     *            LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *            and the weights Vector could be either a SparseVector or DenseVector
-     * @return JsValue
-     */
-    override def write(obj: LinearRegressionModel): JsValue = {
-      val weights = VectorFormat.write(obj.weights)
-      JsObject(
-        "weights" -> weights,
-        "intercept" -> JsNumber(obj.intercept)
-      )
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionModel
-     * @param json JsValue
-     * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *         and the weights Vector could be either a SparseVector or DenseVector
-     */
-    override def read(json: JsValue): LinearRegressionModel = {
-      val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
-      val weights = fields.get("weights").map(v => {
-        VectorFormat.read(v)
-      }
-      ).get
-
-      new LinearRegressionModel(weights, intercept)
-    }
-
-  }
-
-  implicit object LinearRegressionDataFormat extends JsonFormat[LinearRegressionData] {
-    /**
-     * The write methods converts from LinearRegressionData to JsValue
-     * @param obj LinearRegressionData. Where LinearRegressionData format is:
-     *            LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
-     * @return JsValue
-     */
-    override def write(obj: LinearRegressionData): JsValue = {
-      val model = LinearRegressionModelFormat.write(obj.linRegModel)
-      JsObject("model" -> model,
-        "observation_columns" -> obj.observationColumns.toJson)
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionData
-     * @param json JsValue
-     * @return LinearRegressionData with format LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
-     */
-    override def read(json: JsValue): LinearRegressionData = {
-      val fields = json.asJsObject.fields
-      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
-        LinearRegressionModelFormat.read(v)
-      }
-      ).get
-      new LinearRegressionData(model, obsCols)
     }
   }
 
@@ -190,7 +126,7 @@ object ScoringJsonReaderWriters {
 
       val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
       val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
 
       new DenseMatrix(numRows, numCols, values, isTransposed)
@@ -447,7 +383,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: KMeansData): JsValue = {
       val model = KmeansModelFormat.write(obj.kMeansModel)
-      JsObject("model" -> model,
+      JsObject("k_means_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "column_scalings" -> obj.columnScalings.toJson)
     }
@@ -460,8 +396,8 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
-      val model = fields.get("model").map(v => {
+      val colScales = getOrInvalid(fields, "column_scalings").convertTo[List[Double]]
+      val model = fields.get("k_means_model").map(v => {
         KmeansModelFormat.read(v)
       }
       ).get
@@ -515,7 +451,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: SVMData): JsValue = {
       val model = SVMModelFormat.write(obj.svmModel)
-      JsObject("model" -> model,
+      JsObject("svm_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -527,7 +463,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): SVMData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("svm_model").map(v => {
         SVMModelFormat.read(v)
       }
       ).get
@@ -587,7 +523,9 @@ object ScoringJsonReaderWriters {
     override def write(obj: LdaModel): JsValue = {
       JsObject(
         "num_topics" -> JsNumber(obj.numTopics),
-        "topic_word_map" -> obj.topicWordMap.toJson
+        "topic_word_map" -> obj.topicWordMap.toJson,
+        "document_column" -> obj.documentColumnName.toJson,
+        "word_column" -> obj.wordColumnName.toJson
       )
     }
 
@@ -600,7 +538,10 @@ object ScoringJsonReaderWriters {
       val fields = json.asJsObject.fields
       val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
       val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
-      LdaModel(numTopics, topicWordMap)
+      val documentColumnName = getOrInvalid(fields, "document_column").convertTo[String]
+      val wordColumnName = getOrInvalid(fields, "word_column").convertTo[String]
+
+      LdaModel(numTopics, topicWordMap, documentColumnName, wordColumnName)
     }
   }
 
@@ -865,7 +806,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestClassifierData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "num_classes" -> obj.numClasses.toJson)
     }
@@ -878,9 +819,8 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestClassifierData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -897,7 +837,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestRegressorData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -909,7 +849,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestRegressorData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -946,7 +886,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: NaiveBayesData): JsValue = {
       val model = NaiveBayesModelFormat.write(obj.naiveBayesModel)
-      JsObject("model" -> model,
+      JsObject("naive_bayes_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
 
     }
@@ -959,7 +899,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): NaiveBayesData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("naive_bayes_model").map(v => {
         NaiveBayesModelFormat.read(v)
       }
       ).get
@@ -970,6 +910,76 @@ object ScoringJsonReaderWriters {
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
+  }
+
+  implicit object ARXModelFormat extends JsonFormat[ARXModel] {
+    /**
+     * The write methods converts from ARXModel to JsValue
+     * @param obj ARXModel. Where ARXModel's format is
+     *              c : scala.Double
+     *              coefficients : scala.Array[scala.Double]
+     *              yMaxLag : scala.Int
+     *              xMaxLag : scala.Int
+     * @return JsValue
+     */
+    override def write(obj: ARXModel): JsValue = {
+      JsObject(
+        "c" -> obj.c.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "xMaxLag" -> obj.xMaxLag.toJson,
+        "yMaxLag" -> obj.yMaxLag.toJson
+      // NOTE: unable to save includesOriginalX parameter
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARXModel
+     * @param json JsValue
+     * @return ARXModel with format
+     *            c : scala.Double
+     *            coefficients : scala.Array[scala.Double]
+     *            yMaxLag : scala.Int
+     *            xMaxLag : scala.Int
+     */
+    override def read(json: JsValue): ARXModel = {
+      val fields = json.asJsObject.fields
+      val c = getOrInvalid(fields, "c").convertTo[Double]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
+      val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
+      // NOTE: unable to get includesOriginalX - defaulting to true
+      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+    }
+
+  }
+
+  implicit object ARXDataFormat extends JsonFormat[ARXData] {
+    /**
+     * The write methods converts from ARXData to JsValue
+     * @param obj ARXData. Where ARXData format is:
+     *            ARXData(arxModel: ARXModel, xColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: ARXData): JsValue = {
+      val model = ARXModelFormat.write(obj.arxModel)
+      JsObject("arx_model" -> model,
+        "x_columns" -> obj.xColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to ARXData
+     * @param json JsValue
+     * @return ARXData with format ARXData(arxModel: ARXModel, xColumns: List[String])
+     */
+    override def read(json: JsValue): ARXData = {
+      val fields = json.asJsObject.fields
+      val xCols = getOrInvalid(fields, "x_columns").convertTo[List[String]]
+      val model = fields.get("arx_model").map(v => {
+        ARXModelFormat.read(v)
+      }
+      ).get
+      new ARXData(model, xCols)
+    }
   }
 
 }

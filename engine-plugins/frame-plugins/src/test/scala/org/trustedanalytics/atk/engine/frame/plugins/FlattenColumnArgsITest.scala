@@ -179,7 +179,7 @@ class FlattenVectorColumnArgsITest extends FlatSpec with Matchers with BeforeAnd
       Row("d", 7), Row("e", 8), Row(null, 0),
       Row("f", 17), Row("g", 2), Row("h", 9),
       Row("i", 37), Row("j", 6), Row(null, 8),
-      Row("k", 22), Row("l", 2), Row("m", 10), Row("n", 0))
+      Row("k", 22), Row("l", 2), Row("m", 10), Row("n", null))
     assertResult(expectedRows) {
       flattened.take(flattened.count().toInt).toList
     }

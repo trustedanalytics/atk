@@ -544,7 +544,12 @@ object DataTypes extends EventLogging {
           case _ =>
             val colType = lifted(i).get
             val value = colType.parse(s)
-            value.get
+
+            if (value.isSuccess || colType.isNumerical == false)
+              value.get
+            else
+              null // return null if the parse was unsuccessful for numerical datatypes
+
         }
     }
   }

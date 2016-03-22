@@ -14,35 +14,36 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.regression
+package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import com.google.common.base.Charsets
-import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import MLLibJsonProtocol._
-import org.apache.spark.mllib.regression.LinearRegressionModel
-import org.trustedanalytics.atk.domain.StringValue
-import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
+import org.apache.spark.mllib.ScoringJsonReaderWriters
+import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin._
+import org.trustedanalytics.atk.domain.StringValue
+import org.apache.hadoop.fs.Path
+import org.trustedanalytics.atk.scoring.models.ARXData
+
 // Implicits needed for JSON conversion
-import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import spray.json._
 import ModelPublishJsonProtocol._
+import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+import org.trustedanalytics.atk.domain.datacatalog.ExportMetadata
 import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonProtocol._
-import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin }
+import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 
 /**
- * Publish a Linear Regression Model for scoring
+ * Publish a ARX Model for scoring
  */
 @PluginDoc(oneLine = "Creates a tar file that will be used as input to the scoring engine",
   extended =
-    """The publish method exports the LinearRegressionModel and its implementation into a tar file. The tar file is then
-       published on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
-       This model can then be used to predict the target value of an observation.
-    """,
+    """The publish method exports the ARX Model and its implementation into a tar file. The tar file is then published
+on HDFS and this method returns the path to the tar file. The tar file serves as input to the scoring engine.
+This model can then be used to predict the cluster assignment of an observation.""",
   returns = """Returns the HDFS path to the trained model's tar file""")
-class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
+class ARXPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
 
   /**
    * The name of the command.
@@ -50,7 +51,7 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:linear_regression/publish"
+  override def name: String = "model:arx/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
@@ -80,13 +81,12 @@ class LinearRegressionWithSGDPublishPlugin extends CommandPlugin[ModelPublishArg
 
     val model: Model = arguments.model
 
-    val linRegJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
-    val linRegData = linRegJsObject.convertTo[LinearRegressionData]
-    val jsvalue: JsValue = linRegData.toJson
+    //Extracting the ARXData from the stored JsObject
+    val arxData = model.data.convertTo[ARXData]
+    val jsvalue: JsValue = arxData.toJson
 
-    val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8),
-      "scoring-models",
-      classOf[LinearRegressionModelReaderPlugin].getName)
-    ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("linear_regression_model"))
+    val modelartifacts = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8), "scoring-models", "org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin")
+
+    ExportMetadata(modelartifacts.filePath, "model", "tar", modelartifacts.fileSize, model.name.getOrElse("arx_model"))
   }
 }

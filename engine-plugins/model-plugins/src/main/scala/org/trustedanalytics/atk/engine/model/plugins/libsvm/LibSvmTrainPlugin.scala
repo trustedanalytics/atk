@@ -69,6 +69,7 @@ class LibSvmTrainPlugin extends SparkCommandPlugin[LibSvmTrainArgs, UnitReturn] 
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
+    require(!frame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     //Running LibSVM
     val param = initializeParameters(arguments)
     val prob = initializeProblem(frame.rdd, arguments, param)

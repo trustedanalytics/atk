@@ -46,7 +46,8 @@ class GraphSmokeTest(unittest.TestCase):
                                             ('vertex_type', str),
                                             ('movie', ta.int32),
                                             ('rating', ta.int32),
-                                            ('splits', str)])
+                                            ('splits', str)],
+                                            skip_header_lines=1)
 
         print "creating frame"
         frame = ta.Frame(csv)
