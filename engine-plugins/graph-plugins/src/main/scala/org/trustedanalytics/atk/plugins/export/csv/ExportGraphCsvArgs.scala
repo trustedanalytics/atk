@@ -17,17 +17,14 @@
 package org.trustedanalytics.atk.plugins.export.csv
 
 import org.apache.commons.lang3.StringUtils
-import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
  * Input arguments class for export to CSV
  */
-//TODO: update doc
-
 case class ExportGraphCsvArgs(graph: GraphReference,
-                              @ArgDoc("""The HDFS folder path where the files
+                              @ArgDoc("""The HDFS folder path where the graph vertices and edges subfolders
 will be created.""") folderName: String,
                               @ArgDoc("""The separator for separating the values.
 Default is comma (,).""") separator: String = ",",
