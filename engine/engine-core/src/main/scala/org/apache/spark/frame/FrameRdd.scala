@@ -16,8 +16,7 @@
 
 package org.apache.spark.frame
 
-
-import org.apache.commons.csv.{CSVFormat, CSVPrinter}
+import org.apache.commons.csv.{ CSVFormat, CSVPrinter }
 import org.apache.commons.lang.StringUtils
 import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
 import org.apache.spark.atk.graph.{ EdgeWrapper, VertexWrapper }
@@ -472,8 +471,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
   //TODO: update doc
   /**
    * Export to a file in CSV format
-    *
-    * @param filename file path where to store the file
+   *
+   * @param filename file path where to store the file
    * @param separator
    * @param count
    * @param offset
