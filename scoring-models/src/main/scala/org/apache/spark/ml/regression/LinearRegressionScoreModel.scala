@@ -14,19 +14,19 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.scoring.models
+package org.apache.spark.ml.regression
 
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
+import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
+import org.trustedanalytics.atk.scoring.models.{ LinearRegressionData, LinearRegressionModelReaderPlugin, ScoringModelUtils }
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent._
-
-class LinearRegressionScoreModel(linearRegressionModel: LinearRegressionModel, linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionModel.weights, linearRegressionModel.intercept) with Model {
+class LinearRegressionScoreModel(linearRegressionData: LinearRegressionData) extends LinearRegressionModel(linearRegressionData.model.uid, linearRegressionData.model.weights, linearRegressionData.model.intercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    val x: Array[Double] = new Array[Double](data.length)
+    data.zipWithIndex.foreach {
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
+    }
     data :+ predict(Vectors.dense(x))
   }
 
