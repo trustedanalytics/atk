@@ -53,7 +53,7 @@ case class DaalCovarianceAlgorithm(featureTable: DistributedNumericTable)
   }
 
   /**
-   * Compute partial results for covariance on each Spark partition
+   * Compute partial results for covariance
    *
    * @return RDD of partial results
    */

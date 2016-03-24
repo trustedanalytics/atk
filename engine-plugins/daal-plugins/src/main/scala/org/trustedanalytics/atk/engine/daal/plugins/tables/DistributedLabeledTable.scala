@@ -87,6 +87,7 @@ object DistributedLabeledTable {
             labelBuf.clear()
           }
         }
+        context.dispose()
         tables.toIterator
     }
     DistributedLabeledTable(tableRdd, totalRows)

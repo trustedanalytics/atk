@@ -89,7 +89,9 @@ object DistributedNumericTable {
             tableElements = 0L
             buf.clear()
           }
+
         }
+        context.dispose()
         tables.toIterator
     }
     DistributedNumericTable(tableRdd, totalRows)

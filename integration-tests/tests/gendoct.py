@@ -106,6 +106,7 @@ frame/export_to_hive.rst
 frame/export_to_jdbc.rst
 frame/export_to_json.rst
 frame/rename.rst
+frame/daal_covariance_matrix.rst
 model-daal_k_means/new.rst
 model-daal_k_means/train.rst
 model-daal_k_means/test.rst
