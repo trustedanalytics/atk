@@ -92,10 +92,10 @@ object PythonRddStorage {
     //Create a new schema which includes keys (KeyedSchema).
     val keyedSchema = udfSchema.copy(columns = data.frameSchema.columns(aggregateByColumnKeys) ++ udfSchema.columns)
     //track key indices to fetch data during BSON decode.
-    val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
+    //val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
-    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, keyIndices, sc)
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc)
     val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
@@ -197,10 +197,9 @@ object PythonRddStorage {
    * This method encodes the raw rdd into Bson to convert into PythonRDD
    * @param udf UDF provided by user to apply on each row
    * @param rdd rdd(List[keys], List[Rows])
-   * @param keyIndices List of key indices, used to retreive key data with result frame
    * @return PythonRdd
    */
-  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     val baseRdd: RDD[Array[Byte]] = rdd.map {
       case (key, rows) => {
@@ -214,7 +213,7 @@ object PythonRddStorage {
               case value => value
             }
           }).toArray
-        obj.put("keyindices", keyIndices.toArray)
+        //obj.put("keyindices", keyIndices.toArray)
         obj.put("array", bsonRows)
         BSON.encode(obj)
       }

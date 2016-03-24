@@ -329,12 +329,14 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
 
         aggregate_with_udf_function = get_group_by_aggregator_function(aggregator_expression, data_types)
 
+        key_indices = FrameSchema.get_indices_for_selected_columns(frame.schema, group_by_column_keys)
+
         from itertools import imap
         arguments = { "frame": frame.uri,
                       "aggregate_by_column_keys": group_by_column_keys,
                       "column_names": names,
                       "column_types": [get_rest_str_from_data_type(t) for t in data_types],
-                      "udf": get_aggregator_udf_arg(frame, aggregate_with_udf_function, imap, output_schema, init_acc_values)
+                      "udf": get_aggregator_udf_arg(frame, aggregate_with_udf_function, imap, key_indices, output_schema, init_acc_values)
                     }
         return execute_new_frame_command('frame/aggregate_with_udf', arguments)
 
