@@ -64,7 +64,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     }
 
     KerberosAuthenticator.loginWithKeyTab()
-    KerberosAuthenticator.loginAsCfUser()
+    KerberosAuthenticator.loginAsAuthenticatedUser()
 
     info("SparkConf settings: " + sparkConf.toDebugString)
 

@@ -109,9 +109,11 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   def isKerberosEnabled(hadoopConf: Configuration) =
     AUTHENTICATION_METHOD.equals(hadoopConf.get(AUTHENTICATION_METHOD_PROPERTY))
 
-  def loginAsCfUser(): Unit = {
+  def loginAsAuthenticatedUser(): Unit = {
+    val yarn_authenticated_user = System.getProperty("YARN_AUTHENTICATED_USERNAME")
+    val yarn_authenticated_password = System.getProperty("YARN_AUTHENTICATED_PASSWORD")
     import sys.process._
-    "echo cf1" #| "kinit cf"!
+    s"echo $yarn_authenticated_password" #| s"kinit $yarn_authenticated_user"!
   }
 
 }
