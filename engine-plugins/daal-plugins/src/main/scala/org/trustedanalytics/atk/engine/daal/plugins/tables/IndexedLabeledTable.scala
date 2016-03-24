@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 /**
  * Indexed numeric tables with features and corresponding labels

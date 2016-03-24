@@ -14,22 +14,47 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
+import org.apache.spark.storage.StorageLevel
+import org.trustedanalytics.atk.domain.schema.FrameSchema
+
 import scala.collection.mutable.ArrayBuffer
 
 /**
  * Distributed DAAL indexed numeric table
+ *
+ * @param tableRdd RDD of indexed numeric table
+ * @param numRows Number of rows in table
  */
-class DistributedNumericTable extends Serializable {
-  private var tableRdd: RDD[IndexedNumericTable] = null
-  private var numRows: Long = 0L
-  private var numCols: Long = 0L
+case class DistributedNumericTable(tableRdd: RDD[IndexedNumericTable],
+                                   numRows: Long) extends DistributedTable(tableRdd, numRows) {
+  require(tableRdd != null, "DAAL numeric table RDD must not be null")
+  val numCols: Long = tableRdd.first().numCols
+
+  /**
+   * Convert table to frame RDD
+   *
+   * @param schema Frame schema
+   * @return Frame RDD
+   */
+  def toFrameRdd(schema: FrameSchema): FrameRdd = {
+    val rowRdd = tableRdd.flatMap(table => {
+      val context = new DaalContext
+      val rows = table.toRowIter(context, Some(schema))
+      context.dispose()
+      rows
+    })
+    new FrameRdd(schema, rowRdd)
+  }
+}
+
+object DistributedNumericTable {
 
   /**
    * Create distributed numeric table from Vector RDD
@@ -37,18 +62,15 @@ class DistributedNumericTable extends Serializable {
    * @param vectorRdd Vector RDD
    * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
    *                         then all rows in a partition are transformed into a single numeric table
+   * @return distributed numeric table
    */
-  def this(vectorRdd: RDD[Vector], maxRowsPerTable: Int = -1) = {
-    this()
-    val first: Vector = vectorRdd.first()
-
-    numCols = first.size
-
-    tableRdd = vectorRdd.mapPartitionsWithIndex {
+  def createTable(vectorRdd: RDD[Vector], maxRowsPerTable: Int): DistributedNumericTable = {
+    var totalRows = 0L
+    val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
         var tableRows = 0L
-        var tableSize = 0L
+        var tableElements = 0L
         val buf = new ArrayBuffer[Double]()
         val tables = new ArrayBuffer[IndexedNumericTable]()
 
@@ -56,20 +78,23 @@ class DistributedNumericTable extends Serializable {
           val vector = iter.next()
           buf ++= vector.toArray
           tableRows += 1
-          tableSize += vector.size
+          tableElements += vector.size
 
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
-            val tableIndex = i - tableRows + 1
-            val table = new HomogenNumericTable(context, buf.toArray, tableSize / tableRows, tableRows)
+            val tableIndex = i //- tableRows + 1
+            val table = new HomogenNumericTable(context, buf.toArray, tableElements / tableRows, tableRows)
             tables += new IndexedNumericTable(tableIndex, table)
-            numRows += tableRows
+            totalRows += tableRows
             tableRows = 0L
-            tableSize = 0L
+            tableElements = 0L
             buf.clear()
           }
+
         }
+        context.dispose()
         tables.toIterator
     }
+    DistributedNumericTable(tableRdd, totalRows)
   }
 
   /**
@@ -79,38 +104,10 @@ class DistributedNumericTable extends Serializable {
    * @param columnNames List of columns for creating numeric table
    * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
    *                         then all rows in a partition are transformed into a single numeric table
+   * @return distributed numeric table
    */
-  def this(frameRdd: FrameRdd, columnNames: List[String], maxRowsPerTable: Int = -1) = {
-    this(frameRdd.toDenseVectorRDD(columnNames), maxRowsPerTable)
+  def createTable(frameRdd: FrameRdd, columnNames: List[String],
+                  maxRowsPerTable: Int = -1): DistributedNumericTable = {
+    createTable(frameRdd.toDenseVectorRDD(columnNames), maxRowsPerTable)
   }
-
-  /**
-   * Get number of rows in distributed table
-   */
-  def getNumRows: Long = numRows
-
-  /**
-   * Get number of columns in distributed table
-   */
-  def getNumCols: Long = numCols
-
-  /**
-   * Get RDD of indexed numeric table
-   */
-  def rdd: RDD[IndexedNumericTable] = tableRdd
-
-  /**
-   * Cache distributed table in memory.
-   */
-  def cache(): Unit = {
-    tableRdd.cache
-  }
-
-  /**
-   * Unpersist cached distributed table.
-   */
-  def unpersist(): Unit = {
-    tableRdd.unpersist()
-  }
-
 }
