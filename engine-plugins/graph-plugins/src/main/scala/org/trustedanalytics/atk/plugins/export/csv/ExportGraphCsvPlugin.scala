@@ -39,8 +39,8 @@ import org.trustedanalytics.atk.plugins.export.csv.ExportGraphCsvJsonFormat._
  * Export a graph to csv format
  */
 @PluginDoc(oneLine = "Write current Parquet graph to HDFS in csv format.",
-  extended = "Export the graph to some Hadoop files for the vertices and the edges in csv format.",
-  returns = "A dictionary with the graph vertices and edges csv files.")
+  extended = "Export the graph to multiple Hadoop files for the vertices and the edges in csv format.",
+  returns = "A dictionary with the location of the graph vertices and edges csv files.")
 class ExportGraphCsvPlugin extends SparkCommandPlugin[ExportGraphCsvArgs, GraphExportMetadata] {
 
   /**
@@ -63,9 +63,9 @@ class ExportGraphCsvPlugin extends SparkCommandPlugin[ExportGraphCsvArgs, GraphE
 
     //Get the graph meta data
     val graph: SparkGraph = arguments.graph
+
     // Get the list of the graph from the meta data
     val graphMeta = engine.graphs.expectSeamless(graph)
-    val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
 
     //Export the graph vertices and edges to CSV file in HDFS, in two subdirectories inside the given directory name
     val vertexFolderName = arguments.folderName + "/vertices"
@@ -91,5 +91,4 @@ class ExportGraphCsvPlugin extends SparkCommandPlugin[ExportGraphCsvArgs, GraphE
     })
     metadata
   }
-
 }

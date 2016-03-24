@@ -16,6 +16,8 @@
 
 package org.apache.spark.frame
 
+import java.lang.StringBuilder
+
 import org.apache.commons.csv.{ CSVFormat, CSVPrinter }
 import org.apache.commons.lang.StringUtils
 import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
@@ -468,9 +470,8 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     new FrameRdd(frameSchema.addColumn(column), rows)
   }
 
-  //TODO: update doc
   /**
-   * Export to a file in CSV format
+   * Export graph to multiple files in CSV format
    *
    * @param filename file path where to store the file
    * @param separator
@@ -486,19 +487,9 @@ class FrameRdd(val frameSchema: Schema, val prev: RDD[Row])
     val filterRdd = if (count > 0) MiscFrameFunctions.getPagedRdd(this, offset, count, -1) else this
     val headers = this.frameSchema.columnNames.mkString(separator.toString)
     val csvFormat = CSVFormat.RFC4180.withDelimiter(separator)
-
+    val rowWrapper = new RowWrapper(frameSchema)
     val csvRdd = filterRdd.map(row => {
-      val stringBuilder = new java.lang.StringBuilder
-      val printer = new CSVPrinter(stringBuilder, csvFormat)
-      val array = row.toSeq.map(col =>
-        col match {
-          case null => ""
-          case arr: ArrayBuffer[_] => arr.mkString(",")
-          case seq: Seq[_] => seq.mkString(",")
-          case x => x.toString
-        })
-      for (i <- array) printer.print(i)
-      stringBuilder.toString
+      rowWrapper(row).exportRowToCsv(csvFormat)
     })
 
     val dataSample = if (csvRdd.isEmpty()) StringUtils.EMPTY else csvRdd.first()

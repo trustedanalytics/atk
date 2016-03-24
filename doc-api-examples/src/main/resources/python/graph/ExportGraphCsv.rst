@@ -25,7 +25,7 @@
 <progress>
 >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
 <progress>
->>> result = graph.export_to_csv("graphCsv")
+>>> result = graph.export_to_csv("csvFolderName")
 <progress>
 >>> result['source'].inspect()
     [#]  _vid  _label  source  label  connectedComponentId
