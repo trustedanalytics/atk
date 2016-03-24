@@ -53,6 +53,7 @@
     frame__covariance_matrix
     frame__cumulative_percent
     frame__cumulative_sum
+    frame__daal_covariance_matrix
     frame__daal_pca
     frame__dot_product
     frame__drop_columns
@@ -108,6 +109,9 @@
     model-cox_proportional_hazard__new
     model-cox_proportional_hazard__predict
     model-cox_proportional_hazard__train
+    model-daal_k_means__new
+    model-daal_k_means__predict
+    model-daal_k_means__train
     model-daal_linear_regression__new
     model-daal_linear_regression__predict
     model-daal_linear_regression__train
@@ -192,6 +196,7 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`frame/covariance_matrix <frame__covariance_matrix>`                                       Calculate covariance matrix for two or more columns.
 :doc:`frame/cumulative_percent <frame__cumulative_percent>`                                     |BETA| Add column to frame with cumulative percent sum.
 :doc:`frame/cumulative_sum <frame__cumulative_sum>`                                             |BETA| Add column to frame with cumulative percent sum.
+:doc:`frame/daal_covariance_matrix <frame__daal_covariance_matrix>`                             Calculate covariance matrix for two or more columns.
 :doc:`frame/daal_pca <frame__daal_pca>`                                                         |ALPHA| Calculate principal components using Intel's Data Analytics Acceleration Library (DAAL).
 :doc:`frame/dot_product <frame__dot_product>`                                                   |ALPHA| Calculate dot product for each row in current frame.
 :doc:`frame/drop_columns <frame__drop_columns>`                                                 Remove columns from the frame.
@@ -259,6 +264,9 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:cox_proportional_hazard/new <model-cox_proportional_hazard__new>`                   Creates a 'new' instance of Cox proportional hazard model.
 :doc:`model:cox_proportional_hazard/predict <model-cox_proportional_hazard__predict>`           |ALPHA| TBD
 :doc:`model:cox_proportional_hazard/train <model-cox_proportional_hazard__train>`               |ALPHA| Build Cox proportional hazard model.
+:doc:`model:daal_k_means/new <model-daal_k_means__new>`                                         Create a 'new' instance of a DAAL k-means model.
+:doc:`model:daal_k_means/predict <model-daal_k_means__predict>`                                 |ALPHA| Predict the cluster assignments for the data points.
+:doc:`model:daal_k_means/train <model-daal_k_means__train>`                                     |ALPHA| Creates DAAL KMeans Model from train frame.
 :doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
 :doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Predict labels for a test frame using trained DAAL linear regression model.
 :doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build DAAL linear regression model.
