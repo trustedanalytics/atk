@@ -31,7 +31,13 @@ object DaalKMeansFunctions extends Serializable {
    */
   def trainKMeansModel(frameRdd: FrameRdd,
                        args: DaalKMeansTrainArgs): DaalKMeansResults = {
-    val table = DistributedNumericTable.createTable(frameRdd, args.observationColumns)
+
+    val vectorRdd = args.columnScalings match {
+      case Some(scalings) => frameRdd.toDenseVectorRDDWithWeights(args.observationColumns, scalings)
+      case _ => frameRdd.toDenseVectorRDD(args.observationColumns)
+    }
+
+    val table = DistributedNumericTable.createTable(vectorRdd)
     table.cache()
 
     // Iteratively update cluster centroids

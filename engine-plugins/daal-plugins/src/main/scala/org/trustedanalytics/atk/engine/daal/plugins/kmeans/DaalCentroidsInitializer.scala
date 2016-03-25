@@ -46,7 +46,7 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
   }
 
   /**
-   * Compute initial cluster centroids locally for each Spark partition
+   * Compute initial cluster centroids locally
    *
    * @return Partial results of centroid initialization
    */
