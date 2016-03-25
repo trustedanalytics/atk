@@ -17,8 +17,6 @@
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 import com.intel.daal.services.DaalContext
-import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
@@ -67,12 +65,12 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
     //Writing the kmeansModel as JSON
     val model: Model = arguments.model
     model.data = DaalKMeansModelData(arguments.observationColumns, arguments.labelColumn,
-      centroids, arguments.k).toJson.asJsObject
+      centroids, arguments.k, arguments.columnScalings).toJson.asJsObject
 
     //Get dictionary with centroids
     val centroidsMap = centroids.zipWithIndex.map {
       case (centroid, i) =>
-        ("Cluster:" + (i + 1).toString, centroid)
+        ("Cluster:" + i.toString, centroid)
     }.toMap
 
     DaalKMeansTrainReturn(centroidsMap, results.clusterSizes)

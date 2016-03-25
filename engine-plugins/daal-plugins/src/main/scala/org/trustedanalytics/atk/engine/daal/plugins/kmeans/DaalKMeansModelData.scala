@@ -22,8 +22,10 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
  * @param labelColumn Column with index of cluster each observation belongs to
  * @param centroids Cluster centroids
  * @param k Number of clusters
+ * @param columnScalings Optional column scalings for each of the observation columns
  */
 case class DaalKMeansModelData(observationColumns: List[String],
                                labelColumn: String,
                                centroids: Array[Array[Double]],
-                               k: Int)
+                               k: Int,
+                               columnScalings: Option[List[Double]] = None)

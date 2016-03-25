@@ -31,6 +31,7 @@ import DaalKMeansJsonFormat._
   extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and the following new columns:
+    'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
     predicted_cluster column: The cluster assignment for the observation""")
 class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, FrameReference] {
 

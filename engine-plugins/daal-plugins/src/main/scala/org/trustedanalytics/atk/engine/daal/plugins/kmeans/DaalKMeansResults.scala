@@ -15,7 +15,6 @@
  */
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.daal.plugins.tables.IndexedNumericTable
 
 /**
