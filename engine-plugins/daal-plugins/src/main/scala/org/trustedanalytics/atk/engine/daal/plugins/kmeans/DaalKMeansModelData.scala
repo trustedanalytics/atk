@@ -13,15 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
-
-import com.intel.daal.data_management.data.NumericTable
-import org.apache.spark.frame.FrameRdd
+package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 /**
- * These implicits can be imported to add conversion functions related functions to DAAL tables
+ * DAAL KMeans model data
+ *
+ * @param observationColumns List of columns containing observations
+ * @param labelColumn Column with index of cluster each observation belongs to
+ * @param centroids Cluster centroids
+ * @param k Number of clusters
  */
-object DaalConversionImplicits {
-  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
-}
+case class DaalKMeansModelData(observationColumns: List[String],
+                               labelColumn: String,
+                               centroids: Array[Array[Double]],
+                               k: Int)

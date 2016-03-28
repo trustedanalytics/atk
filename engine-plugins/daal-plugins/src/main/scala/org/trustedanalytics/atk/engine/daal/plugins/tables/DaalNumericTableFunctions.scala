@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
 

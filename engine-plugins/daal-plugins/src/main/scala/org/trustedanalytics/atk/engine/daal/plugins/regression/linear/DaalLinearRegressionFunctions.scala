@@ -13,7 +13,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 import java.io.Serializable
@@ -27,8 +26,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits._
-import org.trustedanalytics.atk.engine.daal.plugins.{ DistributedNumericTable, DistributedLabeledTable, IndexedNumericTable }
+import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedLabeledTable, DistributedNumericTable, IndexedNumericTable }
 
 object DaalLinearRegressionFunctions extends Serializable {
 
@@ -45,7 +43,7 @@ object DaalLinearRegressionFunctions extends Serializable {
                        featureColumns: List[String],
                        dependentVariableColumns: List[String]): Model = {
 
-    val trainTables = new DistributedLabeledTable(frameRdd, featureColumns, dependentVariableColumns)
+    val trainTables = DistributedLabeledTable.createTable(frameRdd, featureColumns, dependentVariableColumns)
     val partialModels = computePartialLinearModels(trainTables)
     val trainedModel = mergeLinearModels(context, partialModels)
     trainedModel
@@ -63,7 +61,7 @@ object DaalLinearRegressionFunctions extends Serializable {
                          frameRdd: FrameRdd,
                          featureColumns: List[String]): FrameRdd = {
 
-    val distributedTable = new DistributedNumericTable(frameRdd, featureColumns)
+    val distributedTable = DistributedNumericTable.createTable(frameRdd, featureColumns)
     val predictRdd = distributedTable.rdd.flatMap(testData => {
       if (testData.isEmpty) {
         List.empty[sql.Row].iterator
@@ -89,11 +87,10 @@ object DaalLinearRegressionFunctions extends Serializable {
    * @return RDD of partial results
    */
   private def computePartialLinearModels(trainTables: DistributedLabeledTable): RDD[PartialResult] = {
-    val linearModelsRdd = trainTables.rdd.map {
-      case (featureTable, labelTable) =>
-        val linearRegressionModel = computeLinearModelsLocal(featureTable, labelTable)
-        linearRegressionModel
-    }
+    val linearModelsRdd = trainTables.rdd.map(table => {
+      val linearRegressionModel = computeLinearModelsLocal(table.features, table.labels)
+      linearRegressionModel
+    })
     linearModelsRdd
   }
 

@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, PluginDocAnnotation, EngineConfig }
 import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin._

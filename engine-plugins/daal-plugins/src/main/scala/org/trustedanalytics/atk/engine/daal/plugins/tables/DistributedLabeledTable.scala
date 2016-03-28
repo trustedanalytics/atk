@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
@@ -26,12 +26,19 @@ import scala.collection.mutable.ArrayBuffer
 
 /**
  * Distributed DAAL numeric table with features and labels
+ *
+ * @param tableRdd RDD of indexed numeric table
+ * @param numRows Number of rows in table
  */
-class DistributedLabeledTable extends Serializable {
-  private var tableRdd: RDD[IndexedLabeledTable] = null
-  private var numRows: Long = 0L
-  private var numFeatureCols: Long = 0L
-  private var numLabelCols: Long = 0L
+case class DistributedLabeledTable(tableRdd: RDD[IndexedLabeledTable],
+                                   numRows: Long) extends DistributedTable(tableRdd, numRows) {
+  require(tableRdd != null, "DAAL labeled table RDD must not be null")
+  val numFeatureCols = tableRdd.first().features.numCols
+  val numLabelCols = tableRdd.first().labels.numCols
+
+}
+
+object DistributedLabeledTable {
 
   /**
    * Create distributed numeric table with features and labels from Vector RDD
@@ -40,16 +47,18 @@ class DistributedLabeledTable extends Serializable {
    * @param splitIndex Column index at which to split vector into features and labels
    * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
    *                         then all rows in a partition are transformed into a single numeric table
+   *
+   * @return Distributed labeled table
    */
-  def this(vectorRdd: RDD[Vector], splitIndex: Int, maxRowsPerTable: Int = -1) = {
-    this()
+  def createTable(vectorRdd: RDD[Vector], splitIndex: Int, maxRowsPerTable: Int): DistributedLabeledTable = {
     val first: Vector = vectorRdd.first()
 
     val numCols = first.size
-    numFeatureCols = splitIndex
-    numLabelCols = numCols - splitIndex
+    var totalRows = 0L
+    val numFeatureCols = splitIndex
+    val numLabelCols = numCols - splitIndex
 
-    tableRdd = vectorRdd.mapPartitionsWithIndex {
+    val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
         var tableRows = 0L
@@ -65,21 +74,23 @@ class DistributedLabeledTable extends Serializable {
 
           //partition can be split into multiple numeric tables if maximum rows per table is set
           if (tableRows == maxRowsPerTable || !iter.hasNext) {
-            val tableIndex = i - tableRows + 1
+            val tableIndex = i //- tableRows + 1
             val featureTable = new IndexedNumericTable(tableIndex,
               new HomogenNumericTable(context, featureBuf.toArray, numFeatureCols, tableRows))
             val labelTable = new IndexedNumericTable(tableIndex,
               new HomogenNumericTable(context, labelBuf.toArray, numLabelCols, tableRows))
 
             tables += IndexedLabeledTable(featureTable, labelTable)
-            numRows += tableRows
-            tableRows = 0
+            totalRows += tableRows
+            tableRows = 0L
             featureBuf.clear()
             labelBuf.clear()
           }
         }
+        context.dispose()
         tables.toIterator
     }
+    DistributedLabeledTable(tableRdd, totalRows)
   }
 
   /**
@@ -87,33 +98,15 @@ class DistributedLabeledTable extends Serializable {
    *
    * @param frameRdd Input frame
    * @param featureColumns List of feature columns
-   * @param labelColums List of label columns
+   * @param labelColumns List of label columns
    * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
    *                         then all rows in a partition are transformed into a single numeric table
+   *
+   * @return Distributed labeled table
    */
-  def this(frameRdd: FrameRdd, featureColumns: List[String], labelColums: List[String], maxRowsPerTable: Int = -1) = {
-    this(frameRdd.toDenseVectorRDD(featureColumns ++ labelColums), featureColumns.size, maxRowsPerTable)
-  }
-
-  /**
-   * Get number of rows in distributed table
-   */
-  def getNumRows: Long = numRows
-
-  /**
-   * Get number of feature columns in distributed table
-   */
-  def getNumFeatureCols: Long = numFeatureCols
-
-  /**
-   * Get number of label columns in distributed table
-   */
-  def getNumLabelCols: Long = numLabelCols
-
-  /**
-   * Get Pair RDD of feature and label numeric tables
-   */
-  def rdd: RDD[(IndexedNumericTable, IndexedNumericTable)] = {
-    tableRdd.map(table => (table.features, table.labels))
+  def createTable(frameRdd: FrameRdd, featureColumns: List[String],
+                  labelColumns: List[String], maxRowsPerTable: Int = -1): DistributedLabeledTable = {
+    createTable(frameRdd.toDenseVectorRDD(featureColumns ++ labelColumns),
+      featureColumns.size, maxRowsPerTable)
   }
 }
