@@ -663,14 +663,9 @@ class _BaseFrame(CommandLoadable):
             dtype_str = atk_dtype_to_pandas_str(dtype)
             try:
                 pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
-            except ValueError as e:
-                if e.message == "Cannot convert NA to integer":
-                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
-                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
-                else:
-                    raise e
-            except TypeError:
+            except (TypeError, ValueError):
                 if dtype_str.startswith("int"):
+                    # DataFrame does not handle missing values in int columns. If we get this error, use the 'object' datatype instead.
                     print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
                     pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
                 else:
