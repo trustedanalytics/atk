@@ -16,7 +16,7 @@
 
 package org.apache.spark.mllib
 
-import com.cloudera.sparkts.models.ARXModel
+import com.cloudera.sparkts.models.{ ARIMAModel, ARXModel }
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
@@ -982,6 +982,75 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object ARIMAModelFormat extends JsonFormat[ARIMAModel] {
+    /**
+     * The write methods converts from ARIMAModel to JsValue
+     * @param obj ARIMAModel. Where ARIMAModel's format is
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     * @return JsValue
+     */
+    override def write(obj: ARIMAModel): JsValue = {
+      JsObject(
+        "p" -> obj.p.toJson,
+        "d" -> obj.d.toJson,
+        "q" -> obj.q.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "hasIntercept" -> obj.hasIntercept.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAModel
+     * @param json JsValue
+     * @return ARIMAModel with format
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     */
+    override def read(json: JsValue): ARIMAModel = {
+      val fields = json.asJsObject.fields
+      val p = getOrInvalid(fields, "p").convertTo[Int]
+      val d = getOrInvalid(fields, "d").convertTo[Int]
+      val q = getOrInvalid(fields, "q").convertTo[Int]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val hasIntercept = getOrInvalid(fields, "hasIntercept").convertTo[Boolean]
+      new ARIMAModel(p, d, q, coefficients, hasIntercept)
+    }
+
+  }
+
+  implicit object ARIMADataFormat extends JsonFormat[ARIMAData] {
+    /**
+     * The write methods converts from ARIMAData to JsValue
+     * @param obj ARIMAData. Where ARIMAData format is:
+     *            ARIMAData(arimaModel: ARIMAModel])
+     * @return JsValue
+     */
+    override def write(obj: ARIMAData): JsValue = {
+      val model = ARIMAModelFormat.write(obj.arimaModel)
+      JsObject("arima_model" -> model)
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAData
+     * @param json JsValue
+     * @return ARIMAData with format ARIMAData(arimaModel: ARIMAModel)
+     */
+    override def read(json: JsValue): ARIMAData = {
+      val fields = json.asJsObject.fields
+      val model = fields.get("arima_model").map(v => {
+        ARIMAModelFormat.read(v)
+      }
+      ).get
+      new ARIMAData(model)
+    }
+  }
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
