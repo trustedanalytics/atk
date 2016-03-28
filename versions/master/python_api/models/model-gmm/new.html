@@ -149,25 +149,25 @@
 </tr>
 </tbody>
 </table>
-<p>A Gaussian Mixture Model <a class="reference internal" href="../model-random_forest_classifier/new.html#r3" id="id1">[R3]</a> represents a distribution where the observations are drawn from one of the k
+<p>A Gaussian Mixture Model <a class="reference internal" href="../model-random_forest_regressor/index.html#r11" id="id1">[R11]</a> represents a distribution where the observations are drawn from one of the k
 Gaussian sub-distributions, each with its own probability. Each observation can belong to only one cluster,
 the cluster representing the distribution with highest probability for that observation.</p>
 <p>The gmm model is initialized, trained on columns of a frame, and used to
 predict cluster assignments for a frame.
-This model runs the MLLib implementation of gmm <a class="reference internal" href="../model-random_forest_classifier/new.html#r4" id="id2">[R4]</a> with enhanced
+This model runs the MLLib implementation of gmm <a class="reference internal" href="../model-random_forest_regressor/index.html#r12" id="id2">[R12]</a> with enhanced
 feature of computing the number of elements in each cluster during training.
 During predict, it computes the cluster assignment of the observations given in the frame.</p>
 <p class="rubric">footnotes</p>
-<table class="docutils citation" frame="void" id="r3" rules="none">
+<table class="docutils citation" frame="void" id="r11" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model">https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id1">[R11]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model">https://en.wikipedia.org/wiki/Mixture_model#Multivariate_Gaussian_mixture_model</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r4" rules="none">
+<table class="docutils citation" frame="void" id="r12" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R4]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#gaussian-mixture">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#gaussian-mixture</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id2">[R12]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-clustering.html#gaussian-mixture">https://spark.apache.org/docs/1.5.0/mllib-clustering.html#gaussian-mixture</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
@@ -237,7 +237,7 @@ During predict, it computes the cluster assignment of the observations given in 
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Mar 24, 2016.
+      Last updated on Mar 28, 2016.
       </li>
     </ul>
     </div>

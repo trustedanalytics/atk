@@ -10,6 +10,7 @@ Models
     RandomForestClassifierModel <model-random_forest_classifier/index.rst>
     GmmModel <model-gmm/index.rst>
     ArxModel <model-arx/index.rst>
+    ArimaModel <model-arima/index.rst>
     DaalKMeansModel <model-daal_k_means/index.rst>
     PrincipalComponentsModel <model-principal_components/index.rst>
     CollaborativeFilteringModel <model-collaborative_filtering/index.rst>
