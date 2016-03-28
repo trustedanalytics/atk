@@ -665,7 +665,8 @@ class _BaseFrame(CommandLoadable):
                 pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
             except ValueError as e:
                 if e.message == "Cannot convert NA to integer":
-                    raise RuntimeError("DataFrame is unable to handle missing values in integer column: '" + headers[i] + "'.  Rectify missing values or use the float datatype instead of integers.")
+                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
+                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
                 else:
                     raise e
             except TypeError:
