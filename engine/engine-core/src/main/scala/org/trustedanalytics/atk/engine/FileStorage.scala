@@ -42,16 +42,17 @@ class FileStorage extends EventLogging {
 
   private val securedConfiguration = withContext("HDFSFileStorage.configuration") {
     info("fsRoot: " + EngineConfig.fsRoot)
+    KerberosAuthenticator.loginAsAuthenticatedUser()
 
     val hadoopConfig = new Configuration()
 
+    val sconfig = KerberosAuthenticator.loginConfigurationWithKeyTab(hadoopConfig)
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
-    hadoopConfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
-    hadoopConfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
-    hadoopConfig.set("fs.defaultFS", EngineConfig.fsRoot)
+    sconfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
+    sconfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
+    sconfig.set("fs.defaultFS", EngineConfig.fsRoot)
 
-    KerberosAuthenticator.loginConfigurationWithKeyTab(hadoopConfig)
-    hadoopConfig
+    sconfig
   }(null)
 
   def configuration: Configuration = {
@@ -62,7 +63,15 @@ class FileStorage extends EventLogging {
   }
 
   val localFileSystem = FileSystem.getLocal(configuration)
-  private val fileSystem = FileSystem.get(configuration)
+  private val fileSystem = {
+    try {
+      import org.trustedanalytics.hadoop.config.client.helper.Hdfs
+      Hdfs.newInstance().createFileSystem()
+    }
+    catch {
+      case _ => FileSystem.get(configuration)
+    }
+  }
 
   /**
    * Verifies that the Kerberos Ticket is still valid and if not relogins before returning fileSystem object

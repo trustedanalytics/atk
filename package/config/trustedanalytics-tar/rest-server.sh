@@ -26,18 +26,17 @@ echo "make jq executable"
 chmod +x $jq
 
 
-if [ "$KEYTAB_VCAP" ]; then
-    (base64 -d <<< $KEYTAB_VCAP) > $DIR/../vcap.keytab
+if [ "$KRB5_BASE64" ]; then
+#    (base64 -d <<< $KEYTAB_VCAP) > $DIR/../vcap.keytab
     (base64 -d <<< $KRB5_BASE64) > $DIR/../krb5.conf
     export KERBEROS_ENABLED=true
-    export PRINCIPAL="vcap@CLOUDERA"
-    export KEYTAB="vcap.keytab"
+#    export PRINCIPAL="vcap@CLOUDERA"
+#    export KEYTAB="vcap.keytab"
     export KRB5_CONFIG=$DIR/../krb5.conf
-    export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '.user-provided | select(.name | contains("kerberos-service")) | .kuser')
-    export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '.user-provided | select(.name | contains("kerberos-service")) | .kpassword')
+    export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kuser')
+    export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kpassword')
     export HADOOP_USER_NAME=$YARN_AUTHENTICATED_USERNAME
     export KRB5CCNAME=/tmp/cf@CLOUDERA
-
 else
     export KERBEROS_ENABLED=false
 fi
@@ -168,7 +167,7 @@ if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
 fi
 
 if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+ export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG} -Djavax.security.auth.useSubjectCredsOnly=false"
 fi
 
 echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication

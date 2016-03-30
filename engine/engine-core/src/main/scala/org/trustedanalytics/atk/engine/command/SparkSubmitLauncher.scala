@@ -17,6 +17,8 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
+import java.security.PrivilegedAction
+import javax.security.auth.Subject
 import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
@@ -51,10 +53,10 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
         //Requires a TGT in the cache before executing SparkSubmit if CDH has Kerberos Support
         KerberosAuthenticator.loginWithKeyTabCLI()
-        val (kerbFile, kerbOptions) = EngineConfig.kerberosKeyTabPath match {
-          case Some(path) => (s",$path",
-            s"-Dtrustedanalytics.atk.engine.hadoop.kerberos.keytab-file=${new File(path).getName} -Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
-          case None => ("", "")
+        val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
+          case true => (s"",
+            s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
+          case false => ("", "")
         }
 
         val sparkMaster = Array(s"--master", s"${EngineConfig.sparkMaster}")
@@ -117,22 +119,15 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
         // Launch Spark Submit
         val javaArgs = if (kerberosConfig.isDefined) {
-          Array("java", kerberosConfig.get, "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          //          Array("java", kerberosConfig.get, "-Djavax.security.auth.useSubjectCredsOnly=false", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          Array("java", "-Djava.security.krb5.conf=/home/vcap/app/krb5.conf", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
         }
         else {
           Array("java", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
         }
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
-        val helper = Configurations.newInstanceFromEnv()
-        val hdfsConf = helper.getServiceConfig(ServiceType.HDFS_TYPE)
-        if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
-          val kerberosProperties = new KerberosProperties
-          val loginManager = KrbLoginManagerFactory.getInstance()
-            .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
-          loginManager.loginInHadoop(loginManager.loginWithCredentials(kerberosProperties.user, kerberosProperties.password.toCharArray()),
-            hdfsConf.asHadoopConfiguration())
-        }
+        val (subject, config) = KerberosAuthenticator.loginUsingHadoopUtils()
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
@@ -140,11 +135,16 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // SparkSubmit as a standalone process (using engine.jar) for every command to get the parallel
         // execution in yarn-cluster mode.
 
-        val pb = new java.lang.ProcessBuilder(javaArgs: _*)
-        val job = pb.inheritIO().start()
-        val result = job.waitFor()
+        val result = Subject.doAs[Int](subject, new PrivilegedAction[Int] {
+          def run: Int = {
+            val pb = new java.lang.ProcessBuilder(javaArgs: _*)
+            val job = pb.inheritIO().start()
+            job.waitFor()
+          }
+        })
         info(s"Completed with exitCode:$result, ${JvmMemory.memory}")
         result
+
       }
       finally {
         sys.props -= "SPARK_SUBMIT" /* Removing so that next command executes in a clean environment to begin with */

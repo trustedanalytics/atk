@@ -16,6 +16,9 @@
 
 package org.trustedanalytics.atk.engine.util
 
+import java.security.AccessController
+import javax.security.auth.Subject
+
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -23,7 +26,8 @@ import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.security.UserGroupInformation
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
 import org.trustedanalytics.hadoop.config.{ ConfigurationHelperImpl, PropertyLocator }
-import org.trustedanalytics.hadoop.config.client.ServiceInstanceConfiguration
+import org.trustedanalytics.hadoop.config.client.{ ServiceType, Configurations, ServiceInstanceConfiguration }
+import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
 import scala.reflect.io.Directory
 import scala.util.control.NonFatal
 
@@ -42,18 +46,8 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   /**
    * Login to Kerberos cluster using a keytab and principal name specified in config files
    */
-  def loginWithKeyTab(): Unit = {
-    if (EngineConfig.enableKerberos) {
-      debug("Listing Files under Current Directory")
-      Directory.Current.get.deepFiles.foreach(f => debug(f.name))
-      //if kerberos is enabled the following configs will have been set.
-      val keyTabPrincipal: String = EngineConfig.kerberosPrincipalName.get
-      val keyTabFile: String = EngineConfig.kerberosKeyTabPath.get
-      info(s"Authenticate with Kerberos\n\tPrincipal: $keyTabPrincipal\n\tKeyTab File: $keyTabFile")
-      UserGroupInformation.loginUserFromKeytab(
-        keyTabPrincipal,
-        keyTabFile)
-    }
+  def loginWithKeyTab(): Configuration = {
+    loginUsingHadoopUtils()._2
   }
 
   /**
@@ -62,35 +56,15 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
    * @param configuration HadoopConfiguration
    * @return UserGroupInformation for Kerberos TGT ticket
    */
-  def loginConfigurationWithKeyTab(configuration: Configuration): Unit = withMyClassLoader {
-    if (EngineConfig.enableKerberos) {
-      UserGroupInformation.setConfiguration(configuration)
-      KerberosAuthenticator.loginWithKeyTab()
-    }
+  def loginConfigurationWithKeyTab(configuration: Configuration): Configuration = withMyClassLoader {
+    loginUsingHadoopUtils()._2
   }
 
   /**
    * Login to Kerberos using a keytab and principal name specified in config files via kinit command
    */
-  def loginWithKeyTabCLI(): Unit = {
-    //Note this method logs executes kinit for the user running ATK Rest Server. This user must be able to get a valid TGT.
-    if (EngineConfig.enableKerberos) {
-      try {
-        info("Authenticate to Kerberos using kinit")
-        val kerberosConfig = s"env KRB5_CONFIG=${sys.env.get("KRB5_CONFIG").getOrElse("")}"
-        val command = s"$kerberosConfig kinit ${EngineConfig.kerberosPrincipalName.get} -k -t ${EngineConfig.kerberosKeyTabPath.get}"
-        info(s"Command: $command")
-        val p = Runtime.getRuntime.exec(command)
-        val exitValue = p.waitFor()
-        info(s"kinit exited with Exit Value: $exitValue")
-        if (exitValue == 1) {
-          warn(s"Problem executing kinit. May not have valid TGT.")
-        }
-      }
-      catch {
-        case NonFatal(e) => error("Error executing kinit.", exception = e)
-      }
-    }
+  def loginWithKeyTabCLI(): Configuration = {
+    loginUsingHadoopUtils()._2
   }
 
   def getKerberosConfigJVMParam: Option[String] = sys.env.get("JAVA_KRB_CONF")
@@ -108,6 +82,29 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
 
   def isKerberosEnabled(hadoopConf: Configuration) =
     AUTHENTICATION_METHOD.equals(hadoopConf.get(AUTHENTICATION_METHOD_PROPERTY))
+
+  def loginUsingHadoopUtils(): (Subject, Configuration) = {
+    try {
+      val helper = Configurations.newInstanceFromEnv()
+      val hdfsConf = helper.getServiceConfig(ServiceType.HDFS_TYPE)
+      if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
+        val kerberosProperties = new KerberosProperties
+        val loginManager = KrbLoginManagerFactory.getInstance()
+          .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
+        val res = hdfsConf.asHadoopConfiguration()
+        val subject = loginManager.loginWithCredentials(kerberosProperties.user, kerberosProperties.password.toCharArray())
+        loginManager.loginInHadoop(subject, res)
+        (subject, res)
+      }
+      else (Subject.getSubject(AccessController.getContext()), new Configuration())
+    }
+    catch {
+      case t: Throwable =>
+        info(s"Failed to loginUsingHadooputils. Either kerberos is not enabled or invalid setup or " +
+          "using System credentials for authentication. Returning default configuration")
+        (null, new Configuration())
+    }
+  }
 
   def loginAsAuthenticatedUser(): Unit = {
     val yarn_authenticated_user = System.getProperty("YARN_AUTHENTICATED_USERNAME")

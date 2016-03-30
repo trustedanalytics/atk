@@ -290,8 +290,6 @@ trait EngineConfig extends EventLogging {
   lazy val gcStaleAge = config.getDuration("trustedanalytics.atk.engine.gc.stale-age", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean("trustedanalytics.atk.engine.hadoop.kerberos.enabled")
-  val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None
-  val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.keytab-file")) else None
 
   /**
    * Path to effective application.conf (includes overrides passed in at runtime
