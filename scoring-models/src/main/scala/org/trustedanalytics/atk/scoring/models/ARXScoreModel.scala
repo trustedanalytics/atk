@@ -43,8 +43,8 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
     if (!data(1).isInstanceOf[List[Double]])
       throw new IllegalArgumentException("Expected second element in data array to be an List[Double] of x values.")
 
-    val yValues = new DenseVector(data(0).asInstanceOf[List[Double]].map(ScoringModelUtils.toDouble(_)).toArray)
-    val xArray = data(1).asInstanceOf[List[Double]].map(ScoringModelUtils.toDouble(_)).toArray
+    val yValues = new DenseVector(data(0).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
+    val xArray = data(1).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray
 
     if (xArray.length != (yValues.length * xColumnsLength))
       throw new IllegalArgumentException("Expected " + (yValues.length * xColumnsLength) + " x values, but received " +
@@ -56,9 +56,7 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
   }
 
   override def input(): Array[Field] = {
-    var input = Array[Field]()
-    input = input :+ Field("y", "Array[Double]")
-    input :+ Field("x_values", "Array[Double]")
+    Array[Field](Field("y", "Array[Double]"), Field("x_values", "Array[Double]"))
   }
 
   override def modelMetadata(): ModelMetaDataArgs = {
@@ -66,8 +64,7 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
   }
 
   override def output(): Array[Field] = {
-    var output = input()
-    output :+ Field("score", "Array[Double]")
+    Array[Field](Field("score", "Array[Double]"))
   }
 
 }

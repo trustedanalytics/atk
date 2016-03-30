@@ -23,62 +23,42 @@ import org.scalatest.WordSpec
  */
 class ScoringModelUtilsTest extends WordSpec {
 
-  "ScoringModelUtils.toInt" should {
+  "ScoringModelUtils.asInt" should {
     "succeed for numerical values" in {
-      assert(5 == ScoringModelUtils.toInt(5))
-      assert(5 == ScoringModelUtils.toInt(5.0))
-      assert(-5 == ScoringModelUtils.toInt(-5))
-      assert(-5 == ScoringModelUtils.toInt(-5.0))
-      assert(5 == ScoringModelUtils.toInt("5"))
-      assert(-5 == ScoringModelUtils.toInt("-5"))
+      assert(5 == ScoringModelUtils.asInt(5))
+      assert(5 == ScoringModelUtils.asInt(5.0))
+      assert(-5 == ScoringModelUtils.asInt(-5))
+      assert(-5 == ScoringModelUtils.asInt(-5.0))
+      assert(5 == ScoringModelUtils.asInt("5"))
+      assert(-5 == ScoringModelUtils.asInt("-5"))
     }
 
     "throw an exception for invalid float/decimal values" in {
       intercept[IllegalArgumentException] {
-        ScoringModelUtils.toInt(null)
+        ScoringModelUtils.asInt(null)
       }
       intercept[IllegalArgumentException] {
-        ScoringModelUtils.toInt(5.5)
+        ScoringModelUtils.asInt(5.5)
       }
       intercept[IllegalArgumentException] {
-        ScoringModelUtils.toInt(-5.5)
+        ScoringModelUtils.asInt(-5.5)
       }
     }
 
     "throw an excpetion for invalid string values" in {
       intercept[NumberFormatException] {
-        ScoringModelUtils.toInt("abc")
+        ScoringModelUtils.asInt("abc")
       }
       intercept[NumberFormatException] {
-        ScoringModelUtils.toInt("5a")
+        ScoringModelUtils.asInt("5a")
       }
       intercept[NumberFormatException] {
-        ScoringModelUtils.toInt("7*5")
+        ScoringModelUtils.asInt("7*5")
       }
       intercept[NumberFormatException] {
-        ScoringModelUtils.toInt("7.5")
+        ScoringModelUtils.asInt("7.5")
       }
     }
   }
 
-  "ScoringModelUtils.isNumerical" should {
-    "return true when passed a numerical value" in {
-      assert(true == ScoringModelUtils.isNumeric(5))
-      assert(true == ScoringModelUtils.isNumeric(-5))
-      assert(true == ScoringModelUtils.isNumeric(5.7))
-      assert(true == ScoringModelUtils.isNumeric(-5.7))
-      assert(true == ScoringModelUtils.isNumeric("5"))
-      assert(true == ScoringModelUtils.isNumeric("-5"))
-      assert(true == ScoringModelUtils.isNumeric("24156"))
-      assert(true == ScoringModelUtils.isNumeric("-578.2"))
-    }
-
-    "return false when passed a non-numeric value" in {
-      assert(false == ScoringModelUtils.isNumeric("a5"))
-      assert(false == ScoringModelUtils.isNumeric("5a"))
-      assert(false == ScoringModelUtils.isNumeric("abc123"))
-      assert(false == ScoringModelUtils.isNumeric("5.67*"))
-      assert(false == ScoringModelUtils.isNumeric(null))
-    }
-  }
 }

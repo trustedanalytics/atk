@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import scala.util.Try
-
 object ScoringModelUtils {
   /**
    * Attempt to cast Any type to Double
@@ -25,7 +23,7 @@ object ScoringModelUtils {
    * @param value input Any type to be cast
    * @return value cast as Double, if possible
    */
-  def toDouble(value: Any): Double = {
+  def asDouble(value: Any): Double = {
     value match {
       case null => throw new IllegalArgumentException("null cannot be converted to Double")
       case i: Int => i.toDouble
@@ -39,11 +37,12 @@ object ScoringModelUtils {
   }
 
   /**
-   * Attempt to cast Any type to Int
+   * Attempt to cast Any type to Int.  If the value cannot be converted to an integer,
+   * an exception is thrown.
    * @param value input Any type to be cast
    * @return value cast as an Int, if possible
    */
-  def toInt(value: Any): Int = {
+  def asInt(value: Any): Int = {
     value match {
       case null => throw new IllegalArgumentException("null cannot be converted to Int")
       case i: Int => i
@@ -71,24 +70,6 @@ object ScoringModelUtils {
       }
       case s: String => s.trim().toInt
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
-    }
-  }
-
-  /**
-   * Returns true if the specified value is numeric
-   * @param value input value to check
-   * @return True, if value is numeric.
-   */
-  def isNumeric(value: Any): Boolean = {
-    value match {
-      case null => false
-      case i: Int => true
-      case l: Long => true
-      case f: Float => true
-      case d: Double => true
-      case bd: BigDecimal => true
-      case s: String => Try(s.trim.toDouble).isSuccess
-      case _ => false
     }
   }
 }
