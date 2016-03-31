@@ -1,0 +1,133 @@
+
+
+--------------------------------------------------
+:doc:`Commands <index>` model:daal_k_means/predict
+--------------------------------------------------
+
+|ALPHA|
+Predict the cluster assignments for the data points.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:daal_k_means/predict
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        A frame whose labels are to be predicted.
+        By default, predict is run on the same columns over which the model is
+        trained.
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        Column(s) containing the observations
+        whose clusters are to be predicted.
+        Default is to predict the clusters over columns the KMeans model was trained on.
+
+
+
+    **label_column** : unicode (default=None)
+
+    ..
+
+        Name of output column with
+        index of cluster each observation belongs to.
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``Frame``
+
+        Frame
+            A new frame consisting of the existing columns of the frame and the following new columns:
+            predicted_cluster column: The cluster assignment for the observation
+
+

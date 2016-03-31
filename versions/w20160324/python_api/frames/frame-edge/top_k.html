@@ -1,0 +1,228 @@
+<!--
+
+     Copyright (c) 2015 Intel Corporation 
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    
+    <title>EdgeFrame top_k &mdash; Trusted Analytics Platform 0.6.0 documentation</title>
+    
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="../../../R_static/css/spc-extend.css">
+    <link rel="stylesheet" href="../../../R_static/scipy.css" type="text/css" >
+    <link rel="stylesheet" href="../../../R_static/pygments.css" type="text/css" >
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.6.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../R_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../R_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../R_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../R_static/js/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" >
+    <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
+    <link rel="up" title="Frames EdgeFrame" href="index.html" >
+    <link rel="next" title="EdgeFrame unflatten_column" href="unflatten_column.html" >
+    <link rel="prev" title="EdgeFrame timeseries_slice" href="timeseries_slice.html" > 
+  </head>
+  <body>
+
+  <div class="container">
+    <div class="header">
+    </div>
+  </div>
+
+
+    <div class="container">
+      <div class="main">
+        
+	<div class="row-fluid">
+	  <div class="span12">
+	    <div class="spc-navbar">
+              
+    <ul class="nav nav-pills pull-left">
+	
+        <li class="active"><a href="../../../index.html">Trusted Analytics</a></li>
+	
+          <li class="active"><a href="../../index.html" >Python API</a></li>
+          <li class="active"><a href="../index.html" >Frames</a></li>
+          <li class="active"><a href="index.html" accesskey="U"><code class="docutils literal"><span class="pre">Frames</span></code> EdgeFrame</a></li> 
+    </ul>
+              
+              
+    <ul class="nav nav-pills pull-right">
+      <li class="active">
+        <a href="timeseries_slice.html" title="EdgeFrame timeseries_slice"
+           accesskey="P">previous</a>
+      </li>
+      <li class="active">
+        <a href="unflatten_column.html" title="EdgeFrame unflatten_column"
+           accesskey="N">next</a>
+      </li>
+      <li class="active">
+        <a href="../../../genindex.html" title="General Index"
+           accesskey="I">index</a>
+      </li>
+    </ul>
+              
+	    </div>
+	  </div>
+	</div>
+        
+
+	<div class="row-fluid">
+      <div class="spc-rightsidebar span3">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+<h3><a href="../../../index.html">Table Of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro.html">Technical Summary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ds_over.html">User Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev_over.html">Extending Trusted Analytics Platform</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ad_over.html">Administration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../index.html">Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../rest_api/v1/index.html">REST API</a></li>
+</ul>
+<ul class="simple">
+</ul>
+
+        </div>
+      </div>
+          <div class="span9">
+            
+        <div class="bodywrapper">
+          <div class="body" id="spc-section-body">
+            
+  <div class="section" id="edgeframe-top-k">
+<h1><a class="reference internal" href="index.html"><em>EdgeFrame</em></a>  top_k<a class="headerlink" href="#edgeframe-top-k" title="Permalink to this headline">¶</a></h1>
+<hr class="docutils" />
+<dl class="function">
+<dt id="top_k">
+<code class="descname">top_k</code><span class="sig-paren">(</span><em>self</em>, <em>column_name</em>, <em>k</em>, <em>weights_column=None</em><span class="sig-paren">)</span><a class="headerlink" href="#top_k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Most or least frequent column values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>column_name</strong> : unicode</p>
+<blockquote>
+<div><p>The column whose top (or bottom) K distinct values are
+to be calculated.</p>
+</div></blockquote>
+<p><strong>k</strong> : int32</p>
+<blockquote>
+<div><p>Number of entries to return (If k is negative, return bottom k).</p>
+</div></blockquote>
+<p><strong>weights_column</strong> : unicode (default=None)</p>
+<blockquote>
+<div><p>The column that provides weights (frequencies) for the topK calculation.
+Must contain numerical data.
+Default is 1 for all items.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: Frame</p>
+<blockquote class="last">
+<div><p>An object with access to the frame of data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Calculate the top (or bottom) K distinct values by count of a column.
+The column can be weighted.
+All data elements of weight &lt;= 0 are excluded from the calculation, as are
+all data elements whose weight is NaN or infinite.
+If there are no data elements of finite weight &gt; 0, then topK is empty.</p>
+<p class="rubric">Examples</p>
+<p>For this example, we calculate the top 5 movie genres in a data frame:
+Consider the following frame containing four columns.</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  rank  city         population_2013  population_2010  change  county</span>
+<span class="go">    ============================================================================</span>
+<span class="go">    [0]     1  Portland              609456           583776  4.40%   Multnomah</span>
+<span class="go">    [1]     2  Salem                 160614           154637  3.87%   Marion</span>
+<span class="go">    [2]     3  Eugene                159190           156185  1.92%   Lane</span>
+<span class="go">    [3]     4  Gresham               109397           105594  3.60%   Multnomah</span>
+<span class="go">    [4]     5  Hillsboro              97368            91611  6.28%   Washington</span>
+<span class="go">    [5]     6  Beaverton              93542            89803  4.16%   Washington</span>
+<span class="go">    [6]    15  Grants Pass            35076            34533  1.57%   Josephine</span>
+<span class="go">    [7]    16  Oregon City            34622            31859  8.67%   Clackamas</span>
+<span class="go">    [8]    17  McMinnville            33131            32187  2.93%   Yamhill</span>
+<span class="go">    [9]    18  Redmond                27427            26215  4.62%   Deschutes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">top_k</span><span class="p">(</span><span class="s2">&quot;county&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">[===Job Progress===]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
+<span class="go">    [#]  county      count</span>
+<span class="go">        ======================</span>
+<span class="go">        [0]  Washington    4.0</span>
+<span class="go">        [1]  Clackamas     3.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container container-navbar-bottom">
+      <div class="spc-navbar">
+        
+      </div>
+    </div>
+    <div class="container">
+    <div class="footer">
+    <div class="row-fluid">
+    <ul class="inline pull-left">
+      <li>
+        &copy; Copyright 2015, Intel.
+      </li>
+      <li>
+      Last updated on Mar 31, 2016.
+      </li>
+    </ul>
+    </div>
+    </div>
+    </div>
+  </body>
+</html>
