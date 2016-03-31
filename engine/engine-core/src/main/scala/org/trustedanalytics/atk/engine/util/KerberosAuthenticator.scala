@@ -107,10 +107,15 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   }
 
   def loginAsAuthenticatedUser(): Unit = {
-    val yarn_authenticated_user = System.getProperty("YARN_AUTHENTICATED_USERNAME")
-    val yarn_authenticated_password = System.getProperty("YARN_AUTHENTICATED_PASSWORD")
-    import sys.process._
-    s"echo $yarn_authenticated_password" #| s"kinit $yarn_authenticated_user"!
+    try {
+      val yarn_authenticated_user = System.getProperty("YARN_AUTHENTICATED_USERNAME")
+      val yarn_authenticated_password = System.getProperty("YARN_AUTHENTICATED_PASSWORD")
+      import sys.process._
+      s"echo $yarn_authenticated_password" #| s"kinit $yarn_authenticated_user" !
+    }
+    catch {
+      case t: Throwable => info("Failed to login as Authenticated User. Kerberos not set or invalid credentials")
+    }
   }
 
 }
