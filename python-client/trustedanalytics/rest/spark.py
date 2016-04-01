@@ -145,7 +145,6 @@ def _wrap_aggregator_rows_function(frame, aggregator_function, key_indices, aggr
     acc_wrapper = MutableRow(aggregator_schema)
     row_wrapper = RowWrapper(row_schema)
     key_indices_wrapper = key_indices
-
     def rows_func(rows):
         try:
             bson_data = bson.decode_all(rows)[0]

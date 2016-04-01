@@ -20,8 +20,7 @@ import java.io.File
 import java.util
 
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
-import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.frame.Udf
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, Udf }
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, Schema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
@@ -75,15 +74,21 @@ object PythonRddStorage {
       udfSchema
     }
     val converter = DataTypes.parseMany(newSchema.columns.map(_.dataType).toArray)(_)
-    val pyRdd = rddToPyRdd(udf, data, sc)
-    val frameRdd = getRddFromPythonRdd(pyRdd, converter)
+    val accumulatorSer = sc.accumulator(0L, "mytimerSerGeneric")
+    val accumulatorDeSer = sc.accumulator(0L, "mytimerDeSerGeneric")
+    val pyRdd = rddToPyRdd(udf, data, sc, accumulatorSer)
+    val frameRdd = getRddFromPythonRdd(pyRdd, converter, accumulatorDeSer)
+    println(s"MytimerSer in mapWith took ${accumulatorSer.value}")
+    frameRdd.count()
+    println(s"MytimerDeSer in mapWith took ${accumulatorDeSer.value}")
     FrameRdd.toFrameRdd(newSchema, frameRdd)
   }
 
   /**
    * This method returns a FrameRdd after applying UDF on referencing FrameRdd
+   *
    * @param data Current referencing FrameRdd
-   * @param aggregateByColumnKeys List of column name(s) based on which aggregation is performed
+   * @param aggregateByColumnKeys List of column name(s) based on which yeahaggregation is performed
    * @param udf User Defined function(UDF) to apply on each row
    * @param udfSchema Mandatory output schema
    * @return FrameRdd
@@ -94,9 +99,17 @@ object PythonRddStorage {
     //track key indices to fetch data during BSON decode.
     //val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
+
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
-    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc)
-    val frameRdd = getRddFromPythonRdd(pyRdd, converter)
+
+    val accumulatorSer = sc.accumulator(0L, "mytimerSerAggregated")
+    val accumulatorDeSer = sc.accumulator(0L, "mytimerDeSerAggregated")
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc, accumulatorSer)
+    val frameRdd = getRddFromPythonRdd(pyRdd, converter, accumulatorDeSer)
+    //serialization timer
+    println(s"MytimerSer in AggregateUDF took ${accumulatorSer.value}")
+    frameRdd.count()
+    println(s"MytimerDeSer in AggregateUDF took ${accumulatorDeSer.value}")
     FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
 
@@ -126,11 +139,12 @@ object PythonRddStorage {
     bsonList
   }
 
-  def rddToPyRdd(udf: Udf, rdd: RDD[Row], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def rddToPyRdd(udf: Udf, rdd: RDD[Row], sc: SparkContext, acc: Accumulator[Long] = null): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     // Create an RDD of byte arrays representing bson objects
     val baseRdd: RDD[Array[Byte]] = rdd.map(
       x => {
+        val start = System.nanoTime()
         val obj = new BasicBSONObject()
         obj.put("array", x.toSeq.toArray.map {
           case y: ArrayBuffer[_] => iterableToBsonList(y)
@@ -138,15 +152,21 @@ object PythonRddStorage {
           case y: scala.collection.mutable.Seq[_] => iterableToBsonList(y)
           case value => value
         })
-        BSON.encode(obj)
+        val res = BSON.encode(obj)
+        println(s"Bson Encoded obj: ${res}")
+        if (acc != null)
+          acc += (System.nanoTime() - start)
+        res
       }
     )
+    println(s"RddToPyRddGeneric Bytes ${baseRdd.first()} ${baseRdd.first().length}")
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
     pyRdd
   }
 
   /**
    * This method converts the base RDD into Python RDD which is processed by the Python VM at the server.
+   *
    * @param udf UDF provided by the user
    * @param baseRdd Base RDD in Array[Bytes]
    * @param predicateInBytes UDF in Array[Bytes]
@@ -195,14 +215,16 @@ object PythonRddStorage {
 
   /**
    * This method encodes the raw rdd into Bson to convert into PythonRDD
+   *
    * @param udf UDF provided by user to apply on each row
    * @param rdd rdd(List[keys], List[Rows])
    * @return PythonRdd
    */
-  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext, acc: Accumulator[Long] = null): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     val baseRdd: RDD[Array[Byte]] = rdd.map {
       case (key, rows) => {
+        val x = System.nanoTime()
         val obj = new BasicBSONObject()
         val bsonRows = rows.map(
           row => {
@@ -215,9 +237,15 @@ object PythonRddStorage {
           }).toArray
         //obj.put("keyindices", keyIndices.toArray)
         obj.put("array", bsonRows)
-        BSON.encode(obj)
+        val res = BSON.encode(obj)
+        println(s"Bson Encoded obj: ${res}")
+        val y = System.nanoTime()
+        if (acc != null)
+          acc += (y - x)
+        res
       }
     }
+    println(s"agg12-RddToPyRddAggregation Bytes ${baseRdd.first()} ${baseRdd.first().length}")
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
     pyRdd
   }
@@ -243,18 +271,23 @@ object PythonRddStorage {
     result.headOption
   }
 
-  def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null): RDD[Array[Any]] = {
+  def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null, acc: Accumulator[Long] = null): RDD[Array[Any]] = {
     val resultRdd = pyRdd.flatMap(s => {
+      val start = System.nanoTime()
       //should be BasicBSONList containing only BasicBSONList objects
       val bson = BSON.decode(s)
       val asList = bson.get("array").asInstanceOf[BasicBSONList]
-      asList.map(innerList => {
+      val res = asList.map(innerList => {
         val asBsonList = innerList.asInstanceOf[BasicBSONList]
         asBsonList.map {
           case x: BasicBSONList => x.toArray
           case value => value
         }.toArray.asInstanceOf[Array[Any]]
       })
+      val end = System.nanoTime()
+      if (acc != null)
+        acc += (end - start)
+      res
     }).map(converter)
 
     resultRdd
