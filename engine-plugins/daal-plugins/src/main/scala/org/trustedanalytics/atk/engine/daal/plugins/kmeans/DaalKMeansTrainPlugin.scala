@@ -17,6 +17,10 @@
 package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 import com.intel.daal.services.DaalContext
+import org.trustedanalytics.atk.domain.CreateEntityArgs
+import org.trustedanalytics.atk.domain.frame.FrameEntity
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
@@ -54,6 +58,7 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: DaalKMeansTrainArgs)(implicit invocation: Invocation): DaalKMeansTrainReturn = {
+    DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
     val frame: SparkFrame = arguments.frame
 
     // Train model

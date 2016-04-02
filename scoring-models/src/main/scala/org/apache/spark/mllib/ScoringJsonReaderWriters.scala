@@ -17,6 +17,8 @@
 package org.apache.spark.mllib
 
 import com.cloudera.sparkts.models.ARXModel
+import com.intel.daal.data_management.data.HomogenNumericTable
+import com.intel.daal.services.DaalContext
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
@@ -402,6 +404,50 @@ object ScoringJsonReaderWriters {
       }
       ).get
       new KMeansData(model, obsCols, colScales)
+    }
+  }
+
+  implicit object DaalKMeansModelDataFormat extends JsonFormat[DaalKMeansModelData] {
+    /**
+     * The write methods converts from DaalKMeansModelData to JsValue
+     * @param obj DaalKMeansModelData. Where DaalKMeansModelData format is:
+     *            KMeansData(observationColumns: List[String], labelColumn: String,
+     *            centroids: HomogenNumericTable, k: Int, columnScalings: Option[List[Double])
+     * @return JsValue
+     */
+    override def write(obj: DaalKMeansModelData): JsValue = {
+      val centroidsMatrix = ScoringModelUtils.toArrayOfDoubleArray(obj.centroids)
+
+      JsObject(
+        "observation_columns" -> obj.observationColumns.toJson,
+        "label_column" -> obj.labelColumn.toJson,
+        "centroids" -> centroidsMatrix.toJson,
+        "k" -> obj.k.toJson,
+        "column_scalings" -> obj.columnScalings.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to DaalKMeansModelData
+     * @param json JsValue
+     * @return DaalKMeansModelData. Where DaalKMeansModelData format is:
+     *            KMeansData(observationColumns: List[String], labelColumn: String,
+     *            centroids: HomogenNumericTable, k: Int, columnScalings: Option[List[Double])
+     */
+    override def read(json: JsValue): DaalKMeansModelData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val labelCol = getOrInvalid(fields, "label_column").convertTo[String]
+      val k = getOrInvalid(fields, "k").convertTo[Int]
+
+      val colScales = fields.get("column_scalings") match {
+        case Some(scaling) => Some(scaling.convertTo[List[Double]])
+        case _ => None
+      }
+
+      val centroidsMatrix = getOrInvalid(fields, "centroids").convertTo[Array[Array[Double]]]
+      val centroids = ScoringModelUtils.toDaalNumericTable(centroidsMatrix)
+
+      new DaalKMeansModelData(obsCols, labelCol, centroids, k, colScales)
     }
   }
 

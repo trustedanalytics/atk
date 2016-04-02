@@ -19,6 +19,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
@@ -55,6 +57,7 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: DaalKMeansPredictArgs)(implicit invocation: Invocation): FrameReference = {
+    DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 

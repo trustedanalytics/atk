@@ -16,6 +16,11 @@
 
 package org.trustedanalytics.atk.scoring.models
 
+import java.nio.DoubleBuffer
+
+import com.intel.daal.data_management.data.{ NumericTable, HomogenNumericTable }
+import com.intel.daal.services.DaalContext
+
 object ScoringModelUtils {
   /**
    * Attempt to cast Any type to Double
@@ -34,5 +39,58 @@ object ScoringModelUtils {
       case s: String => s.trim().toDouble
       case _ => throw new IllegalArgumentException(s"The following value is not a numeric data type: $value")
     }
+  }
+
+  /**
+   * Convert matrix to Intel DAAL homogeneous numeric table
+   */
+  def toDaalNumericTable(matrix: Array[Array[Double]]): HomogenNumericTable = {
+    require(matrix != null && matrix.length > 0, "Array must not be null or empty")
+    val context = new DaalContext()
+    val numRows = matrix.length
+    val array = matrix.flatten
+    val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
+    table.pack()
+    context.dispose()
+    table
+  }
+
+  /**
+   * Convert DAAL numeric table into an array of array of doubles
+   *
+   * Each feature vector (row) in the numeric table is converted into an array of doubles
+   *
+   * @return Array of array of doubles
+   */
+  def toArrayOfDoubleArray(table: NumericTable): Array[Array[Double]] = {
+    val context = new DaalContext()
+    table.unpack(context)
+    val numRows = table.getNumberOfRows.toInt
+    val numCols = table.getNumberOfColumns.toInt
+    val buffer = DoubleBuffer.allocate(numRows * numCols)
+    val doubleBuffer = table.getBlockOfRows(0, numRows, buffer)
+
+    val arrays = new Array[Array[Double]](numRows)
+    for (i <- 0 until numRows) {
+      val rowArray = new Array[Double](numCols)
+      for (j <- 0 until numCols) {
+        rowArray(j) = doubleBuffer.get(i * numCols + j)
+      }
+      arrays(i) = rowArray
+    }
+    context.dispose()
+
+    arrays
+  }
+
+  /**
+   * Convert DAAL numeric table into an array of doubles
+   *
+   * Each feature vector (row) in the numeric table is converted into an array of doubles
+   *
+   * @return Array of array of doubles
+   */
+  def toDoubleArray(table: NumericTable): Array[Double] = {
+    toArrayOfDoubleArray(table).flatten
   }
 }
