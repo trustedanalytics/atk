@@ -42,6 +42,12 @@ Recommendation Algorithms
 =========================
 -   :ref:`Collaborative Filtering using ALS (Alternating Least Squares) <python_api/models/model-model-collaborative_filtering/index>`
 
+Timeseries Algorithms
+=====================
+-   :ref:`Autoregressive Exogenous Model (ARX)  <python_api/models/model-arx/index>`
+-   :ref:`Autoregressive Integrated Moving Average Model (ARIMA) <python_api/models/model-arima/index>`
+
+
 Graph Algorithms
 ================
 
