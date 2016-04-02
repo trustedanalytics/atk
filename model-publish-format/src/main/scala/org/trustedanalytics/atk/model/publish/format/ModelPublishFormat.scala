@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.model.publish.format
 import java.io._
 import java.lang.reflect.Field
 import java.net.{ URL, URLClassLoader }
+import java.nio.file.{ Path, Files }
 
 import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream, TarArchiveOutputStream }
 import org.apache.commons.io.{ FileUtils, IOUtils }
@@ -75,7 +76,6 @@ object ModelPublishFormat extends EventLogging {
    * @return the instantiated Model   
    */
   def read(modelArchiveInput: File, parentClassLoader: ClassLoader): Model = {
-
     var tarFile: TarArchiveInputStream = null
     var modelName: String = null
     var urls = Array.empty[URL]
@@ -83,6 +83,8 @@ object ModelPublishFormat extends EventLogging {
     var libraryPaths: Set[String] = Set.empty[String]
 
     try {
+      // Extract files to temporary directory so that dynamic library names are not changed
+      val tempDirectory = Files.createTempDirectory("tap-scoring-model")
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
@@ -93,16 +95,16 @@ object ModelPublishFormat extends EventLogging {
         tarFile.read(content, 0, content.length)
 
         if (individualFile.contains(".jar")) {
-          val file = writeTempFile(content, individualFile, ".jar")
+          val file = writeTempFile(tempDirectory, content, individualFile, ".jar")
           val url = file.toURI.toURL
           urls = urls :+ url
         }
         else if (individualFile.contains(".so")) {
-          val file = writeTempFile(content, individualFile, ".so")
+          val file = writeTempFile(tempDirectory, content, individualFile, ".so")
           libraryPaths += getDirectoryPath(file)
         }
         else if (individualFile.contains(".dll")) {
-          val file = writeTempFile(content, individualFile, ".dll")
+          val file = writeTempFile(tempDirectory, content, individualFile, ".dll")
           libraryPaths += getDirectoryPath(file)
         }
         else if (individualFile.contains(modelReaderString)) {
@@ -135,22 +137,25 @@ object ModelPublishFormat extends EventLogging {
   /**
    * Write content to temporary file
    *
+   * @param tempDir Temporary directory
    * @param content File content to write
    * @param filePath File path
    * @param fileExtension File extension
    *
    * @return Temporary file
    */
-  private def writeTempFile(content: Array[Byte], filePath: String, fileExtension: String): File = {
+  private def writeTempFile(tempDir: Path, content: Array[Byte], filePath: String, fileExtension: String): File = {
     var file: File = null
     var outputFile: FileOutputStream = null
-    var fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
-    fileName = fileName.substring(0, fileName.length - fileExtension.size)
+    val fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
 
     try {
-      file = File.createTempFile(fileName, fileExtension)
+      file = new File(tempDir.toString, fileName)
+      file.createNewFile()
+      //TODO: file.deleteOnExit()???
       outputFile = new FileOutputStream(file)
       IOUtils.write(content, outputFile)
+
     }
     catch {
       case e: Exception =>
