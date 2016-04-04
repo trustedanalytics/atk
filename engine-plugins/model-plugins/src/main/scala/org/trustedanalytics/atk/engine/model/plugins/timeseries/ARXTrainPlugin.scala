@@ -43,10 +43,12 @@ import scala.collection.mutable.ArrayBuffer
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
   extended = """Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
 dataset being trained must be small enough to be worked with on a single node.""",
-  returns = """dictionary
-    A dictionary with trained ARX model with the following keys\:
-'c' : intercept term, or zero for no intercept
-'coefficients' : coefficients for each column of exogenous inputs.""")
+  returns = """A dictionary with trained ARX model with the following keys\:
+
+              |   **Double* : *c*
+              |       intercept term, or zero for no intercept
+              |   **List[Double]** : *coefficients*
+              |       coefficients for each column of exogenous input.""")
 class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   /**
    * The name of the command.
