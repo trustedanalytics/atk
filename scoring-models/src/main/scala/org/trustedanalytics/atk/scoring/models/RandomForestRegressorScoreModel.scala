@@ -29,7 +29,7 @@ class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorDat
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.asDouble(value)
     }
     val prediction = predict(Vectors.dense(x))
     val score: Array[Any] = Array(prediction)

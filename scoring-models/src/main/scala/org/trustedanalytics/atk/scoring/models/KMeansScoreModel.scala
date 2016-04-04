@@ -25,11 +25,8 @@ import scala.concurrent._
 class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) extends KMeansModel(libKMeansModel.clusterCenters) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
-
-    val prediction = predict(Vectors.dense(x)) + 1
-    val output: Array[Any] = Array(prediction)
-    output
+    val x: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
+    data :+ (predict(Vectors.dense(x)) + 1)
   }
 
   /**
@@ -53,6 +50,6 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
    */
   override def output(): Array[Field] = {
     var output = input()
-    output :+ Field("prediction", "Int")
+    output :+ Field("score", "Int")
   }
 }

@@ -16,7 +16,6 @@
 package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.classification.SVMModel
-import org.apache.spark.mllib.regression.LinearRegressionModel
 import org.apache.spark.mllib.linalg.Vectors
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
 
@@ -26,10 +25,8 @@ import scala.concurrent._
 class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.weights, svmData.svmModel.intercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
-    val prediction = predict(Vectors.dense(x))
-    val score: Array[Any] = Array(prediction)
-    score
+    val x: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
+    data :+ predict(Vectors.dense(x))
   }
 
   override def input(): Array[Field] = {

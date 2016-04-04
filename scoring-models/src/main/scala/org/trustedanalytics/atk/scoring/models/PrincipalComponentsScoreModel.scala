@@ -27,7 +27,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
   pcaModel.meanCentered, pcaModel.meanVector, pcaModel.singularValues, pcaModel.vFactor) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = data.map(value => ScoringModelUtils.toDouble(value))
+    val x: Array[Double] = data.map(value => ScoringModelUtils.asDouble(value))
     val y: DenseMatrix = computePrincipalComponents(x)
     val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
     val pcaScoreOutput: Array[Any] = Array(y.values.toList, t_squared_index)
@@ -38,6 +38,9 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
    * Compute the principal components for the observation
    * @param x Each observation stored as an Array[Double]
    * @return (org.apache.spark.mllib)DenseMatrix
+   *
+   *
+   *
    */
   def computePrincipalComponents(x: Array[Double]): DenseMatrix = {
     var inputVector = new org.apache.spark.mllib.linalg.DenseVector(x)

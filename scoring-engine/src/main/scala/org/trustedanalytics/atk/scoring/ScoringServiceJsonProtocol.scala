@@ -95,6 +95,8 @@ class ScoringServiceJsonProtocol(model: Model) {
             case (a: String, b: Double) => new JsField(a, JsNumber(b))
             case (a: String, i: Int) => new JsField(a, JsNumber(i))
           })
+          case a: Array[_] => new JsArray(a.map(x => write(x)).toList)
+          case default => throw new RuntimeException("Unsupported array data type in scoring service json formatting write: " + default.getClass.getSimpleName)
         }.toList)
         case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
         case n: java.lang.Long => new JsNumber(n.longValue())
