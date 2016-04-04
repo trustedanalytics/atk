@@ -25,7 +25,7 @@ import scala.concurrent._
 class SVMWithSGDScoreModel(svmData: SVMData) extends SVMModel(svmData.svmModel.weights, svmData.svmModel.intercept) with Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    val x: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
     data :+ predict(Vectors.dense(x))
   }
 

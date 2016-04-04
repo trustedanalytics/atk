@@ -25,7 +25,7 @@ class LinearRegressionScoreModel(linearRegressionData: LinearRegressionData) ext
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = new Array[Double](data.length)
     data.zipWithIndex.foreach {
-      case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
+      case (value: Any, index: Int) => x(index) = ScoringModelUtils.asDouble(value)
     }
     data :+ predict(Vectors.dense(x))
   }
