@@ -261,7 +261,7 @@ trait AbstractRow {
    * @return the modified row (with a different schema)
    */
   def convertType(columnName: String, dataType: DataType): Row = {
-    setValueIgnoreType(columnName, DataTypes.convertToType(value(columnName), dataType))
+    setValueIgnoreType(columnName, dataType.toScalaType(value(columnName)))
   }
 
   /**
@@ -337,7 +337,8 @@ trait AbstractRow {
         content(updatedSchema.columnIndex(columnName)) = value(columnName)
       }
       else if (schema.hasColumn(columnName)) {
-        content(updatedSchema.columnIndex(columnName)) = DataTypes.convertToType(value(columnName), updatedSchema.columnDataType(columnName))
+        val dataType = updatedSchema.columnDataType(columnName)
+        content(updatedSchema.columnIndex(columnName)) = dataType.toScalaType(value(columnName))
       }
       else {
         // it is non-intuitive but even primitives can be null with Rows

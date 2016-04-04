@@ -13,13 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 /**
- * Indexed numeric tables with features and corresponding labels
+ * DAAL KMeans model data
  *
- * @param features Numeric table with features
- * @param labels Numeric table with labels
+ * @param observationColumns List of columns containing observations
+ * @param labelColumn Column with index of cluster each observation belongs to
+ * @param centroids Cluster centroids
+ * @param k Number of clusters
  */
-case class IndexedLabeledTable(features: IndexedNumericTable, labels: IndexedNumericTable)
+case class DaalKMeansModelData(observationColumns: List[String],
+                               labelColumn: String,
+                               centroids: Array[Array[Double]],
+                               k: Int)

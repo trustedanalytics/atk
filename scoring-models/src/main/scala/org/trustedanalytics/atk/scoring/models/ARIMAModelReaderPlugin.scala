@@ -14,14 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins.conversions
+package org.trustedanalytics.atk.scoring.models
 
-import com.intel.daal.data_management.data.NumericTable
-import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
+import org.apache.spark.mllib.ScoringJsonReaderWriters.ARIMADataFormat
 
-/**
- * These implicits can be imported to add conversion functions related functions to DAAL tables
- */
-object DaalConversionImplicits {
-  implicit def numericTableFunctions(self: NumericTable): DaalNumericTableFunctions = new DaalNumericTableFunctions(self)
+class ARIMAModelReaderPlugin() extends ModelLoader {
+
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    val arimaData = str.parseJson.convertTo[ARIMAData]
+    new ARIMAScoreModel(arimaData.arimaModel, arimaData).asInstanceOf[Model]
+  }
+
 }
