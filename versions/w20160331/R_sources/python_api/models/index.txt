@@ -1,0 +1,42 @@
+
+Models
+======
+
+**Classes**
+
+.. toctree::
+    LibsvmModel <model-libsvm/index.rst>
+    DaalLinearRegressionModel <model-daal_linear_regression/index.rst>
+    RandomForestClassifierModel <model-random_forest_classifier/index.rst>
+    GmmModel <model-gmm/index.rst>
+    ArxModel <model-arx/index.rst>
+    ArimaModel <model-arima/index.rst>
+    DaalKMeansModel <model-daal_k_means/index.rst>
+    PrincipalComponentsModel <model-principal_components/index.rst>
+    CollaborativeFilteringModel <model-collaborative_filtering/index.rst>
+    KMeansModel <model-k_means/index.rst>
+    SvmModel <model-svm/index.rst>
+    LdaModel <model-lda/index.rst>
+    LogisticRegressionModel <model-logistic_regression/index.rst>
+    NaiveBayesModel <model-naive_bayes/index.rst>
+    LinearRegressionModel <model-linear_regression/index.rst>
+    CoxProportionalHazardModel <model-cox_proportional_hazard/index.rst>
+    RandomForestRegressorModel <model-random_forest_regressor/index.rst>
+    PowerIterationClusteringModel <model-power_iteration_clustering/index.rst>
+
+.. toctree::
+    :hidden:
+
+    get_model
+    drop_models
+    get_model_names
+
+-------
+
+**Global Methods**
+
+:doc:`get_model<get_model>`
+
+:doc:`drop_models<drop_models>`
+
+:doc:`get_model_names<get_model_names>`

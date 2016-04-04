@@ -1,0 +1,44 @@
+
+:doc:`DaalLinearRegressionModel <index>`  __init__
+**************************************************
+
+------
+
+
+.. function:: __init__(self, name=None)
+
+    |ALPHA|
+    Create a 'new' instance of a DAAL Linear Regression model.
+
+
+    :Parameters:
+
+        **name** : unicode (default=None)
+
+        ..
+
+            User supplied name.
+
+
+
+
+    :Returns:
+
+        : Model
+
+        ..
+
+            A new instance of DaalLinearRegressionNewPlugin
+    Linear Regression [1]_ is used to model the relationship between a scalar
+    dependent variable and one or more independent variables.
+    The Linear Regression model is initialized, trained on columns of a frame and
+    used to predict the value of the dependent variable given the independent
+    observations of a frame.
+    This model runs the DAAL implementation of Linear Regression [2]_ with
+    QR [3]_ decomposition.
+
+    .. rubric:: footnotes
+
+    .. [1] https://en.wikipedia.org/wiki/Linear_regression
+    .. [2] https://software.intel.com/en-us/daal
+    .. [3] https://en.wikipedia.org/wiki/QR_decomposition

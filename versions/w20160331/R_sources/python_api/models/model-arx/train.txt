@@ -1,0 +1,80 @@
+
+:doc:`ArxModel <index>`  train
+******************************
+
+------
+
+
+.. function:: train(self, frame, timeseries_column, x_columns, y_max_lag, x_max_lag, no_intercept=False)
+
+    |ALPHA|
+    Creates AutoregressionX (ARX) Model from train frame.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on.
+
+
+
+        **timeseries_column** : unicode
+
+        ..
+
+            Name of the column that contains the time series values.
+
+
+
+        **x_columns** : list
+
+        ..
+
+            Names of the column(s) that contain the values of previous exogenous regressors.
+
+
+
+        **y_max_lag** : int32
+
+        ..
+
+            The maximum lag order for the dependent (time series) variable
+
+
+
+        **x_max_lag** : int32
+
+        ..
+
+            The maximum lag order for exogenous variables
+
+
+
+        **no_intercept** : bool (default=False)
+
+        ..
+
+            a boolean flag indicating if the intercept should be dropped. Default is false
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            dictionary
+                A dictionary with trained ARX model with the following keys\:
+            'c' : intercept term, or zero for no intercept
+            'coefficients' : coefficients for each column of exogenous inputs.
+    Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
+    dataset being trained must be small enough to be worked with on a single node.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

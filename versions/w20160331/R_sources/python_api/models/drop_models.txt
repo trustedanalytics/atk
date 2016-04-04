@@ -1,0 +1,30 @@
+
+:doc:`trustedanalytics <index>`  drop_models
+********************************************
+
+------
+
+
+.. function:: drop_models(items)
+
+    Deletes the model on the server.
+
+
+    :Parameters:
+
+        **items** : [ str | model object | list [ str | model objects ]]
+
+        ..
+
+            Either the name of the model object to delete or the model object itself
+
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+            Number of models deleted.
