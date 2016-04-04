@@ -84,6 +84,11 @@ class ScoringServiceJsonProtocol(model: Model) {
           case n: Long => JsNumber(n)
           case n: Float => JsNumber(n)
           case s: String => JsString(s)
+          //          case t: Tuple2[String, _] => new JsObject(t.map {
+          //            case (a: String, l: Double) => new JsField(a, l.toJson)
+          //            case (a: String, l: List[Double]) => new JsField(a, l.toJson)
+          //            case (a: String, i: Int) => new JsField(a, JsNumber(i))
+          //          })
           case l: List[_] => new JsArray(l.map(x => write(x)))
           case m: Map[String, _] => new JsObject(m.map {
             case (a: String, l: List[Double]) => new JsField(a, l.toJson)

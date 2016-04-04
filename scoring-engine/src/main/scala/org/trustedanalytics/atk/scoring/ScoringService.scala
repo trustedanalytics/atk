@@ -150,9 +150,7 @@ class ScoringService(model: Model) extends Directives {
   def scoreModel(records: Seq[Array[Any]], version: String): Future[Array[Any]] = Future {
     var scores = new ArrayBuffer[Any]()
     records.foreach(row => {
-      val inputNames = model.input().map(f => f.name)
-      val inputMap: Map[String, Any] = (inputNames zip row).toMap
-      val score = inputMap ++ model.score(row)
+      val score = scoreToMap(model.score(row), row)
       if (version == "v1") {
         //scores += score(score.length - 1).toString
         scores += score.toString
@@ -165,6 +163,14 @@ class ScoringService(model: Model) extends Directives {
       }
     })
     scores.toArray
+  }
+
+  def scoreToMap(score: Array[Any], input: Array[Any]): Array[Any] = {
+    val output = input ++ score
+    val outputNames = model.output().map(o => o.name)
+    //val outputMap: Map[String, Any] = outputNames.zip(output).map(combined => (combined._1.name, combined._2)).toMap
+    val outputMap: Array[Any] = outputNames.zip(output)
+    outputMap
   }
 }
 

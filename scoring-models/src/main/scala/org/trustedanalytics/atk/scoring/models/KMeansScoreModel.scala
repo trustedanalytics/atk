@@ -28,10 +28,8 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
     val x: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
 
     val prediction = predict(Vectors.dense(x)) + 1
-    val scoreOutput: Map[String, Any] = Map(
-      "prediction" -> prediction
-    )
-    scoreOutput.toArray
+    val output: Array[Any] = Array(prediction)
+    output
   }
 
   /**

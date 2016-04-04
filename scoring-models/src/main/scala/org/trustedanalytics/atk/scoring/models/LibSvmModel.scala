@@ -40,11 +40,9 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
       j += 1
     }
     val prediction = svm.svm_predict(libSvmModel, x)
+    val score: Array[Any] = Array(prediction)
+    score
 
-    val scoreOutput: Map[String, Any] = Map(
-      "prediction" -> prediction
-    )
-    scoreOutput.toArray
   }
 
   private def columnFormatter(valueIndexPairArray: Array[(Any, Int)]): String = {

@@ -27,10 +27,8 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
     val prediction = predict(Vectors.dense(x))
-    val scoreOutput: Map[String, Any] = Map(
-      "prediction" -> prediction
-    )
-    scoreOutput.toArray
+    val output: Array[Any] = Array(prediction)
+    output
   }
 
   /**

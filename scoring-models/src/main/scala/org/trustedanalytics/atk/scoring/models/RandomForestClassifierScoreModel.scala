@@ -32,10 +32,8 @@ class RandomForestClassifierScoreModel(randomForestData: RandomForestClassifierD
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.toDouble(value)
     }
     val prediction = predict(Vectors.dense(x))
-    val scoreOutput: Map[String, Any] = Map(
-      "prediction" -> prediction
-    )
-    scoreOutput.toArray
+    val score: Array[Any] = Array(prediction)
+    score
   }
 
   /**
