@@ -52,7 +52,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         BackgroundInit.waitTillCompleted
 
         //Requires a TGT in the cache before executing SparkSubmit if CDH has Kerberos Support
-        KerberosAuthenticator.loginWithKeyTabCLI()
+        KerberosAuthenticator.loginUsingHadoopUtils()
         val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
           case true => (s"",
             s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
@@ -119,8 +119,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
         // Launch Spark Submit
         val javaArgs = if (kerberosConfig.isDefined) {
-          //          Array("java", kerberosConfig.get, "-Djavax.security.auth.useSubjectCredsOnly=false", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
-          Array("java", "-Djava.security.krb5.conf=/home/vcap/app/krb5.conf", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
+          Array("java", kerberosConfig.get, "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs
         }
         else {
           Array("java", "-cp", s"$engineClasspath", "org.apache.spark.deploy.SparkSubmit") ++ inputArgs

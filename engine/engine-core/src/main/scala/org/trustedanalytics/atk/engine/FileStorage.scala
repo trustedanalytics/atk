@@ -44,9 +44,7 @@ class FileStorage extends EventLogging {
     info("fsRoot: " + EngineConfig.fsRoot)
     KerberosAuthenticator.loginAsAuthenticatedUser()
 
-    val hadoopConfig = new Configuration()
-
-    val sconfig = KerberosAuthenticator.loginConfigurationWithKeyTab(hadoopConfig)
+    val sconfig = KerberosAuthenticator.loginConfigurationWithClassLoader()
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
     sconfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
     sconfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
@@ -56,9 +54,6 @@ class FileStorage extends EventLogging {
   }(null)
 
   def configuration: Configuration = {
-    if (EngineConfig.enableKerberos) {
-      KerberosAuthenticator.loginConfigurationWithKeyTab(securedConfiguration)
-    }
     securedConfiguration
   }
 
@@ -78,9 +73,6 @@ class FileStorage extends EventLogging {
    * @return Hadoop FileSystem
    */
   def hdfs: FileSystem = {
-    if (EngineConfig.enableKerberos) {
-      KerberosAuthenticator.loginConfigurationWithKeyTab(securedConfiguration)
-    }
     fileSystem
   }
 

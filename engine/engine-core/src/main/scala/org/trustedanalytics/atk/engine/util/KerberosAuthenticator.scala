@@ -44,26 +44,10 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   // TODO: Allow support for multiple keytabs once namespaces is implemented
 
   /**
-   * Login to Kerberos cluster using a keytab and principal name specified in config files
+   * Login to Kerberos cluster with classloader
+   * @return Configuration Hadoop Configuration for the cluster
    */
-  def loginWithKeyTab(): Configuration = {
-    loginUsingHadoopUtils()._2
-  }
-
-  /**
-   * Login to Kerberos cluster using a keytab and principal name specified in config files
-   * using a specific HadoopConfiguration
-   * @param configuration HadoopConfiguration
-   * @return UserGroupInformation for Kerberos TGT ticket
-   */
-  def loginConfigurationWithKeyTab(configuration: Configuration): Configuration = withMyClassLoader {
-    loginUsingHadoopUtils()._2
-  }
-
-  /**
-   * Login to Kerberos using a keytab and principal name specified in config files via kinit command
-   */
-  def loginWithKeyTabCLI(): Configuration = {
+  def loginConfigurationWithClassLoader(): Configuration = withMyClassLoader {
     loginUsingHadoopUtils()._2
   }
 

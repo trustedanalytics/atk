@@ -167,11 +167,12 @@ if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
 fi
 
 if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG} -Djavax.security.auth.useSubjectCredsOnly=false"
+ export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+ export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
 fi
 
-echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
-java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 
