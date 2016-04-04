@@ -45,9 +45,9 @@ import scala.collection.mutable.ArrayBuffer
 dataset being trained must be small enough to be worked with on a single node.""",
   returns = """A dictionary with trained ARX model with the following keys\:
 
-              |   **Double* : *c*
+              |   **c** : *float*
               |       intercept term, or zero for no intercept
-              |   **List[Double]** : *coefficients*
+              |   **coefficients** : *list*
               |       coefficients for each column of exogenous input.""")
 class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   /**
