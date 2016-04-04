@@ -26,12 +26,10 @@ echo "make jq executable"
 chmod +x $jq
 
 
+
 if [ "$KRB5_BASE64" ]; then
-#    (base64 -d <<< $KEYTAB_VCAP) > $DIR/../vcap.keytab
     (base64 -d <<< $KRB5_BASE64) > $DIR/../krb5.conf
     export KERBEROS_ENABLED=true
-#    export PRINCIPAL="vcap@CLOUDERA"
-#    export KEYTAB="vcap.keytab"
     export KRB5_CONFIG=$DIR/../krb5.conf
     export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kuser')
     export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kpassword')
