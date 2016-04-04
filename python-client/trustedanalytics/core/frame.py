@@ -1075,8 +1075,8 @@ class _BaseFrame(CommandLoadable):
     @api
     @beta
     @arg('right', 'Frame', "Another frame to join with")
-    @arg('left_on', str, "Name of the column in the left frame used to match up the two frames.")
-    @arg('right_on', str, "Name of the column in the right frame used to match up the two frames. "
+    @arg('left_on', list, "Names of the columns in the left frame used to match up the two frames.")
+    @arg('right_on', list, "Names of the columns in the right frame used to match up the two frames. "
          "Default is the same as the left frame.")
     @arg('how', str, "How to qualify the data to be joined together.  Must be one of the following:  "
          "'left', 'right', 'inner', 'outer'.  Default is 'inner'")

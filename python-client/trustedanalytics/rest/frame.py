@@ -474,8 +474,8 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
             right_on = left_on
         arguments = {"name": name,
                      "how": how,
-                     "left_frame": {"frame": left.uri, "join_column": left_on},
-                     "right_frame": {"frame": right.uri, "join_column": right_on} }
+                     "left_frame": {"frame": left.uri, "join_columns": left_on},
+                     "right_frame": {"frame": right.uri, "join_columns": right_on} }
         return execute_new_frame_command('frame:/join', arguments)
 
     def copy(self, frame, columns=None, where=None, name=None):

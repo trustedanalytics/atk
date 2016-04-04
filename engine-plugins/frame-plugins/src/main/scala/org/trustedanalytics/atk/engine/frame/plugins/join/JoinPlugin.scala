@@ -69,19 +69,21 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
     val rightFrame: SparkFrame = arguments.rightFrame.frame
 
     //first validate join columns are valid
-    leftFrame.schema.validateColumnsExist(List(arguments.leftFrame.joinColumn))
-    rightFrame.schema.validateColumnsExist(List(arguments.rightFrame.joinColumn))
-    require(DataTypes.isCompatibleDataType(
-      leftFrame.schema.columnDataType(arguments.leftFrame.joinColumn),
-      rightFrame.schema.columnDataType(arguments.rightFrame.joinColumn)),
-      "Join columns must have compatible data types")
+    leftFrame.schema.validateColumnsExist(arguments.leftFrame.joinColumns)
+    rightFrame.schema.validateColumnsExist(arguments.rightFrame.joinColumns)
+
+    //Check left join column is compatiable with right join column
+    (arguments.leftFrame.joinColumns zip arguments.rightFrame.joinColumns).map{ case(leftJoinCol, rightJoinCol) =>  require(DataTypes.isCompatibleDataType(
+      leftFrame.schema.columnDataType(leftJoinCol),
+      rightFrame.schema.columnDataType(rightJoinCol)),
+      "Join columns must have compatible data types")}
 
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold
 
     val joinedFrame = JoinRddFunctions.join(
-      createRDDJoinParam(leftFrame, arguments.leftFrame.joinColumn, broadcastJoinThreshold),
-      createRDDJoinParam(rightFrame, arguments.rightFrame.joinColumn, broadcastJoinThreshold),
+      createRDDJoinParam(leftFrame, arguments.leftFrame.joinColumns, broadcastJoinThreshold),
+      createRDDJoinParam(rightFrame, arguments.rightFrame.joinColumns, broadcastJoinThreshold),
       arguments.how,
       broadcastJoinThreshold,
       arguments.skewedJoinType
@@ -95,14 +97,14 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
 
   //Create parameters for join
   private def createRDDJoinParam(frame: SparkFrame,
-                                 joinColumn: String,
+                                 joinColumns: Seq[String],
                                  broadcastJoinThreshold: Long): RddJoinParam = {
     val frameSize = if (broadcastJoinThreshold > 0) frame.sizeInBytes else None
     val estimatedRddSize = frameSize match {
       case Some(size) => Some((size * EngineConfig.frameCompressionRatio).toLong)
       case _ => None
     }
-    RddJoinParam(frame.rdd, joinColumn, estimatedRddSize)
+    RddJoinParam(frame.rdd, joinColumns, estimatedRddSize)
   }
 
 }

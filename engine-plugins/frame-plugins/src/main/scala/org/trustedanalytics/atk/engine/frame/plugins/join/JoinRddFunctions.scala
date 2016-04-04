@@ -88,7 +88,7 @@ object JoinRddFunctions extends Serializable {
       val rightFrame = right.frame.toDataFrame
       val joinedFrame = leftFrame.join(
         rightFrame,
-        leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn))
+        left.joinColumns
       )
       joinedFrame.rdd
     }
@@ -108,12 +108,25 @@ object JoinRddFunctions extends Serializable {
   def fullOuterJoin(left: RddJoinParam, right: RddJoinParam): RDD[Row] = {
     val leftFrame = left.frame.toDataFrame
     val rightFrame = right.frame.toDataFrame
+
+    val columnsTuple=left.joinColumns.zip(right.joinColumns)
+
+    var exps= makeExpression(columnsTuple.head._1, columnsTuple.head._2)
+
+    columnsTuple.tail.map{ case(lc, rc) => exps= exps && makeExpression(lc, rc)}
+
+    def makeExpression(leftCol: String, rightCol:String): Column ={
+      leftFrame(leftCol).equalTo(rightFrame(rightCol))
+    }
+
     val joinedFrame = leftFrame.join(rightFrame,
-      leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
+      exps,
       joinType = "fullouter"
     )
     joinedFrame.rdd
   }
+
+
 
   /**
    * Perform right-outer join
@@ -138,8 +151,19 @@ object JoinRddFunctions extends Serializable {
       case _ =>
         val leftFrame = left.frame.toDataFrame
         val rightFrame = right.frame.toDataFrame
+
+        val columnsTuple=left.joinColumns.zip(right.joinColumns)
+
+        var exps= makeExpression(columnsTuple.head._1, columnsTuple.head._2)
+
+        columnsTuple.tail.map{ case(lc, rc) => exps= exps && makeExpression(lc, rc)}
+
+        def makeExpression(leftCol: String, rightCol:String): Column ={
+          leftFrame(leftCol).equalTo(rightFrame(rightCol))
+        }
+
         val joinedFrame = leftFrame.join(rightFrame,
-          leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
+          exps,
           joinType = "right"
         )
         joinedFrame.rdd
@@ -167,8 +191,19 @@ object JoinRddFunctions extends Serializable {
       case _ =>
         val leftFrame = left.frame.toDataFrame
         val rightFrame = right.frame.toDataFrame
+
+        val columnsTuple=left.joinColumns.zip(right.joinColumns)
+
+        var exps= makeExpression(columnsTuple.head._1, columnsTuple.head._2)
+
+        columnsTuple.tail.map{ case(lc, rc) => exps= exps && makeExpression(lc, rc)}
+
+        def makeExpression(leftCol: String, rightCol:String): Column ={
+          leftFrame(leftCol).equalTo(rightFrame(rightCol))
+        }
+
         val joinedFrame = leftFrame.join(rightFrame,
-          leftFrame(left.joinColumn).equalTo(rightFrame(right.joinColumn)),
+          exps,
           joinType = "left"
         )
         joinedFrame.rdd
