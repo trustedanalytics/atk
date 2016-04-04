@@ -13,6 +13,7 @@
     last_read_date
     name
     predict
+    publish
     status
     train
 
@@ -33,6 +34,7 @@
     ====================================================================================================  ====================================================================================================
     :ref:`__init__ <ArimaModel__init__>`\ (self[, name, _info])                                           Create a 'new' instance of an Autoregressive Integrated Moving Average (ARIMA) model.
     :doc:`predict <predict>`\ (self, timeseries_values, future_periods)                                   |ALPHA| Forecasts future periods using ARIMA.
+    :doc:`publish <publish>`\ (self)                                                                      |ALPHA| Creates a tar file that will be used as input to the scoring engine
     :doc:`train <train>`\ (self, timeseries_values, p, d, q[, include_intercept, method, ...])            |ALPHA| Creates Autoregressive Integrated Moving Average (ARIMA) Model from the specified time series values.
     ====================================================================================================  ====================================================================================================
 
