@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
-import com.intel.daal.algorithms.ModelSerializer
-import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -28,9 +26,8 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, A
 
 //Implicits needed for JSON conversion
 import spray.json._
-import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-
+import DaalLinearRegressionModelFormat._
 import DaalLinearRegressionJsonFormat._
 
 /**
@@ -42,7 +39,7 @@ existing columns and a new predicted value column.""",
   returns =
     """frame\:
   Frame containing the original frame's columns and a column with the predicted value.""")
-class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, FrameReference] {
+class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionTrainArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -65,24 +62,22 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): FrameReference =
+  override def execute(arguments: DaalLinearRegressionTrainArgs)(implicit invocation: Invocation): FrameReference =
     {
       DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
       val model: Model = arguments.model
 
       //create RDD from the frame
       val testFrame: SparkFrame = arguments.frame
-      val featureColumns = arguments.featureColumns
-      val labelColumns = arguments.labelColumns
+      val featureColumns = arguments.observationColumns
+      val labelColumn = arguments.valueColumn
 
       //Load the DAAL linear regression model
       val lrJsObject = model.data
       val modelData = lrJsObject.convertTo[DaalLinearRegressionModel]
 
-      require(modelData.featureColumns.length == arguments.featureColumns.length,
+      require(modelData.featureColumns.length == arguments.observationColumns.length,
         "Number of feature columns for train and predict should be same")
-      require(modelData.labelColumns.length == arguments.labelColumns.length,
-        "Number of label columns for train and predict should be same")
 
       val lrResultsFrameRdd = DaalLinearRegressionFunctions.predictLinearModel(
         modelData,

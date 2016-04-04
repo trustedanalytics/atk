@@ -35,15 +35,17 @@ object DaalLinearRegressionFunctions extends Serializable {
    *
    * @param frameRdd Input frame
    * @param featureColumns Feature columns
-   * @param dependentVariableColumns Dependent variable columns
+   * @param dependentVariableColumn Dependent variable column
+   * @param fitIntercept Boolean flag for whether to fit an intercept term
    * @return DAAL trained linear regression model
    */
   def trainLinearModel(context: DaalContext,
                        frameRdd: FrameRdd,
                        featureColumns: List[String],
-                       dependentVariableColumns: List[String]): Model = {
+                       dependentVariableColumn: String,
+                       fitIntercept: Boolean = true): Model = {
 
-    val trainTables = DistributedLabeledTable.createTable(frameRdd, featureColumns, dependentVariableColumns)
+    val trainTables = DistributedLabeledTable.createTable(frameRdd, featureColumns, List(dependentVariableColumn))
     val partialModels = computePartialLinearModels(trainTables)
     val trainedModel = mergeLinearModels(context, partialModels)
     trainedModel
@@ -76,7 +78,7 @@ object DaalLinearRegressionFunctions extends Serializable {
       }
     })
 
-    val predictColumns = modelData.labelColumns.map(col => Column("predict_" + col, DataTypes.float64))
+    val predictColumns = List(Column("predict_" + modelData.valueColumn, DataTypes.float64))
     frameRdd.zipFrameRdd(new FrameRdd(FrameSchema(predictColumns), predictRdd))
   }
 
@@ -84,9 +86,11 @@ object DaalLinearRegressionFunctions extends Serializable {
    * Compute partial results for linear regression  using QR decomposition
    *
    * @param trainTables RDD of features and dependent variables for training
+   * @param fitIntercept Boolean flag for whether to fit an intercept term
    * @return RDD of partial results
    */
-  private def computePartialLinearModels(trainTables: DistributedLabeledTable): RDD[PartialResult] = {
+  private def computePartialLinearModels(trainTables: DistributedLabeledTable,
+                                         fitIntercept: Boolean = true): RDD[PartialResult] = {
     val linearModelsRdd = trainTables.rdd.map(table => {
       val linearRegressionModel = computeLinearModelsLocal(table.features, table.labels)
       linearRegressionModel
@@ -101,13 +105,18 @@ object DaalLinearRegressionFunctions extends Serializable {
    *
    * @param featureTable Feature table
    * @param labelTable Dependent variable table
+   * @param fitIntercept Boolean flag for whether to fit an intercept term
    * @return Partial result of training
    */
-  private def computeLinearModelsLocal(featureTable: IndexedNumericTable, labelTable: IndexedNumericTable): PartialResult = {
+  private def computeLinearModelsLocal(featureTable: IndexedNumericTable,
+                                       labelTable: IndexedNumericTable,
+                                       fitIntercept: Boolean = true): PartialResult = {
     val context = new DaalContext()
     val linearRegressionTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double], TrainingMethod.qrDense)
     linearRegressionTraining.input.set(TrainingInputId.data, featureTable.getUnpackedTable(context))
     linearRegressionTraining.input.set(TrainingInputId.dependentVariable, labelTable.getUnpackedTable(context))
+    linearRegressionTraining.parameter.setInterceptFlag(fitIntercept)
+
     val lrResult = linearRegressionTraining.compute()
     lrResult.pack()
     context.dispose()

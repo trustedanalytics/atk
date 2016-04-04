@@ -21,11 +21,11 @@ package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
  *
  * @param serializedModel Serialized linear regression model
  * @param featureColumns List of feature column names
- * @param labelColumns List of label column names
+ * @param valueColumn Column name containing the value for each observation
  */
 case class DaalLinearRegressionModel(serializedModel: List[Byte],
                                      featureColumns: List[String],
-                                     labelColumns: List[String])
+                                     valueColumn: String)
 
 /**
  * JSON serialization for model

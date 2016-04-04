@@ -18,9 +18,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
 import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.services.DaalContext
-import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, PluginDocAnnotation, EngineConfig }
+import org.apache.spark.mllib.evaluation.RegressionMetrics
+import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.frame.SparkFrame
@@ -29,39 +28,6 @@ import org.trustedanalytics.atk.engine.plugin._
 import DaalConversionImplicits._
 
 import scala.util.{ Success, Failure, Try }
-
-/** Json conversion for arguments and return value case classes */
-object DaalLinearRegressionJsonFormat {
-  import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val lrTrainFormat = jsonFormat4(DaalLinearRegressionArgs)
-  implicit val lrTrainResultFormat = jsonFormat1(DaalLinearRegressionTrainResult)
-}
-
-/**
- * Arguments for training and scoring DAAL linear regression model
- *
- * @param model Handle to the model to be written to.
- * @param frame Handle to the data frame
- * @param featureColumns Handle to the observation column of the data frame
- */
-case class DaalLinearRegressionArgs(model: ModelReference,
-                                    @ArgDoc("""A frame to train or test the model on.""") frame: FrameReference,
-                                    @ArgDoc("""List of column(s) containing the
-observations.""") featureColumns: List[String],
-                                    @ArgDoc("""List of column(s) containing the label
-for each observation.""") labelColumns: List[String]) {
-  require(model != null, "model is required")
-  require(frame != null, "frame is required")
-  require(featureColumns != null && featureColumns.nonEmpty, "observationColumn must not be null nor empty")
-  require(labelColumns != null && labelColumns.nonEmpty, "labelColumn must not be null nor empty")
-}
-
-/**
- * Results of training DAAL linear regression model
- *
- * @param betas Beta parameters for trained linear regression model
- */
-case class DaalLinearRegressionTrainResult(betas: Array[Array[Double]])
 
 import spray.json._
 import DaalLinearRegressionModelFormat._
@@ -72,7 +38,7 @@ import DaalLinearRegressionJsonFormat._
 @PluginDoc(oneLine = "Build DAAL linear regression model.",
   extended = "Create DAAL LinearRegression Model using the observation column and target column of the train frame",
   returns = "Array with coefficients of linear regression model")
-class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, DaalLinearRegressionTrainResult] {
+class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegressionTrainArgs, DaalLinearRegressionTrainReturn] {
   /**
    * The name of the command.
    *
@@ -95,15 +61,15 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): DaalLinearRegressionTrainResult =
+  override def execute(arguments: DaalLinearRegressionTrainArgs)(implicit invocation: Invocation): DaalLinearRegressionTrainReturn =
     {
       DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
       val model: Model = arguments.model
 
       // Create RDD from the frame
       val trainFrame: SparkFrame = arguments.frame
-      val featureColumns = arguments.featureColumns
-      val labelColumns = arguments.labelColumns
+      val featureColumns = arguments.observationColumns
+      val valueColumn = arguments.valueColumn
 
       // Train model
       val context = new DaalContext()
@@ -111,7 +77,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         context,
         trainFrame.rdd,
         featureColumns,
-        labelColumns)
+        valueColumn)
       val betas = trainModel.getBeta()
       val betaArray = betas.toArrayOfDoubleArray()
 
@@ -124,15 +90,31 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
         }
       }
 
-      val jsonModel = DaalLinearRegressionModel(serializedModel,
+      val lrModel = DaalLinearRegressionModel(serializedModel,
         featureColumns,
-        labelColumns).toJson.asJsObject
-      model.data = jsonModel
+        valueColumn)
+      model.data = lrModel.toJson.asJsObject
 
+      // Compute summary statistics for regression model
+      val lrResultsFrameRdd = DaalLinearRegressionFunctions.predictLinearModel(
+        lrModel,
+        trainFrame.rdd,
+        featureColumns)
+
+      val predictionAndObservations = lrResultsFrameRdd.mapRows(row => {
+        val prediction = row.doubleValue("predict_" + valueColumn)
+        val value = row.doubleValue(valueColumn)
+        (prediction, value)
+      })
+
+      val summary = new RegressionMetrics(predictionAndObservations)
+      val explainedVariance = summary.explainedVariance
       // Dispose DAAL data structures
       context.dispose()
       // Return trained model
-      DaalLinearRegressionTrainResult(betaArray)
+      DaalLinearRegressionTrainReturn(featureColumns,
+        valueColumn, 0, betaArray.flatten, summary.explainedVariance, summary.meanAbsoluteError,
+        summary.meanSquaredError, summary.r2, summary.rootMeanSquaredError)
     }
 
 }
