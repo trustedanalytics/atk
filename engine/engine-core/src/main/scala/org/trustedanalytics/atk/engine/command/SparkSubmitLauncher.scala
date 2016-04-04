@@ -51,8 +51,6 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // make sure hdfs libs have been uploaded
         BackgroundInit.waitTillCompleted
 
-        //Requires a TGT in the cache before executing SparkSubmit if CDH has Kerberos Support
-        KerberosAuthenticator.loginUsingHadoopUtils()
         val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
           case true => (s"",
             s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
