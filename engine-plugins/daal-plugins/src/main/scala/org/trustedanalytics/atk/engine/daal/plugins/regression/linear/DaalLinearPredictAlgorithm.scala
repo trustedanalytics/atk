@@ -37,7 +37,7 @@ import DaalLinearPredictAlgorithm._
  * @param frameRdd Frame with test data
  * @param observationColumns List of column(s) storing the observations
  */
-case class DaalLinearPredictAlgorithm(modelData: DaalLinearRegressionModel,
+case class DaalLinearPredictAlgorithm(modelData: DaalLinearRegressionModelData,
                                       frameRdd: FrameRdd,
                                       observationColumns: List[String]) {
   /**

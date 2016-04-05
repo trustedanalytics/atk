@@ -64,7 +64,7 @@ class DaalLinearRegressionTestPlugin extends SparkCommandPlugin[DaalLinearRegres
       //Load the DAAL linear regression model
       val model: Model = arguments.model
       val lrJsObject = model.data
-      val trainedModel = lrJsObject.convertTo[DaalLinearRegressionModel]
+      val trainedModel = lrJsObject.convertTo[DaalLinearRegressionModelData]
 
       //create RDD from the frame
       val testFrame: SparkFrame = arguments.frame

@@ -66,15 +66,15 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
       //Load the DAAL linear regression model
       val model: Model = arguments.model
       val lrJsObject = model.data
-      val modelData = lrJsObject.convertTo[DaalLinearRegressionModel]
+      val trainedModel = lrJsObject.convertTo[DaalLinearRegressionModelData]
 
       //create RDD from the frame
       val testFrame: SparkFrame = arguments.frame
-      val observationColumns = arguments.observationColumns.getOrElse(modelData.observationColumns)
-      require(modelData.observationColumns.length == observationColumns.length,
+      val observationColumns = arguments.observationColumns.getOrElse(trainedModel.observationColumns)
+      require(trainedModel.observationColumns.length == observationColumns.length,
         "Number of observations columns for train and predict should be same")
 
-      val predictFrame = DaalLinearPredictAlgorithm(modelData, testFrame.rdd, observationColumns).predict()
+      val predictFrame = DaalLinearPredictAlgorithm(trainedModel, testFrame.rdd, observationColumns).predict()
 
       engine.frames.tryNewFrame(CreateEntityArgs(
         description = Some("created by DAAL linear regression predict operation"))) {

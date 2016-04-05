@@ -44,7 +44,7 @@ case class DaalLinearTrainAlgorithm(frameRdd: FrameRdd,
    * Train Intel DAAL linear regression model using QR decomposition
    * @return Trained linear regression model
    */
-  def train(): DaalLinearRegressionModel = {
+  def train(): DaalLinearRegressionModelData = {
     val context = new DaalContext
 
     //train model
@@ -56,7 +56,7 @@ case class DaalLinearTrainAlgorithm(frameRdd: FrameRdd,
     val (weights, intercept) = getWeightsAndIntercept(trainedModel)
     val serializedModel = serializeTrainedModel(trainedModel)
     context.dispose()
-    DaalLinearRegressionModel(serializedModel, observationColumns, valueColumn, weights, intercept)
+    DaalLinearRegressionModelData(serializedModel, observationColumns, valueColumn, weights, intercept)
   }
 
   /**

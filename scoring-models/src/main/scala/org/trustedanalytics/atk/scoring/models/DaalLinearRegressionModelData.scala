@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
+package org.trustedanalytics.atk.scoring.models
 
 /**
  * DAAL linear regression model
@@ -24,16 +24,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
  * @param weights Weights of the trained model
  * @param intercept Intercept of the trained model
  */
-case class DaalLinearRegressionModel(serializedModel: List[Byte],
-                                     observationColumns: List[String],
-                                     valueColumn: String,
-                                     weights: Array[Double],
-                                     intercept: Double)
-
-/**
- * JSON serialization for model
- */
-object DaalLinearRegressionModelFormat {
-  import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val lrModelDataFormat = jsonFormat5(DaalLinearRegressionModel)
-}
+case class DaalLinearRegressionModelData(serializedModel: List[Byte],
+                                         observationColumns: List[String],
+                                         valueColumn: String,
+                                         weights: Array[Double],
+                                         intercept: Double)
