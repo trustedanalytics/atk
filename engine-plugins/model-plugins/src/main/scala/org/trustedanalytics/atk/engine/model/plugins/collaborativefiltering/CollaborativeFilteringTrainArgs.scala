@@ -39,6 +39,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""use implicit preference""") useImplicit: Boolean = false,
                                            @ArgDoc("""number of user blocks""") numUserBlocks: Int = 2,
                                            @ArgDoc("""number of item blocks""") numItemBlock: Int = 3,
+                                           @ArgDoc("""Number of iterations between checkpoints""") checkpointIterations: Int = 10
                                            @ArgDoc("""target RMSE""") targetRMSE: Double = 0.05) {
 
   require(frame != null, "input frame is required")
@@ -48,6 +49,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
   require(maxSteps > 1, "min steps must be a positive integer")
   require(regularization > 0, "regularization must be a positive value")
   require(alpha > 0, "alpha must be a positive value")
+  require(checkpointIterations > 0 or checkpointIterations == -1, "Iterations between checkpoints must be either positive or -1")
   require(numFactors > 0, "number of factors must be a positive integer")
   require(numUserBlocks > 0, "number of user blocks must be a positive integer")
   require(numItemBlock > 0, "number of item blocks must be a positive integer")
