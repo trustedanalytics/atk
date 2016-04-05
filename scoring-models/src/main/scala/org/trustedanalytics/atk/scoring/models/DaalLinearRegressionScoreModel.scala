@@ -27,7 +27,7 @@ class DaalLinearRegressionScoreModel(lrData: DaalLinearRegressionModelData) exte
   val breezeWeights = new BreezeDenseVector[Double](lrData.weights)
 
   override def score(data: Array[Any]): Array[Any] = {
-    val features: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    val features: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
     val breezeFeatures = new BreezeDenseVector[Double](features)
     val prediction = breezeWeights.dot(breezeFeatures) + lrData.intercept
     data :+ (prediction)
