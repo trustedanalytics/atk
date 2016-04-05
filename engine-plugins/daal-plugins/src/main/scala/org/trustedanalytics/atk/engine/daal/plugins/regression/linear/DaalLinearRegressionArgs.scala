@@ -22,9 +22,12 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 /** Json conversion for arguments and return value case classes */
 object DaalLinearRegressionJsonFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-  implicit val lrTrainFormat = jsonFormat5(DaalLinearRegressionTrainArgs)
+  implicit val lrTrainArgsFormat = jsonFormat5(DaalLinearRegressionTrainArgs)
   implicit val lrTrainResultFormat = jsonFormat9(DaalLinearRegressionTrainReturn)
-  implicit val lrPredict = jsonFormat3(DaalLinearRegressionPredictArgs)
+  implicit val lrPredictArgsFormat = jsonFormat4(DaalLinearRegressionPredictArgs)
+  implicit val lrTestArgsFormat = jsonFormat4(DaalLinearRegressionTestArgs)
+  implicit val lrTestResultFormat = jsonFormat5(DaalLinearRegressionTestReturn)
+
 }
 
 /**
@@ -65,14 +68,46 @@ case class DaalLinearRegressionTrainReturn(@ArgDoc("""The list of column(s) stor
                                            @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
                                            @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
                                            @ArgDoc("""The coefficient of determination of the trained model""") r2: Double,
-                                           @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double)
+                                           @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double) {
+  require(observationColumns != null && observationColumns.nonEmpty, "observationColumn must not be null nor empty")
+  require(valueColumn != null && !valueColumn.isEmpty, "valueColumn must not be null nor empty")
+  require(weights != null, "model weights must not be null")
+}
 
 /**
  * Arguments for LinearRegression predict
  * @param model The trained Linear Regression model
  * @param frame The handle to the frame to run predict on
- * @param observationColumns The frame's column(s) storing the observations
+ * @param valueColumn Optional frame column containing the value for the observation
+ * @param observationColumns Optional frame column(s) storing the observations
  */
 case class DaalLinearRegressionPredictArgs(model: ModelReference,
                                            @ArgDoc("""The frame to predict on""") frame: FrameReference,
-                                           @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]])
+                                           @ArgDoc("""Column name containing the value of each observation""") valueColumn: Option[String] = None,
+                                           @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]] = None)
+
+/**
+ * Arguments to Linear Regression test plugin
+ * @param model The trained linear regression model to run test on
+ * @param frame The frame to test the linear regression model on
+ * @param valueColumn Optional frame column containing the value for the observation
+ * @param observationColumns Optional frame column(s) containing the observations
+ */
+case class DaalLinearRegressionTestArgs(model: ModelReference,
+                                        @ArgDoc("""The frame to test the linear regression model on""") frame: FrameReference,
+                                        @ArgDoc("""Column name containing the value of each observation""") valueColumn: Option[String] = None,
+                                        @ArgDoc("""List of column(s) containing the observations""") observationColumns: Option[List[String]] = None)
+
+/**
+ * Return of Linear Regression test plugin
+ * @param explainedVariance The explained variance regression score
+ * @param meanAbsoluteError The risk function corresponding to the expected value of the absolute error loss or l1-norm loss
+ * @param meanSquaredError The risk function corresponding to the expected value of the squared error loss or quadratic loss
+ * @param r2 The coefficient of determination
+ * @param rootMeanSquaredError The square root of the mean squared error
+ */
+case class DaalLinearRegressionTestReturn(@ArgDoc("""The explained variance regression score""") explainedVariance: Double,
+                                          @ArgDoc("""The risk function corresponding to the expected value of the absolute error loss or l1-norm loss""") meanAbsoluteError: Double,
+                                          @ArgDoc("""The risk function corresponding to the expected value of the squared error loss or quadratic loss""") meanSquaredError: Double,
+                                          @ArgDoc("""The unadjusted coefficient of determination""") r2: Double,
+                                          @ArgDoc("""The square root of the mean squared error""") rootMeanSquaredError: Double)
