@@ -73,10 +73,12 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
     rightFrame.schema.validateColumnsExist(arguments.rightFrame.joinColumns)
 
     //Check left join column is compatiable with right join column
-    (arguments.leftFrame.joinColumns zip arguments.rightFrame.joinColumns).map{ case(leftJoinCol, rightJoinCol) =>  require(DataTypes.isCompatibleDataType(
-      leftFrame.schema.columnDataType(leftJoinCol),
-      rightFrame.schema.columnDataType(rightJoinCol)),
-      "Join columns must have compatible data types")}
+    (arguments.leftFrame.joinColumns zip arguments.rightFrame.joinColumns).map {
+      case (leftJoinCol, rightJoinCol) => require(DataTypes.isCompatibleDataType(
+        leftFrame.schema.columnDataType(leftJoinCol),
+        rightFrame.schema.columnDataType(rightJoinCol)),
+        "Join columns must have compatible data types")
+    }
 
     // Get estimated size of frame to determine whether to use a broadcast join
     val broadcastJoinThreshold = EngineConfig.broadcastJoinThreshold

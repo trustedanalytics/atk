@@ -24,7 +24,7 @@ import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation }
  * Arguments for Join plugin
  *
  */
-case class  JoinArgs(leftFrame: JoinFrameArgs,
+case class JoinArgs(leftFrame: JoinFrameArgs,
                     @ArgDoc("""Join arguments for first data frame.""") rightFrame: JoinFrameArgs,
                     @ArgDoc("""Methods of join (inner, left, right or outer).""") how: String,
                     @ArgDoc("""Name of new frame to be created.""") name: Option[String] = None,

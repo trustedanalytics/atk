@@ -57,24 +57,23 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "inner")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, Seq("col_0")),
+      RddJoinParam(countryNames, Seq("col_0")), "inner")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman"))
+      new GenericRow(Array[Any](1, 354, "Iceland")),
+      new GenericRow(Array[Any](1, 354, "Ice-land")),
+      new GenericRow(Array[Any](2, 91, "India")),
+      new GenericRow(Array[Any](2, 100, "India")),
+      new GenericRow(Array[Any](3, 47, "Norway")),
+      new GenericRow(Array[Any](4, 968, "Oman"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -84,8 +83,8 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val leftJoinParam = RddJoinParam(countryCode, "col_0", Some(150))
-    val rightJoinParam = RddJoinParam(countryNames, "col_0", Some(10000))
+    val leftJoinParam = RddJoinParam(countryCode, Seq("col_0"), Some(150))
+    val rightJoinParam = RddJoinParam(countryNames, Seq("col_0"), Some(10000))
 
     val resultFrame = JoinRddFunctions.join(leftJoinParam, rightJoinParam, "inner")
     val results = resultFrame.collect()
@@ -93,17 +92,16 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman"))
+      new GenericRow(Array[Any](1, 354, "Iceland")),
+      new GenericRow(Array[Any](1, 354, "Ice-land")),
+      new GenericRow(Array[Any](2, 91, "India")),
+      new GenericRow(Array[Any](2, 100, "India")),
+      new GenericRow(Array[Any](3, 47, "Norway")),
+      new GenericRow(Array[Any](4, 968, "Oman"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -113,25 +111,24 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "left")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, Seq("col_0")),
+      RddJoinParam(countryNames, Seq("col_0")), "left")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](5, 50, null, null))
+      new GenericRow(Array[Any](1, 354,"Iceland")),
+      new GenericRow(Array[Any](1, 354,"Ice-land")),
+      new GenericRow(Array[Any](2, 91,"India")),
+      new GenericRow(Array[Any](2, 100,"India")),
+      new GenericRow(Array[Any](3, 47,"Norway")),
+      new GenericRow(Array[Any](4, 968,"Oman")),
+      new GenericRow(Array[Any](5, 50, null))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -141,8 +138,8 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val leftJoinParam = RddJoinParam(countryCode, "col_0", Some(1500L))
-    val rightJoinParam = RddJoinParam(countryNames, "col_0", Some(100L + Int.MaxValue))
+    val leftJoinParam = RddJoinParam(countryCode, Seq("col_0"), Some(1500L))
+    val rightJoinParam = RddJoinParam(countryNames, Seq("col_0"), Some(100L + Int.MaxValue))
 
     // Test join wrapper function
     val resultFrame = JoinRddFunctions.join(leftJoinParam, rightJoinParam, "left")
@@ -151,18 +148,17 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](5, 50, null, null))
+      new GenericRow(Array[Any](1, 354,"Iceland")),
+      new GenericRow(Array[Any](1, 354, "Ice-land")),
+      new GenericRow(Array[Any](2, 91, "India")),
+      new GenericRow(Array[Any](2, 100, "India")),
+      new GenericRow(Array[Any](3, 47, "Norway")),
+      new GenericRow(Array[Any](4, 968, "Oman")),
+      new GenericRow(Array[Any](5, 50, null))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -172,25 +168,24 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
     val resultFrame = JoinRddFunctions.join(
-      RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "right")
+      RddJoinParam(countryCode, Seq("col_0")),
+      RddJoinParam(countryNames, Seq("col_0")), "right")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_L", DataTypes.int32, 0),
+      Column("col_0", DataTypes.int32, 1),
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](null, null, 6, "Germany"))
+      new GenericRow(Array[Any](354, 1, "Iceland")),
+      new GenericRow(Array[Any](354, 1, "Ice-land")),
+      new GenericRow(Array[Any](91, 2, "India")),
+      new GenericRow(Array[Any](100, 2, "India")),
+      new GenericRow(Array[Any](47, 3, "Norway")),
+      new GenericRow(Array[Any](968, 4, "Oman")),
+      new GenericRow(Array[Any](null, 6, "Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -201,27 +196,26 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
     val broadcastJoinThreshold = 1000
-    val leftJoinParam = RddJoinParam(countryCode, "col_0", Some(800))
-    val rightJoinParam = RddJoinParam(countryNames, "col_0", Some(4000))
+    val leftJoinParam = RddJoinParam(countryCode, Seq("col_0"), Some(800))
+    val rightJoinParam = RddJoinParam(countryNames, Seq("col_0"), Some(4000))
 
     val resultFrame = JoinRddFunctions.join(leftJoinParam, rightJoinParam, "right", broadcastJoinThreshold)
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
-      Column("col_0_L", DataTypes.int32, 0),
-      Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_L", DataTypes.int32, 0),
+      Column("col_0", DataTypes.int32, 1),
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](null, null, 6, "Germany"))
+      new GenericRow(Array[Any](354, 1, "Iceland")),
+      new GenericRow(Array[Any](354, 1, "Ice-land")),
+      new GenericRow(Array[Any](91, 2, "India")),
+      new GenericRow(Array[Any](100, 2, "India")),
+      new GenericRow(Array[Any](47, 3, "Norway")),
+      new GenericRow(Array[Any](968, 4, "Oman")),
+      new GenericRow(Array[Any](null, 6, "Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -231,26 +225,25 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "outer")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, Seq("col_0")),
+      RddJoinParam(countryNames, Seq("col_0")), "outer")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, 1, "Iceland")),
-      new GenericRow(Array[Any](1, 354, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, 91, 2, "India")),
-      new GenericRow(Array[Any](2, 100, 2, "India")),
-      new GenericRow(Array[Any](3, 47, 3, "Norway")),
-      new GenericRow(Array[Any](4, 968, 4, "Oman")),
-      new GenericRow(Array[Any](5, 50, null, null)),
-      new GenericRow(Array[Any](6, null, 6, "Germany"))
+      new GenericRow(Array[Any](1, 354,"Iceland")),
+      new GenericRow(Array[Any](1, 354,"Ice-land")),
+      new GenericRow(Array[Any](2, 91,"India")),
+      new GenericRow(Array[Any](2, 100,"India")),
+      new GenericRow(Array[Any](3, 47,"Norway")),
+      new GenericRow(Array[Any](4, 968, "Oman")),
+      new GenericRow(Array[Any](5, 50, null)),
+      new GenericRow(Array[Any](6, null,"Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -261,24 +254,22 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(emptyIdCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(idCountryNames))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "outer")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, Seq("col_0")), RddJoinParam(countryNames, Seq("col_0")), "outer")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, null, 1, "Iceland")),
-      new GenericRow(Array[Any](1, null, 1, "Ice-land")),
-      new GenericRow(Array[Any](2, null, 2, "India")),
-      new GenericRow(Array[Any](3, null, 3, "Norway")),
-      new GenericRow(Array[Any](4, null, 4, "Oman")),
-      new GenericRow(Array[Any](6, null, 6, "Germany"))
+      new GenericRow(Array[Any](1, null,"Iceland")),
+      new GenericRow(Array[Any](1, null,"Ice-land")),
+      new GenericRow(Array[Any](2, null,"India")),
+      new GenericRow(Array[Any](3, null, "Norway")),
+      new GenericRow(Array[Any](4, null,"Oman")),
+      new GenericRow(Array[Any](6, null,"Germany"))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -289,24 +280,23 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val countryCode = new FrameRdd(codeSchema, sparkContext.parallelize(idCountryCodes))
     val countryNames = new FrameRdd(countrySchema, sparkContext.parallelize(emptyIdCountryNames))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, "col_0"),
-      RddJoinParam(countryNames, "col_0"), "outer")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(countryCode, Seq("col_0")),
+      RddJoinParam(countryNames, Seq("col_0")), "outer")
     val results = resultFrame.collect()
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
       Column("col_1_L", DataTypes.int32, 1),
-      Column("col_0_R", DataTypes.int32, 2),
-      Column("col_1_R", DataTypes.str, 3)
+      Column("col_1_R", DataTypes.str, 2)
     ))
 
     val expectedResults = List(
-      new GenericRow(Array[Any](1, 354, null, null)),
-      new GenericRow(Array[Any](2, 91, null, null)),
-      new GenericRow(Array[Any](2, 100, null, null)),
-      new GenericRow(Array[Any](3, 47, null, null)),
-      new GenericRow(Array[Any](4, 968, null, null)),
-      new GenericRow(Array[Any](5, 50, null, null))
+      new GenericRow(Array[Any](1, 354, null)),
+      new GenericRow(Array[Any](2, 91, null)),
+      new GenericRow(Array[Any](2, 100, null)),
+      new GenericRow(Array[Any](3, 47, null)),
+      new GenericRow(Array[Any](4, 968, null)),
+      new GenericRow(Array[Any](5, 50, null))
     )
 
     results should contain theSameElementsAs expectedResults
@@ -327,8 +317,8 @@ class SparkJoinITest extends TestingSparkContextFlatSpec with Matchers {
     val rddFiveHundredThousandsToOneFiftyThousands = new FrameRdd(inputSchema,
       sparkContext.parallelize(fiftyThousandToOneFiftyThousands))
 
-    val resultFrame = JoinRddFunctions.join(RddJoinParam(rddOneToMillion, "col_0"),
-      RddJoinParam(rddFiveHundredThousandsToOneFiftyThousands, "col_0"), "outer")
+    val resultFrame = JoinRddFunctions.join(RddJoinParam(rddOneToMillion, Seq("col_0")),
+      RddJoinParam(rddFiveHundredThousandsToOneFiftyThousands, Seq("col_0")), "outer")
 
     resultFrame.frameSchema.columns should equal(List(
       Column("col_0", DataTypes.int32, 0),
