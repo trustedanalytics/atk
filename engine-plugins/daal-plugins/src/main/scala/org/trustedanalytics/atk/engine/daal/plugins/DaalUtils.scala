@@ -13,8 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.trustedanalytics.atk.engine.daal.plugins
+
+import java.io.File
 
 import org.apache.commons.lang.StringUtils
 
@@ -40,5 +41,17 @@ object DaalUtils extends Serializable {
         throw new scala.IllegalArgumentException(s"Please add path to ${library} in trustedanalytics.atk.engine.spark.daal.dynamic-libraries.")
       }
     })
+  }
+
+  /**
+   * Get list of files to DAAL libraries
+   *
+   * @param confLibraryPath  String with comma-separated list of DAAL libraries in configuration
+   * @return List of files to DAAL libraries
+   */
+  def getDaalLibraryPaths(confLibraryPath: String): List[File] = {
+    validateDaalLibraries(confLibraryPath)
+    val paths = confLibraryPath.split(",").toList
+    paths.map(p => new File(p))
   }
 }

@@ -20,7 +20,6 @@ import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 import com.intel.daal.algorithms.kmeans.init.InitMethod
-import com.intel.daal.algorithms.kmeans.Method
 
 /**
  * Command for loading model data into existing model in the model database.
@@ -44,12 +43,13 @@ deterministic - Choice of first k feature vectors from the data set.""") initial
 
   require(model != null, "model must not be null")
   require(frame != null, "frame must not be null")
-  require(observationColumns != null && observationColumns.nonEmpty, "observationColumns must not be null nor empty")
+  require(observationColumns != null && observationColumns.nonEmpty, "observation columns must not be null nor empty")
   require(columnScalings != null || columnScalings.isEmpty ||
-    observationColumns.length == columnScalings.get.length, "columnScalings must be empty or the same size as observationColumns")
-  require(labelColumn != null && labelColumn.nonEmpty, "labelColumn must not be null nor empty")
+    observationColumns.length == columnScalings.get.length,
+    "column scalings must be empty or the same size as observation columns")
+  require(labelColumn != null && labelColumn.nonEmpty, "label column must not be null nor empty")
   require(k > 0, "k must be at least 1")
-  require(maxIterations > 0, "maxIterations must be a positive value")
+  require(maxIterations > 0, "max iterations must be a positive value")
   require(initializationMode == "random" || initializationMode == "deterministic",
     "initialization mode must be 'random' or 'deterministic'")
 

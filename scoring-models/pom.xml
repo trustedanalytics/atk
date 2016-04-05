@@ -104,6 +104,13 @@
         </dependency>
         <!--END dependencies to our modules-->
 
+        <!-- START Intel DAAL dependencies -->
+        <dependency>
+            <groupId>com.intel.daal</groupId>
+            <artifactId>daal-core</artifactId>
+        </dependency>
+        <!-- END Intel DAAL dependencies -->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>

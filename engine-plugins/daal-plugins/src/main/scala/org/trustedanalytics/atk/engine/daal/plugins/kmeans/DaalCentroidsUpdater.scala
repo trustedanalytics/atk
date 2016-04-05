@@ -18,7 +18,6 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import com.intel.daal.algorithms.kmeans._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
@@ -49,17 +48,19 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
   }
 
   /**
-   * Partially update cluster centroids on each Spark partition
+   * Partially update cluster centroids
    *
    * @return RDD of partial k-means and optional cluster assignments
    */
   override def computePartialResults(): RDD[PartialResult] = {
     featureTable.rdd.map { table =>
       val context = new DaalContext
+
       val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
       local.input.set(InputId.data, table.getUnpackedTable(context))
       local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
       local.parameter.setAssignFlag(false)
+
       val partialResult = local.compute
       partialResult.pack()
 

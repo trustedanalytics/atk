@@ -13,7 +13,9 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.engine.daal.plugins.kmeans
+package org.trustedanalytics.atk.scoring.models
+
+import com.intel.daal.data_management.data.HomogenNumericTable
 
 /**
  * DAAL KMeans model data
@@ -26,13 +28,14 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
  */
 case class DaalKMeansModelData(observationColumns: List[String],
                                labelColumn: String,
-                               centroids: Array[Array[Double]],
+                               centroids: HomogenNumericTable,
                                k: Int,
                                columnScalings: Option[List[Double]] = None) {
   require(observationColumns != null && observationColumns.nonEmpty, "observation columns must not be null nor empty")
+  require(labelColumn != null && labelColumn.nonEmpty, "label column must not be null nor empty")
+  require(centroids != null, "centroids must not be null")
+  require(k > 0, "k must be at least 1")
   require(columnScalings != null || columnScalings.isEmpty ||
     observationColumns.length == columnScalings.get.length,
     "column scalings must be empty or the same size as observation columns")
-  require(labelColumn != null && labelColumn.nonEmpty, "label column must not be null nor empty")
-  require(k > 0, "k must be at least 1")
 }

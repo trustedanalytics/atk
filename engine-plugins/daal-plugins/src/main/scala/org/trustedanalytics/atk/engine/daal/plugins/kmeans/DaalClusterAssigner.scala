@@ -70,7 +70,7 @@ case class DaalClusterAssigner(featureTable: DistributedNumericTable,
   def clusterSizes(assignmentFrame: FrameRdd): Map[String, Long] = {
     //TODO: Use DAAL partial results nObservations to compute cluster sizes
     assignmentFrame.mapRows(row => {
-      val clusterId = row.intValue(labelColumn) + 1
+      val clusterId = row.intValue(labelColumn)
       ("Cluster:" + clusterId.toString, 1L)
     }).reduceByKey(_ + _).collect().toMap
   }
