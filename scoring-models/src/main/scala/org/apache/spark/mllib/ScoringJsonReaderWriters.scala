@@ -16,7 +16,7 @@
 
 package org.apache.spark.mllib
 
-import com.cloudera.sparkts.models.ARXModel
+import com.cloudera.sparkts.models.{ ARIMAModel, ARXModel }
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import libsvm.svm_model
@@ -171,39 +171,23 @@ object ScoringJsonReaderWriters {
     }
 
     override def read(json: JsValue): libsvm.svm_parameter = {
-      val fields = json.asJsObject.fields
-      val svm_type = fields.get("svm_type").get.asInstanceOf[JsNumber].value.intValue()
-      val kernel_type = fields.get("kernel_type").get.asInstanceOf[JsNumber].value.intValue()
-      val degree = fields.get("degree").get.asInstanceOf[JsNumber].value.intValue()
-      val gamma = fields.get("gamma").get.asInstanceOf[JsNumber].value.doubleValue()
-      val coef0 = fields.get("coef0").get.asInstanceOf[JsNumber].value.doubleValue()
-      val cache_size = fields.get("cache_size").get.asInstanceOf[JsNumber].value.doubleValue()
-      val eps = fields.get("eps").get.asInstanceOf[JsNumber].value.doubleValue()
-      val C = fields.get("C").get.asInstanceOf[JsNumber].value.doubleValue()
-      val nr_weight = fields.get("nr_weight").get.asInstanceOf[JsNumber].value.intValue()
-      val nu = fields.get("nu").get.asInstanceOf[JsNumber].value.doubleValue()
-      val p = fields.get("p").get.asInstanceOf[JsNumber].value.doubleValue()
-      val shrinking = fields.get("shrinking").get.asInstanceOf[JsNumber].value.intValue()
-      val probability = fields.get("probability").get.asInstanceOf[JsNumber].value.intValue()
-      val weight_label = fields.get("weight_label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
-      val weight = fields.get("weight").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
-
       val svmParam = new libsvm.svm_parameter()
-      svmParam.svm_type = svm_type
-      svmParam.kernel_type = kernel_type
-      svmParam.degree = degree
-      svmParam.gamma = gamma
-      svmParam.coef0 = coef0
-      svmParam.cache_size = cache_size
-      svmParam.eps = eps
-      svmParam.C = C
-      svmParam.nr_weight = nr_weight
-      svmParam.nu = nu
-      svmParam.p = p
-      svmParam.shrinking = shrinking
-      svmParam.probability = probability
-      svmParam.weight = weight
-      svmParam.weight_label = weight_label
+      val fields = json.asJsObject.fields
+      svmParam.svm_type = fields.get("svm_type").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.kernel_type = fields.get("kernel_type").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.degree = fields.get("degree").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.gamma = fields.get("gamma").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.coef0 = fields.get("coef0").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.cache_size = fields.get("cache_size").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.eps = fields.get("eps").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.C = fields.get("C").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.nr_weight = fields.get("nr_weight").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.nu = fields.get("nu").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.p = fields.get("p").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.shrinking = fields.get("shrinking").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.probability = fields.get("probability").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.weight_label = fields.get("weight_label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+      svmParam.weight = fields.get("weight").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
 
       svmParam
     }
@@ -240,19 +224,19 @@ object ScoringJsonReaderWriters {
       //val t = if (obj.label == null) JsNull else new JsArray(obj.label.map(i => JsNumber(i)).toList)
       val checkLabel = obj.label match {
         case null => JsNull
-        case _ => new JsArray(obj.label.map(i => JsNumber(i)).toList)
+        case x => new JsArray(x.map(i => JsNumber(i)).toList)
       }
       val checkProbA = obj.probA match {
         case null => JsNull
-        case _ => new JsArray(obj.probA.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
       val checkProbB = obj.probB match {
         case null => JsNull
-        case _ => new JsArray(obj.probB.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
       val checkNsv = obj.nSV match {
         case null => JsNull
-        case _ => new JsArray(obj.nSV.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
 
       JsObject(
@@ -282,21 +266,21 @@ object ScoringJsonReaderWriters {
       val rho = fields.get("rho").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       val probA = fields.get("probA").get match {
         case JsNull => null
-        case _ => fields.get("probA").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       }
       val probB = fields.get("probB").get match {
         case JsNull => null
-        case _ => fields.get("probB").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       }
       val sv_indices = fields.get("sv_indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       val sv_coef = fields.get("sv_coef").get.asInstanceOf[JsArray].elements.map(row => row.asInstanceOf[JsArray].elements.map(j => j.asInstanceOf[JsNumber].value.doubleValue()).toArray).toArray
       val label = fields.get("label").get match {
         case JsNull => null
-        case _ => fields.get("label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       }
       val nSV = fields.get("nSV").get match {
         case JsNull => null
-        case _ => fields.get("nSV").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       }
       val param = fields.get("param").map(v => SvmParameterFormat.read(v)).get
       val SV = fields.get("SV").get.asInstanceOf[JsArray].elements.map(row => row.asInstanceOf[JsArray].elements.map(j => svm_node.read(j))toArray).toArray
@@ -1065,6 +1049,75 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object ARIMAModelFormat extends JsonFormat[ARIMAModel] {
+    /**
+     * The write methods converts from ARIMAModel to JsValue
+     * @param obj ARIMAModel. Where ARIMAModel's format is
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     * @return JsValue
+     */
+    override def write(obj: ARIMAModel): JsValue = {
+      JsObject(
+        "p" -> obj.p.toJson,
+        "d" -> obj.d.toJson,
+        "q" -> obj.q.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "hasIntercept" -> obj.hasIntercept.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAModel
+     * @param json JsValue
+     * @return ARIMAModel with format
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     */
+    override def read(json: JsValue): ARIMAModel = {
+      val fields = json.asJsObject.fields
+      val p = getOrInvalid(fields, "p").convertTo[Int]
+      val d = getOrInvalid(fields, "d").convertTo[Int]
+      val q = getOrInvalid(fields, "q").convertTo[Int]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val hasIntercept = getOrInvalid(fields, "hasIntercept").convertTo[Boolean]
+      new ARIMAModel(p, d, q, coefficients, hasIntercept)
+    }
+
+  }
+
+  implicit object ARIMADataFormat extends JsonFormat[ARIMAData] {
+    /**
+     * The write methods converts from ARIMAData to JsValue
+     * @param obj ARIMAData. Where ARIMAData format is:
+     *            ARIMAData(arimaModel: ARIMAModel])
+     * @return JsValue
+     */
+    override def write(obj: ARIMAData): JsValue = {
+      val model = ARIMAModelFormat.write(obj.arimaModel)
+      JsObject("arima_model" -> model)
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAData
+     * @param json JsValue
+     * @return ARIMAData with format ARIMAData(arimaModel: ARIMAModel)
+     */
+    override def read(json: JsValue): ARIMAData = {
+      val fields = json.asJsObject.fields
+      val model = fields.get("arima_model").map(v => {
+        ARIMAModelFormat.read(v)
+      }
+      ).get
+      new ARIMAData(model)
+    }
+  }
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)
