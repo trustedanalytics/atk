@@ -24,35 +24,47 @@ import com.cloudera.sparkts.models.ARXModel
 
 class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxModel.c, arxModel.coefficients, arxModel.yMaxLag, arxModel.xMaxLag, true) with Model {
 
-  override def score(row: Array[Any]): Array[Any] = {
+  override def score(data: Array[Any]): Array[Any] = {
     val xColumnsLength = arxData.xColumns.length
 
-    // Length of the row should be 1 (y) + the number of x columns
-    require(row.length == (xColumnsLength + 1), s"Number of items in the row should be ${(xColumnsLength + 1).toString} (1 y value and ${xColumnsLength.toString} x values), but was ${row.length}.")
+    if (data.length == 0)
+      throw new IllegalArgumentException("Unable to score using ARX model, because the array of data passed in is empty.")
 
-    // Values should be doubles
-    val rowDoubles = row.map(item => {
-      ScoringModelUtils.toDouble(item)
-    })
+    var predictedValues = Array[Any]()
 
-    // Create Vector and Matrix to call predict
-    val y = new DenseVector(Array[Double](rowDoubles(0)))
-    val xValues = rowDoubles.slice(1, rowDoubles.length)
-    val x = new DenseMatrix(rows = 1, cols = xColumnsLength, data = xValues)
+    // We should have an array of y values, and an array of x values
+    if (data.length != 2)
+      throw new IllegalArgumentException("Expected 2 arrays of data (for y values and x values), but received " +
+        data.length.toString + " items.")
 
-    arxModel.predict(y, x).map(_.asInstanceOf[Any]).toArray
+    if (!data(0).isInstanceOf[List[Double]])
+      throw new IllegalArgumentException("Expected first element in data array to be an List[Double] of y values.")
+
+    if (!data(1).isInstanceOf[List[Double]])
+      throw new IllegalArgumentException("Expected second element in data array to be an List[Double] of x values.")
+
+    val yValues = new DenseVector(data(0).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
+    val xArray = data(1).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray
+
+    if (xArray.length != (yValues.length * xColumnsLength))
+      throw new IllegalArgumentException("Expected " + (yValues.length * xColumnsLength) + " x values, but received " +
+        xArray.length.toString)
+
+    val xValues = new DenseMatrix(rows = yValues.length, cols = xColumnsLength, data = xArray)
+
+    data :+ arxModel.predict(yValues, xValues).toArray
   }
 
   override def input(): Array[Field] = {
-    arxData.xColumns.map(name => Field(name, "Double")).toArray
+    Array[Field](Field("y", "Array[Double]"), Field("x_values", "Array[Double]"))
   }
+
   override def modelMetadata(): ModelMetaDataArgs = {
     new ModelMetaDataArgs("ARX Model", classOf[ARXModel].getName, classOf[ARXModelReaderPlugin].getName, Map())
   }
 
   override def output(): Array[Field] = {
-    var output = input()
-    output :+ Field("score", "Int")
+    Array[Field](Field("score", "Array[Double]"))
   }
 
 }

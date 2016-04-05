@@ -25,7 +25,7 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaData
 class DaalKMeansScoreModel(kmeansData: DaalKMeansModelData) extends Model {
 
   override def score(data: Array[Any]): Array[Any] = {
-    val features: Array[Double] = data.map(y => ScoringModelUtils.toDouble(y))
+    val features: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
     val clusterId = predictCluster(features)
 
     data :+ (clusterId)
