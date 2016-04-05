@@ -174,7 +174,10 @@
 <tr class="row-even"><td><a class="reference internal" href="predict.html"><em>predict</em></a>(self, frame[, observation_columns, label_column])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Predict the cluster assignments for the data points.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, observation_columns[, k, max_iterations, column_scalings, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="publish.html"><em>publish</em></a>(self)</td>
+<td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates a tar file that will be used as input to the scoring engine</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="train.html"><em>train</em></a>(self, frame, observation_columns[, k, max_iterations, column_scalings, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Creates DAAL KMeans Model from train frame.</td>
 </tr>
 </tbody>
@@ -234,46 +237,42 @@ algorithm computes centroids using the Lloyd method[R5]_</p>
 <p>Consider the following model trained and tested on the sample data set in <em>frame</em> &#8216;frame&#8217;.</p>
 <p>Consider the following frame containing two columns.</p>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">[#]  data   name     cluster</span>
-<span class="go">============================</span>
-<span class="go">[0]    2.0  ab             1</span>
-<span class="go">[1]    1.0  cd             1</span>
-<span class="go">[2]    7.0  ef             1</span>
-<span class="go">[3]    1.0  gh             1</span>
-<span class="go">[4]    9.0  ij             1</span>
-<span class="go">[5]    2.0  kl             1</span>
-<span class="go">[6]    0.0  mn             1</span>
-<span class="go">[7]    6.0  op             1</span>
-<span class="go">[8]    5.0  qr             1</span>
-<span class="go">[9]  120.0  outlier        0</span>
+<span class="go">[#]  data   name</span>
+<span class="go">===================</span>
+<span class="go">[0]    2.0  ab</span>
+<span class="go">[1]    1.0  cd</span>
+<span class="go">[2]    7.0  ef</span>
+<span class="go">[3]    1.0  gh</span>
+<span class="go">[4]    9.0  ij</span>
+<span class="go">[5]    2.0  kl</span>
+<span class="go">[6]    0.0  mn</span>
+<span class="go">[7]    6.0  op</span>
+<span class="go">[8]    5.0  qr</span>
+<span class="go">[9]  120.0  outlier</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ta</span><span class="o">.</span><span class="n">DaalKMeansModel</span><span class="p">()</span>
 <span class="go">[===Job Progress===]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>  <span class="mi">2</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>  <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">max_iterations</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">train_output</span>
-<span class="go">{&#39;assignments&#39;: Frame  &lt;unnamed&gt;</span>
-<span class="go"> row_count = 10</span>
-<span class="go"> schema = [data:float64, name:unicode, cluster:int32]</span>
-<span class="go"> status = ACTIVE  (last_read_date = 2016-03-14T19:10:31.601000-07:00),</span>
-<span class="go"> &#39;centroids&#39;: {u&#39;Cluster:1&#39;: [120.0], u&#39;Cluster:2&#39;: [3.6666666666666665]}}</span>
+<span class="go">{u&#39;centroids&#39;: {u&#39;Cluster:0&#39;: [120.0], u&#39;Cluster:1&#39;: [3.6666666666666665]},</span>
+<span class="go"> u&#39;cluster_sizes&#39;: {u&#39;Cluster:0&#39;: 1, u&#39;Cluster:1&#39;: 9}}</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 <span class="go">[===Job Progress===]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">predicted_frame</span><span class="o">.</span><span class="n">inspect</span><span class="p">()</span>
-<span class="go">[#]  data   name     cluster</span>
-<span class="go">============================</span>
-<span class="go">[0]    2.0  ab             1</span>
-<span class="go">[1]    1.0  cd             1</span>
-<span class="go">[2]    7.0  ef             1</span>
-<span class="go">[3]    1.0  gh             1</span>
-<span class="go">[4]    9.0  ij             1</span>
-<span class="go">[5]    2.0  kl             1</span>
-<span class="go">[6]    0.0  mn             1</span>
-<span class="go">[7]    6.0  op             1</span>
-<span class="go">[8]    5.0  qr             1</span>
-<span class="go">[9]  120.0  outlier        0</span>
-<span class="go">[===Job Progress===]</span>
+<span class="go">[#]  data   name     distance_from_cluster_0  distance_from_cluster_1  cluster</span>
+<span class="go">==============================================================================</span>
+<span class="go">[0]    2.0  ab                       13924.0            2.77777777778        1</span>
+<span class="go">[1]    1.0  cd                       14161.0            7.11111111111        1</span>
+<span class="go">[2]    7.0  ef                       12769.0            11.1111111111        1</span>
+<span class="go">[3]    1.0  gh                       14161.0            7.11111111111        1</span>
+<span class="go">[4]    9.0  ij                       12321.0            28.4444444444        1</span>
+<span class="go">[5]    2.0  kl                       13924.0            2.77777777778        1</span>
+<span class="go">[6]    0.0  mn                       14400.0            13.4444444444        1</span>
+<span class="go">[7]    6.0  op                       12996.0            5.44444444444        1</span>
+<span class="go">[8]    5.0  qr                       13225.0            1.77777777778        1</span>
+<span class="go">[9]  120.0  outlier                      0.0            13533.4444444        0</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -301,7 +300,7 @@ algorithm computes centroids using the Lloyd method[R5]_</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 04, 2016.
+      Last updated on Apr 05, 2016.
       </li>
     </ul>
     </div>

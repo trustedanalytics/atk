@@ -128,6 +128,7 @@ Response
 
         Frame
             A new frame consisting of the existing columns of the frame and the following new columns:
+            'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
             predicted_cluster column: The cluster assignment for the observation
 
 
