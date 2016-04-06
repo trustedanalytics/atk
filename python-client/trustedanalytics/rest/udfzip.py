@@ -99,9 +99,14 @@ def _make_archive(file_list, archive, root):
     'file_list' is a list of file names - full path each name
     'archive' is the file name for the archive with a full path
     """
+    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+    print "atk udfzip creating zip: %s" % archive
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for f in file_list:
+            print ">> %s %s" % (f, os.path.getsize(f))
             zipf.write(f, os.path.relpath(f, root))
+    print "Done. total size=%s" % os.path.getsize(archive)
+    print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
 
 def _zip_dir(path):
