@@ -6,9 +6,9 @@ import com.tinkerpop.blueprints.impls.orient.{OrientGraphFactory, OrientGraph}
   * Created by wtaie on 4/1/16.
   * create Orient graph database (graph type is transactional)
   */
-class GraphDbFactory {
-  def createGraphDb(dbUrl: String): OrientGraph = {
-    val factory: OrientGraphFactory = new OrientGraphFactory(dbUrl)
+ object GraphDbFactory {
+  def createGraphDb(dbUrl: String, userName: String, password: String): OrientGraph = {
+    val factory: OrientGraphFactory = new OrientGraphFactory(dbUrl,userName,password)
     var graph: OrientGraph = factory.getTx
     return graph
   }
