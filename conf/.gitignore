@@ -1,5 +1,3 @@
 application.conf
 dev.conf
 logback.xml
-application.conf.xavier3
-generated.conf.xavier3
