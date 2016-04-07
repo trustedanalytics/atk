@@ -1176,7 +1176,7 @@ class _BaseFrame(CommandLoadable):
 
         Join them on the 'numbers' column ('inner' join by default)
 
-        >>> j = codes.join(colors, ['numbers'])
+        >>> j = codes.join(colors, 'numbers')
         <progress>
 
         >>> j.inspect()
@@ -1193,7 +1193,7 @@ class _BaseFrame(CommandLoadable):
 
         Try a 'left' join, which includes all the rows of the codes frame.
 
-        >>> j_left = codes.join(colors, ['numbers'], how='left')
+        >>> j_left = codes.join(colors, 'numbers', how='left')
         <progress>
 
         >>> j_left.inspect()
@@ -1211,7 +1211,7 @@ class _BaseFrame(CommandLoadable):
 
         And an outer join:
 
-        >>> j_outer = codes.join(colors, ['numbers'], how='outer')
+        >>> j_outer = codes.join(colors, 'numbers', how='outer')
         <progress>
 
         >>> j_outer.inspect()

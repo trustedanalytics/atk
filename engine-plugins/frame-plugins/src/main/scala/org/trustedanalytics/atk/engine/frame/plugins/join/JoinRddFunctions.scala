@@ -108,9 +108,8 @@ object JoinRddFunctions extends Serializable {
     def makeExpression(leftCol: String, rightCol: String): Column = {
       leftFrame(leftCol).equalTo(rightFrame(rightCol))
     }
-    var exps = makeExpression(columnsTuple.head._1, columnsTuple.head._2)
-    columnsTuple.tail.map { case (lc, rc) => exps = exps && makeExpression(lc, rc) }
-    exps
+    val expression = columnsTuple.map { case (lc, rc) => makeExpression(lc, rc) }.reduce(_ && _)
+    expression
   }
 
   /**
@@ -273,7 +272,7 @@ object JoinRddFunctions extends Serializable {
     val rightSchema = right.frame.frameSchema
     val newSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
     val frameRdd = new FrameRdd(newSchema, joinedRdd)
-    val leftColNames = right.joinColumns.map(col => col + "_L")
+    val leftColNames = left.joinColumns.map(col => col + "_L")
     frameRdd.dropColumns(leftColNames.toList)
   }
 

@@ -470,8 +470,16 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         return RowsInspection(data, schema, offset=offset, format_settings=format_settings)
 
     def join(self, left, right, left_on, right_on, how, name=None):
+        if left_on is None:
+            raise ValueError("Please provide column name on which join should be performed")
+        elif isinstance(left_on, basestring):
+            left_on = [left_on]
         if right_on is None:
             right_on = left_on
+        elif isinstance(right_on, basestring):
+            right_on = [right_on]
+        if len(left_on) != len(right_on):
+            raise ValueError("Please provide equal number of join columns")
         arguments = {"name": name,
                      "how": how,
                      "left_frame": {"frame": left.uri, "join_columns": left_on},
