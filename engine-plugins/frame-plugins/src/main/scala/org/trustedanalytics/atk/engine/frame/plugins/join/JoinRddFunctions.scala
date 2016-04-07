@@ -94,6 +94,26 @@ object JoinRddFunctions extends Serializable {
   }
 
   /**
+   * expression maker helps for generating conditions to check when join invoked with composite keys
+   *
+   * @param leftFrame left data frame
+   * @param rightFrame rigth data frame
+   * @param leftJoinCols list of left frame column names used in join
+   * @param rightJoinCols list of right frame column name used in join
+   * @return
+   */
+  def expressionMaker(leftFrame: DataFrame, rightFrame: DataFrame, leftJoinCols: Seq[String], rightJoinCols: Seq[String]): Column = {
+    val columnsTuple = leftJoinCols.zip(rightJoinCols)
+
+    def makeExpression(leftCol: String, rightCol: String): Column = {
+      leftFrame(leftCol).equalTo(rightFrame(rightCol))
+    }
+    var exps = makeExpression(columnsTuple.head._1, columnsTuple.head._2)
+    columnsTuple.tail.map { case (lc, rc) => exps = exps && makeExpression(lc, rc) }
+    exps
+  }
+
+  /**
    * Perform full-outer join
    *
    * Full-outer joins return both matching, and non-matching rows in the first and second data frame.
@@ -106,17 +126,9 @@ object JoinRddFunctions extends Serializable {
   def fullOuterJoin(left: RddJoinParam, right: RddJoinParam): RDD[Row] = {
     val leftFrame = left.frame.toDataFrame
     val rightFrame = right.frame.toDataFrame
-
-    val columnsTuple = left.joinColumns.zip(right.joinColumns)
-
-    def makeExpression(leftCol: String, rightCol: String): Column = {
-      leftFrame(leftCol).equalTo(rightFrame(rightCol))
-    }
-    var exps = makeExpression(columnsTuple.head._1, columnsTuple.head._2)
-    columnsTuple.tail.map { case (lc, rc) => exps = exps && makeExpression(lc, rc) }
-
+    val expression = expressionMaker(leftFrame, rightFrame, left.joinColumns, right.joinColumns)
     val joinedFrame = leftFrame.join(rightFrame,
-      exps,
+      expression,
       joinType = "fullouter"
     )
     joinedFrame.rdd
@@ -144,17 +156,9 @@ object JoinRddFunctions extends Serializable {
       case _ =>
         val leftFrame = left.frame.toDataFrame
         val rightFrame = right.frame.toDataFrame
-
-        val columnsTuple = left.joinColumns.zip(right.joinColumns)
-
-        def makeExpression(leftCol: String, rightCol: String): Column = {
-          leftFrame(leftCol).equalTo(rightFrame(rightCol))
-        }
-        var exps = makeExpression(columnsTuple.head._1, columnsTuple.head._2)
-        columnsTuple.tail.map { case (lc, rc) => exps = exps && makeExpression(lc, rc) }
-
+        val expression = expressionMaker(leftFrame, rightFrame, left.joinColumns, right.joinColumns)
         val joinedFrame = leftFrame.join(rightFrame,
-          exps,
+          expression,
           joinType = "right"
         )
         joinedFrame.rdd
@@ -181,19 +185,12 @@ object JoinRddFunctions extends Serializable {
       case _ =>
         val leftFrame = left.frame.toDataFrame
         val rightFrame = right.frame.toDataFrame
-
-        val columnsTuple = left.joinColumns.zip(right.joinColumns)
-
-        def makeExpression(leftCol: String, rightCol: String): Column = {
-          leftFrame(leftCol).equalTo(rightFrame(rightCol))
-        }
-        var exps = makeExpression(columnsTuple.head._1, columnsTuple.head._2)
-        columnsTuple.tail.map { case (lc, rc) => exps = exps && makeExpression(lc, rc) }
-
+        val expression = expressionMaker(leftFrame, rightFrame, left.joinColumns, right.joinColumns)
         val joinedFrame = leftFrame.join(rightFrame,
-          exps,
+          expression,
           joinType = "left"
         )
+
         joinedFrame.rdd
     }
   }
@@ -216,13 +213,13 @@ object JoinRddFunctions extends Serializable {
     how match {
       case "outer" => {
         val mergedRdd = mergeJoinColumns(joinedRdd, left, right)
-        dropRightJoinColumn(mergedRdd, left, right)
+        dropRightJoinColumn(mergedRdd, left, right, how)
       }
       case "right" => {
         dropLeftJoinColumn(joinedRdd, left, right)
       }
       case _ => {
-        dropRightJoinColumn(joinedRdd, left, right)
+        dropRightJoinColumn(joinedRdd, left, right, how)
       }
     }
   }
@@ -243,20 +240,15 @@ object JoinRddFunctions extends Serializable {
 
     val leftSchema = left.frame.frameSchema
     val rightSchema = right.frame.frameSchema
-
-    //    val leftJoinIndex = leftSchema.columnIndex(left.joinColumn)
-    //    val rightJoinIndex = rightSchema.columnIndex(right.joinColumn) + leftSchema.columns.size
-
     val leftJoinIndices = leftSchema.columnIndices(left.joinColumns)
     val rightJoinIndices = rightSchema.columnIndices(right.joinColumns).map(rightindex => rightindex + leftSchema.columns.size)
 
     joinedRdd.map(row => {
-
       val rowArray = row.toSeq.toArray
       leftJoinIndices.zip(rightJoinIndices).map {
-        case (leftindex, rightindex) => {
-          if (row.get(leftindex) == null) {
-            rowArray(leftindex) = row.get(rightindex)
+        case (leftIndex, rightIndex) => {
+          if (row.get(leftIndex) == null) {
+            rowArray(leftIndex) = row.get(rightIndex)
           }
         }
       }
@@ -279,12 +271,10 @@ object JoinRddFunctions extends Serializable {
                          right: RddJoinParam): FrameRdd = {
     val leftSchema = left.frame.frameSchema
     val rightSchema = right.frame.frameSchema
-
-    // Create new schema
-    val newLeftSchema = leftSchema.dropColumns(left.joinColumns.toList)
-    val newSchema = FrameSchema(Schema.join(newLeftSchema.columns, rightSchema.columns))
-
-    new FrameRdd(newSchema, joinedRdd)
+    val newSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+    val frameRdd = new FrameRdd(newSchema, joinedRdd)
+    val leftColNames = right.joinColumns.map(col => col + "_L")
+    frameRdd.dropColumns(leftColNames.toList)
   }
 
   /**
@@ -299,15 +289,23 @@ object JoinRddFunctions extends Serializable {
    */
   def dropRightJoinColumn(joinedRdd: RDD[Row],
                           left: RddJoinParam,
-                          right: RddJoinParam): FrameRdd = {
+                          right: RddJoinParam,
+                          how: String): FrameRdd = {
 
     val leftSchema = left.frame.frameSchema
     val rightSchema = right.frame.frameSchema
 
     // Create new schema
-    val newRightSchema = rightSchema.dropColumns(right.joinColumns.toList)
-    val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
-
-    new FrameRdd(newSchema, joinedRdd)
+    if (how == "inner") {
+      val newRightSchema = rightSchema.dropColumns(right.joinColumns.toList)
+      val newSchema = FrameSchema(Schema.join(leftSchema.columns, newRightSchema.columns))
+      new FrameRdd(newSchema, joinedRdd)
+    }
+    else {
+      val newSchema = FrameSchema(Schema.join(leftSchema.columns, rightSchema.columns))
+      val frameRdd = new FrameRdd(newSchema, joinedRdd)
+      val rightColNames = right.joinColumns.map(col => col + "_R")
+      frameRdd.dropColumns(rightColNames.toList)
+    }
   }
 }
