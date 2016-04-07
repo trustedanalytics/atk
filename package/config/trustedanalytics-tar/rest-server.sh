@@ -19,25 +19,36 @@ echo "Starting ATK startup script"
 
 set -o errexit
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-export KEYTAB=$DIR/../atk.keytab
-export KRB5_CONFIG=$DIR/../krb5.conf
+echo "Current Execution Directory:"$DIR
+
+jq=$DIR/../jq
+echo "make jq executable"
+chmod +x $jq
+
+
+
+if [ "$KRB5_BASE64" ]; then
+    (base64 -d <<< $KRB5_BASE64) > $DIR/../krb5.conf
+    export KERBEROS_ENABLED=true
+    export KRB5_CONFIG=$DIR/../krb5.conf
+    export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kuser')
+    export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kpassword')
+    export HADOOP_USER_NAME=$YARN_AUTHENTICATED_USERNAME
+    export KRB5CCNAME=/tmp/cf@CLOUDERA
+else
+    export KERBEROS_ENABLED=false
+fi
+
 export ATK_CONF_DIR="$DIR/../conf"
 export YARN_CONF_DIR=$ATK_CONF_DIR
+export HADOOP_CONF_DIR=$YARN_CONF_DIR
 
-echo $DIR
 
 CP=$DIR/../lib/module-loader-master-SNAPSHOT.jar:$DIR/../lib/scala-library-2.10.4.jar:$DIR/../lib/config-1.2.1.jar:$DIR/../lib/scala-reflect-2.10.4.jar
 CP=$DIR/../conf/logback.xml:$CP
 CP=$DIR/../conf:$CP
 
 export SEARCH_PATH="-Datk.module-loader.search-path=$DIR/../lib/"
-
-echo "Downloading jquery exectuable to parse environment variables"
-
-jq=$DIR/../jq
-echo "make jq executable"
-chmod +x $jq
-
 
 echo "Setting environment variables"
 export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
@@ -46,8 +57,6 @@ export USE_HTTP=true
 
 export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
-
-export PRINCIPAL=$(echo $VCAP_SERVICES | $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["dfs.datanode.kerberos.principal"]')
 
 # uncomment the following lines if a binding to the zookeeper is needed
 #export ZOOKEEPER_HOST=$(echo $VCAP_SERVICES | $jq '.["zookeeper-wssb"] | .[0].credentials.uri  / "," | map(. / ":" | .[0]) | join(",")'  | tr -d '"')
@@ -157,10 +166,11 @@ fi
 
 if [ -f ${KRB5_CONFIG} ]; then
  export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
+ export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
 fi
 
-echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
-java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 
