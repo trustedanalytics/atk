@@ -74,13 +74,8 @@ object PythonRddStorage {
       udfSchema
     }
     val converter = DataTypes.parseMany(newSchema.columns.map(_.dataType).toArray)(_)
-    val accumulatorSer = sc.accumulator(0L, "mytimerSerGeneric")
-    val accumulatorDeSer = sc.accumulator(0L, "mytimerDeSerGeneric")
-    val pyRdd = rddToPyRdd(udf, data, sc, accumulatorSer)
-    val frameRdd = getRddFromPythonRdd(pyRdd, converter, accumulatorDeSer)
-    println(s"MytimerSer in mapWith took ${accumulatorSer.value}")
-    frameRdd.count()
-    println(s"MytimerDeSer in mapWith took ${accumulatorDeSer.value}")
+    val pyRdd = rddToPyRdd(udf, data, sc)
+    val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(newSchema, frameRdd)
   }
 
@@ -99,17 +94,9 @@ object PythonRddStorage {
     //track key indices to fetch data during BSON decode.
     //val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
-
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
-
-    val accumulatorSer = sc.accumulator(0L, "mytimerSerAggregated")
-    val accumulatorDeSer = sc.accumulator(0L, "mytimerDeSerAggregated")
-    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc, accumulatorSer)
-    val frameRdd = getRddFromPythonRdd(pyRdd, converter, accumulatorDeSer)
-    //serialization timer
-    println(s"MytimerSer in AggregateUDF took ${accumulatorSer.value}")
-    frameRdd.count()
-    println(s"MytimerDeSer in AggregateUDF took ${accumulatorDeSer.value}")
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc)
+    val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
 
@@ -139,12 +126,11 @@ object PythonRddStorage {
     bsonList
   }
 
-  def rddToPyRdd(udf: Udf, rdd: RDD[Row], sc: SparkContext, acc: Accumulator[Long] = null): EnginePythonRdd[Array[Byte]] = {
+  def rddToPyRdd(udf: Udf, rdd: RDD[Row], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     // Create an RDD of byte arrays representing bson objects
     val baseRdd: RDD[Array[Byte]] = rdd.map(
       x => {
-        val start = System.nanoTime()
         val obj = new BasicBSONObject()
         obj.put("array", x.toSeq.toArray.map {
           case y: ArrayBuffer[_] => iterableToBsonList(y)
@@ -153,13 +139,9 @@ object PythonRddStorage {
           case value => value
         })
         val res = BSON.encode(obj)
-        println(s"Bson Encoded obj: ${res}")
-        if (acc != null)
-          acc += (System.nanoTime() - start)
         res
       }
     )
-    println(s"RddToPyRddGeneric Bytes ${baseRdd.first()} ${baseRdd.first().length}")
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
     pyRdd
   }
@@ -220,11 +202,10 @@ object PythonRddStorage {
    * @param rdd rdd(List[keys], List[Rows])
    * @return PythonRdd
    */
-  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext, acc: Accumulator[Long] = null): EnginePythonRdd[Array[Byte]] = {
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     val baseRdd: RDD[Array[Byte]] = rdd.map {
       case (key, rows) => {
-        val x = System.nanoTime()
         val obj = new BasicBSONObject()
         val bsonRows = rows.map(
           row => {
@@ -238,14 +219,9 @@ object PythonRddStorage {
         //obj.put("keyindices", keyIndices.toArray)
         obj.put("array", bsonRows)
         val res = BSON.encode(obj)
-        println(s"Bson Encoded obj: ${res}")
-        val y = System.nanoTime()
-        if (acc != null)
-          acc += (y - x)
         res
       }
     }
-    println(s"agg12-RddToPyRddAggregation Bytes ${baseRdd.first()} ${baseRdd.first().length}")
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
     pyRdd
   }
@@ -271,9 +247,8 @@ object PythonRddStorage {
     result.headOption
   }
 
-  def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null, acc: Accumulator[Long] = null): RDD[Array[Any]] = {
+  def getRddFromPythonRdd(pyRdd: EnginePythonRdd[Array[Byte]], converter: (Array[Any] => Array[Any]) = null): RDD[Array[Any]] = {
     val resultRdd = pyRdd.flatMap(s => {
-      val start = System.nanoTime()
       //should be BasicBSONList containing only BasicBSONList objects
       val bson = BSON.decode(s)
       val asList = bson.get("array").asInstanceOf[BasicBSONList]
@@ -284,9 +259,6 @@ object PythonRddStorage {
           case value => value
         }.toArray.asInstanceOf[Array[Any]]
       })
-      val end = System.nanoTime()
-      if (acc != null)
-        acc += (end - start)
       res
     }).map(converter)
 
