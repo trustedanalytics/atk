@@ -48,7 +48,7 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
    * @return Configuration Hadoop Configuration for the cluster
    */
   def loginConfigurationWithClassLoader(): Configuration = withMyClassLoader {
-    loginUsingHadoopUtils()._2
+    loginUsingHadoopUtils().configuration
   }
 
   def getKerberosConfigJVMParam: Option[String] = sys.env.get("JAVA_KRB_CONF")
@@ -67,7 +67,7 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   def isKerberosEnabled(hadoopConf: Configuration) =
     AUTHENTICATION_METHOD.equals(hadoopConf.get(AUTHENTICATION_METHOD_PROPERTY))
 
-  def loginUsingHadoopUtils(): (Subject, Configuration) = {
+  def loginUsingHadoopUtils(): UserAuthenticatedConfiguration = {
     try {
       val helper = Configurations.newInstanceFromEnv()
       val hdfsConf = helper.getServiceConfig(ServiceType.HDFS_TYPE)
@@ -78,15 +78,15 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
         val res = hdfsConf.asHadoopConfiguration()
         val subject = loginManager.loginWithCredentials(kerberosProperties.user, kerberosProperties.password.toCharArray())
         loginManager.loginInHadoop(subject, res)
-        (subject, res)
+        UserAuthenticatedConfiguration(subject, res)
       }
-      else (Subject.getSubject(AccessController.getContext()), new Configuration())
+      else UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
     }
     catch {
       case t: Throwable =>
         info(s"Failed to loginUsingHadooputils. Either kerberos is not enabled or invalid setup or " +
           "using System credentials for authentication. Returning default configuration")
-        (null, new Configuration())
+        UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
     }
   }
 
@@ -95,6 +95,7 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
       val yarn_authenticated_user = System.getProperty("YARN_AUTHENTICATED_USERNAME")
       val yarn_authenticated_password = System.getProperty("YARN_AUTHENTICATED_PASSWORD")
       import sys.process._
+      // Run kinit on a node and key in the password. The user and password are supplied by the environment
       s"echo $yarn_authenticated_password" #| s"kinit $yarn_authenticated_user" !
     }
     catch {
@@ -103,6 +104,8 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
   }
 
 }
+
+case class UserAuthenticatedConfiguration(subject: Subject, configuration: Configuration)
 
 case class KerberosProperties(kdc: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.KRB_KDC),
                               realm: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.KRB_REALM),

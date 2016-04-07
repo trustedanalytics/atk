@@ -44,13 +44,13 @@ class FileStorage extends EventLogging {
     info("fsRoot: " + EngineConfig.fsRoot)
     KerberosAuthenticator.loginAsAuthenticatedUser()
 
-    val sconfig = KerberosAuthenticator.loginConfigurationWithClassLoader()
+    val configuration = KerberosAuthenticator.loginConfigurationWithClassLoader()
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
-    sconfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
-    sconfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
-    sconfig.set("fs.defaultFS", EngineConfig.fsRoot)
+    configuration.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
+    configuration.set("fs.file.impl", classOf[LocalFileSystem].getName)
+    configuration.set("fs.defaultFS", EngineConfig.fsRoot)
 
-    sconfig
+    configuration
   }(null)
 
   def configuration: Configuration = {
@@ -64,7 +64,9 @@ class FileStorage extends EventLogging {
       Hdfs.newInstance().createFileSystem()
     }
     catch {
-      case _ => FileSystem.get(configuration)
+      case _ =>
+        info("Failed to create HDFS instance using hadoop-library. Default to FileSystem")
+        FileSystem.get(configuration)
     }
   }
 

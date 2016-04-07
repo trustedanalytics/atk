@@ -124,7 +124,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         }
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
-        val (subject, config) = KerberosAuthenticator.loginUsingHadoopUtils()
+        val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
@@ -132,7 +132,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // SparkSubmit as a standalone process (using engine.jar) for every command to get the parallel
         // execution in yarn-cluster mode.
 
-        val result = Subject.doAs[Int](subject, new PrivilegedAction[Int] {
+        val result = Subject.doAs[Int](userAuthenticatedConfiguration.subject, new PrivilegedAction[Int] {
           def run: Int = {
             val pb = new java.lang.ProcessBuilder(javaArgs: _*)
             val job = pb.inheritIO().start()
