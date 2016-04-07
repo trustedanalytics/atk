@@ -36,8 +36,9 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
   def leftBroadcastJoin(other: RddJoinParam): RDD[Row] = {
     val rightBroadcastVariable = JoinBroadcastVariable(other)
     lazy val rightNullRow: Row = new GenericRow(other.frame.numColumns)
+    val leftJoinColumns = self.joinColumns.toList
     self.frame.flatMapRows(left => {
-      val leftKeys = left.values(self.joinColumns.toList)
+      val leftKeys = left.values(leftJoinColumns)
       rightBroadcastVariable.get(leftKeys) match {
         case Some(rightRowSet) => for (rightRow <- rightRowSet) yield Row.merge(left.row, rightRow)
         case _ => List(Row.merge(left.row, rightNullRow.copy()))
@@ -55,8 +56,9 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
   def rightBroadcastJoin(other: RddJoinParam): RDD[Row] = {
     val leftBroadcastVariable = JoinBroadcastVariable(self)
     lazy val leftNullRow: Row = new GenericRow(self.frame.numColumns)
+    val rightJoinColumns = other.joinColumns.toList
     other.frame.flatMapRows(right => {
-      val rightKeys = right.values(other.joinColumns.toList)
+      val rightKeys = right.values(rightJoinColumns)
       leftBroadcastVariable.get(rightKeys) match {
         case Some(leftRowSet) => for (leftRow <- leftRowSet) yield Row.merge(leftRow, right.row)
         case _ => List(Row.merge(leftNullRow.copy(), right.row))
@@ -79,8 +81,9 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
       val rightBroadcastVariable = JoinBroadcastVariable(other)
 
       val rightColsToKeep = other.frame.frameSchema.dropColumns(other.joinColumns.toList).columnNames
+      val leftJoinColumns = self.joinColumns.toList
       self.frame.flatMapRows(left => {
-        val leftKeys = left.values(self.joinColumns.toList)
+        val leftKeys = left.values(leftJoinColumns)
         rightBroadcastVariable.get(leftKeys) match {
           case Some(rightRowSet) =>
             for (rightRow <- rightRowSet) yield Row.merge(left.row, new GenericRow(rowWrapper(rightRow).values(rightColsToKeep).toArray))
@@ -90,9 +93,10 @@ class BroadcastJoinRddFunctions(self: RddJoinParam) extends Logging with Seriali
     }
     else if (leftSizeInBytes <= broadcastJoinThreshold) {
       val leftBroadcastVariable = JoinBroadcastVariable(self)
+      val rightJoinColumns = other.joinColumns.toList
       other.frame.flatMapRows(rightRow => {
         val leftColsToKeep = self.frame.frameSchema.dropColumns(self.joinColumns.toList).columnNames
-        val rightKeys = rightRow.values(other.joinColumns.toList)
+        val rightKeys = rightRow.values(rightJoinColumns)
         leftBroadcastVariable.get(rightKeys) match {
           case Some(leftRowSet) =>
             for (leftRow <- leftRowSet) yield Row.merge(new GenericRow(rowWrapper(leftRow).values(leftColsToKeep).toArray), rightRow.row)
