@@ -14,15 +14,18 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.engine.daal.plugins.tables
 
-import com.intel.daal.data_management.data.NumericTable
+import java.nio.DoubleBuffer
+
+import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
 import com.intel.daal.services.DaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.domain.schema.FrameSchema
+
 import scala.collection.mutable.ListBuffer
-import java.nio.DoubleBuffer
 
 /**
  * DAAL numeric table with index
@@ -34,7 +37,7 @@ import java.nio.DoubleBuffer
  * @param index Table index
  * @param table DAAL numeric table
  */
-case class IndexedNumericTable(index: Long, private val table: NumericTable) extends Serializable {
+case class IndexedNumericTable(index: Long, table: NumericTable) extends Serializable {
   require(table != null, "Numeric table must not be null")
   val numRows: Int = table.getNumberOfRows.toInt
   val numCols: Int = table.getNumberOfColumns.toInt
@@ -64,7 +67,9 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
    * @param context DAAL context
    * @return Row iterator
    */
-  def toRowIter(context: DaalContext): Iterator[Row] = {
+  def toRowIter(context: DaalContext, frameSchema: Option[FrameSchema] = None): Iterator[Row] = {
+    require(frameSchema.isEmpty || frameSchema.get.columns.length == numCols,
+      "Size of frame schema must equal number of columns in numeric table")
     if (isEmpty) return List.empty[sql.Row].iterator
 
     val unpackedTable = getUnpackedTable(context)
@@ -75,7 +80,11 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
     for (i <- 0 until numRows) {
       val rowArray = new Array[Any](numCols)
       for (j <- 0 until numCols) {
-        rowArray(j) = doubleBuffer.get(i * numCols + j)
+        val doubleValue = doubleBuffer.get(i * numCols + j)
+        rowArray(j) = frameSchema match {
+          case Some(schema) => schema.columns(j).dataType.toScalaType(doubleValue)
+          case _ => doubleValue
+        }
       }
       rowBuffer += new GenericRow(rowArray)
     }
@@ -87,4 +96,21 @@ case class IndexedNumericTable(index: Long, private val table: NumericTable) ext
    * Check if table is empty
    */
   def isEmpty: Boolean = numRows < 1
+}
+
+object IndexedNumericTable extends Serializable {
+
+  /**
+   * Create indexed numeric table from matrix
+   */
+  def createTable(index: Long, matrix: Array[Array[Double]]): IndexedNumericTable = {
+    require(matrix != null && matrix.length > 0, "Array must not be null or empty")
+    val context = new DaalContext()
+    val numRows = matrix.length
+    val array = matrix.flatten
+    val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
+    val indexedTable = IndexedNumericTable(index, table)
+    context.dispose()
+    indexedTable
+  }
 }
