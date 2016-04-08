@@ -27,9 +27,7 @@ class LinearRegressionScoreModel(linearRegressionData: LinearRegressionData) ext
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.asDouble(value)
     }
-    val prediction = predict(Vectors.dense(x))
-    val score: Array[Any] = Array(prediction)
-    score
+    Array(predict(Vectors.dense(x)))
   }
 
   /**

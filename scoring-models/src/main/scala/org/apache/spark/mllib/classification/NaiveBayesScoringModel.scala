@@ -26,9 +26,7 @@ class NaiveBayesScoringModel(naiveBayesData: NaiveBayesData) extends NaiveBayesM
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.asDouble(value)
     }
-    val prediction = predict(Vectors.dense(x))
-    val output: Array[Any] = Array(prediction)
-    output
+    Array(predict(Vectors.dense(x)))
   }
 
   /**

@@ -28,7 +28,7 @@ class DaalKMeansScoreModel(kmeansData: DaalKMeansModelData) extends Model {
     val features: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
     val clusterId = predictCluster(features)
 
-    data :+ (clusterId)
+    Array(clusterId)
   }
 
   /**
