@@ -39,7 +39,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
                                            @ArgDoc("""use implicit preference""") useImplicit: Boolean = false,
                                            @ArgDoc("""number of user blocks""") numUserBlocks: Int = 2,
                                            @ArgDoc("""number of item blocks""") numItemBlock: Int = 3,
-                                           @ArgDoc("""Number of iterations between checkpoints""") checkpointIterations: Int = 10
+                                           @ArgDoc("""Number of iterations between checkpoints""") checkpointIterations: Int = 10,
                                            @ArgDoc("""target RMSE""") targetRMSE: Double = 0.05) {
 
   require(frame != null, "input frame is required")
