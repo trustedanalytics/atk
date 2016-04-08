@@ -78,18 +78,23 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
+        case m: Map[String, _] => new JsObject(m.map {
+          case (a: String, l: List[Double]) => new JsField(a, l.toJson)
+          case (a: String, b: Double) => new JsField(a, JsNumber(b))
+          case (a: String, i: Int) => new JsField(a, JsNumber(i))
+        })
         case v: Array[_] => new JsArray(v.map {
           case d: Double => JsNumber(d)
           case n: Int => JsNumber(n)
           case n: Long => JsNumber(n)
           case n: Float => JsNumber(n)
           case s: String => JsString(s)
-          case l: List[_] => new JsArray(l.map(x => write(x)))
           case m: Map[String, _] => new JsObject(m.map {
             case (a: String, l: List[Double]) => new JsField(a, l.toJson)
             case (a: String, b: Double) => new JsField(a, JsNumber(b))
             case (a: String, i: Int) => new JsField(a, JsNumber(i))
           })
+          case l: List[_] => new JsArray(l.map(x => write(x)))
           case a: Array[_] => new JsArray(a.map(x => write(x)).toList)
           case default => throw new RuntimeException("Unsupported array data type in scoring service json formatting write: " + default.getClass.getSimpleName)
         }.toList)
@@ -129,9 +134,7 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output_columns" -> new JsArray(model.output.map(output => FieldFormat.write(output)).toList),
-        "output_values" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("data" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
