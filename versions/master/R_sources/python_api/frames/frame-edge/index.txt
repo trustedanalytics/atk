@@ -46,7 +46,6 @@
     export_to_jdbc
     export_to_json
     filter
-    flatten_column
     flatten_columns
     get_error_frame
     group_by
@@ -69,7 +68,6 @@
     timeseries_from_observations
     timeseries_slice
     top_k
-    unflatten_column
     unflatten_columns
 
 .. class:: EdgeFrame
@@ -143,7 +141,6 @@
     :doc:`export_to_jdbc <export_to_jdbc>`\ (self, table_name[, connector_type, driver_name, query])      Write current frame to JDBC table.
     :doc:`export_to_json <export_to_json>`\ (self, folder_name[, count, offset])                          Write current frame to HDFS in JSON format.
     :doc:`filter <filter>`\ (self, predicate)                                                             Select all rows which satisfy a predicate.
-    :doc:`flatten_column <flatten_column>`\ (self, column[, delimiter])                                   |DEPRECATED| Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
     :doc:`flatten_columns <flatten_columns>`\ (self, columns[, delimiters])                               Spread data to multiple rows based on cell data.
     :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
     :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
@@ -161,7 +158,6 @@
     :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
     :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
-    :doc:`unflatten_column <unflatten_column>`\ (self, columns[, delimiter])                              |DEPRECATED| Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
     :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.
     ====================================================================================================  ====================================================================================================
 

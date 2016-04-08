@@ -38,7 +38,6 @@
     drop_columns
     drop_duplicates
     drop_rows
-    drop_vertices
     ecdf
     entropy
     export_to_csv
@@ -47,7 +46,6 @@
     export_to_jdbc
     export_to_json
     filter
-    flatten_column
     flatten_columns
     get_error_frame
     group_by
@@ -70,7 +68,6 @@
     timeseries_from_observations
     timeseries_slice
     top_k
-    unflatten_column
     unflatten_columns
 
 .. class:: VertexFrame
@@ -139,7 +136,6 @@
     :doc:`drop_columns <drop_columns>`\ (self, columns)                                                   Remove columns from the frame.
     :doc:`drop_duplicates <drop_duplicates>`\ (self[, unique_columns])                                    Remove duplicate vertex rows.
     :doc:`drop_rows <drop_rows>`\ (self, predicate)                                                       Delete rows in this vertex frame that qualify.
-    :doc:`drop_vertices <drop_vertices>`\ (self, predicate)                                               |DEPRECATED| drop_vertices has been deprecated.  Use drop_rows instead.
     :doc:`ecdf <ecdf>`\ (self, column[, result_frame_name])                                               Builds new frame with columns for data and distribution.
     :doc:`entropy <entropy>`\ (self, data_column[, weights_column])                                       Calculate the Shannon entropy of a column.
     :doc:`export_to_csv <export_to_csv>`\ (self, folder_name[, separator, count, offset])                 Write current frame to HDFS in csv format.
@@ -148,7 +144,6 @@
     :doc:`export_to_jdbc <export_to_jdbc>`\ (self, table_name[, connector_type, driver_name, query])      Write current frame to JDBC table.
     :doc:`export_to_json <export_to_json>`\ (self, folder_name[, count, offset])                          Write current frame to HDFS in JSON format.
     :doc:`filter <filter>`\ (self, predicate)                                                             <Missing Doc>
-    :doc:`flatten_column <flatten_column>`\ (self, column[, delimiter])                                   |DEPRECATED| Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
     :doc:`flatten_columns <flatten_columns>`\ (self, columns[, delimiters])                               Spread data to multiple rows based on cell data.
     :doc:`get_error_frame <get_error_frame>`\ (self)                                                      Get a frame with error recordings.
     :doc:`group_by <group_by>`\ (self, group_by_columns, \*aggregation_arguments)                         |BETA| Create summarized frame.
@@ -166,7 +161,6 @@
     :doc:`timeseries_from_observations <timeseries_from_observations>`\ (self, date_time_index, ...)      Returns a frame that has the observations formatted as a time series.
     :doc:`timeseries_slice <timeseries_slice>`\ (self, date_time_index, start, end)                       Returns a frame that is a sub-slice of the given series.
     :doc:`top_k <top_k>`\ (self, column_name, k[, weights_column])                                        Most or least frequent column values.
-    :doc:`unflatten_column <unflatten_column>`\ (self, columns[, delimiter])                              |DEPRECATED| Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
     :doc:`unflatten_columns <unflatten_columns>`\ (self, columns[, delimiter])                            Compacts data from multiple rows based on cell data.
     ====================================================================================================  ====================================================================================================
 
