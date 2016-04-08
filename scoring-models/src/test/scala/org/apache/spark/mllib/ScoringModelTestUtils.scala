@@ -73,7 +73,7 @@ object ScoringModelTestUtils {
   def successfulModelScoringFloatTest(model: Model, numColumns: Int) = {
     // score model and check result length
     val score = model.score(getRandomFloatArray(numColumns))
-    score.map(output => assert(output.asInstanceOf[Map[String, Any]].size == numColumns + 1))
+    assert(score.length == 1)
   }
 
   // Generates data with integer data for the specified number of column/rows and then

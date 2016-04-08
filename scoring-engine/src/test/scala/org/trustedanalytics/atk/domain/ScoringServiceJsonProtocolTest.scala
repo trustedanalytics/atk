@@ -82,7 +82,7 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
       val output = DataTypeJsonFormat.write(scores)
       assert(output != null)
-      //assert(output.compactPrint == """["test_string",1.0,{"int_key":1,"list_key":[2.0,3.0]}]""")
+      assert(output.compactPrint == """["test_string",1.0,{"int_key":1,"list_key":[2.0,3.0]}]""")
     }
 
     "parse JSON input" in {

@@ -26,7 +26,8 @@ class KMeansScoreModel(libKMeansModel: KMeansModel, kmeansData: KMeansData) exte
 
   override def score(data: Array[Any]): Array[Any] = {
     val x: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
-    data :+ (predict(Vectors.dense(x)) + 1)
+    val output: Array[Any] = Array(predict(Vectors.dense(x)) + 1)
+    output
   }
 
   /**

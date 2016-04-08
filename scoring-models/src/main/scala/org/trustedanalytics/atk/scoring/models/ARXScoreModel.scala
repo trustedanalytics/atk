@@ -52,7 +52,7 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
 
     val xValues = new DenseMatrix(rows = yValues.length, cols = xColumnsLength, data = xArray)
 
-    data :+ arxModel.predict(yValues, xValues).toArray
+    arxModel.predict(yValues, xValues).toArray.map(_.asInstanceOf[Any])
   }
 
   override def input(): Array[Field] = {

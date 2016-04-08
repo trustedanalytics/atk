@@ -27,10 +27,6 @@ trait Model {
    */
   def score(row: Array[Any]): Array[Any]
 
-  def scoreToMap(row: Array[Any]): Map[String, Any] = {
-    score(row).zip(output()).map(combined => (combined._2.name, combined._1)).toMap
-  }
-
   def input(): Array[Field]
 
   def output(): Array[Field]
