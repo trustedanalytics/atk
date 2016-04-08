@@ -49,7 +49,7 @@ case class CollaborativeFilteringTrainArgs(model: ModelReference,
   require(maxSteps > 1, "min steps must be a positive integer")
   require(regularization > 0, "regularization must be a positive value")
   require(alpha > 0, "alpha must be a positive value")
-  require(checkpointIterations > 0 or checkpointIterations == -1, "Iterations between checkpoints must be either positive or -1")
+  require(checkpointIterations > 0, "Iterations between checkpoints must be positive")
   require(numFactors > 0, "number of factors must be a positive integer")
   require(numUserBlocks > 0, "number of user blocks must be a positive integer")
   require(numItemBlock > 0, "number of item blocks must be a positive integer")
