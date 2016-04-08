@@ -13,17 +13,22 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
-import org.trustedanalytics.atk.engine.daal.plugins.tables.IndexedNumericTable
+package org.trustedanalytics.atk.scoring.models
 
-/**
- * DAAL KMeans clustering results
- *
- * @param centroids Cluster centroids
- * @param k Number of clusters
- * @param clusterSizes Map of cluster names and sizes
- */
-case class DaalKMeansResults(centroids: IndexedNumericTable,
-                             k: Int,
-                             clusterSizes: Map[String, Long])
+import org.apache.spark.mllib.ScoringJsonReaderWriters.DaalKMeansModelDataFormat
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
+
+class DaalKMeansModelReaderPlugin() extends ModelLoader {
+
+  private var daalKMeansScoreModel: DaalKMeansScoreModel = _
+
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val kMeansModelData = json.convertTo[DaalKMeansModelData]
+    daalKMeansScoreModel = new DaalKMeansScoreModel(kMeansModelData)
+    daalKMeansScoreModel.asInstanceOf[Model]
+  }
+}
