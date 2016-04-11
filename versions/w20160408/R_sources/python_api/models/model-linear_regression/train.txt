@@ -1,0 +1,101 @@
+
+:doc:`LinearRegressionModel <index>`  train
+*******************************************
+
+------
+
+
+.. function:: train(self, frame, value_column, observation_columns, elastic_net_parameter=0.0, fit_intercept=True, max_iterations=100, reg_param=0.0, standardization=True, tolerance=1e-06)
+
+    |ALPHA|
+    Build linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            A frame to train the model on
+
+
+
+        **value_column** : unicode
+
+        ..
+
+            Column name containing the value for each observation.
+
+
+
+        **observation_columns** : list
+
+        ..
+
+            List of column(s) containing the
+            observations.
+
+
+
+        **elastic_net_parameter** : float64 (default=0.0)
+
+        ..
+
+            Parameter for the ElasticNet mixing. Default is 0.0
+
+
+
+        **fit_intercept** : bool (default=True)
+
+        ..
+
+            Parameter for whether to fit an intercept term. Default is true
+
+
+
+        **max_iterations** : int32 (default=100)
+
+        ..
+
+            Parameter for maximum number of iterations. Default is 100
+
+
+
+        **reg_param** : float64 (default=0.0)
+
+        ..
+
+            Parameter for regularization. Default is 0.0
+
+
+
+        **standardization** : bool (default=True)
+
+        ..
+
+            Parameter for whether to standardize the training features before fitting the model. Default is true
+
+
+
+        **tolerance** : float64 (default=1e-06)
+
+        ..
+
+            Parameter for the convergence tolerance for iterative algorithms. Default is 1E-6
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Trained linear regression model
+    Creating a LinearRegression Model using the observation column and target column of the train frame
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

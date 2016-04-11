@@ -1,0 +1,128 @@
+
+
+--------------------------------------------
+:doc:`Commands <index>` frame/export_to_json
+--------------------------------------------
+
+Write current frame to HDFS in JSON format.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    frame/export_to_json
+
+:arguments:
+
+
+    **frame** : Frame
+
+    ..
+
+        <Missing Description>
+
+
+
+    **folder_name** : unicode
+
+    ..
+
+        The HDFS folder path where the files
+        will be created.
+
+
+
+    **count** : int32 (default=0)
+
+    ..
+
+        The number of records you want.
+        Default (0), or a non-positive value, is the whole frame.
+
+
+
+    **offset** : int32 (default=0)
+
+    ..
+
+        The number of rows to skip before exporting to the file.
+        Default is zero (0).
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Export the frame to a file in JSON format as a Hadoop file.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+
+
+

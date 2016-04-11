@@ -1,0 +1,30 @@
+
+:doc:`Frame <index>`  wordcount
+*******************************
+
+------
+
+
+.. function:: wordcount(self)
+
+    Counts and reports the top 10 words across all columns with string data in a frame.
+
+
+    :Parameters:
+
+
+
+    :Returns:
+
+        : list
+
+        ..
+
+
+                    dictionary
+                    Dictionary of top 10 words
+                
+    Extended Summary
+            ----------------
+            Extended Summary for Plugin goes here ...
+        
