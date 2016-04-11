@@ -125,7 +125,6 @@ class ApiExistsSmokeTest(unittest.TestCase):
                                       'drop_columns',
                                       'drop_duplicates',
                                       'drop_rows',
-                                      'drop_vertices',
                                       'ecdf',
                                       'entropy',
                                       'export_to_csv',
