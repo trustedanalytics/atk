@@ -16,13 +16,13 @@
 
 package org.trustedanalytics.atk.scoring
 
-import org.codehaus.jettison.json.JSONObject
 import org.joda.time.DateTime
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 import scala.collection.immutable.Map
 import scala.collection.mutable.ArrayBuffer
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
+import scala.reflect.ClassTag
 import scala.reflect.runtime.universe._
 
 class ScoringServiceJsonProtocol(model: Model) {
@@ -69,72 +69,8 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
-  //  implicit object DataTypeJsonFormat extends JsonFormat[Any] {
-  //    override def write(obj: Any): JsValue = {
-  //      obj match {
-  //        case n: Int => new JsNumber(n)
-  //        case n: Long => new JsNumber(n)
-  //        case n: Float => new JsNumber(BigDecimal(n))
-  //        case n: Double => new JsNumber(n)
-  //        case s: String => new JsString(s)
-  //        case s: Boolean => JsBoolean(s)
-  //        case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-  //        case m: Map[String, _] => new JsObject(m.map {
-  //          case (k: String, l: List[Double]) => new JsField(k, l.toJson)
-  //          case (k: String, b: Double) => new JsField(k, JsNumber(b))
-  //          case (k: String, i: Int) => new JsField(k, JsNumber(i))
-  //          case (k: String, v: List[String]) => new JsField(k, v.toJson)
-  //          case (k: String, v: Vector[Double]) => new JsField(k, v.toJson)
-  //        })
-  //        case v: Array[_] => new JsArray(v.map {
-  //          case d: Double => JsNumber(d)
-  //          case n: Int => JsNumber(n)
-  //          case n: Long => JsNumber(n)
-  //          case n: Float => JsNumber(n)
-  //          case s: String => JsString(s)
-  //          case m: Map[String, _] => new JsObject(m.map {
-  //            case (a: String, l: List[Double]) => new JsField(a, l.toJson)
-  //            case (a: String, b: Double) => new JsField(a, JsNumber(b))
-  //            case (a: String, i: Int) => new JsField(a, JsNumber(i))
-  //          })
-  //          case l: List[_] => new JsArray(l.map(x => write(x)))
-  //          case a: Array[_] => new JsArray(a.map(x => write(x)).toList)
-  //          case default => throw new RuntimeException("Unsupported array data type in scoring service json formatting write: " + default.getClass.getSimpleName)
-  //        }.toList)
-  //        case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
-  //        case n: java.lang.Long => new JsNumber(n.longValue())
-  //        // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
-  //        case unk =>
-  //          val name: String = if (unk != null) {
-  //            unk.getClass.getName
-  //          }
-  //          else {
-  //            "null"
-  //          }
-  //          serializationError("Cannot serialize " + name)
-  //      }
-  //    }
-  //
-  //    override def read(json: JsValue): Any = {
-  //      json match {
-  //        case JsNumber(n) if n.isValidInt => n.intValue()
-  //        case JsNumber(n) if n.isValidLong => n.longValue()
-  //        case JsNumber(n) if n.isValidFloat => n.floatValue()
-  //        case JsNumber(n) => n.doubleValue()
-  //        case JsBoolean(b) => b
-  //        case JsString(s) => s
-  //        case JsArray(v) => v.map(x => read(x))
-  //        case obj: JsObject => obj.fields.map {
-  //          case (a, JsArray(v)) => (a, v.map(x => read(x)))
-  //          case (a, JsNumber(b)) => (a, b)
-  //        }
-  //        case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
-  //      }
-  //    }
-  //  }
-
-  class DataTypeJsonFormat[T: TypeTag] extends JsonFormat[T] {
-    override def write(obj: T): JsValue = {
+  implicit object DataTypeJsonFormat extends JsonFormat[Any] {
+    override def write(obj: Any): JsValue = {
       obj match {
         case n: Int => new JsNumber(n)
         case n: Long => new JsNumber(n)
@@ -143,29 +79,11 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case m: Map[String, T] => new JsObject(m.map {
-          case (k: String, l: List[Double @unchecked]) if typeOf[T] =:= typeOf[Double] => new JsField(k, l.toJson)
-          case (k: String, b: Double) => new JsField(k, JsNumber(b))
-          case (k: String, i: Int) => new JsField(k, JsNumber(i))
-          case (k: String, v: List[String @unchecked]) if typeOf[T] =:= typeOf[String] => new JsField(k, v.toJson)
-          case (k: String, v: Vector[Double]) => new JsField(k, v.toJson)
-        })
-        case v: Array[_] => new JsArray(v.map {
-          case d: Double => JsNumber(d)
-          case n: Int => JsNumber(n)
-          case n: Long => JsNumber(n)
-          case n: Float => JsNumber(n)
-          case s: String => JsString(s)
-          case m: Map[String, _] => new JsObject(m.map {
-            case (a: String, l: List[Double]) => new JsField(a, l.toJson)
-            case (a: String, b: Double) => new JsField(a, JsNumber(b))
-            case (a: String, i: Int) => new JsField(a, JsNumber(i))
-          })
-          case l: List[T] => new JsArray(l.map(x => write(x)))
-          case a: Array[T] => new JsArray(a.map(x => write(x)).toList)
-          case default => throw new RuntimeException("Unsupported array data type in scoring service json formatting write: " + default.getClass.getSimpleName)
-        }.toList)
-        case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
+        case m: Map[_, _] @unchecked => mapToJson(m)
+        case v: List[_] => listToJson(v)
+        case v: Array[_] => listToJson(v.toList)
+        case v: Vector[_] => listToJson(v.toList)
+        case v: ArrayBuffer[_] @unchecked => listToJson(v.toList)
         case n: java.lang.Long => new JsNumber(n.longValue())
         // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
         case unk =>
@@ -179,8 +97,8 @@ class ScoringServiceJsonProtocol(model: Model) {
       }
     }
 
-    override def read(json: JsValue): T = {
-      val jsval = json match {
+    override def read(json: JsValue): Any = {
+      json match {
         case JsNumber(n) if n.isValidInt => n.intValue()
         case JsNumber(n) if n.isValidLong => n.longValue()
         case JsNumber(n) if n.isValidFloat => n.floatValue()
@@ -194,17 +112,14 @@ class ScoringServiceJsonProtocol(model: Model) {
         }
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
-      jsval.asInstanceOf[T]
     }
   }
-
-  implicit val dataTypeFormat = new DataTypeJsonFormat[Any]()
 
   implicit object DataOutputFormat extends JsonFormat[Array[Any]] {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      JsObject("data" -> new JsArray(obj.map(output => dataTypeFormat.write(output)).toList))
+      JsObject("data" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
@@ -268,5 +183,39 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
+  private def mapToJson[K <: Any, V <: Any](m: Map[K, V]): JsObject = {
+    require(m != null, s"Scoring service cannot serialize null to JSON")
+    val jsMap: Map[String, JsValue] = m.map {
+      case (x) => x match {
+        case (k: String, n: Double) => (k, n.toJson)
+        case (k: String, n: Int) => (k, n.toJson)
+        case (k: String, n: Long) => (k, n.toJson)
+        case (k: String, n: Float) => (k, n.toJson)
+        case (k: String, str: String) => (k, JsString(str))
+        case (k: String, list: List[_]) => (k, listToJson(list))
+        case (k: String, array: Array[_]) => (k, listToJson(array.toList))
+        case (k: String, vector: Vector[_]) => (k, listToJson(vector.toList))
+        case unk => serializationError(s"Scoring service cannot serialize ${unk.getClass.getName} to JSON")
+      }
+    }
+    JsObject(jsMap)
+  }
+
+  private def listToJson(list: List[Any]): JsArray = {
+    require(list != null, s"Scoring service cannot serialize null to JSON")
+    val jsElements = list.map {
+      case n: Double => n.toJson
+      case n: Int => n.toJson
+      case n: Long => n.toJson
+      case n: Float => n.toJson
+      case str: String => str.toJson
+      case map: Map[_, _] @unchecked => mapToJson(map)
+      case list: List[_] => listToJson(list)
+      case arr: Array[_] => listToJson(arr.toList)
+      case vector: Vector[_] => listToJson(vector.toList)
+      case unk => serializationError(s"Scoring service cannot serialize ${unk.getClass.getName} to Json")
+    }
+    new JsArray(jsElements)
+  }
 }
 
