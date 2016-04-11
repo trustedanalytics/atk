@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 import org.apache.spark.mllib.ScoringJsonReaderWriters._
 import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
 import spray.json._
+import org.apache.spark.mllib.ScoringJsonReaderWriters
 
 /**
  * Scoring model for Latent Dirichlet Allocation
@@ -38,7 +39,7 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(
       case _ => throw new IllegalArgumentException("Scoring input must be a list of words")
     }
     val predictReturn = predict(inputDocument.toList)
-    data :+ predictReturn.toMap
+    predictReturn.toMap.toArray
   }
 
   /**

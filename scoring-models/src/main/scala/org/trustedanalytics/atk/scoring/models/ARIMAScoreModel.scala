@@ -46,7 +46,7 @@ class ARIMAScoreModel(arimaModel: ARIMAModel, arimaData: ARIMAData) extends ARIM
     val timeseries = new DenseVector(data(0).asInstanceOf[List[Double]].map(ScoringModelUtils.asDouble(_)).toArray)
     val futurePeriods = ScoringModelUtils.asInt(data(1))
 
-    data :+ (forecast(timeseries, futurePeriods)).toArray
+    forecast(timeseries, futurePeriods).toArray.map(_.asInstanceOf[Any])
   }
 
   override def input(): Array[Field] = {

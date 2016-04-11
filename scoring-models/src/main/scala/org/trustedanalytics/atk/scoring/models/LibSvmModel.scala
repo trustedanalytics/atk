@@ -39,7 +39,7 @@ class LibSvmModel(libSvmModel: svm_model, libsvm: LibSvmData) extends svm_model 
       x(j).value = atof(splitObs.nextToken)
       j += 1
     }
-    data :+ svm.svm_predict(libSvmModel, x)
+    Array(svm.svm_predict(libSvmModel, x))
   }
 
   private def columnFormatter(valueIndexPairArray: Array[(Any, Int)]): String = {
