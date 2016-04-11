@@ -168,7 +168,6 @@ class ScoringService(model: Model) extends Directives {
     val output = input ++ score
     val outputNames = model.output().map(o => o.name)
     val outputMap: Map[String, Any] = outputNames.zip(output).map(combined => (combined._1.name, combined._2)).toMap
-    //val outputMap: Array[Any] = outputNames.zip(output)
     outputMap
   }
 }
