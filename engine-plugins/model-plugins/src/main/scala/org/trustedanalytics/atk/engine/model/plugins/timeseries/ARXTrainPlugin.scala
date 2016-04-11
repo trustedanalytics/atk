@@ -41,12 +41,20 @@ import org.apache.spark.mllib.ScoringJsonReaderWriters
 import scala.collection.mutable.ArrayBuffer
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
-  extended = """Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
-dataset being trained must be small enough to be worked with on a single node.""",
-  returns = """dictionary
-    A dictionary with trained ARX model with the following keys\:
-'c' : intercept term, or zero for no intercept
-'coefficients' : coefficients for each column of exogenous inputs.""")
+  extended = """Fit an autoregressive model with additional exogenous variables.
+
+**Notes**
+
+#)  Dataset being trained must be small enough to be worked with on a single node.
+#)  If the specified set of exogenous variables is not invertible, there will be an
+error specifying that the matrix is singular.  This happens when there are certain
+patterns in the dataset or columns of all zeros.  """,
+  returns = """A dictionary with trained ARX model with the following keys\:
+
+              |   **c** : *float*
+              |       intercept term, or zero for no intercept
+              |   **coefficients** : *list*
+              |       coefficients for each column of exogenous input.""")
 class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   /**
    * The name of the command.
