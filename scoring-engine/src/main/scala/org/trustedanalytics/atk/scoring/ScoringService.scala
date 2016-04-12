@@ -167,6 +167,7 @@ class ScoringService(model: Model) extends Directives {
   def scoreToMap(score: Array[Any], input: Array[Any]): Map[String, Any] = {
     val output = input ++ score
     val outputNames = model.output().map(o => o.name)
+    require(output.length == outputNames.length, "Length of output values should match the output names")
     val outputMap: Map[String, Any] = outputNames.zip(output).map(combined => (combined._1.name, combined._2)).toMap
     outputMap
   }
