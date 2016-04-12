@@ -56,7 +56,11 @@ class ARIMAScoreModelTest extends WordSpec {
 
       // Call score model to predict
       val output = arimaScoreModel.score(input)
-      val predictions = output.map(ScoringModelUtils.asDouble).toList
+      assert(output.length == (input.length + 1))
+
+      // grab the array of predictions from the last element in the output
+      assert(output(output.length - 1).isInstanceOf[Array[Double]])
+      val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
       assert(predictions.length == (goldenValues.length + future))
       assert(predictions.sameElements(List(12.674342627141744, 13.536088349647843, 13.724075785996275,
         13.807716737252422, 13.322091628390751, 13.51383197812193, 13.923562351193734, 13.830586820836254)))

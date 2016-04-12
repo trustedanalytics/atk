@@ -31,7 +31,7 @@ class RandomForestRegressorScoreModel(randomForestData: RandomForestRegressorDat
     data.zipWithIndex.foreach {
       case (value: Any, index: Int) => x(index) = ScoringModelUtils.asDouble(value)
     }
-    Array(predict(Vectors.dense(x)))
+    data :+ predict(Vectors.dense(x))
   }
 
   /**

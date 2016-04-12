@@ -155,7 +155,7 @@ class ScoringService(model: Model) extends Directives {
         scores += score(score.length - 1).toString
       }
       else if (version == "v2") {
-        scores += scoreToMap(model.score(row), row)
+        scores += scoreToMap(model.score(row))
       }
       else {
         throw new IllegalArgumentException(s"Not supported version: $version")
@@ -164,11 +164,10 @@ class ScoringService(model: Model) extends Directives {
     scores.toArray
   }
 
-  def scoreToMap(score: Array[Any], input: Array[Any]): Map[String, Any] = {
-    val output = input ++ score
+  def scoreToMap(score: Array[Any]): Map[String, Any] = {
     val outputNames = model.output().map(o => o.name)
-    require(output.length == outputNames.length, "Length of output values should match the output names")
-    val outputMap: Map[String, Any] = outputNames.zip(output).map(combined => (combined._1.name, combined._2)).toMap
+    require(score.length == outputNames.length, "Length of output values should match the output names")
+    val outputMap: Map[String, Any] = outputNames.zip(score).map(combined => (combined._1.name, combined._2)).toMap
     outputMap
   }
 }
