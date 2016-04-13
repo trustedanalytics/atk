@@ -60,20 +60,17 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
     val score1 = scores(1).asInstanceOf[Array[Any]]
     val score2 = scores(2).asInstanceOf[Array[Any]]
 
-    val score01 = score0(1).asInstanceOf[Array[Any]]
-    score01(0).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.5, 0.333333))
-    score01(1).asInstanceOf[Int] should equal(1)
-    score01(2).asInstanceOf[Double] should equal(100 / 6d +- epsilon)
+    score0(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.5, 0.333333))
+    score0(2).asInstanceOf[Int] should equal(1)
+    score0(3).asInstanceOf[Double] should equal(100 / 6d +- epsilon)
 
-    val score11 = score1(1).asInstanceOf[Array[Any]]
-    score11(0).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.4375, 0.5625))
-    score11(1).asInstanceOf[Int] should equal(0)
-    score11(2).asInstanceOf[Double] should equal(0d +- epsilon)
+    score1(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.4375, 0.5625))
+    score1(2).asInstanceOf[Int] should equal(0)
+    score1(3).asInstanceOf[Double] should equal(0d +- epsilon)
 
-    val score21 = score2(1).asInstanceOf[Array[Any]]
-    score21(0).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0d, 0d))
-    score21(1).asInstanceOf[Int] should equal(0)
-    score21(2).asInstanceOf[Double] should equal(0d +- epsilon)
+    score2(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0d, 0d))
+    score2(2).asInstanceOf[Int] should equal(0)
+    score2(3).asInstanceOf[Double] should equal(0d +- epsilon)
 
   }
 

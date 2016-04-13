@@ -39,7 +39,7 @@ class LdaScoreModel(ldaModel: LdaModel) extends LdaModel(
       case _ => throw new IllegalArgumentException("Scoring input must be a list of words")
     }
     val predictReturn = predict(inputDocument.toList)
-    data :+ Array(predictReturn.topicsGivenDoc, predictReturn.newWordsCount, predictReturn.newWordsPercentage)
+    data ++ Array(predictReturn.topicsGivenDoc, predictReturn.newWordsCount, predictReturn.newWordsPercentage)
   }
 
   /**
