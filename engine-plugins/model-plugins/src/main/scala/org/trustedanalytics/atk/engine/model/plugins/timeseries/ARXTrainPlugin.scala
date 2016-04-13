@@ -54,7 +54,7 @@ import scala.collection.mutable.ArrayBuffer
 """,
   returns = """A dictionary with trained ARX model with the following keys\:
 
-              |   **c** : *float*
+              |   **c** : *float64*
               |       intercept term, or zero for no intercept
               |   **coefficients** : *list*
               |       coefficients for each column of exogenous input.""")
