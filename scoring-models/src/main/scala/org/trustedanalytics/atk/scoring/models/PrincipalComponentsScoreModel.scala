@@ -30,12 +30,7 @@ class PrincipalComponentsScoreModel(pcaModel: PrincipalComponentsData) extends P
     val x: Array[Double] = data.map(value => ScoringModelUtils.asDouble(value))
     val y: DenseMatrix = computePrincipalComponents(x)
     val t_squared_index = computeTSquaredIndex(y.values, pcaModel.singularValues, pcaModel.k)
-
-    val pcaScoreOutput: Map[String, Any] = Map(
-      "principal_components" -> y.values.toList,
-      "t_squared_index" -> t_squared_index
-    )
-    data :+ pcaScoreOutput
+    data ++ Array(y.values.toList, t_squared_index)
   }
 
   /**
