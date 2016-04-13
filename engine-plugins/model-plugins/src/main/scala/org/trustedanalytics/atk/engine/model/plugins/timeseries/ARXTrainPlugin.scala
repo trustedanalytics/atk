@@ -46,9 +46,11 @@ import scala.collection.mutable.ArrayBuffer
 **Notes**
 
 #)  Dataset being trained must be small enough to be worked with on a single node.
-#)  If the specified set of exogenous variables is not invertible, there will be an
-    error specifying that the matrix is singular.  This happens when there are certain
-    patterns in the dataset or columns of all zeros.
+#)  If the specified set of exogenous variables is not invertible, an exception is
+    thrown stating that the "matrix is singular".  This happens when there are
+    certain patterns in the dataset or columns of all zeros.  In order to work
+    around the singular matrix issue, try selecting a different set of columns for
+    exogenous variables, or use a different time window for training.
 """,
   returns = """A dictionary with trained ARX model with the following keys\:
 
