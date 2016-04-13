@@ -215,4 +215,63 @@ class DataTypesTest extends FlatSpec with Matchers {
     DataTypes.isCompatibleDataType(DataTypes.vector(2), DataTypes.vector(3)) shouldBe false
 
   }
+
+  "parseMany" should "treat non-numerical values as missing (null)" in {
+    val parser = DataTypes.parseMany(Array[DataTypes.DataType](DataTypes.int32, DataTypes.int64, DataTypes.float32, DataTypes.float64))(_)
+    parser(Array("a", "b", "c", "d")) shouldBe Array(null, null, null, null)
+    parser(Array("", "", "", "")) shouldBe Array(null, null, null, null)
+    parser(Array(null, null, null, null)) shouldBe Array(null, null, null, null)
+  }
+
+  "asScalaType" should "convert data to Scala type" in {
+    val epsilon = 1e-6f
+    DataTypes.int32.toScalaType(5.3d) shouldBe 5
+    DataTypes.int64.toScalaType(100.2) shouldBe 100L
+    DataTypes.float32.toScalaType(100.2) shouldBe 100.2f +- epsilon
+    DataTypes.float64.toScalaType(205.74) shouldBe 205.74 +- epsilon
+    DataTypes.string.toScalaType(55) shouldBe "55"
+    DataTypes.vector(2).toScalaType("5,777") shouldBe Vector[Double](5, 777)
+
+    intercept[RuntimeException] { DataTypes.int32.toScalaType(null) }
+    intercept[RuntimeException] { DataTypes.int64.toScalaType(null) }
+    intercept[RuntimeException] { DataTypes.float32.toScalaType(null) }
+    intercept[RuntimeException] { DataTypes.float64.toScalaType(null) }
+    intercept[RuntimeException] { DataTypes.vector(3).toScalaType(null) }
+
+    intercept[RuntimeException] { DataTypes.int32.toScalaType("bad int") }
+    intercept[RuntimeException] { DataTypes.int64.toScalaType("bad long") }
+    intercept[RuntimeException] { DataTypes.float32.toScalaType("bad float") }
+    intercept[RuntimeException] { DataTypes.float64.toScalaType("bad double") }
+    intercept[RuntimeException] { DataTypes.vector(3).toScalaType("bad vector") }
+
+  }
+
+  "int parse" should "be unsuccessful if the value is not numerical" in {
+    DataTypes.int32.parse("a").isSuccess shouldBe false
+    DataTypes.int32.parse("").isSuccess shouldBe false
+    DataTypes.int32.parse(null).isSuccess shouldBe false
+    DataTypes.int32.parse("5").isSuccess shouldBe true
+    DataTypes.int32.parse(5).isSuccess shouldBe true
+
+    DataTypes.int64.parse("a").isSuccess shouldBe false
+    DataTypes.int64.parse("").isSuccess shouldBe false
+    DataTypes.int64.parse(null).isSuccess shouldBe false
+    DataTypes.int64.parse("5").isSuccess shouldBe true
+    DataTypes.int64.parse(5).isSuccess shouldBe true
+  }
+
+  "float parse" should "be unsuccessful if the value is not numerical" in {
+    DataTypes.float32.parse("a").isSuccess shouldBe false
+    DataTypes.float32.parse("").isSuccess shouldBe false
+    DataTypes.float32.parse(null).isSuccess shouldBe false
+    DataTypes.float32.parse("5.5").isSuccess shouldBe true
+    DataTypes.float32.parse(5.5).isSuccess shouldBe true
+
+    DataTypes.float64.parse("a").isSuccess shouldBe false
+    DataTypes.float64.parse("").isSuccess shouldBe false
+    DataTypes.float64.parse(null).isSuccess shouldBe false
+    DataTypes.float64.parse("5.5").isSuccess shouldBe true
+    DataTypes.float64.parse(5.5).isSuccess shouldBe true
+  }
+
 }

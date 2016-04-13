@@ -13,16 +13,17 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.trustedanalytics.atk.model.publish.format
 
 import java.io._
+import java.lang.reflect.Field
 import java.net.{ URL, URLClassLoader }
+import java.nio.file.{ Path, Files }
+
+import org.apache.commons.compress.archivers.tar.{ TarArchiveEntry, TarArchiveInputStream, TarArchiveOutputStream }
+import org.apache.commons.io.{ FileUtils, IOUtils }
 import org.trustedanalytics.atk.event.EventLogging
-import org.trustedanalytics.atk.scoring.interfaces.{ ModelLoader, Model }
-import org.apache.commons.compress.archivers.tar.{ TarArchiveInputStream, TarArchiveOutputStream, TarArchiveEntry }
-import org.apache.commons.io.IOUtils
-import org.apache.commons.io.FileUtils
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 
 /**
  * Read/write for publishing models
@@ -47,24 +48,12 @@ object ModelPublishFormat extends EventLogging {
     try {
       classLoaderFiles.foreach((file: File) => {
         if (!file.isDirectory && file.exists()) {
-          val fileEntry = new TarArchiveEntry(file, file.getName)
-          tarBall.putArchiveEntry(fileEntry)
-          IOUtils.copy(new FileInputStream(file), tarBall)
-          tarBall.closeArchiveEntry()
+          addFileToTar(tarBall, file)
         }
       })
 
-      val modelDataEntry = new TarArchiveEntry(modelDataString + ".txt")
-      modelDataEntry.setSize(modelData.length)
-      tarBall.putArchiveEntry(modelDataEntry)
-      IOUtils.copy(new ByteArrayInputStream(modelData), tarBall)
-      tarBall.closeArchiveEntry()
-
-      val modelLoaderEntry = new TarArchiveEntry(modelReaderString + ".txt")
-      modelLoaderEntry.setSize(modelLoaderClass.length)
-      tarBall.putArchiveEntry(modelLoaderEntry)
-      IOUtils.copy(new ByteArrayInputStream(modelLoaderClass.getBytes("utf-8")), tarBall)
-      tarBall.closeArchiveEntry()
+      addByteArrayToTar(tarBall, modelDataString + ".txt", modelData.length, modelData)
+      addByteArrayToTar(tarBall, modelReaderString + ".txt", modelLoaderClass.length, modelLoaderClass.getBytes("utf-8"))
     }
     catch {
       case e: Exception =>
@@ -87,15 +76,15 @@ object ModelPublishFormat extends EventLogging {
    * @return the instantiated Model   
    */
   def read(modelArchiveInput: File, parentClassLoader: ClassLoader): Model = {
-
-    var outputFile: FileOutputStream = null
     var tarFile: TarArchiveInputStream = null
     var modelName: String = null
     var urls = Array.empty[URL]
     var byteArray: Array[Byte] = null
-    var file: File = null
+    var libraryPaths: Set[String] = Set.empty[String]
 
     try {
+      // Extract files to temporary directory so that dynamic library names are not changed
+      val tempDirectory = Files.createTempDirectory("tap-scoring-model")
       tarFile = new TarArchiveInputStream(new FileInputStream(modelArchiveInput))
 
       var entry = tarFile.getNextTarEntry
@@ -106,14 +95,17 @@ object ModelPublishFormat extends EventLogging {
         tarFile.read(content, 0, content.length)
 
         if (individualFile.contains(".jar")) {
-          var fileName = individualFile.substring(individualFile.lastIndexOf("/") + 1)
-          fileName = fileName.substring(0, fileName.length - 4)
-          file = File.createTempFile(fileName, ".jar")
-          outputFile = new FileOutputStream(file)
-          IOUtils.write(content, outputFile)
-
+          val file = writeTempFile(tempDirectory, content, individualFile, ".jar")
           val url = file.toURI.toURL
           urls = urls :+ url
+        }
+        else if (individualFile.contains(".so")) {
+          val file = writeTempFile(tempDirectory, content, individualFile, ".so")
+          libraryPaths += getDirectoryPath(file)
+        }
+        else if (individualFile.contains(".dll")) {
+          val file = writeTempFile(tempDirectory, content, individualFile, ".dll")
+          libraryPaths += getDirectoryPath(file)
         }
         else if (individualFile.contains(modelReaderString)) {
           val s = new String(content)
@@ -128,6 +120,7 @@ object ModelPublishFormat extends EventLogging {
       val classLoader = new URLClassLoader(urls, parentClassLoader)
       val modelLoader = classLoader.loadClass(modelName).newInstance()
 
+      addToJavaLibraryPath(libraryPaths) //Add temporary directory to java.library.path
       modelLoader.asInstanceOf[ModelLoader].load(byteArray)
     }
     catch {
@@ -136,11 +129,108 @@ object ModelPublishFormat extends EventLogging {
         throw e
     }
     finally {
-      IOUtils.closeQuietly(outputFile)
       IOUtils.closeQuietly(tarFile)
-      FileUtils.deleteQuietly(file)
     }
 
   }
+
+  /**
+   * Write content to temporary file
+   *
+   * @param tempDir Temporary directory
+   * @param content File content to write
+   * @param filePath File path
+   * @param fileExtension File extension
+   *
+   * @return Temporary file
+   */
+  private def writeTempFile(tempDir: Path, content: Array[Byte], filePath: String, fileExtension: String): File = {
+    var file: File = null
+    var outputFile: FileOutputStream = null
+    val fileName = filePath.substring(filePath.lastIndexOf("/") + 1)
+
+    try {
+      file = new File(tempDir.toString, fileName)
+      file.createNewFile()
+      //TODO: file.deleteOnExit()???
+      outputFile = new FileOutputStream(file)
+      IOUtils.write(content, outputFile)
+
+    }
+    catch {
+      case e: Exception =>
+        error(s"reading model failed due to error extracting file: ${filePath}", exception = e)
+        throw e
+    }
+    finally {
+      IOUtils.closeQuietly(outputFile)
+    }
+    file
+  }
+
+  /**
+   * Add byte array contents to tar ball using
+   *
+   * @param tarBall Tar ball
+   * @param entryName Name of entry to add
+   * @param entrySize Size of entry
+   * @param entryContent Content to add
+   */
+  private def addByteArrayToTar(tarBall: TarArchiveOutputStream, entryName: String, entrySize: Int, entryContent: Array[Byte]): Unit = {
+    val modelEntry = new TarArchiveEntry(entryName)
+    modelEntry.setSize(entrySize)
+    tarBall.putArchiveEntry(modelEntry)
+    IOUtils.copy(new ByteArrayInputStream(entryContent), tarBall)
+    tarBall.closeArchiveEntry()
+  }
+
+  /**
+   * Add file contents to tar ball using
+   *
+   * @param tarBall Tar ball
+   * @param file File to add
+   */
+  private def addFileToTar(tarBall: TarArchiveOutputStream, file: File): Unit = {
+    val fileEntry = new TarArchiveEntry(file, file.getName)
+    tarBall.putArchiveEntry(fileEntry)
+    IOUtils.copy(new FileInputStream(file), tarBall)
+    tarBall.closeArchiveEntry()
+  }
+
+  /**
+   * Get directory path for input file
+   *
+   * @param file Input file
+   * @return Returns parent directory if input is a file, or absolute path if input is a directory
+   */
+  private def getDirectoryPath(file: File): String = {
+    if (file.isDirectory) {
+      file.getAbsolutePath
+    }
+    else {
+      file.getParent
+    }
+  }
+
+  /**
+   * Dynamically add library paths to java.library.path
+   *
+   * @param libraryPaths Library paths to add
+   */
+  private def addToJavaLibraryPath(libraryPaths: Set[String]): Unit = {
+    try {
+      val usrPathField = classOf[ClassLoader].getDeclaredField("usr_paths")
+      usrPathField.setAccessible(true)
+      val newLibraryPaths = usrPathField.get(null).asInstanceOf[Array[String]].toSet ++ libraryPaths
+      usrPathField.set(null, newLibraryPaths.toArray)
+    }
+    catch {
+      case e: Exception =>
+        error(s"reading model failed due to failure to set java.library.path: ${libraryPaths.mkString(",")}",
+          exception = e)
+        throw e
+    }
+  }
+
 }
 

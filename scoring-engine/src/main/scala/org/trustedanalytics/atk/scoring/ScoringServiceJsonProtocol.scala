@@ -16,13 +16,14 @@
 
 package org.trustedanalytics.atk.scoring
 
-import org.codehaus.jettison.json.JSONObject
 import org.joda.time.DateTime
 import spray.json.DefaultJsonProtocol._
 import spray.json._
 import scala.collection.immutable.Map
 import scala.collection.mutable.ArrayBuffer
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Model, Field }
+import scala.reflect.ClassTag
+import scala.reflect.runtime.universe._
 
 class ScoringServiceJsonProtocol(model: Model) {
 
@@ -42,7 +43,7 @@ class ScoringServiceJsonProtocol(model: Model) {
     override def write(obj: Field): JsValue = {
       JsObject(
         "name" -> JsString(obj.name),
-        "value" -> JsString(obj.data_type))
+        "value" -> JsString(obj.dataType))
     }
 
     override def read(json: JsValue): Field = {
@@ -78,8 +79,11 @@ class ScoringServiceJsonProtocol(model: Model) {
         case s: String => new JsString(s)
         case s: Boolean => JsBoolean(s)
         case dt: DateTime => JsString(org.joda.time.format.ISODateTimeFormat.dateTime.print(dt))
-        case v: Array[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList)
-        case v: ArrayBuffer[_] => new JsArray(v.map { case d: Double => JsNumber(d) }.toList) // for vector DataType
+        case m: Map[_, _] @unchecked => mapToJson(m)
+        case v: List[_] => listToJson(v)
+        case v: Array[_] => listToJson(v.toList)
+        case v: Vector[_] => listToJson(v.toList)
+        case v: ArrayBuffer[_] @unchecked => listToJson(v.toList)
         case n: java.lang.Long => new JsNumber(n.longValue())
         // case null => JsNull  Consciously not writing nulls, may need to change, but for now it may catch bugs
         case unk =>
@@ -101,7 +105,11 @@ class ScoringServiceJsonProtocol(model: Model) {
         case JsNumber(n) => n.doubleValue()
         case JsBoolean(b) => b
         case JsString(s) => s
-        case JsArray(v) => v.map(x => read(x)).toList
+        case JsArray(v) => v.map(x => read(x))
+        case obj: JsObject => obj.fields.map {
+          case (a, JsArray(v)) => (a, v.map(x => read(x)))
+          case (a, JsNumber(b)) => (a, b)
+        }
         case unk => deserializationError("Cannot deserialize " + unk.getClass.getName)
       }
     }
@@ -111,10 +119,7 @@ class ScoringServiceJsonProtocol(model: Model) {
 
     override def write(obj: Array[Any]): JsValue = {
       val modelMetadata = model.modelMetadata()
-      //JsObject("Model Details" -> new JsArray(modelMetadata.map(data => JsObject(data._1 -> JsString(data._2))).toList),
-      JsObject("Model Details" -> modelMetadata.toJson,
-        "Input" -> new JsArray(model.input.map(input => FieldFormat.write(input)).toList),
-        "output" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
+      JsObject("data" -> new JsArray(obj.map(output => DataTypeJsonFormat.write(output)).toList))
     }
 
     //don't need this method. just there to satisfy the API.
@@ -131,10 +136,13 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
     var features: Seq[Array[Any]] = Seq[Array[Any]]()
     decodedRecords.foreach(decodedRecord => {
-      val featureArray = new Array[Any](model.input().length)
       val obsColumns = model.input()
+      val featureArray = new Array[Any](obsColumns.length)
       if (decodedRecord.size != featureArray.length) {
-        throw new scala.IllegalArgumentException("Size of the input record is not the same as the number of Obs Columns that the model was trained on")
+        throw new IllegalArgumentException(
+          "Size of input record is not equal to number of observation columns that model was trained on:\n" +
+            s"""Expected columns are: [${obsColumns.mkString(",")}]"""
+        )
       }
       decodedRecord.foreach({
         case (name, value) => {
@@ -150,7 +158,9 @@ class ScoringServiceJsonProtocol(model: Model) {
             }
           }
           if (!found) {
-            throw new scala.IllegalArgumentException(s"$name was not found in the list of Observation Columns that the model was trained on")
+            throw new IllegalArgumentException(
+              s"""$name was not found in list of Observation Columns that model was trained on: [${obsColumns.mkString(",")}]"""
+            )
           }
 
         }
@@ -173,5 +183,39 @@ class ScoringServiceJsonProtocol(model: Model) {
     }
   }
 
+  private def mapToJson[K <: Any, V <: Any](m: Map[K, V]): JsObject = {
+    require(m != null, s"Scoring service cannot serialize null to JSON")
+    val jsMap: Map[String, JsValue] = m.map {
+      case (x) => x match {
+        case (k: String, n: Double) => (k, n.toJson)
+        case (k: String, n: Int) => (k, n.toJson)
+        case (k: String, n: Long) => (k, n.toJson)
+        case (k: String, n: Float) => (k, n.toJson)
+        case (k: String, str: String) => (k, JsString(str))
+        case (k: String, list: List[_]) => (k, listToJson(list))
+        case (k: String, array: Array[_]) => (k, listToJson(array.toList))
+        case (k: String, vector: Vector[_]) => (k, listToJson(vector.toList))
+        case unk => serializationError(s"Scoring service cannot serialize ${unk.getClass.getName} to JSON")
+      }
+    }
+    JsObject(jsMap)
+  }
+
+  private def listToJson(list: List[Any]): JsArray = {
+    require(list != null, s"Scoring service cannot serialize null to JSON")
+    val jsElements = list.map {
+      case n: Double => n.toJson
+      case n: Int => n.toJson
+      case n: Long => n.toJson
+      case n: Float => n.toJson
+      case str: String => str.toJson
+      case map: Map[_, _] @unchecked => mapToJson(map)
+      case list: List[_] => listToJson(list)
+      case arr: Array[_] => listToJson(arr.toList)
+      case vector: Vector[_] => listToJson(vector.toList)
+      case unk => serializationError(s"Scoring service cannot serialize ${unk.getClass.getName} to Json")
+    }
+    new JsArray(jsElements)
+  }
 }
 

@@ -437,6 +437,12 @@ class _BaseFrame(CommandLoadable):
 
         .. code::
 
+            <hide>
+            >>> frame = _frame.copy()
+            -etc-
+
+            </hide>
+
             >>> frame.inspect()
             [#]  name      age  tenure  phone
             ====================================
@@ -491,7 +497,7 @@ class _BaseFrame(CommandLoadable):
             <progress>
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode]
             status = ACTIVE  (last_read_date = -etc-)
@@ -558,7 +564,7 @@ class _BaseFrame(CommandLoadable):
         .. code::
 
             >>> frame
-            Frame "example_frame"
+            Frame <unnamed>
             row_count = 4
             schema = [name:unicode, age:int32, tenure:int32, phone:unicode, adult_years:int32, of_age:float32, of_adult:float32, tenured_name:unicode, tenured_name_age:unicode]
             status = ACTIVE  (last_read_date = -etc-)
@@ -652,12 +658,18 @@ class _BaseFrame(CommandLoadable):
         from trustedanalytics.core.atkpandas import atk_dtype_to_pandas_str
         result = self._backend.take(self, n, offset, columns)
         headers, data_types = zip(*result.schema)
-
         pandas_df = pandas.DataFrame(result.data, columns=headers)
-
         for i, dtype in enumerate(data_types):
             dtype_str = atk_dtype_to_pandas_str(dtype)
-            pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            try:
+                pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype(dtype_str)
+            except (TypeError, ValueError):
+                if dtype_str.startswith("int"):
+                    # DataFrame does not handle missing values in int columns. If we get this error, use the 'object' datatype instead.
+                    print "WARNING - Encountered problem casting column %s to %s, possibly due to missing values (i.e. presence of None).  Continued by casting column %s as 'object'" % (headers[i], dtype_str, headers[i])
+                    pandas_df[[headers[i]]] = pandas_df[[headers[i]]].astype("object")
+                else:
+                    raise
         return pandas_df
 
     @api
@@ -788,6 +800,7 @@ class _BaseFrame(CommandLoadable):
             *   stdev
             *   sum
             *   var (see glossary :term:`Bias vs Variance`)
+            *   The aggregation arguments also accepts the User Defined function(UDF). UDF acts on each row
 
         Examples
         --------
@@ -844,7 +857,6 @@ class _BaseFrame(CommandLoadable):
             [2]  2  charlie   12.0
             [3]  1  bravo      5.0
 
-
             >>> mix_frame = frame.group_by('a', ta.agg.count, {'f': [ta.agg.avg, ta.agg.sum, ta.agg.min], 'g': ta.agg.max})
             <progress>
             >>> mix_frame.inspect()
@@ -852,6 +864,21 @@ class _BaseFrame(CommandLoadable):
             =========================================
             [0]  1      3      9    5.0   15.0    3.0
             [1]  2      4      7   6.25   25.0    5.0
+
+            >>> def custom_agg(acc, row):
+            ...     acc.c_sum = acc.c_sum + row.c
+            ...     acc.c_prod= acc.c_prod*row.c
+
+            >>> sum_prod_frame = frame.group_by(['a', 'b'], ta.agg.udf(aggregator=custom_agg,output_schema=[('c_sum', ta.float64),('c_prod', ta.float64)],init_values=[0,1]))
+            <progress>
+
+            >>> sum_prod_frame.inspect()
+            [#]  a  b        c_sum  c_prod
+            ==============================
+            [0]  2  bravo     27.0   672.0
+            [1]  1  alpha      8.0    15.0
+            [2]  2  charlie   12.0    12.0
+            [3]  1  bravo      5.0     5.0
 
         For further examples, see :ref:`example_frame.group_by`.
         """
@@ -1346,49 +1373,6 @@ class _BaseFrame(CommandLoadable):
         result = self._backend.take(self, n, offset, columns)
         return result.data
 
-    @api
-    @arg('column', 'str', "The name of the column to be flattened.")
-    @arg('delimiter', 'str', "The delimiter string for the column to flatten. The default is to use a ',' delimiter.")
-    @deprecated("Use flatten_columns")
-    def __flatten_column(self, column, delimiter=None):
-        """
-        Note that flatten_column() has been deprecated.  Use flatten_columns() instead.
-
-        Spread data to multiple rows based on cell data.
-
-        Splits cells in the specified column into multiple rows according to a string
-        delimiter.
-        New rows are a full copy of the original row, but the specified column only
-        contains one value.
-        The original row is deleted.
-        """
-
-        if delimiter is None:
-            delimiter = [","]
-
-        self.flatten_columns(column, delimiter)
-
-    @api
-    @arg('columns', 'str', "Name of the column(s) to be used as keys for unflattening")
-    @arg('delimiter', 'str', "Separator for the data in the result columns. Default is comma (,).")
-    @deprecated("Use unflatten_columns")
-    def __unflatten_column(self, columns, delimiter=None):
-        """
-        Note that unflatten_column() has been deprecated.  Use unflatten_columns() instead.
-
-        Compacts data from multiple rows based on cell data.
-
-        Groups together cells in all columns (less the composite key) using "," as string delimiter.
-        The original rows are deleted.
-        The grouping takes place based on a composite key created from cell values.
-        The column datatypes are changed to string.
-        """
-
-        if delimiter is None:
-            delimiter = ","
-
-        self.unflatten_columns(columns, delimiter)
-
 @api
 class Frame(_DocStubsFrame, _BaseFrame):
     """
@@ -1722,24 +1706,6 @@ A VertexFrame is similar to a Frame but with a few important differences:
         """
 
         self._backend.filter_vertices(self, predicate, keep_matching_vertices=False)
-
-    @api
-    @arg('predicate', 'function', "|UDF| which evaluates a row (vertex) to a boolean; vertices that answer True are dropped from the Frame")
-    @deprecated("Use drop_rows")
-    def __drop_vertices(self, predicate):
-        """
-        drop_vertices has been deprecated.  Use drop_rows instead.
-
-        Delete rows in this vertex frame that qualify.
-
-        Parameters
-        ----------
-        predicate : |UDF|
-            |UDF| or :term:`lambda` which takes a row argument and evaluates
-            to a boolean value.
-
-        """
-        self.drop_rows(predicate)
 
     @api
     @arg('predicate', 'function', "|UDF| which evaluates a row to a boolean; vertices that answer False are dropped from the Frame")

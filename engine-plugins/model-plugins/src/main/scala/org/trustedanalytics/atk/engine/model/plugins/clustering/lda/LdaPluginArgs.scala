@@ -135,7 +135,9 @@ object LdaJsonFormat {
     override def write(obj: AtkLdaModel): JsValue = {
       JsObject(
         "num_topics" -> JsNumber(obj.numTopics),
-        "topic_word_map" -> obj.topicWordMap.toJson
+        "topic_word_map" -> obj.topicWordMap.toJson,
+        "document_column" -> obj.documentColumnName.toJson,
+        "word_column" -> obj.wordColumnName.toJson
       )
     }
 
@@ -143,7 +145,9 @@ object LdaJsonFormat {
       val fields = json.asJsObject.fields
       val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
       val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, Vector[Double]]]
-      val ldaModel = new AtkLdaModel(numTopics)
+      val documentColumnName = getOrInvalid(fields, "document_column").convertTo[String]
+      val wordColumnName = getOrInvalid(fields, "word_column").convertTo[String]
+      val ldaModel = new AtkLdaModel(numTopics, documentColumnName, wordColumnName)
       ldaModel.topicWordMap = topicWordMap
       ldaModel
     }

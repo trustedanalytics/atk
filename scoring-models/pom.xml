@@ -104,6 +104,13 @@
         </dependency>
         <!--END dependencies to our modules-->
 
+        <!-- START Intel DAAL dependencies -->
+        <dependency>
+            <groupId>com.intel.daal</groupId>
+            <artifactId>daal-core</artifactId>
+        </dependency>
+        <!-- END Intel DAAL dependencies -->
+
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
@@ -125,6 +132,10 @@
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_${scala.short.version}</artifactId>
             <version>${dep.spark.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cloudera.sparkts</groupId>
+            <artifactId>sparkts</artifactId>
         </dependency>
     </dependencies>
 

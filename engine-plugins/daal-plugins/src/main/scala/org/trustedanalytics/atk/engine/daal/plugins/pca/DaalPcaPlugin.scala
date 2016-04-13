@@ -14,14 +14,13 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.daal.plugins.pca
 
 import com.intel.daal.algorithms.pca.Method
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.engine.{ ArgDocAnnotation, PluginDocAnnotation, EngineConfig }
 import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
-import org.trustedanalytics.atk.engine.daal.plugins.conversions.DaalConversionImplicits
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits
 import org.trustedanalytics.atk.engine.plugin._
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._

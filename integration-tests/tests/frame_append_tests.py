@@ -53,8 +53,8 @@ class FrameAppendTests(unittest.TestCase):
         self.combined_schema.extend(self.schema1)
         self.combined_schema.extend(self.schema2)
 
-        self.csv1 = ta.CsvFile("/datasets/oregon-cities.csv", schema=self.schema1, delimiter='|')
-        self.csv2 = ta.CsvFile("/datasets/flattenable.csv", schema= self.schema2, delimiter=',')
+        self.csv1 = ta.CsvFile("/datasets/oregon-cities.csv", schema=self.schema1, delimiter='|',skip_header_lines=1)
+        self.csv2 = ta.CsvFile("/datasets/flattenable.csv", schema= self.schema2, delimiter=',',skip_header_lines=1)
 
     def test_append_to_empty_frame(self):
         frame = ta.Frame()

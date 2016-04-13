@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 package org.trustedanalytics.atk.engine.command.mgmt
 
 import org.trustedanalytics.atk.event.EventLogging

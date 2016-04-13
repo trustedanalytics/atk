@@ -51,13 +51,26 @@ case class ModelPublishArtifact(filePath: String, fileSize: Long) {
 
 object ModelPublish {
 
-  def createTarForScoringEngine(modelData: Array[Byte], scoringModelJar: String, modelClassName: String): ModelPublishArtifact = {
+  /**
+   * Create tar file for scoring
+   *
+   * @param modelData Serialized model data
+   * @param scoringModelJar Name of scoring model jar
+   * @param modelClassName  Model class name
+   * @param dynamicLibraries Optional list of dynamic libraries to include in tar file
+   * @return Model publishing artifact
+   */
+  def createTarForScoringEngine(modelData: Array[Byte], scoringModelJar: String, modelClassName: String, dynamicLibraries: Option[List[File]] = None): ModelPublishArtifact = {
 
     var tarFile: File = null
     var tarOutput: FileOutputStream = null
 
     try {
-      val fileList = Module.allLibs("scoring-models").map(jarUrl => new File(jarUrl.getPath)).toList
+      val jarFileList = Module.allLibs("scoring-models").map(jarUrl => new File(jarUrl.getPath)).toList
+      val fileList = dynamicLibraries match {
+        case Some(files) => jarFileList ++ files
+        case _ => jarFileList
+      }
 
       tarFile = File.createTempFile("modelTar", ".tar")
       tarOutput = new FileOutputStream(tarFile)

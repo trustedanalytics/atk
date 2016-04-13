@@ -35,21 +35,21 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
 
   "LdaScoringModel" should "throw an IllegalArgumentException if number of topics is less than one" in {
     intercept[IllegalArgumentException] {
-      new LdaScoreModel(LdaModel(0, topicWordMap))
+      new LdaScoreModel(LdaModel(0, topicWordMap, "doc", "word"))
     }
   }
 
   "predict" should "compute topic probabilities for document" in {
-    val ldaModel = LdaModel(numTopics, topicWordMap)
+    val ldaModel = LdaModel(numTopics, topicWordMap, "doc", "word")
     val scoringModel = new LdaScoreModel(ldaModel)
 
     val documents = Seq(
-      Array("jobs", "harry", "jobs", "harry", "harry", "new_word"),
-      Array("jobs", "economy", "economy", "harry"),
-      Array.empty[String]
+      Array(List("jobs", "harry", "jobs", "harry", "harry", "new_word")),
+      Array(List("jobs", "economy", "economy", "harry")),
+      Array(List.empty[String])
     )
 
-    var scores = Array[Any]()
+    var scores = List[Any]()
     documents.foreach { document =>
 
       scores = scores :+ scoringModel.score(document.asInstanceOf[Array[Any]])
@@ -60,20 +60,18 @@ class LdaScoreModelTest extends FlatSpec with Matchers with ScalaFutures {
     val score1 = scores(1).asInstanceOf[Array[Any]]
     val score2 = scores(2).asInstanceOf[Array[Any]]
 
-    val score06 = JsonParser(score0(6).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score06.topicsGivenDoc.toArray should equalWithTolerance(Array(0.5, 0.333333))
-    score06.newWordsCount should equal(1)
-    score06.newWordsPercentage should equal(100 / 6d +- epsilon)
+    score0(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.5, 0.333333))
+    score0(2).asInstanceOf[Int] should equal(1)
+    score0(3).asInstanceOf[Double] should equal(100 / 6d +- epsilon)
 
-    val score14 = JsonParser(score1(4).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score14.topicsGivenDoc.toArray should equalWithTolerance(Array(0.4375, 0.5625))
-    score14.newWordsCount should equal(0)
-    score14.newWordsPercentage should equal(0d +- epsilon)
+    score1(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0.4375, 0.5625))
+    score1(2).asInstanceOf[Int] should equal(0)
+    score1(3).asInstanceOf[Double] should equal(0d +- epsilon)
 
-    val score20 = JsonParser(score2(0).toString).asJsObject.convertTo[LdaModelPredictReturn]
-    score20.topicsGivenDoc.toArray should equalWithTolerance(Array(0d, 0d))
-    score20.newWordsCount should equal(0)
-    score20.newWordsPercentage should equal(0d +- epsilon)
+    score2(1).asInstanceOf[Vector[Double]].toArray should equalWithTolerance(Array(0d, 0d))
+    score2(2).asInstanceOf[Int] should equal(0)
+    score2(3).asInstanceOf[Double] should equal(0d +- epsilon)
+
   }
 
 }

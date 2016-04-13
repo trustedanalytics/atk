@@ -16,11 +16,15 @@
 
 package org.apache.spark.mllib
 
+import com.cloudera.sparkts.models.{ ARIMAModel, ARXModel }
+import com.intel.daal.data_management.data.HomogenNumericTable
+import com.intel.daal.services.DaalContext
 import libsvm.svm_model
 import org.apache.spark.mllib.classification.{ NaiveBayesModel, SVMModel }
 import org.apache.spark.mllib.clustering.KMeansModel
+import com.cloudera.sparkts
 import org.apache.spark.mllib.linalg.{ DenseMatrix, DenseVector, Matrix, SparseVector, Vector }
-import org.apache.spark.mllib.regression.LinearRegressionModel
+import org.apache.spark.ml.regression.LinearRegressionModel
 import org.apache.spark.mllib.tree.configuration.Algo._
 import org.apache.spark.mllib.tree.configuration.FeatureType._
 import org.apache.spark.mllib.tree.configuration.{ Algo, FeatureType }
@@ -58,9 +62,9 @@ object ScoringJsonReaderWriters {
      */
     override def read(json: JsValue): SparseVector = {
       val fields = json.asJsObject.fields
-      val size = fields.get("size").get.asInstanceOf[JsNumber].value.intValue
-      val indices = fields.get("indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val size = getOrInvalid(fields, "size").asInstanceOf[JsNumber].value.intValue
+      val indices = getOrInvalid(fields, "indices").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
 
       new SparseVector(size, indices, values)
     }
@@ -85,74 +89,8 @@ object ScoringJsonReaderWriters {
      */
     override def read(json: JsValue): DenseVector = {
       val fields = json.asJsObject.fields
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       new DenseVector(values)
-    }
-  }
-
-  implicit object LinearRegressionModelFormat extends JsonFormat[LinearRegressionModel] {
-    /**
-     * The write methods converts from LinearRegressionModel to JsValue
-     * @param obj LinearRegressionModel. Where LinearRegressionModel's format is
-     *            LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *            and the weights Vector could be either a SparseVector or DenseVector
-     * @return JsValue
-     */
-    override def write(obj: LinearRegressionModel): JsValue = {
-      val weights = VectorFormat.write(obj.weights)
-      JsObject(
-        "weights" -> weights,
-        "intercept" -> JsNumber(obj.intercept)
-      )
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionModel
-     * @param json JsValue
-     * @return LinearRegressionModel with format LinearRegressionModel(val weights: Vector,val intercept: Double)
-     *         and the weights Vector could be either a SparseVector or DenseVector
-     */
-    override def read(json: JsValue): LinearRegressionModel = {
-      val fields = json.asJsObject.fields
-      val intercept = fields.getOrElse("intercept", throw new IllegalArgumentException("Error in de-serialization: Missing intercept."))
-        .asInstanceOf[JsNumber].value.doubleValue()
-
-      val weights = fields.get("weights").map(v => {
-        VectorFormat.read(v)
-      }
-      ).get
-
-      new LinearRegressionModel(weights, intercept)
-    }
-
-  }
-
-  implicit object LinearRegressionDataFormat extends JsonFormat[LinearRegressionData] {
-    /**
-     * The write methods converts from LinearRegressionData to JsValue
-     * @param obj LinearRegressionData. Where LinearRegressionData format is:
-     *            LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
-     * @return JsValue
-     */
-    override def write(obj: LinearRegressionData): JsValue = {
-      val model = LinearRegressionModelFormat.write(obj.linRegModel)
-      JsObject("model" -> model,
-        "observation_columns" -> obj.observationColumns.toJson)
-    }
-
-    /**
-     * The read method reads a JsValue to LinearRegressionData
-     * @param json JsValue
-     * @return LinearRegressionData with format LinearRegressionData(linRegModel: LinearRegressionModel, observationColumns: List[String])
-     */
-    override def read(json: JsValue): LinearRegressionData = {
-      val fields = json.asJsObject.fields
-      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
-        LinearRegressionModelFormat.read(v)
-      }
-      ).get
-      new LinearRegressionData(model, obsCols)
     }
   }
 
@@ -190,7 +128,7 @@ object ScoringJsonReaderWriters {
 
       val numRows = getOrInvalid(fields, "num_rows").convertTo[Int]
       val numCols = getOrInvalid(fields, "num_cols").convertTo[Int]
-      val values = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
+      val values = getOrInvalid(fields, "values").asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toArray
       val isTransposed = getOrInvalid(fields, "is_transposed").convertTo[Boolean]
 
       new DenseMatrix(numRows, numCols, values, isTransposed)
@@ -233,39 +171,23 @@ object ScoringJsonReaderWriters {
     }
 
     override def read(json: JsValue): libsvm.svm_parameter = {
-      val fields = json.asJsObject.fields
-      val svm_type = fields.get("svm_type").get.asInstanceOf[JsNumber].value.intValue()
-      val kernel_type = fields.get("kernel_type").get.asInstanceOf[JsNumber].value.intValue()
-      val degree = fields.get("degree").get.asInstanceOf[JsNumber].value.intValue()
-      val gamma = fields.get("gamma").get.asInstanceOf[JsNumber].value.doubleValue()
-      val coef0 = fields.get("coef0").get.asInstanceOf[JsNumber].value.doubleValue()
-      val cache_size = fields.get("cache_size").get.asInstanceOf[JsNumber].value.doubleValue()
-      val eps = fields.get("eps").get.asInstanceOf[JsNumber].value.doubleValue()
-      val C = fields.get("C").get.asInstanceOf[JsNumber].value.doubleValue()
-      val nr_weight = fields.get("nr_weight").get.asInstanceOf[JsNumber].value.intValue()
-      val nu = fields.get("nu").get.asInstanceOf[JsNumber].value.doubleValue()
-      val p = fields.get("p").get.asInstanceOf[JsNumber].value.doubleValue()
-      val shrinking = fields.get("shrinking").get.asInstanceOf[JsNumber].value.intValue()
-      val probability = fields.get("probability").get.asInstanceOf[JsNumber].value.intValue()
-      val weight_label = fields.get("weight_label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
-      val weight = fields.get("weight").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
-
       val svmParam = new libsvm.svm_parameter()
-      svmParam.svm_type = svm_type
-      svmParam.kernel_type = kernel_type
-      svmParam.degree = degree
-      svmParam.gamma = gamma
-      svmParam.coef0 = coef0
-      svmParam.cache_size = cache_size
-      svmParam.eps = eps
-      svmParam.C = C
-      svmParam.nr_weight = nr_weight
-      svmParam.nu = nu
-      svmParam.p = p
-      svmParam.shrinking = shrinking
-      svmParam.probability = probability
-      svmParam.weight = weight
-      svmParam.weight_label = weight_label
+      val fields = json.asJsObject.fields
+      svmParam.svm_type = fields.get("svm_type").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.kernel_type = fields.get("kernel_type").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.degree = fields.get("degree").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.gamma = fields.get("gamma").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.coef0 = fields.get("coef0").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.cache_size = fields.get("cache_size").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.eps = fields.get("eps").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.C = fields.get("C").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.nr_weight = fields.get("nr_weight").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.nu = fields.get("nu").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.p = fields.get("p").get.asInstanceOf[JsNumber].value.doubleValue()
+      svmParam.shrinking = fields.get("shrinking").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.probability = fields.get("probability").get.asInstanceOf[JsNumber].value.intValue()
+      svmParam.weight_label = fields.get("weight_label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+      svmParam.weight = fields.get("weight").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
 
       svmParam
     }
@@ -302,19 +224,19 @@ object ScoringJsonReaderWriters {
       //val t = if (obj.label == null) JsNull else new JsArray(obj.label.map(i => JsNumber(i)).toList)
       val checkLabel = obj.label match {
         case null => JsNull
-        case _ => new JsArray(obj.label.map(i => JsNumber(i)).toList)
+        case x => new JsArray(x.map(i => JsNumber(i)).toList)
       }
       val checkProbA = obj.probA match {
         case null => JsNull
-        case _ => new JsArray(obj.probA.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
       val checkProbB = obj.probB match {
         case null => JsNull
-        case _ => new JsArray(obj.probB.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
       val checkNsv = obj.nSV match {
         case null => JsNull
-        case _ => new JsArray(obj.nSV.map(d => JsNumber(d)).toList)
+        case x => new JsArray(x.map(d => JsNumber(d)).toList)
       }
 
       JsObject(
@@ -344,21 +266,21 @@ object ScoringJsonReaderWriters {
       val rho = fields.get("rho").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       val probA = fields.get("probA").get match {
         case JsNull => null
-        case _ => fields.get("probA").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       }
       val probB = fields.get("probB").get match {
         case JsNull => null
-        case _ => fields.get("probB").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue()).toArray
       }
       val sv_indices = fields.get("sv_indices").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       val sv_coef = fields.get("sv_coef").get.asInstanceOf[JsArray].elements.map(row => row.asInstanceOf[JsArray].elements.map(j => j.asInstanceOf[JsNumber].value.doubleValue()).toArray).toArray
       val label = fields.get("label").get match {
         case JsNull => null
-        case _ => fields.get("label").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       }
       val nSV = fields.get("nSV").get match {
         case JsNull => null
-        case _ => fields.get("nSV").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
+        case x => x.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.intValue()).toArray
       }
       val param = fields.get("param").map(v => SvmParameterFormat.read(v)).get
       val SV = fields.get("SV").get.asInstanceOf[JsArray].elements.map(row => row.asInstanceOf[JsArray].elements.map(j => svm_node.read(j))toArray).toArray
@@ -447,7 +369,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: KMeansData): JsValue = {
       val model = KmeansModelFormat.write(obj.kMeansModel)
-      JsObject("model" -> model,
+      JsObject("k_means_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "column_scalings" -> obj.columnScalings.toJson)
     }
@@ -460,12 +382,56 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): KMeansData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
-      val model = fields.get("model").map(v => {
+      val colScales = getOrInvalid(fields, "column_scalings").convertTo[List[Double]]
+      val model = fields.get("k_means_model").map(v => {
         KmeansModelFormat.read(v)
       }
       ).get
       new KMeansData(model, obsCols, colScales)
+    }
+  }
+
+  implicit object DaalKMeansModelDataFormat extends JsonFormat[DaalKMeansModelData] {
+    /**
+     * The write methods converts from DaalKMeansModelData to JsValue
+     * @param obj DaalKMeansModelData. Where DaalKMeansModelData format is:
+     *            KMeansData(observationColumns: List[String], labelColumn: String,
+     *            centroids: HomogenNumericTable, k: Int, columnScalings: Option[List[Double])
+     * @return JsValue
+     */
+    override def write(obj: DaalKMeansModelData): JsValue = {
+      val centroidsMatrix = ScoringModelUtils.toArrayOfDoubleArray(obj.centroids)
+
+      JsObject(
+        "observation_columns" -> obj.observationColumns.toJson,
+        "label_column" -> obj.labelColumn.toJson,
+        "centroids" -> centroidsMatrix.toJson,
+        "k" -> obj.k.toJson,
+        "column_scalings" -> obj.columnScalings.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to DaalKMeansModelData
+     * @param json JsValue
+     * @return DaalKMeansModelData. Where DaalKMeansModelData format is:
+     *            KMeansData(observationColumns: List[String], labelColumn: String,
+     *            centroids: HomogenNumericTable, k: Int, columnScalings: Option[List[Double])
+     */
+    override def read(json: JsValue): DaalKMeansModelData = {
+      val fields = json.asJsObject.fields
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val labelCol = getOrInvalid(fields, "label_column").convertTo[String]
+      val k = getOrInvalid(fields, "k").convertTo[Int]
+
+      val colScales = fields.get("column_scalings") match {
+        case Some(scaling) => Some(scaling.convertTo[List[Double]])
+        case _ => None
+      }
+
+      val centroidsMatrix = getOrInvalid(fields, "centroids").convertTo[Array[Array[Double]]]
+      val centroids = ScoringModelUtils.toDaalNumericTable(centroidsMatrix)
+
+      new DaalKMeansModelData(obsCols, labelCol, centroids, k, colScales)
     }
   }
 
@@ -515,7 +481,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: SVMData): JsValue = {
       val model = SVMModelFormat.write(obj.svmModel)
-      JsObject("model" -> model,
+      JsObject("svm_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -527,7 +493,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): SVMData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("svm_model").map(v => {
         SVMModelFormat.read(v)
       }
       ).get
@@ -587,7 +553,9 @@ object ScoringJsonReaderWriters {
     override def write(obj: LdaModel): JsValue = {
       JsObject(
         "num_topics" -> JsNumber(obj.numTopics),
-        "topic_word_map" -> obj.topicWordMap.toJson
+        "topic_word_map" -> obj.topicWordMap.toJson,
+        "document_column" -> obj.documentColumnName.toJson,
+        "word_column" -> obj.wordColumnName.toJson
       )
     }
 
@@ -600,7 +568,10 @@ object ScoringJsonReaderWriters {
       val fields = json.asJsObject.fields
       val numTopics = getOrInvalid(fields, "num_topics").convertTo[Int]
       val topicWordMap = getOrInvalid(fields, "topic_word_map").convertTo[Map[String, scala.Vector[Double]]]
-      LdaModel(numTopics, topicWordMap)
+      val documentColumnName = getOrInvalid(fields, "document_column").convertTo[String]
+      val wordColumnName = getOrInvalid(fields, "word_column").convertTo[String]
+
+      LdaModel(numTopics, topicWordMap, documentColumnName, wordColumnName)
     }
   }
 
@@ -865,7 +836,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestClassifierData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson,
         "num_classes" -> obj.numClasses.toJson)
     }
@@ -878,9 +849,8 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestClassifierData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val colScales = fields.get("values").get.asInstanceOf[JsArray].elements.map(i => i.asInstanceOf[JsNumber].value.doubleValue).toList
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -897,7 +867,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: RandomForestRegressorData): JsValue = {
       val model = RandomForestModelFormat.write(obj.randomForestModel)
-      JsObject("model" -> model,
+      JsObject("random_forest_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
     }
 
@@ -909,7 +879,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): RandomForestRegressorData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("random_forest_model").map(v => {
         RandomForestModelFormat.read(v)
       }
       ).get
@@ -946,7 +916,7 @@ object ScoringJsonReaderWriters {
      */
     override def write(obj: NaiveBayesData): JsValue = {
       val model = NaiveBayesModelFormat.write(obj.naiveBayesModel)
-      JsObject("model" -> model,
+      JsObject("naive_bayes_model" -> model,
         "observation_columns" -> obj.observationColumns.toJson)
 
     }
@@ -959,7 +929,7 @@ object ScoringJsonReaderWriters {
     override def read(json: JsValue): NaiveBayesData = {
       val fields = json.asJsObject.fields
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val model = fields.get("model").map(v => {
+      val model = fields.get("naive_bayes_model").map(v => {
         NaiveBayesModelFormat.read(v)
       }
       ).get
@@ -972,6 +942,145 @@ object ScoringJsonReaderWriters {
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
   }
 
+  implicit object ARXModelFormat extends JsonFormat[ARXModel] {
+    /**
+     * The write methods converts from ARXModel to JsValue
+     * @param obj ARXModel. Where ARXModel's format is
+     *              c : scala.Double
+     *              coefficients : scala.Array[scala.Double]
+     *              yMaxLag : scala.Int
+     *              xMaxLag : scala.Int
+     * @return JsValue
+     */
+    override def write(obj: ARXModel): JsValue = {
+      JsObject(
+        "c" -> obj.c.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "xMaxLag" -> obj.xMaxLag.toJson,
+        "yMaxLag" -> obj.yMaxLag.toJson
+      // NOTE: unable to save includesOriginalX parameter
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARXModel
+     * @param json JsValue
+     * @return ARXModel with format
+     *            c : scala.Double
+     *            coefficients : scala.Array[scala.Double]
+     *            yMaxLag : scala.Int
+     *            xMaxLag : scala.Int
+     */
+    override def read(json: JsValue): ARXModel = {
+      val fields = json.asJsObject.fields
+      val c = getOrInvalid(fields, "c").convertTo[Double]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val xMaxLag = getOrInvalid(fields, "xMaxLag").convertTo[Int]
+      val yMaxLag = getOrInvalid(fields, "yMaxLag").convertTo[Int]
+      // NOTE: unable to get includesOriginalX - defaulting to true
+      new ARXModel(c, coefficients, xMaxLag, yMaxLag, true)
+    }
+
+  }
+
+  implicit object ARXDataFormat extends JsonFormat[ARXData] {
+    /**
+     * The write methods converts from ARXData to JsValue
+     * @param obj ARXData. Where ARXData format is:
+     *            ARXData(arxModel: ARXModel, xColumns: List[String])
+     * @return JsValue
+     */
+    override def write(obj: ARXData): JsValue = {
+      val model = ARXModelFormat.write(obj.arxModel)
+      JsObject("arx_model" -> model,
+        "x_columns" -> obj.xColumns.toJson)
+    }
+
+    /**
+     * The read method reads a JsValue to ARXData
+     * @param json JsValue
+     * @return ARXData with format ARXData(arxModel: ARXModel, xColumns: List[String])
+     */
+    override def read(json: JsValue): ARXData = {
+      val fields = json.asJsObject.fields
+      val xCols = getOrInvalid(fields, "x_columns").convertTo[List[String]]
+      val model = fields.get("arx_model").map(v => {
+        ARXModelFormat.read(v)
+      }
+      ).get
+      new ARXData(model, xCols)
+    }
+  }
+
+  implicit object ARIMAModelFormat extends JsonFormat[ARIMAModel] {
+    /**
+     * The write methods converts from ARIMAModel to JsValue
+     * @param obj ARIMAModel. Where ARIMAModel's format is
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     * @return JsValue
+     */
+    override def write(obj: ARIMAModel): JsValue = {
+      JsObject(
+        "p" -> obj.p.toJson,
+        "d" -> obj.d.toJson,
+        "q" -> obj.q.toJson,
+        "coefficients" -> obj.coefficients.toJson,
+        "hasIntercept" -> obj.hasIntercept.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAModel
+     * @param json JsValue
+     * @return ARIMAModel with format
+     *            p : scala.Int
+     *            d : scala.Int
+     *            q : scala.Int
+     *            coefficients : scala:Array[scala.Double]
+     *            hasIntercept : scala.Boolean
+     */
+    override def read(json: JsValue): ARIMAModel = {
+      val fields = json.asJsObject.fields
+      val p = getOrInvalid(fields, "p").convertTo[Int]
+      val d = getOrInvalid(fields, "d").convertTo[Int]
+      val q = getOrInvalid(fields, "q").convertTo[Int]
+      val coefficients = getOrInvalid(fields, "coefficients").convertTo[Array[Double]]
+      val hasIntercept = getOrInvalid(fields, "hasIntercept").convertTo[Boolean]
+      new ARIMAModel(p, d, q, coefficients, hasIntercept)
+    }
+
+  }
+
+  implicit object ARIMADataFormat extends JsonFormat[ARIMAData] {
+    /**
+     * The write methods converts from ARIMAData to JsValue
+     * @param obj ARIMAData. Where ARIMAData format is:
+     *            ARIMAData(arimaModel: ARIMAModel])
+     * @return JsValue
+     */
+    override def write(obj: ARIMAData): JsValue = {
+      val model = ARIMAModelFormat.write(obj.arimaModel)
+      JsObject("arima_model" -> model)
+    }
+
+    /**
+     * The read method reads a JsValue to ARIMAData
+     * @param json JsValue
+     * @return ARIMAData with format ARIMAData(arimaModel: ARIMAModel)
+     */
+    override def read(json: JsValue): ARIMAData = {
+      val fields = json.asJsObject.fields
+      val model = fields.get("arima_model").map(v => {
+        ARIMAModelFormat.read(v)
+      }
+      ).get
+      new ARIMAData(model)
+    }
+  }
 }
 
 class InvalidJsonException(message: String) extends RuntimeException(message)

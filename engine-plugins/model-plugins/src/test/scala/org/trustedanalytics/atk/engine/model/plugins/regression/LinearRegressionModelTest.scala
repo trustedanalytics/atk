@@ -16,14 +16,15 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.regression
 
-import org.apache.spark.mllib.linalg.DenseVector
-import org.apache.spark.mllib.regression.LabeledPoint
+import org.apache.spark.ml.regression.LinearRegressionModel
+import org.apache.spark.mllib.linalg.{ VectorUDT, DenseVector }
+import org.apache.spark.sql.types.{ DoubleType, StructField, StructType }
+import org.apache.spark.sql.{ SQLContext, Row }
+import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.engine.model.plugins.classification.ClassificationWithSGDTrainArgs
-import org.trustedanalytics.atk.engine.model.plugins.regression.LinearRegressionWithSGDTrainPlugin
 import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 
@@ -32,20 +33,19 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
   "LinearRegressionModel" should "create a LinearRegressionModel" in {
     val modelRef = mock[ModelReference]
     val frameRef = mock[FrameReference]
-    val labeledPoint: Array[LabeledPoint] = Array(new LabeledPoint(1, new DenseVector(Array(16.8973559126, 2.6933495054))),
-      new LabeledPoint(1, new DenseVector(Array(5.5548729596, 2.7777687995))),
-      new LabeledPoint(0, new DenseVector(Array(46.1810010826, 3.1611961917))),
-      new LabeledPoint(0, new DenseVector(Array(44.3117586448, 3.3458963222))))
+    val rowArray: Array[Row] = Array(new GenericRow((Array[Any](1.0, new DenseVector(Array(16.8974, 2.693))))))
+    val rdd = sparkContext.parallelize(rowArray)
+    val schema = StructType(Seq(StructField("label", DoubleType, true), StructField("features", new VectorUDT, true)))
+    val dataFrame = new SQLContext(sparkContext).createDataFrame(rdd, schema)
 
-    val rdd = sparkContext.parallelize(labeledPoint)
+    val trainArgs = LinearRegressionTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"))
+    val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(trainArgs)
+    val linRegModel = linReg.fit(dataFrame)
 
-    val trainArgs = ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List("obs1", "obs2"))
-    val linReg = LinearRegressionWithSGDTrainPlugin.initializeLinearRegressionModel(trainArgs)
-    val linRegModel = linReg.run(rdd)
-
-    val linRegData = new LinearRegressionData(linRegModel, trainArgs.observationColumns)
+    val linRegData = new LinearRegressionData(linRegModel, trainArgs.observationColumns, trainArgs.valueColumn)
 
     linRegData shouldBe a[LinearRegressionData]
+    linRegModel shouldBe a[LinearRegressionModel]
   }
 
   "LinearRegressionModel" should "thow an IllegalArgumentException for empty observationColumns during train" in {
@@ -54,7 +54,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      ClassificationWithSGDTrainArgs(modelRef, frameRef, "label", List())
+      LinearRegressionTrainArgs(modelRef, frameRef, "label", List())
     }
   }
 
@@ -64,7 +64,7 @@ class LinearRegressionModelTest extends TestingSparkContextFlatSpec with Matcher
       val modelRef = mock[ModelReference]
       val frameRef = mock[FrameReference]
 
-      ClassificationWithSGDTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
+      LinearRegressionTrainArgs(modelRef, frameRef, "", List("obs1", "obs2"))
     }
   }
 
