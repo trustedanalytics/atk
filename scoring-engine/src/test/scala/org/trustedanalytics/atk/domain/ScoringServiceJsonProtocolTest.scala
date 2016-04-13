@@ -67,11 +67,11 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
   "DataOutputFormat" should {
     "construct a Json Object" in {
-      var scores = Array("-1", "-1", "-1", "0.0")
+      val scores = Array("-1", "-1", "-1", "0.0")
 
       val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
       assert(output != null)
-      assert(output.compactPrint == "{\"input\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"}],\"output_columns\":[{\"name\":\"col1\",\"value\":\"Double\"},{\"name\":\"col2\",\"value\":\"Double\"},{\"name\":\"col3\",\"value\":\"double\"},{\"name\":\"score\",\"value\":\"double\"}],\"output_values\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"data\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
     }
 
   }
@@ -83,6 +83,29 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
       val output = DataTypeJsonFormat.write(scores)
       assert(output != null)
       assert(output.compactPrint == """["test_string",1.0,{"int_key":1,"list_key":[2.0,3.0]}]""")
+    }
+
+    "construct a Json Object from an input map" in {
+      val scores = Map("int_key" -> 1, "string_key" -> "test", "int_list_key" -> List(2.0, 3.0),
+        "string_list_key" -> List("a", "b"), "vector_key" -> Vector(4d, 5d)
+      )
+
+      val output: JsObject = DataTypeJsonFormat.write(scores).asJsObject
+      assert(output != null)
+      assert(output.fields.size == 5)
+      assert(output.fields("int_key").compactPrint == """1""")
+      assert(output.fields("int_list_key").compactPrint == """[2.0,3.0]""")
+      assert(output.fields("string_list_key").compactPrint == """["a","b"]""")
+      assert(output.fields("vector_key").compactPrint == """[4.0,5.0]""")
+      assert(output.fields("string_key").compactPrint == """"test"""")
+    }
+
+    "construct a Json Object from an input list" in {
+      val scores = List(1, "test_string", Array(2.0, 3.0), Map("list_key" -> List(2.0, 3.0)))
+
+      val output = DataTypeJsonFormat.write(scores)
+      assert(output != null)
+      assert(output.compactPrint == """[1,"test_string",[2.0,3.0],{"list_key":[2.0,3.0]}]""")
     }
 
     "parse JSON input" in {
