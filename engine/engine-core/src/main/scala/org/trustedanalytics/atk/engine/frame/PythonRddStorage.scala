@@ -91,8 +91,6 @@ object PythonRddStorage {
   def aggregateMapWith(data: FrameRdd, aggregateByColumnKeys: List[String], udf: Udf, udfSchema: Schema, sc: SparkContext): FrameRdd = {
     //Create a new schema which includes keys (KeyedSchema).
     val keyedSchema = udfSchema.copy(columns = data.frameSchema.columns(aggregateByColumnKeys) ++ udfSchema.columns)
-    //track key indices to fetch data during BSON decode.
-    //val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
     val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc)
