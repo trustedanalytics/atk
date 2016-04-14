@@ -100,7 +100,7 @@ class ScoringService(model: Model) extends Directives {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
                 import jsonFormat.DataOutputFormat
-                onComplete(Future { scoreModel(DataInputFormat.read(json)) }) {
+                onComplete(Future { scoreJsonRequest(DataInputFormat.read(json)) }) {
                   case Success(output) => complete(DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -120,7 +120,7 @@ class ScoringService(model: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(Future { scorev1(records) }) {
+            onComplete(Future { scoreStringRequest(records) }) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -147,14 +147,14 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scorev1(records: Seq[Array[Any]]): Array[Any] = {
+  def scoreStringRequest(records: Seq[Array[Any]]): Array[Any] = {
     records.map(row => {
       val score = model.score(row)
       score(score.length - 1).toString
     }).toArray
   }
 
-  def scoreModel(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
+  def scoreJsonRequest(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
     records.map(row => scoreToMap(model.score(row))).toArray
   }
 
