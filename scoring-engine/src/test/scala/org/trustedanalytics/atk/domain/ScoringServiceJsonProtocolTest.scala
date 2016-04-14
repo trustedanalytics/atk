@@ -22,6 +22,8 @@ import org.scalatest.{ Matchers, WordSpec }
 import spray.json._
 import org.trustedanalytics.atk.scoring.interfaces.{ ModelMetaDataArgs, Field, Model }
 
+import scala.collection.immutable.Map
+
 class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
   val model = new Model {
     override def input(): Array[Field] = {
@@ -67,11 +69,11 @@ class ScoringServiceJsonProtocolTest extends WordSpec with Matchers {
 
   "DataOutputFormat" should {
     "construct a Json Object" in {
-      val scores = Array("-1", "-1", "-1", "0.0")
+      val scores = Array(Map("col1" -> -1, "col2" -> -1, "col3" -> 1, "col4" -> 0.0))
 
-      val output = DataOutputFormat.write(scores.asInstanceOf[Array[Any]])
+      val output = DataOutputFormat.write(scores.asInstanceOf[Array[Map[String, Any]]])
       assert(output != null)
-      assert(output.compactPrint == "{\"data\":[\"-1\",\"-1\",\"-1\",\"0.0\"]}")
+      assert(output.compactPrint == "{\"data\":[{\"col1\":-1,\"col2\":-1,\"col3\":1,\"col4\":0.0}]}")
     }
 
   }

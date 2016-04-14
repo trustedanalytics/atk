@@ -100,7 +100,7 @@ class ScoringService(model: Model) extends Directives {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
                 import jsonFormat.DataOutputFormat
-                onComplete(scoreModel(DataInputFormat.read(json), "v2")) {
+                onComplete(Future { scoreModel(DataInputFormat.read(json)) }) {
                   case Success(output) => complete(DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -120,7 +120,7 @@ class ScoringService(model: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(scoreModel(records, "v1")) {
+            onComplete(Future { scorev1(records) }) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -147,21 +147,15 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scoreModel(records: Seq[Array[Any]], version: String): Future[Array[Any]] = Future {
-    var scores = new ArrayBuffer[Any]()
-    records.foreach(row => {
-      if (version == "v1") {
-        val score = model.score(row)
-        scores += score(score.length - 1).toString
-      }
-      else if (version == "v2") {
-        scores += scoreToMap(model.score(row))
-      }
-      else {
-        throw new IllegalArgumentException(s"Not supported version: $version")
-      }
-    })
-    scores.toArray
+  def scorev1(records: Seq[Array[Any]]): Array[Any] = {
+    records.map(row => {
+      val score = model.score(row)
+      score(score.length - 1).toString
+    }).toArray
+  }
+
+  def scoreModel(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
+    records.map(row => scoreToMap(model.score(row))).toArray
   }
 
   def scoreToMap(score: Array[Any]): Map[String, Any] = {
