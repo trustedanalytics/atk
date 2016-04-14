@@ -167,20 +167,34 @@ Creates AutoregressionX (ARX) Model from train frame.</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><dl class="docutils">
-<dt>dictionary</dt>
-<dd><p class="first last">A dictionary with trained ARX model with the following keys:</p>
-</dd>
-</dl>
-<p>&#8216;c&#8217; : intercept term, or zero for no intercept
-&#8216;coefficients&#8217; : coefficients for each column of exogenous inputs.</p>
+<div><p>A dictionary with trained ARX model with the following keys:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line"><strong>c</strong> : <em>float64</em></div>
+<div class="line-block">
+<div class="line">intercept term, or zero for no intercept</div>
+</div>
+<div class="line"><strong>coefficients</strong> : <em>list</em></div>
+<div class="line-block">
+<div class="line">coefficients for each column of exogenous input.</div>
+</div>
+</div>
+</div></blockquote>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
-dataset being trained must be small enough to be worked with on a single node.</p>
+<p>Fit an autoregressive model with additional exogenous variables.</p>
+<p><strong>Notes</strong></p>
+<ol class="arabic simple">
+<li>Dataset being trained must be small enough to be worked with on a single node.</li>
+<li>If the specified set of exogenous variables is not invertible, an exception is
+thrown stating that the &#8220;matrix is singular&#8221;.  This happens when there are
+certain patterns in the dataset or columns of all zeros.  In order to work
+around the singular matrix issue, try selecting a different set of columns for
+exogenous variables, or use a different time window for training.</li>
+</ol>
 <p class="rubric">Examples</p>
 <p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
@@ -208,7 +222,7 @@ dataset being trained must be small enough to be worked with on a single node.</
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 08, 2016.
+      Last updated on Apr 14, 2016.
       </li>
     </ul>
     </div>

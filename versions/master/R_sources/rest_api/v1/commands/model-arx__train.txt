@@ -97,8 +97,17 @@ Request
 
 **Description**
 
-Creating a AutoregressionX (ARX) Model using the observation columns. Note that the
-dataset being trained must be small enough to be worked with on a single node.
+Fit an autoregressive model with additional exogenous variables.
+
+**Notes**
+
+#)  Dataset being trained must be small enough to be worked with on a single node.
+#)  If the specified set of exogenous variables is not invertible, an exception is
+    thrown stating that the "matrix is singular".  This happens when there are
+    certain patterns in the dataset or columns of all zeros.  In order to work
+    around the singular matrix issue, try selecting a different set of columns for
+    exogenous variables, or use a different time window for training.
+
 
 |
 
@@ -146,9 +155,11 @@ Response
 
 ``dict``
 
-        dictionary
-            A dictionary with trained ARX model with the following keys\:
-        'c' : intercept term, or zero for no intercept
-        'coefficients' : coefficients for each column of exogenous inputs.
+        A dictionary with trained ARX model with the following keys\:
+
+                      |   **c** : *float64*
+                      |       intercept term, or zero for no intercept
+                      |   **coefficients** : *list*
+                      |       coefficients for each column of exogenous input.
 
 
