@@ -206,37 +206,37 @@
 </tr>
 </tbody>
 </table>
-<p>Principal component analysis <a class="reference internal" href="#r21" id="id1">[R21]</a> is a statistical algorithm
+<p>Principal component analysis <a class="reference internal" href="#r19" id="id1">[R19]</a> is a statistical algorithm
 that converts possibly correlated features to linearly uncorrelated variables
 called principal components.
 The number of principal components is less than or equal to the number of
 original variables.
 This implementation of computing Principal Components is done by Singular
-Value Decomposition <a class="reference internal" href="#r22" id="id2">[R22]</a> of the data, providing the user with an option to
+Value Decomposition <a class="reference internal" href="#r20" id="id2">[R20]</a> of the data, providing the user with an option to
 mean center the data.
 The Principal Components model is initialized; trained on
 specifying the observation columns of the frame and the number of components;
 used to predict principal components.
-The MLLib Singular Value Decomposition <a class="reference internal" href="#r23" id="id3">[R23]</a> implementation has been used for
+The MLLib Singular Value Decomposition <a class="reference internal" href="#r21" id="id3">[R21]</a> implementation has been used for
 this, with additional features to 1) mean center the data during train and
 predict and 2) compute the t-squared index during prediction.</p>
 <p class="rubric">footnotes</p>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[R19]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[R20]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
+</tbody>
+</table>
 <table class="docutils citation" frame="void" id="r21" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Principal_component_analysis">https://en.wikipedia.org/wiki/Principal_component_analysis</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r22" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R22]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Singular_value_decomposition">https://en.wikipedia.org/wiki/Singular_value_decomposition</a></td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="r23" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[R23]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id3">[R21]</a></td><td><a class="reference external" href="https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html">https://spark.apache.org/docs/1.5.0/mllib-dimensionality-reduction.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
