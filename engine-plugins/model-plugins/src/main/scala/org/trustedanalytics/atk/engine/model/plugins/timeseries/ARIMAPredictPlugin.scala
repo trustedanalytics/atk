@@ -16,15 +16,9 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-import com.cloudera.sparkts.models.ARIMAModel
 import org.apache.spark.mllib.linalg.DenseVector
-import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, PluginDoc, SparkCommandPlugin }
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.scoring.models.ARIMAData
 
 // implicits needed for json conversion

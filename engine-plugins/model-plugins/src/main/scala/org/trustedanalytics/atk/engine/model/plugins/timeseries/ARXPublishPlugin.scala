@@ -17,8 +17,6 @@
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import com.google.common.base.Charsets
-import org.apache.spark.mllib.ScoringJsonReaderWriters
-import org.trustedanalytics.atk.engine.{ FileStorage, EngineConfig }
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublish, ModelPublishArgs, ModelPublishJsonProtocol }
 import org.trustedanalytics.atk.engine.plugin._
