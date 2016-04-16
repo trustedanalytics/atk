@@ -33,14 +33,14 @@ Consider the following frame containing two columns.
 <skip>
 >>> train_output
 {u'centroids': {u'Cluster:0': [120.0], u'Cluster:1': [3.6666666666666665]},
- u'cluster_sizes': {u'Cluster:0': 1, u'Cluster:1': 9}}
+ u'cluster_size': {u'Cluster:0': 1, u'Cluster:1': 9}}
 </skip>
 >>> predicted_frame = model.predict(frame, ["data"])
 <progress>
 >>> predicted_frame.inspect()
 <skip>
-[#]  data   name     distance_from_cluster_0  distance_from_cluster_1  cluster
-==============================================================================
+[#]  data   name     distance_from_cluster_0  distance_from_cluster_1  predicted_cluster
+========================================================================================
 [0]    2.0  ab                       13924.0            2.77777777778        1
 [1]    1.0  cd                       14161.0            7.11111111111        1
 [2]    7.0  ef                       12769.0            11.1111111111        1

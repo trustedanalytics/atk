@@ -51,13 +51,12 @@ object DaalKMeansFunctions extends Serializable {
       centroids = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
     }
 
-    table.unpersist()
-
     // Create frame with cluster assignments
     val clusterAssigner = DaalClusterAssigner(table, centroids, args.labelColumn)
     val assignmentFrame = clusterAssigner.assign()
     val clusterSizes = clusterAssigner.clusterSizes(assignmentFrame)
     val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes)
+    table.unpersist()
     kMeansResults
   }
 
@@ -80,7 +79,7 @@ object DaalKMeansFunctions extends Serializable {
     val centroids = IndexedNumericTable.createTable(0L, modelData.centroids)
 
     // Create assignment and cluster distances frame
-    val assignFrame = DaalClusterAssigner(table, centroids, modelData.labelColumn).assign()
+    val assignFrame = DaalClusterAssigner(table, centroids, labelColumn).assign()
     val distanceFrame = computeClusterDistances(vectorRdd, modelData.centroids)
     frameRdd.zipFrameRdd(distanceFrame).zipFrameRdd(assignFrame)
   }

@@ -52,7 +52,6 @@ object DistributedLabeledTable {
     val first: Vector = vectorRdd.first()
 
     val numCols = first.size
-    var numRows = 0L
     val numFeatureCols = splitIndex
     val numLabelCols = numCols - splitIndex
 
@@ -61,6 +60,7 @@ object DistributedLabeledTable {
         val context = new DaalContext
         val featureBuf = new ArrayBuffer[Double]()
         val labelBuf = new ArrayBuffer[Double]()
+        var numRows = 0L
 
         while (iter.hasNext) {
           val array = iter.next().toArray
@@ -80,8 +80,8 @@ object DistributedLabeledTable {
         context.dispose()
         Array(indexedTable).toIterator
     }
-
-    DistributedLabeledTable(tableRdd, numRows)
+    val totalRows = tableRdd.map(table => table.features.numRows.toLong).sum().toLong
+    DistributedLabeledTable(tableRdd, totalRows)
   }
 
   /**

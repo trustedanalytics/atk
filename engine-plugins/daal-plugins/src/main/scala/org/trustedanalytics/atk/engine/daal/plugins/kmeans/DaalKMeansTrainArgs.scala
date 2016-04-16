@@ -36,7 +36,7 @@ Default is 20.""") maxIterations: Int = 20,
 The scaling value is multiplied by the corresponding value in the
 observation column.""") columnScalings: Option[List[Double]] = None,
                                @ArgDoc("""Optional name of output column with
-index of cluster each observation belongs to.""") labelColumn: String = "cluster",
+index of cluster each observation belongs to.""") labelColumn: String = "predicted_cluster",
                                @ArgDoc("""Optional initialization mode for cluster centroids.
 random - Random choice of k feature vectors from the data set.
 deterministic - Choice of first k feature vectors from the data set.""") initializationMode: String = "random") {
