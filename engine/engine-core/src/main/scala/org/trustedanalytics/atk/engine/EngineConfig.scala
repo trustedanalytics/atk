@@ -108,7 +108,7 @@ trait EngineConfig extends EventLogging {
    * The hdfs url where the checkpointing directory will be created and used for checkpoints, traditionally
    * under the file system root for the ATK
    */
-  val checkPointDirectory: String config.getString("trustedanalytics.atk.engine.fs.checkpoint-directory")
+  val checkPointDirectory: String = config.getString("trustedanalytics.atk.engine.fs.checkpoint-directory")
 
   /**
    * Path relative to fs.root where jars are copied to
