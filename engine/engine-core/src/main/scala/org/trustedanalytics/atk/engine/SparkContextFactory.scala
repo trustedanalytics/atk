@@ -53,6 +53,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     val sparkConf = new SparkConf()
       .setMaster(EngineConfig.sparkMaster)
       .setSparkHome(EngineConfig.sparkHome)
+      .setCheckpointDirectory(EngineConfig.checkPointDirectory)
       .setAppName(s"trustedanalytics:$userName:$description")
 
     EngineConfig.sparkConfProperties.foreach { case (k, v) => debug(s"$k->$v") }
