@@ -87,6 +87,7 @@ echo "$NAME starting, CP=$CP"
 java $@ -XX:MaxPermSize=256m -Xss10m $SEARCH_PATH -cp "$CONF:$CP" \
     -Dconfig.resource=integration-test.conf \
     -Dtrustedanalytics.atk.engine.fs.root=file:$FS_ROOT \
+    -Dtrustedanalytics.atk.engine.fs.checkpoint-directory=file:"$FS_ROOT/checkpoints" \
     -Dtrustedanalytics.atk.engine.spark.conf.properties.spark.sql.parquet.useDataSourceApi=false \
     -Dtrustedanalytics.atk.engine.spark.conf.properties.spark.eventLog.dir=file:$SPARK_EVENTS_DIR\
      org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication > $LOG 2>&1 &
