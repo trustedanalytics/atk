@@ -1,12 +1,16 @@
 .. _ad_scoring_pipeline:
 Scoring Pipeline
 ================
+Scoring Pipeline is a python app that can be used to perform ETL transformations followed by scoring on a deployed model, on a stream of records. The result is then either sent back to the client
+or is queued up on the kafka sink topic, depending upon the mode that the app was configured in at the time of initialization.
 
-This section covers deployment and running the scoring pipeline.
+Scoring pipeline can be initialized in 2 modes: Kafka streaming mode or REST endpoint streaming mode.
+
+This section covers instantiating a scoring pipeline in TAP.
 
 
-create a Scoring Pipeline Instance
-----------------------------------
+Create a Scoring Pipeline Instance from a broker in TAP
+-------------------------------------------------------
 
 In the TAP web site:
 
