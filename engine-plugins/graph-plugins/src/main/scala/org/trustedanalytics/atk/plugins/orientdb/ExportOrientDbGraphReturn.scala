@@ -7,13 +7,6 @@ import scala.collection.immutable.Map
  * Created by wtaie on 4/14/16.
  */
 
-/**
- *
- * @param oVerticesStats
- * @param oEdgeStats
- * @param dbUri
- */
-
-case class ExportOrientDbGraphReturn(@ArgDoc("""a tuple of two: the vertex frame RDD names and the corresponding number of exported Orient vertices.""") oVerticesStats: Map[String, Long],
-                                     @ArgDoc("""a tuple of two: the edge frame RDD names and the corresponding number of exported Orient edges.""") oEdgeStats: Map[String, Long],
+case class ExportOrientDbGraphReturn(@ArgDoc("""a tuple of two: the vertices class name and the corresponding number of exported Orient vertices.""") oVerticesStats: Map[String, Long],
+                                     @ArgDoc("""a tuple of two: the edges class name and the corresponding number of exported Orient edges.""") oEdgeStats: Map[String, Long],
                                      @ArgDoc("""The created Orient database URI .""") dbUri: String)

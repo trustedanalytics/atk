@@ -11,16 +11,15 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
 /**
  * Created by wtaie on 4/1/16.
  */
-//TODO: update scala doc  , adding the try catch
 
 object ExportOrientDbFunctions extends Serializable {
 
   /**
-   *
-   * @param dbUri
-   * @param vertexFrameRdd
-   * @param batchSize
-   * @return
+   * Method to export vertex frame to OrientDb
+   * @param dbUri OrientDb URI
+   * @param vertexFrameRdd  vertices frame to be exported to Orient
+   * @param batchSize the number of vertices to be committed
+   * @return the number of exported vertices
    */
   def exportVertexFrame(dbUri: String, vertexFrameRdd: VertexFrameRdd, batchSize: Int): Long = {
 
@@ -43,11 +42,11 @@ object ExportOrientDbFunctions extends Serializable {
   }
 
   /**
-   *
-   * @param dbUri
-   * @param edgeFrameRdd
-   * @param batchSize
-   * @return
+   * Method to export edge frame to OrientDb
+   * @param dbUri OrientDb URI
+   * @param edgeFrameRdd edges frame to be exported to Orient
+   * @param batchSize the number of edges to be commited
+   * @return the number of exported edges
    */
   def exportEdgeFrame(dbUri: String, edgeFrameRdd: EdgeFrameRdd, batchSize: Int): Long = {
 
@@ -58,8 +57,8 @@ object ExportOrientDbFunctions extends Serializable {
         val edgeWrapper = iter.next()
         val edge = edgeWrapper.toEdge
         // lookup the source and destination vertices
-        val srcVertex = oGraph.getVertices("Vertex_label._vid", edge.srcVertexId()).iterator().next()
-        val destVertex = oGraph.getVertices("Vertex_label._vid", edge.destVertexId()).iterator().next()
+        val srcVertex = oGraph.getVertices("_vid", edge.srcVertexId()).iterator().next()
+        val destVertex = oGraph.getVertices("_vid", edge.destVertexId()).iterator().next()
         val oEdge = addEdge(oGraph, edge, srcVertex, destVertex)
         batchCounter += 1
         if (batchCounter % batchSize == 0 && batchCounter != 0) {
@@ -73,7 +72,7 @@ object ExportOrientDbFunctions extends Serializable {
   }
 
   /**
-   *
+   * Method to export the vertex schema
    * @param oGraph  an instance of Orient graph database
    * @param vertexSchema ATK vertex schema
    * @return Orient vertex schema
@@ -94,13 +93,14 @@ object ExportOrientDbFunctions extends Serializable {
   }
 
   /**
-   *
-   * @param oGraph     an instance of Orient graph database
+   * Method to export the edge schema
+   * @param oGraph  an instance of Orient graph database
    * @param edgeSchema ATK edge schema
    * @return Orient edge schema
    */
 
   def createEdgeSchema(oGraph: OrientGraph, edgeSchema: EdgeSchema): OrientEdgeType = {
+
     val className: String = "Edge" + edgeSchema.label
     val oEdgeType = oGraph.createEdgeType(className)
     val eColumns = edgeSchema.columns
@@ -116,7 +116,7 @@ object ExportOrientDbFunctions extends Serializable {
   object DataTypesToOTypeMatch extends App {
 
     /**
-     *
+     * Method for converting data types to Orient data types
      * @param dataType ATK data types
      * @return OrientDB data type
      */
@@ -131,7 +131,7 @@ object ExportOrientDbFunctions extends Serializable {
   }
 
   /**
-   *
+   * Method for exporting a vertex
    * @param oGraph an instance of Orient graph database
    * @param vertex atk vertex to be converted to Orient BlueprintsVertex
    * @return Orient BlueprintsVertex
@@ -153,7 +153,7 @@ object ExportOrientDbFunctions extends Serializable {
   }
 
   /**
-   *
+   * Method for exporting an edge
    * @param oGraph     an instance of Orient graph database
    * @param edge       he atk edge that is required to be exported to OrientEdge
    * @param srcVertex  is a blueprintsVertex as a source

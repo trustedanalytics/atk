@@ -63,9 +63,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     val graphMeta = engine.graphs.expectSeamless(graph)
     val oVerticesStats = exportVertexFramesToOrient(arguments, graphMeta)
     val oEdgesStats = exportEdgeFramesToOrient(arguments, graphMeta)
-
     ExportOrientDbGraphReturn(oVerticesStats, oEdgesStats, arguments.dbUri)
-
   }
 
   /**
@@ -86,7 +84,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
       val vertexFrameRdd = new VertexFrameRdd(sparkFrame.rdd)
       val verticesCount = ExportOrientDbFunctions.exportVertexFrame(arguments.dbUri, vertexFrameRdd, arguments.batchSize)
 
-      (vertexFrameRdd.name, verticesCount)
+      (vertexFrameRdd.vertexWrapper.schema.label, verticesCount)
     })
     metadata.toMap
   }
@@ -108,7 +106,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
       val sparkFrame: SparkFrame = frame
       val edgeFrameRdd = new EdgeFrameRdd(sparkFrame.rdd)
       val edgesCount = ExportOrientDbFunctions.exportEdgeFrame(arguments.dbUri, edgeFrameRdd, arguments.batchSize)
-      (edgeFrameRdd.name, edgesCount)
+      (edgeFrameRdd.edge.schema.label, edgesCount)
     })
     metadata.toMap
   }

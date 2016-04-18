@@ -10,7 +10,7 @@ import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
 object GraphDbFactory {
 
   /**
-   *
+   * Method to create/connect to Orient database
    * @param dbUri the database with default username; "admin" and password : "admin".
    * @return a transcational Orient graph database instance
    */
@@ -29,7 +29,7 @@ object GraphDbFactory {
   }
 
   /**
-   *
+   * Method for creating Orient graph database
    * @param dbUri the database URL
    * @param userName database username
    * @param password the database password
