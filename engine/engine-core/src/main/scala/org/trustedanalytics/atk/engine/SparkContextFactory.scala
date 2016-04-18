@@ -69,7 +69,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     info("SparkConf settings: " + sparkConf.toDebugString)
 
     val context = new SparkContext(sparkConf)
-      .setCheckpointDir(EngineConfig.checkPointDirectory)
+    context.setCheckpointDir(EngineConfig.checkPointDirectory)
     if (!EngineConfig.reuseSparkContext) {
       try {
         val progressPrinter = new ProgressPrinter
