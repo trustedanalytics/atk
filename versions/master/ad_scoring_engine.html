@@ -150,34 +150,39 @@
 </div>
 <div class="section" id="scoring-client">
 <h2>Scoring Client<a class="headerlink" href="#scoring-client" title="Permalink to this headline">¶</a></h2>
-<p>Below is a sample python script to connect to the scoring engine:</p>
-<div class="code highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">requests</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Content-type&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
-<span class="gp">... </span>           <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json,text/plain&#39;</span><span class="p">}</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s1">&#39;http://my-svm-model:9099/v1/score?data=2,17,-6&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="o">.</span><span class="n">text</span>
-<span class="go">list(1)</span>
+<p>Below is a sample python script to send requests to the scoring engine:</p>
+<div class="code highlight-python"><div class="highlight"><pre><span></span>$ python[2.7]
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; headers = {&#39;Content-type&#39;: &#39;application/json&#39;,
+...            &#39;Accept&#39;: &#39;application/json,text/plain&#39;}
+
+
+# Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+&gt;&gt;&gt; r = requests.post(&#39;http://my-svm-model.demotrustedanalytics.com/v1/score?data=2,17,-6&#39;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#39;-1.0&#39;
+
+# Posting a request to version 1 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&#39;http://my-svm-model.demotrustedanalytics.com/v1/score?data=2,17,-6&amp;data=0,0,0&#39;, headers=headers)
+&gt;&gt;&gt; r.text
+u&#39;-1.0,1.0&#39;
+
+# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#39;tr_row&#39; and &#39;tr_col&#39; are the names of the observation columns that the model was trained on:
+&gt;&gt;&gt; r = requests.post(&quot;http://my-svm-model.demotrustedanalytics.com/v2/score&quot;, json={&quot;records&quot;: [{&quot;tr_row&quot;: 1.0, &quot;tr_col&quot;: 2.6}]})
+&gt;&gt;&gt; r.text
+u&#39;{&quot;data&quot;:[{&quot;tr_row&quot;:1.0,&quot;tr_col&quot;:2.6,&quot;Prediction&quot;:-1.0}]}&#39;
+
+# posting a request to version 2 with multiple records to score:
+&gt;&gt;&gt; r = requests.post(&quot;http://my-svm-model.demotrustedanalytics.com/v2/score&quot;, json={&quot;records&quot;: [{&quot;tr_row&quot;: 1.0, &quot;tr_col&quot;: 2.6},{&quot;tr_row&quot;: 3.0, &quot;tr_col&quot;: 0.6} ]})
+&gt;&gt;&gt; r.text
+u&#39;{&quot;data&quot;:[{&quot;tr_row&quot;:1.0,&quot;tr_col&quot;:2.6,&quot;Prediction&quot;:-1.0},{&quot;tr_row&quot;:3.0,&quot;tr_col&quot;:0.6,&quot;Prediction&quot;:-1.0}]}&#39;
+
+# posting a request to get the metadata about the model
+&gt;&gt;&gt; r =requests.get(&#39;http://my-svm-model.demotrustedanalytics.com/v2/metadata&#39;)
+&gt;&gt;&gt; r.text
+u&#39;{&quot;model_details&quot;:{&quot;model_type&quot;:&quot;LibSvm Model&quot;,&quot;model_class&quot;:&quot;org.trustedanalytics.atk.scoring.models.LibSvmModel&quot;,&quot;model_reader&quot;:&quot;org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin&quot;,&quot;custom_values&quot;:{}},&quot;input&quot;:[{&quot;name&quot;:&quot;tr_row&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;tr_col&quot;,&quot;value&quot;:&quot;Double&quot;}],&quot;output&quot;:[{&quot;name&quot;:&quot;tr_row&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;tr_col&quot;,&quot;value&quot;:&quot;Double&quot;},{&quot;name&quot;:&quot;Prediction&quot;,&quot;value&quot;:&quot;Double&quot;}]}&#39;
 </pre></div>
 </div>
-</div>
-<div class="section" id="posting-requests-to-scoring-engine">
-<h2>Posting Requests to Scoring Engine<a class="headerlink" href="#posting-requests-to-scoring-engine" title="Permalink to this headline">¶</a></h2>
-<p>Below are a couple of examples of posting a request to a scoring engine containing a LibSvm Model, and its response.</p>
-<p>version 1 of Scoring Engine supporting strings for requests and response:</p>
-<p>request from a python client with String Input scoring a record:
-r = requests.post(&#8216;<a class="reference external" href="http://localhost:9100/v1/score?data=-1,-1">http://localhost:9100/v1/score?data=-1,-1</a>, -1, -1&#8217;, headers=headers)
-String response:
-&#8216;-1.0&#8217;</p>
-<p>version 2 of Scoring Engine supporting Json for requests and responses. In the following example, &#8216;tr_row&#8217; and &#8216;tr_col&#8217; are the names of the observation columns that the model was trained on.</p>
-<p>request from a python client with Json Input scoring a record:
-r = requests.post(&#8220;<a class="reference external" href="http://localhost:9100/v2/score">http://localhost:9100/v2/score</a>&#8221;, json={&#8220;records&#8221;: [{&#8220;tr_row&#8221;: 1.0, &#8220;tr_col&#8221;: 2.6}]})
-r.text
-Json response:
-u&#8217;{&#8220;input&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output_columns&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output_values&#8221;:[[-1.0,-1.0,1.0]]}&#8217;</p>
-<p>r =requests.get(&#8216;<a class="reference external" href="http://localhost:9100/v2/metadata">http://localhost:9100/v2/metadata</a>&#8216;)
-r.text
-u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;LibSvm Model&#8221;,&#8221;model_class&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LibSvmModel&#8221;,&#8221;model_reader&#8221;:&#8221;org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin&#8221;,&#8221;custom_values&#8221;:{}},&#8221;input&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}],&#8221;output&#8221;:[{&#8220;name&#8221;:&#8221;tr_row&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;tr_col&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;},{&#8220;name&#8221;:&#8221;Prediction&#8221;,&#8221;value&#8221;:&#8221;Double&#8221;}]}&#8217;</p>
 </div>
 </div>
 
@@ -202,7 +207,7 @@ u&#8217;{&#8220;model_details&#8221;:{&#8220;model_type&#8221;:&#8221;LibSvm Mod
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 15, 2016.
+      Last updated on Apr 18, 2016.
       </li>
     </ul>
     </div>
