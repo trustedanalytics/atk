@@ -19,6 +19,8 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame._
+import org.trustedanalytics.atk.engine.EngineConfig
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
@@ -31,6 +33,7 @@ import DaalKMeansJsonFormat._
   extended = "Predicts the clusters for each data point and distance to every cluster center of the frame using the trained model",
   returns = """Frame
     A new frame consisting of the existing columns of the frame and the following new columns:
+    'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
     predicted_cluster column: The cluster assignment for the observation""")
 class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, FrameReference] {
 
@@ -54,6 +57,7 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
    * @return a value of type declared as the Return type.
    */
   override def execute(arguments: DaalKMeansPredictArgs)(implicit invocation: Invocation): FrameReference = {
+    DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 

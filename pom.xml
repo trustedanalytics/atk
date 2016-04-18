@@ -1319,7 +1319,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
-                <version>1.9.13</version>
+                <version>1.8.9</version>
             </dependency>
             <dependency>
                 <groupId>com.codahale.metrics</groupId>

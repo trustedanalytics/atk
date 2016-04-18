@@ -21,9 +21,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
-import org.apache.spark.storage.StorageLevel
 import org.trustedanalytics.atk.domain.schema.FrameSchema
-
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -60,41 +58,30 @@ object DistributedNumericTable {
    * Create distributed numeric table from Vector RDD
    *
    * @param vectorRdd Vector RDD
-   * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
-   *                         then all rows in a partition are transformed into a single numeric table
    * @return distributed numeric table
    */
-  def createTable(vectorRdd: RDD[Vector], maxRowsPerTable: Int): DistributedNumericTable = {
-    var totalRows = 0L
+  def createTable(vectorRdd: RDD[Vector]): DistributedNumericTable = {
+    var numRows = 0L
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
-        var tableRows = 0L
-        var tableElements = 0L
+        var numElements = 0L
         val buf = new ArrayBuffer[Double]()
-        val tables = new ArrayBuffer[IndexedNumericTable]()
 
         while (iter.hasNext) {
           val vector = iter.next()
+          numElements += vector.size
           buf ++= vector.toArray
-          tableRows += 1
-          tableElements += vector.size
-
-          if (tableRows == maxRowsPerTable || !iter.hasNext) {
-            val tableIndex = i //- tableRows + 1
-            val table = new HomogenNumericTable(context, buf.toArray, tableElements / tableRows, tableRows)
-            tables += new IndexedNumericTable(tableIndex, table)
-            totalRows += tableRows
-            tableRows = 0L
-            tableElements = 0L
-            buf.clear()
-          }
-
+          numRows += 1
         }
+
+        val table = new HomogenNumericTable(context, buf.toArray, numElements / numRows, numRows)
+        val indexedTable = new IndexedNumericTable(i, table)
+        buf.clear()
         context.dispose()
-        tables.toIterator
+        Array(indexedTable).toIterator
     }
-    DistributedNumericTable(tableRdd, totalRows)
+    DistributedNumericTable(tableRdd, numRows)
   }
 
   /**
@@ -102,12 +89,9 @@ object DistributedNumericTable {
    *
    * @param frameRdd Input frame
    * @param columnNames List of columns for creating numeric table
-   * @param maxRowsPerTable  Max number of rows in each numeric table. If this is non-positive
-   *                         then all rows in a partition are transformed into a single numeric table
    * @return distributed numeric table
    */
-  def createTable(frameRdd: FrameRdd, columnNames: List[String],
-                  maxRowsPerTable: Int = -1): DistributedNumericTable = {
-    createTable(frameRdd.toDenseVectorRDD(columnNames), maxRowsPerTable)
+  def createTable(frameRdd: FrameRdd, columnNames: List[String]): DistributedNumericTable = {
+    createTable(frameRdd.toDenseVectorRDD(columnNames))
   }
 }

@@ -100,7 +100,7 @@ class ScoringService(model: Model) extends Directives {
               scoreArgs =>
                 val json: JsValue = scoreArgs.parseJson
                 import jsonFormat.DataOutputFormat
-                onComplete(scoreModel(DataInputFormat.read(json), "v2")) {
+                onComplete(Future { scoreJsonRequest(DataInputFormat.read(json)) }) {
                   case Success(output) => complete(DataOutputFormat.write(output).toString())
                   case Failure(ex) => ctx => {
                     ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -120,7 +120,7 @@ class ScoringService(model: Model) extends Directives {
               val splitSegment = decoded.split(",")
               records = records :+ splitSegment.asInstanceOf[Array[Any]]
             }
-            onComplete(scoreModel(records, "v1")) {
+            onComplete(Future { scoreStringRequest(records) }) {
               case Success(string) => complete(string.mkString(","))
               case Failure(ex) => ctx => {
                 ctx.complete(StatusCodes.InternalServerError, ex.getMessage)
@@ -147,21 +147,22 @@ class ScoringService(model: Model) extends Directives {
       }
   }
 
-  def scoreModel(records: Seq[Array[Any]], version: String): Future[Array[Any]] = Future {
-    var scores = new ArrayBuffer[Any]()
-    records.foreach(row => {
+  def scoreStringRequest(records: Seq[Array[Any]]): Array[Any] = {
+    records.map(row => {
       val score = model.score(row)
-      if (version == "v1") {
-        scores += score(score.length - 1).toString
-      }
-      else if (version == "v2") {
-        scores += score
-      }
-      else {
-        throw new IllegalArgumentException(s"Not supported version: $version")
-      }
-    })
-    scores.toArray
+      score(score.length - 1).toString
+    }).toArray
+  }
+
+  def scoreJsonRequest(records: Seq[Array[Any]]): Array[Map[String, Any]] = {
+    records.map(row => scoreToMap(model.score(row))).toArray
+  }
+
+  def scoreToMap(score: Array[Any]): Map[String, Any] = {
+    val outputNames = model.output().map(o => o.name)
+    require(score.length == outputNames.length, "Length of output values should match the output names")
+    val outputMap: Map[String, Any] = outputNames.zip(score).map(combined => (combined._1.name, combined._2)).toMap
+    outputMap
   }
 }
 

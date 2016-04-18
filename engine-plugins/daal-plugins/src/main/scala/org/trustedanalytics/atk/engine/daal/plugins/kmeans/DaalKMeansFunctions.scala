@@ -18,7 +18,16 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import com.intel.daal.algorithms.kmeans._
 import com.intel.daal.data_management.data.HomogenNumericTable
 import org.apache.spark.frame.FrameRdd
+import org.apache.spark.mllib.atk.plugins.VectorUtils._
+import org.apache.spark.mllib.linalg.Vector
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.Row
+import org.apache.spark.sql.catalyst.expressions.GenericRow
+import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column, DataTypes }
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
+import org.apache.mahout.math.{ DenseVector => MahoutDenseVector }
+
+import scala.collection.mutable.ListBuffer
 
 object DaalKMeansFunctions extends Serializable {
 
@@ -31,47 +40,72 @@ object DaalKMeansFunctions extends Serializable {
    */
   def trainKMeansModel(frameRdd: FrameRdd,
                        args: DaalKMeansTrainArgs): DaalKMeansResults = {
-    val table = DistributedNumericTable.createTable(frameRdd, args.observationColumns)
+
+    val vectorRdd = createVectorRdd(frameRdd, args.observationColumns, args.columnScalings)
+    val table = DistributedNumericTable.createTable(vectorRdd)
     table.cache()
 
     // Iteratively update cluster centroids
     var centroids = DaalCentroidsInitializer(table, args).initializeCentroids()
-    for (i <- 1 until args.maxIterations) {
+    for (i <- 1 to args.maxIterations) {
       centroids = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
     }
 
-    // Run final iteration and get cluster assignments
-    centroids = DaalCentroidsUpdater(table, centroids, args.labelColumn).updateCentroids()
     table.unpersist()
 
     // Create frame with cluster assignments
     val clusterAssigner = DaalClusterAssigner(table, centroids, args.labelColumn)
     val assignmentFrame = clusterAssigner.assign()
     val clusterSizes = clusterAssigner.clusterSizes(assignmentFrame)
-    val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes) //.zipFrameRdd(assignmentFrame)))
+    val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes)
     kMeansResults
   }
 
   /**
    * Predict cluster assignments for KMeans model
    *
-   * @param arguments Prediction input arguments
-   * @param frame Input frame
+   * @param args Prediction input arguments
+   * @param frameRdd Input frame
    * @param modelData KMeans model data
    * @return Frame with cluster assignments
    */
-  def predictKMeansModel(arguments: DaalKMeansPredictArgs, frame: FrameRdd, modelData: DaalKMeansModelData): FrameRdd = {
-    val observationColumns = arguments.observationColumns.getOrElse(modelData.observationColumns)
-    val labelColumn = arguments.labelColumn.getOrElse(modelData.labelColumn)
+  def predictKMeansModel(args: DaalKMeansPredictArgs, frameRdd: FrameRdd, modelData: DaalKMeansModelData): FrameRdd = {
+    val observationColumns = args.observationColumns.getOrElse(modelData.observationColumns)
+    val labelColumn = args.labelColumn.getOrElse(modelData.labelColumn)
 
     // Compute cluster assignments
-    val table = DistributedNumericTable.createTable(frame, observationColumns)
+    val vectorRdd = createVectorRdd(frameRdd, observationColumns, modelData.columnScalings)
+    vectorRdd.cache()
+    val table = DistributedNumericTable.createTable(vectorRdd)
     val centroids = IndexedNumericTable.createTable(0L, modelData.centroids)
-    val frameRdd = DaalClusterAssigner(table, centroids, modelData.labelColumn).assign()
 
-    // Create assignment frame
-    val assignmentFrame = frame.zipFrameRdd(frameRdd)
-    assignmentFrame
+    // Create assignment and cluster distances frame
+    val assignFrame = DaalClusterAssigner(table, centroids, modelData.labelColumn).assign()
+    val distanceFrame = computeClusterDistances(vectorRdd, modelData.centroids)
+    frameRdd.zipFrameRdd(distanceFrame).zipFrameRdd(assignFrame)
+  }
+
+  /**
+   * Compute distances to cluster centroids for each observation in Vector RDD
+   *
+   * @param vectorRdd Vector RDD
+   * @param centroids Cluster centroids
+   * @return Frame with 'k' columns with squared distance of each observation to 'k'th cluster center
+   */
+  def computeClusterDistances(vectorRdd: RDD[Vector], centroids: Array[Array[Double]]): FrameRdd = {
+    val rowRdd: RDD[Row] = vectorRdd.map(vector => {
+      val distances: Array[Any] = centroids.map(centroid => {
+        toMahoutVector(vector).getDistanceSquared(new MahoutDenseVector(centroid))
+      })
+      new GenericRow(distances)
+    })
+
+    val columns = new ListBuffer[Column]()
+    for (i <- 0 until centroids.length) {
+      val colName = "distance_from_cluster_" + i.toString
+      columns += Column(colName, DataTypes.float64)
+    }
+    new FrameRdd(FrameSchema(columns.toList), rowRdd)
   }
 
   /**
@@ -82,7 +116,8 @@ object DaalKMeansFunctions extends Serializable {
    * @param result k-means result
    * @return sum of distances of observations to their closest cluster center
    */
-  def getGoalFunction(result: Result): Double = {
+  private def getGoalFunction(result: Result): Double = {
+    //TODO: Goal function is returning zero in DAAL 2016.0.109. Revisit after upgrade
     val goal = result.get(ResultId.goalFunction).asInstanceOf[HomogenNumericTable]
     val arr = goal.getDoubleArray
     if (arr.size > 0) {
@@ -91,6 +126,24 @@ object DaalKMeansFunctions extends Serializable {
     else {
       throw new RuntimeException("Unable to calculate goal function for k-means clustering")
     }
+  }
+
+  /**
+   * Create Vector RDD from observation columns in frame
+   *
+   * @param frameRdd Input frame
+   * @param observationColumns Observation columns
+   * @param columnScalings Optional column scalings for each of the observation columns
+   * @return Vector RDD
+   */
+  private def createVectorRdd(frameRdd: FrameRdd,
+                              observationColumns: List[String],
+                              columnScalings: Option[List[Double]] = None): RDD[Vector] = {
+    val vectorRdd = columnScalings match {
+      case Some(scalings) => frameRdd.toDenseVectorRDDWithWeights(observationColumns, scalings)
+      case _ => frameRdd.toDenseVectorRDD(observationColumns)
+    }
+    vectorRdd
   }
 
 }
