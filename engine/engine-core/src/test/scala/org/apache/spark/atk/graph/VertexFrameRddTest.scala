@@ -1,16 +1,16 @@
 package org.apache.spark.atk.graph
 
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.apache.spark.atk.graph.{VertexFrameRdd, VertexWrapper}
-import org.scalatest.{Matchers, WordSpec}
+import org.apache.spark.atk.graph.{ VertexFrameRdd, VertexWrapper }
+import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import scala.collection.mutable.ArrayBuffer
 /**
-  * Created by wtaie on 4/5/16.
-  */
-class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with Matchers{
+ * Created by wtaie on 4/5/16.
+ */
+class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with Matchers {
 
   val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
   val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
@@ -30,8 +30,6 @@ class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with 
 
         while (iter.hasNext) {
           val vertexWrapper = iter.next() //Atk vertex wrapper
-          val vertexSchema = vertexWrapper.schema
-          val label = vertexWrapper.label
           val nameProperty = vertexWrapper.stringValue("name")
 
           nameBuffer += nameProperty
@@ -40,9 +38,8 @@ class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with 
       })
       //colect the nameRdd into an array
       val nameList = nameRdd.collect()
-      nameList should contain theSameElementsAs(Array("Bob", "Alice", "Fred", "Lucy"))
+      nameList should contain theSameElementsAs (Array("Bob", "Alice", "Fred", "Lucy"))
     }
   }
-
 
 }

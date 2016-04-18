@@ -1,80 +1,67 @@
 package org.trustedanalytics.atk.testutils
 
-import com.tinkerpop.blueprints.Vertex
-import com.tinkerpop.blueprints.impls.orient.{OrientVertex, OrientEdge, OrientGraph}
+import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
+import com.tinkerpop.blueprints.impls.orient.OrientGraph
 
 /**
-  * Created by wtaie on 3/31/16.
-  */
+ * Created by wtaie on 3/31/16.
+ */
 trait TestingOrientDb {
-  /*val vertexClassName: String = "Person"
-  val vertexPropNames: Array[String] = Array("firstName", "lastName")
-  val vertexPropValues: Array[String] = Array("John", "Smith")
-  val vertexClassName1: String = "Address"
-  val vertexPropNames1: Array[String] = Array("street", "city", "state")
-  val vertexPropValues1: Array[String] = Array("Van Ness Ave.", "San Francisco", "California")
-  var v1: Vertex = null
-  var v2: Vertex = null*/
-  //protected var names: Array[String] = Array[String]("Jay", "Luca", "Bill", "Steve", "Jill", "Luigi", "Enrico", "Emanuele")
-  //protected var surnames: Array[String] = Array[String]("Miner", "Ferguson", "Cancelli", "Lavori", "Raggio", "Eagles", "Smiles", "Ironcutter")
+
   var orientGraph: OrientGraph = null
-
-
-  def setupOrientDb(): Unit = {
+  var orientDb: OrientGraph = null
+  /**
+   * create in memory Orient graph database
+   */
+  def setupOrientDbInMemory(): Unit = {
     val uuid = java.util.UUID.randomUUID.toString
-    orientGraph = new OrientGraph("memory:OrientTestDb"+uuid)
-    /*v1 = createVertex(orientGraph, vertexClassName, vertexPropNames, vertexPropValues)
-    v2 = createVertex(orientGraph, vertexClassName1, vertexPropNames1, vertexPropValues1)
-    createEdge(orientGraph, "Live", "lives", v1, v2)*/
+    orientGraph = new OrientGraph("memory:OrientTestDb" + uuid)
   }
-  /*private def createVertex(ograph: OrientGraph, vertexClassName: String, vertexPropNames: Array[String], vertexPropValues: Array[String]): Vertex =
-  {
-   // ograph.createVertexType(vertexClassName)
-    var v: Vertex = ograph.addVertex("class:" + vertexClassName)
-    ograph.begin
-    try {
-      if (vertexPropNames != null && vertexPropValues != null) {
-        val numberOfProp: Int = vertexPropNames.length
-        var counter: Int = 1
-        while (counter <= numberOfProp) {
-          v.setProperty(vertexPropNames(counter), vertexPropValues(counter))
-          ograph.commit
-          counter += 1
-        }
-      }
-    }
-    catch {
-      case e: Exception => {
-        System.out.println("Unable to commit the create vertex tx ")
-        ograph.rollback
-      }
-    }
-    return v
-  }
-
-  private def createEdge(graph: OrientGraph, edgeClassName: String, edgeLabel: String, srcVertex: Vertex, destVertex: Vertex) {
-    graph.begin
-    try {
-      val edge_ : OrientEdge = graph.addEdge("class:" + edgeClassName, srcVertex, destVertex, edgeLabel)
-      graph.commit
-    }
-    catch {
-      case e: Exception => {
-        System.out.println("Unable to commit the create edge tx ")
-        graph.rollback
-      }
-    }
-  }*/
 
   /**
-    * commit the transcation and close the ograph
-    */
+   *
+   */
+  def setupOrientDb(): Unit = {
+
+    val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx("plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest")
+    if (!orientDocDb.exists()) {
+      orientDocDb.create()
+    }
+    else {
+      System.out.println("the database already exists and now open")
+      orientDocDb.open("admin", "admin")
+    }
+    val orientDb = new OrientGraph(orientDocDb)
+  }
+
+  /**
+   * commit the transcation and close/drop the ograph, for plocal and remote database creation modes
+   */
   def cleanupOrientDb(): Unit = {
+    try {
+      if (orientDb != null) {
+        orientDb.commit()
+        orientDb.drop()
+      }
+    }
+    finally {
+      val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx("plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest")
+      System.out.println("the database already exists and now open")
+      orientDocDb.open("admin", "admin")
+      orientDocDb.drop()
+    }
+  }
+
+  /**
+   * commit the transcation and close the ograph
+   */
+  def cleanupOrientDbInMemory(): Unit = {
     try {
       if (orientGraph != null) {
         orientGraph.commit()
       }
-    } finally {
+    }
+    finally {
       orientGraph.shutdown()
     }
   }

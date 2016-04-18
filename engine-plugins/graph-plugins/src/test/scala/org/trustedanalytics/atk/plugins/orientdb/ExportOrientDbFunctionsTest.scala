@@ -1,25 +1,25 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
-import com.tinkerpop.blueprints.{Vertex => BlueprintsVertex}
-import org.apache.spark.atk.graph.{Edge, Vertex, VertexFrameRdd}
+import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
+import org.apache.spark.atk.graph.{ Edge, Vertex, VertexFrameRdd }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
-import org.trustedanalytics.atk.testutils.{TestingOrientDb, TestingSparkContextWordSpec}
+import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
 /**
-  * Created by wtaie on 4/1/16.
-  */
+ * Created by wtaie on 4/1/16.
+ */
 class ExportOrientDbFunctionsTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
 
   override def beforeEach() {
-    setupOrientDb()
+    setupOrientDbInMemory()
   }
 
   override def afterEach() {
-    cleanupOrientDb()
+    cleanupOrientDbInMemory()
   }
 
   "Export to OrientDB functions" should {
