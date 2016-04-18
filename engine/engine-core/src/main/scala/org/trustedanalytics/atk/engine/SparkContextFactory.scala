@@ -53,7 +53,6 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     val sparkConf = new SparkConf()
       .setMaster(EngineConfig.sparkMaster)
       .setSparkHome(EngineConfig.sparkHome)
-      .setCheckpointDirectory(EngineConfig.checkPointDirectory)
       .setAppName(s"trustedanalytics:$userName:$description")
 
     EngineConfig.sparkConfProperties.foreach { case (k, v) => debug(s"$k->$v") }
@@ -70,6 +69,7 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
     info("SparkConf settings: " + sparkConf.toDebugString)
 
     val context = new SparkContext(sparkConf)
+      .setCheckpointDirectory(EngineConfig.checkPointDirectory)
     if (!EngineConfig.reuseSparkContext) {
       try {
         val progressPrinter = new ProgressPrinter
