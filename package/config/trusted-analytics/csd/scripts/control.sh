@@ -65,7 +65,6 @@ case "$1" in
     log "fs root port-${fs_root_port}"
 
     echo "trustedanalytics.atk.engine.fs.root=\"hdfs://${fs_root_host}:${fs_root_port}/user/${ATK_USER}\"" >> $ATK_TEMP/application.conf
-    echo "trustedanalytics.atk.engine.fs.checkpoint-directory=\"hdfs://${fs_root_host}:${fs_root_port}/user/${ATK_USER}/checkpoints\"" >> $ATK_TEMP/application.conf
 
     zookeeper_hosts=$(getHostnames "ZOOKEEPER" "SERVER" )
     zHosts=""
