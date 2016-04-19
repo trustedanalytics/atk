@@ -35,7 +35,7 @@ public final class ModelSerializer {
      * @return Serialized model
      */
     public static byte[] serializeQrModel(com.intel.daal.algorithms.linear_regression.Model model) {
-        ByteBuffer buffer = cSerializeQrModel(model.getCModel());
+        ByteBuffer buffer = cSerializeQrModel(model.getCObject());
         byte[] serializedCObject = new byte[buffer.capacity()];
         buffer.position(0);
         buffer.get(serializedCObject);
