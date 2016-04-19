@@ -274,7 +274,6 @@ object JoinRddFunctions extends Serializable {
     val frameRdd = new FrameRdd(newSchema, joinedRdd)
     val leftColIndices = leftSchema.columnIndices(left.joinColumns)
     val leftColNames = leftColIndices.map(colindex => newSchema.column(colindex).name)
-    //val leftColNames = left.joinColumns.map(col => col + "_L")
     frameRdd.dropColumns(leftColNames.toList)
   }
 
@@ -307,7 +306,6 @@ object JoinRddFunctions extends Serializable {
       val frameRdd = new FrameRdd(newSchema, joinedRdd)
       val rightColIndices = rightSchema.columnIndices(right.joinColumns).map(rightindex => leftSchema.columns.size + rightindex)
       val rightColNames = rightColIndices.map(colindex => newSchema.column(colindex).name)
-      //val rightColNames = right.joinColumns.map(col => col + "_R")
       frameRdd.dropColumns(rightColNames.toList)
     }
   }
