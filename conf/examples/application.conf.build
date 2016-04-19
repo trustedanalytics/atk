@@ -35,7 +35,6 @@ trustedanalytics.atk {
     # The hdfs URL where the trustedanalytics folder will be created
     # and which will be used as the starting point for any relative URLs
     fs.root = "file:///tmp"
-    fs.checkpoint-directory = "file:///tmp/checkpoints"
 
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
