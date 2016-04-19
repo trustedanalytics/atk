@@ -1,3 +1,18 @@
+/**
+ *  Copyright (c) 2015 Intel Corporation 
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
@@ -8,9 +23,9 @@ import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
 /**
- * Created by wtaie on 4/11/16.
+ * Created by wtaie on 4/18/16.
  */
-class ExportOrientDbFunctionsExportEdgeFrameTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
+class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 
   override def beforeEach() {
     setupOrientDb()
@@ -19,8 +34,7 @@ class ExportOrientDbFunctionsExportEdgeFrameTest extends WordSpec with TestingSp
   override def afterEach() {
     cleanupOrientDb()
   }
-
-  "Export OrientDb functions" should {
+  "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
       val dbUri: String = "plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest"
@@ -35,7 +49,8 @@ class ExportOrientDbFunctionsExportEdgeFrameTest extends WordSpec with TestingSp
       val vRowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(vSchema, vRowRdd)
       val vBatchSize = 4
-      val verticesCountRdd = ExportOrientDbFunctions.exportVertexFrame(dbUri, vertexFrameRdd, vBatchSize)
+      val vertexFrameWriter = new VertexFrameWriter
+      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(dbUri, vertexFrameRdd, vBatchSize)
 
       //exporting the edge frame:
       val eColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
@@ -47,7 +62,8 @@ class ExportOrientDbFunctionsExportEdgeFrameTest extends WordSpec with TestingSp
       val eRowRdd = sparkContext.parallelize(edges)
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
       val batchSize = 3
-      val edgesCount = ExportOrientDbFunctions.exportEdgeFrame(dbUri, edgeFrameRdd, batchSize)
+      val edgeFrameWriter = new EdgeFrameWriter
+      val edgesCount = edgeFrameWriter.exportEdgeFrame(dbUri, edgeFrameRdd, batchSize)
       edgesCount shouldEqual (3)
 
     }
