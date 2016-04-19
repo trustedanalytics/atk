@@ -41,38 +41,39 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
   "JoinBroadcastVariable" should "create a single broadcast variable when RDD size is less than 2GB" in {
     val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", Some(150))
+    val joinParam = RddJoinParam(countryNames, Seq("col_0"), Some(150))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
     broadcastVariable.broadcastMultiMap.value.size should equal(5)
-    broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
-    broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
-    broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
-    broadcastVariable.get(4).get should contain theSameElementsAs Set(idCountryNames(4))
-    broadcastVariable.get(6).get should contain theSameElementsAs Set(idCountryNames(5))
-    broadcastVariable.get(8).isDefined should equal(false)
+    broadcastVariable.get(List(1)).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
+    broadcastVariable.get(List(2)).get should contain theSameElementsAs Set(idCountryNames(2))
+    broadcastVariable.get(List(3)).get should contain theSameElementsAs Set(idCountryNames(3))
+    broadcastVariable.get(List(4)).get should contain theSameElementsAs Set(idCountryNames(4))
+    broadcastVariable.get(List(6)).get should contain theSameElementsAs Set(idCountryNames(5))
+    broadcastVariable.get(List(8)).isDefined should equal(false)
 
   }
+
   "JoinBroadcastVariable" should "create a two broadcast variables when RDD size is equals 3GB" in {
     val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", Some(3L * 1024 * 1024 * 1024))
+    val joinParam = RddJoinParam(countryNames, Seq("col_0"), Some(3L * 1024 * 1024 * 1024))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
-    broadcastVariable.get(1).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
-    broadcastVariable.get(2).get should contain theSameElementsAs Set(idCountryNames(2))
-    broadcastVariable.get(3).get should contain theSameElementsAs Set(idCountryNames(3))
-    broadcastVariable.get(4).get should contain theSameElementsAs Set(idCountryNames(4))
-    broadcastVariable.get(6).get should contain theSameElementsAs Set(idCountryNames(5))
-    broadcastVariable.get(8).isDefined should equal(false)
+    broadcastVariable.get(List(1)).get should contain theSameElementsAs Set(idCountryNames(0), idCountryNames(1))
+    broadcastVariable.get(List(2)).get should contain theSameElementsAs Set(idCountryNames(2))
+    broadcastVariable.get(List(3)).get should contain theSameElementsAs Set(idCountryNames(3))
+    broadcastVariable.get(List(4)).get should contain theSameElementsAs Set(idCountryNames(4))
+    broadcastVariable.get(List(6)).get should contain theSameElementsAs Set(idCountryNames(5))
+    broadcastVariable.get(List(8)).isDefined should equal(false)
 
   }
   "JoinBroadcastVariable" should "create an empty broadcast variable" in {
     val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(List.empty[Row]))
 
-    val joinParam = RddJoinParam(countryNames, "col_0", Some(3L * 1024 * 1024 * 1024))
+    val joinParam = RddJoinParam(countryNames, Seq("col_0"), Some(3L * 1024 * 1024 * 1024))
 
     val broadcastVariable = JoinBroadcastVariable(joinParam)
 
@@ -86,7 +87,7 @@ class JoinBroadcastVariableITest extends TestingSparkContextFlatSpec with Matche
   "JoinBroadcastVariable" should "throw an Exception if column does not exist in frame" in {
     intercept[Exception] {
       val countryNames = new FrameRdd(inputSchema, sparkContext.parallelize(idCountryNames))
-      val joinParam = RddJoinParam(countryNames, "col_bad", Some(3L * 1024 * 1024 * 1024))
+      val joinParam = RddJoinParam(countryNames, Seq("col_bad"), Some(3L * 1024 * 1024 * 1024))
       JoinBroadcastVariable(joinParam)
     }
   }
