@@ -64,6 +64,9 @@ trustedanalytics.atk {
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://invalid-fsroot-host/user/atkuser"
 
+    # The location for checkpointing, usually under the filesystem root
+    fs.checkpoint-directory = ${trustedanalytics.atk.engine.fs.root}"/checkpoints"
+
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
 

@@ -44,13 +44,11 @@ class LibSvmModelTest extends WordSpec {
     "successfully score a model when float data is provided" in {
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3)
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20)
     }
 
     "successfully score a model when integer data is provided" in {
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 3)
       ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 1)
-      ScoringModelTestUtils.successfulModelScoringFloatTest(libSvmModel, 20)
     }
 
     "successfully return the observation columns used for training the model" in {

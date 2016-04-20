@@ -63,11 +63,13 @@ trait SparkContextFactory extends EventLogging with EventLoggingImplicits {
       sparkConf.set("spark.kryo.registrator", kryoRegistrator.get)
     }
 
-    KerberosAuthenticator.loginWithKeyTab()
+    KerberosAuthenticator.loginUsingHadoopUtils()
+    KerberosAuthenticator.loginAsAuthenticatedUser()
 
     info("SparkConf settings: " + sparkConf.toDebugString)
 
     val context = new SparkContext(sparkConf)
+    context.setCheckpointDir(EngineConfig.checkPointDirectory)
     if (!EngineConfig.reuseSparkContext) {
       try {
         val progressPrinter = new ProgressPrinter

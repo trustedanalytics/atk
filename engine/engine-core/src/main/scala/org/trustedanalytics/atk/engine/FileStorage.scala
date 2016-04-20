@@ -42,36 +42,39 @@ class FileStorage extends EventLogging {
 
   private val securedConfiguration = withContext("HDFSFileStorage.configuration") {
     info("fsRoot: " + EngineConfig.fsRoot)
+    KerberosAuthenticator.loginAsAuthenticatedUser()
 
-    val hadoopConfig = new Configuration()
-
+    val configuration = KerberosAuthenticator.loginConfigurationWithClassLoader()
     //http://stackoverflow.com/questions/17265002/hadoop-no-filesystem-for-scheme-file
-    hadoopConfig.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
-    hadoopConfig.set("fs.file.impl", classOf[LocalFileSystem].getName)
-    hadoopConfig.set("fs.defaultFS", EngineConfig.fsRoot)
+    configuration.set("fs.hdfs.impl", classOf[DistributedFileSystem].getName)
+    configuration.set("fs.file.impl", classOf[LocalFileSystem].getName)
+    configuration.set("fs.defaultFS", EngineConfig.fsRoot)
 
-    KerberosAuthenticator.loginConfigurationWithKeyTab(hadoopConfig)
-    hadoopConfig
+    configuration
   }(null)
 
   def configuration: Configuration = {
-    if (EngineConfig.enableKerberos) {
-      KerberosAuthenticator.loginConfigurationWithKeyTab(securedConfiguration)
-    }
     securedConfiguration
   }
 
   val localFileSystem = FileSystem.getLocal(configuration)
-  private val fileSystem = FileSystem.get(configuration)
+  private val fileSystem = {
+    try {
+      import org.trustedanalytics.hadoop.config.client.helper.Hdfs
+      Hdfs.newInstance().createFileSystem()
+    }
+    catch {
+      case _ =>
+        info("Failed to create HDFS instance using hadoop-library. Default to FileSystem")
+        FileSystem.get(configuration)
+    }
+  }
 
   /**
    * Verifies that the Kerberos Ticket is still valid and if not relogins before returning fileSystem object
    * @return Hadoop FileSystem
    */
   def hdfs: FileSystem = {
-    if (EngineConfig.enableKerberos) {
-      KerberosAuthenticator.loginConfigurationWithKeyTab(securedConfiguration)
-    }
     fileSystem
   }
 

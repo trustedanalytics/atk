@@ -14,12 +14,21 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.daal.plugins
+package org.trustedanalytics.atk.scoring.models
 
-/**
- * Indexed numeric tables with features and corresponding labels
- *
- * @param features Numeric table with features
- * @param labels Numeric table with labels
- */
-case class IndexedLabeledTable(features: IndexedNumericTable, labels: IndexedNumericTable)
+import org.apache.spark.mllib.ScoringJsonReaderWriters.DaalKMeansModelDataFormat
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
+import spray.json._
+
+class DaalKMeansModelReaderPlugin() extends ModelLoader {
+
+  private var daalKMeansScoreModel: DaalKMeansScoreModel = _
+
+  override def load(bytes: Array[Byte]): Model = {
+    val str = new String(bytes)
+    val json: JsValue = str.parseJson
+    val kMeansModelData = json.convertTo[DaalKMeansModelData]
+    daalKMeansScoreModel = new DaalKMeansScoreModel(kMeansModelData)
+    daalKMeansScoreModel.asInstanceOf[Model]
+  }
+}
