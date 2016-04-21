@@ -16,29 +16,19 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-//Implicits needed for JSON conversion
-
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.mllib.linalg.Matrices
-import breeze.linalg._
-import org.apache.spark.mllib.linalg.Vectors
-import org.apache.spark.SparkContext._
 import org.trustedanalytics.atk.scoring.models.ARXData
+import com.cloudera.sparkts.models.{ AutoregressionX }
+
+// Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
-import com.cloudera.sparkts.models.{ ARXModel, AutoregressionX }
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
 import org.apache.spark.mllib.ScoringJsonReaderWriters
-import scala.collection.mutable.ArrayBuffer
 
 @PluginDoc(oneLine = "Creates AutoregressionX (ARX) Model from train frame.",
   extended = """Fit an autoregressive model with additional exogenous variables.
