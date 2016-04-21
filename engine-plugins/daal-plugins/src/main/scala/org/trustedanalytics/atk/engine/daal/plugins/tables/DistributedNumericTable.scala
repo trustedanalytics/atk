@@ -61,11 +61,12 @@ object DistributedNumericTable {
    * @return distributed numeric table
    */
   def createTable(vectorRdd: RDD[Vector]): DistributedNumericTable = {
+
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
-        var numElements = 0L
         var numRows = 0L
+        var numElements = 0L
         val buf = new ArrayBuffer[Double]()
 
         while (iter.hasNext) {
@@ -75,8 +76,7 @@ object DistributedNumericTable {
           numRows += 1
         }
 
-        val numCols = numElements / numRows
-        val table = new HomogenNumericTable(context, buf.toArray, numCols, numRows)
+        val table = new HomogenNumericTable(context, buf.toArray, numElements / numRows, numRows)
         val indexedTable = new IndexedNumericTable(i, table)
         buf.clear()
         context.dispose()

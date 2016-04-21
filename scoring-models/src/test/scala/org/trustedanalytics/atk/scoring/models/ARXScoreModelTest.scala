@@ -18,9 +18,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import org.apache.spark.mllib.ScoringModelTestUtils
 import com.cloudera.sparkts.models.ARXModel
-import org.scalatest.Assertions._
 import org.scalatest.WordSpec
-import scala.Predef.assert
 
 class ARXScoreModelTest extends WordSpec {
 
@@ -83,7 +81,7 @@ class ARXScoreModelTest extends WordSpec {
       // call score model and get the last item in the output array
       val output = arxScoreModel.score(input)
       assert(output(output.length - 1).isInstanceOf[Array[Double]])
-      val predictions = List.fromArray(output(output.length - 1).asInstanceOf[Array[Double]])
+      val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
       assert(predictions.length == 5) // we should get one y prediction per row
       assert(predictions.sameElements(List[Double](99.99999234330198, 98.00000220169095, 101.99999803760333, 98.00000071010813, 111.99999886664024)))
     }
@@ -111,7 +109,7 @@ class ARXScoreModelTest extends WordSpec {
       val arxScoreModelWithLag = new ARXScoreModel(arxModelWithLag, arxData)
       val output = arxScoreModelWithLag.score(input)
       assert(output(output.length - 1).isInstanceOf[Array[Double]])
-      val predictions = List.fromArray(output(output.length - 1).asInstanceOf[Array[Double]])
+      val predictions = output(output.length - 1).asInstanceOf[Array[Double]].toList
       assert(predictions.length == 4) // we should get one y prediction per row, minus the lag
       assert(predictions.sameElements(List[Double](98.00000721876397, 101.99999878091927, 97.99999998905012, 111.99999804593499)))
     }

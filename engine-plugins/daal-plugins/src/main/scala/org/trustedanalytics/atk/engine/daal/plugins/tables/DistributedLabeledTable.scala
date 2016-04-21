@@ -80,6 +80,7 @@ object DistributedLabeledTable {
         context.dispose()
         Array(indexedTable).toIterator
     }
+
     val totalRows = tableRdd.map(table => table.features.numRows.toLong).sum().toLong
     DistributedLabeledTable(tableRdd, totalRows)
   }
