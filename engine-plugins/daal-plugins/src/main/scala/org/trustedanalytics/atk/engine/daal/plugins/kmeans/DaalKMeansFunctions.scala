@@ -26,7 +26,7 @@ import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.{ FrameSchema, Column, DataTypes }
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 import org.apache.mahout.math.{ DenseVector => MahoutDenseVector }
-
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
 import scala.collection.mutable.ListBuffer
 
 object DaalKMeansFunctions extends Serializable {
@@ -39,7 +39,7 @@ object DaalKMeansFunctions extends Serializable {
    * @return Trained k-means model
    */
   def trainKMeansModel(frameRdd: FrameRdd,
-                       args: DaalKMeansTrainArgs): DaalKMeansResults = {
+                       args: DaalKMeansTrainArgs): DaalKMeansTrainReturn = {
 
     val vectorRdd = createVectorRdd(frameRdd, args.observationColumns, args.columnScalings)
     val table = DistributedNumericTable.createTable(vectorRdd)
@@ -57,7 +57,13 @@ object DaalKMeansFunctions extends Serializable {
     val clusterAssigner = DaalClusterAssigner(table, centroids, args.labelColumn)
     val assignmentFrame = clusterAssigner.assign()
     val clusterSizes = clusterAssigner.clusterSizes(assignmentFrame)
-    val kMeansResults = DaalKMeansResults(centroids, args.k, clusterSizes)
+
+    //Get dictionary with centroids
+    val centroidsMap = centroids.table.toArrayOfDoubleArray().zipWithIndex.map {
+      case (centroid, i) =>
+        ("Cluster:" + i.toString, centroid)
+    }.toMap
+    val kMeansResults = DaalKMeansTrainReturn(centroidsMap, clusterSizes)
     kMeansResults
   }
 

@@ -63,22 +63,14 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
 
     // Train model
     val results = DaalKMeansFunctions.trainKMeansModel(frame.rdd, arguments)
-    val daalContext = new DaalContext()
-    val centroids = results.centroids.getUnpackedTable(daalContext).toArrayOfDoubleArray()
-    daalContext.dispose()
+    val centroids = for (i <- 1 until arguments.k) yield results.centroids("Cluster:" + i.toString)
 
     //Writing the kmeansModel as JSON
     val model: Model = arguments.model
     model.data = DaalKMeansModelData(arguments.observationColumns, arguments.labelColumn,
-      centroids, arguments.k, arguments.columnScalings).toJson.asJsObject
+      centroids.toArray, arguments.k, arguments.columnScalings).toJson.asJsObject
 
-    //Get dictionary with centroids
-    val centroidsMap = centroids.zipWithIndex.map {
-      case (centroid, i) =>
-        ("Cluster:" + i.toString, centroid)
-    }.toMap
-
-    DaalKMeansTrainReturn(centroidsMap, results.clusterSizes)
+    results
   }
 }
 
