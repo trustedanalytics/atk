@@ -31,7 +31,7 @@ observations.""") observationColumns: List[String],
                                @ArgDoc("""Desired number of clusters.
 Default is 2.""") k: Int = 2,
                                @ArgDoc("""Number of iterations for which the algorithm should run.
-Default is 20.""") maxIterations: Int = 20,
+Default is 20.""") maxIterations: Int = 50,
                                @ArgDoc("""Optional column scalings for each of the observation columns.
 The scaling value is multiplied by the corresponding value in the
 observation column.""") columnScalings: Option[List[Double]] = None,
