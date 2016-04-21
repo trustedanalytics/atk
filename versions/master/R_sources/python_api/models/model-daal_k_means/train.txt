@@ -5,7 +5,7 @@
 ------
 
 
-.. function:: train(self, frame, observation_columns, k=2, max_iterations=20, column_scalings=None, label_column='cluster', initialization_mode='random')
+.. function:: train(self, frame, observation_columns, k=2, max_iterations=50, column_scalings=None, label_column='cluster', initialization_mode='random')
 
     |ALPHA|
     Creates DAAL KMeans Model from train frame.
@@ -39,7 +39,7 @@
 
 
 
-        **max_iterations** : int32 (default=20)
+        **max_iterations** : int32 (default=50)
 
         ..
 

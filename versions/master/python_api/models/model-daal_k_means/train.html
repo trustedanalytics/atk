@@ -132,7 +132,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>k=2</em>, <em>max_iterations=20</em>, <em>column_scalings=None</em>, <em>label_column='cluster'</em>, <em>initialization_mode='random'</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>observation_columns</em>, <em>k=2</em>, <em>max_iterations=50</em>, <em>column_scalings=None</em>, <em>label_column='cluster'</em>, <em>initialization_mode='random'</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
 Creates DAAL KMeans Model from train frame.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -153,7 +153,7 @@ observations.</p>
 <div><p>Desired number of clusters.
 Default is 2.</p>
 </div></blockquote>
-<p><strong>max_iterations</strong> : int32 (default=20)</p>
+<p><strong>max_iterations</strong> : int32 (default=50)</p>
 <blockquote>
 <div><p>Number of iterations for which the algorithm should run.
 Default is 20.</p>
@@ -219,7 +219,7 @@ deterministic - Choice of first k feature vectors from the data set.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 19, 2016.
+      Last updated on Apr 20, 2016.
       </li>
     </ul>
     </div>

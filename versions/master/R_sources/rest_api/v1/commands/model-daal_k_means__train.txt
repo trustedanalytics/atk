@@ -65,7 +65,7 @@ Request
 
 
 
-    **max_iterations** : int32 (default=20)
+    **max_iterations** : int32 (default=50)
 
     ..
 
