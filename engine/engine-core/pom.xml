@@ -348,5 +348,21 @@
             <groupId>org.apache.mahout</groupId>
             <artifactId>mahout-math</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.trustedanalytics</groupId>
+            <artifactId>hadoop-utils</artifactId>
+            <version>0.5.3</version>
+            </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.6</version>
+        </dependency>
     </dependencies>
 </project>
