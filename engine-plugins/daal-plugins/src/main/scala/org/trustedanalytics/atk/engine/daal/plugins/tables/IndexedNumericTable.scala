@@ -20,12 +20,14 @@ import java.nio.DoubleBuffer
 
 import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
 import com.intel.daal.services.DaalContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.FrameSchema
+import org.apache.spark.mllib.linalg.{ DenseVector, Vector }
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable.{ ArrayBuffer, ListBuffer }
 
 /**
  * DAAL numeric table with index
@@ -65,6 +67,8 @@ case class IndexedNumericTable(index: Long, table: NumericTable) extends Seriali
    * Convert DAAL numeric table into iterator of Spark SQL rows
    *
    * @param context DAAL context
+   * @param frameSchema Optional frame schema converts columns to specified data types.
+   *                    If no schema is provided, data is converted to Double
    * @return Row iterator
    */
   def toRowIter(context: DaalContext, frameSchema: Option[FrameSchema] = None): Iterator[Row] = {
@@ -87,6 +91,31 @@ case class IndexedNumericTable(index: Long, table: NumericTable) extends Seriali
         }
       }
       rowBuffer += new GenericRow(rowArray)
+    }
+
+    rowBuffer.iterator
+  }
+
+  /**
+   * Convert table to iterator of Spark MLlib vectors
+   *
+   * @param context DAAL context
+   * @return Iterator of vector
+   */
+  def toVectorIterator(context: DaalContext): Iterator[Vector] = {
+    if (isEmpty) return List.empty[Vector].iterator
+
+    val unpackedTable = getUnpackedTable(context)
+    val buffer = DoubleBuffer.allocate(numRows * numCols)
+    val doubleBuffer = unpackedTable.getBlockOfRows(0, numRows, buffer)
+    val rowBuffer = new ListBuffer[Vector]()
+
+    for (i <- 0 until numRows) {
+      val rowArray = new Array[Double](numCols)
+      for (j <- 0 until numCols) {
+        rowArray(j) = doubleBuffer.get(i * numCols + j)
+      }
+      rowBuffer += new DenseVector(rowArray)
     }
 
     rowBuffer.iterator

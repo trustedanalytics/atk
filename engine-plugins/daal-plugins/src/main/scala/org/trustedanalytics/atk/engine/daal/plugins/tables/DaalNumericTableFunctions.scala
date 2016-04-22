@@ -57,6 +57,36 @@ class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
   }
 
   /**
+   * Convert DAAL numeric table into a transposed array of array of doubles
+   *
+   * Transposes the rows and columns so that each column in the numeric table
+   * is converted into an array of doubles
+   *
+   * @return Array of array of doubles
+   */
+  def toTransposedArrayOfDoubleArray(): Array[Array[Double]] = {
+    val context = new DaalContext()
+
+    self.unpack(context)
+    val numRows = self.getNumberOfRows.toInt
+    val numCols = self.getNumberOfColumns.toInt
+    val buffer = DoubleBuffer.allocate(numRows * numCols)
+    val doubleBuffer = self.getBlockOfRows(0, numRows, buffer)
+
+    val arrays = new Array[Array[Double]](numCols)
+    for (j <- 0 until numCols) {
+      val rowArray = new Array[Double](numRows)
+      for (i <- 0 until numRows) {
+        rowArray(i) = doubleBuffer.get(i * numCols + j)
+      }
+      arrays(j) = rowArray
+    }
+    context.dispose()
+
+    arrays
+  }
+
+  /**
    * Convert DAAL numeric table into an array of vectors
    *
    * Each feature vector (row) in the numeric table is converted into an array of doubles
