@@ -77,10 +77,11 @@ object DistributedNumericTable {
    * @return distributed numeric table
    */
   def createTable(vectorRdd: RDD[Vector]): DistributedNumericTable = {
-    var numRows = 0L
+
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val context = new DaalContext
+        var numRows = 0L
         var numElements = 0L
         val buf = new ArrayBuffer[Double]()
 
@@ -97,7 +98,8 @@ object DistributedNumericTable {
         context.dispose()
         Array(indexedTable).toIterator
     }
-    DistributedNumericTable(tableRdd, numRows)
+    val totalRows = tableRdd.map(table => table.numRows).sum().toLong
+    DistributedNumericTable(tableRdd, totalRows)
   }
 
   /**

@@ -44,7 +44,7 @@ class SparkGraphHBaseBackend(hbaseAdminFactory: HBaseAdminFactory)
   override def copyUnderlyingTable(graphName: String, newName: String)(implicit invocation: Invocation): Unit = {
     val tableName: String = graphName
     try {
-      KerberosAuthenticator.loginWithKeyTabCLI()
+      KerberosAuthenticator.loginUsingHadoopUtils()
       info(s"Trying to copy the HBase Table: $tableName")
       val hbaseAdmin = hbaseAdminFactory.createHBaseAdmin()
 
@@ -92,7 +92,7 @@ class SparkGraphHBaseBackend(hbaseAdminFactory: HBaseAdminFactory)
   private def performDelete(graphName: String, quiet: Boolean): Unit = {
     val tableName: String = graphName
     try {
-      KerberosAuthenticator.loginWithKeyTabCLI()
+      KerberosAuthenticator.loginUsingHadoopUtils()
       val hbaseAdmin = hbaseAdminFactory.createHBaseAdmin()
 
       if (hbaseAdmin.tableExists(tableName)) {
