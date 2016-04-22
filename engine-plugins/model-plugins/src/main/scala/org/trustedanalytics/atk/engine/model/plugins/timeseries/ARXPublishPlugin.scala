@@ -52,20 +52,6 @@ class ARXPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
   override def name: String = "model:arx/publish"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ModelPublishArgs)(implicit invocation: Invocation) = 1
-
   /**
    * Get the predictions for observations in a test frame
    *

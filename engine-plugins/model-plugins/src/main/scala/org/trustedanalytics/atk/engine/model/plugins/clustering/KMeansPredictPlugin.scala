@@ -45,7 +45,6 @@ import scala.collection.mutable.ListBuffer
     'k' columns : Each of the 'k' columns containing squared distance of that observation to the 'k'th cluster center
     predicted_cluster column: The cluster assignment for the observation""")
 class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameReference] {
-
   /**
    * The name of the command.
    *
@@ -55,20 +54,6 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameRef
   override def name: String = "model:k_means/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: KMeansPredictArgs)(implicit invocation: Invocation) = 1
-
   /**
    * Get the predictions for observations in a test frame
    *
@@ -82,6 +67,7 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameRef
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Extracting the KMeansModel from the stored JsObject
     val kmeansData = model.data.convertTo[KMeansData]
     val kmeansModel = kmeansData.kMeansModel

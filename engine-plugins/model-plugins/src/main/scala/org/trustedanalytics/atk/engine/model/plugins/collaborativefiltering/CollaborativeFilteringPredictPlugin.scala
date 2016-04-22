@@ -55,6 +55,7 @@ class CollaborativeFilteringPredictPlugin
   override def execute(arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frames = engine.frames
     val edgeFrame: SparkFrame = arguments.frame
+    require(!edgeFrame.rdd.isEmpty(), "Edge Frame is empty. Please predict on a non-empty Frame.")
     val schema = edgeFrame.schema
     val model: Model = arguments.model
     val data = model.data.convertTo[CollaborativeFilteringData]

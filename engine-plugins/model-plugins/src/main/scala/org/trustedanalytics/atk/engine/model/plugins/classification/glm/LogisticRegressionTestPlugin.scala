@@ -59,12 +59,6 @@ class LogisticRegressionTestPlugin extends SparkCommandPlugin[ClassificationWith
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ClassificationWithSGDTestArgs)(implicit invocation: Invocation) = 9
-  /**
    * Get the predictions for observations in a test frame
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -77,6 +71,7 @@ class LogisticRegressionTestPlugin extends SparkCommandPlugin[ClassificationWith
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
+    require(!frame.rdd.isEmpty(), "Test Frame is empty. Please test on a non-empty Frame.")
     val logRegData = model.data.convertTo[LogisticRegressionData]
     val logRegModel = logRegData.logRegModel
     if (arguments.observationColumns.isDefined) {

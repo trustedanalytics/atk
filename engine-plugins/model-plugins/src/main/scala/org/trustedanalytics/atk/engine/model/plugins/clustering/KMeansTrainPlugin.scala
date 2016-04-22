@@ -49,19 +49,6 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
   override def name: String = "model:k_means/train"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   *
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: KMeansTrainArgs)(implicit invocation: Invocation) = 15
   /**
    * Run MLLib's KMeans() on the training frame and create a Model for it.
    *
@@ -77,6 +64,7 @@ class KMeansTrainPlugin extends SparkCommandPlugin[KMeansTrainArgs, KMeansTrainR
     val kMeans = KMeansTrainPlugin.initializeKmeans(arguments)
 
     val trainFrameRdd = frame.rdd
+    require(!trainFrameRdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     trainFrameRdd.cache()
     val vectorRDD = trainFrameRdd.toDenseVectorRDDWithWeights(arguments.observationColumns, arguments.columnScalings)
     val kmeansModel = kMeans.run(vectorRDD)

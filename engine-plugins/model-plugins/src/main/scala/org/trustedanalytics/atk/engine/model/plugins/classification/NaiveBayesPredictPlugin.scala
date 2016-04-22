@@ -62,14 +62,6 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
   override def name: String = "model:naive_bayes/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: NaiveBayesPredictArgs)(implicit invocation: Invocation) = 9
-
   /**
    * Get the predictions for observations in a test frame
    *
@@ -84,6 +76,7 @@ class NaiveBayesPredictPlugin extends SparkCommandPlugin[NaiveBayesPredictArgs, 
     val model: Model = arguments.model
 
     // Loading model
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     val naiveBayesJsObject = model.dataOption.getOrElse(
       throw new RuntimeException("This model has not been trained yet. Please train before trying to predict")
     )

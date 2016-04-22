@@ -64,12 +64,6 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: RandomForestClassifierTrainArgs)(implicit invocation: Invocation) = 109
-
-  /**
    * Run MLLib's RandomForest classifier on the training frame and create a Model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -83,6 +77,7 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
     val model: Model = arguments.model
 
     //create RDD from the frame
+    require(!frame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     val labeledTrainRdd: RDD[LabeledPoint] = frame.rdd.toLabeledPointRDD(arguments.labelColumn, arguments.observationColumns)
     val randomForestModel = RandomForest.trainClassifier(labeledTrainRdd, arguments.numClasses, arguments.getCategoricalFeaturesInfo, arguments.numTrees,
       arguments.getFeatureSubsetCategory, arguments.impurity, arguments.maxDepth, arguments.maxBins, arguments.seed)

@@ -54,12 +54,6 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
   override def name: String = "model:principal_components/train"
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: PrincipalComponentsTrainArgs)(implicit invocation: Invocation) = 7
-
-  /**
    * Calculate principal components for the specified columns
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
@@ -70,6 +64,7 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
   override def execute(arguments: PrincipalComponentsTrainArgs)(implicit invocation: Invocation): PrincipalComponentsTrainReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
+    require(!frame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
 
     validatePrincipalComponentsArgs(frame.schema, arguments)
 

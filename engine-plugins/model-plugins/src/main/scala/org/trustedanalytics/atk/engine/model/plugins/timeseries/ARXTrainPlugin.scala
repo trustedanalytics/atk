@@ -58,14 +58,6 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
   override def name: String = "model:arx/train"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   *
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: ARXTrainArgs)(implicit invocation: Invocation) = 15
-
   /**
    * Run the spark time series ARX fitmodel() on the training frame and create a Model for it.
    *
@@ -79,6 +71,7 @@ class ARXTrainPlugin extends SparkCommandPlugin[ARXTrainArgs, ARXTrainReturn] {
     val frame: SparkFrame = arguments.frame
     val model = arguments.model
     val trainFrameRdd = frame.rdd
+    require(!trainFrameRdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
 
     trainFrameRdd.cache()
 

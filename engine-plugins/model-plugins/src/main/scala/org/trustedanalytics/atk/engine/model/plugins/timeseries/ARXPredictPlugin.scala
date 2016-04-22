@@ -52,14 +52,6 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
   override def name: String = "model:arx/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: ARXPredictArgs)(implicit invocation: Invocation) = 1
-
   /**
    * Get the predictions for observations in a test frame
    *
@@ -72,7 +64,7 @@ class ARXPredictPlugin extends SparkCommandPlugin[ARXPredictArgs, FrameReference
   override def execute(arguments: ARXPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
-
+    require(!frame.rdd.isEmpty(), "Predict Frame is empty. Please predict on a non-empty Frame.")
     //Extracting the ARXModel from the stored JsObject
     val arxData = model.data.convertTo[ARXData]
     val arxModel = arxData.arxModel

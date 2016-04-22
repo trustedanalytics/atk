@@ -57,12 +57,6 @@ class LogisticRegressionTrainPlugin extends SparkCommandPlugin[LogisticRegressio
   override def name: String = "model:logistic_regression/train"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: LogisticRegressionTrainArgs)(implicit invocation: Invocation) = arguments.numIterations + 5
   /**
    * Run MLLib's LogisticRegressionWithSGD() on the training frame and create a Model for it.
    *
@@ -77,6 +71,7 @@ class LogisticRegressionTrainPlugin extends SparkCommandPlugin[LogisticRegressio
     val model: Model = arguments.model
 
     //create RDD from the frame
+    require(!frame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     val labeledTrainRdd = frame.rdd.toLabeledPointRDDWithFrequency(arguments.labelColumn,
       arguments.observationColumns, arguments.frequencyColumn)
 

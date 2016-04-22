@@ -44,7 +44,6 @@ import MLLibJsonProtocol._
 predicted_cluster : int
     Integer containing the cluster assignment.""")
 class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference] {
-
   /**
    * The name of the command.
    *
@@ -54,19 +53,6 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
   override def name: String = "model:gmm/predict"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: GMMPredictArgs)(implicit invocation: Invocation) = 1
 
   /**
    * Get the predictions for observations in a test frame

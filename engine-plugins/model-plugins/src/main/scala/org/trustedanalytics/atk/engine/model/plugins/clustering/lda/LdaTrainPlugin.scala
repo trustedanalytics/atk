@@ -54,12 +54,6 @@ class LdaTrainPlugin
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: LdaTrainArgs)(implicit invocation: Invocation) = arguments.maxIterations + 14
-
   override def execute(arguments: LdaTrainArgs)(implicit invocation: Invocation): LdaTrainResult = {
 
     // validate arguments
@@ -67,6 +61,8 @@ class LdaTrainPlugin
     edgeFrame.schema.requireColumnIsType(arguments.documentColumnName, DataTypes.string)
     edgeFrame.schema.requireColumnIsType(arguments.wordColumnName, DataTypes.string)
     edgeFrame.schema.requireColumnIsType(arguments.wordCountColumnName, DataTypes.isIntegerDataType)
+
+    require(!edgeFrame.rdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     require(edgeFrame.isParquet, "frame must be stored as parquet file, or support for new input format is needed")
 
     val ldaModel = LdaTrainFunctions.trainLdaModel(edgeFrame.rdd, arguments)

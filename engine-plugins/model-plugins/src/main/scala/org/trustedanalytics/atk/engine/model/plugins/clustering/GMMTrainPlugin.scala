@@ -53,20 +53,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
   override def name: String = "model:gmm/train"
 
   override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
-  /**
-   * User documentation exposed in Python.
-   *
-   * [[http://docutils.sourceforge.net/rst.html ReStructuredText]]
-   */
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   *
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: GMMTrainArgs)(implicit invocation: Invocation) = 1
-
   /**
    * Run MLLib's GaussianMixtureModel() on the training frame and create a Model for it.
    *

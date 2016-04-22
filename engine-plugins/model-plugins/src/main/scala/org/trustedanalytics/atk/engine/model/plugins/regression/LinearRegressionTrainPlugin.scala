@@ -56,6 +56,7 @@ class LinearRegressionTrainPlugin extends SparkCommandPlugin[LinearRegressionTra
     val frame: SparkFrame = arguments.frame
 
     val trainFrameRdd = frame.rdd
+    require(!trainFrameRdd.isEmpty(), "Train Frame is empty. Please train on a non-empty Frame.")
     val dataFrame = trainFrameRdd.toLabeledDataFrame(arguments.valueColumn, arguments.observationColumns)
 
     val linReg = LinearRegressionTrainPlugin.initializeLinearRegressionModel(arguments)
