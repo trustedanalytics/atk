@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
-    <link rel="next" title="Commands model:daal_linear_regression/train" href="model-daal_linear_regression__train.html" >
+    <link rel="next" title="Commands model:daal_linear_regression/publish" href="model-daal_linear_regression__publish.html" >
     <link rel="prev" title="Commands model:daal_linear_regression/new" href="model-daal_linear_regression__new.html" > 
   </head>
   <body>
@@ -77,7 +77,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="model-daal_linear_regression__train.html" title="Commands model:daal_linear_regression/train"
+        <a href="model-daal_linear_regression__publish.html" title="Commands model:daal_linear_regression/publish"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -129,7 +129,7 @@
   <div class="section" id="commands-model-daal-linear-regression-predict">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:daal_linear_regression/predict<a class="headerlink" href="#commands-model-daal-linear-regression-predict" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Predict labels for a test frame using trained DAAL linear regression model.</p>
+Predict labels for a test frame using trained Intel DAAL linear regression model.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -155,17 +155,15 @@ Predict labels for a test frame using trained DAAL linear regression model.</p>
 </div></blockquote>
 <p><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train or test the model on.</p>
+<div><p>The frame to predict on</p>
 </div></blockquote>
-<p><strong>feature_columns</strong> : list</p>
+<p><strong>value_column</strong> : unicode (default=None)</p>
 <blockquote>
-<div><p>List of column(s) containing the
-observations.</p>
+<div><p>Column name containing the value of each observation</p>
 </div></blockquote>
-<p><strong>label_columns</strong> : list</p>
+<p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote class="last">
-<div><p>List of column(s) containing the label
-for each observation.</p>
+<div><p>List of column(s) containing the observations</p>
 </div></blockquote>
 </td>
 </tr>
@@ -257,7 +255,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 21, 2016.
+      Last updated on Apr 22, 2016.
       </li>
     </ul>
     </div>

@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models DaalLinearRegressionModel" href="index.html" >
     <link rel="next" title="Models RandomForestClassifierModel" href="../model-random_forest_classifier/index.html" >
-    <link rel="prev" title="DaalLinearRegressionModel status" href="status.html" > 
+    <link rel="prev" title="DaalLinearRegressionModel test" href="test.html" > 
   </head>
   <body>
 
@@ -74,7 +74,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="status.html" title="DaalLinearRegressionModel status"
+        <a href="test.html" title="DaalLinearRegressionModel test"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -132,9 +132,9 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>feature_columns</em>, <em>label_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>value_column</em>, <em>observation_columns</em>, <em>fit_intercept=True</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Build DAAL linear regression model.</p>
+Build Intel DAAL linear regression model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -143,27 +143,31 @@ Build DAAL linear regression model.</p>
 <blockquote>
 <div><p>A frame to train or test the model on.</p>
 </div></blockquote>
-<p><strong>feature_columns</strong> : list</p>
+<p><strong>value_column</strong> : unicode</p>
 <blockquote>
-<div><p>List of column(s) containing the
-observations.</p>
+<div><p>Column name containing the value for each observation.</p>
 </div></blockquote>
-<p><strong>label_columns</strong> : list</p>
+<p><strong>observation_columns</strong> : list</p>
 <blockquote>
-<div><p>List of column(s) containing the label
-for each observation.</p>
+<div><p>List of column(s) containing the observations.</p>
+</div></blockquote>
+<p><strong>fit_intercept</strong> : bool (default=True)</p>
+<blockquote>
+<div><p>Parameter for whether to fit an intercept term. Default is true</p>
 </div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">: dict</p>
 <blockquote class="last">
-<div><p>Array with coefficients of linear regression model</p>
+<div><p>Trained Intel DAAL linear regression model</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Create DAAL LinearRegression Model using the observation column and target column of the train frame</p>
+<p>Create Intel DAAL LinearRegression Model using the observation column and target column of the train frame</p>
+<p class="rubric">Examples</p>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -189,7 +193,7 @@ for each observation.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 21, 2016.
+      Last updated on Apr 22, 2016.
       </li>
     </ul>
     </div>

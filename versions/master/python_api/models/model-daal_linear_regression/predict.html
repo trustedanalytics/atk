@@ -44,7 +44,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" >
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="Models DaalLinearRegressionModel" href="index.html" >
-    <link rel="next" title="DaalLinearRegressionModel status" href="status.html" >
+    <link rel="next" title="DaalLinearRegressionModel publish" href="publish.html" >
     <link rel="prev" title="DaalLinearRegressionModel name" href="name.html" > 
   </head>
   <body>
@@ -78,7 +78,7 @@
            accesskey="P">previous</a>
       </li>
       <li class="active">
-        <a href="status.html" title="DaalLinearRegressionModel status"
+        <a href="publish.html" title="DaalLinearRegressionModel publish"
            accesskey="N">next</a>
       </li>
       <li class="active">
@@ -132,26 +132,24 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>feature_columns</em>, <em>label_columns</em><span class="sig-paren">)</span><a class="headerlink" href="#predict" title="Permalink to this definition">¶</a></dt>
+<code class="descname">predict</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>value_column=None</em>, <em>observation_columns=None</em><span class="sig-paren">)</span><a class="headerlink" href="#predict" title="Permalink to this definition">¶</a></dt>
 <dd><p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Predict labels for a test frame using trained DAAL linear regression model.</p>
+Predict labels for a test frame using trained Intel DAAL linear regression model.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame</strong> : Frame</p>
 <blockquote>
-<div><p>A frame to train or test the model on.</p>
+<div><p>The frame to predict on</p>
 </div></blockquote>
-<p><strong>feature_columns</strong> : list</p>
+<p><strong>value_column</strong> : unicode (default=None)</p>
 <blockquote>
-<div><p>List of column(s) containing the
-observations.</p>
+<div><p>Column name containing the value of each observation</p>
 </div></blockquote>
-<p><strong>label_columns</strong> : list</p>
+<p><strong>observation_columns</strong> : list (default=None)</p>
 <blockquote>
-<div><p>List of column(s) containing the label
-for each observation.</p>
+<div><p>List of column(s) containing the observations</p>
 </div></blockquote>
 </td>
 </tr>
@@ -169,6 +167,8 @@ for each observation.</p>
 </table>
 <p>Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted value column.</p>
+<p class="rubric">Examples</p>
+<p>See <a class="reference internal" href="new.html"><em>here</em></a> for examples.</p>
 </dd></dl>
 
 </div>
@@ -194,7 +194,7 @@ existing columns and a new predicted value column.</p>
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 21, 2016.
+      Last updated on Apr 22, 2016.
       </li>
     </ul>
     </div>

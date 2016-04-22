@@ -45,7 +45,7 @@
     <link rel="top" title="Trusted Analytics Platform 0.6.0 documentation" href="../../../index.html" >
     <link rel="up" title="REST API Commands" href="index.html" >
     <link rel="next" title="Commands model:gmm/new" href="model-gmm__new.html" >
-    <link rel="prev" title="Commands model:daal_linear_regression/predict" href="model-daal_linear_regression__predict.html" > 
+    <link rel="prev" title="Commands model:daal_linear_regression/test" href="model-daal_linear_regression__test.html" > 
   </head>
   <body>
 
@@ -73,7 +73,7 @@
               
     <ul class="nav nav-pills pull-right">
       <li class="active">
-        <a href="model-daal_linear_regression__predict.html" title="Commands model:daal_linear_regression/predict"
+        <a href="model-daal_linear_regression__test.html" title="Commands model:daal_linear_regression/test"
            accesskey="P">previous</a>
       </li>
       <li class="active">
@@ -129,7 +129,7 @@
   <div class="section" id="commands-model-daal-linear-regression-train">
 <h1><a class="reference internal" href="index.html"><em>Commands</em></a> model:daal_linear_regression/train<a class="headerlink" href="#commands-model-daal-linear-regression-train" title="Permalink to this headline">¶</a></h1>
 <p><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr>
-Build DAAL linear regression model.</p>
+Build Intel DAAL linear regression model.</p>
 <div class="section" id="post-v1-commands">
 <h2>POST /v1/commands/<a class="headerlink" href="#post-v1-commands" title="Permalink to this headline">¶</a></h2>
 </div>
@@ -157,15 +157,17 @@ Build DAAL linear regression model.</p>
 <blockquote>
 <div><p>A frame to train or test the model on.</p>
 </div></blockquote>
-<p><strong>feature_columns</strong> : list</p>
+<p><strong>value_column</strong> : unicode</p>
 <blockquote>
-<div><p>List of column(s) containing the
-observations.</p>
+<div><p>Column name containing the value for each observation.</p>
 </div></blockquote>
-<p><strong>label_columns</strong> : list</p>
+<p><strong>observation_columns</strong> : list</p>
+<blockquote>
+<div><p>List of column(s) containing the observations.</p>
+</div></blockquote>
+<p><strong>fit_intercept</strong> : bool (default=True)</p>
 <blockquote class="last">
-<div><p>List of column(s) containing the label
-for each observation.</p>
+<div><p>Parameter for whether to fit an intercept term. Default is true</p>
 </div></blockquote>
 </td>
 </tr>
@@ -183,7 +185,7 @@ Content-type: application/json
 <div class="line"><br /></div>
 </div>
 <p><strong>Description</strong></p>
-<p>Create DAAL LinearRegression Model using the observation column and target column of the train frame</p>
+<p>Create Intel DAAL LinearRegression Model using the observation column and target column of the train frame</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -226,7 +228,7 @@ Content-type: application/json
 <p><strong>Body</strong></p>
 <p><code class="docutils literal"><span class="pre">dict</span></code></p>
 <blockquote>
-<div>Array with coefficients of linear regression model</div></blockquote>
+<div>Trained Intel DAAL linear regression model</div></blockquote>
 </div>
 </div>
 </div>
@@ -252,7 +254,7 @@ Content-type: application/json
         &copy; Copyright 2015, Intel.
       </li>
       <li>
-      Last updated on Apr 21, 2016.
+      Last updated on Apr 22, 2016.
       </li>
     </ul>
     </div>

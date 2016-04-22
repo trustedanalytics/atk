@@ -119,6 +119,8 @@
     model-daal_k_means__train
     model-daal_linear_regression__new
     model-daal_linear_regression__predict
+    model-daal_linear_regression__publish
+    model-daal_linear_regression__test
     model-daal_linear_regression__train
     model-gmm__new
     model-gmm__predict
@@ -278,8 +280,10 @@ Command Name  (explained :doc:`here <about_command_names>`)                     
 :doc:`model:daal_k_means/publish <model-daal_k_means__publish>`                                 |ALPHA| Creates a tar file that will be used as input to the scoring engine
 :doc:`model:daal_k_means/train <model-daal_k_means__train>`                                     |ALPHA| Creates DAAL KMeans Model from train frame.
 :doc:`model:daal_linear_regression/new <model-daal_linear_regression__new>`                     |ALPHA| Create a 'new' instance of a DAAL Linear Regression model.
-:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Predict labels for a test frame using trained DAAL linear regression model.
-:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build DAAL linear regression model.
+:doc:`model:daal_linear_regression/predict <model-daal_linear_regression__predict>`             |ALPHA| Predict labels for a test frame using trained Intel DAAL linear regression model.
+:doc:`model:daal_linear_regression/publish <model-daal_linear_regression__publish>`             |ALPHA| Creates a tar file that will be used as input to the scoring engine
+:doc:`model:daal_linear_regression/test <model-daal_linear_regression__test>`                   |ALPHA| Compute test metrics for trained Intel DAAL linear regression model.
+:doc:`model:daal_linear_regression/train <model-daal_linear_regression__train>`                 |ALPHA| Build Intel DAAL linear regression model.
 :doc:`model:gmm/new <model-gmm__new>`                                                           Create a 'new' instance of a gmm model.
 :doc:`model:gmm/predict <model-gmm__predict>`                                                   |BETA| Predict the cluster assignments for the data points.
 :doc:`model:gmm/train <model-gmm__train>`                                                       |BETA| Creates a GMM Model from the train frame.

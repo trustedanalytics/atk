@@ -5,7 +5,7 @@
 ----------------------------------------------------------
 
 |ALPHA|
-Build DAAL linear regression model.
+Build Intel DAAL linear regression model.
 
 POST /v1/commands/
 ==================
@@ -47,21 +47,27 @@ Request
 
 
 
-    **feature_columns** : list
+    **value_column** : unicode
 
     ..
 
-        List of column(s) containing the
-        observations.
+        Column name containing the value for each observation.
 
 
 
-    **label_columns** : list
+    **observation_columns** : list
 
     ..
 
-        List of column(s) containing the label
-        for each observation.
+        List of column(s) containing the observations.
+
+
+
+    **fit_intercept** : bool (default=True)
+
+    ..
+
+        Parameter for whether to fit an intercept term. Default is true
 
 
 
@@ -75,7 +81,7 @@ Request
 
 **Description**
 
-Create DAAL LinearRegression Model using the observation column and target column of the train frame
+Create Intel DAAL LinearRegression Model using the observation column and target column of the train frame
 
 |
 
@@ -123,6 +129,6 @@ Response
 
 ``dict``
 
-        Array with coefficients of linear regression model
+        Trained Intel DAAL linear regression model
 
 

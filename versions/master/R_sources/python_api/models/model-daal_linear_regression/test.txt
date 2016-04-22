@@ -1,0 +1,52 @@
+
+:doc:`DaalLinearRegressionModel <index>`  test
+**********************************************
+
+------
+
+
+.. function:: test(self, frame, value_column=None, observation_columns=None)
+
+    |ALPHA|
+    Compute test metrics for trained Intel DAAL linear regression model.
+
+
+    :Parameters:
+
+        **frame** : Frame
+
+        ..
+
+            The frame to test the linear regression model on
+
+
+
+        **value_column** : unicode (default=None)
+
+        ..
+
+            Column name containing the value of each observation
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            List of column(s) containing the observations
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            Test metrics for Intel DAAL linear regression model
+    Predict the labels for a test frame, and compute test metrics for trained model.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.

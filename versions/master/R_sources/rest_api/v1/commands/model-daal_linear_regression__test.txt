@@ -1,0 +1,126 @@
+
+
+---------------------------------------------------------
+:doc:`Commands <index>` model:daal_linear_regression/test
+---------------------------------------------------------
+
+|ALPHA|
+Compute test metrics for trained Intel DAAL linear regression model.
+
+POST /v1/commands/
+==================
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  POST /v1/commands/
+
+**Body**
+
+
+
+:name:
+
+    model:daal_linear_regression/test
+
+:arguments:
+
+
+    **model** : Model
+
+    ..
+
+        <Missing Description>
+
+
+
+    **frame** : Frame
+
+    ..
+
+        The frame to test the linear regression model on
+
+
+
+    **value_column** : unicode (default=None)
+
+    ..
+
+        Column name containing the value of each observation
+
+
+
+    **observation_columns** : list (default=None)
+
+    ..
+
+        List of column(s) containing the observations
+
+
+
+|
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+**Description**
+
+Predict the labels for a test frame, and compute test metrics for trained model.
+
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+Returns information about the command.  See the Response Body for Get Command here below.  It is the same.
+
+
+GET /v1/commands/:id
+====================
+
+Request
+-------
+
+**Route** ::
+
+  GET /v1/commands/18
+
+**Body**
+
+(None)
+
+**Headers** ::
+
+  Authorization: test_api_key_1
+  Content-type: application/json
+|
+
+Response
+--------
+
+**Status** ::
+
+  200 OK
+
+**Body**
+
+
+``dict``
+
+        Test metrics for Intel DAAL linear regression model
+
+

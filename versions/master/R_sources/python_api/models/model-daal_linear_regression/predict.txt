@@ -5,10 +5,10 @@
 ------
 
 
-.. function:: predict(self, frame, feature_columns, label_columns)
+.. function:: predict(self, frame, value_column=None, observation_columns=None)
 
     |ALPHA|
-    Predict labels for a test frame using trained DAAL linear regression model.
+    Predict labels for a test frame using trained Intel DAAL linear regression model.
 
 
     :Parameters:
@@ -17,25 +17,23 @@
 
         ..
 
-            A frame to train or test the model on.
+            The frame to predict on
 
 
 
-        **feature_columns** : list
-
-        ..
-
-            List of column(s) containing the
-            observations.
-
-
-
-        **label_columns** : list
+        **value_column** : unicode (default=None)
 
         ..
 
-            List of column(s) containing the label
-            for each observation.
+            Column name containing the value of each observation
+
+
+
+        **observation_columns** : list (default=None)
+
+        ..
+
+            List of column(s) containing the observations
 
 
 
@@ -50,3 +48,7 @@
               Frame containing the original frame's columns and a column with the predicted value.
     Predict the labels for a test frame and create a new frame revision with
     existing columns and a new predicted value column.
+
+    Examples
+    --------
+    See :doc:`here <new>` for examples.
