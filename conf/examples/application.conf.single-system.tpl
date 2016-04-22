@@ -42,6 +42,10 @@ trustedanalytics.atk {
       #   2) Use "Actions" -> "Upload Spark Jar" to install jar in HDFS, if it is not already there
       //spark.yarn.jar = "hdfs://invalid-hdfs-host/user/spark/share/lib/spark-assembly.jar"
       //spark.yarn.jar = "/opt/cloudera/parcels/CDH/lib/spark/assembly/lib/spark-assembly-1.5.0-cdh5.5.0-hadoop2.6.0-cdh5.5.0.jar"
+
+      # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
+      //spark.driver.extraLibraryPath = "."
+      //spark.executor.extraLibraryPath = "."
     }
   }
 }
