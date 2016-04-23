@@ -132,7 +132,7 @@
 <hr class="docutils" />
 <dl class="function">
 <dt id="train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>source_column_name</em>, <em>dest_column_name</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>self</em>, <em>frame</em>, <em>source_column_name</em>, <em>dest_column_name</em>, <em>weight_column_name</em>, <em>max_steps=10</em>, <em>regularization=0.5</em>, <em>alpha=0.5</em>, <em>num_factors=3</em>, <em>use_implicit=False</em>, <em>num_user_blocks=2</em>, <em>num_item_block=3</em>, <em>checkpoint_iterations=10</em>, <em>target_rmse=0.05</em><span class="sig-paren">)</span><a class="headerlink" href="#train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collaborative filtering (ALS) model</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -178,6 +178,10 @@
 <p><strong>num_item_block</strong> : int32 (default=3)</p>
 <blockquote>
 <div><p>number of item blocks</p>
+</div></blockquote>
+<p><strong>checkpoint_iterations</strong> : int32 (default=10)</p>
+<blockquote>
+<div><p>Number of iterations between checkpoints</p>
 </div></blockquote>
 <p><strong>target_rmse</strong> : float64 (default=0.05)</p>
 <blockquote class="last">

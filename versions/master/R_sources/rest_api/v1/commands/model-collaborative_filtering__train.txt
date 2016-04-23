@@ -126,6 +126,14 @@ Request
 
 
 
+    **checkpoint_iterations** : int32 (default=10)
+
+    ..
+
+        Number of iterations between checkpoints
+
+
+
     **target_rmse** : float64 (default=0.05)
 
     ..
