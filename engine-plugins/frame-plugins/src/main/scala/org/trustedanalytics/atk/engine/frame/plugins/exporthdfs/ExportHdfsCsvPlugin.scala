@@ -69,47 +69,11 @@ class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMe
     require(!fileStorage.exists(new Path(arguments.folderName)), "File or Directory already exists")
     val frame: SparkFrame = arguments.frame
     // load frame as RDD
-    val sample = exportToHdfsCsv(frame.rdd, arguments.folderName, arguments.separator.charAt(0), arguments.count, arguments.offset)
+    val sample = frame.rdd.exportToHdfsCsv(arguments.folderName, arguments.separator.charAt(0), arguments.count, arguments.offset)
 
     val artifactPath = new Path(s"${fileStorage.hdfs.getHomeDirectory()}/${arguments.folderName}")
     ExportMetadata(artifactPath.toString, "all", "csv", frame.rowCount, sample,
       fileStorage.size(artifactPath.toString), Some(arguments.folderName))
   }
 
-  /**
-   * Export to a file in CSV format
-   *
-   * @param frameRdd input rdd containing all columns
-   * @param filename file path where to store the file
-   */
-  private def exportToHdfsCsv(
-    frameRdd: FrameRdd,
-    filename: String,
-    separator: Char,
-    count: Int,
-    offset: Int) = {
-
-    val filterRdd = if (count > 0) MiscFrameFunctions.getPagedRdd(frameRdd, offset, count, -1) else frameRdd
-    val headers = frameRdd.frameSchema.columnNames.mkString(separator.toString)
-    val csvFormat = CSVFormat.RFC4180.withDelimiter(separator)
-
-    val csvRdd = filterRdd.map(row => {
-      val stringBuilder = new java.lang.StringBuilder
-      val printer = new CSVPrinter(stringBuilder, csvFormat)
-      val array = row.toSeq.map(col =>
-        col match {
-          case null => ""
-          case arr: ArrayBuffer[_] => arr.mkString(",")
-          case seq: Seq[_] => seq.mkString(",")
-          case x => x.toString
-        })
-      for (i <- array) printer.print(i)
-      stringBuilder.toString
-    })
-
-    val dataSample = if (csvRdd.isEmpty()) StringUtils.EMPTY else csvRdd.first()
-    val addHeaders = frameRdd.sparkContext.parallelize(List(headers)) ++ csvRdd
-    addHeaders.saveAsTextFile(filename)
-    dataSample
-  }
 }

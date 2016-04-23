@@ -96,6 +96,7 @@ frame-/label_propagation.rst
 graph/graphx_connected_components.rst
 graph/graphx_triangle_count.rst
 graph/graphx_pagerank.rst
+graph/ExportGraphCsv.rst
 frame/column_median.rst
 frame/column_mode.rst
 frame/column_summary_statistics.rst
