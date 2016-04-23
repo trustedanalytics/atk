@@ -23,7 +23,7 @@ import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 import scala.collection.mutable.ArrayBuffer
 /**
- * Created by wtaie on 4/5/16.
+ * Scala unit test for mapPartitionVertices() method in VertexFrameRdd
  */
 class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with Matchers {
 
@@ -37,7 +37,7 @@ class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with 
     new GenericRow(Array(4L, "l1", "Lucy", "LAX", "PDX", 450)))
 
   "VertexFrameRdd" should {
-    "test map vertices partitions" in {
+    "execute user-defined vertex functions in mapPartitionVertices" in {
       val rowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(schema, rowRdd)
       val nameRdd = vertexFrameRdd.mapPartitionVertices(iter => {
@@ -51,7 +51,7 @@ class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with 
         }
         nameBuffer.toIterator
       })
-      //colect the nameRdd into an array
+      //collect the nameRdd into an array
       val nameList = nameRdd.collect()
       nameList should contain theSameElementsAs (Array("Bob", "Alice", "Fred", "Lucy"))
     }

@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
 /**
- * Created by wtaie on 4/18/16.
+ *  scala test for EdgeFrameWriter, checking the number of exported edges
  */
 class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 
@@ -34,10 +34,12 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   override def afterEach() {
     cleanupOrientDb()
   }
+
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbUri: String = "plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest"
+      val dbName = "OrientDbTest"
+      val dbConfig = new DbConfigurations(dbUri, "admin", "admin")
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
@@ -49,8 +51,8 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val vRowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(vSchema, vRowRdd)
       val vBatchSize = 4
-      val vertexFrameWriter = new VertexFrameWriter
-      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(dbUri, vertexFrameRdd, vBatchSize)
+      val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
+      val verticesCountRdd = vertexFrameWriter.exportVertexFrame(dbName, vBatchSize)
 
       //exporting the edge frame:
       val eColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
@@ -62,8 +64,9 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val eRowRdd = sparkContext.parallelize(edges)
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
       val batchSize = 3
-      val edgeFrameWriter = new EdgeFrameWriter
-      val edgesCount = edgeFrameWriter.exportEdgeFrame(dbUri, edgeFrameRdd, batchSize)
+      val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
+      val edgesCount = edgeFrameWriter.exportEdgeFrame(dbName, batchSize)
+      val loadedEdgesCount = orientFileGraph.countEdges()
       edgesCount shouldEqual (3)
 
     }

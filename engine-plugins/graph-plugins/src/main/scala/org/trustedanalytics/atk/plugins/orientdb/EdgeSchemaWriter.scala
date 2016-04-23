@@ -19,25 +19,24 @@ import com.tinkerpop.blueprints.impls.orient.{ OrientEdgeType, OrientGraph }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema }
 
 /**
- * Created by wtaie on 4/18/16.
+ * export the edge schema
+ * @param edgeSchema ATK edge schema
  */
-class EdgeSchemaWriter {
+class EdgeSchemaWriter(edgeSchema: EdgeSchema) {
 
   /**
    * Method to export the edge schema
    * @param oGraph  an instance of Orient graph database
-   * @param edgeSchema ATK edge schema
    * @return Orient edge schema
    */
-  def createEdgeSchema(oGraph: OrientGraph, edgeSchema: EdgeSchema): OrientEdgeType = {
+  def createEdgeSchema(oGraph: OrientGraph): OrientEdgeType = {
 
-    val className: String = "Edge" + edgeSchema.label
+    val className: String = edgeSchema.label
     val oEdgeType = oGraph.createEdgeType(className)
     val eColumns = edgeSchema.columns
     eColumns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        val convertDataTypes = new DataTypeToOTypeConversion
-        val oColumnDataType = convertDataTypes.convertDataTypeToOrientDbType(col.dataType)
+        val oColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
         oEdgeType.createProperty(col.name, oColumnDataType)
       }
     })

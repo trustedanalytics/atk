@@ -18,34 +18,45 @@ package org.trustedanalytics.atk.plugins.orientdb
 import org.apache.spark.atk.graph.VertexFrameRdd
 
 /**
- * Created by wtaie on 4/18/16.
+ * Exports VertexFrameRdd to OrientDB
+ *
+ * @param vertexFrameRdd  vertices frame to be exported to Orient
  */
-class VertexFrameWriter {
+
+class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+
   /**
    * Method to export vertex frame to OrientDb
    *
-   * @param dbUri OrientDb URI
-   * @param vertexFrameRdd  vertices frame to be exported to Orient
+   * @param dbName OrientDb URI
    * @param batchSize the number of vertices to be committed
    * @return the number of exported vertices
    */
-  def exportVertexFrame(dbUri: String, vertexFrameRdd: VertexFrameRdd, batchSize: Int): Long = {
-
+  def exportVertexFrame(dbName: String, batchSize: Int): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
-      val graphFactory = new GraphDbFactory
-      val oGraph = graphFactory.GraphDbConnector(dbUri)
-      while (iter.hasNext) {
-        val vertexWrapper = iter.next()
-        val vertex = vertexWrapper.toVertex
-        val addOrientVertex = new VertexWriter
-        val oVertex = addOrientVertex.addVertex(oGraph, vertex)
-        batchCounter += 1
-        if (batchCounter % batchSize == 0 && batchCounter != 0) {
-          oGraph.commit()
+      val oGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
+      try {
+        while (iter.hasNext) {
+          val vertexWrapper = iter.next()
+          val vertex = vertexWrapper.toVertex
+          val addOrientVertex = new VertexWriter(oGraph)
+          val oVertex = addOrientVertex.addVertex(vertex)
+          batchCounter += 1
+          if (batchCounter % batchSize == 0 && batchCounter != 0) {
+            oGraph.commit()
+          }
         }
       }
-      oGraph.shutdown(true, true) // commit and close the graph database
+      catch {
+        case e: Exception => {
+          oGraph.rollback()
+          throw new RuntimeException("Unable to add edges to OrientDB graph", e)
+        }
+      }
+      finally {
+        oGraph.shutdown(true, true) // commit and close the graph database
+      }
       Array(batchCounter).toIterator
     })
     verticesCountRdd.sum().toLong

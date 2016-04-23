@@ -15,18 +15,17 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 /**
- * ExportOrientDbGraph plugin input arguments
+ * the database parsed configurations
  */
 
-case class ExportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") dbName: String,
-                                   @ArgDoc("""batch size for commiting transcations.""") batchSize: Int = 1000) {
+case class DbConfigurations(@ArgDoc("""OrientDB database URI.""") dbUri: String,
+                            @ArgDoc("""User name.""") dbUserName: String,
+                            @ArgDoc("""User name.""") dbPassword: String) extends Serializable {
 
-  require(graph != null, "graph is required")
-  require(dbName != null, "database name is required")
-  require(batchSize > 0, "batch size should be a positive value")
-
+  require(dbUri != null, "database URI is required")
+  require(dbUserName != null, "User name is required")
+  require(dbPassword != null, "Password is required")
 }

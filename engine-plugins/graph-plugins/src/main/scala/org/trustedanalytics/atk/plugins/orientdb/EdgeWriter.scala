@@ -22,25 +22,26 @@ import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 
 /**
- * Created by wtaie on 4/18/16.
+ * Exports edge to OrientEdge
+ * @param oGraph an instance of Orient graph database
+ * @param edge atk edge to be exported to OrientEdge
  */
-class EdgeWriter {
+class EdgeWriter(oGraph: OrientGraph, edge: Edge) {
+
+  require(oGraph != null, "The Orient graph database instance must not equal null")
 
   /**
    * Method for exporting an edge
-   * @param oGraph     an instance of Orient graph database
-   * @param edge       he atk edge that is required to be exported to OrientEdge
    * @param srcVertex  is a blueprintsVertex as a source
    * @param destVertex is a blueprintsVertex as a destination
    * @return OrientEdge
    */
-  def addEdge(oGraph: OrientGraph, edge: Edge, srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
+  def addEdge(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
 
-    require(oGraph != null, "The Orient graph database instance must not equal null")
-    val className = "Edge" + edge.schema.label
+    val className = edge.schema.label
     if (oGraph.getEdgeType(className) == null) {
-      val createEdgeSchema = new EdgeSchemaWriter
-      val oEdgeType = createEdgeSchema.createEdgeSchema(oGraph, edge.schema)
+      val createEdgeSchema = new EdgeSchemaWriter(edge.schema)
+      val oEdgeType = createEdgeSchema.createEdgeSchema(oGraph)
     }
     val oEdge = oGraph.addEdge("class:" + className, srcVertex, destVertex, className)
     val rowWrapper = new RowWrapper(edge.schema)

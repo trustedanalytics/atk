@@ -22,21 +22,23 @@ import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 
 /**
- * Created by wtaie on 4/18/16.
+ * Export vertex to OrientDB vertex
+ *
+ * @param oGraph an instance of Orient graph database
  */
-class VertexWriter {
+class VertexWriter(oGraph: OrientGraph) {
 
   /**
    * Method for exporting a vertex
-   * @param oGraph an instance of Orient graph database
+   *
    * @param vertex atk vertex to be converted to Orient BlueprintsVertex
    * @return Orient BlueprintsVertex
    */
 
-  def addVertex(oGraph: OrientGraph, vertex: Vertex): BlueprintsVertex = {
+  def addVertex(vertex: Vertex): BlueprintsVertex = {
 
     require(oGraph != null, "The Orient graph database instance must not equal null")
-    val className: String = "Vertex" + vertex.schema.label
+    val className: String = vertex.schema.label
     if (oGraph.getVertexType(className) == null) {
       val createVertexSchema = new VertexSchemaWriter
       val oVertexType = createVertexSchema.createVertexSchema(oGraph, vertex.schema)
@@ -50,6 +52,26 @@ class VertexWriter {
     })
 
     oVertex
+
+  }
+
+  /**
+   * a method for checking an existing vertex and creates a new vertex if not found
+   * @param vertexId the vertex ID
+   * @return vertex
+   */
+  def findOrCreateVertex(vertexId: Long): BlueprintsVertex = {
+
+    val vertexIterator = oGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
+    if (vertexIterator.hasNext) {
+      val existingVertex = vertexIterator.next()
+      existingVertex
+    }
+    else {
+      val newVertex = oGraph.addVertex(GraphSchema.labelProperty, null)
+      newVertex.setProperty(GraphSchema.vidProperty, vertexId)
+      newVertex
+    }
 
   }
 }

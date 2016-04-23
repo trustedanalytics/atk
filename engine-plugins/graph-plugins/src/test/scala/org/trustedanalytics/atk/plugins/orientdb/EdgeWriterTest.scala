@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
 /**
- * Created by wtaie on 4/18/16.
+ * scala test for EdgeWriter, checking the exported exported edge source vertex ID, destination vertex ID and the edge properties.
  */
 class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWordSpec with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
@@ -41,16 +41,16 @@ class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWord
       val rowDest = new GenericRow(Array(2L, "l1", "Alice", "SFO", "SEA", 465))
       val vertexSrc = Vertex(schema, rowSrc)
       val vertexDest = Vertex(schema, rowDest)
-      val addOrientVertex = new VertexWriter
-      val oVertexSrc = addOrientVertex.addVertex(orientGraph, vertexSrc)
-      val oVertexDest = addOrientVertex.addVertex(orientGraph, vertexDest)
+      val addOrientVertex = new VertexWriter(orientMemoryGraph)
+      val oVertexSrc = addOrientVertex.addVertex(vertexSrc)
+      val oVertexDest = addOrientVertex.addVertex(vertexDest)
       // create the edge
       val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
       val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
       val edgeRow = new GenericRow(Array(1L, 2L, 3L, "distance", 500))
       val edge = Edge(edgeSchema, edgeRow)
-      val addOrientEdge = new EdgeWriter
-      val oEdge = addOrientEdge.addEdge(orientGraph, edge, oVertexSrc, oVertexDest)
+      val addOrientEdge = new EdgeWriter(orientMemoryGraph, edge)
+      val oEdge = addOrientEdge.addEdge(oVertexSrc, oVertexDest)
       val srcVidProp: Any = oEdge.getProperty(GraphSchema.srcVidProperty)
       val destVidProp: Any = oEdge.getProperty(GraphSchema.destVidProperty)
       val edgeProp: Any = oEdge.getProperty("distance")

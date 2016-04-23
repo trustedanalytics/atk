@@ -16,39 +16,53 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.EdgeFrameRdd
+import org.trustedanalytics.atk.domain.schema.GraphSchema
 
 /**
- * Created by wtaie on 4/18/16.
+ *  Exports EdgeFrameRdd to OrientDB edges
+ *
+ * @param edgeFrameRdd edges frame to be exported to Orient
  */
-class EdgeFrameWriter {
+
+class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+
   /**
    * Method to export edge frame to OrientDb
    *
-   * @param dbUri OrientDb URI
-   * @param edgeFrameRdd edges frame to be exported to Orient
+   * @param dbName OrientDb URI
    * @param batchSize the number of edges to be commited
    * @return the number of exported edges
    */
-  def exportEdgeFrame(dbUri: String, edgeFrameRdd: EdgeFrameRdd, batchSize: Int): Long = {
+  def exportEdgeFrame(dbName: String, batchSize: Int): Long = {
 
     val edgesCountRdd = edgeFrameRdd.mapPartitionEdges(iter => {
-      val graphFactory = new GraphDbFactory
-      val oGraph = graphFactory.GraphDbConnector(dbUri)
+      val oGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
       var batchCounter = 0L
-      while (iter.hasNext) {
-        val edgeWrapper = iter.next()
-        val edge = edgeWrapper.toEdge
-        // lookup the source and destination vertices
-        val srcVertex = oGraph.getVertices("_vid", edge.srcVertexId()).iterator().next()
-        val destVertex = oGraph.getVertices("_vid", edge.destVertexId()).iterator().next()
-        val oEdgeWriter = new EdgeWriter
-        val oEdge = oEdgeWriter.addEdge(oGraph, edge, srcVertex, destVertex)
-        batchCounter += 1
-        if (batchCounter % batchSize == 0 && batchCounter != 0) {
-          oGraph.commit()
+      try {
+        while (iter.hasNext) {
+          val edgeWrapper = iter.next()
+          val edge = edgeWrapper.toEdge
+          // lookup the source and destination vertices
+          val findOrientVertex = new VertexWriter(oGraph)
+          val srcVertex = findOrientVertex.findOrCreateVertex(edge.srcVertexId())
+          val destVertex = findOrientVertex.findOrCreateVertex(edge.destVertexId())
+          val oEdgeWriter = new EdgeWriter(oGraph, edge)
+          val oEdge = oEdgeWriter.addEdge(srcVertex, destVertex)
+          batchCounter += 1
+          if (batchCounter % batchSize == 0 && batchCounter != 0) {
+            oGraph.commit()
+          }
         }
       }
-      oGraph.shutdown(true, true) //commit the changes and close the graph
+      catch {
+        case e: Exception => {
+          oGraph.rollback()
+          throw new RuntimeException("Unable to add edges to OrientDB graph", e)
+        }
+      }
+      finally {
+        oGraph.shutdown(true, true) //commit the changes and close the graph
+      }
       Array(batchCounter).toIterator
     })
     edgesCountRdd.sum().toLong

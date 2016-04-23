@@ -29,9 +29,9 @@
 <progress>
 >>> result['db_uri']
 u'plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbDocTest'
->>> result['o_vertices_stats']
+>>> result['vertices']
  {u'source': 5}
->>> result['o_edge_stats']
+>>> result['edges']
  {u'edges': 5}
 
 

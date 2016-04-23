@@ -17,44 +17,66 @@ package org.trustedanalytics.atk.plugins.orientdb
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
+import org.trustedanalytics.atk.event.EventLogging
+import scala.util.{ Failure, Success, Try }
 
 /**
- * Created by wtaie on 4/1/16.
+ * OrientDB graph factory
  */
 
-class GraphDbFactory {
+object GraphDbFactory extends EventLogging {
   /**
-   * Method to create/connect to Orient database
-   * @param dbUri the database with default username; "admin" and password : "admin".
-   * @return a transcational Orient graph database instance
+   * Method to create/connect to OrientDB graph
+   *
+   * @param dbName the database name
+   * @param dbConfigurations OrientDB configurations
+   * @return a transactional OrientDB graph database instance
    */
 
-  def GraphDbConnector(dbUri: String): OrientGraph = {
+  def graphDbConnector(dbName: String, dbConfigurations: DbConfigurations): OrientGraph = {
 
-    val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbUri)
-    if (!orientDb.exists()) {
-      orientDb.create()
+    val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
+
+    val orientGraphDb = if (!orientDb.exists()) {
+      createGraphDb(dbConfigurations)
     }
     else {
-      System.out.println("the database already exists and now open")
-      orientDb.open("admin", "admin")
+      openGraphDb(orientDb, dbConfigurations)
     }
-    val orientGraphDb = new OrientGraph(orientDb)
     orientGraphDb
   }
 
   /**
    * Method for creating Orient graph database
-   * @param dbUri the database URL
-   * @param userName database username
-   * @param password the database password
+   * @param dbConfigurations OrientDB configurations
    * @return a transcational Orient graph database instance
    */
-  def createGraphDb(dbUri: String, userName: String, password: String): OrientGraph = {
-
-    val factory: OrientGraphFactory = new OrientGraphFactory(dbUri, userName, password)
-    var graph: OrientGraph = factory.getTx
+  def createGraphDb(dbConfigurations: DbConfigurations): OrientGraph = {
+    val graph = Try {
+      val factory = new OrientGraphFactory(dbConfigurations.dbUri, dbConfigurations.dbUserName, dbConfigurations.dbPassword)
+      factory.getDatabase.getMetadata.getSecurity.authenticate(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
+      factory.getTx
+    } match {
+      case Success(orientGraph) => orientGraph
+      case Failure(ex) => throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}", ex)
+    }
     graph
+  }
+
+  /**
+   * Method for opening Orient graph database
+   *
+   * @param dbConfigurations OrientDB configurations
+   * @return a transactional Orient graph database instance
+   */
+  private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfigurations): OrientGraph = {
+    Try {
+      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
+      db
+    } match {
+      case Success(db) => new OrientGraph(db)
+      case Failure(ex) => throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}", ex)
+    }
   }
 
 }

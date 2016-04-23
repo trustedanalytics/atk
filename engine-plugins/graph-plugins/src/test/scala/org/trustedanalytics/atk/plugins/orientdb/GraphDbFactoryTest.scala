@@ -13,37 +13,48 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.plugins.orientdb.g
+package org.trustedanalytics.atk.plugins.orientdb
+
+import java.io.File
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraph
 import org.scalatest.{ Matchers, WordSpec }
-import org.trustedanalytics.atk.plugins.orientdb.GraphDbFactory
+import org.trustedanalytics.atk.testutils.DirectoryUtils
 
 /**
- * Created by wtaie on 4/1/16.
+ * scala unit tests for GraphDbFactory: the first,checking creating OrientDB, the second, checking opening an existing graph
  */
+
 class GraphDbFactoryTest extends WordSpec with Matchers {
 
   "graph database factory" should {
-    val graphFactory = new GraphDbFactory
     "creates a graph database and takes input arguments" in {
       val dbUri: String = "memory:OrientTestDb"
       val userName: String = "admin"
       val password: String = "admin"
-      val graph: OrientGraph = graphFactory.createGraphDb(dbUri, userName, password)
+      val dbConfig = new DbConfigurations(dbUri, userName, password)
+      val graph: OrientGraph = GraphDbFactory.createGraphDb(dbConfig)
       graph.isClosed shouldBe false
       graph.shutdown()
     }
     "connect to OrientDB" in {
-      val dbUri: String = "plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest"
-      val graphFactory = new GraphDbFactory
-      val orientDb = graphFactory.GraphDbConnector(dbUri)
+      var tmpDir: File = null
+      val dbName = "OrientDbTest"
+      tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
+      val dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
+      val userName: String = "admin"
+      val password: String = "admin"
+      val dbConfig = new DbConfigurations(dbUri, userName, password)
+      val orientDb = GraphDbFactory.graphDbConnector(dbName, dbConfig)
       orientDb.isClosed shouldBe false
       orientDb.shutdown()
-      val orientDbnew = graphFactory.GraphDbConnector(dbUri)
+      val orientDbnew = GraphDbFactory.graphDbConnector(dbName, dbConfig)
       orientDbnew.isClosed shouldBe false
       orientDbnew.drop()
       orientDbnew.isClosed shouldBe true
+
+      //clean up: delete the database direcotry
+      DirectoryUtils.deleteTempDirectory(tmpDir)
     }
   }
 }

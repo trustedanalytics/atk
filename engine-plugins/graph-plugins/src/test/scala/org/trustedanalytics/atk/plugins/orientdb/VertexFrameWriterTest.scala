@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSc
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
 /**
- * Created by wtaie on 4/18/16.
+ * scala test for VertexFrameWriter, checking the number of exported vertices
  */
 class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
@@ -33,12 +33,13 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
   override def afterEach() {
     cleanupOrientDb()
   }
+
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
-      val dbUri: String = "plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest"
+      val dbName = "OrientDbTest"
+      val dbConfig = new DbConfigurations(dbUri, "admin", "admin")
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
-
       val vertices: List[Row] = List(
         new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350)),
         new GenericRow(Array(2L, "l1", "Alice", "SFO", "SEA", 465)),
@@ -48,9 +49,11 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
       val batchSize = 4
       val rowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(schema, rowRdd)
-      val vertexFrameWriter = new VertexFrameWriter
-      val verticesCount = vertexFrameWriter.exportVertexFrame(dbUri, vertexFrameRdd, batchSize)
-      verticesCount shouldEqual (4)
+      val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
+      val verticesCount = vertexFrameWriter.exportVertexFrame(dbName, batchSize)
+      val loadedVerticesCount = orientFileGraph.countVertices()
+      verticesCount shouldEqual (loadedVerticesCount)
+
     }
   }
 

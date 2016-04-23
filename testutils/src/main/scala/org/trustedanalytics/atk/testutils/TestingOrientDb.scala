@@ -15,22 +15,28 @@
  */
 package org.trustedanalytics.atk.testutils
 
+import java.io.File
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
+import org.scalatest.mock.MockitoSugar
 
 /**
- * Created by wtaie on 3/31/16.
+ * setup for testing export to OrientDB plugin functions
  */
 trait TestingOrientDb {
 
-  var orientGraph: OrientGraph = null
-  var orientDb: OrientGraph = null
+  var tmpDir: File = null
+  var dbUri: String = null
+  var dbName: String = "OrientDbTest"
+  var orientMemoryGraph: OrientGraph = null
+  var orientFileGraph: OrientGraph = null
+
   /**
    * create in memory Orient graph database
    */
   def setupOrientDbInMemory(): Unit = {
     val uuid = java.util.UUID.randomUUID.toString
-    orientGraph = new OrientGraph("memory:OrientTestDb" + uuid)
+    orientMemoryGraph = new OrientGraph("memory:OrientTestDb" + uuid)
   }
 
   /**
@@ -38,46 +44,40 @@ trait TestingOrientDb {
    */
   def setupOrientDb(): Unit = {
 
-    val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx("plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest")
-    if (!orientDocDb.exists()) {
-      orientDocDb.create()
-    }
-    else {
-      System.out.println("the database already exists and now open")
-      orientDocDb.open("admin", "admin")
-    }
-    val orientDb = new OrientGraph(orientDocDb)
+    tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
+    dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
+    val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbUri)
+    orientDocDb.create()
+    orientFileGraph = new OrientGraph(orientDocDb)
+
   }
 
   /**
-   * commit the transcation and close/drop the ograph, for plocal and remote database creation modes
+   * commit the transaction and close/drop the graph database
    */
   def cleanupOrientDb(): Unit = {
     try {
-      if (orientDb != null) {
-        orientDb.commit()
-        orientDb.drop()
+      if (orientFileGraph != null) {
+        orientFileGraph.commit()
+        orientFileGraph.drop()
       }
     }
     finally {
-      val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx("plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbTest")
-      System.out.println("the database already exists and now open")
-      orientDocDb.open("admin", "admin")
-      orientDocDb.drop()
+      DirectoryUtils.deleteTempDirectory(tmpDir)
     }
   }
 
   /**
-   * commit the transcation and close the ograph
+   * commit the transaction and close the graph database
    */
   def cleanupOrientDbInMemory(): Unit = {
     try {
-      if (orientGraph != null) {
-        orientGraph.commit()
+      if (orientMemoryGraph != null) {
+        orientMemoryGraph.commit()
       }
     }
     finally {
-      orientGraph.shutdown()
+      orientMemoryGraph.shutdown()
     }
   }
 }

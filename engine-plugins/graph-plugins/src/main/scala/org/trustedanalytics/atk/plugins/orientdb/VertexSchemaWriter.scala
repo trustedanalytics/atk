@@ -20,7 +20,7 @@ import com.tinkerpop.blueprints.impls.orient.{ OrientVertexType, OrientGraph }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, VertexSchema }
 
 /**
- * Created by wtaie on 4/18/16.
+ * Export vertex schema to OrientDB
  */
 class VertexSchemaWriter {
 
@@ -34,17 +34,15 @@ class VertexSchemaWriter {
   def createVertexSchema(oGraph: OrientGraph, vertexSchema: VertexSchema): OrientVertexType = {
 
     val vColumns = vertexSchema.columns
-    val className: String = "Vertex" + vertexSchema.label
+    val className: String = vertexSchema.label
     val oVertexType = oGraph.createVertexType(className)
     vColumns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        val convertDataTypes = new DataTypeToOTypeConversion
-        val oColumnDataType = convertDataTypes.convertDataTypeToOrientDbType(col.dataType)
+        val oColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
         oVertexType.createProperty(col.name, oColumnDataType)
       }
     })
-    oGraph.createKeyIndex("_vid", classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
+    oGraph.createKeyIndex(GraphSchema.vidProperty, classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
     oVertexType
   }
-
 }
