@@ -472,6 +472,43 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object DaalNaiveBayesDataFormat extends JsonFormat[DaalNaiveBayesModelData] {
+    /**
+     * The write methods converts from DaalNaiveBayesModelData to JsValue
+     * @param obj DaalNaiveBayesModelData. Where DaalNaiveBayesModelData format is:
+     *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
+     *                                          labelColumn: String, numClasses: Int, alpha: Double)
+     * @return JsValue
+     */
+    override def write(obj: DaalNaiveBayesModelData): JsValue = {
+      JsObject(
+        "serialized_model" -> obj.serializedModel.toJson,
+        "observation_columns" -> obj.observationColumns.toJson,
+        "label_column" -> obj.labelColumn.toJson,
+        "num_classes" -> obj.numClasses.toJson,
+        "alpha" -> obj.alpha.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to DaalNaiveBayesModelData
+     * @param json JsValue
+     * @return DaalNaiveBayesModelData with format:
+     *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
+     *                                          labelColumn: String, numClasses: Int, alpha: Double)
+     */
+    override def read(json: JsValue): DaalNaiveBayesModelData = {
+      val fields = json.asJsObject.fields
+      val serializedModel = getOrInvalid(fields, "serialized_model").convertTo[List[Byte]]
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val labelColumn = getOrInvalid(fields, "value_column").convertTo[String]
+      val numClasses = getOrInvalid(fields, "numClasses").convertTo[Int]
+      val alpha = getOrInvalid(fields, "alpha").convertTo[Double]
+
+      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses, alpha)
+    }
+  }
+
   implicit object SVMModelFormat extends JsonFormat[SVMModel] {
     /**
      * The write methods converts from SVMModel to JsValue

@@ -23,7 +23,7 @@ import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.scoring.{ ModelPublishJsonProtocol, ModelPublish, ModelPublishArgs }
 import org.trustedanalytics.atk.engine.plugin._
-import org.trustedanalytics.atk.scoring.models.{ NaiveBayesData, NaiveBayesReaderPlugin }
+import org.trustedanalytics.atk.scoring.models.DaalNaiveBayesReaderPlugin
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -67,7 +67,7 @@ class DaalNaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, Export
     val jsvalue: JsValue = naiveBayesData.toJson
 
     val modelArtifact = ModelPublish.createTarForScoringEngine(jsvalue.toString().getBytes(Charsets.UTF_8),
-      "scoring-models", classOf[NaiveBayesReaderPlugin].getName,
+      "scoring-models", classOf[DaalNaiveBayesReaderPlugin].getName,
       Some(DaalUtils.getDaalLibraryPaths(EngineConfig.daalDynamicLibraries))
     )
     ExportMetadata(modelArtifact.filePath, "model", "tar", modelArtifact.fileSize, model.name.getOrElse("daal_naive_bayes_model"))
