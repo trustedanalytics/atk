@@ -15,9 +15,7 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.graph.{ SparkEdgeFrame, SparkVertexFrame, SparkGraph }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
 import scala.collection.immutable.Map
@@ -33,7 +31,7 @@ object ExportOrientDbGraphJsonFormat {
 import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
 
 @PluginDoc(oneLine = "Export graph to OrientDB",
-  extended = """Export the graph to OrientDB file located in the given dbURI.""",
+  extended = """Exports the graph to OrientDB file located in the given dbURI, and creates a user with the provided user name and password.""",
   returns = """OrientDB file, statistics for the exported vertices and edges.""")
 class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphArgs, ExportOrientDbGraphReturn] {
 
@@ -74,7 +72,6 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
     val metadata = vertexFrames.map(frame => {
-      //load frame as RDD
       val sparkFrame: SparkVertexFrame = frame
       val vertexFrameRdd = sparkFrame.rdd
       val exportVertexFrame = new VertexFrameWriter(vertexFrameRdd, dbConfigurations)
@@ -97,7 +94,6 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
     val edgeFrames = graphMeta.edgeFrames.map(_.toReference)
     val metadata = edgeFrames.map(frame => {
-      //load frame as RDD
       val sparkFrame: SparkEdgeFrame = frame
       val edgeFrameRdd = sparkFrame.rdd
       val exportEdgeFrame = new EdgeFrameWriter(edgeFrameRdd, dbConfigurations)

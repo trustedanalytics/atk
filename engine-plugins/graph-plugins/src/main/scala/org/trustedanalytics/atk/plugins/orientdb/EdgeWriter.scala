@@ -23,15 +23,17 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
 
 /**
  * Exports edge to OrientEdge
- * @param oGraph an instance of Orient graph database
+ *
+ * @param orientGraph an instance of Orient graph database
  * @param edge atk edge to be exported to OrientEdge
  */
-class EdgeWriter(oGraph: OrientGraph, edge: Edge) {
+class EdgeWriter(orientGraph: OrientGraph, edge: Edge) {
 
-  require(oGraph != null, "The Orient graph database instance must not equal null")
+  require(orientGraph != null, "The Orient graph database instance must not equal null")
 
   /**
    * Method for exporting an edge
+   *
    * @param srcVertex  is a blueprintsVertex as a source
    * @param destVertex is a blueprintsVertex as a destination
    * @return OrientEdge
@@ -39,18 +41,18 @@ class EdgeWriter(oGraph: OrientGraph, edge: Edge) {
   def addEdge(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
 
     val className = edge.schema.label
-    if (oGraph.getEdgeType(className) == null) {
+    if (orientGraph.getEdgeType(className) == null) {
       val createEdgeSchema = new EdgeSchemaWriter(edge.schema)
-      val oEdgeType = createEdgeSchema.createEdgeSchema(oGraph)
+      val edgeType = createEdgeSchema.createEdgeSchema(orientGraph)
     }
-    val oEdge = oGraph.addEdge("class:" + className, srcVertex, destVertex, className)
+    val orientEdge = orientGraph.addEdge("class:" + className, srcVertex, destVertex, className)
     val rowWrapper = new RowWrapper(edge.schema)
     edge.schema.columns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        oEdge.setProperty(col.name, rowWrapper(edge.row).value(col.name))
+        orientEdge.setProperty(col.name, rowWrapper(edge.row).value(col.name))
       }
     })
-    oEdge
+    orientEdge
   }
 
 }

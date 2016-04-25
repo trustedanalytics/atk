@@ -17,14 +17,15 @@ package org.trustedanalytics.atk.plugins.orientdb
 
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
-import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Failure, Success, Try }
 
 /**
  * OrientDB graph factory
  */
 
-object GraphDbFactory extends EventLogging {
+object GraphDbFactory {
+
+  val orientRole = "admin"
   /**
    * Method to create/connect to OrientDB graph
    *
@@ -48,12 +49,14 @@ object GraphDbFactory extends EventLogging {
 
   /**
    * Method for creating Orient graph database
+   *
    * @param dbConfigurations OrientDB configurations
    * @return a transcational Orient graph database instance
    */
   def createGraphDb(dbConfigurations: DbConfigurations): OrientGraph = {
     val graph = Try {
       val factory = new OrientGraphFactory(dbConfigurations.dbUri, dbConfigurations.dbUserName, dbConfigurations.dbPassword)
+      factory.getDatabase.getMetadata.getSecurity.createUser(dbConfigurations.dbUserName, dbConfigurations.dbPassword, orientRole)
       factory.getDatabase.getMetadata.getSecurity.authenticate(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
       factory.getTx
     } match {

@@ -46,9 +46,9 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val vertex = Vertex(schema, row)
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
 
-      val oVertex = addOrientVertex.addVertex(vertex)
-      val vidProp: Any = oVertex.getProperty(GraphSchema.vidProperty)
-      val propName: Any = oVertex.getProperty("name")
+      val orientVertex = addOrientVertex.addVertex(vertex)
+      val vidProp: Any = orientVertex.getProperty(GraphSchema.vidProperty)
+      val propName: Any = orientVertex.getProperty("name")
       val keyIdx = orientMemoryGraph.getIndexedKeys(classOf[BlueprintsVertex])
 
       assert(propName == "Bob")
@@ -61,8 +61,8 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
       val vertex = Vertex(schema, row)
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
-      val oVertex = addOrientVertex.addVertex(vertex)
-      val verIdd = oVertex.getId
+      val orientVertex = addOrientVertex.addVertex(vertex)
+      val verIdd = orientVertex.getId
       val vertexId = 1L
       val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
@@ -76,8 +76,8 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
       val vertex = Vertex(schema, row)
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
-      val oVertex = addOrientVertex.addVertex(vertex)
-      val verIdd = oVertex.getId
+      val orientVertex = addOrientVertex.addVertex(vertex)
+      val verIdd = orientVertex.getId
       val vertexId = 2L
       val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)

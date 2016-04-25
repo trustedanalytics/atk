@@ -24,9 +24,11 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
 /**
  * Export vertex to OrientDB vertex
  *
- * @param oGraph an instance of Orient graph database
+ * @param orientGraph an instance of Orient graph database
  */
-class VertexWriter(oGraph: OrientGraph) {
+class VertexWriter(orientGraph: OrientGraph) {
+
+  require(orientGraph != null, "The Orient graph database instance must not equal null")
 
   /**
    * Method for exporting a vertex
@@ -37,38 +39,38 @@ class VertexWriter(oGraph: OrientGraph) {
 
   def addVertex(vertex: Vertex): BlueprintsVertex = {
 
-    require(oGraph != null, "The Orient graph database instance must not equal null")
     val className: String = vertex.schema.label
-    if (oGraph.getVertexType(className) == null) {
+    if (orientGraph.getVertexType(className) == null) {
       val createVertexSchema = new VertexSchemaWriter
-      val oVertexType = createVertexSchema.createVertexSchema(oGraph, vertex.schema)
+      val oVertexType = createVertexSchema.createVertexSchema(orientGraph, vertex.schema)
     }
-    val oVertex: BlueprintsVertex = oGraph.addVertex(className, null)
+    val orientVertexType: BlueprintsVertex = orientGraph.addVertex(className, null)
     val rowWrapper = new RowWrapper(vertex.schema)
     vertex.schema.columns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        oVertex.setProperty(col.name, rowWrapper(vertex.row).value(col.name))
+        orientVertexType.setProperty(col.name, rowWrapper(vertex.row).value(col.name))
       }
     })
 
-    oVertex
+    orientVertexType
 
   }
 
   /**
    * a method for checking an existing vertex and creates a new vertex if not found
+   *
    * @param vertexId the vertex ID
    * @return vertex
    */
   def findOrCreateVertex(vertexId: Long): BlueprintsVertex = {
 
-    val vertexIterator = oGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
+    val vertexIterator = orientGraph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
     if (vertexIterator.hasNext) {
       val existingVertex = vertexIterator.next()
       existingVertex
     }
     else {
-      val newVertex = oGraph.addVertex(GraphSchema.labelProperty, null)
+      val newVertex = orientGraph.addVertex(GraphSchema.labelProperty, null)
       newVertex.setProperty(GraphSchema.vidProperty, vertexId)
       newVertex
     }

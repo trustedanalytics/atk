@@ -35,27 +35,27 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
   def exportVertexFrame(dbName: String, batchSize: Int): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
-      val oGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
+      val orientGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
       try {
         while (iter.hasNext) {
           val vertexWrapper = iter.next()
           val vertex = vertexWrapper.toVertex
-          val addOrientVertex = new VertexWriter(oGraph)
-          val oVertex = addOrientVertex.addVertex(vertex)
+          val addOrientVertex = new VertexWriter(orientGraph)
+          val orientVertex = addOrientVertex.addVertex(vertex)
           batchCounter += 1
           if (batchCounter % batchSize == 0 && batchCounter != 0) {
-            oGraph.commit()
+            orientGraph.commit()
           }
         }
       }
       catch {
         case e: Exception => {
-          oGraph.rollback()
+          orientGraph.rollback()
           throw new RuntimeException("Unable to add edges to OrientDB graph", e)
         }
       }
       finally {
-        oGraph.shutdown(true, true) // commit and close the graph database
+        orientGraph.shutdown(true, true) // commit and close the graph database
       }
       Array(batchCounter).toIterator
     })

@@ -39,7 +39,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
     "Export edge frame" in {
       // exporting a vertex frame:
       val dbName = "OrientDbTest"
-      val dbConfig = new DbConfigurations(dbUri, "admin", "admin")
+      val dbConfig = new DbConfigurations(dbUri, "admin", "admin", "port", "host")
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 

@@ -26,18 +26,19 @@ class EdgeSchemaWriter(edgeSchema: EdgeSchema) {
 
   /**
    * Method to export the edge schema
-   * @param oGraph  an instance of Orient graph database
+   *
+   * @param orientGraph  an instance of Orient graph database
    * @return Orient edge schema
    */
-  def createEdgeSchema(oGraph: OrientGraph): OrientEdgeType = {
+  def createEdgeSchema(orientGraph: OrientGraph): OrientEdgeType = {
 
     val className: String = edgeSchema.label
-    val oEdgeType = oGraph.createEdgeType(className)
+    val oEdgeType = orientGraph.createEdgeType(className)
     val eColumns = edgeSchema.columns
     eColumns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        val oColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
-        oEdgeType.createProperty(col.name, oColumnDataType)
+        val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
+        oEdgeType.createProperty(col.name, orientColumnDataType)
       }
     })
     oEdgeType

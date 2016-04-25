@@ -32,7 +32,9 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
       val dbUri: String = "memory:OrientTestDb"
       val userName: String = "admin"
       val password: String = "admin"
-      val dbConfig = new DbConfigurations(dbUri, userName, password)
+      val host = "host"
+      val port = "port"
+      val dbConfig = new DbConfigurations(dbUri, userName, password, port, host)
       val graph: OrientGraph = GraphDbFactory.createGraphDb(dbConfig)
       graph.isClosed shouldBe false
       graph.shutdown()
@@ -44,7 +46,9 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
       val dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
       val userName: String = "admin"
       val password: String = "admin"
-      val dbConfig = new DbConfigurations(dbUri, userName, password)
+      val host = "host"
+      val port = "port"
+      val dbConfig = new DbConfigurations(dbUri, userName, password, port, host)
       val orientDb = GraphDbFactory.graphDbConnector(dbName, dbConfig)
       orientDb.isClosed shouldBe false
       orientDb.shutdown()

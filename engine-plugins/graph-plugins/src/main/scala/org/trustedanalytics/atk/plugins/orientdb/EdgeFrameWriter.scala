@@ -36,32 +36,32 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
   def exportEdgeFrame(dbName: String, batchSize: Int): Long = {
 
     val edgesCountRdd = edgeFrameRdd.mapPartitionEdges(iter => {
-      val oGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
+      val orientGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
       var batchCounter = 0L
       try {
         while (iter.hasNext) {
           val edgeWrapper = iter.next()
           val edge = edgeWrapper.toEdge
           // lookup the source and destination vertices
-          val findOrientVertex = new VertexWriter(oGraph)
+          val findOrientVertex = new VertexWriter(orientGraph)
           val srcVertex = findOrientVertex.findOrCreateVertex(edge.srcVertexId())
           val destVertex = findOrientVertex.findOrCreateVertex(edge.destVertexId())
-          val oEdgeWriter = new EdgeWriter(oGraph, edge)
-          val oEdge = oEdgeWriter.addEdge(srcVertex, destVertex)
+          val edgeWriter = new EdgeWriter(orientGraph, edge)
+          val orientEdge = edgeWriter.addEdge(srcVertex, destVertex)
           batchCounter += 1
           if (batchCounter % batchSize == 0 && batchCounter != 0) {
-            oGraph.commit()
+            orientGraph.commit()
           }
         }
       }
       catch {
         case e: Exception => {
-          oGraph.rollback()
+          orientGraph.rollback()
           throw new RuntimeException("Unable to add edges to OrientDB graph", e)
         }
       }
       finally {
-        oGraph.shutdown(true, true) //commit the changes and close the graph
+        orientGraph.shutdown(true, true) //commit the changes and close the graph
       }
       Array(batchCounter).toIterator
     })

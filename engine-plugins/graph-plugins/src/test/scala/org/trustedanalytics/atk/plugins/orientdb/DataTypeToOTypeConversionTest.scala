@@ -27,7 +27,7 @@ class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
 
   val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
   val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
-  val oTypeBuffer = new ArrayBuffer[String]()
+  val orientTypeBuffer = new ArrayBuffer[String]()
   val dataTypeBuffer = new ArrayBuffer[String]()
 
   "Data Types to OType conversion" should {
@@ -36,12 +36,12 @@ class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
       columns.foreach(col => {
         val colName = col.name
         val colDataType = col.dataType
-        val oColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(colDataType)
-        val oTypeName = oColumnDataType
-        oTypeBuffer += oTypeName.toString
+        val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(colDataType)
+        val orientTypeName = orientColumnDataType
+        orientTypeBuffer += orientTypeName.toString
         dataTypeBuffer += colDataType.toString
       })
-      oTypeBuffer shouldBe Array("LONG", "STRING", "STRING", "STRING", "STRING", "INTEGER")
+      orientTypeBuffer shouldBe Array("LONG", "STRING", "STRING", "STRING", "STRING", "INTEGER")
 
     }
   }

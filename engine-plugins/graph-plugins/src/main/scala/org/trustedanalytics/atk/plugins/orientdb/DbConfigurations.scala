@@ -23,9 +23,18 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class DbConfigurations(@ArgDoc("""OrientDB database URI.""") dbUri: String,
                             @ArgDoc("""User name.""") dbUserName: String,
-                            @ArgDoc("""User name.""") dbPassword: String) extends Serializable {
+                            @ArgDoc("""User password.""") dbPassword: String,
+                            @ArgDoc("""Port number.""") portNumber: String,
+                            @ArgDoc("""The database host.""") dbHost: String) extends Serializable {
 
   require(dbUri != null, "database URI is required")
   require(dbUserName != null, "User name is required")
+  require(dbUserName != "invalid-orientdb-user", """User name is "invalid-orientdb-user", please update the configurations file """)
   require(dbPassword != null, "Password is required")
+  require(dbPassword != "invalid-orientdb-password", """Password is "invalid-orientdb-password, please update the configurations file"""")
+  require(portNumber != null, "the port number is required")
+  require(portNumber != "invalid-orientdb-port", """the port number is "invalid-orientdb-port", please update the configurations file""")
+  require(dbHost != null, "the host name is required")
+  require(dbHost != "invalid-orientdb-host", """the host name is "invalid-orientdb-host", please update the configurations file""")
+
 }

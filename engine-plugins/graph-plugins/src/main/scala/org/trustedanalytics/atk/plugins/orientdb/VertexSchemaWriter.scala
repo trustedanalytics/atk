@@ -26,23 +26,24 @@ class VertexSchemaWriter {
 
   /**
    * Method to export the vertex schema
-   * @param oGraph  an instance of Orient graph database
+   *
+   * @param orientGraph  an instance of Orient graph database
    * @param vertexSchema ATK vertex schema
    * @return Orient vertex schema
    */
 
-  def createVertexSchema(oGraph: OrientGraph, vertexSchema: VertexSchema): OrientVertexType = {
+  def createVertexSchema(orientGraph: OrientGraph, vertexSchema: VertexSchema): OrientVertexType = {
 
     val vColumns = vertexSchema.columns
     val className: String = vertexSchema.label
-    val oVertexType = oGraph.createVertexType(className)
+    val orientVertexType = orientGraph.createVertexType(className)
     vColumns.foreach(col => {
       if (col.name != GraphSchema.labelProperty) {
-        val oColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
-        oVertexType.createProperty(col.name, oColumnDataType)
+        val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
+        orientVertexType.createProperty(col.name, orientColumnDataType)
       }
     })
-    oGraph.createKeyIndex(GraphSchema.vidProperty, classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
-    oVertexType
+    orientGraph.createKeyIndex(GraphSchema.vidProperty, classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
+    orientVertexType
   }
 }
