@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.trustedanalytics.atk</groupId>
         <artifactId>TrustedAnalytics</artifactId>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
         <version>master-SNAPSHOT</version>
     </parent>
     <profiles>

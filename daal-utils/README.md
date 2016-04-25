@@ -27,8 +27,8 @@ from Intel DAAL's installation directory
 Build the Intel DAAL extensions used by the TAP analytics toolkit
 
 ```
- %linux-prompt> cd src/main/c++
- %linux-prompt> make all
+ %linux-prompt> mvn install -P daal-make -DskipTests
 ```
 
-This step builds the library lib/intel64_lin/libAtkDaalJavaAPI.so
+The install builds the jar files and the dynamic library lib/intel64_lin/libAtkDaalJavaAPI.so
+
