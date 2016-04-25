@@ -17,13 +17,13 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.lang
 
-import com.intel.daal.algorithms.multinomial_naive_bayes.prediction.{PredictionMethod, PredictionBatch}
+import com.intel.daal.algorithms.multinomial_naive_bayes.prediction.{ PredictionMethod, PredictionBatch }
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import com.intel.daal.algorithms.classifier.prediction.{ ModelInputId, NumericTableInputId, PredictionResultId }
-import com.intel.daal.algorithms.multinomial_naive_bayes.{Model => DaalNaiveBayesModel}
+import com.intel.daal.algorithms.multinomial_naive_bayes.{ Model => DaalNaiveBayesModel }
 
-import org.trustedanalytics.atk.scoring.interfaces.{Field, Model, ModelMetaDataArgs}
+import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaDataArgs }
 
 /**
  * Scoring model for Intel DAAL Naive Bayes
@@ -31,7 +31,7 @@ import org.trustedanalytics.atk.scoring.interfaces.{Field, Model, ModelMetaDataA
  * @param modelData trained model
  */
 class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model {
-  val naiveBayesModel : DaalNaiveBayesModel = null
+  val naiveBayesModel: DaalNaiveBayesModel = null
 
   override def score(data: Array[Any]): Array[Any] = {
     val features: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
@@ -76,7 +76,7 @@ class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model
    * @param features Array with input features
    * @return score
    */
-  private def predict(features: Array[Double]):  Double = {
+  private def predict(features: Array[Double]): Double = {
     val context = new DaalContext()
     val predictAlgorithm = new PredictionBatch(context, classOf[lang.Double],
       PredictionMethod.defaultDense, modelData.numClasses)

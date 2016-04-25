@@ -16,8 +16,8 @@
 
 package org.trustedanalytics.atk.scoring.models
 
-import org.apache.spark.mllib.ScoringJsonReaderWriters.DaalLinearRegressionDataFormat
-import org.trustedanalytics.atk.scoring.interfaces.{Model, ModelLoader}
+import org.apache.spark.mllib.ScoringJsonReaderWriters.DaalNaiveBayesDataFormat
+import org.trustedanalytics.atk.scoring.interfaces.{ Model, ModelLoader }
 import spray.json._
 
 class DaalNaiveBayesReaderPlugin() extends ModelLoader {
