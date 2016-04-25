@@ -30,6 +30,14 @@ JNIEXPORT jobject JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cSerial
 JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserializeQrModel
   (JNIEnv *, jclass, jobject, jlong);
 
+/** JNI wrapper for serializing DAAL Naive Bayes models to byte arrays */
+JNIEXPORT jobject JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cSerializeNaiveBayesModel
+  (JNIEnv *, jclass, jlong);
+
+/** JNI wrapper for deserializing byte arrays to DAAL Naive Bayes models */
+JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserializeNaiveBayesModel
+  (JNIEnv *, jclass, jobject, jlong);
+
 /** JNI wrapper for serializing DAAL QR models to byte arrays */
 JNIEXPORT void JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cFreeByteBuffer
   (JNIEnv *, jclass, jobject);

@@ -59,9 +59,45 @@ public final class ModelSerializer {
         return qrModel;
     }
 
+    /**
+     * Serialize DAAL linear regression QR model
+     *
+     * @param model Linear regression model
+     * @return Serialized model
+     */
+    public static byte[] serializeNaiveBayesModel(com.intel.daal.algorithms.multinomial_naive_bayes.Model model) {
+        ByteBuffer buffer = cSerializeNaiveBayesModel(model.getCObject());
+        byte[] serializedCObject = new byte[buffer.capacity()];
+        buffer.position(0);
+        buffer.get(serializedCObject);
+        cFreeByteBuffer(buffer);
+        return serializedCObject;
+    }
+
+    /**
+     * Deserialize DAAL linear regression QR model
+     *
+     * @param context DAAL context
+     * @param serializedCObject Serialized model
+     * @return Deserialized model
+     */
+    public static com.intel.daal.algorithms.multinomial_naive_bayes.Model deserializeNaiveBayesModel(DaalContext context, byte[] serializedCObject) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(serializedCObject.length);
+        buffer.put(serializedCObject);
+
+        long cModelRef = cDeserializeNaiveBayesModel(buffer, buffer.capacity());
+        com.intel.daal.algorithms.multinomial_naive_bayes.Model nbModel =
+            new com.intel.daal.algorithms.multinomial_naive_bayes.Model(context, cModelRef);
+        return nbModel;
+    }
+
     protected static native ByteBuffer cSerializeQrModel(long cModel);
 
     protected static native long cDeserializeQrModel(ByteBuffer buffer, long size);
+
+    protected static native ByteBuffer cSerializeNaiveBayesModel(long cModel);
+
+    protected static native long cDeserializeNaiveBayesModel(ByteBuffer buffer, long size);
 
     private static native void cFreeByteBuffer(ByteBuffer var1);
 }

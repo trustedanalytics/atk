@@ -21,6 +21,7 @@
 #include "services/daal_defines.h"
 #include "algorithms/linear_regression/linear_regression_model.h"
 #include "algorithms/linear_regression/linear_regression_qr_model.h"
+#include "algorithms/naive_bayes/multinomial_naive_bayes_model.h"
 #include "com_intel_daal_algorithms_ModelSerializer.h"
 
 using namespace daal;
@@ -55,6 +56,39 @@ JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserial
     qrModel->deserialize(*dataArchive);
 
     services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr = new services::SharedPtr<algorithms::linear_regression::ModelQR>(qrModel);
+    return (jlong)sharedPtr;
+}
+
+/** JNI wrapper for serializing DAAL Naive Bayes models to byte arrays */
+JNIEXPORT jobject JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cSerializeNaiveBayesModel
+  (JNIEnv *env, jclass thisClass, jlong cModel) {
+
+   services::SharedPtr<data_management::NumericTable> dataTable;
+   services::SharedPtr<algorithms::multinomial_naive_bayes::Model> *sharedPtr = (services::SharedPtr<algorithms::multinomial_naive_bayes::Model>*)cModel;
+
+   algorithms::multinomial_naive_bayes::Model* nbModel = sharedPtr->get();
+   data_management::InputDataArchive *dataArchive = new data_management::InputDataArchive();
+   nbModel->serialize(*dataArchive);
+   size_t size = dataArchive->getSizeOfArchive();
+   byte* byteArray = new daal::byte[size];
+   dataArchive->copyArchiveToArray(byteArray, size);
+
+   jobject directBuffer = env->NewDirectByteBuffer(byteArray, size);
+   jobject globalRef = env->NewGlobalRef(directBuffer);
+   delete dataArchive;
+   return globalRef;
+}
+
+/** JNI wrapper for deserializing byte arrays to DAAL Naive Bayes models */
+JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserializeNaiveBayesModel
+  (JNIEnv *env, jclass thisClass, jobject buffer, jlong bufferSize) {
+    jbyte* bufferPtr = (jbyte*)env->GetDirectBufferAddress(buffer);
+
+    algorithms::multinomial_naive_bayes::Model *nbModel = new algorithms::multinomial_naive_bayes::Model();
+    data_management::OutputDataArchive *dataArchive = new data_management::OutputDataArchive((daal::byte*)bufferPtr, bufferSize);
+    nbModel->deserialize(*dataArchive);
+
+    services::SharedPtr<algorithms::multinomial_naive_bayes::Model> *sharedPtr = new services::SharedPtr<algorithms::multinomial_naive_bayes::Model>(nbModel);
     return (jlong)sharedPtr;
 }
 
