@@ -162,6 +162,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <modules>
                 <module>doc-api-examples</module>
                 <module>testutils</module>
+                <module>daal-utils</module>
                 <module>module-loader</module>
                 <module>scoring-interfaces</module>
                 <module>model-publish-format</module>
@@ -171,7 +172,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <module>scoring-models</module>
                 <module>rest-server</module>
                 <module>python-client</module>
-								<module>doc</module>
+                <module>doc</module>
                 <module>package</module>
             </modules>
         </profile>
@@ -321,7 +322,7 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                                         <goal>install-file</goal>
                                     </goals>
                                     <configuration>
-                                        <file>${project.basedir}/engine-plugins/daal-plugins/lib/daal-core-${dep.daal.version}.jar</file>
+                                        <file>${project.basedir}/daal-utils/lib/daal-core-${dep.daal.version}.jar</file>
                                         <groupId>com.intel.daal</groupId>
                                         <artifactId>daal-core</artifactId>
                                         <version>${dep.daal.version}</version>
@@ -780,6 +781,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
             <dependency>
                 <groupId>org.trustedanalytics.atk</groupId>
                 <artifactId>daal-plugins</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trustedanalytics.atk</groupId>
+                <artifactId>daal-utils</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
