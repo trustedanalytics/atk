@@ -12,7 +12,44 @@
         <relativePath>../../pom.xml</relativePath>
         <version>master-SNAPSHOT</version>
     </parent>
+    <profiles>
+        <profile>
+            <id>daal-make</id>
+            <activation>
+                <property>
+                    <name>env.DAALROOT</name>
+                </property>
+                <!--<activeByDefault>false</activeByDefault>-->
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <executions>
+                        <!--Copy this entire section to run other executions START-->
+                        <execution>
+                            <id>daal-all</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>exec</goal>
+                            </goals>
+                            <configuration>
+                                <executable>make</executable>
+                                <workingDirectory>${basedir}/src/main/c++/</workingDirectory>
+                                <arguments>
+                                    <argument>all</argument>
+                                </arguments>
+                            </configuration>
+                        </execution>
+                        <!--Copy this entire section to run other executions END-->
 
+                    </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <build>
         <plugins>
             <plugin>
