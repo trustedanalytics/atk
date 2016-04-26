@@ -94,6 +94,7 @@ frame-vertex/drop_duplicates.rst
 frame-/rename_columns.rst
 frame-/label_propagation.rst
 graph/graphx_connected_components.rst
+graph/export_to_orientdb.rst
 graph/graphx_triangle_count.rst
 graph/graphx_pagerank.rst
 frame/column_median.rst
