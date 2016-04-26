@@ -18,6 +18,7 @@
     define_vertex_type
     edge_count
     edges
+    export_to_orientdb
     graphx_connected_components
     graphx_label_propagation
     graphx_pagerank
@@ -66,6 +67,7 @@
     :doc:`copy <copy>`\ (self[, name])                                                                    Make a copy of the current graph.
     :doc:`define_edge_type <define_edge_type>`\ (self, label, src_vertex_label, dest_vertex_label)        Define an edge type.
     :doc:`define_vertex_type <define_vertex_type>`\ (self, label)                                         Define a vertex type by label.
+    :doc:`export_to_orientdb <export_to_orientdb>`\ (self, db_name[, batch_size])                         Export graph to OrientDB
     :doc:`graphx_connected_components <graphx_connected_components>`\ (self[, ...])                       Implements the connected components computation on a graph by invoking graphx api.
     :doc:`graphx_label_propagation <graphx_label_propagation>`\ (self[, max_steps, ...])                  |ALPHA| Implements the label propagation computation on a graph by invoking graphx api.
     :doc:`graphx_pagerank <graphx_pagerank>`\ (self, output_property[, input_edge_labels, ...])           Determine which vertices are the most important.
@@ -216,7 +218,7 @@
     u'ACTIVE'
 
     >>> graph.last_read_date
-    datetime.datetime(2016, 4, 26, 11, 5, 55, 329903)
+    datetime.datetime(2016, 4, 26, 14, 38, 24, 827884)
 
     >>> graph
     Graph <unnamed>

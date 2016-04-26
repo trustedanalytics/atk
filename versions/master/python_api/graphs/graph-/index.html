@@ -206,28 +206,31 @@ Vertex and edge properties are stored as columns.</p>
 <tr class="row-odd"><td><a class="reference internal" href="define_vertex_type.html"><em>define_vertex_type</em></a>(self, label)</td>
 <td>Define a vertex type by label.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graphx_connected_components.html"><em>graphx_connected_components</em></a>(self[, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="export_to_orientdb.html"><em>export_to_orientdb</em></a>(self, db_name[, batch_size])</td>
+<td>Export graph to OrientDB</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="graphx_connected_components.html"><em>graphx_connected_components</em></a>(self[, ...])</td>
 <td>Implements the connected components computation on a graph by invoking graphx api.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graphx_label_propagation.html"><em>graphx_label_propagation</em></a>(self[, max_steps, ...])</td>
+<tr class="row-even"><td><a class="reference internal" href="graphx_label_propagation.html"><em>graphx_label_propagation</em></a>(self[, max_steps, ...])</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Implements the label propagation computation on a graph by invoking graphx api.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="graphx_pagerank.html"><em>graphx_pagerank</em></a>(self, output_property[, input_edge_labels, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="graphx_pagerank.html"><em>graphx_pagerank</em></a>(self, output_property[, input_edge_labels, ...])</td>
 <td>Determine which vertices are the most important.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="graphx_triangle_count.html"><em>graphx_triangle_count</em></a>(self, output_property[, input_edge_labels])</td>
+<tr class="row-even"><td><a class="reference internal" href="graphx_triangle_count.html"><em>graphx_triangle_count</em></a>(self, output_property[, input_edge_labels])</td>
 <td>Number of triangles among vertices of current graph.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="kclique_percolation.html"><em>kclique_percolation</em></a>(self, clique_size, community_property_label)</td>
+<tr class="row-odd"><td><a class="reference internal" href="kclique_percolation.html"><em>kclique_percolation</em></a>(self, clique_size, community_property_label)</td>
 <td><abbr title="This is a function or feature which has been developed, but has not been completely tested.  Use this function with caution.  This function may be changed or eliminated in future releases.">[ALPHA]</abbr> Find groups of vertices with similar attributes.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="label_propagation.html"><em>label_propagation</em></a>(self, prior_property, posterior_property, ...)</td>
+<tr class="row-even"><td><a class="reference internal" href="label_propagation.html"><em>label_propagation</em></a>(self, prior_property, posterior_property, ...)</td>
 <td>Classification on sparse data using Belief Propagation.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="loopy_belief_propagation.html"><em>loopy_belief_propagation</em></a>(self, prior_property, ...[, ...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="loopy_belief_propagation.html"><em>loopy_belief_propagation</em></a>(self, prior_property, ...[, ...])</td>
 <td>Classification on sparse data using Belief Propagation.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="vertex_outdegree.html"><em>vertex_outdegree</em></a>(self)</td>
+<tr class="row-even"><td><a class="reference internal" href="vertex_outdegree.html"><em>vertex_outdegree</em></a>(self)</td>
 <td>Counts the out-degree of vertices in a graph.</td>
 </tr>
 </tbody>
@@ -378,7 +381,7 @@ for a graph:</p>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span><span class="o">.</span><span class="n">last_read_date</span>
-<span class="go">datetime.datetime(2016, 4, 26, 11, 5, 55, 329903)</span>
+<span class="go">datetime.datetime(2016, 4, 26, 14, 38, 24, 827884)</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">graph</span>

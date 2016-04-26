@@ -1,0 +1,39 @@
+
+:doc:`Graph <index>`  export_to_orientdb
+****************************************
+
+------
+
+
+.. function:: export_to_orientdb(self, db_name, batch_size=1000)
+
+    Export graph to OrientDB
+
+
+    :Parameters:
+
+        **db_name** : unicode
+
+        ..
+
+            OrientDB database name.
+
+
+
+        **batch_size** : int32 (default=1000)
+
+        ..
+
+            batch size for commiting transactions.
+
+
+
+
+    :Returns:
+
+        : dict
+
+        ..
+
+            OrientDB file, statistics for the exported vertices and edges.
+    Exports the graph to OrientDB database located in the given dbURI.
