@@ -31,7 +31,7 @@ object ExportOrientDbGraphJsonFormat {
 import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
 
 @PluginDoc(oneLine = "Export graph to OrientDB",
-  extended = """Exports the graph to OrientDB file located in the given dbURI, and creates a user with the provided user name and password.""",
+  extended = """Exports the graph to OrientDB database located in the given dbURI.""",
   returns = """OrientDB file, statistics for the exported vertices and edges.""")
 class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphArgs, ExportOrientDbGraphReturn] {
 
@@ -75,7 +75,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
       val sparkFrame: SparkVertexFrame = frame
       val vertexFrameRdd = sparkFrame.rdd
       val exportVertexFrame = new VertexFrameWriter(vertexFrameRdd, dbConfigurations)
-      val verticesCount = exportVertexFrame.exportVertexFrame(arguments.dbName, arguments.batchSize)
+      val verticesCount = exportVertexFrame.exportVertexFrame(arguments.batchSize)
       (vertexFrameRdd.vertexWrapper.schema.label, verticesCount)
     })
     metadata.toMap
@@ -97,7 +97,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
       val sparkFrame: SparkEdgeFrame = frame
       val edgeFrameRdd = sparkFrame.rdd
       val exportEdgeFrame = new EdgeFrameWriter(edgeFrameRdd, dbConfigurations)
-      val edgesCount = exportEdgeFrame.exportEdgeFrame(arguments.dbName, arguments.batchSize)
+      val edgesCount = exportEdgeFrame.exportEdgeFrame(arguments.batchSize)
       (edgeFrameRdd.edge.schema.label, edgesCount)
     })
     metadata.toMap

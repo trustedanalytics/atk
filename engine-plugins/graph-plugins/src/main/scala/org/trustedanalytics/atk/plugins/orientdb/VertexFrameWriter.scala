@@ -28,14 +28,13 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
   /**
    * Method to export vertex frame to OrientDb
    *
-   * @param dbName OrientDb URI
    * @param batchSize the number of vertices to be committed
    * @return the number of exported vertices
    */
-  def exportVertexFrame(dbName: String, batchSize: Int): Long = {
+  def exportVertexFrame(batchSize: Int): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
-      val orientGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
+      val orientGraph = GraphDbFactory.graphDbConnector(dbConfigurations)
       try {
         while (iter.hasNext) {
           val vertexWrapper = iter.next()

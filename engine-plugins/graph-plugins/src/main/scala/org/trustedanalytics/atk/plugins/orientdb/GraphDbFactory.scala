@@ -25,19 +25,15 @@ import scala.util.{ Failure, Success, Try }
 
 object GraphDbFactory {
 
-  val orientRole = "admin"
   /**
    * Method to create/connect to OrientDB graph
    *
-   * @param dbName the database name
    * @param dbConfigurations OrientDB configurations
    * @return a transactional OrientDB graph database instance
    */
-
-  def graphDbConnector(dbName: String, dbConfigurations: DbConfigurations): OrientGraph = {
+  def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraph = {
 
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
-
     val orientGraphDb = if (!orientDb.exists()) {
       createGraphDb(dbConfigurations)
     }
@@ -51,12 +47,12 @@ object GraphDbFactory {
    * Method for creating Orient graph database
    *
    * @param dbConfigurations OrientDB configurations
-   * @return a transcational Orient graph database instance
+   * @return a transactional Orient graph database instance
    */
   def createGraphDb(dbConfigurations: DbConfigurations): OrientGraph = {
+
     val graph = Try {
       val factory = new OrientGraphFactory(dbConfigurations.dbUri, dbConfigurations.dbUserName, dbConfigurations.dbPassword)
-      factory.getDatabase.getMetadata.getSecurity.createUser(dbConfigurations.dbUserName, dbConfigurations.dbPassword, orientRole)
       factory.getDatabase.getMetadata.getSecurity.authenticate(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
       factory.getTx
     } match {

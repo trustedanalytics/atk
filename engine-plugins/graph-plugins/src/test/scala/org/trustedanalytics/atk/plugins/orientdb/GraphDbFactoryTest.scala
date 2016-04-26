@@ -30,8 +30,8 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
   "graph database factory" should {
     "creates a graph database and takes input arguments" in {
       val dbUri: String = "memory:OrientTestDb"
-      val userName: String = "testUser"
-      val password: String = "testPassword"
+      val userName: String = "admin"
+      val password: String = "admin"
       val host = "host"
       val port = "port"
       val dbConfig = new DbConfigurations(dbUri, userName, password, port, host)
@@ -44,15 +44,15 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
       val dbName = "OrientDbTest"
       tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
       val dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
-      val userName: String = "testUser"
-      val password: String = "testPassword"
+      val userName: String = "admin"
+      val password: String = "admin"
       val host = "host"
       val port = "port"
       val dbConfig = new DbConfigurations(dbUri, userName, password, port, host)
-      val orientDb = GraphDbFactory.graphDbConnector(dbName, dbConfig)
+      val orientDb = GraphDbFactory.graphDbConnector(dbConfig)
       orientDb.isClosed shouldBe false
       orientDb.shutdown()
-      val orientDbnew = GraphDbFactory.graphDbConnector(dbName, dbConfig)
+      val orientDbnew = GraphDbFactory.graphDbConnector(dbConfig)
       orientDbnew.isClosed shouldBe false
       orientDbnew.drop()
       orientDbnew.isClosed shouldBe true

@@ -16,7 +16,6 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.EdgeFrameRdd
-import org.trustedanalytics.atk.domain.schema.GraphSchema
 
 /**
  *  Exports EdgeFrameRdd to OrientDB edges
@@ -29,14 +28,13 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
   /**
    * Method to export edge frame to OrientDb
    *
-   * @param dbName OrientDb URI
    * @param batchSize the number of edges to be commited
    * @return the number of exported edges
    */
-  def exportEdgeFrame(dbName: String, batchSize: Int): Long = {
+  def exportEdgeFrame(batchSize: Int): Long = {
 
     val edgesCountRdd = edgeFrameRdd.mapPartitionEdges(iter => {
-      val orientGraph = GraphDbFactory.graphDbConnector(dbName, dbConfigurations)
+      val orientGraph = GraphDbFactory.graphDbConnector(dbConfigurations)
       var batchCounter = 0L
       try {
         while (iter.hasNext) {

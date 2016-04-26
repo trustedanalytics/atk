@@ -25,10 +25,8 @@
 <progress>
 >>> graph.edges['edges'].add_edges(edge_frame, 'source', 'dest', ['weight'])
 <progress>
->>> result = graph.export_to_orientdb("plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbDocTest","admin","admin",5)
+>>> result = graph.export_to_orientdb("OrientDbDocTest",5)
 <progress>
->>> result['db_uri']
-u'plocal:/home/wtaie/graphDBs_home/orientdb-community-2.1.12/databases/OrientDbDocTest'
 >>> result['vertices']
  {u'source': 5}
 >>> result['edges']

@@ -36,7 +36,6 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
 
   "vertex frame writer" should {
     "export vertex frame to OrientDB" in {
-      val dbName = "OrientDbTest"
       val dbConfig = new DbConfigurations(dbUri, "admin", "admin", "port", "host")
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
@@ -50,9 +49,9 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
       val rowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(schema, rowRdd)
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
-      val verticesCount = vertexFrameWriter.exportVertexFrame(dbName, batchSize)
+      val verticesCount = vertexFrameWriter.exportVertexFrame(batchSize)
       val loadedVerticesCount = orientFileGraph.countVertices()
-      verticesCount shouldEqual (loadedVerticesCount)
+      verticesCount shouldEqual loadedVerticesCount
 
     }
   }
