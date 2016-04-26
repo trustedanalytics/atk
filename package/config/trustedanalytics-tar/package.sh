@@ -50,8 +50,8 @@ cp -v  config/$package/jq tarballs/$package/
 cp -v  config/$package/manifest.yml.tpl tarballs/$package/
 
 echo "copy Intel DAAL dynamic libraries into package"
-tar -jxvf ../engine-plugins/daal-plugins/lib/daal-libs.tar.bz2 -C tarballs/$package/lib/daal
-cp -v ../engine-plugins/daal-plugins/lib/daal-core-${DAAL_JAR_VERSION}.jar tarballs/$package/lib
+tar -jxvf ../daal-utils/lib/daal-libs.tar.bz2 -C tarballs/$package/lib/daal
+cp -v ../daal-utils/lib/daal-core-${DAAL_JAR_VERSION}.jar tarballs/$package/lib
 
 echo "copy jar dependencies"
 cp -v rest-server-lib/target/dependency/*.jar tarballs/$package/lib/
