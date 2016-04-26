@@ -19,6 +19,7 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.algorithms.classifier.training.{ InputId, TrainingDistributedInputId, TrainingResultId }
 import com.intel.daal.algorithms.multinomial_naive_bayes.Model
 import com.intel.daal.algorithms.multinomial_naive_bayes.training._
+import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
@@ -40,7 +41,8 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
                                         observationColumns: List[String],
                                         labelColumn: String,
                                         numClasses: Int,
-                                        alpha: Double = 1d) extends DistributedAlgorithm[TrainingPartialResult, TrainingResult] {
+                                        alpha: Double = 1d,
+                                        classPrior: Option[Array[Double]] = None) extends DistributedAlgorithm[TrainingPartialResult, TrainingResult] {
   private val trainTables = DistributedLabeledTable.createTable(frameRdd, observationColumns, List(labelColumn))
 
   /**
@@ -68,21 +70,30 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
    */
   override def computePartialResults(): RDD[TrainingPartialResult] = {
 
-    val oartialResultRdd = trainTables.rdd.map(table => {
+    val partialResultRdd = trainTables.rdd.map(table => {
       val context = new DaalContext()
       val featureTable = table.features
       val labelTable = table.labels
+
       val naiveBayesTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double],
         TrainingMethod.defaultDense, numClasses)
       naiveBayesTraining.input.set(InputId.data, featureTable.getUnpackedTable(context))
       naiveBayesTraining.input.set(InputId.labels, labelTable.getUnpackedTable(context))
+
+      val alphaParameters = Array.fill[Double](observationColumns.length)(alpha)
+      naiveBayesTraining.parameter.setAlpha(new HomogenNumericTable(context, alphaParameters, alphaParameters.length, 1L))
+
+      if (classPrior.isDefined) {
+        val classPriorTable = new HomogenNumericTable(context, classPrior.get, classPrior.get.length, 1L)
+        naiveBayesTraining.parameter.setPriorClassEstimates(classPriorTable)
+      }
 
       val partialResult = naiveBayesTraining.compute()
       partialResult.pack()
       context.dispose()
       partialResult
     })
-    oartialResultRdd
+    partialResultRdd
   }
 
   /**

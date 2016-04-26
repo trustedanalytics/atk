@@ -22,13 +22,13 @@ package org.trustedanalytics.atk.engine.daal.plugins.classification.naivebayes
  * @param observationColumns List of column(s) storing the observations
  * @param labelColumn Column name containing the label
  * @param numClasses Number of classes
- * @param alpha Imagined occurrences of features
+ * @param lambdaParameter Imagined occurrences of features
  */
 case class DaalNaiveBayesModelData(serializedModel: List[Byte],
                                    observationColumns: List[String],
                                    labelColumn: String,
                                    numClasses: Int,
-                                   alpha: Double)
+                                   lambdaParameter: Double)
 
 /**
  * JSON serialization for model
