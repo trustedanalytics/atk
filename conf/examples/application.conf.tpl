@@ -250,6 +250,10 @@ trustedanalytics.atk {
           # Verify that the path below exist across all yarn master/worker nodes.
           // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
           // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+
+          # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
+          // spark.driver.extraLibraryPath = "."
+          // spark.executor.extraLibraryPath = "."
         }
 
       }
