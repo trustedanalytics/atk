@@ -35,13 +35,13 @@ import scala.util.{ Failure, Success, Try }
  * @param observationColumns Feature columns
  * @param labelColumn Label column
  * @param numClasses Number of classes
- * @param alpha Imagined occurrences of features
+ * @param lambda Imagined occurrences of features
  */
 case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
                                         observationColumns: List[String],
                                         labelColumn: String,
                                         numClasses: Int,
-                                        alpha: Double = 1d,
+                                        lambda: Double = 1d,
                                         classPrior: Option[Array[Double]] = None) extends DistributedAlgorithm[TrainingPartialResult, TrainingResult] {
   private val trainTables = DistributedLabeledTable.createTable(frameRdd, observationColumns, List(labelColumn))
 
@@ -60,7 +60,7 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
     // serialize model and return results
     val serializedModel = serializeTrainedModel(trainedModel)
     context.dispose()
-    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, alpha, classPrior)
+    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, lambda, classPrior)
   }
 
   /**
@@ -80,7 +80,7 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
       naiveBayesTraining.input.set(InputId.data, featureTable.getUnpackedTable(context))
       naiveBayesTraining.input.set(InputId.labels, labelTable.getUnpackedTable(context))
 
-      val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context, alpha, observationColumns.length)
+      val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context, lambda, observationColumns.length)
       if (classPrior.isDefined) {
         DaalNaiveBayesParameters.getClassPriorParameter(context, classPrior.get)
       }

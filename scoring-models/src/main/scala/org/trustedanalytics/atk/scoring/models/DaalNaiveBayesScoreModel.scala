@@ -17,6 +17,7 @@ package org.trustedanalytics.atk.scoring.models
 
 import java.lang
 
+import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.algorithms.multinomial_naive_bayes.prediction.{ PredictionMethod, PredictionBatch }
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
@@ -31,7 +32,6 @@ import org.trustedanalytics.atk.scoring.interfaces.{ Field, Model, ModelMetaData
  * @param modelData trained model
  */
 class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model {
-  val naiveBayesModel: DaalNaiveBayesModel = null
 
   override def score(data: Array[Any]): Array[Any] = {
     val features: Array[Double] = data.map(y => ScoringModelUtils.asDouble(y))
@@ -81,9 +81,9 @@ class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model
     val predictAlgorithm = new PredictionBatch(context, classOf[lang.Double],
       PredictionMethod.defaultDense, modelData.numClasses)
     val testTable = new HomogenNumericTable(context, features, features.length, 1L)
-
+    val trainedModel = ModelSerializer.deserializeNaiveBayesModel(context, modelData.serializedModel.toArray)
     predictAlgorithm.input.set(NumericTableInputId.data, testTable)
-    predictAlgorithm.input.set(ModelInputId.model, naiveBayesModel)
+    predictAlgorithm.input.set(ModelInputId.model, trainedModel)
     val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context,
       modelData.lambdaParameter, modelData.observationColumns.length)
     if (modelData.classPrior.isDefined) {

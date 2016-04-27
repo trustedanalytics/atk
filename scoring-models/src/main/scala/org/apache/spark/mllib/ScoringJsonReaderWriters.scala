@@ -502,9 +502,9 @@ object ScoringJsonReaderWriters {
       val fields = json.asJsObject.fields
       val serializedModel = getOrInvalid(fields, "serialized_model").convertTo[List[Byte]]
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
-      val labelColumn = getOrInvalid(fields, "value_column").convertTo[String]
+      val labelColumn = getOrInvalid(fields, "label_column").convertTo[String]
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
-      val lambdaParameter = getOrInvalid(fields, "lamda_parameter").convertTo[Double]
+      val lambdaParameter = getOrInvalid(fields, "lambda_parameter").convertTo[Double]
       val classPrior = fields.get("class_prior") match {
         case Some(prior) => Some(prior.convertTo[Array[Double]])
         case _ => None

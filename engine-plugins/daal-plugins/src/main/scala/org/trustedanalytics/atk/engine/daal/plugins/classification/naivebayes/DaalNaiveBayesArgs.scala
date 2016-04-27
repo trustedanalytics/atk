@@ -33,7 +33,7 @@ Default is 1.0.""") lambdaParameter: Double = 1.0,
                                    @ArgDoc("""Number of classes""") numClasses: Int = 2,
                                    @ArgDoc(
                                      """Prior probabilities of classes.
-Default is 1/num_classes for each class""".stripMargin) classPrior: Option[Array[Double]] = None) {
+Default is 1/num_classes for each class""") classPrior: Option[Array[Double]] = None) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observation column must not be null nor empty")
