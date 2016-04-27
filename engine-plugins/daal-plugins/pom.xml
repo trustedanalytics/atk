@@ -51,6 +51,10 @@
         <!-- END Intel DAAL dependencies -->
         <dependency>
             <groupId>org.trustedanalytics.atk</groupId>
+            <artifactId>daal-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.trustedanalytics.atk</groupId>
             <artifactId>module-loader</artifactId>
         </dependency>
         <dependency>

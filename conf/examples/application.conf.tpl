@@ -56,6 +56,13 @@ trustedanalytics.atk {
     //connection-sqlserver.username = "invalid-sqlserver-username"
     //connection-sqlserver.password = "invalid-sqlserver-password"
     //connection-sqlserver.url = "invalid-sqlserver-url"
+
+     # OrientDB
+    //connection-orientdb.host = "invalid-orientdb-host"
+    //connection-orientdb.port = "invalid-orientdb-port"
+    //connection-orientdb.username = "invalid-orientdb-user"
+    //connection-orientdb.password = "invalid-orientdb-password"
+    //connection-orientdb.url = "remote:/${trustedanalytics.atk.datastore.connection-orientdb.host}:${trustedanalytics.atk.connection-orientdb.port}"
   }
 
   engine {
@@ -63,6 +70,9 @@ trustedanalytics.atk {
     # The hdfs URL where the trustedanalytics folder will be created
     # and which will be used as the starting point for any relative URLs
     fs.root = "hdfs://invalid-fsroot-host/user/atkuser"
+
+    # The location for checkpointing, usually under the filesystem root
+    fs.checkpoint-directory = ${trustedanalytics.atk.engine.fs.root}"/checkpoints"
 
     # The URL for connecting to the Spark master server
     spark.master = "spark://invalid-spark-master:7077"
@@ -240,6 +250,10 @@ trustedanalytics.atk {
           # Verify that the path below exist across all yarn master/worker nodes.
           // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
           // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+
+          # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
+          // spark.driver.extraLibraryPath = "."
+          // spark.executor.extraLibraryPath = "."
         }
 
       }

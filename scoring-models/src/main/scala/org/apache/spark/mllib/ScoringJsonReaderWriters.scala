@@ -435,6 +435,43 @@ object ScoringJsonReaderWriters {
     }
   }
 
+  implicit object DaalLinearRegressionDataFormat extends JsonFormat[DaalLinearRegressionModelData] {
+    /**
+     * The write methods converts from DaalLinearRegressionModelData to JsValue
+     * @param obj DaalLinearRegressionModelData. Where DaalLinearRegressionModelData format is:
+     *            DaalLinearRegressionModelData(serializedModel: List[Byte], observationColumns: List[String],
+     *                                          valueColumn: String, weights: Array[Double], intercept: Double)
+     * @return JsValue
+     */
+    override def write(obj: DaalLinearRegressionModelData): JsValue = {
+      JsObject(
+        "serialized_model" -> obj.serializedModel.toJson,
+        "observation_columns" -> obj.observationColumns.toJson,
+        "value_column" -> obj.valueColumn.toJson,
+        "weights" -> obj.weights.toJson,
+        "intercept" -> obj.intercept.toJson
+      )
+    }
+
+    /**
+     * The read method reads a JsValue to LinearRegressionData
+     * @param json JsValue
+     * @return DaalLinearRegressionModelData with format DaalLinearRegressionModelData(serializedModel: List[Byte],
+     *                                          observationColumns: List[String], valueColumn: String,
+     *                                          weights: Array[Double], intercept: Double)
+     */
+    override def read(json: JsValue): DaalLinearRegressionModelData = {
+      val fields = json.asJsObject.fields
+      val serializedModel = getOrInvalid(fields, "serialized_model").convertTo[List[Byte]]
+      val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
+      val valueColumn = getOrInvalid(fields, "value_column").convertTo[String]
+      val weights = getOrInvalid(fields, "weights").convertTo[Array[Double]]
+      val intercept = getOrInvalid(fields, "intercept").convertTo[Double]
+
+      new DaalLinearRegressionModelData(serializedModel, obsCols, valueColumn, weights, intercept)
+    }
+  }
+
   implicit object SVMModelFormat extends JsonFormat[SVMModel] {
     /**
      * The write methods converts from SVMModel to JsValue

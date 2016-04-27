@@ -16,7 +16,6 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
-import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.model.ModelReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
