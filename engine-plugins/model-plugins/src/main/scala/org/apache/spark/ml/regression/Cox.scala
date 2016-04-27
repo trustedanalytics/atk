@@ -52,11 +52,9 @@ with HasTol with HasFitIntercept with Logging {
    * If the value is 1, it means the event has occurred i.e. uncensored; otherwise censored.
    * @group param
    */
-  @Since("1.6.0")
   final val censorCol: Param[String] = new Param(this, "censorCol", "censor column name")
 
   /** @group getParam */
-  @Since("1.6.0")
   def getCensorCol: String = $(censorCol)
   setDefault(censorCol -> "censor")
 
@@ -78,35 +76,22 @@ with HasTol with HasFitIntercept with Logging {
   }
 }
 
-/**
- * :: Experimental ::
- * Fit a parametric survival regression model named accelerated failure time (AFT) model
- * ([[https://en.wikipedia.org/wiki/Accelerated_failure_time_model]])
- * based on the Weibull distribution of the survival time.
- */
-@Experimental
-@Since("1.6.0")
 class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
   extends Estimator[CoxModel] with CoxParams
   with DefaultParamsWritable with Logging {
 
-  @Since("1.6.0")
-  def this() = this(Identifiable.randomUID("aftSurvReg"))
+  def this() = this(Identifiable.randomUID("coxSurvReg"))
 
   /** @group setParam */
-  @Since("1.6.0")
   def setFeaturesCol(value: String): this.type = set(featuresCol, value)
 
   /** @group setParam */
-  @Since("1.6.0")
   def setLabelCol(value: String): this.type = set(labelCol, value)
 
   /** @group setParam */
-  @Since("1.6.0")
   def setCensorCol(value: String): this.type = set(censorCol, value)
 
   /** @group setParam */
-  @Since("1.6.0")
   def setPredictionCol(value: String): this.type = set(predictionCol, value)
 
   /**
@@ -114,7 +99,6 @@ class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
    * Default is 100.
    * @group setParam
    */
-  @Since("1.6.0")
   def setMaxIter(value: Int): this.type = set(maxIter, value)
   setDefault(maxIter -> 100)
 
@@ -124,7 +108,6 @@ class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
    * Default is 1E-6.
    * @group setParam
    */
-  @Since("1.6.0")
   def setTol(value: Double): this.type = set(tol, value)
   setDefault(tol -> 1E-6)
 
@@ -132,273 +115,22 @@ class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
    * Extract [[featuresCol]], [[labelCol]] and [[censorCol]] from input dataset,
    * and put it in an RDD with strong types.
    */
-  protected[ml] def extractAFTPoints(dataset: DataFrame): RDD[CoxPoint] = {
+  protected[ml] def extractCoxPoints(dataset: DataFrame, currentBeta: BDV[Double]): RDD[CoxPointWithCumulativeSumAndBetaX] = {
     val coxRdd = dataset.select($(featuresCol), $(labelCol), $(censorCol)).map {
       case Row(features: Vector, time: Double, censor: Double) =>
         CoxPoint(features, time, censor)
     }
-    coxRdd.sortBy(_.time, false)
-  }
-
-  @Since("1.6.0")
-  override def fit(dataset: DataFrame): CoxModel = {
-    validateAndTransformSchema(dataset.schema, fitting = true)
-    val instances = extractAFTPoints(dataset)
-    val handlePersistence = dataset.rdd.getStorageLevel == StorageLevel.NONE
-    if (handlePersistence) instances.persist(StorageLevel.MEMORY_AND_DISK)
-
-    val costFun = new CoxCostFun(instances)
-    val optimizer = new BreezeLBFGS[BDV[Double]]($(maxIter), 10, $(tol))
-
-    val numFeatures = dataset.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
-    /*
-       The parameters vector has three parts:
-       the first element: Double, log(sigma), the log of scale parameter
-       the second element: Double, intercept of the beta parameter
-       the third to the end elements: Doubles, regression coefficients vector of the beta parameter
-     */
-    val initialParameters = Vectors.zeros(numFeatures + 2)
-
-    val states = optimizer.iterations(new CachedDiffFunction(costFun),
-      initialParameters.toBreeze.toDenseVector)
-
-    val parameters = {
-      val arrayBuilder = mutable.ArrayBuilder.make[Double]
-      var state: optimizer.State = null
-      while (states.hasNext) {
-        state = states.next()
-        arrayBuilder += state.adjustedValue
-      }
-      if (state == null) {
-        val msg = s"${optimizer.getClass.getName} failed."
-        throw new SparkException(msg)
-      }
-
-      state.x.toArray.clone()
-    }
-
-    if (handlePersistence) instances.unpersist()
-
-    val coefficients = Vectors.dense(parameters.slice(2, parameters.length))
-//    val intercept = parameters(1)
-//    val scale = math.exp(parameters(0))
-    val model = new CoxModel(uid, coefficients)
-    copyValues(model.setParent(this))
-  }
-
-  @Since("1.6.0")
-  override def transformSchema(schema: StructType): StructType = {
-    validateAndTransformSchema(schema, fitting = true)
-  }
-
-  @Since("1.6.0")
-  override def copy(extra: ParamMap): Cox = defaultCopy(extra)
-}
-
-@Since("1.6.0")
-object Cox extends DefaultParamsReadable[Cox] {
-
-  @Since("1.6.0")
-  override def load(path: String): Cox = super.load(path)
-}
-
-/**
- * :: Experimental ::
- * Model produced by [[Cox]].
- */
-@Experimental
-@Since("1.6.0")
-class CoxModel private[ml] (@Since("1.6.0") override val uid: String,
-                                               @Since("1.6.0") val coefficients: Vector)
-  extends Model[CoxModel] with CoxParams with MLWritable {
-
-  /** @group setParam */
-  @Since("1.6.0")
-  def setFeaturesCol(value: String): this.type = set(featuresCol, value)
-
-  /** @group setParam */
-  @Since("1.6.0")
-  def setPredictionCol(value: String): this.type = set(predictionCol, value)
-
-  @Since("1.6.0")
-  def predict(features: Vector): Double = {
-    //TODO AB
-    0.0
-  }
-
-  @Since("1.6.0")
-  override def transform(dataset: DataFrame): DataFrame = {
-    transformSchema(dataset.schema)
-    val predictUDF = udf { features: Vector => predict(features) }
-      dataset.withColumn($(predictionCol), predictUDF(col($(featuresCol))))
-  }
-
-  @Since("1.6.0")
-  override def transformSchema(schema: StructType): StructType = {
-    validateAndTransformSchema(schema, fitting = false)
-  }
-
-  @Since("1.6.0")
-  override def copy(extra: ParamMap): CoxModel = {
-    copyValues(new CoxModel(uid, coefficients), extra)
-      .setParent(parent)
-  }
-
-  @Since("1.6.0")
-  override def write: MLWriter =
-    new CoxModel.CoxModelWriter(this)
-}
-
-@Since("1.6.0")
-object CoxModel extends MLReadable[CoxModel] {
-
-  @Since("1.6.0")
-  override def read: MLReader[CoxModel] = new CoxModelReader
-
-  @Since("1.6.0")
-  override def load(path: String): CoxModel = super.load(path)
-
-  /** [[MLWriter]] instance for [[CoxModel]] */
-  private[CoxModel] class CoxModelWriter (instance: CoxModel) extends MLWriter with Logging {
-
-    private case class Data(coefficients: Vector)
-
-    override protected def saveImpl(path: String): Unit = {
-      // Save metadata and Params
-      DefaultParamsWriter.saveMetadata(instance, path, sc)
-      // Save model data: coefficients, intercept, scale
-      val data = Data(instance.coefficients)
-      val dataPath = new Path(path, "data").toString
-      sqlContext.createDataFrame(Seq(data)).repartition(1).write.parquet(dataPath)
-    }
-  }
-
-  private class CoxModelReader extends MLReader[CoxModel] {
-
-    /** Checked against metadata when loading model */
-    private val className = classOf[CoxModel].getName
-
-    override def load(path: String): CoxModel = {
-      val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
-
-      val dataPath = new Path(path, "data").toString
-      val data = sqlContext.read.parquet(dataPath)
-        .select("coefficients").head()
-      val coefficients = data.getAs[Vector](0)
-      val model = new CoxModel(metadata.uid, coefficients)
-
-      DefaultParamsReader.getAndSetParams(model, metadata)
-      model
-    }
-  }
-}
-
-private class CoxAggregator(parameters: BDV[Double], fitIntercept: Boolean)
-  extends Serializable {
-
-  // beta is the intercept and regression coefficients to the covariates
-  private val beta = parameters.slice(1, parameters.length)
-  // sigma is the scale parameter of the AFT model
-  private val sigma = math.exp(parameters(0))
-
-  private var totalCnt: Long = 0L
-  private var lossSum = 0.0
-  private var gradientBetaSum = BDV.zeros[Double](beta.length)
-  private var gradientLogSigmaSum = 0.0
-
-  def count: Long = totalCnt
-
-  def loss: Double = if (totalCnt == 0) 1.0 else lossSum / totalCnt
-
-  // Here we optimize loss function over beta and log(sigma)
-  def gradient: BDV[Double] = BDV.vertcat(BDV(Array(gradientLogSigmaSum / totalCnt.toDouble)),
-    gradientBetaSum/totalCnt.toDouble)
-
-  /**
-   * Add a new training data to this AFTAggregator, and update the loss and gradient
-   * of the objective function.
-   *
-   *
-   *
-   * @param data The AFTPoint representation for one data point to be added into this aggregator.
-   * @return This AFTAggregator object.
-   */
-  //TODO: AB do we need an add for Cox?
-  def add(data: CoxPointWithCumulativeSumAndBetaX): this.type = {
-
-    //TODO: AB check if intercept is needed
-//    val xi = if (fitIntercept) {
-//      Vectors.dense(Array(1.0) ++ data.features.toArray).toBreeze
-//    } else {
-//      Vectors.dense(Array(0.0) ++ data.features.toArray).toBreeze
-//    }
-    /*val ti = data.time
-    val delta = data.censor
-    val epsilon = (math.log(ti) - beta.dot(xi)) / sigma
-
-    lossSum += math.log(sigma) * delta
-    lossSum += (math.exp(epsilon) - delta * epsilon)
-
-    // Sanity check (should never occur):
-    assert(!lossSum.isInfinity,
-      s"AFTAggregator loss sum is infinity. Error for unknown reason.")
-
-    gradientBetaSum += xi * (delta - math.exp(epsilon)) / sigma
-    gradientLogSigmaSum += delta + (delta - math.exp(epsilon)) * epsilon
-
-    totalCnt += 1
-    this*/
-    val ti = data.time
-    val epsilon = math.log(data.cumulativeSum)
-    val betaX: Double = beta.dot(data.features)
-    lossSum += (betaX - epsilon)
-
-    data.betaX :*= 1/data.cumulativeSum
-
-    gradientBetaSum += (data.features.toBreeze - data.betaX)
-
-  }
-
-  /**
-   * Merge another AFTAggregator, and update the loss and gradient
-   * of the objective function.
-   * (Note that it's in place merging; as a result, `this` object will be modified.)
-   *
-   * @param other The other AFTAggregator to be merged.
-   * @return This AFTAggregator object.
-   */
-  def merge(other: CoxAggregator): this.type = {
-    if (totalCnt != 0) {
-      totalCnt += other.totalCnt
-      lossSum += other.lossSum
-
-      gradientBetaSum += other.gradientBetaSum
-      gradientLogSigmaSum += other.gradientLogSigmaSum
-    }
-    this
-  }
-}
-
-/**
- * AFTCostFun implements Breeze's DiffFunction[T] for AFT cost.
- * It returns the loss and gradient at a particular point (parameters).
- * It's used in Breeze's convex optimization routines.
- */
-private class CoxCostFun(sortedData: RDD[CoxPoint])
-  extends DiffFunction[BDV[Double]] {
-
-  override def calculate(currentBeta: BDV[Double]): (Double, BDV[Double]) = {
-
+    val sortedData = coxRdd.sortBy(_.time, false)
     val sc = sortedData.sparkContext
-    //val accumulator = sc.accumulator((array, array))
     val riskSetRdd = riskSet(sortedData, currentBeta)
     val rRdd = riskSetRdd.map(x => x._1)
     val cumulativeSum = computePartitionSum(rRdd)
     val broadCastCumulativeSum = sc.broadcast(cumulativeSum)
     val finalRisk = computeFinalR(riskSetRdd,broadCastCumulativeSum)
     val updatedCoxPoint = sortedData.zip(finalRisk).map{case(a,(nR,dR)) =>CoxPointWithCumulativeSumAndBetaX(a.features, a.time, a.censor,nR,dR)}
-
+    updatedCoxPoint
   }
+
 
   def computePartitionSum(rdd: RDD[Double]): scala.collection.Map[Int,Double] = {
     var map = rdd.mapPartitionsWithIndex {
@@ -411,13 +143,11 @@ private class CoxCostFun(sortedData: RDD[CoxPoint])
     map
   }
 
-  //def riskSet(sortedData: RDD[CoxPoint], accumulator: Accumulator[(Array[Double], Array[Double])], currentBeta: BDV[Double]): RDD[(Double, Double)] = {
   def riskSet(sortedData: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double])] = {
-  val X = sortedData.mapPartitionsWithIndex {
+    val X = sortedData.mapPartitionsWithIndex {
       case (i, iter) =>
         var sumR: Double = 0.0
 
-        //var sumTuple: (Double, BDV[Double]) = (0.0, 0.0)
         val featureBuf = new ArrayBuffer[(Double, BDV[Double])]()
         while (iter.hasNext) {
           val xj: BDV[Double] = new BDV(iter.next().features.toArray)
@@ -451,11 +181,238 @@ private class CoxCostFun(sortedData: RDD[CoxPoint])
     }
 
   }
+
+
+  override def fit(dataSet: DataFrame): CoxModel = {
+    validateAndTransformSchema(dataSet.schema, fitting = true)
+    val numFeatures = dataSet.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
+    //val meanVector = dataSet.select($(featuresCol)).
+    import breeze.linalg._
+    import breeze.numerics._
+    val initialBetas =DenseVector.zeros[Double](numFeatures)
+    val instances = extractCoxPoints(dataSet, initialBetas)
+    val handlePersistence = dataSet.rdd.getStorageLevel == StorageLevel.NONE
+    if (handlePersistence) instances.persist(StorageLevel.MEMORY_AND_DISK)
+
+    val costFun = new CoxCostFun(instances)
+    val optimizer = new BreezeLBFGS[BDV[Double]]($(maxIter), 10, $(tol))
+
+
+    /*
+       The parameters vector has three parts:
+       the first element: Double, log(sigma), the log of scale parameter
+       the second element: Double, intercept of the beta parameter
+       the third to the end elements: Doubles, regression coefficients vector of the beta parameter
+     */
+    val initialParameters = Vectors.zeros(numFeatures + 2)
+
+    val states = optimizer.iterations(new CachedDiffFunction(costFun),
+      initialParameters.toBreeze.toDenseVector)
+
+    val parameters = {
+      val arrayBuilder = mutable.ArrayBuilder.make[Double]
+      var state: optimizer.State = null
+      while (states.hasNext) {
+        state = states.next()
+        arrayBuilder += state.adjustedValue
+      }
+      if (state == null) {
+        val msg = s"${optimizer.getClass.getName} failed."
+        throw new SparkException(msg)
+      }
+
+      state.x.toArray.clone()
+    }
+
+    if (handlePersistence) instances.unpersist()
+
+    val coefficients = Vectors.dense(parameters.slice(2, parameters.length))
+//    val intercept = parameters(1)
+//    val scale = math.exp(parameters(0))
+    //TODO: Temporary returning coefficients instead of average. Working on this.
+    val model = new CoxModel(uid, coefficients, coefficients)
+    copyValues(model.setParent(this))
+  }
+
+    override def transformSchema(schema: StructType): StructType = {
+    validateAndTransformSchema(schema, fitting = true)
+  }
+  
+  override def copy(extra: ParamMap): Cox = defaultCopy(extra)
+}
+
+  object Cox extends DefaultParamsReadable[Cox] {
+
+  override def load(path: String): Cox = super.load(path)
+}
+
+/**
+ * Model produced by [[Cox]].
+ */
+class CoxModel private[ml] (@Since("1.6.0") override val uid: String,
+                                               @Since("1.6.0") val coefficients: Vector,
+                             val meanVector: Vector)
+  extends Model[CoxModel] with CoxParams with MLWritable {
+
+  /** @group setParam */
+  def setFeaturesCol(value: String): this.type = set(featuresCol, value)
+
+  /** @group setParam */
+  def setPredictionCol(value: String): this.type = set(predictionCol, value)
+  
+  def predict(features: Vector): Double = {
+    //TODO AB
+    0.0
+  }
+
+
+  
+  override def transform(dataset: DataFrame): DataFrame = {
+    transformSchema(dataset.schema)
+    val predictUDF = udf { features: Vector => predict(features) }
+      dataset.withColumn($(predictionCol), predictUDF(col($(featuresCol))))
+  }
+  
+  override def transformSchema(schema: StructType): StructType = {
+    validateAndTransformSchema(schema, fitting = false)
+  }
+  
+  override def copy(extra: ParamMap): CoxModel = {
+    copyValues(new CoxModel(uid, coefficients, meanVector), extra)
+      .setParent(parent)
+  }
+  
+  override def write: MLWriter =
+    new CoxModel.CoxModelWriter(this)
+}
+
+object CoxModel extends MLReadable[CoxModel] {
+  
+  override def read: MLReader[CoxModel] = new CoxModelReader
+  
+  override def load(path: String): CoxModel = super.load(path)
+
+  /** [[MLWriter]] instance for [[CoxModel]] */
+  private[CoxModel] class CoxModelWriter (instance: CoxModel) extends MLWriter with Logging {
+
+    private case class Data(coefficients: Vector)
+
+    override protected def saveImpl(path: String): Unit = {
+      // Save metadata and Params
+      DefaultParamsWriter.saveMetadata(instance, path, sc)
+      // Save model data: coefficients, intercept, scale
+      val data = Data(instance.coefficients)
+      val dataPath = new Path(path, "data").toString
+      sqlContext.createDataFrame(Seq(data)).repartition(1).write.parquet(dataPath)
+    }
+  }
+
+  private class CoxModelReader extends MLReader[CoxModel] {
+
+    /** Checked against metadata when loading model */
+    private val className = classOf[CoxModel].getName
+
+    override def load(path: String): CoxModel = {
+      val metadata = DefaultParamsReader.loadMetadata(path, sc, className)
+
+      val dataPath = new Path(path, "data").toString
+      val data = sqlContext.read.parquet(dataPath)
+        .select("coefficients").head()
+      val coefficients = data.getAs[Vector](0)
+      val mean = data.getAs[Vector](1)
+      val model = new CoxModel(metadata.uid, coefficients, mean)
+
+      DefaultParamsReader.getAndSetParams(model, metadata)
+      model
+    }
+  }
+}
+
+private class CoxAggregator(parameters: BDV[Double])
+  extends Serializable {
+
+  // beta is the intercept and regression coefficients to the covariates
+  private val beta = parameters.slice(1, parameters.length)
+
+  private var totalCnt: Long = 0L
+  private var lossSum = 0.0
+  private var gradientBetaSum = BDV.zeros[Double](beta.length)
+  private var gradientLogSigmaSum = 0.0
+
+  def count: Long = totalCnt
+
+  def loss: Double = if (totalCnt == 0) 1.0 else lossSum / totalCnt
+
+  // Here we optimize loss function over beta and log(sigma)
+  //TODO: Check with Soila
+  def gradient: BDV[Double] = BDV.vertcat(BDV(Array(gradientLogSigmaSum / totalCnt.toDouble)),
+    gradientBetaSum/totalCnt.toDouble)
+
+  /**
+   * Add a new training data to this CoxAggregator, and update the loss and gradient
+   * of the objective function.
+   * @param data The CoxPoint representation for one data point to be added into this aggregator.
+   * @return This CoxAggregator object.
+   */
+  def add(data: CoxPointWithCumulativeSumAndBetaX): this.type = {
+    val epsilon = math.log(data.cumulativeSum)
+    val betaX: Double = beta.dot(data.features.toBreeze)
+    lossSum += (betaX - epsilon)*data.censor
+
+    data.betaDotX :*= 1/data.cumulativeSum
+
+    val temp = data.features.toBreeze - data.betaDotX
+    gradientBetaSum += temp:* data.censor
+    totalCnt +=1
+    this
+  }
+
+  /**
+   * Merge another CoxAggregator, and update the loss and gradient
+   * of the objective function.
+   * (Note that it's in place merging; as a result, `this` object will be modified.)
+   *
+   * @param other The other CoxAggregator to be merged.
+   * @return This Coxggregator object.
+   */
+  def merge(other: CoxAggregator): this.type = {
+    if (totalCnt != 0) {
+      totalCnt += other.totalCnt
+      lossSum += other.lossSum
+
+      gradientBetaSum += other.gradientBetaSum
+    }
+    this
+  }
+}
+
+/**
+ * CoxCostFun implements Breeze's DiffFunction[T] for Cox cost.
+ * It returns the loss and gradient at a particular point (parameters).
+ * It's used in Breeze's convex optimization routines.
+ */
+private class CoxCostFun(sortedData: RDD[CoxPointWithCumulativeSumAndBetaX])
+  extends DiffFunction[BDV[Double]] {
+
+  override def calculate(currentBeta: BDV[Double]): (Double, BDV[Double]) = {
+
+
+    val coxAggregator = sortedData.treeAggregate(new CoxAggregator(currentBeta))(
+      seqOp = (c, v) => (c, v) match {
+        case (aggregator, instance) => aggregator.add(instance)
+      },
+      combOp = (c1, c2) => (c1, c2) match {
+        case (aggregator1, aggregator2) => aggregator1.merge(aggregator2)
+      })
+
+    (coxAggregator.loss, coxAggregator.gradient)
+  }
+
 }
 
 
 /**
- * Class that represents the (features, label, censor) of a data point.
+ * Class that represents the (features, time, censor) of a data point.
  *
  * @param features List of features for this data point.
  * @param time Label for this data point.
@@ -463,7 +420,16 @@ private class CoxCostFun(sortedData: RDD[CoxPoint])
  *                 the event has occurred i.e. uncensored; otherwise censored.
  */
 private[regression] case class CoxPoint(features: Vector, time: Double, censor: Double) {
-  require(censor == 1.0 || censor == 0.0, "censor of class AFTPoint must be 1.0 or 0.0")
+  require(censor == 1.0 || censor == 0.0, "censor of class CoxPoint must be 1.0 or 0.0")
 }
 
-case class CoxPointWithCumulativeSumAndBetaX(features: Vector, time: Double, censor: Double, cumulativeSum: Double, betaX:BDV[Double] )
+/**
+ * Class that represents the (features, tume, censor, cummulativeSum and betaDotX)
+ * @param features List of features for this data point.
+ * @param time Label for this data point.
+ * @param censor Indicator of the event has occurred or not. If the value is 1, it means
+ *                 the event has occurred i.e. uncensored; otherwise censored.
+ * @param cumulativeSum
+ * @param betaDotX
+ */
+case class CoxPointWithCumulativeSumAndBetaX(features: Vector, time: Double, censor: Double, cumulativeSum: Double, betaDotX:BDV[Double] )
