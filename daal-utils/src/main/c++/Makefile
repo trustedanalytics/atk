@@ -34,7 +34,4 @@ ${TARGET} : serializer.o
 clean:
 	$(RM) *.o ${TARGETFILE}
 
-install: ${TARGET}
-	sudo cp ${TARGETFILE} ${DAALROOT}/lib/intel64_lin/
-
 # DO NOT DELETE THIS LINE -- make depend needs it

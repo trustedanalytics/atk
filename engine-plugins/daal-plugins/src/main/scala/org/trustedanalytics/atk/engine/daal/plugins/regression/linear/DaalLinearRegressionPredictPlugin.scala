@@ -16,8 +16,6 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.regression.linear
 
-import com.intel.daal.algorithms.ModelSerializer
-import com.intel.daal.services.DaalContext
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 import org.trustedanalytics.atk.engine.EngineConfig
@@ -28,21 +26,20 @@ import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, SparkCommandPlugin, A
 
 //Implicits needed for JSON conversion
 import spray.json._
-import DaalLinearRegressionModelFormat._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-
+import DaalLinearRegressionModelFormat._
 import DaalLinearRegressionJsonFormat._
 
 /**
- * Plugin for scoring DAAL's Linear Regression using QR decomposition
+ * Plugin for predicting Intel DAAL Linear Regression using QR decomposition
  */
-@PluginDoc(oneLine = "Predict labels for a test frame using trained DAAL linear regression model.",
+@PluginDoc(oneLine = "Predict labels for a test frame using trained Intel DAAL linear regression model.",
   extended = """Predict the labels for a test frame and create a new frame revision with
 existing columns and a new predicted value column.""",
   returns =
     """frame\:
   Frame containing the original frame's columns and a column with the predicted value.""")
-class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionArgs, FrameReference] {
+class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearRegressionPredictArgs, FrameReference] {
   /**
    * The name of the command.
    *
@@ -53,9 +50,6 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
 
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
-  /** Disable Kryo serialization to prevent seg-faults when using DAAL */
-  override def kryoRegistrator: Option[String] = None
-
   /**
    * Get predictions for DAAL's Linear Regression with QR decomposition using test frame
    *
@@ -65,34 +59,27 @@ class DaalLinearRegressionPredictPlugin extends SparkCommandPlugin[DaalLinearReg
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DaalLinearRegressionArgs)(implicit invocation: Invocation): FrameReference =
+  override def execute(arguments: DaalLinearRegressionPredictArgs)(implicit invocation: Invocation): FrameReference =
     {
       DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)
+
+      //Load the DAAL linear regression model
       val model: Model = arguments.model
+      val lrJsObject = model.data
+      val trainedModel = lrJsObject.convertTo[DaalLinearRegressionModelData]
 
       //create RDD from the frame
       val testFrame: SparkFrame = arguments.frame
-      val featureColumns = arguments.featureColumns
-      val labelColumns = arguments.labelColumns
+      val observationColumns = arguments.observationColumns.getOrElse(trainedModel.observationColumns)
+      require(trainedModel.observationColumns.length == observationColumns.length,
+        "Number of observations columns for train and predict should be same")
 
-      //Load the DAAL linear regression model
-      val lrJsObject = model.data
-      val modelData = lrJsObject.convertTo[DaalLinearRegressionModel]
-
-      require(modelData.featureColumns.length == arguments.featureColumns.length,
-        "Number of feature columns for train and predict should be same")
-      require(modelData.labelColumns.length == arguments.labelColumns.length,
-        "Number of label columns for train and predict should be same")
-
-      val lrResultsFrameRdd = DaalLinearRegressionFunctions.predictLinearModel(
-        modelData,
-        testFrame.rdd,
-        featureColumns)
+      val predictFrame = DaalLinearPredictAlgorithm(trainedModel, testFrame.rdd, observationColumns).predict()
 
       engine.frames.tryNewFrame(CreateEntityArgs(
         description = Some("created by DAAL linear regression predict operation"))) {
         newPredictedFrame: FrameEntity =>
-          newPredictedFrame.save(lrResultsFrameRdd)
+          newPredictedFrame.save(predictFrame)
       }
     }
 

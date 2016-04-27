@@ -62,6 +62,7 @@ class CollaborativeFilteringTrainPlugin
       })
 
     val als = new ALS()
+      .setCheckpointInterval(arguments.checkpointIterations)
       .setRank(arguments.numFactors)
       .setIterations(arguments.maxSteps)
       .setRank(arguments.numFactors)
