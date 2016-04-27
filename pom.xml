@@ -1148,6 +1148,11 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>com.orientechnologies</groupId>
+                <artifactId>orientdb-graphdb</artifactId>
+                <version>2.1.12</version>
+            </dependency>
 
             <!--commons-->
             <dependency>

@@ -83,6 +83,15 @@ class VertexFrameRdd(schema: VertexSchema, prev: RDD[Row]) extends FrameRdd(sche
   }
 
   /**
+   * Map partition over vertices
+   * @param mapPartitionFunction map partition function that operates on an iterator VertexWrapper
+   * @tparam U return type that will be the in resulting RDD
+   */
+  def mapPartitionVertices[U: ClassTag](mapPartitionFunction: Iterator[VertexWrapper] => Iterator[U]): RDD[U] = {
+    this.map(data => vertexWrapper(data)).mapPartitions(mapPartitionFunction)
+  }
+
+  /**
    * RDD of idColumn and _vid
    */
   def idColumns: RDD[(Any, Long)] = {
