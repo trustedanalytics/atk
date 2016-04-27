@@ -19,7 +19,6 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.algorithms.classifier.training.{ InputId, TrainingDistributedInputId, TrainingResultId }
 import com.intel.daal.algorithms.multinomial_naive_bayes.Model
 import com.intel.daal.algorithms.multinomial_naive_bayes.training._
-import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
@@ -51,15 +50,20 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
    */
   def train(): DaalNaiveBayesModelData = {
     val context = new DaalContext
+    var serializedModel: List[Byte] = null
 
-    //train model
-    val partialResultsRdd = computePartialResults()
-    val trainingResult = mergePartialResults(context, partialResultsRdd)
-    val trainedModel: Model = trainingResult.get(TrainingResultId.model)
-
-    // serialize model and return results
-    val serializedModel = serializeTrainedModel(trainedModel)
-    context.dispose()
+    try {
+      val partialResultsRdd = computePartialResults()
+      val trainingResult = mergePartialResults(context, partialResultsRdd)
+      val trainedModel: Model = trainingResult.get(TrainingResultId.model)
+      serializedModel = serializeTrainedModel(trainedModel)
+    }
+    catch {
+      case ex: Exception => throw new RuntimeException("Could not train model:", ex)
+    }
+    finally {
+      context.dispose()
+    }
     DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, lambda, classPrior)
   }
 
@@ -72,22 +76,33 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
 
     val partialResultRdd = trainTables.rdd.map(table => {
       val context = new DaalContext()
-      val featureTable = table.features
-      val labelTable = table.labels
+      var partialResult: TrainingPartialResult = null
 
-      val naiveBayesTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double],
-        TrainingMethod.defaultDense, numClasses)
-      naiveBayesTraining.input.set(InputId.data, featureTable.getUnpackedTable(context))
-      naiveBayesTraining.input.set(InputId.labels, labelTable.getUnpackedTable(context))
+      try {
+        val featureTable = table.features
+        val labelTable = table.labels
 
-      val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context, lambda, observationColumns.length)
-      if (classPrior.isDefined) {
-        DaalNaiveBayesParameters.getClassPriorParameter(context, classPrior.get)
+        val naiveBayesTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double],
+          TrainingMethod.defaultDense, numClasses)
+        naiveBayesTraining.input.set(InputId.data, featureTable.getUnpackedTable(context))
+        naiveBayesTraining.input.set(InputId.labels, labelTable.getUnpackedTable(context))
+
+        val alphaParameter = DaalNaiveBayesParameters.getAlphaParameter(context, lambda, observationColumns.length)
+        naiveBayesTraining.parameter.setAlpha(alphaParameter)
+        if (classPrior.isDefined) {
+          val priorParameter = DaalNaiveBayesParameters.getClassPriorParameter(context, classPrior.get)
+          naiveBayesTraining.parameter.setPriorClassEstimates(priorParameter)
+        }
+
+        partialResult = naiveBayesTraining.compute()
+        partialResult.pack()
       }
-
-      val partialResult = naiveBayesTraining.compute()
-      partialResult.pack()
-      context.dispose()
+      catch {
+        case ex: Exception => throw new RuntimeException("Could not compute partial model:", ex)
+      }
+      finally {
+        context.dispose()
+      }
       partialResult
     })
     partialResultRdd
@@ -125,8 +140,7 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
     val serializedModel = Try(ModelSerializer.serializeNaiveBayesModel(trainedModel).toList) match {
       case Success(sModel) => sModel
       case Failure(ex) => {
-        println(s"Unable to serialize DAAL Naive Bayes model : ${ex.getMessage}")
-        throw new scala.RuntimeException(s"Unable to serialize DAAL Naive Bayes model : ${ex.getMessage}")
+        throw new scala.RuntimeException(s"Could not serialize model : ${ex.getMessage}")
       }
     }
     serializedModel

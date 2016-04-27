@@ -23,6 +23,7 @@ import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql
+import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
@@ -52,10 +53,18 @@ case class DaalNaiveBayesPredictAlgorithm(modelData: DaalNaiveBayesModelData,
       }
       else {
         val context = new DaalContext()
-        val trainedModel = ModelSerializer.deserializeNaiveBayesModel(context, modelData.serializedModel.toArray)
-        val predictions = predictTableResults(context, trainedModel, testData)
-        val results = predictions.toRowIter(context)
-        context.dispose()
+        var results: Iterator[Row] = null
+        try {
+          val trainedModel = ModelSerializer.deserializeNaiveBayesModel(context, modelData.serializedModel.toArray)
+          val predictions = predictTableResults(context, trainedModel, testData)
+          results = predictions.toRowIter(context)
+        }
+        catch {
+          case ex: Exception => throw new RuntimeException("Could not predict model:", ex)
+        }
+        finally {
+          context.dispose()
+        }
         results
       }
     })
@@ -84,10 +93,12 @@ case class DaalNaiveBayesPredictAlgorithm(modelData: DaalNaiveBayesModelData,
     predictAlgorithm.input.set(NumericTableInputId.data, testTable)
     predictAlgorithm.input.set(ModelInputId.model, trainedModel)
 
-    val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context,
+    val alphaParameter = DaalNaiveBayesParameters.getAlphaParameter(context,
       modelData.lambdaParameter, observationColumns.length)
+    predictAlgorithm.parameter.setAlpha(alphaParameter)
     if (modelData.classPrior.isDefined) {
-      DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+      val priorParameter = DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+      predictAlgorithm.parameter.setPriorClassEstimates(priorParameter)
     }
 
     /* Compute and retrieve prediction results */

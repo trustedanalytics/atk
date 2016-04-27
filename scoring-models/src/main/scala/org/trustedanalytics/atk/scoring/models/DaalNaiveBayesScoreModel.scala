@@ -78,24 +78,36 @@ class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model
    */
   private def predict(features: Array[Double]): Double = {
     val context = new DaalContext()
-    val predictAlgorithm = new PredictionBatch(context, classOf[lang.Double],
-      PredictionMethod.defaultDense, modelData.numClasses)
-    val testTable = new HomogenNumericTable(context, features, features.length, 1L)
-    val trainedModel = ModelSerializer.deserializeNaiveBayesModel(context, modelData.serializedModel.toArray)
-    predictAlgorithm.input.set(NumericTableInputId.data, testTable)
-    predictAlgorithm.input.set(ModelInputId.model, trainedModel)
-    val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context,
-      modelData.lambdaParameter, modelData.observationColumns.length)
-    if (modelData.classPrior.isDefined) {
-      DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+    var prediction: Double = Double.NaN
+
+    try {
+      val predictAlgorithm = new PredictionBatch(context, classOf[lang.Double],
+        PredictionMethod.defaultDense, modelData.numClasses)
+      val testTable = new HomogenNumericTable(context, features, features.length, 1L)
+      val trainedModel = ModelSerializer.deserializeNaiveBayesModel(context, modelData.serializedModel.toArray)
+      predictAlgorithm.input.set(NumericTableInputId.data, testTable)
+      predictAlgorithm.input.set(ModelInputId.model, trainedModel)
+
+      val alphaParameter = DaalNaiveBayesParameters.getAlphaParameter(context,
+        modelData.lambdaParameter, modelData.observationColumns.length)
+      predictAlgorithm.parameter.setAlpha(alphaParameter)
+      if (modelData.classPrior.isDefined) {
+        val priorParameter = DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+        predictAlgorithm.parameter.setPriorClassEstimates(priorParameter)
+      }
+
+      /* Compute and retrieve prediction results */
+      val partialResult = predictAlgorithm.compute()
+
+      val predictions = partialResult.get(PredictionResultId.prediction).asInstanceOf[HomogenNumericTable]
+      prediction = predictions.getDoubleArray.head
     }
-
-    /* Compute and retrieve prediction results */
-    val partialResult = predictAlgorithm.compute()
-
-    val predictions = partialResult.get(PredictionResultId.prediction).asInstanceOf[HomogenNumericTable]
-    val prediction = predictions.getDoubleArray.head
-    context.dispose()
+    catch {
+      case ex: Exception => throw new RuntimeException("Could not score model:", ex)
+    }
+    finally {
+      context.dispose()
+    }
     prediction
   }
 }

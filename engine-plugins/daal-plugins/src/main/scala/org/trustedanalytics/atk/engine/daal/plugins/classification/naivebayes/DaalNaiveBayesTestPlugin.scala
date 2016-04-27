@@ -82,14 +82,14 @@ class DaalNaiveBayesTestPlugin extends SparkCommandPlugin[DaalNaiveBayesTestArgs
     }
 
     //predicting a label for the observation columns
-    val naiveBayesColumns = arguments.observationColumns.getOrElse(naiveBayesModel.observationColumns)
-    val predictColumn = "predicted_class_" + arguments.labelColumn
+    val observationColumns = arguments.observationColumns.getOrElse(naiveBayesModel.observationColumns)
+    val predictColumn = "predicted_" + arguments.labelColumn
     val predictFrame = new DaalNaiveBayesPredictAlgorithm(naiveBayesModel, frame.rdd,
-      naiveBayesColumns, predictColumn).predict()
+      observationColumns, predictColumn).predict()
 
     //predicting and testing
     val scoreAndLabelRdd = predictFrame.toScoreAndLabelRdd(row => {
-      val labeledPoint = row.valuesAsLabeledPoint(naiveBayesColumns, arguments.labelColumn)
+      val labeledPoint = row.valuesAsLabeledPoint(observationColumns, arguments.labelColumn)
       val score = row.doubleValue(predictColumn)
       ScoreAndLabel(score, labeledPoint.label)
     })
