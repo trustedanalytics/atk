@@ -33,7 +33,8 @@ object DaalPcaFunctions extends Serializable {
    * @return PCA results with eigen values and vectors
    */
   def runPCA(frameRdd: FrameRdd, arguments: DaalPcaArgs): DaalPcaResult = {
-    val distributedTable = DistributedNumericTable.createTable(frameRdd, arguments.columnNames)
+    val vectorRdd = frameRdd.toMeanCenteredDenseVectorRDD(arguments.columnNames)
+    val distributedTable = DistributedNumericTable.createTable(vectorRdd)
     val partialResults = computePcaPartialResults(distributedTable, arguments)
     val pcaResults = mergePcaPartialResults(partialResults, arguments)
     pcaResults

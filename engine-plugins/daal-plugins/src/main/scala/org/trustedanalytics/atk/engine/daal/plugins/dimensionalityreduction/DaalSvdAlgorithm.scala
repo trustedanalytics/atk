@@ -36,7 +36,7 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
     val results = mergePartialResults(context, partialResults)
     val singularValues: Array[Double] = getSingularValues(results)
     val rightSingularMatrix: Array[Array[Double]] = getRightSingularMatrix(results, k)
-    val leftSingularMatrix = computeLeftSingularMatrix(results.uMatrixMasterResult, partialResults)
+    //val leftSingularMatrix = computeLeftSingularMatrix(results.uMatrixMasterResult, partialResults)
 
     DaalSvdData(
       k,
@@ -132,7 +132,7 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
       uMatrixDataCollection.unpack(context)
       val svdLocal = new DistributedStep3Local(context, classOf[java.lang.Double], Method.defaultDense)
       svdLocal.input.set(DistributedStep3LocalInputId.inputOfStep3FromStep1, uMatrixDataCollection)
-      svdLocal.input.set(DistributedStep3LocalInputId.inputOfStep3FromStep2, uMatrixLocalInput)
+      //svdLocal.input.set(DistributedStep3LocalInputId.inputOfStep3FromStep2, uMatrixLocalInput)
       svdLocal.compute()
       val result = svdLocal.finalizeCompute()
 
