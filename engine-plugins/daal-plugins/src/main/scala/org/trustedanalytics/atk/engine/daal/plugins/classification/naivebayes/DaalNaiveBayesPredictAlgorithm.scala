@@ -19,6 +19,7 @@ import com.intel.daal.algorithms.ModelSerializer
 import com.intel.daal.algorithms.classifier.prediction.{ ModelInputId, NumericTableInputId, PredictionResultId }
 import com.intel.daal.algorithms.multinomial_naive_bayes.Model
 import com.intel.daal.algorithms.multinomial_naive_bayes.prediction._
+import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql
@@ -83,9 +84,14 @@ case class DaalNaiveBayesPredictAlgorithm(modelData: DaalNaiveBayesModelData,
     predictAlgorithm.input.set(NumericTableInputId.data, testTable)
     predictAlgorithm.input.set(ModelInputId.model, trainedModel)
 
+    val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context,
+      modelData.lambdaParameter, observationColumns.length)
+    if (modelData.classPrior.isDefined) {
+      DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+    }
+
     /* Compute and retrieve prediction results */
     val partialResult = predictAlgorithm.compute()
-
     val predictions = partialResult.get(PredictionResultId.prediction)
     new IndexedNumericTable(testData.index, predictions)
   }

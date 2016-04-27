@@ -92,7 +92,7 @@ JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserial
     return (jlong)sharedPtr;
 }
 
-/** JNI wrapper for serializing DAAL QR models to byte arrays */
+/** JNI wrapper for freeing byte buffer */
 JNIEXPORT void JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cFreeByteBuffer
   (JNIEnv *env, jclass thisClass, jobject buffer) {
     daal::byte* byteArray = (daal::byte*)env->GetDirectBufferAddress(buffer);

@@ -84,6 +84,11 @@ class DaalNaiveBayesScoreModel(modelData: DaalNaiveBayesModelData) extends Model
 
     predictAlgorithm.input.set(NumericTableInputId.data, testTable)
     predictAlgorithm.input.set(ModelInputId.model, naiveBayesModel)
+    val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context,
+      modelData.lambdaParameter, modelData.observationColumns.length)
+    if (modelData.classPrior.isDefined) {
+      DaalNaiveBayesParameters.getClassPriorParameter(context, modelData.classPrior.get)
+    }
 
     /* Compute and retrieve prediction results */
     val partialResult = predictAlgorithm.compute()

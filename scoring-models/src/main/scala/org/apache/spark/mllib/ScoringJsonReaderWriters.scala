@@ -477,7 +477,7 @@ object ScoringJsonReaderWriters {
      * The write methods converts from DaalNaiveBayesModelData to JsValue
      * @param obj DaalNaiveBayesModelData. Where DaalNaiveBayesModelData format is:
      *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
-     *                                          labelColumn: String, numClasses: Int, alpha: Double)
+     *               labelColumn: String, numClasses: Int, lambdaParameter: Double, classPrior: Option[Array[Double]])
      * @return JsValue
      */
     override def write(obj: DaalNaiveBayesModelData): JsValue = {
@@ -486,7 +486,8 @@ object ScoringJsonReaderWriters {
         "observation_columns" -> obj.observationColumns.toJson,
         "label_column" -> obj.labelColumn.toJson,
         "num_classes" -> obj.numClasses.toJson,
-        "alpha" -> obj.alpha.toJson
+        "lamda_parameter" -> obj.lambdaParameter.toJson,
+        "class_prior" -> obj.classPrior.toJson
       )
     }
 
@@ -495,17 +496,20 @@ object ScoringJsonReaderWriters {
      * @param json JsValue
      * @return DaalNaiveBayesModelData with format:
      *            DaalNaiveBayesModelData(serializedModel: List[Byte], observationColumns: List[String],
-     *                                          labelColumn: String, numClasses: Int, alpha: Double)
+     *                 labelColumn: String, numClasses: Int, lambdaParameter: Double, classPrior: Option[Array[Double]])
      */
     override def read(json: JsValue): DaalNaiveBayesModelData = {
       val fields = json.asJsObject.fields
       val serializedModel = getOrInvalid(fields, "serialized_model").convertTo[List[Byte]]
       val obsCols = getOrInvalid(fields, "observation_columns").convertTo[List[String]]
       val labelColumn = getOrInvalid(fields, "value_column").convertTo[String]
-      val numClasses = getOrInvalid(fields, "numClasses").convertTo[Int]
-      val alpha = getOrInvalid(fields, "alpha").convertTo[Double]
-
-      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses, alpha)
+      val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
+      val lambdaParameter = getOrInvalid(fields, "lamda_parameter").convertTo[Double]
+      val classPrior = fields.get("class_prior") match {
+        case Some(prior) => Some(prior.convertTo[Array[Double]])
+        case _ => None
+      }
+      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses, lambdaParameter, classPrior)
     }
   }
 

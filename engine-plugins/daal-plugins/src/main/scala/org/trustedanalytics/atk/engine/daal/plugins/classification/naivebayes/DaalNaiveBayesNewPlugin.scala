@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /**
  * Create a 'new' instance of a Intel Daal Naive Bayes model
  */
-@PluginDoc(oneLine = "Create a 'new' instance of a Naive Bayes model",
+@PluginDoc(oneLine = "Create a 'new' instance of a multinomial Naive Bayes model",
   extended = """Naive Bayes [1]_ is a probabilistic classifier with strong
 independence assumptions between features.
 It computes the conditional probability distribution of each feature given label,

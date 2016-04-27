@@ -1,17 +1,17 @@
 /**
- *  Copyright (c) 2015 Intel Corporation 
+ * Copyright (c) 2015 Intel Corporation 
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *       http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.trustedanalytics.atk.engine.daal.plugins.classification.naivebayes
 
@@ -42,7 +42,7 @@ Default is 1/num_classes for each class""".stripMargin) classPrior: Option[Array
   require(numClasses > 1, "number of classes must be greater than 1")
   require(classPrior.isEmpty || classPrior.get.length == numClasses,
     "class prior should be empty or an array of the same length as number of classes")
-  require(classPrior.isEmpty || classPrior.get.forall(_ >= 0) && classPrior.get.sum.toInt == 1,
+  require(classPrior.isEmpty || classPrior.get.forall(_ >= 0) && Math.abs(classPrior.get.sum - 1) <= 1e-6,
     "sum of class priors should equal 1")
 }
 
@@ -82,7 +82,9 @@ was trained on.""") observationColumns: Option[List[String]]) {
  * JSON serialization for model
  */
 object DaalNaiveBayesArgsFormat {
+
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
   implicit val nbTrainArgsFormat = jsonFormat7(DaalNaiveBayesTrainArgs)
   implicit val nbPredictArgsFormat = jsonFormat3(DaalNaiveBayesPredictArgs)
   implicit val nbTestArgsFormat = jsonFormat4(DaalNaiveBayesTestArgs)

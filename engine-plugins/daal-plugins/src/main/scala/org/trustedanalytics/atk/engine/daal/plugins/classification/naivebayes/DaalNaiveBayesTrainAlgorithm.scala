@@ -60,7 +60,7 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
     // serialize model and return results
     val serializedModel = serializeTrainedModel(trainedModel)
     context.dispose()
-    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, alpha)
+    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, alpha, classPrior)
   }
 
   /**
@@ -80,12 +80,9 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
       naiveBayesTraining.input.set(InputId.data, featureTable.getUnpackedTable(context))
       naiveBayesTraining.input.set(InputId.labels, labelTable.getUnpackedTable(context))
 
-      val alphaParameters = Array.fill[Double](observationColumns.length)(alpha)
-      naiveBayesTraining.parameter.setAlpha(new HomogenNumericTable(context, alphaParameters, alphaParameters.length, 1L))
-
+      val alphaParameters = DaalNaiveBayesParameters.getAlphaParameter(context, alpha, observationColumns.length)
       if (classPrior.isDefined) {
-        val classPriorTable = new HomogenNumericTable(context, classPrior.get, classPrior.get.length, 1L)
-        naiveBayesTraining.parameter.setPriorClassEstimates(classPriorTable)
+        DaalNaiveBayesParameters.getClassPriorParameter(context, classPrior.get)
       }
 
       val partialResult = naiveBayesTraining.compute()
