@@ -21,19 +21,19 @@
 
 
 
-        **left_on** : str
+        **left_on** : list
 
         ..
 
-            Name of the column in the left frame used to match up the two frames.
+            Names of the columns in the left frame used to match up the two frames.
 
 
 
-        **right_on** : str (default=None)
+        **right_on** : list (default=None)
 
         ..
 
-            Name of the column in the right frame used to match up the two frames. Default is the same as the left frame.
+            Names of the columns in the right frame used to match up the two frames. Default is the same as the left frame.
 
 
 
@@ -64,21 +64,21 @@
     Create a new frame from a SQL JOIN operation with another frame.
     The frame on the 'left' is the currently active frame.
     The frame on the 'right' is another frame.
-    This method takes a column in the left frame and matches its values
-    with a column in the right frame.
+    This method take column(s) in the left frame and matches its values
+    with column(s) in the right frame.
     Using the default 'how' option ['inner'] will only allow data in the
     resultant frame if both the left and right frames have the same value
-    in the matching column.
+    in the matching column(s).
     Using the 'left' 'how' option will allow any data in the resultant
     frame if it exists in the left frame, but will allow any data from the
-    right frame if it has a value in its column which matches the value in
-    the left frame column.
+    right frame if it has a value in its column(s) which matches the value in
+    the left frame column(s).
     Using the 'right' option works similarly, except it keeps all the data
     from the right frame and only the data from the left frame when it
     matches.
     The 'outer' option provides a frame with data from both frames where
     the left and right frames did not have the same value in the matching
-    column.
+    column(s).
 
     Notes
     -----
@@ -146,16 +146,17 @@
     [===Job Progress===]
 
     >>> j_left.inspect()
-    [#]  numbers  color
-    ====================
-    [0]        1  red
-    [1]        3  green
-    [2]        1  red
-    [3]        0  None
-    [4]        2  yellow
-    [5]        1  red
-    [6]        5  None
-    [7]        3  green
+    [#]  numbers_L  color
+    ======================
+    [0]          1  red
+    [1]          3  green
+    [2]          1  red
+    [3]          0  None
+    [4]          2  yellow
+    [5]          1  red
+    [6]          5  None
+    [7]          3  green
+
 
     And an outer join:
 
@@ -163,17 +164,54 @@
     [===Job Progress===]
 
     >>> j_outer.inspect()
-    [#]  numbers  color
-    ====================
-    [0]        0  None
-    [1]        1  red
-    [2]        1  red
-    [3]        1  red
-    [4]        2  yellow
-    [5]        3  green
-    [6]        3  green
-    [7]        4  blue
-    [8]        5  None
+    [#]  numbers_L  color
+    ======================
+    [0]          0  None
+    [1]          1  red
+    [2]          1  red
+    [3]          1  red
+    [4]          2  yellow
+    [5]          3  green
+    [6]          3  green
+    [7]          4  blue
+    [8]          5  None
+
+    Consider two frames: country_codes_frame and country_names_frame
+
+    >>> country_codes_frame.inspect()
+    [#]  col_0  col_1  col_2
+    ========================
+    [0]      1    354  a
+    [1]      2     91  a
+    [2]      2    100  b
+    [3]      3     47  a
+    [4]      4    968  c
+    [5]      5     50  c
+
+
+    >>> country_names_frame.inspect()
+    [#]  col_0  col_1     col_2
+    ===========================
+    [0]      1  Iceland   a
+    [1]      1  Ice-land  a
+    [2]      2  India     b
+    [3]      3  Norway    a
+    [4]      4  Oman      c
+    [5]      6  Germany   c
+
+    Join them on the 'col_0' and 'col_2' columns ('inner' join by default)
+
+    >>> composite_join = country_codes_frame.join(country_names_frame, ['col_0', 'col_2'])
+    [===Job Progress===]
+
+    >>> composite_join.inspect()
+    [#]  col_0  col_1_L  col_2  col_1_R
+    ====================================
+    [0]      1      354  a      Ice-land
+    [1]      1      354  a      Iceland
+    [2]      2      100  b      India
+    [3]      3       47  a      Norway
+    [4]      4      968  c      Oman
 
     More examples can be found in the :ref:`user manual
     <example_frame.join>`.
