@@ -105,6 +105,12 @@ trait EngineConfig extends EventLogging {
   val fsRoot: String = config.getString("trustedanalytics.atk.engine.fs.root")
 
   /**
+   * The hdfs url where the checkpointing directory will be created and used for checkpoints, traditionally
+   * under the file system root for the ATK
+   */
+  val checkPointDirectory: String = config.getString("trustedanalytics.atk.engine.fs.checkpoint-directory")
+
+  /**
    * Path relative to fs.root where jars are copied to
    */
   val hdfsLib: String = config.getString("trustedanalytics.atk.engine.hdfs-lib")
@@ -290,8 +296,6 @@ trait EngineConfig extends EventLogging {
   lazy val gcStaleAge = config.getDuration("trustedanalytics.atk.engine.gc.stale-age", TimeUnit.MILLISECONDS)
 
   val enableKerberos: Boolean = config.getBoolean("trustedanalytics.atk.engine.hadoop.kerberos.enabled")
-  val kerberosPrincipalName: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.principal-name")) else None
-  val kerberosKeyTabPath: Option[String] = if (enableKerberos) Some(nonEmptyString("trustedanalytics.atk.engine.hadoop.kerberos.keytab-file")) else None
 
   /**
    * Path to effective application.conf (includes overrides passed in at runtime

@@ -17,16 +17,20 @@
 package org.trustedanalytics.atk.engine.command
 
 import java.io.File
-import org.trustedanalytics.atk.domain.jobcontext.{ JobContext, JobContextTemplate }
+import java.security.PrivilegedAction
+import javax.security.auth.Subject
+import org.trustedanalytics.atk.domain.jobcontext.JobContext
 import org.trustedanalytics.atk.engine._
 import org.trustedanalytics.atk.engine.frame.PythonRddStorage
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, SparkCommandPlugin }
-import org.trustedanalytics.atk.engine.util.{ JvmMemory, KerberosAuthenticator }
+import org.trustedanalytics.atk.engine.plugin.Invocation
+import org.trustedanalytics.atk.engine.util.{ KerberosProperties, JvmMemory, KerberosAuthenticator }
 import org.trustedanalytics.atk.EventLoggingImplicits
-import org.trustedanalytics.atk.domain.command.Command
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
+
+import org.trustedanalytics.hadoop.config.client.{ Configurations, ServiceType }
+import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
 
 /**
  * Our wrapper for calling SparkSubmit to run a plugin.
@@ -47,12 +51,10 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         // make sure hdfs libs have been uploaded
         BackgroundInit.waitTillCompleted
 
-        //Requires a TGT in the cache before executing SparkSubmit if CDH has Kerberos Support
-        KerberosAuthenticator.loginWithKeyTabCLI()
-        val (kerbFile, kerbOptions) = EngineConfig.kerberosKeyTabPath match {
-          case Some(path) => (s",$path",
-            s"-Dtrustedanalytics.atk.engine.hadoop.kerberos.keytab-file=${new File(path).getName}")
-          case None => ("", "")
+        val (kerbFile, kerbOptions) = EngineConfig.enableKerberos match {
+          case true => (s"",
+            s"-Djavax.security.auth.useSubjectCredsOnly=false -DYARN_AUTHENTICATED_USERNAME=${System.getenv("YARN_AUTHENTICATED_USERNAME")} -DYARN_AUTHENTICATED_PASSWORD=${System.getenv("YARN_AUTHENTICATED_PASSWORD")}")
+          case false => ("", "")
         }
 
         val sparkMaster = Array(s"--master", s"${EngineConfig.sparkMaster}")
@@ -122,17 +124,24 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         }
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
+        val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
+
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
         // create an instance of ApplicationMaster due to current spark design. We took the approach of invoking
         // SparkSubmit as a standalone process (using engine.jar) for every command to get the parallel
         // execution in yarn-cluster mode.
 
-        val pb = new java.lang.ProcessBuilder(javaArgs: _*)
-        val job = pb.inheritIO().start()
-        val result = job.waitFor()
+        val result = Subject.doAs[Int](userAuthenticatedConfiguration.subject, new PrivilegedAction[Int] {
+          def run: Int = {
+            val pb = new java.lang.ProcessBuilder(javaArgs: _*)
+            val job = pb.inheritIO().start()
+            job.waitFor()
+          }
+        })
         info(s"Completed with exitCode:$result, ${JvmMemory.memory}")
         result
+
       }
       finally {
         sys.props -= "SPARK_SUBMIT" /* Removing so that next command executes in a clean environment to begin with */

@@ -51,6 +51,16 @@ class EdgeFrameRdd(schema: EdgeSchema, prev: RDD[Row]) extends FrameRdd(schema, 
   }
 
   /**
+   * Map partition over edges
+   * @param mapPartitionFunction map partition function that operates on an iterator EdgeWrapper
+   * @tparam U return type that will be the in resulting RDD
+   * @return
+   */
+  def mapPartitionEdges[U: ClassTag](mapPartitionFunction: Iterator[EdgeWrapper] => Iterator[U]): RDD[U] = {
+    this.map(data => edge(data)).mapPartitions(mapPartitionFunction)
+  }
+
+  /**
    * Convert this RDD in match the schema provided
    * @param updatedSchema the new schema to take effect
    * @return the new RDD

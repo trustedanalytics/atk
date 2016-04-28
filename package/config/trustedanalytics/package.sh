@@ -66,8 +66,8 @@ cp -v rest-server-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalyt
 cp -v scoring-engine-lib/target/dependency/*.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 echo "copy DAAL dynamic libraries"
-tar -jxvf ../engine-plugins/daal-plugins/lib/daal-libs.tar.bz2 -C ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/daal
-cp -v ../engine-plugins/daal-plugins/lib/daal-core-${DAAL_JAR_VERSION}.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
+tar -jxvf ../daal-utils/lib/daal-libs.tar.bz2 -C ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/daal
+cp -v ../daal-utils/lib/daal-core-${DAAL_JAR_VERSION}.jar ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/lib/
 
 mkdir -p ${BUILD_DIR}/usr/lib/trustedanalytics/rest-server/client
 ls -l config/trustedanalytics-python-client/trustedanalytics/dist
