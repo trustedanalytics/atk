@@ -31,6 +31,16 @@ object PrincipalComponentsFunctions extends Serializable {
     }
   }
 
+  /**
+   * 
+   * @param frameRdd
+   * @param principalComponentData
+   * @param predictColumns
+   * @param c
+   * @param meanCentered
+   * @param computeTsquaredIndex
+   * @return
+   */
   def predictPrincipalComponents(frameRdd: FrameRdd,
                                  principalComponentData: PrincipalComponentsData,
                                  predictColumns: List[String],
@@ -38,23 +48,39 @@ object PrincipalComponentsFunctions extends Serializable {
                                  meanCentered: Boolean,
                                  computeTsquaredIndex: Boolean): FrameRdd = {
     val indexedRowMatrix = toIndexedRowMatrix(frameRdd, predictColumns, meanCentered)
-    val eigenVectors = principalComponentData.vFactor
-    val y = indexedRowMatrix.multiply(eigenVectors)
-    val cComponentsOfY = new IndexedRowMatrix(y.rows.map(r => r.copy(vector = Vectors.dense(r.vector.toArray.take(c)))))
+    val principalComponents = computePrincipalComponents(principalComponentData, c, indexedRowMatrix)
 
     val pcaColumns = for (i <- 1 to c) yield Column("p_" + i.toString, DataTypes.float64)
     val (componentColumns, components) = computeTsquaredIndex match {
       case true => {
-        val tSquareMatrix = computeTSquaredIndex(cComponentsOfY, principalComponentData.singularValues, c)
+        val tSquareMatrix = computeTSquaredIndex(principalComponents, principalComponentData.singularValues, c)
         val tSquareColumn = Column("t_squared_index", DataTypes.float64)
         (pcaColumns :+ tSquareColumn, tSquareMatrix)
       }
-      case false => (pcaColumns, cComponentsOfY)
+      case false => (pcaColumns, principalComponents)
     }
 
-    val componentRowRdd = components.rows.map(row => Row.fromSeq(row.vector.toArray.toSeq))
-    val componentFrameRdd = new FrameRdd(FrameSchema(componentColumns.toList), componentRowRdd)
-    frameRdd.zipFrameRdd(componentFrameRdd)
+    val componentRows = components.rows.map(row => Row.fromSeq(row.vector.toArray.toSeq))
+    val componentFrame = new FrameRdd(FrameSchema(componentColumns.toList), componentRows)
+    frameRdd.zipFrameRdd(componentFrame)
+  }
+
+
+  /**
+   * Compute principal components using trained model
+   *
+   * @param modelData Train model data
+   * @param c Number of principal components to compute
+   * @param indexedRowMatrix  Indexed row matrix with input data
+   * @return Principal components with projection of input into k dimensional space
+   */
+  def computePrincipalComponents(modelData: PrincipalComponentsData,
+                                 c: Int, 
+                                 indexedRowMatrix: IndexedRowMatrix): IndexedRowMatrix = {
+    val eigenVectors = modelData.vFactor
+    val y = indexedRowMatrix.multiply(eigenVectors)
+    val cComponentsOfY = new IndexedRowMatrix(y.rows.map(r => r.copy(vector = Vectors.dense(r.vector.toArray.take(c)))))
+    cComponentsOfY
   }
 
   /**
@@ -85,7 +111,7 @@ object PrincipalComponentsFunctions extends Serializable {
    * @param meanCentered If true, mean center the columns
    * @return Distributed row matrix
    */
-  def toRowMatrix(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean = true): RowMatrix = {
+  def toRowMatrix(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean): RowMatrix = {
     val vectorRdd = toVectorRdd(frameRdd, columns, meanCentered)
     new RowMatrix(vectorRdd)
   }
@@ -98,7 +124,7 @@ object PrincipalComponentsFunctions extends Serializable {
    * @param meanCentered If true, mean center the columns
    * @return Distributed indexed row matrix
    */
-  def toIndexedRowMatrix(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean = true): IndexedRowMatrix = {
+  def toIndexedRowMatrix(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean): IndexedRowMatrix = {
     val vectorRdd = toVectorRdd(frameRdd, columns, meanCentered)
     new IndexedRowMatrix(vectorRdd.zipWithIndex().map { case (vector, index) => IndexedRow(index, vector) })
   }
@@ -111,7 +137,7 @@ object PrincipalComponentsFunctions extends Serializable {
    * @param meanCentered If true, mean center the columns
    * @return Vector RDD
    */
-  private def toVectorRdd(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean = true): RDD[Vector] = {
+  def toVectorRdd(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean): RDD[Vector] = {
     meanCentered match {
       case true => frameRdd.toMeanCenteredDenseVectorRDD(columns)
       case false => frameRdd.toDenseVectorRDD(columns)
