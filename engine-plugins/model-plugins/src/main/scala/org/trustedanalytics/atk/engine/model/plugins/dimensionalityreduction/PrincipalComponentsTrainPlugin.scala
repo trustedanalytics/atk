@@ -17,6 +17,7 @@
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import breeze.numerics._
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.mllib.stat.Statistics
 import org.trustedanalytics.atk.domain.frame._
@@ -54,12 +55,6 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
   override def name: String = "model:principal_components/train"
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: PrincipalComponentsTrainArgs)(implicit invocation: Invocation) = 7
-
-  /**
    * Calculate principal components for the specified columns
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
@@ -71,40 +66,20 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
-    validatePrincipalComponentsArgs(frame.schema, arguments)
+    val observationColumns = arguments.observationColumns
+    val meanCentered = arguments.meanCentered
+    frame.schema.requireColumnsAreVectorizable(observationColumns)
 
-    val k = arguments.k.getOrElse(arguments.observationColumns.length)
+    val k = arguments.k.getOrElse(observationColumns.length)
 
-    val rowMatrix: RowMatrix = new RowMatrix(arguments.meanCentered match {
-      case true => frame.rdd.toMeanCenteredDenseVectorRDD(arguments.observationColumns)
-      case false => frame.rdd.toDenseVectorRDD(arguments.observationColumns)
-    })
-
+    val rowMatrix = PrincipalComponentsFunctions.toRowMatrix(frame.rdd, observationColumns, meanCentered)
     val svd = rowMatrix.computeSVD(k, computeU = true)
 
-    val columnStatistics = frame.rdd.columnStatistics(arguments.observationColumns)
-    val principalComponentsObject = new PrincipalComponentsData(k, arguments.observationColumns, arguments.meanCentered, columnStatistics.mean, svd.s, svd.V)
+    val columnStatistics = frame.rdd.columnStatistics(observationColumns)
+    val principalComponentsObject = new PrincipalComponentsData(k, observationColumns,
+      meanCentered, columnStatistics.mean, svd.s, svd.V)
     model.data = principalComponentsObject.toJson.asJsObject
 
     new PrincipalComponentsTrainReturn(principalComponentsObject)
   }
-
-  // TODO: this kind of standardized validation belongs in the Schema class
-  /**
-   * Validate the input arguments
-   * @param frameSchema Schema of the input frame
-   * @param arguments Arguments to the principal components train plugin
-   */
-  private def validatePrincipalComponentsArgs(frameSchema: Schema, arguments: PrincipalComponentsTrainArgs): Unit = {
-    val dataColumnNames = arguments.observationColumns
-    if (dataColumnNames.size == 1) {
-      frameSchema.requireColumnIsType(dataColumnNames.toList.head, DataTypes.isVectorDataType)
-    }
-    else {
-      require(dataColumnNames.size >= 2, "single vector column, or two or more numeric columns required")
-      frameSchema.requireColumnsOfNumericPrimitives(dataColumnNames)
-    }
-    require(arguments.k.getOrElse(arguments.observationColumns.length) >= 1, "k should be greater than equal to 1")
-  }
-
 }

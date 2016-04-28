@@ -18,27 +18,14 @@ package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
-import org.trustedanalytics.atk.domain.model.ModelReference
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
-import org.trustedanalytics.atk.engine.PluginDocAnnotation
+import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, ApiMaturityTag }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.distributed.{ IndexedRow, IndexedRowMatrix, RowMatrix }
-import org.apache.spark.mllib.stat.{ MultivariateStatisticalSummary, Statistics }
-import org.apache.spark.rdd.RDD
-import org.apache.spark.mllib.linalg.{ Vectors, Vector }
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
-import org.apache.spark.sql.Row
-
-import scala.RuntimeException
-import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "Predict using principal components model.",
   extended = """Predicting on a dataframe's columns using a PrincipalComponents Model.""",
@@ -56,15 +43,6 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    */
   override def name: String = "model:principal_components/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
-  /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-
-  override def numberOfJobs(arguments: PrincipalComponentsPredictArgs)(implicit invocation: Invocation) = 9
-
   /**
    * Get the predictions for observations in a test frame
    *
@@ -78,127 +56,24 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
-    //Running MLLib
-    val principalComponentJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
+    val principalComponentJsObject = model.dataOption.getOrElse(
+      throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
     val principalComponentData = principalComponentJsObject.convertTo[PrincipalComponentsData]
 
-    validateInputArguments(arguments, principalComponentData)
-
+    // Validate arguments
+    PrincipalComponentsFunctions.validateInputArguments(arguments, principalComponentData)
     val c = arguments.c.getOrElse(principalComponentData.k)
     val predictColumns = arguments.observationColumns.getOrElse(principalComponentData.observationColumns)
 
-    //create RDD from the frame
-    val indexedFrameRdd = frame.rdd.zipWithIndex().map { case (row, index) => (index, row) }
+    // Predict principal components and optional T-squared index
+    val resultFrame = PrincipalComponentsFunctions.predictPrincipalComponents(frame.rdd,
+      principalComponentData, predictColumns, c, arguments.meanCentered, arguments.tSquaredIndex)
 
-    val indexedRowMatrix: IndexedRowMatrix = toIndexedRowMatrix(arguments.meanCentered, frame, principalComponentData, predictColumns, indexedFrameRdd)
-
-    val eigenVectors = principalComponentData.vFactor
-    val y = indexedRowMatrix.multiply(eigenVectors)
-    val cComponentsOfY = new IndexedRowMatrix(y.rows.map(r => r.copy(vector = Vectors.dense(r.vector.toArray.take(c)))))
-
-    var columnNames = new ListBuffer[String]()
-    var columnTypes = new ListBuffer[DataType]()
-    for (i <- 1 to c) {
-      val colName = "p_" + i.toString
-      columnNames += colName
-      columnTypes += DataTypes.float64
-    }
-    val components = evaluateTSquaredIndex(arguments.tSquaredIndex, principalComponentData, c, cComponentsOfY, columnNames, columnTypes)
-
-    val resultFrameRdd = components.rows.map(row => (row.index, row.vector)).join(indexedFrameRdd)
-      .map { case (index, (vector, row)) => Row.fromSeq(row.toSeq ++ vector.toArray.toSeq) }
-
-    val newColumns = columnNames.toList.zip(columnTypes.toList.map(x => x: DataType))
-    val updatedSchema = frame.schema.addColumns(newColumns.map { case (name, dataType) => Column(name, dataType) })
-    val resultFrame = new FrameRdd(updatedSchema, resultFrameRdd)
-
-    val resultFrameEntity = engine.frames.tryNewFrame(CreateEntityArgs(name = arguments.name, description = Some("created from principal components predict"))) {
-      newFrame => newFrame.save(resultFrame)
-    }
+    val resultFrameEntity = engine.frames.tryNewFrame(
+      CreateEntityArgs(name = arguments.name, description = Some("created from principal components predict"))) {
+        newFrame => newFrame.save(resultFrame)
+      }
 
     resultFrameEntity
-
-  }
-
-  /**
-   * Validate the arguments to the plugin
-   * @param arguments Arguments passed to the predict plugin
-   * @param principalComponentData Trained PrincipalComponents model data
-   */
-  def validateInputArguments(arguments: PrincipalComponentsPredictArgs, principalComponentData: PrincipalComponentsData): Unit = {
-    if (arguments.meanCentered == true) {
-      require(principalComponentData.meanCentered == arguments.meanCentered, "Cannot mean center the predict frame if the train frame was not mean centered.")
-    }
-
-    if (arguments.observationColumns.isDefined) {
-      require(principalComponentData.observationColumns.length == arguments.observationColumns.get.length, "Number of columns for train and predict should be same")
-    }
-
-    if (arguments.c.isDefined) {
-      require(principalComponentData.k >= arguments.c.get, "Number of components must be at most the number of components trained on")
-    }
-  }
-
-  /**
-   * Compute an IndexedRowMatrix with/without t-squared index depending on the argument
-   * @param tSquaredIndex Flag indicating whether we need to compute the t-squared index
-   * @param principalComponentData Trained PrincipalComponents model data
-   * @param y IndexedRowMatrix storing the projection into k dimensional space
-   * @param columnNames ListBuffer storing the column name(s) of the output frame
-   * @param columnTypes ListBuffer storing the column type(s) of the output frame
-   * @return IndexedRowMatrix
-   */
-  def evaluateTSquaredIndex(tSquaredIndex: Boolean, principalComponentData: PrincipalComponentsData, c: Int,
-                            y: IndexedRowMatrix, columnNames: ListBuffer[String], columnTypes: ListBuffer[DataType]): IndexedRowMatrix = {
-    tSquaredIndex match {
-      case true => {
-        val t = computeTSquaredIndex(y, principalComponentData.singularValues, c)
-
-        columnNames += "t_squared_index"
-        columnTypes += DataTypes.float64
-        t
-      }
-      case _ => y
-    }
-  }
-
-  /**
-   * Check flag and mean center the input RDD
-   * @param meanCentered Flag indicating whether the frame is to be mean centered
-   * @param frame
-   * @param principalComponentData Trained PrincipalComponents model data
-   * @param predictColumns Frame's column(s) to be used for principal components computation
-   * @param indexedFrameRdd
-   * @return
-   */
-  def toIndexedRowMatrix(meanCentered: Boolean, frame: SparkFrame, principalComponentData: PrincipalComponentsData,
-                         predictColumns: List[String], indexedFrameRdd: RDD[(Long, Row)]): IndexedRowMatrix = {
-    new IndexedRowMatrix(
-      meanCentered match {
-        case true => FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns, principalComponentData.meanVector)
-        case false => FrameRdd.toIndexedRowRdd(indexedFrameRdd, frame.schema, predictColumns)
-      })
-  }
-
-  /**
-   * Compute the t-squared index for an IndexedRowMatrix created from the input frame
-   * @param y IndexedRowMatrix storing the projection into k dimensional space
-   * @param E Singular Values
-   * @param c Number of dimensions
-   * @return IndexedRowMatrix with existing elements in the RDD and computed t-squared index
-   */
-  def computeTSquaredIndex(y: IndexedRowMatrix, E: Vector, c: Int): IndexedRowMatrix = {
-    val matrix = y.rows.map(row => {
-      val rowVectorToArray = row.vector.toArray
-      var t = 0.0
-      var flag = false
-      for (i <- 0 until c) {
-        if (E(i) > 0)
-          t += ((rowVectorToArray(i) * rowVectorToArray(i)) / (E(i) * E(i)))
-      }
-      new IndexedRow(row.index, Vectors.dense(rowVectorToArray :+ t))
-    })
-    new IndexedRowMatrix(matrix)
-
   }
 }
