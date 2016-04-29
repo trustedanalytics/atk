@@ -52,8 +52,7 @@ case class JoinBroadcastVariable(joinParam: RddJoinParam) {
   // Create the broadcast variable for the join
   private def createBroadcastMultiMaps(joinParam: RddJoinParam): Broadcast[MultiMap[Any, Row]] = {
     //Grouping by key to ensure that duplicate keys are not split across different broadcast variables
-    val broadcastList = joinParam.frame.groupByRows(row => row.value(joinParam.joinColumn)).collect().toList
-
+    val broadcastList = joinParam.frame.groupByRows(row => row.values(joinParam.joinColumns.toList)).collect().toList
     val broadcastMultiMap = listToMultiMap(broadcastList)
     joinParam.frame.sparkContext.broadcast(broadcastMultiMap)
   }

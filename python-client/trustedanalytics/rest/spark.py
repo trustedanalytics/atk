@@ -128,7 +128,7 @@ class RowWrapper(Row):
     def load_row(self, data):
         self._set_data(data)
 
-def _wrap_aggregator_rows_function(frame, aggregator_function, aggregator_schema, init_acc_values, optional_schema=None):
+def _wrap_aggregator_rows_function(frame, aggregator_function, key_indices, aggregator_schema, init_acc_values, optional_schema=None):
     """
     Wraps a python row function, like one used for a filter predicate, such
     that it will be evaluated with using the expected 'row' object rather than
@@ -144,20 +144,20 @@ def _wrap_aggregator_rows_function(frame, aggregator_function, aggregator_schema
 
     acc_wrapper = MutableRow(aggregator_schema)
     row_wrapper = RowWrapper(row_schema)
-
+    key_indices_wrapper = key_indices
     def rows_func(rows):
         try:
             bson_data = bson.decode_all(rows)[0]
             rows_data = bson_data['array']
-            key_indices = bson_data['keyindices']
+            #key_indices = bson_data['keyindices']
             acc_wrapper._set_data(list(init_acc_values))
             for row in rows_data:
                 row_wrapper.load_row(row)
                 aggregator_function(acc_wrapper, row_wrapper)
             result = []
-            for key_index in key_indices:
-                answer = [rows_data[0][key_index]]
-                result.extend(answer)
+            for key_index in key_indices_wrapper:
+                answer = rows_data[0][key_index]
+                result.append(answer)
             result.extend(acc_wrapper._get_data())
             return numpy_to_bson_friendly(result)
         except Exception as e:
