@@ -22,6 +22,6 @@ import scala.collection.immutable.Map
  * the returned arguments of ExportOrientDbGraphPlugin
  */
 
-case class ExportOrientDbGraphReturn(@ArgDoc("""a dictionary of vertex classname and the corresponding counts of exported vertices.""") vertices: Map[String, Long],
+case class ExportOrientDbGraphReturn(@ArgDoc("""a dictionary of vertex class name and the corresponding counts of exported vertices.""") vertices: Map[String, Long],
                                      @ArgDoc("""a dictionary of edge classname and the corresponding counts of exported edges.""") edges: Map[String, Long],
                                      @ArgDoc("""The URI to the OrientDB graph .""") dbUri: String)

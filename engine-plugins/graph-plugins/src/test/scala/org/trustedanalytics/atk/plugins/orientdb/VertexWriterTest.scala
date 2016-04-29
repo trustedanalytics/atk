@@ -37,49 +37,46 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
   }
 
   "Vertex Writer" should {
-
-    "export vertex to OrientDb vertex " in {
-
+    val vertex = {
       val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
       val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
-      val vertex = Vertex(schema, row)
-      val addOrientVertex = new VertexWriter(orientMemoryGraph)
+      Vertex(schema, row)
+    }
 
+    "export vertex to OrientDb vertex " in {
+      val addOrientVertex = new VertexWriter(orientMemoryGraph)
+      //Tested method
       val orientVertex = addOrientVertex.addVertex(vertex)
+      //Results validation
       val vidProp: Any = orientVertex.getProperty(GraphSchema.vidProperty)
       val propName: Any = orientVertex.getProperty("name")
       val keyIdx = orientMemoryGraph.getIndexedKeys(classOf[BlueprintsVertex])
-
       assert(propName == "Bob")
       assert(vidProp == 1)
       keyIdx should contain("_vid")
     }
+
     "findOrCreate gets a vertex" in {
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
-      val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
-      val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
-      val vertex = Vertex(schema, row)
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
       val orientVertex = addOrientVertex.addVertex(vertex)
-      val verIdd = orientVertex.getId
       val vertexId = 1L
+      //Tested method
       val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
+      //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       val propName: Any = newVertex.getProperty("from")
       assert(vidProp == 1)
       assert(propName == "PDX")
     }
+
     "findOrCreate creates a vertex if not found" in {
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
-      val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
-      val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
-      val vertex = Vertex(schema, row)
       val addOrientVertex = new VertexWriter(orientMemoryGraph)
       val orientVertex = addOrientVertex.addVertex(vertex)
-      val verIdd = orientVertex.getId
       val vertexId = 2L
+      //Tested Method
       val newVertex = addOrientVertex.findOrCreateVertex(vertexId)
+      //Results validation
       val vidProp: Any = newVertex.getProperty(GraphSchema.vidProperty)
       assert(vidProp == 2)
 

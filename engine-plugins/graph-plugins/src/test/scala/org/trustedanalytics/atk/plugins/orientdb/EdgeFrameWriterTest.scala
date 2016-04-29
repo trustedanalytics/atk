@@ -38,8 +38,7 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
   "Edge frame writer" should {
     "Export edge frame" in {
       // exporting a vertex frame:
-      val dbName = "OrientDbTest"
-      val dbConfig = new DbConfigurations(dbUri, "admin", "admin", "port", "host")
+      val dbConfig = new DbConfigurations(dbUri, dbUserName, dbUserName, "port", "host", rootPassword)
       val vColumns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))
       val vSchema = new VertexSchema(vColumns, GraphSchema.labelProperty, null)
 
@@ -65,9 +64,11 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
       val batchSize = 3
       val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
+      // call method under test
       val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize)
-      val loadedEdgesCount = orientFileGraph.countEdges()
-      edgesCount shouldEqual (3)
+      //validate results
+      val exportedEdges = orientFileGraph.countEdges()
+      edgesCount shouldEqual exportedEdges
 
     }
   }

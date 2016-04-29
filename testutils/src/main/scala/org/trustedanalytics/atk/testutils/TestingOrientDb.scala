@@ -28,6 +28,9 @@ trait TestingOrientDb {
   var tmpDir: File = null
   var dbUri: String = null
   var dbName: String = "OrientDbTest"
+  var dbUserName = "admin"
+  var dbPassword = "admin"
+  var rootPassword = "root"
   var orientMemoryGraph: OrientGraph = null
   var orientFileGraph: OrientGraph = null
 
@@ -46,10 +49,10 @@ trait TestingOrientDb {
 
     tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
     dbUri = "plocal:/" + tmpDir.getAbsolutePath + "/" + dbName
-    val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbUri)
-    orientDocDb.create()
-    orientFileGraph = new OrientGraph(orientDocDb)
-
+    //val orientDocDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbUri)
+    // orientDocDb.create()
+    val factory = new OrientGraphFactory(dbUri, dbUserName, dbPassword)
+    orientFileGraph = factory.getTx
   }
 
   /**

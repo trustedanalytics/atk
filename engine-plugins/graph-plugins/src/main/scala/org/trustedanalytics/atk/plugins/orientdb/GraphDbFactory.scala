@@ -15,6 +15,7 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
+import com.orientechnologies.orient.client.remote.OServerAdmin
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphFactory, OrientGraph }
 import scala.util.{ Failure, Success, Try }
@@ -32,9 +33,16 @@ object GraphDbFactory {
    * @return a transactional OrientDB graph database instance
    */
   def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraph = {
-
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
-    val orientGraphDb = if (!orientDb.exists()) {
+    val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:") && !new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).existsDatabase()) {
+      new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).createDatabase("graph", "plocal")
+      openGraphDb(orientDb, dbConfigurations)
+    }
+    else if (dbConfigurations.dbUri.startsWith("remote:") && new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).existsDatabase()) {
+      new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword)
+      openGraphDb(orientDb, dbConfigurations)
+    }
+    else if (!orientDb.exists()) {
       createGraphDb(dbConfigurations)
     }
     else {
@@ -70,7 +78,7 @@ object GraphDbFactory {
    */
   private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfigurations): OrientGraph = {
     Try {
-      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbPassword)
+      val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbUserName)
       db
     } match {
       case Success(db) => new OrientGraph(db)
