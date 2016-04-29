@@ -329,12 +329,14 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
 
         aggregate_with_udf_function = get_group_by_aggregator_function(aggregator_expression, data_types)
 
+        key_indices = FrameSchema.get_indices_for_selected_columns(frame.schema, group_by_column_keys)
+
         from itertools import imap
         arguments = { "frame": frame.uri,
                       "aggregate_by_column_keys": group_by_column_keys,
                       "column_names": names,
                       "column_types": [get_rest_str_from_data_type(t) for t in data_types],
-                      "udf": get_aggregator_udf_arg(frame, aggregate_with_udf_function, imap, output_schema, init_acc_values)
+                      "udf": get_aggregator_udf_arg(frame, aggregate_with_udf_function, imap, key_indices, output_schema, init_acc_values)
                     }
         return execute_new_frame_command('frame/aggregate_with_udf', arguments)
 
@@ -468,12 +470,20 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
         return RowsInspection(data, schema, offset=offset, format_settings=format_settings)
 
     def join(self, left, right, left_on, right_on, how, name=None):
+        if left_on is None:
+            raise ValueError("Please provide column name on which join should be performed")
+        elif isinstance(left_on, basestring):
+            left_on = [left_on]
         if right_on is None:
             right_on = left_on
+        elif isinstance(right_on, basestring):
+            right_on = [right_on]
+        if len(left_on) != len(right_on):
+            raise ValueError("Please provide equal number of join columns")
         arguments = {"name": name,
                      "how": how,
-                     "left_frame": {"frame": left.uri, "join_column": left_on},
-                     "right_frame": {"frame": right.uri, "join_column": right_on} }
+                     "left_frame": {"frame": left.uri, "join_columns": left_on},
+                     "right_frame": {"frame": right.uri, "join_columns": right_on} }
         return execute_new_frame_command('frame:/join', arguments)
 
     def copy(self, frame, columns=None, where=None, name=None):
@@ -513,7 +523,18 @@ status = {status}  (last_read_date = {last_read_date})""".format(type=frame_type
                 if arg == agg.count:
                     aggregation_list.append({'function': agg.count, 'column_name': first_column_name, 'new_column_name': "count"})
                 else:
-                    return FrameBackendRest.aggregate_with_udf(self, frame, group_by_columns, arg.aggregator, arg.output_schema, arg.init_values)
+                    #validte the arguments
+                    init_flag = False
+                    if arg.init_values is None:
+                        init_flag=True
+                    else:
+                        if len(arg.output_schema) == len(arg.init_values):
+                            init_flag=True
+
+                    if init_flag == True:
+                        return FrameBackendRest.aggregate_with_udf(self, frame, group_by_columns, arg.aggregator, arg.output_schema, arg.init_values)
+                    else:
+                        raise ValueError("Provide initial values for all column names in output schema or leave initial values as empty")
             elif isinstance(arg, dict):
                 for k,v in arg.iteritems():
                     # leave the valid column check to the server

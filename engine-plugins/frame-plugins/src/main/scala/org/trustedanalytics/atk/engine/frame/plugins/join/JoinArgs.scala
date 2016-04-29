@@ -31,8 +31,8 @@ case class JoinArgs(leftFrame: JoinFrameArgs,
                     @ArgDoc("""The type of skewed join: 'skewedhash' or 'skewedbroadcast'""") skewedJoinType: Option[String] = None) {
   require(leftFrame != null && leftFrame.frame != null, "left frame is required")
   require(rightFrame != null && rightFrame.frame != null, "right frame is required")
-  require(leftFrame.joinColumn != null, "left join column is required")
-  require(rightFrame.joinColumn != null, "right join column is required")
+  require(leftFrame.joinColumns != null, "left join column is required")
+  require(rightFrame.joinColumns != null, "right join column is required")
   require(how != null, "join method is required")
   require(skewedJoinType.isEmpty
     || (skewedJoinType.get == "skewedhash" || skewedJoinType.get == "skewedbroadcast"),
@@ -43,6 +43,6 @@ case class JoinArgs(leftFrame: JoinFrameArgs,
  * Join arguments for frame
  *
  * @param frame Data frame
- * @param joinColumn Join column name
+ * @param joinColumns Join column name
  */
-case class JoinFrameArgs(frame: FrameReference, joinColumn: String)
+case class JoinFrameArgs(frame: FrameReference, joinColumns: List[String])
