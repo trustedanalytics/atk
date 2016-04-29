@@ -26,6 +26,7 @@ import scala.util.{ Failure, Success, Try }
 
 object GraphDbFactory {
 
+  val rootUserName = "root"
   /**
    * Method to create/connect to OrientDB graph
    *
@@ -34,13 +35,15 @@ object GraphDbFactory {
    */
   def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraph = {
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
-    val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:") && !new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).existsDatabase()) {
-      new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).createDatabase("graph", "plocal")
-      openGraphDb(orientDb, dbConfigurations)
-    }
-    else if (dbConfigurations.dbUri.startsWith("remote:") && new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword).existsDatabase()) {
-      new OServerAdmin(dbConfigurations.dbUri).connect("root", dbConfigurations.rootPassword)
-      openGraphDb(orientDb, dbConfigurations)
+    val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:")) {
+      if (!new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).existsDatabase()) {
+        new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).createDatabase("graph", "plocal")
+        openGraphDb(orientDb, dbConfigurations)
+      }
+      else {
+        new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword)
+        openGraphDb(orientDb, dbConfigurations)
+      }
     }
     else if (!orientDb.exists()) {
       createGraphDb(dbConfigurations)
