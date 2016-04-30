@@ -25,7 +25,7 @@ import org.apache.spark.rdd.RDD
 trait DistributedAlgorithm[P <: PartialResult, R <: Result] {
 
   /**
-   * Compute partial results for algorithm on each Spark partition
+   * Compute partial results for algorithm on slave nodes
    *
    * @return RDD of partial results
    */

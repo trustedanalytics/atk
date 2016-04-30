@@ -17,14 +17,9 @@
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import org.apache.spark.mllib.linalg.DenseVector
-import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, ApiMaturityTag, SparkCommandPlugin, PluginDoc }
-import com.cloudera.sparkts.models.{ ARIMA, ARIMAModel }
+import com.cloudera.sparkts.models.{ ARIMA }
 import org.trustedanalytics.atk.scoring.models.ARIMAData
-import scala.collection.mutable.ArrayBuffer
-import org.trustedanalytics.atk.domain.frame.{ FrameEntity, FrameReference }
 
 // implicits needed for json conversion
 import spray.json._
@@ -52,12 +47,6 @@ class ARIMATrainPlugin extends SparkCommandPlugin[ARIMATrainArgs, ARIMATrainRetu
     val userInitParams = if (arguments.userInitParams.isDefined) arguments.userInitParams.get.toArray else null
     val arimaModel = ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
       arguments.includeIntercept, arguments.method, userInitParams)
-
-    /*if (arguments.userInitParams.isDefined)
-        ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
-          arguments.includeIntercept, arguments.method, arguments.userInitParams.get.toArray)
-      else ARIMA.fitModel(arguments.p, arguments.d, arguments.q, new DenseVector(arguments.timeseriesValues.toArray),
-      arguments.includeIntercept, arguments.method)*/
 
     val jsonModel = new ARIMAData(arimaModel)
     model.data = jsonModel.toJson.asJsObject

@@ -21,7 +21,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 /** Json conversion for arguments and return value case classes */
 object CollaborativeFilteringJsonFormat {
 
-  implicit val cfTrainArgs = jsonFormat13(CollaborativeFilteringTrainArgs)
+  implicit val cfTrainArgs = jsonFormat14(CollaborativeFilteringTrainArgs)
   implicit val cfScoreArgs = jsonFormat3(CollaborativeFilteringScoreArgs)
   implicit val cfPredictArgs = jsonFormat7(CollaborativeFilteringPredictArgs)
   implicit val cfRecommendArgs = jsonFormat4(CollaborativeFilteringRecommendArgs)

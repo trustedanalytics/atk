@@ -17,15 +17,10 @@
 package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import java.io.Serializable
-import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.Schema
-import org.trustedanalytics.atk.domain.schema.{ Column, FrameSchema, DataTypes }
-import org.trustedanalytics.atk.engine.frame.{ VectorFunctions, RowWrapper }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes }
 import org.apache.spark.frame.FrameRdd
-import com.cloudera.sparkts._
 import breeze.linalg._
-
-import scala.collection.mutable.{ ArrayBuffer, WrappedArray }
 
 /**
  * Object contains utility functions for working with time series

@@ -18,25 +18,23 @@ package org.trustedanalytics.atk.engine.model.plugins.timeseries
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.domain.{ CreateEntityArgs, Naming }
+import org.trustedanalytics.atk.domain.{ CreateEntityArgs }
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.Column
-import org.trustedanalytics.atk.domain.schema.{ FrameSchema, DataTypes }
-import org.trustedanalytics.atk.domain.schema.DataTypes._
-import org.trustedanalytics.atk.engine.frame.{ RowWrapper, SparkFrame }
+import org.trustedanalytics.atk.domain.schema.{ DataTypes }
+import org.trustedanalytics.atk.engine.frame.{ SparkFrame }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import breeze.linalg._
 import org.trustedanalytics.atk.scoring.models.ARXData
+
+// Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.timeseries.ARXJsonProtocol._
-
-import scala.collection.mutable.ListBuffer
 
 @PluginDoc(oneLine = "New frame with column of predicted y values",
   extended = """Predict the time series values for a test frame, based on the specified
