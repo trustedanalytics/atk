@@ -117,6 +117,9 @@ model-daal_linear_regression/train.rst
 model-daal_linear_regression/predict.rst
 model-daal_linear_regression/test.rst
 model-daal_linear_regression/publish.rst
+model-daal_principal_components/new.rst
+model-daal_principal_components/train.rst
+model-daal_principal_components/publish.rst
 """.splitlines())
 
 

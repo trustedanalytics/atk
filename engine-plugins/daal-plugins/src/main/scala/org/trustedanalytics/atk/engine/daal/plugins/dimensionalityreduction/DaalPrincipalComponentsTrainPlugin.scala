@@ -17,11 +17,9 @@
 package org.trustedanalytics.atk.engine.daal.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.apache.spark.rdd.RDD
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.{ PrincipalComponentsData, PrincipalComponentsTrainReturn, PrincipalComponentsTrainArgs }
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.{ PrincipalComponentsTrainReturn, PrincipalComponentsTrainArgs }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 // Implicits needed for JSON conversion
