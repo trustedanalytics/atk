@@ -135,11 +135,20 @@ object IndexedNumericTable extends Serializable {
   def createTable(index: Long, matrix: Array[Array[Double]]): IndexedNumericTable = {
     require(matrix != null && matrix.length > 0, "Array must not be null or empty")
     val context = new DaalContext()
-    val numRows = matrix.length
-    val array = matrix.flatten
-    val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
-    val indexedTable = IndexedNumericTable(index, table)
-    context.dispose()
+    var indexedTable: IndexedNumericTable = null
+
+    try {
+      val numRows = matrix.length
+      val array = matrix.flatten
+      val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
+      indexedTable = IndexedNumericTable(index, table)
+    }
+    catch {
+      case ex: Exception => throw new RuntimeException("Could not create numeric table from matrix", ex)
+    }
+    finally {
+      context.dispose()
+    }
     indexedTable
   }
 }

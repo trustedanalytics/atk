@@ -16,16 +16,16 @@
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
 import org.apache.spark.frame.FrameRdd
-import org.apache.spark.mllib.linalg.{Matrices, Vectors}
+import org.apache.spark.mllib.linalg.{ Matrices, Vectors }
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
-import org.trustedanalytics.atk.domain.schema.{Column, DataTypes, FrameSchema}
+import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
 import org.trustedanalytics.atk.testutils.MatcherUtils._
 import org.trustedanalytics.atk.testutils.TestingSparkContextWordSpec
 
-class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with Matchers with MockitoSugar{
+class PrincipalComponentsFunctionsTest extends TestingSparkContextWordSpec with Matchers with MockitoSugar {
 
   val schema = FrameSchema(List(
     Column("col_0", DataTypes.float64),
@@ -35,7 +35,7 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
     Column("col_4", DataTypes.float64)
   ))
 
-  val data : List[Row] = List(
+  val data: List[Row] = List(
     new GenericRow(Array[Any](0.0, 1.0, 0.0, 7.0, 0.0)),
     new GenericRow(Array[Any](2.0, 0.0, 3.0, 4.0, 5.0)),
     new GenericRow(Array[Any](4.0, 0.0, 0.0, 6.0, 7.0))
@@ -51,11 +51,11 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
     Column("col_2", DataTypes.float64)
   ))
 
-  val predictInput : List[Row] = List(
+  val predictInput: List[Row] = List(
     new GenericRow(Array[Any](-0.4, 0.13001, 0.0)),
     new GenericRow(Array[Any](3.6, 1.25, 1.0))
   )
-  
+
   "PrincipalComponentsFunctions" should {
 
     "predict principal components and t-square index without mean-centering" in {
@@ -71,8 +71,8 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
       }).collect()
 
       resultArray.length should equal(2)
-      resultArray(0).toArray should equalWithTolerance(Array(-0.4, 0.13001, 0.0, 0.376046, -0.188093, 0.0104783,0.060298))
-      resultArray(1).toArray should equalWithTolerance(Array(3.6, 1.25, 1.0, -3.696964,-0.529377,1.254782, 16.622385))
+      resultArray(0).toArray should equalWithTolerance(Array(-0.4, 0.13001, 0.0, 0.376046, -0.188093, 0.0104783, 0.060298))
+      resultArray(1).toArray should equalWithTolerance(Array(3.6, 1.25, 1.0, -3.696964, -0.529377, 1.254782, 16.622385))
     }
 
     "predict principal components with mean-centering" in {
@@ -89,10 +89,10 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
       }).collect()
 
       resultArray.length should equal(2)
-      resultArray(0).toArray should equalWithTolerance(Array(-0.4, 0.13001, 0.0, 2.036505, 0.170642, -0.622152 ))
+      resultArray(0).toArray should equalWithTolerance(Array(-0.4, 0.13001, 0.0, 2.036505, 0.170642, -0.622152))
       resultArray(1).toArray should equalWithTolerance(Array(3.6, 1.25, 1.0, -2.036505, -0.170642, 0.622152))
     }
-    
+
     "compute the principal components" in {
       val rows = sparkContext.parallelize(predictInput)
       val frameRdd = new FrameRdd(predictSchema, rows)
@@ -107,13 +107,13 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
 
       val vectors = principalComponents.rows.collect()
       vectors(0).vector.toArray should equalWithTolerance(Array(0.376046, -0.188093, 0.0104782))
-      vectors(1).vector.toArray should equalWithTolerance(Array(-3.696964,-0.529377,1.254782))
+      vectors(1).vector.toArray should equalWithTolerance(Array(-3.696964, -0.529377, 1.254782))
     }
-    
+
     "compute the t-squared index" in {
-      val y : List[Row] = List(
+      val y: List[Row] = List(
         new GenericRow(Array[Any](0.376046, -0.188093, 0.010475)),
-        new GenericRow(Array[Any](-3.696964,-0.529377,1.254782)),
+        new GenericRow(Array[Any](-3.696964, -0.529377, 1.254782)),
         new GenericRow(Array[Any](-2.806404, -1.222661, 0.607612))
       )
 
@@ -128,11 +128,11 @@ class PrincipalComponentsFunctionsTest  extends TestingSparkContextWordSpec with
       tSquaredIndexMeanCentered.numRows() should equal(3)
 
       val vectors = tSquaredIndexMeanCentered.rows.collect()
-      vectors(0).vector.toArray should equalWithTolerance(Array(0.376046, -0.188093, 0.0104783,0.060298))
-      vectors(1).vector.toArray should equalWithTolerance(Array(-3.696964,-0.529377,1.254782, 16.622385))
-      vectors(2).vector.toArray should equalWithTolerance(Array(-2.806404, -1.222661, 0.607612,6.024266))
+      vectors(0).vector.toArray should equalWithTolerance(Array(0.376046, -0.188093, 0.0104783, 0.060298))
+      vectors(1).vector.toArray should equalWithTolerance(Array(-3.696964, -0.529377, 1.254782, 16.622385))
+      vectors(2).vector.toArray should equalWithTolerance(Array(-2.806404, -1.222661, 0.607612, 6.024266))
     }
-    
+
     "convert frame to vector RDD" in {
       val rows = sparkContext.parallelize(data)
       val frameRdd = new FrameRdd(schema, rows)

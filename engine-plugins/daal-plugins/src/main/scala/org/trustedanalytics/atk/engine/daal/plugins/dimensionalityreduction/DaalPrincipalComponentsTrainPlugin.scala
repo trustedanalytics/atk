@@ -16,15 +16,18 @@
 
 package org.trustedanalytics.atk.engine.daal.plugins.dimensionalityreduction
 
+import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
+import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.{ PrincipalComponentsData, PrincipalComponentsTrainReturn, PrincipalComponentsTrainArgs }
 import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
-import DaalPrincipalComponentsJsonFormat._
+import MLLibJsonProtocol._
 
 @PluginDoc(oneLine = "Build Intel DAAL principal components model.",
   extended = """Creating a PrincipalComponents Model using the observation columns.""",
@@ -38,7 +41,7 @@ import DaalPrincipalComponentsJsonFormat._
     |'eigen_vectors': list of a list storing the eigen vectors of the specified columns of the input frame
     |'eigen_values': list storing the eigen values of the specified columns of the input frame
   """)
-class DaalPrincipalComponentsTrainPlugin extends SparkCommandPlugin[DaalPrincipalComponentsTrainArgs, DaalPrincipalComponentsTrainReturn] {
+class DaalPrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
 
   /**
    * The name of the command
@@ -52,36 +55,22 @@ class DaalPrincipalComponentsTrainPlugin extends SparkCommandPlugin[DaalPrincipa
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
    *                   that can be called to produce a SparkContext that can be used during this invocation
-   * @param arguments input specification for covariance matrix
+   * @param arguments input specification
    * @return value of type declared as the Return type
    */
-  override def execute(arguments: DaalPrincipalComponentsTrainArgs)(implicit invocation: Invocation): DaalPrincipalComponentsTrainReturn = {
+  override def execute(arguments: PrincipalComponentsTrainArgs)(implicit invocation: Invocation): PrincipalComponentsTrainReturn = {
     val model: Model = arguments.model
     val frame: SparkFrame = arguments.frame
 
-    validatePrincipalComponentsArgs(frame.schema, arguments)
+    val observationColumns = arguments.observationColumns
+    frame.schema.requireColumnsAreVectorizable(observationColumns)
 
-    val svdData = DaalSvdAlgorithm(frame.rdd, arguments).compute()
-    model.data = svdData.toJson.asJsObject
-    new DaalPrincipalComponentsTrainReturn(svdData)
-  }
+    val k = arguments.k.getOrElse(arguments.observationColumns.length)
+    val svdData = DaalSvdAlgorithm(frame.rdd, arguments).compute(k, computeU = false)
 
-  // TODO: this kind of standardized validation belongs in the Schema class
-  /**
-   * Validate the input arguments
-   * @param frameSchema Schema of the input frame
-   * @param arguments Arguments to the principal components train plugin
-   */
-  private def validatePrincipalComponentsArgs(frameSchema: Schema, arguments: DaalPrincipalComponentsTrainArgs): Unit = {
-    val dataColumnNames = arguments.observationColumns
-    if (dataColumnNames.size == 1) {
-      frameSchema.requireColumnIsType(dataColumnNames.toList.head, DataTypes.isVectorDataType)
-    }
-    else {
-      require(dataColumnNames.size >= 2, "single vector column, or two or more numeric columns required")
-      frameSchema.requireColumnsOfNumericPrimitives(dataColumnNames)
-    }
-    require(arguments.k.getOrElse(arguments.observationColumns.length) >= 1, "k should be greater than equal to 1")
+    val principalComponentsObject = svdData.toPrincipalComponentsData
+    model.data = principalComponentsObject.toJson.asJsObject
+    new PrincipalComponentsTrainReturn(principalComponentsObject)
   }
 
 }

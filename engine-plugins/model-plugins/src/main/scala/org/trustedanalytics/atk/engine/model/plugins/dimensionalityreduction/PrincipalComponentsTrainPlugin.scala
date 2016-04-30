@@ -16,19 +16,11 @@
 
 package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
 
-import breeze.numerics._
-import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
-import org.apache.spark.mllib.stat.Statistics
-import org.trustedanalytics.atk.domain.frame._
-import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.{ SparkCommandPlugin, SparkInvocation }
-import org.trustedanalytics.atk.domain.schema.DataTypes.vector
-import org.apache.spark.mllib.linalg.{ Vector, Matrix }
-import org.apache.spark.mllib.linalg.distributed.RowMatrix
+import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
 // Implicits needed for JSON conversion
 import spray.json._
@@ -59,7 +51,7 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
    *                   that can be called to produce a SparkContext that can be used during this invocation
-   * @param arguments input specification for covariance matrix
+   * @param arguments input specification
    * @return value of type declared as the Return type
    */
   override def execute(arguments: PrincipalComponentsTrainArgs)(implicit invocation: Invocation): PrincipalComponentsTrainReturn = {
@@ -73,7 +65,7 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
     val k = arguments.k.getOrElse(observationColumns.length)
 
     val rowMatrix = PrincipalComponentsFunctions.toRowMatrix(frame.rdd, observationColumns, meanCentered)
-    val svd = rowMatrix.computeSVD(k, computeU = true)
+    val svd = rowMatrix.computeSVD(k, computeU = false)
 
     val columnStatistics = frame.rdd.columnStatistics(observationColumns)
     val principalComponentsObject = new PrincipalComponentsData(k, observationColumns,

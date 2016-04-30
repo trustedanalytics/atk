@@ -47,7 +47,7 @@ object PrincipalComponentsFunctions extends Serializable {
   }
 
   /**
-   * 
+   *
    * @param frameRdd
    * @param principalComponentData
    * @param predictColumns
@@ -80,7 +80,6 @@ object PrincipalComponentsFunctions extends Serializable {
     frameRdd.zipFrameRdd(componentFrame)
   }
 
-
   /**
    * Compute principal components using trained model
    *
@@ -90,7 +89,7 @@ object PrincipalComponentsFunctions extends Serializable {
    * @return Principal components with projection of input into k dimensional space
    */
   def computePrincipalComponents(modelData: PrincipalComponentsData,
-                                 c: Int, 
+                                 c: Int,
                                  indexedRowMatrix: IndexedRowMatrix): IndexedRowMatrix = {
     val eigenVectors = modelData.vFactor
     val y = indexedRowMatrix.multiply(eigenVectors)
