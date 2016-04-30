@@ -65,12 +65,10 @@ class UnflattenColumnPlugin extends SparkCommandPlugin[UnflattenColumnArgs, Unit
     val schema = frame.schema
     val compositeKeyNames = arguments.columns
     val compositeKeyIndices = compositeKeyNames.map(schema.columnIndex)
-
     // run the operation
     val targetSchema = UnflattenColumnFunctions.createTargetSchema(schema, compositeKeyNames)
     val initialRdd = frame.rdd.groupByRows(row => row.values(compositeKeyNames))
     val resultRdd = UnflattenColumnFunctions.unflattenRddByCompositeKey(compositeKeyIndices, initialRdd, targetSchema, arguments.delimiter.getOrElse(defaultDelimiter))
-
     frame.save(new FrameRdd(targetSchema, resultRdd))
   }
 

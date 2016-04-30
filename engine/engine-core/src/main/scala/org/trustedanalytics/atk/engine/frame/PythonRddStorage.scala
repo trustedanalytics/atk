@@ -20,8 +20,7 @@ import java.io.File
 import java.util
 
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
-import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.domain.frame.Udf
+import org.trustedanalytics.atk.domain.frame.{ FrameReference, Udf }
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, Schema }
 import org.trustedanalytics.atk.engine.plugin.Invocation
 import org.trustedanalytics.atk.engine.{ SparkContextFactory, EngineConfig }
@@ -82,8 +81,9 @@ object PythonRddStorage {
 
   /**
    * This method returns a FrameRdd after applying UDF on referencing FrameRdd
+   *
    * @param data Current referencing FrameRdd
-   * @param aggregateByColumnKeys List of column name(s) based on which aggregation is performed
+   * @param aggregateByColumnKeys List of column name(s) based on which yeahaggregation is performed
    * @param udf User Defined function(UDF) to apply on each row
    * @param udfSchema Mandatory output schema
    * @return FrameRdd
@@ -91,11 +91,9 @@ object PythonRddStorage {
   def aggregateMapWith(data: FrameRdd, aggregateByColumnKeys: List[String], udf: Udf, udfSchema: Schema, sc: SparkContext): FrameRdd = {
     //Create a new schema which includes keys (KeyedSchema).
     val keyedSchema = udfSchema.copy(columns = data.frameSchema.columns(aggregateByColumnKeys) ++ udfSchema.columns)
-    //track key indices to fetch data during BSON decode.
-    val keyIndices = for (key <- aggregateByColumnKeys) yield data.frameSchema.columnIndex(key)
     val converter = DataTypes.parseMany(keyedSchema.columns.map(_.dataType).toArray)(_)
     val groupRDD = data.groupByRows(row => row.values(aggregateByColumnKeys))
-    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, keyIndices, sc)
+    val pyRdd = aggregateRddToPyRdd(udf, groupRDD, sc)
     val frameRdd = getRddFromPythonRdd(pyRdd, converter)
     FrameRdd.toFrameRdd(keyedSchema, frameRdd)
   }
@@ -138,7 +136,8 @@ object PythonRddStorage {
           case y: scala.collection.mutable.Seq[_] => iterableToBsonList(y)
           case value => value
         })
-        BSON.encode(obj)
+        val res = BSON.encode(obj)
+        res
       }
     )
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
@@ -147,6 +146,7 @@ object PythonRddStorage {
 
   /**
    * This method converts the base RDD into Python RDD which is processed by the Python VM at the server.
+   *
    * @param udf UDF provided by the user
    * @param baseRdd Base RDD in Array[Bytes]
    * @param predicateInBytes UDF in Array[Bytes]
@@ -195,12 +195,12 @@ object PythonRddStorage {
 
   /**
    * This method encodes the raw rdd into Bson to convert into PythonRDD
+   *
    * @param udf UDF provided by user to apply on each row
    * @param rdd rdd(List[keys], List[Rows])
-   * @param keyIndices List of key indices, used to retreive key data with result frame
    * @return PythonRdd
    */
-  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], keyIndices: List[Int], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
+  def aggregateRddToPyRdd(udf: Udf, rdd: RDD[(List[Any], Iterable[Row])], sc: SparkContext): EnginePythonRdd[Array[Byte]] = {
     val predicateInBytes = decodePythonBase64EncodedStrToBytes(udf.function)
     val baseRdd: RDD[Array[Byte]] = rdd.map {
       case (key, rows) => {
@@ -214,9 +214,10 @@ object PythonRddStorage {
               case value => value
             }
           }).toArray
-        obj.put("keyindices", keyIndices.toArray)
+        //obj.put("keyindices", keyIndices.toArray)
         obj.put("array", bsonRows)
-        BSON.encode(obj)
+        val res = BSON.encode(obj)
+        res
       }
     }
     val pyRdd = getPyRdd(udf, sc, baseRdd, predicateInBytes)
@@ -249,13 +250,14 @@ object PythonRddStorage {
       //should be BasicBSONList containing only BasicBSONList objects
       val bson = BSON.decode(s)
       val asList = bson.get("array").asInstanceOf[BasicBSONList]
-      asList.map(innerList => {
+      val res = asList.map(innerList => {
         val asBsonList = innerList.asInstanceOf[BasicBSONList]
         asBsonList.map {
           case x: BasicBSONList => x.toArray
           case value => value
         }.toArray.asInstanceOf[Array[Any]]
       })
+      res
     }).map(converter)
 
     resultRdd
