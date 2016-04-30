@@ -47,6 +47,13 @@ Default is 1/num_classes for each class""") classPrior: Option[Array[Double]] = 
 }
 
 /**
+ * Return for Intel DAAL Naive Bayes train plugin
+ */
+case class DaalNaiveBayesTrainReturn(
+  @ArgDoc("""Smoothed empirical log probability for each class.""") classLogPrior: Array[Double],
+  @ArgDoc("""Empirical log probability of features given a class, P(x_i|y).""") featureLogProb: Array[Array[Double]])
+
+/**
  * Input arguments for Intel DAAL Naive Bayes predict plugin
  */
 case class DaalNaiveBayesPredictArgs(model: ModelReference,
@@ -86,6 +93,7 @@ object DaalNaiveBayesArgsFormat {
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
   implicit val nbTrainArgsFormat = jsonFormat7(DaalNaiveBayesTrainArgs)
+  implicit val nbTrainReturnFormat = jsonFormat2(DaalNaiveBayesTrainReturn)
   implicit val nbPredictArgsFormat = jsonFormat3(DaalNaiveBayesPredictArgs)
   implicit val nbTestArgsFormat = jsonFormat4(DaalNaiveBayesTestArgs)
 }

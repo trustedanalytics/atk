@@ -29,10 +29,14 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalNaiveBayesModelFormat._
 import DaalNaiveBayesArgsFormat._
 
-@PluginDoc(oneLine = "Build a naive bayes model.",
-  extended = """Train a NaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""",
-  returns = """Trained NaiveBayes model""")
-class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainArgs, UnitReturn] {
+@PluginDoc(oneLine = "Build a multinomial naive bayes model.",
+  extended = """Train a DaalNaiveBayesModel using the observation column, label column of the train frame and an optional lambda value.""",
+  returns = """dictionary
+A dictionary with trained multinomial naive bayes model with the following keys:
+'class_log_prior': smoothed empirical log probability for each class
+'feature_log_prob': empirical log probability of features given a class, P(x_i|y)
+            """)
+class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainArgs, DaalNaiveBayesTrainReturn] {
   /**
    * The name of the command.
    *
@@ -52,7 +56,7 @@ class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainAr
    * @param arguments user supplied arguments to running this plugin
    * @return a value of type declared as the Return type.
    */
-  override def execute(arguments: DaalNaiveBayesTrainArgs)(implicit invocation: Invocation): UnitReturn = {
+  override def execute(arguments: DaalNaiveBayesTrainArgs)(implicit invocation: Invocation): DaalNaiveBayesTrainReturn = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
 
@@ -66,5 +70,6 @@ class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainAr
     ).train()
 
     model.data = naiveBayesModel.toJson.asJsObject
+    DaalNaiveBayesTrainReturn(naiveBayesModel.classLogPrior, naiveBayesModel.featureLogProb)
   }
 }

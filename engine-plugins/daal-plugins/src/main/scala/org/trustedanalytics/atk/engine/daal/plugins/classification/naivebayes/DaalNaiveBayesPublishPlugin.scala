@@ -36,7 +36,7 @@ import DaalNaiveBayesModelFormat._
  * Publish a Random Forest Classifier Model for scoring
  */
 @PluginDoc(oneLine = "Creates a scoring engine tar file.",
-  extended = """Creates a tar file with the trained Naive Bayes Model
+  extended = """Creates a tar file with the trained multinomial Naive Bayes Model
 The tar file is used as input to the scoring engine to predict the class of an observation.""",
   returns = """The HDFS path to the tar file.""")
 class DaalNaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {

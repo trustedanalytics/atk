@@ -26,6 +26,8 @@ import com.intel.daal.services.DaalContext
  * @param labelColumn Column name containing the label
  * @param numClasses Number of classes
  * @param lambdaParameter Additive smoothing parameter
+ * @param classLogPrior Smoothed empirical log probability for each class.
+ * @param featureLogProb Empirical log probability of features given a class, P(x_i|y).
  * @param classPrior Optional prior probabilities of classes
  */
 case class DaalNaiveBayesModelData(serializedModel: List[Byte],
@@ -33,6 +35,8 @@ case class DaalNaiveBayesModelData(serializedModel: List[Byte],
                                    labelColumn: String,
                                    numClasses: Int,
                                    lambdaParameter: Double,
+                                   classLogPrior: Array[Double],
+                                   featureLogProb: Array[Array[Double]],
                                    classPrior: Option[Array[Double]] = None)
 
 /**

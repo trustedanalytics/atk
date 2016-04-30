@@ -25,8 +25,13 @@ Consider the following frame containing three columns.
 
 >>> model = ta.DaalNaiveBayesModel()
 <progress>
->>> model.train(frame, 'Class', ['Dim_1', 'Dim_2'], lambda_parameter=0.9, class_prior=[0.6, 0.4], num_classes=2)
+>>> train_output = model.train(frame, 'Class', ['Dim_1', 'Dim_2'], lambda_parameter=0.9, class_prior=[0.6, 0.4], num_classes=2)
 <progress>
+<skip>
+>>> train_output
+{u'class_log_prior': [-0.6931471805599453, -0.6931471805599453],
+ u'feature_log_prob': [[-0.07696104113612832, -2.6026896854443837],[-0.15762894420358317, -1.9252908618525777]]}
+</skip>
 >>> predicted_frame = model.predict(frame, ['Dim_1', 'Dim_2'])
 <progress>
 >>> predicted_frame.inspect()

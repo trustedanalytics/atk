@@ -28,8 +28,8 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import DaalNaiveBayesModelFormat._
 import DaalNaiveBayesArgsFormat._
 
-@PluginDoc(oneLine = "Predict labels for data points using trained Intel DAAL Naive Bayes model.",
-  extended = """Predict the labels for a test frame using trained Intel DAAL Naive Bayes model,
+@PluginDoc(oneLine = "Predict labels for data points using trained multinomial Naive Bayes model.",
+  extended = """Predict the labels for a test frame using trained multinomial Naive Bayes model,
       and create a new frame revision with existing columns and a new predicted label's column.""",
   returns = "Frame containing the original frame's columns and a column with the predicted label.")
 class DaalNaiveBayesPredictPlugin extends SparkCommandPlugin[DaalNaiveBayesPredictArgs, FrameReference] {

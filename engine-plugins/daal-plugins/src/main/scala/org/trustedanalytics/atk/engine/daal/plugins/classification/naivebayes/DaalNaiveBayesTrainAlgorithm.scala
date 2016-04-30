@@ -24,6 +24,7 @@ import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.DistributedLabeledTable
+import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
 
 import scala.util.{ Failure, Success, Try }
 
@@ -51,12 +52,16 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
   def train(): DaalNaiveBayesModelData = {
     val context = new DaalContext
     var serializedModel: List[Byte] = null
+    var classLogPrior: Array[Double] = null
+    var featureLogProb: Array[Array[Double]] = null
 
     try {
       val partialResultsRdd = computePartialResults()
       val trainingResult = mergePartialResults(context, partialResultsRdd)
       val trainedModel: Model = trainingResult.get(TrainingResultId.model)
       serializedModel = serializeTrainedModel(trainedModel)
+      classLogPrior = trainedModel.getLogP().toDoubleArray()
+      featureLogProb = trainedModel.getLogTheta().toArrayOfDoubleArray()
     }
     catch {
       case ex: Exception => throw new RuntimeException("Could not train model:", ex)
@@ -64,7 +69,8 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
     finally {
       context.dispose()
     }
-    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses, lambda, classPrior)
+    DaalNaiveBayesModelData(serializedModel, observationColumns, labelColumn, numClasses,
+      lambda, classLogPrior, featureLogProb, classPrior)
   }
 
   /**

@@ -487,6 +487,8 @@ object ScoringJsonReaderWriters {
         "label_column" -> obj.labelColumn.toJson,
         "num_classes" -> obj.numClasses.toJson,
         "lamda_parameter" -> obj.lambdaParameter.toJson,
+        "class_log_prior" -> obj.classLogPrior.toJson,
+        "feature_log_prob" -> obj.featureLogProb.toJson,
         "class_prior" -> obj.classPrior.toJson
       )
     }
@@ -505,11 +507,14 @@ object ScoringJsonReaderWriters {
       val labelColumn = getOrInvalid(fields, "label_column").convertTo[String]
       val numClasses = getOrInvalid(fields, "num_classes").convertTo[Int]
       val lambdaParameter = getOrInvalid(fields, "lambda_parameter").convertTo[Double]
+      val classLogPrior = getOrInvalid(fields, "class_log_prior").convertTo[Array[Double]]
+      val featureLogProb = getOrInvalid(fields, "feature_log_prob").convertTo[Array[Array[Double]]]
       val classPrior = fields.get("class_prior") match {
         case Some(prior) => Some(prior.convertTo[Array[Double]])
         case _ => None
       }
-      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses, lambdaParameter, classPrior)
+      new DaalNaiveBayesModelData(serializedModel, obsCols, labelColumn, numClasses,
+        lambdaParameter, classLogPrior, featureLogProb, classPrior)
     }
   }
 
