@@ -34,7 +34,7 @@ observation column.""") columnScalings: Option[List[Double]] = None,
                                @ArgDoc("""Desired number of clusters.
 Default is 2.""") k: Int = 2,
                                @ArgDoc("""Number of iterations for which the algorithm should run.
-Default is 20.""") maxIterations: Int = 50,
+Default is 20.""") maxIterations: Int = 100,
                                @ArgDoc("""Optional name of output column with
 index of cluster each observation belongs to.""") labelColumn: String = "predicted_cluster") {
 
@@ -55,6 +55,5 @@ index of cluster each observation belongs to.""") labelColumn: String = "predict
    *
    * @return centroid initialization method
    */
-  def getInitMethod: InitMethod = InitMethod.randomDense
-
+  def getInitMethod: InitMethod =  InitMethod.randomDense
 }

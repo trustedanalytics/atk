@@ -81,7 +81,7 @@ object DistributedNumericTable {
         buf.clear()
         context.dispose()
         Array(indexedTable).toIterator
-    }
+    }.filter(_.numRows > 0)
     val totalRows = tableRdd.map(table => table.numRows.toLong).sum().toLong
     DistributedNumericTable(tableRdd, totalRows)
   }
