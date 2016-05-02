@@ -18,18 +18,18 @@
 package org.apache.spark.mllib.linalg
 
 import java.util
-import java.lang.{Double => JavaDouble, Integer => JavaInteger, Iterable => JavaIterable}
+import java.lang.{ Double => JavaDouble, Integer => JavaInteger, Iterable => JavaIterable }
 
 import scala.annotation.varargs
 import scala.collection.JavaConverters._
 
-import breeze.linalg.{DenseVector => BDV, SparseVector => BSV, Vector => BV}
+import breeze.linalg.{ DenseVector => BDV, SparseVector => BSV, Vector => BV }
 import org.json4s.DefaultFormats
 import org.json4s.JsonDSL._
-import org.json4s.jackson.JsonMethods.{compact, render, parse => parseJson}
+import org.json4s.jackson.JsonMethods.{ compact, render, parse => parseJson }
 
 import org.apache.spark.SparkException
-import org.apache.spark.annotation.{AlphaComponent, Since}
+import org.apache.spark.annotation.{ AlphaComponent, Since }
 import org.apache.spark.mllib.util.NumericParser
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.GenericMutableRow
@@ -92,7 +92,8 @@ sealed trait Vector extends Serializable {
           result = 31 * result + (bits ^ (bits >>> 32)).toInt
           nnz += 1
         }
-      } else {
+      }
+      else {
         return result
       }
     }
@@ -163,7 +164,8 @@ sealed trait Vector extends Serializable {
     // A dense vector needs 8 * size + 8 bytes, while a sparse vector needs 12 * nnz + 20 bytes.
     if (1.5 * (nnz + 1.0) < size) {
       toSparse
-    } else {
+    }
+    else {
       toDense
     }
   }
@@ -324,8 +326,9 @@ object Vectors {
    */
   @Since("1.0.0")
   def sparse(size: Int, elements: JavaIterable[(JavaInteger, JavaDouble)]): Vector = {
-    sparse(size, elements.asScala.map { case (i, x) =>
-      (i.intValue(), x.doubleValue())
+    sparse(size, elements.asScala.map {
+      case (i, x) =>
+        (i.intValue(), x.doubleValue())
     }.toSeq)
   }
 
@@ -388,13 +391,15 @@ object Vectors {
       case v: BDV[Double] =>
         if (v.offset == 0 && v.stride == 1 && v.length == v.data.length) {
           new DenseVector(v.data)
-        } else {
-          new DenseVector(v.toArray)  // Can't use underlying array directly, so make a new one
+        }
+        else {
+          new DenseVector(v.toArray) // Can't use underlying array directly, so make a new one
         }
       case v: BSV[Double] =>
         if (v.index.length == v.used) {
           new SparseVector(v.length, v.index, v.data)
-        } else {
+        }
+        else {
           new SparseVector(v.length, v.index.slice(0, v.used), v.data.slice(0, v.used))
         }
       case v: BV[_] =>
@@ -427,7 +432,8 @@ object Vectors {
         i += 1
       }
       sum
-    } else if (p == 2) {
+    }
+    else if (p == 2) {
       var sum = 0.0
       var i = 0
       while (i < size) {
@@ -435,7 +441,8 @@ object Vectors {
         i += 1
       }
       math.sqrt(sum)
-    } else if (p == Double.PositiveInfinity) {
+    }
+    else if (p == Double.PositiveInfinity) {
       var max = 0.0
       var i = 0
       while (i < size) {
@@ -444,7 +451,8 @@ object Vectors {
         i += 1
       }
       max
-    } else {
+    }
+    else {
       var sum = 0.0
       var i = 0
       while (i < size) {
@@ -483,10 +491,12 @@ object Vectors {
           if (kv2 >= nnzv2 || (kv1 < nnzv1 && v1Indices(kv1) < v2Indices(kv2))) {
             score = v1Values(kv1)
             kv1 += 1
-          } else if (kv1 >= nnzv1 || (kv2 < nnzv2 && v2Indices(kv2) < v1Indices(kv1))) {
+          }
+          else if (kv1 >= nnzv1 || (kv2 < nnzv2 && v2Indices(kv2) < v1Indices(kv1))) {
             score = v2Values(kv2)
             kv2 += 1
-          } else {
+          }
+          else {
             score = v1Values(kv1) - v2Values(kv2)
             kv1 += 1
             kv2 += 1
@@ -531,7 +541,8 @@ object Vectors {
       var score = 0.0
       if (kv2 != iv1) {
         score = v2(kv2)
-      } else {
+      }
+      else {
         score = v1.values(kv1) - v2(kv2)
         if (kv1 < nnzv1 - 1) {
           kv1 += 1
@@ -548,10 +559,10 @@ object Vectors {
    * Check equality between sparse/dense vectors
    */
   private[mllib] def equals(
-                             v1Indices: IndexedSeq[Int],
-                             v1Values: Array[Double],
-                             v2Indices: IndexedSeq[Int],
-                             v2Values: Array[Double]): Boolean = {
+    v1Indices: IndexedSeq[Int],
+    v1Values: Array[Double],
+    v2Indices: IndexedSeq[Int],
+    v2Values: Array[Double]): Boolean = {
     val v1Size = v1Values.length
     val v2Size = v2Values.length
     var k1 = 0
@@ -581,7 +592,7 @@ object Vectors {
 @Since("1.0.0")
 @SQLUserDefinedType(udt = classOf[VectorUDT])
 class DenseVector @Since("1.0.0") (
-                                    @Since("1.0.0") val values: Array[Double]) extends Vector {
+    @Since("1.0.0") val values: Array[Double]) extends Vector {
 
   @Since("1.0.0")
   override def size: Int = values.length
@@ -666,7 +677,8 @@ class DenseVector @Since("1.0.0") (
   override def argmax: Int = {
     if (size == 0) {
       -1
-    } else {
+    }
+    else {
       var maxIdx = 0
       var maxValue = values(0)
       var i = 1
@@ -706,9 +718,9 @@ object DenseVector {
 @Since("1.0.0")
 @SQLUserDefinedType(udt = classOf[VectorUDT])
 class SparseVector @Since("1.0.0") (
-                                     @Since("1.0.0") override val size: Int,
-                                     @Since("1.0.0") val indices: Array[Int],
-                                     @Since("1.0.0") val values: Array[Double]) extends Vector {
+    @Since("1.0.0") override val size: Int,
+    @Since("1.0.0") val indices: Array[Int],
+    @Since("1.0.0") val values: Array[Double]) extends Vector {
 
   require(indices.length == values.length, "Sparse vectors require that the dimension of the" +
     s" indices match the dimension of the values. You provided ${indices.length} indices and " +
@@ -789,7 +801,8 @@ class SparseVector @Since("1.0.0") (
     val nnz = numNonzeros
     if (nnz == numActives) {
       this
-    } else {
+    }
+    else {
       val ii = new Array[Int](nnz)
       val vv = new Array[Double](nnz)
       var k = 0
@@ -808,7 +821,8 @@ class SparseVector @Since("1.0.0") (
   override def argmax: Int = {
     if (size == 0) {
       -1
-    } else {
+    }
+    else {
       // Find the max active entry.
       var maxIdx = indices(0)
       var maxValue = values(0)
@@ -836,7 +850,8 @@ class SparseVector @Since("1.0.0") (
             }
             maxIdx = k
           }
-        } else {
+        }
+        else {
           // If the max active value is negative, find and return the first inactive index.
           var k = 0
           while (k < na && indices(k) == k) {
@@ -865,7 +880,8 @@ class SparseVector @Since("1.0.0") (
       val iIdx = java.util.Arrays.binarySearch(this.indices, origIdx)
       val i_v = if (iIdx >= 0) {
         Iterator((currentIdx, this.values(iIdx)))
-      } else {
+      }
+      else {
         Iterator()
       }
       currentIdx += 1

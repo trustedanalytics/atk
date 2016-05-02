@@ -24,9 +24,9 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods._
 import org.json4s.JsonDSL._
 
-import org.apache.spark.{Logging, SparkContext}
-import org.apache.spark.annotation.{Experimental, Since}
-import org.apache.spark.ml.param.{ParamPair, Params}
+import org.apache.spark.{ Logging, SparkContext }
+import org.apache.spark.annotation.{ Experimental, Since }
+import org.apache.spark.ml.param.{ ParamPair, Params }
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.util.Utils
 
@@ -83,7 +83,8 @@ abstract class MLWriter extends BaseReadWrite with Logging {
         logInfo(s"Path $path already exists. It will be overwritten.")
         // TODO: Revert back to the original content if save is not successful.
         fs.delete(qualifiedOutputPath, true)
-      } else {
+      }
+      else {
         throw new IOException(
           s"Path $path already exists. Please use write.overwrite().save(path) to overwrite it.")
       }
@@ -211,16 +212,17 @@ private[ml] object DefaultParamsWriter {
    *                  [[org.apache.spark.ml.param.Param.jsonEncode()]].
    */
   def saveMetadata(
-                    instance: Params,
-                    path: String,
-                    sc: SparkContext,
-                    extraMetadata: Option[JObject] = None,
-                    paramMap: Option[JValue] = None): Unit = {
+    instance: Params,
+    path: String,
+    sc: SparkContext,
+    extraMetadata: Option[JObject] = None,
+    paramMap: Option[JValue] = None): Unit = {
     val uid = instance.uid
     val cls = instance.getClass.getName
     val params = instance.extractParamMap().toSeq.asInstanceOf[Seq[ParamPair[Any]]]
-    val jsonParams = paramMap.getOrElse(render(params.map { case ParamPair(p, v) =>
-      p.name -> parse(p.jsonEncode(v))
+    val jsonParams = paramMap.getOrElse(render(params.map {
+      case ParamPair(p, v) =>
+        p.name -> parse(p.jsonEncode(v))
     }.toList))
     val basicMetadata = ("class" -> cls) ~
       ("timestamp" -> System.currentTimeMillis()) ~
@@ -267,13 +269,13 @@ private[ml] object DefaultParamsReader {
    * @param metadataJson  Full metadata file String (for debugging)
    */
   case class Metadata(
-                       className: String,
-                       uid: String,
-                       timestamp: Long,
-                       sparkVersion: String,
-                       params: JValue,
-                       metadata: JValue,
-                       metadataJson: String)
+    className: String,
+    uid: String,
+    timestamp: Long,
+    sparkVersion: String,
+    params: JValue,
+    metadata: JValue,
+    metadataJson: String)
 
   /**
    * Load metadata from file.
@@ -307,10 +309,11 @@ private[ml] object DefaultParamsReader {
     implicit val format = DefaultFormats
     metadata.params match {
       case JObject(pairs) =>
-        pairs.foreach { case (paramName, jsonValue) =>
-          val param = instance.getParam(paramName)
-          val value = param.jsonDecode(compact(render(jsonValue)))
-          instance.set(param, value)
+        pairs.foreach {
+          case (paramName, jsonValue) =>
+            val param = instance.getParam(paramName)
+            val value = param.jsonDecode(compact(render(jsonValue)))
+            instance.set(param, value)
         }
       case _ =>
         throw new IllegalArgumentException(

@@ -16,10 +16,12 @@
 
 package org.apache.spark.ml.atk.plugins
 
+import org.apache.spark.ml.regression.CoxModel
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol.VectorFormat
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.engine.model.plugins.regression._
+import org.trustedanalytics.atk.engine.model.plugins.survivalanalysis.{ MultivariateCoxPredictArgs, MultivariateCoxData, MultivariateCoxTrainReturn, MultivariateCoxTrainArgs }
 import org.trustedanalytics.atk.scoring.models.LinearRegressionData
 import spray.json._
 
@@ -49,6 +51,34 @@ object MLJsonProtocol {
       new org.apache.spark.ml.regression.LinearRegressionModel(uid, weights, intercept)
     }
   }
+
+  implicit object CoxModelFormat extends JsonFormat[CoxModel] {
+
+    override def write(obj: CoxModel): JsValue = {
+      val beta = VectorFormat.write(obj.beta)
+      val mean = VectorFormat.write(obj.meanVector)
+      JsObject(
+        "uid" -> JsString(obj.uid),
+        "beta" -> beta,
+        "mean" -> mean
+      )
+    }
+
+    override def read(json: JsValue): org.apache.spark.ml.regression.CoxModel = {
+      val fields = json.asJsObject.fields
+      val uid = getOrInvalid(fields, "uid").convertTo[String]
+      val beta = fields.get("beta").map(v => {
+        VectorFormat.read(v)
+      }).get
+
+      val mean = fields.get("mean").map(v => {
+        VectorFormat.read(v)
+      }).get
+
+      new CoxModel(uid, beta, mean)
+    }
+  }
+
   def getOrInvalid[T](map: Map[String, T], key: String): T = {
     // throw exception if a programmer made a mistake
     map.getOrElse(key, throw new InvalidJsonException(s"expected key $key was not found in JSON $map"))
@@ -60,6 +90,11 @@ object MLJsonProtocol {
   implicit val linearRegressionMlModelPredictArgs = jsonFormat3(LinearRegressionPredictArgs)
   implicit val linearRegressionMlModelTestArgs = jsonFormat4(LinearRegressionTestArgs)
   implicit val linearRegressionMlModelTestReturn = jsonFormat5(LinearRegressionTestReturn)
+
+  implicit val coxMlModelTrainArgs = jsonFormat7(MultivariateCoxTrainArgs)
+  implicit val coxMlModelTrainReturn = jsonFormat1(MultivariateCoxTrainReturn)
+  implicit val coxMlModelDataFormat = jsonFormat4(MultivariateCoxData)
+  implicit val coxMlModelPredictArgs = jsonFormat3(MultivariateCoxPredictArgs)
 
 }
 class InvalidJsonException(message: String) extends RuntimeException(message)

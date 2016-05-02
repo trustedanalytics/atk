@@ -17,13 +17,11 @@
 
 package org.apache.spark.sql.catalyst.util
 
-
-
 import scala.collection.JavaConverters._
 
 import org.apache.spark.sql.catalyst.InternalRow
-import org.apache.spark.sql.types.{MapData, ArrayData, DataType, Decimal}
-import org.apache.spark.unsafe.types.{CalendarInterval, UTF8String}
+import org.apache.spark.sql.types.{ MapData, ArrayData, DataType, Decimal }
+import org.apache.spark.unsafe.types.{ CalendarInterval, UTF8String }
 
 class GenericArrayData(val array: Array[Any]) extends ArrayData {
 
@@ -93,11 +91,11 @@ class GenericArrayData(val array: Array[Any]) extends ArrayData {
               return false
             }
           case f1: Float if java.lang.Float.isNaN(f1) =>
-            if (!o2.isInstanceOf[Float] || ! java.lang.Float.isNaN(o2.asInstanceOf[Float])) {
+            if (!o2.isInstanceOf[Float] || !java.lang.Float.isNaN(o2.asInstanceOf[Float])) {
               return false
             }
           case d1: Double if java.lang.Double.isNaN(d1) =>
-            if (!o2.isInstanceOf[Double] || ! java.lang.Double.isNaN(o2.asInstanceOf[Double])) {
+            if (!o2.isInstanceOf[Double] || !java.lang.Double.isNaN(o2.asInstanceOf[Double])) {
               return false
             }
           case _ => if (o1 != o2) {
@@ -118,7 +116,8 @@ class GenericArrayData(val array: Array[Any]) extends ArrayData {
       val update: Int =
         if (isNullAt(i)) {
           0
-        } else {
+        }
+        else {
           array(i) match {
             case b: Boolean => if (b) 0 else 1
             case b: Byte => b.toInt

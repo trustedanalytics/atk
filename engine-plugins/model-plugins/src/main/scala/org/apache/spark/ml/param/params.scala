@@ -27,9 +27,9 @@ import scala.collection.JavaConverters._
 import org.json4s._
 import org.json4s.jackson.JsonMethods._
 
-import org.apache.spark.annotation.{DeveloperApi, Experimental}
+import org.apache.spark.annotation.{ DeveloperApi, Experimental }
 import org.apache.spark.ml.util.Identifiable
-import org.apache.spark.mllib.linalg.{Vector, Vectors}
+import org.apache.spark.mllib.linalg.{ Vector, Vectors }
 
 /**
  * :: DeveloperApi ::
@@ -45,7 +45,7 @@ import org.apache.spark.mllib.linalg.{Vector, Vectors}
  */
 @DeveloperApi
 class Param[T](val parent: String, val name: String, val doc: String, val isValid: T => Boolean)
-  extends Serializable {
+    extends Serializable {
 
   def this(parent: Identifiable, name: String, doc: String, isValid: T => Boolean) =
     this(parent.uid, name, doc, isValid)
@@ -182,10 +182,10 @@ object ParamValidators {
    *                        If false, check for value < upperBound.
    */
   def inRange[T](
-                  lowerBound: Double,
-                  upperBound: Double,
-                  lowerInclusive: Boolean,
-                  upperInclusive: Boolean): T => Boolean = { (value: T) =>
+    lowerBound: Double,
+    upperBound: Double,
+    lowerInclusive: Boolean,
+    upperInclusive: Boolean): T => Boolean = { (value: T) =>
     val x: Double = getDouble(value)
     val lowerValid = if (lowerInclusive) x >= lowerBound else x > lowerBound
     val upperValid = if (upperInclusive) x <= upperBound else x < upperBound
@@ -221,7 +221,7 @@ object ParamValidators {
  */
 @DeveloperApi
 class DoubleParam(parent: String, name: String, doc: String, isValid: Double => Boolean)
-  extends Param[Double](parent, name, doc, isValid) {
+    extends Param[Double](parent, name, doc, isValid) {
 
   def this(parent: String, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -281,7 +281,7 @@ private[param] object DoubleParam {
  */
 @DeveloperApi
 class IntParam(parent: String, name: String, doc: String, isValid: Int => Boolean)
-  extends Param[Int](parent, name, doc, isValid) {
+    extends Param[Int](parent, name, doc, isValid) {
 
   def this(parent: String, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -310,7 +310,7 @@ class IntParam(parent: String, name: String, doc: String, isValid: Int => Boolea
  */
 @DeveloperApi
 class FloatParam(parent: String, name: String, doc: String, isValid: Float => Boolean)
-  extends Param[Float](parent, name, doc, isValid) {
+    extends Param[Float](parent, name, doc, isValid) {
 
   def this(parent: String, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -371,7 +371,7 @@ private object FloatParam {
  */
 @DeveloperApi
 class LongParam(parent: String, name: String, doc: String, isValid: Long => Boolean)
-  extends Param[Long](parent, name, doc, isValid) {
+    extends Param[Long](parent, name, doc, isValid) {
 
   def this(parent: String, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -400,7 +400,7 @@ class LongParam(parent: String, name: String, doc: String, isValid: Long => Bool
  */
 @DeveloperApi
 class BooleanParam(parent: String, name: String, doc: String) // No need for isValid
-  extends Param[Boolean](parent, name, doc) {
+    extends Param[Boolean](parent, name, doc) {
 
   def this(parent: Identifiable, name: String, doc: String) = this(parent.uid, name, doc)
 
@@ -423,7 +423,7 @@ class BooleanParam(parent: String, name: String, doc: String) // No need for isV
  */
 @DeveloperApi
 class StringArrayParam(parent: Params, name: String, doc: String, isValid: Array[String] => Boolean)
-  extends Param[Array[String]](parent, name, doc, isValid) {
+    extends Param[Array[String]](parent, name, doc, isValid) {
 
   def this(parent: Params, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -448,7 +448,7 @@ class StringArrayParam(parent: Params, name: String, doc: String, isValid: Array
  */
 @DeveloperApi
 class DoubleArrayParam(parent: Params, name: String, doc: String, isValid: Array[Double] => Boolean)
-  extends Param[Array[Double]](parent, name, doc, isValid) {
+    extends Param[Array[Double]](parent, name, doc, isValid) {
 
   def this(parent: Params, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -478,7 +478,7 @@ class DoubleArrayParam(parent: Params, name: String, doc: String, isValid: Array
  */
 @DeveloperApi
 class IntArrayParam(parent: Params, name: String, doc: String, isValid: Array[Int] => Boolean)
-  extends Param[Array[Int]](parent, name, doc, isValid) {
+    extends Param[Array[Int]](parent, name, doc, isValid) {
 
   def this(parent: Params, name: String, doc: String) =
     this(parent, name, doc, ParamValidators.alwaysTrue)
@@ -559,7 +559,8 @@ trait Params extends Identifiable with Serializable {
       val defaultValueStr = getDefault(param).map("default: " + _)
       val currentValueStr = get(param).map("current: " + _)
       (defaultValueStr ++ currentValueStr).mkString("(", ", ", ")")
-    } else {
+    }
+    else {
       "(undefined)"
     }
     s"${param.name}: ${param.doc} $valueStr"
@@ -786,7 +787,7 @@ abstract class JavaParams extends Params
  */
 @Experimental
 final class ParamMap private[ml] (private val map: mutable.Map[Param[Any], Any])
-  extends Serializable {
+    extends Serializable {
 
   /* DEVELOPERS: About validating parameter values
    *   This and ParamPair are the only two collections of parameters.
@@ -871,8 +872,9 @@ final class ParamMap private[ml] (private val map: mutable.Map[Param[Any], Any])
   def copy: ParamMap = new ParamMap(map.clone())
 
   override def toString: String = {
-    map.toSeq.sortBy(_._1.name).map { case (param, value) =>
-      s"\t${param.parent}-${param.name}: $value"
+    map.toSeq.sortBy(_._1.name).map {
+      case (param, value) =>
+        s"\t${param.parent}-${param.name}: $value"
     }.mkString("{\n", ",\n", "\n}")
   }
 
@@ -898,8 +900,9 @@ final class ParamMap private[ml] (private val map: mutable.Map[Param[Any], Any])
    * Converts this param map to a sequence of param pairs.
    */
   def toSeq: Seq[ParamPair[_]] = {
-    map.toSeq.map { case (param, value) =>
-      ParamPair(param, value)
+    map.toSeq.map {
+      case (param, value) =>
+        ParamPair(param, value)
     }
   }
 
