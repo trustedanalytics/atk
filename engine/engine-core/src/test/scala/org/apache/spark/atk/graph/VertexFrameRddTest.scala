@@ -53,7 +53,7 @@ class VertexFrameRddTest extends WordSpec with TestingSparkContextWordSpec with 
       })
       //collect the nameRdd into an array
       val nameList = nameRdd.collect()
-      nameList should contain theSameElementsAs (Array("Bob", "Alice", "Fred", "Lucy"))
+      nameList should contain theSameElementsAs Array("Bob", "Alice", "Fred", "Lucy")
     }
   }
 

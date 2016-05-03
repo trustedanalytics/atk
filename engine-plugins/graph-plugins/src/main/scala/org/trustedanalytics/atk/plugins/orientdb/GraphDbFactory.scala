@@ -68,7 +68,7 @@ object GraphDbFactory {
       factory.getTx
     } match {
       case Success(orientGraph) => orientGraph
-      case Failure(ex) => throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}", ex)
+      case Failure(ex) => throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
     graph
   }
@@ -85,7 +85,7 @@ object GraphDbFactory {
       db
     } match {
       case Success(db) => new OrientGraph(db)
-      case Failure(ex) => throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}", ex)
+      case Failure(ex) => throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
   }
 

@@ -39,6 +39,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
   /**
    * Method to export graph to OrientDB
+   *
    * @param arguments the arguments supplied by the caller
    * @param invocation
    * @return some statistics of the exported vertices and edges
@@ -58,7 +59,6 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     val edges = exportEdgeFramesToOrient(arguments, dbConfig, graphMeta)
     ExportOrientDbGraphReturn(vertices, edges, dbConfig.dbUri)
   }
-
   /**
    * A method for exporting  vertex frames to Orient vertices
    *
@@ -102,5 +102,4 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
     })
     metadata.toMap
   }
-
 }
