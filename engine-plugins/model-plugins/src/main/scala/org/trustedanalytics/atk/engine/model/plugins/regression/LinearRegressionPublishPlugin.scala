@@ -49,8 +49,6 @@ class LinearRegressionPublishPlugin extends CommandPlugin[ModelPublishArgs, Expo
    */
   override def name: String = "model:linear_regression/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

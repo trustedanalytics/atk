@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.frame.ClassificationMetricValue
 import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.engine.frame.plugins.{ ScoreAndLabel, ClassificationMetrics }
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -53,8 +53,6 @@ class LibSvmTestPlugin extends SparkCommandPlugin[LibSvmTestArgs, Classification
    * e.g Python client via code generation.
    */
   override def name: String = "model:libsvm/test"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

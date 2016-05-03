@@ -20,7 +20,7 @@ import java.util.StringTokenizer
 
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import libsvm.{ svm_node, svm_problem, svm_parameter, svm }
@@ -46,8 +46,6 @@ class LibSvmTrainPlugin extends SparkCommandPlugin[LibSvmTrainArgs, UnitReturn] 
    * e.g Python client via code generation.
    */
   override def name: String = "model:libsvm/train"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

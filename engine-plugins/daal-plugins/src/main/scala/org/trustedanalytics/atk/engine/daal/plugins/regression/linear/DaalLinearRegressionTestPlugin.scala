@@ -46,7 +46,7 @@ class DaalLinearRegressionTestPlugin extends SparkCommandPlugin[DaalLinearRegres
    */
   override def name: String = "model:daal_linear_regression/test"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get test metrics for DAAL's Linear Regression with QR decomposition using test frame

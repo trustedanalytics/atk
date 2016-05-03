@@ -53,8 +53,6 @@ class KMeansPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata
    */
   override def name: String = "model:k_means/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *
