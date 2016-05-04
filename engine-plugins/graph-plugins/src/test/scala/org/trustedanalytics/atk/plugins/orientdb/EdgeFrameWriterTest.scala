@@ -50,6 +50,10 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val vRowRdd = sparkContext.parallelize(vertices)
       val vertexFrameRdd = new VertexFrameRdd(vSchema, vRowRdd)
       val vBatchSize = 4
+      if (orientFileGraph.getVertexType(vSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oVertexType = schemaWriter.createVertexSchema(vSchema)
+      }
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
       val verticesCountRdd = vertexFrameWriter.exportVertexFrame(vBatchSize)
 
@@ -63,6 +67,10 @@ class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with
       val eRowRdd = sparkContext.parallelize(edges)
       val edgeFrameRdd = new EdgeFrameRdd(eSchema, eRowRdd)
       val batchSize = 3
+      if (orientFileGraph.getEdgeType(eSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oEdgeType = schemaWriter.createEdgeSchema(eSchema)
+      }
       val edgeFrameWriter = new EdgeFrameWriter(edgeFrameRdd, dbConfig)
       // call method under test
       val edgesCount = edgeFrameWriter.exportEdgeFrame(batchSize)

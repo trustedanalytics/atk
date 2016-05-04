@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import java.io.File
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraph }
 import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.testutils.DirectoryUtils
 
@@ -37,7 +37,7 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
       val dbUri: String = "memory:OrientTestDb"
       val dbConfig = new DbConfigurations(dbUri, userName, password, port, host, rootPassword)
       //Tested method
-      val graph: OrientGraph = GraphDbFactory.createGraphDb(dbConfig)
+      val graph: OrientGraphNoTx = GraphDbFactory.createGraphDb(dbConfig)
       //Results validation
       graph.isClosed shouldBe false
       graph.shutdown()

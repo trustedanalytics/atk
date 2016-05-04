@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
-import com.tinkerpop.blueprints.impls.orient.{ OrientEdge, OrientGraph }
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdge, OrientGraph }
 import org.apache.spark.atk.graph.Edge
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
  * @param orientGraph an instance of Orient graph database
  * @param edge atk edge to be exported to OrientEdge
  */
-class EdgeWriter(orientGraph: OrientGraph, edge: Edge) {
+class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
   require(orientGraph != null, "The Orient graph database instance must not equal null")
 
@@ -41,10 +41,6 @@ class EdgeWriter(orientGraph: OrientGraph, edge: Edge) {
   def addEdge(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
 
     val className = edge.schema.label
-    if (orientGraph.getEdgeType(className) == null) {
-      val createEdgeSchema = new EdgeSchemaWriter(edge.schema)
-      val edgeType = createEdgeSchema.createEdgeSchema(orientGraph)
-    }
     val orientEdge = orientGraph.addEdge("class:" + className, srcVertex, destVertex, className)
     val rowWrapper = new RowWrapper(edge.schema)
     edge.schema.columns.foreach(col => {

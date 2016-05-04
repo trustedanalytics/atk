@@ -70,13 +70,19 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
   def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Long] = {
 
+    val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
     val metadata = vertexFrames.map(frame => {
       val sparkFrame: SparkVertexFrame = frame
       val vertexFrameRdd = sparkFrame.rdd
+      val vertexSchema = vertexFrameRdd.vertexWrapper.schema
+      if (orientDatabase.getVertexType(vertexSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientDatabase)
+        val oVertexType = schemaWriter.createVertexSchema(vertexSchema)
+      }
       val exportVertexFrame = new VertexFrameWriter(vertexFrameRdd, dbConfigurations)
       val verticesCount = exportVertexFrame.exportVertexFrame(arguments.batchSize)
-      (vertexFrameRdd.vertexWrapper.schema.label, verticesCount)
+      (vertexSchema.label, verticesCount)
     })
     metadata.toMap
   }
@@ -92,13 +98,19 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
   def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Long] = {
 
+    val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val edgeFrames = graphMeta.edgeFrames.map(_.toReference)
     val metadata = edgeFrames.map(frame => {
       val sparkFrame: SparkEdgeFrame = frame
       val edgeFrameRdd = sparkFrame.rdd
+      val edgeSchema = edgeFrameRdd.edge.schema
+      if (orientDatabase.getEdgeType(edgeSchema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientDatabase)
+        val edgeType = schemaWriter.createEdgeSchema(edgeSchema)
+      }
       val exportEdgeFrame = new EdgeFrameWriter(edgeFrameRdd, dbConfigurations)
       val edgesCount = exportEdgeFrame.exportEdgeFrame(arguments.batchSize)
-      (edgeFrameRdd.edge.schema.label, edgesCount)
+      (edgeSchema.label, edgesCount)
     })
     metadata.toMap
   }

@@ -54,7 +54,6 @@ class VertexWriterTest extends WordSpec with Matchers with TestingSparkContextWo
       val keyIdx = orientMemoryGraph.getIndexedKeys(classOf[BlueprintsVertex])
       assert(propName == "Bob")
       assert(vidProp == 1)
-      keyIdx should contain("_vid")
     }
 
     "findOrCreate gets a vertex" in {

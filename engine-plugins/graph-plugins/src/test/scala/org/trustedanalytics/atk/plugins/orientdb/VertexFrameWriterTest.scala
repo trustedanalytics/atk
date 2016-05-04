@@ -46,6 +46,10 @@ class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec wi
         new GenericRow(Array(4L, "l1", "Lucy", "LAX", "PDX", 450)))
       val batchSize = 4
       val rowRdd = sparkContext.parallelize(vertices)
+      if (orientFileGraph.getVertexType(schema.label) == null) {
+        val schemaWriter = new SchemaWriter(orientFileGraph)
+        val oVertexType = schemaWriter.createVertexSchema(schema)
+      }
       val vertexFrameRdd = new VertexFrameRdd(schema, rowRdd)
       val vertexFrameWriter = new VertexFrameWriter(vertexFrameRdd, dbConfig)
       //Tested method
