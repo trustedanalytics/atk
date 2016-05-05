@@ -114,8 +114,7 @@ for the distributed calculation of weighted vertex degrees.""",
   returns = """Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a column storing the annotated degree for the vertex
 in a user specified property.
-Call dictionary_name['label'] to get the handle to frame whose vertex type
-is label.""")
+Call dictionary_name['vertex type'] to get the handle to frame of that 'vertex type' """)
 class AnnotateDegreesPlugin extends SparkCommandPlugin[AnnotateDegreesArgs, AnnotateDegreesReturn] {
 
   override def name: String = "graph/annotate_degrees"
