@@ -44,7 +44,7 @@ class httpSession(object):
     def __init__(self, scheme):
         self.scheme = scheme
         self.session = requests.Session()
-        self.session.mount('%s://' % self.scheme, Tlsv1HttpAdapter(HTTPAdapter(max_retries=10)))
+        self.session.mount('%s://' % self.scheme, Tlsv1HttpAdapter(max_retries=30))
     def __enter__(self):
         return self.session
     def __exit__(self, exc_type, exc_val, exc_tb):
