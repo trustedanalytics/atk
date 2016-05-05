@@ -87,5 +87,6 @@ class FrameRddTest extends TestingSparkContextWordSpec with Matchers {
       ids(0) should be(startVal)
 
     }
+
   }
 }

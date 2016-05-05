@@ -76,9 +76,9 @@ class MultivariateCoxTrainPlugin extends SparkCommandPlugin[MultivariateCoxTrain
 
 object MultivariateCoxTrainPlugin {
   /**
-   * Initializing the LinearRegression model given the train arguments
+   * Initializing the Cox model given the train arguments
    * @param arguments Arguments passed for training the LinearRegression model
-   * @return Initialized LinearRegression model with training arguments
+   * @return Initialized Cox model with training arguments
    */
   def initializeCoxModel(arguments: MultivariateCoxTrainArgs): Cox = {
     val cox = new Cox()

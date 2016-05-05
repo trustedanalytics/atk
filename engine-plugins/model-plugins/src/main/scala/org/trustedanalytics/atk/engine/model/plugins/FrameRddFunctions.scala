@@ -92,8 +92,8 @@ class FrameRddFunctions(self: FrameRdd) {
    */
   def toCoxDataFrame(featureColumnNames: List[String], timeColumn: String, censorColumn: String): DataFrame = {
     val rdd: RDD[(org.apache.spark.mllib.linalg.Vector, Double, Double)] = self.mapRows(row => {
-      val features = row.values(featureColumnNames).map(value => DataTypes.toDouble(value))
-      (new DenseVector(features.toArray), DataTypes.toDouble(row.value(timeColumn)), DataTypes.toDouble(row.value(censorColumn)))
+      val features = row.valuesAsDoubleArray(featureColumnNames)
+      (new DenseVector(features), DataTypes.toDouble(row.value(timeColumn)), DataTypes.toDouble(row.value(censorColumn)))
     })
     val rowRdd: RDD[Row] = rdd.map(entry => new GenericRow(Array[Any](entry._1, entry._2, entry._3)))
     val schema = StructType(Seq(StructField("features", new VectorUDT, true), StructField("time", DoubleType, true), StructField("censor", DoubleType, true)))

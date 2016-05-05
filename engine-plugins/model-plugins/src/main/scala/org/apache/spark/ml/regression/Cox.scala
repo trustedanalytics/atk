@@ -119,111 +119,27 @@ class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
    * Extract [[featuresCol]], [[labelCol]] and [[censorCol]] from input dataset,
    * and put it in an RDD with strong types.
    */
-  protected[ml] def extractCoxPoints(dataset: DataFrame, currentBeta: BDV[Double]): RDD[CoxPointWithCumulativeSumAndBetaX] = {
-    val coxRdd = dataset.select($(featuresCol), $(labelCol), $(censorCol)).map {
+  protected[ml] def extractSortedCoxPointRdd(dataFrame: DataFrame): RDD[CoxPoint] = {
+    val rdd = dataFrame.select($(featuresCol), $(labelCol), $(censorCol)).map {
       case Row(features: Vector, time: Double, censor: Double) =>
         CoxPoint(features, time, censor)
     }
-    val sortedData = coxRdd.sortBy(_.time, false)
-    val sc = sortedData.sparkContext
-    val riskSetRdd = riskSet(sortedData, currentBeta)
-    val rRdd = riskSetRdd.map(x => x._1)
-    val cumulativeSum = computePartitionSum(rRdd)
-    val broadCastCumulativeSum = sc.broadcast(cumulativeSum)
-    val finalRisk = computeFinalR(riskSetRdd, broadCastCumulativeSum)
-    val updatedCoxPoint = sortedData.zip(finalRisk).map { case (a, (nR, dR)) => CoxPointWithCumulativeSumAndBetaX(a.features, a.time, a.censor, nR, dR) }
-    updatedCoxPoint
-  }
-
-  def computePartitionSum(rdd: RDD[Double]): scala.collection.Map[Int, Double] = {
-    var map = rdd.mapPartitionsWithIndex {
-      case (index, partition) => {
-        val y = (index + 1, partition.sum)
-        Iterator(y)
-      }
-    }.collectAsMap()
-    map += (0 -> 0d)
-    map
-  }
-
-  def riskSet(sortedData: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double])] = {
-    val X = sortedData.mapPartitionsWithIndex {
-      case (i, iter) =>
-        var sumR: Double = 0.0
-
-        val featureBuf = new ArrayBuffer[(Double, BDV[Double])]()
-        while (iter.hasNext) {
-          val xj: BDV[Double] = new BDV(iter.next().features.toArray)
-          val r = math.exp(currentBeta.dot(xj))
-
-          sumR += r
-
-          xj :*= r
-          val sumTuple = (sumR, xj)
-          featureBuf += sumTuple
-        }
-        featureBuf.iterator
-    }
-    X
-  }
-
-  def computeFinalR(riskSetRdd: RDD[(Double, BDV[Double])], broadcast: Broadcast[Map[Int, Double]]): RDD[(Double, BDV[Double])] = {
-    riskSetRdd.mapPartitionsWithIndex {
-      case (i, iter) =>
-        val prevSum = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))
-        val featureBuf = new ArrayBuffer[(Double, BDV[Double])]()
-        while (iter.hasNext) {
-          val (sumR, xjR) = iter.next()
-          val updatedSum = sumR + prevSum
-          val sumTuple = (updatedSum, xjR)
-
-          featureBuf += sumTuple
-        }
-        featureBuf.iterator
-    }
-
+    rdd.sortBy(_.time, false)
   }
 
   override def fit(dataSet: DataFrame): CoxModel = {
     //validateAndTransformSchema(dataSet.schema, fitting = true)
     val numFeatures = dataSet.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
 
-    // Computing the mean of the observations
-    val instanceRdd: RDD[Instance] = dataSet.select(col($(featuresCol))).map {
-      case Row(features: Vector) =>
-        Instance(0d, 1d, features)
-    }
-
-    val instanceRddArray = instanceRdd.collect()
-
-    val meanSummarizer = {
-      val seqOp = (c: MultivariateOnlineSummarizer,
-        instance: Instance) =>
-        {
-          c.add(instance.features)
-          c
-        }
-
-      val combOp = (c1: MultivariateOnlineSummarizer,
-        c2: MultivariateOnlineSummarizer) =>
-        {
-          (c1.merge(c2))
-          c1
-        }
-
-      instanceRdd.treeAggregate(new MultivariateOnlineSummarizer)(seqOp, combOp)
-    }
-
-    val meanVector = meanSummarizer.mean
-
+    val meanVector = computeFeatureMean(dataSet)
     import breeze.linalg._
     import breeze.numerics._
-    val initialBetas = DenseVector.zeros[Double](numFeatures)
-    val instances = extractCoxPoints(dataSet, initialBetas)
-    val handlePersistence = dataSet.rdd.getStorageLevel == StorageLevel.NONE
-    if (handlePersistence) instances.persist(StorageLevel.MEMORY_AND_DISK)
+    val coxPointRdd = extractSortedCoxPointRdd(dataSet)
 
-    val costFun = new CoxCostFun(instances)
+    val handlePersistence = dataSet.rdd.getStorageLevel == StorageLevel.NONE
+
+    if (handlePersistence) coxPointRdd.persist(StorageLevel.MEMORY_AND_DISK)
+    val costFun = new CoxCostFun(coxPointRdd)
     val optimizer = new BreezeLBFGS[BDV[Double]]($(maxIter), 10, $(tol))
 
     /*
@@ -251,11 +167,39 @@ class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
       state.x.toArray.clone()
     }
 
-    if (handlePersistence) instances.unpersist()
+    if (handlePersistence) coxPointRdd.unpersist()
 
-    val coefficients = Vectors.dense(parameters.slice(2, parameters.length))
+    val coefficients = Vectors.dense(parameters)
     val model = new CoxModel(uid, coefficients, meanVector)
     copyValues(model.setParent(this))
+  }
+
+  def computeFeatureMean(dataSet: DataFrame): org.apache.spark.mllib.linalg.Vector = {
+    // Computing the mean of the observations
+    val instanceRdd: RDD[Instance] = dataSet.select(col($(featuresCol))).map {
+      case Row(features: Vector) =>
+        Instance(0d, 1d, features)
+    }
+
+    val meanSummarizer = {
+      val seqOp = (c: MultivariateOnlineSummarizer,
+        instance: Instance) =>
+        {
+          c.add(instance.features)
+          c
+        }
+
+      val combOp = (c1: MultivariateOnlineSummarizer,
+        c2: MultivariateOnlineSummarizer) =>
+        {
+          (c1.merge(c2))
+          c1
+        }
+
+      instanceRdd.treeAggregate(new MultivariateOnlineSummarizer)(seqOp, combOp)
+    }
+
+    meanSummarizer.mean
   }
 
   override def transformSchema(schema: StructType): StructType = {
@@ -361,16 +305,15 @@ private class CoxAggregator(parameters: BDV[Double])
   private var totalCnt: Long = 0L
   private var lossSum = 0.0
   private var gradientBetaSum = BDV.zeros[Double](beta.length)
-  private var gradientLogSigmaSum = 0.0
+  //private var gradientLogSigmaSum = 0.0
 
   def count: Long = totalCnt
 
   def loss: Double = if (totalCnt == 0) 1.0 else lossSum / totalCnt
 
   // Here we optimize loss function over beta and log(sigma)
-  //TODO: Check with Soila
-  def gradient: BDV[Double] = BDV.vertcat(BDV(Array(gradientLogSigmaSum / totalCnt.toDouble)),
-    gradientBetaSum / totalCnt.toDouble)
+
+  def gradient: BDV[Double] = if (totalCnt == 0) gradientBetaSum else gradientBetaSum :/ totalCnt.toDouble
 
   /**
    * Add a new training data to this CoxAggregator, and update the loss and gradient
@@ -382,12 +325,13 @@ private class CoxAggregator(parameters: BDV[Double])
     val epsilon = math.log(data.cumulativeSum)
 
     val betaX: Double = beta.dot(data.features.toBreeze)
+
     lossSum += (betaX - epsilon) * data.censor
 
-    data.betaDotX :*= 1 / data.cumulativeSum
+    val rhs: BDV[Double] = if (data.cumulativeSum == 0) BDV(0d) else data.cumulativeSum2 :/ data.cumulativeSum
 
-    val temp = data.features.toBreeze - data.betaDotX
-    gradientBetaSum += temp :* data.censor
+    val diff = data.features.toBreeze - rhs
+    gradientBetaSum += diff :* data.censor
     totalCnt += 1
     this
   }
@@ -401,12 +345,10 @@ private class CoxAggregator(parameters: BDV[Double])
    * @return This Coxggregator object.
    */
   def merge(other: CoxAggregator): this.type = {
-    if (totalCnt != 0) {
-      totalCnt += other.totalCnt
-      lossSum += other.lossSum
+    totalCnt += other.totalCnt
+    lossSum += other.lossSum
 
-      gradientBetaSum += other.gradientBetaSum
-    }
+    gradientBetaSum += other.gradientBetaSum
     this
   }
 }
@@ -416,12 +358,13 @@ private class CoxAggregator(parameters: BDV[Double])
  * It returns the loss and gradient at a particular point (parameters).
  * It's used in Breeze's convex optimization routines.
  */
-private class CoxCostFun(sortedData: RDD[CoxPointWithCumulativeSumAndBetaX])
-    extends DiffFunction[BDV[Double]] {
+private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) extends DiffFunction[BDV[Double]] {
 
   override def calculate(currentBeta: BDV[Double]): (Double, BDV[Double]) = {
 
-    val coxAggregator = sortedData.treeAggregate(new CoxAggregator(currentBeta))(
+    val coxPointWithCumSumAndBetaX = extractCoxPointsWithMetaData(coxPointRdd, currentBeta)
+
+    val coxAggregator = coxPointWithCumSumAndBetaX.treeAggregate(new CoxAggregator(currentBeta))(
       seqOp = (c, v) => (c, v) match {
         case (aggregator, instance) => aggregator.add(instance)
       },
@@ -430,8 +373,101 @@ private class CoxCostFun(sortedData: RDD[CoxPointWithCumulativeSumAndBetaX])
       })
 
     (coxAggregator.loss, coxAggregator.gradient)
+
   }
 
+  protected[ml] def extractCoxPointsWithMetaData(coxPointRdd: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[CoxPointWithCumulativeSumAndBetaX] = {
+
+    val sc = coxPointRdd.sparkContext
+    val riskSetRdd = riskSet(coxPointRdd, currentBeta)
+
+    val rRdd = riskSetRdd.map(x => (x._1, x._4))
+
+    val cumulativeSum = computePartitionSum(rRdd, currentBeta.length)
+    val broadCastCumulativeSum = sc.broadcast(cumulativeSum)
+    val finalRisk = computeFinalR(riskSetRdd, broadCastCumulativeSum)
+
+    //val updatedCoxPoint = coxPointRdd.zip(finalRisk).map { case (a, (nR, dR)) => CoxPointWithCumulativeSumAndBetaX(a.features, a.time, a.censor, nR, dR) }
+    val updatedCoxPoint = coxPointRdd.zip(finalRisk).map { case (a, (sumR, xR, r, sumS)) => CoxPointWithCumulativeSumAndBetaX(a.features, a.time, a.censor, sumR, xR, r, sumS) }
+
+    updatedCoxPoint
+  }
+  //
+  //  //Anahita rename partition to iter
+  //  def computePartitionSum(rdd: RDD[(Double,BDV[Double])]): scala.collection.Map[Int, (Double,BDV[Double])] = {
+  //    var map = rdd.mapPartitionsWithIndex {
+  //      case (index, partition) => {
+  //        val y = (index + 1, partition.sum)
+  //        Iterator(y)
+  //      }
+  //    }.collectAsMap()
+  //    map += (0 -> 0d)
+  //    map
+  //  }
+  import breeze.linalg.DenseVector
+
+  def computePartitionSum(rdd: RDD[(Double, BDV[Double])], length: Int): scala.collection.Map[Int, (Double, BDV[Double])] = {
+    var sumR = 0.0
+    var sumS = DenseVector.zeros[Double](length)
+
+    var map = rdd.mapPartitionsWithIndex {
+      case (index, iterator) => {
+        while (iterator.hasNext) {
+          val (r, s) = iterator.next()
+          sumR += r
+          sumS :+= s
+
+        }
+        val sumTuple = (index + 1, (sumR, sumS))
+        Array(sumTuple).toIterator
+      }
+    }.collectAsMap()
+    map += (0 -> (0d, BDV.zeros[Double](length)))
+    map
+  }
+
+  // Returns sumR, x*e^Beta.X, e^Beta.X, sum(x*e^BetaX)
+  def riskSet(sortedData: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double], Double, BDV[Double])] = {
+    import breeze.linalg.DenseVector
+    val X = sortedData.mapPartitionsWithIndex {
+      case (i, iter) =>
+        var sumR: Double = 0.0
+        var sumXEBetaX = DenseVector.zeros[Double](currentBeta.length)
+        val featureBuf = new ArrayBuffer[(Double, BDV[Double], Double, BDV[Double])]()
+        while (iter.hasNext) {
+          val xj: BDV[Double] = new BDV(iter.next().features.toArray)
+          val r = math.exp(currentBeta.dot(xj))
+
+          sumR += r
+          xj :*= r
+          val temp = sumXEBetaX + xj
+          sumXEBetaX :+= xj
+          val sumTuple = (sumR, xj, r, temp)
+          featureBuf += sumTuple
+        }
+        featureBuf.iterator
+    }
+    X
+  }
+
+  def computeFinalR(riskSetRdd: RDD[(Double, BDV[Double], Double, BDV[Double])], broadcast: Broadcast[Map[Int, (Double, BDV[Double])]]): RDD[(Double, BDV[Double], Double, BDV[Double])] = {
+    riskSetRdd.mapPartitionsWithIndex {
+      case (i, iter) =>
+        val prevSumR = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))._1
+        val prevSumS = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))._2
+        val featureBuf = new ArrayBuffer[(Double, BDV[Double], Double, BDV[Double])]()
+        while (iter.hasNext) {
+          val (sumR, xjR, r, sumS) = iter.next()
+          val updatedSum = sumR + prevSumR
+          //val updatedSumS = sumS + prevSumS
+          val sumTuple = (updatedSum, xjR, r, sumS)
+
+          featureBuf += sumTuple
+        }
+        featureBuf.iterator
+    }
+
+  }
 }
 
 /**
@@ -446,13 +482,4 @@ private[regression] case class CoxPoint(features: Vector, time: Double, censor: 
   require(censor == 1.0 || censor == 0.0, "censor of class CoxPoint must be 1.0 or 0.0")
 }
 
-/**
- * Class that represents the (features, tume, censor, cummulativeSum and betaDotX)
- * @param features List of features for this data point.
- * @param time Label for this data point.
- * @param censor Indicator of the event has occurred or not. If the value is 1, it means
- *                 the event has occurred i.e. uncensored; otherwise censored.
- * @param cumulativeSum
- * @param betaDotX
- */
-case class CoxPointWithCumulativeSumAndBetaX(features: Vector, time: Double, censor: Double, cumulativeSum: Double, betaDotX: BDV[Double])
+case class CoxPointWithCumulativeSumAndBetaX(features: Vector, time: Double, censor: Double, cumulativeSum: Double, xDotEBetaX: BDV[Double], eBetaX: Double, cumulativeSum2: BDV[Double])
