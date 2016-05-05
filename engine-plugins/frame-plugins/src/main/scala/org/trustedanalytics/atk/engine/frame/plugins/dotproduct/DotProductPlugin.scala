@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.domain.schema.{ Schema, DataTypes }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.apache.spark.frame.FrameRdd
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -67,8 +67,6 @@ class DotProductPlugin extends SparkCommandPlugin[DotProductArgs, UnitReturn] {
    * (this configuration is used to prevent multiple progress bars in Python client)
    */
   override def numberOfJobs(arguments: DotProductArgs)(implicit invocation: Invocation) = 3
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Calculates the dot product for each row in a frame using values from two equal-length sequences of columns.

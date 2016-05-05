@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.TallyPercentArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ArgDoc, Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
@@ -46,8 +46,6 @@ class TallyPercentPlugin extends SparkCommandPlugin[TallyPercentArgs, UnitReturn
    * e.g Python client via code generation.
    */
   override def name: String = "frame/tally_percent"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Computes a cumulative percent count

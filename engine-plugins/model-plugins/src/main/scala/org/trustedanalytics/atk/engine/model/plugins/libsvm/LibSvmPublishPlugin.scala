@@ -58,8 +58,6 @@ class LibSvmPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata
    */
   override def name: String = "model:libsvm/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

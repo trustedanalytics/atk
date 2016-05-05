@@ -45,8 +45,6 @@ class LinearRegressionPredictPlugin extends SparkCommandPlugin[LinearRegressionP
    */
   override def name: String = "model:linear_regression/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   /**
    * Predict values for a frame using a trained Linear Regression model
    * @param invocation information about the user and the circumstances at the time of the call,

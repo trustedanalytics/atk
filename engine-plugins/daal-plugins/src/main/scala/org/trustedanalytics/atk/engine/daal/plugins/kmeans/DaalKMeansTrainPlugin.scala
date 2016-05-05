@@ -46,7 +46,7 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
    */
   override def name: String = "model:daal_k_means/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Run DAAL k-means clustering algorithm on the training frame and create a Model for it.

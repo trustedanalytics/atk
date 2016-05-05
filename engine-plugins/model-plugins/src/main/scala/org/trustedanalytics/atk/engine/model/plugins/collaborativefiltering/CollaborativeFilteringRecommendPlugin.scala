@@ -42,8 +42,6 @@ class CollaborativeFilteringRecommendPlugin
    */
   override def name: String = "model:collaborative_filtering/recommend"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   override def execute(arguments: CollaborativeFilteringRecommendArgs)(implicit invocation: Invocation): CollaborativeFilteringRecommendReturn = {
 
     val model: Model = arguments.model

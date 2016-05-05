@@ -42,7 +42,7 @@ class DaalLinearRegressionTrainPlugin extends SparkCommandPlugin[DaalLinearRegre
    */
   override def name: String = "model:daal_linear_regression/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Run DAAL's Linear Regression with QR decomposition on the training frame and create a Model for it.
