@@ -25,7 +25,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 import ssl
-
+import trustedanalytics.rest.config as config
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.poolmanager import PoolManager
 
@@ -44,7 +44,7 @@ class httpSession(object):
     def __init__(self, scheme):
         self.scheme = scheme
         self.session = requests.Session()
-        self.session.mount('%s://' % self.scheme, Tlsv1HttpAdapter(max_retries=30))
+        self.session.mount('%s://' % self.scheme, Tlsv1HttpAdapter(max_retries=config.requests_defaults.max_retries))
     def __enter__(self):
         return self.session
     def __exit__(self, exc_type, exc_val, exc_tb):
