@@ -22,10 +22,10 @@ import org.trustedanalytics.atk.domain.schema.GraphSchema
 import org.trustedanalytics.atk.engine.frame.RowWrapper
 
 /**
- * Exports edge to OrientEdge
+ * Exports edge to OrientDB edge
  *
- * @param orientGraph an instance of Orient graph database
- * @param edge atk edge to be exported to OrientEdge
+ * @param orientGraph an instance of OrientDB graph database
+ * @param edge atk edge to be exported to OrientDB edge
  */
 class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
 
@@ -36,7 +36,7 @@ class EdgeWriter(orientGraph: OrientGraphNoTx, edge: Edge) {
    *
    * @param srcVertex  is a blueprintsVertex as a source
    * @param destVertex is a blueprintsVertex as a destination
-   * @return OrientEdge
+   * @return OrientDB edge
    */
   def addEdge(srcVertex: BlueprintsVertex, destVertex: BlueprintsVertex): OrientEdge = {
 

@@ -19,11 +19,12 @@ import org.apache.spark.atk.graph.VertexFrameRdd
 
 /**
  * Exports VertexFrameRdd to OrientDB
- * @param vertexFrameRdd vertices frame to be exported to Orient
+ * @param vertexFrameRdd vertices frame to be exported to OrientDB
  * @param dbConfigurations OrientDB configurations
  */
 
 class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+
   /**
    * Method to export vertex frame to OrientDb
    * @param batchSize the number of vertices to be committed

@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 object DbConfigReader extends Serializable {
 
   /**
-   * A method to extract the configurations from a file
+   * A method to extract the database configurations from a file
    *
    * @param dbName database name
    * @return database configurations

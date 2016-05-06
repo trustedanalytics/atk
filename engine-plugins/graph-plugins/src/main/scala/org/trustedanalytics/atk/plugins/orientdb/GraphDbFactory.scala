@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.plugins.orientdb
 import com.orientechnologies.orient.client.remote.OServerAdmin
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory, OrientGraph }
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
 import scala.util.{ Failure, Success, Try }
 
 /**
@@ -33,7 +33,7 @@ object GraphDbFactory {
    * Method to create/connect to OrientDB graph
    *
    * @param dbConfigurations OrientDB configurations
-   * @return a transactional OrientDB graph database instance
+   * @return a non transactional OrientDB graph database instance
    */
   def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
@@ -61,7 +61,7 @@ object GraphDbFactory {
    * Method for creating Orient graph database
    *
    * @param dbConfigurations OrientDB configurations
-   * @return a transactional Orient graph database instance
+   * @return a non transactional Orient graph database instance
    */
   def createGraphDb(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
 
@@ -81,7 +81,7 @@ object GraphDbFactory {
    * Method for opening Orient graph database
    *
    * @param dbConfigurations OrientDB configurations
-   * @return a transactional Orient graph database instance
+   * @return a non transactional Orient graph database instance
    */
   private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfigurations): OrientGraphNoTx = {
     Try {

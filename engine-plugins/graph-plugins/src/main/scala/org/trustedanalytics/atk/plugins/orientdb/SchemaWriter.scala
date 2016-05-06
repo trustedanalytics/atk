@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import com.tinkerpop.blueprints.{ Parameter, Vertex => BlueprintsVertex }
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdgeType, OrientVertexType, OrientGraph }
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdgeType, OrientVertexType }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema, VertexSchema }
 
 /**
@@ -35,15 +35,23 @@ class SchemaWriter(orientGraph: OrientGraphNoTx) {
   def createVertexSchema(vertexSchema: VertexSchema): OrientVertexType = {
     val vColumns = vertexSchema.columns
     val className: String = vertexSchema.label
-    val orientVertexType = orientGraph.createVertexType(className)
-    vColumns.foreach(col => {
-      if (col.name != GraphSchema.labelProperty) {
-        val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
-        orientVertexType.createProperty(col.name, orientColumnDataType)
+    try {
+      val orientVertexType = orientGraph.createVertexType(className)
+      vColumns.foreach(col => {
+        if (col.name != GraphSchema.labelProperty) {
+          val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
+          orientVertexType.createProperty(col.name, orientColumnDataType)
+        }
+      })
+      orientGraph.createKeyIndex(GraphSchema.vidProperty, classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
+      orientVertexType
+    }
+    catch {
+      case e: Exception => {
+        orientGraph.rollback()
+        throw new RuntimeException(s"Unable to create the vertex schema: ${e.getMessage}")
       }
-    })
-    orientGraph.createKeyIndex(GraphSchema.vidProperty, classOf[BlueprintsVertex], new Parameter("class", className), new Parameter("type", "UNIQUE"))
-    orientVertexType
+    }
   }
 
   /**
@@ -54,15 +62,23 @@ class SchemaWriter(orientGraph: OrientGraphNoTx) {
    */
   def createEdgeSchema(edgeSchema: EdgeSchema): OrientEdgeType = {
     val className: String = edgeSchema.label
-    val oEdgeType = orientGraph.createEdgeType(className)
-    val eColumns = edgeSchema.columns
-    eColumns.foreach(col => {
-      if (col.name != GraphSchema.labelProperty) {
-        val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
-        oEdgeType.createProperty(col.name, orientColumnDataType)
+    try {
+      val oEdgeType = orientGraph.createEdgeType(className)
+      val eColumns = edgeSchema.columns
+      eColumns.foreach(col => {
+        if (col.name != GraphSchema.labelProperty) {
+          val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(col.dataType)
+          oEdgeType.createProperty(col.name, orientColumnDataType)
+        }
+      })
+      oEdgeType
+    }
+    catch {
+      case e: Exception => {
+        orientGraph.rollback()
+        throw new RuntimeException(s"Unable to create the edge schema: ${e.getMessage}")
       }
-    })
-    oEdgeType
+    }
   }
 
 }

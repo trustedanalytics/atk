@@ -15,7 +15,7 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraph }
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 import org.apache.spark.atk.graph.Vertex
 import org.trustedanalytics.atk.domain.schema.GraphSchema

@@ -19,15 +19,15 @@ import org.apache.spark.atk.graph.EdgeFrameRdd
 
 /**
  * Exports EdgeFrameRdd to OrientDB edges
- * @param edgeFrameRdd the edges frame to be exported to Orient
+ * @param edgeFrameRdd the edges frame to be exported to OrientDB
  * @param dbConfigurations OrientDB configurations
  */
 class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
 
   /**
-   * Method to export edge frame to OrientDb
+   * Method to export edge frame to OrientDB
    *
-   * @param batchSize the number of edges to be commited
+   * @param batchSize the number of edges to be committed
    * @return the number of exported edges
    */
   def exportEdgeFrame(batchSize: Int): Long = {
