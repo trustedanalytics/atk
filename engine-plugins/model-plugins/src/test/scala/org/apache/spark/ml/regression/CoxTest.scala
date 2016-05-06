@@ -18,6 +18,7 @@ package org.apache.spark.ml.regression
 
 import org.apache.spark.mllib.linalg.DenseVector
 import org.scalatest.Matchers
+import org.trustedanalytics.atk.testutils.MatcherUtils._
 import org.trustedanalytics.atk.testutils.TestingSparkContextFlatSpec
 import breeze.linalg.{ DenseVector => BDV, * }
 
@@ -34,7 +35,7 @@ class CoxTest extends TestingSparkContextFlatSpec with Matchers {
     new CoxPoint(new DenseVector(Array(31.4)), 6d, 1d))
 
   "extractCoxPointsWithMetaData in CoxCostFun" should "compute correct Rdd" in {
-    val coxRdd = sparkContext.parallelize(sortedCoxPointArray)
+    val coxRdd = sparkContext.parallelize(sortedCoxPointArray, 2)
 
     val currentBeta = BDV(0d)
     val coxCostFun = new CoxCostFun(coxRdd)
@@ -55,7 +56,7 @@ class CoxTest extends TestingSparkContextFlatSpec with Matchers {
   }
 
   "calculate in CoxCostFun" should "compute loss and gradient" in {
-    val coxRdd = sparkContext.parallelize(sortedCoxPointArray)
+    val coxRdd = sparkContext.parallelize(sortedCoxPointArray, 2)
 
     val currentBeta = BDV(0d)
     val estimatedLoss = -1.4224252755646078
@@ -64,8 +65,8 @@ class CoxTest extends TestingSparkContextFlatSpec with Matchers {
     val coxCostFun = new CoxCostFun(coxRdd)
     val (loss, gradient) = coxCostFun.calculate(currentBeta)
 
-    loss shouldBe estimatedLoss
-    gradient shouldBe estimatedGradient
+    loss shouldBe estimatedLoss +- 1e-6
+    gradient.toArray should equalWithTolerance(estimatedGradient.toArray)
 
   }
 }
