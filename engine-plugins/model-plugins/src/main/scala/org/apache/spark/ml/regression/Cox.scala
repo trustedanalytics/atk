@@ -17,8 +17,8 @@
 
 package org.apache.spark.ml.regression
 
-import breeze.linalg.{DenseVector => BDV}
-import breeze.optimize.{CachedDiffFunction, DiffFunction, LBFGS => BreezeLBFGS}
+import breeze.linalg.{ DenseVector => BDV }
+import breeze.optimize.{ CachedDiffFunction, DiffFunction, LBFGS => BreezeLBFGS }
 import org.apache.hadoop.fs.Path
 import org.apache.spark._
 import org.apache.spark.annotation.Since
@@ -27,21 +27,21 @@ import org.apache.spark.ml.feature.Instance
 import org.apache.spark.ml.param._
 import org.apache.spark.ml.param.shared._
 import org.apache.spark.ml.util._
-import org.apache.spark.ml.{Estimator, Model}
+import org.apache.spark.ml.{ Estimator, Model }
 import org.apache.spark.mllib.linalg._
 import org.apache.spark.mllib.stat.MultivariateOnlineSummarizer
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.types.{DoubleType, StructType}
-import org.apache.spark.sql.{DataFrame, Row}
+import org.apache.spark.sql.types.{ DoubleType, StructType }
+import org.apache.spark.sql.{ DataFrame, Row }
 import org.apache.spark.storage.StorageLevel
 
 import scala.collection.mutable.ArrayBuffer
-import scala.collection.{Map, mutable}
+import scala.collection.{ Map, mutable }
 
 private[regression] trait CoxParams extends Params
-with HasFeaturesCol with HasLabelCol with HasPredictionCol with HasMaxIter
-with HasTol with HasFitIntercept with Logging {
+    with HasFeaturesCol with HasLabelCol with HasPredictionCol with HasMaxIter
+    with HasTol with HasFitIntercept with Logging {
 
   /**
    * Param for censor column name.
@@ -63,8 +63,8 @@ with HasTol with HasFitIntercept with Logging {
    * @return output schema
    */
   protected def validateAndTransformSchema(
-                                            schema: StructType,
-                                            fitting: Boolean): StructType = {
+    schema: StructType,
+    fitting: Boolean): StructType = {
     SchemaUtils.checkColumnType(schema, $(featuresCol), new VectorUDT)
     if (fitting) {
       SchemaUtils.checkColumnType(schema, $(censorCol), DoubleType)
@@ -75,9 +75,9 @@ with HasTol with HasFitIntercept with Logging {
   }
 }
 
-class Cox @Since("1.6.0")(@Since("1.6.0") override val uid: String)
-  extends Estimator[CoxModel] with CoxParams
-  with DefaultParamsWritable with Logging {
+class Cox @Since("1.6.0") (@Since("1.6.0") override val uid: String)
+    extends Estimator[CoxModel] with CoxParams
+    with DefaultParamsWritable with Logging {
 
   def this() = this(Identifiable.randomUID("coxSurvReg"))
 
@@ -179,13 +179,13 @@ class Cox @Since("1.6.0")(@Since("1.6.0") override val uid: String)
 
     val meanSummarizer = {
       val seqOp = (c: MultivariateOnlineSummarizer,
-                   instance: Instance) => {
+        instance: Instance) => {
         c.add(instance.features)
         c
       }
 
       val combOp = (c1: MultivariateOnlineSummarizer,
-                    c2: MultivariateOnlineSummarizer) => {
+        c2: MultivariateOnlineSummarizer) => {
         (c1.merge(c2))
         c1
       }
@@ -214,7 +214,7 @@ object Cox extends DefaultParamsReadable[Cox] {
 class CoxModel(override val uid: String,
                val beta: Vector,
                val meanVector: Vector)
-  extends Model[CoxModel] with CoxParams with MLWritable {
+    extends Model[CoxModel] with CoxParams with MLWritable {
 
   /** @group setParam */
   def setFeaturesCol(value: String): this.type = set(featuresCol, value)
@@ -292,7 +292,7 @@ object CoxModel extends MLReadable[CoxModel] {
 }
 
 private class CoxAggregator(parameters: BDV[Double])
-  extends Serializable {
+    extends Serializable {
 
   // beta is the intercept and regression coefficients to the covariates
   private val beta = parameters
