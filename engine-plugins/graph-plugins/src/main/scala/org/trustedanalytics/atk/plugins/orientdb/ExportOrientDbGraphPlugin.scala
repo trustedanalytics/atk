@@ -25,7 +25,6 @@ import spray.json._
 /** Json conversion for arguments and return value case classes */
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 object ExportOrientDbGraphJsonFormat {
-  import DomainJsonProtocol._
   implicit val exportOrientDbGraphArgsFormat = jsonFormat3(ExportOrientDbGraphArgs)
   implicit val StatisticsFormat = jsonFormat2(Statistics)
   implicit val exportOrientDbGraphReturnFormat = jsonFormat3(ExportOrientDbGraphReturn)
@@ -35,20 +34,19 @@ import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
 @PluginDoc(oneLine = "Exports graph to OrientDB",
   extended =
     """Creates OrientDB database using the parameters provided in the configurations file.
-      |
-      |OrientDB database will be located according to the given host name and port number,
-      |and with the given user credentials after checking the user authorization to create or access OrientDB database.
-      |
-      |Then exports the graph edges and vertices schemas,
-      |exports the vertices and finally, the edges by looking up the source vertex
-      |and destination vertex using the vertex IDs and creates the edge.""".stripMargin,
+
+      OrientDB database will be located according to the given host name and port number,
+      and with the given user credentials after checking the user authorization to create or access OrientDB database.
+
+      Then exports the graph edges and vertices schemas,
+      exports the vertices and finally, the edges by looking up the source vertex
+      and destination vertex using the vertex IDs and creates the edge.""",
   returns =
     """the location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
-      |for vertices dictionary:
-      |       it returns the vertex class name, the number of the exported vertices and the number of vertices failed to be exported.
-      |for the edges dictionary:
-      |       it returns the edge class name, the number of the exported edges and the number of edges that failed to be exported.
-    """.stripMargin)
+      for vertices dictionary:
+             it returns the vertex class name, the number of the exported vertices and the number of vertices failed to be exported.
+      for the edges dictionary:
+             it returns the edge class name, the number of the exported edges and the number of edges that failed to be exported.""")
 class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphArgs, ExportOrientDbGraphReturn] {
 
   override def name: String = "graph:/export_to_orientdb"

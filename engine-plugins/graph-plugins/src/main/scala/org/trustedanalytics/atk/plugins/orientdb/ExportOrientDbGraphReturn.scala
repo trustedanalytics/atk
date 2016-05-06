@@ -27,10 +27,10 @@ import scala.collection.immutable.Map
 
 case class ExportOrientDbGraphReturn(@ArgDoc(
                                        """a dictionary of vertex classname,
-    |and the corresponding statistics of exported vertices.""".stripMargin) exportedVertices: Map[String, Statistics],
+    |and the corresponding statistics of exported vertices.""") exportedVertices: Map[String, Statistics],
                                      @ArgDoc(
                                        """a dictionary of edge classname,
-                                         | and the corresponding statistics of exported edges.""".stripMargin) exportedEdges: Map[String, Statistics],
+                                         |and the corresponding statistics of exported edges.""") exportedEdges: Map[String, Statistics],
                                      @ArgDoc("""The URI to the OrientDB graph .""") dbUri: String)
 
 /**
@@ -38,5 +38,4 @@ case class ExportOrientDbGraphReturn(@ArgDoc(
  * @param exportedCount the number of the exported elements
  * @param failuresCount the number of elements failed to be exported.
  */
-case class Statistics(@ArgDoc("""the number of the exported elements.""") exportedCount: Long,
-                      @ArgDoc("""the number of elements failed to be exported.""") failuresCount: Long)
+case class Statistics(exportedCount: Long, failuresCount: Long)
