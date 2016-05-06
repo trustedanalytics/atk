@@ -51,8 +51,6 @@ class SVMWithSGDPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMeta
    */
   override def name: String = "model:svm/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

@@ -45,8 +45,6 @@ class CollaborativeFilteringScorePlugin
    */
   override def name: String = "model:collaborative_filtering/score"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   override def execute(arguments: CollaborativeFilteringScoreArgs)(implicit invocation: Invocation): DoubleValue = {
 
     val model: Model = arguments.model

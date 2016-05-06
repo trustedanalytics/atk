@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.CumulativeSumArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
@@ -48,8 +48,6 @@ class CumulativeSumPlugin extends SparkCommandPlugin[CumulativeSumArgs, UnitRetu
    * e.g Python client via code generation.
    */
   override def name: String = "frame/cumulative_sum"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Compute a cumulative sum

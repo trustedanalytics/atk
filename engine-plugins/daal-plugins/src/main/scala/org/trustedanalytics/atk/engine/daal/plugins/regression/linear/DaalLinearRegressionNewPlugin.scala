@@ -55,7 +55,7 @@ class DaalLinearRegressionNewPlugin extends CommandPlugin[GenericNewModelArgs, M
    */
   override def name: String = "model:daal_linear_regression/new"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     DaalUtils.validateDaalLibraries(EngineConfig.daalDynamicLibraries)

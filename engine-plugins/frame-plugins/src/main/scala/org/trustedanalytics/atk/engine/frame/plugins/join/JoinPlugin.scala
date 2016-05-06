@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.frame.FrameReference
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, FrameSchema, Schema }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.EngineConfig
 import org.trustedanalytics.atk.engine.frame._
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
@@ -50,8 +50,6 @@ class JoinPlugin extends SparkCommandPlugin[JoinArgs, FrameReference] {
    * e.g Python client via code generation.
    */
   override def name: String = "frame:/join"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def numberOfJobs(arguments: JoinArgs)(implicit invocation: Invocation): Int = 2
 
