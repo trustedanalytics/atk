@@ -36,6 +36,6 @@ case class ExportOrientDbGraphReturn(@ArgDoc(
 /**
  * returns statistics for the exported graph elements
  * @param exportedCount the number of the exported elements
- * @param failuresCount the number of elements failed to be exported.
+ * @param failureCount the number of elements failed to be exported.
  */
-case class Statistics(exportedCount: Long, failuresCount: Long)
+case class Statistics(exportedCount: Long, failureCount: Long)

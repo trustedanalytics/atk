@@ -35,14 +35,12 @@ import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
   extended =
     """Creates OrientDB database using the parameters provided in the configurations file.
 
-      OrientDB database will be located according to the given host name and port number,
+      OrientDB database will be created in the given host name and port number,
       and with the given user credentials after checking the user authorization to create or access OrientDB database.
 
-      Then exports the graph edges and vertices schemas,
-      exports the vertices and finally, the edges by looking up the source vertex
-      and destination vertex using the vertex IDs and creates the edge.""",
+      Then exports the graph edges and vertices to the OrientDB database. Each vertex or edge type in the graph corresponds to a vertex or edge class in OrientDB.""",
   returns =
-    """the location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
+    """The location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
       for vertices dictionary:
              it returns the vertex class name, the number of the exported vertices and the number of vertices failed to be exported.
       for the edges dictionary:
