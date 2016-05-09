@@ -104,7 +104,7 @@ of the weights of the edges leaving the vertex.
 
 The toolkit provides this routine for the distributed calculation of weighted
 vertex degrees.""",
-returns = """Dictionary containing the vertex type as the key and the corresponding
+  returns = """Dictionary containing the vertex type as the key and the corresponding
 vertex's frame with a column storing the annotated weighted degree for the vertex
 in a user specified property.
 Call dictionary_name['vertex type'] to get the handle to frame of that 'vertex type' """)

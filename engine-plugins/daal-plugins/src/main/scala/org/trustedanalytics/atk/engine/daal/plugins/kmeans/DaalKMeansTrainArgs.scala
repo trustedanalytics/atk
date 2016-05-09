@@ -55,5 +55,5 @@ index of cluster each observation belongs to.""") labelColumn: String = "predict
    *
    * @return centroid initialization method
    */
-  def getInitMethod: InitMethod =  InitMethod.randomDense
+  def getInitMethod: InitMethod = InitMethod.randomDense
 }
