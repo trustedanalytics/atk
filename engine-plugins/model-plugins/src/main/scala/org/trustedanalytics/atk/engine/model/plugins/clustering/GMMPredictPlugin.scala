@@ -53,8 +53,6 @@ class GMMPredictPlugin extends SparkCommandPlugin[GMMPredictArgs, FrameReference
    */
   override def name: String = "model:gmm/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

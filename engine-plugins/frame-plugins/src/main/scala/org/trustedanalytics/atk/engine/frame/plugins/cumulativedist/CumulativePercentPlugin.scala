@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.cumulativedist
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.CumulativePercentArgs
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.frame.FrameRdd
@@ -53,8 +53,6 @@ class CumulativePercentPlugin extends SparkCommandPlugin[CumulativePercentArgs, 
    * e.g Python client via code generation.
    */
   override def name: String = "frame/cumulative_percent"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Compute a cumulative percent sum.

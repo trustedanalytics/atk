@@ -39,6 +39,7 @@ class upload_defaults:
 class requests_defaults:
     ping_timeout_secs = 10
     request_timeout_secs = None  # None means no timeout
+    max_retries = 5
 
 
 class polling_defaults:

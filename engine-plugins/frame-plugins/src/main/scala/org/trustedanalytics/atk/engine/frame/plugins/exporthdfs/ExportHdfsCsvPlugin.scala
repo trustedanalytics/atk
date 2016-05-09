@@ -41,7 +41,8 @@ import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonPr
  * Export a frame to csv file
  */
 @PluginDoc(oneLine = "Write current frame to HDFS in csv format.",
-  extended = "Export the frame to a file in csv format as a Hadoop file.")
+  extended = "Export the frame to a file in csv format as a Hadoop file.",
+  returns = """The URI of the created file""")
 class ExportHdfsCsvPlugin extends SparkCommandPlugin[ExportHdfsCsvArgs, ExportMetadata] {
 
   /**
