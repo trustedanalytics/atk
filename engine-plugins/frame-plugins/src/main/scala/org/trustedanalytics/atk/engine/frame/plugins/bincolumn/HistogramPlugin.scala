@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.bincolumn
 import org.trustedanalytics.atk.domain.command.CommandDoc
 import org.trustedanalytics.atk.domain.frame._
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema, Schema }
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.apache.spark.rdd.RDD
@@ -57,8 +57,6 @@ density : array of float
 class HistogramPlugin extends SparkCommandPlugin[HistogramArgs, Histogram] {
 
   override def name: String = "frame/histogram"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def numberOfJobs(arguments: HistogramArgs)(implicit invocation: Invocation): Int = arguments.binType match {
     case Some("equaldepth") => 8

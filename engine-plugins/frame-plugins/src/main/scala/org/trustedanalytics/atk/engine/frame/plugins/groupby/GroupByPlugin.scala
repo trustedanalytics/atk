@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.groupby
 
 import org.trustedanalytics.atk.domain.frame.{ GroupByArgs, FrameReference }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 
@@ -41,8 +41,6 @@ class GroupByPlugin extends SparkCommandPlugin[GroupByArgs, FrameReference] {
    * e.g Python client via code generation.
    */
   override def name: String = "frame/group_by"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Create a Summarized Frame with Aggregations (Avg, Count, Max, Min, Mean, Sum, Stdev, ...)

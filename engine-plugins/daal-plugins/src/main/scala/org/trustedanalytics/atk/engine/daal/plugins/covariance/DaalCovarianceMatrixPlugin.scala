@@ -22,7 +22,7 @@ import org.trustedanalytics.atk.domain.frame.{ FrameReference, FrameEntity, Fram
 import org.trustedanalytics.atk.domain.schema.DataTypes.vector
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Schema }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 import com.intel.daal.algorithms.covariance.ResultId
 
 // Implicits needed for JSON conversion
@@ -47,6 +47,8 @@ class DaalCovarianceMatrixPlugin extends SparkCommandPlugin[DaalCovarianceMatrix
    * The name of the command
    */
   override def name: String = "frame/daal_covariance_matrix"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Calculate covariance matrix for the specified columns

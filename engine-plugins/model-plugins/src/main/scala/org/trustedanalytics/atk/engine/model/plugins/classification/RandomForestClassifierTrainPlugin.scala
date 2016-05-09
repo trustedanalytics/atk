@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.PluginDocAnnotation
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
 import org.trustedanalytics.atk.engine.model.plugins.ModelPluginImplicits._
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, ApiMaturityTag, Invocation, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation, SparkCommandPlugin }
 import org.trustedanalytics.atk.scoring.models.RandomForestClassifierData
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
@@ -60,8 +60,6 @@ class RandomForestClassifierTrainPlugin extends SparkCommandPlugin[RandomForestC
    * e.g Python client via code generation.
    */
   override def name: String = "model:random_forest_classifier/train"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

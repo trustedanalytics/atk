@@ -50,8 +50,6 @@ class NaiveBayesPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMeta
    */
   override def name: String = "model:naive_bayes/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   /**
    * User documentation exposed in Python.
    *

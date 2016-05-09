@@ -50,8 +50,6 @@ class RandomForestRegressorPublishPlugin extends CommandPlugin[ModelPublishArgs,
    */
   override def name: String = "model:random_forest_regressor/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

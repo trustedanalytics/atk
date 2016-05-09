@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.frame.plugins
 
 import org.trustedanalytics.atk.UnitReturn
 import org.trustedanalytics.atk.domain.frame.SortByColumnsArgs
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, ArgDoc, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
@@ -39,8 +39,6 @@ class SortByColumnsPlugin extends SparkCommandPlugin[SortByColumnsArgs, UnitRetu
    * e.g Python client via code generation.
    */
   override def name: String = "frame/sort"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Number of Spark jobs that get created by running this command
