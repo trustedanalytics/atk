@@ -52,7 +52,6 @@ object DistributedLabeledTable {
     val first: Vector = vectorRdd.first()
 
     val numCols = first.size
-
     val numFeatureCols = splitIndex
     val numLabelCols = numCols - splitIndex
 
@@ -80,9 +79,9 @@ object DistributedLabeledTable {
         labelBuf.clear()
         context.dispose()
         Array(indexedTable).toIterator
-    }
+    }.filter(_.features.numRows > 0)
 
-    val totalRows = tableRdd.map(table => table.features.numRows).sum().toLong
+    val totalRows = tableRdd.map(table => table.features.numRows.toLong).sum().toLong
     DistributedLabeledTable(tableRdd, totalRows)
   }
 
