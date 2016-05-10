@@ -45,7 +45,7 @@ class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainAr
    */
   override def name: String = "model:daal_naive_bayes/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Run Intel DAAL NaiveBayes() on the training frame and create a Model for it.

@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.engine.daal.plugins.classification.naivebayes
 
 import com.intel.daal.algorithms.ModelSerializer
-import com.intel.daal.algorithms.classifier.training.{ InputId, TrainingDistributedInputId, TrainingResultId }
+import com.intel.daal.algorithms.classifier.training.{ PartialResultId, InputId, TrainingDistributedInputId, TrainingResultId }
 import com.intel.daal.algorithms.multinomial_naive_bayes.Model
 import com.intel.daal.algorithms.multinomial_naive_bayes.training._
 import com.intel.daal.services.DaalContext
@@ -143,12 +143,6 @@ case class DaalNaiveBayesTrainAlgorithm(frameRdd: FrameRdd,
    * @return Serialized model
    */
   private def serializeTrainedModel(trainedModel: Model): List[Byte] = {
-    val serializedModel = Try(ModelSerializer.serializeNaiveBayesModel(trainedModel).toList) match {
-      case Success(sModel) => sModel
-      case Failure(ex) => {
-        throw new scala.RuntimeException(s"Could not serialize model : ${ex.getMessage}")
-      }
-    }
-    serializedModel
+    ModelSerializer.serializeNaiveBayesModel(trainedModel).toList
   }
 }

@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.classification.naivebayes
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -52,6 +52,8 @@ class DaalNaiveBayesNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelRe
    * e.g Python client via code generation.
    */
   override def name: String = "model:daal_naive_bayes/new"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_naive_bayes")))

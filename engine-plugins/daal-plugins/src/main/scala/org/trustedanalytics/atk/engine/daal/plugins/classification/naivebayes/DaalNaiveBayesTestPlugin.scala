@@ -56,7 +56,7 @@ class DaalNaiveBayesTestPlugin extends SparkCommandPlugin[DaalNaiveBayesTestArgs
    */
   override def name: String = "model:daal_naive_bayes/test"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame
