@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import com.intel.daal.algorithms.kmeans.init._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ IndexedNumericTable, DistributedNumericTable }
 
@@ -37,12 +38,11 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
    * @return Numeric table with initial cluster centroids
    */
   def initializeCentroids(): IndexedNumericTable = {
-    val context = new DaalContext()
-    val partsRdd = computePartialResults()
-    val results = mergePartialResults(context, partsRdd)
-    val centroids = IndexedNumericTable(0L, results.get(InitResultId.centroids))
-    context.dispose()
-    centroids
+    withDaalContext { context =>
+      val partsRdd = computePartialResults()
+      val results = mergePartialResults(context, partsRdd)
+      IndexedNumericTable(0L, results.get(InitResultId.centroids))
+    }.elseError("Could not initialize centroids")
   }
 
   /**
@@ -53,14 +53,14 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
   override def computePartialResults(): RDD[InitPartialResult] = {
     val totalRows = featureTable.numRows
     featureTable.rdd.map { table =>
-      val context = new DaalContext
-      val initLocal = new InitDistributedStep1Local(context, classOf[java.lang.Double],
-        args.getInitMethod, args.k.toLong, totalRows, table.index)
-      initLocal.input.set(InitInputId.data, table.getUnpackedTable(context))
-      val partialResult = initLocal.compute
-      partialResult.pack()
-      context.dispose()
-      partialResult
+      withDaalContext { context =>
+        val initLocal = new InitDistributedStep1Local(context, classOf[java.lang.Double],
+          args.getInitMethod, args.k.toLong, totalRows, table.index)
+        initLocal.input.set(InitInputId.data, table.getUnpackedTable(context))
+        val partialResult = initLocal.compute
+        partialResult.pack()
+        partialResult
+      }.elseError("Could not compute partial results for centroid initialization")
     }
   }
 

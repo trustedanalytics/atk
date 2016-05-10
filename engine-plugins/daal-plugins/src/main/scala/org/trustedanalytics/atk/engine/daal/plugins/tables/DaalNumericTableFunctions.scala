@@ -17,15 +17,18 @@
 package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
-
-import com.intel.daal.data_management.data.NumericTable
-import com.intel.daal.services.DaalContext
+import java.util.Arrays
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
+import org.apache.spark.mllib.linalg.{ Matrices, Matrix }
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-
+import com.intel.daal.data_management.data.NumericTable
+import com.intel.daal.services.DaalContext
 import scala.collection.mutable.ListBuffer
 
 class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
+  private val numRows = self.getNumberOfRows.toInt
+  private val numCols = self.getNumberOfColumns.toInt
 
   /**
    * Convert DAAL numeric table into an array of array of doubles
@@ -35,25 +38,38 @@ class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
    * @return Array of array of doubles
    */
   def toArrayOfDoubleArray(): Array[Array[Double]] = {
-    val context = new DaalContext()
-
-    self.unpack(context)
-    val numRows = self.getNumberOfRows.toInt
-    val numCols = self.getNumberOfColumns.toInt
-    val buffer = DoubleBuffer.allocate(numRows * numCols)
-    val doubleBuffer = self.getBlockOfRows(0, numRows, buffer)
-
     val arrays = new Array[Array[Double]](numRows)
-    for (i <- 0 until numRows) {
-      val rowArray = new Array[Double](numCols)
-      for (j <- 0 until numCols) {
-        rowArray(j) = doubleBuffer.get(i * numCols + j)
+
+    withDaalContext { context =>
+      self.unpack(context)
+      val buffer = DoubleBuffer.allocate(numRows * numCols)
+      val doubleBuffer = self.getBlockOfRows(0, numRows, buffer)
+
+      for (i <- 0 until numRows) {
+        val rowArray = new Array[Double](numCols)
+        for (j <- 0 until numCols) {
+          rowArray(j) = doubleBuffer.get(i * numCols + j)
+        }
+        arrays(i) = rowArray
       }
-      arrays(i) = rowArray
-    }
-    context.dispose()
+    }.elseError("Could not convert numeric table to array")
 
     arrays
+  }
+
+  /**
+   * Convert DAAL numeric table into a column-major dense matrix.
+   *
+   * Transposes the rows and columns so that each column in the numeric table
+   * is converted into an array of doubles
+   *
+   * @param k Subset of columns to return, Defaults to number of columns in table.
+   *
+   * @return Column-major dense matrix
+   */
+  def toMatrix(k: Int = numCols): Matrix = {
+    require(k > 0 && k <= numCols, s"k must be smaller than the number of observation columns: ${numCols}")
+    Matrices.dense(numRows, k, Arrays.copyOfRange(toDoubleArray(), 0, numRows * k))
   }
 
   /**
@@ -74,9 +90,6 @@ class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
    * @return Iterator of rows
    */
   def toRowIter(context: DaalContext): Iterator[Row] = {
-    val numRows = self.getNumberOfRows.toInt
-    val numCols = self.getNumberOfColumns.toInt
-
     val buffer = DoubleBuffer.allocate(numRows * numCols)
     val doubleBuffer = self.getBlockOfRows(0, numRows, buffer)
     val rowBuffer = new ListBuffer[Row]()

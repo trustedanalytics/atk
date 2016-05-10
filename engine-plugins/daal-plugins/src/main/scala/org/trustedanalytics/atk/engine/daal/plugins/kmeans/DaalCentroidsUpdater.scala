@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 import com.intel.daal.algorithms.kmeans._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
@@ -39,12 +40,11 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
    * @return Updated centroids
    */
   def updateCentroids(): IndexedNumericTable = {
-    val context = new DaalContext
-    val partialResults = computePartialResults()
-    val results = mergePartialResults(context, partialResults)
-    val updatedCentroids = IndexedNumericTable(0.toLong, results.get(ResultId.centroids))
-    context.dispose()
-    updatedCentroids
+    withDaalContext { context =>
+      val partialResults = computePartialResults()
+      val results = mergePartialResults(context, partialResults)
+      IndexedNumericTable(0.toLong, results.get(ResultId.centroids))
+    }.elseError("Could not update cluster centroids")
   }
 
   /**
@@ -54,18 +54,16 @@ case class DaalCentroidsUpdater(featureTable: DistributedNumericTable,
    */
   override def computePartialResults(): RDD[PartialResult] = {
     featureTable.rdd.map { table =>
-      val context = new DaalContext
+      withDaalContext { context =>
+        val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
+        local.input.set(InputId.data, table.getUnpackedTable(context))
+        local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
+        local.parameter.setAssignFlag(false)
 
-      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
-      local.input.set(InputId.data, table.getUnpackedTable(context))
-      local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
-      local.parameter.setAssignFlag(false)
-
-      val partialResult = local.compute
-      partialResult.pack()
-
-      context.dispose()
-      partialResult
+        val partialResult = local.compute
+        partialResult.pack()
+        partialResult
+      }.elseError("Could not compute partial results for updating cluster centroids")
     }
   }
 
