@@ -156,7 +156,7 @@ class KCliquePercolationPlugin extends SparkCommandPlugin[KCliqueArgs, KCliqueRe
    */
   override def name: String = "graph:/kclique_percolation"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * The number of jobs varies with the number of supersteps required to find the connected components

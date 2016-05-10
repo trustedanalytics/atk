@@ -51,7 +51,7 @@ class ARXPublishPlugin extends CommandPlugin[ModelPublishArgs, ExportMetadata] {
    */
   override def name: String = "model:arx/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * User documentation exposed in Python.

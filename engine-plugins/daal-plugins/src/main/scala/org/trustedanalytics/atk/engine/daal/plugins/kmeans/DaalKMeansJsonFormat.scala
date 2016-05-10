@@ -20,7 +20,7 @@ import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
 /** JSON conversion for arguments and return value case classes */
 object DaalKMeansJsonFormat {
-  implicit val daalKMeansArgsFormat = jsonFormat8(DaalKMeansTrainArgs)
+  implicit val daalKMeansArgsFormat = jsonFormat7(DaalKMeansTrainArgs)
   implicit val daalKmeansReturnArgsFormat = jsonFormat2(DaalKMeansTrainReturn)
   implicit val daalKmeansModelData = jsonFormat5(DaalKMeansModelData)
   implicit val daalKmeansPredictArgsFormat = jsonFormat4(DaalKMeansPredictArgs)

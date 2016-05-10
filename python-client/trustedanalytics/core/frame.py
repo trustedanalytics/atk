@@ -764,7 +764,6 @@ class _BaseFrame(CommandLoadable):
         return self._backend.get_error_frame(self)
 
     @api
-    @beta
     @arg('group_by_columns', list, 'Column name or list of column names')
     @arg('*aggregation_arguments', dict, "Aggregation function based on entire row, and/or dictionaries (one or more) of { column name str : aggregation function(s) }.")
     @returns('Frame', 'A new frame with the results of the group_by')
@@ -885,7 +884,6 @@ class _BaseFrame(CommandLoadable):
         return self._backend.group_by(self, group_by_columns, aggregation_arguments)
 
     @api
-    @alpha
     @arg('*column_inputs', 'str | tuple(str, dict)', 'Comma-separated column names to summarize or tuple containing column name '
                                                      'and dictionary of optional parameters. '
                                                      'Optional parameters (see below for details): '
@@ -1069,7 +1067,6 @@ class _BaseFrame(CommandLoadable):
         return self._backend.inspect(self, n, offset, columns, format_settings=format_settings)
 
     @api
-    @beta
     @arg('right', 'Frame', "Another frame to join with")
     @arg('left_on', list, "Names of the columns in the left frame used to match up the two frames.")
     @arg('right_on', list, "Names of the columns in the right frame used to match up the two frames. "
@@ -1266,7 +1263,6 @@ class _BaseFrame(CommandLoadable):
         return self._backend.join(self, right, left_on, right_on, how, name)
 
     @api
-    @beta
     @arg('columns', 'str | list of str | list of tuples', "Either a column name, a list of column names, or a "
          "list of tuples where each tuple is a name and an ascending bool value.")
     @arg('ascending', bool, "True for ascending, False for descending.")

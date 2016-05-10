@@ -38,8 +38,6 @@ class LinearRegressionTestPlugin extends SparkCommandPlugin[LinearRegressionTest
    */
   override def name: String = "model:linear_regression/test"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   /**
    * Run Spark ML's LinearRegression() on the training frame and create a Model for it.
    *

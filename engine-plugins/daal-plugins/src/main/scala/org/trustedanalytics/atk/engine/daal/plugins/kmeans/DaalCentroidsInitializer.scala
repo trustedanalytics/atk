@@ -74,7 +74,7 @@ case class DaalCentroidsInitializer(featureTable: DistributedNumericTable,
   override def mergePartialResults(context: DaalContext, partsRdd: RDD[InitPartialResult]): InitResult = {
     val partsCollection = partsRdd.collect()
     val initMaster: InitDistributedStep2Master = new InitDistributedStep2Master(context,
-      classOf[java.lang.Double], args.getInitMethod, args.k)
+      classOf[java.lang.Double], args.getInitMethod, args.k.toLong)
 
     for (value <- partsCollection) {
       value.unpack(context)

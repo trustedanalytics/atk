@@ -62,8 +62,6 @@ class NaiveBayesTrainPlugin extends SparkCommandPlugin[NaiveBayesTrainArgs, Unit
    */
   override def name: String = "model:naive_bayes/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)

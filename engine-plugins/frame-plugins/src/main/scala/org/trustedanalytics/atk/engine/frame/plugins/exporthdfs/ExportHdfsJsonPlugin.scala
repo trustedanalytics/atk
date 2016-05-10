@@ -38,7 +38,8 @@ import org.trustedanalytics.atk.domain.datacatalog.DataCatalogRestResponseJsonPr
  * Export a frame to json file
  */
 @PluginDoc(oneLine = "Write current frame to HDFS in JSON format.",
-  extended = "Export the frame to a file in JSON format as a Hadoop file.")
+  extended = "Export the frame to a file in JSON format as a Hadoop file.",
+  returns = """The URI of the created file""")
 class ExportHdfsJsonPlugin extends SparkCommandPlugin[ExportHdfsJsonArgs, ExportMetadata] {
 
   /**
