@@ -16,9 +16,7 @@
 package org.trustedanalytics.atk.testutils
 
 import java.io.File
-import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory, OrientGraph }
-import org.scalatest.mock.MockitoSugar
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory}
 
 /**
  * setup for testing export to OrientDB plugin functions

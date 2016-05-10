@@ -39,4 +39,17 @@ object OrientDbTypeConverter {
     case _ => throw new IllegalArgumentException(s"Unable to convert $dataType to OrientDB data type")
   }
 
+  /**
+    * converts OrientDB data type to data type
+    * @param orientDbType OrientDB data type
+    * @return ATK data type
+    */
+  def convertOrientDbtoDataType(orientDbType: OType): DataType = orientDbType match {
+    case OType.LONG => DataTypes.toDataType("int64")
+    case OType.INTEGER => DataTypes.toDataType("int32")
+    case OType.FLOAT => DataTypes.toDataType("float32")
+    case OType.STRING => DataTypes.toDataType("string")
+    case _ => throw new IllegalArgumentException(s"Unable to convert $orientDbType to DataType")
+  }
+
 }
