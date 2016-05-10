@@ -1159,26 +1159,6 @@ export MAVEN_OPTS="-Xmx512m -XX:PermSize=256m"
                 <artifactId>orientdb-core</artifactId>
                 <version>${dep.orientdb.version}</version>
             </dependency>
-           <!-- <dependency>
-                <groupId>com.orientechnologies</groupId>
-                <artifactId>orientdb-client</artifactId>
-                <version>${dep.orientdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.orientechnologies</groupId>
-                <artifactId>orientdb-enterprise</artifactId>
-                <version>${dep.orientdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.orientechnologies</groupId>
-                <artifactId>orientdb-server</artifactId>
-                <version>${dep.orientdb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.orientechnologies</groupId>
-                <artifactId>orientdb-tools</artifactId>
-                <version>${dep.orientdb.version}</version>
-            </dependency>-->
            <dependency>
                 <groupId>com.tinkerpop.blueprints</groupId>
                 <artifactId>blueprints-core</artifactId>
