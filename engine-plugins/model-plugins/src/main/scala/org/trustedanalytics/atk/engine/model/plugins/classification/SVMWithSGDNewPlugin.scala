@@ -57,8 +57,6 @@ class SVMWithSGDNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelRefere
    */
   override def name: String = "model:svm/new"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:svm")))
   }

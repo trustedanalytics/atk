@@ -10,6 +10,9 @@ To register the plugins with the Analytics Toolkit, update the following configu
 src/main/resources/atk-module.conf
 src/main/resources/atk-plugin.conf
 
+The 3 mentioned plugins are commented out in the default atk-plugin.conf file.
+To enable them, uncomment those lines and rebuild.
+
 Installing plugins:
 
 To add the plugins to your current installation of trusted analytics copy the example-plugins.jar to

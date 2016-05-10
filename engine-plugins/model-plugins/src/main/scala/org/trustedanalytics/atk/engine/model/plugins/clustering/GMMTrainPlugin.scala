@@ -52,8 +52,6 @@ class GMMTrainPlugin extends SparkCommandPlugin[GMMTrainArgs, GMMTrainReturn] {
    */
   override def name: String = "model:gmm/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

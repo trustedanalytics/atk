@@ -45,7 +45,7 @@ class DaalKMeansPredictPlugin extends SparkCommandPlugin[DaalKMeansPredictArgs, 
    */
   override def name: String = "model:daal_k_means/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame

@@ -1,8 +1,11 @@
 Examples
 --------
-Consider Frame *my_frame*:
 
 .. code::
 
-    >>> my_frame.export_to_csv('covarianceresults')
+<skip>
+    >>> frame.export_to_csv('covarianceresults')
+    <progress>
+    "hdfs://hostname/user/user1/covarianceresults"
+</skip>
 

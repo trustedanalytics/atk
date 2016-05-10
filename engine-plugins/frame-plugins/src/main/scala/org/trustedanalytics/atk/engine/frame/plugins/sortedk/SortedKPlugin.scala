@@ -19,7 +19,7 @@ package org.trustedanalytics.atk.engine.frame.plugins.sortedk
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameReference
-import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
 
@@ -65,8 +65,6 @@ class SortedKPlugin extends SparkCommandPlugin[SortedKArgs, FrameReference] {
    * e.g Python client via code generation.
    */
   override def name: String = "frame/sorted_k"
-
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
    * Number of Spark jobs that get created by running this command

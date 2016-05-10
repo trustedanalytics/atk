@@ -53,7 +53,7 @@ class DaalLinearRegressionPublishPlugin extends CommandPlugin[ModelPublishArgs, 
    */
   override def name: String = "model:daal_linear_regression/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame

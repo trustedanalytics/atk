@@ -74,8 +74,6 @@ class NaiveBayesTestPlugin extends SparkCommandPlugin[NaiveBayesTestArgs, Classi
    */
   override def name: String = "model:naive_bayes/test"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
-
   /**
    * Number of Spark jobs that get created by running this command
    * (this configuration is used to prevent multiple progress bars in Python client)
