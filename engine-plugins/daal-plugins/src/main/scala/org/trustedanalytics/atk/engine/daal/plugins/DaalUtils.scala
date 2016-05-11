@@ -58,6 +58,7 @@ object DaalUtils extends Serializable {
 
   /**
    * Interface for DAAL context results
+   * @tparam T Return type for operation on DAAL context
    */
   trait DaalContextResult[T] {
 
