@@ -15,7 +15,7 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraph
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 import org.apache.spark.atk.graph.Vertex
 import org.trustedanalytics.atk.domain.schema.GraphSchema
@@ -26,7 +26,7 @@ import org.trustedanalytics.atk.engine.frame.RowWrapper
  *
  * @param orientGraph an instance of Orient graph database
  */
-class VertexWriter(orientGraph: OrientGraph) {
+class VertexWriter(orientGraph: OrientGraphNoTx) {
 
   require(orientGraph != null, "The Orient graph database instance must not equal null")
 
@@ -40,10 +40,6 @@ class VertexWriter(orientGraph: OrientGraph) {
   def addVertex(vertex: Vertex): BlueprintsVertex = {
 
     val className: String = vertex.schema.label
-    if (orientGraph.getVertexType(className) == null) {
-      val createVertexSchema = new VertexSchemaWriter
-      val oVertexType = createVertexSchema.createVertexSchema(orientGraph, vertex.schema)
-    }
     val orientVertexType: BlueprintsVertex = orientGraph.addVertex(className, null)
     val rowWrapper = new RowWrapper(vertex.schema)
     vertex.schema.columns.foreach(col => {
