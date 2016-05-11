@@ -82,6 +82,15 @@ export POSTGRES_PASS=$PG_PASS
 export POSTGRES_DB=$PG_DB
 export POSTGRES_URL=$PG_URL
 
+#OrientDB
+export ORIENTDB_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.orientdb | .[0].credentials.hostname')
+export ORIENTDB_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.orientdb | .[0].credentials.ports["2424/tcp"]')
+export ORIENTDB_USER=$(echo $VCAP_SERVICES | $jq -c -r '.orientdb | .[0].credentials.username')
+export ORIENTDB_PASS=$(echo $VCAP_SERVICES | $jq -c -r '.orientdb | .[0].credentials.password')
+export ORIENTDB_ROOTPASS=$(echo $VCAP_SERVICES | $jq -c -r '.orientdb | .[0].credentials.password')
+
+
+
 export MYSQL_HOST=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.hostname')
 export MYSQL_PORT=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.port')
 export MYSQL_USER=$(echo $VCAP_SERVICES | $jq -c -r '.mysql56 | .[0].credentials.username')

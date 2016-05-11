@@ -23,7 +23,7 @@ import com.typesafe.config.ConfigFactory
 object DbConfigReader extends Serializable {
 
   /**
-   * A method to extract the configurations from a file
+   * A method to extract the database configurations from a file
    *
    * @param dbName database name
    * @return database configurations
@@ -33,10 +33,11 @@ object DbConfigReader extends Serializable {
 
     val userName = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.username")
     val password = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.password")
+    val rootPassword = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.rootpassword")
     val dbHost = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.host")
     val portNumber = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.port")
     val dbDir = ConfigFactory.load().getString("trustedanalytics.atk.datastore.connection-orientdb.url")
     val dbUri = dbDir + "/" + dbName
-    DbConfigurations(dbUri, userName, password, portNumber, dbHost)
+    DbConfigurations(dbUri, userName, password, portNumber, dbHost, rootPassword)
   }
 }
