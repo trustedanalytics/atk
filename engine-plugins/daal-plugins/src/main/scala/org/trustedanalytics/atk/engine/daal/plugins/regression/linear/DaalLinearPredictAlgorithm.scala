@@ -80,8 +80,7 @@ case class DaalLinearPredictAlgorithm(modelData: DaalLinearRegressionModelData,
                                   testData: IndexedNumericTable): IndexedNumericTable = {
     val predictAlgorithm = new PredictionBatch(context, classOf[java.lang.Double], PredictionMethod.defaultDense)
     val testTable = testData.getUnpackedTable(context)
-
-    require(testTable.getNumberOfColumns > 0 && testTable.getNumberOfRows > 0)
+    println(s"Predicting table ${testData.index} with numRows ${testTable.getNumberOfRows} and numCols ${testTable.getNumberOfColumns}")
     predictAlgorithm.input.set(PredictionInputId.data, testTable)
     predictAlgorithm.input.set(PredictionInputId.model, trainedModel)
 

@@ -55,6 +55,7 @@ object DistributedLabeledTable {
     val numCols = first.size
     val numFeatureCols = splitIndex
     val numLabelCols = numCols - splitIndex
+    val rowSumAccum = vectorRdd.sparkContext.accumulator(0L, "Row Sum Accumulator")
 
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
@@ -70,6 +71,8 @@ object DistributedLabeledTable {
             numRows += 1
           }
 
+          rowSumAccum += numRows
+
           val featureTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
             featureBuf.toArray, numFeatureCols, numRows))
           val labelTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
@@ -80,7 +83,7 @@ object DistributedLabeledTable {
         Array(indexedTable).toIterator
     }.filter(_.features.numRows > 0)
 
-    val totalRows = tableRdd.map(table => table.features.numRows.toLong).sum().toLong
+    val totalRows = rowSumAccum.value
     DistributedLabeledTable(tableRdd, totalRows)
   }
 
