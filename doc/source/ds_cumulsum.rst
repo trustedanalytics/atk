@@ -7,17 +7,17 @@ Cumulative Sum
 Setup
 -----
 
-Establish a connection to the ATK Rest Server
-This handle will be used for the remaineder of the script
+Establish a connection to the ATK REST Server
+This handle will be used for the remainder of the script
 
-Get your server URL and credentials file from the TAP administrator
+Get the server URL and credentials file from the TAP administrator
 
 .. code::
 
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK
+Set the server, and use the credentials to connect to the ATK REST server
 
 .. code::
 
@@ -29,16 +29,16 @@ Workflow
 --------
 
 
-The general workflow will be build a frame, then run some analytics on the frame.
+The general workflow will build a frame, then run some analytics on the frame.
 
 
 
 Build a Frame
 -------------
 
-Construct a frame to be uploaded, this is done using plain python lists uploaded to the server.
+Construct a frame to be uploaded, this is done using Python lists uploaded to the server.
 The following frame could represent some ordered list (such as customer orders) and a value associated with the order.
-The order is sorted on, and then the order value is accumulated
+The frame is sorted by the order column, and then the order value is accumulated.
 
 Cumulative sum finds the sum up to and including a given order
 
@@ -63,7 +63,7 @@ Build the frame described in in the UploadRows object.
 Operate on the Frame
 --------------------
 
-Sort on order, note this is a side effect based operation.
+Sort the frame by the order columns, note this is a side effect based operation.
 
 .. code::
 

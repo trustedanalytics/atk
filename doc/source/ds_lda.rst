@@ -11,7 +11,7 @@ For example, given a number of documents, LDA can group the texts on similar top
 Setup
 -----
 
-Establish a connection to the ATK Rest Server.
+Establish a connection to the ATK REST Server.
 This handle will be used for the remainder of the script.
 
 Get server URL and credentials file from the TAP administrator.
@@ -20,7 +20,7 @@ Get server URL and credentials file from the TAP administrator.
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK.
+Set the server, and use the credentials to connect to the ATK REST server.
 
 .. code::
    ia.server.uri = atk_server_uri
@@ -76,7 +76,7 @@ Train the Model
 
 This LDA model will be trained using the frame above.
 
-[FIX THIS]Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
+Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
 The final argument is the number of topics to search for.
 
 .. code::

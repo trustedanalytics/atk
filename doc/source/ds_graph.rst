@@ -4,14 +4,14 @@
 Graphs
 ======
 
-        # Graphs are composed of 2 sets, one of vertices, and one of edges that
-        # connect exactly two (possibly not distinct) vertices. The degree
-        # of a vertex is the number of edges attached to it
+Graphs are composed of 2 sets, one of vertices, and one of edges that
+connect exactly two (possibly not distinct) vertices. The degree
+of a vertex is the number of edges attached to it
 
 Setup
 -----
 
-Establish a connection to the ATK Rest Server.
+Establish a connection to the ATK REST Server.
 This handle will be used for the remainder of the script.
 
 Get server URL and credentials file from the TAP administrator.
@@ -21,7 +21,7 @@ Get server URL and credentials file from the TAP administrator.
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK.
+Set the server, and use the credentials to connect to the ATK REST server.
 
 .. code::
 
@@ -31,7 +31,7 @@ Set the server, and use the credentials to connect to the ATK.
 Build a Graph
 -------------
 
-Below we build a frame using a vertexlist and an edgelist.
+The example below shows how to build a frame using a vertexlist and an edgelist.
 
 .. code::
 
@@ -51,7 +51,7 @@ Below we build a frame using a vertexlist and an edgelist.
 
 The graph is a center vertex (vertex20, with four vertices each attached to the center vertex. This is known as a star graph. It can be visualized as a plus sign.
 
-To Create a graph define the vertices, then define the edges.
+To create a graph define the vertices, then define the edges.
 
 .. code::
    graph = ia.Graph()
