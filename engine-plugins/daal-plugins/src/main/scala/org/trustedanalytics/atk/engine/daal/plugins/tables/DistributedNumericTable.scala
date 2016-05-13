@@ -75,7 +75,7 @@ object DistributedNumericTable {
    * @return distributed numeric table
    */
   def createTable(vectorRdd: RDD[Vector]): DistributedNumericTable = {
-
+    val rowSumAccum = vectorRdd.sparkContext.accumulator(0L, "Row Sum Accumulator")
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
         val indexedTable: IndexedNumericTable = withDaalContext { context =>
@@ -90,6 +90,7 @@ object DistributedNumericTable {
             numRows += 1
           }
 
+          rowSumAccum += numRows
           val table = new HomogenNumericTable(context, buf.toArray, numElements / numRows, numRows)
           new IndexedNumericTable(i, table)
         }.elseError("Could not convert numeric table to vector RDD")
@@ -97,7 +98,7 @@ object DistributedNumericTable {
         Array(indexedTable).toIterator
     }.filter(_.numRows > 0)
 
-    val totalRows = tableRdd.map(table => table.numRows).sum().toLong
+    val totalRows = rowSumAccum.value
     DistributedNumericTable(tableRdd, totalRows)
   }
 

@@ -24,44 +24,50 @@
 #include "com_intel_daal_algorithms_ModelSerializer.h"
 
 using namespace daal;
+using namespace daal::services;
 
 /** JNI wrapper for serializing DAAL QR models to byte arrays */
 JNIEXPORT jobject JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cSerializeQrModel
   (JNIEnv *env, jclass thisClass, jlong cModel) {
 
-   services::SharedPtr<data_management::NumericTable> dataTable;
-   services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr = (services::SharedPtr<algorithms::linear_regression::ModelQR>*)cModel;
-
+   //get linear regression QR model
+   services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr =
+    (services::SharedPtr<algorithms::linear_regression::ModelQR>*)cModel;
    algorithms::linear_regression::ModelQR* qrModel = sharedPtr->get();
+
+   //serialize model
    data_management::InputDataArchive *dataArchive = new data_management::InputDataArchive();
    qrModel->serialize(*dataArchive);
-   size_t size = dataArchive->getSizeOfArchive();
-   byte* byteArray = new daal::byte[size];
-   dataArchive->copyArchiveToArray(byteArray, size);
 
-   jobject directBuffer = env->NewDirectByteBuffer(byteArray, size);
-   jobject globalRef = env->NewGlobalRef(directBuffer);
-   delete dataArchive;
-   return globalRef;
+   size_t length = dataArchive->getSizeOfArchive();
+
+   byte* buffer = (byte*)daal_malloc(length);
+   dataArchive->copyArchiveToArray(buffer, length);
+
+   return env->NewDirectByteBuffer(buffer, length);
 }
 
 /** JNI wrapper for deserializing byte arrays to DAAL QR models */
 JNIEXPORT jlong JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cDeserializeQrModel
-  (JNIEnv *env, jclass thisClass, jobject buffer, jlong bufferSize) {
-    jbyte* bufferPtr = (jbyte*)env->GetDirectBufferAddress(buffer);
+  (JNIEnv *env, jclass thisClass, jobject byteBuffer, jlong bufferSize) {
+    jbyte* buffer = (jbyte*)env->GetDirectBufferAddress(byteBuffer);
 
+    //Get linear regression QR model
     algorithms::linear_regression::ModelQR *qrModel = new algorithms::linear_regression::ModelQR();
-    data_management::OutputDataArchive *dataArchive = new data_management::OutputDataArchive((daal::byte*)bufferPtr, bufferSize);
+
+    //deserialize model
+    data_management::OutputDataArchive *dataArchive =
+        new data_management::OutputDataArchive((daal::byte*)buffer, bufferSize);
     qrModel->deserialize(*dataArchive);
 
-    services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr = new services::SharedPtr<algorithms::linear_regression::ModelQR>(qrModel);
+    services::SharedPtr<algorithms::linear_regression::ModelQR> *sharedPtr =
+        new services::SharedPtr<algorithms::linear_regression::ModelQR>(qrModel);
     return (jlong)sharedPtr;
 }
 
 /** JNI wrapper for serializing DAAL QR models to byte arrays */
 JNIEXPORT void JNICALL Java_com_intel_daal_algorithms_ModelSerializer_cFreeByteBuffer
-  (JNIEnv *env, jclass thisClass, jobject buffer) {
-    daal::byte* byteArray = (daal::byte*)env->GetDirectBufferAddress(buffer);
-    env->DeleteGlobalRef(buffer);
-    delete byteArray;
+  (JNIEnv *env, jclass thisClass, jobject byteBuffer) {
+    daal::byte* buffer = (daal::byte*)env->GetDirectBufferAddress(byteBuffer);
+    daal_free(buffer);
 }

@@ -24,6 +24,14 @@ import java.nio.ByteBuffer;
  * Serializer/Deserializer for DAAL models
  */
 public final class ModelSerializer {
+
+    /**
+     * Private constructor for utility class
+     */
+    private ModelSerializer() {
+        //Not called
+    }
+
     static {
         System.loadLibrary("AtkDaalJavaAPI");
     }
@@ -50,7 +58,9 @@ public final class ModelSerializer {
      * @param serializedCObject Serialized model
      * @return Deserialized model
      */
-    public static com.intel.daal.algorithms.linear_regression.Model deserializeQrModel(DaalContext context, byte[] serializedCObject) {
+    public static com.intel.daal.algorithms.linear_regression.Model deserializeQrModel(
+        DaalContext context, byte[] serializedCObject) {
+
         ByteBuffer buffer = ByteBuffer.allocateDirect(serializedCObject.length);
         buffer.put(serializedCObject);
 
@@ -59,9 +69,27 @@ public final class ModelSerializer {
         return qrModel;
     }
 
+    /**
+     * Native method for serializing DAAL linear regression QR model
+     *
+     * @param cModel Pointer to model
+     * @return Serialized model
+     */
     protected static native ByteBuffer cSerializeQrModel(long cModel);
 
+    /**
+     * Native method for deserializing DAAL linear regression QR model
+     *
+     * @param buffer Buffer with serialized model
+     * @param size Buffer size
+     * @return Deserialized model
+     */
     protected static native long cDeserializeQrModel(ByteBuffer buffer, long size);
 
-    private static native void cFreeByteBuffer(ByteBuffer var1);
+    /**
+     *  Native method for freeing byte buffer
+     *
+     * @param byteBuffer Byte buffer
+     */
+    private static native void cFreeByteBuffer(ByteBuffer byteBuffer);
 }
