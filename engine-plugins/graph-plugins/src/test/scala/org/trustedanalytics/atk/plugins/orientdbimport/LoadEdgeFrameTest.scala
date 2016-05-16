@@ -15,27 +15,18 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
-import org.apache.spark.atk.graph.{Vertex, Edge}
+import org.apache.spark.atk.graph.Edge
+import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-import org.scalatest.{Matchers, BeforeAndAfterEach, WordSpec}
-import org.trustedanalytics.atk.domain.schema.DataTypes.string
-import org.trustedanalytics.atk.domain.schema._
+import org.scalatest.{BeforeAndAfterEach, Matchers, WordSpec}
+import org.trustedanalytics.atk.domain.schema.{EdgeSchema, DataTypes, GraphSchema, Column}
 import org.trustedanalytics.atk.plugins.orientdb.{EdgeWriter, VertexWriter}
 import org.trustedanalytics.atk.testutils.TestingOrientDb
 
-class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
+class LoadEdgeFrameTest extends WordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach{
 
   override def beforeEach() {
     setupOrientDbInMemory()
-    val vertex = {
-      val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64),
-        Column(GraphSchema.labelProperty, DataTypes.string),
-        Column("name", DataTypes.string), Column("from", DataTypes.string),
-        Column("to", DataTypes.string), Column("fair", DataTypes.int32))
-      val schema = new VertexSchema(columns, GraphSchema.labelProperty, null)
-      val row = new GenericRow(Array(1L, "l1", "Bob", "PDX", "LAX", 350))
-      Vertex(schema, row)
-    }
     val edge = {
       val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64),
         Column(GraphSchema.srcVidProperty, DataTypes.int64),
@@ -47,7 +38,7 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
       Edge(edgeSchema, edgeRow)
     }
     val addOrientVertex = new VertexWriter(orientMemoryGraph)
-    val srcVertex= addOrientVertex.addVertex(vertex)
+    val srcVertex= addOrientVertex.findOrCreateVertex(1L)
     val destVertex = addOrientVertex.findOrCreateVertex(2L)
     val edgeWriter = new EdgeWriter(orientMemoryGraph,edge)
     edgeWriter.addEdge(srcVertex,destVertex)
@@ -57,24 +48,14 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
     cleanupOrientDbInMemory()
   }
 
-  "Schema reader" should{
-    "import vertex schema"in {
-      val vertexSchemaReader = new SchemaReader(orientMemoryGraph)
-      // call method under test
-      val vertexSchema = vertexSchemaReader.importVertexSchema()
-      //validate the results
-      vertexSchema.columnNames shouldBe List("name","from","to","fair","_vid","_label")
-      assert(vertexSchema.columnDataType("name") == string)
-      assert(vertexSchema.label == "_label")
-    }
+  "Load edge frame" should {
 
-    "import edge schema" in {
-      val schemaReader = new SchemaReader(orientMemoryGraph)
-      // call method under test
-      val edgeSchema = schemaReader.importEdgeSchema()
-      //validate the results
-      edgeSchema.columnNames shouldBe List(GraphSchema.srcVidProperty,"distance",GraphSchema.edgeProperty, GraphSchema.destVidProperty,"_label")
-      assert(edgeSchema.columnDataType(GraphSchema.edgeProperty) == DataTypes.int64)
+    "import OrientDB edge class as a edge frame" in{
+      val loadEdgeFrame = new LoadEdgeFrame(orientMemoryGraph)
+      //call method under test
+      val edgeRowList = loadEdgeFrame.importOrientDbEdgeClass()
+      //validate results
+      edgeRowList(0) shouldBe Row(1L,500,1L, 2L, "label")
     }
   }
 

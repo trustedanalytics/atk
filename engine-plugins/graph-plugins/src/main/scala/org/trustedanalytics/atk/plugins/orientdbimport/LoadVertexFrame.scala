@@ -13,26 +13,28 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.plugins.orientdb
+package org.trustedanalytics.atk.plugins.orientdbimport
 
-import com.orientechnologies.orient.core.metadata.schema.OType
-import org.scalatest.WordSpec
+import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
+import org.apache.spark.sql.Row
+
 import scala.collection.mutable.ArrayBuffer
 
-class OrientDbTypeToDataTypeConverterTest extends WordSpec{
+class LoadVertexFrame(graph: OrientGraphNoTx) {
 
-  "OrientDB type to data type converter" should {
-    "Convert OType to DataType" in {
-      val orientDbType = Array(OType.LONG,OType.STRING,OType.INTEGER)
-      val dataTypeBuffer = new ArrayBuffer[String]()
-      orientDbType.foreach(oType => {
-        //call Method under test
-        val dataType = OrientDbTypeConverter.convertOrientDbtoDataType(oType)
-        dataTypeBuffer += dataType.toString
-      })
-      //validate results
-      assert(dataTypeBuffer ==ArrayBuffer("int64","string","int32"))
+  def importOrientDbVertexClass(): List[Row] = {
+    val schemaReader = new SchemaReader(graph)
+    val vertexSchema = schemaReader.importVertexSchema()
+    val vertexBuffer = new ArrayBuffer[Row]()
+    val vertexCount = graph.countVertices(vertexSchema.label)
+    var vertexId = 1
+    while (vertexCount != 0 && vertexId <= vertexCount) {
+      val vertexReader = new VertexReader(graph, vertexSchema, vertexId)
+      val vertex = vertexReader.importVertex()
+      vertexBuffer += vertex.row
+      vertexId += 1
     }
+    vertexBuffer.toList
   }
 
 }
