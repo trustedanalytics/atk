@@ -4,7 +4,7 @@
 Getting Started
 ===============
 
-To start using the TAP Analytics Toolkit (AT), create a new Jupyter notebook instance and create a set of credentials to connect to AT. The following steps will guide you through this process.   
+To start using ATK on TAP, create a new Jupyter notebook instance and create a set of credentials to connect to ATK Server. The following steps will guide you through this process.   
 
 For a more detailed set of instructions please visit the `Trusted Analytics Platform wiki pages <https://github.com/trustedanalytics/platform-wiki/wiki/Getting-Started-with-AT>`_.   
 Note: The wiki page will be updated to stay in sync with the latest version of AT and TAP and might not always be consistent with AT version 0.7.0   
