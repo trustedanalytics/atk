@@ -36,11 +36,13 @@ class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
       columns.foreach(col => {
         val colName = col.name
         val colDataType = col.dataType
+        // call method under test
         val orientColumnDataType = OrientDbTypeConverter.convertDataTypeToOrientDbType(colDataType)
         val orientTypeName = orientColumnDataType
         orientTypeBuffer += orientTypeName.toString
         dataTypeBuffer += colDataType.toString
       })
+      //validate results
       orientTypeBuffer shouldBe Array("LONG", "STRING", "STRING", "STRING", "STRING", "INTEGER")
 
     }

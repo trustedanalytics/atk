@@ -18,15 +18,14 @@ package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
 
-import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
-import com.intel.daal.services.DaalContext
-import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.apache.spark.sql
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
 import org.trustedanalytics.atk.domain.schema.FrameSchema
 import org.apache.spark.mllib.linalg.{ DenseVector, Vector }
-
+import com.intel.daal.data_management.data.{ HomogenNumericTable, NumericTable }
+import com.intel.daal.services.DaalContext
 import scala.collection.mutable.{ ArrayBuffer, ListBuffer }
 
 /**
@@ -134,21 +133,14 @@ object IndexedNumericTable extends Serializable {
    */
   def createTable(index: Long, matrix: Array[Array[Double]]): IndexedNumericTable = {
     require(matrix != null && matrix.length > 0, "Array must not be null or empty")
-    val context = new DaalContext()
-    var indexedTable: IndexedNumericTable = null
 
-    try {
+    val indexedTable: IndexedNumericTable = withDaalContext { context =>
       val numRows = matrix.length
       val array = matrix.flatten
       val table = new HomogenNumericTable(context, array, array.length / numRows, numRows)
-      indexedTable = IndexedNumericTable(index, table)
-    }
-    catch {
-      case ex: Exception => throw new RuntimeException("Could not create numeric table from matrix", ex)
-    }
-    finally {
-      context.dispose()
-    }
+      IndexedNumericTable(index, table)
+    }.elseError("Could not create numeric table from matrix")
+
     indexedTable
   }
 }

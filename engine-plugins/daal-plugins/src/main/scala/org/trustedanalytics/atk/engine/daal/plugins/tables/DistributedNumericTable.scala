@@ -16,12 +16,12 @@
 package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
-import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.FrameSchema
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils._
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -43,17 +43,9 @@ case class DistributedNumericTable(tableRdd: RDD[IndexedNumericTable],
    */
   def toFrameRdd(schema: FrameSchema): FrameRdd = {
     val rowRdd = tableRdd.flatMap(table => {
-      val context = new DaalContext
-      var rows: Iterator[Row] = null
-      try {
-        rows = table.toRowIter(context, Some(schema))
-      }
-      catch {
-        case ex: Exception => throw new RuntimeException("Could not convert numeric table to frame", ex)
-      }
-      finally {
-        context.dispose()
-      }
+      val rows: Iterator[Row] = withDaalContext { context =>
+        table.toRowIter(context, Some(schema))
+      }.elseError("Could not convert numeric table to frame")
       rows
     })
     new FrameRdd(schema, rowRdd)
@@ -66,17 +58,9 @@ case class DistributedNumericTable(tableRdd: RDD[IndexedNumericTable],
    */
   def toVectorRdd(): RDD[Vector] = {
     tableRdd.flatMap(table => {
-      var vectors: Iterator[Vector] = null
-      val context = new DaalContext
-      try {
-        vectors = table.toVectorIterator(context)
-      }
-      catch {
-        case ex: Exception => throw new RuntimeException("Could not convert numeric table to vector RDD", ex)
-      }
-      finally {
-        context.dispose()
-      }
+      val vectors: Iterator[Vector] = withDaalContext { context =>
+        table.toVectorIterator(context)
+      }.elseError("Could not convert numeric table to vector RDD")
       vectors
     })
   }
@@ -94,13 +78,11 @@ object DistributedNumericTable {
 
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
-        val context = new DaalContext
-        var indexedTable: IndexedNumericTable = null
-
-        try {
+        val indexedTable: IndexedNumericTable = withDaalContext { context =>
           var numRows = 0L
           var numElements = 0L
           val buf = new ArrayBuffer[Double]()
+
           while (iter.hasNext) {
             val vector = iter.next()
             numElements += vector.size
@@ -109,14 +91,9 @@ object DistributedNumericTable {
           }
 
           val table = new HomogenNumericTable(context, buf.toArray, numElements / numRows, numRows)
-          indexedTable = new IndexedNumericTable(i, table)
-        }
-        catch {
-          case ex: Exception => throw new RuntimeException("Could not convert numeric table to vector RDD", ex)
-        }
-        finally {
-          context.dispose()
-        }
+          new IndexedNumericTable(i, table)
+        }.elseError("Could not convert numeric table to vector RDD")
+
         Array(indexedTable).toIterator
     }.filter(_.numRows > 0)
 

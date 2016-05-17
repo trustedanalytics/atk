@@ -19,21 +19,21 @@ import org.apache.spark.atk.graph.VertexFrameRdd
 
 /**
  * Exports VertexFrameRdd to OrientDB
- *
- * @param vertexFrameRdd  vertices frame to be exported to Orient
+ * @param vertexFrameRdd vertices frame to be exported to OrientDB
+ * @param dbConfigurations OrientDB configurations
  */
 
 class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
 
   /**
    * Method to export vertex frame to OrientDb
-   *
    * @param batchSize the number of vertices to be committed
    * @return the number of exported vertices
    */
   def exportVertexFrame(batchSize: Int): Long = {
     val verticesCountRdd = vertexFrameRdd.mapPartitionVertices(iter => {
       var batchCounter = 0L
+
       val orientGraph = GraphDbFactory.graphDbConnector(dbConfigurations)
       try {
         while (iter.hasNext) {
@@ -50,7 +50,7 @@ class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConf
       catch {
         case e: Exception => {
           orientGraph.rollback()
-          throw new RuntimeException("Unable to add edges to OrientDB graph", e)
+          throw new RuntimeException(s"Unable to add vertices to OrientDB graph: ${e.getMessage}")
         }
       }
       finally {

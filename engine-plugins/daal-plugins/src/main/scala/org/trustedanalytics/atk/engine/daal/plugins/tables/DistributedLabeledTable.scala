@@ -17,10 +17,10 @@
 package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
-import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -58,9 +58,7 @@ object DistributedLabeledTable {
 
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
-        val context = new DaalContext
-        var indexedTable: IndexedLabeledTable = null
-        try {
+        val indexedTable: IndexedLabeledTable = withDaalContext { context =>
           val featureBuf = new ArrayBuffer[Double]()
           val labelBuf = new ArrayBuffer[Double]()
           var numRows = 0L
@@ -76,14 +74,8 @@ object DistributedLabeledTable {
             featureBuf.toArray, numFeatureCols, numRows))
           val labelTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
             labelBuf.toArray, numLabelCols, numRows))
-          indexedTable = IndexedLabeledTable(featureTable, labelTable)
-        }
-        catch {
-          case ex: Exception => throw new RuntimeException("Could not create numeric table from Vector RDD", ex)
-        }
-        finally {
-          context.dispose()
-        }
+          IndexedLabeledTable(featureTable, labelTable)
+        }.elseError("Could not create numeric table from Vector RDD")
 
         Array(indexedTable).toIterator
     }.filter(_.features.numRows > 0)

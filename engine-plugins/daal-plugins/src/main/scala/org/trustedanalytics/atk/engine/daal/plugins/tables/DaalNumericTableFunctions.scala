@@ -18,13 +18,12 @@ package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import java.nio.DoubleBuffer
 import java.util.Arrays
-
-import com.intel.daal.data_management.data.NumericTable
-import com.intel.daal.services.DaalContext
-import org.apache.spark.mllib.linalg.{ Matrices, DenseMatrix, Matrix }
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
+import org.apache.spark.mllib.linalg.{ Matrices, Matrix }
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.catalyst.expressions.GenericRow
-
+import com.intel.daal.data_management.data.NumericTable
+import com.intel.daal.services.DaalContext
 import scala.collection.mutable.ListBuffer
 
 class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
@@ -39,10 +38,9 @@ class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
    * @return Array of array of doubles
    */
   def toArrayOfDoubleArray(): Array[Array[Double]] = {
-    val context = new DaalContext()
     val arrays = new Array[Array[Double]](numRows)
 
-    try {
+    withDaalContext { context =>
       self.unpack(context)
       val buffer = DoubleBuffer.allocate(numRows * numCols)
       val doubleBuffer = self.getBlockOfRows(0, numRows, buffer)
@@ -54,13 +52,8 @@ class DaalNumericTableFunctions(self: NumericTable) extends Serializable {
         }
         arrays(i) = rowArray
       }
-    }
-    catch {
-      case ex: Exception => throw new RuntimeException("Could not convert numeric table to array", ex)
-    }
-    finally {
-      context.dispose()
-    }
+    }.elseError("Could not convert numeric table to array")
+
     arrays
   }
 
