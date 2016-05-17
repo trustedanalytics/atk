@@ -16,7 +16,7 @@
 package org.trustedanalytics.atk.testutils
 
 import java.io.File
-import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory}
+import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
 
 /**
  * setup for testing export to OrientDB plugin functions

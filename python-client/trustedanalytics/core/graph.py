@@ -28,6 +28,7 @@ api = get_api_decorator(logger)
 from trustedanalytics.meta.metaprog import CommandInstallable as CommandLoadable
 from trustedanalytics.meta.docstub import doc_stubs_import
 from trustedanalytics.meta.namedobj import name_support
+from trustedanalytics.core.files import OrientDBGraph
 import uuid
 import json
 
@@ -108,9 +109,10 @@ A seamless graph is better suited for bulk :term:`OLAP`-type operations
     _entity_type = 'graph:'
 
     @api
+    @arg('source', 'OrientDBGraph | Graph', "A source of initial data.")
     @arg('name', str, """Name for the new graph.
 Default is None.""")
-    def __init__(self, name=None, _info=None):
+    def __init__(self, source=None, name=None, _info=None):
         """Initialize the graph.
 
     Examples
@@ -431,6 +433,8 @@ Default is None.""")
             self.uri = _info.uri
         else:
             self.uri = self._backend.create(self, name, 'atk/frame', _info)
+        if isinstance(source, OrientDBGraph):
+            self._backend._import_orientdb(self,source)
 
         self._vertices = GraphFrameCollection(self, "vertices", self._get_vertex_frame, self._get_vertex_frames)
         self._edges = GraphFrameCollection(self, "edges", self._get_edge_frame, self._get_edge_frames)

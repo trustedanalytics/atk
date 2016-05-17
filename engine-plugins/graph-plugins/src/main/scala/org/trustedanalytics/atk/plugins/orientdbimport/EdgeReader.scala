@@ -15,54 +15,62 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
-import com.tinkerpop.blueprints.impls.orient.{OrientEdge, OrientGraphNoTx}
+import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
 import com.tinkerpop.blueprints.{ Edge => BlueprintsEdge }
 import org.apache.spark.atk.graph.Edge
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.domain.schema.{GraphSchema, EdgeSchema}
+import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema }
 
-class EdgeReader (graph: OrientGraphNoTx, edgeSchema: EdgeSchema, srcVertexId:Long){
+/**
+ *
+ * @param graph OrientDB graph database
+ * @param edgeSchema ATK edge schema in Parquet graph format
+ * @param srcVertexId Source vertex ID
+ */
+class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema, srcVertexId: Long) {
 
   /**
-    *
-    * @return
-    */
+   * A method imports OrientDB edge from OrientDB database to ATK edge
+   * @return ATK edge
+   */
   def importEdge(): Edge = {
-    try{
+    try {
       val orientEdge = getOrientEdge
       createEdge(orientEdge)
-    }catch{
+    }
+    catch {
       case e: Exception =>
         throw new RuntimeException(s"Unable to read edge with source ID $srcVertexId from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
-    *
-    * @param orientEdge
-    * @return
-    */
+   * A method creates ATK edge
+   * @param orientEdge OrientDB edge
+   * @return ATK edge
+   */
   def createEdge(orientEdge: BlueprintsEdge): Edge = {
 
     val row = edgeSchema.columns.map(col => {
       if (col.name == GraphSchema.labelProperty) {
-       edgeSchema.label
+        edgeSchema.label
 
-      }else{
+      }
+      else {
         val prop: Any = orientEdge.getProperty(col.name)
         prop
       }
     })
-    new Edge(edgeSchema,Row.fromSeq(row.toSeq))
+    new Edge(edgeSchema, Row.fromSeq(row.toSeq))
   }
 
   /**
-    *
-    * @return
-    */
-  def getOrientEdge: BlueprintsEdge  = {
+   * A method gets OrientDB edge from OrientDB database
+   * @return OrientDB edge
+   */
+  def getOrientEdge: BlueprintsEdge = {
     val edgeIterator = graph.getEdges(GraphSchema.srcVidProperty, srcVertexId).iterator()
-      edgeIterator.next()
+    edgeIterator.next()
 
   }
 }

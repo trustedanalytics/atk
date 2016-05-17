@@ -17,19 +17,31 @@ package org.trustedanalytics.atk.plugins.orientdbimport
 
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
+import org.apache.spark.SparkContext
+import org.apache.spark.atk.graph.EdgeFrameRdd
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.GraphSchema
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * imports a class of edges from OrientDB graph database to ATK
+ *
+ * @param graph OrientDB graph database
+ */
 class LoadEdgeFrame(graph: OrientGraphNoTx) {
-  def importOrientDbEdgeClass(): List[Row] = {
 
+  /**
+   * A method imports a class of edges from OrientDB graph database
+   *
+   * @return Edge frame RDD
+   */
+  def importOrientDbEdgeClass(sc: SparkContext): EdgeFrameRdd = {
     val schemaReader = new SchemaReader(graph)
     val edgeSchema = schemaReader.importEdgeSchema()
     val edgeBuffer = new ArrayBuffer[Row]()
     val edgeCount = graph.countEdges(edgeSchema.label)
     var count = 1
-    while(edgeCount !=0 && count <= edgeCount) {
+    while (edgeCount != 0 && count <= edgeCount) {
       val srcVertexId: Long = graph.getEdgesOfClass(edgeSchema.label).iterator().next().getVertex(Direction.OUT).getProperty(GraphSchema.vidProperty)
       val edgeReader = new EdgeReader(graph, edgeSchema, srcVertexId)
       val edge = edgeReader.importEdge()
@@ -37,6 +49,8 @@ class LoadEdgeFrame(graph: OrientGraphNoTx) {
       count += 1
     }
     edgeBuffer.toList
+    val rowRdd = sc.parallelize(edgeBuffer.toList)
+    new EdgeFrameRdd(edgeSchema, rowRdd)
   }
 
 }

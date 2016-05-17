@@ -873,3 +873,55 @@ class JdbcTable(object):
 
 
 
+class OrientDBGraph(object):
+    """
+    Define the object to retrieve the data from an jdbc table.
+    """
+
+    def __init__(self, graph_name):
+        """
+        Define the object to retrieve the data from an jdbc table.
+
+        Parameters
+        ----------
+        table_name : str
+            the table name
+        connector_type : str
+            the connector type
+        url : str
+            Jdbc connection string (as url)
+        driver_name : str
+            An optional driver name
+
+        Returns
+        -------
+        class : JdbcTable object
+            An object which holds jdbc data.
+
+        Examples
+        --------
+        .. code::
+
+            >>> import trustedanalytics as ta
+            >>> ta.connect()
+            >>> jdbcTable = ta.JdbcTable ("test",
+                                          "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
+                                          "com.microsoft.sqlserver.jdbc.SQLServerDriver",
+                                          "select * FROM SomeTable")
+            >>> frame = ta.Frame(jdbcTable)
+            >>> frame.inspect()
+
+        """
+        if (not isinstance(graph_name, str)):
+            raise ValueError("Incorrect graph name")
+
+        self.graph_name = graph_name
+
+    def to_json(self):
+        return {"graph_name": self.graph_name}
+
+    def __repr__(self):
+        return json.dumps(self.to_json(), indent=2)
+
+
+

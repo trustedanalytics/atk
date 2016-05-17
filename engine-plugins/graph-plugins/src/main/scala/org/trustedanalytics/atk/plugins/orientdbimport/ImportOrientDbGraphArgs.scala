@@ -15,8 +15,13 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
+/**
+ * The input arguments for import orientDB graph plugin
+ */
+
+import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-case class ImportOrientDbGraphArgs( @ArgDoc("""OrientDB database name.""") dbName: String) {
+case class ImportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String) {
 
 }

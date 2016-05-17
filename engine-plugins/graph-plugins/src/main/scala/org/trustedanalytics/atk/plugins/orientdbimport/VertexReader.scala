@@ -18,49 +18,51 @@ package org.trustedanalytics.atk.plugins.orientdbimport
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
 import org.apache.spark.atk.graph.Vertex
 import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.domain.schema.{ VertexSchema,GraphSchema}
+import org.trustedanalytics.atk.domain.schema.{ VertexSchema, GraphSchema }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 
 class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema, vertexId: Long) {
 
   /**
-    *
-    * @return
-    */
-  def importVertex():Vertex ={
-    try{
-    val orientVertex = getOrientVertex
-    createVertex(orientVertex)
+   * A method imports OrientDB vertex to ATK vertex
+   * @return Atk vertex
+   */
+  def importVertex(): Vertex = {
+    try {
+      val orientVertex = getOrientVertex
+      createVertex(orientVertex)
 
-  }catch{
+    }
+    catch {
       case e: Exception =>
         throw new RuntimeException(s"Unable to read vertex with ID $vertexId from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
-    *
-    * @param orientVertex
-    * @return
-    */
+   * A method creates ATK vertex
+   * @param orientVertex OrientDB vertex
+   * @return ATK vertex
+   */
   def createVertex(orientVertex: BlueprintsVertex): Vertex = {
 
     val row = vertexSchema.columns.map(col => {
       if (col.name == GraphSchema.labelProperty) {
         vertexSchema.label
-      }else{
+      }
+      else {
         val prop: Any = orientVertex.getProperty(col.name)
         prop
       }
     })
-    new Vertex(vertexSchema,Row.fromSeq(row.toSeq))
+    new Vertex(vertexSchema, Row.fromSeq(row.toSeq))
   }
 
   /**
-    *
-    * @return
-    */
-  def getOrientVertex: BlueprintsVertex  = {
+   * A method gets OrientDB vertex from OrientDB graph database
+   * @return OrientDB vertex
+   */
+  def getOrientVertex: BlueprintsVertex = {
     val vertexIterator = graph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
     val orientVertex = vertexIterator.next()
     orientVertex

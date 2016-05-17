@@ -16,82 +16,87 @@
 package org.trustedanalytics.atk.plugins.orientdbimport
 
 import java.util
-import com.orientechnologies.orient.core.metadata.schema.{OType, OSchema, OProperty}
+import com.orientechnologies.orient.core.metadata.schema.OType
 import com.tinkerpop.blueprints.impls.orient._
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.plugins.orientdb.OrientDbTypeConverter
+import scala.collection.mutable.ListBuffer
 
-import scala.collection.mutable
-import scala.collection.mutable.{ListBuffer, ArrayBuffer}
+/**
+ * imports vertices and edges schemas from OrientDB to ATK
+ *
+ * @param graph OrientDB graph database
+ */
+class SchemaReader(graph: OrientGraphNoTx) {
 
-class SchemaReader(graph:OrientGraphNoTx) {
   /**
-    *
-    * @return
-    */
+   * A method imports vertex schema from OrientDB to ATK vertex schema
+   * @return ATK vertex schema
+   */
   def importVertexSchema(): VertexSchema = {
 
     try {
       val vertexTypeName = graph.getVertexBaseType.asInstanceOf[OrientVertexType].getName
       val className = graph.getVerticesOfClass(vertexTypeName).iterator().next().asInstanceOf[OrientVertex].getLabel
       val vertexPropertiesKeys = graph.getVerticesOfClass(className).iterator().next().asInstanceOf[OrientVertex].getProperties
-     createVertexSchema(className, vertexPropertiesKeys)
-    }catch{
+      createVertexSchema(className, vertexPropertiesKeys)
+    }
+    catch {
       case e: Exception =>
-      throw new RuntimeException(s"Unable to read vertex schema from OrientDB graph: ${e.getMessage}")
+        throw new RuntimeException(s"Unable to read vertex schema from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
-    *
-    * @param className
-    * @param propertiesKeys
-    * @return
-    */
-  def createVertexSchema(className: String, propertiesKeys: util.Map[String,AnyRef]): VertexSchema = {
+   * A method creates ATK vertex schema
+   * @param className OrientDB vertex class name
+   * @param propertiesKeys OrientDB vertex properties keys
+   * @return ATK vertex schema
+   */
+  def createVertexSchema(className: String, propertiesKeys: util.Map[String, AnyRef]): VertexSchema = {
     var columns = new ListBuffer[Column]()
     val propKeys = graph.getVerticesOfClass(className).iterator().next().asInstanceOf[OrientVertex].getPropertyKeys
-    while(propKeys.iterator().hasNext){
+    while (propKeys.iterator().hasNext) {
       val propKey = propKeys.iterator.next()
       val propValue = propertiesKeys.get(propKey)
       val propOrientType = OType.getTypeByValue(propValue)
-        val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propOrientType)
-        val newColumn = new Column(propKey, columnType)
-        columns += newColumn
+      val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propOrientType)
+      val newColumn = new Column(propKey, columnType)
+      columns += newColumn
       propKeys.remove(propKey)
     }
-    columns += Column(className,OrientDbTypeConverter.convertOrientDbtoDataType(OType.getTypeByValue(className)))
-    VertexSchema(columns.toList,className)
+    columns += Column(GraphSchema.labelProperty, DataTypes.str)
+    VertexSchema(columns.toList, className)
   }
 
-
   /**
-    *
-    * @return
-    */
+   * A method imports edge schema from OrientDB to ATK edge schema
+   * @return ATK edge schema
+   */
   def importEdgeSchema(): EdgeSchema = {
-    try{
-    val edgeTypeName = graph.getEdgeBaseType.getName
-    val edgeClassName = graph.getEdgesOfClass(edgeTypeName).iterator().next().asInstanceOf[OrientEdge].getLabel
+    try {
+      val edgeTypeName = graph.getEdgeBaseType.getName
+      val edgeClassName = graph.getEdgesOfClass(edgeTypeName).iterator().next().asInstanceOf[OrientEdge].getLabel
       val properties = graph.getEdgesOfClass(edgeClassName).iterator().next().asInstanceOf[OrientEdge].getProperties
-     createEdgeSchema(edgeClassName,properties)
-    }catch{
-      case e:Exception =>
+      createEdgeSchema(edgeClassName, properties)
+    }
+    catch {
+      case e: Exception =>
         throw new RuntimeException(s"Unable to read edge schema from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
-    *
-     * @param className
-    * @param properties
-    * @return
-    */
-  def createEdgeSchema(className: String, properties: util.Map[String,AnyRef]): EdgeSchema = {
+   * A method creates ATK edge schema
+   * @param className OrientDB edge class name
+   * @param properties OrientDB edge Properties keys
+   * @return ATK edge schema
+   */
+  def createEdgeSchema(className: String, properties: util.Map[String, AnyRef]): EdgeSchema = {
 
     var columns = new ListBuffer[Column]()
     val propKeys = graph.getEdgesOfClass(className).iterator().next().asInstanceOf[OrientEdge].getPropertyKeys
-    while(propKeys.iterator().hasNext){
+    while (propKeys.iterator().hasNext) {
       val propKey = propKeys.iterator.next()
       val propValue = properties.get(propKey)
       val propOrientType = OType.getTypeByValue(propValue)
@@ -100,9 +105,8 @@ class SchemaReader(graph:OrientGraphNoTx) {
       columns += newColumn
       propKeys.remove(propKey)
     }
-   columns += Column("_"+className,OrientDbTypeConverter.convertOrientDbtoDataType(OType.getTypeByValue(className)))
-    //columns += Column(GraphSchema.edgeProperty,DataTypes.int64)
-    EdgeSchema(columns.toList,className,"src","dest")
+    columns += Column(GraphSchema.labelProperty, DataTypes.str)
+    EdgeSchema(columns.toList, className, "source", "source")
   }
 
 }

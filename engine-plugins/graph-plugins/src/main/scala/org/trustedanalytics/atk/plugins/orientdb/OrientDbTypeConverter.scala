@@ -40,10 +40,10 @@ object OrientDbTypeConverter {
   }
 
   /**
-    * converts OrientDB data type to data type
-    * @param orientDbType OrientDB data type
-    * @return ATK data type
-    */
+   * converts OrientDB data type to data type
+   * @param orientDbType OrientDB data type
+   * @return ATK data type
+   */
   def convertOrientDbtoDataType(orientDbType: OType): DataType = orientDbType match {
     case OType.LONG => DataTypes.toDataType("int64")
     case OType.INTEGER => DataTypes.toDataType("int32")

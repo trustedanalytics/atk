@@ -15,15 +15,18 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
-
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
-import org.apache.spark.atk.graph.{EdgeFrameRdd, VertexFrameRdd}
+import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
+import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.UnitReturn
+import org.trustedanalytics.atk.domain.CreateEntityArgs
+import org.trustedanalytics.atk.domain.frame.{ FrameName, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.domain.schema.GraphSchema
-import org.trustedanalytics.atk.engine.plugin.{Invocation, SparkCommandPlugin, PluginDoc}
-import org.trustedanalytics.atk.plugins.orientdb.{GraphDbFactory, DbConfigReader}
+import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema, GraphSchema }
+import org.trustedanalytics.atk.engine.graph.{ SparkVertexFrame, SparkGraph }
+import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin, PluginDoc }
+import org.trustedanalytics.atk.plugins.orientdb.{ GraphDbFactory, DbConfigReader }
 import spray.json._
 
 import scala.collection.mutable.ArrayBuffer
@@ -31,62 +34,46 @@ import scala.collection.mutable.ArrayBuffer
 /** Json conversion for arguments and return value case classes */
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 object importOrientDbGraphJsonFormat {
-  implicit val importOrientDbGraphArgsFormat = jsonFormat1(ImportOrientDbGraphArgs)
- // implicit val importOrientDbGraphReturnFormat = jsonFormat3(ImportOrientDbGraphReturn)
+  implicit val importOrientDbGraphArgsFormat = jsonFormat2(ImportOrientDbGraphArgs)
+  // implicit val importOrientDbGraphReturnFormat = jsonFormat3(ImportOrientDbGraphReturn)
 }
 import org.trustedanalytics.atk.plugins.orientdbimport.importOrientDbGraphJsonFormat._
 
-@PluginDoc(oneLine = "Imports a graph from OrientDB",
-  extended =".",
-  returns ="ATK graph.")
-class ImportOrientDbGraphPlugin extends SparkCommandPlugin [ImportOrientDbGraphArgs, GraphEntity]{
+@PluginDoc(oneLine = "Imports a graph from OrientDB database to ATK",
+  extended = ".",
+  returns = "ATK graph in Parquet graph format.")
+class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphArgs, GraphEntity] {
 
   override def name: String = "graph:/_import_orientdb"
 
-  override def execute(arguments: ImportOrientDbGraphArgs)(implicit invocation: Invocation):GraphEntity= ???
-  /*  // Get OrientDB configurations
-    val dbConfig = DbConfigReader.extractConfigurations(arguments.dbName)
+  /**
+   * A method imports OrientDB graph to ATK Parquet graph format
+   *
+   * @param arguments the arguments supplied by the caller
+   * @param invocation
+   * @return a value of type declared as the Return type.
+   */
+  override def execute(arguments: ImportOrientDbGraphArgs)(implicit invocation: Invocation): GraphEntity = {
+
+    //Get the graph meta data
+    val graph: SparkGraph = arguments.graph
+    // Get OrientDB configurations
+    val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
     val orientDbGraph = GraphDbFactory.graphDbConnector(dbConfig)
-    val vertexFrameRdd = importVertexFrame(orientDbGraph)
-    val edgeFrameRdd = importEdgeFrame(orientDbGraph)
-    ImportOrientDbGraphReturn(vertexFrameRdd,edgeFrameRdd,dbConfig.dbUri)
+    val loadVertexFrame = new LoadVertexFrame(orientDbGraph)
+    val vertexFrameRdd: VertexFrameRdd = loadVertexFrame.importOrientDbVertexClass(sc)
+    val loadEdgeFrame = new LoadEdgeFrame(orientDbGraph)
+    val edgeFrameRdd = loadEdgeFrame.importOrientDbEdgeClass(sc)
+    val vertexFrameSchema = vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]
+    graph.defineVertexType(vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]) // add schema method to VertexFrameRdd
+    val edgeFrameSchema = edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema]
+    graph.defineEdgeType(edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema])
+    //Get the list of the graph from the meta data
+    val graphMeta = engine.graphs.expectSeamless(graph)
+    val vertexFrame = graphMeta.vertexMeta(vertexFrameSchema.label)
+    engine.graphs.saveVertexRdd(vertexFrame.toReference, vertexFrameRdd)
+    val edgeFrame = graphMeta.edgeMeta(edgeFrameSchema.label)
+    engine.graphs.saveEdgeRdd(edgeFrame.toReference, edgeFrameRdd)
+    graph
   }
-
-  def importVertexFrame(graph: OrientGraphNoTx): VertexFrameRdd ={
-
-    val schemaReader = new SchemaReader(graph)
-    val vertexSchema = schemaReader.importVertexSchema()
-    val vertexBuffer = new ArrayBuffer[Row]()
-    val vertexCount = graph.countVertices(graph.getVertexBaseType.getName)
-    var vertexId = 1
-    while(vertexCount !=0 && vertexId <= vertexCount) {
-      val vertexReader = new VertexReader(graph, vertexSchema, vertexId)
-      val vertex = vertexReader.importVertex()
-      vertexBuffer += vertex.row
-      vertexId += 1
-    }
-    vertexBuffer.toList
-    val rowRdd = sc.parallelize(vertexBuffer.toList)
-    new VertexFrameRdd(vertexSchema, rowRdd)
-  }
-
-  def importEdgeFrame(graph: OrientGraphNoTx): EdgeFrameRdd = {
-
-    val schemaReader = new SchemaReader(graph)
-    val edgeSchema = schemaReader.importEdgeSchema()
-    val edgeBuffer = new ArrayBuffer[Row]()
-    val edgeCount = graph.countEdges(graph.getVertexBaseType.getName)
-    var count = 1
-    while(edgeCount !=0 && count <= edgeCount) {
-      val srcVertexId = graph.getEdges.iterator().next().getProperty(GraphSchema.srcVidProperty)
-      val edgeReader = new EdgeReader(graph, edgeSchema, srcVertexId)
-      val edge = edgeReader.importEdge()
-      edgeBuffer += edge.row
-      count += 1
-    }
-    edgeBuffer.toList
-    val rowRdd = sc.parallelize(edgeBuffer.toList)
-    new EdgeFrameRdd(edgeSchema, rowRdd)
-  }*/
-
 }

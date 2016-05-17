@@ -16,13 +16,24 @@
 package org.trustedanalytics.atk.plugins.orientdbimport
 
 import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
+import org.apache.spark.SparkContext
+import org.apache.spark.atk.graph.VertexFrameRdd
 import org.apache.spark.sql.Row
-
 import scala.collection.mutable.ArrayBuffer
 
+/**
+ * imports a vertex class from OrientDB database to ATK
+ *
+ * @param graph OrientDB database
+ */
 class LoadVertexFrame(graph: OrientGraphNoTx) {
 
-  def importOrientDbVertexClass(): List[Row] = {
+  /**
+   * A method imports a vertex class from OrientDB to ATK
+   *
+   * @return vertex frame RDD
+   */
+  def importOrientDbVertexClass(sc: SparkContext): VertexFrameRdd = {
     val schemaReader = new SchemaReader(graph)
     val vertexSchema = schemaReader.importVertexSchema()
     val vertexBuffer = new ArrayBuffer[Row]()
@@ -35,6 +46,7 @@ class LoadVertexFrame(graph: OrientGraphNoTx) {
       vertexId += 1
     }
     vertexBuffer.toList
+    val rowRdd = sc.parallelize(vertexBuffer.toList)
+    new VertexFrameRdd(vertexSchema, rowRdd)
   }
-
 }
