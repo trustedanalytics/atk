@@ -9,17 +9,17 @@ Naive Bayes is a basic classifier.
 Setup
 -----
 
-Establish a connection to the ATK REST Server
-This handle will be used for the remaineder of the script
+Establish a connection to the ATK REST Server.
+This handle will be used for the remainder of the script.
 
-Get your server URL and credentials file from the TAP administrator
+Get your server URL and credentials file from the TAP administrator.
 
 .. code::
 
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK REST server
+Set the server, and use the credentials to connect to the ATK REST server.
 
 .. code::
 
@@ -35,11 +35,11 @@ The general workflow will be build a frame, build a model, train the model on th
 Build a Frame
 -------------
 
-Construct a frame to be uploaded, this is done using Python lists uploaded to the server
+Construct a frame to be uploaded, this is done using Python lists uploaded to the server.
 
-Each row represents a sample from a probability distribution, with a vector associated with a category. For the purposes of this example there are two categories and three features to indicate whether the sample is a cat or a dog (weight, height, fur type)
+Each row represents a sample from a probability distribution, with a vector associated with a category. For the purposes of this example there are two categories and three features to indicate whether the sample is a cat or a dog (weight, height, fur type).
 
-The frame has the schema Class, feature 1, feature 2, feature 3, where class is the category that the sample belongs to
+The frame has the schema Class, feature 1, feature 2, feature 3, where class is the category that the sample belongs to.
 
 .. code::
 
@@ -59,6 +59,8 @@ The frame has the schema Class, feature 1, feature 2, feature 3, where class is 
 Build a Model
 -------------
 
+.. code::
+
         nb_model = ia.NaiveBayesModel()
 
 Train the model on the frame. This is supervised training technique so the category is used in the training process. Note the feature vector is represented as a list of column names.
@@ -71,20 +73,20 @@ Predict assigns a category to a sample in the feature space
 For the purposes of illustrating the workflow, I am predicting on the
 same frame used to train, normally you would predict on a different
 frame representing data that didn't have a category assigned to it
-again note the feature vector is a python list of column names
+again note the feature vector is a python list of column names.
 
 .. code::
 
         result = nb_model.predict(frame, ["f1", "f2", "f3"])
 
-The result is a frame with a new "predicted_class" column
+The result is a frame with a new "predicted_class" column.
 
 .. code::
 
         print result.inspect()
 
 Run classification metrics on the resultant frame to understand
-model performance
+model performance.
 
 .. code::
 

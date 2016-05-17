@@ -7,17 +7,17 @@ Cumulative Sum
 Setup
 -----
 
-Establish a connection to the ATK REST Server
-This handle will be used for the remainder of the script
+Establish a connection to the ATK REST Server.
+This handle will be used for the remainder of the script.
 
-Get the server URL and credentials file from the TAP administrator
+Get the server URL and credentials file from the TAP administrator.
 
 .. code::
 
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK REST server
+Set the server, and use the credentials to connect to the ATK REST server.
 
 .. code::
 
@@ -40,9 +40,10 @@ Construct a frame to be uploaded, this is done using Python lists uploaded to th
 The following frame could represent some ordered list (such as customer orders) and a value associated with the order.
 The frame is sorted by the order column, and then the order value is accumulated.
 
-Cumulative sum finds the sum up to and including a given order
+Cumulative sum finds the sum up to and including a given order.
 
-Describe the frame to be built
+Describe the frame to be built.
+
 .. code::
 
         rows_frame = ia.UploadRows([[0,100],
@@ -82,5 +83,3 @@ Fetch the results, and validate they are what you would expect.
 .. code::
 
         result = frame.take(frame.row_count)
-        self.assertItemsEqual(
-            result, [[0,100,100], [3,20,235], [1,25,125], [2,90,215]])

@@ -25,7 +25,7 @@ Plug-ins do not require the author to have a deep understanding the REST server,
 Plug-ins are written in Scala and have a few requirements that follow this pattern:
 
 1. Declare an arguments case class.
-2. Declare an return value case class.
+2. Declare a return value case class.
 3. Define JSON serialization (most of which is provided through library calls).
 4. Write the execution logic.
 

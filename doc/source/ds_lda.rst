@@ -36,9 +36,9 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 Construct a Frame
 -----------------
 
-Construct a frame to be uploaded, this is done using Python lists uploaded to the server
+Construct a frame to be uploaded, this is done using Python lists uploaded to the server.
 
-In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times
+In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times.
 
 .. code::
 
@@ -86,7 +86,7 @@ The final argument is the number of topics to search for.
 Predict on the Model
 --------------------
 
-Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words
+Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words.
 
 .. code::
 
@@ -94,7 +94,5 @@ Using the trained model, predict the words of two new papers, and show that they
    cluster2 = lda_model.predict(["word21", "word23"])
    print cluster1
    print cluster2
-
-   self.assertNotEqual(cluster1, cluster2)
 
 

@@ -8,6 +8,6 @@ User Manual
     :maxdepth: 2
 
     ds_strt
-    ds_algorithms
     ds_pflw
+    ds_algorithms
     ds_bkm

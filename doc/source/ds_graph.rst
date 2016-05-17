@@ -4,9 +4,9 @@
 Graphs
 ======
 
-Graphs are composed of 2 sets, one of vertices, and one of edges that
+Graphs are composed of two sets, one of vertices, and one of edges that
 connect exactly two (possibly not distinct) vertices. The degree
-of a vertex is the number of edges attached to it
+of a vertex is the number of edges attached to it.
 
 Setup
 -----
@@ -49,7 +49,7 @@ The example below shows how to build a frame using a vertexlist and an edgelist.
                       ["vertex2", "vertex5"]],
                      [("from", str), ("to", str)]))
 
-The graph is a center vertex (vertex20, with four vertices each attached to the center vertex. This is known as a star graph. It can be visualized as a plus sign.
+The graph is a center vertex (vertex2), with four vertices each attached to the center vertex. This is known as a star graph. It can be visualized as a plus sign.
 
 To create a graph define the vertices, then define the edges.
 
