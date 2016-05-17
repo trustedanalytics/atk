@@ -61,3 +61,37 @@ Confusion Matrix:
             Predicted_Pos  Predicted_Neg
 Actual_Pos              7              0
 Actual_Neg              0              7
+
+>>> model.publish()
+<progress>
+
+<skip>
+# Take the path to the published model and run it in the Scoring Engine
+>>> import requests
+>>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+# posting a request to get the metadata about the model
+>>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+>>> r.text
+u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
+# Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6', headers=headers)
+>>> r.text
+u'-1.0'
+
+# Posting a request to version 1 with multiple records to score:
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6&data=0,0,0', headers=headers)
+>>> r.text
+u'-1.0,1.0'
+
+# Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6}]})
+>>> r.text
+u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0}]}'
+
+# posting a request to version 2 with multiple records to score:
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6},{"tr_row": 3.0, "tr_col": 0.6} ]})
+>>> r.text
+u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
+</skip>
