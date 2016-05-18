@@ -25,18 +25,17 @@ import org.trustedanalytics.atk.engine.EngineConfig
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.security.UserGroupInformation
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
-import org.trustedanalytics.hadoop.config.{ ConfigurationHelperImpl, PropertyLocator }
 import org.trustedanalytics.hadoop.config.client.{ ServiceType, Configurations, ServiceInstanceConfiguration }
 import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
 import scala.reflect.io.Directory
 import scala.util.control.NonFatal
+import org.trustedanalytics.hadoop.config.client.Property
 
 /**
  * Static methods for accessing a Kerberos secured hadoop cluster.
  */
 object KerberosAuthenticator extends EventLogging with EventLoggingImplicits with ClassLoaderAware {
 
-  val confHelper = ConfigurationHelperImpl.getInstance()
   val DEFAULT_VALUE = ""
   val AUTHENTICATION_METHOD = "kerberos"
   val AUTHENTICATION_METHOD_PROPERTY = "hadoop.security.authentication"
@@ -53,10 +52,11 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
 
   def getKerberosConfigJVMParam: Option[String] = sys.env.get("JAVA_KRB_CONF")
 
-  def getPropertyValue(property: PropertyLocator): String = {
-    val value = confHelper.getPropertyFromEnv(property)
-    value.isPresent match {
-      case true => value.get()
+  def getPropertyValue(property: Property): String = {
+    val helper = Configurations.newInstanceFromEnv()
+    val result = helper.getServiceConfig(ServiceType.KERBEROS_TYPE).getProperty(property)
+    result.isPresent match {
+      case true => result.get()
       case false => DEFAULT_VALUE
     }
   }
@@ -107,7 +107,7 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
 
 case class UserAuthenticatedConfiguration(subject: Subject, configuration: Configuration)
 
-case class KerberosProperties(kdc: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.KRB_KDC),
-                              realm: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.KRB_REALM),
-                              user: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.USER),
-                              password: String = KerberosAuthenticator.getPropertyValue(PropertyLocator.PASSWORD))
+case class KerberosProperties(kdc: String = KerberosAuthenticator.getPropertyValue(Property.KRB_KDC),
+                              realm: String = KerberosAuthenticator.getPropertyValue(Property.KRB_REALM),
+                              user: String = KerberosAuthenticator.getPropertyValue(Property.USER),
+                              password: String = KerberosAuthenticator.getPropertyValue(Property.PASSWORD))
