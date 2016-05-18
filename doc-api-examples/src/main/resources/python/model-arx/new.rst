@@ -77,3 +77,23 @@ The frame has five columns where "y" is the time series value and "vistors", "wk
 
 >>> model.publish()
 <progress>
+
+<skip>
+# Take the path to the published model and run it in the Scoring Engine
+>>> import requests
+>>> headers = {'Content-type': 'application/json', 'Accept': 'application/json,text/plain'}
+
+# Post a request to get the metadata about the model
+>>> r = requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
+>>> r.text
+u'{"model_details":{"model_type":"ARX Model","model_class":"com.cloudera.sparkts.models.ARXModel","model_reader":"org.trustedanalytics.atk.scoring.models.ARXModelReaderPlugin","custom_values":{}},"input":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"}],"output":[{"name":"y","value":"Array[Double]"},{"name":"x_values","value":"Array[Double]"},{"name":"score","value":"Array[Double]"}]}'
+
+# The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
+# that was trained and published in the example above.  To keep things simple, we just send the first three rows of
+# 'y' values and the corresponding 'x_values' (visitors, wkends, incidentRate, and seasonality).
+r = requests.post('http://localhost:9100/v2/score',json={"records":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})
+
+# The 'score' value contains an array of predicted y values.
+r.text
+u'{"data":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584],"score":[74.24592767720993,87.31024788358613,84.8763748215895]}]}'
+</skip>
