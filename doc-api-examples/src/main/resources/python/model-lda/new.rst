@@ -124,14 +124,14 @@ True
 u'{"model_details":{"model_type":"Lda Model","model_class":"org.trustedanalytics.atk.scoring.models.LdaScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin","custom_values":{}},"input":[{"name":"doc_id","value":"Array[String]"}],"output":[{"name":"doc_id","value":"Array[String]"},{"name":"topics_given_doc","value":"Vector[Double]"},{"name":"new_words_count","value":"Int"},{"name":"new_words_percentage","value":"Double"}]}'
 
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=harry,secrets', headers=headers)
 >>> r.text
-u'1'
+#not working
 
 # Posting a request to version 1 with multiple records to score:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&data=7.0&data=5.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=harry.secrets&data=harry,secrets', headers=headers)
 >>> r.text
-u'1,2,2'
+#not working
 
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"doc_id": ['harry', 'secrets', 'magic']}]})

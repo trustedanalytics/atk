@@ -64,14 +64,14 @@ Actual_Neg              0              3
 u'{"model_details":{"model_type":"Naive Bayes Model","model_class":"org.apache.spark.mllib.classification.NaiveBayesScoringModel","model_reader":"org.trustedanalytics.atk.scoring.models.NaiveBayesReaderPlugin","custom_values":{}},"input":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"}],"output":[{"name":"Dim_1","value":"Double"},{"name":"Dim_2","value":"Double"},{"name":"score","value":"Double"}]}'
 
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.298585', headers=headers)
 >>> r.text
-u'1'
+u'0.0' #not working
 
 # Posting a request to version 1 with multiple records to score:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&data=7.0&data=5.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446&data=5.5548729596, 2.7777687995', headers=headers)
 >>> r.text
-u'1,2,2'
+u'0.0,1.0' #not working
 
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.298585}]})
