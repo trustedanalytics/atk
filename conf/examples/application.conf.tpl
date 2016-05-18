@@ -33,22 +33,21 @@ trustedanalytics.atk {
 
   datastore
     {
+    # Postgresql
+    //connection-postgresql.host = "invalid-postgresql-host"
+    //connection-postgresql.port = 5432
+    //connection-postgresql.database = "postgresql-datastore"
+    //connection-postgresql.username = "postgresql-user"
+    //connection-postgresql.password = "postgresql-password"
+    connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
 
-        # Postgresql
-        //connection-postgresql.host = "invalid-postgresql-host"
-        //connection-postgresql.port = 5432
-        //connection-postgresql.database = "postgresql-datastore"
-        //connection-postgresql.username = "postgresql-user"
-        //connection-postgresql.password = "postgresql-password"
-        //connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
-
-        # MYSQL
-        //connection-mysql.host = "invalid-mysql-host"
-        //connection-mysql.port = 3306
-        //connection-mysql.database = "mysql-datastore"
-        //connection-mysql.username = "mysql-user"
-        //connection-mysql.password = "mysql-password"
-        //connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
+    # MYSQL
+    //connection-mysql.host = "invalid-mysql-host"
+    //connection-mysql.port = 3306
+    //connection-mysql.database = "mysql-datastore"
+    //connection-mysql.username = "mysql-user"
+    //connection-mysql.password = "mysql-password"
+    connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
 
      # OrientDB
     //connection-orientdb.host = "invalid-orientdb-host"
@@ -241,8 +240,8 @@ trustedanalytics.atk {
 
           # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
           # Verify that the path below exist across all yarn master/worker nodes.
-          spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
-          spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
+          // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
+          // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
 
           # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
           // spark.driver.extraLibraryPath = "."
