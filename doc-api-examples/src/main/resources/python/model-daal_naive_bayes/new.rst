@@ -25,7 +25,7 @@ Consider the following frame containing three columns.
 
 >>> model = ta.DaalNaiveBayesModel()
 <progress>
->>> train_output = model.train(frame, 'Class', ['Dim_1', 'Dim_2'], lambda_parameter=0.9, class_prior=[0.6, 0.4], num_classes=2)
+>>> train_output = model.train(frame, 'Class', ['Dim_1', 'Dim_2'], num_classes=2)
 <progress>
 <skip>
 >>> train_output

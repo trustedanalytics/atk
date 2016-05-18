@@ -59,14 +59,14 @@ class DaalNaiveBayesTrainPlugin extends SparkCommandPlugin[DaalNaiveBayesTrainAr
   override def execute(arguments: DaalNaiveBayesTrainArgs)(implicit invocation: Invocation): DaalNaiveBayesTrainReturn = {
     val frame: SparkFrame = arguments.frame
     val model: Model = arguments.model
-
+    //TODO: Convert to plugin argument once fix for setting DAAL naive Bayes parameters is available
+    val lambdaParameter = 1d
     val naiveBayesModel = new DaalNaiveBayesTrainAlgorithm(
       frame.rdd,
       arguments.observationColumns,
       arguments.labelColumn,
       arguments.numClasses,
-      arguments.lambdaParameter,
-      arguments.classPrior
+      lambdaParameter
     ).train()
 
     model.data = naiveBayesModel.toJson.asJsObject

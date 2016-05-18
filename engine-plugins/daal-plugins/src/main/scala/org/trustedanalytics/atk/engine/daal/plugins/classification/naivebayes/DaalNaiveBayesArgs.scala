@@ -28,22 +28,12 @@ case class DaalNaiveBayesTrainArgs(model: ModelReference,
 observation.""") labelColumn: String,
                                    @ArgDoc("""Column(s) containing the
 observations.""") observationColumns: List[String],
-                                   @ArgDoc("""Additive smoothing parameter
-Default is 1.0.""") lambdaParameter: Double = 1.0,
-                                   @ArgDoc("""Number of classes""") numClasses: Int = 2,
-                                   @ArgDoc(
-                                     """Prior probabilities of classes.
-Default is 1/num_classes for each class""") classPrior: Option[Array[Double]] = None) {
+                                   @ArgDoc("""Number of classes""") numClasses: Int = 2) {
   require(model != null, "model is required")
   require(frame != null, "frame is required")
   require(observationColumns != null && observationColumns.nonEmpty, "observation column must not be null nor empty")
   require(labelColumn != null && !labelColumn.isEmpty, "label column must not be null nor empty")
-  require(lambdaParameter >= 0, "lambda parameter should be greater than or equal to zero")
   require(numClasses > 1, "number of classes must be greater than 1")
-  require(classPrior.isEmpty || classPrior.get.length == numClasses,
-    "class prior should be empty or an array of the same length as number of classes")
-  require(classPrior.isEmpty || classPrior.get.forall(_ >= 0) && Math.abs(classPrior.get.sum - 1) <= 1e-6,
-    "sum of class priors should equal 1")
 }
 
 /**
@@ -92,7 +82,7 @@ object DaalNaiveBayesArgsFormat {
 
   import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 
-  implicit val nbTrainArgsFormat = jsonFormat7(DaalNaiveBayesTrainArgs)
+  implicit val nbTrainArgsFormat = jsonFormat5(DaalNaiveBayesTrainArgs)
   implicit val nbTrainReturnFormat = jsonFormat2(DaalNaiveBayesTrainReturn)
   implicit val nbPredictArgsFormat = jsonFormat3(DaalNaiveBayesPredictArgs)
   implicit val nbTestArgsFormat = jsonFormat4(DaalNaiveBayesTestArgs)
