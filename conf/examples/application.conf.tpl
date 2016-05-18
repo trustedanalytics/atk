@@ -40,7 +40,7 @@ trustedanalytics.atk {
         //connection-postgresql.database = "postgresql-datastore"
         //connection-postgresql.username = "postgresql-user"
         //connection-postgresql.password = "postgresql-password"
-        connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
+        //connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
 
         # MYSQL
         //connection-mysql.host = "invalid-mysql-host"
@@ -48,7 +48,7 @@ trustedanalytics.atk {
         //connection-mysql.database = "mysql-datastore"
         //connection-mysql.username = "mysql-user"
         //connection-mysql.password = "mysql-password"
-        connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
+        //connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
 
      # OrientDB
     //connection-orientdb.host = "invalid-orientdb-host"
