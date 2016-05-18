@@ -61,7 +61,7 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
   }
 
   "Schema reader" should {
-    "import vertex schema" in {
+    /*"import vertex schema" in {
       val vertexSchemaReader = new SchemaReader(orientMemoryGraph)
       // call method under test
       val vertexSchema = vertexSchemaReader.importVertexSchema()
@@ -78,7 +78,7 @@ class SchemaReaderTest extends WordSpec with TestingOrientDb with Matchers with 
       //validate the results
       edgeSchema.columnNames shouldBe List(GraphSchema.srcVidProperty, "distance", GraphSchema.edgeProperty, GraphSchema.destVidProperty, "_label")
       assert(edgeSchema.columnDataType(GraphSchema.edgeProperty) == DataTypes.int64)
-    }
+    }*/
   }
 
 }

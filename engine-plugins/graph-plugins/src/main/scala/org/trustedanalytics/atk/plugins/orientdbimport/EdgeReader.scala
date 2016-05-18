@@ -25,22 +25,20 @@ import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema }
  *
  * @param graph OrientDB graph database
  * @param edgeSchema ATK edge schema in Parquet graph format
- * @param srcVertexId Source vertex ID
  */
-class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema, srcVertexId: Long) {
+class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) {
 
   /**
    * A method imports OrientDB edge from OrientDB database to ATK edge
    * @return ATK edge
    */
-  def importEdge(): Edge = {
+  def importEdge(orientEdge: BlueprintsEdge): Edge = {
     try {
-      val orientEdge = getOrientEdge
       createEdge(orientEdge)
     }
     catch {
       case e: Exception =>
-        throw new RuntimeException(s"Unable to read edge with source ID $srcVertexId from OrientDB graph: ${e.getMessage}")
+        throw new RuntimeException(s"Unable to read edge with source ID ${orientEdge.getId.toString} from OrientDB graph: ${e.getMessage}")
     }
   }
 
@@ -64,7 +62,7 @@ class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema, srcVertexId: Lo
     new Edge(edgeSchema, Row.fromSeq(row.toSeq))
   }
 
-  /**
+  /* /**
    * A method gets OrientDB edge from OrientDB database
    * @return OrientDB edge
    */
@@ -72,5 +70,5 @@ class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema, srcVertexId: Lo
     val edgeIterator = graph.getEdges(GraphSchema.srcVidProperty, srcVertexId).iterator()
     edgeIterator.next()
 
-  }
+  }*/
 }

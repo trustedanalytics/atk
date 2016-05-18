@@ -51,7 +51,7 @@ class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with Be
   }
 
   "Edge reader" should {
-    val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64),
+    /* val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64),
       Column(GraphSchema.srcVidProperty, DataTypes.int64),
       Column(GraphSchema.destVidProperty, DataTypes.int64),
       Column(GraphSchema.labelProperty, DataTypes.string),
@@ -81,7 +81,7 @@ class EdgeReaderTest extends WordSpec with TestingOrientDb with Matchers with Be
       //call method under test and validate results
       intercept[RuntimeException] { edgeReader.importEdge() }
     }
-
+*/
   }
 
 }

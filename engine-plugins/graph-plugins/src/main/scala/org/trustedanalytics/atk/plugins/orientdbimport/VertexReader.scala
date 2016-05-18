@@ -21,21 +21,15 @@ import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, GraphSchema }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 
-class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema, vertexId: Long) {
+class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema) {
 
-  /**
-   * A method imports OrientDB vertex to ATK vertex
-   * @return Atk vertex
-   */
-  def importVertex(): Vertex = {
+  def importVertex(orientVertex: BlueprintsVertex): Vertex = {
     try {
-      val orientVertex = getOrientVertex
       createVertex(orientVertex)
-
     }
     catch {
       case e: Exception =>
-        throw new RuntimeException(s"Unable to read vertex with ID $vertexId from OrientDB graph: ${e.getMessage}")
+        throw new RuntimeException(s"Unable to read vertex with ID ${orientVertex.getId.toString} from OrientDB graph: ${e.getMessage}")
     }
   }
 
@@ -58,7 +52,7 @@ class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema, vertexId:
     new Vertex(vertexSchema, Row.fromSeq(row.toSeq))
   }
 
-  /**
+  /* /**
    * A method gets OrientDB vertex from OrientDB graph database
    * @return OrientDB vertex
    */
@@ -66,5 +60,5 @@ class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema, vertexId:
     val vertexIterator = graph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
     val orientVertex = vertexIterator.next()
     orientVertex
-  }
+  }*/
 }

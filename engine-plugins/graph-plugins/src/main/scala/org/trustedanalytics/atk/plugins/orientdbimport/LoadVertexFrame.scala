@@ -15,18 +15,17 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
 import org.apache.spark.SparkContext
 import org.apache.spark.atk.graph.VertexFrameRdd
-import org.apache.spark.sql.Row
-import scala.collection.mutable.ArrayBuffer
+import org.trustedanalytics.atk.plugins.orientdb.DbConfigurations
+import org.apache.spark.atk.graph.GraphRddImplicits._
 
 /**
  * imports a vertex class from OrientDB database to ATK
  *
- * @param graph OrientDB database
+ * @param dbConfigurations
  */
-class LoadVertexFrame(graph: OrientGraphNoTx) {
+class LoadVertexFrame(dbConfigurations: DbConfigurations) {
 
   /**
    * A method imports a vertex class from OrientDB to ATK
@@ -34,19 +33,9 @@ class LoadVertexFrame(graph: OrientGraphNoTx) {
    * @return vertex frame RDD
    */
   def importOrientDbVertexClass(sc: SparkContext): VertexFrameRdd = {
-    val schemaReader = new SchemaReader(graph)
-    val vertexSchema = schemaReader.importVertexSchema()
-    val vertexBuffer = new ArrayBuffer[Row]()
-    val vertexCount = graph.countVertices(vertexSchema.label)
-    var vertexId = 1
-    while (vertexCount != 0 && vertexId <= vertexCount) {
-      val vertexReader = new VertexReader(graph, vertexSchema, vertexId)
-      val vertex = vertexReader.importVertex()
-      vertexBuffer += vertex.row
-      vertexId += 1
-    }
-    vertexBuffer.toList
-    val rowRdd = sc.parallelize(vertexBuffer.toList)
-    new VertexFrameRdd(vertexSchema, rowRdd)
+
+    val vertexRdd = new OrientDbVertexRdd(sc, dbConfigurations)
+    val vertexFrames = vertexRdd.splitByLabel()
+    vertexFrames.head
   }
 }

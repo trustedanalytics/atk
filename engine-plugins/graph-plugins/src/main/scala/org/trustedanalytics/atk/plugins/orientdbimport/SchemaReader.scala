@@ -15,8 +15,7 @@
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
 
-import java.util
-import com.orientechnologies.orient.core.metadata.schema.OType
+import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient._
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.plugins.orientdb.OrientDbTypeConverter
@@ -31,15 +30,13 @@ class SchemaReader(graph: OrientGraphNoTx) {
 
   /**
    * A method imports vertex schema from OrientDB to ATK vertex schema
+   *
    * @return ATK vertex schema
    */
-  def importVertexSchema(): VertexSchema = {
+  def importVertexSchema(className: String): VertexSchema = {
 
     try {
-      val vertexTypeName = graph.getVertexBaseType.asInstanceOf[OrientVertexType].getName
-      val className = graph.getVerticesOfClass(vertexTypeName).iterator().next().asInstanceOf[OrientVertex].getLabel
-      val vertexPropertiesKeys = graph.getVerticesOfClass(className).iterator().next().asInstanceOf[OrientVertex].getProperties
-      createVertexSchema(className, vertexPropertiesKeys)
+      createVertexSchema(className)
     }
     catch {
       case e: Exception =>
@@ -49,21 +46,20 @@ class SchemaReader(graph: OrientGraphNoTx) {
 
   /**
    * A method creates ATK vertex schema
+   *
    * @param className OrientDB vertex class name
-   * @param propertiesKeys OrientDB vertex properties keys
    * @return ATK vertex schema
    */
-  def createVertexSchema(className: String, propertiesKeys: util.Map[String, AnyRef]): VertexSchema = {
+  def createVertexSchema(className: String): VertexSchema = {
     var columns = new ListBuffer[Column]()
-    val propKeys = graph.getVerticesOfClass(className).iterator().next().asInstanceOf[OrientVertex].getPropertyKeys
-    while (propKeys.iterator().hasNext) {
-      val propKey = propKeys.iterator.next()
-      val propValue = propertiesKeys.get(propKey)
-      val propOrientType = OType.getTypeByValue(propValue)
-      val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propOrientType)
+    val propKeysIterator = graph.getRawGraph.getMetadata.getSchema.getClass(className).properties().iterator()
+    while (propKeysIterator.hasNext) {
+      val prop = propKeysIterator.next()
+      val propKey = prop.getName
+      val propType = prop.getType
+      val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propType)
       val newColumn = new Column(propKey, columnType)
       columns += newColumn
-      propKeys.remove(propKey)
     }
     columns += Column(GraphSchema.labelProperty, DataTypes.str)
     VertexSchema(columns.toList, className)
@@ -71,14 +67,12 @@ class SchemaReader(graph: OrientGraphNoTx) {
 
   /**
    * A method imports edge schema from OrientDB to ATK edge schema
+   *
    * @return ATK edge schema
    */
-  def importEdgeSchema(): EdgeSchema = {
+  def importEdgeSchema(className: String): EdgeSchema = {
     try {
-      val edgeTypeName = graph.getEdgeBaseType.getName
-      val edgeClassName = graph.getEdgesOfClass(edgeTypeName).iterator().next().asInstanceOf[OrientEdge].getLabel
-      val properties = graph.getEdgesOfClass(edgeClassName).iterator().next().asInstanceOf[OrientEdge].getProperties
-      createEdgeSchema(edgeClassName, properties)
+      createEdgeSchema(className)
     }
     catch {
       case e: Exception =>
@@ -88,25 +82,26 @@ class SchemaReader(graph: OrientGraphNoTx) {
 
   /**
    * A method creates ATK edge schema
+   *
    * @param className OrientDB edge class name
-   * @param properties OrientDB edge Properties keys
    * @return ATK edge schema
    */
-  def createEdgeSchema(className: String, properties: util.Map[String, AnyRef]): EdgeSchema = {
+  def createEdgeSchema(className: String): EdgeSchema = {
 
     var columns = new ListBuffer[Column]()
-    val propKeys = graph.getEdgesOfClass(className).iterator().next().asInstanceOf[OrientEdge].getPropertyKeys
-    while (propKeys.iterator().hasNext) {
-      val propKey = propKeys.iterator.next()
-      val propValue = properties.get(propKey)
-      val propOrientType = OType.getTypeByValue(propValue)
-      val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propOrientType)
+    val propKeysIterator = graph.getRawGraph.getMetadata.getSchema.getClass(className).properties().iterator()
+    while (propKeysIterator.hasNext) {
+      val prop = propKeysIterator.next()
+      val propKey = prop.getName
+      val propType = prop.getType
+      val columnType = OrientDbTypeConverter.convertOrientDbtoDataType(propType)
       val newColumn = new Column(propKey, columnType)
       columns += newColumn
-      propKeys.remove(propKey)
     }
     columns += Column(GraphSchema.labelProperty, DataTypes.str)
-    EdgeSchema(columns.toList, className, "source", "source")
+    val srcVertexLabel = graph.getEdgesOfClass(className).iterator().next().getVertex(Direction.OUT).asInstanceOf[OrientVertex].getLabel
+    val destVertexLabel = graph.getEdgesOfClass(className).iterator().next().getVertex(Direction.IN).asInstanceOf[OrientVertex].getLabel
+    EdgeSchema(columns.toList, className, srcVertexLabel, destVertexLabel)
   }
 
 }

@@ -59,10 +59,9 @@ class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphAr
     val graph: SparkGraph = arguments.graph
     // Get OrientDB configurations
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
-    val orientDbGraph = GraphDbFactory.graphDbConnector(dbConfig)
-    val loadVertexFrame = new LoadVertexFrame(orientDbGraph)
+    val loadVertexFrame = new LoadVertexFrame(dbConfig)
     val vertexFrameRdd: VertexFrameRdd = loadVertexFrame.importOrientDbVertexClass(sc)
-    val loadEdgeFrame = new LoadEdgeFrame(orientDbGraph)
+    val loadEdgeFrame = new LoadEdgeFrame(dbConfig)
     val edgeFrameRdd = loadEdgeFrame.importOrientDbEdgeClass(sc)
     val vertexFrameSchema = vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]
     graph.defineVertexType(vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]) // add schema method to VertexFrameRdd

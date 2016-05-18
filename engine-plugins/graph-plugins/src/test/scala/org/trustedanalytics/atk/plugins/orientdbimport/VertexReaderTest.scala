@@ -48,7 +48,7 @@ class VertexReaderTest extends WordSpec with TestingOrientDb with Matchers with 
   }
 
   "Vertex reader" should {
-    val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64),
+    /* val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64),
       Column(GraphSchema.labelProperty, DataTypes.string),
       Column("name", DataTypes.string), Column("from", DataTypes.string),
       Column("to", DataTypes.string), Column("fair", DataTypes.int32))
@@ -81,6 +81,6 @@ class VertexReaderTest extends WordSpec with TestingOrientDb with Matchers with 
       val vertexReader = new VertexReader(orientMemoryGraph, schema, vertexId)
       //call method under test and validate results
       intercept[RuntimeException] { vertexReader.importVertex() }
-    }
+    }*/
   }
 }
