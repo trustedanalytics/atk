@@ -41,16 +41,18 @@ class EdgeWriterTest extends WordSpec with Matchers with TestingSparkContextWord
       val rowDest = new GenericRow(Array(2L, "l1", "Alice", "SFO", "SEA", 465))
       val vertexSrc = Vertex(schema, rowSrc)
       val vertexDest = Vertex(schema, rowDest)
-      val addOrientVertex = new VertexWriter(orientMemoryGraph)
-      val orientVertexSrc = addOrientVertex.addVertex(vertexSrc)
-      val orientVertexDest = addOrientVertex.addVertex(vertexDest)
+      val vertexWriter = new VertexWriter(orientMemoryGraph)
+      val orientVertexSrc = vertexWriter.addVertex(vertexSrc)
+      val orientVertexDest = vertexWriter.addVertex(vertexDest)
       // create the edge
       val edgeColumns = List(Column(GraphSchema.edgeProperty, DataTypes.int64), Column(GraphSchema.srcVidProperty, DataTypes.int64), Column(GraphSchema.destVidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("distance", DataTypes.int32))
       val edgeSchema = new EdgeSchema(edgeColumns, "label", "srclabel", "destlabel")
       val edgeRow = new GenericRow(Array(1L, 2L, 3L, "distance", 500))
       val edge = Edge(edgeSchema, edgeRow)
-      val addOrientEdge = new EdgeWriter(orientMemoryGraph, edge)
-      val orientEdge = addOrientEdge.addEdge(orientVertexSrc, orientVertexDest)
+      val edgeWriter = new EdgeWriter(orientMemoryGraph, edge)
+      // call method under test
+      val orientEdge = edgeWriter.addEdge(orientVertexSrc, orientVertexDest)
+      //validate results
       val srcVidProp: Any = orientEdge.getProperty(GraphSchema.srcVidProperty)
       val destVidProp: Any = orientEdge.getProperty(GraphSchema.destVidProperty)
       val edgeProp: Any = orientEdge.getProperty("distance")

@@ -20,11 +20,12 @@ import org.trustedanalytics.atk.domain.schema.DataTypes
 import org.trustedanalytics.atk.domain.schema.DataTypes.DataType
 
 /**
- * an object to convert DataTypes to OrientDb data type
+ * converts DataTypes to OrientDB data type
  */
 object OrientDbTypeConverter {
+
   /**
-   * Method for converting data types to Orient data types
+   * converts data types to OrientDB data types
    *
    * @param dataType ATK data types
    * @return OrientDB data type
@@ -35,7 +36,7 @@ object OrientDbTypeConverter {
     case float32 if dataType.equalsDataType(DataTypes.float32) => OType.FLOAT
     case float64 if dataType.equalsDataType(DataTypes.float64) => OType.FLOAT
     case string if dataType.equalsDataType(DataTypes.string) => OType.STRING
-    case _ => throw new IllegalArgumentException(s"Unable to convert $dataType to OrientDb data type")
+    case _ => throw new IllegalArgumentException(s"Unable to convert $dataType to OrientDB data type")
   }
 
 }

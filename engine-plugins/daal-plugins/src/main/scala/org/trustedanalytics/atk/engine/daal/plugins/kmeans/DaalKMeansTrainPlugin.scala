@@ -32,9 +32,10 @@ import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplici
 import DaalKMeansJsonFormat._
 
 @PluginDoc(oneLine = "Creates DAAL KMeans Model from train frame.",
-  extended = "Creating a DAAL KMeans Model using the observation columns.",
+  extended = """Creating a DAAL KMeans Model using the observation columns.
+The algorithm chooses random observations as the initial cluster centers.""",
   returns = """dictionary
-    A dictionary with trained KMeans model with the following keys\:
+    A dictionary with trained KMeans model with the following keys:
 'centroids' : dictionary with 'Cluster:id' as the key and the corresponding centroid as the value
 'assignments' : Frame with cluster assignments.""")
 class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, DaalKMeansTrainReturn] {
@@ -63,7 +64,7 @@ class DaalKMeansTrainPlugin extends SparkCommandPlugin[DaalKMeansTrainArgs, Daal
 
     // Train model
     val results = DaalKMeansFunctions.trainKMeansModel(frame.rdd, arguments)
-    val centroids = for (i <- 1 until arguments.k) yield results.centroids("Cluster:" + i.toString)
+    val centroids = for (i <- 0 until arguments.k) yield results.centroids("Cluster:" + i.toString)
 
     //Writing the kmeansModel as JSON
     val model: Model = arguments.model

@@ -22,6 +22,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql
 import org.trustedanalytics.atk.domain.schema.{ Column, DataTypes, FrameSchema }
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils._
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
 object DaalLinearPredictAlgorithm extends Serializable {
@@ -53,12 +54,11 @@ case class DaalLinearPredictAlgorithm(modelData: DaalLinearRegressionModelData,
         List.empty[sql.Row].iterator
       }
       else {
-        val context = new DaalContext()
-        val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray)
-        val predictions = predictTableResults(context, trainedModel, testData)
-        val results = predictions.toRowIter(context)
-        context.dispose()
-        results
+        withDaalContext { context =>
+          val trainedModel = ModelSerializer.deserializeQrModel(context, modelData.serializedModel.toArray)
+          val predictions = predictTableResults(context, trainedModel, testData)
+          predictions.toRowIter(context)
+        }.elseError("Could not predict linear regression model")
       }
     })
 

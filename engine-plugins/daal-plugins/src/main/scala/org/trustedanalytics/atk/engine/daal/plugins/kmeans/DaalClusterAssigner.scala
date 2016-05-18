@@ -19,6 +19,7 @@ import com.intel.daal.algorithms.kmeans.{ ResultId, InputId, Method, Distributed
 import com.intel.daal.data_management.data.HomogenNumericTable
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.trustedanalytics.atk.domain.schema.{ DataTypes, Column, FrameSchema }
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
 
@@ -42,20 +43,20 @@ case class DaalClusterAssigner(featureTable: DistributedNumericTable,
     val schema = FrameSchema(List(Column(labelColumn, DataTypes.int32)))
     var numRows = 0L
     val rdd = featureTable.rdd.map { table =>
-      val context = new DaalContext
-      val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
-      local.input.set(InputId.data, table.getUnpackedTable(context))
-      local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
-      local.parameter.setAssignFlag(true)
-      val partialResults = local.compute
-      partialResults.pack()
+      withDaalContext { context =>
+        val local = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense, centroids.numRows)
+        local.input.set(InputId.data, table.getUnpackedTable(context))
+        local.input.set(InputId.inputCentroids, centroids.getUnpackedTable(context))
+        local.parameter.setAssignFlag(true)
+        val partialResults = local.compute
+        partialResults.pack()
 
-      val result = local.finalizeCompute()
-      val assignmentTable = result.get(ResultId.assignments).asInstanceOf[HomogenNumericTable]
-      val assignments = IndexedNumericTable(table.index, assignmentTable)
-      numRows += assignments.numRows
-      context.dispose()
-      assignments
+        val result = local.finalizeCompute()
+        val assignmentTable = result.get(ResultId.assignments).asInstanceOf[HomogenNumericTable]
+        val assignments = IndexedNumericTable(table.index, assignmentTable)
+        numRows += assignments.numRows
+        assignments
+      }.elseError("Could not assign cluster centroids")
     }
 
     DistributedNumericTable(rdd, numRows).toFrameRdd(schema)
