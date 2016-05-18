@@ -108,7 +108,7 @@ u'{"model_details":{"model_type":"ARIMA Model","model_class":"com.cloudera.spark
 # The ARIMA model only supports version 2 of the scoring engine.  In the following example, we send the historical
 # time series value and specify to forecast 0 periods beyond the length of the time series provided.  This means that
 # since 7 historical time series values were provided, 7 future periods will be forecasted.
-r = requests.post('http://localhost:9100/v2/score',json={"records":[{"timeseries":[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],"future":0}]})
+r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"timeseries":[12.88969427,13.54964408,13.8432745,12.13843611,12.81156092,14.2499628,15.12102595],"future":0}]})
 
 # The 'predicted_values' array contains the future values, which have been forecasted based on the historical data.
 r.text

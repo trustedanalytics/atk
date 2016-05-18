@@ -91,7 +91,7 @@ u'{"model_details":{"model_type":"ARX Model","model_class":"com.cloudera.sparkts
 # The ARX model only supports version 2 of the scoring engine.  In the following example, we are using the ARX model
 # that was trained and published in the example above.  To keep things simple, we just send the first three rows of
 # 'y' values and the corresponding 'x_values' (visitors, wkends, incidentRate, and seasonality).
-r = requests.post('http://localhost:9100/v2/score',json={"records":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})
+r = requests.post('http://mymodel.demotrustedanalytics.com/v2/score',json={"records":[{"y":[68.0,89.0,96.0],"x_values":[278.0,324.0,318.0,0.0,0.0,0.0,28.0,28.0,28.0,0.0151327580791,0.0115112433251,0.0190129524584]}]})
 
 # The 'score' value contains an array of predicted y values.
 r.text
