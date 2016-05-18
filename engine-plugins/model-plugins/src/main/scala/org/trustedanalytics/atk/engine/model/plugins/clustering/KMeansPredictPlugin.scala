@@ -54,8 +54,6 @@ class KMeansPredictPlugin extends SparkCommandPlugin[KMeansPredictArgs, FrameRef
    */
   override def name: String = "model:k_means/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * User documentation exposed in Python.
    *

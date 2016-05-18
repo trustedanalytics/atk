@@ -18,6 +18,6 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 /**
  * Return object when training a DaalKMeansModel
  * @param centroids A dictionary containing the cluster Id and centroids
- * @param clusterSizes A dictionary of cluster names and sizes
+ * @param clusterSize A dictionary of cluster names and sizes
  */
-case class DaalKMeansTrainReturn(centroids: Map[String, Array[Double]], clusterSizes: Map[String, Long])
+case class DaalKMeansTrainReturn(centroids: Map[String, Array[Double]], clusterSize: Map[String, Long])

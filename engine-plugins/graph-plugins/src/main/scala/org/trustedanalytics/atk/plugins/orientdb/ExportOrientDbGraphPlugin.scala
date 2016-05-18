@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.plugins.orientdb
 import org.trustedanalytics.atk.domain.DomainJsonProtocol
 import org.trustedanalytics.atk.domain.graph.SeamlessGraphMeta
 import org.trustedanalytics.atk.engine.graph.{ SparkEdgeFrame, SparkVertexFrame, SparkGraph }
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 import scala.collection.immutable.Map
 import spray.json._
 
@@ -26,7 +26,7 @@ import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 object ExportOrientDbGraphJsonFormat {
   implicit val exportOrientDbGraphArgsFormat = jsonFormat3(ExportOrientDbGraphArgs)
-  implicit val StatisticsFormat = jsonFormat2(Statistics)
+  implicit val statisticsFormat = jsonFormat2(Statistics)
   implicit val exportOrientDbGraphReturnFormat = jsonFormat3(ExportOrientDbGraphReturn)
 }
 import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
@@ -49,6 +49,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
 
   override def name: String = "graph:/export_to_orientdb"
 
+  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
   /**
    * Method to export graph to OrientDB
    *

@@ -17,11 +17,10 @@
 package org.trustedanalytics.atk.engine.daal.plugins.tables
 
 import com.intel.daal.data_management.data.HomogenNumericTable
-import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.rdd.RDD
-
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -35,9 +34,11 @@ case class DistributedLabeledTable(tableRdd: RDD[IndexedLabeledTable],
   require(tableRdd != null, "DAAL labeled table RDD must not be null")
   val numFeatureCols = tableRdd.first().features.numCols
   val numLabelCols = tableRdd.first().labels.numCols
-
 }
 
+/**
+ * Factory object for creating labeled tables
+ */
 object DistributedLabeledTable {
 
   /**
@@ -52,37 +53,34 @@ object DistributedLabeledTable {
     val first: Vector = vectorRdd.first()
 
     val numCols = first.size
-
     val numFeatureCols = splitIndex
     val numLabelCols = numCols - splitIndex
 
     val tableRdd = vectorRdd.mapPartitionsWithIndex {
       case (i, iter) =>
-        val context = new DaalContext
-        val featureBuf = new ArrayBuffer[Double]()
-        val labelBuf = new ArrayBuffer[Double]()
-        var numRows = 0L
+        val indexedTable: IndexedLabeledTable = withDaalContext { context =>
+          val featureBuf = new ArrayBuffer[Double]()
+          val labelBuf = new ArrayBuffer[Double]()
+          var numRows = 0L
 
-        while (iter.hasNext) {
-          val array = iter.next().toArray
-          featureBuf ++= array.slice(0, splitIndex)
-          labelBuf ++= array.slice(splitIndex, numCols)
-          numRows += 1
-        }
+          while (iter.hasNext) {
+            val array = iter.next().toArray
+            featureBuf ++= array.slice(0, splitIndex)
+            labelBuf ++= array.slice(splitIndex, numCols)
+            numRows += 1
+          }
 
-        val featureTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
-          featureBuf.toArray, numFeatureCols, numRows))
-        val labelTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
-          labelBuf.toArray, numLabelCols, numRows))
-        val indexedTable = IndexedLabeledTable(featureTable, labelTable)
+          val featureTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
+            featureBuf.toArray, numFeatureCols, numRows))
+          val labelTable = new IndexedNumericTable(i, new HomogenNumericTable(context,
+            labelBuf.toArray, numLabelCols, numRows))
+          IndexedLabeledTable(featureTable, labelTable)
+        }.elseError("Could not create numeric table from Vector RDD")
 
-        featureBuf.clear()
-        labelBuf.clear()
-        context.dispose()
         Array(indexedTable).toIterator
-    }
+    }.filter(_.features.numRows > 0)
 
-    val totalRows = tableRdd.map(table => table.features.numRows).sum().toLong
+    val totalRows = tableRdd.map(table => table.features.numRows.toLong).sum().toLong
     DistributedLabeledTable(tableRdd, totalRows)
   }
 

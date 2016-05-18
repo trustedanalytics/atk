@@ -51,8 +51,6 @@ class PrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArgs, E
    */
   override def name: String = "model:principal_components/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   /**
    * Get the predictions for observations in a test frame
    *

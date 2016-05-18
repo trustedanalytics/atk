@@ -18,7 +18,7 @@ package org.trustedanalytics.atk.engine.daal.plugins.kmeans
 
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.model.{ GenericNewModelArgs, ModelReference }
-import org.trustedanalytics.atk.engine.plugin.{ CommandPlugin, Invocation, PluginDoc }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, CommandPlugin, Invocation, PluginDoc }
 
 //Implicits needed for JSON conversion
 import spray.json._
@@ -46,6 +46,8 @@ algorithm computes centroids using the Lloyd method[3]_
 class DaalKMeansNewPlugin extends CommandPlugin[GenericNewModelArgs, ModelReference] {
 
   override def name: String = "model:daal_k_means/new"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_k_means")))

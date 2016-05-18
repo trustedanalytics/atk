@@ -21,6 +21,7 @@ import com.intel.daal.algorithms.linear_regression.training._
 import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils.withDaalContext
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DaalConversionImplicits, DistributedLabeledTable }
 import DaalConversionImplicits._
@@ -45,18 +46,17 @@ case class DaalLinearTrainAlgorithm(frameRdd: FrameRdd,
    * @return Trained linear regression model
    */
   def train(): DaalLinearRegressionModelData = {
-    val context = new DaalContext
+    withDaalContext { context =>
+      //train model
+      val partialResultsRdd = computePartialResults()
+      val trainingResult = mergePartialResults(context, partialResultsRdd)
+      val trainedModel = trainingResult.get(TrainingResultId.model)
 
-    //train model
-    val partialResultsRdd = computePartialResults()
-    val trainingResult = mergePartialResults(context, partialResultsRdd)
-    val trainedModel = trainingResult.get(TrainingResultId.model)
-
-    // serialize model and return results
-    val (weights, intercept) = getWeightsAndIntercept(trainedModel)
-    val serializedModel = serializeTrainedModel(trainedModel)
-    context.dispose()
-    DaalLinearRegressionModelData(serializedModel, observationColumns, valueColumn, weights, intercept)
+      // serialize model and return results
+      val (weights, intercept) = getWeightsAndIntercept(trainedModel)
+      val serializedModel = serializeTrainedModel(trainedModel)
+      DaalLinearRegressionModelData(serializedModel, observationColumns, valueColumn, weights, intercept)
+    }.elseError("Could not train linear regression model")
   }
 
   /**
@@ -67,18 +67,18 @@ case class DaalLinearTrainAlgorithm(frameRdd: FrameRdd,
   override def computePartialResults(): RDD[PartialResult] = {
 
     val linearModelsRdd = trainTables.rdd.map(table => {
-      val context = new DaalContext()
-      val featureTable = table.features
-      val labelTable = table.labels
-      val linearRegressionTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double], TrainingMethod.qrDense)
-      linearRegressionTraining.input.set(TrainingInputId.data, featureTable.getUnpackedTable(context))
-      linearRegressionTraining.input.set(TrainingInputId.dependentVariable, labelTable.getUnpackedTable(context))
-      linearRegressionTraining.parameter.setInterceptFlag(fitIntercept)
+      withDaalContext { context =>
+        val featureTable = table.features
+        val labelTable = table.labels
+        val linearRegressionTraining = new TrainingDistributedStep1Local(context, classOf[java.lang.Double], TrainingMethod.qrDense)
+        linearRegressionTraining.input.set(TrainingInputId.data, featureTable.getUnpackedTable(context))
+        linearRegressionTraining.input.set(TrainingInputId.dependentVariable, labelTable.getUnpackedTable(context))
+        linearRegressionTraining.parameter.setInterceptFlag(fitIntercept)
 
-      val lrResult = linearRegressionTraining.compute()
-      lrResult.pack()
-      context.dispose()
-      lrResult
+        val lrResult = linearRegressionTraining.compute()
+        lrResult.pack()
+        lrResult
+      }.elseError("Could not compute partial results for linear regression")
     })
     linearModelsRdd
   }

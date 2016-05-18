@@ -50,7 +50,7 @@ Machine learning algorithms are also invoked as higher-level data science API
 (such as creating parallel recommender systems or training classifier and
 clustering models) accessible to a broad population of researchers possessing
 mainstream data science programming skills.
-For more information, see the section on :doc:`process flow </ds_dflw>`
+For more information, see the section on :doc:`process flow </ds_pflw>`
 and the `Python website <http://www.python.org>`__.
 
 
@@ -110,7 +110,9 @@ See the section on :doc:`machine learning </ds_ml>` and the
 Scoring Engine
 --------------
 
-The scoring engine produces predictions from inputs using a previously trained machine learning model. Once a model has been trained and evaluated, it can be deployed easily into production via the scoring engine.
+The scoring engine produces predictions from inputs using a previously trained 
+machine learning model. Once a model has been trained and evaluated, it can be 
+deployed easily into production via the scoring engine.
 
 ---------------
 Plugins Summary

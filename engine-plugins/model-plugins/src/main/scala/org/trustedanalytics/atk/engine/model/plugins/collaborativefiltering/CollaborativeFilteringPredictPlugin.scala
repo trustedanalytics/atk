@@ -50,8 +50,6 @@ class CollaborativeFilteringPredictPlugin
    */
   override def name: String = "model:collaborative_filtering/predict"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
-
   override def execute(arguments: CollaborativeFilteringPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val frames = engine.frames
     val edgeFrame: SparkFrame = arguments.frame

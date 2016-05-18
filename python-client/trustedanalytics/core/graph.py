@@ -477,6 +477,7 @@ Default is None.""")
         """
         Vertex frame collection
 
+        Acts like a dictionary where the vertex type is the key, returning the particular VertexFrame
 
         Examples
         --------
@@ -490,6 +491,7 @@ Default is None.""")
         """
         Edge frame collection
 
+        Acts like a dictionary where the edge type is the key, returning the particular EdgeFrame
 
         Examples
         --------
