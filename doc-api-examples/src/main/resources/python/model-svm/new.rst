@@ -73,25 +73,25 @@ Actual_Neg              0              7
 # posting a request to get the metadata about the model
 >>> r =requests.get('http://mymodel.demotrustedanalytics.com/v2/metadata')
 >>> r.text
-u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+u'{"model_details":{"model_type":"SVM with SGD Model","model_class":"org.trustedanalytics.atk.scoring.models.SVMWithSGDScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.SVMWithSGDModelReaderPlugin","custom_values":{}},"input":[{"name":"data","value":"Double"}],"output":[{"name":"data","value":"Double"},{"name":"Prediction","value":"Double"}]}'
 
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=-48.0', headers=headers)
 >>> r.text
-u'-1.0'
+u'1.0'
 
 # Posting a request to version 1 with multiple records to score:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2,17,-6&data=0,0,0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=-48.0&data=73.0', headers=headers)
 >>> r.text
-u'-1.0,1.0'
+u'1.0,0.0'
 
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
->>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6}]})
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"data": -48.0}]})
 >>> r.text
-u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0}]}'
+u'{"data":[{"data":-48.0,"Prediction":1.0}]}'
 
 # posting a request to version 2 with multiple records to score:
->>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"tr_row": 1.0, "tr_col": 2.6},{"tr_row": 3.0, "tr_col": 0.6} ]})
+>>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"data": -48.0},{"data": 73.0}]})
 >>> r.text
-u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
+u'{"data":[{"data":-48.0,"Prediction":1.0},{"data":73.0,"Prediction":0.0}]}'
 </skip>

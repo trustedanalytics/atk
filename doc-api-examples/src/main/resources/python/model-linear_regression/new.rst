@@ -85,14 +85,14 @@ Consider the following frame containing two columns.
 u'{"model_details":{"model_type":"Linear Regression Model","model_class":"org.apache.spark.ml.regression.LinearRegressionModel","model_reader":"org.trustedanalytics.atk.scoring.models.LinearRegressionModelReaderPlugin","custom_values":{}},"input":[{"name":"x1","value":"Double"}],"output":[{"name":"x1","value":"Double"},{"name":"Prediction","value":"Double"}]}'
 
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0', headers=headers)
 >>> r.text
-u'1'
+u'9.743030303030302' #not working
 
 # Posting a request to version 1 with multiple records to score:
->>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=2.0&data=7.0&data=5.0', headers=headers)
+>>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0&data=0.0', headers=headers)
 >>> r.text
-u'1,2,2'
+u'9.743030303030302, -0.032727272727271384' #not working
 
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"x1": 0.0}]})
