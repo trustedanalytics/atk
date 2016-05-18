@@ -31,7 +31,6 @@ case class JdbcArgs(
     @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
     @ArgDoc("""table name""") tableName: String,
     @ArgDoc("""(optional) connector type""") connectorType: String = "postgres",
-    @ArgDoc("""(optional) connection string, 3-tuple of connection string, username, password""") connectionString: Option[(String, String, String)],
     @ArgDoc("""(optional) query for filtering""") query: Option[String] = None) {
 
   require(StringUtils.isNotEmpty(tableName), "table name is required")

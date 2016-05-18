@@ -42,12 +42,6 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
   override def name: String = "frame/export_to_jdbc"
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: ExportHdfsJdbcArgs)(implicit invocation: Invocation) = 5
-
-  /**
    * Export the frame to a jdbc table
    *
    * @param invocation information about the user and the circumstances at the time of the call, as well as a function
@@ -71,10 +65,7 @@ class ExportHdfsJdbcPlugin extends SparkCommandPlugin[ExportHdfsJdbcArgs, UnitRe
     val dataFrame = frame.rdd.toDataFrame
 
     // Set up the connection string
-    val (dbConnectionString, username, password) = arguments.connectionString match {
-      case Some(connect) => connect
-      case None => JdbcFunctions.buildUrl(arguments.connectorType)
-    }
+    val (dbConnectionString, username, password) = JdbcFunctions.buildUrl(arguments.connectorType)
 
     val connect = new Properties()
     connect.setProperty("username", username)

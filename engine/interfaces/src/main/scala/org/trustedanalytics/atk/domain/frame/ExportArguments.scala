@@ -76,8 +76,7 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
  */
 case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
                               @ArgDoc("""JDBC table name""") tableName: String,
-                              @ArgDoc("""(optional) JDBC connector, either mysql or postgres. Default is postgres""") connectorType: String = "postgres",
-                              @ArgDoc("""(optional) connection string (not needed in TAP), this is an optional 3-tuple of connection string, username, password""") connectionString: Option[(String, String, String)]) {
+                              @ArgDoc("""(optional) JDBC connector, either mysql or postgres. Default is postgres""") connectorType: String = "postgres") {
   require(frame != null, "frame is required")
   require(StringUtils.isNotEmpty(tableName), "table name is required")
   require(connectorType == "postgres" || connectorType == "mysql", "connector type must be either mysql or postgres")

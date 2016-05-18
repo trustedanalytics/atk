@@ -34,6 +34,22 @@ trustedanalytics.atk {
   datastore
     {
 
+        # Postgresql
+        //connection-postgresql.host = "invalid-postgresql-host"
+        //connection-postgresql.port = 5432
+        //connection-postgresql.database = "postgresql-datastore"
+        //connection-postgresql.username = "postgresql-user"
+        //connection-postgresql.password = "postgresql-password"
+        connection-postgresql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.postgres.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-postgresql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-postgresql.port}"/"${trustedanalytics.atk.datastore.connection-postgresql.database}
+
+        # MYSQL
+        //connection-mysql.host = "invalid-mysql-host"
+        //connection-mysql.port = 3306
+        //connection-mysql.database = "mysql-datastore"
+        //connection-mysql.username = "mysql-user"
+        //connection-mysql.password = "mysql-password"
+        connection-mysql.url = ${trustedanalytics.atk.jdbc.prefix}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.mysql.prefix}${trustedanalytics.atk.jdbc.url.splitter}"//"${trustedanalytics.atk.datastore.connection-mysql.host}${trustedanalytics.atk.jdbc.url.splitter}${trustedanalytics.atk.datastore.connection-mysql.port}"/"${trustedanalytics.atk.datastore.connection-mysql.database}
+
      # OrientDB
     //connection-orientdb.host = "invalid-orientdb-host"
     //connection-orientdb.port = "invalid-orientdb-port"

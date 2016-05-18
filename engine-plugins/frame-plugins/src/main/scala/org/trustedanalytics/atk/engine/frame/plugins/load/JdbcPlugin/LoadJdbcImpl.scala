@@ -38,10 +38,7 @@ object LoadJdbcImpl extends Serializable {
    */
   def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
     val sqlContext = new SQLContext(sc)
-    val (dbConnectionString, username, password): (String, String, String) = arguments.connectionString match {
-      case Some(connect) => connect
-      case None => JdbcFunctions.buildUrl(arguments.connectorType)
-    }
+    val (dbConnectionString, username, password) = JdbcFunctions.buildUrl(arguments.connectorType)
 
     val connect = new Properties()
     connect.setProperty("username", username)
