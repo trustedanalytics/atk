@@ -22,7 +22,7 @@ import org.apache.spark._
 import org.apache.spark.rdd.JdbcRDD
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.{ DataFrame, SQLContext }
-import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
+import org.trustedanalytics.atk.domain.frame.load.{ LoadHdfsJdbcArgs }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
 
@@ -36,7 +36,7 @@ object LoadJdbcImpl extends Serializable {
    * @param sc default spark context
    * @param arguments arguments for jdbc connection (including the initial data filtering)
    */
-  def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
+  def createDataFrame(sc: SparkContext, arguments: LoadHdfsJdbcArgs): DataFrame = {
     val sqlContext = new SQLContext(sc)
     val (dbConnectionString, username, password) = JdbcFunctions.buildUrl(arguments.connectorType)
 

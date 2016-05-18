@@ -601,7 +601,7 @@ object DomainJsonProtocol extends AtkDefaultJsonProtocol with EventLogging {
 
   implicit val hBaseArgsFormat = jsonFormat5(HBaseArgs)
 
-  implicit val jdbcArgsFormat = jsonFormat4(JdbcArgs)
+  implicit val jdbcArgsFormat = jsonFormat4(LoadHdfsJdbcArgs)
 
   implicit val hiveArgsFormat = jsonFormat2(HiveArgs)
 

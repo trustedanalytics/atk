@@ -27,7 +27,7 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * @param driverName optional driver name
  * @param query optional initial query
  */
-case class JdbcArgs(
+case class LoadHdfsJdbcArgs(
     @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
     @ArgDoc("""table name""") tableName: String,
     @ArgDoc("""(optional) connector type""") connectorType: String = "postgres",
