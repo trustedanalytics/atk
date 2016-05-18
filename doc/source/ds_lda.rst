@@ -11,7 +11,7 @@ For example, given a number of documents, LDA can group the texts on similar top
 Setup
 -----
 
-Establish a connection to the ATK Rest Server.
+Establish a connection to the ATK REST Server.
 This handle will be used for the remainder of the script.
 
 Get server URL and credentials file from the TAP administrator.
@@ -20,7 +20,7 @@ Get server URL and credentials file from the TAP administrator.
    atk_server_uri = os.getenv("ATK_SERVER_URI", ia.server.uri)
    credentials_file = os.getenv("ATK_CREDENTIALS", "")
 
-Set the server, and use the credentials to connect to the ATK.
+Set the server, and use the credentials to connect to the ATK REST server.
 
 .. code::
    ia.server.uri = atk_server_uri
@@ -36,9 +36,9 @@ Note there is no metrics. Evaluating unsupervised machine learning results can b
 Construct a Frame
 -----------------
 
-Construct a frame to be uploaded, this is done using Python lists uploaded to the server
+Construct a frame to be uploaded, this is done using Python lists uploaded to the server.
 
-In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times
+In this example, there are 3 papers on 2 topics, with 4 words each, which each appear 2 times.
 
 .. code::
 
@@ -76,7 +76,7 @@ Train the Model
 
 This LDA model will be trained using the frame above.
 
-[FIX THIS]Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
+Give the model the papers to train topics on, and words associated with those papers, and the count of words in a paper.
 The final argument is the number of topics to search for.
 
 .. code::
@@ -86,7 +86,7 @@ The final argument is the number of topics to search for.
 Predict on the Model
 --------------------
 
-Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words
+Using the trained model, predict the words of two new papers, and show that they are in different topics. A new paper is a list of words and counts of those words.
 
 .. code::
 
@@ -94,7 +94,5 @@ Using the trained model, predict the words of two new papers, and show that they
    cluster2 = lda_model.predict(["word21", "word23"])
    print cluster1
    print cluster2
-
-   self.assertNotEqual(cluster1, cluster2)
 
 
