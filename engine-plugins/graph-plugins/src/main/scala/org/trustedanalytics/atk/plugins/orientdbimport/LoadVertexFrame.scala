@@ -32,10 +32,10 @@ class LoadVertexFrame(dbConfigurations: DbConfigurations) {
    *
    * @return vertex frame RDD
    */
-  def importOrientDbVertexClass(sc: SparkContext): VertexFrameRdd = {
+  def importOrientDbVertexClass(sc: SparkContext): List[VertexFrameRdd] = {
 
     val vertexRdd = new OrientDbVertexRdd(sc, dbConfigurations)
     val vertexFrames = vertexRdd.splitByLabel()
-    vertexFrames.head
+    vertexFrames
   }
 }

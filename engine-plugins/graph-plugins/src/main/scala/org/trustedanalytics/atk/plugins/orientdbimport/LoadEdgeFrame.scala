@@ -32,10 +32,10 @@ class LoadEdgeFrame(dbConfigurations: DbConfigurations) {
    *
    * @return Edge frame RDD
    */
-  def importOrientDbEdgeClass(sc: SparkContext): EdgeFrameRdd = {
+  def importOrientDbEdgeClass(sc: SparkContext): List[EdgeFrameRdd] = {
     val edgeRdd = new OrientDbEdgeRdd(sc, dbConfigurations)
     val edgeFrames = edgeRdd.splitByLabel()
-    edgeFrames.head
+    edgeFrames
   }
 
 }

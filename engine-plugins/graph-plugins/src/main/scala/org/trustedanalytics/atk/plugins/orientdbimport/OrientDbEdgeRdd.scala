@@ -25,10 +25,10 @@ import org.trustedanalytics.atk.plugins.orientdb.{ DbConfigurations, GraphDbFact
 import scala.collection.mutable.ArrayBuffer
 
 /**
-  *
-  * @param sc
-  * @param dbConfigurations
-  */
+ *
+ * @param sc
+ * @param dbConfigurations
+ */
 class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfigurations) extends RDD[Edge](sc, Nil) {
 
   override def compute(split: Partition, context: TaskContext): Iterator[Edge] = {
@@ -48,9 +48,9 @@ class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfigurations) exte
   }
 
   /**
-    *
-    * @return
-    */
+   *
+   * @return
+   */
   override protected def getPartitions: Array[Partition] = {
     val partitionBuffer = new ArrayBuffer[OrientDbPartition]()
     val graph = GraphDbFactory.graphDbConnector(dbConfigurations)

@@ -14,19 +14,12 @@
  *  limitations under the License.
  */
 package org.trustedanalytics.atk.plugins.orientdbimport
-
-import com.tinkerpop.blueprints.impls.orient.OrientGraphNoTx
 import org.apache.spark.atk.graph.{ EdgeFrameRdd, VertexFrameRdd }
-import org.apache.spark.frame.FrameRdd
-import org.apache.spark.sql.Row
-import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.CreateEntityArgs
-import org.trustedanalytics.atk.domain.frame.{ FrameName, FrameEntity }
 import org.trustedanalytics.atk.domain.graph.GraphEntity
-import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema, GraphSchema }
-import org.trustedanalytics.atk.engine.graph.{ SparkVertexFrame, SparkGraph }
+import org.trustedanalytics.atk.domain.schema.{ EdgeSchema, VertexSchema }
+import org.trustedanalytics.atk.engine.graph.SparkGraph
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin, PluginDoc }
-import org.trustedanalytics.atk.plugins.orientdb.{ GraphDbFactory, DbConfigReader }
+import org.trustedanalytics.atk.plugins.orientdb.DbConfigReader
 import spray.json._
 
 import scala.collection.mutable.ArrayBuffer
@@ -60,19 +53,45 @@ class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphAr
     // Get OrientDB configurations
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
     val loadVertexFrame = new LoadVertexFrame(dbConfig)
-    val vertexFrameRdd: VertexFrameRdd = loadVertexFrame.importOrientDbVertexClass(sc)
+    val vertexFrameRdds = loadVertexFrame.importOrientDbVertexClass(sc)
     val loadEdgeFrame = new LoadEdgeFrame(dbConfig)
-    val edgeFrameRdd = loadEdgeFrame.importOrientDbEdgeClass(sc)
-    val vertexFrameSchema = vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]
-    graph.defineVertexType(vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]) // add schema method to VertexFrameRdd
-    val edgeFrameSchema = edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema]
-    graph.defineEdgeType(edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema])
-    //Get the list of the graph from the meta data
-    val graphMeta = engine.graphs.expectSeamless(graph)
-    val vertexFrame = graphMeta.vertexMeta(vertexFrameSchema.label)
-    engine.graphs.saveVertexRdd(vertexFrame.toReference, vertexFrameRdd)
-    val edgeFrame = graphMeta.edgeMeta(edgeFrameSchema.label)
-    engine.graphs.saveEdgeRdd(edgeFrame.toReference, edgeFrameRdd)
+    val edgeFrameRdds = loadEdgeFrame.importOrientDbEdgeClass(sc)
+
+    saveVertexFrames(graph, vertexFrameRdds)
+
+    saveEdgeFrames(graph, edgeFrameRdds)
     graph
+  }
+
+  /**
+   *
+   * @param graph
+   * @param edgeFrameRdds
+   */
+  def saveEdgeFrames(graph: SparkGraph, edgeFrameRdds: List[EdgeFrameRdd])(implicit invocation: Invocation): Unit = {
+    edgeFrameRdds.foreach(edgeFrameRdd => {
+      val edgeFrameSchema = edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema]
+      graph.defineEdgeType(edgeFrameRdd.frameSchema.asInstanceOf[EdgeSchema])
+      //Get the list of the graph from the meta data
+      val graphMeta = engine.graphs.expectSeamless(graph)
+      val edgeFrame = graphMeta.edgeMeta(edgeFrameSchema.label)
+      engine.graphs.saveEdgeRdd(edgeFrame.toReference, edgeFrameRdd)
+    })
+  }
+
+  /**
+   *
+   * @param graph
+   * @param vertexFrameRdds
+   */
+  def saveVertexFrames(graph: SparkGraph, vertexFrameRdds: List[VertexFrameRdd])(implicit invocation: Invocation): Unit = {
+    vertexFrameRdds.foreach(vertexFrameRdd => {
+      val vertexFrameSchema = vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema]
+      graph.defineVertexType(vertexFrameRdd.frameSchema.asInstanceOf[VertexSchema])
+      //Get the list of the graph from the meta data
+      val graphMeta = engine.graphs.expectSeamless(graph)
+      val vertexFrame = graphMeta.vertexMeta(vertexFrameSchema.label)
+      engine.graphs.saveVertexRdd(vertexFrame.toReference, vertexFrameRdd)
+    })
   }
 }
