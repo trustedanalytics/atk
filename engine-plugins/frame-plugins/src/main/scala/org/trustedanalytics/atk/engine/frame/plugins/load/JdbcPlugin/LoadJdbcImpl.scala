@@ -16,10 +16,13 @@
 
 package org.trustedanalytics.atk.engine.frame.plugins.load.JdbcPlugin
 
+import java.sql.DriverManager
+import java.util.Properties
 import org.apache.spark._
+import org.apache.spark.rdd.JdbcRDD
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.sql.{ DataFrame, SQLContext }
-import org.trustedanalytics.atk.domain.frame.load.{ JdbcArgs }
+import org.trustedanalytics.atk.domain.frame.load.{ LoadHdfsJdbcArgs }
 import org.trustedanalytics.atk.domain.schema.DataTypes._
 import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
 
@@ -33,11 +36,15 @@ object LoadJdbcImpl extends Serializable {
    * @param sc default spark context
    * @param arguments arguments for jdbc connection (including the initial data filtering)
    */
-  def createDataFrame(sc: SparkContext, arguments: JdbcArgs): DataFrame = {
+  def createDataFrame(sc: SparkContext, arguments: LoadHdfsJdbcArgs): DataFrame = {
     val sqlContext = new SQLContext(sc)
-    val connectionArgs = JdbcFunctions.buildConnectionArgs(arguments.tableName, arguments.connectorType, arguments.driverName)
+    val (dbConnectionString, username, password) = JdbcFunctions.buildUrl(arguments.connectorType)
 
-    sqlContext.load("jdbc", connectionArgs)
+    val connect = new Properties()
+    connect.setProperty("username", username)
+    connect.setProperty("password", password)
+
+    sqlContext.read.jdbc(dbConnectionString, arguments.tableName, connect)
   }
 
   /**
@@ -48,5 +55,4 @@ object LoadJdbcImpl extends Serializable {
   def sparkDataTypeToSchemaDataType(sparkDataType: String): DataType = {
     FrameRdd.sparkDataTypeToSchemaDataType(sparkDataType)
   }
-
 }
