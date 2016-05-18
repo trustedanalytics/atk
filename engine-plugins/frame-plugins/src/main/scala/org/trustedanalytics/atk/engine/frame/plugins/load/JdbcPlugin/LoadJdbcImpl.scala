@@ -44,10 +44,7 @@ object LoadJdbcImpl extends Serializable {
     connect.setProperty("username", username)
     connect.setProperty("password", password)
 
-    arguments.query match {
-      case None => sqlContext.read.jdbc(dbConnectionString, arguments.tableName, connect)
-      case Some(query) => sqlContext.read.jdbc(dbConnectionString, arguments.tableName, connect).sqlContext.sql(query)
-    }
+    sqlContext.read.jdbc(dbConnectionString, arguments.tableName, connect)
   }
 
   /**

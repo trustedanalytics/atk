@@ -23,15 +23,13 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 /**
  * Jdbc argument class
  * @param destination destination frame
- * @param tableName a non empty list of csv separated table names
+ * @param tableName table name to read from
  * @param driverName optional driver name
- * @param query optional initial query
  */
 case class LoadHdfsJdbcArgs(
     @ArgDoc("""DataFrame to load data into.Should be either a uri or id.""") destination: FrameReference,
     @ArgDoc("""table name""") tableName: String,
-    @ArgDoc("""(optional) connector type""") connectorType: String = "postgres",
-    @ArgDoc("""(optional) query for filtering""") query: Option[String] = None) {
+    @ArgDoc("""(optional) connector type""") connectorType: String = "postgres") {
 
   require(StringUtils.isNotEmpty(tableName), "table name is required")
   require(connectorType == "postgres" || connectorType == "mysql", "connector type must be postgres or mysql")
