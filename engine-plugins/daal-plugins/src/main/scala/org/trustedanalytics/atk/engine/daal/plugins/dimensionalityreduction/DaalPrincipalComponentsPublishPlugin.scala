@@ -48,7 +48,7 @@ class DaalPrincipalComponentsPublishPlugin extends CommandPlugin[ModelPublishArg
    */
   override def name: String = "model:daal_principal_components/publish"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame

@@ -46,7 +46,7 @@ class DaalPrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCom
    */
   override def name: String = "model:daal_principal_components/train"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Calculate principal components for the specified columns

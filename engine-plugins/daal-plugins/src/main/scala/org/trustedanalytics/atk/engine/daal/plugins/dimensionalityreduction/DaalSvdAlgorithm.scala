@@ -21,6 +21,7 @@ import com.intel.daal.services.DaalContext
 import org.apache.spark.frame.FrameRdd
 import org.apache.spark.mllib.linalg._
 import org.apache.spark.rdd.RDD
+import org.trustedanalytics.atk.engine.daal.plugins.DaalUtils._
 import org.trustedanalytics.atk.engine.daal.plugins.DistributedAlgorithm
 import org.trustedanalytics.atk.engine.daal.plugins.tables.DaalConversionImplicits._
 import org.trustedanalytics.atk.engine.daal.plugins.tables.{ DistributedNumericTable, IndexedNumericTable }
@@ -67,27 +68,20 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
    */
   def compute(k: Int, computeU: Boolean = false): DaalSvdData = {
     require(k > 0 && k <= args.observationColumns.length, "k must be smaller than the number of observation columns")
-    var modelData: DaalSvdData = null
-    val context = new DaalContext
 
-    try {
+    val modelData = withDaalContext { context =>
       val partialResults = computePartialResults()
       val svdMasterResult = mergePartialResults(context, partialResults)
 
       val columnStatistics = frameRdd.columnStatistics(args.observationColumns)
       val singularValues = getSingularValues(svdMasterResult, k)
       val rightSingularMatrix = getRightSingularMatrix(svdMasterResult, k)
-      val leftSingularMatrix = computeLeftSingularMatrix(svdMasterResult.partialResult, partialResults, computeU)
+      val leftSingularMatrix = computeLeftSingularMatrix(svdMasterResult.partialResult,
+        partialResults, computeU)
 
-      modelData = DaalSvdData(k, args.observationColumns, args.meanCentered, columnStatistics.mean,
+      DaalSvdData(k, args.observationColumns, args.meanCentered, columnStatistics.mean,
         singularValues, rightSingularMatrix, leftSingularMatrix)
-    }
-    catch {
-      case ex: Exception => throw new RuntimeException("Could not compute singular value decomposition", ex)
-    }
-    finally {
-      context.dispose()
-    }
+    }.elseError("Could not compute singular value decomposition")
     modelData
   }
 
@@ -98,25 +92,16 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
    */
   override def computePartialResults(): RDD[SvdPartialResults] = {
     distributedTable.rdd.map(table => {
-      val context = new DaalContext
-      var vMatrixDataCollection: DataCollection = null
-      var uMatrixDataCollection: DataCollection = null
-      try {
+      withDaalContext { context =>
         val svdLocal = new DistributedStep1Local(context, classOf[java.lang.Double], Method.defaultDense)
         svdLocal.input.set(InputId.data, table.getUnpackedTable(context))
         val partialResult = svdLocal.compute
-        vMatrixDataCollection = partialResult.get(PartialResultId.outputOfStep1ForStep2)
-        uMatrixDataCollection = partialResult.get(PartialResultId.outputOfStep1ForStep3)
+        val vMatrixDataCollection = partialResult.get(PartialResultId.outputOfStep1ForStep2)
+        val uMatrixDataCollection = partialResult.get(PartialResultId.outputOfStep1ForStep3)
         vMatrixDataCollection.pack()
         uMatrixDataCollection.pack()
-      }
-      catch {
-        case ex: Exception => throw new RuntimeException("Could not compute partial SVD results", ex)
-      }
-      finally {
-        context.dispose()
-      }
-      SvdPartialResults(table.index, vMatrixDataCollection, uMatrixDataCollection)
+        SvdPartialResults(table.index, vMatrixDataCollection, uMatrixDataCollection)
+      }.elseError("Could not compute right singular matrix")
     })
   }
 
@@ -159,9 +144,7 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
     val partialResultBcast = rdd.sparkContext.broadcast(svdMasterPartialResult)
 
     val leftSingularMatrixRdd = rdd.flatMap(svdPartialResults => {
-      val context = new DaalContext()
-      var vectorIterator: Iterator[Vector] = null
-      try {
+      val vectorIterator = withDaalContext { context =>
         val masterResult = partialResultBcast.value
         masterResult.unpack(context)
 
@@ -178,14 +161,8 @@ case class DaalSvdAlgorithm(frameRdd: FrameRdd,
 
         val uMatrix = result.get(ResultId.leftSingularMatrix).asInstanceOf[HomogenNumericTable]
         val leftSingularMatrix = IndexedNumericTable(svdPartialResults.tableIndex, uMatrix)
-        vectorIterator = leftSingularMatrix.toVectorIterator(context)
-      }
-      catch {
-        case ex: Exception => throw new RuntimeException("Could not compute left singular matrix", ex)
-      }
-      finally {
-        context.dispose()
-      }
+        leftSingularMatrix.toVectorIterator(context)
+      }.elseError("Could not compute left singular matrix")
       vectorIterator
     })
 

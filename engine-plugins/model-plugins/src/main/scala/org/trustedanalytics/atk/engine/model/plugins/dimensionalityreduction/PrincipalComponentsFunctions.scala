@@ -47,14 +47,14 @@ object PrincipalComponentsFunctions extends Serializable {
   }
 
   /**
-   *
-   * @param frameRdd
-   * @param principalComponentData
-   * @param predictColumns
-   * @param c
-   * @param meanCentered
-   * @param computeTsquaredIndex
-   * @return
+   * Predict principal components
+   * @param frameRdd Input frame
+   * @param principalComponentData Principal components model data
+   * @param predictColumns List of columns names for prediction
+   * @param c Number of principal components
+   * @param meanCentered If true, mean center the input data
+   * @param computeTsquaredIndex If true, compute t-squared index
+   * @return Frame with predicted principal components
    */
   def predictPrincipalComponents(frameRdd: FrameRdd,
                                  principalComponentData: PrincipalComponentsData,
@@ -152,9 +152,11 @@ object PrincipalComponentsFunctions extends Serializable {
    * @return Vector RDD
    */
   def toVectorRdd(frameRdd: FrameRdd, columns: List[String], meanCentered: Boolean): RDD[Vector] = {
-    meanCentered match {
-      case true => frameRdd.toMeanCenteredDenseVectorRDD(columns)
-      case false => frameRdd.toDenseVectorRDD(columns)
+    if (meanCentered) {
+      frameRdd.toMeanCenteredDenseVectorRDD(columns)
+    }
+    else {
+      frameRdd.toDenseVectorRDD(columns)
     }
   }
 }

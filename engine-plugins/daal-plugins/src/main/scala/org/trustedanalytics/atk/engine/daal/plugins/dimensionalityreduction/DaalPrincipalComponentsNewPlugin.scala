@@ -58,7 +58,7 @@ class DaalPrincipalComponentsNewPlugin extends CommandPlugin[GenericNewModelArgs
    */
   override def name: String = "model:daal_principal_components/new"
 
-  override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   override def execute(arguments: GenericNewModelArgs)(implicit invocation: Invocation): ModelReference = {
     engine.models.createModel(CreateEntityArgs(name = arguments.name, entityType = Some("model:daal_principal_components")))

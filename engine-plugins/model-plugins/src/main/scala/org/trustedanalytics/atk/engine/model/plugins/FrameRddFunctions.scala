@@ -100,10 +100,13 @@ class FrameRddFunctions(self: FrameRdd) {
   def toIndexedRowMatrix(meanCentered: Boolean, principalComponentData: PrincipalComponentsData,
                          predictColumns: List[String], indexedFrameRdd: RDD[(Long, Row)]): IndexedRowMatrix = {
     new IndexedRowMatrix(
-      meanCentered match {
-        case true => FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, self.frameSchema, predictColumns, principalComponentData.meanVector)
-        case false => FrameRdd.toIndexedRowRdd(indexedFrameRdd, self.frameSchema, predictColumns)
-      })
+      if (meanCentered) {
+        FrameRdd.toMeanCenteredIndexedRowRdd(indexedFrameRdd, self.frameSchema,
+          predictColumns, principalComponentData.meanVector)
+      }
+      else {
+        FrameRdd.toIndexedRowRdd(indexedFrameRdd, self.frameSchema, predictColumns)
+      }
+    )
   }
-
 }
