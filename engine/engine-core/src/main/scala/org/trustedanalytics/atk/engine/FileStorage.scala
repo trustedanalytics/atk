@@ -19,6 +19,7 @@ package org.trustedanalytics.atk.engine
 import java.io.{ InputStream, OutputStream }
 import java.util.concurrent.TimeUnit
 
+import org.apache.hadoop.fs.permission.{ FsPermission, FsAction }
 import org.trustedanalytics.atk.engine.util.KerberosAuthenticator
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.apache.commons.lang3.ArrayUtils
@@ -147,7 +148,7 @@ class FileStorage extends EventLogging {
 
   def createDirectory(directory: Path): Unit = withContext("file.createDirectory") {
     val adjusted = absolutePath(directory.toString)
-    hdfs.mkdirs(adjusted)
+    hdfs.mkdirs(adjusted, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
   }
 
   /**

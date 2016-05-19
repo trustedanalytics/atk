@@ -26,15 +26,15 @@ echo "make jq executable"
 chmod +x $jq
 
 
+export KRB5_BASE64=1
 
 if [ "$KRB5_BASE64" ]; then
-    (base64 -d <<< $KRB5_BASE64) > $DIR/../krb5.conf
     export KERBEROS_ENABLED=true
-    export KRB5_CONFIG=$DIR/../krb5.conf
-    export YARN_AUTHENTICATED_USERNAME=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kuser')
-    export YARN_AUTHENTICATED_PASSWORD=$(echo $VCAP_SERVICES | $jq -c -r '."user-provided"[] | select (.name == "kerberos-service") | .credentials | .kpassword')
-    export HADOOP_USER_NAME=$YARN_AUTHENTICATED_USERNAME
-    export KRB5CCNAME=/tmp/cf@CLOUDERA
+    export KRB5_CONFIG=$DIR/../krb5jwt/etc/krb5.conf
+    export YARN_AUTHENTICATED_USERNAME=cf
+    export YARN_AUTHENTICATED_PASSWORD=cf1
+    export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
+    export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
 else
     export KERBEROS_ENABLED=false
 fi
@@ -55,7 +55,7 @@ export APP_NAME=$(echo $VCAP_APPLICATION | $jq -r .application_name)
 export APP_SPACE=$(echo $VCAP_APPLICATION | $jq -r .space_id)
 export USE_HTTP=true
 
-export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.HADOOP_CONFIG_KEY["fs.defaultFS"]')
+export FS_ROOT=$(echo $VCAP_SERVICES |  $jq -c -r '.hdfs[0].credentials.uri')
 export SPARK_EVENT_LOG_DIR=$(echo $FS_ROOT | cut -d'/' -f1-3)$"/user/spark/applicationHistory"
 
 # uncomment the following lines if a binding to the zookeeper is needed
@@ -173,13 +173,8 @@ if [ -d "$DIR/../lib/daal/intel64_lin" ]; then
  export LD_LIBRARY_PATH=${DAAL_LIB_DIR}:${DAAL_LIB_DIR}/${DAAL_GCC_VERSION}:${LD_LIBRARY_PATH}
 fi
 
-if [ -f ${KRB5_CONFIG} ]; then
- export JAVA_KRB_CONF="-Djava.security.krb5.conf=${KRB5_CONFIG}"
- export USE_SUBJECT_CREDS="-Djavax.security.auth.useSubjectCredsOnly=false"
-fi
-
-echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
-java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $JAVA_KRB_CONF $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+echo java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
+java $@ $JAVA_OPTS -XX:MaxPermSize=384m $SEARCH_PATH $USE_SUBJECT_CREDS -cp "$CP" -Djava.library.path=$LD_LIBRARY_PATH org.trustedanalytics.atk.moduleloader.Module rest-server org.trustedanalytics.atk.rest.RestServerApplication
 
 popd
 

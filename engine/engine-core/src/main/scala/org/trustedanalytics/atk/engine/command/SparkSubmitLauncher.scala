@@ -28,6 +28,7 @@ import org.trustedanalytics.atk.EventLoggingImplicits
 import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.moduleloader.Module
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
+import org.trustedanalytics.hadoop.config.client.oauth.TapOauthToken
 
 import org.trustedanalytics.hadoop.config.client.{ Configurations, ServiceType }
 import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
@@ -124,7 +125,8 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         }
         info(s"Launching Spark Submit: ${javaArgs.mkString(" ")}")
 
-        val userAuthenticatedConfiguration = KerberosAuthenticator.loginUsingHadoopUtils()
+        val jwtToken = new TapOauthToken(invocation.user.token.get)
+        val userAuthenticatedConfiguration = KerberosAuthenticator.submitYarnJobAsAuthenticatedUser(jwtToken)
 
         // We were initially invoking SparkSubmit main method directly (i.e. inside our JVM). However, only one
         // ApplicationMaster can exist at a time inside a single JVM. All further calls to SparkSubmit fail to
@@ -135,6 +137,8 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
         val result = Subject.doAs[Int](userAuthenticatedConfiguration.subject, new PrivilegedAction[Int] {
           def run: Int = {
             val pb = new java.lang.ProcessBuilder(javaArgs: _*)
+            pb.environment().put("KRB5CCNAME", s"/tmp/${jwtToken.getUserId}@CLOUDERA")
+            pb.environment().put("KRB5_CONFIG", s"krb5jwt/etc/krb5.conf")
             val job = pb.inheritIO().start()
             job.waitFor()
           }

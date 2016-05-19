@@ -25,6 +25,7 @@ import org.trustedanalytics.atk.engine.EngineConfig
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.security.UserGroupInformation
 import org.trustedanalytics.atk.moduleloader.ClassLoaderAware
+import org.trustedanalytics.hadoop.config.client.oauth.JwtToken
 import org.trustedanalytics.hadoop.config.client.{ ServiceType, Configurations, ServiceInstanceConfiguration }
 import org.trustedanalytics.hadoop.kerberos.KrbLoginManagerFactory
 import scala.reflect.io.Directory
@@ -100,6 +101,31 @@ object KerberosAuthenticator extends EventLogging with EventLoggingImplicits wit
     }
     catch {
       case t: Throwable => info("Failed to login as Authenticated User. Kerberos not set or invalid credentials")
+    }
+  }
+
+  def submitYarnJobAsAuthenticatedUser(jwtToken: JwtToken): UserAuthenticatedConfiguration = {
+    try {
+      val helper = Configurations.newInstanceFromEnv()
+      val hdfsConf = helper.getServiceConfig(ServiceType.YARN_TYPE)
+      if (KerberosAuthenticator.isKerberosEnabled(hdfsConf)) {
+        val kerberosProperties = new KerberosProperties
+        val loginManager = KrbLoginManagerFactory.getInstance()
+          .getKrbLoginManagerInstance(kerberosProperties.kdc, kerberosProperties.realm)
+        val res = hdfsConf.asHadoopConfiguration()
+        val subject = loginManager.loginWithJWTtoken(jwtToken)
+        loginManager.loginInHadoop(subject, res)
+        UserAuthenticatedConfiguration(subject, res)
+      }
+      else UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
+    }
+    catch {
+      case t: Throwable =>
+        info("Printing stack trace as to why kinit failed")
+        t.printStackTrace()
+        info(s"Failed to loginUsingHadooputils. Either kerberos is not enabled or invalid setup or " +
+          "using System credentials for authentication. Returning default configuration")
+        UserAuthenticatedConfiguration(Subject.getSubject(AccessController.getContext()), new Configuration())
     }
   }
 

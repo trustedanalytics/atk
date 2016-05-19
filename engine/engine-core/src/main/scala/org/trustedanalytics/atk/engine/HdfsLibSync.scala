@@ -16,6 +16,7 @@
 
 package org.trustedanalytics.atk.engine
 
+import org.apache.hadoop.fs.permission.{ FsPermission, FsAction }
 import org.apache.hadoop.fs.{ FileStatus, Path }
 import org.trustedanalytics.atk.event.{ EventContext, EventLogging }
 import org.trustedanalytics.atk.moduleloader.Module
@@ -36,7 +37,7 @@ class HdfsLibSync(fs: FileStorage) extends EventLogging {
     info(s"hdfs-lib: $destDir")
     if (!fs.hdfs.exists(destDir)) {
       info(s"Creating $destDir")
-      fs.hdfs.mkdirs(destDir)
+      fs.hdfs.mkdirs(destDir, new FsPermission(FsAction.ALL, FsAction.ALL, FsAction.READ_EXECUTE))
     }
     require(fs.hdfs.isDirectory(destDir), s"Not a directory $destDir, please configure hdfs-lib")
     localLibs.foreach(localLib => {
