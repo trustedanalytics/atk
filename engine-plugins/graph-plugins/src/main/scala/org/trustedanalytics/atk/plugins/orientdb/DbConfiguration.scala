@@ -21,12 +21,12 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
  * the database parsed configurations
  */
 
-case class DbConfigurations(@ArgDoc("""OrientDB database URI.""") dbUri: String,
-                            @ArgDoc("""The database user name.""") dbUserName: String,
-                            @ArgDoc("""The database password.""") dbPassword: String,
-                            @ArgDoc("""Port number.""") portNumber: String,
-                            @ArgDoc("""The database host.""") dbHost: String,
-                            @ArgDoc("""The root password.""") rootPassword: String) extends Serializable {
+case class DbConfiguration(@ArgDoc("""OrientDB database URI.""") dbUri: String,
+                           @ArgDoc("""The database user name.""") dbUserName: String,
+                           @ArgDoc("""The database password.""") dbPassword: String,
+                           @ArgDoc("""Port number.""") portNumber: String,
+                           @ArgDoc("""The database host.""") dbHost: String,
+                           @ArgDoc("""The root password.""") rootPassword: String) extends Serializable {
 
   require(dbUri != null, "database URI is required")
   require(dbUserName != null, "the user name is required")

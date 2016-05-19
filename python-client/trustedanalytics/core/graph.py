@@ -109,7 +109,7 @@ A seamless graph is better suited for bulk :term:`OLAP`-type operations
     _entity_type = 'graph:'
 
     @api
-    @arg('source', 'OrientDBGraph | Graph', "A source of initial data.")
+    @arg('source', 'OrientDBGraph | None', "A source of initial data.")
     @arg('name', str, """Name for the new graph.
 Default is None.""")
     def __init__(self, source=None, name=None, _info=None):

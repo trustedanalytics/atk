@@ -21,7 +21,7 @@ import com.tinkerpop.blueprints.{ Edge => BlueprintsEdge }
 import org.apache.spark.atk.graph.Edge
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{ Partition, SparkContext, TaskContext }
-import org.trustedanalytics.atk.plugins.orientdb.{ DbConfigurations, GraphDbFactory }
+import org.trustedanalytics.atk.plugins.orientdb.{ DbConfiguration, GraphDbFactory }
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -29,7 +29,7 @@ import scala.collection.mutable.ArrayBuffer
  * @param sc
  * @param dbConfigurations
  */
-class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfigurations) extends RDD[Edge](sc, Nil) {
+class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfiguration) extends RDD[Edge](sc, Nil) {
 
   override def compute(split: Partition, context: TaskContext): Iterator[Edge] = {
     val graph = GraphDbFactory.graphDbConnector(dbConfigurations)

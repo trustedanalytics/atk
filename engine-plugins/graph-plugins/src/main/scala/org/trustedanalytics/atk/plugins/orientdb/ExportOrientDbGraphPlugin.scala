@@ -81,7 +81,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
@@ -111,7 +111,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val edgeFrames = graphMeta.edgeFrames.map(_.toReference)

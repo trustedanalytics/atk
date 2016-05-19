@@ -17,7 +17,7 @@ package org.trustedanalytics.atk.plugins.orientdbimport
 
 import org.apache.spark.SparkContext
 import org.apache.spark.atk.graph.EdgeFrameRdd
-import org.trustedanalytics.atk.plugins.orientdb.DbConfigurations
+import org.trustedanalytics.atk.plugins.orientdb.DbConfiguration
 import org.apache.spark.atk.graph.GraphRddImplicits._
 
 /**
@@ -25,7 +25,7 @@ import org.apache.spark.atk.graph.GraphRddImplicits._
  *
  * @param dbConfigurations
  */
-class LoadEdgeFrame(dbConfigurations: DbConfigurations) {
+class LoadEdgeFrame(dbConfigurations: DbConfiguration) {
 
   /**
    * A method imports a class of edges from OrientDB graph database

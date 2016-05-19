@@ -41,7 +41,7 @@ trait TestingOrientDb {
   }
 
   /**
-   *
+   * create plocal Orient graph database
    */
   def setupOrientDb(): Unit = {
 

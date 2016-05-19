@@ -35,7 +35,7 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional OrientDB graph database instance
    */
-  def graphDbConnector(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  def graphDbConnector(dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     val orientDb: ODatabaseDocumentTx = new ODatabaseDocumentTx(dbConfigurations.dbUri)
     val orientGraphDb = if (dbConfigurations.dbUri.startsWith("remote:")) {
       if (!new OServerAdmin(dbConfigurations.dbUri).connect(rootUserName, dbConfigurations.rootPassword).existsDatabase()) {
@@ -63,7 +63,7 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional Orient graph database instance
    */
-  def createGraphDb(dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  def createGraphDb(dbConfigurations: DbConfiguration): OrientGraphNoTx = {
 
     val graph = Try {
       val factory = new OrientGraphFactory(dbConfigurations.dbUri, dbConfigurations.dbUserName, dbConfigurations.dbPassword)
@@ -83,7 +83,7 @@ object GraphDbFactory {
    * @param dbConfigurations OrientDB configurations
    * @return a non transactional Orient graph database instance
    */
-  private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfigurations): OrientGraphNoTx = {
+  private def openGraphDb(orientDb: ODatabaseDocumentTx, dbConfigurations: DbConfiguration): OrientGraphNoTx = {
     Try {
       val db: ODatabaseDocumentTx = orientDb.open(dbConfigurations.dbUserName, dbConfigurations.dbUserName)
       db

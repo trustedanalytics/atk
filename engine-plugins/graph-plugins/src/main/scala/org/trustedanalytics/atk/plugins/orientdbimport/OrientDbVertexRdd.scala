@@ -21,7 +21,7 @@ import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
 import org.apache.spark.atk.graph.Vertex
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{ Partition, SparkContext, TaskContext }
-import org.trustedanalytics.atk.plugins.orientdb.{ DbConfigurations, GraphDbFactory }
+import org.trustedanalytics.atk.plugins.orientdb.{ DbConfiguration, GraphDbFactory }
 import scala.collection.mutable.ArrayBuffer
 
 /**
@@ -29,7 +29,7 @@ import scala.collection.mutable.ArrayBuffer
  * @param sc
  * @param dbConfigurations
  */
-class OrientDbVertexRdd(sc: SparkContext, dbConfigurations: DbConfigurations) extends RDD[Vertex](sc, Nil) {
+class OrientDbVertexRdd(sc: SparkContext, dbConfigurations: DbConfiguration) extends RDD[Vertex](sc, Nil) {
 
   /**
    *

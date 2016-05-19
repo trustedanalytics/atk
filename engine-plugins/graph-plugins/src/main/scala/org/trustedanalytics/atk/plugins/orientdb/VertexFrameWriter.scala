@@ -23,7 +23,7 @@ import org.apache.spark.atk.graph.VertexFrameRdd
  * @param dbConfigurations OrientDB configurations
  */
 
-class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+class VertexFrameWriter(vertexFrameRdd: VertexFrameRdd, dbConfigurations: DbConfiguration) extends Serializable {
 
   /**
    * Method to export vertex frame to OrientDb

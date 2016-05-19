@@ -22,7 +22,7 @@ import org.apache.spark.atk.graph.EdgeFrameRdd
  * @param edgeFrameRdd the edges frame to be exported to OrientDB
  * @param dbConfigurations OrientDB configurations
  */
-class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurations) extends Serializable {
+class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfiguration) extends Serializable {
 
   /**
    * Method to export edge frame to OrientDB
