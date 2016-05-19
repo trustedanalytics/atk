@@ -4,25 +4,26 @@
 Getting Started
 ===============
 
-.. contents:: Table of Contents
-    :local:
-    :backlinks: none
+To start using ATK on TAP, create a new Jupyter notebook instance and create a set of credentials to connect to ATK Server. The following steps will guide you through this process.   
 
------------
-Open-Source
------------
+For a more detailed set of instructions please visit the `Trusted Analytics Platform wiki pages <https://github.com/trustedanalytics/platform-wiki/wiki/Getting-Started-with-AT>`_.   
+Note: The wiki page will be updated to stay in sync with the latest version of AT and TAP and might not always be consistent with AT version 0.7.0   
 
-|PACKAGE| uses standards and open-source routines from
-`Apache Hadoop <http://hadoop.apache.org/>`__ such as |HDFS|,
-:term:`MapReduce`, YARN
+Creating a Jupyter Notebook Instance
+------------------------------------
 
---------
-Features
---------
+1.      From the *>Home* page, select *>Data Science* from the main menu, then select *>Jupyter*.
+2.      Click inside form field labeled Instance Name and assign a name to your instance. 
+3.      Select the button *>Create new Jupyter instance* to create a new instance.  The button is not available until a name has been provided in the available form field. 
 
-*   Import routines read and convert data from several different formats
-*   Data cleaning tools prepare the data by removing erroneous values,
-    transforming values to a normalized state and constructing
-    new features through manipulating existing values
-*   Analysis and machine learning algorithms give deeper insight into the data
+Your new Jupyter instance has been created.  The new instance can be found by selecting *>Data Science* from the main menu, then by selecting the sub menu item *>Jupyter* and searching for the Instance Name you assigned in step 2. 
+
+Working with the Analytics Toolkit from a Jupyter Notebook
+----------------------------------------------------------
+
+Create your credentials file: `Creating a Credentials File Example Notebook <https://github.com/trustedanalytics/jupyter-default-notebooks/blob/master/notebooks/examples/atk/create-credentials.ipynb>`_  
+
+This step only needs to be taken the first time you attempt to use the Analytics Toolkit or when switching to a new instance of Analytics Toolkit.  
+Creating credentials generates a file named myuser-cred.creds  
+This file is necessary when writing scripts to connect to the Analytics Toolkit from Jupyter Notebooks.  
 
