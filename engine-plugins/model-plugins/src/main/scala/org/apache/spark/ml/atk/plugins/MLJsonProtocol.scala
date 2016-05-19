@@ -92,9 +92,9 @@ object MLJsonProtocol {
   implicit val linearRegressionMlModelTestReturn = jsonFormat5(LinearRegressionTestReturn)
 
   implicit val coxMlModelTrainArgs = jsonFormat7(MultivariateCoxTrainArgs)
-  implicit val coxMlModelTrainReturn = jsonFormat1(MultivariateCoxTrainReturn)
+  implicit val coxMlModelTrainReturn = jsonFormat2(MultivariateCoxTrainReturn)
   implicit val coxMlModelDataFormat = jsonFormat4(MultivariateCoxData)
-  implicit val coxMlModelPredictArgs = jsonFormat3(MultivariateCoxPredictArgs)
+  implicit val coxMlModelPredictArgs = jsonFormat4(MultivariateCoxPredictArgs)
 
 }
 class InvalidJsonException(message: String) extends RuntimeException(message)

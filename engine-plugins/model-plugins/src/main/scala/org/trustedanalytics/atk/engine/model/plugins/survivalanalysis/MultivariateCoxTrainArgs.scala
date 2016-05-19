@@ -27,21 +27,24 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 case class MultivariateCoxTrainArgs(model: ModelReference,
                                     @ArgDoc("""A frame to train the model on.""") frame: FrameReference,
                                     @ArgDoc("""Column containing the time data.""") timeColumn: String,
-                                    @ArgDoc("""List of column(s) containing the covariate data.""") covariateColumns: List[String],
-                                    @ArgDoc("""List of column(s) containing the censored data. Can have 2 values: 0 - event did not happen (censored); 1 - event happened (not censored)""") censorColumn: String,
+                                    @ArgDoc("""List of column(s) containing the co-variate data.""") covariateColumns: List[String],
+                                    @ArgDoc("""Column containing the censored data. Can have 2 values: 0 - event did not happen (censored); 1 - event happened (not censored)""") censorColumn: String,
                                     @ArgDoc("""Convergence tolerance""") convergenceTolerance: Double = 1E-6,
-                                    //@ArgDoc("""Initial beta.""") initialBetas: List[Double] = 0.0,
                                     @ArgDoc("""Max steps.""") maxSteps: Int = 100) {
 
   require(model != null, "model is required")
   require(frame != null, "frame is required")
-  require(StringUtils.isNotBlank(timeColumn), "Event time column name must be provided")
-  //require(StringUtils.isNotBlank(covariateColumns), "covarianceColumn must not be null nor empty")
+  require(timeColumn != null && timeColumn.nonEmpty, "Time column must not be null or empty")
+  require(censorColumn != null && censorColumn.nonEmpty, "Censor column must not be null or empty")
+  require(covariateColumns != null && covariateColumns.nonEmpty, "Co-variate columns must not be null or empty")
+  require(covariateColumns.length == 1,"Current implementation is for univariate data. Multivariate is under implementation")
   require(maxSteps > 0, "Max steps must be a positive integer")
 }
 
 /**
  * Return object when training a CoxProportionalHazardModel
- * @param beta beta at final step
+ * @param beta List containing the final beta values
+ * @param mean List containing the mean of the covariates
  */
-case class MultivariateCoxTrainReturn(beta: List[Double])
+
+case class MultivariateCoxTrainReturn(beta: List[Double], mean: List[Double])

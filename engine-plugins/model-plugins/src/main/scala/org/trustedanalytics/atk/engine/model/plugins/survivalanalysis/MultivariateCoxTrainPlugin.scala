@@ -42,12 +42,6 @@ class MultivariateCoxTrainPlugin extends SparkCommandPlugin[MultivariateCoxTrain
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Number of Spark jobs that get created by running this command
-   * (this configuration is used to prevent multiple progress bars in Python client)
-   */
-  override def numberOfJobs(arguments: MultivariateCoxTrainArgs)(implicit invocation: Invocation) = 9
-
-  /**
    * Fits Cox hazard function and creates a model for it.
    *
    * @param invocation information about the user and the circumstances at the time of the call,
@@ -69,7 +63,7 @@ class MultivariateCoxTrainPlugin extends SparkCommandPlugin[MultivariateCoxTrain
     val jsonModel = new MultivariateCoxData(coxModel, arguments.covariateColumns, arguments.timeColumn, arguments.censorColumn)
     model.data = jsonModel.toJson.asJsObject
 
-    new MultivariateCoxTrainReturn(coxModel.beta.toArray.toList)
+    new MultivariateCoxTrainReturn(coxModel.beta.toArray.toList, coxModel.meanVector.toArray.toList)
   }
 
 }

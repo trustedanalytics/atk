@@ -48,7 +48,7 @@ class MultivariateCoxPredictPlugin extends SparkCommandPlugin[MultivariateCoxPre
   override def apiMaturityTag = Some(ApiMaturityTag.Alpha)
 
   /**
-   * Predict values for a frame using a trained Linear Regression model
+   * Predict values for a frame using a trained Cox proportional hazards model
    * @param invocation information about the user and the circumstances at the time of the call,
    *                   as well as a function that can be called to produce a SparkContext that
    *                   can be used during this invocation.
@@ -57,7 +57,7 @@ class MultivariateCoxPredictPlugin extends SparkCommandPlugin[MultivariateCoxPre
    */
   override def execute(arguments: MultivariateCoxPredictArgs)(implicit invocation: Invocation): FrameReference = {
     val model: Model = arguments.model
-    val frame: SparkFrame = arguments.frame
+    val frame: SparkFrame = arguments.predictFrame
     val predictFrameRdd = frame.rdd
 
     val coxJsObject = model.dataOption.getOrElse(throw new RuntimeException("This model has not be trained yet. Please train before trying to predict"))
@@ -65,19 +65,21 @@ class MultivariateCoxPredictPlugin extends SparkCommandPlugin[MultivariateCoxPre
     val coxModel = coxData.coxModel
     val featureColumns = arguments.featureColumns.getOrElse(coxData.featureColumns)
 
-    val hazardRatios = frame.rdd.mapRows(row => {
-      val observation = row.valuesAsDenseVector(featureColumns)
-      val hazardRatio = coxModel.predict(observation)
-      row.addValue(hazardRatio)
-    })
+    val meanVector = if (arguments.comparisonFrame.isDefined) {
+      val compareFrame: SparkFrame = arguments.comparisonFrame.get
+      compareFrame.rdd.columnStatistics(coxData.featureColumns).mean
+    }
+    else
+      coxModel.meanVector
     val hazardRatioColumn = Column("hazard_ratio", DataTypes.float64)
-    val predictFrame = frame.rdd.addColumn(hazardRatioColumn, row => {
+    val predictFrame = predictFrameRdd.addColumn(hazardRatioColumn, row => {
       val observation = row.valuesAsDenseVector(featureColumns)
-      coxModel.predict(observation)
+      coxModel.predict(observation, meanVector)
     })
 
     engine.frames.tryNewFrame(CreateEntityArgs(description = Some("created by Multivariate Cox Proportional Hazards predict operation"))) {
       newPredictedFrame: FrameEntity =>
+
         newPredictedFrame.save(predictFrame)
     }
 
