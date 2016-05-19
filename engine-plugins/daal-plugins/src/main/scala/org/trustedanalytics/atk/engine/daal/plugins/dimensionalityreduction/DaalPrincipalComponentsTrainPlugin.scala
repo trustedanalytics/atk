@@ -14,20 +14,20 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
+package org.trustedanalytics.atk.engine.daal.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.{ PrincipalComponentsTrainReturn, PrincipalComponentsTrainArgs }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
 
 // Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
 
-@PluginDoc(oneLine = "Build principal components model.",
+@PluginDoc(oneLine = "Build Intel DAAL principal components model.",
   extended = """Creating a PrincipalComponents Model using the observation columns.""",
   returns =
     """dictionary
@@ -36,15 +36,17 @@ import MLLibJsonProtocol._
     |'k': number of principal components used to train the model
     |'mean_centered': Flag indicating if the model was mean centered during training
     |'observation_columns': the list of observation columns on which the model was trained,
-    |'right_singular_vectors': list of a list storing the right singular vectors of the specified columns of the input frame
-    |'singular_values': list storing the singular values of the specified columns of the input frame
+    |'eigen_vectors': list of a list storing the eigen vectors of the specified columns of the input frame
+    |'eigen_values': list storing the eigen values of the specified columns of the input frame
   """)
-class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
+class DaalPrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalComponentsTrainArgs, PrincipalComponentsTrainReturn] {
 
   /**
    * The name of the command
    */
-  override def name: String = "model:principal_components/train"
+  override def name: String = "model:daal_principal_components/train"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Calculate principal components for the specified columns
@@ -59,19 +61,14 @@ class PrincipalComponentsTrainPlugin extends SparkCommandPlugin[PrincipalCompone
     val frame: SparkFrame = arguments.frame
 
     val observationColumns = arguments.observationColumns
-    val meanCentered = arguments.meanCentered
     frame.schema.requireColumnsAreVectorizable(observationColumns)
 
-    val k = arguments.k.getOrElse(observationColumns.length)
+    val k = arguments.k.getOrElse(arguments.observationColumns.length)
+    val svdData = DaalSvdAlgorithm(frame.rdd, arguments).compute(k, computeU = false)
 
-    val rowMatrix = PrincipalComponentsFunctions.toRowMatrix(frame.rdd, observationColumns, meanCentered)
-    val svd = rowMatrix.computeSVD(k, computeU = false)
-
-    val columnStatistics = frame.rdd.columnStatistics(observationColumns)
-    val principalComponentsObject = new PrincipalComponentsData(k, observationColumns,
-      meanCentered, columnStatistics.mean, svd.s, svd.V)
+    val principalComponentsObject = svdData.toPrincipalComponentsData
     model.data = principalComponentsObject.toJson.asJsObject
-
     new PrincipalComponentsTrainReturn(principalComponentsObject)
   }
+
 }

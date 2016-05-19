@@ -14,15 +14,17 @@
  *  limitations under the License.
  */
 
-package org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction
+package org.trustedanalytics.atk.engine.daal.plugins.dimensionalityreduction
 
 import org.apache.spark.mllib.atk.plugins.MLLibJsonProtocol
 import org.trustedanalytics.atk.domain.CreateEntityArgs
 import org.trustedanalytics.atk.domain.frame.FrameEntity
 import org.trustedanalytics.atk.engine.frame.SparkFrame
 import org.trustedanalytics.atk.engine.model.Model
-import org.trustedanalytics.atk.engine.plugin.{ PluginDoc, Invocation }
-import org.trustedanalytics.atk.engine.plugin.SparkCommandPlugin
+import org.trustedanalytics.atk.engine.model.plugins.dimensionalityreduction.{ PrincipalComponentsFunctions, PrincipalComponentsData, PrincipalComponentsPredictArgs }
+import org.trustedanalytics.atk.engine.plugin.{ ApiMaturityTag, Invocation, PluginDoc, SparkCommandPlugin }
+
+// Implicits needed for JSON conversion
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 import MLLibJsonProtocol._
@@ -33,7 +35,7 @@ import MLLibJsonProtocol._
     """A frame with existing columns and following additional columns\:
       'c' additional columns: containing the projections of V on the the frame
       't_squared_index': column storing the t-square-index value, if requested""")
-class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalComponentsPredictArgs, FrameEntity] {
+class DaalPrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalComponentsPredictArgs, FrameEntity] {
 
   /**
    * The name of the command.
@@ -41,7 +43,9 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
    * The format of the name determines how the plugin gets "installed" in the client layer
    * e.g Python client via code generation.
    */
-  override def name: String = "model:principal_components/predict"
+  override def name: String = "model:daal_principal_components/predict"
+
+  override def apiMaturityTag = Some(ApiMaturityTag.Beta)
 
   /**
    * Get the predictions for observations in a test frame
@@ -65,12 +69,13 @@ class PrincipalComponentsPredictPlugin extends SparkCommandPlugin[PrincipalCompo
     val c = arguments.c.getOrElse(principalComponentData.k)
     val predictColumns = arguments.observationColumns.getOrElse(principalComponentData.observationColumns)
 
+    //TODO: Update predict method once DAAL supports linear algebra operations on its numeric tables
     // Predict principal components and optional T-squared index
     val resultFrame = PrincipalComponentsFunctions.predictPrincipalComponents(frame.rdd,
       principalComponentData, predictColumns, c, arguments.meanCentered, arguments.tSquaredIndex)
 
     val resultFrameEntity = engine.frames.tryNewFrame(
-      CreateEntityArgs(name = arguments.name, description = Some("created from principal components predict"))) {
+      CreateEntityArgs(name = arguments.name, description = Some("created from DAAL principal components predict"))) {
         newFrame => newFrame.save(resultFrame)
       }
 

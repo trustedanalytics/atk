@@ -122,6 +122,9 @@ model-daal_naive_bayes/train.rst
 model-daal_naive_bayes/predict.rst
 model-daal_naive_bayes/test.rst
 model-daal_naive_bayes/publish.rst
+model-daal_principal_components/new.rst
+model-daal_principal_components/train.rst
+model-daal_principal_components/publish.rst
 """.splitlines())
 
 
