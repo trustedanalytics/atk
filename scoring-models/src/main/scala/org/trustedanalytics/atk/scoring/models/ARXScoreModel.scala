@@ -64,7 +64,8 @@ class ARXScoreModel(arxModel: ARXModel, arxData: ARXData) extends ARXModel(arxMo
   }
 
   override def output(): Array[Field] = {
-    Array[Field](Field("score", "Array[Double]"))
+    var output = input()
+    output :+ Field("score", "Array[Double]")
   }
 
 }

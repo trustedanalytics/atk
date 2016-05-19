@@ -58,7 +58,8 @@ class ARIMAScoreModel(arimaModel: ARIMAModel, arimaData: ARIMAData) extends ARIM
   }
 
   override def output(): Array[Field] = {
-    Array[Field](Field("predicted_values", "Array[Double]"))
+    var output = input()
+    output :+ Field("predicted_values", "Array[Double]")
   }
 
 }
