@@ -22,18 +22,17 @@ import org.trustedanalytics.atk.engine.plugin.{ Invocation, SparkCommandPlugin, 
 import org.trustedanalytics.atk.plugins.orientdb.DbConfigReader
 import spray.json._
 
-import scala.collection.mutable.ArrayBuffer
-
-/** Json conversion for arguments and return value case classes */
+/** Json conversion for input arguments case class */
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
 object importOrientDbGraphJsonFormat {
   implicit val importOrientDbGraphArgsFormat = jsonFormat2(ImportOrientDbGraphArgs)
-  // implicit val importOrientDbGraphReturnFormat = jsonFormat3(ImportOrientDbGraphReturn)
 }
 import org.trustedanalytics.atk.plugins.orientdbimport.importOrientDbGraphJsonFormat._
 
-@PluginDoc(oneLine = "Imports a graph from OrientDB database to ATK",
-  extended = ".",
+@PluginDoc(oneLine = "Imports a graph from OrientDB database to ATK graph",
+  extended =
+    """Connects to the given OrientDB database name using the settings provided in the configurations file.
+       Each imported vertex or edge class from the OrientDB database corresponds to vertex frame RDD or edge frame RDD in ATK.""",
   returns = "ATK graph in Parquet graph format.")
 class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphArgs, GraphEntity] {
 
@@ -41,10 +40,6 @@ class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphAr
 
   /**
    * A method imports OrientDB graph to ATK Parquet graph format
-   *
-   * @param arguments the arguments supplied by the caller
-   * @param invocation
-   * @return a value of type declared as the Return type.
    */
   override def execute(arguments: ImportOrientDbGraphArgs)(implicit invocation: Invocation): GraphEntity = {
 
@@ -52,21 +47,19 @@ class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphAr
     val graph: SparkGraph = arguments.graph
     // Get OrientDB configurations
     val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
-    val loadVertexFrame = new LoadVertexFrame(dbConfig)
-    val vertexFrameRdds = loadVertexFrame.importOrientDbVertexClass(sc)
-    val loadEdgeFrame = new LoadEdgeFrame(dbConfig)
-    val edgeFrameRdds = loadEdgeFrame.importOrientDbEdgeClass(sc)
-
+    val vertexFrameReader = new VertexFrameReader(dbConfig)
+    val vertexFrameRdds = vertexFrameReader.importOrientDbVertexClass(sc)
+    val edgeFrameReader = new EdgeFrameReader(dbConfig)
+    val edgeFrameRdds = edgeFrameReader.importOrientDbEdgeClass(sc)
     saveVertexFrames(graph, vertexFrameRdds)
-
     saveEdgeFrames(graph, edgeFrameRdds)
     graph
   }
 
   /**
-   *
-   * @param graph
-   * @param edgeFrameRdds
+   * A method saves the edge frame RDDs into the ATK graph
+   * @param graph ATK graph
+   * @param edgeFrameRdds List of the imported edge frame RDDs
    */
   def saveEdgeFrames(graph: SparkGraph, edgeFrameRdds: List[EdgeFrameRdd])(implicit invocation: Invocation): Unit = {
     edgeFrameRdds.foreach(edgeFrameRdd => {
@@ -80,9 +73,9 @@ class ImportOrientDbGraphPlugin extends SparkCommandPlugin[ImportOrientDbGraphAr
   }
 
   /**
-   *
-   * @param graph
-   * @param vertexFrameRdds
+   * A method saves the vertex frame RDDs into the ATK graph
+   * @param graph ATK graph
+   * @param vertexFrameRdds List of the imported vertex frame RDDs
    */
   def saveVertexFrames(graph: SparkGraph, vertexFrameRdds: List[VertexFrameRdd])(implicit invocation: Invocation): Unit = {
     vertexFrameRdds.foreach(vertexFrameRdd => {

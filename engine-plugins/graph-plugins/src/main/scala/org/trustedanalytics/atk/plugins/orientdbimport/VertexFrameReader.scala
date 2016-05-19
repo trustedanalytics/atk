@@ -16,26 +16,27 @@
 package org.trustedanalytics.atk.plugins.orientdbimport
 
 import org.apache.spark.SparkContext
-import org.apache.spark.atk.graph.EdgeFrameRdd
+import org.apache.spark.atk.graph.VertexFrameRdd
 import org.trustedanalytics.atk.plugins.orientdb.DbConfiguration
 import org.apache.spark.atk.graph.GraphRddImplicits._
 
 /**
- * imports a class of edges from OrientDB graph database to ATK
+ * imports vertex classes from OrientDB database to ATK
  *
- * @param dbConfigurations
+ * @param dbConfigurations OrientDB configurations
  */
-class LoadEdgeFrame(dbConfigurations: DbConfiguration) {
+class VertexFrameReader(dbConfigurations: DbConfiguration) {
 
   /**
-   * A method imports a class of edges from OrientDB graph database
+   * A method imports vertex classes from OrientDB to ATK
    *
-   * @return Edge frame RDD
+   * @return List of vertex frame RDDs
    */
-  def importOrientDbEdgeClass(sc: SparkContext): List[EdgeFrameRdd] = {
-    val edgeRdd = new OrientDbEdgeRdd(sc, dbConfigurations)
-    val edgeFrames = edgeRdd.splitByLabel()
-    edgeFrames
-  }
+  def importOrientDbVertexClass(sc: SparkContext): List[VertexFrameRdd] = {
 
+    val vertexRdd = new OrientDbVertexRdd(sc, dbConfigurations)
+    //TODO: replace vertexRdd.spli with vertexRdd.splitByLabel(List(VertexSchema))
+    val vertexFrames = vertexRdd.splitByLabel()
+    vertexFrames
+  }
 }

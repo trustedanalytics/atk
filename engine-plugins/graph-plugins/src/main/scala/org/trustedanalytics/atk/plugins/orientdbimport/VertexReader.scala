@@ -20,21 +20,36 @@ import org.apache.spark.atk.graph.Vertex
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, GraphSchema }
 import com.tinkerpop.blueprints.{ Vertex => BlueprintsVertex }
+import org.trustedanalytics.atk.event.EventLogging
 
-class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema) {
+/**
+ * imports OrientDB vertex from OrientDB database to ATK vertex
+ *
+ * @param graph OrientDB database
+ * @param vertexSchema ATK vertex Schema
+ */
+class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema) extends EventLogging {
 
+  /**
+   * A method imports OrientDB vertex to ATK vertex
+   *
+   * @param orientVertex OrientDB vertex
+   * @return ATK vertex
+   */
   def importVertex(orientVertex: BlueprintsVertex): Vertex = {
     try {
       createVertex(orientVertex)
     }
     catch {
       case e: Exception =>
+        error(s"Unable to read vertex with ID ${orientVertex.getId.toString} from OrientDB graph", exception = e)
         throw new RuntimeException(s"Unable to read vertex with ID ${orientVertex.getId.toString} from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
    * A method creates ATK vertex
+   *
    * @param orientVertex OrientDB vertex
    * @return ATK vertex
    */
@@ -45,20 +60,9 @@ class VertexReader(graph: OrientGraphNoTx, vertexSchema: VertexSchema) {
         vertexSchema.label
       }
       else {
-        val prop: Any = orientVertex.getProperty(col.name)
-        prop
+        orientVertex.getProperty(col.name): Any
       }
     })
     new Vertex(vertexSchema, Row.fromSeq(row.toSeq))
   }
-
-  /* /**
-   * A method gets OrientDB vertex from OrientDB graph database
-   * @return OrientDB vertex
-   */
-  def getOrientVertex: BlueprintsVertex = {
-    val vertexIterator = graph.getVertices(GraphSchema.vidProperty, vertexId).iterator()
-    val orientVertex = vertexIterator.next()
-    orientVertex
-  }*/
 }

@@ -25,18 +25,12 @@ import org.trustedanalytics.atk.plugins.orientdb.{ DbConfiguration, GraphDbFacto
 import scala.collection.mutable.ArrayBuffer
 
 /**
- *
- * @param sc
- * @param dbConfigurations
+ * creates Spark RDDs for the imported vertex classes from OrientDB graph
+ * @param sc Spark context
+ * @param dbConfigurations OrientDB database configurations
  */
 class OrientDbVertexRdd(sc: SparkContext, dbConfigurations: DbConfiguration) extends RDD[Vertex](sc, Nil) {
 
-  /**
-   *
-   * @param split
-   * @param context
-   * @return
-   */
   override def compute(split: Partition, context: TaskContext): Iterator[Vertex] = {
     val graph = GraphDbFactory.graphDbConnector(dbConfigurations)
     val partition = split.asInstanceOf[OrientDbPartition]
@@ -56,8 +50,8 @@ class OrientDbVertexRdd(sc: SparkContext, dbConfigurations: DbConfiguration) ext
   }
 
   /**
-   *
-   * @return
+   * divides OrientDB vertices to partitions, each partition has data from a single cluster and class
+   * @return Array of partitions for OrientDB graph vertices to be imported in parallel
    */
   override protected def getPartitions: Array[Partition] = {
     val partitionBuffer = new ArrayBuffer[OrientDbPartition]()

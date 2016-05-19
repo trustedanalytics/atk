@@ -18,13 +18,14 @@ package org.trustedanalytics.atk.plugins.orientdb
 import com.tinkerpop.blueprints.{ Parameter, Vertex => BlueprintsVertex }
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientEdgeType, OrientVertexType }
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema, VertexSchema }
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
  * Export schema to OrientDB schema
  *
  * @param orientGraph OrientDB graph
  */
-class SchemaWriter(orientGraph: OrientGraphNoTx) {
+class SchemaWriter(orientGraph: OrientGraphNoTx) extends EventLogging {
 
   /**
    * A method to export vertex schema
@@ -49,6 +50,7 @@ class SchemaWriter(orientGraph: OrientGraphNoTx) {
     catch {
       case e: Exception => {
         orientGraph.rollback()
+        error(s"Unable to create the vertex schema", exception = e)
         throw new RuntimeException(s"Unable to create the vertex schema: ${e.getMessage}")
       }
     }
@@ -76,6 +78,7 @@ class SchemaWriter(orientGraph: OrientGraphNoTx) {
     catch {
       case e: Exception => {
         orientGraph.rollback()
+        error(s"Unable to create the edge schema", exception = e)
         throw new RuntimeException(s"Unable to create the edge schema: ${e.getMessage}")
       }
     }

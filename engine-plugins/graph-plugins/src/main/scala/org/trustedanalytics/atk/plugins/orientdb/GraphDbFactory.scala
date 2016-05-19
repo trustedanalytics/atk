@@ -19,13 +19,14 @@ import com.orientechnologies.orient.client.remote.OServerAdmin
 import com.orientechnologies.orient.core.db.document.ODatabaseDocumentTx
 import com.orientechnologies.orient.core.intent.OIntentMassiveInsert
 import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraphFactory }
+import org.trustedanalytics.atk.event.EventLogging
 import scala.util.{ Failure, Success, Try }
 
 /**
  * OrientDB graph factory
  */
 
-object GraphDbFactory {
+object GraphDbFactory extends EventLogging {
 
   val rootUserName = "root"
 
@@ -72,7 +73,9 @@ object GraphDbFactory {
       factory.getNoTx
     } match {
       case Success(orientGraph) => orientGraph
-      case Failure(ex) => throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
+      case Failure(ex) =>
+        error(s"Unable to create database", exception = ex)
+        throw new RuntimeException(s"Unable to create database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
     graph
   }
@@ -89,7 +92,9 @@ object GraphDbFactory {
       db
     } match {
       case Success(db) => new OrientGraphNoTx(db)
-      case Failure(ex) => throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
+      case Failure(ex) =>
+        error(s"Unable to open database", exception = ex)
+        throw new scala.RuntimeException(s"Unable to open database: ${dbConfigurations.dbUri}, ${ex.getMessage}")
     }
   }
 

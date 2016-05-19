@@ -20,16 +20,19 @@ import com.tinkerpop.blueprints.{ Edge => BlueprintsEdge }
 import org.apache.spark.atk.graph.Edge
 import org.apache.spark.sql.Row
 import org.trustedanalytics.atk.domain.schema.{ GraphSchema, EdgeSchema }
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
+ * imports OrientDB edge to ATK edge
  *
  * @param graph OrientDB graph database
- * @param edgeSchema ATK edge schema in Parquet graph format
+ * @param edgeSchema ATK edge schema
  */
-class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) {
+class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) extends EventLogging {
 
   /**
    * A method imports OrientDB edge from OrientDB database to ATK edge
+   *
    * @return ATK edge
    */
   def importEdge(orientEdge: BlueprintsEdge): Edge = {
@@ -38,12 +41,14 @@ class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) {
     }
     catch {
       case e: Exception =>
-        throw new RuntimeException(s"Unable to read edge with source ID ${orientEdge.getId.toString} from OrientDB graph: ${e.getMessage}")
+        error(s"Unable to read edge of ID ${orientEdge.getId.toString} from OrientDB graph", exception = e)
+        throw new RuntimeException(s"Unable to read edge of ID ${orientEdge.getId.toString} from OrientDB graph: ${e.getMessage}")
     }
   }
 
   /**
    * A method creates ATK edge
+   *
    * @param orientEdge OrientDB edge
    * @return ATK edge
    */
@@ -52,7 +57,6 @@ class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) {
     val row = edgeSchema.columns.map(col => {
       if (col.name == GraphSchema.labelProperty) {
         edgeSchema.label
-
       }
       else {
         val prop: Any = orientEdge.getProperty(col.name)
@@ -61,14 +65,4 @@ class EdgeReader(graph: OrientGraphNoTx, edgeSchema: EdgeSchema) {
     })
     new Edge(edgeSchema, Row.fromSeq(row.toSeq))
   }
-
-  /* /**
-   * A method gets OrientDB edge from OrientDB database
-   * @return OrientDB edge
-   */
-  def getOrientEdge: BlueprintsEdge = {
-    val edgeIterator = graph.getEdges(GraphSchema.srcVidProperty, srcVertexId).iterator()
-    edgeIterator.next()
-
-  }*/
 }

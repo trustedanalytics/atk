@@ -19,10 +19,6 @@ import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
 import scala.collection.mutable.ArrayBuffer
 
-/**
- * scala unit test for OrientDbTypeConverter
- */
-
 class DataTypeToOTypeConversionTest extends WordSpec with Matchers {
 
   val columns = List(Column(GraphSchema.vidProperty, DataTypes.int64), Column(GraphSchema.labelProperty, DataTypes.string), Column("name", DataTypes.string), Column("from", DataTypes.string), Column("to", DataTypes.string), Column("fair", DataTypes.int32))

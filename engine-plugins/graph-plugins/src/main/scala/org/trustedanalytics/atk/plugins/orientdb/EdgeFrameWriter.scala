@@ -16,13 +16,15 @@
 package org.trustedanalytics.atk.plugins.orientdb
 
 import org.apache.spark.atk.graph.EdgeFrameRdd
+import org.trustedanalytics.atk.event.EventLogging
 
 /**
  * Exports EdgeFrameRdd to OrientDB edges
+ *
  * @param edgeFrameRdd the edges frame to be exported to OrientDB
  * @param dbConfigurations OrientDB configurations
  */
-class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfiguration) extends Serializable {
+class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfiguration) extends Serializable with EventLogging {
 
   /**
    * Method to export edge frame to OrientDB
@@ -54,6 +56,7 @@ class EdgeFrameWriter(edgeFrameRdd: EdgeFrameRdd, dbConfigurations: DbConfigurat
       catch {
         case e: Exception => {
           orientGraph.rollback()
+          error(s"Unable to add edges to OrientDB graph", exception = e)
           throw new RuntimeException(s"Unable to add edges to OrientDB graph: ${e.getMessage}")
         }
       }

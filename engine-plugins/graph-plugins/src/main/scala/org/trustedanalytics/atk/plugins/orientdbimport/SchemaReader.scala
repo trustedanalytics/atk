@@ -18,6 +18,7 @@ package org.trustedanalytics.atk.plugins.orientdbimport
 import com.tinkerpop.blueprints.Direction
 import com.tinkerpop.blueprints.impls.orient._
 import org.trustedanalytics.atk.domain.schema._
+import org.trustedanalytics.atk.event.EventLogging
 import org.trustedanalytics.atk.plugins.orientdb.OrientDbTypeConverter
 import scala.collection.mutable.ListBuffer
 
@@ -26,7 +27,7 @@ import scala.collection.mutable.ListBuffer
  *
  * @param graph OrientDB graph database
  */
-class SchemaReader(graph: OrientGraphNoTx) {
+class SchemaReader(graph: OrientGraphNoTx) extends EventLogging {
 
   /**
    * A method imports vertex schema from OrientDB to ATK vertex schema
@@ -40,6 +41,7 @@ class SchemaReader(graph: OrientGraphNoTx) {
     }
     catch {
       case e: Exception =>
+        error("Unable to read vertex schema from OrientDB graph", exception = e)
         throw new RuntimeException(s"Unable to read vertex schema from OrientDB graph: ${e.getMessage}")
     }
   }
@@ -76,6 +78,7 @@ class SchemaReader(graph: OrientGraphNoTx) {
     }
     catch {
       case e: Exception =>
+        error("Unable to read edge schema from OrientDB graph", exception = e)
         throw new RuntimeException(s"Unable to read edge schema from OrientDB graph: ${e.getMessage}")
     }
   }

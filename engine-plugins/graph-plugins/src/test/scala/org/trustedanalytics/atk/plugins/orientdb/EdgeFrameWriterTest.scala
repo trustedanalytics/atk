@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema._
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- *  scala test for EdgeFrameWriter, checking the number of exported edges
- */
 class EdgeFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with TestingOrientDb with Matchers with BeforeAndAfterEach {
 
   override def beforeEach() {

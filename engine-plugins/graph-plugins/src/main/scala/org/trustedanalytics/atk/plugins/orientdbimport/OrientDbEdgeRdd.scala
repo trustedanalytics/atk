@@ -25,9 +25,9 @@ import org.trustedanalytics.atk.plugins.orientdb.{ DbConfiguration, GraphDbFacto
 import scala.collection.mutable.ArrayBuffer
 
 /**
- *
- * @param sc
- * @param dbConfigurations
+ * creates Spark RDDs for the imported edge classes from OrientDB graph
+ * @param sc Spark context
+ * @param dbConfigurations OrientDB database configurations
  */
 class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfiguration) extends RDD[Edge](sc, Nil) {
 
@@ -48,8 +48,8 @@ class OrientDbEdgeRdd(sc: SparkContext, dbConfigurations: DbConfiguration) exten
   }
 
   /**
-   *
-   * @return
+   * divides OrientDB edges to partitions, each partition has data from a single cluster and class
+   * @return Array of partitions for OrientDB graph edges to be imported in parallel
    */
   override protected def getPartitions: Array[Partition] = {
     val partitionBuffer = new ArrayBuffer[OrientDbPartition]()

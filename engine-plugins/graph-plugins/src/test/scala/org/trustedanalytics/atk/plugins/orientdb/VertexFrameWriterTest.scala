@@ -22,9 +22,6 @@ import org.scalatest.{ BeforeAndAfterEach, Matchers, WordSpec }
 import org.trustedanalytics.atk.domain.schema.{ VertexSchema, DataTypes, GraphSchema, Column }
 import org.trustedanalytics.atk.testutils.{ TestingOrientDb, TestingSparkContextWordSpec }
 
-/**
- * scala test for VertexFrameWriter, checking the number of exported vertices
- */
 class VertexFrameWriterTest extends WordSpec with TestingSparkContextWordSpec with Matchers with TestingOrientDb with BeforeAndAfterEach {
   override def beforeEach() {
     setupOrientDb()

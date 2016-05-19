@@ -23,5 +23,5 @@ import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class ImportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String) {
-
+  require(graphName != null, "database name is required")
 }

@@ -19,9 +19,6 @@ import com.orientechnologies.orient.core.metadata.schema.OType
 import org.scalatest.WordSpec
 import scala.collection.mutable.ArrayBuffer
 
-/**
- * scala unit test for converting OrientDB data type to ATK DataTypes.DataType
- */
 class OrientDbTypeToDataTypeConverterTest extends WordSpec {
 
   "OrientDB type to data type converter" should {

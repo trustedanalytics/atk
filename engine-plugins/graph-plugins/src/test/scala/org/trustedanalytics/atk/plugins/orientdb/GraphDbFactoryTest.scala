@@ -20,10 +20,6 @@ import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraph }
 import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.testutils.DirectoryUtils
 
-/**
- * scala unit tests for GraphDbFactory: the first,checking creating OrientDB, the second, checking opening an existing graph
- */
-
 class GraphDbFactoryTest extends WordSpec with Matchers {
 
   "graph database factory" should {
