@@ -123,6 +123,7 @@ True
 >>> r.text
 u'{"model_details":{"model_type":"Lda Model","model_class":"org.trustedanalytics.atk.scoring.models.LdaScoreModel","model_reader":"org.trustedanalytics.atk.scoring.models.LdaModelReaderPlugin","custom_values":{}},"input":[{"name":"doc_id","value":"Array[String]"}],"output":[{"name":"doc_id","value":"Array[String]"},{"name":"topics_given_doc","value":"Vector[Double]"},{"name":"new_words_count","value":"Int"},{"name":"new_words_percentage","value":"Double"}]}'
 
+# The LDA model only supports version 2 of the scoring engine.
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"doc_id": ['harry', 'secrets', 'magic']}]})
 >>> r.text

@@ -1,8 +1,8 @@
 .. _ad_scoring_engine:
 Scoring Engine
 ==============
-The Scoring Engine is a simple REST server capable of loading models published by ATK.
-This section covers deployment and running the scoring engine.
+The Scoring Engine is a simple REST server capable of loading trained models published by ATK.
+This section covers deployment and running the scoring engine in TAP environment.
 
 
 Create a Scoring Engine Instance
