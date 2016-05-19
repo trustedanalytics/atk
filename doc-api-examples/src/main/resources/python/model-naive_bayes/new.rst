@@ -66,12 +66,12 @@ u'{"model_details":{"model_type":"Naive Bayes Model","model_class":"org.apache.s
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446, 2.298585', headers=headers)
 >>> r.text
-u'0.0' #not working
+u'0.0'
 
 # Posting a request to version 1 with multiple records to score:
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=19.8446&data=5.5548729596, 2.7777687995', headers=headers)
 >>> r.text
-u'0.0,1.0' #not working
+u'0.0,1.0'
 
 # Posting a request to version 2 of Scoring Engine supporting Json for requests and responses.
 >>> r = requests.post("http://mymodel.demotrustedanalytics.com/v2/score", json={"records": [{"Dim_1": 19.8446, "Dim_2": 2.298585}]})

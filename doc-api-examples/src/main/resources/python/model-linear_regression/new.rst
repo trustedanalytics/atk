@@ -87,7 +87,7 @@ u'{"model_details":{"model_type":"Linear Regression Model","model_class":"org.ap
 # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0', headers=headers)
 >>> r.text
-u'9.743030303030302' #not working
+u'9.743030303030302'
 
 # Posting a request to version 1 with multiple records to score:
 >>> r = requests.post('http://mymodel.demotrustedanalytics.com/v1/score?data=4.0&data=0.0', headers=headers)

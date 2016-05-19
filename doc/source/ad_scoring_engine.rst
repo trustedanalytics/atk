@@ -1,7 +1,7 @@
 .. _ad_scoring_engine:
 Scoring Engine
 ==============
-
+The Scoring Engine is a simple REST server capable of loading models published by ATK.
 This section covers deployment and running the scoring engine.
 
 
@@ -31,6 +31,11 @@ Below is a sample Python script to send requests to the scoring engine:
     >>> headers = {'Content-type': 'application/json',
     ...            'Accept': 'application/json,text/plain'}
 
+    # posting a request to get the metadata about the model
+    >>> r =requests.get('http://my-svm-model.demotrustedanalytics.com/v2/metadata')
+    >>> r.text
+    u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
+
 
     # Posting a request to version 1 of Scoring Engine supporting strings for requests and response:
     >>> r = requests.post('http://my-svm-model.demotrustedanalytics.com/v1/score?data=2,17,-6', headers=headers)
@@ -52,10 +57,6 @@ Below is a sample Python script to send requests to the scoring engine:
     >>> r.text
     u'{"data":[{"tr_row":1.0,"tr_col":2.6,"Prediction":-1.0},{"tr_row":3.0,"tr_col":0.6,"Prediction":-1.0}]}'
 
-    # posting a request to get the metadata about the model
-    >>> r =requests.get('http://my-svm-model.demotrustedanalytics.com/v2/metadata')
-    >>> r.text
-    u'{"model_details":{"model_type":"LibSvm Model","model_class":"org.trustedanalytics.atk.scoring.models.LibSvmModel","model_reader":"org.trustedanalytics.atk.scoring.models.LibSvmModelReaderPlugin","custom_values":{}},"input":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"}],"output":[{"name":"tr_row","value":"Double"},{"name":"tr_col","value":"Double"},{"name":"Prediction","value":"Double"}]}'
 
 Header 
 ------
