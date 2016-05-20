@@ -818,7 +818,7 @@ class JdbcTable(object):
     Define the object to retrieve the data from an jdbc table.
     """
 
-    def __init__(self, table_name, connector_type = None, url = None, driver_name = None):
+    def __init__(self, table_name):
         """
         Define the object to retrieve the data from an jdbc table.
 
@@ -826,12 +826,6 @@ class JdbcTable(object):
         ----------
         table_name : str
             the table name
-        connector_type : str
-            the connector type
-        url : str
-            Jdbc connection string (as url)
-        driver_name : str
-            An optional driver name
 
         Returns
         -------
@@ -844,10 +838,7 @@ class JdbcTable(object):
 
             >>> import trustedanalytics as ta
             >>> ta.connect()
-            >>> jdbcTable = ta.JdbcTable ("test",
-                                          "jdbc:sqlserver://localhost/SQLExpress;databasename=somedatabase;user=someuser;password=somepassord",
-                                          "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-                                          "select * FROM SomeTable")
+            >>> jdbcTable = ta.JdbcTable ("test", "postgres")
             >>> frame = ta.Frame(jdbcTable)
             >>> frame.inspect()
 
@@ -857,16 +848,10 @@ class JdbcTable(object):
 
         self.table_name = table_name
         self.connector_type = connector_type
-        self.url = url
-        self.driver_name = driver_name
-        self.query = None
 
     def to_json(self):
-        return {"url": self.url,
-                "table_name": self.table_name,
-                "connector_type":self.connector_type,
-                "driver_name": self.driver_name,
-                "query": self.query}
+        return {"table_name": self.table_name,
+                "connector_type":self.connector_type}
 
     def __repr__(self):
         return json.dumps(self.to_json(), indent=2)
