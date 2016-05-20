@@ -70,14 +70,3 @@ case class ExportHdfsHBaseArgs(@ArgDoc("Frame being exported to HBase") frame: F
   require(frame != null, "frame is required")
   require(tableName != null, "table name is required")
 }
-
-/**
- * Input arguments class for export to JDBC
- */
-case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
-                              @ArgDoc("""JDBC table name""") tableName: String,
-                              @ArgDoc("""(optional) JDBC connector, either mysql or postgres. Default is postgres""") connectorType: String = "postgres") {
-  require(frame != null, "frame is required")
-  require(StringUtils.isNotEmpty(tableName), "table name is required")
-  require(connectorType == "postgres" || connectorType == "mysql", "connector type must be either mysql or postgres")
-}

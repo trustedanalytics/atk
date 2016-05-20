@@ -18,14 +18,33 @@ package org.trustedanalytics.atk.engine.frame.plugins.exporthdfs
 
 import java.sql.SQLException
 import org.trustedanalytics.atk.UnitReturn
-import org.trustedanalytics.atk.domain.frame.{ ExportHdfsJdbcArgs }
 import org.trustedanalytics.atk.engine.frame.plugins.load.JdbcFunctions
 import org.trustedanalytics.atk.engine.frame.{ SparkFrame }
 import org.trustedanalytics.atk.engine.plugin.{ Invocation, PluginDoc, SparkCommandPlugin }
+import org.apache.commons.lang3.StringUtils
+import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.trustedanalytics.atk.domain.frame.FrameReference
 
 // Implicits needed for JSON conversion 
 import spray.json._
 import org.trustedanalytics.atk.domain.DomainJsonProtocol._
+
+object ExportHdfsJdbcArgsFormat {
+  implicit val exportHdfsJdbcPlugin = jsonFormat3(ExportHdfsJdbcArgs)
+}
+
+import ExportHdfsJdbcArgsFormat._
+
+/**
+ * Input arguments class for export to JDBC
+ */
+case class ExportHdfsJdbcArgs(@ArgDoc("""Frame to be exported to JDBC""") frame: FrameReference,
+                              @ArgDoc("""JDBC table name""") tableName: String,
+                              @ArgDoc("""(optional) JDBC connector, either mysql or postgres. Default is postgres""") connectorType: String = "postgres") {
+  require(frame != null, "frame is required")
+  require(StringUtils.isNotEmpty(tableName), "table name is required")
+  require(connectorType == "postgres" || connectorType == "mysql", "connector type must be either mysql or postgres")
+}
 
 /**
  * Export a frame to Jdbc table

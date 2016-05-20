@@ -238,11 +238,6 @@ trustedanalytics.atk {
           # Allow user defined functions (UDF's) to be overwritten
           spark.files.overwrite = true
 
-          # Uncomment the following lines to enable non-standard atk i/o connectors (such as jdbc - mysql).
-          # Verify that the path below exist across all yarn master/worker nodes.
-          // spark.driver.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:.:"
-          // spark.executor.extraClassPath = ":/opt/cloudera/parcels/CDH/jars/mysql-connector-java-5.1.23.jar:postgresql-9.1-901.jdbc4.jar:"
-
           # Uncomment the following lines for setting extra library path (e.g. for DAAL execution in Yarn)
           // spark.driver.extraLibraryPath = "."
           // spark.executor.extraLibraryPath = "."
