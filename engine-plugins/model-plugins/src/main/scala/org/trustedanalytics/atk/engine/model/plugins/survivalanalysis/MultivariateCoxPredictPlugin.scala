@@ -69,8 +69,9 @@ class MultivariateCoxPredictPlugin extends SparkCommandPlugin[MultivariateCoxPre
       val compareFrame: SparkFrame = arguments.comparisonFrame.get
       compareFrame.rdd.columnStatistics(coxData.featureColumns).mean
     }
-    else
+    else {
       coxModel.meanVector
+    }
     val hazardRatioColumn = Column("hazard_ratio", DataTypes.float64)
     val predictFrame = predictFrameRdd.addColumn(hazardRatioColumn, row => {
       val observation = row.valuesAsDenseVector(featureColumns)

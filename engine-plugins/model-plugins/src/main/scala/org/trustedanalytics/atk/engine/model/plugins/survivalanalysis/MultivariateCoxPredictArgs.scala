@@ -24,8 +24,8 @@ import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
 case class MultivariateCoxPredictArgs(model: ModelReference,
                                       @ArgDoc("A frame whose hazard values") predictFrame: FrameReference,
-                                      @ArgDoc("A frame storing observations to compare hazards of the predict frame against. By default it is the frame used to train the model ")comparisonFrame: Option[FrameReference],
-                                      @ArgDoc("Columns containing the observations. By default it is the columns used to train the model")featureColumns: Option[List[String]]) {
+                                      @ArgDoc("A frame storing observations to compare hazards of the predict frame against. By default it is the frame used to train the model ") comparisonFrame: Option[FrameReference],
+                                      @ArgDoc("Columns containing the observations. By default it is the columns used to train the model") featureColumns: Option[List[String]]) {
   require(model != null, "model is required")
   require(predictFrame != null, "frame is required")
 }

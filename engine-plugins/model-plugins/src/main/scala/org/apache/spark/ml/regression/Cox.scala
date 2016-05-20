@@ -75,7 +75,7 @@ private[regression] trait CoxParams extends Params
   }
 }
 
-class Cox (override val uid: String)
+class Cox(override val uid: String)
     extends Estimator[CoxModel] with CoxParams
     with DefaultParamsWritable with Logging {
 
@@ -113,34 +113,22 @@ class Cox (override val uid: String)
 
   setDefault(tol -> 1E-6)
 
-  /**
-   * Extract [[featuresCol]], [[labelCol]] and [[censorCol]] from input dataset,
-   * and put it in an RDD with strong types.
-   */
-  protected[ml] def extractSortedCoxPointRdd(dataFrame: DataFrame): RDD[CoxPoint] = {
-    val rdd = dataFrame.select($(featuresCol), $(labelCol), $(censorCol)).map {
-      case Row(features: Vector, time: Double, censor: Double) =>
-        CoxPoint(features, time, censor)
-    }
-    rdd.sortBy(_.time, false)
-  }
+  override def fit(dataFrame: DataFrame): CoxModel = {
+    val numFeatures = dataFrame.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
 
-  override def fit(dataSet: DataFrame): CoxModel = {
-    val numFeatures = dataSet.select($(featuresCol)).take(1)(0).getAs[Vector](0).size
-
-    val meanVector = computeFeatureMean(dataSet)
+    val meanVector = computeFeatureMean(dataFrame)
     import breeze.linalg._
-    val coxPointRdd = extractSortedCoxPointRdd(dataSet)
+    val coxPointRdd = extractSortedCoxPointRdd(dataFrame)
 
-    val handlePersistence = dataSet.rdd.getStorageLevel == StorageLevel.NONE
+    val handlePersistence = dataFrame.rdd.getStorageLevel == StorageLevel.NONE
     if (handlePersistence) coxPointRdd.persist(StorageLevel.MEMORY_AND_DISK)
     val costFun = new CoxCostFun(coxPointRdd)
-    
+
     var previousBeta = DenseVector.zeros[Double](numFeatures)
     var previousLoss = 1E-3
     var iterations: Int = 0
-    var epsilon: Double = 911d
-    
+    var epsilon: Double = scala.Double.PositiveInfinity
+
     while (iterations < $(maxIter) && (epsilon > $(tol))) {
       val (currentLoss, currentGradient, currentInformationMatrix) = costFun.calculate(previousBeta)
       previousBeta = if (currentInformationMatrix == 0) previousBeta else previousBeta - (currentGradient / currentInformationMatrix)
@@ -154,9 +142,30 @@ class Cox (override val uid: String)
     copyValues(model.setParent(this))
   }
 
-  def computeFeatureMean(dataSet: DataFrame): org.apache.spark.mllib.linalg.Vector = {
+  override def transformSchema(schema: StructType): StructType = {
+    validateAndTransformSchema(schema, fitting = true)
+  }
+
+  override def copy(extra: ParamMap): Cox = defaultCopy(extra)
+
+  /**
+   * Extract [[featuresCol]], [[labelCol]] and [[censorCol]] from input dataFrame,
+   * and put it in an RDD of CoxPoint sorted in descending order of time.
+   */
+  protected[ml] def extractSortedCoxPointRdd(dataFrame: DataFrame): RDD[CoxPoint] = {
+    val rdd = dataFrame.select($(featuresCol), $(labelCol), $(censorCol)).map {
+      case Row(features: Vector, time: Double, censor: Double) =>
+
+        CoxPoint(features, time, censor)
+    }
+    rdd.sortBy(_.time, false)
+  }
+  /**
+   * Computes a vector storing the mean of each of the columns given in [[featuresCol]]] of the dataFrame
+   */
+  protected[ml] def computeFeatureMean(dataFrame: DataFrame): org.apache.spark.mllib.linalg.Vector = {
     // Computing the mean of the observations
-    val instanceRdd: RDD[Instance] = dataSet.select(col($(featuresCol))).map {
+    val instanceRdd: RDD[Instance] = dataFrame.select(col($(featuresCol))).map {
       case Row(features: Vector) =>
         Instance(0d, 1d, features)
     }
@@ -179,12 +188,6 @@ class Cox (override val uid: String)
 
     meanSummarizer.mean
   }
-
-  override def transformSchema(schema: StructType): StructType = {
-    validateAndTransformSchema(schema, fitting = true)
-  }
-
-  override def copy(extra: ParamMap): Cox = defaultCopy(extra)
 }
 
 object Cox extends DefaultParamsReadable[Cox] {
@@ -211,7 +214,7 @@ class CoxModel(override val uid: String,
     val products = beta.toBreeze :* diffVector
     math.exp(products.toArray.sum)
   }
-  
+
   //TODO: Need to check transform, copy, write, read, load when submitting to Spark
   override def transform(dataset: DataFrame): DataFrame = {
     transformSchema(dataset.schema)
@@ -275,6 +278,7 @@ object CoxModel extends MLReadable[CoxModel] {
 
 private class CoxAggregator(parameters: BDV[Double])
     extends Serializable {
+  //TODO: Need to update these calculations for multivariate implementation
 
   private val beta = parameters
   private var totalCnt: Long = 0L
@@ -302,10 +306,11 @@ private class CoxAggregator(parameters: BDV[Double])
     val diff = data.features.toBreeze - rhs
     gradientBetaSum += diff :* data.censor
 
-    val numerator1: Double = data.sumXDotEBetaX.dot(data.sumXDotEBetaX)
-    val numerator2: Double = data.sumEBetaX * data.sumXSquaredEBetaX
-    val numerator = numerator1 - numerator2
-    secondOrderDerivative += (numerator / (data.sumEBetaX * data.sumEBetaX)) * data.censor
+    val numeratorA: Double = data.sumXDotEBetaX.dot(data.sumXDotEBetaX)
+    val numeratorB: Double = data.sumEBetaX * data.sumXSquaredEBetaX
+    val numerator = numeratorA - numeratorB
+    val value = if (data.sumEBetaX == 0) numerator * data.censor else (numerator / (data.sumEBetaX * data.sumEBetaX)) * data.censor
+    secondOrderDerivative += value
     totalCnt += 1
     this
   }
@@ -352,10 +357,10 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
   }
 
   /**
-   *
-   * @param coxPointRdd
-   * @param currentBeta
-   * @return
+   * Computes additional parameters given CoxPoint and intial beta to be used by Newton Raphson to estimate new beta
+   * @param coxPointRdd Rdd storing the CoxPoint containing features, time and censor
+   * @param currentBeta The current value for beta
+   * @return Rdd storing CoxPoint and sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX in addition
    */
   protected[ml] def extractCoxPointsWithMetaData(coxPointRdd: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[CoxPointWithMetaData] = {
 
@@ -375,27 +380,27 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
   import breeze.linalg.DenseVector
 
   /**
-   *
-   * @param rdd
-   * @param length
-   * @return
+   * Returns the sum of each partition for the sumEBetaX, sumXEBetaX, sumXSquaredEBetaX values
+   * @param rdd Rdd containing for each observation the, sumEBetaX, sumXEBetaX, sumXSquaredEBetaX
+   * @param length The number of co-variates
+   * @return Map storing, for each partition the sumEBetaX, sumXEBetaX, sumXSquaredEBetaX values
    */
   def computePartitionSum(rdd: RDD[(Double, BDV[Double], Double)], length: Int): scala.collection.Map[Int, (Double, BDV[Double], Double)] = {
     //TODO: Consider replacing mapPartitionsWithIndex with accumulator in riskSet
     val array = rdd.mapPartitionsWithIndex {
       case (index, iterator) => {
-        var sumR = 0.0
+        var sumEBetaX = 0.0
         var sumXSquaredEBetaX = 0.0
-        var sumS = DenseVector.zeros[Double](length)
+        var sumXEBetaX = DenseVector.zeros[Double](length)
 
         while (iterator.hasNext) {
-          val (r, s, t) = iterator.next()
-          sumR = r
-          sumS = s
-          sumXSquaredEBetaX = t
+          val (partialSumEBetaX, partialSumXEBetaX, partialSumXSquaredEBetaX) = iterator.next()
+          sumEBetaX = partialSumEBetaX
+          sumXEBetaX = partialSumXEBetaX
+          sumXSquaredEBetaX = partialSumXSquaredEBetaX
 
         }
-        val sumTuple = (index + 1, (sumR, sumS, sumXSquaredEBetaX))
+        val sumTuple = (index + 1, (sumEBetaX, sumXEBetaX, sumXSquaredEBetaX))
         Array(sumTuple).toIterator
       }
     }.collect()
@@ -410,12 +415,11 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
     cumSum.toMap
   }
 
-  // Returns sum(e^Beta.X), x*e^Beta.X, e^Beta.X, sum(x*e^Beta.X), sum(x^2.e^Beta.X)
   /**
-   *
-   * @param sortedData
-   * @param currentBeta
-   * @return
+   * Computes meta data using CoxPoint and current beta with one pass over the data
+   * @param sortedData Rdd storing the features, time and censor information sorted in decreasing order on time
+   * @param currentBeta The current beta value
+   * @return Rdd containing the meta data as a tuple with sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX
    */
   def riskSet(sortedData: RDD[CoxPoint], currentBeta: BDV[Double]): RDD[(Double, BDV[Double], Double, BDV[Double], Double)] = {
     import breeze.linalg.DenseVector
@@ -442,24 +446,24 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
   }
 
   /**
-   *
-   * @param riskSetRdd
-   * @param broadcast
-   * @return
+   * Computes the sum of sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX across all partitions
+   * @param riskSetRdd Rdd containing the meta data as a tuple with sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX
+   * @param broadcast Broadcast variable containing the sums of each partitions
+   * @return Rdd of the sum of sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX across all partitions
    */
   def computeFinalR(riskSetRdd: RDD[(Double, BDV[Double], Double, BDV[Double], Double)], broadcast: Broadcast[Map[Int, (Double, BDV[Double], Double)]]): RDD[(Double, BDV[Double], Double, BDV[Double], Double)] = {
     riskSetRdd.mapPartitionsWithIndex {
       case (i, iter) =>
-        val prevSumR = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))._1
-        val prevSumS = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))._2
-        val prevSumT = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum not computed."))._3
+        val prevSumEBetaX = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum e^beta.x not computed."))._1
+        val prevSumXEBetaX = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum x.e^beta.x not computed."))._2
+        val prevSumXSquaredEBetaX = broadcast.value.getOrElse(i, throw new IllegalArgumentException("Previous sum x^2.e^beta.x not computed."))._3
         val featureBuf = new ArrayBuffer[(Double, BDV[Double], Double, BDV[Double], Double)]()
         while (iter.hasNext) {
-          val (sumR, xjR, r, sumS, sumT) = iter.next()
-          val updatedSum = sumR + prevSumR
-          val updatedSumS = sumS + prevSumS
-          val updatedSumT = sumT + prevSumT
-          val sumTuple = (updatedSum, xjR, r, updatedSumS, updatedSumT)
+          val (sumEBetaX, xEBetaX, eBetaX, sumXEBetaX, sumXSquaredEBetaX) = iter.next()
+          val updatedSumEBetaX = sumEBetaX + prevSumEBetaX
+          val updatedSumXEBetaX = sumXEBetaX + prevSumXEBetaX
+          val updatedSumXSquaredEBetaX = sumXSquaredEBetaX + prevSumXSquaredEBetaX
+          val sumTuple = (updatedSumEBetaX, xEBetaX, eBetaX, updatedSumXEBetaX, updatedSumXSquaredEBetaX)
 
           featureBuf += sumTuple
         }
@@ -471,7 +475,6 @@ private class CoxCostFun(coxPointRdd: RDD[CoxPoint]) {
 
 /**
  * Class that represents the (features, time, censor) of a data point.
- *
  * @param features List of features for this data point.
  * @param time Label for this data point.
  * @param censor Indicator of the event has occurred or not. If the value is 1, it means
@@ -482,17 +485,17 @@ private[regression] case class CoxPoint(features: Vector, time: Double, censor: 
 }
 
 /**
- * 
- * @param features
- * @param time
- * @param censor
- * @param sumEBetaX
- * @param xDotEBetaX
- * @param eBetaX
- * @param sumXDotEBetaX
- * @param sumXSquaredEBetaX
+ *
+ * @param features The covariates of the train data
+ * @param time The time of the event
+ * @param censor Value indicating if the event has occured. Can have 2 values: 0 - event did not happen (censored); 1 - event happened (not censored)
+ * @param sumEBetaX Sum of e raised to the dot product of beta and features, for all observations in the risk set of an observation
+ * @param xDotEBetaX Dot product of feature and e raised to the dot product of beta and features
+ * @param eBetaX e raised to dot product of beta and features
+ * @param sumXDotEBetaX Sum of Dot product of feature and e raised to the dot product of beta and features, for all observations in the risk set of an observatiiiion
+ * @param sumXSquaredEBetaX Sum of Dot product of square of the feature and e raised to the dot product of beta and features, for all observations in the risk set of an observatiiiion
  */
-case class CoxPointWithMetaData(features: Vector, 
+case class CoxPointWithMetaData(features: Vector,
                                 time: Double,
                                 censor: Double,
                                 sumEBetaX: Double,

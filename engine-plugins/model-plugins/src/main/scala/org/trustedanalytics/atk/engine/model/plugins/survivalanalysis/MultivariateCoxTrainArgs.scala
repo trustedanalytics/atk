@@ -37,7 +37,7 @@ case class MultivariateCoxTrainArgs(model: ModelReference,
   require(timeColumn != null && timeColumn.nonEmpty, "Time column must not be null or empty")
   require(censorColumn != null && censorColumn.nonEmpty, "Censor column must not be null or empty")
   require(covariateColumns != null && covariateColumns.nonEmpty, "Co-variate columns must not be null or empty")
-  require(covariateColumns.length == 1,"Current implementation is for univariate data. Multivariate is under implementation")
+  require(covariateColumns.length == 1, "Current implementation is for univariate data. Multivariate is under implementation")
   require(maxSteps > 0, "Max steps must be a positive integer")
 }
 

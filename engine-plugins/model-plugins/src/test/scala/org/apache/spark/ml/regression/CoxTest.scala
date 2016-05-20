@@ -77,18 +77,19 @@ class CoxTest extends TestingSparkContextFlatSpec with Matchers {
 
     coxWithMetaDataArray shouldBe estimatedCoxMetaDataArray
   }
-  //  "calculate in CoxCostFun" should "compute loss and gradient" in {
-  //    val coxRdd = sparkContext.parallelize(sortedCoxPointArray, 2)
-  //
-  //    val currentBeta = BDV(0d)
-  //    val estimatedLoss = -1.4224252755646078
-  //    val estimatedGradient = BDV(-0.2791181657848334)
-  //
-  //    val coxCostFun = new CoxCostFun(coxRdd)
-  //    val (loss, gradient) = coxCostFun.calculate(currentBeta)
-  //
-  //    loss shouldBe estimatedLoss +- 1e-6
-  //    gradient.toArray should equalWithTolerance(estimatedGradient.toArray)
-  //
-  //  }
+  "calculate in CoxCostFun" should "compute loss and gradient" in {
+    val coxRdd = sparkContext.parallelize(sortedCoxPointArray, 2)
+
+    val currentBeta = BDV(0d)
+    val estimatedLoss = -12.801827480081469
+    val estimatedGradient = BDV(-2.5120634920635005)
+    val estimatedInformationMatrix = -77.12552113882519
+
+    val coxCostFun = new CoxCostFun(coxRdd)
+    val (loss, gradient, informationMatrix) = coxCostFun.calculate(currentBeta)
+
+    loss shouldBe estimatedLoss +- 1e-6
+    gradient.toArray should equalWithTolerance(estimatedGradient.toArray)
+    informationMatrix shouldBe estimatedInformationMatrix +- 1e-6
+  }
 }
