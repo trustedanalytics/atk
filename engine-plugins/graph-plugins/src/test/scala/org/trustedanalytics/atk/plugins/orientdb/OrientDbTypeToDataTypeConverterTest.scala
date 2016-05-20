@@ -15,18 +15,24 @@
  */
 package org.trustedanalytics.atk.plugins.orientdb
 
-import org.trustedanalytics.atk.domain.graph.GraphReference
-import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import com.orientechnologies.orient.core.metadata.schema.OType
+import org.scalatest.WordSpec
+import scala.collection.mutable.ArrayBuffer
 
-/**
- * ExportOrientDbGraph plugin input arguments
- */
+class OrientDbTypeToDataTypeConverterTest extends WordSpec {
 
-case class ExportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String,
-                                   @ArgDoc("""batch size for commiting transactions.""") batchSize: Int = 1000) {
-
-  require(graph != null, "graph is required")
-  require(graphName != null, "database name is required")
-  require(batchSize > 0, "batch size should be a positive value")
+  "OrientDB type to data type converter" should {
+    "Convert OType to DataType" in {
+      val orientDbType = Array(OType.LONG, OType.STRING, OType.INTEGER)
+      val dataTypeBuffer = new ArrayBuffer[String]()
+      orientDbType.foreach(oType => {
+        //call Method under test
+        val dataType = OrientDbTypeConverter.convertOrientDbtoDataType(oType)
+        dataTypeBuffer += dataType.toString
+      })
+      //validate results
+      assert(dataTypeBuffer == ArrayBuffer("int64", "string", "int32"))
+    }
+  }
 
 }

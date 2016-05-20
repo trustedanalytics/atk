@@ -20,10 +20,6 @@ import com.tinkerpop.blueprints.impls.orient.{ OrientGraphNoTx, OrientGraph }
 import org.scalatest.{ Matchers, WordSpec }
 import org.trustedanalytics.atk.testutils.DirectoryUtils
 
-/**
- * scala unit tests for GraphDbFactory: the first,checking creating OrientDB, the second, checking opening an existing graph
- */
-
 class GraphDbFactoryTest extends WordSpec with Matchers {
 
   "graph database factory" should {
@@ -35,7 +31,7 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
 
     "creates a graph database and takes input arguments" in {
       val dbUri: String = "memory:OrientTestDb"
-      val dbConfig = new DbConfigurations(dbUri, userName, password, port, host, rootPassword)
+      val dbConfig = new DbConfiguration(dbUri, userName, password, port, host, rootPassword)
       //Tested method
       val graph: OrientGraphNoTx = GraphDbFactory.createGraphDb(dbConfig)
       //Results validation
@@ -49,7 +45,7 @@ class GraphDbFactoryTest extends WordSpec with Matchers {
       val dbName = "OrientDbTest"
       tmpDir = DirectoryUtils.createTempDirectory("orient-graph-for-unit-testing")
       val dbUri = "plocal:" + tmpDir.getAbsolutePath + "/" + dbName
-      val dbConfig = new DbConfigurations(dbUri, userName, password, port, host, rootPassword)
+      val dbConfig = new DbConfiguration(dbUri, userName, password, port, host, rootPassword)
       //Tested method
       val orientDb = GraphDbFactory.graphDbConnector(dbConfig)
       //Results validation

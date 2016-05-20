@@ -38,7 +38,7 @@ import org.trustedanalytics.atk.plugins.orientdb.ExportOrientDbGraphJsonFormat._
       OrientDB database will be created in the given host name and port number,
       and with the given user credentials after checking the user authorization to create or access OrientDB database.
 
-      Then exports the graph edges and vertices to the OrientDB database. Each vertex or edge type in the graph corresponds to a vertex or edge class in OrientDB.""",
+      Exports the graph edges and vertices to the OrientDB database. Each vertex or edge type in the graph corresponds to a vertex or edge class in OrientDB.""",
   returns =
     """The location to the OrientDB database file "URI", in addition to dictionary for the exported vertices and edges.
       for vertices dictionary:
@@ -61,7 +61,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
   override def execute(arguments: ExportOrientDbGraphArgs)(implicit invocation: Invocation): ExportOrientDbGraphReturn = {
 
     // Get OrientDB configurations
-    val dbConfig = DbConfigReader.extractConfigurations(arguments.dbName)
+    val dbConfig = DbConfigReader.extractConfigurations(arguments.graphName)
 
     //Get the graph meta data
     val graph: SparkGraph = arguments.graph
@@ -81,7 +81,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportVertexFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val vertexFrames = graphMeta.vertexFrames.map(_.toReference)
@@ -111,7 +111,7 @@ class ExportOrientDbGraphPlugin extends SparkCommandPlugin[ExportOrientDbGraphAr
    * @return a value of type declared as the return type.
    */
 
-  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfigurations, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
+  def exportEdgeFramesToOrient(arguments: ExportOrientDbGraphArgs, dbConfigurations: DbConfiguration, graphMeta: SeamlessGraphMeta)(implicit invocation: Invocation): Map[String, Statistics] = {
 
     val orientDatabase = GraphDbFactory.graphDbConnector(dbConfigurations)
     val edgeFrames = graphMeta.edgeFrames.map(_.toReference)

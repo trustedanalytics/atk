@@ -13,20 +13,15 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.plugins.orientdb
+package org.trustedanalytics.atk.plugins.orientdbimport
+
+/**
+ * The input arguments for import orientDB graph plugin
+ */
 
 import org.trustedanalytics.atk.domain.graph.GraphReference
 import org.trustedanalytics.atk.engine.plugin.ArgDoc
 
-/**
- * ExportOrientDbGraph plugin input arguments
- */
-
-case class ExportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String,
-                                   @ArgDoc("""batch size for commiting transactions.""") batchSize: Int = 1000) {
-
-  require(graph != null, "graph is required")
+case class ImportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String) {
   require(graphName != null, "database name is required")
-  require(batchSize > 0, "batch size should be a positive value")
-
 }

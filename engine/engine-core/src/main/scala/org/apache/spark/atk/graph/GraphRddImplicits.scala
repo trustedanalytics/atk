@@ -13,20 +13,13 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.trustedanalytics.atk.plugins.orientdb
+package org.apache.spark.atk.graph
 
-import org.trustedanalytics.atk.domain.graph.GraphReference
-import org.trustedanalytics.atk.engine.plugin.ArgDoc
+import org.apache.spark.rdd.RDD
 
-/**
- * ExportOrientDbGraph plugin input arguments
- */
+object GraphRddImplicits {
 
-case class ExportOrientDbGraphArgs(graph: GraphReference, @ArgDoc("""OrientDB database name.""") graphName: String,
-                                   @ArgDoc("""batch size for commiting transactions.""") batchSize: Int = 1000) {
+  implicit def vertexRDDToVertexRDDFunctions(rdd: RDD[Vertex]) = new VertexRddFunctions(rdd)
 
-  require(graph != null, "graph is required")
-  require(graphName != null, "database name is required")
-  require(batchSize > 0, "batch size should be a positive value")
-
+  implicit def edgeRDDToEdgeRDDFunctions(rdd: RDD[Edge]) = new EdgeRddFunctions(rdd)
 }
