@@ -31,10 +31,14 @@ Consider the following frame containing three columns.
 <progress>
 >>> train_output = model.train(frame,time_column='time',covariate_columns=['bmi'],censor_column='censor',convergence_tolerance=0.01,max_steps=10)
 <progress>
+<skip>
 >>> train_output
 {u'beta': [-0.03351902788328831], u'mean': [27.977777777777778]}
+</skip>
+<skip>
 >>> train_output['beta']
 [-0.03351902788328831]
+</skip>
 >>> predict_output = model.predict(frame)
 <progress>
 <skip>

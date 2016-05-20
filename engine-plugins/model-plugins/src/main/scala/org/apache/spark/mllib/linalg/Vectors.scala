@@ -1,4 +1,5 @@
 /*
+
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
@@ -15,6 +16,7 @@
  * limitations under the License.
  */
 
+//TODO: This class hass been added from spark due to a dependency needed for Cox. To be deleted when contributing to Spark
 package org.apache.spark.mllib.linalg
 
 import java.util

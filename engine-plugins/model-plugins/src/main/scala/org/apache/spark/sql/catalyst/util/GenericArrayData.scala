@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+//TODO: This class hass been added from spark due to a dependency needed for Cox. To be deleted when contributing to Spark
 package org.apache.spark.sql.catalyst.util
 
 import scala.collection.JavaConverters._
