@@ -43,7 +43,7 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
 
   lazy val hdfsFileStorage: FileStorage = engine.asInstanceOf[EngineImpl].fileStorage
 
-  def execute(moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Int = {
+  def execute(moduleName: String, jobContext: JobContext)(implicit invocation: Invocation): Unit = {
     withContext("executeCommandOnYarn") {
 
       try {
@@ -140,7 +140,6 @@ class SparkSubmitLauncher(engine: Engine) extends EventLogging with EventLogging
           }
         })
         info(s"Completed with exitCode:$result, ${JvmMemory.memory}")
-        result
 
       }
       finally {
