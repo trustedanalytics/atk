@@ -34,7 +34,7 @@ Consider the following frame containing three columns.
 >>> train_output
 {u'beta': [-0.03351902788328871], u'mean': [27.977777777777778]}
 >>> train_output['beta']
--0.03351902788328871
+[-0.03351902788328871]
 >>> predict_output = model.predict(frame)
 <progress>
 >>> predict_output.inspect()
