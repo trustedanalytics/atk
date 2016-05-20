@@ -3,8 +3,8 @@ TAP Analytics Toolkit (AT)
 
 #End User Documentation
 
-[ATK Documentation](http://trustedanalytics.github.io/atk/)
-[TAP Wiki](https://github.com/trustedanalytics/platform-wiki-0.7/wiki)
+* [ATK Documentation](http://trustedanalytics.github.io/atk/)
+* [TAP Wiki](https://github.com/trustedanalytics/platform-wiki-0.7/wiki)
 
 #Setting up your build environment
 You will need to increase your maven memory settings and set the https protocol.
