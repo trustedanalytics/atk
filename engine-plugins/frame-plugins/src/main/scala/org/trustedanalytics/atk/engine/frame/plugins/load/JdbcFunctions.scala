@@ -26,7 +26,7 @@ case class JdbcConnectionInfo(connector: String) {
 
   def userPassProperties() = {
     val properties = new Properties()
-    properties.setProperty("username", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".username"))
+    properties.setProperty("user", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".username"))
     properties.setProperty("password", ConfigFactory.load().getString("trustedanalytics.atk.datastore." + connector + ".password"))
     properties
   }
@@ -47,7 +47,7 @@ object JdbcFunctions extends Serializable {
    */
   def buildUrl(connectorType: String) = {
     val connector = connectorType match {
-      case "postgres" => "connection-postgres"
+      case "postgres" => "connection-postgresql"
       case "mysql" => "connection-mysql"
       case _ => throw new IllegalArgumentException("value must be postgres or mysql")
     }
